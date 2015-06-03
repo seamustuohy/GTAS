@@ -2,11 +2,11 @@ package gov.cbp.taspd.gtas.parsers.paxlst;
 
 import gov.cbp.taspd.gtas.model.Pax;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -33,37 +33,31 @@ public class PaxlstParser {
 	}
 	
 	private void readFile() {
-		File file = new File(this.fileName);
-		FileInputStream fis = null;
-		byte[] data = null;
-		try {
-			fis = new FileInputStream(file);
-			data = new byte[(int) file.length()];
-			fis.read(data);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-		    e.printStackTrace();			
-		} finally {
-		    try {
-		        if (fis != null) {
-		            fis.close();
-		        }
-		    } catch (IOException e) {
-		    }
-		}
+		Path path = Paths.get(this.fileName);
 
-		String tmp = null;
-		try {
-			tmp = new String(data, "ascii");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		
-		this.rawText = tmp;
+	    try {
+	      byte[] bytes = Files.readAllBytes(path);
+	      this.rawText = new String(bytes, StandardCharsets.US_ASCII);
+	    } catch (IOException e) {
+	      System.out.println(e);
+	    }		
 	}
 	
 	private void preprocessFile() {
+		final int STX_CODEPOINT = 2;
+		final int ETX_CODEPOINT = 3;
+		
+		int stxIndex = this.rawText.indexOf(STX_CODEPOINT);
+		if (stxIndex != -1) {
+			this.rawText = this.rawText.substring(stxIndex + 1);
+		}
+		int etxIndex = this.rawText.indexOf(ETX_CODEPOINT);
+		if (etxIndex != -1) {
+			this.rawText = this.rawText.substring(0, etxIndex);
+		}
+		
+		this.rawText = this.rawText.toUpperCase();
+		
 		int unaIndex = this.rawText.indexOf("UNA");
 		if (unaIndex != -1) {
 			int endIndex = unaIndex + "UNA".length() + 6;
@@ -75,15 +69,13 @@ public class PaxlstParser {
 
 		int unbIndex = this.rawText.indexOf("UNB");
 		if (unbIndex == -1) {
-			// bail out
+			System.err.println("no UNB segment");
 			System.exit(0);
 		}
 		this.rawText = this.rawText.substring(unbIndex);
 		
-		String regex = "[^ 0-9A-Za-z" + this.serviceStrings.getDelimsRegex() + "]";
-		System.out.println(regex);
-		this.rawText = this.rawText.replaceAll(regex, "");
-		System.out.println(this.rawText);
+		this.rawText = this.rawText.replaceAll("\\n|\\r|\\t", "");
+		System.out.println("rawtext: " + this.rawText);
 	}
 	
 	private void getSegments() {
@@ -111,6 +103,8 @@ public class PaxlstParser {
 			case "NAD":
 				processPaxOrContact(s, i);
 				break;
+			case "TDT":
+				processFlight(s, i);
 			}
 		}		
 	}
@@ -120,11 +114,37 @@ public class PaxlstParser {
 		if (nextSeg.getName().equals("COM")) {
 //			ReportingParty rp = new ReportingParty();
 		} else {
+			i.previous();
+			
 			Pax p = new Pax();
 			String[] nadFields = nad.getFields();
 			p.setFirstName(nadFields[3]);
 			message.getPassengers().add(p);
+			
+			boolean done = false;
+			while (!done) {
+				Segment s = i.next();
+				if (i == null) return;
+				switch (s.getName()) {
+				case "ATT":
+				case "DTM":
+				case "GEI":
+				case "FTX":
+				case "LOC":
+				case "COM":
+				case "EMP":
+				case "NAT":
+				case "RFF":
+					System.out.println("\t" + s.getName());
+					break;
+				default:
+					return;
+				}
+			}
 		}
+	}
+
+	private void processFlight(Segment tdt, ListIterator<Segment> i) {
 	}
 	
 	private void processUnb(Segment unb) {
