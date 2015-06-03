@@ -57,19 +57,15 @@ public class PaxlstParser {
 	private void getSegments() {
 		String segmentRegex = String.format("\\%c", serviceStrings.segmentTerminator);
 		String[] stringSegments = rawText.split(segmentRegex);
-
-		String regex = String.format("\\%c|\\%c",
-				serviceStrings.componentDataElementSeparator,
-				serviceStrings.dataElementSeparator);
 		for (String s : stringSegments) {
-			segments.add(new Segment(s, regex));
+			segments.add(new Segment(s, serviceStrings));
 		}
 	}
 	
 	private void createMessage() {
 		for (ListIterator<Segment> i=segments.listIterator(); i.hasNext(); ) {
 			Segment s = i.next();
-			System.out.println("seg " + s.getName());
+			System.out.println(s);
 			switch (s.getName()) {
 			case "UNB":
 				processUnb(s);
@@ -88,13 +84,13 @@ public class PaxlstParser {
 	private void processPaxOrContact(Segment nad, ListIterator<Segment> i) {
 		Segment nextSeg = i.next();
 		if (nextSeg.getName().equals("COM")) {
+			System.out.println(nextSeg);
 //			ReportingParty rp = new ReportingParty();
 		} else {
 			i.previous();
 			
 			Pax p = new Pax();
-			String[] nadFields = nad.getFields();
-			p.setFirstName(nadFields[3]);
+			p.setFirstName("dummy");
 			message.getPassengers().add(p);
 			
 			boolean done = false;
@@ -111,7 +107,7 @@ public class PaxlstParser {
 				case "EMP":
 				case "NAT":
 				case "RFF":
-					System.out.println("\t" + s.getName());
+					System.out.println("\t" + s);
 					break;
 				default:
 					return;
@@ -130,19 +126,14 @@ public class PaxlstParser {
 		message.setReceiver(fields[3]);
 	}
 	
-	public static void main(String[] argv) {
+	public static void main(String[] argv) {		
 		if (argv.length < 1) {
 			System.out.println("usage: EdifactParser [filename]");
 			System.exit(0);
 		}
 		
 		PaxlstParser parser = new PaxlstParser(argv[0]);
-		Message m = parser.parse();
-		System.out.println(m.getCode() + " " + m.getReceiver());
-		for (Pax p : m.getPassengers()) {
-			System.out.println("pax: " + p.getFirstName());
-		}
-		
+		Message m = parser.parse();		
 		System.exit(0);		
 	}
 }
