@@ -1,92 +1,68 @@
 package gov.cbp.taspd.gtas.parsers.paxlst;
 
 import gov.cbp.taspd.gtas.model.Pax;
+import gov.cbp.taspd.gtas.util.FileUtils;
+import gov.cbp.taspd.gtas.util.ParseUtils;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
 public class PaxlstParser {
 	UNA serviceStrings = null;
-	private String fileName = null;
+	private String filePath = null;
 	private String rawText = null;
 	private List<Segment> segments = null;
 	private Message message = null;
 	
 	public PaxlstParser(String fn) {
-		this.fileName = fn;
+		this.filePath = fn;
 		this.message = new Message();
 		segments = new ArrayList<>();
 	}
 	
 	public Message parse() {
-		readFile();
+		this.rawText = FileUtils.readSmallTextFile(this.filePath, StandardCharsets.US_ASCII);
 		preprocessFile();
 		getSegments();
 		createMessage();
-		return message;
-	}
-	
-	private void readFile() {
-		Path path = Paths.get(this.fileName);
-
-	    try {
-	      byte[] bytes = Files.readAllBytes(path);
-	      this.rawText = new String(bytes, StandardCharsets.US_ASCII);
-	    } catch (IOException e) {
-	      System.out.println(e);
-	    }		
+		return this.message;
 	}
 	
 	private void preprocessFile() {
-		final int STX_CODEPOINT = 2;
-		final int ETX_CODEPOINT = 3;
+		rawText = ParseUtils.stripHeaderAndFooter(rawText);
+		rawText = rawText.toUpperCase();
 		
-		int stxIndex = this.rawText.indexOf(STX_CODEPOINT);
-		if (stxIndex != -1) {
-			this.rawText = this.rawText.substring(stxIndex + 1);
-		}
-		int etxIndex = this.rawText.indexOf(ETX_CODEPOINT);
-		if (etxIndex != -1) {
-			this.rawText = this.rawText.substring(0, etxIndex);
-		}
-		
-		this.rawText = this.rawText.toUpperCase();
-		
-		int unaIndex = this.rawText.indexOf("UNA");
+		int unaIndex = rawText.indexOf("UNA");
 		if (unaIndex != -1) {
 			int endIndex = unaIndex + "UNA".length() + 6;
-			String delims = this.rawText.substring(unaIndex, endIndex);
-			this.serviceStrings = new UNA(delims);
+			String delims = rawText.substring(unaIndex, endIndex);
+			serviceStrings = new UNA(delims);
 		} else {
-			this.serviceStrings = new UNA();
+			serviceStrings = new UNA();
 		}
 
-		int unbIndex = this.rawText.indexOf("UNB");
+		int unbIndex = rawText.indexOf("UNB");
 		if (unbIndex == -1) {
 			System.err.println("no UNB segment");
 			System.exit(0);
 		}
-		this.rawText = this.rawText.substring(unbIndex);
+		rawText = rawText.substring(unbIndex);
 		
-		this.rawText = this.rawText.replaceAll("\\n|\\r|\\t", "");
-		System.out.println("rawtext: " + this.rawText);
+		rawText = rawText.replaceAll("\\n|\\r|\\t", "");
+		System.out.println("rawtext: " + rawText);
 	}
 	
 	private void getSegments() {
-		String segmentRegex = String.format("\\%c", this.serviceStrings.segmentTerminator);
-		String[] stringSegments = this.rawText.split(segmentRegex);
+		String segmentRegex = String.format("\\%c", serviceStrings.segmentTerminator);
+		String[] stringSegments = rawText.split(segmentRegex);
 
 		String regex = String.format("\\%c|\\%c",
-				this.serviceStrings.componentDataElementSeparator,
-				this.serviceStrings.dataElementSeparator);
+				serviceStrings.componentDataElementSeparator,
+				serviceStrings.dataElementSeparator);
 		for (String s : stringSegments) {
-			this.segments.add(new Segment(s, regex));
+			segments.add(new Segment(s, regex));
 		}
 	}
 	
@@ -124,7 +100,7 @@ public class PaxlstParser {
 			boolean done = false;
 			while (!done) {
 				Segment s = i.next();
-				if (i == null) return;
+				if (s == null) return;
 				switch (s.getName()) {
 				case "ATT":
 				case "DTM":
