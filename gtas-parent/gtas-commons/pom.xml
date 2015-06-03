@@ -9,7 +9,7 @@
     <artifactId>gtas-parent</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>gtas-model</artifactId>
+  <artifactId>gtas-commons</artifactId>
   <packaging>jar</packaging>
 
   <name>GTAS Domain Objects</name>

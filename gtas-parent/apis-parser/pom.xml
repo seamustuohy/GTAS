@@ -31,7 +31,7 @@
   <dependencies>
     <dependency>
       <groupId>gov.cbp.taspd.gtas</groupId>
-      <artifactId>gtas-model</artifactId>
+      <artifactId>gtas-commons</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

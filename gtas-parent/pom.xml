@@ -14,7 +14,7 @@
   <name>GTAS Parent Project</name>
  
   <modules>
-    <module>gtas-model</module>
+    <module>gtas-commons</module>
     <module>gtas-webapp</module>
     <module>apis-parser</module>
     <module>pnr-parser</module>
