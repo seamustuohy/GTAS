@@ -80,5 +80,4 @@ public class Pax {
     public void setDebarkation(String debarkation) {
         this.debarkation = debarkation;
     }
-    
 }

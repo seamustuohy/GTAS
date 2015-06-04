@@ -5,6 +5,7 @@ import gov.cbp.taspd.gtas.parsers.unedifact.Composite;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
 import gov.cbp.taspd.gtas.parsers.unedifact.SegmentFactory;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNA;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNB;
 import gov.cbp.taspd.gtas.util.FileUtils;
 import gov.cbp.taspd.gtas.util.ParseUtils;
 
@@ -54,7 +55,6 @@ public class PaxlstParser {
         txt = txt.substring(unbIndex);
         
         txt = txt.replaceAll("\\n|\\r|\\t", "");
-        System.out.println("txt: " + txt);
 
         SegmentFactory factory = new SegmentFactory(serviceStrings);
         segments = new LinkedList<>();
@@ -93,7 +93,6 @@ public class PaxlstParser {
             i.previous();
             
             Pax p = new Pax();
-            p.setFirstName("dummy");
             message.getPassengers().add(p);
             
             boolean done = false;
@@ -122,10 +121,10 @@ public class PaxlstParser {
     private void processFlight(Segment tdt, ListIterator<Segment> i) {
     }
     
-    private void processUnb(Segment unb) {
-        Composite[] c = unb.getComposites();
-        message.setCode(c[0].getElements()[0].getValue());
-        message.setReceiver(c[3].getElements()[0].getValue());
+    private void processUnb(Segment seg) {
+        UNB unb = (UNB)seg;
+        message.setSender(unb.getSenderIdentification());
+        message.setReceiver(unb.getRecipientIdentification());
     }
     
     public static void main(String[] argv) {        
@@ -136,5 +135,6 @@ public class PaxlstParser {
 
         PaxlstParser parser = new PaxlstParser(argv[0]);
         Message m = parser.parse();     
+        System.out.println(m);
     }
 }

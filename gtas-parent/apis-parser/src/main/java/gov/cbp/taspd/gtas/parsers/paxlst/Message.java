@@ -6,6 +6,9 @@ import gov.cbp.taspd.gtas.model.Pax;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class Message {
     private String raw;
     
@@ -79,5 +82,8 @@ public class Message {
         this.passengers = passengers;
     }
     
-    
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE); 
+    }    
 }
