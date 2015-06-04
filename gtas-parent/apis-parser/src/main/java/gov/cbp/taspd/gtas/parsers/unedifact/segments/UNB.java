@@ -7,13 +7,12 @@ import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
 public class UNB extends Segment {
     private String syntaxIdentifier;
     private String syntaxVersion;
-    
     private String senderIdentification;
     private String c_partnerIdentificationCodeQualifier;
     private String recipientIdentification;
     private String c_partnerIdentificationCodeQualifier2;
-    private String dateOfPreparation;
-    private String timeOfPreparation;
+    private String date;
+    private String time;
     private String interchangeControlReference;
     private String applicationReference;
     
@@ -24,34 +23,31 @@ public class UNB extends Segment {
             Element[] e = c.getElements();
             switch (i) {
             case 0:
-                assert e.length == 2;
                 this.syntaxIdentifier = e[0].getValue();
                 this.syntaxVersion = e[1].getValue();
                 break;
             case 1:
-                assert e.length >= 1;
                 this.senderIdentification = e[0].getValue();
                 if (e.length > 1) {
                     this.c_partnerIdentificationCodeQualifier = e[1].getValue();
                 }
+                break;
             case 2:
-                assert e.length >= 1;
                 this.recipientIdentification = e[0].getValue();
                 if (e.length > 1) {
                     this.c_partnerIdentificationCodeQualifier2 = e[1].getValue();
                 }                
+                break;
             case 3:
-                assert e.length == 2;
-                this.dateOfPreparation = e[0].getValue();
-                this.timeOfPreparation = e[1].getValue();
+                this.date = e[0].getValue();
+                this.time = e[1].getValue();
+                break;
             case 4:
-                assert e.length == 1;
                 this.interchangeControlReference = c.getValue();
+                break;
             case 5:
-                assert e.length == 1;
                 this.applicationReference = c.getValue();
-            default:
-                // unknown 
+                break;
             }
         }
     }
@@ -80,12 +76,12 @@ public class UNB extends Segment {
         return c_partnerIdentificationCodeQualifier2;
     }
 
-    public String getDateOfPreparation() {
-        return dateOfPreparation;
+    public String getDate() {
+        return date;
     }
 
-    public String getTimeOfPreparation() {
-        return timeOfPreparation;
+    public String getTime() {
+        return time;
     }
 
     public String getInterchangeControlReference() {
@@ -94,22 +90,5 @@ public class UNB extends Segment {
 
     public String getApplicationReference() {
         return applicationReference;
-    }
-
-    @Override
-    public String toString() {
-        return "UNB [syntaxIdentifier=" + syntaxIdentifier + ", syntaxVersion="
-                + syntaxVersion + ", senderIdentification="
-                + senderIdentification
-                + ", c_partnerIdentificationCodeQualifier="
-                + c_partnerIdentificationCodeQualifier
-                + ", recipientIdentification=" + recipientIdentification
-                + ", c_partnerIdentificationCodeQualifier2="
-                + c_partnerIdentificationCodeQualifier2
-                + ", dateOfPreparation=" + dateOfPreparation
-                + ", timeOfPreparation=" + timeOfPreparation
-                + ", interchangeControlReference="
-                + interchangeControlReference + ", applicationReference="
-                + applicationReference + "]";
     }
 }

@@ -71,7 +71,6 @@ public class PaxlstParser {
             System.out.println(s);
             switch (s.getName()) {
             case "UNB":
-                System.out.println("MIKE UNB: " + s);
                 processUnb(s);
                 break;
             case "UNH":
@@ -86,7 +85,6 @@ public class PaxlstParser {
     }
     
     private void processPaxOrContact(Segment nad, ListIterator<Segment> i) {
-        
         Segment nextSeg = i.next();
         if (nextSeg.getName().equals("COM")) {
             System.out.println(nextSeg);
@@ -128,7 +126,6 @@ public class PaxlstParser {
         Composite[] c = unb.getComposites();
         message.setCode(c[0].getElements()[0].getValue());
         message.setReceiver(c[3].getElements()[0].getValue());
-        System.out.println(c.length + " " + message.getCode() + " " + message.getReceiver());
     }
     
     public static void main(String[] argv) {        
@@ -136,9 +133,8 @@ public class PaxlstParser {
             System.out.println("usage: EdifactParser [filename]");
             System.exit(0);
         }
-        
+
         PaxlstParser parser = new PaxlstParser(argv[0]);
         Message m = parser.parse();     
-        System.exit(0);     
     }
 }

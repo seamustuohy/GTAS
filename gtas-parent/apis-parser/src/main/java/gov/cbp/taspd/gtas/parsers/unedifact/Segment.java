@@ -1,5 +1,8 @@
 package gov.cbp.taspd.gtas.parsers.unedifact;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 
 public class Segment {
     private String name;
@@ -19,13 +22,6 @@ public class Segment {
 
     @Override
     public String toString() {
-        StringBuffer b = new StringBuffer();
-        b.append(this.name + " ");
-        for (Composite x : this.composites) {
-            b.append(x + " ");
-        }
-        return b.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE); 
     }
-    
-    
 }
