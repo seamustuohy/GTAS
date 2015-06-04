@@ -7,14 +7,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileUtils {
-	public static String readSmallTextFile(String filePath, Charset charset) {
-		Path path = Paths.get(filePath);
-	    try {
-			byte[] bytes = Files.readAllBytes(path);
-			return new String(bytes, charset);
-	    } catch (IOException e) {
-	      System.out.println(e);
-	      return null;
-	    }		
-	}
+    public static String readSmallTextFile(String filePath, Charset charset) {
+        Path path = Paths.get(filePath);
+        try {
+            byte[] bytes = Files.readAllBytes(path);
+            return new String(bytes, charset);
+        } catch (IOException e) {
+          System.out.println(e);
+          return null;
+        }       
+    }
 }
