@@ -19,11 +19,11 @@ public class SegmentFactory {
     public Segment build(String txt) {
         String regex = String.format(
                 "[^\\%c]*(\\%c\\%c)+[^\\%c]*|[^\\%c]+",
-                serviceStrings.dataElementSeparator,
-                serviceStrings.releaseCharacter,
-                serviceStrings.dataElementSeparator,
-                serviceStrings.dataElementSeparator,
-                serviceStrings.dataElementSeparator);
+                serviceStrings.getDataElementSeparator(),
+                serviceStrings.getReleaseCharacter(),
+                serviceStrings.getDataElementSeparator(),
+                serviceStrings.getDataElementSeparator(),
+                serviceStrings.getDataElementSeparator());
         Pattern tokenPattern = Pattern.compile(regex);
         Matcher matcher = tokenPattern.matcher(txt);
         List<String> tokens = new LinkedList<>();

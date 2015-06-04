@@ -9,7 +9,7 @@ public class Composite {
     private Element[] elements;
 
     public Composite(String s, UNA serviceStrings) {
-        String[] tmp = s.split("" + serviceStrings.componentDataElementSeparator);
+        String[] tmp = s.split("" + serviceStrings.getComponentDataElementSeparator());
         if (tmp.length == 1) {
             this.value = tmp[0];
         } else if (tmp.length > 1) {

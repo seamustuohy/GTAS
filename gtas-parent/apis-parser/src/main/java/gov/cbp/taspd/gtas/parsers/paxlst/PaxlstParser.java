@@ -58,7 +58,7 @@ public class PaxlstParser {
 
         SegmentFactory factory = new SegmentFactory(serviceStrings);
         segments = new LinkedList<>();
-        String segmentRegex = String.format("\\%c", serviceStrings.segmentTerminator);
+        String segmentRegex = String.format("\\%c", serviceStrings.getSegmentTerminator());
         String[] stringSegments = txt.split(segmentRegex);
         for (String s : stringSegments) {
             segments.add(factory.build(s));
