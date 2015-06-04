@@ -1,15 +1,21 @@
-package gov.cbp.taspd.gtas.parsers.paxlst;
+package gov.cbp.taspd.gtas.parsers.unedifact;
+
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAD;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNA;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNB;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Segment {
-    private String name;
-    private Composite[] composites;
+public class SegmentFactory {
+    private UNA serviceStrings;
+    public SegmentFactory(UNA serviceStrings) {
+        this.serviceStrings = serviceStrings;
+    }
     
-    public Segment(String txt, UNA serviceStrings) {        
+    public Segment build(String txt) {
         String regex = String.format(
                 "[^\\%c]*(\\%c\\%c)+[^\\%c]*|[^\\%c]+",
                 serviceStrings.dataElementSeparator,
@@ -27,35 +33,31 @@ public class Segment {
         int numTokens = tokens.size();
         if (numTokens == 0) {
             // error?
-            return;
+            return null;
         }
         
-        this.name = tokens.get(0);
+        String segmentType = tokens.get(0);
         tokens.remove(0);
         
+        Composite[] composites = null;
         if (numTokens >= 1) {
-            this.composites = new Composite[tokens.size()];
+            composites = new Composite[tokens.size()];
             for (int i=0; i<tokens.size(); i++) {
-                this.composites[i] = new Composite(tokens.get(i), serviceStrings);
+                composites[i] = new Composite(tokens.get(i), serviceStrings);
             }
         }
-    }
-    public String getName() {
-        return name;
-    }
-    public Composite[] getComposites() {
-        return composites;
+        
+        Segment rv = null;
+        switch (segmentType) {
+        case "UNB":            
+            return new UNB(composites);
+        case "NAD":
+            return new NAD(composites);
+        default:
+            rv = new Segment(segmentType, new Composite[0]);
+        }
+        
+        return rv;
     }
 
-    @Override
-    public String toString() {
-        StringBuffer b = new StringBuffer();
-        b.append(this.name + " ");
-        for (Composite x : this.composites) {
-            b.append(x + " ");
-        }
-        return b.toString();
-    }
-    
-    
 }

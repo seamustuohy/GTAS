@@ -1,4 +1,4 @@
-package gov.cbp.taspd.gtas.parsers.paxlst;
+package gov.cbp.taspd.gtas.parsers.unedifact;
 
 public class Element {
     private String value;

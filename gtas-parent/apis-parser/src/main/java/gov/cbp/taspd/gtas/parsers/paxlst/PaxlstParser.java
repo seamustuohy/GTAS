@@ -1,6 +1,10 @@
 package gov.cbp.taspd.gtas.parsers.paxlst;
 
 import gov.cbp.taspd.gtas.model.Pax;
+import gov.cbp.taspd.gtas.parsers.unedifact.Composite;
+import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
+import gov.cbp.taspd.gtas.parsers.unedifact.SegmentFactory;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNA;
 import gov.cbp.taspd.gtas.util.FileUtils;
 import gov.cbp.taspd.gtas.util.ParseUtils;
 
@@ -23,7 +27,6 @@ public class PaxlstParser {
         String rawText = FileUtils.readSmallTextFile(this.filePath, StandardCharsets.US_ASCII);
         this.message = new Message();
         this.message.setRaw(rawText);
-        segments = new LinkedList<>();
 
         processRawAndGetSegments(rawText);
         processSegments();
@@ -53,13 +56,15 @@ public class PaxlstParser {
         txt = txt.replaceAll("\\n|\\r|\\t", "");
         System.out.println("txt: " + txt);
 
+        SegmentFactory factory = new SegmentFactory(serviceStrings);
+        segments = new LinkedList<>();
         String segmentRegex = String.format("\\%c", serviceStrings.segmentTerminator);
         String[] stringSegments = txt.split(segmentRegex);
         for (String s : stringSegments) {
-            segments.add(new Segment(s, serviceStrings));
+            segments.add(factory.build(s));
         }
     }
-        
+
     private void processSegments() {
         for (ListIterator<Segment> i=segments.listIterator(); i.hasNext(); ) {
             Segment s = i.next();
@@ -80,6 +85,7 @@ public class PaxlstParser {
     }
     
     private void processPaxOrContact(Segment nad, ListIterator<Segment> i) {
+        
         Segment nextSeg = i.next();
         if (nextSeg.getName().equals("COM")) {
             System.out.println(nextSeg);

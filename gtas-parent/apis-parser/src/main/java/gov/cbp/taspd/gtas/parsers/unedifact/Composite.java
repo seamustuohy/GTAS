@@ -1,4 +1,6 @@
-package gov.cbp.taspd.gtas.parsers.paxlst;
+package gov.cbp.taspd.gtas.parsers.unedifact;
+
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNA;
 
 import java.util.Arrays;
 
