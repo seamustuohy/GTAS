@@ -7,19 +7,16 @@ import java.util.regex.Pattern;
 
 public class Segment {
 	private String name;
-	private String[] fields;
-	private UNA serviceStrings;
+	private Composite[] composites;
 	
-	public Segment(String txt, UNA serviceStrings) {
-		this.serviceStrings = serviceStrings;
-		
+	public Segment(String txt, UNA serviceStrings) {		
 		String regex = String.format(
 				"[^\\%c]*(\\%c\\%c)+[^\\%c]*|[^\\%c]+",
-				this.serviceStrings.dataElementSeparator,
-				this.serviceStrings.releaseCharacter,
-				this.serviceStrings.dataElementSeparator,
-				this.serviceStrings.dataElementSeparator,
-				this.serviceStrings.dataElementSeparator);
+				serviceStrings.dataElementSeparator,
+				serviceStrings.releaseCharacter,
+				serviceStrings.dataElementSeparator,
+				serviceStrings.dataElementSeparator,
+				serviceStrings.dataElementSeparator);
 		Pattern tokenPattern = Pattern.compile(regex);
 		Matcher matcher = tokenPattern.matcher(txt);
 		List<String> tokens = new LinkedList<>();
@@ -27,32 +24,34 @@ public class Segment {
 		    tokens.add(matcher.group());
 		}
 
+		int numTokens = tokens.size();
+		if (numTokens == 0) {
+			// error?
+			return;
+		}
+		
 		this.name = tokens.get(0);
 		tokens.remove(0);
-		fields = tokens.toArray(new String[tokens.size()]);
+		
+		if (numTokens >= 1) {
+			this.composites = new Composite[tokens.size()];
+			for (int i=0; i<tokens.size(); i++) {
+				this.composites[i] = new Composite(tokens.get(i), serviceStrings);
+			}
+		}
 	}
-
 	public String getName() {
 		return name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String[] getFields() {
-		return fields;
-	}
-
-	public void setFields(String[] fields) {
-		this.fields = fields;
+	public Composite[] getComposites() {
+		return composites;
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer b = new StringBuffer();
 		b.append(this.name + " ");
-		for (String x : this.fields) {
+		for (Composite x : this.composites) {
 			b.append(x + " ");
 		}
 		return b.toString();

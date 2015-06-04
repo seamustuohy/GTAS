@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Message {
+	private String raw;
+	
 	private String code;
 	private String version;
 	private String sender;
@@ -22,6 +24,12 @@ public class Message {
 		passengers = new ArrayList<>();
 	}
 	
+	public String getRaw() {
+		return raw;
+	}
+	public void setRaw(String raw) {
+		this.raw = raw;
+	}
 	public String getCode() {
 		return code;
 	}

@@ -5,64 +5,62 @@ import gov.cbp.taspd.gtas.util.FileUtils;
 import gov.cbp.taspd.gtas.util.ParseUtils;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 public class PaxlstParser {
-	UNA serviceStrings = null;
+	private UNA serviceStrings = null;
 	private String filePath = null;
-	private String rawText = null;
 	private List<Segment> segments = null;
 	private Message message = null;
 	
-	public PaxlstParser(String fn) {
-		this.filePath = fn;
-		this.message = new Message();
-		segments = new ArrayList<>();
+	public PaxlstParser(String filePath) {
+		this.filePath = filePath;
 	}
 	
 	public Message parse() {
-		this.rawText = FileUtils.readSmallTextFile(this.filePath, StandardCharsets.US_ASCII);
-		preprocessFile();
-		getSegments();
-		createMessage();
+		String rawText = FileUtils.readSmallTextFile(this.filePath, StandardCharsets.US_ASCII);
+		this.message = new Message();
+		this.message.setRaw(rawText);
+		segments = new LinkedList<>();
+
+		processRawAndGetSegments(rawText);
+		processSegments();
 		return this.message;
 	}
 	
-	private void preprocessFile() {
-		rawText = ParseUtils.stripHeaderAndFooter(rawText);
-		rawText = rawText.toUpperCase();
+	private void processRawAndGetSegments(String raw) {
+		String txt = ParseUtils.stripHeaderAndFooter(raw);
+		txt = txt.toUpperCase();
 		
-		int unaIndex = rawText.indexOf("UNA");
+		int unaIndex = txt.indexOf("UNA");
 		if (unaIndex != -1) {
 			int endIndex = unaIndex + "UNA".length() + 6;
-			String delims = rawText.substring(unaIndex, endIndex);
+			String delims = txt.substring(unaIndex, endIndex);
 			serviceStrings = new UNA(delims);
 		} else {
 			serviceStrings = new UNA();
 		}
 
-		int unbIndex = rawText.indexOf("UNB");
+		int unbIndex = txt.indexOf("UNB");
 		if (unbIndex == -1) {
 			System.err.println("no UNB segment");
 			System.exit(0);
 		}
-		rawText = rawText.substring(unbIndex);
+		txt = txt.substring(unbIndex);
 		
-		rawText = rawText.replaceAll("\\n|\\r|\\t", "");
-		System.out.println("rawtext: " + rawText);
-	}
-	
-	private void getSegments() {
+		txt = txt.replaceAll("\\n|\\r|\\t", "");
+		System.out.println("txt: " + txt);
+
 		String segmentRegex = String.format("\\%c", serviceStrings.segmentTerminator);
-		String[] stringSegments = rawText.split(segmentRegex);
+		String[] stringSegments = txt.split(segmentRegex);
 		for (String s : stringSegments) {
 			segments.add(new Segment(s, serviceStrings));
 		}
 	}
-	
-	private void createMessage() {
+		
+	private void processSegments() {
 		for (ListIterator<Segment> i=segments.listIterator(); i.hasNext(); ) {
 			Segment s = i.next();
 			System.out.println(s);
@@ -120,10 +118,10 @@ public class PaxlstParser {
 	}
 	
 	private void processUnb(Segment unb) {
-		String[] fields = unb.getFields();
-		System.out.println(fields.length);
-		message.setCode(fields[0]);
-		message.setReceiver(fields[3]);
+		Composite[] c = unb.getComposites();
+		message.setCode(c[0].getElements()[0].getValue());
+		message.setReceiver(c[3].getElements()[0].getValue());
+		System.out.println(c.length + " " + message.getCode() + " " + message.getReceiver());
 	}
 	
 	public static void main(String[] argv) {		
