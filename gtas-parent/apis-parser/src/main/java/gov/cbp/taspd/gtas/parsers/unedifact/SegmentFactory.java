@@ -3,6 +3,7 @@ package gov.cbp.taspd.gtas.parsers.unedifact;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAD;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNA;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNB;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNG;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +52,8 @@ public class SegmentFactory {
         switch (segmentType) {
         case "UNB":            
             return new UNB(composites);
+        case "UNG":
+            return new UNG(composites);
         case "NAD":
             return new NAD(composites);
         default:

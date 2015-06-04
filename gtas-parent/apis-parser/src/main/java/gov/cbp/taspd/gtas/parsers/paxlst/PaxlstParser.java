@@ -71,6 +71,7 @@ public class PaxlstParser {
             System.out.println(s);
             switch (s.getName()) {
             case "UNB":
+                System.out.println("MIKE UNB: " + s);
                 processUnb(s);
                 break;
             case "UNH":

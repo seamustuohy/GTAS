@@ -4,9 +4,9 @@ import gov.cbp.taspd.gtas.parsers.unedifact.Composite;
 import gov.cbp.taspd.gtas.parsers.unedifact.Element;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
 
-public class NAD extends Segment {
-    public NAD(Composite[] composites) {
-        super(NAD.class.getSimpleName(), composites);
+public class GEI extends Segment {
+    public GEI(Composite[] composites) {
+        super(GEI.class.getSimpleName(), composites);
         for (int i=0; i<this.composites.length; i++) {
             Composite c = this.composites[i];
             Element[] e = c.getElements();

@@ -1,6 +1,13 @@
 package gov.cbp.taspd.gtas.parsers.unedifact.segments;
 
 public class UNA {
+    public char componentDataElementSeparator;
+    public char dataElementSeparator;
+    public char decimalMark;
+    public char releaseCharacter;
+    public char repetitionSeparator;
+    public char segmentTerminator;
+
     public UNA() {
         // use default UNA:+.?*' 
         componentDataElementSeparator = ':';
@@ -22,19 +29,4 @@ public class UNA {
         repetitionSeparator = unaSegment.charAt(7);
         segmentTerminator = unaSegment.charAt(8);
     }
-    
-    public String getDelimsRegex() {
-        return String.format("\\%c\\%c\\%c\\%c\\%c\\%c", componentDataElementSeparator
-            , dataElementSeparator
-            , decimalMark
-            , releaseCharacter
-            , repetitionSeparator
-            , segmentTerminator);
-    }
-    public char componentDataElementSeparator;
-    public char dataElementSeparator;
-    public char decimalMark;
-    public char releaseCharacter;
-    public char repetitionSeparator;
-    public char segmentTerminator;
 }
