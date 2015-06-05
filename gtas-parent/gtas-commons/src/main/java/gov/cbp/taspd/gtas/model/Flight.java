@@ -6,61 +6,63 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Flight {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer id;
+public class Flight extends BaseEntityAudit {
+    public Flight() { }
     
     @ManyToMany(
             targetEntity=Pax.class,
             cascade={CascadeType.PERSIST, CascadeType.MERGE}
     )
     @JoinTable(
-        name="Flight_Pax",
+        name="flight_pax",
         joinColumns=@JoinColumn(name="flight_id"),
         inverseJoinColumns=@JoinColumn(name="pax_id")
     )    
     private Set<Pax> passengers = new HashSet<>();
 
-    private String carrier;
-    private String number;
+    @ManyToOne
+    @JoinColumn(name="carrier", referencedColumnName="id")     
+    private Carrier carrier;
+    
+    private String flightNumber;
     private String origin;
+    
+    @ManyToOne
+    @JoinColumn(name="country", referencedColumnName="id")     
+    private Country originCountry;
+    
     private String destination;
+    
+    @ManyToOne
+    @JoinColumn(name="country", referencedColumnName="id")     
+    private Country destinationCountry;
+
+    private Date flightDate;
     private Date etd;
     private Date eta;
-        
-    
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
     public Set<Pax> getPassengers() {
         return passengers;
     }
     public void setPassengers(Set<Pax> passengers) {
         this.passengers = passengers;
     }
-    public String getCarrier() {
+    public Carrier getCarrier() {
         return carrier;
     }
-    public void setCarrier(String carrier) {
+    public void setCarrier(Carrier carrier) {
         this.carrier = carrier;
     }
-    public String getNumber() {
-        return number;
+    public String getFlightNumber() {
+        return flightNumber;
     }
-    public void setNumber(String number) {
-        this.number = number;
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
     }
     public String getOrigin() {
         return origin;
@@ -68,11 +70,29 @@ public class Flight {
     public void setOrigin(String origin) {
         this.origin = origin;
     }
+    public Country getOriginCountry() {
+        return originCountry;
+    }
+    public void setOriginCountry(Country originCountry) {
+        this.originCountry = originCountry;
+    }
     public String getDestination() {
         return destination;
     }
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+    public Country getDestinationCountry() {
+        return destinationCountry;
+    }
+    public void setDestinationCountry(Country destinationCountry) {
+        this.destinationCountry = destinationCountry;
+    }
+    public Date getFlightDate() {
+        return flightDate;
+    }
+    public void setFlightDate(Date flightDate) {
+        this.flightDate = flightDate;
     }
     public Date getEtd() {
         return etd;

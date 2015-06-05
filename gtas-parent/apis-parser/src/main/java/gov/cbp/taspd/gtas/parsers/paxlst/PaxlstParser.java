@@ -127,8 +127,7 @@ public class PaxlstParser {
     private void processFlight(Segment seg, ListIterator<Segment> i) {
         Flight f = new Flight();
         TDT tdt = (TDT)seg;
-        f.setCarrier(tdt.getC_carrierIdentifier());
-        f.setNumber(tdt.getC_journeyIdentifier());
+        f.setFlightNumber(tdt.getC_journeyIdentifier());
         message.setFlight(f);
     }
     
