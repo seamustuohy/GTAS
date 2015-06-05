@@ -16,8 +16,8 @@ public class Flight extends BaseEntityAudit {
     public Flight() { }
     
     @ManyToMany(
-            targetEntity=Pax.class,
-            cascade={CascadeType.PERSIST, CascadeType.MERGE}
+        targetEntity=Pax.class,
+        cascade={CascadeType.PERSIST, CascadeType.MERGE}
     )
     @JoinTable(
         name="flight_pax",
@@ -46,6 +46,14 @@ public class Flight extends BaseEntityAudit {
     private Date flightDate;
     private Date etd;
     private Date eta;
+    
+    @ManyToMany(
+        cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+        mappedBy = "flights",
+        targetEntity = ApisMessage.class
+    )    
+    private Set<ApisMessage> messages = new HashSet<>();
+    
     public Set<Pax> getPassengers() {
         return passengers;
     }

@@ -1,6 +1,8 @@
 package gov.cbp.taspd.gtas.parsers.paxlst;
 
+import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
+import gov.cbp.taspd.gtas.model.Message;
 import gov.cbp.taspd.gtas.model.Pax;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAD;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.TDT;
@@ -12,15 +14,19 @@ import gov.cbp.taspd.gtas.util.FileUtils;
 import gov.cbp.taspd.gtas.util.ParseUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 public class PaxlstParser {
-    private UNA serviceStrings = null;
-    private String filePath = null;
-    private List<Segment> segments = null;
-    private Message message = null;
+    private UNA serviceStrings;
+    private String filePath;
+    private List<Segment> segments;
+    private ApisMessage message;
+    private Flight flight;
+    private Set<Pax> passengers;
     
     public PaxlstParser(String filePath) {
         this.filePath = filePath;
@@ -30,11 +36,20 @@ public class PaxlstParser {
         byte[] raw = FileUtils.readSmallFile(this.filePath);
         String msg = new String(raw, StandardCharsets.US_ASCII);
         
-        this.message = new Message();
+        this.flight = new Flight();
+        this.passengers = new HashSet<>();
+        this.flight.setPassengers(passengers);
+
+        this.message = new ApisMessage();
         this.message.setRaw(raw);
 
         processRawAndGetSegments(msg);
         processSegments();
+        
+        for (Pax x : this.passengers) {
+            System.out.println(x.getLastName() + ", " + x.getFirstName() + " " + x.getMiddleName());
+        }
+        
         return this.message;
     }
     
@@ -97,11 +112,13 @@ public class PaxlstParser {
         } else {
             i.previous();
             
-            Pax p = new Pax();
-            message.getPassengers().add(p);
             NAD nad = (NAD)seg;
+            Pax p = new Pax();
             p.setFirstName(nad.getFirstName());
             p.setLastName(nad.getLastName());
+            p.setMiddleName(nad.getMiddleName());
+            passengers.add(p);
+            System.out.println(passengers.size());
             
             boolean done = false;
             while (!done) {
@@ -127,16 +144,14 @@ public class PaxlstParser {
     }
 
     private void processFlight(Segment seg, ListIterator<Segment> i) {
-        Flight f = new Flight();
         TDT tdt = (TDT)seg;
-        f.setFlightNumber(tdt.getC_journeyIdentifier());
-        message.setFlight(f);
+        this.flight.setFlightNumber(tdt.getC_journeyIdentifier());
     }
     
     private void processUnb(Segment seg) {
         UNB unb = (UNB)seg;
-        message.setSender(unb.getSenderIdentification());
-        message.setReceiver(unb.getRecipientIdentification());
+//        message.setSender(unb.getSenderIdentification());
+//        message.setReceiver(unb.getRecipientIdentification());
     }
     
     public static void main(String[] argv) {        
