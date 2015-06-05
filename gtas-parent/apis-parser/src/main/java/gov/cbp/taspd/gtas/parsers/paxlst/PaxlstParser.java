@@ -27,11 +27,13 @@ public class PaxlstParser {
     }
     
     public Message parse() {
-        String rawText = FileUtils.readSmallTextFile(this.filePath, StandardCharsets.US_ASCII);
+        byte[] raw = FileUtils.readSmallFile(this.filePath);
+        String msg = new String(raw, StandardCharsets.US_ASCII);
+        
         this.message = new Message();
-        this.message.setRaw(rawText);
+        this.message.setRaw(raw);
 
-        processRawAndGetSegments(rawText);
+        processRawAndGetSegments(msg);
         processSegments();
         return this.message;
     }
@@ -145,6 +147,5 @@ public class PaxlstParser {
 
         PaxlstParser parser = new PaxlstParser(argv[0]);
         Message m = parser.parse();     
-        System.out.println(m);
     }
 }

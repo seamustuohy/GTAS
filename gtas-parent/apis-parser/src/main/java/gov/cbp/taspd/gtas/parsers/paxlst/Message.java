@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class Message {
-    private String raw;
+    private byte[] raw;
     
     private String code;
     private String version;
@@ -26,12 +26,14 @@ public class Message {
         passengers = new ArrayList<>();
     }
     
-    public String getRaw() {
+    public byte[] getRaw() {
         return raw;
     }
-    public void setRaw(String raw) {
+
+    public void setRaw(byte[] raw) {
         this.raw = raw;
     }
+
     public String getCode() {
         return code;
     }

@@ -12,7 +12,7 @@
   <artifactId>gtas-commons</artifactId>
   <packaging>jar</packaging>
 
-  <name>GTAS Domain Objects</name>
+  <name>GTAS Common Code</name>
 
   <build>
     <pluginManagement>
