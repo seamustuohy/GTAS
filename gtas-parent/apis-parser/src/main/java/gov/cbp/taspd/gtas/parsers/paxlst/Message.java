@@ -19,11 +19,10 @@ public class Message {
     private String date;
     private String time;
     
-    private List<Flight> flights;
+    private Flight flight;
     private List<Pax> passengers;
     
     public Message() {
-        flights = new ArrayList<>();
         passengers = new ArrayList<>();
     }
     
@@ -69,11 +68,11 @@ public class Message {
     public void setTime(String time) {
         this.time = time;
     }
-    public List<Flight> getFlights() {
-        return flights;
+    public Flight getFlight() {
+        return flight;
     }
-    public void setFlights(List<Flight> flights) {
-        this.flights = flights;
+    public void setFlight(Flight flight) {
+        this.flight = flight;
     }
     public List<Pax> getPassengers() {
         return passengers;

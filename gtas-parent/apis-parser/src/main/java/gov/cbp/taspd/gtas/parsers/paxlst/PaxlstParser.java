@@ -1,7 +1,9 @@
 package gov.cbp.taspd.gtas.parsers.paxlst;
 
+import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Pax;
-import gov.cbp.taspd.gtas.parsers.unedifact.Composite;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAD;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.TDT;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
 import gov.cbp.taspd.gtas.parsers.unedifact.SegmentFactory;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNA;
@@ -80,11 +82,12 @@ public class PaxlstParser {
                 break;
             case "TDT":
                 processFlight(s, i);
+                break;
             }
         }       
     }
     
-    private void processPaxOrContact(Segment nad, ListIterator<Segment> i) {
+    private void processPaxOrContact(Segment seg, ListIterator<Segment> i) {
         Segment nextSeg = i.next();
         if (nextSeg.getName().equals("COM")) {
             System.out.println(nextSeg);
@@ -94,6 +97,9 @@ public class PaxlstParser {
             
             Pax p = new Pax();
             message.getPassengers().add(p);
+            NAD nad = (NAD)seg;
+            p.setFirstName(nad.getFirstName());
+            p.setLastName(nad.getLastName());
             
             boolean done = false;
             while (!done) {
@@ -118,7 +124,12 @@ public class PaxlstParser {
         }
     }
 
-    private void processFlight(Segment tdt, ListIterator<Segment> i) {
+    private void processFlight(Segment seg, ListIterator<Segment> i) {
+        Flight f = new Flight();
+        TDT tdt = (TDT)seg;
+        f.setCarrier(tdt.getC_carrierIdentifier());
+        f.setNumber(tdt.getC_journeyIdentifier());
+        message.setFlight(f);
     }
     
     private void processUnb(Segment seg) {
