@@ -4,6 +4,8 @@ import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Message;
 import gov.cbp.taspd.gtas.model.Pax;
+import gov.cbp.taspd.gtas.model.ReportingParty;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.COM;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAD;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.TDT;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
@@ -27,6 +29,7 @@ public class PaxlstParser {
     private ApisMessage message;
     private Flight flight;
     private Set<Pax> passengers;
+    private int currentGroup;
     
     public PaxlstParser(String filePath) {
         this.filePath = filePath;
@@ -85,6 +88,8 @@ public class PaxlstParser {
     }
 
     private void processSegments() {
+        currentGroup = 0;
+        
         for (ListIterator<Segment> i=segments.listIterator(); i.hasNext(); ) {
             Segment s = i.next();
             System.out.println(s);
@@ -94,51 +99,66 @@ public class PaxlstParser {
                 break;
             case "UNH":
                 break;
-//            case "NAD":
-//                processPaxOrContact(s, i);
-//                break;
-//            case "TDT":
+            case "NAD":
+                if (currentGroup == 0) {
+                    currentGroup = 1;
+                    processReportingParty(s, i);
+                } else {
+                    currentGroup = 4;
+                    processPax(s, i);
+                }
+                break;
+            case "TDT":
+                currentGroup = 2;
 //                processFlight(s, i);
-//                break;
+                break;
             }
         }       
     }
     
-    private void processPaxOrContact(Segment seg, ListIterator<Segment> i) {
+    private void processReportingParty(Segment seg, ListIterator<Segment> i) {
+        NAD nad = (NAD)seg;        
+        ReportingParty rp = new ReportingParty();
+        rp.setPartyName(nad.getPartyName());
+
         Segment nextSeg = i.next();
         if (nextSeg.getName().equals("COM")) {
-            System.out.println(nextSeg);
-//          ReportingParty rp = new ReportingParty();
+            // optional COM segment
+            COM com = (COM)nextSeg;
+            rp.setTelephone(com.getPhoneNumber());
+            rp.setFax(com.getFaxNumber());
         } else {
             i.previous();
-            
-            NAD nad = (NAD)seg;
-            Pax p = new Pax();
-            p.setFirstName(nad.getFirstName());
-            p.setLastName(nad.getLastName());
-            p.setMiddleName(nad.getMiddleName());
-            passengers.add(p);
-            System.out.println(passengers.size());
-            
-            boolean done = false;
-            while (!done) {
-                Segment s = i.next();
-                if (s == null) return;
-                switch (s.getName()) {
-                case "ATT":
-                case "DTM":
-                case "GEI":
-                case "FTX":
-                case "LOC":
-                case "COM":
-                case "EMP":
-                case "NAT":
-                case "RFF":
-                    System.out.println("\t" + s);
-                    break;
-                default:
-                    return;
-                }
+        }
+    }
+    
+    private void processPax(Segment seg, ListIterator<Segment> i) {
+        NAD nad = (NAD)seg;
+        Pax p = new Pax();
+        p.setFirstName(nad.getFirstName());
+        p.setLastName(nad.getLastName());
+        p.setMiddleName(nad.getMiddleName());
+        passengers.add(p);
+        
+        boolean done = false;
+        while (!done) {
+            Segment s = i.next();
+            if (s == null) return;
+            switch (s.getName()) {
+            case "ATT":
+            case "DTM":
+            case "GEI":
+            case "FTX":
+            case "LOC":
+            case "COM":
+            case "EMP":
+            case "NAT":
+            case "RFF":
+            case "DOC":
+                System.out.println("\t" + s);
+                break;
+            default:
+                return;
             }
         }
     }

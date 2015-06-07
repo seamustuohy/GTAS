@@ -27,8 +27,8 @@ public class SegmentFactory {
         this.serviceStrings = serviceStrings;
     }
     
-    public Segment build(String txt) {
-        Composite[] parsed = parseSegmentSimple(txt);
+    public Segment build(String segmentText) {
+        Composite[] parsed = parseSegmentSimple(segmentText);
         String segmentType = parsed[0].getValue();
         Composite[] composites = null;
         if (parsed.length > 1) {
@@ -68,18 +68,38 @@ public class SegmentFactory {
         }
     }
 
-    private Composite[] parseSegmentSimple(String txt) {
+    /**
+     * TODO: this doesn't handle escape chars
+     */
+    private Composite[] parseSegmentSimple(String segmentText) {
+        Composite[] rv = null;
+        
         String regex = String.format("\\%c", serviceStrings.getDataElementSeparator());
-        String[] tmp = txt.split(regex);
-
-        Composite[] composites = null;
-        if (tmp.length >= 1) {
-            composites = new Composite[tmp.length];
-            for (int i=0; i<tmp.length; i++) {
-                composites[i] = new Composite(tmp[i], serviceStrings);
+        String[] stringComposites = segmentText.split(regex);
+        int numComposites = stringComposites.length;
+        if (numComposites == 0) {
+            System.err.println("segment has no composites: " + segmentText);
+            return null;
+        }
+        
+        rv = new Composite[numComposites];
+        for (int i=0; i<numComposites; i++) {
+            String[] elementsText = stringComposites[i].split("" + serviceStrings.getComponentDataElementSeparator());
+            int numElements = elementsText.length;
+            if (numElements == 1) {
+                rv[i] = new Composite(elementsText[0]);
+            } else if (numElements > 1) {
+                Element[] elements = new Element[numElements];
+                for (int j = 0; j < numElements; j++) {
+                    elements[j] = new Element(elementsText[j]);
+                }
+                rv[i] = new Composite(elements);
+            } else {
+                System.err.println("unable to parse segment: " + segmentText);
             }
         }
-        return composites;        
+
+        return rv;        
     }
     
     private Composite[] parseSegment(String txt) {
@@ -109,7 +129,7 @@ public class SegmentFactory {
         if (numTokens >= 1) {
             composites = new Composite[tokens.size()];
             for (int i=0; i<tokens.size(); i++) {
-                composites[i] = new Composite(tokens.get(i), serviceStrings);
+//                composites[i] = new Composite(tokens.get(i), serviceStrings);
             }
         }
         return composites;
