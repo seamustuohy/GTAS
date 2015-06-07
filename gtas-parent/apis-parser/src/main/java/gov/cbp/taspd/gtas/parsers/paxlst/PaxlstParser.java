@@ -94,12 +94,12 @@ public class PaxlstParser {
                 break;
             case "UNH":
                 break;
-            case "NAD":
-                processPaxOrContact(s, i);
-                break;
-            case "TDT":
-                processFlight(s, i);
-                break;
+//            case "NAD":
+//                processPaxOrContact(s, i);
+//                break;
+//            case "TDT":
+//                processFlight(s, i);
+//                break;
             }
         }       
     }

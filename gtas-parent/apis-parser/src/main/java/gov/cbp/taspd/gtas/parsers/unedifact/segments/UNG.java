@@ -3,13 +3,15 @@ package gov.cbp.taspd.gtas.parsers.unedifact.segments;
 import gov.cbp.taspd.gtas.parsers.unedifact.Composite;
 import gov.cbp.taspd.gtas.parsers.unedifact.Element;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
+import gov.cbp.taspd.gtas.util.ParseUtils;
+
+import java.util.Date;
 
 public class UNG extends Segment {
     private String messageGroupIdentification;
     private String senderIdentification;
     private String recipientIdentification;
-    private String date;
-    private String time;
+    private Date dateAndTimeOfPreparation;
     private String groupReferenceNumber;
     private String controllingAgency;
     private String messageVersionNumber;
@@ -31,8 +33,8 @@ public class UNG extends Segment {
                 this.recipientIdentification = c.getValue();
                 break;
             case 3:
-                this.date = e[0].getValue();
-                this.time = e[1].getValue();
+                String tmp = e[0].getValue() + e[1].getValue(); 
+                this.dateAndTimeOfPreparation = ParseUtils.parseDateTime(tmp, UNB.DATE_TIME_FORMAT);
                 break;
             case 4:
                 this.groupReferenceNumber = c.getValue();
@@ -60,12 +62,8 @@ public class UNG extends Segment {
         return recipientIdentification;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public String getTime() {
-        return time;
+    public Date getDateAndTimeOfPreparation() {
+        return dateAndTimeOfPreparation;
     }
 
     public String getGroupReferenceNumber() {

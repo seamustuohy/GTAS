@@ -5,6 +5,11 @@ import gov.cbp.taspd.gtas.parsers.unedifact.Element;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
 
 public class UNH extends Segment {
+    public enum TransferIndicator { 
+        CONTINUANCE,
+        FINAL 
+    }
+    
     private String messageReferenceNumber;
     private String messageType;
     private String messageTypeVersion;
@@ -13,7 +18,7 @@ public class UNH extends Segment {
     private String c_associationAssignedCode;
     private String c_commonAccessReference;
     private String c_sequenceMessageTransferNumber;
-    private String c_transferIndicator;
+    private TransferIndicator c_transferIndicator;
     
     public UNH(Composite[] composites) {
         super(UNH.class.getSimpleName(), composites);
@@ -41,7 +46,19 @@ public class UNH extends Segment {
                     this.c_sequenceMessageTransferNumber = e[0].getValue();
                 }
                 if (e.length > 1) {
-                    this.c_transferIndicator = e[1].getValue();
+                    /*
+                     * A value of 'C' indicates this transmission is a continuance of previously
+                     * transmitted data for a particular flight. A value of 'F' must be used to
+                     * indicate a FINAL transmission of passenger/crew data reporting.
+                     */
+                    String tmp = e[1].getValue();
+                    if (tmp.equals("C")) {
+                        this.c_transferIndicator = TransferIndicator.CONTINUANCE;
+                    } else if (tmp.equals("F")) {
+                        this.c_transferIndicator = TransferIndicator.FINAL;
+                    } else {
+                        System.err.println("UNH: invalid transfer indicator");
+                    }
                 }
                 break;
             }
@@ -80,7 +97,7 @@ public class UNH extends Segment {
         return c_sequenceMessageTransferNumber;
     }
 
-    public String getC_transferIndicator() {
+    public TransferIndicator getC_transferIndicator() {
         return c_transferIndicator;
     }   
 }

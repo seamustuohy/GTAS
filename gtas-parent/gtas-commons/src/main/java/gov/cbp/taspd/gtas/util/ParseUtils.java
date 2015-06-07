@@ -1,5 +1,11 @@
 package gov.cbp.taspd.gtas.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class ParseUtils {
     public static String stripHeaderAndFooter(String text) {
         String rv = text;
@@ -16,5 +22,16 @@ public class ParseUtils {
         }       
         
         return rv;
+    }
+    
+    public static Date parseDateTime(String dt, String format) {
+        DateFormat timeFormat = new SimpleDateFormat(format, Locale.ENGLISH);
+        try {
+            return timeFormat.parse(dt);
+        } catch (ParseException pe) {
+            pe.printStackTrace();
+            return null;
+        }
+        
     }
 }

@@ -15,5 +15,4 @@ public class UNE extends Segment {
             }
         }
     }
-
 }
