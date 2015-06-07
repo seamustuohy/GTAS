@@ -1,6 +1,8 @@
 package gov.cbp.taspd.gtas.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +13,8 @@ import javax.persistence.ManyToMany;
 
 @Entity
 public class ApisMessage extends Message {
+    List<ReportingParty> reportingParties = new ArrayList<>();
+    
     @ManyToMany(
         targetEntity=Flight.class,
         cascade={CascadeType.PERSIST, CascadeType.MERGE}
@@ -29,4 +33,13 @@ public class ApisMessage extends Message {
     public void setFlights(Set<Flight> flights) {
         this.flights = flights;
     }
+
+    public List<ReportingParty> getReportingParties() {
+        return reportingParties;
+    }
+
+    public void setReportingParties(List<ReportingParty> reportingParties) {
+        this.reportingParties = reportingParties;
+    }
+    
 }

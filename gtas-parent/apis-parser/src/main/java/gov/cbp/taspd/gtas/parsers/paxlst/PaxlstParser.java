@@ -2,10 +2,14 @@ package gov.cbp.taspd.gtas.parsers.paxlst;
 
 import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
+import gov.cbp.taspd.gtas.model.Gender;
 import gov.cbp.taspd.gtas.model.Message;
 import gov.cbp.taspd.gtas.model.Pax;
 import gov.cbp.taspd.gtas.model.ReportingParty;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.ATT;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.COM;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.DTM;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.LOC;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAD;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.TDT;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
@@ -119,6 +123,7 @@ public class PaxlstParser {
     private void processReportingParty(Segment seg, ListIterator<Segment> i) {
         NAD nad = (NAD)seg;        
         ReportingParty rp = new ReportingParty();
+        message.getReportingParties().add(rp);
         rp.setPartyName(nad.getPartyName());
 
         Segment nextSeg = i.next();
@@ -133,29 +138,51 @@ public class PaxlstParser {
     }
     
     private void processPax(Segment seg, ListIterator<Segment> i) {
-        NAD nad = (NAD)seg;
         Pax p = new Pax();
+        passengers.add(p);
+
+        NAD nad = (NAD)seg;
         p.setFirstName(nad.getFirstName());
         p.setLastName(nad.getLastName());
         p.setMiddleName(nad.getMiddleName());
-        passengers.add(p);
         
-        boolean done = false;
-        while (!done) {
+        for (;;) {
             Segment s = i.next();
             if (s == null) return;
+            System.out.println("\t" + s);
             switch (s.getName()) {
+            
             case "ATT":
+                ATT att = (ATT)s;
+                String tmp = att.getAttributeDescriptionCode();
+                Gender g;
+                if (tmp.equals("M")) {
+                    g = Gender.MALE;
+                } else {
+                    g = Gender.FEMALE;
+                }
+                p.setGender(g);
+                break;
+                
             case "DTM":
+                DTM dtm = (DTM)s;
+                p.setDob(dtm.getDtmValue());
+                break;
+                
             case "GEI":
             case "FTX":
+                break;
+                
             case "LOC":
+                LOC loc = (LOC)s;
+                //if (loc.get)
+                break;
+                
             case "COM":
             case "EMP":
             case "NAT":
             case "RFF":
             case "DOC":
-                System.out.println("\t" + s);
                 break;
             default:
                 return;

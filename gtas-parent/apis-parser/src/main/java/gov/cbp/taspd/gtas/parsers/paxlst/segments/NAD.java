@@ -5,11 +5,22 @@ import gov.cbp.taspd.gtas.parsers.unedifact.Element;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
 
 public class NAD extends Segment {
-    private String partyFunctionCodeQualifier;
+    public enum PartyCode {
+        REPORTING_PARTY,
+        PASSENGER,
+        CREW_MEMBER,
+        INTRANSIT_PASSENGER,
+        INTRANSIT_CREW_MEMBER,
+        INVOLVED_PARTY_GATE_PASS_REQUEST,
+        CANCEL_RESERVATION_OR_FLIGHT_CLOSE_OUT
+    }
+    
+    private PartyCode partyFunctionCodeQualifier;
     
     /** only used if isReportingParty == true */
     private String partyName;
     
+    /** following only used if isReportingParty == false */
     private String lastName;
     private String firstName;
     private String middleName;
@@ -19,8 +30,8 @@ public class NAD extends Segment {
     private String postalCode;
     private String countryCode;
     
-    /** to distinguish the two kinds of NAD segments */
-    private boolean isReportingParty;
+    /** to distinguish the two major kinds of NAD segments */
+    private boolean isReportingParty = false;
     
     public NAD(Composite[] composites) {
         super(NAD.class.getSimpleName(), composites);
@@ -30,9 +41,34 @@ public class NAD extends Segment {
             
             switch (i) {
             case 0:
-                this.partyFunctionCodeQualifier = c.getValue();
-                this.isReportingParty = c.getValue().equals("MS");
+                switch (c.getValue()) {
+                case "MS":
+                    this.isReportingParty = true;
+                    this.partyFunctionCodeQualifier = PartyCode.REPORTING_PARTY;
+                    break;
+                case "FL":
+                    this.partyFunctionCodeQualifier = PartyCode.PASSENGER;
+                    break;
+                case "FM":
+                    this.partyFunctionCodeQualifier = PartyCode.CREW_MEMBER;
+                    break;
+                case "DDU":
+                    this.partyFunctionCodeQualifier = PartyCode.INTRANSIT_PASSENGER;
+                    break;
+                case "DDT":
+                    this.partyFunctionCodeQualifier = PartyCode.INTRANSIT_CREW_MEMBER;
+                    break;
+                case "COT":
+                    this.partyFunctionCodeQualifier = PartyCode.INVOLVED_PARTY_GATE_PASS_REQUEST;
+                    break;
+                case "ZZZ":
+                    this.partyFunctionCodeQualifier = PartyCode.CANCEL_RESERVATION_OR_FLIGHT_CLOSE_OUT;
+                    break;
+                default:
+                    System.err.println("NAD: invalid party function code");
+                }
                 break;
+
             case 3:
                 if (this.isReportingParty) {
                     this.partyName = c.getValue();
@@ -67,7 +103,7 @@ public class NAD extends Segment {
         }
     }
 
-    public String getPartyFunctionCodeQualifier() {
+    public PartyCode getPartyFunctionCodeQualifier() {
         return partyFunctionCodeQualifier;
     }
 

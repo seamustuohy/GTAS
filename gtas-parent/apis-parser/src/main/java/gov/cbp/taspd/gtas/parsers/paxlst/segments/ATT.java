@@ -3,9 +3,9 @@ package gov.cbp.taspd.gtas.parsers.paxlst.segments;
 import gov.cbp.taspd.gtas.parsers.unedifact.Composite;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
 
-public class ATT extends Segment {
+public class ATT extends Segment {    
     private String functionCode;
-    private String descriptionCode;
+    private String attributeDescriptionCode;
     
     public ATT(Composite[] composites) {
         super(ATT.class.getSimpleName(), composites);
@@ -16,7 +16,7 @@ public class ATT extends Segment {
                 this.functionCode = c.getValue();
                 break;
             case 2:
-                this.descriptionCode = c.getValue();
+                this.attributeDescriptionCode = c.getValue();
                 break;
             }
         }
@@ -26,7 +26,7 @@ public class ATT extends Segment {
         return functionCode;
     }
 
-    public String getDescriptionCode() {
-        return descriptionCode;
+    public String getAttributeDescriptionCode() {
+        return attributeDescriptionCode;
     }
 }
