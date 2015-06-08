@@ -31,7 +31,6 @@ import org.kie.api.event.rule.ObjectUpdatedEvent;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.objenesis.instantiator.basic.ObjectInputStreamInstantiator;
 
 public class RuleServiceImpl implements RuleService{
 
@@ -177,11 +176,18 @@ public class RuleServiceImpl implements RuleService{
 	    	    
 	    return kieSession;
 	}
-	
+	/**
+	 * Creates a session from cached KieBase.
+	 * @param objectFilePath
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	private KieSession getSessionfromCachedKieBase(final String objectFilePath) throws FileNotFoundException, ClassNotFoundException, IOException{
 		ObjectInputStream in =
 			       new ObjectInputStream( new FileInputStream( objectFilePath ) );
-			@SuppressWarnings( "unchecked" )
+//			@SuppressWarnings( "unchecked" )
 			KieBase kieBase = (KieBase)in.readObject();
 			in.close();		
 		    KieSession kieSession = kieBase.newKieSession();
