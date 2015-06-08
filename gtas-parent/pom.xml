@@ -15,6 +15,7 @@
  
   <modules>
     <module>gtas-commons</module>
+    <module>gtas-rulesvc</module>
     <module>gtas-webapp</module>
     <module>apis-parser</module>
     <module>pnr-parser</module>
