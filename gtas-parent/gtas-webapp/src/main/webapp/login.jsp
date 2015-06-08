@@ -36,12 +36,12 @@
         <div class="col-sm-12 col-md-12 col-xl-12">
             <div class="col-sm-3 div_margin">
                 <!-- Company Logo -->
-                <a href="#"><img src="" title="GTAS" alt="GTAS"/></a>
+                <a href="#"><img src="" title="GTAS" alt="GTAS LOGO GOES HERE"/></a>
             </div>
-            <div class="col-sm-9  div_margin" style="margin-top: 18px;">
+            <div class="col-sm-9  div_margin" style="margin-top: 16px;">
                 <!-- Company Title -->
                 <h1>
-                Global Tracking and Analysis System (GATS)
+                Global Tracking and Analysis System (GTAS)
                 </h1>
                 <p class="sub_title">
                     Tag line goes here
@@ -61,7 +61,7 @@
                 <div class="welcome">
                     <div class="col-sm-12">
                         <p class="welcom_p">
-                            Welcome to Global Tracking and Analysis System of United States Custom and Border Petrol. 
+                            Welcome to Global Tracking and Analysis System of United States Custom and Border Patrol. 
                         </p>
                     
                         <p class="welcom_p">
@@ -69,7 +69,7 @@
                         </p>
                         
                         <p class="welcom_p">
-                            If you are authorized USCBP employee please login to the system by providing your credentials. IF you don't have an account please contact USCBP Admin at gtasadmin@cbp.gov. 
+                            If you are authorized USCBP employee please login to the system by providing your credentials. IF you don't have an account please contact the USCBP Administrator at gtasadmin@cbp.gov. 
                         </p>
                     </div>
                     
