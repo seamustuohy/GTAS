@@ -78,7 +78,4 @@
     </dependencies>
   </dependencyManagement>
   
-  <modules>
-    <module>gtas-parent</module>
-  </modules>
 </project>

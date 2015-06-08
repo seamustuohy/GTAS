@@ -1,73 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                              http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>gov.cbp.taspd.gtas</groupId>
-    <artifactId>gtas-parent</artifactId>
-    <version>0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>gtas-commons</artifactId>
-  <packaging>jar</packaging>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gov.cbp.taspd.gtas</groupId>
+		<artifactId>gtas-parent</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>gtas-commons</artifactId>
+	<packaging>jar</packaging>
 
-  <name>GTAS Domain Objects</name>
+	<name>GTAS Domain Objects</name>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <testFailureIgnore>true</testFailureIgnore>
-          </configuration>
-        </plugin>
-        
-<!-- 	    <plugin> -->
-<!-- 	      run "mvn hibernate3:hbm2ddl" to generate a schema -->
-<!-- 	      <groupId>org.codehaus.mojo</groupId> -->
-<!-- 	      <artifactId>hibernate3-maven-plugin</artifactId> -->
-<!-- 	      <version>2.2</version> -->
-<!-- 	      <configuration> -->
-<!-- 	        <components> -->
-<!-- 	          <component> -->
-<!-- 	            <name>hbm2ddl</name> -->
-<!-- 	            <implementation>jpaconfiguration</implementation> -->
-<!-- 	          </component> -->
-<!-- 	        </components> -->
-<!-- 	        <componentProperties> -->
-<!-- 	          <persistenceunit>Default</persistenceunit> -->
-<!-- 	          <outputfilename>schema.ddl</outputfilename> -->
-<!-- 	          <drop>false</drop> -->
-<!-- 	          <create>true</create> -->
-<!-- 	          <export>false</export> -->
-<!-- 	          <format>true</format> -->
-<!-- 	        </componentProperties> -->
-<!-- 	      </configuration> -->
-<!-- 	    </plugin> -->
-          
-      </plugins>
-    </pluginManagement> 
-  </build>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<!-- run "mvn hibernate3:hbm2ddl" to generate a schema -->
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>hibernate3-maven-plugin</artifactId>
+					<version>2.2</version>
+					<configuration>
+						<components>
+							<component>
+								<name>hbm2ddl</name>
+								<implementation>jpaconfiguration</implementation>
+							</component>
+						</components>
+						<componentProperties>
+							<persistenceunit>Default</persistenceunit>
+							<outputfilename>schema.ddl</outputfilename>
+							<drop>false</drop>
+							<create>true</create>
+							<export>false</export>
+							<format>true</format>
+						</componentProperties>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-annotations</artifactId>
-      <version>3.3.0.ga</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate</artifactId>
-      <version>3.2.5.ga</version>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.transaction</groupId>
-          <artifactId>jta</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-  </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>3.3.0.ga</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate</artifactId>
+			<version>3.2.5.ga</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.transaction</groupId>
+					<artifactId>jta</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
 </project>
