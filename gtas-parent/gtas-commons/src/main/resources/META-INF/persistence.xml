@@ -6,7 +6,7 @@
          http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
 
   <persistence-unit name="Default">
-     <provider>org.hibernate.ejb.HibernatePersistence</provider>
+     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
      <jta-data-source>java:/DefaultDS</jta-data-source>
      <properties>
        <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
