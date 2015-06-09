@@ -14,6 +14,7 @@ public class DTM extends Segment {
         ARRIVAL,
         ARRIVAL_AND_DEPARTURE_MCL,
         DATE_OF_BIRTH,
+        PASSPORT_EXPIRATION_DATE,
         UNKNOWN
     }
     
@@ -40,6 +41,10 @@ public class DTM extends Segment {
                 break;
             case 329:
                 this.dtmCodeQualifier = DtmCode.DATE_OF_BIRTH;                    
+                dateFormat = "yyMMdd";
+                break;
+            case 36:
+                this.dtmCodeQualifier = DtmCode.PASSPORT_EXPIRATION_DATE;                    
                 dateFormat = "yyMMdd";
                 break;
             default:

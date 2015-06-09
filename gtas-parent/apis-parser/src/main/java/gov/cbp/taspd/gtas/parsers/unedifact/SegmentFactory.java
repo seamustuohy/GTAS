@@ -3,11 +3,13 @@ package gov.cbp.taspd.gtas.parsers.unedifact;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.ATT;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.BGM;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.COM;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.DOC;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.DTM;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.FTX;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.GEI;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.LOC;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAD;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAT;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.RFF;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.TDT;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNA;
@@ -62,7 +64,11 @@ public class SegmentFactory {
             return new GEI(composites);
         case "FTX":
             return new FTX(composites);
-            
+        case "NAT":
+            return new NAT(composites);
+        case "DOC":
+            return new DOC(composites);
+
         default:
             return new Segment(segmentType, new Composite[0]);
         }

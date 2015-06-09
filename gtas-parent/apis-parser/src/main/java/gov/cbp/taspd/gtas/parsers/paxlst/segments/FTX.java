@@ -20,7 +20,7 @@ public class FTX extends Segment {
             Element[] e = c.getElements();
             switch (i) {
             case 0:
-                switch(e[0].getValue()) {
+                switch(c.getValue()) {
                 case "BAG":
                     this.subjectCodeQualifier = SubjectCode.BAG;
                     break;
@@ -28,8 +28,12 @@ public class FTX extends Segment {
                 break;
                 
             case 3:
-                this.text1 = e[0].getValue();
-                this.text2 = e[1].getValue();
+                if (e.length >= 1) {
+                    this.text1 = e[0].getValue();
+                }
+                if (e.length >= 2) {
+                    this.text2 = e[1].getValue();                    
+                }
                 break;
             }
         }
