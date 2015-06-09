@@ -19,12 +19,13 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+ 
 	<properties>
 		<jdk.version>1.8</jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<skip.integration.tests>true</skip.integration.tests>
 		<skip.unit.tests>false</skip.unit.tests>
+		<spring.version>4.1.6.RELEASE</spring.version>
 	</properties>
 	<modules>
 		<module>gtas-commons</module>
@@ -32,6 +33,7 @@
 		<module>gtas-webapp</module>
 		<module>apis-parser</module>
 		<module>pnr-parser</module>
+		<module>gtas-rest-service</module>
 	</modules>
 	<dependencies>
 		<!-- Apache Commons -->

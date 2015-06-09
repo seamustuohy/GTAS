@@ -94,6 +94,11 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>gov.cbp.taspd.gtas</groupId>
+			<artifactId>gtas-query-builder</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
