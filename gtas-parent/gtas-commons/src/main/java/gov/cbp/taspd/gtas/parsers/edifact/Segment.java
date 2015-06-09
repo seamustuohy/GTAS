@@ -1,4 +1,4 @@
-package gov.cbp.taspd.gtas.parsers.unedifact;
+package gov.cbp.taspd.gtas.parsers.edifact;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

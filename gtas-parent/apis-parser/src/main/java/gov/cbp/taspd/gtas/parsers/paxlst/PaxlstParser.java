@@ -8,22 +8,21 @@ import gov.cbp.taspd.gtas.model.Gender;
 import gov.cbp.taspd.gtas.model.Message;
 import gov.cbp.taspd.gtas.model.Pax;
 import gov.cbp.taspd.gtas.model.ReportingParty;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.ATT;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.COM;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.DOC;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.DTM;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.DTM.DtmCode;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.FTX;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.GEI;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.LOC;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.LOC.LocCode;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAD;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAT;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.TDT;
-import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
-import gov.cbp.taspd.gtas.parsers.unedifact.SegmentFactory;
-import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNA;
-import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNB;
+import gov.cbp.taspd.gtas.parsers.edifact.EdifactParser;
+import gov.cbp.taspd.gtas.parsers.edifact.Segment;
+import gov.cbp.taspd.gtas.parsers.edifact.segments.UNB;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.ATT;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.COM;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.DOC;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.DTM;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.FTX;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.GEI;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.LOC;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.NAD;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.NAT;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.TDT;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.DTM.DtmCode;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.LOC.LocCode;
 import gov.cbp.taspd.gtas.util.FileUtils;
 import gov.cbp.taspd.gtas.util.ParseUtils;
 
@@ -35,7 +34,6 @@ import java.util.ListIterator;
 import java.util.Set;
 
 public class PaxlstParser {
-    private UNA serviceStrings;
     private String filePath;
     private List<Segment> segments;
     private ApisMessage message;
@@ -51,6 +49,7 @@ public class PaxlstParser {
         byte[] raw = FileUtils.readSmallFile(this.filePath);
         String msg = new String(raw, StandardCharsets.US_ASCII);
         
+        this.segments = new LinkedList<>();
         this.flight = new Flight();
         this.passengers = new HashSet<>();
         this.flight.setPassengers(passengers);
@@ -71,31 +70,14 @@ public class PaxlstParser {
     private void processRawAndGetSegments(String raw) {
         String txt = ParseUtils.stripHeaderAndFooter(raw);
         txt = txt.toUpperCase();
-        
-        int unaIndex = txt.indexOf("UNA");
-        if (unaIndex != -1) {
-            int endIndex = unaIndex + "UNA".length() + 6;
-            String delims = txt.substring(unaIndex, endIndex);
-            serviceStrings = new UNA(delims);
-        } else {
-            serviceStrings = new UNA();
-        }
-
-        int unbIndex = txt.indexOf("UNB");
-        if (unbIndex == -1) {
-            System.err.println("no UNB segment");
-            System.exit(0);
-        }
-        txt = txt.substring(unbIndex);
-        
         txt = txt.replaceAll("\\n|\\r|\\t", "");
-
-        SegmentFactory factory = new SegmentFactory(serviceStrings);
-        segments = new LinkedList<>();
-        String segmentRegex = String.format("\\%c", serviceStrings.getSegmentTerminator());
-        String[] stringSegments = txt.split(segmentRegex);
-        for (String s : stringSegments) {
-            segments.add(factory.build(s));
+        
+        SegmentFactory factory = new SegmentFactory();
+        EdifactParser p = new EdifactParser();
+        LinkedList<Segment> edifactSegments = p.parse(txt);
+        for (Segment s: edifactSegments) {
+            Segment paxlstSegment = factory.build(s);
+            segments.add(paxlstSegment);
         }
     }
 
@@ -124,6 +106,9 @@ public class PaxlstParser {
                 currentGroup = 2;
 //                processFlight(s, i);
                 break;
+            case "UNZ":
+                // done
+                return;
             }
         }       
     }

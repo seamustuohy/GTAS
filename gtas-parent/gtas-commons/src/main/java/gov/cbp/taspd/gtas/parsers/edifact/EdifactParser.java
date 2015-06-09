@@ -1,21 +1,6 @@
-package gov.cbp.taspd.gtas.parsers.unedifact;
+package gov.cbp.taspd.gtas.parsers.edifact;
 
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.ATT;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.BGM;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.COM;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.DOC;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.DTM;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.FTX;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.GEI;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.LOC;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAD;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAT;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.RFF;
-import gov.cbp.taspd.gtas.parsers.paxlst.segments.TDT;
-import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNA;
-import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNB;
-import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNG;
-import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNH;
+import gov.cbp.taspd.gtas.parsers.edifact.segments.UNA;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -23,55 +8,42 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SegmentFactory {
+public class EdifactParser {
     private UNA serviceStrings;
-    public SegmentFactory(UNA serviceStrings) {
-        this.serviceStrings = serviceStrings;
-    }
     
-    public Segment build(String segmentText) {
-        Composite[] parsed = parseSegmentSimple(segmentText);
-        String segmentType = parsed[0].getValue();
-        Composite[] composites = null;
-        if (parsed.length > 1) {
-            composites = Arrays.copyOfRange(parsed, 1, parsed.length);
+    public LinkedList<Segment> parse(String txt) {
+        int unaIndex = txt.indexOf("UNA");
+        if (unaIndex != -1) {
+            int endIndex = unaIndex + "UNA".length() + 6;
+            String delims = txt.substring(unaIndex, endIndex);
+            serviceStrings = new UNA(delims);
+        } else {
+            serviceStrings = new UNA();
+        }
+
+        int unbIndex = txt.indexOf("UNB");
+        if (unbIndex == -1) {
+            System.err.println("no UNB segment");
+            System.exit(0);
+        }
+        txt = txt.substring(unbIndex);
+        
+        txt = txt.replaceAll("\\n|\\r|\\t", "");
+
+        LinkedList<Segment> segments = new LinkedList<>();
+        String segmentRegex = String.format("\\%c", serviceStrings.getSegmentTerminator());
+        String[] stringSegments = txt.split(segmentRegex);
+        for (String s : stringSegments) {
+            Composite[] parsed = parseSegmentSimple(s);
+            String segmentType = parsed[0].getValue();
+            Composite[] composites = null;
+            if (parsed.length > 1) {
+                composites = Arrays.copyOfRange(parsed, 1, parsed.length);
+            }
+            segments.add(new Segment(segmentType, composites));
         }
         
-        switch (segmentType) {
-        case "UNB":            
-            return new UNB(composites);
-        case "UNG":
-            return new UNG(composites);
-        case "UNH":
-            return new UNH(composites);
-        case "BGM":
-            return new BGM(composites);
-        case "RFF":
-            return new RFF(composites);
-        case "NAD":
-            return new NAD(composites);
-        case "COM":
-            return new COM(composites);
-        case "TDT":
-            return new TDT(composites);
-        case "LOC":
-            return new LOC(composites);
-        case "DTM":
-            return new DTM(composites);
-        case "ATT":
-            return new ATT(composites);
-        case "GEI":
-            return new GEI(composites);
-        case "FTX":
-            return new FTX(composites);
-        case "NAT":
-            return new NAT(composites);
-        case "DOC":
-            return new DOC(composites);
-
-        default:
-            return new Segment(segmentType, new Composite[0]);
-        }
+        return segments;
     }
 
     /**
@@ -139,6 +111,5 @@ public class SegmentFactory {
             }
         }
         return composites;
-    }
-    
+    }    
 }

@@ -1,8 +1,8 @@
-package gov.cbp.taspd.gtas.parsers.unedifact.segments;
+package gov.cbp.taspd.gtas.parsers.edifact.segments;
 
-import gov.cbp.taspd.gtas.parsers.unedifact.Composite;
-import gov.cbp.taspd.gtas.parsers.unedifact.Element;
-import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
+import gov.cbp.taspd.gtas.parsers.edifact.Composite;
+import gov.cbp.taspd.gtas.parsers.edifact.Element;
+import gov.cbp.taspd.gtas.parsers.edifact.Segment;
 
 public class UNE extends Segment {
     public UNE(Composite[] composites) {
