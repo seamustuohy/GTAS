@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public abstract class BaseQueryBuilderResult {
 	
-	private int id;
+	private Long id;
 	private String flightNumber;
 	private String carrierCode;
 	private String origin;
@@ -17,10 +17,10 @@ public abstract class BaseQueryBuilderResult {
 	private Date departureDt;
 	private Date arrivalDt;
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getFlightNumber() {

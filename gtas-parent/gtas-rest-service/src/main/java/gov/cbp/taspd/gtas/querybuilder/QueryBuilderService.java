@@ -4,6 +4,7 @@ import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Pax;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,9 +21,8 @@ public class QueryBuilderService {
 		List<Flight> result = new ArrayList<>();
 		
 		Flight flight = new Flight();
-		flight.setId(1);
-		flight.setCarrier("DELTA");
 		flight.setDestination("USA");
+		flight.setEta(new Date());
 		
 		result.add(flight);
 	

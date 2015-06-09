@@ -115,8 +115,8 @@ public class QueryBuilderController {
 					QueryBuilderFlight qbFlight = new QueryBuilderFlight();
 					
 					qbFlight.setId(flight.getId());
-					qbFlight.setFlightNumber(flight.getNumber());
-					qbFlight.setCarrierCode(flight.getCarrier());
+					qbFlight.setFlightNumber(flight.getFlightNumber());
+					qbFlight.setCarrierCode(flight.getCarrier().toString());
 					qbFlight.setOrigin(flight.getOrigin());
 					qbFlight.setOriginCountry(null);
 					qbFlight.setDestination(flight.getDestination());
@@ -144,8 +144,8 @@ public class QueryBuilderController {
 					qbPassenger.setFirstName(passenger.getFirstName());
 					qbPassenger.setLastName(passenger.getLastName());
 					qbPassenger.setPassengerType(null);
-					qbPassenger.setGender(passenger.getGender());
-					qbPassenger.setDob(passenger.getDob());
+					qbPassenger.setGender(passenger.getGender().name());
+					qbPassenger.setDob(passenger.getDob().toString());
 					qbPassenger.setCitizenship(null);
 					qbPassenger.setDocumentNumber(null);
 					qbPassenger.setDocumentType(null);
