@@ -7,8 +7,8 @@
 		<artifactId>gtas-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>gtas</artifactId>
-	<name>gtas</name>
+	<artifactId>gtas-webapp</artifactId>
+	<name>GTAS Web Application</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 
