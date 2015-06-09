@@ -5,7 +5,7 @@ package gov.cbp.taspd.gtas.web.model;
  * @author GTAS5
  *
  */
-public class QueryBuilderPassenger extends AbstractQueryBuilderResult {
+public class QueryBuilderPassenger extends BaseQueryBuilderResult {
 
 	private String firstName;
 	private String lastName;
