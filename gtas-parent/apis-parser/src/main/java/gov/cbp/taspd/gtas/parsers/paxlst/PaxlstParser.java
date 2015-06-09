@@ -1,6 +1,8 @@
 package gov.cbp.taspd.gtas.parsers.paxlst;
 
 import gov.cbp.taspd.gtas.model.ApisMessage;
+import gov.cbp.taspd.gtas.model.Document;
+import gov.cbp.taspd.gtas.model.DocumentCode;
 import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Gender;
 import gov.cbp.taspd.gtas.model.Message;
@@ -8,9 +10,15 @@ import gov.cbp.taspd.gtas.model.Pax;
 import gov.cbp.taspd.gtas.model.ReportingParty;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.ATT;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.COM;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.DOC;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.DTM;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.DTM.DtmCode;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.FTX;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.GEI;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.LOC;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.LOC.LocCode;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAD;
+import gov.cbp.taspd.gtas.parsers.paxlst.segments.NAT;
 import gov.cbp.taspd.gtas.parsers.paxlst.segments.TDT;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
 import gov.cbp.taspd.gtas.parsers.unedifact.SegmentFactory;
@@ -154,37 +162,85 @@ public class PaxlstParser {
             
             case "ATT":
                 ATT att = (ATT)s;
-                String tmp = att.getAttributeDescriptionCode();
-                Gender g;
-                if (tmp.equals("M")) {
-                    g = Gender.MALE;
-                } else {
-                    g = Gender.FEMALE;
-                }
-                p.setGender(g);
+                p.setGender(Gender.valueOf(att.getAttributeDescriptionCode()));
                 break;
                 
             case "DTM":
                 DTM dtm = (DTM)s;
-                p.setDob(dtm.getDtmValue());
+                DtmCode dtmCode = dtm.getDtmCodeQualifier();
+                if (dtmCode == DtmCode.DATE_OF_BIRTH) {
+                    p.setDob(dtm.getDtmValue());
+                }
                 break;
                 
             case "GEI":
-            case "FTX":
+                GEI gei = (GEI)s;
                 break;
-                
+            case "FTX":
+                FTX ftx = (FTX)s;
+                break;
             case "LOC":
                 LOC loc = (LOC)s;
-                //if (loc.get)
+                LocCode locCode = loc.getFunctionCode();
+                String val = loc.getLocationNameCode();
+                if (locCode == LocCode.PORT_OF_DEBARKATION) {
+                    p.setDebarkation(val);
+                } else if (locCode == LocCode.PORT_OF_EMBARKATION) {
+                    p.setEmbarkation(val);
+                }
+                break;
+            case "COM":
+                COM com = (COM)s;
+            case "EMP":
+                break;
+            case "NAT":
+                NAT nat = (NAT)s;
+                break;
+            case "RFF":
                 break;
                 
-            case "COM":
-            case "EMP":
-            case "NAT":
-            case "RFF":
             case "DOC":
+                currentGroup = 5;
+                processDocument(p, s, i);
+                // should be done with pax
+                return;
+    
+            default:
+                i.previous();                
+                return;
+            }
+        }
+    }
+    
+    private void processDocument(Pax p, Segment seg, ListIterator<Segment> i) {
+        DOC doc = (DOC)seg;
+        Document d = new Document();
+        p.getDocuments().add(d);
+        d.setDocumentType(DocumentCode.valueOf(doc.getDocCode()));
+        d.setNumber(doc.getDocumentIdentifier());
+
+        for (;;) {
+            Segment s = i.next();
+            if (s == null) return;
+            System.out.println("\t" + "\t" + s);
+            switch (s.getName()) {
+            case "DTM":
+                DTM dtm = (DTM)s;
+                DtmCode dtmCode = dtm.getDtmCodeQualifier();
+                if (dtmCode == DtmCode.PASSPORT_EXPIRATION_DATE) {
+                    d.setExpirationDate(dtm.getDtmValue());
+                }
+                break;
+            case "LOC":
+                LOC loc = (LOC)s;
+                LocCode locCode = loc.getFunctionCode();
+                if (locCode == LocCode.PLACE_OF_DOCUMENT_ISSUE) {
+//                    d.setIssuanceCountry(loc.getLocationNameCode());
+                }
                 break;
             default:
+                i.previous();
+                currentGroup = 4;
                 return;
             }
         }

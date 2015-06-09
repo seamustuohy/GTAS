@@ -5,7 +5,7 @@ import gov.cbp.taspd.gtas.parsers.unedifact.Element;
 import gov.cbp.taspd.gtas.parsers.unedifact.Segment;
 
 public class LOC extends Segment {
-    public enum FunctionCode {
+    public enum LocCode {
         GATE_PASS_LOCATION,
         DEPARTURE_AIRPORT,
         ARRIVAL_AIRPORT,
@@ -18,10 +18,11 @@ public class LOC extends Segment {
         COUNTRY_OF_RESIDENCE,
         PORT_OF_EMBARKATION,
         PORT_OF_DEBARKATION,
-        PLACE_OF_BIRTH        
+        PLACE_OF_BIRTH,
+        PLACE_OF_DOCUMENT_ISSUE
     }
     
-    private FunctionCode functionCode;
+    private LocCode functionCode;
     private String locationNameCode;
     private String firstRelatedLocationName;
     private String secondRelatedLocationName;
@@ -36,40 +37,43 @@ public class LOC extends Segment {
             case 0:
                 switch(Integer.valueOf(c.getValue())) {
                 case 87:
-                    this.functionCode = FunctionCode.ARRIVAL_AIRPORT;
+                    this.functionCode = LocCode.ARRIVAL_AIRPORT;
                     break;                    
                 case 125:
-                    this.functionCode = FunctionCode.DEPARTURE_AIRPORT;
+                    this.functionCode = LocCode.DEPARTURE_AIRPORT;
                     break;                    
                 case 92:
-                    this.functionCode = FunctionCode.BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT;
+                    this.functionCode = LocCode.BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT;
                     break;                   
-                case 91:
-                    this.functionCode = FunctionCode.GATE_PASS_LOCATION;
-                    break;                    
+// ambiguous?
+//                case 91:
+//                    this.functionCode = LocCode.GATE_PASS_LOCATION;
+//                    break;                    
                 case 188:
-                    this.functionCode = FunctionCode.FILING_LOCATION;
+                    this.functionCode = LocCode.FILING_LOCATION;
                     break;                    
                 case 172:
-                    this.functionCode = FunctionCode.REPORTING_LOCATION;
+                    this.functionCode = LocCode.REPORTING_LOCATION;
                     break;                    
                     
                 case 22:
-                    this.functionCode = FunctionCode.AIRPORT_OF_FIRST_US_ARRIVAL;
+                    this.functionCode = LocCode.AIRPORT_OF_FIRST_US_ARRIVAL;
                     break;
                 case 174:
-                    this.functionCode = FunctionCode.COUNTRY_OF_RESIDENCE;
+                    this.functionCode = LocCode.COUNTRY_OF_RESIDENCE;
                     break;
                 case 178:
-                    this.functionCode = FunctionCode.PORT_OF_EMBARKATION;
+                    this.functionCode = LocCode.PORT_OF_EMBARKATION;
                     break;
                 case 179:
-                    this.functionCode = FunctionCode.PORT_OF_DEBARKATION;
+                    this.functionCode = LocCode.PORT_OF_DEBARKATION;
                     break;
                 case 180:
-                    this.functionCode = FunctionCode.PLACE_OF_BIRTH;
+                    this.functionCode = LocCode.PLACE_OF_BIRTH;
                     break;
-                    
+                case 91:
+                    this.functionCode = LocCode.PLACE_OF_DOCUMENT_ISSUE;
+                    break;
                 }
                 break;
 
@@ -92,7 +96,7 @@ public class LOC extends Segment {
         }
     }
 
-    public FunctionCode getFunctionCode() {
+    public LocCode getFunctionCode() {
         return functionCode;
     }
 

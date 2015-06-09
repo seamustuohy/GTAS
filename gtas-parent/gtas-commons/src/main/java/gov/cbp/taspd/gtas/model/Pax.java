@@ -30,7 +30,7 @@ public class Pax extends BaseEntity {
     private String lastName;
     private String suffix;
     
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     
     @Type(type="date")
@@ -40,7 +40,7 @@ public class Pax extends BaseEntity {
     private String debarkation;
     
     @OneToMany(mappedBy="pax")
-    private Set<Document> documents;
+    private Set<Document> documents = new HashSet<>();
     
     public Set<Flight> getFlights() {
         return flights;
@@ -108,6 +108,13 @@ public class Pax extends BaseEntity {
     public void setDebarkation(String debarkation) {
         this.debarkation = debarkation;
     }
+    public Set<Document> getDocuments() {
+        return documents;
+    }
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
