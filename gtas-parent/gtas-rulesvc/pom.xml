@@ -11,51 +11,53 @@
 	<artifactId>gtasrulesvc</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-
 	<name>gtasrulesvc</name>
-
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.drools</groupId>
+				<artifactId>drools-bom</artifactId>
+				<type>pom</type>
+				<version>6.1.0.Final</version>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<properties>
-		<drools.version>6.2.0.Final</drools.version>
 		<gtas-commons.version>0.1-SNAPSHOT</gtas-commons.version>
 	</properties>
 
 	<dependencies>
-	    <!-- GTAS intermodule dependencies  -->
-	    <dependency>
-		    <groupId>gov.cbp.taspd.gtas</groupId>
-		    <artifactId>gtas-commons</artifactId>
-		    <version>${gtas-commons.version}</version>	    
-	    </dependency>
+		<!-- GTAS intermodule dependencies -->
+		<dependency>
+			<groupId>gov.cbp.taspd.gtas</groupId>
+			<artifactId>gtas-commons</artifactId>
+			<version>${gtas-commons.version}</version>
+		</dependency>
 		<!-- Drools dependencies -->
 		<dependency>
 			<groupId>org.kie</groupId>
 			<artifactId>kie-api</artifactId>
-			<version>${drools.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-core</artifactId>
-			<version>${drools.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-compiler</artifactId>
-			<version>${drools.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-decisiontables</artifactId>
-			<version>${drools.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-templates</artifactId>
-			<version>${drools.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.kie</groupId>
 			<artifactId>kie-internal</artifactId>
-			<version>${drools.version}</version>
 		</dependency>
 	</dependencies>
 </project>
