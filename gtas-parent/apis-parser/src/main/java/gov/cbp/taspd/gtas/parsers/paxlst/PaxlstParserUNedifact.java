@@ -52,9 +52,6 @@ public class PaxlstParserUNedifact extends PaxlstParser {
                 currentGroup = 2;
                 processFlight(s, i);
                 break;
-            case "UNZ":
-                // done
-                return;
             }
         }       
     }

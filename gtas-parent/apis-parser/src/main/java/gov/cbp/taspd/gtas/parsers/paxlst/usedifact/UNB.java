@@ -63,87 +63,43 @@ public class UNB extends Segment {
         return syntaxIdentifier;
     }
 
-    public void setSyntaxIdentifier(String syntaxIdentifier) {
-        this.syntaxIdentifier = syntaxIdentifier;
-    }
-
     public String getVersion() {
         return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
     }
 
     public String getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
     public String getSenderQualifier() {
         return senderQualifier;
-    }
-
-    public void setSenderQualifier(String senderQualifier) {
-        this.senderQualifier = senderQualifier;
     }
 
     public String getRecipient() {
         return recipient;
     }
 
-    public void setRecipient(String recipient) {
-        this.recipient = recipient;
-    }
-
     public String getRecipientQualifier() {
         return recipientQualifier;
-    }
-
-    public void setRecipientQualifier(String recipientQualifier) {
-        this.recipientQualifier = recipientQualifier;
     }
 
     public Date getDateAndTimeOfPreparation() {
         return dateAndTimeOfPreparation;
     }
 
-    public void setDateAndTimeOfPreparation(Date dateAndTimeOfPreparation) {
-        this.dateAndTimeOfPreparation = dateAndTimeOfPreparation;
-    }
-
     public String getInterchangeControlReference() {
         return interchangeControlReference;
-    }
-
-    public void setInterchangeControlReference(String interchangeControlReference) {
-        this.interchangeControlReference = interchangeControlReference;
     }
 
     public String getApplicationReference() {
         return applicationReference;
     }
 
-    public void setApplicationReference(String applicationReference) {
-        this.applicationReference = applicationReference;
-    }
-
     public String getC_priorityCode() {
         return c_priorityCode;
     }
 
-    public void setC_priorityCode(String c_priorityCode) {
-        this.c_priorityCode = c_priorityCode;
-    }
-
     public String getTestIndicator() {
         return testIndicator;
-    }
-
-    public void setTestIndicator(String testIndicator) {
-        this.testIndicator = testIndicator;
     }
 }

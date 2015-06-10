@@ -136,8 +136,4 @@ public class UNG extends Segment {
     public void setReleaseNumber(String releaseNumber) {
         this.releaseNumber = releaseNumber;
     }
-
-    public static String getDateTimeFormat() {
-        return DATE_TIME_FORMAT;
-    }
 }

@@ -26,12 +26,11 @@ public class EdifactParser {
         }
         txt = txt.substring(unbIndex);
         
-        txt = txt.replaceAll("\\n|\\r|\\t", "");
-
         LinkedList<Segment> segments = new LinkedList<>();
         String segmentRegex = String.format("\\%c", serviceStrings.getSegmentTerminator());
         String[] stringSegments = txt.split(segmentRegex);
         for (String s : stringSegments) {
+            s = s.trim();
             System.out.println(s);
             Composite[] parsed = parseSegmentSimple(s);
             if (parsed.length == 0) { 
