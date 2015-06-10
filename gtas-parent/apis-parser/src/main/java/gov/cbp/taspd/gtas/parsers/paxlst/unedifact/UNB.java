@@ -8,7 +8,7 @@ import gov.cbp.taspd.gtas.util.ParseUtils;
 import java.util.Date;
 
 public class UNB extends Segment {
-    public static final String DATE_TIME_FORMAT = "yyMMddhhmm";
+    private static final String DATE_TIME_FORMAT = "yyMMddhhmm";
     
     private String syntaxIdentifier;
     private String syntaxVersion;

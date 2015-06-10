@@ -8,6 +8,8 @@ import gov.cbp.taspd.gtas.util.ParseUtils;
 import java.util.Date;
 
 public class DTM extends Segment {
+    private static final String DATE_TIME_FORMAT = "yyMMddhhmm";
+    
     public enum DtmCode {
         DEPARTURE,
         ARRIVAL,
@@ -27,7 +29,7 @@ public class DTM extends Segment {
             Composite c = this.composites[i];
             Element[] e = c.getElements();
 
-            String dateFormat = UNB.DATE_TIME_FORMAT;
+            String dateFormat = DATE_TIME_FORMAT;
             switch(Integer.valueOf(e[0].getValue())) {
             case 189:
                 this.dtmCodeQualifier = DtmCode.DEPARTURE;

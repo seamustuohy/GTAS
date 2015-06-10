@@ -8,6 +8,8 @@ import gov.cbp.taspd.gtas.util.ParseUtils;
 import java.util.Date;
 
 public class UNG extends Segment {
+    private static final String DATE_TIME_FORMAT = "yyMMddhhmm";
+    
     private String messageGroupIdentification;
     private String senderIdentification;
     private String recipientIdentification;
@@ -34,7 +36,7 @@ public class UNG extends Segment {
                 break;
             case 3:
                 String tmp = e[0].getValue() + e[1].getValue(); 
-                this.dateAndTimeOfPreparation = ParseUtils.parseDateTime(tmp, UNB.DATE_TIME_FORMAT);
+                this.dateAndTimeOfPreparation = ParseUtils.parseDateTime(tmp, DATE_TIME_FORMAT);
                 break;
             case 4:
                 this.groupReferenceNumber = c.getValue();
