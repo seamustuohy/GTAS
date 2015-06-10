@@ -39,17 +39,20 @@ public abstract class PaxlstParser {
         this.message = new ApisMessage();
 
         byte[] raw = FileUtils.readSmallFile(this.filePath);
-        String msg = new String(raw, StandardCharsets.US_ASCII);
+        if (raw == null) {
+            return null;
+        }
+        
         this.message.setRaw(raw);
-
-        processRawAndGetSegments(msg);
+        String msg = new String(raw, StandardCharsets.US_ASCII);
+        processMessageAndGetSegments(msg);
         parseSegments();
         
         return this.message;
     }
     
-    private void processRawAndGetSegments(String raw) {
-        String txt = ParseUtils.stripHeaderAndFooter(raw);
+    private void processMessageAndGetSegments(String msg) {
+        String txt = ParseUtils.stripHeaderAndFooter(msg);
         txt = txt.toUpperCase();
         txt = txt.replaceAll("\\n|\\r|\\t", "");
         

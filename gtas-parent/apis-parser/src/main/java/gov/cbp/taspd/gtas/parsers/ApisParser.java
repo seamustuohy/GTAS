@@ -3,12 +3,15 @@ package gov.cbp.taspd.gtas.parsers;
 import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.parsers.paxlst.PaxlstParser;
 import gov.cbp.taspd.gtas.parsers.paxlst.PaxlstParserUNedifact;
+import gov.cbp.taspd.gtas.parsers.paxlst.PaxlstParserUSedifact;
 
 public class ApisParser {
     public void parseApisFile(String filePath) {
         // TODO: determine type of file: unedifact, usedifact
-        PaxlstParser parser = new PaxlstParserUNedifact(filePath);
-        ApisMessage m = parser.parse();             
+        PaxlstParser UNParser = new PaxlstParserUNedifact(filePath);
+        PaxlstParser USParser = new PaxlstParserUSedifact(filePath);
+        
+        ApisMessage m = USParser.parse();             
     }
     
     public static void main(String[] argv) {        

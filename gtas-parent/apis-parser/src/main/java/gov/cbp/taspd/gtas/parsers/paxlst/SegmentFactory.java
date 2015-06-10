@@ -26,7 +26,6 @@ public class SegmentFactory {
                 return (Segment)c.getDeclaredConstructor(Composite[].class).newInstance(args);
             } catch (Exception e) {
                 System.err.println("unrecognized segment: " + segmentName);
-                e.printStackTrace();
                 return null;
             }
         }

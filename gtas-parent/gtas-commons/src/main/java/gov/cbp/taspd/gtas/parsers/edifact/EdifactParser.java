@@ -32,6 +32,7 @@ public class EdifactParser {
         String segmentRegex = String.format("\\%c", serviceStrings.getSegmentTerminator());
         String[] stringSegments = txt.split(segmentRegex);
         for (String s : stringSegments) {
+            System.out.println(s);
             Composite[] parsed = parseSegmentSimple(s);
             if (parsed.length == 0) { 
                 continue;

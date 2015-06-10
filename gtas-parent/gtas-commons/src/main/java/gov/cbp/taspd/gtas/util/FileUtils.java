@@ -11,7 +11,7 @@ public class FileUtils {
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
-          System.out.println(e);
+          e.printStackTrace();
           return null;
         }       
     }
