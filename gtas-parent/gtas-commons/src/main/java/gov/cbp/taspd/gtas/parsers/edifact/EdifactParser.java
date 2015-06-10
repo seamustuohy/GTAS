@@ -1,7 +1,5 @@
 package gov.cbp.taspd.gtas.parsers.edifact;
 
-import gov.cbp.taspd.gtas.parsers.edifact.segments.UNA;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
