@@ -10,7 +10,6 @@ import gov.cbp.taspd.gtas.model.Pax;
 import gov.cbp.taspd.gtas.model.ReportingParty;
 import gov.cbp.taspd.gtas.parsers.edifact.EdifactParser;
 import gov.cbp.taspd.gtas.parsers.edifact.Segment;
-import gov.cbp.taspd.gtas.parsers.edifact.segments.UNB;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.ATT;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.COM;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.DOC;
@@ -21,6 +20,7 @@ import gov.cbp.taspd.gtas.parsers.unedifact.segments.LOC;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.NAD;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.NAT;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.TDT;
+import gov.cbp.taspd.gtas.parsers.unedifact.segments.UNB;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.DTM.DtmCode;
 import gov.cbp.taspd.gtas.parsers.unedifact.segments.LOC.LocCode;
 import gov.cbp.taspd.gtas.util.FileUtils;
@@ -72,7 +72,7 @@ public class PaxlstParser {
         txt = txt.toUpperCase();
         txt = txt.replaceAll("\\n|\\r|\\t", "");
         
-        SegmentFactory factory = new SegmentFactory();
+        SegmentFactory factory = new SegmentFactory("gov.cbp.taspd.gtas.parsers.unedifact.segments");
         EdifactParser p = new EdifactParser();
         LinkedList<Segment> edifactSegments = p.parse(txt);
         for (Segment s: edifactSegments) {

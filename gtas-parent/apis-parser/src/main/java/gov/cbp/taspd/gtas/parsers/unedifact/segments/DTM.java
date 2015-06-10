@@ -3,7 +3,6 @@ package gov.cbp.taspd.gtas.parsers.unedifact.segments;
 import gov.cbp.taspd.gtas.parsers.edifact.Composite;
 import gov.cbp.taspd.gtas.parsers.edifact.Element;
 import gov.cbp.taspd.gtas.parsers.edifact.Segment;
-import gov.cbp.taspd.gtas.parsers.edifact.segments.UNB;
 import gov.cbp.taspd.gtas.util.ParseUtils;
 
 import java.util.Date;
