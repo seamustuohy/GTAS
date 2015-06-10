@@ -11,15 +11,14 @@ public class SegmentFactory {
     }
     
     public Segment build(Segment s) {
-        String segmentName = s.getName().trim();
+        String segmentName = s.getName();
         switch (segmentName) {
         case "CNT":
         case "UNT":
         case "UNE":
         case "UNZ":
-        case "":
             return s;
-            
+
         default:
             try {
                 Class<?> c = Class.forName(this.segmentPackageName + "." + segmentName);

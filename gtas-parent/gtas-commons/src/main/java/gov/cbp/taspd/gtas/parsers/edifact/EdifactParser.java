@@ -33,7 +33,15 @@ public class EdifactParser {
         String[] stringSegments = txt.split(segmentRegex);
         for (String s : stringSegments) {
             Composite[] parsed = parseSegmentSimple(s);
-            String segmentType = parsed[0].getValue();
+            if (parsed.length == 0) { 
+                continue;
+            }
+            
+            String segmentType = parsed[0].getValue().trim();
+            if (segmentType == null || segmentType.equals("")) {
+                continue;
+            }
+            
             Composite[] composites = null;
             if (parsed.length > 1) {
                 composites = Arrays.copyOfRange(parsed, 1, parsed.length);
