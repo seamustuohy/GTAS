@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class Flight extends BaseEntityAudit {
@@ -33,8 +34,9 @@ public class Flight extends BaseEntityAudit {
     private String flightNumber;
     private String origin;
     
-    @ManyToOne
-    @JoinColumn(name="country", referencedColumnName="id")     
+//    @ManyToOne
+//    @JoinColumn(name="country", referencedColumnName="id")     
+    @Transient
     private Country originCountry;
     
     private String destination;
