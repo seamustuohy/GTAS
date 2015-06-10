@@ -1,4 +1,4 @@
-package gov.cbp.taspd.gtas.parsers.edifact.segments;
+package gov.cbp.taspd.gtas.parsers.edifact;
 
 public class UNA {
     private char componentDataElementSeparator;

@@ -1,4 +1,4 @@
-package gov.cbp.taspd.gtas.parsers.unedifact.segments;
+package gov.cbp.taspd.gtas.parsers.paxlst.unedifact;
 
 import gov.cbp.taspd.gtas.parsers.edifact.Composite;
 import gov.cbp.taspd.gtas.parsers.edifact.Element;
