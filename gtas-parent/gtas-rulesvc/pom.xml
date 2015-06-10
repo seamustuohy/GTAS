@@ -16,10 +16,16 @@
 
 	<properties>
 		<drools.version>6.2.0.Final</drools.version>
+		<gtas-commons.version>0.1-SNAPSHOT</gtas-commons.version>
 	</properties>
 
-	<!-- <url>http://maven.apache.org</url> -->
 	<dependencies>
+	    <!-- GTAS intermodule dependencies  -->
+	    <dependency>
+		    <groupId>gov.cbp.taspd.gtas</groupId>
+		    <artifactId>gtas-commons</artifactId>
+		    <version>${gtas-commons.version}</version>	    
+	    </dependency>
 		<!-- Drools dependencies -->
 		<dependency>
 			<groupId>org.kie</groupId>

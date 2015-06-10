@@ -2,6 +2,7 @@ package gov.cbp.taspd.gtas.rule;
 
 import gov.cbp.taspd.gtas.bo.RuleServiceRequest;
 import gov.cbp.taspd.gtas.error.RuleServiceException;
+import gov.cbp.taspd.gtas.model.ApisMessage;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,13 +21,12 @@ public class RuleRepositoryTest {
 	}
 
 	@Test
-	public void testDefaultRequest() {
-      testTarget.invokeRuleset(0, new RuleServiceRequest() {
-	     });
+	public void testApisRequest() {
+      testTarget.invokeRuleset(testTarget.createRuleServiceRequest(new ApisMessage()));
     }
 
 	@Test(expected=RuleServiceException.class)
 	public void testNullRequest() {
-      testTarget.invokeRuleset(0, null);
+      testTarget.invokeRuleset("gtas.drl", null);
     }
 }

@@ -2,7 +2,10 @@ package gov.cbp.taspd.gtas.rule;
 
 import gov.cbp.taspd.gtas.bo.ApiMesssage;
 import gov.cbp.taspd.gtas.bo.RuleServiceRequest;
+import gov.cbp.taspd.gtas.bo.RuleServiceRequestType;
 import gov.cbp.taspd.gtas.error.RuleServiceException;
+import gov.cbp.taspd.gtas.model.ApisMessage;
+import gov.cbp.taspd.gtas.model.Flight;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,8 +36,10 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
 public class RuleServiceImpl implements RuleService{
-
-	public RuleServiceResult invokeRuleset(int ruleSetId, RuleServiceRequest req) {
+	private static final String DEFAULT_RULESET_NAME = "gtas.drl";
+	
+    @Override
+	public RuleServiceResult invokeRuleset(String ruleSetName, RuleServiceRequest req) {
 		if(null == req){
 			throw new RuleServiceException("Input Request cannot be null");
 		}
@@ -60,6 +65,32 @@ public class RuleServiceImpl implements RuleService{
 		return null;
 	}
 	
+    @Override
+	public RuleServiceResult invokeRuleset(RuleServiceRequest req) {
+    	return invokeRuleset(DEFAULT_RULESET_NAME, req);
+	}
+    
+	@Override
+	public RuleServiceRequest createRuleServiceRequest(
+			final gov.cbp.taspd.gtas.model.Message requestMessage) {
+		RuleServiceRequest ret = null;
+		if(requestMessage instanceof ApisMessage){
+			ret = createApisRequest((ApisMessage)requestMessage);
+		}
+		return ret;
+	}
+    private RuleServiceRequest createApisRequest(final ApisMessage req){
+    	final List<Flight> requestList = new ArrayList<Flight>(req.getFlights());
+    	return new RuleServiceRequest(){
+    		public List<?> getRequestObjects(){
+    			return requestList;
+    		}
+    		public RuleServiceRequestType getRequestType(){
+    			return RuleServiceRequestType.APIS_MESSAGE;
+    		}
+    		
+    	};
+    }
 	/**
 	 * Creates a list of KieSession event listeners.
 	 * @return list of event listeners.
