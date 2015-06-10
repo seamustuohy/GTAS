@@ -45,10 +45,6 @@ public abstract class PaxlstParser {
         processRawAndGetSegments(msg);
         parseSegments();
         
-        for (Pax x : this.passengers) {
-            System.out.println(x.getLastName() + ", " + x.getFirstName() + " " + x.getMiddleName());
-        }
-        
         return this.message;
     }
     
@@ -64,15 +60,5 @@ public abstract class PaxlstParser {
             Segment paxlstSegment = factory.build(s);
             segments.add(paxlstSegment);
         }
-    }
-
-    public static void main(String[] argv) {        
-        if (argv.length < 1) {
-            System.out.println("usage: EdifactParser [filename]");
-            System.exit(0);
-        }
-
-        PaxlstParser parser = new PaxlstParserUNedifact(argv[0]);
-        ApisMessage m = parser.parse();     
     }
 }
