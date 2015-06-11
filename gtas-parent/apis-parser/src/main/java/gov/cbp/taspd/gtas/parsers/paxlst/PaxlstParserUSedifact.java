@@ -13,14 +13,6 @@ import gov.cbp.taspd.gtas.parsers.paxlst.usedifact.UNB;
 import java.util.ListIterator;
 
 public class PaxlstParserUSedifact extends PaxlstParser {
-    public enum GROUP {
-        NONE,
-        HEADER,
-        REPORTING_PARTY,
-        FLIGHT,
-        PAX
-    }
-    private GROUP currentGroup;
     
     public PaxlstParserUSedifact(String filePath) {
         super(filePath, UNB.class.getPackage().getName());
@@ -32,19 +24,47 @@ public class PaxlstParserUSedifact extends PaxlstParser {
         for (ListIterator<Segment> i=segments.listIterator(); i.hasNext(); ) {
             Segment s = i.next();
             System.out.println(s);
+            
             switch (s.getName()) {
             case "CTA":
-                processReportingParty(s);
+                if (currentGroup == GROUP.NONE || currentGroup == GROUP.REPORTING_PARTY) {
+                    currentGroup = GROUP.REPORTING_PARTY;
+                    processReportingParty(s);
+                } else {
+                    handleUnexpectedSegment(s);
+                    return;
+                }
                 break;
+
             case "TDT":
-                processFlight(s);
+                if (currentGroup == GROUP.HEADER 
+                    || currentGroup == GROUP.REPORTING_PARTY
+                    || currentGroup == GROUP.FLIGHT) {
+                    
+                    currentGroup = GROUP.FLIGHT;
+                    processFlight(s);
+                } else {
+                    handleUnexpectedSegment(s);
+                    return;
+                }
                 break;
+                
             case "UNS":
+                currentGroup = GROUP.PAX;
                 break;
+            
             case "PDT":
-                processPax(s);
+                if (currentGroup == GROUP.PAX) {
+                    processPax(s);
+                } else {
+                    // missing UNS segment
+                    handleUnexpectedSegment(s);
+                    return;
+                }
                 break;
+                
             case "UNZ":
+                currentGroup = GROUP.NONE;
                 break;
             }
         }        
@@ -81,4 +101,8 @@ public class PaxlstParserUSedifact extends PaxlstParser {
         rp.setTelephone(cta.getTelephoneNumber());
         rp.setFax(cta.getFaxNumber());
     }
+    
+    private void handleUnexpectedSegment(Segment s) {
+        System.err.println("unexpected segment " + s);
+    }    
 }

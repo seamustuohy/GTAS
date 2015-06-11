@@ -41,7 +41,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                     currentGroup = GROUP.HEADER;
                     processHeader(s, i);
                 } else {
-                    System.err.println("unexpected segment ordering");
+                    handleUnexpectedSegment(s);
                     return;
                 }
                 break;
@@ -54,17 +54,20 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                     currentGroup = GROUP.PAX;
                     processPax(s, i);
                 } else {
-                    System.err.println("unexpected segment ordering");
+                    handleUnexpectedSegment(s);
                     return;                    
                 }
                 break;
             
             case "TDT":
-                if (currentGroup == GROUP.HEADER || currentGroup == GROUP.REPORTING_PARTY) {
+                if (currentGroup == GROUP.HEADER 
+                    || currentGroup == GROUP.REPORTING_PARTY
+                    || currentGroup == GROUP.FLIGHT) {
+                    
                     currentGroup = GROUP.FLIGHT;
                     processFlight(s, i);
                 } else {
-                    System.err.println("unexpected segment ordering");
+                    handleUnexpectedSegment(s);
                     return;                    
                 }
                 
@@ -77,6 +80,10 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }       
     }
     
+    private void handleUnexpectedSegment(Segment s) {
+        System.err.println("unexpected segment " + s);
+    }
+
     private void processReportingParty(Segment seg, ListIterator<Segment> i) {
         NAD nad = (NAD)seg;        
         ReportingParty rp = new ReportingParty();
