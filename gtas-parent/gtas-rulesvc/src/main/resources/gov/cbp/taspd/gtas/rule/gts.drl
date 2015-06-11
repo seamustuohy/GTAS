@@ -16,24 +16,24 @@
 
 package gov.cbp.taspd.gtas.rule;
  
-import gov.cbp.taspd.gtas.bo.ApiMesssage;
+import gov.cbp.taspd.gtas.model.Message;
 
 global java.util.List resultList
  
-rule "R1 - Hello"
+rule "RH1 - Hello Messsage"
     dialect "mvel"
     when
-        m : ApiMesssage( status == ApiMesssage.HELLO, message : message )
+         m:Message( transmissionSource.equals("Hello"), date:transmissionDate )
     then
-        System.out.println( message );
-        modify ( m ) { message = "Goodbye cruel world",
-                   status = ApiMesssage.GOODBYE };
+        System.out.println( "Transmission date ="+date );
+        modify ( m ) { transmissionSource = "Goodbye"};
 end
 
-rule "R2 - Good Bye"
+rule "RH2 - Good Bye Message"
     dialect "java"
     when
-        ApiMesssage( status == ApiMesssage.GOODBYE, message : message )
+        Message( transmissionSource.equals("Goodbye"), date:transmissionDate )
     then
-        System.out.println( message );
+        System.out.println( "Goodbye from Message" );
+        resultList.add(date);
 end

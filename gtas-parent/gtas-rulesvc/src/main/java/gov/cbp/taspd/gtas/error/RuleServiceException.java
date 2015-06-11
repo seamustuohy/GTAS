@@ -7,31 +7,24 @@ public class RuleServiceException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = -4115507029260625072L;
 
-	public RuleServiceException() {
-		super();
-		// TODO Auto-generated constructor stub
+	private String errorCode;
+	
+	public String getErrorCode() {
+		return errorCode;
 	}
 
-	public RuleServiceException(String arg0, Throwable arg1, boolean arg2,
-			boolean arg3) {
-		super(arg0, arg1, arg2, arg3);
-		// TODO Auto-generated constructor stub
+//	public RuleServiceException(String arg0, Throwable arg1, boolean arg2,
+//			boolean arg3) {
+//		super(arg0, arg1, arg2, arg3);
+//	}
+
+	public RuleServiceException(final String msg, final Throwable exception) {
+		super(msg, exception);
 	}
 
-	public RuleServiceException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
+	public RuleServiceException(final String errCode, final String errMessage) {
+		super(errMessage);
+		errorCode = errCode;
 	}
-
-	public RuleServiceException(String arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public RuleServiceException(Throwable arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
 	
 }

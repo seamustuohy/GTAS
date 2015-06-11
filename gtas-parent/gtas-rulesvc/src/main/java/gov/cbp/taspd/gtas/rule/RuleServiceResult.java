@@ -1,5 +1,7 @@
 package gov.cbp.taspd.gtas.rule;
 
-public interface RuleServiceResult {
+import java.util.List;
 
+public interface RuleServiceResult {
+  List<?> getResultList();
 }

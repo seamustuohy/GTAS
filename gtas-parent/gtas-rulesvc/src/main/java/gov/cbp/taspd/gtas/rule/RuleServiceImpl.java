@@ -3,7 +3,8 @@ package gov.cbp.taspd.gtas.rule;
 import gov.cbp.taspd.gtas.bo.ApiMesssage;
 import gov.cbp.taspd.gtas.bo.RuleServiceRequest;
 import gov.cbp.taspd.gtas.bo.RuleServiceRequestType;
-import gov.cbp.taspd.gtas.error.RuleServiceException;
+import gov.cbp.taspd.gtas.constant.RuleServiceConstants;
+import gov.cbp.taspd.gtas.error.RuleServiceErrorHandler;
 import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
 
@@ -34,26 +35,43 @@ import org.kie.api.event.rule.ObjectUpdatedEvent;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class RuleServiceImpl implements RuleService{
 	private static final String DEFAULT_RULESET_NAME = "gtas.drl";
 	
+    @Autowired
+    private RuleServiceErrorHandler errorHandler;
+	
     @Override
 	public RuleServiceResult invokeRuleset(String ruleSetName, RuleServiceRequest req) {
 		if(null == req){
-			throw new RuleServiceException("Input Request cannot be null");
+			throw errorHandler.createException(RuleServiceConstants.NULL_ARGUMENT_ERROR_CODE, "RuleServiceRequest", "RuleServiceImpl.invokeRuleset()");
 		}
 		
 		KieSession ksession = initSessionFromClasspath("GtasKS", createEventListeners());
 		
+		List<?> reqObjectList = req.getRequestObjects();
+		for(Object x:reqObjectList){
+			ksession.insert(x);
+		}
 		
-        final ApiMesssage message = new ApiMesssage();
-        message.setMessage( "Hello World" );
-        message.setStatus( ApiMesssage.HELLO );
-        ksession.insert( message );
+//        final ApiMesssage message = new ApiMesssage();
+//        message.setMessage( "Hello World" );
+//        message.setStatus( ApiMesssage.HELLO );
+//        ksession.insert( message );
 
         // and fire the rules
         ksession.fireAllRules();
+        
+        //extract the result
+        final List<?> resList = (List<?>)ksession.getGlobal( "resultList");
+        RuleServiceResult res = new RuleServiceResult(){
+        	public List<?> getResultList(){
+        		return resList;
+        	}
+        };        
+
         
         // Remove comment if using logging
         // logger.close();
@@ -62,7 +80,7 @@ public class RuleServiceImpl implements RuleService{
         ksession.dispose();
 		
 		
-		return null;
+		return res;
 	}
 	
     @Override
@@ -76,9 +94,17 @@ public class RuleServiceImpl implements RuleService{
 		RuleServiceRequest ret = null;
 		if(requestMessage instanceof ApisMessage){
 			ret = createApisRequest((ApisMessage)requestMessage);
+		}else{
+			//arbitrary Message object
+			ret = createRequest(requestMessage);
 		}
 		return ret;
 	}
+	/**
+	 * Creates a request from a API message.
+	 * @param req the API messsage
+	 * @return RuleServiceRequest object
+	 */
     private RuleServiceRequest createApisRequest(final ApisMessage req){
     	final List<Flight> requestList = new ArrayList<Flight>(req.getFlights());
     	return new RuleServiceRequest(){
@@ -87,6 +113,24 @@ public class RuleServiceImpl implements RuleService{
     		}
     		public RuleServiceRequestType getRequestType(){
     			return RuleServiceRequestType.APIS_MESSAGE;
+    		}
+    		
+    	};
+    }
+	/**
+	 * Creates a request from an arbitrary object.
+	 * @param req the input object
+	 * @return RuleServiceRequest object
+	 */
+    private RuleServiceRequest createRequest(final gov.cbp.taspd.gtas.model.Message req){
+    	final List<gov.cbp.taspd.gtas.model.Message> requestList = new ArrayList<gov.cbp.taspd.gtas.model.Message>();
+    	requestList.add(req);
+    	return new RuleServiceRequest(){
+    		public List<?> getRequestObjects(){
+    			return requestList;
+    		}
+    		public RuleServiceRequestType getRequestType(){
+    			return RuleServiceRequestType.ANY_MESSAGE;
     		}
     		
     	};
@@ -130,7 +174,7 @@ public class RuleServiceImpl implements RuleService{
         // KieServices is the factory for all KIE services 
         KieServices ks = KieServices.Factory.get();
         
-        // From the kie services, a container is created from the classpath
+        // From the KIE services, a container is created from the class-path
         KieContainer kc = ks.getKieClasspathContainer();
         
         // From the container, a session is created based on  
@@ -206,22 +250,5 @@ public class RuleServiceImpl implements RuleService{
 	    out.close();
 	    	    
 	    return kieSession;
-	}
-	/**
-	 * Creates a session from cached KieBase.
-	 * @param objectFilePath
-	 * @return
-	 * @throws FileNotFoundException
-	 * @throws ClassNotFoundException
-	 * @throws IOException
-	 */
-	private KieSession getSessionfromCachedKieBase(final String objectFilePath) throws FileNotFoundException, ClassNotFoundException, IOException{
-		ObjectInputStream in =
-			       new ObjectInputStream( new FileInputStream( objectFilePath ) );
-//			@SuppressWarnings( "unchecked" )
-			KieBase kieBase = (KieBase)in.readObject();
-			in.close();		
-		    KieSession kieSession = kieBase.newKieSession();
-		    return kieSession;
 	}
 }
