@@ -33,7 +33,6 @@
 		<module>gtas-webapp</module>
 		<module>apis-parser</module>
 		<module>pnr-parser</module>
-		<module>gtas-rest-service</module>
 	</modules>
 	<dependencies>
 		<!-- Apache Commons -->
