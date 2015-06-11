@@ -30,7 +30,7 @@ public abstract class PaxlstParser {
 
     protected ApisMessage message;
     protected List<Segment> segments;
-    protected Flight flight;
+    protected Set<Flight> flights;
     protected Set<Pax> passengers;
     
     public PaxlstParser(String filePath, String segmentPackageName) {
@@ -42,9 +42,8 @@ public abstract class PaxlstParser {
     
     public ApisMessage parse() {
         this.segments = new LinkedList<>();
-        this.flight = new Flight();
+        this.flights = new HashSet<>();
         this.passengers = new HashSet<>();
-        this.flight.setPassengers(passengers);
         this.message = new ApisMessage();
 
         byte[] raw = FileUtils.readSmallFile(this.filePath);

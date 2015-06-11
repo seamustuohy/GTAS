@@ -10,7 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
+import org.jadira.cdt.country.ISOCountryCode;
+import org.hibernate.annotations.Type;
 
 @Entity
 public class Flight extends BaseEntityAudit {
@@ -36,8 +37,8 @@ public class Flight extends BaseEntityAudit {
     
 //    @ManyToOne
 //    @JoinColumn(name="country", referencedColumnName="id")     
-    @Transient
-    private Country originCountry;
+    @Type(type = "org.jadira.usertype.country.PersistentISOCountryCode")
+    private ISOCountryCode originCountry;
     
     private String destination;
     
@@ -80,10 +81,10 @@ public class Flight extends BaseEntityAudit {
     public void setOrigin(String origin) {
         this.origin = origin;
     }
-    public Country getOriginCountry() {
+    public ISOCountryCode getOriginCountry() {
         return originCountry;
     }
-    public void setOriginCountry(Country originCountry) {
+    public void setOriginCountry(ISOCountryCode originCountry) {
         this.originCountry = originCountry;
     }
     public String getDestination() {

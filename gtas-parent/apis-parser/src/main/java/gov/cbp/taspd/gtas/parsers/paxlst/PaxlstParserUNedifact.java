@@ -2,6 +2,7 @@ package gov.cbp.taspd.gtas.parsers.paxlst;
 
 import gov.cbp.taspd.gtas.model.Document;
 import gov.cbp.taspd.gtas.model.DocumentCode;
+import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Gender;
 import gov.cbp.taspd.gtas.model.Pax;
 import gov.cbp.taspd.gtas.model.ReportingParty;
@@ -202,7 +203,27 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
 
     private void processFlight(Segment seg, ListIterator<Segment> i) {
         TDT tdt = (TDT)seg;
-        this.flight.setFlightNumber(tdt.getC_journeyIdentifier());
+        Flight f = new Flight();
+        this.flights.add(f);
+        f.setFlightNumber(tdt.getC_journeyIdentifier());
+
+        for (;;) {
+            Segment s = i.next();
+            if (s == null) return;
+            System.out.println("\t" + s);
+            switch (s.getName()) {
+            case "LOC":
+                LOC loc = (LOC)s;
+                
+                break;
+            case "DTM":
+                DTM dtm = (DTM)s;
+                break;
+            default:
+                i.previous();
+                return;
+            }
+        }
     }
     
     private void processHeader(Segment seg, ListIterator<Segment> i) {
