@@ -22,35 +22,56 @@ import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.UNB;
 
 import java.util.ListIterator;
 
-public class PaxlstParserUNedifact extends PaxlstParser {
+public final class PaxlstParserUNedifact extends PaxlstParser {
+
     public PaxlstParserUNedifact(String filePath) {
         super(filePath, UNB.class.getPackage().getName());
     }
     
     public void parseSegments() {
-        currentGroup = 0;
+        currentGroup = GROUP.NONE;
         
         for (ListIterator<Segment> i=segments.listIterator(); i.hasNext(); ) {
             Segment s = i.next();
             System.out.println(s);
+
             switch (s.getName()) {
             case "UNB":
-                processUnb(s);
-                break;
-            case "UNH":
-                break;
-            case "NAD":
-                if (currentGroup == 0) {
-                    currentGroup = 1;
-                    processReportingParty(s, i);
+                if (currentGroup == GROUP.NONE) {
+                    currentGroup = GROUP.HEADER;
+                    processHeader(s, i);
                 } else {
-                    currentGroup = 4;
-                    processPax(s, i);
+                    System.err.println("unexpected segment ordering");
+                    return;
                 }
                 break;
+                
+            case "NAD":
+                if (currentGroup == GROUP.HEADER || currentGroup == GROUP.REPORTING_PARTY) {
+                    currentGroup = GROUP.REPORTING_PARTY;
+                    processReportingParty(s, i);
+                } else if (currentGroup == GROUP.FLIGHT || currentGroup == GROUP.PAX) {
+                    currentGroup = GROUP.PAX;
+                    processPax(s, i);
+                } else {
+                    System.err.println("unexpected segment ordering");
+                    return;                    
+                }
+                break;
+            
             case "TDT":
-                currentGroup = 2;
-                processFlight(s, i);
+                if (currentGroup == GROUP.HEADER || currentGroup == GROUP.REPORTING_PARTY) {
+                    currentGroup = GROUP.FLIGHT;
+                    processFlight(s, i);
+                } else {
+                    System.err.println("unexpected segment ordering");
+                    return;                    
+                }
+                
+                break;
+                
+            case "UNZ":
+                currentGroup = GROUP.NONE;
                 break;
             }
         }       
@@ -128,7 +149,6 @@ public class PaxlstParserUNedifact extends PaxlstParser {
                 break;
                 
             case "DOC":
-                currentGroup = 5;
                 processDocument(p, s, i);
                 // should be done with pax
                 return;
@@ -168,7 +188,6 @@ public class PaxlstParserUNedifact extends PaxlstParser {
                 break;
             default:
                 i.previous();
-                currentGroup = 4;
                 return;
             }
         }
@@ -179,9 +198,26 @@ public class PaxlstParserUNedifact extends PaxlstParser {
         this.flight.setFlightNumber(tdt.getC_journeyIdentifier());
     }
     
-    private void processUnb(Segment seg) {
+    private void processHeader(Segment seg, ListIterator<Segment> i) {
         UNB unb = (UNB)seg;
-//        message.setSender(unb.getSenderIdentification());
-//        message.setReceiver(unb.getRecipientIdentification());
+        
+        for (;;) {
+            Segment s = i.next();
+            if (s == null) return;
+            System.out.println("\t" + s);
+            switch (s.getName()) {
+            case "UNG":
+                break;
+            case "UNH":
+                break;
+            case "BGM":
+                break;
+            case "RFF":
+                break;
+            default:
+                i.previous();
+                return;
+            }
+        }
     }
 }

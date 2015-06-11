@@ -17,12 +17,21 @@ import java.util.Set;
 public abstract class PaxlstParser {
     private String filePath;
     private String segmentPackageName;
+
+    protected enum GROUP {
+        NONE,
+        HEADER,
+        REPORTING_PARTY,
+        FLIGHT,
+        PAX
+    }
     
+    protected GROUP currentGroup;
+
     protected ApisMessage message;
     protected List<Segment> segments;
     protected Flight flight;
     protected Set<Pax> passengers;
-    protected int currentGroup;
     
     public PaxlstParser(String filePath, String segmentPackageName) {
         this.filePath = filePath;
