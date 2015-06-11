@@ -1,11 +1,11 @@
-package gov.cbp.taspd.gtas.web.model;
+package gov.cbp.taspd.gtas.web.querybuilder.model;
 
 /**
  * 
  * @author GTAS5
  *
  */
-public class QueryBuilderFlight extends BaseQueryBuilderResult {
+public class QueryBuilderFlightResult extends BaseQueryBuilderResult {
 
 	private String originCountry;
 	private String destinationCountry;

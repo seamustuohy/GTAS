@@ -1,11 +1,11 @@
-package gov.cbp.taspd.gtas.web.model;
+package gov.cbp.taspd.gtas.web.querybuilder.model;
 
 /**
  * 
  * @author GTAS5
  *
  */
-public class QueryBuilderPassenger extends BaseQueryBuilderResult {
+public class QueryBuilderPassengerResult extends BaseQueryBuilderResult {
 
 	private String firstName;
 	private String lastName;

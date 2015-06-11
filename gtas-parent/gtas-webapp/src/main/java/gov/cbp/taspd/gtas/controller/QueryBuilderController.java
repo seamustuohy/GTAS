@@ -1,12 +1,14 @@
 package gov.cbp.taspd.gtas.controller;
 
 import gov.cbp.taspd.gtas.constants.URIConstants;
-import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Pax;
 import gov.cbp.taspd.gtas.querybuilder.QueryBuilderService;
-import gov.cbp.taspd.gtas.web.model.QueryBuilderFlight;
-import gov.cbp.taspd.gtas.web.model.QueryBuilderPassenger;
-import gov.cbp.taspd.gtas.web.model.QueryBuilderTable;
+import gov.cbp.taspd.gtas.web.querybuilder.model.Address;
+import gov.cbp.taspd.gtas.web.querybuilder.model.Column;
+import gov.cbp.taspd.gtas.web.querybuilder.model.Flight;
+import gov.cbp.taspd.gtas.web.querybuilder.model.IWebModel;
+import gov.cbp.taspd.gtas.web.querybuilder.model.QueryBuilderFlightResult;
+import gov.cbp.taspd.gtas.web.querybuilder.model.QueryBuilderPassengerResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,22 +33,13 @@ public class QueryBuilderController {
 	QueryBuilderService queryService;
 	
 	@RequestMapping(value = URIConstants.INIT, method = RequestMethod.GET)
-	public List<QueryBuilderTable> initQueryBuilder() {
-		List<QueryBuilderTable> tableList = new ArrayList<>();
+	public List<IWebModel> initQueryBuilder() {
+		List<IWebModel> modelList = new ArrayList<>();
 		
-		QueryBuilderTable qbTable = new QueryBuilderTable();
-		qbTable.setTableName("Flight");
-		TreeMap<String, String> columns = new TreeMap<>();
-		columns.put("carrier", "Carrier");
-		columns.put("eta", "ETA");
-		columns.put("etd", "ETD");
-		columns.put("flightNumber", "Number");
+		modelList.add(createFlight());
+		modelList.add(createAddress());
 		
-		qbTable.setColumn(columns);
-		
-		tableList.add(qbTable);
-		
-		return tableList;
+		return modelList;
 	}
 	
 	/**
@@ -54,9 +47,9 @@ public class QueryBuilderController {
 	 * @param query
 	 */
 	@RequestMapping(value = URIConstants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.GET)
-	public List<QueryBuilderFlight> runQueryOnFlight(String query) {
+	public List<QueryBuilderFlightResult> runQueryOnFlight(String query) {
 		
-		return mapToQueryBuilderFlight(queryService.runQueryOnFlight(query));
+		return null;
 	}
 	
 	/**
@@ -65,9 +58,9 @@ public class QueryBuilderController {
 	 * @return
 	 */
 	@RequestMapping(value = URIConstants.RUN_QUERY_PASSENGER_URI, method = RequestMethod.GET)
-	public List<QueryBuilderPassenger> runQueryOnPassenger(String query) {
+	public List<QueryBuilderPassengerResult> runQueryOnPassenger(String query) {
 		
-		return mapToQueryBuilderPassenger(queryService.runQueryOnPassenger(query));
+		return null;
 	}
 	
 	/**
@@ -105,61 +98,74 @@ public class QueryBuilderController {
 		queryService.deleteQuery();
 	}
 	
-	private List<QueryBuilderFlight> mapToQueryBuilderFlight(List<Flight> flightList) {
-		List<QueryBuilderFlight> qbFlightList = new ArrayList<>();
+	private Flight createFlight() {
+		Flight flight = new Flight();
+		List<Column> colList = new ArrayList<>();
 		
-		if(flightList != null) {
-			for(Flight flight : flightList) {
-				
-				if(flight != null) {
-					QueryBuilderFlight qbFlight = new QueryBuilderFlight();
-					
-					qbFlight.setId(flight.getId());
-					qbFlight.setFlightNumber(flight.getFlightNumber());
-					qbFlight.setCarrierCode(flight.getCarrier().toString());
-					qbFlight.setOrigin(flight.getOrigin());
-					qbFlight.setOriginCountry(null);
-					qbFlight.setDestination(flight.getDestination());
-					qbFlight.setDestinationCountry(null);
-					qbFlight.setDepartureDt(flight.getEtd());
-					qbFlight.setArrivalDt(flight.getEta());
-					
-					qbFlightList.add(qbFlight);
-				}
-			}
-		}
+		flight.setLabel("Flight");
 		
-		return qbFlightList;
+		Column qbColumn = new Column();
+		qbColumn.setId("carrier");
+		qbColumn.setLabel("Carrier");
+		qbColumn.setType("string");
+		
+		colList.add(qbColumn);
+		
+		qbColumn = new Column();
+		qbColumn.setId("eta");
+		qbColumn.setLabel("ETA");
+		qbColumn.setType("date");
+		colList.add(qbColumn);
+		
+		qbColumn.setId("etd");
+		qbColumn.setLabel("ETD");
+		qbColumn.setType("date");
+		colList.add(qbColumn);
+		
+		qbColumn = new Column();
+		qbColumn.setId("flightNumber");
+		qbColumn.setLabel("Number");
+		qbColumn.setType("string");
+		colList.add(qbColumn);
+		
+		flight.setColumns(colList);
+		
+		return flight;
 	}
 	
-	private List<QueryBuilderPassenger> mapToQueryBuilderPassenger(List<Pax> passengerList) {
-		List<QueryBuilderPassenger> qbPassengerList = new ArrayList<>();
+	private Address createAddress() {
+		Address address = new Address();
+		List<Column> colList = new ArrayList<>();
 		
-		if(passengerList != null) {
-			for(Pax passenger : passengerList) {
-				if(passenger != null) {
-					QueryBuilderPassenger qbPassenger = new QueryBuilderPassenger();
-					
-					qbPassenger.setId(passenger.getId());
-					qbPassenger.setFirstName(passenger.getFirstName());
-					qbPassenger.setLastName(passenger.getLastName());
-					qbPassenger.setPassengerType(null);
-					qbPassenger.setGender(passenger.getGender().name());
-					qbPassenger.setDob(passenger.getDob().toString());
-					qbPassenger.setCitizenship(null);
-					qbPassenger.setDocumentNumber(null);
-					qbPassenger.setDocumentType(null);
-					qbPassenger.setDocumentIssuanceContry(null);
-					qbPassenger.setSeatNumber(null);
-					qbPassenger.setStatus(null);
-					qbPassenger.setOnWatchList(true);
-					qbPassenger.setOnSomethingList(true);
-					
-					qbPassengerList.add(qbPassenger);
-				}
-			}
-		}
+		address.setLabel("Address");
 		
-		return qbPassengerList;
+		Column qbColumn = new Column();
+		qbColumn.setId("firstName");
+		qbColumn.setLabel("First Name");
+		qbColumn.setType("string");
+		
+		colList.add(qbColumn);
+		
+		qbColumn = new Column();
+		qbColumn.setId("lastName");
+		qbColumn.setLabel("Last Name");
+		qbColumn.setType("string");
+		colList.add(qbColumn);
+		
+		qbColumn.setId("streetAddress1");
+		qbColumn.setLabel("Street Address 1");
+		qbColumn.setType("string");
+		colList.add(qbColumn);
+		
+		qbColumn = new Column();
+		qbColumn.setId("streetAddress2");
+		qbColumn.setLabel("Street Address 2");
+		qbColumn.setType("string");
+		colList.add(qbColumn);
+		
+		address.setColumns(colList);
+		
+		return address;
 	}
+	
 }

@@ -1,4 +1,4 @@
-package gov.cbp.taspd.gtas.web.model;
+package gov.cbp.taspd.gtas.web.querybuilder.model;
 
 import java.util.Date;
 
