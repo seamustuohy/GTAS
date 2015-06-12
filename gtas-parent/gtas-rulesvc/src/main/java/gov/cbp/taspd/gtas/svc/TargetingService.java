@@ -4,6 +4,7 @@
 package gov.cbp.taspd.gtas.svc;
 
 import gov.cbp.taspd.gtas.model.ApisMessage;
+import gov.cbp.taspd.gtas.rule.RuleServiceResult;
 
 
 /**
@@ -12,5 +13,5 @@ import gov.cbp.taspd.gtas.model.ApisMessage;
  */
 
 public interface TargetingService {
-  void analyzeApisMessage(ApisMessage message);
+	RuleServiceResult analyzeApisMessage(ApisMessage message);
 }

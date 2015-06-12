@@ -10,4 +10,9 @@ public final class URIConstants {
 	public static final String EDIT_QUERY_URI = "/editQuery";
 	public static final String DELETE_QUERY_URI = "/deleteQuery";
 	
+	//UDR URI
+	public static final String UDR_BUILDER_ROOT = "/udrbuilder";
+	public static final String UDR_GET = "/getUdr";
+	public static final String UDR_TEST = "/testUdr";
+	
 }
