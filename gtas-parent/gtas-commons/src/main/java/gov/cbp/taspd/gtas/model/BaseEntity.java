@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 @MappedSuperclass  
 public abstract class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;  
@@ -46,8 +49,13 @@ public abstract class BaseEntity implements Serializable {
         return true;  
     }  
   
-    @Override  
-    public String toString() {  
-        return this.getClass().getName() + " [ID=" + id + "]";  
-    }  
+//    @Override  
+//    public String toString() {  
+//        return this.getClass().getName() + " [ID=" + id + "]";  
+//    }  
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    }        
 }  

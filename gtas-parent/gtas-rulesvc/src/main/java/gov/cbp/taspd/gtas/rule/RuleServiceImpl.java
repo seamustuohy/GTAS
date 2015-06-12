@@ -1,6 +1,6 @@
 package gov.cbp.taspd.gtas.rule;
 
-import gov.cbp.taspd.gtas.bo.ApiMesssage;
+import gov.cbp.taspd.gtas.bo.RuleExecutionStatistics;
 import gov.cbp.taspd.gtas.bo.RuleServiceRequest;
 import gov.cbp.taspd.gtas.bo.RuleServiceRequestType;
 import gov.cbp.taspd.gtas.constant.RuleServiceConstants;
@@ -8,29 +8,18 @@ import gov.cbp.taspd.gtas.error.RuleServiceErrorHandler;
 import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.kie.api.KieBase;
-import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
-import org.kie.api.builder.KieBuilder;
-import org.kie.api.builder.KieFileSystem;
-import org.kie.api.builder.Message;
-import org.kie.api.builder.Results;
-import org.kie.api.conf.EventProcessingOption;
 import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.DebugAgendaEventListener;
 import org.kie.api.event.rule.DebugRuleRuntimeEventListener;
+import org.kie.api.event.rule.ObjectDeletedEvent;
+import org.kie.api.event.rule.ObjectInsertedEvent;
 import org.kie.api.event.rule.ObjectUpdatedEvent;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieContainer;
@@ -48,27 +37,30 @@ public class RuleServiceImpl implements RuleService{
 		if(null == req){
 			throw errorHandler.createException(RuleServiceConstants.NULL_ARGUMENT_ERROR_CODE, "RuleServiceRequest", "RuleServiceImpl.invokeRuleset()");
 		}
+		/*
+		 * object where execution statistics are collected.
+		 */
+		final RuleExecutionStatistics stats = new RuleExecutionStatistics();
 		
-		KieSession ksession = initSessionFromClasspath("GtasKS", createEventListeners());
+		KieSession ksession = initSessionFromClasspath("GtasKS", createEventListeners(stats));
 		
 		List<?> reqObjectList = req.getRequestObjects();
 		for(Object x:reqObjectList){
 			ksession.insert(x);
 		}
 		
-//        final ApiMesssage message = new ApiMesssage();
-//        message.setMessage( "Hello World" );
-//        message.setStatus( ApiMesssage.HELLO );
-//        ksession.insert( message );
-
         // and fire the rules
         ksession.fireAllRules();
         
         //extract the result
         final List<?> resList = (List<?>)ksession.getGlobal( "resultList");
+        
         RuleServiceResult res = new RuleServiceResult(){
         	public List<?> getResultList(){
         		return resList;
+        	}
+        	public RuleExecutionStatistics getExecutionStatistics(){
+        		return stats;
         	}
         };        
 
@@ -139,14 +131,14 @@ public class RuleServiceImpl implements RuleService{
 	 * Creates a list of KieSession event listeners.
 	 * @return list of event listeners.
 	 */
-	private List<EventListener> createEventListeners(){
+	private List<EventListener> createEventListeners(final RuleExecutionStatistics stats){
 		List<EventListener> eventListenerList = new LinkedList<EventListener>();
 		
 		eventListenerList.add(new DebugAgendaEventListener(){
 
 			@Override
 			public void afterMatchFired(AfterMatchFiredEvent event) {
-				System.out.println("Fired rule name ="+ event.getMatch().getRule().getName());
+				stats.addRuleFired(event.getMatch().getRule().getName());
 				super.afterMatchFired(event);
 			}
 			
@@ -155,8 +147,26 @@ public class RuleServiceImpl implements RuleService{
 
 			@Override
 			public void objectUpdated(ObjectUpdatedEvent event) {
-				System.out.println("Object Updated by Rule:"+event.getRule().getName());
+				stats.addModifiedObject(event.getObject());
 				super.objectUpdated(event);
+			}
+
+			/* (non-Javadoc)
+			 * @see org.kie.api.event.rule.DebugRuleRuntimeEventListener#objectDeleted(org.kie.api.event.rule.ObjectDeletedEvent)
+			 */
+			@Override
+			public void objectDeleted(ObjectDeletedEvent event) {
+				stats.addDeletedObject(event.getOldObject());
+				super.objectDeleted(event);
+			}
+
+			/* (non-Javadoc)
+			 * @see org.kie.api.event.rule.DebugRuleRuntimeEventListener#objectInserted(org.kie.api.event.rule.ObjectInsertedEvent)
+			 */
+			@Override
+			public void objectInserted(ObjectInsertedEvent event) {
+				stats.addInsertedObject(event.getObject());
+				super.objectInserted(event);
 			}
 			
 		});
@@ -213,42 +223,4 @@ public class RuleServiceImpl implements RuleService{
         return ksession;
 	}
 	
-	/**
-	 * Creates a KieSession from a DRL file.
-	 * @see http://stackoverflow.com/questions/27488034/with-drools-6-x-how-do-i-avoid-maven-and-the-compiler
-	 * @param filePath
-	 * @param outFilePath
-	 * @return
-	 * @throws FileNotFoundException
-	 */
-	private KieSession initSessionFromFile(final String filePath, final String outFilePath) throws FileNotFoundException, IOException{
-	    KieServices ks = KieServices.Factory.get();
-	    KieFileSystem kfs = ks.newKieFileSystem();
-	    FileInputStream fis = new FileInputStream( filePath );
-	    kfs.write( "src/main/resources/sale.drl",
-	                   ks.getResources().newInputStreamResource( fis ) );
-	    KieBuilder kieBuilder = ks.newKieBuilder( kfs ).buildAll();
-	    Results results = kieBuilder.getResults();
-	    if( results.hasMessages( Message.Level.ERROR ) ){
-	        System.out.println( results.getMessages() );
-	        throw new IllegalStateException( "### errors ###" );
-	    }
-	    KieContainer kieContainer =
-	        ks.newKieContainer( ks.getRepository().getDefaultReleaseId() );
-
-	    // CEP - get the KIE related configuration container and set the EventProcessing (from default cloud) to Stream
-	    KieBaseConfiguration config = ks.newKieBaseConfiguration();
-	    config.setOption( EventProcessingOption.STREAM );
-	    KieBase kieBase = kieContainer.newKieBase( config );
-	    //      KieSession kieSession = kieContainer.newKieSession();
-	    KieSession kieSession = kieBase.newKieSession();
-	    
-	    //save the KieBase so that sessions can be created fast in the future.
-	    ObjectOutputStream out =
-	            new ObjectOutputStream( new FileOutputStream( outFilePath ) );
-	    out.writeObject( kieBase );
-	    out.close();
-	    	    
-	    return kieSession;
-	}
 }

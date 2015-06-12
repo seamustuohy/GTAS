@@ -11,53 +11,40 @@
   <artifactId>gtas-commons</artifactId>
   <packaging>jar</packaging>
 
-  <name>GTAS Domain Objects</name>
+  <name>GTAS Common Classes</name>
 
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
-          <!-- run "mvn hibernate3:hbm2ddl" to generate a schema -->
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>hibernate3-maven-plugin</artifactId>
-          <version>2.2</version>
+          <groupId>de.juplo</groupId>
+          <artifactId>hibernate4-maven-plugin</artifactId>
+          <version>1.1.0</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>export</goal>
+              </goals>
+            </execution>
+          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>org.jadira.usertype</groupId>
+              <!-- <artifactId>usertype.extended</artifactId> -->
+              <artifactId>usertype.core</artifactId>
+              <version>3.2.0.GA</version>
+            </dependency>
+            <dependency>
+              <groupId>org.jadira.cdt</groupId>
+              <artifactId>cdt</artifactId>
+              <version>3.2.0.GA</version>
+            </dependency>
+          </dependencies>
           <configuration>
-            <components>
-              <component>
-                <name>hbm2ddl</name>
-                <implementation>jpaconfiguration</implementation>
-              </component>
-            </components>
-            <componentProperties>
-              <persistenceunit>Default</persistenceunit>
-              <outputfilename>schema.ddl</outputfilename>
-              <drop>false</drop>
-              <create>true</create>
-              <export>false</export>
-              <format>true</format>
-            </componentProperties>
+            <target>NONE</target>
           </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
   </build>
-
-<!--   <dependencies> -->
-<!--     <dependency> -->
-<!--       <groupId>org.hibernate</groupId> -->
-<!--       <artifactId>hibernate-annotations</artifactId> -->
-<!--       <version>3.3.0.ga</version> -->
-<!--     </dependency> -->
-<!--     <dependency> -->
-<!--       <groupId>org.hibernate</groupId> -->
-<!--       <artifactId>hibernate</artifactId> -->
-<!--       <version>3.2.5.ga</version> -->
-<!--       <exclusions> -->
-<!--         <exclusion> -->
-<!--           <groupId>javax.transaction</groupId> -->
-<!--           <artifactId>jta</artifactId> -->
-<!--         </exclusion> -->
-<!--       </exclusions> -->
-<!--     </dependency> -->
-<!--   </dependencies> -->
 </project>

@@ -11,7 +11,11 @@
   <name>GTAS Web Application</name>
   <packaging>war</packaging>
   <version>1.0.0-BUILD-SNAPSHOT</version>
-
+  
+  <properties>
+    <ruleservice.version>0.1.1-SNAPSHOT</ruleservice.version>
+  </properties>
+  
   <dependencies>
     <!-- JPA Provider (Hibernate) -->
     <dependency>
@@ -98,6 +102,11 @@
       <groupId>gov.cbp.taspd.gtas</groupId>
       <artifactId>gtas-query-builder</artifactId>
       <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>gov.cbp.taspd.gtas</groupId>
+	  <artifactId>gtasrulesvc</artifactId>
+	  <version>${ruleservice.version}</version>
     </dependency>
   </dependencies>
   <build>

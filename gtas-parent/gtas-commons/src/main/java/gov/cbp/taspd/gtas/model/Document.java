@@ -8,10 +8,15 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Type;
+import org.jadira.cdt.country.ISOCountryCode;
+
 @Entity
 public class Document extends BaseEntity {
+    public Document() { }
+    
     @Enumerated(EnumType.STRING)    
-    private DocumentCode documentType;
+    private DocumentType documentType;
     
     private String number;
     
@@ -19,19 +24,20 @@ public class Document extends BaseEntity {
     
     private Date issuanceDate;
     
-    @ManyToOne
-    @JoinColumn(name="country", referencedColumnName="id")         
-    private Country issuanceCountry;
+//    @ManyToOne
+//    @JoinColumn(name="country", referencedColumnName="id")         
+    @Type(type = "org.jadira.usertype.country.PersistentISOCountryCode")
+    private ISOCountryCode issuanceCountry;
     
     @ManyToOne
     @JoinColumn(name="pax_id", referencedColumnName="id")         
     private Pax pax;
 
-    public DocumentCode getDocumentType() {
+    public DocumentType getDocumentType() {
         return documentType;
     }
 
-    public void setDocumentType(DocumentCode documentType) {
+    public void setDocumentType(DocumentType documentType) {
         this.documentType = documentType;
     }
 
@@ -59,11 +65,11 @@ public class Document extends BaseEntity {
         this.issuanceDate = issuanceDate;
     }
 
-    public Country getIssuanceCountry() {
+    public ISOCountryCode getIssuanceCountry() {
         return issuanceCountry;
     }
 
-    public void setIssuanceCountry(Country issuanceCountry) {
+    public void setIssuanceCountry(ISOCountryCode issuanceCountry) {
         this.issuanceCountry = issuanceCountry;
     }
 

@@ -3,6 +3,7 @@ package gov.cbp.taspd.gtas.parsers.paxlst;
 import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Pax;
+import gov.cbp.taspd.gtas.model.ReportingParty;
 import gov.cbp.taspd.gtas.parsers.edifact.EdifactParser;
 import gov.cbp.taspd.gtas.parsers.edifact.Segment;
 import gov.cbp.taspd.gtas.util.FileUtils;
@@ -30,7 +31,7 @@ public abstract class PaxlstParser {
 
     protected ApisMessage message;
     protected List<Segment> segments;
-    protected Flight flight;
+    protected Set<Flight> flights;
     protected Set<Pax> passengers;
     
     public PaxlstParser(String filePath, String segmentPackageName) {
@@ -42,9 +43,8 @@ public abstract class PaxlstParser {
     
     public ApisMessage parse() {
         this.segments = new LinkedList<>();
-        this.flight = new Flight();
+        this.flights = new HashSet<>();
         this.passengers = new HashSet<>();
-        this.flight.setPassengers(passengers);
         this.message = new ApisMessage();
 
         byte[] raw = FileUtils.readSmallFile(this.filePath);
@@ -57,6 +57,18 @@ public abstract class PaxlstParser {
         processMessageAndGetSegments(msg);
         parseSegments();
         
+        this.message.setFlights(this.flights);
+        
+        for (ReportingParty rp : this.message.getReportingParties()) {
+            System.out.println(rp);
+        }
+        for (Flight f : this.flights) {
+            System.out.println(f);
+        }
+        for (Pax p : this.passengers) {
+            System.out.println(p);
+        }
+
         return this.message;
     }
     

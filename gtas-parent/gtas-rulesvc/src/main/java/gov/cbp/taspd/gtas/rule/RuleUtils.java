@@ -6,7 +6,6 @@ import gov.cbp.taspd.gtas.error.RuleServiceErrorHandler;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,9 +60,9 @@ public class RuleUtils {
 	 * @throws IOException on IO error
 	 */
 	public static KieBase createKieBaseFromDrlString(final String drlString, final RuleServiceErrorHandler errorHandler) throws IOException{
-	    File file = File.createTempFile("rule", "drl");
+	    File file = File.createTempFile("rule","");
 	    ByteArrayInputStream bis = new ByteArrayInputStream(drlString.getBytes());
-	    String kfilepath = RuleServiceConstants.KIE_FILE_SYSTEM_ROOT+file.getName();
+	    String kfilepath = RuleServiceConstants.KIE_FILE_SYSTEM_ROOT+file.getName()+".drl";
 	    return createKieBase(kfilepath, bis, errorHandler);
 	}
 	/**
@@ -134,6 +133,8 @@ public class RuleUtils {
 	    KieBaseConfiguration config = ks.newKieBaseConfiguration();
 	    config.setOption( EventProcessingOption.STREAM );
 	    KieBase kieBase = kieContainer.newKieBase( config );
+	    
+//	    KieBase kieBase = kieContainer.getKieBase();
 	    
 	    return kieBase;
     	
