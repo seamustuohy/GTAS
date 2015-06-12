@@ -25,7 +25,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 @EnableTransactionManagement
 @ComponentScan("gov.cbp.taspd.gtas")
 @PropertySource("classpath:application.properties")
-@EnableJpaRepositories("gov.cbp.taspd.gtas.repository")
+@EnableJpaRepositories("gov.cbp.taspd.gtas")
 public class WebAppConfig {
  
     private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
