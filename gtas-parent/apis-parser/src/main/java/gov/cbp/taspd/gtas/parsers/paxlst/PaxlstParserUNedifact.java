@@ -1,10 +1,12 @@
 package gov.cbp.taspd.gtas.parsers.paxlst;
 
+import gov.cbp.taspd.gtas.model.Carrier;
 import gov.cbp.taspd.gtas.model.Document;
-import gov.cbp.taspd.gtas.model.DocumentCode;
+import gov.cbp.taspd.gtas.model.DocumentType;
 import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Gender;
 import gov.cbp.taspd.gtas.model.Pax;
+import gov.cbp.taspd.gtas.model.PaxType;
 import gov.cbp.taspd.gtas.model.ReportingParty;
 import gov.cbp.taspd.gtas.parsers.edifact.Segment;
 import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.ATT;
@@ -17,11 +19,14 @@ import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.GEI;
 import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.LOC;
 import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.LOC.LocCode;
 import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.NAD;
+import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.NAD.PartyCode;
 import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.NAT;
 import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.TDT;
 import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.UNB;
 
 import java.util.ListIterator;
+
+import org.jadira.cdt.country.ISOCountryCode;
 
 public final class PaxlstParserUNedifact extends PaxlstParser {
 
@@ -34,13 +39,13 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         
         for (ListIterator<Segment> i=segments.listIterator(); i.hasNext(); ) {
             Segment s = i.next();
-            System.out.println(s);
+//            System.out.println(s);
 
             switch (s.getName()) {
             case "UNB":
                 if (currentGroup == GROUP.NONE) {
                     currentGroup = GROUP.HEADER;
-                    processHeader(s, i);
+//                    processHeader(s, i);
                 } else {
                     handleUnexpectedSegment(s);
                     return;
@@ -110,11 +115,18 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         p.setFirstName(nad.getFirstName());
         p.setLastName(nad.getLastName());
         p.setMiddleName(nad.getMiddleName());
+        PartyCode partyCode = nad.getPartyFunctionCodeQualifier();
+        if (partyCode == PartyCode.PASSENGER) {
+            p.setType(PaxType.PAX);
+        } else if (partyCode == PartyCode.CREW_MEMBER) {
+            p.setType(PaxType.CREW);
+        } else {
+            p.setType(PaxType.OTHER);
+        }
         
-        for (;;) {
+        while (i.hasNext()) {
             Segment s = i.next();
-            if (s == null) return;
-            System.out.println("\t" + s);
+//            System.out.println("\t" + s);
             switch (s.getName()) {
             
             case "ATT":
@@ -172,13 +184,12 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         DOC doc = (DOC)seg;
         Document d = new Document();
         p.getDocuments().add(d);
-        d.setDocumentType(DocumentCode.valueOf(doc.getDocCode()));
+        d.setDocumentType(DocumentType.valueOf(doc.getDocCode()));
         d.setNumber(doc.getDocumentIdentifier());
 
-        for (;;) {
+        while (i.hasNext()) {
             Segment s = i.next();
-            if (s == null) return;
-            System.out.println("\t" + "\t" + s);
+//            System.out.println("\t" + "\t" + s);
             switch (s.getName()) {
             case "DTM":
                 DTM dtm = (DTM)s;
@@ -191,7 +202,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 LOC loc = (LOC)s;
                 LocCode locCode = loc.getFunctionCode();
                 if (locCode == LocCode.PLACE_OF_DOCUMENT_ISSUE) {
-//                    d.setIssuanceCountry(loc.getLocationNameCode());
+                    d.setIssuanceCountry(ISOCountryCode.getByAlpha3Code(loc.getLocationNameCode()));
                 }
                 break;
             default:
@@ -206,18 +217,48 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         Flight f = new Flight();
         this.flights.add(f);
         f.setFlightNumber(tdt.getC_journeyIdentifier());
+        
+        String tmp = tdt.getC_carrierIdentifier();
+        if (tmp != null) {
+            f.setCarrier(Carrier.getByIataCode(tmp));
+        } else {
+            // try 2 letter iata code
+            String iata = tdt.getC_journeyIdentifier().substring(0, 2);
+            Carrier c = Carrier.getByIataCode(iata);
+            if (c != null) {
+                f.setCarrier(c);
+            } else {
+                // try 3 letter icao code
+                String icao = tdt.getC_journeyIdentifier().substring(0, 3);
+                c = Carrier.valueOf(icao);
+                f.setCarrier(c);
+            }
+        }
 
-        for (;;) {
+        while (i.hasNext()) {
             Segment s = i.next();
-            if (s == null) return;
-            System.out.println("\t" + s);
+//            System.out.println("\t" + s);
             switch (s.getName()) {
             case "LOC":
                 LOC loc = (LOC)s;
-                
+                LocCode locCode = loc.getFunctionCode();
+                if (locCode == LocCode.DEPARTURE_AIRPORT) {
+                    f.setOrigin(loc.getLocationNameCode());
+                } else if (locCode == LocCode.ARRIVAL_AIRPORT) {
+                    f.setDestination(loc.getLocationNameCode());
+                } else if (locCode == LocCode.BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT) {
+                    f.setOrigin(loc.getLocationNameCode());
+                    f.setDestination(loc.getLocationNameCode());
+                }
                 break;
             case "DTM":
                 DTM dtm = (DTM)s;
+                DtmCode dtmCode = dtm.getDtmCodeQualifier();
+                if (dtmCode == DtmCode.DEPARTURE) {
+                    f.setEtd(dtm.getDtmValue());
+                } else if (dtmCode == DtmCode.ARRIVAL) {
+                    f.setEta(dtm.getDtmValue());
+                }
                 break;
             default:
                 i.previous();
@@ -229,10 +270,9 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     private void processHeader(Segment seg, ListIterator<Segment> i) {
         UNB unb = (UNB)seg;
         
-        for (;;) {
+        while (i.hasNext()) {
             Segment s = i.next();
-            if (s == null) return;
-            System.out.println("\t" + s);
+//            System.out.println("\t" + s);
             switch (s.getName()) {
             case "UNG":
                 break;

@@ -1,12 +1,13 @@
 package gov.cbp.taspd.gtas.parsers;
 
-import java.nio.charset.StandardCharsets;
-
 import gov.cbp.taspd.gtas.model.ApisMessage;
+import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.parsers.paxlst.PaxlstParser;
 import gov.cbp.taspd.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.cbp.taspd.gtas.parsers.paxlst.PaxlstParserUSedifact;
 import gov.cbp.taspd.gtas.util.FileUtils;
+
+import java.nio.charset.StandardCharsets;
 
 public class ApisParser {
     public void parseApisFile(String filePath) {
@@ -20,7 +21,7 @@ public class ApisParser {
             parser= new PaxlstParserUNedifact(filePath);
         }
         
-        ApisMessage m = parser.parse();             
+        ApisMessage m = parser.parse();
     }
     
     private boolean isUSEdifactFile(String msg) {

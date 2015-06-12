@@ -3,6 +3,7 @@ package gov.cbp.taspd.gtas.parsers.paxlst;
 import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Pax;
+import gov.cbp.taspd.gtas.model.ReportingParty;
 import gov.cbp.taspd.gtas.parsers.edifact.EdifactParser;
 import gov.cbp.taspd.gtas.parsers.edifact.Segment;
 import gov.cbp.taspd.gtas.util.FileUtils;
@@ -56,6 +57,18 @@ public abstract class PaxlstParser {
         processMessageAndGetSegments(msg);
         parseSegments();
         
+        this.message.setFlights(this.flights);
+        
+        for (ReportingParty rp : this.message.getReportingParties()) {
+            System.out.println(rp);
+        }
+        for (Flight f : this.flights) {
+            System.out.println(f);
+        }
+        for (Pax p : this.passengers) {
+            System.out.println(p);
+        }
+
         return this.message;
     }
     

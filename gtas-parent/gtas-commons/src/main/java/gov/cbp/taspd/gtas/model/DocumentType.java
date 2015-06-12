@@ -1,6 +1,6 @@
 package gov.cbp.taspd.gtas.model;
 
-public enum DocumentCode {
+public enum DocumentType {
     P, // - Passport
     C, // - Permanent resident card
     A, // - Resident alien card

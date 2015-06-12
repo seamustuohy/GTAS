@@ -6,12 +6,14 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import org.jadira.cdt.country.ISOCountryCode;
+
 import org.hibernate.annotations.Type;
+import org.jadira.cdt.country.ISOCountryCode;
 
 @Entity
 public class Flight extends BaseEntityAudit {
@@ -28,8 +30,7 @@ public class Flight extends BaseEntityAudit {
     )    
     private Set<Pax> passengers = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name="carrier", referencedColumnName="id")     
+    @Enumerated(EnumType.STRING)
     private Carrier carrier;
     
     private String flightNumber;
@@ -42,9 +43,10 @@ public class Flight extends BaseEntityAudit {
     
     private String destination;
     
-    @ManyToOne
-    @JoinColumn(name="country", referencedColumnName="id")     
-    private Country destinationCountry;
+//    @ManyToOne
+//    @JoinColumn(name="country", referencedColumnName="id")     
+    @Type(type = "org.jadira.usertype.country.PersistentISOCountryCode")
+    private ISOCountryCode destinationCountry;
 
     private Date flightDate;
     private Date etd;
@@ -93,10 +95,10 @@ public class Flight extends BaseEntityAudit {
     public void setDestination(String destination) {
         this.destination = destination;
     }
-    public Country getDestinationCountry() {
+    public ISOCountryCode getDestinationCountry() {
         return destinationCountry;
     }
-    public void setDestinationCountry(Country destinationCountry) {
+    public void setDestinationCountry(ISOCountryCode destinationCountry) {
         this.destinationCountry = destinationCountry;
     }
     public Date getFlightDate() {
@@ -116,5 +118,62 @@ public class Flight extends BaseEntityAudit {
     }
     public void setEta(Date eta) {
         this.eta = eta;
+    }
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((carrier == null) ? 0 : carrier.hashCode());
+        result = prime * result
+                + ((destination == null) ? 0 : destination.hashCode());
+        result = prime
+                * result
+                + ((destinationCountry == null) ? 0 : destinationCountry
+                        .hashCode());
+        result = prime * result
+                + ((flightDate == null) ? 0 : flightDate.hashCode());
+        result = prime * result
+                + ((flightNumber == null) ? 0 : flightNumber.hashCode());
+        result = prime * result + ((origin == null) ? 0 : origin.hashCode());
+        result = prime * result
+                + ((originCountry == null) ? 0 : originCountry.hashCode());
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Flight other = (Flight) obj;
+        if (carrier != other.carrier)
+            return false;
+        if (destination == null) {
+            if (other.destination != null)
+                return false;
+        } else if (!destination.equals(other.destination))
+            return false;
+        if (destinationCountry != other.destinationCountry)
+            return false;
+        if (flightDate == null) {
+            if (other.flightDate != null)
+                return false;
+        } else if (!flightDate.equals(other.flightDate))
+            return false;
+        if (flightNumber == null) {
+            if (other.flightNumber != null)
+                return false;
+        } else if (!flightNumber.equals(other.flightNumber))
+            return false;
+        if (origin == null) {
+            if (other.origin != null)
+                return false;
+        } else if (!origin.equals(other.origin))
+            return false;
+        if (originCountry != other.originCountry)
+            return false;
+        return true;
     }
 }
