@@ -102,8 +102,10 @@ public class PaxlstParserUSedifact extends PaxlstParser {
                 LocCode locCode = loc.getLocationCode();
                 if (locCode == LocCode.DEPARTURE) {
                     f.setOriginCountry(ISOCountryCode.getByAlpha2Code(loc.getIataCountryCode()));
+                    f.setOrigin(loc.getIataAirportCode());
                 } else if (locCode == LocCode.ARRIVAL) {
                     f.setDestinationCountry(ISOCountryCode.getByAlpha2Code(loc.getIataCountryCode()));
+                    f.setDestination(loc.getIataAirportCode());
                 }
                 break;
             
