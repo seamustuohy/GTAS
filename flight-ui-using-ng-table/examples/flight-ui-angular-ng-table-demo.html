@@ -20,35 +20,43 @@
 
     <button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
     <button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
-    <p><strong>Sorting:</strong> {{tableParams.sorting()|json}}
-    <p><strong>Filter:</strong> {{tableParams.filter()|json}}
+
+<!--    <p><strong>Sorting:</strong> {{tableParams.sorting().hits}}</p> //-->
+    <p><strong>Sorting:</strong> {{tableParams.sorting()|json}}</p>
+    <p><strong>Filter:</strong> {{tableParams.filter()|json}}</p>
 
 
     <table ng-table="tableParams" show-filter="true" class="table">
-        <tr ng-repeat="user in $data">
+        <tr ng-repeat="flight in $data">
+<!-- tested filtering by number            <td data-title="'R'" sortable="'r'" filter="{ 'r': 'number' }">
+                {{flight.r}}
+            </td> //-->
+            <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">
+                {{flight.hits}}
+            </td>
             <td data-title="'Number'" sortable="'number'" filter="{ 'number': 'text' }">
-                {{user.number}}
+                {{flight.number}}
             </td>
-            <td data-title="'Carrier Code'" sortable="'carriercode'" filter="{ 'carriercode': 'text' }">
-                {{user.carriercode}}
+            <td data-title="'Carrier Code'" sortable="'carriercode'" filter="{ 'carriercode': 'select' }" filter-data="values($column, 'carriercode')">
+                {{flight.carriercode}}
             </td>
-            <td data-title="'Origin'" sortable="'origin'" filter="{ 'origin': 'text' }">
-                {{user.origin}}
+            <td data-title="'Origin'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">
+                {{flight.origin}}
             </td>
-            <td data-title="'Country'" sortable="'originCountry'" filter="{ 'originCountry': 'text' }">
-                {{user.originCountry}}
+            <td data-title="'Country'" sortable="'originCountry'" filter="{ 'originCountry': 'select' }" filter-data="values($column, 'originCountry')">
+                {{flight.originCountry}}
             </td>
-            <td data-title="'Departure DateTime'" sortable="'departureDateTime'" filter="{ 'departureDateTime': 'text' }">
-                {{user.departureDateTime}}
+            <td data-title="'Departure DateTime'" sortable="'departureDateTimeSort'" filter="{ 'departureDateTime': 'text' }">
+                {{flight.departureDateTime}}
             </td>
-            <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'text' }">
-                {{user.destination}}
+            <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'select' }" filter-data="values($column, 'destination')">
+                {{flight.destination}}
             </td>
-            <td data-title="'Country'" sortable="'destinationCountry'" filter="{ 'destinationCountry': 'text' }">
-                {{user.destinationCountry}}
+            <td data-title="'Country'" sortable="'destinationCountry'" filter="{ 'destinationCountry': 'select' }" filter-data="values($column, 'destinationCountry')">
+                {{flight.destinationCountry}}
             </td>
-            <td data-title="'Arrival DateTime'" sortable="'destinationDateTime'" filter="{ 'destinationDateTime': 'text' }">
-                {{user.destinationDateTime}}
+            <td data-title="'Arrival DateTime'" sortable="'destinationDateTimeSort'" filter="{ 'destinationDateTime': 'text' }">
+                {{flight.destinationDateTime}}
             </td>
         </tr>
     </table>
@@ -60,10 +68,129 @@
         var app = angular.module('main', ['ngTable']).
                 controller('DemoCtrl', function($scope, $filter, NgTableParams) {
                     var data = [
-                        {'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', destination: 'AKL', destinationCountry: 'NZ', destinationDateTime: '11/8/2013 12:45 PM'},
-                        {'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', destination: 'SFO', destinationCountry: 'US', destinationDateTime: '1/21/2013 10:20 PM'},
-                        {'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', destination: 'LAX', destinationCountry: 'US', destinationDateTime: '1/20/2013 2:00 PM'},
-                        {'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', destination: 'DUD', destinationCountry: 'NZ', destinationDateTime: '11/29/2012 3:20 PM'}
+                        {r: 10, hits: 10, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 1, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 0, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'}
+                    ];
+                    
+                    var dupeData = [
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'},
+                        {r: 10, hits: 0, 'number': "0406", carriercode: 'EK', origin: 'MEL', originCountry: 'AU', departureDateTime: '11/8/2013 7:10 AM', departureDateTimeSort: '2013-08-11 AM 07:10', destination: 'AKL', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/8/2013 12:45 PM', destinationDateTimeSort: '2013-11-08 PM 12:45'},
+                        {r: 1, hits: 0, 'number': "0008", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/21/2013 7:30 PM', departureDateTimeSort: '2013-01-21 PM 07:30', destination: 'SFO', destinationCountry: 'US', 
+                            destinationDateTime: '1/21/2013 10:30 AM', destinationDateTimeSort: '2013-01-21 AM 10:30'},
+                        {r: 0, hits: 2, 'number': "0002", carriercode: 'NZ', origin: 'AKL', originCountry: 'NZ', departureDateTime: '1/20/2013 10:45 PM', departureDateTimeSort: '2013-01-20 PM 10:45', destination: 'LAX', destinationCountry: 'US', 
+                            destinationDateTime: '1/20/2013 2:00 PM', destinationDateTimeSort: '2013-01-20 PM 02:00'},
+                        {r: 3, hits: 3, 'number': "0074", carriercode: 'DJ', origin: 'BNE', originCountry: 'AU', departureDateTime: '', departureDateTimeSort: '', destination: 'DUD', destinationCountry: 'NZ', 
+                            destinationDateTime: '11/29/2012 3:20 PM', destinationDateTimeSort: '2012-11-29 PM 03:20'}
                     ];
 
                     $scope.tableParams = new NgTableParams({
@@ -74,7 +201,7 @@
                         },
                         */
                         sorting: {
-                            carriercode: 'desc', originCountry: 'asc', 'number': 'asc'     // initial sorting
+                            hits: 'desc', destinationDateTimeSort: 'asc' //, 'number': 'asc'     // initial sorting
                         }
                     }, {
                         total: data.length, // length of data
@@ -91,7 +218,21 @@
                             $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                         }
                     });
-                })
+                    
+                    $scope.values = function (column, fieldName) {
+                        console.log('fieldName:' + fieldName);
+                        var lookup = {}, key, def;
+                         angular.forEach(data, function(item){
+                            key = item[fieldName];                         
+                            lookup[key] = lookup[key] !== undefined ? lookup[key] + 1 : 1;
+                        });
+                        def = $.map(lookup, function(value, index) {
+                            return [{id: index, title: index + ' ('+value+')'}];
+                        });
+                        console.dir(def);
+                        return def;
+                    };
+                });
     </script>
 </div>
 </body>
