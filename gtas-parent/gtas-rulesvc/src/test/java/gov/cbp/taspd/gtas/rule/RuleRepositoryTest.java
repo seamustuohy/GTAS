@@ -11,6 +11,9 @@ import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Message;
 
 import java.util.Date;
+import java.util.HashSet;
+
+import gov.cbp.taspd.gtas.model.Pax;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,59 +36,55 @@ public class RuleRepositoryTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-
-	@Test
-	public void testBasicRequest() {
-	  Message msg = new Message();
-	  msg.setTransmissionSource("Hello");
-	  Date transmissionDate = new Date();
-	  msg.setTransmissionDate(transmissionDate);
-      RuleServiceResult res = testTarget.invokeRuleset(testTarget.createRuleServiceRequest(msg));
-      assertNotNull(res);
-      assertNotNull(res.getResultList());
-      assertEquals("Result list is empty", 1, res.getResultList().size());
-      assertEquals("Expected Transmission Date", transmissionDate, res.getResultList().get(0));
-      RuleExecutionStatistics stats = res.getExecutionStatistics();
-      assertNotNull(stats);
-      assertEquals("Expected 2 rules to be fired", 2, stats.getRuleFiringSequence().size());     
-      assertEquals("Expected 1 object to be modified", 1, stats.getModifiedObjectClassNameList().size());      
-
-    }
-	@Test
-	public void testBasicApisRequest() {
-	  Message msg = new Message();
-	  msg.setTransmissionSource("Hello");
-	  Date transmissionDate = new Date();
-	  msg.setTransmissionDate(transmissionDate);
-      RuleServiceResult res = testTarget.invokeRuleset(testTarget.createRuleServiceRequest(msg));
-      assertNotNull(res);
-      assertNotNull(res.getResultList());
-      assertEquals("Result list is empty", 1, res.getResultList().size());
-      assertEquals("Expected Transmission Date", transmissionDate, res.getResultList().get(0));
-      RuleExecutionStatistics stats = res.getExecutionStatistics();
-      assertNotNull(stats);
-      assertEquals("Expected 2 rules to be fired", 2, stats.getRuleFiringSequence().size());     
-      assertEquals("Expected 1 object to be modified", 1, stats.getModifiedObjectClassNameList().size());      
-
-    }
-
+	
 	@Test(expected=RuleServiceException.class)
 	public void testNullRequest() {
       testTarget.invokeRuleset("gtas.drl", null);
     }
-	
-//	@Test
-//	public void testFlighSingleRuleHit() {
-//	  ApisMessage msg = new ApisMessage();
-//	  Flight flt = new Flight();
-//	  flt.setFlightNumber("123");
-//	  flt.setOrigin("Timbuktu");
-//	  msg.getFlights().add(flt);
-//      RuleServiceResult res = testTarget.invokeRuleset(testTarget.createRuleServiceRequest(msg));
-//      assertNotNull(res);
-//      assertNotNull(res.getResultList());
-//      assertEquals("Result list is empty", 1, res.getResultList().size());
-//      assertEquals("Expected flight in result list", flt, res.getResultList().get(0));
-//    }
 
+	@Test
+	public void testBasicApisRequest() {
+	  Pax p1 = createPassenger("Medulla", "Oblongata", "Timbuktu");
+	  ApisMessage msg = createBasicApisMessage(p1);
+      RuleServiceResult res = testTarget.invokeRuleset(testTarget.createRuleServiceRequest(msg));
+      assertNotNull(res);
+      assertNotNull(res.getResultList());
+      assertEquals("Result list is empty", 1, res.getResultList().size());
+      assertEquals("Expected Passenger", p1, res.getResultList().get(0));
+      RuleExecutionStatistics stats = res.getExecutionStatistics();
+      assertNotNull(stats);
+      assertEquals("Expected 2 rules to be fired", 2, stats.getRuleFiringSequence().size());
+      //Expecting 1 flight object and one passenger object to be inserted
+      assertEquals("Expected 2 object to be inserted", 2, stats.getInsertedObjectClassNameList().size());      
+    }
+
+	/**
+	 * creates a simple passenger object.
+	 * @param fn
+	 * @param ln
+	 * @param embarkation
+	 * @return
+	 */
+	private Pax createPassenger(final String fn, final String ln, final String embarkation){
+		Pax p = new Pax();
+		p.setFirstName(fn);
+		p.setLastName(ln);
+		p.setEmbarkation(embarkation);
+		return p;
+	}
+	/**
+	 * Creates a simple ApisMessage with a single passenger
+	 */
+	private ApisMessage createBasicApisMessage(final Pax passenger){
+		  ApisMessage msg = new ApisMessage();
+		  Flight flight = new Flight();
+		  HashSet<Pax> set = new HashSet<Pax>();
+		  set.add(passenger);
+		  flight.setPassengers(set);
+		  flight.setDestination("Narnia");
+		  HashSet<Flight> flightSet = new HashSet<Flight>();
+		  flightSet.add(flight);
+		  msg. setFlights(flightSet);
+		  return msg;
+	}
 }

@@ -18,6 +18,8 @@ import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.DebugAgendaEventListener;
 import org.kie.api.event.rule.DebugRuleRuntimeEventListener;
+import org.kie.api.event.rule.ObjectDeletedEvent;
+import org.kie.api.event.rule.ObjectInsertedEvent;
 import org.kie.api.event.rule.ObjectUpdatedEvent;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieContainer;
@@ -147,6 +149,24 @@ public class RuleServiceImpl implements RuleService{
 			public void objectUpdated(ObjectUpdatedEvent event) {
 				stats.addModifiedObject(event.getObject());
 				super.objectUpdated(event);
+			}
+
+			/* (non-Javadoc)
+			 * @see org.kie.api.event.rule.DebugRuleRuntimeEventListener#objectDeleted(org.kie.api.event.rule.ObjectDeletedEvent)
+			 */
+			@Override
+			public void objectDeleted(ObjectDeletedEvent event) {
+				stats.addDeletedObject(event.getOldObject());
+				super.objectDeleted(event);
+			}
+
+			/* (non-Javadoc)
+			 * @see org.kie.api.event.rule.DebugRuleRuntimeEventListener#objectInserted(org.kie.api.event.rule.ObjectInsertedEvent)
+			 */
+			@Override
+			public void objectInserted(ObjectInsertedEvent event) {
+				stats.addInsertedObject(event.getObject());
+				super.objectInserted(event);
 			}
 			
 		});

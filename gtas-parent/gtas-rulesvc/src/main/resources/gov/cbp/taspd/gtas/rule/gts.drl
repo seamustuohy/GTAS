@@ -1,39 +1,28 @@
 /*
- * Copyright 2010 JBoss Inc
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
+* Default rules for the GTAS system.
+* TODO: create Meta Rules and Rule Flow here - AB.
+*/
 package gov.cbp.taspd.gtas.rule;
  
-import gov.cbp.taspd.gtas.model.Message;
+import gov.cbp.taspd.gtas.model.Flight;
+import gov.cbp.taspd.gtas.model.Pax;
 
 global java.util.List resultList
  
-rule "RH1 - Hello Messsage"
-    dialect "mvel"
-    when
-         m:Message( transmissionSource.equals("Hello"), date:transmissionDate )
-    then
-        System.out.println( "Transmission date ="+date );
-        modify ( m ) { transmissionSource = "Goodbye"};
-end
-
-rule "RH2 - Good Bye Message"
+rule "R1 - Extract Passengers"
     dialect "java"
     when
-        Message( transmissionSource.equals("Goodbye"), date:transmissionDate )
+         f:Flight( passengers.size() > 0, destination != null, passCollection:passengers, dest:destination )
     then
-        System.out.println( "Goodbye from Message" );
-        resultList.add(date);
+        for(Object p:passCollection){
+          insert (p);
+        }
+end
+
+rule "R2 - List Passengers"
+    dialect "java"
+    when
+        p:Pax( embarkation.equals("Timbuktu"), fn:firstName, ln:lastName )
+    then
+        resultList.add(p);
 end

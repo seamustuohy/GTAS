@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping(URIConstants.UDR_BUILDER_ROOT)
+@RequestMapping(URIConstants.UDR_ROOT)
 public class UdrManagementController {
 	@Autowired
 	TargetingService targetingService;

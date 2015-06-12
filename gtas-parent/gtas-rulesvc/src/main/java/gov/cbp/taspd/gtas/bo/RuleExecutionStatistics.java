@@ -20,12 +20,16 @@ public class RuleExecutionStatistics implements Serializable{
     private int totalObjectsModified;
     final private List<String> ruleFiringSequence;
     final private List<String> modifiedObjectClassNameList;
+    final private List<String> insertedObjectClassNameList;
+    final private List<String> deletedObjectClassNameList;
     /**
      * Constructor to initialize the member lists.
      */
     public RuleExecutionStatistics(){
     	this.ruleFiringSequence = new LinkedList<String>();
     	this.modifiedObjectClassNameList = new LinkedList<String>();
+    	this.insertedObjectClassNameList = new LinkedList<String>();
+    	this.deletedObjectClassNameList = new LinkedList<String>();
     }
     /**
      * @return add one to the totalRulesFired and return the result.
@@ -47,11 +51,25 @@ public class RuleExecutionStatistics implements Serializable{
     	ruleFiringSequence.add(ruleName);
     }
     /**
-     * Adds the fired rule name to the sequence of fired rules.
-     * @param ruleName the name of the rule
+     * Adds the inserted object class name to the sequence.
+     * @param insertedObject the name of the object class
+     */
+    public void addInsertedObject(final Object insertedObject){
+    	insertedObjectClassNameList.add(insertedObject.getClass().getName());
+    }
+    /**
+     * Adds the modified object class name to the sequence.
+     * @param modifiedObject the name of the object class
      */
     public void addModifiedObject(final Object modifiedObject){
     	modifiedObjectClassNameList.add(modifiedObject.getClass().getName());
+    }
+    /**
+     * Adds the deleted object class name to the sequence.
+     * @param deletedObject the name of the object class
+     */
+    public void addDeletedObject(final Object deletedObject){
+    	deletedObjectClassNameList.add(deletedObject.getClass().getName());
     }
 	/**
 	 * @return the totalRulesFired
@@ -88,5 +106,17 @@ public class RuleExecutionStatistics implements Serializable{
 	 */
 	public List<String> getModifiedObjectClassNameList() {
 		return Collections.unmodifiableList(modifiedObjectClassNameList);
+	}    
+	/**
+	 * @return the insertedObjectClassNameList
+	 */
+	public List<String> getInsertedObjectClassNameList() {
+		return Collections.unmodifiableList(insertedObjectClassNameList);
+	}    
+	/**
+	 * @return the deletedObjectClassNameList
+	 */
+	public List<String> getDeletedObjectClassNameList() {
+		return Collections.unmodifiableList(deletedObjectClassNameList);
 	}    
 }
