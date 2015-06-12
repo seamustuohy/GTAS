@@ -6,12 +6,13 @@ import gov.cbp.taspd.gtas.error.RuleServiceErrorHandler;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import org.kie.api.KieBase;
 import org.kie.api.KieBaseConfiguration;
@@ -40,11 +41,11 @@ public class RuleUtils {
 	 
 	/**
 	 * Creates a KieSession from a DRL file.
-	 * @see http://stackoverflow.com/questions/27488034/with-drools-6-x-how-do-i-avoid-maven-and-the-compiler
-	 * @param filePath the input DRL file on the class path
-	 * @param errorHandler error handler
-	 * @return the  created KieBase
-	 * @throws IOException on IO error
+	 * @see http://stackoverflow.com/questions/27488034/with-drools-6-x-how-do-i-avoid-maven-and-the-compiler.
+	 * @param filePath the input DRL file on the class path.
+	 * @param errorHandler error handler.
+	 * @return the  created KieBase.
+	 * @throws IOException on IO error.
 	 */
 	public static KieBase createKieBaseFromClasspathFile(final String filePath, final RuleServiceErrorHandler errorHandler) throws IOException{
 		File file = new File(filePath);
@@ -55,9 +56,9 @@ public class RuleUtils {
 	/**
 	 * Creates a KieBase from DRL string data.
 	 * @param drlString the DRL data as a string.
-	 * @param errorHandler error handler
-	 * @return the  created KieBase
-	 * @throws IOException on IO error
+	 * @param errorHandler error handler.
+	 * @return the  created KieBase.
+	 * @throws IOException on IO error.
 	 */
 	public static KieBase createKieBaseFromDrlString(final String drlString, final RuleServiceErrorHandler errorHandler) throws IOException{
 	    File file = File.createTempFile("rule","");
@@ -78,30 +79,31 @@ public class RuleUtils {
 		return ksession;
 	}
 	/**
-	 * Converts a KieBase to a binary data suitable for saving in a database as a BLOB.
+	 * Converts a KieBase to compressed binary data suitable for caching or saving in a database as a BLOB.
 	 * @param kieBase the KieBase to convert.
-	 * @return binary data for KieBase
-	 * @throws IOException on IO error
+	 * @return compressed binary data for KieBase.
+	 * @throws IOException on IO error.
 	 */
-	public static byte[] convertKieBaseToBytes(KieBase kieBase) throws IOException{
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	    ObjectOutputStream out = new ObjectOutputStream(bos);
+	public static byte[] convertKieBaseToBytes(final KieBase kieBase) throws IOException{
+		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		final GZIPOutputStream gzipOutStream = new GZIPOutputStream(bos);
+	    final ObjectOutputStream out = new ObjectOutputStream(gzipOutStream);
 	    out.writeObject( kieBase );
 	    out.close();
 	    return bos.toByteArray();		
 	}
 	
 	/**
-	 * Creates a session from cached KieBase.
-	 * @param objectFilePath
-	 * @return
-	 * @throws FileNotFoundException
-	 * @throws ClassNotFoundException
-	 * @throws IOException
+	 * Creates a KieBase from compressed binary data.
+	 * @param kiebaseBytes the binary compressed data to be used for input.
+	 * @return the KieBase object constructed from the input data.
+	 * @throws ClassNotFoundException if the compressed binary data includes unknown serialized Java Class instances.
+	 * @throws IOException on IO error.
 	 */
-	public static KieBase convertKieBasefromBytes(final byte[] kiebaseBytes) throws FileNotFoundException, ClassNotFoundException, IOException{
-		ByteArrayInputStream bis = new ByteArrayInputStream(kiebaseBytes);
-		ObjectInputStream in = new ObjectInputStream( bis );
+	public static KieBase convertKieBasefromBytes(final byte[] kiebaseBytes) throws ClassNotFoundException, IOException{
+		final ByteArrayInputStream bis = new ByteArrayInputStream(kiebaseBytes);
+		final GZIPInputStream gzipInStream = new GZIPInputStream(bis);
+		final ObjectInputStream in = new ObjectInputStream(gzipInStream);
 		KieBase kieBase = (KieBase)in.readObject();
 		in.close();		
 		return kieBase;
@@ -109,7 +111,7 @@ public class RuleUtils {
 	/**
 	 * Creates a KieBase from input stream data. 
 	 * @param kfilepath the in memory KieFileSystem name
-	 * @param is  the input stream for data
+	 * @param is  the input stream for DRL data
 	 * @param errorHandler error handler
 	 * @return the created KieBase
 	 */
@@ -134,7 +136,7 @@ public class RuleUtils {
 	    config.setOption( EventProcessingOption.STREAM );
 	    KieBase kieBase = kieContainer.newKieBase( config );
 	    
-//	    KieBase kieBase = kieContainer.getKieBase();
+//	    KieBase kieBase = kieContainer.getKieBase();//alternative way to gewt the default KieBase
 	    
 	    return kieBase;
     	

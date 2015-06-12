@@ -2,18 +2,14 @@ package gov.cbp.taspd.gtas.rule;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import gov.cbp.taspd.gtas.bo.RuleExecutionStatistics;
 import gov.cbp.taspd.gtas.config.RuleServiceConfig;
 import gov.cbp.taspd.gtas.error.RuleServiceException;
 import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
-import gov.cbp.taspd.gtas.model.Message;
-
-import java.util.Date;
-import java.util.HashSet;
-
 import gov.cbp.taspd.gtas.model.Pax;
+
+import java.util.HashSet;
 
 import org.junit.After;
 import org.junit.Before;
@@ -53,8 +49,10 @@ public class RuleRepositoryTest {
       assertEquals("Expected Passenger", p1, res.getResultList().get(0));
       RuleExecutionStatistics stats = res.getExecutionStatistics();
       assertNotNull(stats);
-      assertEquals("Expected 2 rules to be fired", 2, stats.getRuleFiringSequence().size());
+      assertEquals("Expected 2 rules to be fired", 2, stats.getTotalRulesFired());
+      assertEquals("Expected 2 rule names in list", 2, stats.getRuleFiringSequence().size());
       //Expecting 1 flight object and one passenger object to be inserted
+      assertEquals("Expected 2 object to be affected", 2, stats.getTotalObjectsModified());
       assertEquals("Expected 2 object to be inserted", 2, stats.getInsertedObjectClassNameList().size());      
     }
 

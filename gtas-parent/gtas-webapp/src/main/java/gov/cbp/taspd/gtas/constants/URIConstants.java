@@ -11,7 +11,7 @@ public final class URIConstants {
 	public static final String DELETE_QUERY_URI = "/deleteQuery";
 	
 	//UDR URI
-	public static final String UDR_ROOT = "/udrbuilder";
+	public static final String UDR_ROOT = "/udr";
 	public static final String UDR_GET = "/getUdr";
 	public static final String UDR_TEST = "/testUdr";
 	
