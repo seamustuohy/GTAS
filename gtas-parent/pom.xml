@@ -34,6 +34,8 @@
     <module>apis-parser</module>
     <module>pnr-parser</module>
     <module>gtas-query-builder</module>
+    <module>gtas-udr-builder</module>
+    
   </modules>
   <dependencies>
     <!-- Apache Commons -->
