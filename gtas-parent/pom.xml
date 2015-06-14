@@ -26,6 +26,7 @@
     <skip.integration.tests>true</skip.integration.tests>
     <skip.unit.tests>false</skip.unit.tests>
     <spring.version>4.1.6.RELEASE</spring.version>
+    <javadoc-plugin.version>2.10.3</javadoc-plugin.version>
   </properties>
   <modules>
     <module>gtas-commons</module>
@@ -171,6 +172,23 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${javadoc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

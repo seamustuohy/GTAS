@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * <ul>
  * <li> Knowledge management</li>
  * <li> Rule management</li>
- * </ul
+ * </ul>
  * @author GTAS3 (AB)
  *
  */
@@ -40,8 +40,8 @@ public class RuleUtils {
 	private static final Logger logger = LoggerFactory.getLogger(RuleUtils.class);
 	 
 	/**
-	 * Creates a KieSession from a DRL file.
-	 * @see http://stackoverflow.com/questions/27488034/with-drools-6-x-how-do-i-avoid-maven-and-the-compiler.
+	 * Creates a KieSession from a DRL file.<br>
+	 * (see for example http://stackoverflow.com/questions/27488034/with-drools-6-x-how-do-i-avoid-maven-and-the-compiler)
 	 * @param filePath the input DRL file on the class path.
 	 * @param errorHandler error handler.
 	 * @return the  created KieBase.

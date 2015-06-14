@@ -14,8 +14,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 /**
  * The configuration class can be imported into an XML configuration by:<br>
- * <context:annotation-config/>
- * <bean class="gov.cbp.taspd.gtas.config.RuleServiceConfig"/>
+ * &lt;context:annotation-config/&gt;
+ * &lt;bean class="gov.cbp.taspd.gtas.config.RuleServiceConfig"/&gt;
  * 
  * @author GTAS3
  *
