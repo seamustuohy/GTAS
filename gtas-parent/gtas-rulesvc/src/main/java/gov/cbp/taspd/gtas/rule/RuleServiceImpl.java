@@ -1,10 +1,5 @@
 package gov.cbp.taspd.gtas.rule;
 
-import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.LinkedList;
-import java.util.List;
-
 import gov.cbp.taspd.gtas.bo.RuleExecutionStatistics;
 import gov.cbp.taspd.gtas.bo.RuleServiceRequest;
 import gov.cbp.taspd.gtas.bo.RuleServiceRequestType;
@@ -12,6 +7,11 @@ import gov.cbp.taspd.gtas.constant.RuleServiceConstants;
 import gov.cbp.taspd.gtas.error.RuleServiceErrorHandler;
 import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
+
+import java.util.ArrayList;
+import java.util.EventListener;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.kie.api.KieServices;
 import org.kie.api.event.rule.AfterMatchFiredEvent;
@@ -25,13 +25,20 @@ import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
-
+/**
+ * Implementation of the Rule Engine.
+ * @author GTAS3 (AB)
+ *
+ */
 public class RuleServiceImpl implements RuleService {
 	private static final String DEFAULT_RULESET_NAME = "gtas.drl";
 
 	@Autowired
 	private RuleServiceErrorHandler errorHandler;
 
+	/* (non-Javadoc)
+	 * @see gov.cbp.taspd.gtas.rule.RuleService#invokeRuleset(java.lang.String, gov.cbp.taspd.gtas.bo.RuleServiceRequest)
+	 */	
 	@Override
 	public RuleServiceResult invokeRuleset(String ruleSetName,
 			RuleServiceRequest req) {
@@ -78,11 +85,17 @@ public class RuleServiceImpl implements RuleService {
 		return res;
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.cbp.taspd.gtas.rule.RuleService#invokeRuleset(gov.cbp.taspd.gtas.bo.RuleServiceRequest)
+	 */
 	@Override
 	public RuleServiceResult invokeRuleset(RuleServiceRequest req) {
 		return invokeRuleset(DEFAULT_RULESET_NAME, req);
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.cbp.taspd.gtas.rule.RuleService#createRuleServiceRequest(gov.cbp.taspd.gtas.model.Message)
+	 */
 	@Override
 	public RuleServiceRequest createRuleServiceRequest(
 			final gov.cbp.taspd.gtas.model.Message requestMessage) {
@@ -96,12 +109,13 @@ public class RuleServiceImpl implements RuleService {
 		return ret;
 	}
 
+
 	/**
 	 * Creates a request from a API message.
 	 * 
 	 * @param req
-	 *            the API messsage
-	 * @return RuleServiceRequest object
+	 *            the API message.
+	 * @return RuleServiceRequest object.
 	 */
 	private RuleServiceRequest createApisRequest(final ApisMessage req) {
 		final List<Flight> requestList = new ArrayList<Flight>(req.getFlights());
@@ -121,8 +135,8 @@ public class RuleServiceImpl implements RuleService {
 	 * Creates a request from an arbitrary object.
 	 * 
 	 * @param req
-	 *            the input object
-	 * @return RuleServiceRequest object
+	 *            the input object.
+	 * @return RuleServiceRequest object.
 	 */
 	private RuleServiceRequest createRequest(
 			final gov.cbp.taspd.gtas.model.Message req) {
@@ -203,14 +217,14 @@ public class RuleServiceImpl implements RuleService {
 
 	/**
 	 * Creates a simple rule session from the provided session name. Note: The
-	 * session name must be configured in the KieModule config file
-	 * META-INF/kmodule.xml
+	 * session name must be configured in the KieModule configuration file
+	 * (META-INF/kmodule.xml).
 	 * 
 	 * @param sessionName
-	 *            the session name
+	 *            the session name.
 	 * @param eventListenerList
-	 *            the list of event listeners to attach to the session
-	 * @return the created session
+	 *            the list of event listeners to attach to the session.
+	 * @return the created session.
 	 */
 	private KieSession initSessionFromClasspath(final String sessionName,
 			final List<EventListener> eventListenerList) {

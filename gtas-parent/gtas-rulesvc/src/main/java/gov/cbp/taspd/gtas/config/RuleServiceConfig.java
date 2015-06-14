@@ -13,11 +13,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 /**
- * The configuration class can be imported into an XML configuration by:<br>
- * &lt;context:annotation-config/&gt;
+ * The spring configuration class for the Rule Engine.<br>
+ * It can be imported into an XML configuration by:<br>
+ * &lt;context:annotation-config/&gt;<br>
  * &lt;bean class="gov.cbp.taspd.gtas.config.RuleServiceConfig"/&gt;
  * 
- * @author GTAS3
+ * @author GTAS3 (AB)
  *
  */
 //@ImportResource("another-application-context.xml")

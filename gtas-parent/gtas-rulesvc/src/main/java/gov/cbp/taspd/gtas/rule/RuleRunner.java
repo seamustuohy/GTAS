@@ -1,13 +1,13 @@
 package gov.cbp.taspd.gtas.rule;
 
 /**
- * Hello world!
+ * A Java application for running the Rule Engine in stand alone mode.
  *
  */
 public class RuleRunner 
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        System.out.println( "Not Yet Implemented!" );
     }
 }
