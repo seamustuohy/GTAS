@@ -6,14 +6,10 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-
-import org.hibernate.annotations.Type;
-import org.jadira.cdt.country.ISOCountryCode;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Flight extends BaseEntityAudit {
@@ -30,23 +26,27 @@ public class Flight extends BaseEntityAudit {
     )    
     private Set<Pax> passengers = new HashSet<>();
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(referencedColumnName="id")     
     private Carrier carrier;
     
     private String flightNumber;
-    private String origin;
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName="id")     
+    private Airport origin;
     
-//    @ManyToOne
-//    @JoinColumn(name="country", referencedColumnName="id")     
-    @Type(type = "org.jadira.usertype.country.PersistentISOCountryCode")
-    private ISOCountryCode originCountry;
+    @ManyToOne
+    @JoinColumn(referencedColumnName="id")     
+    private Country originCountry;
     
-    private String destination;
+    @ManyToOne
+    @JoinColumn(referencedColumnName="id")     
+    private Airport destination;
     
-//    @ManyToOne
-//    @JoinColumn(name="country", referencedColumnName="id")     
-    @Type(type = "org.jadira.usertype.country.PersistentISOCountryCode")
-    private ISOCountryCode destinationCountry;
+    @ManyToOne
+    @JoinColumn(referencedColumnName="id")     
+    private Country destinationCountry;
 
     private Date flightDate;
     private Date etd;
@@ -77,32 +77,20 @@ public class Flight extends BaseEntityAudit {
     public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
     }
-    public String getOrigin() {
-        return origin;
-    }
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-    public ISOCountryCode getOriginCountry() {
-        return originCountry;
-    }
-    public void setOriginCountry(ISOCountryCode originCountry) {
-        this.originCountry = originCountry;
-    }
-    public String getDestination() {
-        return destination;
-    }
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-    public ISOCountryCode getDestinationCountry() {
-        return destinationCountry;
-    }
-    public void setDestinationCountry(ISOCountryCode destinationCountry) {
-        this.destinationCountry = destinationCountry;
-    }
     public Date getFlightDate() {
         return flightDate;
+    }
+    public Airport getOrigin() {
+        return origin;
+    }
+    public void setOrigin(Airport origin) {
+        this.origin = origin;
+    }
+    public Airport getDestination() {
+        return destination;
+    }
+    public void setDestination(Airport destination) {
+        this.destination = destination;
     }
     public void setFlightDate(Date flightDate) {
         this.flightDate = flightDate;
@@ -118,6 +106,18 @@ public class Flight extends BaseEntityAudit {
     }
     public void setEta(Date eta) {
         this.eta = eta;
+    }
+    public Country getOriginCountry() {
+        return originCountry;
+    }
+    public void setOriginCountry(Country originCountry) {
+        this.originCountry = originCountry;
+    }
+    public Country getDestinationCountry() {
+        return destinationCountry;
+    }
+    public void setDestinationCountry(Country destinationCountry) {
+        this.destinationCountry = destinationCountry;
     }
     @Override
     public int hashCode() {
