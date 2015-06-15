@@ -1,5 +1,6 @@
 package gov.cbp.taspd.gtas.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +13,9 @@ import javax.persistence.Transient;
 
 @Entity
 public class ApisMessage extends Message {
+    private Date transmissionDate;
+    private String transmissionSource;
+
     @Transient
     Set<ReportingParty> reportingParties = new HashSet<>();
     
@@ -40,5 +44,21 @@ public class ApisMessage extends Message {
 
     public void setReportingParties(Set<ReportingParty> reportingParties) {
         this.reportingParties = reportingParties;
+    }
+
+    public Date getTransmissionDate() {
+        return transmissionDate;
+    }
+
+    public void setTransmissionDate(Date transmissionDate) {
+        this.transmissionDate = transmissionDate;
+    }
+
+    public String getTransmissionSource() {
+        return transmissionSource;
+    }
+
+    public void setTransmissionSource(String transmissionSource) {
+        this.transmissionSource = transmissionSource;
     }
 }
