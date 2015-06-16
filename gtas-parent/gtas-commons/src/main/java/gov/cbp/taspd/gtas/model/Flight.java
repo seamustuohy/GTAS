@@ -55,6 +55,7 @@ public class Flight extends BaseEntityAudit {
 
     @Column(name = "flight_date")
     private Date flightDate;
+    
     private Date etd;
     private Date eta;
     
@@ -127,8 +128,7 @@ public class Flight extends BaseEntityAudit {
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
        return Objects.hash(this.carrier, this.flightNumber, this.flightDate, this.origin, this.destination);
     }
     
@@ -140,7 +140,6 @@ public class Flight extends BaseEntityAudit {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        
         final Flight other = (Flight)obj;
         return Objects.equals(this.carrier, other.carrier)
                 && Objects.equals(this.flightNumber, other.flightNumber)

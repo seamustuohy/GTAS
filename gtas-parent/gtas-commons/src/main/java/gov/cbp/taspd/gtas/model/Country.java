@@ -1,5 +1,7 @@
 package gov.cbp.taspd.gtas.model;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -32,14 +34,12 @@ public class Country extends BaseEntity {
     public String getIsoNumeric() {
         return isoNumeric;
     }
+    
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((iso2 == null) ? 0 : iso2.hashCode());
-        result = prime * result + ((iso3 == null) ? 0 : iso3.hashCode());
-        return result;
+        return Objects.hash(this.iso2, this.iso3);
     }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -48,18 +48,9 @@ public class Country extends BaseEntity {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Country other = (Country) obj;
-        if (iso2 == null) {
-            if (other.iso2 != null)
-                return false;
-        } else if (!iso2.equals(other.iso2))
-            return false;
-        if (iso3 == null) {
-            if (other.iso3 != null)
-                return false;
-        } else if (!iso3.equals(other.iso3))
-            return false;
-        return true;
+        final Country other = (Country) obj;
+        return Objects.equals(this.iso2, other.iso2)
+                && Objects.equals(this.iso3, other.iso3);
     }
     
     public static Country getByAlpha2Code(String alpha2) {

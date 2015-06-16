@@ -1,6 +1,7 @@
 package gov.cbp.taspd.gtas.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -64,14 +65,12 @@ public class Airport extends BaseEntity {
         return timezone;
     }
     private String timezone;
+    
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((iata == null) ? 0 : iata.hashCode());
-        result = prime * result + ((icao == null) ? 0 : icao.hashCode());
-        return result;
+        return Objects.hash(this.iata, this.icao);
     }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -80,18 +79,9 @@ public class Airport extends BaseEntity {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Airport other = (Airport) obj;
-        if (iata == null) {
-            if (other.iata != null)
-                return false;
-        } else if (!iata.equals(other.iata))
-            return false;
-        if (icao == null) {
-            if (other.icao != null)
-                return false;
-        } else if (!icao.equals(other.icao))
-            return false;
-        return true;
+        final Airport other = (Airport) obj;
+        return Objects.equals(this.iata, other.iata)
+                && Objects.equals(this.icao, other.icao);
     }
     
     public static Airport getByIataCode(String code) {
