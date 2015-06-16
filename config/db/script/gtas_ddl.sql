@@ -325,6 +325,7 @@ DROP TABLE IF EXISTS `flight_pax`;
         FOREIGN KEY (message_id)
         REFERENCES Flight (id);
 
+<<<<<<< HEAD
     ALTER TABLE message_flight
         ADD CONSTRAINT FK_n2dqku9mlt3vodtjs2gqb8vm
         FOREIGN KEY (flight_id)
@@ -355,3 +356,220 @@ DROP TABLE IF EXISTS `flight_pax`;
 --        ADD CONSTRAINT FK7E26AC582BE274BD 
 --        FOREIGN KEY (flight_id) 
 --        REFERENCES Flight (id);
+=======
+DROP TABLE IF EXISTS `address_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `address_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `address_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'city', 'City', 'string'),
+	(2, 'country', 'Country', 'string'),
+	(3, 'line1', 'Line 1', 'string'),
+	(4, 'line2', 'Line 2', 'string'),
+	(5, 'line3', 'Line 3', 'string'),
+	(6, 'postal_code', 'Postal Code', 'string'),
+	(7, 'state', 'State/Province', 'string');
+
+DROP TABLE IF EXISTS `api_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `api_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `api_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'flight_direction', 'Flight Direction', 'string');
+
+DROP TABLE IF EXISTS `credit_card_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `credit_card_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `credit_card_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'cc_number', 'Number', 'string');
+
+DROP TABLE IF EXISTS `document_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `document_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `document_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'citizenship', 'Citizenship OR Issuance Country', 'string'),
+	(2, 'exp_date', 'Expiration Date', 'string'),
+	(3, 'issuance_country', 'Issuance Country', 'string'),
+	(4, 'doc_number', 'Number', 'string'),
+	(5, 'doc_type', 'Type', 'string');
+
+DROP TABLE IF EXISTS `email_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `email_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `email_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'email_address', 'Address', 'string'),
+	(2, 'domain', 'Domain', 'string');
+
+DROP TABLE IF EXISTS `flight_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `flight_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `flight_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'airport_destination', 'Airport - Destination', 'string'),
+	(2, 'airport_origin', 'Airport - Origin', 'string'),
+	(3, 'carrier', 'Carrier', 'string'),
+	(4, 'dest_country', 'Country - Destination', 'string'),
+	(5, 'origin_country', 'Country - Origin', 'string'),
+	(6, 'inbound', 'Direction - Inbound', 'string'),
+	(7, 'outbound', 'Direction - Outbound', 'string'),
+	(8, 'eta', 'ETA', 'datetime'),
+	(9, 'etd', 'ETD', 'datetime'),
+	(10, 'flightNumber', 'Number', 'string'),
+	(11, 'thru', 'Thru', 'string');
+
+DROP TABLE IF EXISTS `frequent_flyer_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `frequent_flyer_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `frequent_flyer_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'ff_airline', 'Airline', 'string'),
+	(2, 'ff_number', 'Number', 'string');
+
+DROP TABLE IF EXISTS `hits_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `hits_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `hits_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'has_hits', 'Has Hits', 'string'),
+	(2, 'has_list_rule_hit', 'Has List Rule Hit', 'string'),
+	(3, 'has_rule_hit', 'Has Rule Hit', 'string'),
+	(4, 'master_list_id', 'List Rules - Master List Id', 'string'),
+	(5, 'sub_list_id', 'Sub List Id', 'string'),
+	(6, 'rule_id', 'Rules - Rule Id', 'string');
+
+DROP TABLE IF EXISTS `name_origin_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `name_origin_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `name_origin_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'first_name', 'First Name', 'string'),
+	(2, 'first_or_last_name', 'First or Last Name', 'string'),
+	(3, 'last_name', 'Last Name', 'string');
+
+DROP TABLE IF EXISTS `passenger_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `passenger_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `passenger_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'age', 'Age', 'integer'),
+	(2, 'citizenship_country', 'Citizenship Country', 'string'),
+	(3, 'debarkation', 'Debarkation', 'string'),
+	(4, 'debarkation_country', 'Debarkation Country', 'string'),
+	(5, 'dob', 'DOB', 'string'),
+	(6, 'embarkation', 'Embarkation', 'string'),
+	(7, 'embarkation_country', 'Embarkation Country', 'string'),
+	(8, 'gender', 'Gender', 'string'),
+	(9, 'first_name', 'Name - First', 'string'),
+	(10, 'last_name', 'Name - Last', 'string'),
+	(11, 'middle_name', 'Name - Middle', 'string'),
+	(12, 'residency_country', 'Residency Country', 'string'),
+	(13, 'seat', 'Seat', 'string'),
+	(14, 'type', 'Type', 'string');
+
+DROP TABLE IF EXISTS `phone_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `phone_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `phone_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'phone_number', 'Number', 'string');
+
+DROP TABLE IF EXISTS `pnr_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `pnr_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `pnr_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'bag_count', 'Bag - Count', 'integer'),
+	(2, 'booking_date', 'Booking Date', 'string'),
+	(3, 'carrier_code', 'Carrier Code', 'string'),
+	(4, 'days_booked_before_trvl', 'Days Booked Before Travel', 'integer'),
+	(5, 'dwell_airport', 'Dwell - Airport', 'string'),
+	(6, 'dwell_country', 'Dwell - Country', 'string'),
+	(7, 'dwell_duration', 'Dwell - Duration', 'integer'),
+	(8, 'dwell_total_duration', 'Dwell - Total Duration', 'integer'),
+	(9, 'form_of_payment', 'Form of Payment', 'string'),
+	(10, 'first_name', 'Name - First', 'string'),
+	(11, 'last_name', 'Name - Last', 'string'),
+	(12, 'middle_name', 'Name - Middle', 'string'),
+	(13, 'origin_airport', 'Origin - Airport', 'string'),
+	(14, 'origin_country', 'Origin - Country', 'string'),
+	(15, 'passenger_count', 'Passenger Count', 'integer'),
+	(16, 'record_locator', 'Record Locator', 'string'),
+	(17, 'route', 'Route', 'string');
+
+DROP TABLE IF EXISTS `travel_agency_ui_mapping`;
+CREATE TABLE IF NOT EXISTS `travel_agency_ui_mapping` (
+  `id` int(11) NOT NULL,
+  `columnName` varchar(100) NOT NULL,
+  `displayName` varchar(100) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `travel_agency_ui_mapping` (`id`, `columnName`, `displayName`, `type`) VALUES
+	(1, 'city', 'City', 'string'),
+	(2, 'name', 'Name', 'string'),
+	(3, 'phone', 'Phone', 'string');
+>>>>>>> Updated script with additional tables
