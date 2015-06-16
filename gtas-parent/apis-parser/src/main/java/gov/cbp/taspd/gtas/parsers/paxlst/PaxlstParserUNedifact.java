@@ -185,7 +185,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         Document d = new Document();
         p.getDocuments().add(d);
         d.setDocumentType(DocumentType.valueOf(doc.getDocCode()));
-        d.setNumber(doc.getDocumentIdentifier());
+        d.setDocumentNumber(doc.getDocumentIdentifier());
 
         while (i.hasNext()) {
             Segment s = i.next();

@@ -149,7 +149,7 @@ public class PaxlstParserUSedifact extends PaxlstParser {
 
         Document d = new Document();
         p.getDocuments().add(d);
-        d.setNumber(pdt.getDocumentNumber());
+        d.setDocumentNumber(pdt.getDocumentNumber());
         d.setExpirationDate(pdt.getC_dateOfExpiration());
         DocType docType = pdt.getDocumentType();
         if (docType == DocType.PASSPORT) {
