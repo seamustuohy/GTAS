@@ -153,9 +153,9 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 LocCode locCode = loc.getFunctionCode();
                 String val = loc.getLocationNameCode();
                 if (locCode == LocCode.PORT_OF_DEBARKATION) {
-                    p.setDebarkation(val);
+//                    p.setDebarkation(val);
                 } else if (locCode == LocCode.PORT_OF_EMBARKATION) {
-                    p.setEmbarkation(val);
+//                    p.setEmbarkation(val);
                 }
                 break;
             case "COM":
