@@ -51,7 +51,7 @@ public class Pax extends BaseEntityAudit {
     private Country residencyCountry;
 
     @Enumerated(EnumType.STRING)
-    private PaxType type;
+    private PaxType paxType;
     
     @Type(type="date")
     private Date dob;
@@ -128,10 +128,10 @@ public class Pax extends BaseEntityAudit {
         return age;
     }
     public PaxType getType() {
-        return type;
+        return paxType;
     }
-    public void setType(PaxType type) {
-        this.type = type;
+    public void setType(PaxType paxType) {
+        this.paxType = paxType;
     }
     public void setAge(Integer age) {
         this.age = age;

@@ -13,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "flight")
@@ -34,7 +35,8 @@ public class Flight extends BaseEntityAudit {
     @JoinColumn(referencedColumnName="id")     
     private Carrier carrier;
     
-    @Column(name = "flight_number")
+    @Size(min = 4, max = 4)
+    @Column(name = "flight_number", length = 4)
     private String flightNumber;
 
     @ManyToOne

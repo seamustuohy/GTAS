@@ -64,7 +64,7 @@ public class ServiceRepositoryTest {
 		f.setEta(new Date());
 		f.setEtd(new Date("6/17/2015"));
 		f.setFlightDate(new Date());
-		f.setFlightNumber("709");
+		f.setFlightNumber("0709");
 
 		testTarget.create(f);
 	    System.out.println("********************************************************");
