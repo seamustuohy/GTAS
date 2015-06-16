@@ -4,7 +4,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class BaseDisplay {
+public abstract class BaseDisplay implements IDisplay{
 
 	@Id
 	private int id;

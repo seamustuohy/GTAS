@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "frequent_flier_display")
-public class FrequentFlierDisplay extends BaseDisplay {
+@Table(name = "frequent_flier_ui_mapping")
+public class FrequentFlierDisplay extends BaseDisplay implements IDisplay {
 
 }

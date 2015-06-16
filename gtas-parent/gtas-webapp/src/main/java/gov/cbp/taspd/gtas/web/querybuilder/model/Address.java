@@ -1,8 +1,8 @@
 package gov.cbp.taspd.gtas.web.querybuilder.model;
 
-import java.util.List;
-
-public class Address extends BaseWebModel implements IWebModel {
+public class Address extends BaseWebModel  {
 	
-	
+	public Address(String label) {
+		setLabel(label);
+	}
 }

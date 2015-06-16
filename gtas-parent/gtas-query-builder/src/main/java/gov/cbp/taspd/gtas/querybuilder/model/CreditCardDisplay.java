@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "credit_card_display")
-public class CreditCardDisplay extends BaseDisplay {
+@Table(name = "credit_card_ui_mapping")
+public class CreditCardDisplay extends BaseDisplay implements IDisplay {
 
 }

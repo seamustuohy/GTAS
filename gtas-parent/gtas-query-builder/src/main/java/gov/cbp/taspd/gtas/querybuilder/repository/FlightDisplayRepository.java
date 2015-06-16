@@ -1,6 +1,7 @@
 package gov.cbp.taspd.gtas.querybuilder.repository;
 
 import gov.cbp.taspd.gtas.querybuilder.model.FlightDisplay;
+import gov.cbp.taspd.gtas.querybuilder.model.IDisplay;
 
 import org.springframework.data.repository.CrudRepository;
 

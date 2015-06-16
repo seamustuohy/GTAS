@@ -2,7 +2,7 @@ package gov.cbp.taspd.gtas.web.querybuilder.model;
 
 import java.util.List;
 
-public abstract class BaseWebModel {
+public abstract class BaseWebModel implements IQueryBuilderModel {
 
 	private String label;
 	private List<Column> columns;

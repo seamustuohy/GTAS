@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "flight_ui_mapping")
-public class FlightDisplay extends BaseDisplay {
+@Table(name = "passenger_ui_mapping")
+public class PassengerDisplay extends BaseDisplay implements IDisplay {
 
 }

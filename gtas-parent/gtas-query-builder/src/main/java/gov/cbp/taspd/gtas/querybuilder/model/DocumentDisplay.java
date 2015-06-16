@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "document_display")
-public class DocumentDisplay extends BaseDisplay {
+@Table(name = "document_ui_mapping")
+public class DocumentDisplay extends BaseDisplay implements IDisplay {
 
 }
