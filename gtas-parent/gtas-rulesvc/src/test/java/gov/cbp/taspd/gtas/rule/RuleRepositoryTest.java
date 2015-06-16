@@ -80,7 +80,7 @@ public class RuleRepositoryTest {
 		  HashSet<Pax> set = new HashSet<Pax>();
 		  set.add(passenger);
 		  flight.setPassengers(set);
-		  flight.setDestination(new Airport());
+//		  flight.setDestination(new Airport());
 		  HashSet<Flight> flightSet = new HashSet<Flight>();
 		  flightSet.add(flight);
 		  msg.setFlights(flightSet);

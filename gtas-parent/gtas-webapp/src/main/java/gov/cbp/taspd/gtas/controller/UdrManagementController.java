@@ -1,7 +1,8 @@
 package gov.cbp.taspd.gtas.controller;
 
 import gov.cbp.taspd.gtas.bo.RuleExecutionStatistics;
-import gov.cbp.taspd.gtas.constants.URIConstants;
+import gov.cbp.taspd.gtas.constants.Constants;
+import gov.cbp.taspd.gtas.model.Airport;
 import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Pax;
@@ -23,12 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping(URIConstants.UDR_ROOT)
+@RequestMapping(Constants.UDR_ROOT)
 public class UdrManagementController {
 	@Autowired
 	TargetingService targetingService;
 
-	@RequestMapping(value = URIConstants.UDR_TEST, method = RequestMethod.GET)
+	@RequestMapping(value = Constants.UDR_TEST, method = RequestMethod.GET)
 	public @ResponseBody RuleExecutionStatistics testUDR() {
 		Pax p1 = createPassenger("Telomere", "Strong", "Timbuktu");
 		ApisMessage msg = new ApisMessage();
@@ -58,7 +59,9 @@ public class UdrManagementController {
 		Pax p = new Pax();
 		p.setFirstName(fn);
 		p.setLastName(ln);
-		p.setEmbarkation(embarkation);
+//		Airport airport = new Airport();
+//		airport.setName
+//		p.setEmbarkation(embarkation);
 		return p;
 	}
 
