@@ -1,6 +1,8 @@
 package gov.cbp.taspd.gtas.parsers.paxlst;
 
+import gov.cbp.taspd.gtas.model.Airport;
 import gov.cbp.taspd.gtas.model.Carrier;
+import gov.cbp.taspd.gtas.model.Country;
 import gov.cbp.taspd.gtas.model.Document;
 import gov.cbp.taspd.gtas.model.DocumentType;
 import gov.cbp.taspd.gtas.model.Flight;
@@ -25,8 +27,6 @@ import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.TDT;
 import gov.cbp.taspd.gtas.parsers.paxlst.unedifact.UNB;
 
 import java.util.ListIterator;
-
-import org.jadira.cdt.country.ISOCountryCode;
 
 public final class PaxlstParserUNedifact extends PaxlstParser {
 
@@ -202,7 +202,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 LOC loc = (LOC)s;
                 LocCode locCode = loc.getFunctionCode();
                 if (locCode == LocCode.PLACE_OF_DOCUMENT_ISSUE) {
-                    d.setIssuanceCountry(ISOCountryCode.getByAlpha3Code(loc.getLocationNameCode()));
+                    d.setIssuanceCountry(Country.getByAlpha3Code(loc.getLocationNameCode()));
                 }
                 break;
             default:
@@ -230,7 +230,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             } else {
                 // try 3 letter icao code
                 String icao = tdt.getC_journeyIdentifier().substring(0, 3);
-                c = Carrier.valueOf(icao);
+                c = Carrier.getByIcaoCode(icao);
                 f.setCarrier(c);
             }
         }
@@ -242,13 +242,14 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             case "LOC":
                 LOC loc = (LOC)s;
                 LocCode locCode = loc.getFunctionCode();
+                Airport airport = Airport.getByIataCode(loc.getLocationNameCode());
                 if (locCode == LocCode.DEPARTURE_AIRPORT) {
-                    f.setOrigin(loc.getLocationNameCode());
+                    f.setOrigin(airport);
                 } else if (locCode == LocCode.ARRIVAL_AIRPORT) {
-                    f.setDestination(loc.getLocationNameCode());
+                    f.setDestination(airport);
                 } else if (locCode == LocCode.BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT) {
-                    f.setOrigin(loc.getLocationNameCode());
-                    f.setDestination(loc.getLocationNameCode());
+                    f.setOrigin(airport);
+                    f.setDestination(airport);
                 }
                 break;
             case "DTM":

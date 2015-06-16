@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import gov.cbp.taspd.gtas.error.RuleServiceErrorHandler;
+import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Message;
 
 import java.io.IOException;
@@ -21,12 +22,12 @@ import org.kie.api.runtime.KieSession;
 public class RuleUtilsTest {
     private static final String testDrl = 
     		"package gov.cbp.taspd.gtas.rule; "   
-           +"import gov.cbp.taspd.gtas.model.Message; "
+           +"import gov.cbp.taspd.gtas.model.ApisMessage; "
            +"global java.util.List resultList; "    
             +"rule \"RH1 - Hello Messsage\" "
               +"dialect \"mvel\" "
               + "when "
-              +   "m:Message( transmissionSource.equals(\"Hello\"), date:transmissionDate ) "
+              +   "m:ApisMessage( transmissionSource.equals(\"Hello\"), date:transmissionDate ) "
               +  "then "
                       +"System.out.println( \"Transmission date =\"+date ); "
                       +"modify ( m ) { transmissionSource = \"Goodbye\"}; "
@@ -34,7 +35,7 @@ public class RuleUtilsTest {
               +"rule \"RH2 - GoodBye Messsage\" "
               +"dialect \"java\" "
               + "when "
-              +   "m:Message( transmissionSource.equals(\"Goodbye\"), date:transmissionDate ) "
+              +   "m:ApisMessage( transmissionSource.equals(\"Goodbye\"), date:transmissionDate ) "
               +  "then "
                       +"System.out.println( \"Got Goodbye\"); "
                       +"resultList.add(m.getTransmissionDate()); "
@@ -59,7 +60,7 @@ public class RuleUtilsTest {
                 new ArrayList<Object>() );
 
         //insert the fact
-		Message msg = new Message();
+		ApisMessage msg = new ApisMessage();
 		msg.setTransmissionSource("Hello");
 		Date transmissionDate = new Date();
 		msg.setTransmissionDate(transmissionDate);

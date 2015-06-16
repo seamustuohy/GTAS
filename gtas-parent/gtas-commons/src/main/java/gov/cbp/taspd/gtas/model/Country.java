@@ -52,4 +52,11 @@ public class Country extends BaseEntity {
             return false;
         return true;
     }
+    
+    public static Country getByAlpha2Code(String alpha2) {
+        return null;
+    }
+    public static Country getByAlpha3Code(String alpha3) {
+        return null;
+    }
 }

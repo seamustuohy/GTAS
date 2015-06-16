@@ -1,6 +1,8 @@
 package gov.cbp.taspd.gtas.parsers.paxlst;
 
+import gov.cbp.taspd.gtas.model.Airport;
 import gov.cbp.taspd.gtas.model.Carrier;
+import gov.cbp.taspd.gtas.model.Country;
 import gov.cbp.taspd.gtas.model.Document;
 import gov.cbp.taspd.gtas.model.DocumentType;
 import gov.cbp.taspd.gtas.model.Flight;
@@ -21,8 +23,6 @@ import gov.cbp.taspd.gtas.parsers.paxlst.usedifact.TDT;
 import gov.cbp.taspd.gtas.parsers.paxlst.usedifact.UNB;
 
 import java.util.ListIterator;
-
-import org.jadira.cdt.country.ISOCountryCode;
 
 public class PaxlstParserUSedifact extends PaxlstParser {
     
@@ -100,12 +100,14 @@ public class PaxlstParserUSedifact extends PaxlstParser {
             case "LOC":
                 LOC loc = (LOC)s;
                 LocCode locCode = loc.getLocationCode();
+                Country country = Country.getByAlpha2Code(loc.getIataCountryCode());
+                Airport airport = Airport.getByIataCode(loc.getIataAirportCode());
                 if (locCode == LocCode.DEPARTURE) {
-                    f.setOriginCountry(ISOCountryCode.getByAlpha2Code(loc.getIataCountryCode()));
-                    f.setOrigin(loc.getIataAirportCode());
+                    f.setOriginCountry(country);
+                    f.setOrigin(airport);
                 } else if (locCode == LocCode.ARRIVAL) {
-                    f.setDestinationCountry(ISOCountryCode.getByAlpha2Code(loc.getIataCountryCode()));
-                    f.setDestination(loc.getIataAirportCode());
+                    f.setDestinationCountry(country);
+                    f.setDestination(airport);
                 }
                 break;
             

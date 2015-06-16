@@ -1,5 +1,8 @@
 package gov.cbp.taspd.gtas.model;
 
+import java.math.BigDecimal;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
@@ -11,8 +14,12 @@ public class Airport extends BaseEntity {
     private String icao;
     private String countryCode;
     private String city;
-    private String latitude;
-    private String longitude;
+    
+    @Column (precision = 9, scale = 6 )
+    private BigDecimal latitude;
+
+    @Column (precision = 9, scale = 6 )
+    private BigDecimal longitude;
     private Integer utcOffset;
 
     public String getName() {
@@ -30,10 +37,10 @@ public class Airport extends BaseEntity {
     public String getCity() {
         return city;
     }
-    public String getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
-    public String getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
     public Integer getUtcOffset() {
@@ -71,5 +78,9 @@ public class Airport extends BaseEntity {
         } else if (!icao.equals(other.icao))
             return false;
         return true;
+    }
+    
+    public static Airport getByIataCode(String code) {
+        return null;
     }
 }

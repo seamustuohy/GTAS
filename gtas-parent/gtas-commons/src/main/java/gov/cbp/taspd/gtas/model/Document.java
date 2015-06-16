@@ -8,9 +8,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.Type;
-import org.jadira.cdt.country.ISOCountryCode;
-
 @Entity
 public class Document extends BaseEntity {
     public Document() { }
@@ -24,10 +21,9 @@ public class Document extends BaseEntity {
     
     private Date issuanceDate;
     
-//    @ManyToOne
-//    @JoinColumn(name="country", referencedColumnName="id")         
-    @Type(type = "org.jadira.usertype.country.PersistentISOCountryCode")
-    private ISOCountryCode issuanceCountry;
+    @ManyToOne
+    @JoinColumn(name="country", referencedColumnName="id")         
+    private Country issuanceCountry;
     
     @ManyToOne
     @JoinColumn(name="pax_id", referencedColumnName="id")         
@@ -65,11 +61,11 @@ public class Document extends BaseEntity {
         this.issuanceDate = issuanceDate;
     }
 
-    public ISOCountryCode getIssuanceCountry() {
+    public Country getIssuanceCountry() {
         return issuanceCountry;
     }
 
-    public void setIssuanceCountry(ISOCountryCode issuanceCountry) {
+    public void setIssuanceCountry(Country issuanceCountry) {
         this.issuanceCountry = issuanceCountry;
     }
 

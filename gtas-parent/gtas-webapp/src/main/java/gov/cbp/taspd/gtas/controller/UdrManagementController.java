@@ -36,7 +36,7 @@ public class UdrManagementController {
 		HashSet<Pax> set = new HashSet<Pax>();
 		set.add(p1);
 		flight.setPassengers(set);
-		flight.setDestination("Narnia");
+//		flight.setDestination("Narnia");
 		HashSet<Flight> flightSet = new HashSet<Flight>();
 		flightSet.add(flight);
 		msg.setFlights(flightSet);

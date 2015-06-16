@@ -38,4 +38,11 @@ public class Carrier extends BaseEntity {
             return false;
         return true;
     }    
+    
+    public static Carrier getByIataCode(String iata) {
+        return null;
+    }
+    public static Carrier getByIcaoCode(String icao) {
+        return null;
+    }
 }

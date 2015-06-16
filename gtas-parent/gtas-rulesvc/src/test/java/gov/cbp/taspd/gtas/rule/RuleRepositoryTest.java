@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import gov.cbp.taspd.gtas.bo.RuleExecutionStatistics;
 import gov.cbp.taspd.gtas.config.RuleServiceConfig;
 import gov.cbp.taspd.gtas.error.RuleServiceException;
+import gov.cbp.taspd.gtas.model.Airport;
 import gov.cbp.taspd.gtas.model.ApisMessage;
 import gov.cbp.taspd.gtas.model.Flight;
 import gov.cbp.taspd.gtas.model.Pax;
@@ -79,10 +80,10 @@ public class RuleRepositoryTest {
 		  HashSet<Pax> set = new HashSet<Pax>();
 		  set.add(passenger);
 		  flight.setPassengers(set);
-		  flight.setDestination("Narnia");
+		  flight.setDestination(new Airport());
 		  HashSet<Flight> flightSet = new HashSet<Flight>();
 		  flightSet.add(flight);
-		  msg. setFlights(flightSet);
+		  msg.setFlights(flightSet);
 		  return msg;
 	}
 }
