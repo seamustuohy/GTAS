@@ -2,13 +2,15 @@ package gov.cbp.taspd.gtas.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 
 /**
  * 
@@ -25,6 +27,10 @@ public class RuleCond extends BaseEntity {
 	private String attrName;
 	private String opCode;
 	private int condSeq;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "RULE_ID")
+	private Rule rule;
 
 	public RuleCond() {
 	}

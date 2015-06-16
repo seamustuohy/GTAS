@@ -1,10 +1,13 @@
 package gov.cbp.taspd.gtas.model;
 
-
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,6 +32,9 @@ public class Rule extends BaseEntity {
 	private String kbRef;
 	private String editedBy;
 	private Date editDt;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "rule")
+	private List<RuleCond> ruleConds;
 
 	public Rule() {
 	}
@@ -94,7 +100,7 @@ public class Rule extends BaseEntity {
 	public void setEditDt(Date editDt) {
 		this.editDt = editDt;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
@@ -105,7 +111,7 @@ public class Rule extends BaseEntity {
 		hashCodeBuilder.append(editDt);
 		return hashCodeBuilder.toHashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
