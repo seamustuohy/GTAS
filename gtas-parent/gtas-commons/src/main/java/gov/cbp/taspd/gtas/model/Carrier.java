@@ -1,5 +1,6 @@
 package gov.cbp.taspd.gtas.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 
@@ -8,7 +9,13 @@ public class Carrier extends BaseEntity {
     public Carrier() { }
     
     private String name;
+    
+    @Column(length=2)
     private String iata;
+    
+    @Column(length=3)
+    private String icao;
+    
     public String getName() {
         return name;
     }

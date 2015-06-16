@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "gtas_users", schema="gtas")
+@Table(name = "gtas_users")
 public class User implements Serializable {
 
 

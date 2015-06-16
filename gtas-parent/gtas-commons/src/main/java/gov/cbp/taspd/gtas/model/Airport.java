@@ -4,15 +4,25 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Airport extends BaseEntity {
     public Airport() { }
     
     private String name;
+    
+    @Column(length=3)
     private String iata;
+    
+    @Column(length=4)
     private String icao;
-    private String countryCode;
+    
+    @ManyToOne
+    @JoinColumn(referencedColumnName="id")     
+    private Country country;
+    
     private String city;
     
     @Column (precision = 9, scale = 6 )
@@ -20,6 +30,7 @@ public class Airport extends BaseEntity {
 
     @Column (precision = 9, scale = 6 )
     private BigDecimal longitude;
+    
     private Integer utcOffset;
 
     public String getName() {
@@ -31,8 +42,8 @@ public class Airport extends BaseEntity {
     public String getIcao() {
         return icao;
     }
-    public String getCountryCode() {
-        return countryCode;
+    public Country getCountry() {
+        return country;
     }
     public String getCity() {
         return city;
