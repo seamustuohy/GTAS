@@ -5,15 +5,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
+@Table(name = "apis_message")
 public class ApisMessage extends Message {
+    @Column(name = "transmission_date")
     private Date transmissionDate;
+    
+    @Column(name = "transmission_source")
     private String transmissionSource;
 
     @Transient

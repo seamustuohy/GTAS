@@ -5,16 +5,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
 @Entity
-public class Pax extends BaseEntity {
+@Table(name = "pax")
+public class Pax extends BaseEntityAudit {
     public Pax() { }
     
     @ManyToMany(
@@ -25,13 +30,25 @@ public class Pax extends BaseEntity {
     private Set<Flight> flights = new HashSet<>();
 
     private String title;
+    
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "middle_name")
     private String middleName;
+    @Column(name = "last_name")
     private String lastName;
     private String suffix;
     
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    
+    @ManyToOne
+    @JoinColumn(name = "citizenship_country", referencedColumnName="id")     
+    private Country citizenshipCountry;
+
+    @ManyToOne
+    @JoinColumn(name = "residency_country", referencedColumnName="id")     
+    private Country residencyCountry;
 
     @Enumerated(EnumType.STRING)
     private PaxType type;
@@ -39,8 +56,22 @@ public class Pax extends BaseEntity {
     @Type(type="date")
     private Date dob;
     private Integer age;
-    private String embarkation;
-    private String debarkation;
+    
+    @ManyToOne
+    @JoinColumn(referencedColumnName="id")         
+    private Airport embarkation;
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName="id")         
+    private Airport debarkation;
+    
+    @ManyToOne
+    @JoinColumn(name = "embark_country", referencedColumnName="id")     
+    private Country embarkCountry;
+
+    @ManyToOne
+    @JoinColumn(name = "debark_country", referencedColumnName="id")     
+    private Country debarkCountry;
     
     @OneToMany(mappedBy="pax")
     private Set<Document> documents = new HashSet<>();
@@ -105,17 +136,41 @@ public class Pax extends BaseEntity {
     public void setAge(Integer age) {
         this.age = age;
     }
-    public String getEmbarkation() {
+    public Airport getEmbarkation() {
         return embarkation;
     }
-    public void setEmbarkation(String embarkation) {
+    public void setEmbarkation(Airport embarkation) {
         this.embarkation = embarkation;
     }
-    public String getDebarkation() {
+    public Airport getDebarkation() {
         return debarkation;
     }
-    public void setDebarkation(String debarkation) {
+    public void setDebarkation(Airport debarkation) {
         this.debarkation = debarkation;
+    }
+    public Country getCitizenshipCountry() {
+        return citizenshipCountry;
+    }
+    public void setCitizenshipCountry(Country citizenshipCountry) {
+        this.citizenshipCountry = citizenshipCountry;
+    }
+    public Country getResidencyCountry() {
+        return residencyCountry;
+    }
+    public void setResidencyCountry(Country residencyCountry) {
+        this.residencyCountry = residencyCountry;
+    }
+    public Country getEmbarkCountry() {
+        return embarkCountry;
+    }
+    public void setEmbarkCountry(Country embarkCountry) {
+        this.embarkCountry = embarkCountry;
+    }
+    public Country getDebarkCountry() {
+        return debarkCountry;
+    }
+    public void setDebarkCountry(Country debarkCountry) {
+        this.debarkCountry = debarkCountry;
     }
     public Set<Document> getDocuments() {
         return documents;

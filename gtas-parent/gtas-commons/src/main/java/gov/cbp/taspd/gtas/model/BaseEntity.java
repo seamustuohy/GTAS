@@ -18,7 +18,7 @@ public abstract class BaseEntity implements Serializable {
     @Id  
     @GeneratedValue(strategy = GenerationType.AUTO)  
     @Basic(optional = false)  
-    @Column(name = "id", nullable = false, columnDefinition = "BIGINT UNSIGNED")  
+    @Column(name = "id", nullable = false, columnDefinition = "bigint unsigned")  
     protected Long id;  
   
     public Long getId() {  

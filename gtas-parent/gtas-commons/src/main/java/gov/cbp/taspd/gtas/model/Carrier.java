@@ -2,9 +2,11 @@ package gov.cbp.taspd.gtas.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 
 @Entity
+@Table(name = "carrier")
 public class Carrier extends BaseEntity {
     public Carrier() { }
     

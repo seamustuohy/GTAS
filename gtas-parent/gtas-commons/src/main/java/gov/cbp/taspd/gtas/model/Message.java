@@ -2,20 +2,27 @@ package gov.cbp.taspd.gtas.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "message")
 @Inheritance(strategy = InheritanceType.JOINED)  
 public class Message extends BaseEntity {
     
     @Lob
     private byte[] raw;
     
+    @Column(name = "create_date")
     private Date createDate;
+
+    @Column(name = "hash_code")
     private String hashCode;
+    
     public byte[] getRaw() {
         return raw;
     }

@@ -6,8 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "airport")
 public class Airport extends BaseEntity {
     public Airport() { }
     
@@ -25,12 +27,13 @@ public class Airport extends BaseEntity {
     
     private String city;
     
-    @Column (precision = 9, scale = 6 )
+    @Column(precision = 9, scale = 6 )
     private BigDecimal latitude;
 
-    @Column (precision = 9, scale = 6 )
+    @Column(precision = 9, scale = 6 )
     private BigDecimal longitude;
     
+    @Column(name = "utc_offset")
     private Integer utcOffset;
 
     public String getName() {

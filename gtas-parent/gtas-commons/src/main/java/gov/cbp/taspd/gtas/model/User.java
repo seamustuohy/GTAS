@@ -25,7 +25,6 @@ public class User implements Serializable {
 	private Role userRole;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="user_id")
 	public String getUserId() {
 		return userId;

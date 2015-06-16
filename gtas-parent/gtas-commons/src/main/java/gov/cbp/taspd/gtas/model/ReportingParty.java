@@ -1,9 +1,13 @@
 package gov.cbp.taspd.gtas.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "reporting_party")
 public class ReportingParty extends BaseEntity {
+    @Column(name = "party_name")
     private String partyName;
     private String telephone;
     private String fax;

@@ -5,13 +5,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "flight")
 public class Flight extends BaseEntityAudit {
     public Flight() { }
     
@@ -30,6 +33,7 @@ public class Flight extends BaseEntityAudit {
     @JoinColumn(referencedColumnName="id")     
     private Carrier carrier;
     
+    @Column(name = "flight_number")
     private String flightNumber;
 
     @ManyToOne
@@ -37,7 +41,7 @@ public class Flight extends BaseEntityAudit {
     private Airport origin;
     
     @ManyToOne
-    @JoinColumn(referencedColumnName="id")     
+    @JoinColumn(name = "origin_country_id", referencedColumnName="id")     
     private Country originCountry;
     
     @ManyToOne
@@ -45,9 +49,10 @@ public class Flight extends BaseEntityAudit {
     private Airport destination;
     
     @ManyToOne
-    @JoinColumn(referencedColumnName="id")     
+    @JoinColumn(name = "destination_country_id", referencedColumnName="id")     
     private Country destinationCountry;
 
+    @Column(name = "flight_date")
     private Date flightDate;
     private Date etd;
     private Date eta;

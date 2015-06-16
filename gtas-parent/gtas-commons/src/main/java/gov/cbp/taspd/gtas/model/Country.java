@@ -2,20 +2,22 @@ package gov.cbp.taspd.gtas.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "country")
 public class Country extends BaseEntity {
     public Country() { }
     
-    @Column(length=2)
+    @Column(length = 2)
     private String iso2;
 
-    @Column(length=3)
+    @Column(length = 3)
     private String iso3;
     
     private String name;
     
-    @Column(length=3)
+    @Column(name = "iso_numeric", length = 3)
     private String isoNumeric;
     
     public String getIso2() {
