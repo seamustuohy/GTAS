@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=RuleServiceConfig.class)
@@ -68,8 +69,13 @@ public class RuleRepositoryTest {
 		Pax p = new Pax();
 		p.setFirstName(fn);
 		p.setLastName(ln);
-		p.setEmbarkation(embarkation);
+		p.setEmbarkation(createAirport("Timbuktu"));
 		return p;
+	}
+	private Airport createAirport(final String airportName){
+		Airport airport = new Airport();
+		ReflectionTestUtils.setField(airport, "name", airportName);
+		return airport;
 	}
 	/**
 	 * Creates a simple ApisMessage with a single passenger
@@ -80,7 +86,7 @@ public class RuleRepositoryTest {
 		  HashSet<Pax> set = new HashSet<Pax>();
 		  set.add(passenger);
 		  flight.setPassengers(set);
-//		  flight.setDestination(new Airport());
+		  flight.setDestination(createAirport("foo"));
 		  HashSet<Flight> flightSet = new HashSet<Flight>();
 		  flightSet.add(flight);
 		  msg.setFlights(flightSet);
