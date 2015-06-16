@@ -2,6 +2,7 @@ package gov.cbp.taspd.gtas.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -124,26 +125,13 @@ public class Flight extends BaseEntityAudit {
     public void setDestinationCountry(Country destinationCountry) {
         this.destinationCountry = destinationCountry;
     }
+
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((carrier == null) ? 0 : carrier.hashCode());
-        result = prime * result
-                + ((destination == null) ? 0 : destination.hashCode());
-        result = prime
-                * result
-                + ((destinationCountry == null) ? 0 : destinationCountry
-                        .hashCode());
-        result = prime * result
-                + ((flightDate == null) ? 0 : flightDate.hashCode());
-        result = prime * result
-                + ((flightNumber == null) ? 0 : flightNumber.hashCode());
-        result = prime * result + ((origin == null) ? 0 : origin.hashCode());
-        result = prime * result
-                + ((originCountry == null) ? 0 : originCountry.hashCode());
-        return result;
+    public int hashCode()
+    {
+       return Objects.hash(this.carrier, this.flightNumber, this.flightDate, this.origin, this.destination);
     }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -152,33 +140,12 @@ public class Flight extends BaseEntityAudit {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Flight other = (Flight) obj;
-        if (carrier != other.carrier)
-            return false;
-        if (destination == null) {
-            if (other.destination != null)
-                return false;
-        } else if (!destination.equals(other.destination))
-            return false;
-        if (destinationCountry != other.destinationCountry)
-            return false;
-        if (flightDate == null) {
-            if (other.flightDate != null)
-                return false;
-        } else if (!flightDate.equals(other.flightDate))
-            return false;
-        if (flightNumber == null) {
-            if (other.flightNumber != null)
-                return false;
-        } else if (!flightNumber.equals(other.flightNumber))
-            return false;
-        if (origin == null) {
-            if (other.origin != null)
-                return false;
-        } else if (!origin.equals(other.origin))
-            return false;
-        if (originCountry != other.originCountry)
-            return false;
-        return true;
+        
+        final Flight other = (Flight)obj;
+        return Objects.equals(this.carrier, other.carrier)
+                && Objects.equals(this.flightNumber, other.flightNumber)
+                && Objects.equals(this.flightDate, other.flightDate)
+                && Objects.equals(this.origin, other.origin)
+                && Objects.equals(this.destination, other.destination);
     }
 }
