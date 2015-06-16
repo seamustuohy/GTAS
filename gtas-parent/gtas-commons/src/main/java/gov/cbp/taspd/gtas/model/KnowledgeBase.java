@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -19,11 +18,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @Table(name = "knowledge_base", catalog = "gtas")
 public class KnowledgeBase extends BaseEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5027457099159173590L;
-	private int version;
 	private byte[] kbBlob;
 	private Date creationDt;
 
@@ -39,16 +34,6 @@ public class KnowledgeBase extends BaseEntity {
 		this.id = id;
 		this.kbBlob = kbBlob;
 		this.creationDt = creationDt;
-	}
-
-	@Version
-	@Column(name = "VERSION", length = 256)
-	public int getVersion() {
-		return this.version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
 	}
 
 	@Column(name = "KB_BLOB")
@@ -73,7 +58,6 @@ public class KnowledgeBase extends BaseEntity {
 	@Override
 	public int hashCode() {
 		HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-		hashCodeBuilder.append(version);
 		hashCodeBuilder.append(kbBlob);
 		hashCodeBuilder.append(creationDt);
 		return hashCodeBuilder.toHashCode();
@@ -92,10 +76,8 @@ public class KnowledgeBase extends BaseEntity {
 		}
 		KnowledgeBase other = (KnowledgeBase) obj;
 		EqualsBuilder equalsBuilder = new EqualsBuilder();
-		equalsBuilder.append(version, other.version);
 		equalsBuilder.append(kbBlob, other.kbBlob);
 		equalsBuilder.append(creationDt, other.creationDt);
 		return equalsBuilder.isEquals();
 	}
-
 }

@@ -11,7 +11,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -23,11 +22,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @Table(name = "rule", catalog = "gtas")
 public class Rule extends BaseEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6208917106485574650L;
-	private int version;
 	private Character deleted;
 	private String kbRef;
 	private String editedBy;
@@ -45,23 +40,12 @@ public class Rule extends BaseEntity {
 	}
 
 	public Rule(long id, Character deleted, String kbRef, String editedBy,
-			Date editDt, int version) {
+			Date editDt) {
 		this.id = id;
 		this.deleted = deleted;
 		this.kbRef = kbRef;
 		this.editedBy = editedBy;
 		this.editDt = editDt;
-		this.version = version;
-	}
-
-	@Version
-	@Column(name = "VERSION")
-	public int getVersion() {
-		return this.version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
 	}
 
 	@Column(name = "DELETED", length = 1)
@@ -104,7 +88,6 @@ public class Rule extends BaseEntity {
 	@Override
 	public int hashCode() {
 		HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-		hashCodeBuilder.append(version);
 		hashCodeBuilder.append(deleted);
 		hashCodeBuilder.append(kbRef);
 		hashCodeBuilder.append(editedBy);
@@ -125,7 +108,6 @@ public class Rule extends BaseEntity {
 		}
 		Rule other = (Rule) obj;
 		EqualsBuilder equalsBuilder = new EqualsBuilder();
-		equalsBuilder.append(version, other.version);
 		equalsBuilder.append(deleted, other.deleted);
 		equalsBuilder.append(kbRef, other.kbRef);
 		equalsBuilder.append(editedBy, other.editedBy);

@@ -2,15 +2,10 @@ package gov.cbp.taspd.gtas.config;
 
 import java.util.Properties;
 
-import gov.cbp.taspd.gtas.services.FlightService;
-import gov.cbp.taspd.gtas.services.FlightServiceImpl;
-
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
