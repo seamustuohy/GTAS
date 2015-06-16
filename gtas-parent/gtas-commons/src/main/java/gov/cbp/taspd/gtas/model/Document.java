@@ -19,7 +19,8 @@ public class Document extends BaseEntity {
     @Column(name = "document_type")
     private DocumentType documentType;
     
-    private String number;
+    @Column(name = "document_number")
+    private String documentNumber;
     
     @Column(name = "expiration_date")
     private Date expirationDate;
@@ -43,20 +44,20 @@ public class Document extends BaseEntity {
         this.documentType = documentType;
     }
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
     public Date getExpirationDate() {
         return expirationDate;
     }
 
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public String getDocumentNumber() {
+        return documentNumber;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
     public Date getIssuanceDate() {
