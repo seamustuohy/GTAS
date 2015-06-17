@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>gov.cbp.taspd.gtas</groupId>
+		<groupId>gov.gtas</groupId>
 		<artifactId>gtas-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<!-- <groupId>gov.cbp.taspd.gtas</groupId> -->
+	<!-- <groupId>gov.gtas</groupId> -->
 	<artifactId>gtasrulesvc</artifactId>
 	<version>0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -30,7 +30,7 @@
 	<dependencies>
 		<!-- GTAS intermodule dependencies -->
 		<dependency>
-			<groupId>gov.cbp.taspd.gtas</groupId>
+			<groupId>gov.gtas</groupId>
 			<artifactId>gtas-commons</artifactId>
 			<version>${gtas-commons.version}</version>
 		</dependency>

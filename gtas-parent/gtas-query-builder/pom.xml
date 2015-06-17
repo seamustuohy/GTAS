@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>gov.cbp.taspd.gtas</groupId>
+    <groupId>gov.gtas</groupId>
     <artifactId>gtas-parent</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
@@ -17,7 +17,7 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>gov.cbp.taspd.gtas</groupId>
+      <groupId>gov.gtas</groupId>
 	  <artifactId>gtas-commons</artifactId>
 	  <version>${project.version}</version>
     </dependency>

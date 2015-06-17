@@ -20,7 +20,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-        	gov.cbp.gtas.taspd.querybuilder.AppConfig gov.cbp.gtas.taspd.udrbuilder.AppConfig
+        	gov.gtas.querybuilder.AppConfig gov.gtas.udrbuilder.AppConfig
         </param-value>
     </context-param>
 
@@ -45,7 +45,7 @@
             and fully-qualified @Configuration classes -->
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>gov.cbp.taspd.gtas.common.WebAppConfig</param-value>
+            <param-value>gov.gtas.common.WebAppConfig</param-value>
         </init-param>
     </servlet>
 

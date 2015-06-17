@@ -2,10 +2,10 @@
 * Default rules for the GTAS system.
 * TODO: create Meta Rules and Rule Flow here - AB.
 */
-package gov.cbp.taspd.gtas.rule;
+package gov.gtas.rule;
  
-import gov.cbp.taspd.gtas.model.Flight;
-import gov.cbp.taspd.gtas.model.Pax;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Pax;
 
 global java.util.List resultList
  
