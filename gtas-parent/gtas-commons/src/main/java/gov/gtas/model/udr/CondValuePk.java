@@ -16,12 +16,12 @@ public class CondValuePk implements Serializable {
 	 */
 	private static final long serialVersionUID = -1678873197327409223L;
 
-	@Column(name = "RULE_ID", nullable = false, updatable = false)
+	@Column(name = "RULE_ID", nullable = false,  insertable=false, updatable = false)
 	private long ruleId;
-	@Column(name = "COND_SEQ", nullable = false, updatable = false)
+	@Column(name = "COND_SEQ", nullable = false, insertable=false, updatable=false)
 	private int condSeq;
 
-	@Column(name = "VAL_NAME", nullable = false, updatable = false)
+	@Column(name = "VAL_NAME", nullable = false, insertable=false, updatable = false)
 	private String valName;
 
 	public CondValuePk() {

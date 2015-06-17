@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -34,21 +36,19 @@ public class CondValue implements Serializable {
 	//the following two fields are key columns
 	@EmbeddedId
 	private CondValuePk id;
-//	@Id
-//	@Column(name = "VAL_NAME", nullable = false, updatable = false)
-//	private String valName;
 	
-//	private long ruleId;
-//	private int condSeq;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "VAL_TYPE", nullable = false, length = 16)
 	private ConditionValueTypeEnum valType;
+	
 	private BigDecimal numVal;
 	private Date dtVal;
 	private String charVal;
 
 	@ManyToOne
 	@JoinColumns({
-		@JoinColumn(name="RULE_ID", referencedColumnName="RULE_ID"),
-		@JoinColumn(name="COND_SEQ", referencedColumnName="COND_SEQ")		
+		@JoinColumn(name="RULE_ID", referencedColumnName="RULE_ID", insertable=false, updatable=false),
+		@JoinColumn(name="COND_SEQ", referencedColumnName="COND_SEQ", insertable=false, updatable=false)		
 	})
 	private RuleCond parent;
 	
@@ -84,33 +84,19 @@ public class CondValue implements Serializable {
 		this.dtVal = value;
 	}
 
-
-	@Column(name = "VAL_TYPE", nullable = false, length = 32)
-	public String getValType() {
-		return this.valType.toString();
+	/**
+	 * @return the valType
+	 */
+	public ConditionValueTypeEnum getValType() {
+		return valType;
 	}
 
-	public void setValType(String valType) {
-		this.valType = ConditionValueTypeEnum.valueOf(valType);
+	/**
+	 * @param valType the valType to set
+	 */
+	public void setValType(ConditionValueTypeEnum valType) {
+		this.valType = valType;
 	}
-
-//	@Column(name = "COND_SEQ", nullable = false)
-//	public int getCondSeq() {
-//		return this.condSeq;
-//	}
-//
-//	public void setCondSeq(int condSeq) {
-//		this.condSeq = condSeq;
-//	}
-//
-//	@Column(name = "VAL_NAME", nullable = false, length = 64)
-//	public String getValName() {
-//		return this.valName;
-//	}
-//
-//	public void setValName(String valName) {
-//		this.valName = valName;
-//	}
 
 	@Column(name = "NUM_VAL", precision = 16, scale = 4)
 	public BigDecimal getNumVal() {

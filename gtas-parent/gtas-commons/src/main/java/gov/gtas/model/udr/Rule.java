@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,12 +33,13 @@ public class Rule extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 6208917106485574650L;
 	
-//	private int version;
 	private Character deleted;
-//	private String kbRef;
-//	private String editedBy;
 	private Date editDt;
 
+	@OneToOne
+	@JoinColumn(name="ID", referencedColumnName="RULE_ID")
+	private RuleMeta metaData;
+	
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="KB_REF", referencedColumnName="id")     
     private KnowledgeBase knowledgeBase;
@@ -45,7 +47,7 @@ public class Rule extends BaseEntity {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<RuleCond> ruleConds;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="EDITED_BY", referencedColumnName="user_id")     
     private User editedBy;
 
@@ -61,24 +63,14 @@ public class Rule extends BaseEntity {
 	}
 
 	public Rule(long id, Character deleted, KnowledgeBase kb, User editedBy,
-			Date editDt, int version) {
+			Date editDt) {
 		this.id = id;
 		this.deleted = deleted;
 		this.knowledgeBase = kb;
 		this.editedBy = editedBy;
 		this.editDt = editDt;
-//		super.version = version;
 	}
 
-//	@Version
-//	@Column(name = "VERSION")
-//	public int getVersion() {
-//		return this.version;
-//	}
-
-//	public void setVersion(int version) {
-//		this.version = version;
-//	}
 
 	@Column(name = "DELETED", length = 1)
 	public Character getDeleted() {
@@ -89,23 +81,6 @@ public class Rule extends BaseEntity {
 		this.deleted = deleted;
 	}
 
-//	@Column(name = "KB_REF", length = 16777215)
-//	public String getKbRef() {
-//		return this.kbRef;
-//	}
-//
-//	public void setKbRef(String kbRef) {
-//		this.kbRef = kbRef;
-//	}
-//
-//	@Column(name = "EDITED_BY", length = 32)
-//	public String getEditedBy() {
-//		return this.editedBy;
-//	}
-//
-//	public void setEditedBy(String editedBy) {
-//		this.editedBy = editedBy;
-//	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "EDIT_DT", nullable = false, length = 19)

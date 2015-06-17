@@ -6,12 +6,16 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * RuleMeta
@@ -21,9 +25,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class RuleMeta extends BaseEntity {
 
 	/**
-	 * 
+	 * serial version UID
 	 */
 	private static final long serialVersionUID = 384462394390643572L;
+	
 	private String title;
 	private String description;
 	private Date startDt;
@@ -32,6 +37,11 @@ public class RuleMeta extends BaseEntity {
 	private Character priorityHigh;
 	private Character hitSharing;
 
+	@OneToOne
+	@JoinColumn(name="RULE_ID", referencedColumnName="id")
+	private Rule rule;
+	
+	
 	public RuleMeta() {
 	}
 
@@ -53,6 +63,20 @@ public class RuleMeta extends BaseEntity {
 		this.priorityHigh = priorityHigh;
 		this.hitSharing = hitSharing;
 	}
+
+//	/**
+//	 * @return the ruleId
+//	 */
+//	public long getRuleId() {
+//		return ruleId;
+//	}
+//
+//	/**
+//	 * @param ruleId the ruleId to set
+//	 */
+//	public void setRuleId(long ruleId) {
+//		this.ruleId = ruleId;
+//	}
 
 	@Column(name = "TITLE", length = 64)
 	public String getTitle() {
@@ -154,5 +178,9 @@ public class RuleMeta extends BaseEntity {
 		equalsBuilder.append(hitSharing, other.hitSharing);
 		return equalsBuilder.isEquals();
 	}
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    }        
 
 }

@@ -9,7 +9,7 @@ import javax.persistence.Table;
  * Operator
  */
 @Entity
-@Table(name = "operator", catalog = "gtas")
+@Table(name = "OPCODE_LOOKUP", catalog = "gtas")
 public class Operator implements java.io.Serializable {
 
 	/**

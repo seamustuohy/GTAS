@@ -49,20 +49,11 @@ public class RuleCond implements Serializable {
 
 	public RuleCond(RuleCondPk id, String entityName, String attrName, OperatorCodeEnum opCode) {
 		this.id = id;
-//		this.condSeq = condSeq;
 		this.entityName = entityName;
 		this.attrName = attrName;
 		this.opCode = opCode;
 	}
 
-//	@Column(name = "COND_SEQ", nullable = false)
-//	public int getCondSeq() {
-//		return this.condSeq;
-//	}
-
-//	public void setCondSeq(int condSeq) {
-//		this.condSeq = condSeq;
-//	}
 
 	@Column(name = "ENTITY_NAME", nullable = false, length = 64)
 	public String getEntityName() {
