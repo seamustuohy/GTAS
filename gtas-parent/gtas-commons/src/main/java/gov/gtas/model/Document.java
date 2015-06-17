@@ -1,5 +1,8 @@
 package gov.gtas.model;
 
+import gov.gtas.model.lookup.Country;
+import gov.gtas.model.lookup.DocumentType;
+
 import java.util.Date;
 
 import javax.persistence.Column;

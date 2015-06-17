@@ -1,15 +1,15 @@
 package gov.gtas.parsers.paxlst;
 
-import gov.gtas.model.Airport;
-import gov.gtas.model.Carrier;
-import gov.gtas.model.Country;
 import gov.gtas.model.Document;
-import gov.gtas.model.DocumentType;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Gender;
 import gov.gtas.model.Pax;
-import gov.gtas.model.PaxType;
 import gov.gtas.model.ReportingParty;
+import gov.gtas.model.lookup.Airport;
+import gov.gtas.model.lookup.Carrier;
+import gov.gtas.model.lookup.Country;
+import gov.gtas.model.lookup.DocumentType;
+import gov.gtas.model.lookup.Gender;
+import gov.gtas.model.lookup.PaxType;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.unedifact.ATT;
 import gov.gtas.parsers.paxlst.unedifact.COM;

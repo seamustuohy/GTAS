@@ -1,5 +1,10 @@
 package gov.gtas.model;
 
+import gov.gtas.model.lookup.Airport;
+import gov.gtas.model.lookup.Country;
+import gov.gtas.model.lookup.Gender;
+import gov.gtas.model.lookup.PaxType;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

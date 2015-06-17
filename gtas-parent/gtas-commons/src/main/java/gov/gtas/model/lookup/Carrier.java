@@ -1,4 +1,6 @@
-package gov.gtas.model;
+package gov.gtas.model.lookup;
+
+import gov.gtas.model.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package gov.gtas.model;
+package gov.gtas.model.lookup;
 
 public enum DocumentType {
     P, // - Passport

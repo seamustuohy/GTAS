@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.Airport;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Message;
+import gov.gtas.model.lookup.Airport;
 import gov.gtas.services.FlightService;
 
 import java.util.Date;

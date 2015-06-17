@@ -4,10 +4,10 @@ import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.rule.RuleServiceResult;
 import gov.gtas.svc.TargetingService;
 import gov.gtas.constants.Constants;
-import gov.gtas.model.Airport;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
+import gov.gtas.model.lookup.Airport;
 
 import java.util.HashSet;
 

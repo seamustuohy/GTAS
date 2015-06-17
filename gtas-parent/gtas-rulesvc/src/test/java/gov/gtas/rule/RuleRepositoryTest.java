@@ -5,10 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.error.RuleServiceException;
-import gov.gtas.model.Airport;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
+import gov.gtas.model.lookup.Airport;
 import gov.gtas.rule.RuleService;
 import gov.gtas.rule.RuleServiceResult;
 
