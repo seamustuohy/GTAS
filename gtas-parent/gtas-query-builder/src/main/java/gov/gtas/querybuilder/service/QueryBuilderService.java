@@ -8,7 +8,7 @@ import gov.gtas.querybuilder.model.CreditCardDisplay;
 import gov.gtas.querybuilder.model.DocumentDisplay;
 import gov.gtas.querybuilder.model.EmailDisplay;
 import gov.gtas.querybuilder.model.FlightDisplay;
-import gov.gtas.querybuilder.model.FrequentFlierDisplay;
+import gov.gtas.querybuilder.model.FrequentFlyerDisplay;
 import gov.gtas.querybuilder.model.HitsDisplay;
 import gov.gtas.querybuilder.model.NameOriginDisplay;
 import gov.gtas.querybuilder.model.PNRDisplay;
@@ -21,7 +21,7 @@ import gov.gtas.querybuilder.repository.CreditCardDisplayRepository;
 import gov.gtas.querybuilder.repository.DocumentDisplayRepository;
 import gov.gtas.querybuilder.repository.EmailDisplayRepository;
 import gov.gtas.querybuilder.repository.FlightDisplayRepository;
-import gov.gtas.querybuilder.repository.FrequentFlierDisplayRepository;
+import gov.gtas.querybuilder.repository.FrequentFlyerDisplayRepository;
 import gov.gtas.querybuilder.repository.HitsDisplayRepository;
 import gov.gtas.querybuilder.repository.NameOriginDisplayRepository;
 import gov.gtas.querybuilder.repository.PNRDisplayRepository;
@@ -54,7 +54,7 @@ public class QueryBuilderService {
 	@Autowired
 	EmailDisplayRepository emailRepository;
 	@Autowired
-	FrequentFlierDisplayRepository frequentFlierRepository;
+	FrequentFlyerDisplayRepository frequentFlyerRepository;
 	@Autowired
 	HitsDisplayRepository hitsRepository;
 	@Autowired
@@ -67,11 +67,12 @@ public class QueryBuilderService {
 	PNRDisplayRepository pnrRepository;
 	@Autowired
 	TravelAgencyDisplayRepository travelAgencyRepository;
-	
+		
 	/**
 	 * 
 	 * @return
 	 */
+
 	public List<FlightDisplay> getFlightDisplay() {
 		
 		return (List<FlightDisplay>) flightRepository.findAll();
@@ -126,9 +127,9 @@ public class QueryBuilderService {
 	 * 
 	 * @return
 	 */
-	public List<FrequentFlierDisplay> getFrequentFlierDisplay() {
+	public List<FrequentFlyerDisplay> getFrequentFlyerDisplay() {
 		
-		return (List<FrequentFlierDisplay>) frequentFlierRepository.findAll();
+		return (List<FrequentFlyerDisplay>) frequentFlyerRepository.findAll();
 	}
 	
 	/**
@@ -189,6 +190,8 @@ public class QueryBuilderService {
 	 * 
 	 */
 	public List<Flight> runQueryOnFlight(String query) {
+		query = "flight.carrier = 'DELTA' OR flight.carrier = 'UNITED' AND " + 
+				"(document.citizenship = 'USA' AND document.doc_type = 'Passport')";
 		
 		return null;
 	}

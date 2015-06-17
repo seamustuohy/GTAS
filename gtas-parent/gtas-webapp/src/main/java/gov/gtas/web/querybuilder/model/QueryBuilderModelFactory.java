@@ -4,7 +4,7 @@ import gov.gtas.constants.Constants;
 
 public class QueryBuilderModelFactory {
 
-	public IQueryBuilderModel getQueryBuilderModel(String modelType){
+	public IQueryBuilderModel getQueryBuilderModel(String modelType) {
 	      if(modelType == null){
 	         return null;
 	      }		
@@ -27,8 +27,8 @@ public class QueryBuilderModelFactory {
 	      else if(modelType.equalsIgnoreCase(Constants.FLIGHT)) {
 	    	  return new Flight(Constants.FLIGHT);
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.FREQUENT_FLIER)) {
-	    	  return new FrequentFlier(Constants.FREQUENT_FLIER);
+	      else if(modelType.equalsIgnoreCase(Constants.FREQUENT_FLYER)) {
+	    	  return new FrequentFlyer(Constants.FREQUENT_FLYER);
 	      }
 	      else if(modelType.equalsIgnoreCase(Constants.HITS)) {
 	    	  return new Hits(Constants.HITS);

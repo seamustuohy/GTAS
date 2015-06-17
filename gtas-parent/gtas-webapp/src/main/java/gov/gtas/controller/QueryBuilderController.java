@@ -1,26 +1,13 @@
 package gov.gtas.controller;
 
+import gov.gtas.constants.Constants;
 import gov.gtas.querybuilder.model.IDisplay;
 import gov.gtas.querybuilder.service.QueryBuilderService;
-import gov.gtas.constants.Constants;
-import gov.gtas.web.querybuilder.model.API;
-import gov.gtas.web.querybuilder.model.Address;
 import gov.gtas.web.querybuilder.model.Column;
-import gov.gtas.web.querybuilder.model.CreditCard;
-import gov.gtas.web.querybuilder.model.Document;
-import gov.gtas.web.querybuilder.model.Email;
-import gov.gtas.web.querybuilder.model.Flight;
-import gov.gtas.web.querybuilder.model.FrequentFlier;
-import gov.gtas.web.querybuilder.model.Hits;
 import gov.gtas.web.querybuilder.model.IQueryBuilderModel;
-import gov.gtas.web.querybuilder.model.NameOrigin;
-import gov.gtas.web.querybuilder.model.PNR;
-import gov.gtas.web.querybuilder.model.Passenger;
-import gov.gtas.web.querybuilder.model.Phone;
 import gov.gtas.web.querybuilder.model.QueryBuilderFlightResult;
 import gov.gtas.web.querybuilder.model.QueryBuilderModelFactory;
 import gov.gtas.web.querybuilder.model.QueryBuilderPassengerResult;
-import gov.gtas.web.querybuilder.model.TravelAgency;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/query")
+@RequestMapping(Constants.QUERY_SERVICE)
 public class QueryBuilderController {
 
 	@Autowired
 	QueryBuilderService queryService;
-	
 
 	@RequestMapping(value = Constants.INIT, method = RequestMethod.GET)
 	public List<IQueryBuilderModel> initQueryBuilder() {
@@ -56,6 +42,8 @@ public class QueryBuilderController {
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.GET)
 	public List<QueryBuilderFlightResult> runQueryOnFlight(String query) {
+		
+		queryService.runQueryOnFlight(query);
 		
 		return null;
 	}
@@ -115,7 +103,7 @@ public class QueryBuilderController {
 		modelList.add(getModel(queryService.getDocumentDisplay(), Constants.DOCUMENT));
 		modelList.add(getModel(queryService.getEmailDisplay(), Constants.EMAIL));
 		modelList.add(getModel(queryService.getFlightDisplay(), Constants.FLIGHT));
-		modelList.add(getModel(queryService.getFrequentFlierDisplay(), Constants.FREQUENT_FLIER));
+		modelList.add(getModel(queryService.getFrequentFlyerDisplay(), Constants.FREQUENT_FLYER));
 		modelList.add(getModel(queryService.getHitsDisplay(), Constants.HITS));
 		modelList.add(getModel(queryService.getNameOriginDisplay(), Constants.NAME_ORIGIN));
 		modelList.add(getModel(queryService.getPassengerDisplay(), Constants.PASSENGER));
