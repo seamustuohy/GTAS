@@ -35,7 +35,7 @@
             </dependency>             
           </dependencies>
           <configuration>
-            <target>NONE</target>
+            <force>true</force>
           </configuration>
         </plugin>
       </plugins>

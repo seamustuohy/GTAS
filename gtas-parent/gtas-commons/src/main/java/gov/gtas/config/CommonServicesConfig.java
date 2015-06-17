@@ -29,15 +29,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @ComponentScan("gov.gtas")
-@PropertySource("classpath:commonservices.properties")
+@PropertySource({"classpath:commonservices.properties", "classpath:hibernate.properties"})
 @EnableJpaRepositories("gov.gtas")
 @EnableTransactionManagement
 public class CommonServicesConfig {
 	
-    private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";
-    private static final String PROPERTY_NAME_DATABASE_PASSWORD = "db.password";
-    private static final String PROPERTY_NAME_DATABASE_URL = "db.url";
-    private static final String PROPERTY_NAME_DATABASE_USERNAME = "db.username";
+    private static final String PROPERTY_NAME_DATABASE_DRIVER = "hibernate.connection.driver_class";
+    private static final String PROPERTY_NAME_DATABASE_PASSWORD = "hibernate.connection.password";
+    private static final String PROPERTY_NAME_DATABASE_URL = "hibernate.connection.url";
+    private static final String PROPERTY_NAME_DATABASE_USERNAME = "hibernate.connection.username";
  
     private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
     private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
