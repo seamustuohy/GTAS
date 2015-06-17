@@ -1,8 +1,8 @@
 package gov.gtas.web.querybuilder.model;
 
-public class Carrier extends BaseWebModel {
+public class Carrier extends BaseQueryBuilderModel {
 
 	public Carrier(String label) {
-		setLabel(label);
+//		setLabel(label);
 	}
 }

@@ -1,8 +1,5 @@
 package gov.gtas.web.querybuilder.model;
 
-public class Address extends BaseWebModel  {
+public class Address extends BaseQueryBuilderModel  {
 	
-	public Address(String label) {
-		setLabel(label);
-	}
 }

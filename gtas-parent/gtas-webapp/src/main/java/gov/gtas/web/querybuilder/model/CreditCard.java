@@ -1,8 +1,5 @@
 package gov.gtas.web.querybuilder.model;
 
-public class CreditCard extends BaseWebModel {
+public class CreditCard extends BaseQueryBuilderModel {
 
-	public CreditCard(String label) {
-		setLabel(label);
-	}
 }

@@ -12,19 +12,19 @@ public final class Constants {
 	public static final String DELETE_QUERY_URI = "/deleteQuery";
 	
 	// query builder model types
-	public static final String ADDRESS = "Address";
+	public static final String ADDRESS = "ADDRESS";
 	public static final String API = "API";
-	public static final String CREDIT_CARD = "Credit Card";
-	public static final String DOCUMENT = "Document";
-	public static final String EMAIL = "Email";
-	public static final String FLIGHT = "Flight";
-	public static final String FREQUENT_FLYER = "Frequent Flyer";
-	public static final String HITS = "Hits";
-	public static final String NAME_ORIGIN = "Name Origin";
-	public static final String PASSENGER = "Passenger";
-	public static final String PHONE = "Phone";
+	public static final String CREDIT_CARD = "CREDIT CARD";
+	public static final String DOCUMENT = "DOCUMENT";
+	public static final String EMAIL = "EMAIL";
+	public static final String FLIGHT = "FLIGHT";
+	public static final String FREQUENT_FLYER = "FREQUENT FLYER";
+	public static final String HITS = "HITS";
+	public static final String NAME_ORIGIN = "NAME ORIGIN";
+	public static final String PASSENGER = "PASSENGER";
+	public static final String PHONE = "PHONE";
 	public static final String PNR = "PNR";
-	public static final String TRAVEL_AGENCY = "Travel Agency";
+	public static final String TRAVEL_AGENCY = "TRAVEL AGENCY";
 	
 	
 	//UDR URI

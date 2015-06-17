@@ -1,8 +1,5 @@
 package gov.gtas.web.querybuilder.model;
 
-public class NameOrigin extends BaseWebModel {
+public class NameOrigin extends BaseQueryBuilderModel {
 
-	public NameOrigin(String label) {
-		setLabel(label);
-	}
 }

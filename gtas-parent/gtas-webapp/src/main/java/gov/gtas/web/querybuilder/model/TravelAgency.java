@@ -1,8 +1,5 @@
 package gov.gtas.web.querybuilder.model;
 
-public class TravelAgency extends BaseWebModel {
+public class TravelAgency extends BaseQueryBuilderModel {
 
-	public TravelAgency(String label) {
-		setLabel(label);
-	}
 }

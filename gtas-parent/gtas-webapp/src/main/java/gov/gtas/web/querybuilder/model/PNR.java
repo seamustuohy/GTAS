@@ -1,8 +1,5 @@
 package gov.gtas.web.querybuilder.model;
 
-public class PNR extends BaseWebModel {
+public class PNR extends BaseQueryBuilderModel {
 
-	public PNR(String label) {
-		setLabel(label);
-	}
 }
