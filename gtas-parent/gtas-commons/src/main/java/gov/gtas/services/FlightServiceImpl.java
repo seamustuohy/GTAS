@@ -1,9 +1,5 @@
 package gov.gtas.services;
 
-
-
-
-
 import gov.gtas.model.Flight;
 import gov.gtas.repository.FlightRepository;
 
