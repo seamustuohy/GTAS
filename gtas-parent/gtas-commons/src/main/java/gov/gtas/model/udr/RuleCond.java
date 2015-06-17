@@ -9,6 +9,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,6 +36,9 @@ public class RuleCond implements Serializable {
 	
 	private String entityName;
 	private String attrName;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "OP_CODE", nullable = false, length = 16)
 	private OperatorCodeEnum opCode;
 
 	@OneToMany(mappedBy="parent")
@@ -77,13 +82,12 @@ public class RuleCond implements Serializable {
 		this.attrName = attrName;
 	}
 
-	@Column(name = "OP_CODE", nullable = false, length = 16)
-	public String getOpCode() {
-		return this.opCode.toString();
+	public OperatorCodeEnum getOpCode() {
+		return this.opCode;
 	}
 
-	public void setOpCode(String opCode) {
-		this.opCode = OperatorCodeEnum.valueOf(opCode);
+	public void setOpCode(OperatorCodeEnum opCode) {
+		this.opCode = opCode;
 	}
 
 	@Override
