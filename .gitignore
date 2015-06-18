@@ -5,7 +5,7 @@
 *.class
 
 # intellij
-*/.idea/*
+.idea/*
 
 # jquery querybuilder specific
 */jQuery-QueryBuilder/dist/*
