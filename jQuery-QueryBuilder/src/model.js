@@ -394,6 +394,8 @@ var Rule = function(parent, $el) {
 
     Node.call(this, parent, $el);
 
+    this.__.table = null;
+    this.__.column = null;
     this.__.filter = null;
     this.__.operator = null;
     this.__.flags = {};
@@ -403,7 +405,7 @@ var Rule = function(parent, $el) {
 Rule.prototype = Object.create(Node.prototype);
 Rule.prototype.constructor = Rule;
 
-defineModelProperties(Rule, ['filter', 'operator', 'flags', 'value']);
+defineModelProperties(Rule, ['table', 'column', 'filter', 'operator', 'flags', 'value']);
 
 
 QueryBuilder.Group = Group;

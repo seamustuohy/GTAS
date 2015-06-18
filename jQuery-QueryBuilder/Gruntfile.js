@@ -36,7 +36,6 @@ module.exports = function(grunt) {
           + wrapper[1];
     }
 
-
     var all_plugins = {},
         all_langs = {},
         loaded_plugins = [],
@@ -242,7 +241,7 @@ module.exports = function(grunt) {
             css: {
                 options: {
                     stripBanners: { block: true },
-                    banner: '<%= banner %>\n\n',
+                    banner: '<%= banner %>\n\n'
                 },
                 files: [{
                     expand: true,
@@ -425,7 +424,7 @@ module.exports = function(grunt) {
                 force: true
             },
             all: {
-                src: '.coverage-results/all.lcov',
+                src: '.coverage-results/all.lcov'
             }
         }
     });

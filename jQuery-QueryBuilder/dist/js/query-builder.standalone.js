@@ -124,7 +124,7 @@
 }));
 
 /*!
- * jQuery QueryBuilder 2.1.0
+ * jQuery QueryBuilder 2.2.0
  * Copyright 2014-2015 Damien "Mistic" Sorel (http://www.strangeplanet.fr)
  * Licensed under MIT (http://opensource.org/licenses/MIT)
  */
@@ -396,6 +396,7 @@ QueryBuilder.prototype.init = function($el, options) {
     }
 
     // SETTINGS SHORTCUTS
+    this.tables = this.settings.tables;
     this.filters = this.settings.filters;
     this.icons = this.settings.icons;
     this.operators = this.settings.operators;
@@ -534,23 +535,38 @@ QueryBuilder.prototype.bindEvents = function() {
     var that = this;
 
     // group condition change
-    this.$el.on('change.queryBuilder', '.rules-group-header [name$=_cond]', function() {
-        if ($(this).is(':checked')) {
-            var $group = $(this).closest('.rules-group-container');
-            Model($group).condition = $(this).val();
-        }
+    this.$el.on('change.queryBuilder', '.group-conditions :checked', function() {
+        var $group = $(this).closest('.rules-group-container');
+        Model($group).condition = this.value;
+    });
+
+    // rule table change
+    this.$el.on('change.queryBuilder', '.rule-table-container select', function() {
+        var $this = $(this);
+        var $rule = $this.closest('.rule-container');
+        Model($rule).table = that.getTableByName($this.val());
+    });
+
+    // rule field change
+    this.$el.on('change.queryBuilder', '.rule-field-container select', function() {
+        var $this = $(this);
+        var $rule = $this.closest('.rule-container');
+        var id = $this.val() != -1 ? Model($rule).table + '.' + $this.val() : '-1';
+        Model($rule).filter = that.getFilterById( id );
     });
 
     // rule filter change
-    this.$el.on('change.queryBuilder', '.rule-filter-container [name$=_filter]', function() {
-        var $rule = $(this).closest('.rule-container');
-        Model($rule).filter = that.getFilterById($(this).val());
+    this.$el.on('change.queryBuilder', '.rule-filter-container select', function() {
+        var $this = $(this);
+        var $rule = $this.closest('.rule-container');
+        Model($rule).filter = that.getFilterById($this.val());
     });
 
     // rule operator change
-    this.$el.on('change.queryBuilder', '.rule-operator-container [name$=_operator]', function() {
-        var $rule = $(this).closest('.rule-container');
-        Model($rule).operator = that.getOperatorByType($(this).val());
+    this.$el.on('change.queryBuilder', '.rule-operator-container select', function() {
+        var $this = $(this);
+        var $rule = $this.closest('.rule-container');
+        Model($rule).operator = that.getOperatorByType($this.val());
     });
 
     // add rule button
@@ -598,27 +614,35 @@ QueryBuilder.prototype.bindEvents = function() {
             switch (field) {
                 case 'error':
                     that.displayError(node);
-                    break;
+                    return;
+
+                case 'table':
+                    that.updateRuleTable(node);
+                    return;
+
+                case 'column':
+                    that.updateRuleColumn(node);
+                    return;
 
                 case 'condition':
                     that.updateGroupCondition(node);
-                    break;
+                    return;
 
                 case 'filter':
                     that.updateRuleFilter(node);
-                    break;
+                    return;
 
                 case 'operator':
                     that.updateRuleOperator(node, oldValue);
-                    break;
+                    return;
 
                 case 'flags':
                     that.applyRuleFlags(node);
-                    break;
+                    return;
 
                 case 'value':
                     that.updateRuleValue(node);
-                    break;
+                    return;
             }
         }
     });
@@ -755,6 +779,7 @@ QueryBuilder.prototype.addRule = function(parent, data) {
 
     this.trigger('afterAddRule', model);
 
+    this.createRuleTables(model);
     this.createRuleFilters(model);
 
     return model;
@@ -780,6 +805,28 @@ QueryBuilder.prototype.deleteRule = function(rule) {
     this.trigger('afterDeleteRule');
 
     return true;
+};
+
+/**
+ * Create the tables <select> for a rule
+ * @param rule {Rule}
+ */
+QueryBuilder.prototype.createRuleTables = function(rule) {
+    var $tablesSelect = $(this.getRuleTableSelect(rule));
+
+    rule.$el.find('.rule-table-container').append($tablesSelect);
+    this.trigger('afterCreateTables', rule);
+};
+
+/**
+ * Create the table's fields <select> for a rule
+ * @param rule {Rule}
+ */
+QueryBuilder.prototype.createRuleTableFields = function(rule) {
+    var $filterSelect = $(this.getRuleTableFieldSelect(rule));
+
+    rule.$el.find('.rule-field-container').html($filterSelect);
+    this.trigger('afterCreateTableFields', rule);
 };
 
 /**
@@ -860,6 +907,28 @@ QueryBuilder.prototype.createRuleInput = function(rule) {
         rule.value = filter.default_value;
     }
 };
+
+/**
+ * Perform action when rule's table is changed
+ * @param rule {Rule}
+ */
+QueryBuilder.prototype.updateRuleTable = function(rule) {
+    rule.$el.find('.rule-table-container select').val(rule.table ? rule.table : '-1');
+    this.createRuleTableFields(rule);
+    this.trigger('afterUpdateRuleTable', rule);
+};
+
+/**
+ * Perform action when rule's column is changed
+ * @param rule {Rule}
+ */
+QueryBuilder.prototype.updateRuleColumn = function(rule) {
+    var value = rule.column ? rule.column : '-1';
+    rule.$el.find('.rule-field-container select').val(value).trigger('change');
+    this.trigger('afterUpdateRuleColumn', rule);
+};
+
+/**
 
 /**
  * Perform action when rule's filter is changed
@@ -1146,7 +1215,9 @@ QueryBuilder.prototype.getRules = function() {
             var rule = {
                 id: model.filter.id,
                 field: model.filter.field,
-                type: model.filter.type,
+                table: model.table,
+                column: model.column,
+                'type': model.filter.type,
                 input: model.filter.input,
                 operator: model.operator.type,
                 value: value
@@ -1225,6 +1296,8 @@ QueryBuilder.prototype.setRules = function(data) {
                 }
 
                 model.filter = that.getFilterById(item.id);
+                model.table = item.id.split('.')[0];
+                model.column = item.id.split('.')[1];
                 model.operator = that.getOperatorByType(item.operator);
                 model.flags = that.parseRuleFlags(item);
 
@@ -1528,6 +1601,25 @@ QueryBuilder.prototype.getOperatorByType = function(type) {
 };
 
 /**
+ * Return a particular table by its table's name
+ * @param type {string}
+ * @return {object|null}
+ */
+QueryBuilder.prototype.getTableByName = function(tableName) {
+    if (tableName == '-1') {
+        return null;
+    }
+    var tableKeys = Object.keys(this.tables);
+    for (var i=0, l=tableKeys.length; i<l; i++) {
+        if (tableKeys[i] === tableName) {
+            return tableKeys[i];
+        }
+    }
+
+    error('Undefined table name  "{0}"', tableName);
+};
+
+/**
  * Returns rule value
  * @param rule {Rule}
  * @return {mixed}
@@ -1742,6 +1834,8 @@ QueryBuilder.prototype.getRuleTemplate = function(rule_id) {
   '+ (this.settings.display_errors ?
     '<div class="error-container"><i class="' + this.icons.error + '"></i></div>'
   :'') +'\
+  <div class="rule-table-container"></div> \
+  <div class="rule-field-container"></div> \
   <div class="rule-filter-container"></div> \
   <div class="rule-operator-container"></div> \
   <div class="rule-value-container"></div> \
@@ -1795,6 +1889,57 @@ QueryBuilder.prototype.getRuleOperatorSelect = function(rule, operators) {
     h+= '</select>';
 
     return this.change('getRuleOperatorSelect', h, rule);
+};
+
+/**
+ * Returns rule table <select> HTML
+ * @param rule {Rule}
+ * @param tables {object}
+ * @return {string}
+ */
+QueryBuilder.prototype.getRuleTableSelect = function(rule) {
+    var tables = Object.keys(this.tables);
+    var h = '<label for="'+ rule.id +'_table">Table:</label> \
+            <select class="form-control table-name" name="'+ rule.id +'_table" id="'+ rule.id +'_table">';
+
+    h+= '<option value="-1"> - </option>';
+
+    for (var i=0, l=tables.length, id, label, selected; i<l; i++) {
+        id = tables[i];
+        label = tables[i]; //this.lang.tables[tables[i].id] || tables[i].id;
+        selected = rule.filter && rule.filter.id.split('.')[0] === id ? 'selected' : '';
+        h+= '<option value="'+ id +'" '+ selected +'>'+ label +'</option>';
+    }
+
+    h+= '</select>';
+
+    return this.change('getRuleTableSelect', h, rule);
+};
+
+/**
+ * Returns rule table field <select> HTML
+ * @param rule {Rule}
+ * @param tables {object}
+ * @return {string}
+ */
+QueryBuilder.prototype.getRuleTableFieldSelect = function(rule) {
+    var tableKey = this.tables[rule.table],
+        columns = tableKey ? tableKey.columns : [],
+        h = '<label for="'+ rule.id +'_table">Field:</label> \
+            <select class="form-control table-corresponding-fields" name="'+ rule.id +'_field">';
+
+    h+= '<option value="-1"> - </option>';
+
+    for (var i=0, l=columns.length, id, label; i<l; i++) {
+        id = columns[i].id;
+        label = columns[i].label; //this.lang.columns[columns[i].id] || columns[i].id;
+
+        h+= '<option value="'+ id +'">'+ label +'</option>';
+    }
+
+    h+= '</select>';
+
+    return this.change('getRuleTableFieldSelect', h, rule);
 };
 
 /**
@@ -2268,6 +2413,8 @@ var Rule = function(parent, $el) {
 
     Node.call(this, parent, $el);
 
+    this.__.table = null;
+    this.__.column = null;
     this.__.filter = null;
     this.__.operator = null;
     this.__.flags = {};
@@ -2277,7 +2424,7 @@ var Rule = function(parent, $el) {
 Rule.prototype = Object.create(Node.prototype);
 Rule.prototype.constructor = Rule;
 
-defineModelProperties(Rule, ['filter', 'operator', 'flags', 'value']);
+defineModelProperties(Rule, ['table', 'column', 'filter', 'operator', 'flags', 'value']);
 
 
 QueryBuilder.Group = Group;
@@ -2484,6 +2631,14 @@ QueryBuilder.define('bt-selectpicker', function(options) {
     }
 
     // init selectpicker
+    this.on('afterCreateTables', function(e, rule) {
+        rule.$el.find('.rule-table-container select').removeClass('form-control').selectpicker(options);
+    });
+
+    this.on('afterCreateTableFields', function(e, rule) {
+        rule.$el.find('.rule-field-container select').removeClass('form-control').selectpicker(options);
+    });
+
     this.on('afterCreateRuleFilters', function(e, rule) {
         rule.$el.find('.rule-filter-container select').removeClass('form-control').selectpicker(options);
     });
@@ -2493,6 +2648,14 @@ QueryBuilder.define('bt-selectpicker', function(options) {
     });
 
     // update selectpicker on change
+    this.on('afterUpdateRuleTable', function(e, rule) {
+        rule.$el.find('.rule-table-container select').selectpicker('render');
+    });
+
+    this.on('afterUpdateRuleColumn', function(e, rule) {
+        rule.$el.find('.rule-field-container select').selectpicker('render');
+    });
+
     this.on('afterUpdateRuleFilter', function(e, rule) {
         rule.$el.find('.rule-filter-container select').selectpicker('render');
     });
@@ -3544,7 +3707,7 @@ QueryBuilder.extend({
 });
 
 /*!
- * jQuery QueryBuilder 2.1.0
+ * jQuery QueryBuilder 2.2.0
  * Locale: English (en)
  * Author: Damien "Mistic" Sorel, http://www.strangeplanet.fr
  * Licensed under MIT (http://opensource.org/licenses/MIT)
@@ -3560,6 +3723,14 @@ QueryBuilder.regional['en'] = {
   "conditions": {
     "AND": "AND",
     "OR": "OR"
+  },
+  "tables": {
+    "FLIGHT": "FLIGHT",
+    "PASSENGER": "PASSENGER"
+  },
+  "tableFields": {
+    "in_stock": "HasHits",
+    "cob": "COB"
   },
   "operators": {
     "equal": "equal",

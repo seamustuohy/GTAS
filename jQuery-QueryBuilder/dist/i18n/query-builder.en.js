@@ -1,5 +1,5 @@
 /*!
- * jQuery QueryBuilder 2.1.0
+ * jQuery QueryBuilder 2.2.0
  * Locale: English (en)
  * Author: Damien "Mistic" Sorel, http://www.strangeplanet.fr
  * Licensed under MIT (http://opensource.org/licenses/MIT)
@@ -27,6 +27,14 @@ QueryBuilder.regional['en'] = {
   "conditions": {
     "AND": "AND",
     "OR": "OR"
+  },
+  "tables": {
+    "FLIGHT": "FLIGHT",
+    "PASSENGER": "PASSENGER"
+  },
+  "tableFields": {
+    "in_stock": "HasHits",
+    "cob": "COB"
   },
   "operators": {
     "equal": "equal",

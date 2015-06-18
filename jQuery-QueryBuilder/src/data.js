@@ -291,6 +291,25 @@ QueryBuilder.prototype.getOperatorByType = function(type) {
 };
 
 /**
+ * Return a particular table by its table's name
+ * @param type {string}
+ * @return {object|null}
+ */
+QueryBuilder.prototype.getTableByName = function(tableName) {
+    if (tableName == '-1') {
+        return null;
+    }
+    var tableKeys = Object.keys(this.tables);
+    for (var i=0, l=tableKeys.length; i<l; i++) {
+        if (tableKeys[i] === tableName) {
+            return tableKeys[i];
+        }
+    }
+
+    error('Undefined table name  "{0}"', tableName);
+};
+
+/**
  * Returns rule value
  * @param rule {Rule}
  * @return {mixed}

@@ -382,6 +382,25 @@ $(function(){
       });
   });
 
+  /**
+   * Test inversion
+   */
+  QUnit.test('invert', function(assert) {
+      $b.queryBuilder({
+          plugins: ['invert'],
+          filters: basic_filters,
+          rules: basic_rules
+      });
+
+      $b.queryBuilder('invert');
+
+      assert.rulesMatch(
+        $b.queryBuilder('getRules'),
+        basic_rules_invert,
+        'Should have inverted all conditions and operators'
+      );
+  });
+
 
   var basic_rules_sql_raw = {
     sql: 'price < 10.25 AND name IS NULL AND ( category IN(\'mo\', \'mu\') OR id != \'1234-azer-5678\' ) '
@@ -464,6 +483,10 @@ $(function(){
       operator: 'between',
       value: ['4','5']
     }, {
+      id: 'price',
+      operator: 'not_between',
+      value: ['4','5']
+    }, {
       id: 'name',
       operator: 'begins_with',
       value: 'foo'
@@ -507,8 +530,45 @@ $(function(){
   };
 
   var all_operators_rules_sql = {
-    sql: 'name = ? AND name != ? AND category IN(?, ?) AND category NOT IN(?, ?) AND price < ? AND price <= ? AND price > ? AND price >= ? AND price BETWEEN ? AND ? AND name LIKE(?) AND name NOT LIKE(?) AND name LIKE(?) AND name NOT LIKE(?) AND name LIKE(?) AND name NOT LIKE(?) AND name = \'\' AND name != \'\' AND name IS NULL AND name IS NOT NULL',
-    params: ['foo', 'foo', 'bk', 'mo', 'bk', 'mo', 5, 5, 4, 4, 4, 5, 'foo%', 'foo%', '%foo%', '%foo%', '%foo', '%foo']
+    sql: 
+      'name = ? ' +
+      'AND name != ? ' +
+      'AND category IN(?, ?) ' +
+      'AND category NOT IN(?, ?) ' +
+      'AND price < ? ' +
+      'AND price <= ? ' +
+      'AND price > ? ' +
+      'AND price >= ? ' +
+      'AND price BETWEEN ? AND ? ' +
+      'AND price NOT BETWEEN ? AND ? ' +
+      'AND name LIKE(?) ' +
+      'AND name NOT LIKE(?) ' +
+      'AND name LIKE(?) ' +
+      'AND name NOT LIKE(?) ' +
+      'AND name LIKE(?) ' +
+      'AND name NOT LIKE(?) ' +
+      'AND name = \'\' ' +
+      'AND name != \'\' ' +
+      'AND name IS NULL ' +
+      'AND name IS NOT NULL',
+    params: [
+      'foo',
+      'foo',
+      'bk', 'mo',
+      'bk', 'mo',
+      5,
+      5,
+      4,
+      4,
+      4, 5,
+      4, 5,
+      'foo%',
+      'foo%',
+      '%foo%',
+      '%foo%',
+      '%foo',
+      '%foo'
+    ]
   };
 
   var all_operators_rules_mongodb = {
@@ -522,6 +582,7 @@ $(function(){
       { price: {$gt: 4} },
       { price: {$gte: 4} },
       { price: {$gte: 4, $lte: 5} },
+      { price: {$lt: 4, $gt: 5} },
       { name: {$regex: '^foo'} },
       { name: {$regex: '^(?!foo)'} },
       { name: {$regex: 'foo'} },
@@ -751,4 +812,32 @@ $(function(){
 
   var sorted_rules = $.extend(true, {}, basic_rules);
   sorted_rules.rules.splice(2, 0, sorted_rules.rules[2].rules.pop());
+
+  var basic_rules_invert = {
+    condition: 'OR',
+    rules: [{
+      id: 'price',
+      field: 'price',
+      operator: 'greater_or_equal',
+      value: 10.25
+    }, {
+      id: 'name',
+      field: 'name',
+      operator: 'is_not_null',
+      value: null
+    }, {
+      condition: 'AND',
+      rules: [{
+        id: 'category',
+        field: 'category',
+        operator: 'not_in',
+        value: ['mo', 'mu']
+      }, {
+        id: 'id',
+        field: 'id',
+        operator: 'equal',
+        value: '1234-azer-5678'
+      }]
+    }]
+  };
 });

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="../dist/ng-table.css" />
+    <title>Passenger UI - Angular using Ng-Table</title>
+</head>
+<body ng-app="main">
+
+<h1><script>document.write(document.title);</script></h1>
+<div ng-controller="DemoCtrl">
+    <button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
+    <button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
+  <ul>
+    <li data-ng-repeat="(key, value) in tableParams.sorting()">
+      {{ key }} {{value}}
+    </li>
+  </ul>
+<!--    <p><strong>Sorting:</strong> {{tableParams.sorting().hits}}</p> //-->
+    <p><strong>Sorting:</strong> {{tableParams.sorting()|json}}</p>
+    <p><strong>Filter:</strong> {{tableParams.filter()|json}}</p>
+
+
+    <table ng-table="tableParams" show-filter="true" class="table">
+        <tr ng-repeat="passenger in $data">
+<!-- tested filtering by number            <td data-title="'R'" sortable="'r'" filter="{ 'r': 'number' }">
+                {{passenger.r}}
+            </td> //-->
+            <td data-title="'R'" sortable="'r'" filter="{ 'r': 'text' }">
+                {{passenger.r}}
+            </td>
+            <td data-title="'L'" sortable="'l'" filter="{ 'l': 'text' }">
+                {{passenger.l}}
+            </td>
+            <td data-title="'LastName'" sortable="'lastName'" filter="{ 'lastName': 'text' }">
+                {{passenger.lastName}}
+            </td>
+            <td data-title="'firstName'" sortable="'firstName'" filter="{ 'firstName': 'text' }">
+                {{passenger.firstName}}
+            </td>
+            <td data-title="'Type'" sortable="'Type'" filter="{ 'Type': 'select' }" filter-data="values($column, 'Type')">
+                {{passenger.Type}}
+            </td>
+            <td data-title="'Gender'" sortable="'gender'" filter="{ 'gender': 'select' }" filter-data="values($column, 'gender')">
+                {{passenger.gender}}
+            </td>
+            <td data-title="'DOB'" sortable="'DOBsort'" filter="{ 'DOB': 'text' }">
+                {{passenger.DOB}}
+            </td>
+            <td data-title="'Citizenship'" sortable="'citizenship'" filter="{ 'citizenship': 'select' }" filter-data="values($column, 'citizenship')">
+                {{passenger.citizenship}}
+            </td>
+            <td data-title="'Document Number'" sortable="'documentNumber'" filter="{ 'documentNumber': 'text' }">
+                {{passenger.departureDateTime}}
+            </td>
+            <td data-title="'T'" sortable="'t'" filter="{ 't': 'select' }" filter-data="values($column, 't')">
+                {{passenger.t}}
+            </td>
+            <td data-title="'Issuance Country'" sortable="'issuanceCountry'" filter="{ 'issuanceCountry': 'select' }" filter-data="values($column, 'issuanceCountry')">
+                {{passenger.issuanceCountry}}
+            </td>
+            <td data-title="'Carrier'" sortable="'carrier'" filter="{ 'carrier': 'select' }" filter-data="values($column, 'carrier')">
+                {{passenger.carrier}}
+            </td>
+            <td data-title="'Flight #'" sortable="'flightNumber'" filter="{ 'flightNumber': 'select' }" filter-data="values($column, 'flightNumber')">
+                {{passenger.flightNumber}}
+            </td>
+            <td data-title="'Origin'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">
+                {{passenger.origin}}
+            </td>
+            <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'select' }" filter-data="values($column, 'destination')">
+                {{passenger.destination}}
+            </td>
+            <td data-title="'ETD'" sortable="'ETDsort'" filter="{ 'ETD': 'text' }">
+                {{passenger.ETD}}
+            </td>
+            <td data-title="'ETA'" sortable="'ETAsort'" filter="{ 'ETA': 'text' }">
+                {{passenger.ETA}}
+            </td>
+            <td data-title="'Seat'" sortable="'seat'" filter="{ 'seat': 'text' }">
+                {{passenger.seat}}
+            </td>
+            <td data-title="'Status'" sortable="'status'" filter="{ 'status': 'text' }">
+                {{passenger.status}}
+            </td>
+        </tr>
+    </table>
+
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="../dist/ng-table.js"></script>
+    <script>
+        var app = angular.module('main', ['ngTable']).
+                controller('DemoCtrl', function($scope, $filter, $q, ngTableParams) {
+                    var data = [
+                        {
+                            r: false, l: false, lastName: "DUBE", firstName: "KEVIN", Type: 'PAX', gender: "M", DOB: '1/16/1960', DOBsort: '1960-01-16', citizenship: 'NZ',
+                            documentNumber: 'N864480L', t: 'P', issuanceCountry: 'NZ', carrier: 'EK', flightNumber: '0406', origin: 'MEL',  destination: 'AKL',
+                            ETD: '11/8/2013 7:10 AM', ETDsort: '2013-08-11 AM 07:10', ETA: '11/8/2013 12:45 PM', ETAsort: '2013-11-08 PM 12:45', seat: '47D', status: ''
+                        }, {
+                            r: false, l: false, lastName: "DUBE", firstName: "KEVIN", Type: 'PAX', gender: "M", DOB: '1/16/1960', DOBsort: '1960-01-16', citizenship: 'NZ',
+                            documentNumber: 'N864480L', t: 'P', issuanceCountry: 'NZ', carrier: 'EK', flightNumber: '0406', origin: 'MEL',  destination: 'AKL',
+                            ETD: '11/8/2013 7:10 AM', ETDsort: '2013-08-11 AM 07:10', ETA: '11/8/2013 12:45 PM', ETAsort: '2013-11-08 PM 12:45', seat: '47D', status: ''
+                        }, {
+                            r: false, l: false, lastName: "DUBE", firstName: "KEVIN", Type: 'PAX', gender: "M", DOB: '1/16/1960', DOBsort: '1960-01-16', citizenship: 'NZ',
+                            documentNumber: 'N864480L', t: 'P', issuanceCountry: 'NZ', carrier: 'EK', flightNumber: '0406', origin: 'MEL',  destination: 'AKL',
+                            ETD: '11/8/2013 7:10 AM', ETDsort: '2013-08-11 AM 07:10', ETA: '11/8/2013 12:45 PM', ETAsort: '2013-11-08 PM 12:45', seat: '47D', status: ''
+                        }, {
+                            r: false, l: false, lastName: "DUBE", firstName: "KEVIN", Type: 'PAX', gender: "M", DOB: '1/16/1960', DOBsort: '1960-01-16', citizenship: 'NZ',
+                            documentNumber: 'N864480L', t: 'P', issuanceCountry: 'NZ', carrier: 'EK', flightNumber: '0406', origin: 'MEL',  destination: 'AKL',
+                            ETD: '11/8/2013 7:10 AM', ETDsort: '2013-08-11 AM 07:10', ETA: '11/8/2013 12:45 PM', ETAsort: '2013-11-08 PM 12:45', seat: '47D', status: ''
+                        }
+                    ];                    
+
+                    $scope.tableParams = new ngTableParams({
+                        page: 1,            // show first page
+                        count: 10,          // count per page
+                        filter: {},
+                        sorting: {
+                            hits: 'desc',
+                            destinationDateTimeSort: 'asc' //, 'number': 'asc'     // initial sorting
+                        }
+                    }, {
+                        total: data.length, // length of data
+                        getData: function($defer, params) {
+                            // use build-in angular filter
+                            var filteredData = params.filter() ?
+                                    $filter('filter')(data, params.filter()) :
+                                    data;
+                            var orderedData = params.sorting() ?
+                                    $filter('orderBy')(filteredData, params.orderBy()) :
+                                    data;
+
+                            params.total(orderedData.length); // set total for recalc pagination
+                            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                        }
+                    });
+                    
+                    $scope.values = function (column, fieldName) {
+                        console.log('fieldName:' + fieldName);
+                        var key, values, lookup = {}, def = $q.defer();
+                         angular.forEach(data, function(item){
+                            key = item[fieldName];                         
+                            lookup[key] = lookup[key] !== undefined ? lookup[key] + 1 : 1;
+                        });
+                        values = $.map(lookup, function(value, index) {
+                            return [{id: index, title: index + ' ('+value+')'}];
+                        });
+                        def.resolve(values);
+                        return def;
+                    };
+                });
+    </script>
+</div>
+</body>
+</html>

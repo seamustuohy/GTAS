@@ -21,6 +21,18 @@ var options = {
     'unique-filter': null,
     'bt-checkbox': { color: 'primary' }
   },
+  tables: {
+    'FLIGHT': {
+      columns: [
+        { id : 'in_stock', label: 'HasHits' }
+      ]
+    },
+    'PASSENGER': {
+      columns: [
+        { id : 'cob', label: 'COB'}
+      ]
+    }
+  },
   filters: [{
     id: 'PASSENGER.cob',
     label: 'PASSENGER.COB',
@@ -97,41 +109,62 @@ var populateFieldOptions = function (objects) {
 
 // CONSTS
 var TABLE_NAMES = Object.keys(dbSchema);
-var TABLE_COLUMNS_CONTAINER = document.createElement('div');
 
-TABLE_COLUMNS_CONTAINER.innerHTML= ' \
-  <label>Table: \
-    <select class="table-name form-control"> \
-    ' + getOptions(TABLE_NAMES) +' \
-    </select></label> \
-  <label>Column: <select class="table-corresponding-fields form-control"></select></label>';
 
-// adds Table and Column dropdowns to DOM
-var addTablesBeforeFields = function () {
-  var currentRule = document.querySelector('.rule-container:last-child');
-  var filters = currentRule.querySelector('.rule-filter-container');
-  var container = TABLE_COLUMNS_CONTAINER.cloneNode(true);
-  currentRule.insertBefore(container, filters);  
-};
-addTablesBeforeFields();
+// $('.set').on('click', function() {
+//   $builder.queryBuilder('setRules', {
+//     condition: 'AND',
+//     rules: [{
+//       id: 'price',
+//       operator: 'between',
+//       value: [10.25, 15.52],
+//       flags: {
+//         no_delete: true,
+//         filter_readonly: true
+//       },
+//       data: {
+//         unit: '€'
+//       }
+//     }, {
+//       id: 'state',
+//       operator: 'equal',
+//       value: 'AK',
+//     }, {
+//       condition: 'OR',
+//       rules: [{
+//         id: 'category',
+//         operator: 'equal',
+//         value: 2
+//       }, {
+//         id: 'coord',
+//         operator: 'equal',
+//         value: 'B.3'
+//       }]
+//     }]
+//   });
+// });
 
-$('body')
-  .on('change', '.table-name', function(e) {
-      var $this = $(e.currentTarget);
-      var fields = dbSchema[$this.val()];
-      // find corresponding fields, both populate fields assign the table via data()
-      $this.parents('.rule-container').find('.table-corresponding-fields').html(populateFieldOptions(fields)).data('table', $this.val());
-  })
-  .on('change', '.table-corresponding-fields', function(e) {
-    var $this = $(e.currentTarget);
-    var $rule = $this.parents('.rule-container');
-      // automate selecting hidden jquery-queryBuilder filter list via TABLE.Column 
-      $rule.find('.btn.dropdown-toggle').eq(0).click();
-      $('.bootstrap-select.open').find('.dropdown-menu.inner').find('a').filter(function(){
-        return this.childNodes[0].innerHTML === $this.data('table')+'.'+$this.find("option:selected").text();
-      }).click();
-  })
-  .on('click', '[data-add="rule"], [data-add="group"]', function(){
-    // add rule driving dropdowns (table, column) anytime rule or group added 
-    setTimeout(addTablesBeforeFields, 50); 
+$('.set').on('click', function() {
+  $builder.queryBuilder('setRules', {
+    condition: 'OR',
+    rules: [{
+      id: 'PASSENGER.cob',
+      operator: 'equal',
+      value: 'CH',
+      options: [
+        { id: "US", name: "UNITED STATES" },
+        { id: "CH", name: "CHINA" },
+        { id: "SA", name: "SAUDI ARABIA" }
+      ]
+    }, {
+      id: 'PASSENGER.cob',
+      operator: 'equal',
+      value: 'US',
+      options: [
+        { id: "US", name: "UNITED STATES" },
+        { id: "CH", name: "CHINA" },
+        { id: "SA", name: "SAUDI ARABIA" }
+      ]
+    }]
   });
+});

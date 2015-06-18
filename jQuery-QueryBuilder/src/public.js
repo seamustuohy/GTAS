@@ -146,7 +146,9 @@ QueryBuilder.prototype.getRules = function() {
             var rule = {
                 id: model.filter.id,
                 field: model.filter.field,
-                type: model.filter.type,
+                table: model.table,
+                column: model.column,
+                'type': model.filter.type,
                 input: model.filter.input,
                 operator: model.operator.type,
                 value: value
@@ -225,6 +227,8 @@ QueryBuilder.prototype.setRules = function(data) {
                 }
 
                 model.filter = that.getFilterById(item.id);
+                model.table = item.id.split('.')[0];
+                model.column = item.id.split('.')[1];
                 model.operator = that.getOperatorByType(item.operator);
                 model.flags = that.parseRuleFlags(item);
 

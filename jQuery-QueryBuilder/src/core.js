@@ -26,6 +26,7 @@ QueryBuilder.prototype.init = function($el, options) {
     }
 
     // SETTINGS SHORTCUTS
+    this.tables = this.settings.tables;
     this.filters = this.settings.filters;
     this.icons = this.settings.icons;
     this.operators = this.settings.operators;
@@ -164,23 +165,38 @@ QueryBuilder.prototype.bindEvents = function() {
     var that = this;
 
     // group condition change
-    this.$el.on('change.queryBuilder', '.rules-group-header [name$=_cond]', function() {
-        if ($(this).is(':checked')) {
-            var $group = $(this).closest('.rules-group-container');
-            Model($group).condition = $(this).val();
-        }
+    this.$el.on('change.queryBuilder', '.group-conditions :checked', function() {
+        var $group = $(this).closest('.rules-group-container');
+        Model($group).condition = this.value;
+    });
+
+    // rule table change
+    this.$el.on('change.queryBuilder', '.rule-table-container select', function() {
+        var $this = $(this);
+        var $rule = $this.closest('.rule-container');
+        Model($rule).table = that.getTableByName($this.val());
+    });
+
+    // rule field change
+    this.$el.on('change.queryBuilder', '.rule-field-container select', function() {
+        var $this = $(this);
+        var $rule = $this.closest('.rule-container');
+        var id = $this.val() != -1 ? Model($rule).table + '.' + $this.val() : '-1';
+        Model($rule).filter = that.getFilterById( id );
     });
 
     // rule filter change
-    this.$el.on('change.queryBuilder', '.rule-filter-container [name$=_filter]', function() {
-        var $rule = $(this).closest('.rule-container');
-        Model($rule).filter = that.getFilterById($(this).val());
+    this.$el.on('change.queryBuilder', '.rule-filter-container select', function() {
+        var $this = $(this);
+        var $rule = $this.closest('.rule-container');
+        Model($rule).filter = that.getFilterById($this.val());
     });
 
     // rule operator change
-    this.$el.on('change.queryBuilder', '.rule-operator-container [name$=_operator]', function() {
-        var $rule = $(this).closest('.rule-container');
-        Model($rule).operator = that.getOperatorByType($(this).val());
+    this.$el.on('change.queryBuilder', '.rule-operator-container select', function() {
+        var $this = $(this);
+        var $rule = $this.closest('.rule-container');
+        Model($rule).operator = that.getOperatorByType($this.val());
     });
 
     // add rule button
@@ -228,27 +244,35 @@ QueryBuilder.prototype.bindEvents = function() {
             switch (field) {
                 case 'error':
                     that.displayError(node);
-                    break;
+                    return;
+
+                case 'table':
+                    that.updateRuleTable(node);
+                    return;
+
+                case 'column':
+                    that.updateRuleColumn(node);
+                    return;
 
                 case 'condition':
                     that.updateGroupCondition(node);
-                    break;
+                    return;
 
                 case 'filter':
                     that.updateRuleFilter(node);
-                    break;
+                    return;
 
                 case 'operator':
                     that.updateRuleOperator(node, oldValue);
-                    break;
+                    return;
 
                 case 'flags':
                     that.applyRuleFlags(node);
-                    break;
+                    return;
 
                 case 'value':
                     that.updateRuleValue(node);
-                    break;
+                    return;
             }
         }
     });
@@ -385,6 +409,7 @@ QueryBuilder.prototype.addRule = function(parent, data) {
 
     this.trigger('afterAddRule', model);
 
+    this.createRuleTables(model);
     this.createRuleFilters(model);
 
     return model;
@@ -410,6 +435,28 @@ QueryBuilder.prototype.deleteRule = function(rule) {
     this.trigger('afterDeleteRule');
 
     return true;
+};
+
+/**
+ * Create the tables <select> for a rule
+ * @param rule {Rule}
+ */
+QueryBuilder.prototype.createRuleTables = function(rule) {
+    var $tablesSelect = $(this.getRuleTableSelect(rule));
+
+    rule.$el.find('.rule-table-container').append($tablesSelect);
+    this.trigger('afterCreateTables', rule);
+};
+
+/**
+ * Create the table's fields <select> for a rule
+ * @param rule {Rule}
+ */
+QueryBuilder.prototype.createRuleTableFields = function(rule) {
+    var $filterSelect = $(this.getRuleTableFieldSelect(rule));
+
+    rule.$el.find('.rule-field-container').html($filterSelect);
+    this.trigger('afterCreateTableFields', rule);
 };
 
 /**
@@ -489,7 +536,34 @@ QueryBuilder.prototype.createRuleInput = function(rule) {
     if (filter.default_value !== undefined) {
         rule.value = filter.default_value;
     }
+    else {
+        that.status.updating_value = true;
+        rule.value = that.getRuleValue(rule);
+        that.status.updating_value = false;
+    }
 };
+
+/**
+ * Perform action when rule's table is changed
+ * @param rule {Rule}
+ */
+QueryBuilder.prototype.updateRuleTable = function(rule) {
+    rule.$el.find('.rule-table-container select').val(rule.table ? rule.table : '-1');
+    this.createRuleTableFields(rule);
+    this.trigger('afterUpdateRuleTable', rule);
+};
+
+/**
+ * Perform action when rule's column is changed
+ * @param rule {Rule}
+ */
+QueryBuilder.prototype.updateRuleColumn = function(rule) {
+    var value = rule.column ? rule.column : '-1';
+    rule.$el.find('.rule-field-container select').val(value).trigger('change');
+    this.trigger('afterUpdateRuleColumn', rule);
+};
+
+/**
 
 /**
  * Perform action when rule's filter is changed

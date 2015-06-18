@@ -80,6 +80,8 @@ QueryBuilder.prototype.getRuleTemplate = function(rule_id) {
   '+ (this.settings.display_errors ?
     '<div class="error-container"><i class="' + this.icons.error + '"></i></div>'
   :'') +'\
+  <div class="rule-table-container"></div> \
+  <div class="rule-field-container"></div> \
   <div class="rule-filter-container"></div> \
   <div class="rule-operator-container"></div> \
   <div class="rule-value-container"></div> \
@@ -133,6 +135,57 @@ QueryBuilder.prototype.getRuleOperatorSelect = function(rule, operators) {
     h+= '</select>';
 
     return this.change('getRuleOperatorSelect', h, rule);
+};
+
+/**
+ * Returns rule table <select> HTML
+ * @param rule {Rule}
+ * @param tables {object}
+ * @return {string}
+ */
+QueryBuilder.prototype.getRuleTableSelect = function(rule) {
+    var tables = Object.keys(this.tables);
+    var h = '<label for="'+ rule.id +'_table">Table:</label> \
+            <select class="form-control table-name" name="'+ rule.id +'_table" id="'+ rule.id +'_table">';
+
+    h+= '<option value="-1"> - </option>';
+
+    for (var i=0, l=tables.length, id, label, selected; i<l; i++) {
+        id = tables[i];
+        label = tables[i]; //this.lang.tables[tables[i].id] || tables[i].id;
+        selected = rule.filter && rule.filter.id.split('.')[0] === id ? 'selected' : '';
+        h+= '<option value="'+ id +'" '+ selected +'>'+ label +'</option>';
+    }
+
+    h+= '</select>';
+
+    return this.change('getRuleTableSelect', h, rule);
+};
+
+/**
+ * Returns rule table field <select> HTML
+ * @param rule {Rule}
+ * @param tables {object}
+ * @return {string}
+ */
+QueryBuilder.prototype.getRuleTableFieldSelect = function(rule) {
+    var tableKey = this.tables[rule.table],
+        columns = tableKey ? tableKey.columns : [],
+        h = '<label for="'+ rule.id +'_table">Field:</label> \
+            <select class="form-control table-corresponding-fields" name="'+ rule.id +'_field">';
+
+    h+= '<option value="-1"> - </option>';
+
+    for (var i=0, l=columns.length, id, label; i<l; i++) {
+        id = columns[i].id;
+        label = columns[i].label; //this.lang.columns[columns[i].id] || columns[i].id;
+
+        h+= '<option value="'+ id +'">'+ label +'</option>';
+    }
+
+    h+= '</select>';
+
+    return this.change('getRuleTableFieldSelect', h, rule);
 };
 
 /**

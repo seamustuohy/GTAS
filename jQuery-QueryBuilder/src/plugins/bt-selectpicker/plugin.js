@@ -10,6 +10,14 @@ QueryBuilder.define('bt-selectpicker', function(options) {
     }
 
     // init selectpicker
+    this.on('afterCreateTables', function(e, rule) {
+        rule.$el.find('.rule-table-container select').removeClass('form-control').selectpicker(options);
+    });
+
+    this.on('afterCreateTableFields', function(e, rule) {
+        rule.$el.find('.rule-field-container select').removeClass('form-control').selectpicker(options);
+    });
+
     this.on('afterCreateRuleFilters', function(e, rule) {
         rule.$el.find('.rule-filter-container select').removeClass('form-control').selectpicker(options);
     });
@@ -19,6 +27,14 @@ QueryBuilder.define('bt-selectpicker', function(options) {
     });
 
     // update selectpicker on change
+    this.on('afterUpdateRuleTable', function(e, rule) {
+        rule.$el.find('.rule-table-container select').selectpicker('render');
+    });
+
+    this.on('afterUpdateRuleColumn', function(e, rule) {
+        rule.$el.find('.rule-field-container select').selectpicker('render');
+    });
+
     this.on('afterUpdateRuleFilter', function(e, rule) {
         rule.$el.find('.rule-filter-container select').selectpicker('render');
     });
