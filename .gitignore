@@ -4,6 +4,13 @@
 *.ear
 *.class
 
+# intellij
+*/.idea/*
+
+# jquery querybuilder specific
+*/jQuery-QueryBuilder/dist/*
+
+
 # eclipse specific git ignore
 *.pydevproject
 .project
