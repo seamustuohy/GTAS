@@ -4,7 +4,7 @@
                              http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>gov.cbp.taspd.gtas</groupId>
+    <groupId>gov.gtas</groupId>
     <artifactId>gtas-parent</artifactId>
     <version>0.1-SNAPSHOT</version>
   </parent>
@@ -29,19 +29,13 @@
           </executions>
           <dependencies>
             <dependency>
-              <groupId>org.jadira.usertype</groupId>
-              <!-- <artifactId>usertype.extended</artifactId> -->
-              <artifactId>usertype.core</artifactId>
-              <version>3.2.0.GA</version>
-            </dependency>
-            <dependency>
-              <groupId>org.jadira.cdt</groupId>
-              <artifactId>cdt</artifactId>
-              <version>3.2.0.GA</version>
-            </dependency>
+              <groupId>org.mariadb.jdbc</groupId>
+              <artifactId>mariadb-java-client</artifactId>
+              <version>1.1.7</version>
+            </dependency>             
           </dependencies>
           <configuration>
-            <target>NONE</target>
+            <force>true</force>
           </configuration>
         </plugin>
       </plugins>

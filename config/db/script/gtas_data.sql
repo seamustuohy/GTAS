@@ -1,4 +1,10 @@
 -- ----------------------------
+-- Records of gtas_roles
+-- ----------------------------
+INSERT INTO `gtas_roles` VALUES ('1', 'ROLE_ADMIN');
+INSERT INTO `gtas_roles` VALUES ('2', 'ROLE_CUST');
+
+-- ----------------------------
 -- Records of gtas_users
 -- ----------------------------
 INSERT INTO `gtas_users` VALUES ('vempatis', 'password', 'Srinivas', 'Vempati', null, '1');
