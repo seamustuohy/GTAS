@@ -15,12 +15,17 @@
 </head>
 <body ng-app="main">
 
-<h1>Flight UI - Angular using Ng-Table</h1>
+<h1><script>document.write(document.title);</script></h1>
 <div ng-controller="DemoCtrl">
 
     <button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
     <button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
-
+    {{tableParams }}
+  <ul>
+    <li data-ng-repeat="(key, value) in tableParams.sorting()">
+      {{ key }} {{value}}
+    </li>
+  </ul>
 <!--    <p><strong>Sorting:</strong> {{tableParams.sorting().hits}}</p> //-->
     <p><strong>Sorting:</strong> {{tableParams.sorting()|json}}</p>
     <p><strong>Filter:</strong> {{tableParams.filter()|json}}</p>
