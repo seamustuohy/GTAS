@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -22,9 +21,6 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "id", nullable = false, columnDefinition = "bigint unsigned")  
     protected Long id;  
   
-    @Version  
-    private Long version;  
-    
     public Long getId() {  
         return id;  
     }
@@ -37,11 +33,6 @@ public abstract class BaseEntity implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-  
-    public Long getVersion() {
-        return version;
-    }
 
     @Override  
     public int hashCode() {  

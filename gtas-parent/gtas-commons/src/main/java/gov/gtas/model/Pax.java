@@ -56,6 +56,7 @@ public class Pax extends BaseEntityAudit {
     private Country residencyCountry;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "pax_type")
     private PaxType paxType;
     
     @Type(type="date")
@@ -63,19 +64,19 @@ public class Pax extends BaseEntityAudit {
     private Integer age;
     
     @ManyToOne
-    @JoinColumn(referencedColumnName="id")         
+    @JoinColumn
     private Airport embarkation;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName="id")         
+    @JoinColumn
     private Airport debarkation;
     
     @ManyToOne
-    @JoinColumn(name = "embark_country", referencedColumnName="id")     
+    @JoinColumn(name = "embark_country")     
     private Country embarkCountry;
 
     @ManyToOne
-    @JoinColumn(name = "debark_country", referencedColumnName="id")     
+    @JoinColumn(name = "debark_country")
     private Country debarkCountry;
     
     @OneToMany(mappedBy="pax")

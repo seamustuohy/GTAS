@@ -20,6 +20,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -35,6 +36,9 @@ public class Rule extends BaseEntity {
 	 * serial version UID
 	 */
 	private static final long serialVersionUID = 6208917106485574650L;
+	
+	@Version
+	private Long version;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DEL_FLAG", nullable = false, length = 1)
@@ -184,4 +188,7 @@ public class Rule extends BaseEntity {
 		return equalsBuilder.isEquals();
 	}
 
+    public Long getVersion() {
+        return version;
+    }
 }
