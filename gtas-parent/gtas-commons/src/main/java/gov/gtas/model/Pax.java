@@ -79,7 +79,7 @@ public class Pax extends BaseEntityAudit {
     @JoinColumn(name = "debark_country")
     private Country debarkCountry;
     
-    @OneToMany(mappedBy="pax")
+    @OneToMany(mappedBy="pax",cascade=CascadeType.ALL)
     private Set<Document> documents = new HashSet<>();
     
     public Set<Flight> getFlights() {
