@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.RuleServiceException;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
@@ -37,7 +38,7 @@ public class RuleRepositoryTest {
 	public void tearDown() throws Exception {
 	}
 	
-	@Test(expected=RuleServiceException.class)
+	@Test(expected=CommonServiceException.class)
 	public void testNullRequest() {
       testTarget.invokeRuleset("gtas.drl", null);
     }
