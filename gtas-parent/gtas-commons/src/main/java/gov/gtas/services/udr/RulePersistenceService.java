@@ -1,4 +1,4 @@
-package gov.gtas.services;
+package gov.gtas.services.udr;
 
 import gov.gtas.model.udr.Rule;
 

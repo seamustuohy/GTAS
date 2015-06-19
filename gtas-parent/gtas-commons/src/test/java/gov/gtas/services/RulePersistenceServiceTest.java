@@ -8,6 +8,7 @@ import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.YesNoEnum;
+import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.test.util.RuleServiceDataGenUtils;
 
 import java.util.List;

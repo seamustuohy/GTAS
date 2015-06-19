@@ -5,8 +5,8 @@ import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.YesNoEnum;
-import gov.gtas.services.RulePersistenceService;
 import gov.gtas.services.UserService;
+import gov.gtas.services.udr.RulePersistenceService;
 
 import java.util.ArrayList;
 import java.util.Date;
