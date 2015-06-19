@@ -1,4 +1,4 @@
-package gov.gtas.repository;
+package gov.gtas.repository.udr;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.YesNoEnum;
-import gov.gtas.repository.RuleRepository;
+import gov.gtas.repository.udr.RuleRepository;
 import gov.gtas.services.UserService;
 
 import java.util.Date;
