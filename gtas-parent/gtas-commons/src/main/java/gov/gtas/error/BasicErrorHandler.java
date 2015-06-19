@@ -1,6 +1,6 @@
 package gov.gtas.error;
 
-import gov.gtas.constant.RuleServiceConstants;
+import gov.gtas.error.CommonErrorConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class RuleServiceErrorHandler {
+public class BasicErrorHandler {
 	/*
 	 * The logger for the Rule Engine Error Handler
 	 */
@@ -25,19 +25,19 @@ public class RuleServiceErrorHandler {
      * @param args the error arguments providing context for the error.
      * @return the error exception object.
      */
-	public RuleServiceException createException(final String errorCode,
+	public CommonServiceException createException(final String errorCode,
 			final Object... args) {
-		RuleServiceException ret = null;
+		CommonServiceException ret = null;
 		switch (errorCode) {
-		case RuleServiceConstants.NULL_ARGUMENT_ERROR_CODE:
+		case CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE:
 			ret = createExceptionAndLog(
-					RuleServiceConstants.NULL_ARGUMENT_ERROR_CODE,
-					RuleServiceConstants.NULL_ARGUMENT_ERROR_MESSAGE, args);
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE, args);
 			break;
-		case RuleServiceConstants.RULE_COMPILE_ERROR_CODE:
+		case CommonErrorConstants.INVALID_USER_ID:
 			ret = createExceptionAndLog(
-					RuleServiceConstants.RULE_COMPILE_ERROR_CODE,
-					RuleServiceConstants.RULE_COMPILE_ERROR_MESSAGE, args[0]);
+					CommonErrorConstants.INVALID_USER_ID,
+					CommonErrorConstants.INVALID_USER_ID_ERROR_MESSAGE, args[0]);
 			break;
 		default:
 			break;
@@ -52,11 +52,11 @@ public class RuleServiceErrorHandler {
      * @param errorMessageArgs the arguments for the error message template.
      * @return the exception object.
      */
-	private RuleServiceException createExceptionAndLog(String errorCode,
+	private CommonServiceException createExceptionAndLog(String errorCode,
 			String errorMessageTemplate, Object... errorMessageArgs) {
 		String message = String.format(errorMessageTemplate, errorMessageArgs);
 		logger.error(message);
-		return new RuleServiceException(errorCode, message);
+		return new CommonServiceException(errorCode, message);
 
 	}
 }

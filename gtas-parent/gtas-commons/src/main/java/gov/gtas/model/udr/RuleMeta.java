@@ -1,11 +1,16 @@
 package gov.gtas.model.udr;
 
-import gov.gtas.model.BaseEntity;
+import gov.gtas.util.DateCalendarUtils;
 
+import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -16,69 +21,155 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.time.DateUtils;
 
 /**
  * RuleMeta
  */
 @Entity
 @Table(name = "rule_meta", catalog = "gtas")
-public class RuleMeta extends BaseEntity {
-
+public class RuleMeta implements Serializable {
 	/**
 	 * serial version UID
 	 */
 	private static final long serialVersionUID = 384462394390643572L;
 	
-	private String title;
-	private String description;
-	private Date startDt;
-	private Date endDt;
-	private Character enabled;
-	private Character priorityHigh;
-	private Character hitSharing;
-
+    @Id
+    @Column(name="ID")
+    private long id;
+    
 	@OneToOne
-	@JoinColumn(name="RULE_ID", referencedColumnName="id")
-	private Rule rule;
+	@JoinColumn(name="ID", referencedColumnName="ID", insertable=false, updatable=false)
+	private Rule parent;
 	
+	@Column(name = "TITLE", nullable=false, length = 64)
+	private String title;
 	
+	@Column(name = "DESCRIPTION", length = 1024)
+	private String description;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "START_DT", nullable = false, length = 19)
+	private Date startDt;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "END_DT", length = 19)
+	private Date endDt;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ENABLE_FLAG", nullable = false, length = 1)	
+	private YesNoEnum enabled;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "HIGH_PRIORITY_FLAG", nullable = false, length = 1)	
+	private YesNoEnum priorityHigh;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "HIT_SHARE_FLAG", nullable = false, length = 1)	
+	private YesNoEnum hitSharing;
+	
+	/**
+	 * Constructor for JPA.
+	 */
 	public RuleMeta() {
+		super();
+		this.priorityHigh = YesNoEnum.N;
+		this.hitSharing = YesNoEnum.N;
 	}
 
-	public RuleMeta(long id, Date startDt, Date endDt) {
-		this.id = id;
+	public RuleMeta(Date startDt, Date endDt) {
+		this();
 		this.startDt = startDt;
 		this.endDt = endDt;
 	}
 
-	public RuleMeta(long id, String title, String description, Date startDt,
-			Date endDt, Character enabled, Character priorityHigh,
-			Character hitSharing) {
-		this.id = id;
+	public RuleMeta(Rule parentRule, String title, String description, Date startDt,
+			Date endDt, YesNoEnum enabled, YesNoEnum priorityHigh,
+			YesNoEnum hitSharing) {
+		this.id = parentRule.getId();
 		this.title = title;
-		this.description = description;
-		this.startDt = startDt;
+		this.description = description;		
+		this.startDt = startDt;		
 		this.endDt = endDt;
 		this.enabled = enabled;
 		this.priorityHigh = priorityHigh;
 		this.hitSharing = hitSharing;
 	}
 
-//	/**
-//	 * @return the ruleId
-//	 */
-//	public long getRuleId() {
-//		return ruleId;
-//	}
-//
-//	/**
-//	 * @param ruleId the ruleId to set
-//	 */
-//	public void setRuleId(long ruleId) {
-//		this.ruleId = ruleId;
-//	}
 
-	@Column(name = "TITLE", length = 64)
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the enabled
+	 */
+	public YesNoEnum getEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * @return the parent
+	 */
+	public Rule getParent() {
+		return parent;
+	}
+
+	/**
+	 * @param parent the parent to set
+	 */
+	public void setParent(Rule parent) {
+		this.parent = parent;
+		if(parent != null && parent.getId() != null){
+		   this.id = parent.getId();
+		}
+	}
+
+	/**
+	 * @param enabled the enabled to set
+	 */
+	public void setEnabled(YesNoEnum enabled) {
+		this.enabled = enabled;
+	}
+
+	/**
+	 * @return the priorityHigh
+	 */
+	public YesNoEnum getPriorityHigh() {
+		return priorityHigh;
+	}
+
+	/**
+	 * @param priorityHigh the priorityHigh to set
+	 */
+	public void setPriorityHigh(YesNoEnum priorityHigh) {
+		this.priorityHigh = priorityHigh;
+	}
+
+	/**
+	 * @return the hitSharing
+	 */
+	public YesNoEnum getHitSharing() {
+		return hitSharing;
+	}
+
+	/**
+	 * @param hitSharing the hitSharing to set
+	 */
+	public void setHitSharing(YesNoEnum hitSharing) {
+		this.hitSharing = hitSharing;
+	}
+
 	public String getTitle() {
 		return this.title;
 	}
@@ -87,17 +178,13 @@ public class RuleMeta extends BaseEntity {
 		this.title = title;
 	}
 
-	@Column(name = "DESCRIPTION", length = 1024)
 	public String getDescription() {
 		return this.description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "START_DT", nullable = false, length = 19)
 	public Date getStartDt() {
 		return this.startDt;
 	}
@@ -106,8 +193,6 @@ public class RuleMeta extends BaseEntity {
 		this.startDt = startDt;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "END_DT", nullable = false, length = 19)
 	public Date getEndDt() {
 		return this.endDt;
 	}
@@ -116,32 +201,6 @@ public class RuleMeta extends BaseEntity {
 		this.endDt = endDt;
 	}
 
-	@Column(name = "ENABLED", length = 1)
-	public Character getEnabled() {
-		return this.enabled;
-	}
-
-	public void setEnabled(Character enabled) {
-		this.enabled = enabled;
-	}
-
-	@Column(name = "PRIORITY_HIGH", length = 1)
-	public Character getPriorityHigh() {
-		return this.priorityHigh;
-	}
-
-	public void setPriorityHigh(Character priorityHigh) {
-		this.priorityHigh = priorityHigh;
-	}
-
-	@Column(name = "HIT_SHARING", length = 1)
-	public Character getHitSharing() {
-		return this.hitSharing;
-	}
-
-	public void setHitSharing(Character hitSharing) {
-		this.hitSharing = hitSharing;
-	}
 
 	@Override
 	public int hashCode() {
@@ -171,8 +230,13 @@ public class RuleMeta extends BaseEntity {
 		EqualsBuilder equalsBuilder = new EqualsBuilder();
 		equalsBuilder.append(title, other.title);
 		equalsBuilder.append(description, other.description);
-		equalsBuilder.append(startDt, other.startDt);
-		equalsBuilder.append(endDt, other.endDt);
+		
+		//start and end date equality up to seconds
+		if(!DateCalendarUtils.dateRoundedEquals(startDt,  other.startDt)
+			|| !DateCalendarUtils.dateRoundedEquals(endDt,  other.endDt)	){
+			return false;
+		}
+		
 		equalsBuilder.append(enabled, other.enabled);
 		equalsBuilder.append(priorityHigh, other.priorityHigh);
 		equalsBuilder.append(hitSharing, other.hitSharing);

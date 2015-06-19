@@ -4,7 +4,7 @@ import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
 import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.error.RuleServiceErrorHandler;
+import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 
@@ -34,7 +34,7 @@ public class RuleServiceImpl implements RuleService {
 	private static final String DEFAULT_RULESET_NAME = "gtas.drl";
 
 	@Autowired
-	private RuleServiceErrorHandler errorHandler;
+	private BasicErrorHandler errorHandler;
 
 	/* (non-Javadoc)
 	 * @see gov.gtas.rule.RuleService#invokeRuleset(java.lang.String, gov.gtas.bo.RuleServiceRequest)

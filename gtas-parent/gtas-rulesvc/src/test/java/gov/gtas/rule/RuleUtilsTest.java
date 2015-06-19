@@ -3,7 +3,7 @@ package gov.gtas.rule;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import gov.gtas.error.RuleServiceErrorHandler;
+import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Message;
 import gov.gtas.rule.RuleUtils;
@@ -51,7 +51,7 @@ public class RuleUtilsTest {
 
 	@Test
 	public void testCreateKieBaseFromString() throws IOException{
-		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, new RuleServiceErrorHandler());
+		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, new BasicErrorHandler());
 		assertNotNull("Expected non null KieBase", kbase);
 		KieSession ksession = RuleUtils.createSession(kbase);
 		assertNotNull("Expected non null KieSession", ksession);
@@ -82,7 +82,7 @@ public class RuleUtilsTest {
 	@Test
 	public void testMultipleSession() throws IOException{
 		//verify that multiple sessions can be created with different IDs
-		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, new RuleServiceErrorHandler());
+		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, new BasicErrorHandler());
 		KieSession s1 = RuleUtils.createSession(kbase);
 		KieSession s2 = RuleUtils.createSession(kbase);
 		assertNotEquals("Unexpected - got identical ids for two sessions", s1.getId(), s2.getId());
@@ -91,7 +91,7 @@ public class RuleUtilsTest {
 	}
     @Test
     public void testBinarySerializationOfKieBase()  throws IOException, ClassNotFoundException{
-		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, new RuleServiceErrorHandler());
+		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, new BasicErrorHandler());
     	byte[] blob = RuleUtils.convertKieBaseToBytes(kbase);
     	assertNotNull("ERROR - KieBase blob is null", blob);
     	byte[] blobCopy = Arrays.copyOf(blob, blob.length);
