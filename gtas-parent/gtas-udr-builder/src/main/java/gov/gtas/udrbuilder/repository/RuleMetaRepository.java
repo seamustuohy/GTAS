@@ -1,4 +1,4 @@
-package gov.cbp.taspd.gtas.udrbuilder.repository;
+package gov.gtas.udrbuilder.repository;
 
 import gov.gtas.model.udr.RuleMeta;
 
