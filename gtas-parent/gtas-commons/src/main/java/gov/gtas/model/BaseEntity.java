@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @MappedSuperclass  
 public abstract class BaseEntity implements Serializable {
-    private static final long serialVersionUID = 1L;  
+	private static final long serialVersionUID = 1L;  
   
     @Id  
     @GeneratedValue(strategy = GenerationType.AUTO)  
@@ -27,7 +27,17 @@ public abstract class BaseEntity implements Serializable {
     
     public Long getId() {  
         return id;  
-    }  
+    }
+    
+    /**
+     * This protected setter is provided for derived classes.<br>
+     * (Example of usage is to set up one to one mappings with identical keys.)
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
   
     public Long getVersion() {
         return version;

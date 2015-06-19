@@ -18,7 +18,7 @@ public class RuleServiceErrorHandler {
 	 * The logger for the Rule Engine Error Handler
 	 */
 	private static final Logger logger = LoggerFactory
-			.getLogger(RuleServiceErrorHandler.class);
+			.getLogger(BasicErrorHandler.class);
     /**
      * Creates the exception message for the indicated error.
      * @param errorCode the error code.
