@@ -1,13 +1,12 @@
 package gov.gtas.controller;
 
 import gov.gtas.bo.RuleExecutionStatistics;
-import gov.gtas.rule.RuleServiceResult;
-import gov.gtas.svc.TargetingService;
 import gov.gtas.constants.Constants;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
-import gov.gtas.model.lookup.Airport;
+import gov.gtas.rule.RuleServiceResult;
+import gov.gtas.svc.TargetingService;
 
 import java.util.HashSet;
 
