@@ -31,5 +31,6 @@ public final class Constants {
 	public static final String UDR_ROOT = "/udr";
 	public static final String UDR_GET = "/getUdr";
 	public static final String UDR_TEST = "/testUdr";
+	public static final String UDR_RULE = "/rules";
 	
 }

@@ -1,31 +1,44 @@
 package gov.gtas.udrbuilder.service;
 
-import org.springframework.stereotype.Service;
+import gov.gtas.model.udr.Rule;
+import gov.gtas.udrbuilder.repository.RuleRepository;
 
-@Service("udrBuilderService")
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class UdrBuilderServiceImpl implements UdrBuilderService {
 
+	@Autowired
+	RuleRepository ruleRepository;
+
 	@Override
-	public void saveRule() {
+	public void saveRule(Rule rule) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void viewRule() {
-		// TODO Auto-generated method stub
-		
+	public Rule getById(Long id) {
+		return ruleRepository.findOne(id);
 	}
 
 	@Override
-	public void editRule() {
+	public void updateRule() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void deleteRule() {
+	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
+	@Override
+	public List<Rule> allRules() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
