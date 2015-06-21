@@ -15,5 +15,12 @@
 			<artifactId>gtas-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>2.3.8</version>
+			<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 </project>

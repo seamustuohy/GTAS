@@ -6,17 +6,17 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-@Service("udrBuilderService")
+@Service
 public interface UdrBuilderService {
 
-	public void saveRule(Rule rule);
+	public Rule getRule(Long id);
 
-	public Rule getById(Long id);
+	public void updateRule(Rule rule);
 
-	public void updateRule();
+	public void deleteRule(Long id);
 
-	public void deleteById(Long id);
-	
 	public List<Rule> allRules();
+
+	public void createRule(Rule rule);
 
 }

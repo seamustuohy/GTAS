@@ -1,4 +1,4 @@
-package gov.gtas.udrbuilder.model;
+package gov.gtas.udrbuilder.wrapper;
 
 public class RuleWrapper {
 

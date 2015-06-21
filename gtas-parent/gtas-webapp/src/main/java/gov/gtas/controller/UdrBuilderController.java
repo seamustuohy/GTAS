@@ -2,16 +2,19 @@ package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
 import gov.gtas.model.udr.Rule;
-import gov.gtas.udrbuilder.model.RuleFE;
 import gov.gtas.udrbuilder.service.UdrBuilderService;
+import gov.gtas.udrbuilder.wrapper.RuleWrapper;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,32 +25,36 @@ public class UdrBuilderController {
 	UdrBuilderService udrService;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public RuleFE findOne(@PathVariable Long id) {
+	public @ResponseBody RuleWrapper getById(@PathVariable Long id) {
 		//
-		udrService.getById(id);
+		udrService.getRule(id);
 		return null;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json")
-	public List<RuleFE> findAll() {
+	public @ResponseBody List<RuleWrapper> getAll() {
 		List<Rule> rules = udrService.allRules();
 		//
 		return null;
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
+	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable("id") Long id) {
-		udrService.deleteById(id);
+		udrService.deleteRule(id);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, headers = "Accept=application/json")
-	public void update(@PathVariable("id") Long id, @RequestBody RuleFE resource) {
-		// convert RuleFE--Rule
+	@ResponseStatus(HttpStatus.OK)
+	public void update(@PathVariable("id") Long id,
+			@RequestBody RuleWrapper resource) {
+		// convert RuleWrapper--Rule
 		// udrService.updateRule(rule);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
-	public void create(@RequestBody RuleFE resource) {
+	@ResponseStatus(HttpStatus.CREATED)
+	public void create(@RequestBody RuleWrapper resource) {
 	}
 
 }

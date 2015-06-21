@@ -13,24 +13,18 @@ public class UdrBuilderServiceImpl implements UdrBuilderService {
 	RuleRepository ruleRepository;
 
 	@Override
-	public void saveRule(Rule rule) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Rule getById(Long id) {
+	public Rule getRule(Long id) {
 		return ruleRepository.findOne(id);
 	}
 
 	@Override
-	public void updateRule() {
+	public void updateRule(Rule rule) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void deleteById(Long id) {
+	public void deleteRule(Long id) {
 		// TODO Auto-generated method stub
 
 	}
@@ -39,6 +33,12 @@ public class UdrBuilderServiceImpl implements UdrBuilderService {
 	public List<Rule> allRules() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void createRule(Rule rule) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
