@@ -5,6 +5,7 @@ import gov.gtas.model.User;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -55,6 +57,7 @@ public class Rule extends BaseEntity {
     private KnowledgeBase knowledgeBase;
     
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+	@OrderColumn(name="COND_SEQ")
 	private List<RuleCond> ruleConds;
 
     @ManyToOne
@@ -80,19 +83,25 @@ public class Rule extends BaseEntity {
 		this.editedBy = editedBy;
 		this.editDt = editDt;
 	}
-
-	/* (non-Javadoc)
-	 * @see gov.gtas.model.BaseEntity#setId(java.lang.Long)
-	 */
-//	@Override
-//	public void setId(Long id) {
-//		super.setId(id);
-//		//set the id for rule meta object
-//		if(this.metaData != null){
-//			this.metaData.setId(id);
-//		}
-//	}
-
+    /**
+     * adds a condition to this rule.
+     * @param cond the condition to add.
+     */
+    public void addConditionToRule(RuleCond cond){
+    	if(ruleConds == null){
+    		ruleConds = new LinkedList<RuleCond>();
+    	}
+    	//set up the child keys
+    	cond.refreshParentRuleId(this.getId());
+    	
+    	this.ruleConds.add(cond);
+    }
+    /**
+     * Removes all conditions from this rule.
+     */
+    public void removeAllConditions(){
+    	this.ruleConds = null;
+    }
     /**
 	 * @return the metaData
 	 */
@@ -147,6 +156,13 @@ public class Rule extends BaseEntity {
 	 */
 	public void setDeleted(YesNoEnum deleted) {
 		this.deleted = deleted;
+	}
+
+	/**
+	 * @return the ruleConds
+	 */
+	public List<RuleCond> getRuleConds() {
+		return ruleConds;
 	}
 
 	@Override

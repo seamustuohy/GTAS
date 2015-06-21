@@ -37,6 +37,13 @@ public class RuleCondPk implements Serializable {
 	}
 
 	/**
+	 * @param ruleId the ruleId to set
+	 */
+	public void setRuleId(long ruleId) {
+		this.ruleId = ruleId;
+	}
+
+	/**
 	 * @return the condSeq
 	 */
 	public int getCondSeq() {

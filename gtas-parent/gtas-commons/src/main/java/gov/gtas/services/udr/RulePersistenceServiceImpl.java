@@ -3,7 +3,9 @@ package gov.gtas.services.udr;
 import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.model.User;
+import gov.gtas.model.udr.CondValue;
 import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.YesNoEnum;
 import gov.gtas.repository.udr.RuleRepository;
@@ -18,6 +20,7 @@ import javax.transaction.Transactional.TxType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 @Service
 public class RulePersistenceServiceImpl implements RulePersistenceService {
@@ -37,15 +40,35 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		if(user == null){
 			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID, userId);
 		}
+		// save meta and rule conditions for now
+		//we will add them after saving the bare rule first.
 		RuleMeta savedMeta = r.getMetaData();
+		List<RuleCond> savedCondList = r.getRuleConds();
+		
 		r.setEditDt(new Date());
 		r.setEditedBy(user);
 		r.setMetaData(null);
+		r.removeAllConditions();
+		
+		//save the rule with the meta data and conditions stripped.
+		//Once the rule id is generated we will add back the meta and conditions
+		//and set their composite keys with the rule ID.
 		Rule rule = ruleRepository.save(r);
-		if(savedMeta != null){
-			savedMeta.setId(rule.getId());
-			rule.setMetaData(savedMeta);
-			savedMeta.setParent(rule);
+		
+		//now add back the meta and conditions and update the rule.
+		if(savedMeta != null || !CollectionUtils.isEmpty(savedCondList)){
+			long ruleid = rule.getId();
+			if(savedMeta != null){
+				savedMeta.setId(ruleid);
+				rule.setMetaData(savedMeta);
+				savedMeta.setParent(rule);
+			}
+			if(!CollectionUtils.isEmpty(savedCondList)){
+				for(RuleCond rc : savedCondList) {
+					rc.refreshParentRuleId(ruleid);
+					rule.addConditionToRule(rc);
+				}				
+			}
 			rule = ruleRepository.save(rule);
 		}
 		return rule;

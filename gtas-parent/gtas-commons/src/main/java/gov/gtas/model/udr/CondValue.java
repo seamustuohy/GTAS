@@ -85,6 +85,13 @@ public class CondValue implements Serializable {
 	}
 
 	/**
+	 * @return the id
+	 */
+	public CondValuePk getId() {
+		return id;
+	}
+
+	/**
 	 * @return the valType
 	 */
 	public ConditionValueTypeEnum getValType() {
