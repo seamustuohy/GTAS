@@ -1,5 +1,5 @@
 package gov.gtas.udrbuilder.model;
 
-public class RuleFE {
+public class RuleWrapper {
 
 }
