@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class ApisMessageVo {
+    private byte[] raw;
     private List<FlightVo> flights = new ArrayList<>();
     private List<PaxVo> passengers = new ArrayList<>();
     private List<ReportingPartyVo> reportingParties = new ArrayList<>();
@@ -20,7 +21,21 @@ public class ApisMessageVo {
     public void addReportingParty(ReportingPartyVo rp) {
         reportingParties.add(rp);
     }
-    
+    public void setRaw(byte[] raw) {
+        this.raw = raw;
+    }
+    public byte[] getRaw() {
+        return raw;
+    }
+    public List<FlightVo> getFlights() {
+        return flights;
+    }
+    public List<PaxVo> getPassengers() {
+        return passengers;
+    }
+    public List<ReportingPartyVo> getReportingParties() {
+        return reportingParties;
+    }
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 

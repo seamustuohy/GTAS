@@ -43,21 +43,10 @@ public abstract class PaxlstParser {
             return null;
         }
         
-//        this.message.setRaw(raw);
+        this.message.setRaw(raw);
         String msg = new String(raw, StandardCharsets.US_ASCII);
         processMessageAndGetSegments(msg);
         parseSegments();
-        
-//        for (ReportingParty rp : this.message.getReportingParties()) {
-//            System.out.println(rp);
-//        }
-//        for (Flight f : this.flights) {
-//            System.out.println(f);
-//        }
-//        for (Pax p : this.passengers) {
-//            System.out.println(p);
-//        }
-        System.out.println(this.message);
 
         return this.message;
     }
