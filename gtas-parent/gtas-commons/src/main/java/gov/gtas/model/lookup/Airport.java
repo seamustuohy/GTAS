@@ -86,7 +86,8 @@ public class Airport extends BaseEntity {
                 && Objects.equals(this.icao, other.icao);
     }
     
-    public static Airport getByIataCode(String code) {
-        return null;
+    @Override
+    public String toString() {
+        return this.iata;
     }
 }

@@ -55,10 +55,8 @@ public class Country extends BaseEntity {
                 && Objects.equals(this.iso3, other.iso3);
     }
     
-    public static Country getByAlpha2Code(String alpha2) {
-        return null;
-    }
-    public static Country getByAlpha3Code(String alpha3) {
-        return null;
+    @Override
+    public String toString() {
+        return this.iso2;
     }
 }

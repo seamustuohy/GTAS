@@ -48,12 +48,10 @@ public class Carrier extends BaseEntity {
         } else if (!iata.equals(other.iata))
             return false;
         return true;
-    }    
+    }
     
-    public static Carrier getByIataCode(String iata) {
-        return null;
-    }
-    public static Carrier getByIcaoCode(String icao) {
-        return null;
-    }
+    @Override
+    public String toString() {
+        return this.iata;
+    }        
 }

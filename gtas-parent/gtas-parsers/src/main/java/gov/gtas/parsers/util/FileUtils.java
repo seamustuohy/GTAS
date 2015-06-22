@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 public class FileUtils {
     public static byte[] readSmallFile(String filePath) {
+        System.out.println(filePath);
         Path path = Paths.get(filePath);
         try {
             return Files.readAllBytes(path);
