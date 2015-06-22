@@ -4,12 +4,12 @@ import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
 import gov.gtas.model.lookup.DocumentType;
 import gov.gtas.model.lookup.Gender;
-import gov.gtas.model.lookup.PaxType;
 import gov.gtas.services.AirportService;
 import gov.gtas.services.CarrierService;
 import gov.gtas.services.CountryService;
@@ -113,7 +113,7 @@ public class ServiceRepositoryTest {
 		//passengerToUpdate.setDocuments(passenger.getDocuments());
 		passengerToUpdate.setSuffix("Mr.");
 		//passengerToUpdate.setTitle(passenger.getTitle());
-		passengerToUpdate.setType(PaxType.PAX);
+//		passengerToUpdate.setType(PaxType.PAX);
 		passengerToUpdate.setCreatedAt(new Date());
 		passengerToUpdate.setCreatedBy("JUNIT TEST");
 		
@@ -123,12 +123,12 @@ public class ServiceRepositoryTest {
 		d.setExpirationDate(new Date("6/6/2020"));
 		d.setIssuanceDate(new Date("6/6/1999"));
 		d.setIssuanceCountry(c);
-		d.setPax(passengerToUpdate);
+		d.setTraveler(passengerToUpdate);
 		Set<Document> docs = new HashSet<>();
 		docs.add(d);
 		passengerToUpdate.setDocuments(docs);
 		
-		Set<Pax> passengers = new HashSet<Pax>();
+		Set<Traveler> passengers = new HashSet<Traveler>();
 		passengers.add(passengerToUpdate);
 		f.setPassengers(passengers);
 		

@@ -5,13 +5,11 @@ import static org.junit.Assert.assertNotNull;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.error.CommonServiceException;
-import gov.gtas.error.RuleServiceException;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
-import gov.gtas.rule.RuleService;
-import gov.gtas.rule.RuleServiceResult;
 
 import java.util.HashSet;
 
@@ -83,10 +81,10 @@ public class RuleRepositoryTest {
 	/**
 	 * Creates a simple ApisMessage with a single passenger
 	 */
-	private ApisMessage createBasicApisMessage(final Pax passenger){
+	private ApisMessage createBasicApisMessage(final Traveler passenger){
 		  ApisMessage msg = new ApisMessage();
 		  Flight flight = new Flight();
-		  HashSet<Pax> set = new HashSet<Pax>();
+		  HashSet<Traveler> set = new HashSet<Traveler>();
 		  set.add(passenger);
 		  flight.setPassengers(set);
 		  flight.setDestination(createAirport("foo"));

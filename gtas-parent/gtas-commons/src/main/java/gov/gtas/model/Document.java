@@ -37,7 +37,7 @@ public class Document extends BaseEntity {
     
     @ManyToOne
     @JoinColumn(referencedColumnName="id")         
-    private Pax pax;
+    private Traveler traveler;
 
     public DocumentType getDocumentType() {
         return documentType;
@@ -79,11 +79,11 @@ public class Document extends BaseEntity {
         this.issuanceCountry = issuanceCountry;
     }
 
-    public Pax getPax() {
-        return pax;
+    public Traveler getTraveler() {
+        return traveler;
     }
 
-    public void setPax(Pax pax) {
-        this.pax = pax;
+    public void setTraveler(Traveler traveler) {
+        this.traveler = traveler;
     }
 }

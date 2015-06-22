@@ -1,19 +1,19 @@
 package gov.gtas.services;
 
-import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
 
 import java.util.List;
 
 
 public interface PassengerService {
 	
-	public Pax create(Pax passenger);
-    public Pax delete(Long id);
-    public List<Pax> findAll();
-    public Pax update(Pax passenger) ;
-    public Pax findById(Long id);
-    public Pax getPassengerByName(String firstName,String lastName);
-    public List<Pax> getPassengersByLastName(String lastName);
+	public Traveler create(Traveler passenger);
+    public Traveler delete(Long id);
+    public List<Traveler> findAll();
+    public Traveler update(Traveler passenger) ;
+    public Traveler findById(Long id);
+    public Traveler getPassengerByName(String firstName,String lastName);
+    public List<Traveler> getPassengersByLastName(String lastName);
 
 
 }

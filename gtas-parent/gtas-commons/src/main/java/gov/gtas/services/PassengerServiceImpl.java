@@ -1,6 +1,6 @@
 package gov.gtas.services;
 
-import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
 import gov.gtas.repository.PassengerRepository;
 
 import java.util.List;
@@ -18,14 +18,14 @@ public class PassengerServiceImpl implements PassengerService {
 	
 	@Override
 	@Transactional
-	public Pax create(Pax passenger) {
+	public Traveler create(Traveler passenger) {
 		return passengerRespository.save(passenger);
 	}
 
 	@Override
 	@Transactional
-	public Pax delete(Long id) {
-		Pax passenger = this.findById(id);
+	public Traveler delete(Long id) {
+		Traveler passenger = this.findById(id);
 		if(passenger != null)
 			passengerRespository.delete(passenger);
 		return passenger;
@@ -33,14 +33,14 @@ public class PassengerServiceImpl implements PassengerService {
 
 	@Override
 	@Transactional
-	public List<Pax> findAll() {
-		return (List<Pax>)passengerRespository.findAll();
+	public List<Traveler> findAll() {
+		return (List<Traveler>)passengerRespository.findAll();
 	}
 
 	@Override
 	@Transactional
-	public Pax update(Pax passenger) {
-		Pax passengerToUpdate = this.findById(passenger.getId());
+	public Traveler update(Traveler passenger) {
+		Traveler passengerToUpdate = this.findById(passenger.getId());
 		if(passengerToUpdate != null){
 			passengerToUpdate.setAge(passenger.getAge());
 			passengerToUpdate.setCitizenshipCountry(passenger.getCitizenshipCountry());
@@ -58,22 +58,22 @@ public class PassengerServiceImpl implements PassengerService {
 			passengerToUpdate.setDocuments(passenger.getDocuments());
 			passengerToUpdate.setSuffix(passenger.getSuffix());
 			passengerToUpdate.setTitle(passenger.getTitle());
-			passengerToUpdate.setType(passenger.getType());
+//			passengerToUpdate.setType(passenger.getType());
 		}
 		return passengerToUpdate;
 	}
 
 	@Override
 	@Transactional
-	public Pax findById(Long id) {
+	public Traveler findById(Long id) {
 		return passengerRespository.findOne(id);
 	}
 
 	@Override
 	@Transactional
-	public Pax getPassengerByName(String firstName, String lastName) {
-		Pax passenger = null;
-		List<Pax> passengerList = passengerRespository.getPassengerByName(firstName, lastName);
+	public Traveler getPassengerByName(String firstName, String lastName) {
+		Traveler passenger = null;
+		List<Traveler> passengerList = passengerRespository.getPassengerByName(firstName, lastName);
 		if(passengerList != null && passengerList.size() > 0)
 			passenger = passengerList.get(0);
 		return passenger;
@@ -81,8 +81,8 @@ public class PassengerServiceImpl implements PassengerService {
 
 	@Override
 	@Transactional
-	public List<Pax> getPassengersByLastName(String lastName) {
-		List<Pax> passengerList = passengerRespository.getPassengersByLastName(lastName);
+	public List<Traveler> getPassengersByLastName(String lastName) {
+		List<Traveler> passengerList = passengerRespository.getPassengersByLastName(lastName);
 		return passengerList;
 	}
 

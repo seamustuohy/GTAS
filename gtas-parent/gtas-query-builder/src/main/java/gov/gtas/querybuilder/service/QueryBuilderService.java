@@ -1,7 +1,7 @@
 package gov.gtas.querybuilder.service;
 
 import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
 import gov.gtas.querybuilder.model.APIDisplay;
 import gov.gtas.querybuilder.model.AddressDisplay;
 import gov.gtas.querybuilder.model.CreditCardDisplay;
@@ -201,8 +201,8 @@ public class QueryBuilderService {
 	 * @param query
 	 * @return
 	 */
-	public List<Pax> runQueryOnPassenger(String query) {
-		List<Pax> result = new ArrayList<>();
+	public List<Traveler> runQueryOnPassenger(String query) {
+		List<Traveler> result = new ArrayList<>();
 		
 		return result;
 	}

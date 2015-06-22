@@ -4,7 +4,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value="P")
-public class Pax extends Traveler {
+@DiscriminatorValue(value="C")
+public class Crew extends Traveler {
 
 }

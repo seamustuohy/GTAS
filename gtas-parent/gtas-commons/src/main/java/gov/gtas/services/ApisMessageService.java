@@ -3,6 +3,7 @@ package gov.gtas.services;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
@@ -64,10 +65,10 @@ public class ApisMessageService {
     }
     
     private void loadApisMessage(ApisMessageVo m) {
-        Set<Pax> pax = new HashSet<>();
+        Set<Traveler> pax = new HashSet<>();
         
         for (PaxVo pvo : m.getPassengers()) {
-            Pax p = convertPaxVo(pvo);
+            Traveler p = convertPaxVo(pvo);
             pax.add(p);
 //            System.out.println(p);
 //            passengerService.create(p);
@@ -82,7 +83,7 @@ public class ApisMessageService {
         }
     }
     
-    public Pax convertPaxVo(PaxVo vo) {
+    public Traveler convertPaxVo(PaxVo vo) {
         Pax p = new Pax();
         BeanUtils.copyProperties(vo, p);
         p.setGender(Gender.valueOf(vo.getGender()));
@@ -92,7 +93,6 @@ public class ApisMessageService {
         p.setEmbarkation(convertAirport(vo.getEmbarkation()));
         p.setCitizenshipCountry(convertCountry(vo.getCitizenshipCountry()));
         p.setResidencyCountry(convertCountry(vo.getResidencyCountry()));
-//        p.sett
         
         for (DocumentVo dvo : vo.getDocuments()) {
             Document d = new Document();
