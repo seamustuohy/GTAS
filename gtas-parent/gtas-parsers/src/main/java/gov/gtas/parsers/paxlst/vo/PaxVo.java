@@ -28,6 +28,10 @@ public class PaxVo {
         documents.add(d);
     }
     
+    public List<DocumentVo> getDocuments() {
+        return documents;
+    }
+
     public String getTitle() {
         return title;
     }

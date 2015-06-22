@@ -28,7 +28,6 @@ public class Pax extends BaseEntityAudit {
     public Pax() { }
     
     @ManyToMany(
-        cascade = {CascadeType.PERSIST, CascadeType.MERGE},
         mappedBy = "passengers",
         targetEntity = Flight.class
     )    
@@ -79,7 +78,7 @@ public class Pax extends BaseEntityAudit {
     @JoinColumn(name = "debark_country")
     private Country debarkCountry;
     
-    @OneToMany(mappedBy="pax",cascade=CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pax")
     private Set<Document> documents = new HashSet<>();
     
     public Set<Flight> getFlights() {

@@ -26,7 +26,7 @@ public class Flight extends BaseEntityAudit {
     
     @ManyToMany(
         targetEntity=Pax.class,
-        cascade={CascadeType.PERSIST, CascadeType.MERGE}
+        cascade={CascadeType.ALL}
     )
     @JoinTable(
         name="flight_pax",
