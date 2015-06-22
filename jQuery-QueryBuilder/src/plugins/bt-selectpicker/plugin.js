@@ -18,6 +18,16 @@ QueryBuilder.define('bt-selectpicker', function(options) {
         rule.$el.find('.rule-field-container select').removeClass('form-control').selectpicker(options);
     });
 
+    //this.on('afterUpdateQueryNamesList', function(e, queryName) {
+    //    if (this.savedQueryNames === undefined) {
+    //        this.savedQueryNames = $('#saved-query-names');
+    //    }
+    //    this.savedQueryNames.selectpicker('refresh');
+    //    if (queryName) {
+    //        this.savedQueryNames.selectpicker('val', queryName);
+    //    }
+    //});
+
     this.on('afterCreateRuleFilters', function(e, rule) {
         rule.$el.find('.rule-filter-container select').removeClass('form-control').selectpicker(options);
     });

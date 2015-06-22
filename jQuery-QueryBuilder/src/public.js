@@ -171,6 +171,57 @@ QueryBuilder.prototype.getRules = function() {
     return this.change('getRules', out);
 };
 
+
+/**
+ * LOAD rules from object
+ */
+QueryBuilder.prototype.loadRules = function(queryName) {
+    var rules = localStorage.getItem(queryName);
+
+    if (!queryName) {
+        alert('requires name');
+        return;
+    }
+
+    if (!rules || Object.keys(rules).length === 0) {
+        alert('query invalid, empty, or deleted / nonexistent');
+        return;
+    }
+
+    this.setRules(JSON.parse(rules));
+};
+
+/**
+ * SAVE rules from object
+ */
+QueryBuilder.prototype.saveRules = function(queryName, saveas) {
+    if (!queryName) {
+        alert('requires name');
+        return;
+    }
+
+    localStorage.setItem(queryName, JSON.stringify(this.getRules()));
+    if (saveas) {
+//        this.trigger('afterUpdateQueryNamesList', queryName);
+        console.log('saved as new || overwrite');
+    } else {
+//        this.trigger('afterUpdateQueryNamesList');
+        console.log('saved || updated');
+    }
+};
+
+/**
+ * DELETE rules from object
+ */
+QueryBuilder.prototype.deleteRules = function(queryName) {
+    if (!queryName) {
+        alert('requires name');
+        return;
+    }
+
+    localStorage.removeItem(queryName);
+};
+
 /**
  * Set rules from object
  * @param data {object}

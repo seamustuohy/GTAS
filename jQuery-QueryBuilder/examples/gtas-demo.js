@@ -1,15 +1,6 @@
 var $builder = $('#builder');
 var $result = $('#result');
 
-var dbSchema = {
-  'PASSENGER': [
-    { id : 'cob', label: 'COB'}
-  ],
-  'FLIGHT': [
-    { id : 'in_stock', label: 'HasHits' }     
-  ]
-};
-
 // define filters
 var options = {
   allow_empty: true,
@@ -78,93 +69,108 @@ $builder.on('afterCreateRuleInput.queryBuilder', function(e, rule) {
 });
 
 
-// reset builder
-$('.reset').on('click', function() {
-  $builder.queryBuilder('reset');
-  $result.addClass('hide').find('pre').empty();
-});
-
-// get rules
-$('.parse-sql').on('click', function() {
-  var res = $builder.queryBuilder('getSQL', $(this).data('stmt'), false);
-  $result.removeClass('hide')
-    .find('pre').html(
-      res.sql + (res.params ? '\n\n' + JSON.stringify(res.params, undefined, 2) : '')
-    );
-});
+// get rules Lola says she doesn't need SQL now
+//$('.parse-sql').on('click', function() {
+//  var res = $builder.queryBuilder('getSQL', $(this).data('stmt'), false);
+//  $result.removeClass('hide')
+//    .find('pre').html(
+//      res.sql + (res.params ? '\n\n' + JSON.stringify(res.params, undefined, 2) : '')
+//    );
+//});
 
 // expects array of strings
-var getOptions = function (strings) {
+var getOptions = function (strings, selectedValue) {
   return '<option value="-1">-</option>' + $.map(strings, function( val ) {
-    return '<option value="'+ val +'">' + val + '</option>';
+    return '<option value="'+ val +'" '+(selectedValue === val ? 'selected' : '')+'>' + val + '</option>';
   }).join('');
 };
 
-// expects array of objects {id: '', label: ''}
-var populateFieldOptions = function (objects) {
-  return '<option value="-1">-</option>' + $.map(objects, function( val ) {
-    return '<option value="'+ val.id +'">' + val.label + '</option>';
-  }).join('');
+Array.prototype.addUnique = function (name) {
+  if (this.indexOf(name) < 0) { this.push(name); }
+  return this;
 };
 
-// CONSTS
-var TABLE_NAMES = Object.keys(dbSchema);
+Array.prototype.remove = function() {
+  var what, a = arguments, L = a.length, ax;
+  while (L && this.length) {
+    what = a[--L];
+    while ((ax = this.indexOf(what)) !== -1) {
+      this.splice(ax, 1);
+    }
+  }
+  return this;
+};
 
 
-// $('.set').on('click', function() {
-//   $builder.queryBuilder('setRules', {
-//     condition: 'AND',
-//     rules: [{
-//       id: 'price',
-//       operator: 'between',
-//       value: [10.25, 15.52],
-//       flags: {
-//         no_delete: true,
-//         filter_readonly: true
-//       },
-//       data: {
-//         unit: '€'
-//       }
-//     }, {
-//       id: 'state',
-//       operator: 'equal',
-//       value: 'AK',
-//     }, {
-//       condition: 'OR',
-//       rules: [{
-//         id: 'category',
-//         operator: 'equal',
-//         value: 2
-//       }, {
-//         id: 'coord',
-//         operator: 'equal',
-//         value: 'B.3'
-//       }]
-//     }]
-//   });
-// });
+var data = {
+  condition: 'OR',
+      rules: [{
+  id: 'PASSENGER.cob',
+  operator: 'equal',
+  value: 'CH',
+  options: [
+    { id: "US", name: "UNITED STATES" },
+    { id: "CH", name: "CHINA" },
+    { id: "SA", name: "SAUDI ARABIA" }
+  ]
+}, {
+  id: 'PASSENGER.cob',
+  operator: 'equal',
+  value: 'US',
+  options: [
+    { id: "US", name: "UNITED STATES" },
+    { id: "CH", name: "CHINA" },
+    { id: "SA", name: "SAUDI ARABIA" }
+  ]
+}]
+};
 
-$('.set').on('click', function() {
-  $builder.queryBuilder('setRules', {
-    condition: 'OR',
-    rules: [{
-      id: 'PASSENGER.cob',
-      operator: 'equal',
-      value: 'CH',
-      options: [
-        { id: "US", name: "UNITED STATES" },
-        { id: "CH", name: "CHINA" },
-        { id: "SA", name: "SAUDI ARABIA" }
-      ]
-    }, {
-      id: 'PASSENGER.cob',
-      operator: 'equal',
-      value: 'US',
-      options: [
-        { id: "US", name: "UNITED STATES" },
-        { id: "CH", name: "CHINA" },
-        { id: "SA", name: "SAUDI ARABIA" }
-      ]
-    }]
+localStorage.setItem('sample', JSON.stringify(data));
+
+savedQueryNamesList = document.querySelector('#saved-query-names');
+queryNameInput = document.querySelector('#query-name');
+
+var queryName;
+var savedQueryNames = localStorage.getItem('savedQueryNames');
+savedQueryNames = savedQueryNames ? savedQueryNames.split(',') : ['sample'];
+
+var updateSavedQueryNamesList = function () {
+  savedQueryNamesList.innerHTML = getOptions(savedQueryNames, queryName);
+  $(savedQueryNamesList).selectpicker('refresh');
+  localStorage.setItem('savedQueryNames', savedQueryNames);
+  queryName = null;
+  queryNameInput.value = '';
+};
+
+updateSavedQueryNamesList();
+var resetQueryBuilder = function() {
+  $builder.queryBuilder('reset');
+  $result.addClass('hide').find('pre').empty();
+};
+
+$(document)
+    // PREP name to save as
+  .on('change', '#query-name', function (e){
+    queryName = e.currentTarget.value;
+  })
+    // LOAD query selected from saved queries
+  .on('change', '#saved-query-names', function (e) {
+    queryName = $(e.currentTarget).val();
+    queryNameInput.value = queryName;
+    $builder.queryBuilder('loadRules', queryName);
+  })
+    // RESET rules on UI
+  .on('click', '.reset', resetQueryBuilder)
+    // SAVE AS rules on UI
+  .on('click', '.save-as', function () {
+      savedQueryNames.addUnique(queryName);
+      $builder.queryBuilder('saveRules', queryName, true);
+      updateSavedQueryNamesList();
+    })
+  // Delete rules on UI
+  .on('click', '.delete', function () {
+    $builder.queryBuilder('deleteRules', queryName);
+    savedQueryNames.remove(queryName);
+    updateSavedQueryNamesList();
+    resetQueryBuilder();
   });
-});

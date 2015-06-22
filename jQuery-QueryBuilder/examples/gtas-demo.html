@@ -19,14 +19,19 @@
       <h1>GTAS QueryBuilder <small>Proof of Concept</small></h1>
     </div>
     <div id="builder"></div>
+      <label for="saved-query-names">Load:</label>
+      <select id="saved-query-names">
+          <option value=""> - </option>
+          <option value="sample">sample</option>
+      </select>
 
-    <div class="btn-group">
-      <button class="btn btn-warning reset">Reset</button>
-      <button class="btn btn-success set">Set rules</button>
-      <button class="btn btn-primary parse-sql" data-stmt="false">GET SQL WHERE CLAUSE</button>
-    </div>
+      <label for="query-name">Save As: </label><input id="query-name" type="text" />
+      <button class="btn btn-success save-as">Save</button>
 
-    <div id="result" class="hide">
+      <button class="btn btn-primary delete" data-stmt="false">Delete</button>
+      <button class="btn btn-warning reset">Clear Rules</button>
+
+      <div id="result" class="hide">
       <h3>Output</h3>
       <pre></pre>
     </div>

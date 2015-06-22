@@ -8,6 +8,8 @@ QueryBuilder.prototype.init = function($el, options) {
     // PROPERTIES
     this.settings = $.extendext(true, 'replace', {}, QueryBuilder.DEFAULTS, options);
     this.model = new Model();
+    this.queryName = null;
+    this.savedQueryNames = [];
     this.status = {
         group_id: 0,
         rule_id: 0,
