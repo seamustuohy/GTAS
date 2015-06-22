@@ -33,11 +33,11 @@ public abstract class Document extends BaseEntity {
     private Date issuanceDate;
     
     @ManyToOne
-    @JoinColumn(name = "issuance_country_id", referencedColumnName="id")         
+    @JoinColumn(name = "issuance_country_id")
     private Country issuanceCountry;
     
     @ManyToOne
-    @JoinColumn(referencedColumnName="id")         
+    @JoinColumn
     private Traveler traveler;
 
     public Date getExpirationDate() {

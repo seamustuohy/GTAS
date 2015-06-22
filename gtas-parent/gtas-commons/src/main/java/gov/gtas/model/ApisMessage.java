@@ -10,8 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "apis_message")
@@ -22,7 +22,7 @@ public class ApisMessage extends Message {
     @Column(name = "transmission_source")
     private String transmissionSource;
 
-    @Transient
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "apisMessage")
     Set<ReportingParty> reportingParties = new HashSet<>();
     
     @ManyToMany(
