@@ -3,7 +3,7 @@ package gov.gtas.parsers.paxlst.usedifact;
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.util.ParseUtils;
+import gov.gtas.parsers.util.ParseUtils;
 
 import java.util.Date;
 

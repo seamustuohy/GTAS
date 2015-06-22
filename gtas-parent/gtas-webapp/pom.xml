@@ -115,12 +115,7 @@
 		</dependency>
 		<dependency>
 			<groupId>gov.gtas</groupId>
-			<artifactId>apis-parser</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>gov.gtas</groupId>
-			<artifactId>pnr-parser</artifactId>
+			<artifactId>gtas-parsers</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

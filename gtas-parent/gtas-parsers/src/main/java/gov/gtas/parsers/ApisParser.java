@@ -1,11 +1,9 @@
 package gov.gtas.parsers;
 
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Flight;
 import gov.gtas.parsers.paxlst.PaxlstParser;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
-import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
-import gov.gtas.util.FileUtils;
+import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
+import gov.gtas.parsers.util.FileUtils;
 
 import java.nio.charset.StandardCharsets;
 
@@ -14,14 +12,14 @@ public class ApisParser {
         byte[] raw = FileUtils.readSmallFile(filePath);
         String msg = new String(raw, StandardCharsets.US_ASCII);
 
-        PaxlstParser parser;
+        PaxlstParser parser = null;
         if (isUSEdifactFile(msg)) {
-            parser = new PaxlstParserUSedifact(filePath);
+//            parser = new PaxlstParserUSedifact(filePath);
         } else {
             parser= new PaxlstParserUNedifact(filePath);
         }
         
-        ApisMessage m = parser.parse();
+        ApisMessageVo m = parser.parse();
     }
     
     private boolean isUSEdifactFile(String msg) {

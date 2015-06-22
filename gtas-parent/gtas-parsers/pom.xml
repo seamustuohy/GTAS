@@ -9,16 +9,11 @@
     <version>0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>apis-parser</artifactId>
+  <artifactId>gtas-parsers</artifactId>
   <packaging>jar</packaging>
-  <name>APIS Parser</name>
+  <name>GTAS Parsers</name>
 
   <dependencies>
-    <dependency>
-      <groupId>gov.gtas</groupId>
-      <artifactId>gtas-commons</artifactId>
-      <version>${project.version}</version>
-    </dependency>
   </dependencies>
 </project>
 

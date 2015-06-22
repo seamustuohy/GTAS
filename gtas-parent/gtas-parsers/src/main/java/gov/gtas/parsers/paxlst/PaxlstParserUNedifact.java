@@ -1,30 +1,23 @@
 package gov.gtas.parsers.paxlst;
 
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
-import gov.gtas.model.ReportingParty;
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
-import gov.gtas.model.lookup.Country;
-import gov.gtas.model.lookup.DocumentType;
-import gov.gtas.model.lookup.Gender;
-import gov.gtas.model.lookup.PaxType;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.unedifact.ATT;
 import gov.gtas.parsers.paxlst.unedifact.COM;
 import gov.gtas.parsers.paxlst.unedifact.DOC;
 import gov.gtas.parsers.paxlst.unedifact.DTM;
+import gov.gtas.parsers.paxlst.unedifact.DTM.DtmCode;
 import gov.gtas.parsers.paxlst.unedifact.FTX;
 import gov.gtas.parsers.paxlst.unedifact.GEI;
 import gov.gtas.parsers.paxlst.unedifact.LOC;
+import gov.gtas.parsers.paxlst.unedifact.LOC.LocCode;
 import gov.gtas.parsers.paxlst.unedifact.NAD;
 import gov.gtas.parsers.paxlst.unedifact.NAT;
 import gov.gtas.parsers.paxlst.unedifact.TDT;
 import gov.gtas.parsers.paxlst.unedifact.UNB;
-import gov.gtas.parsers.paxlst.unedifact.DTM.DtmCode;
-import gov.gtas.parsers.paxlst.unedifact.LOC.LocCode;
-import gov.gtas.parsers.paxlst.unedifact.NAD.PartyCode;
+import gov.gtas.parsers.paxlst.vo.DocumentVo;
+import gov.gtas.parsers.paxlst.vo.FlightVo;
+import gov.gtas.parsers.paxlst.vo.PaxVo;
+import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
 import java.util.ListIterator;
 
@@ -92,8 +85,8 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
 
     private void processReportingParty(Segment seg, ListIterator<Segment> i) {
         NAD nad = (NAD)seg;        
-        ReportingParty rp = new ReportingParty();
-        message.getReportingParties().add(rp);
+        ReportingPartyVo rp = new ReportingPartyVo();
+        message.addReportingParty(rp);
         rp.setPartyName(nad.getPartyName());
 
         Segment nextSeg = i.next();
@@ -108,21 +101,14 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     }
     
     private void processPax(Segment seg, ListIterator<Segment> i) {
-        Pax p = new Pax();
-        passengers.add(p);
+        PaxVo p = new PaxVo();
+        message.addPax(p);
 
         NAD nad = (NAD)seg;
         p.setFirstName(nad.getFirstName());
         p.setLastName(nad.getLastName());
         p.setMiddleName(nad.getMiddleName());
-        PartyCode partyCode = nad.getPartyFunctionCodeQualifier();
-        if (partyCode == PartyCode.PASSENGER) {
-            p.setType(PaxType.PAX);
-        } else if (partyCode == PartyCode.CREW_MEMBER) {
-            p.setType(PaxType.CREW);
-        } else {
-            p.setType(PaxType.OTHER);
-        }
+        p.setPaxType(nad.getPartyFunctionCodeQualifier().toString());
         
         while (i.hasNext()) {
             Segment s = i.next();
@@ -131,7 +117,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             
             case "ATT":
                 ATT att = (ATT)s;
-                p.setGender(Gender.valueOf(att.getAttributeDescriptionCode()));
+                p.setGender(att.getAttributeDescriptionCode());
                 break;
                 
             case "DTM":
@@ -153,9 +139,9 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 LocCode locCode = loc.getFunctionCode();
                 String val = loc.getLocationNameCode();
                 if (locCode == LocCode.PORT_OF_DEBARKATION) {
-//                    p.setDebarkation(val);
+                    p.setDebarkation(val);
                 } else if (locCode == LocCode.PORT_OF_EMBARKATION) {
-//                    p.setEmbarkation(val);
+                    p.setEmbarkation(val);
                 }
                 break;
             case "COM":
@@ -180,11 +166,11 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
     }
     
-    private void processDocument(Pax p, Segment seg, ListIterator<Segment> i) {
+    private void processDocument(PaxVo p, Segment seg, ListIterator<Segment> i) {
         DOC doc = (DOC)seg;
-        Document d = new Document();
-        p.getDocuments().add(d);
-        d.setDocumentType(DocumentType.valueOf(doc.getDocCode()));
+        DocumentVo d = new DocumentVo();
+        p.addDocument(d);
+        d.setDocumentType(doc.getDocCode());
         d.setDocumentNumber(doc.getDocumentIdentifier());
 
         while (i.hasNext()) {
@@ -202,7 +188,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 LOC loc = (LOC)s;
                 LocCode locCode = loc.getFunctionCode();
                 if (locCode == LocCode.PLACE_OF_DOCUMENT_ISSUE) {
-                    d.setIssuanceCountry(Country.getByAlpha3Code(loc.getLocationNameCode()));
+                    d.setIssuanceCountry(loc.getLocationNameCode());
                 }
                 break;
             default:
@@ -214,26 +200,26 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
 
     private void processFlight(Segment seg, ListIterator<Segment> i) {
         TDT tdt = (TDT)seg;
-        Flight f = new Flight();
-        this.flights.add(f);
+        FlightVo f = new FlightVo();
+        message.addFlight(f);
         f.setFlightNumber(tdt.getC_journeyIdentifier());
         
-        String tmp = tdt.getC_carrierIdentifier();
-        if (tmp != null) {
-            f.setCarrier(Carrier.getByIataCode(tmp));
-        } else {
-            // try 2 letter iata code
-            String iata = tdt.getC_journeyIdentifier().substring(0, 2);
-            Carrier c = Carrier.getByIataCode(iata);
-            if (c != null) {
-                f.setCarrier(c);
-            } else {
-                // try 3 letter icao code
-                String icao = tdt.getC_journeyIdentifier().substring(0, 3);
-                c = Carrier.getByIcaoCode(icao);
-                f.setCarrier(c);
-            }
-        }
+        f.setCarrier(tdt.getC_carrierIdentifier());
+//        if (tmp != null) {
+//            f.setCarrier(Carrier.getByIataCode(tmp));
+//        } else {
+//            // try 2 letter iata code
+//            String iata = tdt.getC_journeyIdentifier().substring(0, 2);
+//            Carrier c = Carrier.getByIataCode(iata);
+//            if (c != null) {
+//                f.setCarrier(c);
+//            } else {
+//                // try 3 letter icao code
+//                String icao = tdt.getC_journeyIdentifier().substring(0, 3);
+//                c = Carrier.getByIcaoCode(icao);
+//                f.setCarrier(c);
+//            }
+//        }
 
         while (i.hasNext()) {
             Segment s = i.next();
@@ -242,7 +228,8 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             case "LOC":
                 LOC loc = (LOC)s;
                 LocCode locCode = loc.getFunctionCode();
-                Airport airport = Airport.getByIataCode(loc.getLocationNameCode());
+                String airport = loc.getLocationNameCode();
+                System.out.println("mac: " + airport);
                 if (locCode == LocCode.DEPARTURE_AIRPORT) {
                     f.setOrigin(airport);
                 } else if (locCode == LocCode.ARRIVAL_AIRPORT) {

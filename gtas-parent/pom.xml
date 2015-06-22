@@ -29,11 +29,10 @@
     <javadoc-plugin.version>2.10.3</javadoc-plugin.version>
   </properties>
   <modules>
+    <module>gtas-parsers</module>
     <module>gtas-commons</module>
     <module>gtas-rulesvc</module>
     <module>gtas-webapp</module>
-    <module>apis-parser</module>
-    <module>pnr-parser</module>
     <module>gtas-query-builder</module>
     <module>gtas-udr-builder</module>
     

@@ -1,4 +1,4 @@
-package gov.gtas.util;
+package gov.gtas.parsers.util;
 
 import java.io.IOException;
 import java.nio.file.Files;

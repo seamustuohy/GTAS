@@ -1,26 +1,20 @@
 package gov.gtas.parsers.paxlst;
 
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
-import gov.gtas.model.ReportingParty;
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
-import gov.gtas.model.lookup.Country;
-import gov.gtas.model.lookup.DocumentType;
-import gov.gtas.model.lookup.Gender;
-import gov.gtas.model.lookup.PaxType;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.usedifact.CTA;
 import gov.gtas.parsers.paxlst.usedifact.DTM;
-import gov.gtas.parsers.paxlst.usedifact.LOC;
-import gov.gtas.parsers.paxlst.usedifact.PDT;
-import gov.gtas.parsers.paxlst.usedifact.TDT;
-import gov.gtas.parsers.paxlst.usedifact.UNB;
 import gov.gtas.parsers.paxlst.usedifact.DTM.DtmCode;
+import gov.gtas.parsers.paxlst.usedifact.LOC;
 import gov.gtas.parsers.paxlst.usedifact.LOC.LocCode;
+import gov.gtas.parsers.paxlst.usedifact.PDT;
 import gov.gtas.parsers.paxlst.usedifact.PDT.DocType;
 import gov.gtas.parsers.paxlst.usedifact.PDT.PersonStatus;
+import gov.gtas.parsers.paxlst.usedifact.TDT;
+import gov.gtas.parsers.paxlst.usedifact.UNB;
+import gov.gtas.parsers.paxlst.vo.DocumentVo;
+import gov.gtas.parsers.paxlst.vo.FlightVo;
+import gov.gtas.parsers.paxlst.vo.PaxVo;
+import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
 import java.util.ListIterator;
 
@@ -84,14 +78,11 @@ public class PaxlstParserUSedifact extends PaxlstParser {
 
     private void processFlight(Segment seg, ListIterator<Segment> i) {
         TDT tdt = (TDT)seg;
-        Flight f = new Flight();
-        this.flights.add(f);
+        FlightVo f = new FlightVo();
+        message.addFlight(f);
 
         f.setFlightNumber(tdt.getC_flightNumber());
-        String iataCarrier = tdt.getC_airlineCode();
-        if (iataCarrier != null) {
-            f.setCarrier(Carrier.getByIataCode(iataCarrier));    
-        }
+        f.setCarrier(tdt.getC_airlineCode());
 
         while (i.hasNext()) {
             Segment s = i.next();
@@ -100,8 +91,8 @@ public class PaxlstParserUSedifact extends PaxlstParser {
             case "LOC":
                 LOC loc = (LOC)s;
                 LocCode locCode = loc.getLocationCode();
-                Country country = Country.getByAlpha2Code(loc.getIataCountryCode());
-                Airport airport = Airport.getByIataCode(loc.getIataAirportCode());
+                String country = loc.getIataCountryCode();
+                String  airport = loc.getIataAirportCode();
                 if (locCode == LocCode.DEPARTURE) {
                     f.setOriginCountry(country);
                     f.setOrigin(airport);
@@ -129,41 +120,43 @@ public class PaxlstParserUSedifact extends PaxlstParser {
     }
 
     private void processPax(Segment s) {
-        Pax p = new Pax();
-        passengers.add(p);
+        PaxVo p = new PaxVo();
+        message.addPax(p);
 
         PDT pdt = (PDT)s;
         p.setFirstName(pdt.getLastName());
         p.setLastName(pdt.getLastName());
         p.setMiddleName(pdt.getC_middleNameOrInitial());
         p.setDob(pdt.getDob());
-        p.setGender(Gender.valueOf(pdt.getGender()));
+        p.setGender(pdt.getGender());
         PersonStatus status = pdt.getPersonStatus();
-        if (status == PersonStatus.PAX) {
-            p.setType(PaxType.PAX);
-        } else if (status == PersonStatus.CREW) {
-            p.setType(PaxType.CREW);
-        } else {
-            p.setType(PaxType.OTHER);
-        }
+        p.setPaxType(status.toString());
+//        if (status == PersonStatus.PAX) {
+//            p.setType(PaxType.PAX);
+//        } else if (status == PersonStatus.CREW) {
+//            p.setType(PaxType.CREW);
+//        } else {
+//            p.setType(PaxType.OTHER);
+//        }
 
-        Document d = new Document();
-        p.getDocuments().add(d);
+        DocumentVo d = new DocumentVo();
+        p.addDocument(d);
         d.setDocumentNumber(pdt.getDocumentNumber());
         d.setExpirationDate(pdt.getC_dateOfExpiration());
         DocType docType = pdt.getDocumentType();
-        if (docType == DocType.PASSPORT) {
-            d.setDocumentType(DocumentType.P);  
-        } else {
-            // TODO
-        }        
+        d.setDocumentType(docType.toString());
+//        if (docType == DocType.PASSPORT) {
+//            d.setDocumentType(DocumentType.P);  
+//        } else {
+//            // TODO
+//        }        
 //        System.out.println("\t" + p);
     }
 
     private void processReportingParty(Segment s) {
         CTA cta = (CTA)s;
-        ReportingParty rp = new ReportingParty();
-        message.getReportingParties().add(rp);
+        ReportingPartyVo rp = new ReportingPartyVo();
+        message.addReportingParty(rp);
         rp.setPartyName(cta.getName());
         rp.setTelephone(cta.getTelephoneNumber());
         rp.setFax(cta.getFaxNumber());
