@@ -1,7 +1,7 @@
 package gov.gtas.services;
 
-import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
@@ -95,7 +95,7 @@ public class ApisMessageService {
         p.setResidencyCountry(convertCountry(vo.getResidencyCountry()));
         
         for (DocumentVo dvo : vo.getDocuments()) {
-            Document d = new Document();
+            Passport d = new Passport();
             BeanUtils.copyProperties(dvo, d);
             d.setIssuanceCountry(convertCountry(dvo.getIssuanceCountry()));
             p.getDocuments().add(d);
