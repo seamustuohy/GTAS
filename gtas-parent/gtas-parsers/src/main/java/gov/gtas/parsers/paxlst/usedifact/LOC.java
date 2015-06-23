@@ -30,7 +30,7 @@ public class LOC extends Segment {
                     this.locationCode = LocCode.ARRIVAL;
                     break;
                 default:
-                    System.err.println("unknown location code: " + c.getValue());
+                    logger.error("unknown location code: " + c.getValue());
                     return;
                 }
                 break;

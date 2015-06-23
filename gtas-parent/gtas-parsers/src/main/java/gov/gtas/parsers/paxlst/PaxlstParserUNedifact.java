@@ -84,7 +84,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     }
     
     private void handleUnexpectedSegment(Segment s) {
-        System.err.println("unexpected segment " + s);
+        logger.error("unexpected segment " + s);
     }
 
     private void processReportingParty(Segment seg, ListIterator<Segment> i) {

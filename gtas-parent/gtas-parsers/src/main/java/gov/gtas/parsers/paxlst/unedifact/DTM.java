@@ -49,7 +49,7 @@ public class DTM extends Segment {
                 dateFormat = "yyMMdd";
                 break;
             default:
-                System.err.println("DTM: invalid dtm code: " + e[0].getValue());
+                logger.error("DTM: invalid dtm code: " + e[0].getValue());
                 this.dtmCodeQualifier = DtmCode.UNKNOWN;                    
                 dateFormat = "yyMMdd";
             }

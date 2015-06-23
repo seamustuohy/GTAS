@@ -39,7 +39,7 @@ public class BGM extends Segment {
                     this.documentNameCode = DocCode.MASTER_CREW_LIST;
                     break;
                 default:
-                    System.err.println("BGM: unknown document code");
+                    logger.error("BGM: unknown document code");
                 }
                 break;
                 

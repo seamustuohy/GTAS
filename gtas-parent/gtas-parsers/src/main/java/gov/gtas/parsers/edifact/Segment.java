@@ -2,8 +2,12 @@ package gov.gtas.parsers.edifact;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Segment {
+    protected static final Logger logger = LoggerFactory.getLogger(Segment.class);
+
     private String name;
     protected Composite[] composites;
 

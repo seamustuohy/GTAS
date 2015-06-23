@@ -57,7 +57,7 @@ public class UNH extends Segment {
                     } else if (tmp.equals("F")) {
                         this.c_transferIndicator = TransferIndicator.FINAL;
                     } else {
-                        System.err.println("UNH: invalid transfer indicator");
+                        logger.error("UNH: invalid transfer indicator");
                     }
                 }
                 break;

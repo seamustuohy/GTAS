@@ -18,7 +18,12 @@ import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
 import java.util.ListIterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PaxlstParserUSedifact extends PaxlstParser {
+    private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);
+    
     
     public PaxlstParserUSedifact(String filePath) {
         super(filePath, UNB.class.getPackage().getName());
@@ -163,6 +168,6 @@ public class PaxlstParserUSedifact extends PaxlstParser {
     }
     
     private void handleUnexpectedSegment(Segment s) {
-        System.err.println("unexpected segment " + s);
+        logger.error("unexpected segment " + s);
     }    
 }

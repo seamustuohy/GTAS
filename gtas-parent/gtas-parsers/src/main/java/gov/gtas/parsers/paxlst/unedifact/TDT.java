@@ -26,7 +26,7 @@ public class TDT extends Segment {
                 } else if (code == 34) {
                     this.transportStageQualifier = TdtType.OVER_FLIGHT;
                 } else {
-                    System.err.println("unknown TDT type: " + c.getValue());
+                    logger.error("unknown TDT type: " + c.getValue());
                 }
                 
                 break;

@@ -31,7 +31,7 @@ public class DTM extends Segment {
                     this.dtmCode = DtmCode.ARRIVAL_DATETIME;
                     break;
                 default:
-                    System.err.println("unknown dtm code: " + c.getValue());
+                    logger.error("unknown dtm code: " + c.getValue());
                     return;
                 }
                 break;

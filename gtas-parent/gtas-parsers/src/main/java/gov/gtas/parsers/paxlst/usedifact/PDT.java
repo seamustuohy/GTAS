@@ -90,7 +90,7 @@ public class PDT extends Segment {
                     this.personStatus = PersonStatus.IN_TRANSIT;
                     break;
                 default:
-                    System.err.println("unknown person type: " + c.getValue());
+                    logger.error("unknown person type: " + c.getValue());
                     return;
                 }
                 break;

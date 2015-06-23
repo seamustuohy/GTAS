@@ -65,7 +65,7 @@ public class NAD extends Segment {
                     this.partyFunctionCodeQualifier = PartyCode.CANCEL_RESERVATION_OR_FLIGHT_CLOSE_OUT;
                     break;
                 default:
-                    System.err.println("NAD: invalid party function code");
+                    logger.error("NAD: invalid party function code");
                 }
                 break;
 
