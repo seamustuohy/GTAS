@@ -1,21 +1,15 @@
 package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
-import gov.gtas.querybuilder.model.AddressDisplay;
-import gov.gtas.querybuilder.model.CreditCardDisplay;
-import gov.gtas.querybuilder.model.FrequentFlyerDisplay;
 import gov.gtas.querybuilder.model.IDisplay;
 import gov.gtas.querybuilder.service.QueryBuilderService;
-import gov.gtas.web.querybuilder.model.Address;
 import gov.gtas.web.querybuilder.model.Column;
 import gov.gtas.web.querybuilder.model.IQueryBuilderModel;
 import gov.gtas.web.querybuilder.model.QueryBuilderFlightResult;
 import gov.gtas.web.querybuilder.model.QueryBuilderModelFactory;
 import gov.gtas.web.querybuilder.model.QueryBuilderPassengerResult;
-import gov.gtas.web.querybuilder.model.BaseQueryBuilderModel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,11 +43,11 @@ public class QueryBuilderController {
 	 * @param query
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.GET)
-	public List<QueryBuilderFlightResult> runQueryOnFlight(String query) {
+	public List<QueryBuilderFlightResult> runQueryOnFlight(String JSONQuery) {
 		
-		queryService.runQueryOnFlight(query);
-		
-		return null;
+		 queryService.runQueryOnFlight(JSONQuery);
+		 
+		 return null;
 	}
 	
 	/**

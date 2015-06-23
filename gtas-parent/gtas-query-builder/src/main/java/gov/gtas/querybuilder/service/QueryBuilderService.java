@@ -28,17 +28,20 @@ import gov.gtas.querybuilder.repository.PNRDisplayRepository;
 import gov.gtas.querybuilder.repository.PassengerDisplayRepository;
 import gov.gtas.querybuilder.repository.PhoneDisplayRepository;
 import gov.gtas.querybuilder.repository.TravelAgencyDisplayRepository;
+import gov.gtas.services.FlightService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * 
  * @author GTAS5
  *
  */
+@Service
 public class QueryBuilderService {
 
 	@Autowired
@@ -68,6 +71,8 @@ public class QueryBuilderService {
 	@Autowired
 	TravelAgencyDisplayRepository travelAgencyRepository;
 		
+	@Autowired
+	FlightService flightService;
 	/**
 	 * 
 	 * @return
@@ -189,9 +194,14 @@ public class QueryBuilderService {
 	/**
 	 * 
 	 */
-	public List<Flight> runQueryOnFlight(String query) {
-		query = "flight.carrier = 'DELTA' OR flight.carrier = 'UNITED' AND " + 
-				"(document.citizenship = 'USA' AND document.doc_type = 'Passport')";
+	public List<Flight> runQueryOnFlight(String JSONQuery) {
+//		JsonObject o = new JsonParser().parse("{\"a\": \"A\"}").getAsJsonObject();
+		// convert JSON object to Java Object
+		
+//		JSONQuery = "where carrier.name = 'Aero V.I.P. Ltda'";
+//		String sqlQuery = "select f from Flight f join f.carrier carrier " + JSONQuery;
+//		
+//		return flightService.Test(sqlQuery);
 		
 		return null;
 	}
