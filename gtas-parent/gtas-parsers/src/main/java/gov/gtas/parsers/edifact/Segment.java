@@ -3,11 +3,13 @@ package gov.gtas.parsers.edifact;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-
 public class Segment {
     private String name;
     protected Composite[] composites;
-    
+
+    @SuppressWarnings("unused")
+    private Segment() { }
+
     public Segment(String name, Composite[] composites) {
         this.name = name;
         this.composites = composites;

@@ -57,7 +57,7 @@ public class ParseUtils {
         String[] tmpSplit = tmp.split(regex);
         String[] rv = new String[tmpSplit.length];
         for (int i=0; i<tmpSplit.length; i++) {
-            rv[i] = tmpSplit[i].replaceAll(sentinel, delimiter + "");
+            rv[i] = tmpSplit[i].replaceAll(sentinel, delimiter + "").trim();
         }
         
         return rv;

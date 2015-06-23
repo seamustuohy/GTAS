@@ -1,7 +1,11 @@
 package gov.gtas.parsers.edifact;
 
-public class Element {
+public final class Element {
     private String value;
+
+    @SuppressWarnings("unused")
+    private Element() { }
+    
     public Element(String value) {
         this.value = value;
     }

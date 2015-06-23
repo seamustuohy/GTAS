@@ -1,5 +1,8 @@
 package gov.gtas.parsers.edifact;
 
+import gov.gtas.parsers.util.ParseUtils;
+
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -13,10 +16,10 @@ public class EdifactParser {
     
     private UNA una;
     
-   public LinkedList<Segment> parse(String txt) {
+    public LinkedList<Segment> parse(String txt) throws ParseException {
         int unaIndex = txt.indexOf("UNA");
         if (unaIndex != -1) {
-            int endIndex = unaIndex + "UNA".length() + 6;
+            int endIndex = unaIndex + "UNA".length() + UNA.NUM_UNA_CHARS;
             String delims = txt.substring(unaIndex, endIndex);
             una = new UNA(delims);
         } else {
@@ -27,16 +30,18 @@ public class EdifactParser {
 
         int unbIndex = txt.indexOf("UNB");
         if (unbIndex == -1) {
-            logger.error("no UNB segment");
-            // TODO: throw exception
+            logger.error("No UNB segment: " + txt);
+            throw new ParseException("No UNB segment", -1);
         }
         txt = txt.substring(unbIndex);
         
         LinkedList<Segment> segments = new LinkedList<>();
-        String segmentRegex = String.format("\\%c", una.getSegmentTerminator());
-        String[] stringSegments = txt.split(segmentRegex);
+        
+        String[] stringSegments = ParseUtils.splitWithEscapeChar(txt, 
+                una.getSegmentTerminator(), 
+                una.getReleaseCharacter());
+
         for (String s : stringSegments) {
-            s = s.trim();
             Composite[] parsed = this.segmentParser.parseSegment(s);
             if (parsed.length == 0) { 
                 continue;

@@ -5,6 +5,7 @@ import gov.gtas.parsers.util.ParseUtils;
 public class SegmentParser {
     private UNA una;
     
+    @SuppressWarnings("unused")
     private SegmentParser() { }
     
     public SegmentParser(UNA una) {
@@ -15,7 +16,7 @@ public class SegmentParser {
         if (segmentText == null) return null;
         
         String[] stringComposites = ParseUtils.splitWithEscapeChar(
-                segmentText.trim(), 
+                segmentText, 
                 una.getDataElementSeparator(), 
                 una.getReleaseCharacter()); 
 
@@ -23,7 +24,7 @@ public class SegmentParser {
         Composite[] rv = new Composite[numComposites];
         for (int i=0; i<numComposites; i++) {
             String[] elementsText = ParseUtils.splitWithEscapeChar(
-                    stringComposites[i].trim(), 
+                    stringComposites[i], 
                     una.getComponentDataElementSeparator(),
                     una.getReleaseCharacter());
             int numElements = elementsText.length;

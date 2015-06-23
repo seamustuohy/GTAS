@@ -7,6 +7,7 @@ import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public abstract class PaxlstParser {
 
     public abstract void parseSegments();
     
-    public ApisMessageVo parse() {
+    public ApisMessageVo parse() throws ParseException {
         this.segments = new LinkedList<>();
         this.message = new ApisMessageVo();
 
@@ -51,10 +52,10 @@ public abstract class PaxlstParser {
         return this.message;
     }
     
-    private void processMessageAndGetSegments(String msg) {
+    private void processMessageAndGetSegments(String msg) throws ParseException {
         String txt = ParseUtils.stripApisHeaderAndFooter(msg);
         txt = txt.toUpperCase();
-        txt = txt.replaceAll("\\n|\\r|\\t", "");
+        txt = txt.replaceAll("\\n|\\r", "");
         
         SegmentFactory factory = new SegmentFactory(segmentPackageName);
         EdifactParser p = new EdifactParser();

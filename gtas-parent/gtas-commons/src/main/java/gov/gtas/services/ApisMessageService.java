@@ -18,6 +18,7 @@ import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.util.FileUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,8 +56,12 @@ public class ApisMessageService {
         }
         
         // TODO: save apis message here with status?
-        
-        ApisMessageVo m = parser.parse();
+        ApisMessageVo m = null;
+        try {
+            m = parser.parse();
+        } catch (ParseException pe) {
+            pe.printStackTrace();
+        }
         loadApisMessage(m);
     }
     

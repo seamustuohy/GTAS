@@ -1,6 +1,8 @@
 package gov.gtas.parsers.edifact;
 
-public class UNA {
+public final class UNA {
+    public static final int NUM_UNA_CHARS = 6;
+    
     private char componentDataElementSeparator;
     private char dataElementSeparator;
     private char decimalMark;
@@ -20,7 +22,7 @@ public class UNA {
     
     public UNA(String unaSegment) {
         if (unaSegment.length() != 9) {
-            // ?
+            throw new IllegalArgumentException("unaSegment.length != 9");
         }
         componentDataElementSeparator = unaSegment.charAt(3);
         dataElementSeparator = unaSegment.charAt(4);
