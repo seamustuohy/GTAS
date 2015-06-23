@@ -1,5 +1,6 @@
 package gov.gtas.parsers.paxlst;
 
+import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.unedifact.ATT;
 import gov.gtas.parsers.paxlst.unedifact.COM;
@@ -21,7 +22,11 @@ import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
 import java.util.ListIterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public final class PaxlstParserUNedifact extends PaxlstParser {
+    private static final Logger logger = LoggerFactory.getLogger(EdifactParser.class);
 
     public PaxlstParserUNedifact(String filePath) {
         super(filePath, UNB.class.getPackage().getName());
@@ -221,7 +226,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 LOC loc = (LOC)s;
                 LocCode locCode = loc.getFunctionCode();
                 String airport = loc.getLocationNameCode();
-                System.out.println("mac: " + airport);
                 if (locCode == LocCode.DEPARTURE_AIRPORT) {
                     f.setOrigin(airport);
                 } else if (locCode == LocCode.ARRIVAL_AIRPORT) {

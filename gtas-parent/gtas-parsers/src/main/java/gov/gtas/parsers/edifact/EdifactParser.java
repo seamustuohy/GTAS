@@ -6,7 +6,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class EdifactParser {
+    private static final Logger logger = LoggerFactory.getLogger(EdifactParser.class);
+
     private UNA serviceStrings;
     
     public LinkedList<Segment> parse(String txt) {
@@ -21,8 +26,8 @@ public class EdifactParser {
 
         int unbIndex = txt.indexOf("UNB");
         if (unbIndex == -1) {
-            System.err.println("no UNB segment");
-            System.exit(0);
+            logger.error("no UNB segment");
+            // TODO: throw exception
         }
         txt = txt.substring(unbIndex);
         
@@ -46,7 +51,6 @@ public class EdifactParser {
                 composites = Arrays.copyOfRange(parsed, 1, parsed.length);
             }
             Segment newSegment = new Segment(segmentType, composites);
-//            System.out.println(newSegment);
             segments.add(newSegment);
         }
         
@@ -63,7 +67,7 @@ public class EdifactParser {
         String[] stringComposites = segmentText.split(regex);
         int numComposites = stringComposites.length;
         if (numComposites == 0) {
-            System.err.println("segment has no composites: " + segmentText);
+            logger.error("segment has no composites: " + segmentText);
             return null;
         }
         
@@ -80,7 +84,7 @@ public class EdifactParser {
                 }
                 rv[i] = new Composite(elements);
             } else {
-                System.err.println("unable to parse segment: " + segmentText);
+                logger.error("unable to parse segment: " + segmentText);
             }
         }
 
