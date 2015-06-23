@@ -75,15 +75,13 @@ public class ApisMessageService {
         for (PaxVo pvo : m.getPassengers()) {
             Traveler p = convertPaxVo(pvo);
             pax.add(p);
-//            System.out.println(p);
-//            passengerService.create(p);
         }
 
         Flight f = null;
         for (FlightVo fvo : m.getFlights()) {
             f = convertFlightVo(fvo);
             f.setPassengers(pax);
-            System.out.println(f);
+//            System.out.println(f);
             flightService.create(f);
         }
     }
