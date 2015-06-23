@@ -52,7 +52,7 @@ public abstract class PaxlstParser {
     }
     
     private void processMessageAndGetSegments(String msg) {
-        String txt = ParseUtils.stripHeaderAndFooter(msg);
+        String txt = ParseUtils.stripApisHeaderAndFooter(msg);
         txt = txt.toUpperCase();
         txt = txt.replaceAll("\\n|\\r|\\t", "");
         

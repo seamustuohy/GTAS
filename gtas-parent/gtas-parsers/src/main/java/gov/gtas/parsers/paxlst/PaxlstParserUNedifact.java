@@ -1,6 +1,5 @@
 package gov.gtas.parsers.paxlst;
 
-import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.unedifact.ATT;
 import gov.gtas.parsers.paxlst.unedifact.COM;
@@ -26,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class PaxlstParserUNedifact extends PaxlstParser {
-    private static final Logger logger = LoggerFactory.getLogger(EdifactParser.class);
+    private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUNedifact.class);
 
     public PaxlstParserUNedifact(String filePath) {
         super(filePath, UNB.class.getPackage().getName());
