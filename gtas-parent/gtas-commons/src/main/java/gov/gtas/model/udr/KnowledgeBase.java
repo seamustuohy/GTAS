@@ -5,13 +5,16 @@ import gov.gtas.model.BaseEntity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -28,8 +31,16 @@ public class KnowledgeBase extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 5027457099159173590L;
 	
-//	private long version;
+	@Version
+	@Column(name = "VERSION")
+	private long version;
+	
+	@Lob @Basic(fetch=FetchType.EAGER)
+	@Column(name="KB_BLOB", columnDefinition="BLOB NOT NULL")
 	private byte[] kbBlob;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "CREATION_DT", nullable = false, length = 19)
 	private Date creationDt;
 
 	@OneToMany(mappedBy="knowledgeBase", fetch=FetchType.LAZY)
@@ -49,17 +60,14 @@ public class KnowledgeBase extends BaseEntity {
 		this.creationDt = creationDt;
 	}
 
-//	@Version
-//	@Column(name = "VERSION", length = 256)
-//	public long getVersion() {
-//		return this.version;
-//	}
-//
-//	public void setVersion(long version) {
-//		this.version = version;
-//	}
+	public long getVersion() {
+		return this.version;
+	}
 
-	@Column(name = "KB_BLOB")
+	public void setVersion(long version) {
+		this.version = version;
+	}
+
 	public byte[] getKbBlob() {
 		return this.kbBlob;
 	}
@@ -68,8 +76,6 @@ public class KnowledgeBase extends BaseEntity {
 		this.kbBlob = kbBlob;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "CREATION_DT", nullable = false, length = 19)
 	public Date getCreationDt() {
 		return this.creationDt;
 	}
