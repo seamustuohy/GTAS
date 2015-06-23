@@ -2,9 +2,12 @@ package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
 import gov.gtas.model.udr.Rule;
+import gov.gtas.repository.udr.json.QueryObject;
+import gov.gtas.repository.udr.json.QueryTerm;
 import gov.gtas.udrbuilder.service.UdrBuilderService;
 import gov.gtas.wrapper.RuleWrapper;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +28,17 @@ public class UdrBuilderController {
 	UdrBuilderService udrService;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody RuleWrapper getById(@PathVariable Long id) {
+	public @ResponseBody QueryObject getById(@PathVariable Long id) {
 		//
-		udrService.getRule(id);
-		return null;
+		//udrService.getRule(id);
+		QueryObject qo = new QueryObject();
+		qo.setConditionCode("OR");
+		List<QueryObject> rules = new LinkedList<QueryObject>();
+		QueryTerm trm = new QueryTerm("Pax", "firstName","EQUAL", "John");
+		rules.add(trm);
+		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", "Jones"));
+		qo.setRule(rules);
+		return qo;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, headers = "Accept=application/json")
