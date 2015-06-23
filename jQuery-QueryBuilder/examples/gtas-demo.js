@@ -80,14 +80,17 @@ $builder.on('afterCreateRuleInput.queryBuilder', function(e, rule) {
 
 // expects array of strings
 var getOptions = function (strings, selectedValue) {
-  return '<option value="-1">-</option>' + $.map(strings, function( val ) {
+  return $.map(strings, function( val ) {
     return '<option value="'+ val +'" '+(selectedValue === val ? 'selected' : '')+'>' + val + '</option>';
   }).join('');
 };
 
 Array.prototype.addUnique = function (name) {
-  if (this.indexOf(name) < 0) { this.push(name); }
-  return this;
+  if (this.indexOf(name) < 0) {
+    this.push(name);
+    return true;
+  }
+  return false;
 };
 
 Array.prototype.remove = function() {
@@ -127,17 +130,20 @@ var data = {
 
 localStorage.setItem('sample', JSON.stringify(data));
 
-savedQueryNamesList = document.querySelector('#saved-query-names');
+$savedQueryNamesList = $(document.querySelector('#saved-query-names'));
 queryNameInput = document.querySelector('#query-name');
 
 var queryName;
-var savedQueryNames = localStorage.getItem('savedQueryNames');
-savedQueryNames = savedQueryNames ? savedQueryNames.split(',') : ['sample'];
+var savedQueryNames = JSON.parse(localStorage.getItem('savedQueryNames')) || [];
 
 var updateSavedQueryNamesList = function () {
-  savedQueryNamesList.innerHTML = getOptions(savedQueryNames, queryName);
-  $(savedQueryNamesList).selectpicker('refresh');
-  localStorage.setItem('savedQueryNames', savedQueryNames);
+  if (savedQueryNames.length) {
+    $savedQueryNamesList.html(getOptions(savedQueryNames, queryName)).selectpicker('refresh');
+    localStorage.setItem('savedQueryNames', savedQueryNames);
+    $savedQueryNamesList.parent().removeClass('hide');
+  } else {
+    $savedQueryNamesList.parent().addClass('hide');
+  }
   queryName = null;
   queryNameInput.value = '';
 };
@@ -169,8 +175,8 @@ $(document)
     })
   // Delete rules on UI
   .on('click', '.delete', function () {
-    $builder.queryBuilder('deleteRules', queryName);
     savedQueryNames.remove(queryName);
+    $builder.queryBuilder('deleteRules', queryName, savedQueryNames);
     updateSavedQueryNamesList();
     resetQueryBuilder();
   });

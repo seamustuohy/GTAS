@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
   <link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.bootstrap3.css" />
   <link rel="stylesheet" href="../dist/css/query-builder.default.css" id="qb-theme" />
-  <link rel="stylesheet" href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css" />
+<!--  <link rel="stylesheet" href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css" /> //-->
 </head>
 <body>
 <div class="container">
@@ -19,11 +19,14 @@
       <h1>GTAS QueryBuilder <small>Proof of Concept</small></h1>
     </div>
     <div id="builder"></div>
-      <label for="saved-query-names">Load:</label>
-      <select id="saved-query-names">
-          <option value=""> - </option>
-          <option value="sample">sample</option>
-      </select>
+      <div id="load-container" class="hide">
+          <label for="saved-query-names">Load:</label>
+          <select id="saved-query-names">
+              <option value=""> - </option>
+              <option value="sample">sample</option>
+          </select>
+
+      </div>
 
       <label for="query-name">Save As: </label><input id="query-name" type="text" />
       <button class="btn btn-success save-as">Save</button>

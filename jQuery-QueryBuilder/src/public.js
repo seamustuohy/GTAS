@@ -195,12 +195,19 @@ QueryBuilder.prototype.loadRules = function(queryName) {
  * SAVE rules from object
  */
 QueryBuilder.prototype.saveRules = function(queryName, saveas) {
+    var rules;
     if (!queryName) {
         alert('requires name');
         return;
     }
 
-    localStorage.setItem(queryName, JSON.stringify(this.getRules()));
+    rules = JSON.stringify(this.getRules());
+    if (rules === "{}") {
+        alert('rules can not be empty');
+        return;
+    }
+
+    localStorage.setItem(queryName, rules);
     if (saveas) {
 //        this.trigger('afterUpdateQueryNamesList', queryName);
         console.log('saved as new || overwrite');
@@ -213,13 +220,14 @@ QueryBuilder.prototype.saveRules = function(queryName, saveas) {
 /**
  * DELETE rules from object
  */
-QueryBuilder.prototype.deleteRules = function(queryName) {
+QueryBuilder.prototype.deleteRules = function(queryName, savedQueryNames) {
     if (!queryName) {
         alert('requires name');
         return;
     }
 
     localStorage.removeItem(queryName);
+    localStorage.setItem('savedQueryNames', JSON.stringify(savedQueryNames));
 };
 
 /**
