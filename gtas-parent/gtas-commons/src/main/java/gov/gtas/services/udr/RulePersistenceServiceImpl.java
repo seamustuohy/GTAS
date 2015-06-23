@@ -27,8 +27,6 @@ import org.springframework.stereotype.Service;
 public class RulePersistenceServiceImpl implements RulePersistenceService {
     @Resource
     private UdrRuleRepository udrRuleRepository;
-//    @Resource
-//    private RuleRepository ruleRepository;
     
     @Autowired
     private UserService userService;
@@ -52,6 +50,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		}
 		
 		r.setEditDt(new Date());
+		r.setAuthor(user);
 		r.setEditedBy(user);
 		r.setMetaData(null);
 		
@@ -129,6 +128,13 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	@Override
 	public UdrRule findById(Long id) {
 		return udrRuleRepository.findOne(id);
+	}
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.udr.RulePersistenceService#findByTitleAndAuthor(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public UdrRule findByTitleAndAuthor(String title, String authorUserId) {
+		return udrRuleRepository.getUdrRuleByTitleAndAuthor(title, authorUserId);
 	}
 
 }

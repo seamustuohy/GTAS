@@ -36,7 +36,7 @@ public class RulePersistenceServiceTest {
 	private UserService userService;
 
 	private RuleServiceDataGenUtils testGenUtils;
-
+	
 	@Before
 	public void setUp() throws Exception {
 		testGenUtils = new RuleServiceDataGenUtils(userService, testTarget);
@@ -50,7 +50,8 @@ public class RulePersistenceServiceTest {
 	@Test()
 	public void testAddUdrRuleNoChild() {
 		final String RULE_DESCRIPTION = "This is a Simple Rule";
-		UdrRule r = testGenUtils.createUdrRule(RULE_DESCRIPTION,
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(1);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle,RULE_DESCRIPTION,
 				YesNoEnum.Y);
 		UdrRule rsav = testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
 		assertNotNull(rsav);
@@ -66,9 +67,29 @@ public class RulePersistenceServiceTest {
 		assertEquals(meta, readRule.getMetaData());
 	}
 	@Test()
+	public void testFetchUdrRuleByTitleAndAuthor() {
+		final String RULE_DESCRIPTION = "This is a Simple Rule";
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(2);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
+				YesNoEnum.Y);
+		UdrRule rsav = testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		assertNotNull(rsav);
+		long id = rsav.getId();
+		assertTrue(id > 0);
+		RuleMeta meta = rsav.getMetaData();
+		assertNotNull(meta);
+
+		// read the rule back
+		UdrRule readRule = testTarget.findByTitleAndAuthor(testRuleTitle, RuleServiceDataGenUtils.TEST_USER1_ID);
+		assertNotNull(String.format("Could not get Rule with title='%s', author ='%s'", testRuleTitle, RuleServiceDataGenUtils.TEST_USER1_ID), readRule);
+		assertNotNull(readRule.getMetaData());
+		assertEquals(meta, readRule.getMetaData());
+	}
+	@Test()
 	public void testUpdateUdrRuleMetaData() {
 		final String RULE_DESCRIPTION = "This is a Simple Rule";
-		UdrRule r = testGenUtils.createUdrRule(RULE_DESCRIPTION,
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(3);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
 				YesNoEnum.Y);
 		r = testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
 		UdrRule rsav = testTarget.findById(r.getId());
@@ -97,7 +118,8 @@ public class RulePersistenceServiceTest {
 	@Test()
 	public void testAddUdrRuleWithChildRule() {
 		final String RULE_DESCRIPTION = "This is a UDR Rule with children";
-		UdrRule r = testGenUtils.createUdrRule(RULE_DESCRIPTION,
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(4);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
 				YesNoEnum.Y);
 		Rule engineRule = testGenUtils.createRuleWithOneCondition(r, 1);
 		r.addEngineRule(engineRule);
@@ -132,7 +154,8 @@ public class RulePersistenceServiceTest {
 	@Test()
 	public void testRuleWithMultipleConditions() {
 		final String RULE_DESCRIPTION = "This is a Rule with conditions";
-		UdrRule r = testGenUtils.createUdrRule(RULE_DESCRIPTION,
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(5);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
 				YesNoEnum.Y);
 		Rule engineRule = testGenUtils.createRuleWithOneCondition(r, 1);
 		engineRule.addConditionToRule(testGenUtils.createCondition(2,
@@ -164,7 +187,8 @@ public class RulePersistenceServiceTest {
 	@Test()
 	public void testDeleteRule() {
 		final String RULE_DESCRIPTION = "This is a Simple Rule";
-		UdrRule r = testGenUtils.createUdrRule(RULE_DESCRIPTION,
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(6);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
 				YesNoEnum.Y);
 		UdrRule rsav = testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
 

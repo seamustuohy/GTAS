@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -94,6 +95,20 @@ public class RuleUtils {
 	}
 	
 	/**
+	 * Converts a Serializable Java object to compressed binary data suitable for caching or saving in a database as a BLOB.
+	 * @param serializable the object to serialize.
+	 * @return compressed binary data for serializable object.
+	 * @throws IOException on IO error.
+	 */
+	public static byte[] convertSerializableToBytes(final Serializable serializable) throws IOException{
+		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		final GZIPOutputStream gzipOutStream = new GZIPOutputStream(bos);
+	    final ObjectOutputStream out = new ObjectOutputStream(gzipOutStream);
+	    out.writeObject( serializable );
+	    out.close();
+	    return bos.toByteArray();		
+	}
+	/**
 	 * Creates a KieBase from compressed binary data.
 	 * @param kiebaseBytes the binary compressed data to be used for input.
 	 * @return the KieBase object constructed from the input data.
@@ -107,6 +122,21 @@ public class RuleUtils {
 		KieBase kieBase = (KieBase)in.readObject();
 		in.close();		
 		return kieBase;
+	}
+	/**
+	 * Creates a Serializable object from compressed binary data.
+	 * @param objectBytes the binary compressed data to be used for input.
+	 * @return the Serializable object constructed from the input data.
+	 * @throws ClassNotFoundException if the compressed binary data includes unknown serialized Java Class instances.
+	 * @throws IOException on IO error.
+	 */
+	public static Serializable convertSerializablefromBytes(final byte[] objectBytes) throws ClassNotFoundException, IOException{
+		final ByteArrayInputStream bis = new ByteArrayInputStream(objectBytes);
+		final GZIPInputStream gzipInStream = new GZIPInputStream(bis);
+		final ObjectInputStream in = new ObjectInputStream(gzipInStream);
+		Serializable serializable = (Serializable)in.readObject();
+		in.close();		
+		return serializable;
 	}
 	/**
 	 * Creates a KieBase from input stream data. 

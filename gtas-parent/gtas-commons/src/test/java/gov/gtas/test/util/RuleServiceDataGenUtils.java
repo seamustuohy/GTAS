@@ -2,8 +2,6 @@ package gov.gtas.test.util;
 
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
-import gov.gtas.model.udr.CondValue;
-import gov.gtas.model.udr.ConditionValueTypeEnum;
 import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.EntityLookupEnum;
 import gov.gtas.model.udr.OperatorCodeEnum;
@@ -16,13 +14,13 @@ import gov.gtas.model.udr.YesNoEnum;
 import gov.gtas.services.UserService;
 import gov.gtas.services.udr.RulePersistenceService;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class RuleServiceDataGenUtils {
-	public static final String TEST_RULE_TITLE = "Test Rule";
+	public static final String TEST_RULE_TITLE_PREFIX = "TestRule";
 
 	public static final int TEST_ROLE1_ID = 1;
 	public static final String TEST_ROLE1_DESCRIPTION = "admin";
@@ -35,10 +33,13 @@ public class RuleServiceDataGenUtils {
 	private UserService userService;
 	private RulePersistenceService rulePersistenceService;
 
+	private final Random randomGenerator;
+	
 	public RuleServiceDataGenUtils(UserService usrSvc,
 			RulePersistenceService rpSvc) {
 		this.userService = usrSvc;
 		this.rulePersistenceService = rpSvc;
+		randomGenerator = new Random(System.currentTimeMillis());
 	}
 
 	public void initUserData() {
@@ -62,11 +63,11 @@ public class RuleServiceDataGenUtils {
 		}
 	}
 
-	public UdrRule createUdrRule(String descr, YesNoEnum enabled) {
+	public UdrRule createUdrRule(String title, String descr, YesNoEnum enabled) {
 		UdrRule rule = new UdrRule();
 		rule.setDeleted(YesNoEnum.N);
 		rule.setEditDt(new Date());
-		RuleMeta meta = createRuleMeta(TEST_RULE_TITLE, descr, enabled);
+		RuleMeta meta = createRuleMeta(title, descr, enabled);
 		rule.setMetaData(meta);
 		return rule;
 	}
@@ -86,7 +87,13 @@ public class RuleServiceDataGenUtils {
 		cond.addValueToCondition("test", value);
 		return cond;
 	}
-
+	public String generateTestRuleTitle(int ruleIndx){
+		StringBuilder bldr = new StringBuilder(TEST_RULE_TITLE_PREFIX);
+		bldr.append(ruleIndx).append('.');
+		bldr.append(this.randomGenerator.nextInt());
+		
+		return bldr.toString();		
+	}
 	private RuleMeta createRuleMeta(String title, String descr,
 			YesNoEnum enabled) {
 		RuleMeta meta = new RuleMeta();

@@ -102,4 +102,17 @@ public class RuleUtilsTest {
     	s.dispose();
     	
     }
+    @Test
+    public void testBinarySerialization()  throws IOException, ClassNotFoundException{
+		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, new BasicErrorHandler());
+    	byte[] blob = RuleUtils.convertKieBaseToBytes(kbase);
+    	assertNotNull("ERROR - KieBase blob is null", blob);
+    	byte[] blobCopy = Arrays.copyOf(blob, blob.length);
+    	kbase = RuleUtils.convertKieBasefromBytes(blobCopy);
+    	assertNotNull("ERROR - could not get KieBase from blob", kbase);
+    	KieSession s = RuleUtils.createSession(kbase);
+    	assertNotNull("Could not Create KieSession from copied KieBase", s);
+    	s.dispose();
+    	
+    }
 }

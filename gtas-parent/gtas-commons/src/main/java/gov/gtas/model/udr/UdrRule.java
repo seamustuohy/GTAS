@@ -48,6 +48,10 @@ public class UdrRule extends BaseEntity {
 	@Column(name = "DEL_FLAG", nullable = false, length = 1)
 	private YesNoEnum deleted;
 	
+    @ManyToOne
+    @JoinColumn(name="AUTHOR", referencedColumnName="user_id", nullable = false)     
+    private User author;
+	
 	@Column(name = "EDIT_DT", nullable = false)
 	private Date editDt;
 
@@ -84,7 +88,22 @@ public class UdrRule extends BaseEntity {
 		this.editedBy = editedBy;
 		this.editDt = editDt;
 	}
-    /**
+
+	/**
+	 * @return the author
+	 */
+	public User getAuthor() {
+		return author;
+	}
+
+	/**
+	 * @param author the author to set
+	 */
+	public void setAuthor(User author) {
+		this.author = author;
+	}
+
+	/**
 	 * @return the metaData
 	 */
 	public RuleMeta getMetaData() {
