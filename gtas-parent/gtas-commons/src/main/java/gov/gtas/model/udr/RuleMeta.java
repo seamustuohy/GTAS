@@ -3,7 +3,6 @@ package gov.gtas.model.udr;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -21,7 +20,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.commons.lang3.time.DateUtils;
 
 /**
  * RuleMeta
@@ -40,7 +38,7 @@ public class RuleMeta implements Serializable {
     
 	@OneToOne
 	@JoinColumn(name="ID", referencedColumnName="ID", insertable=false, updatable=false)
-	private Rule parent;
+	private UdrRule parent;
 	
 	@Column(name = "TITLE", nullable=false, length = 64)
 	private String title;
@@ -121,14 +119,14 @@ public class RuleMeta implements Serializable {
 	/**
 	 * @return the parent
 	 */
-	public Rule getParent() {
+	public UdrRule getParent() {
 		return parent;
 	}
 
 	/**
 	 * @param parent the parent to set
 	 */
-	public void setParent(Rule parent) {
+	public void setParent(UdrRule parent) {
 		this.parent = parent;
 		if(parent != null && parent.getId() != null){
 		   this.id = parent.getId();

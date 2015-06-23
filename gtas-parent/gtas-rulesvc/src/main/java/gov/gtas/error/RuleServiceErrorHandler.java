@@ -39,6 +39,11 @@ public class RuleServiceErrorHandler {
 					RuleServiceConstants.RULE_COMPILE_ERROR_CODE,
 					RuleServiceConstants.RULE_COMPILE_ERROR_MESSAGE, args[0]);
 			break;
+		case RuleServiceConstants.INCOMPLETE_TREE_ERROR_CODE:
+			ret = createExceptionAndLog(
+					RuleServiceConstants.INCOMPLETE_TREE_ERROR_CODE,
+					RuleServiceConstants.INCOMPLETE_TREE_ERROR_MESSAGE, args[0]);
+			break;			
 		default:
 			break;
 		}

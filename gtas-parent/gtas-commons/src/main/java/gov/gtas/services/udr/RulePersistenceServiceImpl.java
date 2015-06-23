@@ -3,16 +3,18 @@ package gov.gtas.services.udr;
 import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.model.User;
-import gov.gtas.model.udr.CondValue;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleMeta;
+import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.YesNoEnum;
-import gov.gtas.repository.udr.RuleRepository;
+import gov.gtas.repository.udr.UdrRuleRepository;
 import gov.gtas.services.UserService;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
@@ -20,12 +22,13 @@ import javax.transaction.Transactional.TxType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 @Service
 public class RulePersistenceServiceImpl implements RulePersistenceService {
     @Resource
-    private RuleRepository ruleRepository;
+    private UdrRuleRepository udrRuleRepository;
+//    @Resource
+//    private RuleRepository ruleRepository;
     
     @Autowired
     private UserService userService;
@@ -35,84 +38,97 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
     
 	@Override
 	@Transactional
-	public Rule create(Rule r, String userId) {
+	public UdrRule create(UdrRule r, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
 			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID, userId);
 		}
 		// save meta and rule conditions for now
-		//we will add them after saving the bare rule first.
+		//we will add them after saving the UDR rule and its child Drools rules first.
 		RuleMeta savedMeta = r.getMetaData();
-		List<RuleCond> savedCondList = r.getRuleConds();
+		Map<Integer, List<RuleCond>> ruleConditionMap = null;
+		if(r.getEngineRules() != null){
+			ruleConditionMap = saveEngineRuleConditions(r);
+		}
 		
 		r.setEditDt(new Date());
 		r.setEditedBy(user);
 		r.setMetaData(null);
-		r.removeAllConditions();
 		
 		//save the rule with the meta data and conditions stripped.
 		//Once the rule id is generated we will add back the meta and conditions
 		//and set their composite keys with the rule ID.
-		Rule rule = ruleRepository.save(r);
+		UdrRule rule = udrRuleRepository.save(r);
 		
 		//now add back the meta and conditions and update the rule.
-		if(savedMeta != null || !CollectionUtils.isEmpty(savedCondList)){
+		if(savedMeta != null || ruleConditionMap != null){
 			long ruleid = rule.getId();
 			if(savedMeta != null){
 				savedMeta.setId(ruleid);
 				rule.setMetaData(savedMeta);
 				savedMeta.setParent(rule);
 			}
-			if(!CollectionUtils.isEmpty(savedCondList)){
-				for(RuleCond rc : savedCondList) {
-					rc.refreshParentRuleId(ruleid);
-					rule.addConditionToRule(rc);
-				}				
+			if(ruleConditionMap != null){
+				for(Rule engineRule: rule.getEngineRules()){
+					for(RuleCond rc : ruleConditionMap.get(engineRule.getRuleIndex())) {
+						rc.refreshParentRuleId(engineRule.getId());
+						engineRule.addConditionToRule(rc);
+					}	
+				}
 			}
-			rule = ruleRepository.save(rule);
+			rule = udrRuleRepository.save(rule);
 		}
 		return rule;
 	}
-
+    private Map<Integer, List<RuleCond>> saveEngineRuleConditions(UdrRule udrRule){
+    	Map<Integer, List<RuleCond>> ruleConditionMap = new HashMap<Integer, List<RuleCond>>();
+    	for(Rule r: udrRule.getEngineRules()){
+    		ruleConditionMap.put(r.getRuleIndex() ,r.getRuleConds());
+		    r.removeAllConditions();
+    	}
+    	return ruleConditionMap;
+    }
 	@Override
 	@Transactional
-	public Rule delete(Long id, String userId) {
+	public UdrRule delete(Long id, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
 			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID, userId);
 		}
-		Rule ruleToDelete = ruleRepository.findOne(id);
+		UdrRule ruleToDelete = udrRuleRepository.findOne(id);
 		if(ruleToDelete != null){
 			ruleToDelete.setDeleted(YesNoEnum.Y);
+			RuleMeta meta = ruleToDelete.getMetaData();
+			meta.setEnabled(YesNoEnum.N);
 			ruleToDelete.setEditedBy(user);
 			ruleToDelete.setEditDt(new Date());
-			ruleRepository.save(ruleToDelete);
+			udrRuleRepository.save(ruleToDelete);
 		}
 		return ruleToDelete;
 	}
 	
 	@Override
 	@Transactional(value=TxType.SUPPORTS)
-	public List<Rule> findAll() {
-		return (List<Rule>)ruleRepository.findByDeleted(YesNoEnum.N);				
+	public List<UdrRule> findAll() {
+		return (List<UdrRule>)udrRuleRepository.findByDeleted(YesNoEnum.N);				
 	}
 
 	@Override
 	@Transactional
-	public Rule update(Rule rule, String userId) {
+	public UdrRule update(UdrRule rule, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
 			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID, userId);
 		}
 		rule.setEditDt(new Date()); 
 		rule.setEditedBy(user);
-		ruleRepository.save(rule);
+		udrRuleRepository.save(rule);
 		return rule;
 	}
 
 	@Override
-	public Rule findById(Long id) {
-		return ruleRepository.findOne(id);
+	public UdrRule findById(Long id) {
+		return udrRuleRepository.findOne(id);
 	}
 
 }

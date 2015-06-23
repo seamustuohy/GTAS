@@ -204,23 +204,15 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         message.addFlight(f);
         f.setFlightNumber(tdt.getC_journeyIdentifier());
         
-        f.setCarrier(tdt.getC_carrierIdentifier());
-//        if (tmp != null) {
-//            f.setCarrier(Carrier.getByIataCode(tmp));
-//        } else {
-//            // try 2 letter iata code
-//            String iata = tdt.getC_journeyIdentifier().substring(0, 2);
-//            Carrier c = Carrier.getByIataCode(iata);
-//            if (c != null) {
-//                f.setCarrier(c);
-//            } else {
-//                // try 3 letter icao code
-//                String icao = tdt.getC_journeyIdentifier().substring(0, 3);
-//                c = Carrier.getByIcaoCode(icao);
-//                f.setCarrier(c);
-//            }
-//        }
-
+        String tmp = tdt.getC_carrierIdentifier();
+        if (tmp != null) {
+            f.setCarrier(tmp);
+        } else {
+            // assume first 2 letters of flight number is carrier iata code
+            String iata = tdt.getC_journeyIdentifier().substring(0, 2);
+            f.setCarrier(iata);
+        }
+        
         while (i.hasNext()) {
             Segment s = i.next();
 //            System.out.println("\t" + s);

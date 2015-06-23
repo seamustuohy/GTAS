@@ -27,6 +27,8 @@ public class RuleServiceConstants {
 	 */
 	public static final String RULE_COMPILE_ERROR_CODE = "RULE_COMPILE_ERROR_CODE";
 
+	public static final String INCOMPLETE_TREE_ERROR_CODE = "INCOMPLETE_TREE_ERROR_CODE";
+	
 	// //////////////////////////////////////////////////////////////////////////////////////
 	// ERROR Messages
 	// //////////////////////////////////////////////////////////////////////////////////////
@@ -41,4 +43,7 @@ public class RuleServiceConstants {
 	 * UDR generated rule could not be compiled.
 	 */
 	public static final String RULE_COMPILE_ERROR_MESSAGE = "The rule file '%s' could not be compiled.";
+	
+	public static final String INCOMPLETE_TREE_ERROR_MESSAGE = "The query tree is incomplete at level %d.";
+	
 }

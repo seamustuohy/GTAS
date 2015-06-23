@@ -11,6 +11,7 @@ import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.RuleMeta;
+import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.YesNoEnum;
 import gov.gtas.services.UserService;
 import gov.gtas.services.udr.RulePersistenceService;
@@ -61,8 +62,8 @@ public class RuleServiceDataGenUtils {
 		}
 	}
 
-	public Rule createRuleNoCondition(String descr, YesNoEnum enabled) {
-		Rule rule = new Rule();
+	public UdrRule createUdrRule(String descr, YesNoEnum enabled) {
+		UdrRule rule = new UdrRule();
 		rule.setDeleted(YesNoEnum.N);
 		rule.setEditDt(new Date());
 		RuleMeta meta = createRuleMeta(TEST_RULE_TITLE, descr, enabled);
@@ -70,12 +71,8 @@ public class RuleServiceDataGenUtils {
 		return rule;
 	}
 
-	public Rule createRuleWithOneCondition(String descr, YesNoEnum enabled) {
-		Rule rule = new Rule();
-		rule.setDeleted(YesNoEnum.N);
-		rule.setEditDt(new Date());
-		RuleMeta meta = createRuleMeta(TEST_RULE_TITLE, descr, enabled);
-		rule.setMetaData(meta);
+	public Rule createRuleWithOneCondition(UdrRule parent, int index) {
+		Rule rule = new Rule(parent, index, null);
 		rule.addConditionToRule(createCondition(1, EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
 				OperatorCodeEnum.EQUAL, "IAD"));

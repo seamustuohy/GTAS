@@ -1,27 +1,28 @@
 package gov.gtas.model;
 
 import gov.gtas.model.lookup.Country;
-import gov.gtas.model.lookup.DocumentType;
 
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "document")
-public class Document extends BaseEntity {
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="document_type",
+    discriminatorType=DiscriminatorType.STRING
+)
+public abstract class Document extends BaseEntity {
     public Document() { }
-    
-    @Enumerated(EnumType.STRING)
-    @Column(name = "document_type")
-    private DocumentType documentType;
-    
+
     @Column(name = "document_number")
     private String documentNumber;
     
@@ -32,20 +33,12 @@ public class Document extends BaseEntity {
     private Date issuanceDate;
     
     @ManyToOne
-    @JoinColumn(name = "issuance_country_id", referencedColumnName="id")         
+    @JoinColumn(name = "issuance_country_id")
     private Country issuanceCountry;
     
     @ManyToOne
-    @JoinColumn(referencedColumnName="id")         
-    private Pax pax;
-
-    public DocumentType getDocumentType() {
-        return documentType;
-    }
-
-    public void setDocumentType(DocumentType documentType) {
-        this.documentType = documentType;
-    }
+    @JoinColumn
+    private Traveler traveler;
 
     public Date getExpirationDate() {
         return expirationDate;
@@ -79,11 +72,11 @@ public class Document extends BaseEntity {
         this.issuanceCountry = issuanceCountry;
     }
 
-    public Pax getPax() {
-        return pax;
+    public Traveler getTraveler() {
+        return traveler;
     }
 
-    public void setPax(Pax pax) {
-        this.pax = pax;
+    public void setTraveler(Traveler traveler) {
+        this.traveler = traveler;
     }
 }

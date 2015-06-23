@@ -2,6 +2,8 @@ package gov.gtas.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -11,6 +13,11 @@ public class ReportingParty extends BaseEntity {
     private String partyName;
     private String telephone;
     private String fax;
+
+    @ManyToOne
+    @JoinColumn(name = "apis_message_id")
+    private ApisMessage apisMessage;
+    
     public String getPartyName() {
         return partyName;
     }

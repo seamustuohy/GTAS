@@ -1,19 +1,23 @@
 package gov.gtas.services.udr;
 
-import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.UdrRule;
 
 import java.util.List;
-
+/**
+ * 
+ * @author GTAS3 (AB)
+ *
+ */
 public interface RulePersistenceService {
 	/**
-	 * Creates
+	 * Creates UDR rule
 	 * @param rule
 	 * @param user
 	 * @return
 	 */
-	public Rule create(Rule rule, String userId);
-    public Rule delete(Long id, String userId);
-    public List<Rule> findAll();
-    public Rule update(Rule rule, String userId) ;
-    public Rule findById(Long id);
+	public UdrRule create(UdrRule rule, String userId);
+    public UdrRule delete(Long id, String userId);
+    public List<UdrRule> findAll();
+    public UdrRule update(UdrRule rule, String userId) ;
+    public UdrRule findById(Long id);
 }

@@ -5,6 +5,6 @@ import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue(value="P")
-public class Pax extends Traveler {
+public class Passport extends Document {
 
 }

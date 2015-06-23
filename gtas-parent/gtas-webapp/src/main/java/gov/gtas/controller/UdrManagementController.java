@@ -5,6 +5,7 @@ import gov.gtas.constants.Constants;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
 import gov.gtas.rule.RuleServiceResult;
 import gov.gtas.svc.TargetingService;
 
@@ -33,7 +34,7 @@ public class UdrManagementController {
 		Pax p1 = createPassenger("Telomere", "Strong", "Timbuktu");
 		ApisMessage msg = new ApisMessage();
 		Flight flight = new Flight();
-		HashSet<Pax> set = new HashSet<Pax>();
+		HashSet<Traveler> set = new HashSet<Traveler>();
 		set.add(p1);
 		flight.setPassengers(set);
 //		flight.setDestination("Narnia");

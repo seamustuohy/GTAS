@@ -25,15 +25,15 @@ public class Flight extends BaseEntityAudit {
     public Flight() { }
     
     @ManyToMany(
-        targetEntity=Pax.class,
-        cascade={CascadeType.PERSIST, CascadeType.MERGE}
+        targetEntity=Traveler.class,
+        cascade={CascadeType.ALL}
     )
     @JoinTable(
-        name="flight_pax",
+        name="flight_traveler",
         joinColumns=@JoinColumn(name="flight_id"),
-        inverseJoinColumns=@JoinColumn(name="pax_id")
+        inverseJoinColumns=@JoinColumn(name="traveler_id")
     )    
-    private Set<Pax> passengers = new HashSet<>();
+    private Set<Traveler> passengers = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(referencedColumnName="id")     
@@ -72,10 +72,10 @@ public class Flight extends BaseEntityAudit {
     )    
     private Set<ApisMessage> messages = new HashSet<>();
     
-    public Set<Pax> getPassengers() {
+    public Set<Traveler> getPassengers() {
         return passengers;
     }
-    public void setPassengers(Set<Pax> passengers) {
+    public void setPassengers(Set<Traveler> passengers) {
         this.passengers = passengers;
     }
     public Carrier getCarrier() {

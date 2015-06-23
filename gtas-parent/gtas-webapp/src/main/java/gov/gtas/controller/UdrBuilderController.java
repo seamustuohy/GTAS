@@ -3,7 +3,7 @@ package gov.gtas.controller;
 import gov.gtas.constants.Constants;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.udrbuilder.service.UdrBuilderService;
-import gov.gtas.udrbuilder.wrapper.RuleWrapper;
+import gov.gtas.wrapper.RuleWrapper;
 
 import java.util.List;
 
