@@ -3,7 +3,7 @@ package gov.gtas.rule.builder;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-/**
+/*
  * A query condition tree node with AND and OR nodes according to the grammar:<br>
  * EXPR ->  COND_OP EXPR_LIST <br>
  * COND_OP -> "AND" | "OR" <br>
@@ -61,7 +61,7 @@ public class QueryTreeNode {
 		this.condOp = condOp;
 	}
 	/**
-	 * @param children the children to set
+	 * @param child the child to set
 	 */
 	public void addChild(QueryTreeNode child) {
 		this.children.add(child);
