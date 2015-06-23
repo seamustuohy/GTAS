@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-@Service
 public interface UdrBuilderService {
 
 	public Rule getRule(Long id);

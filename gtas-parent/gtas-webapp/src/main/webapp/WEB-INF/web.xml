@@ -20,7 +20,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-        	gov.gtas.querybuilder.AppConfig gov.gtas.udrbuilder.AppConfig
+        	gov.gtas.querybuilder.AppConfig gov.gtas.udrbuilder.UdrBuilderConfig
         </param-value>
     </context-param>
 
