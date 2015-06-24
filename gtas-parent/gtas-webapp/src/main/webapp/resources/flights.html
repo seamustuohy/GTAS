@@ -32,7 +32,7 @@
                 {{flight.originCountry}}
             </td>
             <td data-title="'ETD'" sortable="'departureDateTimeSort'" filter="{ 'departureDateTime': 'text' }">
-                {{flight.departureDateTime}}
+                {{flight.etd}}
             </td>
             <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'select' }" filter-data="values($column, 'destination')">
                 {{flight.destination}}
@@ -41,7 +41,7 @@
                 {{flight.destinationCountry}}
             </td>
             <td data-title="'ETA'" sortable="'destinationDateTimeSort'" filter="{ 'destinationDateTime': 'text' }">
-                {{flight.destinationDateTime}}
+                {{flight.eta}}
             </td>
         </tr>
     </table>
