@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+    <link rel="stylesheet" href="dist/ng-table.css" />
+    <title>Flights</title>
+</head>
+<body ng-app="main">
+
+<h1><script>document.write(document.title);</script></h1>
+
+<div ng-controller="DemoCtrl">
+    <button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
+    <button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
+
+    <table ng-table="tableParams" show-filter="true" class="table">
+        <tr ng-repeat="flight in $data">
+            <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">
+                {{flight.hits}}
+            </td>
+            <td data-title="'Carrier Code'" sortable="'carriercode'" filter="{ 'carriercode': 'select' }" filter-data="values($column, 'carriercode')">
+                {{flight.carrier}}
+            </td>
+            <td data-title="'Flight #'" sortable="'number'" filter="{ 'number': 'text' }">
+                {{flight.flightNumber}}
+            </td>
+            <td data-title="'Origin'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">
+                {{flight.origin}}
+            </td>
+            <td data-title="'Country'" sortable="'originCountry'" filter="{ 'originCountry': 'select' }" filter-data="values($column, 'originCountry')">
+                {{flight.originCountry}}
+            </td>
+            <td data-title="'ETD'" sortable="'departureDateTimeSort'" filter="{ 'departureDateTime': 'text' }">
+                {{flight.departureDateTime}}
+            </td>
+            <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'select' }" filter-data="values($column, 'destination')">
+                {{flight.destination}}
+            </td>
+            <td data-title="'Country'" sortable="'destinationCountry'" filter="{ 'destinationCountry': 'select' }" filter-data="values($column, 'destinationCountry')">
+                {{flight.destinationCountry}}
+            </td>
+            <td data-title="'ETA'" sortable="'destinationDateTimeSort'" filter="{ 'destinationDateTime': 'text' }">
+                {{flight.destinationDateTime}}
+            </td>
+        </tr>
+    </table>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="dist/ng-table.js"></script>
+    <script src="js/demo.js"></script>
+    <script>
+        var app = angular.module('main', ['ngTable']);
+
+	    app.service("flightService", function( $http, $q ) {	
+			// Return public API.
+			return({
+			    getFlights: getFlights
+			});
+			
+			function getFlights() {
+			    var request = $http({
+			        method: "get",
+			        url: "/gtas/flights",
+			        params: {
+			            action: "get"
+			        }
+			    });
+			    return( request.then( handleSuccess, handleError ) );
+			}
+			
+            // I transform the error response, unwrapping the application dta from
+            // the API response payload.
+            function handleError( response ) {
+                // The API response from the server should be returned in a
+                // nomralized format. However, if the request was not handled by the
+                // server (or what not handles properly - ex. server error), then we
+                // may have to normalize it on our end, as best we can.
+                if (! angular.isObject( response.data ) || ! response.data.message) {
+                    return( $q.reject( "An unknown error occurred." ) );
+                }
+
+                // Otherwise, use expected error message.
+                return( $q.reject( response.data.message ) );
+            }
+
+            // I transform the successful response, unwrapping the application data
+            // from the API response payload.
+            function handleSuccess( response ) {
+                return( response.data );
+            }
+		});
+
+
+        app.controller('DemoCtrl', function($scope, $filter, $q, ngTableParams, flightService) {
+        	var data = [];
+	        $scope.tableParams = new ngTableParams(
+	        {
+	            page: 1,            // show first page
+	            count: 10,          // count per page
+	            filter: {},
+	            sorting: {
+	                hits: 'desc',
+	                destinationDateTimeSort: 'asc' //, 'number': 'asc'     // initial sorting
+	            }
+	        }, {
+            total: data.length, // length of data
+            getData: function($defer, params) {
+                flightService.getFlights().then(function (myData) {
+                	data = myData;
+				    //vm.tableParams.total(result.total);
+			        $defer.resolve(myData);
+			    });
+            
+            /*
+                // use build-in angular filter
+                var filteredData = params.filter() ?
+                        $filter('filter')(data, params.filter()) :
+                        data;
+                var orderedData = params.sorting() ?
+                        $filter('orderBy')(filteredData, params.orderBy()) :
+                        data;
+
+                params.total(orderedData.length); // set total for recalc pagination
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            */
+            }
+        });
+                    
+        $scope.values = function (column, fieldName) {
+            console.log('fieldName:' + fieldName);
+            var key, values, lookup = {}, def = $q.defer();
+             angular.forEach(data, function(item){
+                key = item[fieldName];                         
+                lookup[key] = lookup[key] !== undefined ? lookup[key] + 1 : 1;
+            });
+            values = $.map(lookup, function(value, index) {
+                return [{id: index, title: index + ' ('+value+')'}];
+            });
+            def.resolve(values);
+            return def;
+        };
+    });
+                               
+</script>
+
+</div>
+</body>
+</html>

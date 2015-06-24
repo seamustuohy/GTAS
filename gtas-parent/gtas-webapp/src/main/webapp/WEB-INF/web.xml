@@ -1,66 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
-	<display-name>Global Targeting Analysis System (GTAS)</display-name>
-  
-  	<!-- Configure ContextLoaderListener to use AnnotationConfigWebApplicationContext
-        instead of the default XmlWebApplicationContext -->
-    <context-param>
-        <param-name>contextClass</param-name>
-        <param-value>
-            org.springframework.web.context.support.AnnotationConfigWebApplicationContext
-        </param-value>
-    </context-param>
+<web-app>
 
-    <!-- Configuration locations must consist of one or more comma- or space-delimited
-        fully-qualified @Configuration classes. Fully-qualified packages may also be
-        specified for component-scanning -->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
-        	gov.gtas.querybuilder.AppConfig gov.gtas.udrbuilder.UdrBuilderConfig
-        </param-value>
-    </context-param>
+    <display-name>GTAS</display-name>
 
-    <!-- Bootstrap the root application context as usual using ContextLoaderListener -->
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+    <welcome-file-list>
+        <welcome-file>/resources/flights.html</welcome-file>
+    </welcome-file-list>
 
-    <!-- Declare a Spring MVC DispatcherServlet -->
-    <servlet>
-        <servlet-name>dispatcher</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <!-- Configure DispatcherServlet to use AnnotationConfigWebApplicationContext
-            instead of the default XmlWebApplicationContext -->
-        <init-param>
-            <param-name>contextClass</param-name>
-            <param-value>
-                org.springframework.web.context.support.AnnotationConfigWebApplicationContext
-            </param-value>
-        </init-param>
-        <!-- Configuration locations must consist of one or more comma- or space-delimited
-            and fully-qualified @Configuration classes -->
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>gov.gtas.common.WebAppConfig</param-value>
-        </init-param>
-    </servlet>
-
-    <!-- map all requests for / to the dispatcher servlet -->
-    <servlet-mapping>
-        <servlet-name>dispatcher</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-	
-	<!-- Spring jsp tag lib -->
-	<jsp-config>
-		<taglib>
-			<taglib-uri>/spring</taglib-uri>
-			<taglib-location>/WEB-INF/tld/spring-form.tld</taglib-location>
-		</taglib>
-	</jsp-config>
 
 </web-app>
