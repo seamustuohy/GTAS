@@ -1,15 +1,24 @@
 package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
+import gov.gtas.querybuilder.model.AddressDisplay;
+import gov.gtas.querybuilder.model.CreditCardDisplay;
+import gov.gtas.querybuilder.model.FrequentFlyerDisplay;
 import gov.gtas.querybuilder.model.IDisplay;
 import gov.gtas.querybuilder.service.QueryBuilderService;
+import gov.gtas.web.querybuilder.model.Address;
 import gov.gtas.web.querybuilder.model.Column;
 import gov.gtas.web.querybuilder.model.IQueryBuilderModel;
 import gov.gtas.web.querybuilder.model.QueryBuilderFlightResult;
 import gov.gtas.web.querybuilder.model.QueryBuilderModelFactory;
 import gov.gtas.web.querybuilder.model.QueryBuilderPassengerResult;
+import gov.gtas.web.querybuilder.model.BaseQueryBuilderModel;
 
 import java.util.ArrayList;
+<<<<<<< Updated upstream
+=======
+import java.util.HashMap;
+>>>>>>> Stashed changes
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
