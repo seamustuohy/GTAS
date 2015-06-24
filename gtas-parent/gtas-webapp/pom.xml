@@ -123,6 +123,11 @@
 			<artifactId>gtas-udr-builder</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
+        <dependency>
+            <groupId>gov.gtas</groupId>
+            <artifactId>gtas-parsers</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
