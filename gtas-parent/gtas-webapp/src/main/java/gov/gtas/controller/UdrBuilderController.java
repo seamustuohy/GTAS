@@ -2,8 +2,9 @@ package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
 import gov.gtas.model.udr.Rule;
-import gov.gtas.repository.udr.json.QueryObject;
-import gov.gtas.repository.udr.json.QueryTerm;
+import gov.gtas.model.udr.json.QueryEntity;
+import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.udrbuilder.service.UdrBuilderService;
 import gov.gtas.wrapper.RuleWrapper;
 
@@ -32,12 +33,12 @@ public class UdrBuilderController {
 		//
 		//udrService.getRule(id);
 		QueryObject qo = new QueryObject();
-		qo.setConditionCode("OR");
-		List<QueryObject> rules = new LinkedList<QueryObject>();
+		qo.setCondition("OR");
+		List<QueryEntity> rules = new LinkedList<QueryEntity>();
 		QueryTerm trm = new QueryTerm("Pax", "firstName","EQUAL", "John");
 		rules.add(trm);
 		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", "Jones"));
-		qo.setRule(rules);
+		qo.setRules(rules);
 		return qo;
 	}
 
