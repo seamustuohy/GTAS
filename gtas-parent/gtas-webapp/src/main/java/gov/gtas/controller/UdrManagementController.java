@@ -47,6 +47,17 @@ public class UdrManagementController {
 		QueryTerm trm = new QueryTerm("Pax", "firstName","EQUAL", "John");
 		rules.add(trm);
 		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", "Jones"));
+		
+		QueryObject queryObjectEmbedded = new QueryObject();
+		queryObjectEmbedded.setCondition("AND");
+		List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
+		QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name","EQUAL", "DBY");
+		rules2.add(trm2);
+		rules2.add(new QueryTerm("Pax", "debarkation.name", "EQUAL", "IAD"));
+		queryObjectEmbedded.setRules(rules2);
+		
+		rules.add(queryObjectEmbedded);
+		
 		queryObject.setRules(rules);
 		
 		UdrSpecification resp = new UdrSpecification(queryObject, new MetaData("Hello Rule 1", "This is a test", new Date(), "jpjones"));
