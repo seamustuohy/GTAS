@@ -56,7 +56,7 @@ public class EdifactParser {
             if (parsed.length > 1) {
                 composites = Arrays.copyOfRange(parsed, 1, parsed.length);
             }
-            Segment newSegment = new Segment(segmentType, composites);
+            Segment newSegment = new Segment(segmentType.trim(), composites);
             segments.add(newSegment);
         }
         
