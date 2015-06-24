@@ -1,7 +1,5 @@
 package gov.gtas.model.udr.json;
 
-import gov.gtas.model.udr.json.QueryEntity;
-import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**

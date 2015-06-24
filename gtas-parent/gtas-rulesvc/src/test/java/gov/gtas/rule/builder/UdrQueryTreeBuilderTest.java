@@ -59,19 +59,29 @@ public class UdrQueryTreeBuilderTest {
     }
 
 	@Test
-	public void testTwoLevel() {
+	public void testFourLevel() {
 		testTarget.beginTree(CondOpEnum.AND);
 		testTarget.addLeaf("A", "B", OperatorCodeEnum.EQUAL, 5);
 		testTarget.addLeaf("A", "C", OperatorCodeEnum.NOT_EQUAL, 7);
 		testTarget.beginTree(CondOpEnum.OR);
 		testTarget.addLeaf("X", "B", OperatorCodeEnum.EQUAL, 5);
 		testTarget.addLeaf("X", "C", OperatorCodeEnum.NOT_EQUAL, 7);
+		testTarget.beginTree(CondOpEnum.AND);
+		testTarget.addLeaf("Y", "B", OperatorCodeEnum.EQUAL, 5);
+		testTarget.addLeaf("Y", "C", OperatorCodeEnum.NOT_EQUAL, 7);
+		testTarget.beginTree(CondOpEnum.OR);
+		testTarget.addLeaf("Z", "B", OperatorCodeEnum.EQUAL, 5);
+		testTarget.addLeaf("Z", "C", OperatorCodeEnum.NOT_EQUAL, 7);
+		testTarget.endTree();
+		testTarget.endTree();
 		testTarget.endTree();
 		testTarget.endTree();
 		List<List<Term>> flatList = testTarget.getFlattenedQueryTree();
 		assertNotNull("Expected a non null flattened minterm list", flatList);
-		assertEquals("Expected a list of two minterms", 2,flatList.size());
-		assertEquals("Expected a minterm with three terms", 3,flatList.get(0).size());
+		assertEquals("Expected a list of four minterms", 4,flatList.size());
+		
+		//first minterm
+		assertEquals("Expected first minterm with three terms", 3,flatList.get(0).size());
 		Term term = flatList.get(0).get(0);
 		assertEquals("A", term.getEntity());
 		assertEquals("B",term.getAttribute());
@@ -90,7 +100,9 @@ public class UdrQueryTreeBuilderTest {
 		assertEquals(OperatorCodeEnum.EQUAL, term.getOperator());
 		assertEquals(5, term.getValue());
        
+       
 		//the second minterm
+		assertEquals("Expected seccond minterm with three terms", 3,flatList.get(1).size());
 		term = flatList.get(1).get(0);
 		assertEquals("A", term.getEntity());
 		assertEquals("B",term.getAttribute());
@@ -109,6 +121,36 @@ public class UdrQueryTreeBuilderTest {
 		assertEquals(OperatorCodeEnum.NOT_EQUAL, term.getOperator());
 		assertEquals(7, term.getValue());
 		
+		//the third minterm
+		assertEquals("Expected third minterm with five terms", 5,flatList.get(2).size());
+		term = flatList.get(2).get(0);
+		assertEquals("A", term.getEntity());
+		assertEquals("B",term.getAttribute());
+		assertEquals(OperatorCodeEnum.EQUAL, term.getOperator());
+		assertEquals(5, term.getValue());
+
+		term = flatList.get(2).get(1);
+		assertEquals("A", term.getEntity());
+		assertEquals("C",term.getAttribute());
+		assertEquals(OperatorCodeEnum.NOT_EQUAL, term.getOperator());
+		assertEquals(7, term.getValue());
+		
+		term = flatList.get(2).get(2);
+		assertEquals("Y", term.getEntity());
+		assertEquals("B",term.getAttribute());
+		assertEquals(OperatorCodeEnum.EQUAL, term.getOperator());
+		assertEquals(5, term.getValue());
+
+		term = flatList.get(2).get(3);
+		assertEquals("Y", term.getEntity());
+		assertEquals("C",term.getAttribute());
+		assertEquals(OperatorCodeEnum.NOT_EQUAL, term.getOperator());
+		assertEquals(7, term.getValue());
 	
+		term = flatList.get(2).get(4);
+		assertEquals("Z", term.getEntity());
+		assertEquals("B",term.getAttribute());
+		assertEquals(OperatorCodeEnum.EQUAL, term.getOperator());
+		assertEquals(5, term.getValue());
 	}
 }

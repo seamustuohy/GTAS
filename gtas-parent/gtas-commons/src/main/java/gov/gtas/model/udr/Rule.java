@@ -5,8 +5,6 @@ import gov.gtas.model.BaseEntity;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

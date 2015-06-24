@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+/**
+ * Rule meta-data JSON object class.
+ * @author GTAS3 (AB)
+ *
+ */
 public class MetaData implements Serializable {
 
 	/**
