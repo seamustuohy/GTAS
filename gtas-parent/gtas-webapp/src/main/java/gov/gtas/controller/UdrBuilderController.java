@@ -5,6 +5,7 @@ import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.model.udr.json.ValueObject;
 import gov.gtas.udrbuilder.service.UdrBuilderService;
 import gov.gtas.wrapper.RuleWrapper;
 
@@ -35,9 +36,9 @@ public class UdrBuilderController {
 		QueryObject qo = new QueryObject();
 		qo.setCondition("OR");
 		List<QueryEntity> rules = new LinkedList<QueryEntity>();
-		QueryTerm trm = new QueryTerm("Pax", "firstName","EQUAL", "John");
+		QueryTerm trm = new QueryTerm("Pax", "firstName","EQUAL", new ValueObject("John"));
 		rules.add(trm);
-		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", "Jones"));
+		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", new ValueObject("Jones")));
 		qo.setRules(rules);
 		return qo;
 	}

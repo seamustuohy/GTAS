@@ -8,6 +8,7 @@ import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.model.udr.json.ValueObject;
 import gov.gtas.model.udr.json.error.GtasJsonError;
 //import gov.gtas.rule.RuleServiceResult;
 import gov.gtas.svc.TargetingService;
@@ -44,16 +45,16 @@ public class UdrManagementController {
 		QueryObject queryObject = new QueryObject();
 		queryObject.setCondition("OR");
 		List<QueryEntity> rules = new LinkedList<QueryEntity>();
-		QueryTerm trm = new QueryTerm("Pax", "firstName","EQUAL", "John");
+		QueryTerm trm = new QueryTerm("Pax", "embarkationDate","EQUAL", new ValueObject(new Date()));
 		rules.add(trm);
-		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", "Jones"));
+		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", new ValueObject("Jones")));
 		
 		QueryObject queryObjectEmbedded = new QueryObject();
 		queryObjectEmbedded.setCondition("AND");
 		List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
-		QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name","EQUAL", "DBY");
+		QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name","IN", new ValueObject("String",new String[]{"DBY","PKY","FLT"}));
 		rules2.add(trm2);
-		rules2.add(new QueryTerm("Pax", "debarkation.name", "EQUAL", "IAD"));
+		rules2.add(new QueryTerm("Pax", "debarkation.name", "EQUAL", new ValueObject("IAD")));
 		queryObjectEmbedded.setRules(rules2);
 		
 		rules.add(queryObjectEmbedded);

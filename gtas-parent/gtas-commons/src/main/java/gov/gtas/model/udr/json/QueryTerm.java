@@ -20,12 +20,12 @@ public class QueryTerm implements QueryEntity {
 	private String entity;
      private String attribute;
      private String operator;
-     private String value;
+     private ValueObject value;
      
      public QueryTerm(){
     	 
      }
-     public QueryTerm(String entity, String attr, String op, String val){
+     public QueryTerm(String entity, String attr, String op, ValueObject val){
     	 this.entity = entity;
     	 this.attribute = attr;
     	 this.operator = op;
@@ -71,13 +71,13 @@ public class QueryTerm implements QueryEntity {
 	/**
 	 * @return the value
 	 */
-	public Serializable getValue() {
+	public ValueObject getValue() {
 		return value;
 	}
 	/**
 	 * @param value the value to set
 	 */
-	public void setValue(String value) {
+	public void setValue(ValueObject value) {
 		this.value = value;
 	}
 
