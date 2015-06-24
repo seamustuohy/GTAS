@@ -111,10 +111,16 @@ public class ApisMessageService {
         Flight f = new Flight();
         BeanUtils.copyProperties(vo, f);
         f.setCarrier(convertCarrier(vo.getCarrier()));
-        f.setDestination(convertAirport(vo.getDestination()));
-        f.setDestinationCountry(convertCountry(vo.getDestinationCountry()));
-        f.setOrigin(convertAirport(vo.getOrigin()));
-        f.setOriginCountry(convertCountry(vo.getOriginCountry()));
+        Airport dest = convertAirport(vo.getDestination());
+        f.setDestination(dest);
+        if (dest != null) {
+            f.setDestinationCountry(dest.getCountry());
+        }
+        Airport origin = convertAirport(vo.getOrigin());
+        f.setOrigin(origin);
+        if (origin != null) {
+            f.setOriginCountry(origin.getCountry());
+        }
         
         // handle flight number specially
         String tmp = vo.getFlightNumber();
