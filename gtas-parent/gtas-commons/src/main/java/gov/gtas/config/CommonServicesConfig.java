@@ -38,10 +38,17 @@ public class CommonServicesConfig {
     private static final String PROPERTY_NAME_DATABASE_PASSWORD = "hibernate.connection.password";
     private static final String PROPERTY_NAME_DATABASE_URL = "hibernate.connection.url";
     private static final String PROPERTY_NAME_DATABASE_USERNAME = "hibernate.connection.username";
- 
+    
+    private static final String PROPERTY_NAME_SECOND_LEVEL_CACHE="hibernate.cache.use_second_level_cache";
     private static final String PROPERTY_NAME_HIBERNATE_DIALECT = "hibernate.dialect";
     private static final String PROPERTY_NAME_HIBERNATE_SHOW_SQL = "hibernate.show_sql";
     private static final String PROPERTY_NAME_ENTITYMANAGER_PACKAGES_TO_SCAN = "entitymanager.packages.to.scan";
+    private static final String PROPERTY_NAME_HIBERNATE_CACHE = "hibernate.cache";
+    private static final String PROPERTY_NAME_HIBERNATE_QUERY_CACHE = "hibernate.cache.use_query_cache";
+    private static final String PROPERTY_NAME_HIBERNATE_STATS = "hibernate.statistics";
+    private static final String PROPERTY_NAME_HIBERNATE_CACHE_PROVIDER = "hibernate.cache.provider_class";
+    private static final String PROPERTY_NAME_HIBERNATE_CACHE_FACTORY = "hibernate.cache.region.factory_class";
+    private static final String PROPERTY_NAME_SRC_EH_ROOT="hibernate.cache.provider_configuration_file_resource_path";
     
     @Resource
     private Environment env;
@@ -74,7 +81,12 @@ public class CommonServicesConfig {
     private Properties hibProperties() {
         Properties properties = new Properties();
         properties.put(PROPERTY_NAME_HIBERNATE_DIALECT, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
-        properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
+        properties.put(PROPERTY_NAME_HIBERNATE_QUERY_CACHE,env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_QUERY_CACHE));
+        properties.put(PROPERTY_NAME_SECOND_LEVEL_CACHE,env.getRequiredProperty(PROPERTY_NAME_SECOND_LEVEL_CACHE));
+        properties.put(PROPERTY_NAME_HIBERNATE_CACHE_PROVIDER,env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_CACHE_PROVIDER));
+        properties.put(PROPERTY_NAME_HIBERNATE_CACHE_FACTORY,env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_CACHE_FACTORY));
+        properties.put(PROPERTY_NAME_SRC_EH_ROOT,env.getRequiredProperty(PROPERTY_NAME_SRC_EH_ROOT));
+
         return properties;
     }
     

@@ -17,6 +17,7 @@ import gov.gtas.services.FlightService;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.After;
@@ -44,6 +45,9 @@ public class ServiceRepositoryTest {
 	@Autowired 
 	private CarrierService crService;
 
+	@Autowired 
+	private LookUpRepository lookupDao; 
+
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -67,7 +71,7 @@ public class ServiceRepositoryTest {
 //	    System.out.println("********************************************************");
 //		
 //    }
-	@Test()
+	//@Test()
 	public void testAddFlight() {
 		Flight f = new Flight();
 		f.setCreatedAt(new Date());
@@ -139,10 +143,35 @@ public class ServiceRepositoryTest {
 		
     }
 
+	@Test()
+	public void testSecondaryCahe() {
+		
+		List<Airport> airports = lookupDao.getAllAirports();
+		System.out.println("***********************AIRPORTS*******************************"+airports.size());
+		List<Carrier> carriers = lookupDao.getAllCarriers();
+		System.out.println("***********************CARRIERS*******************************"+carriers.size());
+		List<Country> countries = lookupDao.getAllCountries();
+		System.out.println("*************COUNTRIES*******************************"+countries.size());
+		
+	}
+	
+	@Test()
+	public void testSecondaryCahe1() {
+		List<Airport> airports = lookupDao.getAllAirports();
+		System.out.println("***********************AIRPORTS*******************************"+airports.size());
+		List<Carrier> carriers = lookupDao.getAllCarriers();
+		System.out.println("***********************CARRIERS*******************************"+carriers.size());
+		List<Country> countries = lookupDao.getAllCountries();
+		System.out.println("*************COUNTRIES*******************************"+countries.size());
+		
+		
+	}
 	private Airport createAirport(final String airportName){
 		Airport airport = new Airport();
 		ReflectionTestUtils.setField(airport, "name", airportName);
 		return airport;
 	}
+
+
 
 }
