@@ -19,10 +19,10 @@
             <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">
                 {{flight.hits}}
             </td>
-            <td data-title="'Carrier Code'" sortable="'carriercode'" filter="{ 'carriercode': 'select' }" filter-data="values($column, 'carriercode')">
+            <td data-title="'Carrier Code'" sortable="'carrier'" filter="{ 'carrier': 'select' }" filter-data="values($column, 'carrier')">
                 {{flight.carrier}}
             </td>
-            <td data-title="'Flight #'" sortable="'number'" filter="{ 'number': 'text' }">
+            <td data-title="'Flight #'" sortable="'flightNumber'" filter="{ 'flightNumber': 'text' }">
                 {{flight.flightNumber}}
             </td>
             <td data-title="'Origin'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">
@@ -31,7 +31,7 @@
             <td data-title="'Country'" sortable="'originCountry'" filter="{ 'originCountry': 'select' }" filter-data="values($column, 'originCountry')">
                 {{flight.originCountry}}
             </td>
-            <td data-title="'ETD'" sortable="'departureDateTimeSort'" filter="{ 'departureDateTime': 'text' }">
+            <td data-title="'ETD'" sortable="'etd'" filter="{ 'etd': 'text' }">
                 {{flight.etd}}
             </td>
             <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'select' }" filter-data="values($column, 'destination')">
@@ -40,7 +40,7 @@
             <td data-title="'Country'" sortable="'destinationCountry'" filter="{ 'destinationCountry': 'select' }" filter-data="values($column, 'destinationCountry')">
                 {{flight.destinationCountry}}
             </td>
-            <td data-title="'ETA'" sortable="'destinationDateTimeSort'" filter="{ 'destinationDateTime': 'text' }">
+            <td data-title="'ETA'" sortable="'eta'" filter="{ 'eta': 'text' }">
                 {{flight.eta}}
             </td>
         </tr>
@@ -49,7 +49,6 @@
     <script src="resources/js/jquery.js"></script>
     <script src="resources/js/angular.min.js"></script>
     <script src="resources/dist/ng-table.js"></script>
-    <script src="resources/js/demo.js"></script>
     <script>
         var app = angular.module('main', ['ngTable']);
 
@@ -110,21 +109,17 @@
                 flightService.getFlights().then(function (myData) {
                 	data = myData;
 				    //vm.tableParams.total(result.total);
-			        $defer.resolve(myData);
-			    });
-            
-            /*
-                // use build-in angular filter
-                var filteredData = params.filter() ?
-                        $filter('filter')(data, params.filter()) :
-                        data;
-                var orderedData = params.sorting() ?
-                        $filter('orderBy')(filteredData, params.orderBy()) :
-                        data;
+	                // use build-in angular filter
+	                var filteredData = params.filter() ?
+	                        $filter('filter')(data, params.filter()) :
+	                        data;
+	                var orderedData = params.sorting() ?
+	                        $filter('orderBy')(filteredData, params.orderBy()) :
+	                        data;
 
-                params.total(orderedData.length); // set total for recalc pagination
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            */
+	                params.total(orderedData.length); // set total for recalc pagination
+	                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			    });            
             }
         });
                     
