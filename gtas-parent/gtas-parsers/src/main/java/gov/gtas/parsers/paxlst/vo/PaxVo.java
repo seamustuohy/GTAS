@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class PaxVo {
     private String title;    
     private String firstName;
@@ -17,6 +19,7 @@ public class PaxVo {
     private String citizenshipCountry;
     private String residencyCountry;
     private String paxType;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)
     private Date dob;
     private String embarkation;
     private String debarkation;
