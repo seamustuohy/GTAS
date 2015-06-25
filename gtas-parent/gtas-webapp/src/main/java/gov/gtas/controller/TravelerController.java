@@ -1,11 +1,14 @@
 package gov.gtas.controller;
 
 import gov.gtas.model.Crew;
+import gov.gtas.model.Document;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Country;
+import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
+import gov.gtas.repository.DocumentRepository;
 import gov.gtas.services.PassengerService;
 
 import java.util.ArrayList;
@@ -27,6 +30,9 @@ public class TravelerController {
     
     @Autowired
     private PassengerService pService;
+    
+    @Autowired
+    private DocumentRepository docDao;
     
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
@@ -56,6 +62,17 @@ public class TravelerController {
             vo.setResidencyCountry(getCountryCode(t.getResidencyCountry()));
             vo.setSuffix(t.getSuffix());
             vo.setTitle(t.getTitle());
+            List<Document> docs = docDao.getTravelerDocuments(t.getId());
+            
+            for (Document d : docs) {
+                DocumentVo docVo = new DocumentVo();
+                docVo.setDocumentNumber(d.getDocumentNumber());
+                docVo.setDocumentType("P");
+                docVo.setIssuanceCountry(getCountryCode(d.getIssuanceCountry()));
+                docVo.setExpirationDate(d.getExpirationDate());
+                docVo.setIssuanceDate(d.getIssuanceDate());
+                vo.addDocument(docVo);
+            }
             rv.add(vo);
         }
         

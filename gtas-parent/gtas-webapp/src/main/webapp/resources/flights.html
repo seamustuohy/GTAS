@@ -10,7 +10,7 @@
 
 <h1><script>document.write(document.title);</script></h1>
 
-<div ng-controller="DemoCtrl">
+<div ng-controller="FlightCtrl">
     <button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
     <button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
 
@@ -92,7 +92,7 @@
 		});
 
 
-        app.controller('DemoCtrl', function($scope, $filter, $q, ngTableParams, flightService) {
+        app.controller('FlightCtrl', function($scope, $filter, $q, ngTableParams, flightService) {
         	var data = [];
 	        $scope.tableParams = new ngTableParams(
 	        {
@@ -104,39 +104,39 @@
 	                destinationDateTimeSort: 'asc' //, 'number': 'asc'     // initial sorting
 	            }
 	        }, {
-            total: data.length, // length of data
-            getData: function($defer, params) {
-                flightService.getFlights().then(function (myData) {
-                	data = myData;
-				    //vm.tableParams.total(result.total);
-	                // use build-in angular filter
-	                var filteredData = params.filter() ?
-	                        $filter('filter')(data, params.filter()) :
-	                        data;
-	                var orderedData = params.sorting() ?
-	                        $filter('orderBy')(filteredData, params.orderBy()) :
-	                        data;
-
-	                params.total(orderedData.length); // set total for recalc pagination
-	                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			    });            
-            }
-        });
+	            total: data.length, // length of data
+	            getData: function($defer, params) {
+	                flightService.getFlights().then(function (myData) {
+	                	data = myData;
+					    //vm.tableParams.total(result.total);
+		                // use build-in angular filter
+		                var filteredData = params.filter() ?
+		                        $filter('filter')(data, params.filter()) :
+		                        data;
+		                var orderedData = params.sorting() ?
+		                        $filter('orderBy')(filteredData, params.orderBy()) :
+		                        data;
+	
+		                params.total(orderedData.length); // set total for recalc pagination
+		                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+				    });            
+	            }
+			});
                     
-        $scope.values = function (column, fieldName) {
-            console.log('fieldName:' + fieldName);
-            var key, values, lookup = {}, def = $q.defer();
-             angular.forEach(data, function(item){
-                key = item[fieldName];                         
-                lookup[key] = lookup[key] !== undefined ? lookup[key] + 1 : 1;
-            });
-            values = $.map(lookup, function(value, index) {
-                return [{id: index, title: index + ' ('+value+')'}];
-            });
-            def.resolve(values);
-            return def;
-        };
-    });
+	        $scope.values = function (column, fieldName) {
+	            console.log('fieldName:' + fieldName);
+	            var key, values, lookup = {}, def = $q.defer();
+	             angular.forEach(data, function(item){
+	                key = item[fieldName];                         
+	                lookup[key] = lookup[key] !== undefined ? lookup[key] + 1 : 1;
+	            });
+	            values = $.map(lookup, function(value, index) {
+	                return [{id: index, title: index + ' ('+value+')'}];
+	            });
+	            def.resolve(values);
+	            return def;
+	        };
+	    });
                                
 </script>
 
