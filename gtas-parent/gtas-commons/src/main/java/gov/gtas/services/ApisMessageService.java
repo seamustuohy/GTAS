@@ -100,6 +100,7 @@ public class ApisMessageService {
         for (DocumentVo dvo : vo.getDocuments()) {
             Passport d = new Passport();
             BeanUtils.copyProperties(dvo, d);
+            d.setTraveler(p);
             d.setIssuanceCountry(convertCountry(dvo.getIssuanceCountry()));
             p.getDocuments().add(d);
         }
