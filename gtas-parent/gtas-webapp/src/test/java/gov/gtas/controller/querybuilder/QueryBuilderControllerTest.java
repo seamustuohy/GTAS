@@ -1,4 +1,4 @@
-package gov.gtas.controller;
+package gov.gtas.controller.querybuilder;
 
 import org.springframework.web.client.RestTemplate;
 
