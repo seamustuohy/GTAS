@@ -123,23 +123,16 @@ public class ApisMessageService {
             f.setOriginCountry(origin.getCountry());
         }
         
-        // handle flight number specially
+        // handle flight number specially: assume first 2 letters are carrier and rest is flight #
         String tmp = vo.getFlightNumber();
         int i;
-        for (i=0; i<tmp.length(); i++) {
-            char c = tmp.charAt(i);
-            if (!StringUtils.isAlpha(c + "")) {
-                break;
-            }
-        }
+        String flightNum = tmp.substring(3);
         StringBuffer buff = new StringBuffer();
-        String flightNum = tmp.substring(i);
         for (int j=0; j<4 - flightNum.length(); j++) {
             buff.append("0");
         }
         buff.append(flightNum);
         f.setFlightNumber(buff.toString());
-        
         return f;
     }
     

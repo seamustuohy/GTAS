@@ -15,12 +15,14 @@
 
     <table ng-table="tableParams" show-filter="true" class="table">
         <tr ng-repeat="passenger in $data">
+        	<!--
             <td data-title="'R'" sortable="'r'" filter="{ 'r': 'text' }">
                 {{passenger.r}}
             </td>
             <td data-title="'L'" sortable="'l'" filter="{ 'l': 'text' }">
                 {{passenger.l}}
             </td>
+            -->
             <td data-title="'LastName'" sortable="'lastName'" filter="{ 'lastName': 'text' }">
                 {{passenger.lastName}}
             </td>
