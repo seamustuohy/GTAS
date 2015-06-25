@@ -9,7 +9,7 @@
 
 # jquery querybuilder specific
 */jQuery-QueryBuilder/dist/*
-
+bower_components
 
 # eclipse specific git ignore
 *.pydevproject
