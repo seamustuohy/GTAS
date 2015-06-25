@@ -1,6 +1,5 @@
 package gov.gtas.controller;
 
-import gov.gtas.config.WebAppInitializer;
 import gov.gtas.controller.config.TestMvcRestServiceWebConfig;
 import gov.gtas.controller.config.TestRestServiceConfig;
 import gov.gtas.model.Role;
@@ -10,7 +9,6 @@ import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
-import gov.gtas.model.udr.json.ValueObject;
 import gov.gtas.services.UserService;
 import gov.gtas.services.udr.RulePersistenceService;
 
@@ -93,11 +91,11 @@ public class AbstractRestServiceControllerTest {
 
 		List<QueryEntity> rules = new LinkedList<QueryEntity>();
 
-		QueryTerm trm = new QueryTerm("Pax", "embarkationDate", "EQUAL",
-				new ValueObject(new Date()));
+		QueryTerm trm = new QueryTerm("Pax", "embarkationDate", "String", "EQUAL",
+				new String[]{new Date().toString()});
 		rules.add(trm);
-		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", new ValueObject(
-				"Jones")));
+		rules.add(new QueryTerm("Pax", "lastName", "String", "EQUAL", new String[]{
+				"Jones"}));
 
 		// QueryObject queryObjectEmbedded = new QueryObject();
 		// queryObjectEmbedded.setCondition("AND");

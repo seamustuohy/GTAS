@@ -20,11 +20,21 @@ import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+//import ch.qos.logback.classic.Logger;
+
 @Service
 public class RulePersistenceServiceImpl implements RulePersistenceService {
+	/*
+	 * The logger for the RulePersistenceService.
+	 */
+	private static final Logger logger = LoggerFactory
+			.getLogger(RulePersistenceServiceImpl.class);
+	
     @Resource
     private UdrRuleRepository udrRuleRepository;
     
@@ -39,7 +49,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	public UdrRule create(UdrRule r, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
-			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID, userId);
+			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
 		// save meta and rule conditions for now
 		//we will add them after saving the UDR rule and its child Drools rules first.
@@ -92,7 +102,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	public UdrRule delete(Long id, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
-			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID, userId);
+			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
 		UdrRule ruleToDelete = udrRuleRepository.findOne(id);
 		if(ruleToDelete != null){
@@ -102,6 +112,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 			ruleToDelete.setEditedBy(user);
 			ruleToDelete.setEditDt(new Date());
 			udrRuleRepository.save(ruleToDelete);
+		}else{
+			logger.warn("RulePersistenceServiceImpl.delete() - object does not exist:"+id);
 		}
 		return ruleToDelete;
 	}
@@ -117,7 +129,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	public UdrRule update(UdrRule rule, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
-			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID, userId);
+			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
 		rule.setEditDt(new Date()); 
 		rule.setEditedBy(user);

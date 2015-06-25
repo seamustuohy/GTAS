@@ -36,9 +36,9 @@ public class UdrBuilderController {
 		QueryObject qo = new QueryObject();
 		qo.setCondition("OR");
 		List<QueryEntity> rules = new LinkedList<QueryEntity>();
-		QueryTerm trm = new QueryTerm("Pax", "firstName","EQUAL", new ValueObject("John"));
+		QueryTerm trm = new QueryTerm("Pax", "firstName","String", "EQUAL", new String[]{"John"});
 		rules.add(trm);
-		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", new ValueObject("Jones")));
+		rules.add(new QueryTerm("Pax", "lastName", "String", "EQUAL", new String[]{"Jones"}));
 		qo.setRules(rules);
 		return qo;
 	}

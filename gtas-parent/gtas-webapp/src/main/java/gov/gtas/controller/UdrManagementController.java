@@ -2,13 +2,14 @@ package gov.gtas.controller;
 
 //import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.constants.Constants;
+import gov.gtas.error.BasicErrorHandler;
+import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
-import gov.gtas.model.udr.json.ValueObject;
 import gov.gtas.model.udr.json.error.GtasJsonError;
 //import gov.gtas.rule.RuleServiceResult;
 import gov.gtas.svc.TargetingService;
@@ -17,6 +18,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,65 +31,83 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The REST service end-point controller for creating and managing 
- * user Defined Rules (UDR) for targeting.
+ * The REST service end-point controller for creating and managing user Defined
+ * Rules (UDR) for targeting.
+ * 
  * @author GTAS3 (AB)
  *
  */
 @RestController
 @RequestMapping(Constants.UDR_ROOT)
 public class UdrManagementController {
+	/*
+	 * The logger for the UdrManagementController
+	 */
+	private static final Logger logger = LoggerFactory
+			.getLogger(BasicErrorHandler.class);
+
 	@Autowired
 	TargetingService targetingService;
 
 	@RequestMapping(value = Constants.UDR_GET, method = RequestMethod.GET)
-	public @ResponseBody UdrSpecification getUDR(@PathVariable String userId, @PathVariable String title) {
-		System.out.println("******** user ="+userId+", title="+title);
+	public @ResponseBody UdrSpecification getUDR(@PathVariable String userId,
+			@PathVariable String title) {
+		System.out.println("******** user =" + userId + ", title=" + title);
 		QueryObject queryObject = new QueryObject();
 		queryObject.setCondition("OR");
 		List<QueryEntity> rules = new LinkedList<QueryEntity>();
-		QueryTerm trm = new QueryTerm("Pax", "embarkationDate","EQUAL", new ValueObject(new Date()));
+		QueryTerm trm = new QueryTerm("Pax", "embarkationDate", "Date",
+				"EQUAL", new String[] { new Date().toString() });
 		rules.add(trm);
-		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", new ValueObject("Jones")));
-		
+		rules.add(new QueryTerm("Pax", "lastName", "String", "EQUAL",
+				new String[] { "Jones" }));
+
 		QueryObject queryObjectEmbedded = new QueryObject();
 		queryObjectEmbedded.setCondition("AND");
 		List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
-		QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name","IN", new ValueObject("String",new String[]{"DBY","PKY","FLT"}));
+		QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name", "String",
+				"IN", new String[] { "DBY", "PKY", "FLT" });
 		rules2.add(trm2);
-		rules2.add(new QueryTerm("Pax", "debarkation.name", "EQUAL", new ValueObject("IAD")));
+		rules2.add(new QueryTerm("Pax", "debarkation.name", "String", "EQUAL",
+				new String[] { "IAD" }));
 		queryObjectEmbedded.setRules(rules2);
-		
+
 		rules.add(queryObjectEmbedded);
-		
+
 		queryObject.setRules(rules);
-		
-		UdrSpecification resp = new UdrSpecification(queryObject, new MetaData("Hello Rule 1", "This is a test", new Date(), "jpjones"));
+
+		UdrSpecification resp = new UdrSpecification(queryObject, new MetaData(
+				"Hello Rule 1", "This is a test", new Date(), "jpjones"));
 		return resp;
 	}
 
-	@RequestMapping(value = Constants.UDR_POST, method = RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody UdrSpecification createUDR(@PathVariable String userId, @RequestBody UdrSpecification inputSpec) {
-		System.out.println("******** user ="+userId);
-		if(inputSpec != null){
+	@RequestMapping(value = Constants.UDR_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody UdrSpecification createUDR(
+			@PathVariable String userId, @RequestBody UdrSpecification inputSpec) {
+		System.out.println("******** user =" + userId);
+		if (inputSpec != null) {
 			QueryObject queryObject = inputSpec.getDetails();
-			System.out.println("******** condition ="+queryObject.getCondition());
+			System.out.println("******** condition ="
+					+ queryObject.getCondition());
 			List<QueryEntity> rules = queryObject.getRules();
-			System.out.println("******** rule count ="+rules.size());
-			QueryTerm trm = (QueryTerm)rules.get(0);
-			System.out.println("******** entity ="+trm.getEntity());
-		}		
+			System.out.println("******** rule count =" + rules.size());
+			QueryTerm trm = (QueryTerm) rules.get(0);
+			System.out.println("******** entity =" + trm.getEntity());
+		}
 		UdrSpecification resp = inputSpec;
 		return resp;
 	}
-	
+
 	@ExceptionHandler(CommonServiceException.class)
-	public @ResponseBody GtasJsonError handleError(CommonServiceException ex){	
+	public @ResponseBody GtasJsonError handleError(CommonServiceException ex) {
 		return new GtasJsonError(ex.getErrorCode(), ex.getMessage());
 	}
 
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody GtasJsonError handleError(Exception ex){	
-		return new GtasJsonError("UNKNOWN_ERROR", ex.getMessage());
+	public @ResponseBody GtasJsonError handleError(Exception ex) {
+		logger.error(ex.getMessage());
+		return new GtasJsonError(CommonErrorConstants.SYSTEM_ERROR_CODE,
+				String.format(CommonErrorConstants.SYSTEM_ERROR_MESSAGE,
+						System.currentTimeMillis()));
 	}
 }

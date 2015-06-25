@@ -34,9 +34,9 @@ public class BasicErrorHandler {
 					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE, args);
 			break;
-		case CommonErrorConstants.INVALID_USER_ID:
+		case CommonErrorConstants.INVALID_USER_ID_ERROR_CODE:
 			ret = createExceptionAndLog(
-					CommonErrorConstants.INVALID_USER_ID,
+					CommonErrorConstants.INVALID_USER_ID_ERROR_CODE,
 					CommonErrorConstants.INVALID_USER_ID_ERROR_MESSAGE, args[0]);
 			break;
 		default:

@@ -42,17 +42,17 @@ public class UdrSpecificationMappingTest {
 		QueryObject queryObject = new QueryObject();
 		queryObject.setCondition("OR");
 		List<QueryEntity> rules = new LinkedList<QueryEntity>();
-		QueryTerm trm = new QueryTerm("Pax", "embarkationDate","EQUAL", new ValueObject(new Date()));
+		QueryTerm trm = new QueryTerm("Pax", "embarkationDate","Date","EQUAL", new String[]{new Date().toString()});
 		rules.add(trm);
-		rules.add(new QueryTerm("Pax", "lastName", "EQUAL", new ValueObject("Jones")));
+		rules.add(new QueryTerm("Pax", "lastName", "String", "EQUAL", new String[]{"Jones"}));
 
 		QueryObject queryObjectEmbedded = new QueryObject();
 		queryObjectEmbedded.setCondition("AND");
 		List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
 		
-		QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name","IN", new ValueObject("String",new String[]{"DBY","PKY","FLT"}));
+		QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name","String", "IN", new String[]{"DBY","PKY","FLT"});
 		rules2.add(trm2);
-		rules2.add(new QueryTerm("Pax", "debarkation.name", "EQUAL", new ValueObject("IAD")));
+		rules2.add(new QueryTerm("Pax", "debarkation.name", "String", "EQUAL", new String[]{"IAD"}));
 		queryObjectEmbedded.setRules(rules2);
 
 		queryObject.setRules(rules);

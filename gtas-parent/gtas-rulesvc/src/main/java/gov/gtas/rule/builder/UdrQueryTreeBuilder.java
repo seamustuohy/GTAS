@@ -6,6 +6,9 @@ import gov.gtas.model.udr.OperatorCodeEnum;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Build a Query tree with AND and OR nodes. <br>
  * After the tree is constructed, it can be flattened to a two level
@@ -15,6 +18,12 @@ import java.util.List;
  *
  */
 public class UdrQueryTreeBuilder {
+	/*
+	 * The logger for the UdrQueryTreeBuilder
+	 */
+	private static final Logger logger = LoggerFactory
+			.getLogger(UdrQueryTreeBuilder.class);
+
 	private QueryTreeNode root;
 	private QueryTreeNode currentNode;
 	private int level = 0;
@@ -37,6 +46,7 @@ public class UdrQueryTreeBuilder {
     		 currentNode.addChild(term);
     	 }else{
     		 //TODO Error
+    		 logger.error("UdrQueryTreeBuilder.addLeaf() - attempted to add leaf in invalid tree state!");
     	 }
      }
      public void endTree(){
