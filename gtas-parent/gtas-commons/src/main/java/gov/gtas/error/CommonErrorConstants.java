@@ -23,6 +23,12 @@ public class CommonErrorConstants {
 	public static final String INVALID_USER_ID_ERROR_CODE = "INVALID_USER_ID";
 
 	/*
+	 * This is the error code indicating that the
+	 * a query returned no result.
+	 */
+	public static final String QUERY_RESULT_EMPTY_ERROR_CODE = "QUERY_RESULT_EMPTY_ERROR_CODE";
+	
+	/*
 	 * This is the error code for an Unexpected internal system error.
 	 */
 	public static final String SYSTEM_ERROR_CODE = "SYSTEM_ERROR_CODE";
@@ -41,7 +47,12 @@ public class CommonErrorConstants {
 	 * user indicated by a supplied userId cannot be found.
 	 */
 	public static final String INVALID_USER_ID_ERROR_MESSAGE = "The user id '%s' does not represent a valid user.";
-
+	
+	/*
+	 * This is the error message indicating that the
+	 * a query returned no result.
+	 */
+	public static final String QUERY_RESULT_EMPTY_ERROR_MESSAGE = "Query for %s using '%s' returned no result.";
 	/*
 	 * This is the error message for an Unexpected internal system error.
 	 */

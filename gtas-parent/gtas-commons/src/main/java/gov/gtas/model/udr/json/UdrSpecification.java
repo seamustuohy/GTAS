@@ -3,7 +3,11 @@ package gov.gtas.model.udr.json;
 import gov.gtas.model.udr.json.QueryObject;
 
 import java.io.Serializable;
-
+/**
+ * JSON object format for communicating with the UI.
+ * @author GTAS3 (AB)
+ *
+ */
 public class UdrSpecification implements Serializable {
 	/**
 	 * serial version UID

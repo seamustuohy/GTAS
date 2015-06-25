@@ -173,6 +173,20 @@ public class UdrRule extends BaseEntity {
 	}
 
 
+	/**
+	 * @return the udrConditionObject
+	 */
+	public byte[] getUdrConditionObject() {
+		return udrConditionObject;
+	}
+
+	/**
+	 * @param udrConditionObject the udrConditionObject to set
+	 */
+	public void setUdrConditionObject(byte[] udrConditionObject) {
+		this.udrConditionObject = udrConditionObject;
+	}
+
 	@Override
 	public int hashCode() {
 		HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
