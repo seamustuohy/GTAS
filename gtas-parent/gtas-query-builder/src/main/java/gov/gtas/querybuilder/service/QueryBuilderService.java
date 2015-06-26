@@ -195,13 +195,6 @@ public class QueryBuilderService {
 	 * 
 	 */
 	public List<Flight> runQueryOnFlight(String JSONQuery) {
-//		JsonObject o = new JsonParser().parse("{\"a\": \"A\"}").getAsJsonObject();
-		// convert JSON object to Java Object
-		
-//		JSONQuery = "where carrier.name = 'Aero V.I.P. Ltda'";
-//		String sqlQuery = "select f from Flight f join f.carrier carrier " + JSONQuery;
-//		
-//		return flightService.Test(sqlQuery);
 		
 		return null;
 	}
