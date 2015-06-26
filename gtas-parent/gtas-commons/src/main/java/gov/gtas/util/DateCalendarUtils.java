@@ -1,5 +1,9 @@
 package gov.gtas.util;
 
+import gov.gtas.model.udr.UdrConstants;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,6 +15,9 @@ import org.apache.commons.lang3.time.DateUtils;
  *
  */
 public class DateCalendarUtils {
+	//TODO create utility methods using Java 8 java.time 
+	//private static DateTimeFormatter jsonDateFormatter = DateTimeFormatter.ofPattern(UdrConstants.UDR_DATE_FORMAT);
+	
 	public static boolean dateRoundedEquals(Date dt1, Date dt2){
 		return dateRoundedEquals(dt1, dt2, Calendar.SECOND);
 	}
@@ -21,5 +28,8 @@ public class DateCalendarUtils {
 			return dt1 == dt2;
 		}
 	}
-
+   public static Date parseJsonDate(final String dateString) throws ParseException{
+	   SimpleDateFormat format = new SimpleDateFormat(UdrConstants.UDR_DATE_FORMAT);
+	   return format.parse(dateString);
+   }
 }

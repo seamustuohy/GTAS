@@ -4,7 +4,7 @@ import gov.gtas.model.udr.UdrRule;
 
 import java.util.List;
 /**
- * 
+ * The Data Layer service for UDR.
  * @author GTAS3 (AB)
  *
  */

@@ -25,8 +25,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//import ch.qos.logback.classic.Logger;
 
+/**
+ * 
+ * @author GTAS3 (AB)
+ *
+ */
 @Service
 public class RulePersistenceServiceImpl implements RulePersistenceService {
 	/*

@@ -1,7 +1,7 @@
 package gov.gtas.error;
 
 /**
- * Constants used in the Rule Service module.
+ * Common Error Constants for GTAS.
  * 
  * @author GTAS3 (AB)
  *
@@ -26,12 +26,12 @@ public class CommonErrorConstants {
 	 * This is the error code indicating that the
 	 * a query returned no result.
 	 */
-	public static final String QUERY_RESULT_EMPTY_ERROR_CODE = "QUERY_RESULT_EMPTY_ERROR_CODE";
+	public static final String QUERY_RESULT_EMPTY_ERROR_CODE = "QUERY_RESULT_EMPTY";
 	
 	/*
 	 * This is the error code for an Unexpected internal system error.
 	 */
-	public static final String SYSTEM_ERROR_CODE = "SYSTEM_ERROR_CODE";
+	public static final String SYSTEM_ERROR_CODE = "SYSTEM_ERROR";
 
 	// //////////////////////////////////////////////////////////////////////////////////////
 	// ERROR Messages
