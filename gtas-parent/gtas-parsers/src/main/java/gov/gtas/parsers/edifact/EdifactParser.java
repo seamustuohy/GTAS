@@ -47,7 +47,7 @@ public class EdifactParser {
                 continue;
             }
             
-            String segmentType = parsed[0].getValue().trim();
+            String segmentType = parsed[0].getValue();
             if (segmentType == null || segmentType.equals("")) {
                 continue;
             }
@@ -56,7 +56,7 @@ public class EdifactParser {
             if (parsed.length > 1) {
                 composites = Arrays.copyOfRange(parsed, 1, parsed.length);
             }
-            Segment newSegment = new Segment(segmentType.trim(), composites);
+            Segment newSegment = new Segment(segmentType, composites);
             segments.add(newSegment);
         }
         
