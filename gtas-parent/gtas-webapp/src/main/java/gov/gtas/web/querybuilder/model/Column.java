@@ -6,6 +6,14 @@ public class Column {
 	private String label;
 	private String type;
 	
+	
+	public Column(String id, String label, String type) {
+		super();
+		this.id = id;
+		this.label = label;
+		this.type = type;
+	}
+
 	public String getId() {
 		return id;
 	}

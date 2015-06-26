@@ -1,15 +1,13 @@
 package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
-import gov.gtas.querybuilder.model.IDisplay;
+import gov.gtas.constants.TableNameEnum;
+import gov.gtas.model.Flight;
 import gov.gtas.querybuilder.service.QueryBuilderService;
-import gov.gtas.web.querybuilder.model.Column;
 import gov.gtas.web.querybuilder.model.IQueryBuilderModel;
-import gov.gtas.web.querybuilder.model.QueryBuilderFlightResult;
 import gov.gtas.web.querybuilder.model.QueryBuilderModelFactory;
 import gov.gtas.web.querybuilder.model.QueryBuilderPassengerResult;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,11 +41,9 @@ public class QueryBuilderController {
 	 * @param query
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.GET)
-	public List<QueryBuilderFlightResult> runQueryOnFlight(String JSONQuery) {
+	public List<Flight> runQueryOnFlight(String JSONQuery) {
 		
-		 queryService.runQueryOnFlight(JSONQuery);
-		 
-		 return null;
+		 return queryService.runQueryOnFlight(JSONQuery);
 	}
 	
 	/**
@@ -99,44 +95,27 @@ public class QueryBuilderController {
 	private Map<String, IQueryBuilderModel> getQueryBuilderModel() {
 		Map<String, IQueryBuilderModel> modelMap = new LinkedHashMap<>();
 		
-		modelMap.put(Constants.ADDRESS, getModel(queryService.getAddressDisplay(), Constants.ADDRESS));
-		modelMap.put(Constants.API, getModel(queryService.getAPIDisplay(), Constants.API));
-		modelMap.put(Constants.CREDIT_CARD, getModel(queryService.getCreditCardDisplay(), Constants.CREDIT_CARD));
-		modelMap.put(Constants.DOCUMENT, getModel(queryService.getDocumentDisplay(), Constants.DOCUMENT));
-		modelMap.put(Constants.EMAIL, getModel(queryService.getEmailDisplay(), Constants.EMAIL));
-		modelMap.put(Constants.FLIGHT, getModel(queryService.getFlightDisplay(), Constants.FLIGHT));
-		modelMap.put(Constants.FREQUENT_FLYER, getModel(queryService.getFrequentFlyerDisplay(), Constants.FREQUENT_FLYER));
-		modelMap.put(Constants.HITS, getModel(queryService.getHitsDisplay(), Constants.HITS));
-		modelMap.put(Constants.NAME_ORIGIN, getModel(queryService.getNameOriginDisplay(), Constants.NAME_ORIGIN));
-		modelMap.put(Constants.PASSENGER, getModel(queryService.getPassengerDisplay(), Constants.PASSENGER));
-		modelMap.put(Constants.PHONE, getModel(queryService.getPhoneDisplay(), Constants.PHONE));
-		modelMap.put(Constants.PNR, getModel(queryService.getPNRDisplay(), Constants.PNR));
-		modelMap.put(Constants.TRAVEL_AGENCY, getModel(queryService.getTravelAgencyDisplay(), Constants.TRAVEL_AGENCY));
+		modelMap.put(TableNameEnum.ADDRESS.toString(), getModel(TableNameEnum.ADDRESS.toString()));
+		modelMap.put(TableNameEnum.API.toString(), getModel(TableNameEnum.API.toString()));
+		modelMap.put(TableNameEnum.CREDIT_CARD.toString(), getModel(TableNameEnum.CREDIT_CARD.toString()));
+		modelMap.put(TableNameEnum.DOCUMENT.toString(), getModel(TableNameEnum.DOCUMENT.toString()));
+		modelMap.put(TableNameEnum.EMAIL.toString(), getModel(TableNameEnum.EMAIL.toString()));
+		modelMap.put(TableNameEnum.FLIGHT.toString(), getModel(TableNameEnum.FLIGHT.toString()));
+		modelMap.put(TableNameEnum.FREQUENT_FLYER.toString(), getModel(TableNameEnum.FREQUENT_FLYER.toString()));
+		modelMap.put(TableNameEnum.HITS.toString(), getModel(TableNameEnum.HITS.toString()));
+		modelMap.put(TableNameEnum.NAME_ORIGIN.toString(), getModel(TableNameEnum.NAME_ORIGIN.toString()));
+		modelMap.put(TableNameEnum.PASSENGER.toString(), getModel(TableNameEnum.PASSENGER.toString()));
+		modelMap.put(TableNameEnum.PHONE.toString(), getModel(TableNameEnum.PHONE.toString()));
+		modelMap.put(TableNameEnum.PNR.toString(), getModel(TableNameEnum.PNR.toString()));
+		modelMap.put(TableNameEnum.TRAVEL_AGENCY.toString(), getModel(TableNameEnum.TRAVEL_AGENCY.toString()));
 		
 		return modelMap;
 	}
 	
-	private IQueryBuilderModel getModel(List<? extends IDisplay> displayList, String modelType) {
+	private IQueryBuilderModel getModel(String modelType) {
 		QueryBuilderModelFactory factory = new QueryBuilderModelFactory();
 		
 		IQueryBuilderModel model = factory.getQueryBuilderModel(modelType);
-				
-		if(displayList != null)
-		{
-			List<Column> colList = new ArrayList<>();
-			
-			for(IDisplay display : displayList) {
-					
-				Column column = new Column();
-				column.setId(display.getColumnName());
-				column.setLabel(display.getDisplayName());
-				column.setType(display.getType());
-				
-				colList.add(column);
-			}
-			
-			model.setColumns(colList);
-		}
 		
 		return model;
 	}

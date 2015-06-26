@@ -1,6 +1,6 @@
 package gov.gtas.web.querybuilder.model;
 
-import gov.gtas.constants.Constants;
+import gov.gtas.constants.TableNameEnum;
 
 public class QueryBuilderModelFactory {
 
@@ -9,43 +9,43 @@ public class QueryBuilderModelFactory {
 	         return null;
 	      }		
 	      
-	      if(modelType.equalsIgnoreCase(Constants.ADDRESS)) {
+	      if(modelType.equalsIgnoreCase(TableNameEnum.ADDRESS.toString())) {
 	         return new Address();
 	      } 
-	      else if(modelType.equalsIgnoreCase(Constants.API)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.API.toString())) {
 	         return new API();
 	      } 
-	      else if(modelType.equalsIgnoreCase(Constants.CREDIT_CARD)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.CREDIT_CARD.toString())) {
 	         return new CreditCard();
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.DOCUMENT)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.DOCUMENT.toString())) {
 	    	  return new Document();
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.EMAIL)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.EMAIL.toString())) {
 	    	  return new Email();
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.FLIGHT)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.FLIGHT.toString())) {
 	    	  return new Flight();
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.FREQUENT_FLYER)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.FREQUENT_FLYER.toString())) {
 	    	  return new FrequentFlyer();
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.HITS)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.HITS.toString())) {
 	    	  return new Hits();
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.NAME_ORIGIN)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.NAME_ORIGIN.toString())) {
 	    	  return new NameOrigin();
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.PASSENGER)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.PASSENGER.toString())) {
 	    	  return new Passenger();
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.PHONE)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.PHONE.toString())) {
 	    	  return new Phone();
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.PNR)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.PNR.toString())) {
 	    	  return new PNR();
 	      }
-	      else if(modelType.equalsIgnoreCase(Constants.TRAVEL_AGENCY)) {
+	      else if(modelType.equalsIgnoreCase(TableNameEnum.TRAVEL_AGENCY.toString())) {
 	    	  return new TravelAgency();
 	      }
 	      
