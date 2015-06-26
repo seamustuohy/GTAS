@@ -27,7 +27,8 @@ public class CommonErrorConstants {
 	 * a query returned no result.
 	 */
 	public static final String QUERY_RESULT_EMPTY_ERROR_CODE = "QUERY_RESULT_EMPTY";
-	
+	public static final String UPDATE_RECORD_MISSING_ERROR_CODE = "UPDATE_RECORD_MISSING";
+		
 	/*
 	 * This is the error code for an Unexpected internal system error.
 	 */
@@ -52,8 +53,14 @@ public class CommonErrorConstants {
 	 * This is the error message indicating that the
 	 * a query returned no result.
 	 */
-	public static final String QUERY_RESULT_EMPTY_ERROR_MESSAGE = "Query for %s using '%s' returned no result.";
+	public static final String UPDATE_RECORD_MISSING_ERROR_MESSAGE = "Cannot find UDR record to update (title=%s, userId=%s).";
+
 	/*
+	 * This is the error message indicating that the
+	 * a query returned no result.
+	 */
+	public static final String QUERY_RESULT_EMPTY_ERROR_MESSAGE = "Query for %s using '%s' returned no result.";
+/*
 	 * This is the error message for an Unexpected internal system error.
 	 */
 	public static final String SYSTEM_ERROR_MESSAGE = "There was an Internal System Error with ID %s. Please contact the HelpDesk for details.";

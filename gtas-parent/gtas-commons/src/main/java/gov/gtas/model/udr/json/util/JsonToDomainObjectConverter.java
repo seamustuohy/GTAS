@@ -2,7 +2,6 @@ package gov.gtas.model.udr.json.util;
 
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
-import gov.gtas.error.udr.UdrErrorConstants;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.YesNoEnum;
@@ -17,8 +16,6 @@ import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utility functions to convert JSON objects to domain objects.
@@ -67,29 +64,14 @@ public class JsonToDomainObjectConverter {
 							"inputJson",
 							"JsonToDomainObjectConverter.createUdrRuleFromJson()"));
 		}
+		
 		final MetaData metaData = inputJson.getSummary();
-		if (metaData == null) {
-			throw new CommonServiceException(
-					UdrErrorConstants.NO_META_ERROR_CODE,
-					UdrErrorConstants.NO_META_ERROR_MESSAGE);
-		}
+		JsonValidationUtils.validateMetaData(metaData);
+		
 		final String title = metaData.getTitle();
-		if (StringUtils.isEmpty(title)) {
-			throw new CommonServiceException(
-					UdrErrorConstants.NO_TITLE_ERROR_CODE,
-					UdrErrorConstants.NO_TITLE_ERROR_MESSAGE);
-		}
-
 		final Date startDate = metaData.getStartDate();
-		if (startDate == null) {
-			throw new CommonServiceException(
-					UdrErrorConstants.INVALID_START_DATE_ERROR_CODE,
-					UdrErrorConstants.INVALID_START_DATE_ERROR_MESSAGE);
-		}
-
-		final String descr = inputJson.getSummary().getDescription();
-		final boolean enabled = inputJson.getSummary().isEnabled();
-
+		final String descr = metaData.getDescription();
+		final boolean enabled = metaData.isEnabled();
 		final Date endDate = metaData.getEndDate();
 		final UdrRule rule = createUdrRule(title, descr, startDate, endDate,
 				enabled ? YesNoEnum.Y : YesNoEnum.N);
@@ -98,7 +80,6 @@ public class JsonToDomainObjectConverter {
 		return rule;
 
 	}
-
 	/**
 	 * Converts a UdrSpecification JSON object to compressed binary data for
 	 * saving in the database as a BLOB.

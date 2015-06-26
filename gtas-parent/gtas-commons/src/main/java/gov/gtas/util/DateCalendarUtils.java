@@ -28,6 +28,20 @@ public class DateCalendarUtils {
 			return dt1 == dt2;
 		}
 	}
+	public static boolean dateRoundedGreater(Date dt1, Date dt2, int granularity){
+		if(dt1 != null && dt2 != null){
+			return DateUtils.truncatedCompareTo(dt1,  dt2, granularity) > 0 ?true:false;
+		} else {
+			return false;
+		}
+	}
+	public static boolean dateRoundedLess(Date dt1, Date dt2, int granularity){
+		if(dt1 != null && dt2 != null){
+			return DateUtils.truncatedCompareTo(dt1,  dt2, granularity) < 0 ?true:false;
+		} else {
+			return false;
+		}
+	}
    public static Date parseJsonDate(final String dateString) throws ParseException{
 	   SimpleDateFormat format = new SimpleDateFormat(UdrConstants.UDR_DATE_FORMAT);
 	   return format.parse(dateString);

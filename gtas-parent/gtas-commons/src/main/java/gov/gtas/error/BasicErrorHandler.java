@@ -39,6 +39,11 @@ public class BasicErrorHandler {
 					CommonErrorConstants.INVALID_USER_ID_ERROR_CODE,
 					CommonErrorConstants.INVALID_USER_ID_ERROR_MESSAGE, args[0]);
 			break;
+		case CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE:
+			ret = createExceptionAndLog(
+					CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE,
+					CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_MESSAGE, args);
+			break;
 		default:
 			break;
 		}

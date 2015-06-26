@@ -31,6 +31,7 @@ public final class Constants {
 	public static final String UDR_ROOT = "/udr";
 	public static final String UDR_GET = "/{userId}/{title}";
 	public static final String UDR_POST = "/{userId}";
+	public static final String UDR_PUT = "/{userId}";
 	public static final String UDR_TEST = "/testUdr";
 	public static final String UDR_RULE = "/rules";
 	

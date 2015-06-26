@@ -87,12 +87,12 @@ public class UdrManagementController {
 		System.out.println("******** user =" + userId);
 		if (inputSpec != null) {
 			QueryObject queryObject = inputSpec.getDetails();
-			System.out.println("******** condition ="
+			logger.info("******** condition ="
 					+ queryObject.getCondition());
 			List<QueryEntity> rules = queryObject.getRules();
-			System.out.println("******** rule count =" + rules.size());
+			logger.info("******** rule count =" + rules.size());
 			QueryTerm trm = (QueryTerm) rules.get(0);
-			System.out.println("******** entity =" + trm.getEntity());
+			logger.info("******** entity =" + trm.getEntity());
 		}else {
 			throw new CommonServiceException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, String.format(CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE, "Create Query For Rule", "inputSpec"));
 		}
@@ -113,6 +113,39 @@ public class UdrManagementController {
 		UdrRule ruleToSave = JsonToDomainObjectConverter.createUdrRuleFromJson(querySpec);
 		UdrRule savedRule = rulePersistenceService.create(ruleToSave, userId);
 		return savedRule;
+	}
+	private UdrRule updateUdrRule(String userId, UdrSpecification querySpec) throws IOException{
+		UdrRule ruleToUpdate = JsonToDomainObjectConverter.createUdrRuleFromJson(querySpec);
+		UdrRule updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
+		return updatedRule;
+	}
+	@RequestMapping(value = Constants.UDR_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonServiceResponse updateUDR(
+			@PathVariable String userId, @RequestBody UdrSpecification inputSpec) {
+		System.out.println("******** user =" + userId);
+		if (inputSpec != null) {
+			QueryObject queryObject = inputSpec.getDetails();
+			logger.info("******** condition ="
+					+ queryObject.getCondition());
+			List<QueryEntity> rules = queryObject.getRules();
+			logger.info("******** rule count =" + rules.size());
+			QueryTerm trm = (QueryTerm) rules.get(0);
+			logger.info("******** entity =" + trm.getEntity());
+		}else {
+			throw new CommonServiceException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, String.format(CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE, "Create Query For Rule", "inputSpec"));
+		}
+		UdrRule updatedRule = null;
+		try{
+			updatedRule = updateUdrRule(userId, inputSpec);
+		}catch(IOException ioe){
+			ioe.printStackTrace();
+			throw new RuntimeException(ioe.getMessage());
+		}
+		JsonServiceResponse resp = new JsonServiceResponse("SUCCESS", "UDR Management Service", "Update UDR",
+				String.format("UDR Rule with title='%s' and ID='%s' was updated.", 
+						inputSpec.getSummary().getTitle(),  updatedRule.getId())
+				);
+		return resp;
 	}
 
 	@RequestMapping(value = Constants.UDR_TEST, method = RequestMethod.GET)

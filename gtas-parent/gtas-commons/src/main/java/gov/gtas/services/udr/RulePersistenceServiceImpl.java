@@ -135,12 +135,39 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		if(user == null){
 			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
+		Long id = verifyUdrRuleExists(rule, userId);
+		if(id != null){
+			rule.setId(id);
+		} else {
+			RuleMeta meta = rule.getMetaData();
+			String title = meta!=null?meta.getTitle():"UNKNOWN";
+			throw errorHandler.createException(CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE, title, userId);
+		}
 		rule.setEditDt(new Date()); 
 		rule.setEditedBy(user);
+		rule.setAuthor(user);//TODO use actual author
 		udrRuleRepository.save(rule);
 		return rule;
 	}
-
+    private Long verifyUdrRuleExists(UdrRule rule, String userId){
+    	Long id = rule.getId();
+    	UdrRule fetchedRule = null;
+    	if(id != null && id.longValue() > 0){
+    		fetchedRule = this.findById(id);
+    	}else {
+    		//this rule was constructed from the UI request and id is not provided
+    		RuleMeta meta = rule.getMetaData();
+    		//User author = rule.getAuthor();////for now we will use the user doing the update
+    		if(meta != null){
+    		   fetchedRule = this.findByTitleAndAuthor(meta.getTitle(), userId);
+    		}
+    	}
+    	if(fetchedRule != null){
+    		return fetchedRule.getId();
+    	} else {
+    		return null;
+    	}
+    }
 	@Override
 	public UdrRule findById(Long id) {
 		return udrRuleRepository.findOne(id);
