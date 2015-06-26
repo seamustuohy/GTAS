@@ -33,7 +33,7 @@ public abstract class PaxlstParser {
         this.segmentPackageName = segmentPackageName;
     }
 
-    public abstract void parseSegments();
+    protected abstract void parseSegments();
     
     public ApisMessageVo parse() throws ParseException {
         this.segments = new LinkedList<>();
