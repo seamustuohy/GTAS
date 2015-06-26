@@ -21,7 +21,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	public List<Flight> getFlightsByDynamicQuery(String query) {
 		List<Flight> flights = new ArrayList<>();
 		
-		query = "select f from Flight f join f.passengers p join p.documents d where d.documentNumber = 'A12345'";
+//		query = "select f from Flight f join f.passengers p join p.documents d where d.documentNumber = 'A12345'";
 		
 		flights = entityManager.createQuery(query, Flight.class).getResultList();
 		

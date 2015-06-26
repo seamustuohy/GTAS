@@ -2,8 +2,8 @@ package gov.gtas.querybuilder.service;
 
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
+import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.querybuilder.repository.QueryBuilderRepository;
-import gov.gtas.services.FlightService;
 
 import java.util.List;
 
@@ -21,13 +21,10 @@ public class QueryBuilderService {
 	@Autowired
 	QueryBuilderRepository queryRepository;
 		
-	@Autowired
-	FlightService flightService;
-	
 	/**
 	 * 
 	 */
-	public List<Flight> runQueryOnFlight(String JSONQuery) {
+	public List<Flight> runQueryOnFlight(QueryObject queryObject) {
 		
 		return null;
 	}

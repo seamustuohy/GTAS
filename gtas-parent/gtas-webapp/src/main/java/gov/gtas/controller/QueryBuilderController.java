@@ -3,8 +3,10 @@ package gov.gtas.controller;
 import gov.gtas.constants.Constants;
 import gov.gtas.constants.TableNameEnum;
 import gov.gtas.model.Flight;
+import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.querybuilder.service.QueryBuilderService;
 import gov.gtas.web.querybuilder.model.IQueryBuilderModel;
+import gov.gtas.web.querybuilder.model.QueryBuilderFlightResult;
 import gov.gtas.web.querybuilder.model.QueryBuilderModelFactory;
 import gov.gtas.web.querybuilder.model.QueryBuilderPassengerResult;
 
@@ -41,9 +43,11 @@ public class QueryBuilderController {
 	 * @param query
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.GET)
-	public List<Flight> runQueryOnFlight(String JSONQuery) {
+	public List<QueryBuilderFlightResult> runQueryOnFlight(QueryObject queryObject) {
 		
-		 return queryService.runQueryOnFlight(JSONQuery);
+		List<Flight> flights = queryService.runQueryOnFlight(queryObject);
+		
+		return null;
 	}
 	
 	/**
@@ -119,5 +123,7 @@ public class QueryBuilderController {
 		
 		return model;
 	}
+	
+//	private mapFlightToFlightResult()
 	
 }
