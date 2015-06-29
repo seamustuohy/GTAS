@@ -44,6 +44,9 @@ public class JsonToDomainObjectConverter {
 			ret = (UdrSpecification) in.readObject();
 			in.close();
 		}
+		//set the id, since id cannot be set on initial create
+		ret.setId(rule.getId());
+		
 		return ret;
 	}
 

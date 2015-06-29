@@ -15,10 +15,11 @@ public class QueryTerm implements QueryEntity {
 	 */
 	private static final long serialVersionUID = 6558396573006515297L;
 	
-	private String entity;
+	 private String entity;
      private String field;
      private String type;
      private String operator;
+     private String value;
      private String[] values;
      
      public QueryTerm(){
@@ -29,6 +30,7 @@ public class QueryTerm implements QueryEntity {
     	 this.field = field;
     	 this.type = type;
     	 this.operator = op;
+    	 this.value = val != null ? val[0] : null;
     	 this.values = val;
      }
      
@@ -82,6 +84,19 @@ public class QueryTerm implements QueryEntity {
 	 */
 	public void setOperator(String operator) {
 		this.operator = operator;
+	}
+
+	/**
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
+	}
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(String value) {
+		this.value = value;
 	}
 	/**
 	 * @return the values

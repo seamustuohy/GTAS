@@ -99,6 +99,8 @@ public class RulePersistenceServiceTest {
 		RuleMeta meta = rsav.getMetaData();
 		assertNotNull(meta);
 
+		//save the version
+		long savedVersion = rsav.getVersion();
 		// modify meta and update
 		meta.setDescription("This is a Simple Rule - Updated");
 		testTarget.update(rsav, RuleServiceDataGenUtils.TEST_USER1_ID);
@@ -108,7 +110,7 @@ public class RulePersistenceServiceTest {
 		assertNotNull(readRule);
 
 		// check that the version has been updated by 1
-		assertEquals(new Long(rsav.getVersion() + 1), readRule.getVersion());
+		assertEquals(new Long(savedVersion+1), readRule.getVersion());
 
 		assertNotNull(readRule.getMetaData());
 		assertEquals(meta, readRule.getMetaData());

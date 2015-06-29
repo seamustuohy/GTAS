@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
 
@@ -39,7 +41,10 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	private static final Logger logger = LoggerFactory
 			.getLogger(RulePersistenceServiceImpl.class);
 	
-    @Resource
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	@Resource
     private UdrRuleRepository udrRuleRepository;
     
     @Autowired
@@ -93,6 +98,17 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		}
 		return rule;
 	}
+	private void prepareUpdatesToUdrRule(UdrRule fetchedRule, UdrRule updatedRule){
+		
+		fetchedRule.setUdrConditionObject(updatedRule.getUdrConditionObject());
+		
+		fetchedRule.getMetaData().setDescription(updatedRule.getMetaData().getDescription());
+		fetchedRule.getMetaData().setStartDt(updatedRule.getMetaData().getStartDt());
+		fetchedRule.getMetaData().setEndDt(updatedRule.getMetaData().getEndDt());
+		fetchedRule.getMetaData().setEnabled(updatedRule.getMetaData().getEnabled());
+		fetchedRule.getMetaData().setHitSharing(updatedRule.getMetaData().getHitSharing());
+		fetchedRule.getMetaData().setPriorityHigh(updatedRule.getMetaData().getPriorityHigh());
+	}
     private Map<Integer, List<RuleCond>> saveEngineRuleConditions(UdrRule udrRule){
     	Map<Integer, List<RuleCond>> ruleConditionMap = new HashMap<Integer, List<RuleCond>>();
     	for(Rule r: udrRule.getEngineRules()){
@@ -127,29 +143,47 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	public List<UdrRule> findAll() {
 		return (List<UdrRule>)udrRuleRepository.findByDeleted(YesNoEnum.N);				
 	}
-
 	@Override
 	@Transactional
 	public UdrRule update(UdrRule rule, String userId) {
+		/*
+		 * For now the following extra processing is done:
+		 * 1. set the id of the UdrRule from the fetched object
+		 * 2. set the author in UdrRule to the use object corresponding to userId
+		 * 3. set the id of the RuleMeta object
+		 * 
+		 */
 		final User user = userService.findById(userId);
 		if(user == null){
 			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
-		Long id = verifyUdrRuleExists(rule, userId);
-		if(id != null){
-			rule.setId(id);
-		} else {
-			RuleMeta meta = rule.getMetaData();
-			String title = meta!=null?meta.getTitle():"UNKNOWN";
-			throw errorHandler.createException(CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE, title, userId);
+		if(rule.getId() == null){
+			//TODO
+//			UdrRule fetchedRule = verifyUdrRuleExists(rule, userId);
+//			if(fetchedRule != null){
+//				/* 1. set the id of the UdrRule from the fetched object. */
+//				rule.setId(fetchedRule.getId());
+//				/* 3. set the id of the RuleMeta object. */
+//				rule.getMetaData().setId(fetchedRule.getMetaData().getId());
+//	
+//			} else {
+//				RuleMeta meta = rule.getMetaData();
+//				String title = meta!=null?meta.getTitle():"UNKNOWN";
+//				throw errorHandler.createException(CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE, title, userId);
+//			}
 		}
 		rule.setEditDt(new Date()); 
 		rule.setEditedBy(user);
-		rule.setAuthor(user);//TODO use actual author
+		/* 2. set the author in UdrRule. */
+		//rule.setAuthor(user);//TODO use actual author
 		udrRuleRepository.save(rule);
+		
+//		entityManager.merge(rule);
+//		prepareUpdatesToUdrRule(fetchedRule, rule);
+//		udrRuleRepository.save(fetchedRule);
 		return rule;
 	}
-    private Long verifyUdrRuleExists(UdrRule rule, String userId){
+    private UdrRule verifyUdrRuleExists(UdrRule rule, String userId){
     	Long id = rule.getId();
     	UdrRule fetchedRule = null;
     	if(id != null && id.longValue() > 0){
@@ -163,12 +197,13 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
     		}
     	}
     	if(fetchedRule != null){
-    		return fetchedRule.getId();
+    		return fetchedRule;
     	} else {
     		return null;
     	}
     }
 	@Override
+	@Transactional(TxType.SUPPORTS)
 	public UdrRule findById(Long id) {
 		return udrRuleRepository.findOne(id);
 	}
@@ -176,6 +211,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 * @see gov.gtas.services.udr.RulePersistenceService#findByTitleAndAuthor(java.lang.String, java.lang.String)
 	 */
 	@Override
+	@Transactional(TxType.SUPPORTS)
 	public UdrRule findByTitleAndAuthor(String title, String authorUserId) {
 		return udrRuleRepository.getUdrRuleByTitleAndAuthor(title, authorUserId);
 	}

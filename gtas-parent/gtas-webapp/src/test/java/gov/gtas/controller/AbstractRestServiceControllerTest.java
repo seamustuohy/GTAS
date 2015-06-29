@@ -113,7 +113,7 @@ public class AbstractRestServiceControllerTest {
 
 		queryObject.setRules(rules);
 
-		UdrSpecification resp = new UdrSpecification(queryObject, new MetaData(
+		UdrSpecification resp = new UdrSpecification(null, queryObject, new MetaData(
 				"Hello Rule 1", "This is a test", new Date(), "jpjones"));
 		return resp;
 	}

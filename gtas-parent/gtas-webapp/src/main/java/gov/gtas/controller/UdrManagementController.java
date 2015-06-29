@@ -122,16 +122,8 @@ public class UdrManagementController {
 	@RequestMapping(value = Constants.UDR_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonServiceResponse updateUDR(
 			@PathVariable String userId, @RequestBody UdrSpecification inputSpec) {
-		System.out.println("******** user =" + userId);
-		if (inputSpec != null) {
-			QueryObject queryObject = inputSpec.getDetails();
-			logger.info("******** condition ="
-					+ queryObject.getCondition());
-			List<QueryEntity> rules = queryObject.getRules();
-			logger.info("******** rule count =" + rules.size());
-			QueryTerm trm = (QueryTerm) rules.get(0);
-			logger.info("******** entity =" + trm.getEntity());
-		}else {
+		logger.info("******** user =" + userId);
+		if (inputSpec == null) {
 			throw new CommonServiceException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, String.format(CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE, "Create Query For Rule", "inputSpec"));
 		}
 		UdrRule updatedRule = null;
@@ -173,7 +165,7 @@ public class UdrManagementController {
 
 		queryObject.setRules(rules);
 
-		UdrSpecification resp = new UdrSpecification(queryObject, new MetaData(
+		UdrSpecification resp = new UdrSpecification(null, queryObject, new MetaData(
 				"Hello Rule 1", "This is a test", new Date(), "jpjones"));
 		return resp;
 	}
