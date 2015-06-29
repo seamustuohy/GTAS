@@ -22,7 +22,6 @@ import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,7 +85,7 @@ public class ApisMessageService {
         }
     }
     
-    public Traveler convertPaxVo(PaxVo vo) {
+    private Traveler convertPaxVo(PaxVo vo) {
         Pax p = new Pax();
         BeanUtils.copyProperties(vo, p);
         p.setGender(Gender.valueOf(vo.getGender()));
@@ -108,7 +107,7 @@ public class ApisMessageService {
         return p;
     }
     
-    public Flight convertFlightVo(FlightVo vo) {
+    private Flight convertFlightVo(FlightVo vo) {
         Flight f = new Flight();
         BeanUtils.copyProperties(vo, f);
         f.setCarrier(convertCarrier(vo.getCarrier()));
