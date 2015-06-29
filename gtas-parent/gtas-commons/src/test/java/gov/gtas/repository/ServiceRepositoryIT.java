@@ -31,7 +31,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=CommonServicesConfig.class)
-public class ServiceRepositoryTest {
+public class ServiceRepositoryIT {
 	
 	@Autowired
 	private FlightService testTarget;

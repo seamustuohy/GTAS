@@ -4,7 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import gov.gtas.controller.AbstractRestServiceControllerTest;
+import gov.gtas.controller.AbstractRestServiceControllerIT;
 import gov.gtas.controller.util.UdrBuilderDataUtils;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.repository.udr.UdrRuleRepository;
@@ -25,7 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-public class UdrBuilderControllerTest extends AbstractRestServiceControllerTest {
+public class UdrBuilderControllerIT extends AbstractRestServiceControllerIT {
 
 	private MockMvc mockMvc;
 

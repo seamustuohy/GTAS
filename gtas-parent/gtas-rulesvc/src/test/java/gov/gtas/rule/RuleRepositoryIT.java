@@ -24,7 +24,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=RuleServiceConfig.class)
-public class RuleRepositoryTest {
+public class RuleRepositoryIT {
 	@Autowired
 	private RuleService testTarget;
 

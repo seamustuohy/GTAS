@@ -28,7 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
-public class RulePersistenceServiceTest {
+public class RulePersistenceServiceIT {
 
 	@Autowired
 	private RulePersistenceService testTarget;

@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.kie.api.KieBase;
 import org.kie.api.runtime.KieSession;
 
-public class RuleUtilsTest {
+public class RuleUtilsIT {
     private static final String testDrl = 
     		"package gov.gtas.rule; "   
            +"import gov.gtas.model.ApisMessage; "

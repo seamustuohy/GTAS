@@ -32,7 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ContextConfiguration(classes = { TestMvcRestServiceWebConfig.class,
 		TestRestServiceConfig.class })
 @WebAppConfiguration
-public class AbstractRestServiceControllerTest {
+public class AbstractRestServiceControllerIT {
 
 	protected MockMvc mockMvc;
 

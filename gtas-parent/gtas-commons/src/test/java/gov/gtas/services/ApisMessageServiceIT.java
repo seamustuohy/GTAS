@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
 //@Transactional
-public class ApisMessageServiceITest {
+public class ApisMessageServiceIT {
 //extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private ApisMessageService svc;
