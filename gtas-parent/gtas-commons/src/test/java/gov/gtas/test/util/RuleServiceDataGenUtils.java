@@ -12,7 +12,6 @@ import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.YesNoEnum;
 import gov.gtas.services.UserService;
-import gov.gtas.services.udr.RulePersistenceService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,14 +30,11 @@ public class RuleServiceDataGenUtils {
 	public static final String TEST_USER2_ID = "pawnX";
 
 	private UserService userService;
-	private RulePersistenceService rulePersistenceService;
 
 	private final Random randomGenerator;
 	
-	public RuleServiceDataGenUtils(UserService usrSvc,
-			RulePersistenceService rpSvc) {
+	public RuleServiceDataGenUtils(UserService usrSvc) {
 		this.userService = usrSvc;
-		this.rulePersistenceService = rpSvc;
 		randomGenerator = new Random(System.currentTimeMillis());
 	}
 

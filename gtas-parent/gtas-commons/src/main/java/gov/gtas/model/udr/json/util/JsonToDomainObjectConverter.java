@@ -2,6 +2,7 @@ package gov.gtas.model.udr.json.util;
 
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
+import gov.gtas.model.User;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.YesNoEnum;
@@ -57,7 +58,7 @@ public class JsonToDomainObjectConverter {
 	 * @return
 	 * @throws IOException
 	 */
-	public static UdrRule createUdrRuleFromJson(UdrSpecification inputJson)
+	public static UdrRule createUdrRuleFromJson(UdrSpecification inputJson, User author)
 			throws IOException {
 		if (inputJson == null) {
 			throw new CommonServiceException(
@@ -76,8 +77,9 @@ public class JsonToDomainObjectConverter {
 		final String descr = metaData.getDescription();
 		final boolean enabled = metaData.isEnabled();
 		final Date endDate = metaData.getEndDate();
-		final UdrRule rule = createUdrRule(title, descr, startDate, endDate,
-				enabled ? YesNoEnum.Y : YesNoEnum.N);
+		final UdrRule rule = createUdrRule(inputJson.getId(), title, descr, startDate, endDate,
+				enabled ? YesNoEnum.Y : YesNoEnum.N, author);
+		
 		setJsonObjectInUdrRule(rule, inputJson);
 
 		return rule;
@@ -111,12 +113,14 @@ public class JsonToDomainObjectConverter {
 	 * @param enabled
 	 * @return
 	 */
-	private static UdrRule createUdrRule(String title, String descr,
-			Date startDate, Date endDate, YesNoEnum enabled) {
+	private static UdrRule createUdrRule(Long id, String title, String descr,
+			Date startDate, Date endDate, YesNoEnum enabled, User author) {
 		UdrRule rule = new UdrRule();
+		rule.setId(id);
 		rule.setDeleted(YesNoEnum.N);
 		rule.setEditDt(new Date());
-		RuleMeta meta = createRuleMeta(title, descr, startDate, endDate,
+		rule.setAuthor(author);
+		RuleMeta meta = createRuleMeta(id, title, descr, startDate, endDate,
 				enabled);
 		rule.setMetaData(meta);
 		return rule;
@@ -129,9 +133,10 @@ public class JsonToDomainObjectConverter {
 	 * @param enabled
 	 * @return
 	 */
-	private static RuleMeta createRuleMeta(String title, String descr,
+	private static RuleMeta createRuleMeta(Long id, String title, String descr,
 			Date startDate, Date endDate, YesNoEnum enabled) {
 		RuleMeta meta = new RuleMeta();
+		meta.setId(id);
 		meta.setDescription(descr);
 		meta.setEnabled(enabled);
 		meta.setHitSharing(YesNoEnum.N);

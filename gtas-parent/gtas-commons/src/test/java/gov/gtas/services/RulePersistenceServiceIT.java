@@ -39,7 +39,7 @@ public class RulePersistenceServiceIT {
 	
 	@Before
 	public void setUp() throws Exception {
-		testGenUtils = new RuleServiceDataGenUtils(userService, testTarget);
+		testGenUtils = new RuleServiceDataGenUtils(userService);
 		testGenUtils.initUserData();
 	}
 
