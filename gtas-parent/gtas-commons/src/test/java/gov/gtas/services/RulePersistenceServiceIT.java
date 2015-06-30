@@ -15,6 +15,7 @@ import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.YesNoEnum;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.test.util.RuleServiceDataGenUtils;
+import gov.gtas.util.DateCalendarUtils;
 
 import java.util.List;
 
@@ -25,7 +26,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
+/**
+ * Persistence layer tests for UDR and the Rule Engine.
+ * The parent domain object for UDR is UdrRule.
+ * The parent domain object for the Rule Engine is KnowledgeBase.
+ * @author GTAS3 (AB)
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
 public class RulePersistenceServiceIT {
@@ -85,8 +92,15 @@ public class RulePersistenceServiceIT {
 		assertNotNull(readRule.getMetaData());
 		assertEquals(meta, readRule.getMetaData());
 	}
+	/**
+	 * The update pattern tested here is:
+	 * 1. Fetch a UdrRule from the persistence service.
+	 * 2. Modify some of UdrRule attributes.
+	 * 3. save the modified UdrRule back.
+	 * 4. verify that the version has been incremented.
+	 */
 	@Test()
-	public void testUpdateUdrRuleMetaData() {
+	public void testUpdateUdrRuleMetaData() throws Exception{
 		final String RULE_DESCRIPTION = "This is a Simple Rule";
 		String testRuleTitle = testGenUtils.generateTestRuleTitle(3);
 		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
@@ -101,8 +115,10 @@ public class RulePersistenceServiceIT {
 
 		//save the version
 		long savedVersion = rsav.getVersion();
+		
 		// modify meta and update
 		meta.setDescription("This is a Simple Rule - Updated");
+		meta.setEndDt(DateCalendarUtils.parseJsonDate("2015-12-31"));
 		testTarget.update(rsav, RuleServiceDataGenUtils.TEST_USER1_ID);
 
 		// read the rule back

@@ -1,11 +1,14 @@
 package gov.gtas.services;
 
+import gov.gtas.model.Role;
 import gov.gtas.model.User;
 import gov.gtas.repository.UserRepository;
 
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -13,13 +16,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
+	@PersistenceContext
+	private EntityManager entityManager;
+	
 	@Resource
 	private UserRepository userRespository;
 
 	@Override
 	@Transactional
 	public User create(User user) {
-		// TODO Auto-generated method stub
+		Role role = entityManager.find(Role.class, user.getUserRole());
+		if(role == null){
+			entityManager.persist(user.getUserRole());
+		}
 		return userRespository.save(user);
 	}
 

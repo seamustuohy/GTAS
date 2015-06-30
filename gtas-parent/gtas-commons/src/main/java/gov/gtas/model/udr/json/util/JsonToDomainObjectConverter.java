@@ -136,7 +136,9 @@ public class JsonToDomainObjectConverter {
 	private static RuleMeta createRuleMeta(Long id, String title, String descr,
 			Date startDate, Date endDate, YesNoEnum enabled) {
 		RuleMeta meta = new RuleMeta();
-		meta.setId(id);
+		if(id!=null){
+		   meta.setId(id);
+		}
 		meta.setDescription(descr);
 		meta.setEnabled(enabled);
 		meta.setHitSharing(YesNoEnum.N);

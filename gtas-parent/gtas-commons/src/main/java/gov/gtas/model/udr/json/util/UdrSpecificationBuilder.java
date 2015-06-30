@@ -20,6 +20,10 @@ public class UdrSpecificationBuilder {
 	private Long id;
 	private MetaData meta;
 	
+	public UdrSpecificationBuilder(Long id){
+		this.id = id;
+	    queryObjectStack = new Stack<QueryObject>();
+	}
 	public UdrSpecificationBuilder(Long id, QueryConditionEnum condition){
 		this.id = id;
 	    queryObjectStack = new Stack<QueryObject>();
