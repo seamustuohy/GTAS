@@ -14,8 +14,8 @@ public abstract class BaseQueryBuilderResult {
 	private String carrierCode;
 	private String origin;
 	private String destination;
-	private Date departureDt;
-	private Date arrivalDt;
+	private String departureDt;
+	private String arrivalDt;
 	
 	public Long getId() {
 		return id;
@@ -47,16 +47,16 @@ public abstract class BaseQueryBuilderResult {
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	public Date getDepartureDt() {
+	public String getDepartureDt() {
 		return departureDt;
 	}
-	public void setDepartureDt(Date departureDt) {
+	public void setDepartureDt(String departureDt) {
 		this.departureDt = departureDt;
 	}
-	public Date getArrivalDt() {
+	public String getArrivalDt() {
 		return arrivalDt;
 	}
-	public void setArrivalDt(Date arrivalDt) {
+	public void setArrivalDt(String arrivalDt) {
 		this.arrivalDt = arrivalDt;
 	}
 }

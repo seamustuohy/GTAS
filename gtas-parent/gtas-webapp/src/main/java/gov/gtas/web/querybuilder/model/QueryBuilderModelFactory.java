@@ -1,6 +1,6 @@
 package gov.gtas.web.querybuilder.model;
 
-import gov.gtas.constants.TableNameEnum;
+import gov.gtas.querybuilder.util.EntityEnum;
 
 public class QueryBuilderModelFactory {
 
@@ -9,43 +9,43 @@ public class QueryBuilderModelFactory {
 	         return null;
 	      }		
 	      
-	      if(modelType.equalsIgnoreCase(TableNameEnum.ADDRESS.toString())) {
+	      if(modelType.equalsIgnoreCase(EntityEnum.ADDRESS.toString())) {
 	         return new Address();
 	      } 
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.API.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.API.toString())) {
 	         return new API();
 	      } 
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.CREDIT_CARD.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.CREDIT_CARD.toString())) {
 	         return new CreditCard();
 	      }
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.DOCUMENT.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.DOCUMENT.toString())) {
 	    	  return new Document();
 	      }
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.EMAIL.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.EMAIL.toString())) {
 	    	  return new Email();
 	      }
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.FLIGHT.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.FLIGHT.toString())) {
 	    	  return new Flight();
 	      }
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.FREQUENT_FLYER.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.FREQUENT_FLYER.toString())) {
 	    	  return new FrequentFlyer();
 	      }
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.HITS.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.HITS.toString())) {
 	    	  return new Hits();
 	      }
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.NAME_ORIGIN.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.NAME_ORIGIN.toString())) {
 	    	  return new NameOrigin();
 	      }
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.PASSENGER.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.PASSENGER.toString())) {
 	    	  return new Passenger();
 	      }
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.PHONE.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.PHONE.toString())) {
 	    	  return new Phone();
 	      }
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.PNR.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.PNR.toString())) {
 	    	  return new PNR();
 	      }
-	      else if(modelType.equalsIgnoreCase(TableNameEnum.TRAVEL_AGENCY.toString())) {
+	      else if(modelType.equalsIgnoreCase(EntityEnum.TRAVEL_AGENCY.toString())) {
 	    	  return new TravelAgency();
 	      }
 	      

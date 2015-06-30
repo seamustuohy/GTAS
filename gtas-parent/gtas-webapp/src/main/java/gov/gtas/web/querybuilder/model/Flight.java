@@ -3,15 +3,15 @@ package gov.gtas.web.querybuilder.model;
 public class Flight extends BaseQueryBuilderModel {
 
 	public Flight() {
-		Column column = new Column("destination", "Airport - Destination", "string");
+		Column column = new Column("destination.iata", "Airport - Destination", "string");
 		getColumns().add(column);
-		column = new Column("origin", "Airport - Origin", "string");
+		column = new Column("origin.iata", "Airport - Origin", "string");
 		getColumns().add(column);
-		column = new Column("carrier", "Carrier", "string");
+		column = new Column("carrier.iata", "Carrier", "string");
 		getColumns().add(column);
-		column = new Column("destinationCountry", "Country - Destination", "string");
+		column = new Column("destinationCountry.iso3", "Country - Destination", "string");
 		getColumns().add(column);
-		column = new Column("originCountry", "Country - Origin", "string");
+		column = new Column("originCountry.iso3", "Country - Origin", "string");
 		getColumns().add(column);
 		column = new Column("inbound", "Direction - Inbound", "string");
 		getColumns().add(column);

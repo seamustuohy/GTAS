@@ -5,17 +5,17 @@ public class Passenger extends BaseQueryBuilderModel {
 	public Passenger() {
 		Column column = new Column("age", "Age", "integer");
 		getColumns().add(column);
-		column = new Column("citizenshipCountry", "Citizenship Country", "string");
+		column = new Column("citizenshipCountry.iso3", "Citizenship Country", "string");
 		getColumns().add(column);
-		column = new Column("debarkation", "Debarkation", "string");
+		column = new Column("debarkation.iata", "Debarkation", "string");
 		getColumns().add(column);
-		column = new Column("debarkCountry", "Debarkation Country", "string");
+		column = new Column("debarkCountry.iso3", "Debarkation Country", "string");
 		getColumns().add(column);
 		column = new Column("dob", "DOB", "string");
 		getColumns().add(column);
-		column = new Column("embarkation", "Embarkation", "string");
+		column = new Column("embarkation.iata", "Embarkation", "string");
 		getColumns().add(column);
-		column = new Column("embarkCountry", "Embarkation Country", "string");
+		column = new Column("embarkCountry.iso3", "Embarkation Country", "string");
 		getColumns().add(column);
 		column = new Column("gender", "Gender", "string");
 		getColumns().add(column);
@@ -25,11 +25,11 @@ public class Passenger extends BaseQueryBuilderModel {
 		getColumns().add(column);
 		column = new Column("middleName", "Name - Middle", "string");
 		getColumns().add(column);
-		column = new Column("residencyCountry", "Residency Country", "string");
+		column = new Column("residencyCountry", "Residency Country", "string"); // not in Entity
 		getColumns().add(column);
-		column = new Column("seat", "Seat", "string");
+		column = new Column("seat", "Seat", "string"); // not in Entity
 		getColumns().add(column);
-		column = new Column("type", "Type", "string");
+		column = new Column("type", "Type", "string"); // not in Entity
 		getColumns().add(column);
 		
 	}

@@ -2,6 +2,7 @@ package gov.gtas.querybuilder.repository;
 
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +10,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
+	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderRepository.class);
 	
 	@PersistenceContext 
  	private EntityManager entityManager;
@@ -21,18 +25,28 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	public List<Flight> getFlightsByDynamicQuery(String query) {
 		List<Flight> flights = new ArrayList<>();
 		
-//		query = "select f from Flight f join f.passengers p join p.documents d where d.documentNumber = 'A12345'";
-		
-		flights = entityManager.createQuery(query, Flight.class).getResultList();
+		if(query != null ) {
+			logger.debug("Getting Flights by this query: " + query);
+			
+			flights = entityManager.createQuery(query, Flight.class).getResultList();
+			
+			logger.debug("Number of Flights returned: " + (flights != null ? flights.size() : "Flight result is null"));
+		}
 		
 		return flights;
 	}
 
 	@Override
-	public List<Pax> getPassengersByDynamicQuery(String query) {
-		List<Pax> passengers = new ArrayList<>();
+	public List<Traveler> getPassengersByDynamicQuery(String query) {
+		List<Traveler> passengers = new ArrayList<>();
 		
-		passengers = entityManager.createQuery(query, Pax.class).getResultList();
+		if(query != null) {
+			logger.debug("Getting Passengers by this query: " + query);
+			
+			passengers = entityManager.createQuery(query, Traveler.class).getResultList();
+			
+			logger.debug("Number of Passengers returned: " + (passengers != null ? passengers.size() : "Passenger result is null"));
+		}
 		
 		return passengers;
 	}
