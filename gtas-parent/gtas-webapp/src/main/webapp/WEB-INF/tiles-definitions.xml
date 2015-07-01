@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+
+   <!--  <definition name="base.definition"
+        template="/WEB-INF/views/layouts/common-layout.jsp">
+        <put-attribute name="title" value="San Andreas" />
+        <put-attribute name="bodyEventHandlerName" value="" />
+        <put-attribute name="header" value="/WEB-INF/views/includes/header.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/views/includes/menu.jsp" />
+        <put-attribute name="javascript" value=""/>
+        <put-attribute name="body" value="" />
+        <put-attribute name="footer" value="/WEB-INF/views/includes/footer.jsp" />
+    </definition> -->
+    
+    <definition name="base.definition"  
+        template="/WEB-INF/views/layouts/common-layout.jsp">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="header" value="/WEB-INF/views/includes/header.jsp" />  
+        <put-attribute name="menu" value="/WEB-INF/views/includes/menu.jsp" />  
+        <put-attribute name="body" value="" />  
+        <put-attribute name="footer" value="/WEB-INF/views/includes/footer.jsp" />  
+    </definition>  
+    
+    
+    <definition name="main" extends="base.definition">  
+        <put-attribute name="title" value="San Andreas" />  
+        <put-attribute name="body" value="/WEB-INF/views/main.jsp" />  
+    </definition>  
+	
+  <definition name="login.definition"
+        template="/WEB-INF/views/layouts/login-layout.jsp">
+        <put-attribute name="title" value="" />
+        <put-attribute name="header" value="/WEB-INF/views/includes/header.jsp" />
+        <put-attribute name="javascript" value=""/>
+        <put-attribute name="body" value="" />
+        <put-attribute name="footer" value="/WEB-INF/views/includes/footer.jsp" />
+    </definition>
+       
+    <definition name="login" extends="login.definition">  
+        <put-attribute name="title" value="San Andreas" />  
+        <put-attribute name="body" value="/WEB-INF/views/login.jsp" />  
+    </definition>  
+	
+       
+       <!--
+    <definition name="angular.definition"
+        template="/WEB-INF/views/layouts/angular-layout.jsp">
+        <put-attribute name="title" value="" />
+        <put-attribute name="angularApplicationName" value="" />
+        <put-attribute name="header" value="/WEB-INF/views/includes/header.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/views/includes/menu.jsp" />
+        <put-attribute name="javascript" value=""/>
+        <put-attribute name="body" value="" />
+        <put-attribute name="footer" value="/WEB-INF/views/includes/footer.jsp" />
+    </definition> -->
+	
+ </tiles-definitions>
