@@ -11,4 +11,32 @@
     </welcome-file-list>
 
 
+   <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
+	<welcome-file-list>
+		<welcome-file>
+      		index.html
+    	</welcome-file>
+	</welcome-file-list>  
+	
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/views/forbiddenError.jsp</location>
+	</error-page>
+	<!-- Security Filters -->
+	
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>*.action</url-pattern>
+		
+		<url-pattern>/j_spring_security_check</url-pattern>
+		<!-- <url-pattern>/j_spring_security_logout</url-pattern> -->
+	</filter-mapping>
 </web-app>
