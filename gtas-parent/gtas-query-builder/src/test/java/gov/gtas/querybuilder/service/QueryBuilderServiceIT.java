@@ -26,20 +26,21 @@ public class QueryBuilderServiceIT {
 
 	@Autowired
 	QueryBuilderService queryService;
-	QueryObject query;
 	
 	@Before
 	public void setUp() throws Exception {
-		query = buildSimpleQuery();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		query = null;
 	}
 
+	//----------------------------------------
+	// Flight Queries
+	//----------------------------------------
 	@Test
 	public void testRunQueryAgainstFlights() {
+		QueryObject query = buildSimpleQuery();
 		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
 		
 		if(flights != null && flights.size() > 0) {
@@ -55,7 +56,62 @@ public class QueryBuilderServiceIT {
 	}
 
 	@Test
+	public void testSimpleDateQueryAgainstFlights() {
+		QueryObject query = buildSimpleDateQuery();
+		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
+		
+		if(flights != null && flights.size() > 0) {
+			System.out.println("Number of flights: " + flights.size());
+			System.out.println("Flight Information:");
+			for(Flight flight : flights) {
+				System.out.println("\tfight number: " + flight.getFlightNumber());
+			}
+		}
+		else {
+			System.out.println("No flights");
+		}
+	}
+	
+	@Test
+	public void testSimpleIsNullQueryAgainstFlights() {
+		QueryObject query = buildSimpleIsNullQuery();
+		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
+		
+		if(flights != null && flights.size() > 0) {
+			System.out.println("Number of flights: " + flights.size());
+			System.out.println("Flight Information:");
+			for(Flight flight : flights) {
+				System.out.println("\tfight number: " + flight.getFlightNumber());
+			}
+		}
+		else {
+			System.out.println("No flights");
+		}
+	}
+	
+	@Test
+	public void testSimpleContainsQueryAgainstFlights() {
+		QueryObject query = buildSimpleContainsQuery();
+		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
+		
+		if(flights != null && flights.size() > 0) {
+			System.out.println("Number of flights: " + flights.size());
+			System.out.println("Flight Information:");
+			for(Flight flight : flights) {
+				System.out.println("\tfight number: " + flight.getFlightNumber());
+			}
+		}
+		else {
+			System.out.println("No flights");
+		}
+	}
+	
+	//-------------------------------
+	// Passenger Queries
+	//-------------------------------
+	@Test
 	public void testRunQueryAgainstPassengers() {
+		QueryObject query = buildSimpleQuery();
 		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PASSENGER);
 		
 		if(passengers != null && passengers.size() > 0) {
@@ -70,6 +126,61 @@ public class QueryBuilderServiceIT {
 		}
 	}
 	
+	@Test
+	public void testSimpleIsNullQueryAgainstPassengers() {
+		QueryObject query = buildSimpleIsNullQuery();
+		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PASSENGER);
+		
+		if(passengers != null && passengers.size() > 0) {
+			System.out.println("Number of Passengers: " + passengers.size());
+			System.out.println("Passenger Information:");
+			for(Traveler passenger : passengers) {
+				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
+			}
+		}
+		else {
+			System.out.println("No passengers");
+		}
+	}
+	
+	@Test
+	public void testSimpleContainsQueryAgainstPassengers() {
+		QueryObject query = buildSimpleContainsQuery();
+		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PASSENGER);
+		
+		if(passengers != null && passengers.size() > 0) {
+			System.out.println("Number of Passengers: " + passengers.size());
+			System.out.println("Passenger Information:");
+			for(Traveler passenger : passengers) {
+				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
+			}
+		}
+		else {
+			System.out.println("No passengers");
+		}
+	}
+	
+	@Test
+	public void testSimpleBetweenQueryAgainstPassengers() {
+		QueryObject query = buildSimpleBetweenQuery();
+		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PASSENGER);
+
+		if(passengers != null && passengers.size() > 0) {
+			System.out.println("Number of Passengers: " + passengers.size());
+			System.out.println("Passenger Information:");
+			for(Traveler passenger : passengers) {
+				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
+			}
+		}
+		else {
+			System.out.println("No passengers");
+		}
+	}
+	
+	//---------------------------------------
+	// Build Query Objects
+	//---------------------------------------
+	
 	private QueryObject buildSimpleQuery() {
 		QueryObject query = new QueryObject();
 		QueryTerm rule = new QueryTerm();
@@ -79,7 +190,88 @@ public class QueryBuilderServiceIT {
 		rule.setField("firstName");
 		rule.setOperator("equal");
 		rule.setType("string");
-		rule.setValue("DAVID");
+		rule.setValue("David");
+		
+		rules.add(rule);
+		
+		query.setCondition("AND");
+		query.setRules(rules);
+		
+		return query;
+	}
+	
+	private QueryObject buildSimpleDateQuery() {
+		QueryObject query = new QueryObject();
+		QueryTerm rule = new QueryTerm();
+		List<QueryEntity> rules = new ArrayList<>();
+		
+		rule.setEntity("Flight");
+		rule.setField("eta");
+		rule.setOperator("equal");
+		rule.setType("date");
+		rule.setValue("05/11/2014");
+		
+		rules.add(rule);
+		
+		query.setCondition("AND");
+		query.setRules(rules);
+		
+		return query;
+	}
+	
+	private QueryObject buildSimpleIsNullQuery() {
+		QueryObject query = new QueryObject();
+		QueryTerm rule = new QueryTerm();
+		List<QueryEntity> rules = new ArrayList<>();
+		
+		rule.setEntity("Pax");
+		rule.setField("middleName");
+		rule.setOperator("is_null");
+		rule.setType("boolean");
+		rule.setValue("");
+		
+		rules.add(rule);
+		
+		query.setCondition("AND");
+		query.setRules(rules);
+		
+		return query;
+	}
+		
+	private QueryObject buildSimpleContainsQuery() {
+		QueryObject query = new QueryObject();
+		QueryTerm rule = new QueryTerm();
+		List<QueryEntity> rules = new ArrayList<>();
+		
+		rule.setEntity("Pax");
+		rule.setField("firstName");
+		rule.setOperator("contains");
+		rule.setType("string");
+		rule.setValue("avi");
+		
+		rules.add(rule);
+		
+		query.setCondition("AND");
+		query.setRules(rules);
+		
+		return query;
+	}
+	
+	private QueryObject buildSimpleBetweenQuery() {
+		QueryObject query = new QueryObject();
+		QueryTerm rule = new QueryTerm();
+		List<QueryEntity> rules = new ArrayList<>();
+		List<String> values = new ArrayList<>();
+		
+		values.add("20");
+		values.add("40");
+		
+		rule.setEntity("Pax");
+		rule.setField("age");
+		rule.setOperator("between");
+		rule.setType("integer");
+		rule.setValue("");
+		rule.setValues(values.toArray(new String[values.size()]));
 		
 		rules.add(rule);
 		

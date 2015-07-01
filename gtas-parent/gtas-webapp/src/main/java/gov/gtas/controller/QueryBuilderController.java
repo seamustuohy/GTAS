@@ -3,7 +3,6 @@ package gov.gtas.controller;
 import gov.gtas.constants.Constants;
 import gov.gtas.model.BaseEntity;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.querybuilder.service.QueryBuilderService;
@@ -79,7 +78,7 @@ public class QueryBuilderController {
 	 * 
 	 * @param query
 	 */
-	@RequestMapping(value = Constants.SAVE_QUERY_URI)
+	@RequestMapping(value = Constants.SAVE_QUERY_URI, method = RequestMethod.POST)
 	public void saveQuery(String query) {
 		
 		queryService.saveQuery();

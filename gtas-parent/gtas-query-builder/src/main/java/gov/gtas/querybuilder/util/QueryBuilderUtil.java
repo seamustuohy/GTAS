@@ -48,20 +48,4 @@ public class QueryBuilderUtil {
 		return joinCondition;
 	}
 	
-	public static String getOperator(String operator) {
-		String op = "";
-		
-		switch (operator.toLowerCase()) {
-	        case "equal":
-	        	op = "=";
-	        	break;
-	        case "in":
-	        	op = "in";
-	        	break;
-	        default:
-	            throw new IllegalArgumentException("Invalid operator");
-		}
-		
-		return op;
-	}
 }

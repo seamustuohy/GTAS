@@ -7,8 +7,8 @@ import static org.junit.Assert.assertEquals;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.util.Constants;
 import gov.gtas.querybuilder.util.EntityEnum;
-import gov.gtas.querybuilder.util.QueryBuilderConstants;
 import gov.gtas.querybuilder.util.QueryBuilderUtil;
 
 import java.lang.reflect.Method;
@@ -46,9 +46,9 @@ public class QueryBuilderServiceTest {
 	
 	@Test()
 	public void testGetQueryForFlightsWithSimpleQuery() throws Exception {
-		final String expectedQuery = QueryBuilderConstants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
-				" " + QueryBuilderConstants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) +
-				QueryBuilderUtil.getJoinCondition(EntityEnum.PASSENGER) + " " + QueryBuilderConstants.WHERE + " p.firstName = 'DAVID'";
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
+				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) +
+				QueryBuilderUtil.getJoinCondition(EntityEnum.PASSENGER) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
 		
 		QueryObject query = buildSimpleQuery();
 		
@@ -62,9 +62,9 @@ public class QueryBuilderServiceTest {
 	
 	@Test()
 	public void testGetQueryForPassengersWithSimpleQuery() throws Exception {
-		final String expectedQuery = QueryBuilderConstants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER) + 
-				" " + QueryBuilderConstants.FROM + " " + EntityEnum.PASSENGER.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER) +
-				" " + QueryBuilderConstants.WHERE + " p.firstName = 'DAVID'";
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER) + 
+				" " + Constants.FROM + " " + EntityEnum.PASSENGER.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER) +
+				" " + Constants.WHERE + " p.firstName = 'DAVID'";
 		
 		QueryObject query = buildSimpleQuery();
 		
@@ -75,6 +75,62 @@ public class QueryBuilderServiceTest {
 		
 		assertEquals(expectedQuery, actualQuery);
 		
+	}
+	
+	@Test()
+	public void testGetQueryForFlightsWithSimpleDateQuery() throws Exception {
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
+				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) +
+				QueryBuilderUtil.getJoinCondition(EntityEnum.PASSENGER) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
+		
+		QueryObject query = buildSimpleDateQuery();
+		
+		Method privateGetQueryMethod = QueryBuilderService.class.getDeclaredMethod("getQuery", QueryObject.class, EntityEnum.class);
+		privateGetQueryMethod.setAccessible(true);
+
+		String actualQuery = (String) privateGetQueryMethod.invoke(service, query, EntityEnum.FLIGHT);
+		
+		System.out.println("actual Query: " + actualQuery);
+		
+//		assertEquals(expectedQuery, actualQuery);
+	}
+	
+	@Test()
+	public void testGetQueryForFlightsWithSimpleIsNullQuery() throws Exception {
+		
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
+				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) +
+				QueryBuilderUtil.getJoinCondition(EntityEnum.PASSENGER) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
+		
+		QueryObject query = buildSimpleIsNullQuery();
+		
+		Method privateGetQueryMethod = QueryBuilderService.class.getDeclaredMethod("getQuery", QueryObject.class, EntityEnum.class);
+		privateGetQueryMethod.setAccessible(true);
+
+		String actualQuery = (String) privateGetQueryMethod.invoke(service, query, EntityEnum.FLIGHT);
+		
+		System.out.println("actual Query: " + actualQuery);
+		
+//		assertEquals(expectedQuery, actualQuery);
+	}
+	
+	@Test()
+	public void testGetQueryForFlightsWithSimpleContainsQuery() throws Exception {
+		
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
+				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) +
+				QueryBuilderUtil.getJoinCondition(EntityEnum.PASSENGER) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
+		
+		QueryObject query = buildSimpleContainsQuery();
+		
+		Method privateGetQueryMethod = QueryBuilderService.class.getDeclaredMethod("getQuery", QueryObject.class, EntityEnum.class);
+		privateGetQueryMethod.setAccessible(true);
+
+		String actualQuery = (String) privateGetQueryMethod.invoke(service, query, EntityEnum.FLIGHT);
+		
+		System.out.println("actual Query: " + actualQuery);
+		
+//		assertEquals(expectedQuery, actualQuery);
 	}
 	
 	private QueryObject buildSimpleQuery() {
@@ -96,7 +152,64 @@ public class QueryBuilderServiceTest {
 		return query;
 	}
 	
-	private QueryObject QueryObjectNestedQuery() {
+	private QueryObject buildSimpleDateQuery() {
+		QueryObject query = new QueryObject();
+		QueryTerm rule = new QueryTerm();
+		List<QueryEntity> rules = new ArrayList<>();
+		
+		rule.setEntity("Flight");
+		rule.setField("eta");
+		rule.setOperator("equal");
+		rule.setType("date");
+		rule.setValue("05/11/2014");
+		
+		rules.add(rule);
+		
+		query.setCondition("AND");
+		query.setRules(rules);
+		
+		return query;
+	}
+	
+	private QueryObject buildSimpleIsNullQuery() {
+		QueryObject query = new QueryObject();
+		QueryTerm rule = new QueryTerm();
+		List<QueryEntity> rules = new ArrayList<>();
+		
+		rule.setEntity("Pax");
+		rule.setField("middleName");
+		rule.setOperator("is_null");
+		rule.setType("boolean");
+		rule.setValue("");
+		
+		rules.add(rule);
+		
+		query.setCondition("AND");
+		query.setRules(rules);
+		
+		return query;
+	}
+	
+	private QueryObject buildSimpleContainsQuery() {
+		QueryObject query = new QueryObject();
+		QueryTerm rule = new QueryTerm();
+		List<QueryEntity> rules = new ArrayList<>();
+		
+		rule.setEntity("Pax");
+		rule.setField("firstName");
+		rule.setOperator("contains");
+		rule.setType("string");
+		rule.setValue("avi");
+		
+		rules.add(rule);
+		
+		query.setCondition("AND");
+		query.setRules(rules);
+		
+		return query;
+	}
+	
+	private QueryObject buildNestedQuery() {
 		QueryObject query = new QueryObject();
 		
 		return query;

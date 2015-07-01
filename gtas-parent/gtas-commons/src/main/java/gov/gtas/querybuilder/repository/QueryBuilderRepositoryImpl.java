@@ -1,7 +1,6 @@
 package gov.gtas.querybuilder.repository;
 
 import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 
 import java.util.ArrayList;

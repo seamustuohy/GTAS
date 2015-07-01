@@ -5,8 +5,9 @@ import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.repository.QueryBuilderRepository;
+import gov.gtas.querybuilder.util.Constants;
 import gov.gtas.querybuilder.util.EntityEnum;
-import gov.gtas.querybuilder.util.QueryBuilderConstants;
+import gov.gtas.querybuilder.util.OperatorEnum;
 import gov.gtas.querybuilder.util.QueryBuilderUtil;
 
 import java.util.Arrays;
@@ -90,15 +91,15 @@ public class QueryBuilderService {
 			parseQueryObject(queryObject, queryType, join, where, level);			
 			logger.debug("Finished Parsing QueryObject");
 			
-			if(queryType.getName().equalsIgnoreCase(EntityEnum.FLIGHT.getName())) {
-				queryPrefix = QueryBuilderConstants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
-						" " + QueryBuilderConstants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT);
-				query = queryPrefix + join + " " + QueryBuilderConstants.WHERE + " " + where;
+			if(queryType == EntityEnum.FLIGHT) {
+				queryPrefix = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
+						" " + Constants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT);
+				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
-			else if(queryType.getName().equalsIgnoreCase(EntityEnum.PASSENGER.getName())) {
-				queryPrefix = QueryBuilderConstants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER) + 
-						" " + QueryBuilderConstants.FROM + " " + EntityEnum.PASSENGER.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER);
-				query = queryPrefix + join + " " + QueryBuilderConstants.WHERE + " " + where;
+			else if(queryType == EntityEnum.PASSENGER) {
+				queryPrefix = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER) + 
+						" " + Constants.FROM + " " + EntityEnum.PASSENGER.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER);
+				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			
 			logger.info("Parsed Query: " + query);
@@ -151,30 +152,59 @@ public class QueryBuilderService {
 			
 			StringBuilder valueStr = new StringBuilder();
 			
-			if(operator != null && (operator.equalsIgnoreCase(QueryBuilderConstants.IN) || 
-					operator.equalsIgnoreCase(QueryBuilderConstants.NOT_IN) || operator.equalsIgnoreCase(QueryBuilderConstants.BETWEEN))) {
+			if(operator != null && (operator.equalsIgnoreCase(OperatorEnum.IN.toString()) || 
+					operator.equalsIgnoreCase(OperatorEnum.NOT_IN.toString()) || operator.equalsIgnoreCase(OperatorEnum.BETWEEN.toString()))) {
 				List<String> values = Arrays.asList(queryTerm.getValues());
 				
 				if(values != null && values.size() > 0) {
 					
-					int index = 0;
-					valueStr.append("(");
-					for(String val : values) {
-						if(index > 0) {
-							valueStr.append(", ");
+					if(operator.equalsIgnoreCase(OperatorEnum.BETWEEN.toString())) {
+						// for BETWEEN operator, there should be two values for the range
+						if(values.size() == 2) {
+							valueStr.append(values.get(0) + " " + Constants.AND + " " + values.get(1));
 						}
-						valueStr.append(type.equalsIgnoreCase("string") ? "'" + val + "'" : val);
-						index++;
 					}
-					valueStr.append(")");
+					else {
+						int index = 0;
+						valueStr.append("(");
+						for(String val : values) {
+							if(index > 0) {
+								valueStr.append(", ");
+							}
+							valueStr.append(type.equalsIgnoreCase("string") ? "'" + val + "'" : val);
+							index++;
+						}
+						valueStr.append(")");
+					}
 				}
 			}
 			else {
 				String value = queryTerm.getValue();
 				
-				valueStr.append(type.equalsIgnoreCase("string") ? "'" + value + "'" : value);
+				// These four operators don't have any value ex. where firstname IS NULL
+				if(operator != null && !(operator.equalsIgnoreCase(OperatorEnum.IS_EMPTY.toString()) ||
+						operator.equalsIgnoreCase(OperatorEnum.IS_NOT_EMPTY.toString()) ||
+						operator.equalsIgnoreCase(OperatorEnum.IS_NULL.toString()) ||
+						operator.equalsIgnoreCase(OperatorEnum.IS_NOT_NULL.toString()))) {
+					
+					if(operator != null && (operator.equalsIgnoreCase(OperatorEnum.BEGINS_WITH.toString()) || 
+							operator.equalsIgnoreCase(OperatorEnum.NOT_BEGINS_WITH.toString())) ) {
+						valueStr.append("'" + value + "%'");
+					}
+					else if(operator != null && (operator.equalsIgnoreCase(OperatorEnum.CONTAINS.toString()) ||
+							operator.equalsIgnoreCase(OperatorEnum.NOT_CONTAINS.toString())) ) {
+						valueStr.append("'%" + value + "%'");
+					}
+					else if(operator != null && (operator.equalsIgnoreCase(OperatorEnum.ENDS_WITH.toString()) ||
+							operator.equalsIgnoreCase(OperatorEnum.NOT_ENDS_WITH.toString()))) {
+						valueStr.append("'%" + value + "'");
+					}
+					else {
+						
+						valueStr.append(type.equalsIgnoreCase("string") ? "'" + value + "'" : value);
+					}
+				}
 			}
-				
 			
 			if(entity != null && !(queryType.getName().equalsIgnoreCase(entity) || queryType.getName().equalsIgnoreCase(entity))) { 
 				String joinCondition = "";
@@ -192,7 +222,8 @@ public class QueryBuilderService {
 					join.append(QueryBuilderUtil.getJoinCondition(EntityEnum.valueOf(entity.toUpperCase())));
 				}
 			}
-			where.append(QueryBuilderUtil.getEntityAlias(EntityEnum.valueOf(entity.toUpperCase())) + "." + field + " " + QueryBuilderUtil.getOperator(operator) + " " + valueStr);
+			
+			where.append(QueryBuilderUtil.getEntityAlias(EntityEnum.valueOf(entity.toUpperCase())) + "." + field + " " + OperatorEnum.getEnum(operator).getValue() + " " + valueStr);
 		}
 	}
 }
