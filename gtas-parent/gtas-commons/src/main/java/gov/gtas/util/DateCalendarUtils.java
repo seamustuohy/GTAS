@@ -11,7 +11,7 @@ import org.apache.commons.lang3.time.DateUtils;
 
 /**
  * Basic adaptation of commons DateUtils.
- * @author GTAS3
+ * @author GTAS3 (AB)
  *
  */
 public class DateCalendarUtils {

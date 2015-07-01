@@ -52,6 +52,9 @@ public class UdrRule extends BaseEntity {
     @JoinColumn(name="AUTHOR", referencedColumnName="user_id", nullable = false)     
     private User author;
 	
+	@Column(name = "TITLE", nullable=false, length = 64)
+	private String title;
+
 	@Column(name = "EDIT_DT", nullable = false)
 	private Date editDt;
 
@@ -101,6 +104,20 @@ public class UdrRule extends BaseEntity {
 	 */
 	public void setAuthor(User author) {
 		this.author = author;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	/**

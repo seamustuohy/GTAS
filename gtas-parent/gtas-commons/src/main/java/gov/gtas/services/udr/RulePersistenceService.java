@@ -21,4 +21,5 @@ public interface RulePersistenceService {
     public UdrRule update(UdrRule rule, String userId) ;
     public UdrRule findById(Long id);
     public UdrRule findByTitleAndAuthor(String title, String authorUserId);
+    public List<UdrRule> findByAuthor(String authorUserId);
 }

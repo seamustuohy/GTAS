@@ -14,9 +14,11 @@ public final class Constants {
 	//UDR URI
 	public static final String UDR_ROOT = "/udr";
 	public static final String UDR_GET = "/{userId}/{title}";
+	public static final String UDR_GET_BY_ID = "/get/{id}";
 	public static final String UDR_GETALL = "/list/{userId}";
 	public static final String UDR_POST = "/{userId}";
 	public static final String UDR_PUT = "/{userId}";
+	public static final String UDR_DELETE = "/{userId}/{id}";
 	public static final String UDR_TEST = "/testUdr";
 	public static final String UDR_RULE = "/rules";
 	
