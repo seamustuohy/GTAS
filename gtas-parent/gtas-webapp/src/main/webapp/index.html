@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>GTAS</title>
+  
+  <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css" >
+  <link rel="stylesheet" href="resources/bower_components/ng-table/dist/ng-table.css" />
+
+  <script src="resources/bower_components/angular/angular.js"></script>
+  <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.js"></script>  
+  <script src="resources/bower_components/angular-bootstrap/ui-bootstrap.js"></script>  
+  <script src="resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>  
+  <script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
+  
+  <script src="app.js"></script>
+</head>
+
+<body>
+  <tabset>
+    <tab heading="Home">
+    	<div ui-view="flights"></div>        
+	</tab>
+	
+    <tab heading="View">
+      <tab-heading>
+        <span class="dropdown" on-toggle="toggled(open)">
+           <a href class="dropdown-toggle">View</a>
+           <ul class="dropdown-menu">
+              <li>Flights</li>
+              <li>Pax</li>
+              <li>item 3</li>
+           </ul>
+        </span>
+     </tab-heading>
+    	Static content2
+   	</tab>
+  </tabset>
+
+
+    <div class="span6">
+      <div ui-view="main"></div>        
+    </div>
+</body>
+
+</html>
