@@ -79,7 +79,7 @@ public class QueryBuilderController {
 	 * @param query
 	 */
 	@RequestMapping(value = Constants.SAVE_QUERY_URI, method = RequestMethod.POST)
-	public void saveQuery(String query) {
+	public void saveQuery(@RequestBody QueryObject queryObject) {
 		
 		queryService.saveQuery();
 	}
