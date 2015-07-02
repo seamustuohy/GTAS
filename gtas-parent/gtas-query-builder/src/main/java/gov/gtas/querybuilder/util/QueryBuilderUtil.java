@@ -1,45 +1,19 @@
 package gov.gtas.querybuilder.util;
 
 public class QueryBuilderUtil {
-
-	public static String getEntityAlias(EntityEnum entity) {
-		String alias;
-		
-		switch (entity.getName()) {
-	        case "Flight":
-	            alias = "f";
-	            break;
-	        case "Passenger":
-	        	alias = "p";
-	        	break;
-	        case "Pax":
-	        	alias = "p";
-	        	break;
-	        case "Document":
-	            alias = "d";
-	            break;
-	        default:
-	            throw new IllegalArgumentException("Invalid entity");
-		}
-
-		return alias;
-	}
 	
 	public static String getJoinCondition(EntityEnum entity) {
 		String joinCondition = "";
 		
-		switch (entity.getName()) {
+		switch (entity.getEntityName()) {
 			case "Flight":
-				joinCondition = " join " + getEntityAlias(EntityEnum.PASSENGER) + ".flights " + getEntityAlias(EntityEnum.FLIGHT);
+				joinCondition = " join " + EntityEnum.PAX.getAlias() + ".flights " + EntityEnum.FLIGHT.getAlias();
 				break;
-	        case "Passenger":
-	        	joinCondition = " join " + getEntityAlias(EntityEnum.FLIGHT) + ".passengers " + getEntityAlias(EntityEnum.PASSENGER);
-	        	break;
 	        case "Pax":
-	        	joinCondition = " join " + getEntityAlias(EntityEnum.FLIGHT) + ".passengers " + getEntityAlias(EntityEnum.PASSENGER);
+	        	joinCondition = " join " + EntityEnum.FLIGHT.getAlias() + ".passengers " + EntityEnum.PAX.getAlias();
 	        	break;
 	        case "Document":
-	        	joinCondition = " join " + getEntityAlias(EntityEnum.PASSENGER) + ".documents " + getEntityAlias(EntityEnum.DOCUMENT);
+	        	joinCondition = " join " + EntityEnum.PAX.getAlias() + ".documents " + EntityEnum.DOCUMENT.getAlias();
 	            break;
 	        default:
 	            throw new IllegalArgumentException("Invalid entity");

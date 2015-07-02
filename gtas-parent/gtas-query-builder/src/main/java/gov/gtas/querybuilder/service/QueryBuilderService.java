@@ -37,11 +37,11 @@ public class QueryBuilderService {
 		query = getQuery(queryObject, queryType);
 		
 		if(query != null && !query.isEmpty()) {
-			if(queryType.getName().equalsIgnoreCase(EntityEnum.FLIGHT.getName())) {
+			if(queryType == EntityEnum.FLIGHT) {
 				
 				return (queryRepository.getFlightsByDynamicQuery(query));
 			}
-			else if(queryType.getName().equalsIgnoreCase(EntityEnum.PASSENGER.getName())) {
+			else if(queryType == EntityEnum.PAX) {
 				
 				return (queryRepository.getPassengersByDynamicQuery(query));
 			}
@@ -92,13 +92,13 @@ public class QueryBuilderService {
 			logger.debug("Finished Parsing QueryObject");
 			
 			if(queryType == EntityEnum.FLIGHT) {
-				queryPrefix = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
-						" " + Constants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT);
+				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.FLIGHT.getAlias() + 
+						" " + Constants.FROM + " " + EntityEnum.FLIGHT.getEntityName() + " " + EntityEnum.FLIGHT.getAlias();
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
-			else if(queryType == EntityEnum.PASSENGER) {
-				queryPrefix = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER) + 
-						" " + Constants.FROM + " " + EntityEnum.PASSENGER.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER);
+			else if(queryType == EntityEnum.PAX) {
+				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.PAX.getAlias() + 
+						" " + Constants.FROM + " " + EntityEnum.PAX.getEntityName() + " " + EntityEnum.PAX.getAlias();
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			
@@ -181,6 +181,10 @@ public class QueryBuilderService {
 			else {
 				String value = queryTerm.getValue();
 				
+				if(value != null) {
+					value = value.replaceAll("'", "''");
+				}
+				
 				// These four operators don't have any value ex. where firstname IS NULL
 				if(operator != null && !(operator.equalsIgnoreCase(OperatorEnum.IS_EMPTY.toString()) ||
 						operator.equalsIgnoreCase(OperatorEnum.IS_NOT_EMPTY.toString()) ||
@@ -200,17 +204,16 @@ public class QueryBuilderService {
 						valueStr.append("'%" + value + "'");
 					}
 					else {
-						
-						valueStr.append(type.equalsIgnoreCase("string") ? "'" + value + "'" : value);
+						valueStr.append(type.equalsIgnoreCase("string") || type.equalsIgnoreCase("date") ? "'" + value + "'" : value);
 					}
 				}
 			}
 			
-			if(entity != null && !(queryType.getName().equalsIgnoreCase(entity) || queryType.getName().equalsIgnoreCase(entity))) { 
+			if(entity != null && !(queryType.getEntityName().equalsIgnoreCase(entity) || queryType.getEntityName().equalsIgnoreCase(entity))) { 
 				String joinCondition = "";
 				
-				if(entity.equalsIgnoreCase(EntityEnum.DOCUMENT.getName())) {
-					joinCondition = QueryBuilderUtil.getJoinCondition(EntityEnum.PASSENGER);
+				if(entity.equalsIgnoreCase(EntityEnum.DOCUMENT.getEntityName())) {
+					joinCondition = QueryBuilderUtil.getJoinCondition(EntityEnum.PAX);
 					
 					if(join.indexOf(joinCondition) == -1) {
 						join.append(joinCondition);
@@ -223,7 +226,7 @@ public class QueryBuilderService {
 				}
 			}
 			
-			where.append(QueryBuilderUtil.getEntityAlias(EntityEnum.valueOf(entity.toUpperCase())) + "." + field + " " + OperatorEnum.getEnum(operator).getValue() + " " + valueStr);
+			where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " " + valueStr);
 		}
 	}
 }

@@ -4,48 +4,48 @@ import gov.gtas.querybuilder.util.EntityEnum;
 
 public class QueryBuilderModelFactory {
 
-	public IQueryBuilderModel getQueryBuilderModel(String modelType) {
+	public IQueryBuilderModel getQueryBuilderModel(EntityEnum modelType) {
 	      if(modelType == null){
 	         return null;
 	      }		
 	      
-	      if(modelType.equalsIgnoreCase(EntityEnum.ADDRESS.toString())) {
+	      if(modelType == EntityEnum.ADDRESS) {
 	         return new Address();
 	      } 
-	      else if(modelType.equalsIgnoreCase(EntityEnum.API.toString())) {
+	      else if(modelType == EntityEnum.API) {
 	         return new API();
 	      } 
-	      else if(modelType.equalsIgnoreCase(EntityEnum.CREDIT_CARD.toString())) {
+	      else if(modelType == EntityEnum.CREDIT_CARD) {
 	         return new CreditCard();
 	      }
-	      else if(modelType.equalsIgnoreCase(EntityEnum.DOCUMENT.toString())) {
+	      else if(modelType == EntityEnum.DOCUMENT) {
 	    	  return new Document();
 	      }
-	      else if(modelType.equalsIgnoreCase(EntityEnum.EMAIL.toString())) {
+	      else if(modelType == EntityEnum.EMAIL) {
 	    	  return new Email();
 	      }
-	      else if(modelType.equalsIgnoreCase(EntityEnum.FLIGHT.toString())) {
+	      else if(modelType == EntityEnum.FLIGHT) {
 	    	  return new Flight();
 	      }
-	      else if(modelType.equalsIgnoreCase(EntityEnum.FREQUENT_FLYER.toString())) {
+	      else if(modelType == EntityEnum.FREQUENT_FLYER) {
 	    	  return new FrequentFlyer();
 	      }
-	      else if(modelType.equalsIgnoreCase(EntityEnum.HITS.toString())) {
+	      else if(modelType == EntityEnum.HITS) {
 	    	  return new Hits();
 	      }
-	      else if(modelType.equalsIgnoreCase(EntityEnum.NAME_ORIGIN.toString())) {
+	      else if(modelType == EntityEnum.NAME_ORIGIN) {
 	    	  return new NameOrigin();
 	      }
-	      else if(modelType.equalsIgnoreCase(EntityEnum.PASSENGER.toString())) {
+	      else if(modelType == EntityEnum.PAX) {
 	    	  return new Passenger();
 	      }
-	      else if(modelType.equalsIgnoreCase(EntityEnum.PHONE.toString())) {
+	      else if(modelType == EntityEnum.PHONE) {
 	    	  return new Phone();
 	      }
-	      else if(modelType.equalsIgnoreCase(EntityEnum.PNR.toString())) {
+	      else if(modelType == EntityEnum.PNR) {
 	    	  return new PNR();
 	      }
-	      else if(modelType.equalsIgnoreCase(EntityEnum.TRAVEL_AGENCY.toString())) {
+	      else if(modelType == EntityEnum.TRAVEL_AGENCY) {
 	    	  return new TravelAgency();
 	      }
 	      

@@ -112,7 +112,7 @@ public class QueryBuilderServiceIT {
 	@Test
 	public void testRunQueryAgainstPassengers() {
 		QueryObject query = buildSimpleQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PASSENGER);
+		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
 		
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
@@ -129,7 +129,7 @@ public class QueryBuilderServiceIT {
 	@Test
 	public void testSimpleIsNullQueryAgainstPassengers() {
 		QueryObject query = buildSimpleIsNullQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PASSENGER);
+		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
 		
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
@@ -146,7 +146,7 @@ public class QueryBuilderServiceIT {
 	@Test
 	public void testSimpleContainsQueryAgainstPassengers() {
 		QueryObject query = buildSimpleContainsQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PASSENGER);
+		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
 		
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
@@ -163,7 +163,7 @@ public class QueryBuilderServiceIT {
 	@Test
 	public void testSimpleBetweenQueryAgainstPassengers() {
 		QueryObject query = buildSimpleBetweenQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PASSENGER);
+		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
 
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
@@ -209,7 +209,7 @@ public class QueryBuilderServiceIT {
 		rule.setField("eta");
 		rule.setOperator("equal");
 		rule.setType("date");
-		rule.setValue("05/11/2014");
+		rule.setValue("2014-05-11");
 		
 		rules.add(rule);
 		

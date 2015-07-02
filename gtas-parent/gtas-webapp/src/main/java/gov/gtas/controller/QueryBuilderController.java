@@ -68,7 +68,7 @@ public class QueryBuilderController {
 		List<QueryBuilderPassengerResult> qbPassengers = new ArrayList<>();
 		
 		if(queryObject != null) {
-			qbPassengers = mapFlightToQueryPassengerResult(queryService.runQuery(queryObject, EntityEnum.PASSENGER));
+			qbPassengers = mapFlightToQueryPassengerResult(queryService.runQuery(queryObject, EntityEnum.PAX));
 		}
 		
 		return qbPassengers;
@@ -112,24 +112,24 @@ public class QueryBuilderController {
 	private Map<String, IQueryBuilderModel> getQueryBuilderModel() {
 		Map<String, IQueryBuilderModel> modelMap = new LinkedHashMap<>();
 		
-		modelMap.put(EntityEnum.ADDRESS.toString(), getModel(EntityEnum.ADDRESS.toString()));
-		modelMap.put(EntityEnum.API.toString(), getModel(EntityEnum.API.toString()));
-		modelMap.put(EntityEnum.CREDIT_CARD.toString(), getModel(EntityEnum.CREDIT_CARD.toString()));
-		modelMap.put(EntityEnum.DOCUMENT.toString(), getModel(EntityEnum.DOCUMENT.toString()));
-		modelMap.put(EntityEnum.EMAIL.toString(), getModel(EntityEnum.EMAIL.toString()));
-		modelMap.put(EntityEnum.FLIGHT.toString(), getModel(EntityEnum.FLIGHT.toString()));
-		modelMap.put(EntityEnum.FREQUENT_FLYER.toString(), getModel(EntityEnum.FREQUENT_FLYER.toString()));
-		modelMap.put(EntityEnum.HITS.toString(), getModel(EntityEnum.HITS.toString()));
-		modelMap.put(EntityEnum.NAME_ORIGIN.toString(), getModel(EntityEnum.NAME_ORIGIN.toString()));
-		modelMap.put(EntityEnum.PASSENGER.toString(), getModel(EntityEnum.PASSENGER.toString()));
-		modelMap.put(EntityEnum.PHONE.toString(), getModel(EntityEnum.PHONE.toString()));
-		modelMap.put(EntityEnum.PNR.toString(), getModel(EntityEnum.PNR.toString()));
-		modelMap.put(EntityEnum.TRAVEL_AGENCY.toString(), getModel(EntityEnum.TRAVEL_AGENCY.toString()));
+		modelMap.put(EntityEnum.ADDRESS.getFriendlyName(), getModel(EntityEnum.ADDRESS));
+		modelMap.put(EntityEnum.API.getFriendlyName(), getModel(EntityEnum.API));
+		modelMap.put(EntityEnum.CREDIT_CARD.getFriendlyName(), getModel(EntityEnum.CREDIT_CARD));
+		modelMap.put(EntityEnum.DOCUMENT.getFriendlyName(), getModel(EntityEnum.DOCUMENT));
+		modelMap.put(EntityEnum.EMAIL.getFriendlyName(), getModel(EntityEnum.EMAIL));
+		modelMap.put(EntityEnum.FLIGHT.getFriendlyName(), getModel(EntityEnum.FLIGHT));
+		modelMap.put(EntityEnum.FREQUENT_FLYER.getFriendlyName(), getModel(EntityEnum.FREQUENT_FLYER));
+		modelMap.put(EntityEnum.HITS.getFriendlyName(), getModel(EntityEnum.HITS));
+		modelMap.put(EntityEnum.NAME_ORIGIN.getFriendlyName(), getModel(EntityEnum.NAME_ORIGIN));
+		modelMap.put(EntityEnum.PAX.getFriendlyName(), getModel(EntityEnum.PAX));
+		modelMap.put(EntityEnum.PHONE.getFriendlyName(), getModel(EntityEnum.PHONE));
+		modelMap.put(EntityEnum.PNR.getFriendlyName(), getModel(EntityEnum.PNR));
+		modelMap.put(EntityEnum.TRAVEL_AGENCY.getFriendlyName(), getModel(EntityEnum.TRAVEL_AGENCY));
 		
 		return modelMap;
 	}
 	
-	private IQueryBuilderModel getModel(String modelType) {
+	private IQueryBuilderModel getModel(EntityEnum modelType) {
 		QueryBuilderModelFactory factory = new QueryBuilderModelFactory();
 		
 		IQueryBuilderModel model = factory.getQueryBuilderModel(modelType);

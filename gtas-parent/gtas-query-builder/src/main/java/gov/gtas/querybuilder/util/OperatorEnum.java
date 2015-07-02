@@ -22,14 +22,14 @@ public enum OperatorEnum {
 	IS_NULL ("IS NULL"),
 	IS_NOT_NULL ("IS NOT NULL");
 	
-	private String value;
+	private String operator;
 
-	private OperatorEnum(String value) {
-		this.value = value;
+	private OperatorEnum(String operator) {
+		this.operator = operator;
 	}
 
-	public String getValue() {
-		return value;
+	public String getOperator() {
+		return operator;
 	}
 	
 	public static OperatorEnum getEnum(String value) {

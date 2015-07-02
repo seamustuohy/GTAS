@@ -46,9 +46,9 @@ public class QueryBuilderServiceTest {
 	
 	@Test()
 	public void testGetQueryForFlightsWithSimpleQuery() throws Exception {
-		final String expectedQuery = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
-				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) +
-				QueryBuilderUtil.getJoinCondition(EntityEnum.PASSENGER) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + EntityEnum.FLIGHT.getAlias() + 
+				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getEntityName() + " " + EntityEnum.FLIGHT.getAlias() +
+				QueryBuilderUtil.getJoinCondition(EntityEnum.PAX) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
 		
 		QueryObject query = buildSimpleQuery();
 		
@@ -62,8 +62,8 @@ public class QueryBuilderServiceTest {
 	
 	@Test()
 	public void testGetQueryForPassengersWithSimpleQuery() throws Exception {
-		final String expectedQuery = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER) + 
-				" " + Constants.FROM + " " + EntityEnum.PASSENGER.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.PASSENGER) +
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + EntityEnum.PAX.getAlias() + 
+				" " + Constants.FROM + " " + EntityEnum.PAX.getEntityName() + " " + EntityEnum.PAX.getAlias() +
 				" " + Constants.WHERE + " p.firstName = 'DAVID'";
 		
 		QueryObject query = buildSimpleQuery();
@@ -71,7 +71,7 @@ public class QueryBuilderServiceTest {
 		Method privateGetQueryMethod = QueryBuilderService.class.getDeclaredMethod("getQuery", QueryObject.class, EntityEnum.class);
 		privateGetQueryMethod.setAccessible(true);
 		
-		String actualQuery = (String) privateGetQueryMethod.invoke(service, query, EntityEnum.PASSENGER);
+		String actualQuery = (String) privateGetQueryMethod.invoke(service, query, EntityEnum.PAX);
 		
 		assertEquals(expectedQuery, actualQuery);
 		
@@ -79,9 +79,9 @@ public class QueryBuilderServiceTest {
 	
 	@Test()
 	public void testGetQueryForFlightsWithSimpleDateQuery() throws Exception {
-		final String expectedQuery = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
-				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) +
-				QueryBuilderUtil.getJoinCondition(EntityEnum.PASSENGER) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + EntityEnum.FLIGHT.getAlias() + 
+				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getEntityName() + " " + EntityEnum.FLIGHT.getAlias() +
+				QueryBuilderUtil.getJoinCondition(EntityEnum.PAX) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
 		
 		QueryObject query = buildSimpleDateQuery();
 		
@@ -98,9 +98,9 @@ public class QueryBuilderServiceTest {
 	@Test()
 	public void testGetQueryForFlightsWithSimpleIsNullQuery() throws Exception {
 		
-		final String expectedQuery = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
-				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) +
-				QueryBuilderUtil.getJoinCondition(EntityEnum.PASSENGER) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + EntityEnum.FLIGHT.getAlias() + 
+				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getEntityName() + " " + EntityEnum.FLIGHT.getAlias() +
+				QueryBuilderUtil.getJoinCondition(EntityEnum.PAX) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
 		
 		QueryObject query = buildSimpleIsNullQuery();
 		
@@ -117,9 +117,9 @@ public class QueryBuilderServiceTest {
 	@Test()
 	public void testGetQueryForFlightsWithSimpleContainsQuery() throws Exception {
 		
-		final String expectedQuery = Constants.SELECT_DISTINCT + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) + 
-				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getName() + " " + QueryBuilderUtil.getEntityAlias(EntityEnum.FLIGHT) +
-				QueryBuilderUtil.getJoinCondition(EntityEnum.PASSENGER) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + EntityEnum.FLIGHT.getAlias() + 
+				" " + Constants.FROM + " " + EntityEnum.FLIGHT.getEntityName() + " " + EntityEnum.FLIGHT.getAlias() +
+				QueryBuilderUtil.getJoinCondition(EntityEnum.PAX) + " " + Constants.WHERE + " p.firstName = 'DAVID'";
 		
 		QueryObject query = buildSimpleContainsQuery();
 		
