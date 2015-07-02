@@ -177,6 +177,13 @@
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
     </dependency>
+
+
+  <dependency>
+    <groupId>org.apache.tiles</groupId>
+    <artifactId>tiles-jsp</artifactId>
+  </dependency>
+
   </dependencies>
   <build>
     <plugins>

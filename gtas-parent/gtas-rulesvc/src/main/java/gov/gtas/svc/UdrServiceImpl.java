@@ -4,6 +4,7 @@ import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.RuleMeta;
+import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
@@ -35,12 +36,6 @@ public class UdrServiceImpl implements UdrService {
 	private static Logger logger = LoggerFactory
 			.getLogger(UdrServiceImpl.class);
 
-	private static final String PERSISTENCE_OP_CREATE = "Create UDR";
-	private static final String PERSISTENCE_OP_UPDATE = "Update UDR";
-	private static final String PERSISTENCE_OP_DELETE = "Delete UDR";
-//	private static final String PERSISTENCE_OP_FIND = "Find UDR";
-//	private static final String PERSISTENCE_OP_LIST = "List UDR";
-	
 	/* The spring context supplied error handler component. */
 	@Autowired
 	private BasicErrorHandler errorHandler;
@@ -167,15 +162,7 @@ public class UdrServiceImpl implements UdrService {
 
 		processRuleGeneration();// TODO placeholder
 
-//		JsonServiceResponse resp = new JsonServiceResponse(
-//				"SUCCESS",
-//				"UDR Service",
-//				"Create UDR",
-//				String.format(
-//						"UDR Rule with title='%s' was saved with ID='%s' for author:'%s'.",
-//						udrToCreate.getSummary().getTitle(), savedRule.getId(),
-//						udrToCreate.getSummary().getAuthor()));
-		return createResponse(true, PERSISTENCE_OP_CREATE, savedRule);
+		return createResponse(true, UdrConstants.UDR_CREATE_OP_NAME, savedRule);
 	}
 
 	private User fetchRuleAuthor(final String userId, final String authorUserId) {
@@ -251,12 +238,7 @@ public class UdrServiceImpl implements UdrService {
 				userId);
 
 
-//		JsonServiceResponse resp = new JsonServiceResponse("SUCCESS",
-//				"UDR Service", "Update UDR", String.format(
-//						"UDR Rule with title='%s' and ID='%s' was updated.",
-//						udrToUpdate.getSummary().getTitle(),
-//						updatedRule.getId()));
-		return createResponse(true, PERSISTENCE_OP_UPDATE, updatedRule);
+		return createResponse(true, UdrConstants.UDR_UPDATE_OP_NAME, updatedRule);
 	}
 
 	/*
@@ -268,29 +250,31 @@ public class UdrServiceImpl implements UdrService {
 	public JsonServiceResponse deleteUdr(String userId, Long id) {
 		UdrRule deletedRule = rulePersistenceService.delete(id, userId);
 		if(deletedRule != null){
-			return createResponse(true, PERSISTENCE_OP_DELETE, deletedRule);
+			return createResponse(true, UdrConstants.UDR_DELETE_OP_NAME, deletedRule);
 		}else {
-			return createResponse(false, PERSISTENCE_OP_DELETE, deletedRule);
+			return createResponse(false, UdrConstants.UDR_DELETE_OP_NAME, deletedRule);
 		}
 	}
 
 	private JsonServiceResponse createResponse(boolean success, String op, UdrRule rule){
 		JsonServiceResponse resp  = null;
 		if(success){
-		resp = new JsonServiceResponse("SUCCESS",
+		resp = new JsonServiceResponse(JsonServiceResponse.SUCCESS_RESPONSE,
 				"UDR Service", op, String.format(
 						op + " on UDR Rule with title='%s' and ID='%s' was successful.",
 						rule.getTitle(),
 						rule.getId()));
+		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(UdrConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(rule.getId())));
+		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(UdrConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(rule.getTitle())));
 		} else {
 			if(rule != null){
-			resp = new JsonServiceResponse("FAILED",
+			resp = new JsonServiceResponse(JsonServiceResponse.FAILURE_RESPONSE,
 					"UDR Service", op, String.format(
 							op + " on UDR Rule with title='%s' and ID='%s' failed.",
 							rule.getTitle(),
 							rule.getId()));
 			} else {
-				resp = new JsonServiceResponse("FAILED",
+				resp = new JsonServiceResponse(JsonServiceResponse.FAILURE_RESPONSE,
 				   "UDR Service", op, op + " failed.");
 				
 			}

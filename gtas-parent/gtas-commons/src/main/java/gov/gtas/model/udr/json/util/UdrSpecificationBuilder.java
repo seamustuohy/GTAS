@@ -99,6 +99,9 @@ public class UdrSpecificationBuilder {
 	 * @return UDR JSON object.
 	 */
 	public static UdrSpecification createSampleSpec() {
+		return createSampleSpec("jpjones");
+	}
+	public static UdrSpecification createSampleSpec(String userId) {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
 		bldr.addTerm(EntityLookupEnum.Pax,
@@ -119,7 +122,7 @@ public class UdrSpecificationBuilder {
 				ConditionValueTypeEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		bldr.addMeta("Hello Rule 1", "This is a test", new Date(), null, true,
-				"jpjones");
+				userId);
 		return bldr.build();
 	}
 }

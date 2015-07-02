@@ -1,6 +1,9 @@
 package gov.gtas.model.udr.json;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 /**
  * Rule meta-data JSON object class.
  * @author GTAS3 (AB)
@@ -13,10 +16,14 @@ public class JsonServiceResponse implements Serializable {
 	 */
 	private static final long serialVersionUID = -1376823917772400644L;
 	
+	public static final String SUCCESS_RESPONSE = "SUCCESS";
+	public static final String FAILURE_RESPONSE = "FAILED";
+
 	private String status;
 	private String serviceName;
 	private String request;
 	private String message;
+	private List<ServiceResponseDetailAttribute> responseDetails;
 	
 	/**
 	 * Constructor.
@@ -30,6 +37,7 @@ public class JsonServiceResponse implements Serializable {
 		this.serviceName = serviceName;
 		this.request = request;
 		this.message = message;
+		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();
 	}
 	/**
 	 * @return the status
@@ -80,4 +88,40 @@ public class JsonServiceResponse implements Serializable {
 		this.message = message;
 	}
 	
+	/**
+	 * @return the responseDetails
+	 */
+	public List<ServiceResponseDetailAttribute> getResponseDetails() {
+		return Collections.unmodifiableList(responseDetails);
+	}
+	/**
+	 * @param responseDetail the responseDetail to add.
+	 */
+	public void addResponseDetails(
+			ServiceResponseDetailAttribute responseDetail) {
+		this.responseDetails.add(responseDetail);
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+	public static class ServiceResponseDetailAttribute{
+		private String attributeName;
+		private String attributeValue;
+		public ServiceResponseDetailAttribute(String attrName, String attrValue){
+			attributeName = attrName;
+			attributeValue = attrValue;
+		}
+		/**
+		 * @return the attributeName
+		 */
+		public String getAttributeName() {
+			return attributeName;
+		}
+		/**
+		 * @return the attributeValue
+		 */
+		public String getAttributeValue() {
+			return attributeValue;
+		}
+		
+	}
 }
