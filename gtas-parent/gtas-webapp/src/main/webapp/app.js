@@ -6,10 +6,29 @@ var app = angular.module('myApp', [
 
 app.config(function($stateProvider){
 $stateProvider
-    .state('flights', {
+/*    .state('flights', {
         url: '/flights',
         templateUrl: 'flights/flights.html',
         controller: 'FlightsController'
+    })
+*/
+    .state('home', {
+        url: '/home',
+        views: {
+            'flights': {
+            templateUrl: 'flights/flights.html',
+            controller: 'FlightsController'
+            },
+            'pax': {
+            templateUrl: 'pax/pax.html',
+            controller: 'PaxController'
+            }
+        }
+    })
+    .state('pax', {
+        url: '/pax',
+        templateUrl: 'pax/pax.html',
+        controller: 'PaxController'
     })
     .state('query', {
         url: '/query',

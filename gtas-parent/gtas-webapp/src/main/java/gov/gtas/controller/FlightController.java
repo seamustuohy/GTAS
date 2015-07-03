@@ -34,6 +34,7 @@ public class FlightController {
         for (Flight f : flights) {
             logger.debug(f.getFlightNumber());
             FlightVo vo = new FlightVo();
+            vo.setFlightId(String.valueOf(f.getId()));
             String carrier = f.getCarrier() != null ? f.getCarrier().getIata() : null;
             vo.setCarrier(carrier);
             vo.setFlightNumber(f.getFlightNumber());

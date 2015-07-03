@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class FlightVo {
     public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm aaa";
+    private String flightId;
     private String carrier;
     private String flightNumber;
     private String origin;
@@ -22,6 +23,12 @@ public class FlightVo {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date eta;
     
+    public String getFlightId() {
+        return flightId;
+    }
+    public void setFlightId(String flightId) {
+        this.flightId = flightId;
+    }
     public String getCarrier() {
         return carrier;
     }

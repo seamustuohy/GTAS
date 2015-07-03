@@ -86,4 +86,10 @@ public class PassengerServiceImpl implements PassengerService {
 		return passengerList;
 	}
 
+    @Override
+    @Transactional
+    public List<Traveler> getPassengersByFlightId(Long flightId) {
+        List<Traveler> passengerList = passengerRespository.getPassengersByFlightId(flightId);
+        return passengerList;
+    }
 }

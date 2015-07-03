@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html ng-app="myApp">
-
-<head>
-  <title>GTAS</title>
   
-  <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css" >
-  <link rel="stylesheet" href="resources/bower_components/ng-table/dist/ng-table.css" />
-
-  <script src="resources/bower_components/angular/angular.js"></script>
-  <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.js"></script>  
-  <script src="resources/bower_components/angular-bootstrap/ui-bootstrap.js"></script>  
-  <script src="resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>  
-  <script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
+  <head>
+    <title>GTAS</title>
+    <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="resources/bower_components/ng-table/dist/ng-table.css" />
+    <script src="resources/bower_components/angular/angular.js"></script>
+    <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="resources/bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script src="resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
+    <script src="app.js"></script>
+    <script src="flights/FlightsController.js"></script>
+    <script src="flights/FlightsService.js"></script>
+    <script src="pax/PaxController.js"></script>
+    <script src="pax/PaxService.js"></script>
+  </head>
   
-  <script src="app.js"></script>
-  <script src="flights/FlightsController.js"></script>
-  <script src="flights/FlightsService.js"></script>
-</head>
-
-<body ng-controller="TabsCtrl">
-
-<div class="row"> 
-    <div class="col-md-offset-1 col-md-10 col-md-offset-1">
-      <tabset>
-    <tab heading="Home" select="gotoState('flights')"></tab>
-    <tab heading="Query" select="gotoState('query')"></tab>
-    <tab heading="Admin" select="gotoState('admin')"></tab>
-  </tabset>
-
-  <div ui-view></div>
-</div>
-</div>
-</body>
+  <body ng-controller="TabsCtrl">
+    <div class="row">
+      <div class="col-md-offset-1 col-md-10 col-md-offset-1">
+        <tabset>
+          <tab heading="Home" select="gotoState('home')">
+            <div ui-view="flights"></div>
+            <div ui-view="pax"></div>
+          </tab>
+          <tab heading="Passengers" select="gotoState('pax')">
+            <div ui-view></div>
+          </tab>
+          <tab heading="Query" select="gotoState('query')"></tab>
+          <tab heading="Admin" select="gotoState('admin')"></tab>
+        </tabset>
+      </div>
+    </div>
+  </body>
 
 </html>

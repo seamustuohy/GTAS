@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -37,10 +38,18 @@ public class TravelerController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/travelers", method = RequestMethod.GET)
-    public List<PaxVo> getAllTravelers() {
+    public List<PaxVo> getAllTravelers(@RequestParam(value = "flightId", required = false) String flightId) {
         List<PaxVo> rv = new ArrayList<>();
-
-        List<Traveler> travelers = pService.findAll();
+        List<Traveler> travelers = null;
+        if (flightId != null) {
+            Long id = Long.valueOf(flightId);
+            travelers = pService.getPassengersByFlightId(id);
+        } else {
+            travelers = pService.findAll();
+        }
+        
+        if (travelers == null) return rv;
+        
         for (Traveler t : travelers) {
             logger.debug(t.getLastName());
             PaxVo vo = new PaxVo();

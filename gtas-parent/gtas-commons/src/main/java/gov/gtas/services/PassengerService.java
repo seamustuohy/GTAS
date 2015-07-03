@@ -4,6 +4,8 @@ import gov.gtas.model.Traveler;
 
 import java.util.List;
 
+import org.springframework.data.repository.query.Param;
+
 
 public interface PassengerService {
 	
@@ -14,6 +16,7 @@ public interface PassengerService {
     public Traveler findById(Long id);
     public Traveler getPassengerByName(String firstName,String lastName);
     public List<Traveler> getPassengersByLastName(String lastName);
+    public List<Traveler> getPassengersByFlightId(Long flightId);
 
 
 }

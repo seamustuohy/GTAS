@@ -1,37 +1,19 @@
-
-<div>
-    <button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
-    <button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
-
-    <table ng-table="tableParams" show-filter="true" class="table">
-        <tr ng-repeat="flight in $data">
-            <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">
-                {{flight.hits}}
-            </td>
-            <td data-title="'Carrier Code'" sortable="'carrier'" filter="{ 'carrier': 'select' }" filter-data="values($column, 'carrier')">
-                {{flight.carrier}}
-            </td>
-            <td data-title="'Flight #'" sortable="'flightNumber'" filter="{ 'flightNumber': 'text' }">
-                {{flight.flightNumber}}
-            </td>
-            <td data-title="'Origin'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">
-                {{flight.origin}}
-            </td>
-            <td data-title="'Country'" sortable="'originCountry'" filter="{ 'originCountry': 'select' }" filter-data="values($column, 'originCountry')">
-                {{flight.originCountry}}
-            </td>
-            <td data-title="'ETD'" sortable="'etd'" filter="{ 'etd': 'text' }">
-                {{flight.etd}}
-            </td>
-            <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'select' }" filter-data="values($column, 'destination')">
-                {{flight.destination}}
-            </td>
-            <td data-title="'Country'" sortable="'destinationCountry'" filter="{ 'destinationCountry': 'select' }" filter-data="values($column, 'destinationCountry')">
-                {{flight.destinationCountry}}
-            </td>
-            <td data-title="'ETA'" sortable="'eta'" filter="{ 'eta': 'text' }">
-                {{flight.eta}}
-            </td>
-        </tr>
-    </table>
-</div>
+<h3>Flights</h3>
+<button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
+<button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
+<table ng-table="tableParams" show-filter="true" class="table">
+    <tr ng-repeat="flight in $data">
+        <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">{{flight.hits}}</td>
+        <td data-title="'Carrier Code'" sortable="'carrier'" filter="{ 'carrier': 'select' }" filter-data="values($column, 'carrier')">{{flight.carrier}}</td>
+        <td data-title="'Flight #'" sortable="'flightNumber'" filter="{ 'flightNumber': 'text' }">
+            <a ng-click="updatePax(flight.flightId)">{{flight.flightNumber}}</a>
+        </td>
+        <td data-title="'Origin'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">{{flight.origin}}</td>
+        <td data-title="'Country'" sortable="'originCountry'" filter="{ 'originCountry': 'select' }" filter-data="values($column, 'originCountry')">{{flight.originCountry}}</td>
+        <td data-title="'ETD'" sortable="'etd'" filter="{ 'etd': 'text' }">{{flight.etd}}</td>
+        <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'select' }" filter-data="values($column, 'destination')">{{flight.destination}}</td>
+        <td data-title="'Country'" sortable="'destinationCountry'" filter="{ 'destinationCountry': 'select' }"
+        filter-data="values($column, 'destinationCountry')">{{flight.destinationCountry}}</td>
+        <td data-title="'ETA'" sortable="'eta'" filter="{ 'eta': 'text' }">{{flight.eta}}</td>
+    </tr>
+</table>

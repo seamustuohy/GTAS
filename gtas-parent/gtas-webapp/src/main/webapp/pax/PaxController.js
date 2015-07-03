@@ -1,10 +1,10 @@
-
-app.controller('FlightsController', function($scope, $filter, $q, ngTableParams, flightService, paxService) {
+app.controller('PaxController', function($scope, $filter, $q, ngTableParams, paxService) {
 	var data = [];
-    $scope.tableParams = new ngTableParams(
-    {
+    var flightId;
+	
+    $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
-        count: 5,          // count per page
+        count: 10,          // count per page
         filter: {},
         sorting: {
             hits: 'desc',
@@ -13,7 +13,7 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
     }, {
         total: data.length, // length of data
         getData: function($defer, params) {
-            flightService.getFlights().then(function (myData) {
+            paxService.getPax(flightId).then(function (myData) {
             	data = myData;
 			    //vm.tableParams.total(result.total);
                 // use build-in angular filter
@@ -28,10 +28,12 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 		    });            
         }
-	});
+    });
     
-  $scope.updatePax = function(flightId) {
-  	paxService.broadcast(flightId);
-  };    
+    $scope.$on('handleBroadcast', function(event, id) {
+        flightId = id;
+        $scope.tableParams.reload();
+        // $scope.$apply();
+    });     
     
 });

@@ -1,0 +1,44 @@
+<h3>Passengers</h3>
+<button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
+<button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
+
+<table ng-table="tableParams" show-filter="true" class="table">
+    <tr ng-repeat="passenger in $data">
+        <td data-title="'LastName'" sortable="'lastName'" filter="{ 'lastName': 'text' }">
+            {{passenger.lastName}}
+        </td>
+        <td data-title="'FirstName'" sortable="'firstName'" filter="{ 'firstName': 'text' }">
+            {{passenger.firstName}}
+        </td>
+        <td data-title="'MiddleName'" sortable="'middleName'" filter="{ 'middleName': 'text' }">
+            {{passenger.middleName}}
+        </td>
+        <td data-title="'Type'" sortable="'Type'" filter="{ 'Type': 'select' }" filter-data="values($column, 'Type')">
+            {{passenger.Type}}
+        </td>
+        <td data-title="'Gender'" sortable="'gender'" filter="{ 'gender': 'select' }" filter-data="values($column, 'gender')">
+            {{passenger.gender}}
+        </td>
+        <td data-title="'DOB'" sortable="'dobsort'" filter="{ 'dob': 'text' }">
+            {{passenger.dob}}
+        </td>
+        <td data-title="'Citizenship'" sortable="'citizenship'" filter="{ 'citizenship': 'select' }" filter-data="values($column, 'citizenship')">
+            {{passenger.citizenship}}
+        </td>
+        <td data-title="'Document Number'" sortable="'documentNumber'" filter="{ 'documentNumber': 'text' }">
+            {{passenger.documents[0].documentNumber}}
+        </td>
+        <td data-title="'T'" sortable="'documentType'" filter="{ 'documentType': 'select' }" filter-data="values($column, 'documentType')">
+            {{passenger.documents[0].documentType}}
+        </td>
+        <td data-title="'Issuance Country'" sortable="'issuanceCountry'" filter="{ 'issuanceCountry': 'select' }" filter-data="values($column, 'issuanceCountry')">
+            {{passenger.documents[0].issuanceCountry}}
+        </td>
+        <td data-title="'Seat'" sortable="'seat'" filter="{ 'seat': 'text' }">
+            {{passenger.seat}}
+        </td>
+        <td data-title="'Status'" sortable="'status'" filter="{ 'status': 'text' }">
+            {{passenger.status}}
+        </td>
+    </tr>
+</table>
