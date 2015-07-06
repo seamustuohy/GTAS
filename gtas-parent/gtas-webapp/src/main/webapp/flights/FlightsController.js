@@ -4,7 +4,7 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
     $scope.tableParams = new ngTableParams(
     {
         page: 1,            // show first page
-        count: 5,          // count per page
+        count: 10,          // count per page
         filter: {},
         sorting: {
             hits: 'desc',

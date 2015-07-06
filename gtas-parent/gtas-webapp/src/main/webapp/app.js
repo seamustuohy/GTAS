@@ -6,22 +6,6 @@ var app = angular.module('myApp', [
 
 app.config(function($stateProvider){
 $stateProvider
-/*
-    .state('home_old', {
-        url: '/home',
-        views: {
-            'flights': {
-            templateUrl: 'flights/flights.html',
-            controller: 'FlightsController'
-            },
-            'pax': {
-            templateUrl: 'pax/pax.html',
-            controller: 'PaxController'
-            }
-        }
-    })
-    */
-
     .state('flights', {
         url: '',
         templateUrl: 'flights/flights.html',
@@ -41,10 +25,3 @@ $stateProvider
         templateUrl: 'admin/admin.html'
     })
 })
-
-app.controller('TabsCtrl', function ($scope, $window, $state) {
-  $scope.gotoState = function(s) {
-  	$state.go(s);
-  };
-});
-
