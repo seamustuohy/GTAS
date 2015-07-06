@@ -1,7 +1,8 @@
 var app = angular.module('myApp', [
 	'ui.router', 
 	'ui.bootstrap', 
-	'ngTable'
+	'ngTable',
+	'spring-security-csrf-token-interceptor'
 ]);
 
 app.config(function($stateProvider){

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<head>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js"></script>
+    
+</head>
+
+<body ng-app="login">    
+    <form ng-submit="onLogin()" name="form" ng-controller="LoginCtrl">
+        <input type="text" ng-model="vm.username" name="username">
+        <input type="password" ng-model="vm.password"name="password">
+        <button type="submit">Log In</button>
+    </form>
+</body>    
+  
+<script>
+    var app = angular.module('login', ['spring-security-csrf-token-interceptor']);
+
+    app.controller('LoginCtrl', ['$scope', '$http', function ($scope, $http) {
+        $scope.vm = {
+            submitted: false,
+            errorMessages: []
+        };
+
+        $scope.preparePostData = function () {
+            var username = $scope.vm.username != undefined ? $scope.vm.username : '';
+            var password = $scope.vm.password != undefined ? $scope.vm.password : '';
+            var email = $scope.vm.email != undefined ? $scope.vm.email : '';
+
+            return 'username=' + username + '&password=' + password + '&email=' + email;
+        }
+
+        $scope.login = function (username, password) {
+            var postData = $scope.preparePostData();
+
+            $http({
+                method: 'POST',
+                url: '/gtas/authenticate',
+                data: postData,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-Login-Ajax-call": 'true'
+                }
+            })
+            .then(function(response) {
+                console.log(response.data);
+                console.log(response);
+                if (response.data == 'ok') {
+
+                    window.location.replace('/gtas/index.html');
+                }
+                else {
+                    $scope.vm.errorMessages = [];
+                    $scope.vm.errorMessages.push({description: 'Access denied'});
+                }
+            });
+        }
+
+        $scope.onLogin = function () {
+            console.log('Attempting login with username ' + $scope.vm.username + ' and password ' + $scope.vm.password);
+            $scope.vm.submitted = true;
+            if ($scope.form.$invalid) {
+                return;
+            }
+
+            $scope.login($scope.vm.userName, $scope.vm.password);
+        };
+    }]);
+</script>		
+  
+    

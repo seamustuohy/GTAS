@@ -8,6 +8,7 @@
         "angular-ui-router": "latest",
         "ng-table": "latest",
         "bootstrap": "latest",
-        "jquery": "latest"
+        "jquery": "latest",
+        "spring-security-csrf-token-interceptor": "latest"        
     }
 }

@@ -2,6 +2,7 @@ package gov.gtas.config;
 
 
 import gov.gtas.config.servlet.ServletContextConfig;
+import gov.gtas.security.AppSecurityConfig;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -13,7 +14,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] {CommonServicesConfig.class};
+        return new Class<?>[] {CommonServicesConfig.class, AppSecurityConfig.class};
     }
 
     @Override
