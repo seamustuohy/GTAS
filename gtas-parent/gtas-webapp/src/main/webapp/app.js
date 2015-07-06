@@ -6,13 +6,8 @@ var app = angular.module('myApp', [
 
 app.config(function($stateProvider){
 $stateProvider
-/*    .state('flights', {
-        url: '/flights',
-        templateUrl: 'flights/flights.html',
-        controller: 'FlightsController'
-    })
-*/
-    .state('home', {
+/*
+    .state('home_old', {
         url: '/home',
         views: {
             'flights': {
@@ -24,6 +19,13 @@ $stateProvider
             controller: 'PaxController'
             }
         }
+    })
+    */
+
+    .state('flights', {
+        url: '/flights',
+        templateUrl: 'flights/flights.html',
+        controller: 'FlightsController'
     })
     .state('pax', {
         url: '/pax',

@@ -4,7 +4,7 @@
 <table ng-table="tableParams" show-filter="true" class="table">
     <tr ng-repeat="flight in $data">
         <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">{{flight.hits}}</td>
-        <td data-title="'Carrier Code'" sortable="'carrier'" filter="{ 'carrier': 'select' }" filter-data="values($column, 'carrier')">{{flight.carrier}}</td>
+        <td data-title="'Carrier'" sortable="'carrier'" filter="{ 'carrier': 'select' }" filter-data="values($column, 'carrier')">{{flight.carrier}}</td>
         <td data-title="'Flight #'" sortable="'flightNumber'" filter="{ 'flightNumber': 'text' }">
             <a ng-click="updatePax(flight.flightId)">{{flight.flightNumber}}</a>
         </td>
