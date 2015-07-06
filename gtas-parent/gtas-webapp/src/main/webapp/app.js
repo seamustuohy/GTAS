@@ -23,7 +23,7 @@ $stateProvider
     */
 
     .state('flights', {
-        url: '/flights',
+        url: '',
         templateUrl: 'flights/flights.html',
         controller: 'FlightsController'
     })
