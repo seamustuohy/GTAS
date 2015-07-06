@@ -17,7 +17,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
+/**
+ * Generates test data for rules domain objects.
+ * @author GTAS3 (AB)
+ *
+ */
 public class RuleServiceDataGenUtils {
 	public static final String TEST_RULE_TITLE_PREFIX = "TestRule";
 
@@ -63,6 +67,7 @@ public class RuleServiceDataGenUtils {
 		UdrRule rule = new UdrRule();
 		rule.setDeleted(YesNoEnum.N);
 		rule.setEditDt(new Date());
+		rule.setTitle(title);
 		RuleMeta meta = createRuleMeta(title, descr, enabled);
 		rule.setMetaData(meta);
 		return rule;

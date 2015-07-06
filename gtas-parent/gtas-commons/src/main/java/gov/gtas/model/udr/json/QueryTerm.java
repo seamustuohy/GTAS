@@ -1,5 +1,8 @@
 package gov.gtas.model.udr.json;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
@@ -34,6 +37,18 @@ public class QueryTerm implements QueryEntity {
     	 this.values = val;
      }
      
+	/* (non-Javadoc)
+	 * @see gov.gtas.model.udr.json.QueryEntity#getFlattenedList()
+	 */
+ 	@Override
+ 	public List<List<QueryTerm>> createFlattenedList() {
+ 		final List<QueryTerm> mintermList = new LinkedList<QueryTerm>();
+ 		mintermList.add(this);
+ 		final List<List<QueryTerm>> ret = new LinkedList<List<QueryTerm>>();
+ 		ret.add(mintermList);
+ 		return ret;
+ 	}
+ 	
 	/**
 	 * @return the entity
 	 */
