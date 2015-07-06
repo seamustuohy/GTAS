@@ -25,9 +25,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User create(User user) {
-		Role role = entityManager.find(Role.class, user.getUserRole());
+		Role role = user.getUserRole();
+		if(role.getRoleId()!= null){
+		    role = entityManager.find(Role.class, user.getUserRole().getRoleId());
+		} else {
+			entityManager.persist(role);
+		}
 		if(role == null){
-			entityManager.persist(user.getUserRole());
+			Role rle = user.getUserRole();
+			rle.setRoleId(null);
+			entityManager.persist(rle);
+			user.setUserRole(rle);
 		}
 		return userRespository.save(user);
 	}

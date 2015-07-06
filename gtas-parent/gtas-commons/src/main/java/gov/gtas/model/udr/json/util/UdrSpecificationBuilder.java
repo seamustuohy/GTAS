@@ -99,9 +99,9 @@ public class UdrSpecificationBuilder {
 	 * @return UDR JSON object.
 	 */
 	public static UdrSpecification createSampleSpec() {
-		return createSampleSpec("jpjones");
+		return createSampleSpec("jpjones", "Test1", "Test Description");
 	}
-	public static UdrSpecification createSampleSpec(String userId) {
+	public static UdrSpecification createSampleSpec(String userId, String title, String description) {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
 		bldr.addTerm(EntityLookupEnum.Pax,
@@ -121,7 +121,7 @@ public class UdrSpecificationBuilder {
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
 				ConditionValueTypeEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
-		bldr.addMeta("Hello Rule 1", "This is a test", new Date(), null, true,
+		bldr.addMeta(title, description, new Date(), null, true,
 				userId);
 		return bldr.build();
 	}
