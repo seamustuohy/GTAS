@@ -7,12 +7,13 @@ INSERT INTO `gtas_roles` VALUES ('2', 'ROLE_CUST');
 -- ----------------------------
 -- Records of gtas_users
 -- ----------------------------
-INSERT INTO `gtas_users` VALUES ('vempatis', 'Srinivas', 'Vempati', 'password', '1');
-INSERT INTO `gtas_users` VALUES ('bandopadhaya', 'Amit', 'Bandopadhay', 'password', '1');
-INSERT INTO `gtas_users` VALUES ('tangj', 'Jeen', 'Tang', 'password', '1');
-INSERT INTO `gtas_users` VALUES ('copenhaferm', 'Mike', 'Copenhafer', 'password', '1');
-INSERT INTO `gtas_users` VALUES ('stygarb', 'Brian', 'Styger', 'password', '1');
-INSERT INTO `gtas_users` VALUES ('ladebiyi', 'Lola', 'Adebiyi', 'password', '1');
+-- password is 'password'
+INSERT INTO `gtas_users` VALUES ('svempati', 'Srinivas', 'Vempati', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
+INSERT INTO `gtas_users` VALUES ('abandopadhay', 'Amit', 'Bandopadhay', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
+INSERT INTO `gtas_users` VALUES ('jtang', 'Jeen', 'Tang', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
+INSERT INTO `gtas_users` VALUES ('mcopenhafer', 'Mike', 'Copenhafer', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
+INSERT INTO `gtas_users` VALUES ('bstygar', 'Brian', 'Styger', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
+INSERT INTO `gtas_users` VALUES ('ladebiyi', 'Lola', 'Adebiyi', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
 
 -- ------------------------------
 -- UI Table Mappings
