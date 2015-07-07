@@ -3,16 +3,19 @@ package gov.gtas.test.util;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.EntityAttributeConstants;
-import gov.gtas.model.udr.EntityLookupEnum;
-import gov.gtas.model.udr.OperatorCodeEnum;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.YesNoEnum;
+import gov.gtas.model.udr.enumtype.EntityLookupEnum;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.services.UserService;
+import gov.gtas.util.DateCalendarUtils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -85,9 +88,29 @@ public class RuleServiceDataGenUtils {
 			String attr, OperatorCodeEnum opCode, Object value) {
 		RuleCondPk key = new RuleCondPk(0L, seq);
 		RuleCond cond = new RuleCond(key, entity, attr, opCode);
-		cond.addValueToCondition("test", value);
+		try{
+		    addCondValue(cond, value);
+		} catch(ParseException pe){
+			throw new RuntimeException("Parse error", pe);
+		}
 		return cond;
 	}
+  private void addCondValue(RuleCond cond, Object val) throws ParseException{
+	   if(val instanceof Date){
+		   cond.addValueToCondition(new String[]{DateCalendarUtils.formatJsonDate((Date)val)}, ValueTypesEnum.Date);
+	   } else if(val instanceof String){
+		   cond.addValueToCondition(new String[]{(String)val}, ValueTypesEnum.String);
+	   } else if(val instanceof Double){
+		   cond.addValueToCondition(new String[]{val.toString()}, ValueTypesEnum.Double);
+	   } else if(val instanceof Long){
+		   cond.addValueToCondition(new String[]{val.toString()}, ValueTypesEnum.Long);
+	   } else if(val instanceof Integer){
+		   cond.addValueToCondition(new String[]{val.toString()}, ValueTypesEnum.Integer);
+	   } else {
+		   cond.addValueToCondition(new String[]{val.toString()}, ValueTypesEnum.String);
+	   }
+ }
+	
 	public String generateTestRuleTitle(int ruleIndx){
 		StringBuilder bldr = new StringBuilder(TEST_RULE_TITLE_PREFIX);
 		bldr.append(ruleIndx).append('.');

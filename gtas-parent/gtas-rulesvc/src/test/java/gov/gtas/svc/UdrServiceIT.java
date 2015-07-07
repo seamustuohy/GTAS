@@ -70,7 +70,7 @@ public class UdrServiceIT {
 		assertEquals(2, listResp.size());
 	}
 	@Test
-	@Transactional
+	//@Transactional
 	public void testFetchUdrById() {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);

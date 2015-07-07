@@ -1,5 +1,7 @@
 package gov.gtas.model.udr.json;
 
+import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;

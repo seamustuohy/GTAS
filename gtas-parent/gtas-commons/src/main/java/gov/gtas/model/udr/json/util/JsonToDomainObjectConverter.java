@@ -3,11 +3,18 @@ package gov.gtas.model.udr.json.util;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.User;
+import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.RuleCond;
+import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.YesNoEnum;
+import gov.gtas.model.udr.enumtype.EntityLookupEnum;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
 
 import java.io.ByteArrayInputStream;
@@ -15,12 +22,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * Utility functions to convert JSON objects to domain objects.
+ * Utility functions to convert JSON objects to JPA domain objects.
  * 
  * @author GTAS3 (AB)
  *
@@ -54,10 +63,13 @@ public class JsonToDomainObjectConverter {
 	 * Converts the rule details portion of the UDR JSON specifications object
 	 * (i.e., QueryObject) object to a blob.
 	 * 
-	 * @param qObj the QueryObject part of JSON UDR object.
+	 * @param qObj
+	 *            the QueryObject part of JSON UDR object.
 	 * @return the binary BLOB data corresponding to the QueryObject.
-	 * @throws IOException on error
-	 * @throws ClassNotFoundException on error
+	 * @throws IOException
+	 *             on error
+	 * @throws ClassNotFoundException
+	 *             on error
 	 */
 	public static byte[] convertQueryObjectToBlob(QueryObject qObj)
 			throws IOException, ClassNotFoundException {
@@ -100,9 +112,13 @@ public class JsonToDomainObjectConverter {
 
 		return ret;
 	}
+
 	/**
-	 * Creates a JSON meta data object from the meta data information in a domain UDR rule object.
-	 * @param uRule the domain UDR rule object.
+	 * Creates a JSON meta data object from the meta data information in a
+	 * domain UDR rule object.
+	 * 
+	 * @param uRule
+	 *            the domain UDR rule object.
 	 * @return JSON meta data object (i.e., the summary item)
 	 */
 	private static MetaData createMetadataFromUdrRule(UdrRule uRule) {
@@ -148,14 +164,57 @@ public class JsonToDomainObjectConverter {
 				startDate, endDate, enabled ? YesNoEnum.Y : YesNoEnum.N, author);
 
 		setJsonObjectInUdrRule(rule, inputJson);
+        try{
+		    createEngineRules(rule, inputJson);
+        } catch(ParseException pe){
+        	throw new RuntimeException("JsonToDomainObjectConverter.createUdrRuleFromJson() - Formatting exception", pe);
+        }
 
 		return rule;
 
 	}
+    /**
+     * Creates engine rules from "minterms" (i.e., ssetss of AND conditions)
+     * @param parent the parent UDR
+     * @param inputJson the JSON UDR object
+     * @throws ParseException on error
+     */
+	private static void createEngineRules(UdrRule parent,
+			UdrSpecification inputJson) throws ParseException{
+		QueryObject qobj = inputJson.getDetails();
+		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
+		int indx = 0;
+		for (List<QueryTerm> ruleData : ruleDataList) {
+			parent.addEngineRule(createRule(ruleData, parent, indx));
+			++indx;
+		}
+	}
+   /**
+    * Creates a single engine rule from a minterm.
+    * @param ruleData the minterm.
+    * @param parent the parent UDR rule.
+    * @param indx the ordering index of the rule with respect to the parent.
+    * @return the engine rule created.
+    * @throws ParseException parse exception.
+    */
+	private static Rule createRule(List<QueryTerm> ruleData, UdrRule parent,
+			int indx)  throws ParseException{
+		Rule ret = new Rule(parent, indx, null);
+		int seq = 0;
+		for (QueryTerm trm : ruleData) {
+			RuleCondPk pk = new RuleCondPk(indx, seq++);
+			RuleCond cond = new RuleCond(pk, EntityLookupEnum.valueOf(trm
+					.getEntity()), trm.getField(), OperatorCodeEnum.valueOf(trm
+					.getOperator()));
+			cond.addValueToCondition(trm.getValues(), ValueTypesEnum.valueOf(trm.getType()));
+			ret.addConditionToRule(cond);
+		}
+		return ret;
+	}
 
 	/**
-	 * Converts a "detail" portion of the UDR JSON object to compressed binary data for
-	 * saving in the database as a BLOB.
+	 * Converts a "detail" portion of the UDR JSON object to compressed binary
+	 * data for saving in the database as a BLOB.
 	 * 
 	 * @param rule
 	 *            the rule domain object.
@@ -177,10 +236,14 @@ public class JsonToDomainObjectConverter {
 	/**
 	 * Creates a UdrRule domain object.
 	 * 
-	 * @param id the Id of the domain UDR Rule object.
-	 * @param title the title of the rule.
-	 * @param descr the rule description.
-	 * @param enabled enabled state of the rule.
+	 * @param id
+	 *            the Id of the domain UDR Rule object.
+	 * @param title
+	 *            the title of the rule.
+	 * @param descr
+	 *            the rule description.
+	 * @param enabled
+	 *            enabled state of the rule.
 	 * @return the UDR rule domain object.
 	 */
 	private static UdrRule createUdrRule(Long id, String title, String descr,
@@ -200,12 +263,18 @@ public class JsonToDomainObjectConverter {
 	/**
 	 * Creates the meta data portion of the UdrRule domain object.
 	 * 
-	 * @param id the Id of the domain UDR Rule object.
-	 * @param title the title of the rule.
-	 * @param descr the rule description.
-	 * @param startDate the day the rule should become active (if enabled).
-	 * @param endDate the day the rule should cease to be active (optional).
-	 * @param enabled enabled state of the rule.
+	 * @param id
+	 *            the Id of the domain UDR Rule object.
+	 * @param title
+	 *            the title of the rule.
+	 * @param descr
+	 *            the rule description.
+	 * @param startDate
+	 *            the day the rule should become active (if enabled).
+	 * @param endDate
+	 *            the day the rule should cease to be active (optional).
+	 * @param enabled
+	 *            enabled state of the rule.
 	 * @return
 	 */
 	private static RuleMeta createRuleMeta(Long id, String title, String descr,

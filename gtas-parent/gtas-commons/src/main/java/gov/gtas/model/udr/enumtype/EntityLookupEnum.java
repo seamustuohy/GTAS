@@ -1,4 +1,4 @@
-package gov.gtas.model.udr;
+package gov.gtas.model.udr.enumtype;
 /**
  * Enumeration of entities that can be used in rules.
  * @author GTAS3 (AB)

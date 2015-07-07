@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import gov.gtas.error.RuleServiceException;
-import gov.gtas.model.udr.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 
 import org.junit.After;
 import org.junit.Before;

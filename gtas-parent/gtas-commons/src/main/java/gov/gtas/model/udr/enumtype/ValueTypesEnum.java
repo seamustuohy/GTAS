@@ -1,4 +1,4 @@
-package gov.gtas.model.udr.json;
+package gov.gtas.model.udr.enumtype;
 /**
  * Enumeration of JSON value types.
  * @author GTAS3 (AB)

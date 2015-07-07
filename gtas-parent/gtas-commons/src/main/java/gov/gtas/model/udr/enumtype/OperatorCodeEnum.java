@@ -1,4 +1,4 @@
-package gov.gtas.model.udr;
+package gov.gtas.model.udr.enumtype;
 
 public enum OperatorCodeEnum {
   EQUAL,

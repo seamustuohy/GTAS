@@ -2,7 +2,7 @@ package gov.gtas.rule.builder;
 
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.RuleServiceErrorHandler;
-import gov.gtas.model.udr.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 
 import java.util.List;
 

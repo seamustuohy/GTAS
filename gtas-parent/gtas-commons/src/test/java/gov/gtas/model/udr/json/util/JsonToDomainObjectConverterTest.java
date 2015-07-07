@@ -5,13 +5,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import gov.gtas.model.User;
-import gov.gtas.model.udr.ConditionValueTypeEnum;
+import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.EntityAttributeConstants;
-import gov.gtas.model.udr.EntityLookupEnum;
-import gov.gtas.model.udr.OperatorCodeEnum;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.YesNoEnum;
+import gov.gtas.model.udr.enumtype.EntityLookupEnum;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.model.udr.json.QueryConditionEnum;
 import gov.gtas.model.udr.json.UdrSpecification;
 
@@ -127,10 +127,6 @@ public class JsonToDomainObjectConverterTest {
 		assertEquals(enabled, meta.getEnabled() == YesNoEnum.Y ? true : false);
 	}
 
-	private UdrSpecification buildUdrSpec(Long id) {
-		return buildUdrSpec(id,null,null,false,null,false,true);
-	}
-
 	private UdrSpecification buildUdrSpec(Long id, Date st, Date nd, boolean enabled,
 			String author) {
 		return buildUdrSpec(id,st,nd,enabled,author,false,false);
@@ -147,16 +143,16 @@ public class JsonToDomainObjectConverterTest {
 			// add terms and then another query object
 			builder.addTerm(EntityLookupEnum.Pax,
 					EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
-					ConditionValueTypeEnum.STRING, OperatorCodeEnum.EQUAL,
+					ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
 					new String[] { "IAD" });
 			builder.addNestedQueryObject(QueryConditionEnum.AND);
 			builder.addTerm(EntityLookupEnum.Pax,
 					EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
-					ConditionValueTypeEnum.STRING, OperatorCodeEnum.EQUAL,
+					ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
 					new String[] { "Jones" });
 			builder.addTerm(EntityLookupEnum.Pax,
 					EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
-					ConditionValueTypeEnum.STRING, OperatorCodeEnum.EQUAL,
+					ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
 					new String[] { "DBY" });
 		}
 		if(!noSummary){

@@ -2,6 +2,7 @@ package gov.gtas.model.udr;
 
 import gov.gtas.model.BaseEntity;
 import gov.gtas.model.User;
+import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
@@ -142,6 +143,9 @@ public class UdrRule extends BaseEntity {
     	}
     	r.setParent(this);
     	this.engineRules.add(r);
+    }
+    public void resetEngineRules(){
+    	this.engineRules = null;
     }
 	/**
 	 * @return the rules

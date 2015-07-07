@@ -1,7 +1,7 @@
 package gov.gtas.model.udr;
 
 import gov.gtas.model.udr.CondValuePk;
-import gov.gtas.model.udr.ConditionValueTypeEnum;
+import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -39,7 +39,7 @@ public class CondValue implements Serializable {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "VAL_TYPE", nullable = false, length = 16)
-	private ConditionValueTypeEnum valType;
+	private ValueTypesEnum valType;
 	
 	private BigDecimal numVal;
 	private Date dtVal;
@@ -60,27 +60,27 @@ public class CondValue implements Serializable {
 
 	public CondValue(CondValuePk id, String value) {
 		this.id = id;
-		this.valType = ConditionValueTypeEnum.STRING;
+		this.valType = ValueTypesEnum.String;
 		this.charVal = value;
 	}
 	public CondValue(CondValuePk id, long value) {
 		this.id = id;
-		this.valType = ConditionValueTypeEnum.LONG;
+		this.valType = ValueTypesEnum.Long;
 		this.numVal = new BigDecimal(value);
 	}
 	public CondValue(CondValuePk id, double value) {
 		this.id = id;
-		this.valType = ConditionValueTypeEnum.DOUBLE;
+		this.valType = ValueTypesEnum.Double;
 		this.numVal = new BigDecimal(value);
 	}
 	public CondValue(CondValuePk id, int value) {
 		this.id = id;
-		this.valType = ConditionValueTypeEnum.INTEGER;
+		this.valType = ValueTypesEnum.Integer;
 		this.numVal = new BigDecimal(value);
 	}
 	public CondValue(CondValuePk id, Date value) {
 		this.id = id;
-		this.valType = ConditionValueTypeEnum.DATE;
+		this.valType = ValueTypesEnum.Date;
 		this.dtVal = value;
 	}
 
@@ -94,14 +94,14 @@ public class CondValue implements Serializable {
 	/**
 	 * @return the valType
 	 */
-	public ConditionValueTypeEnum getValType() {
+	public ValueTypesEnum getValType() {
 		return valType;
 	}
 
 	/**
 	 * @param valType the valType to set
 	 */
-	public void setValType(ConditionValueTypeEnum valType) {
+	public void setValType(ValueTypesEnum valType) {
 		this.valType = valType;
 	}
 

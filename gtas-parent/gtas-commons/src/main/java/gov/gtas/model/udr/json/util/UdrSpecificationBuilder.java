@@ -1,15 +1,16 @@
 package gov.gtas.model.udr.json.util;
 
-import gov.gtas.model.udr.ConditionValueTypeEnum;
 import gov.gtas.model.udr.EntityAttributeConstants;
-import gov.gtas.model.udr.EntityLookupEnum;
-import gov.gtas.model.udr.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.EntityLookupEnum;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryConditionEnum;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -54,7 +55,7 @@ public class UdrSpecificationBuilder {
 	}
 
 	public UdrSpecificationBuilder addTerm(EntityLookupEnum entity,
-			String attr, ConditionValueTypeEnum type, OperatorCodeEnum op,
+			String attr, ValueTypesEnum type, OperatorCodeEnum op,
 			String[] val) {
 		queryObjectStack
 				.peek()
@@ -106,20 +107,20 @@ public class UdrSpecificationBuilder {
 				QueryConditionEnum.OR);
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_DOB,
-				ConditionValueTypeEnum.DATE, OperatorCodeEnum.EQUAL,
-				new String[] { new Date().toString() });
+				ValueTypesEnum.Date, OperatorCodeEnum.EQUAL,
+				new String[] { DateCalendarUtils.formatJsonDate(new Date())});
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
-				ConditionValueTypeEnum.STRING, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
-				ConditionValueTypeEnum.STRING, OperatorCodeEnum.IN,
+				ValueTypesEnum.String, OperatorCodeEnum.IN,
 				new String[] { "DBY", "PKY", "FLT" });
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
-				ConditionValueTypeEnum.STRING, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		bldr.addMeta(title, description, new Date(), null, true,
 				userId);

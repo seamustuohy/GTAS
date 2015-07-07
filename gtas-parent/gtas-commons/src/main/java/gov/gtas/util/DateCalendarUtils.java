@@ -46,4 +46,9 @@ public class DateCalendarUtils {
 	   SimpleDateFormat format = new SimpleDateFormat(UdrConstants.UDR_DATE_FORMAT);
 	   return format.parse(dateString);
    }
+
+   public static String formatJsonDate(final Date date){
+	   SimpleDateFormat format = new SimpleDateFormat(UdrConstants.UDR_DATE_FORMAT);
+	   return format.format(date);
+   }
 }

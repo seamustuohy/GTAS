@@ -1,7 +1,7 @@
 package gov.gtas.repository.udr;
 
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.YesNoEnum;
+import gov.gtas.model.udr.enumtype.YesNoEnum;
 
 import java.util.List;
 

@@ -3,7 +3,7 @@ package gov.gtas.rule.builder;
 import java.util.LinkedList;
 import java.util.List;
 
-import gov.gtas.model.udr.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 
 public final class Term extends QueryTreeNode{
     private String entity;

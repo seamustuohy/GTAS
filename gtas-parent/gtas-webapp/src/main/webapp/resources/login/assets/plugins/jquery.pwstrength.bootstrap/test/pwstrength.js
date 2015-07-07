@@ -1,1 +1,1 @@
-../src/pwstrength.js
+//../src/pwstrength.js

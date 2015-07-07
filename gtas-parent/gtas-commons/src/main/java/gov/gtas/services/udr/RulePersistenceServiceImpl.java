@@ -7,7 +7,7 @@ import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.YesNoEnum;
+import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.repository.udr.UdrRuleRepository;
 import gov.gtas.services.UserService;
 

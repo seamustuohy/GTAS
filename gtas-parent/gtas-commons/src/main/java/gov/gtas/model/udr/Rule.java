@@ -82,9 +82,7 @@ public class Rule extends BaseEntity {
     	}
     	//set up the child keys
     	cond.refreshParentRuleId(this.getId());
-    	List<RuleCond> ruleConditions = this.ruleConds;
-    	ruleConditions.add(cond);
-    	this.ruleConds = ruleConditions;
+    	this.ruleConds.add(cond);
     }
     /**
      * Removes all conditions from this rule.
@@ -92,61 +90,6 @@ public class Rule extends BaseEntity {
     public void removeAllConditions(){
     	this.ruleConds = null;
     }
-//    /**
-//	 * @return the metaData
-//	 */
-//	public RuleMeta getMetaData() {
-//		return metaData;
-//	}
-
-//	/**
-//	 * @param metaData the metaData to set
-//	 */
-//	public void setMetaData(RuleMeta metaData) {
-//		this.metaData = metaData;
-//		if(this.id != null){
-//		   metaData.setId(this.id);
-//		}
-//	}
-
-//	@Temporal(TemporalType.TIMESTAMP)
-//	@Column(name = "EDIT_DT", nullable = false, length = 19)
-//	public Date getEditDt() {
-//		return this.editDt;
-//	}
-//
-//	public void setEditDt(Date editDt) {
-//		this.editDt = editDt;
-//	}
-//
-//	
-//	/**
-//	 * @return the editedBy
-//	 */
-//	public User getEditedBy() {
-//		return editedBy;
-//	}
-//
-//	/**
-//	 * @param editedBy the editedBy to set
-//	 */
-//	public void setEditedBy(User editedBy) {
-//		this.editedBy = editedBy;
-//	}
-//
-//	/**
-//	 * @return the deleted
-//	 */
-//	public YesNoEnum getDeleted() {
-//		return deleted;
-//	}
-//
-//	/**
-//	 * @param deleted the deleted to set
-//	 */
-//	public void setDeleted(YesNoEnum deleted) {
-//		this.deleted = deleted;
-//	}
 
 	/**
 	 * @return the ruleConds
@@ -176,13 +119,6 @@ public class Rule extends BaseEntity {
 		Rule other = (Rule) obj;
 		EqualsBuilder equalsBuilder = new EqualsBuilder();
 		equalsBuilder.append(id, other.id);
-//		equalsBuilder.append(getVersion(), other.getVersion());
-//		equalsBuilder.append(kbRef, other.kbRef);
-		
-//		//date equality up to seconds
-//		if(!DateCalendarUtils.dateRoundedEquals(editDt,  other.editDt)){
-//						return false;
-//		}
 		
 		return equalsBuilder.isEquals();
 	}
