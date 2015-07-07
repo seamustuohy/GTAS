@@ -8,12 +8,12 @@ INSERT INTO `gtas_roles` VALUES ('2', 'ROLE_CUST');
 -- Records of gtas_users
 -- ----------------------------
 -- password is 'password'
-INSERT INTO `gtas_users` VALUES ('svempati', 'Srinivas', 'Vempati', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
-INSERT INTO `gtas_users` VALUES ('abandopadhay', 'Amit', 'Bandopadhay', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
-INSERT INTO `gtas_users` VALUES ('jtang', 'Jeen', 'Tang', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
-INSERT INTO `gtas_users` VALUES ('mcopenhafer', 'Mike', 'Copenhafer', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
-INSERT INTO `gtas_users` VALUES ('bstygar', 'Brian', 'Styger', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
-INSERT INTO `gtas_users` VALUES ('ladebiyi', 'Lola', 'Adebiyi', '$10$49p6sGMHZhEzVQ4j0zLoUOpK7NmrLJjOaQTCQsnf0wqqa.IJjaeUy', '1');
+INSERT INTO `gtas_users` VALUES ('svempati', 'Srinivas', 'Vempati', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
+INSERT INTO `gtas_users` VALUES ('abandopadhay', 'Amit', 'Bandopadhay', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
+INSERT INTO `gtas_users` VALUES ('jtang', 'Jeen', 'Tang', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
+INSERT INTO `gtas_users` VALUES ('mcopenhafer', 'Mike', 'Copenhafer', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
+INSERT INTO `gtas_users` VALUES ('bstygar', 'Brian', 'Styger', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
+INSERT INTO `gtas_users` VALUES ('ladebiyi', 'Lola', 'Adebiyi', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
 
 -- ------------------------------
 -- UI Table Mappings
