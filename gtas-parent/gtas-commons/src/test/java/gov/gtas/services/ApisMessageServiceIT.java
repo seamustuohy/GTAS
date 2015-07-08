@@ -1,8 +1,10 @@
 package gov.gtas.services;
 
 import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +14,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
-//@Transactional
-public class ApisMessageServiceIT {
-//extends AbstractTransactionalJUnit4SpringContextTests {
+@Transactional
+public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private ApisMessageService svc;
 
@@ -35,8 +39,9 @@ public class ApisMessageServiceIT {
     }
 
     @Test()
-    public void testRunService() {
-        svc.parseAndLoadApisFile(this.apisFilePath);
+    public void testRunService() throws ParseException {
+        ApisMessageVo msg = svc.parseApisMessage(this.apisFilePath);
+        assertNotNull(msg);
     }
 
     public List<String> listFilesForFolder(final File folder) {
@@ -51,12 +56,12 @@ public class ApisMessageServiceIT {
         return rv;
     }
     
-    public void testeverything() {
+    public void testeverything() throws ParseException {
         final File folder = new File("c:/temp/APIS-test-files");
         List<String> files = listFilesForFolder(folder);
         for (String f : files) {
-            System.out.println(f);
-            svc.parseAndLoadApisFile(f);
+            ApisMessageVo msg = svc.parseApisMessage(f);
+            svc.loadApisMessage(msg);
         }
     }
 }

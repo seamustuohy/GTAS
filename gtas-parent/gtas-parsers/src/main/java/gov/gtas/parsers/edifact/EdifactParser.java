@@ -30,8 +30,7 @@ public class EdifactParser {
 
         int unbIndex = txt.indexOf("UNB");
         if (unbIndex == -1) {
-            logger.error("No UNB segment: " + txt);
-            throw new ParseException("No UNB segment", -1);
+            throw new ParseException("No UNB segment found", -1);
         }
         txt = txt.substring(unbIndex);
         

@@ -43,7 +43,7 @@ public class ApisMessageService {
     @Autowired
     private FlightService flightService;
     
-    public void parseAndLoadApisFile(String filePath) {
+    public ApisMessageVo parseApisMessage(String filePath) throws ParseException {
         byte[] raw = FileUtils.readSmallFile(filePath);
         String msg = new String(raw, StandardCharsets.US_ASCII);
 
@@ -55,20 +55,14 @@ public class ApisMessageService {
         }
         
         // TODO: save apis message here with status?
-        ApisMessageVo m = null;
-        try {
-            m = parser.parse();
-        } catch (ParseException pe) {
-            pe.printStackTrace();
-        }
-        loadApisMessage(m);
+        return parser.parse();
     }
     
     private boolean isUSEdifactFile(String msg) {
         return (msg.contains("CDT") || msg.contains("PDT"));
     }
     
-    private void loadApisMessage(ApisMessageVo m) {
+    public void loadApisMessage(ApisMessageVo m) {
         Set<Traveler> pax = new HashSet<>();
         
         for (PaxVo pvo : m.getPassengers()) {
@@ -124,7 +118,6 @@ public class ApisMessageService {
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #
         String tmp = vo.getFlightNumber();
-        int i;
         String flightNum = tmp.substring(3);
         StringBuffer buff = new StringBuffer();
         for (int j=0; j<4 - flightNum.length(); j++) {
