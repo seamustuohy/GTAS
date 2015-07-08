@@ -5,6 +5,7 @@ import java.util.Map;
 
 //import gov.gtas.error.CommonErrorConstants;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,78 +19,70 @@ import static gov.gtas.error.CommonErrorConstants.*;
  *
  */
 @Component
-public class BasicErrorHandler {
+public class BasicErrorHandler implements ErrorHandler {
+	
 	/*
 	 * The logger for the Rule Engine Error Handler
 	 */
 	private static final Logger logger = LoggerFactory
 			.getLogger(BasicErrorHandler.class);
 
+	/*
+	 * The map of all error codes handled by this handler.
+	 */
 	private final Map<String, String> errorMap;
 
+	/*
+	 * The first handler in the delegate chain for this error handler;
+	 */
+	private  ErrorHandler delegate;
+	
 	public BasicErrorHandler() {
 		errorMap = new HashMap<String, String>();
 		errorMap.put(NULL_ARGUMENT_ERROR_CODE, NULL_ARGUMENT_ERROR_MESSAGE);
 		errorMap.put(INVALID_USER_ID_ERROR_CODE, INVALID_USER_ID_ERROR_MESSAGE);
+		errorMap.put(INPUT_JSON_FORMAT_ERROR_CODE, INPUT_JSON_FORMAT_ERROR_MESSAGE);
 		errorMap.put(UPDATE_RECORD_MISSING_ERROR_CODE,
 				UPDATE_RECORD_MISSING_ERROR_MESSAGE);
 		errorMap.put(QUERY_RESULT_EMPTY_ERROR_CODE,
 				QUERY_RESULT_EMPTY_ERROR_MESSAGE);
 	}
 
-	/**
-	 * Creates the exception message for the indicated error.
-	 * 
-	 * @param errorCode
-	 *            the error code.
-	 * @param args
-	 *            the error arguments providing context for the error.
-	 * @return the error exception object.
+	/* (non-Javadoc)
+	 * @see gov.gtas.error.GtasErrorHandler#addErrorHandlerDelegate(gov.gtas.error.GtasErrorHandler)
 	 */
-	public CommonServiceException createException(final String errorCode,
-			final Object... args) {
-
+	@Override
+	public void addErrorHandlerDelegate(ErrorHandler errorHandler) {
+		if(this.delegate == null){
+			this.delegate = errorHandler;
+		}else{
+			this.delegate.addErrorHandlerDelegate(errorHandler);
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see gov.gtas.error.GtasErrorHandler#createException(java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public CommonServiceException createException(String errorCode,
+			Object... args) {
 		CommonServiceException ret = null;
 		final String errorMessage = errorMap.get(errorCode);
 		if (errorMessage == null) {
-			ret = createExceptionAndLog(
-					CommonErrorConstants.UNKNOWN_ERROR_CODE,
-					CommonErrorConstants.UNKNOWN_ERROR_CODE_MESSAGE, errorCode);
+			if(this.delegate != null){
+				this.delegate.createException(errorCode, args);
+			} else {
+				ret = createExceptionAndLog(
+						CommonErrorConstants.UNKNOWN_ERROR_CODE,
+						CommonErrorConstants.UNKNOWN_ERROR_CODE_MESSAGE, errorCode);
+			}
 		} else {
 			ret = createExceptionAndLog(errorCode, errorMessage, args);
 		}
-		// switch (errorCode) {
-		// case CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE:
-		// ret = createExceptionAndLog(
-		// CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
-		// CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE, args);
-		// break;
-		// case CommonErrorConstants.INVALID_USER_ID_ERROR_CODE:
-		// ret = createExceptionAndLog(
-		// CommonErrorConstants.INVALID_USER_ID_ERROR_CODE,
-		// CommonErrorConstants.INVALID_USER_ID_ERROR_MESSAGE, args[0]);
-		// break;
-		// case CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE:
-		// ret = createExceptionAndLog(
-		// CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE,
-		// CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_MESSAGE, args);
-		// break;
-		// case CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE:
-		// ret = createExceptionAndLog(
-		// CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE,
-		// CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_MESSAGE, args);
-		// break;
-		// default:
-		// ret = createExceptionAndLog(
-		// CommonErrorConstants.UNKNOWN_ERROR_CODE,
-		// CommonErrorConstants.UNKNOWN_ERROR_CODE_MESSAGE, errorCode);
-		// break;
-		// }
-
 		return ret;
 	}
 
-	public void addErrorCodeToHandlerMap(String errCode, String errMessage) {
+	protected void addErrorCodeToHandlerMap(String errCode, String errMessage) {
 		String msg = errorMap.get(errCode);
 		if (msg == null) {
 			errorMap.put(errCode, errMessage);
@@ -112,7 +105,7 @@ public class BasicErrorHandler {
 	 *            the arguments for the error message template.
 	 * @return the exception object.
 	 */
-	private CommonServiceException createExceptionAndLog(String errorCode,
+	protected CommonServiceException createExceptionAndLog(String errorCode,
 			String errorMessageTemplate, Object... errorMessageArgs) {
 		String message = String.format(errorMessageTemplate, errorMessageArgs);
 		logger.error(message);

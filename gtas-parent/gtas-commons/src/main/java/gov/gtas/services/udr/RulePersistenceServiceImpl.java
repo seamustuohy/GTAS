@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
 
@@ -39,8 +41,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	private static final Logger logger = LoggerFactory
 			.getLogger(RulePersistenceServiceImpl.class);
 
-//	@PersistenceContext
-//	private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	@Resource
     private UdrRuleRepository udrRuleRepository;
@@ -104,6 +106,14 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
     	}
     	return ruleConditionMap;
     }
+    private Map<Integer, List<RuleCond>> saveEngineRuleConditions(List<Rule> engineRules){
+    	Map<Integer, List<RuleCond>> ruleConditionMap = new HashMap<Integer, List<RuleCond>>();
+    	for(Rule r: engineRules){
+    		ruleConditionMap.put(r.getRuleIndex() ,r.getRuleConds());
+		    r.removeAllConditions();
+    	}
+    	return ruleConditionMap;
+    }
 	@Override
 	@Transactional
 	public UdrRule delete(Long id, String userId) {
@@ -132,7 +142,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	}
 	@Override
 	@Transactional
-	public UdrRule update(UdrRule rule, String userId) {
+	public UdrRule update(UdrRule rule, List<Rule> newEngineRules, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
 			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
@@ -140,11 +150,38 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		if(rule.getId() == null){
 			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "id", "Update UDR");
 		}
+		
 		rule.setEditDt(new Date()); 
 		rule.setEditedBy(user);
+		if(newEngineRules != null){
+			rule.clearEngineRules();
+		}
 		udrRuleRepository.save(rule);
+        UdrRule updatedRule = udrRuleRepository.findOne(rule.getId());
+        
+		if(newEngineRules != null){
+			batchInsertEngineRules(updatedRule, newEngineRules);
+		}
+		return updatedRule;
+	}
+	private void batchInsertEngineRules(UdrRule parent, List<Rule> newEngineRules){
+		Map<Integer, List<RuleCond>> ruleConditionMap = saveEngineRuleConditions(newEngineRules);
+		for(Rule r:newEngineRules){
+			r.setParent(parent);
+			entityManager.persist(r);
+		}
+		entityManager.flush();
+		entityManager.clear();
+		for(Rule engineRule: newEngineRules){
+			for(RuleCond rc : ruleConditionMap.get(engineRule.getRuleIndex())) {
+				rc.refreshParentRuleId(engineRule.getId());
+				engineRule.addConditionToRule(rc);
+			}
+			entityManager.merge(engineRule);
+		}
+		entityManager.flush();
+		entityManager.clear();
 		
-		return rule;
 	}
 	@Override
 	@Transactional(TxType.SUPPORTS)

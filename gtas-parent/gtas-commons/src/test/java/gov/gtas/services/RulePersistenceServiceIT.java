@@ -126,7 +126,7 @@ public class RulePersistenceServiceIT {
 		// modify meta and update
 		meta.setDescription("This is a Simple Rule - Updated");
 		meta.setEndDt(DateCalendarUtils.parseJsonDate("2015-12-31"));
-		testTarget.update(rsav, RuleServiceDataGenUtils.TEST_USER1_ID);
+		testTarget.update(rsav, null, RuleServiceDataGenUtils.TEST_USER1_ID);
 
 		// read the rule back
 		UdrRule readRule = testTarget.findById(rsav.getId());

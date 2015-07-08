@@ -17,7 +17,7 @@ public class RuleServiceConstants {
 	// //////////////////////////////////////////////////////////////////////////////////////
 	/*
 	 * This is the error code for an internal system error indicating invalid
-	 * program logic causing the rule engine bbeing called with a null
+	 * program logic causing the rule engine being called with a null
 	 * argument.
 	 */
 	public static final String NULL_ARGUMENT_ERROR_CODE = "NULL_ARGUMENT";
@@ -34,7 +34,7 @@ public class RuleServiceConstants {
 	// //////////////////////////////////////////////////////////////////////////////////////
 	/*
 	 * This is the error message for an internal system error indicating invalid
-	 * program logic causing the rule engine bbeing called with a null
+	 * program logic causing the rule engine being called with a null
 	 * argument.
 	 */
 	public static final String NULL_ARGUMENT_ERROR_MESSAGE = "The parameter '%s' passed to the method '%s' should not be null.";

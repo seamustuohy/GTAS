@@ -102,6 +102,14 @@ public class UdrSpecificationBuilder {
 	public static UdrSpecification createSampleSpec() {
 		return createSampleSpec("jpjones", "Test1", "Test Description");
 	}
+	/**
+	 * Creates a sample UDR specification JSON object.
+	 * (This is used for testing.)
+	 * @param userId
+	 * @param title
+	 * @param description
+	 * @return
+	 */
 	public static UdrSpecification createSampleSpec(String userId, String title, String description) {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
@@ -122,6 +130,21 @@ public class UdrSpecificationBuilder {
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
 				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
+		bldr.addMeta(title, description, new Date(), null, true,
+				userId);
+		return bldr.build();
+	}
+	public static UdrSpecification createSampleSpec2(String userId, String title, String description) {
+		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
+				QueryConditionEnum.AND);
+		bldr.addTerm(EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_DOB,
+				ValueTypesEnum.Date, OperatorCodeEnum.EQUAL,
+				new String[] { DateCalendarUtils.formatJsonDate(new Date())});
+		bldr.addTerm(EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
+				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
+				new String[] { "Jones" });
 		bldr.addMeta(title, description, new Date(), null, true,
 				userId);
 		return bldr.build();

@@ -16,6 +16,9 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -52,7 +55,11 @@ public class RuleCond implements Serializable {
 
 	@OneToMany(mappedBy="parent", cascade=CascadeType.ALL)
 	private List<CondValue> values;
-	
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="RULE_ID", nullable=false, insertable=false, updatable=false, referencedColumnName="id")     
+    private Rule parent;
+
 	public RuleCond() {
 	}
 
@@ -89,12 +96,6 @@ public class RuleCond implements Serializable {
      * @param valName the name of the value (e.g., "start date").
      * @param val the value.
      */
-//    public void  addValueToCondition(String valName, Object val){
-//		if(this.values == null){
-//			this.values = new LinkedList<CondValue>();
-//		}
-//		this.values.add(createCondValue(valName, val));
-//    }
     public void  addValueToCondition(String[] valueArray, ValueTypesEnum type) throws ParseException{
 		if(this.values == null){
 			this.values = new LinkedList<CondValue>();
@@ -130,28 +131,6 @@ public class RuleCond implements Serializable {
  			  return new CondValue(pk, val);		   
  	   }
     }
-    /**
-     * Creates a value and adds it to the list of values.
-     * @param valName
-     * @param val
-     * @return
-     */
-//    private CondValue createCondValue(String valName, Object val){
-// 	   CondValuePk pk = new CondValuePk(this.id, valName); 	   
-// 	   if(val instanceof Date){
-// 		   return new CondValue(pk, (Date) val);
-// 	   } else if(val instanceof String){
-// 		   return new CondValue(pk, val.toString());
-// 	   } else if(val instanceof Double){
-// 		   return new CondValue(pk, (Double)val);
-// 	   } else if(val instanceof Long){
-// 		   return new CondValue(pk, (Long)val);
-// 	   } else if(val instanceof Integer){
-// 		   return new CondValue(pk, (Integer)val);
-// 	   } else {
-// 		   return new CondValue(pk, val.toString());
-// 	   }
-//    }
 	/**
 	 * @return the entityName
 	 */

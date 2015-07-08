@@ -3,6 +3,7 @@ package gov.gtas.svc;
 import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.model.User;
+import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
@@ -18,6 +19,8 @@ import gov.gtas.services.udr.RulePersistenceService;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -219,7 +222,10 @@ public class UdrServiceImpl implements UdrService {
 		RuleMeta ruleMeta = JsonToDomainObjectConverter
 				.extractRuleMeta(udrToUpdate);
 		ruleToUpdate.setMetaData(ruleMeta);
+		ruleToUpdate.setTitle(ruleMeta.getTitle());
 
+		UdrRule updatedRule = null;
+		
 		QueryObject queryObject = udrToUpdate.getDetails();
 		if (queryObject != null) {
 			try {
@@ -230,13 +236,20 @@ public class UdrServiceImpl implements UdrService {
 				ex.printStackTrace();
 				throw new RuntimeException(ex.getMessage());
 			}
+
+			//update the engine rules
+			List<Rule> newEngineRules = JsonToDomainObjectConverter.listEngineRules(ruleToUpdate, udrToUpdate);
 			
+			updatedRule = rulePersistenceService.update(ruleToUpdate, newEngineRules,
+					userId);			
+						
 			processRuleGeneration();// TODO placeholder
 
+		} else {
+			//simple update - meta data only
+			updatedRule = rulePersistenceService.update(ruleToUpdate, null, 
+					userId);			
 		}
-		UdrRule updatedRule = rulePersistenceService.update(ruleToUpdate,
-				userId);
-
 
 		return createResponse(true, UdrConstants.UDR_UPDATE_OP_NAME, updatedRule);
 	}

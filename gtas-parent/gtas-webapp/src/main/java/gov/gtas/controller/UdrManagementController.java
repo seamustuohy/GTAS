@@ -119,6 +119,7 @@ public class UdrManagementController {
 
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody GtasJsonError handleError(Exception ex) {
+		ex.printStackTrace();
 		logger.error(ex.getMessage());
 		return new GtasJsonError(CommonErrorConstants.SYSTEM_ERROR_CODE,
 				String.format(CommonErrorConstants.SYSTEM_ERROR_MESSAGE,

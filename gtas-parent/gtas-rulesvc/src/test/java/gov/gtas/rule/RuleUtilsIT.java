@@ -5,9 +5,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Message;
-import gov.gtas.model.udr.json.UdrSpecification;
-import gov.gtas.rule.RuleUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;

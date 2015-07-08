@@ -34,7 +34,7 @@ public class Rule extends BaseEntity {
 	@Column(name="RULE_INDX")
 	private int ruleIndex;
 	
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch=FetchType.LAZY)
     @JoinColumn(name="UDR_RULE_REF", nullable=false, referencedColumnName="id")     
     private UdrRule parent;
 
@@ -42,7 +42,7 @@ public class Rule extends BaseEntity {
     @JoinColumn(name="KB_REF", nullable=true, referencedColumnName="id")     
     private KnowledgeBase knowledgeBase;
     
-	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER, mappedBy="parent")
 	@OrderColumn(name="COND_SEQ")
 	private List<RuleCond> ruleConds;
 

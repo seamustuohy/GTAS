@@ -5,14 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import gov.gtas.model.User;
-import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.YesNoEnum;
-import gov.gtas.model.udr.json.QueryConditionEnum;
 import gov.gtas.model.udr.json.UdrSpecification;
 
 import java.io.IOException;
@@ -38,11 +33,12 @@ public class JsonToDomainObjectConverterTest {
 
 	@Test
 	public void testBasicWithId() {
-		Date startDate = new Date();
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(UDR_AUTHOR, UDR_TITLE, UDR_DESCRIPTION);
+		Date startDate = spec.getSummary().getStartDate();
 		Date endDate = new Date(System.currentTimeMillis() + 86400000L);//one day in the future
-		
-		UdrSpecification spec = buildUdrSpec(UDR_ID, startDate, endDate, false,
-				UDR_AUTHOR);
+        spec.getSummary().setEndDate(endDate);
+        spec.setId(UDR_ID);
+        
 		UdrRule rule = null;
 		try {
 			User author = new User();
@@ -57,7 +53,7 @@ public class JsonToDomainObjectConverterTest {
 			assertEquals("meta data id is null",UDR_ID, rule.getMetaData().getId());
 			assertNotNull(rule);
 			RuleMeta meta = rule.getMetaData();
-			verifyMeta(meta, UDR_TITLE, UDR_DESCRIPTION, startDate, endDate, false);
+			verifyMeta(meta, UDR_TITLE, UDR_DESCRIPTION, startDate, endDate, true);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			fail("Not expecting exception");
@@ -66,12 +62,12 @@ public class JsonToDomainObjectConverterTest {
 	}
 
 	@Test
-	public void testBasicWithNullId() {
-		Date startDate = new Date();
+	public void testBasicWithNullId() {		
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(UDR_AUTHOR, UDR_TITLE, UDR_DESCRIPTION);
+		Date startDate = spec.getSummary().getStartDate();
 		Date endDate = new Date(System.currentTimeMillis() + 86400000L);//one day in the future
-		
-		UdrSpecification spec = buildUdrSpec(null, startDate, endDate, false,
-				UDR_AUTHOR);
+        spec.getSummary().setEndDate(endDate);
+        
 		UdrRule rule = null;
 		try {
 			User author = new User();
@@ -85,37 +81,25 @@ public class JsonToDomainObjectConverterTest {
 			assertNull("meta data id is not null", rule.getMetaData().getId());
 			assertNotNull(rule);
 			RuleMeta meta = rule.getMetaData();
-			verifyMeta(meta, UDR_TITLE, UDR_DESCRIPTION, startDate, endDate, false);
+			verifyMeta(meta, UDR_TITLE, UDR_DESCRIPTION, startDate, endDate, true);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			fail("Not expecting exception");
 		}
 
 	}
-//	@Test
-//	public void testBasicWithNullMeta() {
-//		Date startDate = new Date();
-//		Date endDate = new Date(System.currentTimeMillis() + 86400000L);//one day in the future
-//		
-//		UdrSpecification spec = buildUdrSpec(UDR_ID);
-//		UdrRule rule = null;
-//		try {
-//			
-//			rule = JsonToDomainObjectConverter.createUdrRuleFromJson(spec,
-//					null);
-//			assertNotNull("Rule blob is null", rule.getUdrConditionObject());
-//			assertEquals(UDR_AUTHOR, rule.getAuthor().getUserId());
-//			assertNull("rule id is  not null", rule.getId());
-//			assertNull("meta data id is not null", rule.getMetaData().getId());
-//			assertNotNull(rule);
-//			RuleMeta meta = rule.getMetaData();
-//			verifyMeta(meta, UDR_TITLE, UDR_DESCRIPTION, startDate, endDate, false);
-//		} catch (IOException ioe) {
-//			ioe.printStackTrace();
-//			fail("Not expecting exception");
-//		}
-//
-//	}
+	@Test
+	public void testMetaOnly() {
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(UDR_AUTHOR, UDR_TITLE, UDR_DESCRIPTION);
+		Date startDate = spec.getSummary().getStartDate();
+		Date endDate = new Date(System.currentTimeMillis() + 86400000L);//one day in the future
+        spec.getSummary().setEndDate(endDate);
+        spec.setId(UDR_ID);
+        
+        RuleMeta meta = JsonToDomainObjectConverter.extractRuleMeta(spec);
+		verifyMeta(meta, UDR_TITLE, UDR_DESCRIPTION, startDate, endDate, true);
+        
+	}
 	
 	private void verifyMeta(RuleMeta meta, String title, String descr,
 			Date startDate, Date endDate, boolean enabled) {
@@ -127,38 +111,4 @@ public class JsonToDomainObjectConverterTest {
 		assertEquals(enabled, meta.getEnabled() == YesNoEnum.Y ? true : false);
 	}
 
-	private UdrSpecification buildUdrSpec(Long id, Date st, Date nd, boolean enabled,
-			String author) {
-		return buildUdrSpec(id,st,nd,enabled,author,false,false);
-	}
-	private UdrSpecification buildUdrSpec(Long id, Date st, Date nd, boolean enabled,
-			String author, boolean noQuery, boolean noSummary) {
-		
-		UdrSpecificationBuilder builder = null;
-		if(noSummary){
-			builder = new UdrSpecificationBuilder(id);			
-		}else{
-			builder = new UdrSpecificationBuilder(id,
-				QueryConditionEnum.OR);
-			// add terms and then another query object
-			builder.addTerm(EntityLookupEnum.Pax,
-					EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
-					ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
-					new String[] { "IAD" });
-			builder.addNestedQueryObject(QueryConditionEnum.AND);
-			builder.addTerm(EntityLookupEnum.Pax,
-					EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
-					ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
-					new String[] { "Jones" });
-			builder.addTerm(EntityLookupEnum.Pax,
-					EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
-					ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
-					new String[] { "DBY" });
-		}
-		if(!noSummary){
-		   builder.addMeta(UDR_TITLE, UDR_DESCRIPTION, st, nd, enabled, author);
-		}
-		return builder.build();
-
-	}
 }

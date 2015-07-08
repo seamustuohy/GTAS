@@ -2,6 +2,7 @@ package gov.gtas.model.udr.json.util;
 
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
+import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
@@ -24,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -42,6 +44,7 @@ public class JsonToDomainObjectConverter {
 	 *            the UDR JSON object.
 	 * @return RuleMeta domain object
 	 */
+
 	public static RuleMeta extractRuleMeta(UdrSpecification inputJson) {
 		final MetaData metaData = inputJson.getSummary();
 		JsonValidationUtils.validateMetaData(metaData);
@@ -151,43 +154,46 @@ public class JsonToDomainObjectConverter {
 							"inputJson",
 							"JsonToDomainObjectConverter.createUdrRuleFromJson()"));
 		}
-
-		final MetaData metaData = inputJson.getSummary();
-		JsonValidationUtils.validateMetaData(metaData);
-
-		final String title = metaData.getTitle();
-		final Date startDate = metaData.getStartDate();
-		final String descr = metaData.getDescription();
-		final boolean enabled = metaData.isEnabled();
-		final Date endDate = metaData.getEndDate();
-		final UdrRule rule = createUdrRule(inputJson.getId(), title, descr,
-				startDate, endDate, enabled ? YesNoEnum.Y : YesNoEnum.N, author);
-
-		setJsonObjectInUdrRule(rule, inputJson);
-        try{
-		    createEngineRules(rule, inputJson);
-        } catch(ParseException pe){
-        	throw new RuntimeException("JsonToDomainObjectConverter.createUdrRuleFromJson() - Formatting exception", pe);
-        }
+		
+		final RuleMeta metaData = extractRuleMeta(inputJson);
+		
+        final UdrRule rule = createUdrRule(inputJson.getId(), metaData, 
+        		createQueryObjectBlob(inputJson),
+        		author);
+		createEngineRules(rule, inputJson);
 
 		return rule;
 
 	}
     /**
-     * Creates engine rules from "minterms" (i.e., ssetss of AND conditions)
+     * Creates engine rules from "minterms" (i.e., sets of AND conditions)
      * @param parent the parent UDR
      * @param inputJson the JSON UDR object
      * @throws ParseException on error
      */
-	private static void createEngineRules(UdrRule parent,
-			UdrSpecification inputJson) throws ParseException{
+	public static void createEngineRules(UdrRule parent,
+			UdrSpecification inputJson) {
 		QueryObject qobj = inputJson.getDetails();
 		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
 		int indx = 0;
 		for (List<QueryTerm> ruleData : ruleDataList) {
-			parent.addEngineRule(createRule(ruleData, parent, indx));
+			parent.addEngineRule(createEngineRule(ruleData, parent, indx));
 			++indx;
 		}
+	}
+	public static List<Rule> listEngineRules(UdrRule parent,
+			UdrSpecification inputJson) {
+		List<Rule> ret = new LinkedList<Rule>();
+		QueryObject qobj = inputJson.getDetails();
+		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
+		int indx = 0;
+		for (List<QueryTerm> ruleData : ruleDataList) {
+			Rule r = createEngineRule(ruleData, parent, indx);
+			r.setParent(parent);
+			ret.add(r);
+			++indx;
+		}
+		return ret;
 	}
    /**
     * Creates a single engine rule from a minterm.
@@ -197,8 +203,8 @@ public class JsonToDomainObjectConverter {
     * @return the engine rule created.
     * @throws ParseException parse exception.
     */
-	private static Rule createRule(List<QueryTerm> ruleData, UdrRule parent,
-			int indx)  throws ParseException{
+	private static Rule createEngineRule(List<QueryTerm> ruleData, UdrRule parent,
+			int indx) {
 		Rule ret = new Rule(parent, indx, null);
 		int seq = 0;
 		for (QueryTerm trm : ruleData) {
@@ -206,7 +212,17 @@ public class JsonToDomainObjectConverter {
 			RuleCond cond = new RuleCond(pk, EntityLookupEnum.valueOf(trm
 					.getEntity()), trm.getField(), OperatorCodeEnum.valueOf(trm
 					.getOperator()));
-			cond.addValueToCondition(trm.getValues(), ValueTypesEnum.valueOf(trm.getType()));
+			try{
+			     cond.addValueToCondition(trm.getValues(), ValueTypesEnum.valueOf(trm.getType()));
+	        } catch(ParseException pe){
+	        	StringBuilder bldr = new StringBuilder("[");
+	        	for(String val:trm.getValues()){
+	        		bldr.append(val).append(",");
+	        	}
+	        	bldr.append("]");
+	        	throw ErrorHandlerFactory.getErrorHandler().createException(CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE, 
+	        			bldr.toString(), trm.getType(), "'Engine Rule Creation'");
+	        }
 			ret.addConditionToRule(cond);
 		}
 		return ret;
@@ -216,21 +232,22 @@ public class JsonToDomainObjectConverter {
 	 * Converts a "detail" portion of the UDR JSON object to compressed binary
 	 * data for saving in the database as a BLOB.
 	 * 
-	 * @param rule
-	 *            the rule domain object.
 	 * @param json
 	 *            the json object to serialize.
+	 * @return the binary blob object
 	 */
-	private static void setJsonObjectInUdrRule(UdrRule rule,
-			UdrSpecification json) throws IOException {
-		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		final GZIPOutputStream gzipOutStream = new GZIPOutputStream(bos);
-		final ObjectOutputStream out = new ObjectOutputStream(gzipOutStream);
-		out.writeObject(json.getDetails());
-		out.close();
-
-		byte[] bytes = bos.toByteArray();
-		rule.setUdrConditionObject(bytes);
+	private static byte[] createQueryObjectBlob(UdrSpecification json) throws IOException {
+		QueryObject qObj = json.getDetails();
+		byte[] retBlob = null;
+		if(qObj != null){
+			final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			final GZIPOutputStream gzipOutStream = new GZIPOutputStream(bos);
+			final ObjectOutputStream out = new ObjectOutputStream(gzipOutStream);
+			out.writeObject(qObj);
+			out.close();
+			retBlob = bos.toByteArray();
+		}
+		return retBlob;
 	}
 
 	/**
@@ -246,17 +263,17 @@ public class JsonToDomainObjectConverter {
 	 *            enabled state of the rule.
 	 * @return the UDR rule domain object.
 	 */
-	private static UdrRule createUdrRule(Long id, String title, String descr,
-			Date startDate, Date endDate, YesNoEnum enabled, User author) {
+	private static UdrRule createUdrRule(Long id, RuleMeta meta, byte[] queryObjectBlob, User author) {
 		UdrRule rule = new UdrRule();
 		rule.setId(id);
 		rule.setDeleted(YesNoEnum.N);
 		rule.setEditDt(new Date());
 		rule.setAuthor(author);
-		rule.setTitle(title);
-		RuleMeta meta = createRuleMeta(id, title, descr, startDate, endDate,
-				enabled);
+		rule.setTitle(meta.getTitle());
+//		RuleMeta meta = createRuleMeta(id, title, descr, startDate, endDate,
+//				enabled);
 		rule.setMetaData(meta);
+		rule.setUdrConditionObject(queryObjectBlob);
 		return rule;
 	}
 

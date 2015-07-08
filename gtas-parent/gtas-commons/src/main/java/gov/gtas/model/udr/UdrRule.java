@@ -25,6 +25,7 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -34,7 +35,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * Rule
  */
 @Entity
-@Table(name = "UDR_RULE", catalog = "GTAS")
+@Table(name = "UDR_RULE", catalog = "GTAS",
+       uniqueConstraints= {@UniqueConstraint(columnNames={"AUTHOR","TITLE"})})
 public class UdrRule extends BaseEntity {
 
 	/**
@@ -66,7 +68,7 @@ public class UdrRule extends BaseEntity {
 	@Column(name="UDR_BLOB", columnDefinition="BLOB NULL")
 	private byte[] udrConditionObject;
 	
-	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER, mappedBy="parent")
 	@OrderColumn(name="RULE_INDX")
 	private List<Rule> engineRules;
 
@@ -144,8 +146,10 @@ public class UdrRule extends BaseEntity {
     	r.setParent(this);
     	this.engineRules.add(r);
     }
-    public void resetEngineRules(){
-    	this.engineRules = null;
+    public void clearEngineRules(){
+    	if(this.engineRules != null && !this.engineRules.isEmpty()){
+    	    this.engineRules.clear();
+    	}
     }
 	/**
 	 * @return the rules

@@ -41,7 +41,7 @@ public class RuleRepositoryIT {
       testTarget.invokeRuleset("gtas.drl", null);
     }
 
-//	@Test
+	@Test
 	public void testBasicApisRequest() {
 	  Pax p1 = createPassenger("Medulla", "Oblongata", "Timbuktu");
 	  ApisMessage msg = createBasicApisMessage(p1);

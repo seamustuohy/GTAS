@@ -23,7 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-
+/**
+ * Integration tests for the UDR maanageement service.
+ * @author GTAS3 (AB)
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=RuleServiceConfig.class)
 @TransactionConfiguration(defaultRollback = true)
@@ -31,7 +35,7 @@ public class UdrServiceIT {
 	private static final String RULE_TITLE1 = "Hello Rule 1";
 	private static final String RULE_DESCRIPTION1 = "This is a test";
 	private static final String RULE_TITLE2 = "Hello Rule 2";
-	private static final String RULE_DESCRIPTION2 = "This is a test";
+	private static final String RULE_DESCRIPTION2 = "This is a test2";
 
 	@Autowired
     UdrService udrService;
@@ -70,7 +74,7 @@ public class UdrServiceIT {
 		assertEquals(2, listResp.size());
 	}
 	@Test
-	//@Transactional
+	@Transactional
 	public void testFetchUdrById() {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
@@ -108,8 +112,10 @@ public class UdrServiceIT {
 		String title = resp.getResponseDetails().get(1).getAttributeValue();       
 		assertEquals(RULE_TITLE1, title);
 		UdrSpecification specFetched = udrService.fetchUdr(user.getUserId(), title);
-		specFetched.getSummary().setDescription(RULE_DESCRIPTION2);
-		udrService.updateUdr(user.getUserId(), specFetched);
+		//specFetched.getSummary().setDescription(RULE_DESCRIPTION2);
+		UdrSpecification updatedSpec = UdrSpecificationBuilder.createSampleSpec2(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION2);
+		updatedSpec.setId(specFetched.getId());
+		udrService.updateUdr(user.getUserId(), updatedSpec);
 		specFetched = udrService.fetchUdr(user.getUserId(), title);		
 		assertNotNull(specFetched);
 		assertEquals(RULE_DESCRIPTION2, specFetched.getSummary().getDescription());
