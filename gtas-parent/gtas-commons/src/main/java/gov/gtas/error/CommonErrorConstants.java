@@ -71,7 +71,7 @@ public class CommonErrorConstants {
 	 * This is the error message indicating that the record to be updated does
 	 * not exist in the database.
 	 */
-	public static final String UPDATE_RECORD_MISSING_ERROR_MESSAGE = "Cannot find UDR record to update (title=%s, userId=%s).";
+	public static final String UPDATE_RECORD_MISSING_ERROR_MESSAGE = "Cannot find UDR record to update (title=%s, userId=%s, id=%s).";
 
 	/*
 	 * This is the error message indicating that the a query returned no result.

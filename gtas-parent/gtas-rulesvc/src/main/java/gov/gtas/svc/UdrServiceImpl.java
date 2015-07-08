@@ -212,6 +212,11 @@ public class UdrServiceImpl implements UdrService {
 		String authorUserId = meta.getAuthor();
 		// fetch the UdrRule
 		UdrRule ruleToUpdate = rulePersistenceService.findById(id);
+		if(ruleToUpdate == null){
+			throw errorHandler.createException(
+					CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE, udrToUpdate.getSummary().getTitle(),
+					userId, id);			
+		}
 		if (!ruleToUpdate.getAuthor().getUserId().equals(authorUserId)) {
 			// TODO throw exception here
 			logger.error(String
