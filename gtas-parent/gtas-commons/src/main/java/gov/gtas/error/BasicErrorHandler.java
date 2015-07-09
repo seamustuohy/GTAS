@@ -1,16 +1,22 @@
 package gov.gtas.error;
 
+import static gov.gtas.error.CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE;
+import static gov.gtas.error.CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_MESSAGE;
+import static gov.gtas.error.CommonErrorConstants.INVALID_USER_ID_ERROR_CODE;
+import static gov.gtas.error.CommonErrorConstants.INVALID_USER_ID_ERROR_MESSAGE;
+import static gov.gtas.error.CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE;
+import static gov.gtas.error.CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE;
+import static gov.gtas.error.CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE;
+import static gov.gtas.error.CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_MESSAGE;
+import static gov.gtas.error.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE;
+import static gov.gtas.error.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_MESSAGE;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
 //import gov.gtas.error.CommonErrorConstants;
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import static gov.gtas.error.CommonErrorConstants.*;
 
 /**
  * Error Handler for the Rule Engine related functionality.
@@ -18,7 +24,7 @@ import static gov.gtas.error.CommonErrorConstants.*;
  * @author GTAS3 (AB)
  *
  */
-@Component
+//@Component
 public class BasicErrorHandler implements ErrorHandler {
 	
 	/*
@@ -68,20 +74,58 @@ public class BasicErrorHandler implements ErrorHandler {
 			Object... args) {
 		CommonServiceException ret = null;
 		final String errorMessage = errorMap.get(errorCode);
-		if (errorMessage == null) {
-			if(this.delegate != null){
-				this.delegate.createException(errorCode, args);
-			} else {
-				ret = createExceptionAndLog(
-						CommonErrorConstants.UNKNOWN_ERROR_CODE,
-						CommonErrorConstants.UNKNOWN_ERROR_CODE_MESSAGE, errorCode);
-			}
-		} else {
+		if (errorMessage != null) {
 			ret = createExceptionAndLog(errorCode, errorMessage, args);
+		} else if (this.delegate != null){
+			ret = this.delegate.createException(errorCode, args);
+		}
+		if (ret == null) {
+			ret = createExceptionAndLog(
+					CommonErrorConstants.UNKNOWN_ERROR_CODE,
+					CommonErrorConstants.UNKNOWN_ERROR_CODE_MESSAGE, errorCode);
 		}
 		return ret;
 	}
+	
+    /* (non-Javadoc)
+	 * @see gov.gtas.error.ErrorHandler#processError(java.lang.Exception)
+	 */
+	@Override
+	public ErrorDetails processError(final Exception exception) {
+		logger.error(exception.getMessage());
+		return new ErrorDetails() {
+			
+			@Override
+			public List<String> getWarningMessages() {
+				return null;
+			}
+			
+			@Override
+			public String getFatalErrorMessage() {
+				if(exception instanceof CommonServiceException){
+					return ((CommonServiceException)exception).getMessage();
+				}else{
+				    return String.format(CommonErrorConstants.SYSTEM_ERROR_MESSAGE,
+							System.currentTimeMillis());
+				}
+			}
+			
+			@Override
+			public String getFatalErrorCode() {
+				if(exception instanceof CommonServiceException){
+					return ((CommonServiceException)exception).getErrorCode();
+				}else{
+				    return CommonErrorConstants.SYSTEM_ERROR_CODE;
+				}
+			}
+		};
+	}
 
+	/**
+     * Adds the error code to the list of errors managed by this handler.
+     * @param errCode the error code to add.
+     * @param errMessage the corresponding error message.
+     */
 	protected void addErrorCodeToHandlerMap(String errCode, String errMessage) {
 		String msg = errorMap.get(errCode);
 		if (msg == null) {

@@ -2,6 +2,8 @@ package gov.gtas.services.udr;
 
 import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.error.CommonErrorConstants;
+import gov.gtas.error.ErrorHandler;
+import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
@@ -50,14 +52,14 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
     @Autowired
     private UserService userService;
     
-    @Autowired
-    private BasicErrorHandler errorHandler;
+    //private ErrorHandler errorHandler;
     
 	@Override
 	@Transactional
 	public UdrRule create(UdrRule r, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
+			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
 			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
 		// save meta and rule conditions for now
@@ -119,6 +121,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	public UdrRule delete(Long id, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
+			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
 			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
 		UdrRule ruleToDelete = udrRuleRepository.findOne(id);
@@ -145,9 +148,11 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	public UdrRule update(UdrRule rule, List<Rule> newEngineRules, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
+			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
 			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
 		if(rule.getId() == null){
+			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
 			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "id", "Update UDR");
 		}
 		

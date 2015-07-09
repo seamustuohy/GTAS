@@ -5,6 +5,9 @@ import gov.gtas.constants.Constants;
 import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
+import gov.gtas.error.ErrorDetails;
+import gov.gtas.error.ErrorHandler;
+import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.UdrSpecification;
@@ -18,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -114,15 +119,30 @@ public class UdrManagementController {
 
 	@ExceptionHandler(CommonServiceException.class)
 	public @ResponseBody GtasJsonError handleError(CommonServiceException ex) {
-		return new GtasJsonError(ex.getErrorCode(), ex.getMessage());
+		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
+		ErrorDetails err = errorHandler.processError(ex);
+		return new GtasJsonError(err.getFatalErrorCode(), err.getFatalErrorMessage());
+		//return new GtasJsonError(ex.getErrorCode(), ex.getMessage());
 	}
 
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody GtasJsonError handleError(Exception ex) {
 		ex.printStackTrace();
-		logger.error(ex.getMessage());
-		return new GtasJsonError(CommonErrorConstants.SYSTEM_ERROR_CODE,
-				String.format(CommonErrorConstants.SYSTEM_ERROR_MESSAGE,
-						System.currentTimeMillis()));
+		GtasJsonError ret = handleSpecialError(ex);
+		if(ret == null){
+			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
+			ErrorDetails err = errorHandler.processError(ex);
+			ret = new GtasJsonError(err.getFatalErrorCode(), err.getFatalErrorMessage());
+		}
+		return ret;
+	}
+	private GtasJsonError handleSpecialError(Exception ex){
+		GtasJsonError ret = null;
+		if(ex instanceof HttpMessageNotReadableException){
+			ret = new GtasJsonError("MALFORMED_JSON_INPUT", "Input JSON is malformed:"+ex.getMessage());
+		} else if (ex instanceof JpaSystemException){
+			ret = new GtasJsonError("DUPLICATE_UDR_TITLE", "This author has already created a UDR with this title:"+ex.getMessage());			
+		}
+		return ret;
 	}
 }

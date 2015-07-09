@@ -3,7 +3,7 @@ package gov.gtas.rule;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import gov.gtas.error.BasicErrorHandler;
+import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
 
 import java.io.IOException;
@@ -51,6 +51,7 @@ public class RuleUtilsIT {
                     + " \"attribute\": \"firstName\","
                     + " \"operator\": \"EQUAL\","
                     + " \"value\": \"John\" "
+                    + " \"values\": [\"John\"] "
                +" },"
                + " {"
                     + " \"@class\": \"QueryTerm\","
@@ -58,6 +59,7 @@ public class RuleUtilsIT {
                     + " \"attribute\": \"lastName\","
                     + " \"operator\": \"EQUAL\","
                     + " \"value\": \"Jones\" "
+                    + " \"values\": [\"Jones\"] "
                 +"}"
             +"]"
         +"},"
@@ -81,7 +83,7 @@ public class RuleUtilsIT {
 
 	@Test
 	public void testCreateKieBaseFromString() throws IOException{
-		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, new BasicErrorHandler());
+		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, ErrorHandlerFactory.getErrorHandler());
 		assertNotNull("Expected non null KieBase", kbase);
 		KieSession ksession = RuleUtils.createSession(kbase);
 		assertNotNull("Expected non null KieSession", ksession);
@@ -112,7 +114,7 @@ public class RuleUtilsIT {
 	@Test
 	public void testMultipleSession() throws IOException{
 		//verify that multiple sessions can be created with different IDs
-		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, new BasicErrorHandler());
+		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, ErrorHandlerFactory.getErrorHandler());
 		KieSession s1 = RuleUtils.createSession(kbase);
 		KieSession s2 = RuleUtils.createSession(kbase);
 		assertNotEquals("Unexpected - got identical ids for two sessions", s1.getId(), s2.getId());
@@ -121,7 +123,7 @@ public class RuleUtilsIT {
 	}
     @Test
     public void testBinarySerializationOfKieBase()  throws IOException, ClassNotFoundException{
-		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, new BasicErrorHandler());
+		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, ErrorHandlerFactory.getErrorHandler());
     	byte[] blob = RuleUtils.convertKieBaseToBytes(kbase);
     	assertNotNull("ERROR - KieBase blob is null", blob);
     	byte[] blobCopy = Arrays.copyOf(blob, blob.length);
@@ -134,7 +136,7 @@ public class RuleUtilsIT {
     }
 //    @Test
 //    public void testBinarySerialization()  throws IOException, ClassNotFoundException{
-//		UdrSpecification jsonObject = RuleUtils.createKieBaseFromDrlString(testDrl, new BasicErrorHandler());
+//		UdrSpecification jsonObject = RuleUtils.createKieBaseFromDrlString(testDrl, ErrorHandlerFactory.getErrorHandler());
 //    	byte[] blob = RuleUtils.convertKieBaseToBytes(kbase);
 //    	assertNotNull("ERROR - KieBase blob is null", blob);
 //    	byte[] blobCopy = Arrays.copyOf(blob, blob.length);
