@@ -11,7 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
+import org.springframework.cache.annotation.Cacheable;
+
+@Cacheable
 @Entity
 @Table(name = "airport")
 public class Airport extends BaseEntity {
