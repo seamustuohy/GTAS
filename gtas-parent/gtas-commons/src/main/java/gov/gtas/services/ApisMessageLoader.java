@@ -35,24 +35,46 @@ public class ApisMessageLoader {
 
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.out.println("Usage: ApisMessageLoader [apis files or folder name]");
+            System.out.println("Usage: ApisMessageLoader [apis files]");
+            System.out.println("Usage: ApisMessageLoader [incoming dir] [outgoing dir]");
             System.exit(0);
         }
 
         try (ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(CommonServicesConfig.class)) {
             ApisMessageService svc = ctx.getBean(ApisMessageService.class);
-            for (int i = 0; i < args.length; i++) {
-                File tmp = new File(args[i]);
-                if (tmp.isFile()) {
-                    processSingleFile(svc, args[i]);
-                } else if (tmp.isDirectory()) {
-                    File[] listOfFiles = tmp.listFiles();
-                    for (int j = 0; j < listOfFiles.length; j++) {
-                        if (listOfFiles[j].isFile()) {
-                            processSingleFile(svc, listOfFiles[j].getAbsolutePath());
-                        }
+            File tmp = new File(args[0]);
+            if (tmp.isFile()) {
+                // assume list of files given; ignore any directories
+                for (int i = 0; i < args.length; i++) {
+                    File f = new File(args[i]);
+                    if (f.isFile()) {
+                        processSingleFile(svc, args[i]);
                     }
                 }
+                
+            } else if (tmp.isDirectory()) {
+                if (args.length != 2) {
+                    System.out.println("error: expected outgoing dir");
+                    System.exit(0);                    
+                }
+                File outgoingDir = new File(args[1]);
+                if (!outgoingDir.isDirectory()) {
+                    System.out.println(outgoingDir + " is not a directory");
+                    System.exit(0);                                        
+                }
+                
+                File[] listOfFiles = tmp.listFiles();
+                for (int i = 0; i < listOfFiles.length; i++) {
+                    File f = listOfFiles[i];
+                    if (f.isFile()) {
+                        processSingleFile(svc, f.getAbsolutePath());
+                        f.renameTo(new File(outgoingDir + File.separator + f.getName()));
+                    }
+                }
+            
+            } else {
+                System.out.println("unrecognized file or directory: " + args[0]);
+                System.exit(0);                                    
             }
         }
     }
