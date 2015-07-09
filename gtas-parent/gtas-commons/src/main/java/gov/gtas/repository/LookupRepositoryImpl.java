@@ -11,8 +11,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
@@ -29,14 +29,14 @@ public class LookupRepositoryImpl implements LookUpRepository {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	@Autowired
+	private CountryRepository countryRepository;
+
 	@SuppressWarnings("unchecked")
 	@Override
 	@Cacheable("country")
 	public List<Country> getAllCountries() {
 		Query query = entityManager.createQuery("from Country");
-		// stores the query results in the second level cache (if enabled)
-		// query.setHint(QueryHints.CACHEABLE, true);
-
 		return (List<Country>) query.getResultList();
 	}
 
@@ -44,11 +44,7 @@ public class LookupRepositoryImpl implements LookUpRepository {
 	@Override
 	@Cacheable("carrier")
 	public List<Carrier> getAllCarriers() {
-
 		Query query = entityManager.createQuery("from Carrier");
-		// stores the query results in the second level cache (if enabled)
-		// query.setHint(QueryHints.CALLABLE, true);
-
 		return (List<Carrier>) query.getResultList();
 	}
 
@@ -57,40 +53,50 @@ public class LookupRepositoryImpl implements LookUpRepository {
 	@Cacheable("airport")
 	public List<Airport> getAllAirports() {
 		Query query = entityManager.createQuery("from Airport");
-		// stores the query results in the second level cache (if enabled)
-		// query.setHint(QueryHints.CALLABLE, true);
-
 		return (List<Airport>) query.getResultList();
 	}
 
 	@Override
 	@Transactional
+	@CacheEvict(value = "carrier", allEntries = true)
 	public void clearAllEntitiesCache() {
-		SessionFactory sessionFactory = entityManager.unwrap(Session.class)
-				.getSessionFactory();
-		sessionFactory.getCache().evictEntityRegion(Country.class);
 
 	}
 
 	@Override
 	@Transactional
 	public void clearEntityFromCache(Long id) {
-		SessionFactory sessionFactory = entityManager.unwrap(Session.class)
-				.getSessionFactory();
-		sessionFactory.getCache().evictEntity(Country.class, id);
+		// SessionFactory sessionFactory = entityManager.unwrap(Session.class)
+		// .getSessionFactory();
+		// sessionFactory.getCache().evictEntity(Country.class, id);
 
 	}
 
 	@Override
 	@Transactional
-	public void clearHibernateCache() {
-		SessionFactory sessionFactory = entityManager.unwrap(Session.class)
-				.getSessionFactory();
-		sessionFactory.getCache().evictEntityRegions();
-		sessionFactory.getCache().evictCollectionRegions();
-		sessionFactory.getCache().evictDefaultQueryRegion();
-		sessionFactory.getCache().evictQueryRegions();
+	public Country saveCountry(Country country) {
+		return countryRepository.save(country);
+	}
 
+	@Override
+	@Transactional
+	@Cacheable(value = "country", key = "#countryName")
+	public Country getCountry(String countryName) {
+		return (Country) entityManager.createQuery(
+			    "SELECT c FROM Country c WHERE c.name LIKE :countryName")
+			    .setParameter("countryName", countryName)
+			    .getSingleResult();
+	}
+	
+	@Transactional
+	@CacheEvict(value = "country", key = "#countryName")
+	public void removeCountryCache(String countryName) {
+		// do not actually delete
+	}
+	
+	@Transactional
+	public void deleteCountryDb(Country country) {
+		countryRepository.delete(country);
 	}
 
 }

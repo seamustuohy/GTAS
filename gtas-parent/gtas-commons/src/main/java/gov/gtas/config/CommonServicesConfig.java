@@ -113,25 +113,6 @@ public class CommonServicesConfig {
 		return entityManagerFactoryBean;
 	}
 
-	// private Properties hibProperties() {
-	// Properties properties = new Properties();
-	// properties.put(PROPERTY_NAME_HIBERNATE_DIALECT,
-	// env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
-	// properties.put(PROPERTY_NAME_HIBERNATE_QUERY_CACHE,
-	// env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_QUERY_CACHE));
-	// properties.put(PROPERTY_NAME_SECOND_LEVEL_CACHE,
-	// env.getRequiredProperty(PROPERTY_NAME_SECOND_LEVEL_CACHE));
-	// properties
-	// .put(PROPERTY_NAME_HIBERNATE_CACHE_PROVIDER,
-	// env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_CACHE_PROVIDER));
-	// properties.put(PROPERTY_NAME_HIBERNATE_CACHE_FACTORY,
-	// env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_CACHE_FACTORY));
-	// properties.put(PROPERTY_NAME_CONFIGURATION_RESOURCE_PATH,
-	// env.getRequiredProperty(PROPERTY_NAME_CONFIGURATION_RESOURCE_PATH));
-	//
-	// return properties;
-	// }
-
 	@Bean
 	public JpaTransactionManager transactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
