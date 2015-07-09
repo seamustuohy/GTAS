@@ -38,10 +38,10 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
           throws AuthenticationException {
  
 	  try {
- logger.info(" BEFORE AUTH >>>> ");
+		  
 		Authentication auth = super.authenticate(authentication);
-		logger.info(" AFTER AUTH >>>> ");
-		//if reach here, means login success, else an exception will be thrown
+		
+		//reached here, means login success, else an exception will be thrown
 		//reset the user_attempts
 //		userDetailsDao.resetFailAttempts(authentication.getName());
  

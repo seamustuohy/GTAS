@@ -1,10 +1,12 @@
 package gov.gtas.security;
 
 
+import gov.gtas.model.Authorities;
 import gov.gtas.model.User;
 import gov.gtas.services.UserService;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,7 +24,7 @@ import org.springframework.stereotype.Service;
  * UserDetails service that reads the user credentials from the database, using a JPA repository.
  *
  */
-@Service
+@Service("userDetailsService")
 public class SecurityUserDetailsService implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(SecurityUserDetailsService.class);
 
@@ -39,7 +41,13 @@ public class SecurityUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(message);
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        
+        Iterator<Authorities> tempIter = user.getAuthorities().iterator();
+        
+        while(tempIter.hasNext()){
+        authorities.add(new SimpleGrantedAuthority(((Authorities)tempIter.next()).getUserRole().getRoleDescription()));
+        }
+        
 
         logger.info("Found user in database: " + user);
 

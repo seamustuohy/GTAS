@@ -44,6 +44,19 @@ CREATE TABLE `gtas_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+DROP TABLE IF EXISTS `authorities`;
+CREATE TABLE IF NOT EXISTS `authorities` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) COLLATE ascii_bin DEFAULT NULL,
+  `role_id` int(11) DEFAULT NULL,
+  `userId` varchar(255) COLLATE ascii_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_3kd4sj83b4bt1yhwao687nqme` (`role_id`),
+  KEY `FK_c537bqgmt0b0kcuuy4mmy4tyk` (`userId`),
+  CONSTRAINT `FK_3kd4sj83b4bt1yhwao687nqme` FOREIGN KEY (`role_id`) REFERENCES `gtas_roles` (`role_id`),
+  CONSTRAINT `FK_c537bqgmt0b0kcuuy4mmy4tyk` FOREIGN KEY (`userId`) REFERENCES `gtas_users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=ascii COLLATE=ascii_bin;
+
 -- ----------------------------
 ALTER TABLE ApisMessage
         DROP

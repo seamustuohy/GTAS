@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import gov.gtas.security.AuthUser;
 
 
-@Service("userDetailsService")
+//@Service("userDetailsService")
 public class AuthUserDetailsService extends JdbcDaoImpl {
 
 
@@ -70,7 +70,7 @@ public class AuthUserDetailsService extends JdbcDaoImpl {
 	 */
 				ArrayList<GrantedAuthority> tempList = new ArrayList<GrantedAuthority>();
 				
-				tempList.add(AuthUser.MANAGE_RULES_AUTHORITY);
+				tempList.add(AuthUser.MANAGE_QUERIES_AUTHORITY);
 				
 				return new AuthUser(username, password, true, true, true, true, tempList);
 			  }

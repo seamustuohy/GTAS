@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,12 +23,17 @@ public class UserAuthenticationFilter extends
 	@Autowired
 	private AuthUserDetailsService userDetailsService;
 	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request,
 			HttpServletResponse response) throws AuthenticationException {
 		// TODO Auto-generated method stub
 		
-	//	logger.info("USER -- "+request.getParameter(SPRING_SECURITY_FORM_USERNAME_KEY));
+//		logger.info("USER -- "+request.getParameter(SPRING_SECURITY_FORM_USERNAME_KEY));
+//		
+//		logger.info("USERAuthFilter -- "+super.getAuthenticationManager());
 		
 	//	logger.info("Return String"+userDetailsService.getUsersByUsernameQuery());
 		
@@ -36,7 +42,13 @@ public class UserAuthenticationFilter extends
 		
 		return super.attemptAuthentication(request, response);
 	}
-
+	
+	@Autowired
+    @Override
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
+    }
+	
 	@Override
 	protected String obtainPassword(HttpServletRequest request) {
 		
