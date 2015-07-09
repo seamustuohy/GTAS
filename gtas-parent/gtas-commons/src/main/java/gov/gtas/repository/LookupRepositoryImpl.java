@@ -6,9 +6,6 @@ import gov.gtas.model.lookup.Country;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,49 +23,44 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class LookupRepositoryImpl implements LookUpRepository {
 
-	@PersistenceContext
-	private EntityManager entityManager;
-
 	@Autowired
 	private CountryRepository countryRepository;
 
-	@SuppressWarnings("unchecked")
+	@Autowired
+	private AirportRepository airportRepository;
+
+	@Autowired
+	private CarrierRepository carrierRepository;
+
 	@Override
 	@Cacheable("country")
 	public List<Country> getAllCountries() {
-		Query query = entityManager.createQuery("from Country");
-		return (List<Country>) query.getResultList();
+		return (List<Country>) countryRepository.findAll();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@Cacheable("carrier")
 	public List<Carrier> getAllCarriers() {
-		Query query = entityManager.createQuery("from Carrier");
-		return (List<Carrier>) query.getResultList();
+		return (List<Carrier>) carrierRepository.findAll();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@Cacheable("airport")
 	public List<Airport> getAllAirports() {
-		Query query = entityManager.createQuery("from Airport");
-		return (List<Airport>) query.getResultList();
+		return (List<Airport>) airportRepository.findAll();
 	}
 
 	@Override
 	@Transactional
 	@CacheEvict(value = "carrier", allEntries = true)
 	public void clearAllEntitiesCache() {
-
+		// remove all entities from cache
 	}
 
 	@Override
 	@Transactional
 	public void clearEntityFromCache(Long id) {
-		// SessionFactory sessionFactory = entityManager.unwrap(Session.class)
-		// .getSessionFactory();
-		// sessionFactory.getCache().evictEntity(Country.class, id);
+		// NOTE: later
 
 	}
 
@@ -82,18 +74,15 @@ public class LookupRepositoryImpl implements LookUpRepository {
 	@Transactional
 	@Cacheable(value = "country", key = "#countryName")
 	public Country getCountry(String countryName) {
-		return (Country) entityManager.createQuery(
-			    "SELECT c FROM Country c WHERE c.name LIKE :countryName")
-			    .setParameter("countryName", countryName)
-			    .getSingleResult();
+		return countryRepository.findByName(countryName);
 	}
-	
+
 	@Transactional
 	@CacheEvict(value = "country", key = "#countryName")
 	public void removeCountryCache(String countryName) {
-		// do not actually delete
+		// remove entity from cache only
 	}
-	
+
 	@Transactional
 	public void deleteCountryDb(Country country) {
 		countryRepository.delete(country);

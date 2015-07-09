@@ -24,5 +24,5 @@ public interface LookUpRepository {
 	public void removeCountryCache(String countryName);
 
 	public void deleteCountryDb(Country country);
-	
+
 }
