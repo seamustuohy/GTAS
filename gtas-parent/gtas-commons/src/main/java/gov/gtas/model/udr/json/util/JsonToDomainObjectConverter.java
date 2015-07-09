@@ -166,7 +166,8 @@ public class JsonToDomainObjectConverter {
 
 	}
     /**
-     * Creates engine rules from "minterms" (i.e., sets of AND conditions)
+     * Creates engine rules from "minterms" (i.e., sets of AND conditions).
+     * This method is called from the UDR service when a new UDR is being created.
      * @param parent the parent UDR
      * @param inputJson the JSON UDR object
      * @throws ParseException on error
@@ -174,6 +175,14 @@ public class JsonToDomainObjectConverter {
 	public static void createEngineRules(UdrRule parent,
 			UdrSpecification inputJson) {
 		QueryObject qobj = inputJson.getDetails();
+		if(qobj == null){
+			throw new CommonServiceException(
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
+					String.format(
+							CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE,
+							"details",
+							"Create new UDR"));			
+		}
 		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
 		int indx = 0;
 		for (List<QueryTerm> ruleData : ruleDataList) {
@@ -181,6 +190,12 @@ public class JsonToDomainObjectConverter {
 			++indx;
 		}
 	}
+	/**
+	 * Creates a new list of engine rules when a UDR is being updated.
+	 * @param parent the UDR.
+	 * @param inputJson the update JSON object.
+	 * @return list of engine rules to replace the existing rules.
+	 */
 	public static List<Rule> listEngineRules(UdrRule parent,
 			UdrSpecification inputJson) {
 		List<Rule> ret = new LinkedList<Rule>();
