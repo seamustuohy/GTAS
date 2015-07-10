@@ -19,7 +19,8 @@ $stateProvider
     })
     .state('query', {
         url: '/query',
-        templateUrl: 'query/query.html'
+        templateUrl: 'query/query.html',
+        controller: 'QueryController'
     })
     .state('admin', {
         url: '/admin',
