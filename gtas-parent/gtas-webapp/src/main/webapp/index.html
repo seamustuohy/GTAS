@@ -1,102 +1,103 @@
 <!DOCTYPE html>
 <html ng-app="myApp">
-    
-    <head>
-        <title>GTAS</title>
-        <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css">
-        <link rel="stylesheet" href="resources/bower_components/ng-table/dist/ng-table.css" />
-        <link rel="stylesheet" href="resources/css/gtas.css" />
 
-        <link rel="stylesheet" href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css">
-        <link rel="stylesheet" href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css">
-        <link rel="stylesheet" href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
-        <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css">
+<head>
+    <title>GTAS</title>
+    <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="resources/bower_components/ng-table/dist/ng-table.css" />
+    <link rel="stylesheet" href="resources/css/gtas.css" />
 
-        <link rel="stylesheet" href="resources/css/query-builder.default.css" id="qb-theme">
+    <link rel="stylesheet" href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css">
+    <link rel="stylesheet" href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
+    <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css">
 
-        <link rel="stylesheet" href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css">
+    <link rel="stylesheet" href="resources/css/query-builder.default.css" id="qb-theme">
 
-        <script src="resources/bower_components/angular/angular.js"></script>
-        <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-        <script src="resources/bower_components/angular-bootstrap/ui-bootstrap.js"></script>
-        <script src="resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-        <script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
-        <script src="resources/bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js"></script>
+    <link rel="stylesheet" href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css">
 
-
-        <script src="resources/bower_components/jquery/dist/jquery.js"></script>
-        <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-        <script src="resources/bower_components/bootbox/bootbox.js"></script>
-        <script src="resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-        <script src="resources/bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
-        <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
-        <script src="resources/bower_components/sql-parser/browser/sql-parser.js"></script>
-        <script src="resources/js/query-builder.js"></script>
+    <script src="resources/bower_components/angular/angular.js"></script>
+    <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="resources/bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script src="resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
+    <script src="resources/bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js"></script>
 
 
+    <script src="resources/bower_components/jquery/dist/jquery.js"></script>
+    <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="resources/bower_components/bootbox/bootbox.js"></script>
+    <script src="resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <script src="resources/bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
+    <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
+    <script src="resources/bower_components/sql-parser/browser/sql-parser.js"></script>
+    <script src="resources/bower_components/moment/min/moment.min.js"></script>
+    <script src="resources/js/query-builder.js"></script>
 
-        <script src="app.js"></script>
-        <script src="flights/FlightsController.js"></script>
-        <script src="flights/FlightsService.js"></script>
-        <script src="pax/PaxController.js"></script>
-        <script src="pax/PaxService.js"></script>
-        <script src="query/QueryController.js"></script>
-        <script src="query/QueryService.js"></script>
-    </head>
-    <body>
-        <header class="navbar navbar-custom navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <ul class="nav navbar-nav">
-                        <a class="navbar-brand">GTAS</a>
-                        <li>
-                            <a ui-sref="flights">Home</a>
-                        </li>
-                        <li class="dropdown" dropdown>
-                            <a role="button" class="dropdown-toggle" dropdown-toggle>View <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a ui-sref="flights">Flights</a>
-                                </li>
-                                <li>
-                                    <a ui-sref="pax">Passengers</a>
-                                </li>
-                                <li>
-                                    <a ui-sref="query">UDR</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown" dropdown>
-                            <a role="button" class="dropdown-toggle" dropdown-toggle>Manage <b class="caret"></b></a>
-                        </li>
-                        <li class="dropdown" dropdown>
-                            <a role="button" class="dropdown-toggle" dropdown-toggle>Admin <b class="caret"></b></a>
-                        </li>
-                        <li class="dropdown" dropdown>
-                            <a role="button" class="dropdown-toggle" dropdown-toggle>Settings <b class="caret"></b></a>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown" dropdown>
-                            <a role="button" class="dropdown-toggle" dropdown-toggle>User <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="/gtas/logout">Logout</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </header>
+
+
+    <script src="app.js"></script>
+    <script src="flights/FlightsController.js"></script>
+    <script src="flights/FlightsService.js"></script>
+    <script src="pax/PaxController.js"></script>
+    <script src="pax/PaxService.js"></script>
+    <script src="query/QueryController.js"></script>
+    <script src="query/QueryService.js"></script>
+</head>
+<body>
+<header class="navbar navbar-custom navbar-fixed-top">
+    <div class="navbar-inner">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div ui-view style="padding-top: 80px;"></div>
-                </div>
-            </div>
+            <ul class="nav navbar-nav">
+                <a class="navbar-brand">GTAS</a>
+                <li>
+                    <a ui-sref="flights">Home</a>
+                </li>
+                <li class="dropdown" dropdown>
+                    <a role="button" class="dropdown-toggle" dropdown-toggle>View <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a ui-sref="flights">Flights</a>
+                        </li>
+                        <li>
+                            <a ui-sref="pax">Passengers</a>
+                        </li>
+                        <li>
+                            <a ui-sref="query">Risk Criteria</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown" dropdown>
+                    <a role="button" class="dropdown-toggle" dropdown-toggle>Manage <b class="caret"></b></a>
+                </li>
+                <li class="dropdown" dropdown>
+                    <a role="button" class="dropdown-toggle" dropdown-toggle>Admin <b class="caret"></b></a>
+                </li>
+                <li class="dropdown" dropdown>
+                    <a role="button" class="dropdown-toggle" dropdown-toggle>Settings <b class="caret"></b></a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" dropdown>
+                    <a role="button" class="dropdown-toggle" dropdown-toggle>User <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/gtas/logout">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-    </body>
+    </div>
+</header>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div ui-view style="padding-top: 80px;"></div>
+        </div>
+    </div>
+</div>
+</body>
 
 </html>
