@@ -19,6 +19,7 @@ INSERT INTO `gtas_users` VALUES ('jtang', 'Jeen', 'Tang', '$2a$10$T5xL/wIet8ev/R
 INSERT INTO `gtas_users` VALUES ('mcopenhafer', 'Mike', 'Copenhafer', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
 INSERT INTO `gtas_users` VALUES ('bstygar', 'Brian', 'Styger', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
 INSERT INTO `gtas_users` VALUES ('ladebiyi', 'Lola', 'Adebiyi', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
+INSERT INTO `gtas_users` VALUES ('adelorie', 'Anthony', 'Delorie', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
 
 
 INSERT INTO `authorities` VALUES('1','jtang','2','jtang');

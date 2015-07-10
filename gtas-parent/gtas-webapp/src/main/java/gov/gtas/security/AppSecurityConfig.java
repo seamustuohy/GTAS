@@ -67,7 +67,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         
         http
         .authorizeRequests()
-        .antMatchers("/resources/**/*").permitAll()
+        .antMatchers("/**/*").permitAll()
         .antMatchers(HttpMethod.POST, "/user").permitAll()
         .antMatchers("/login.jsp").permitAll()
         .antMatchers("/home.action").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
