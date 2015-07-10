@@ -4,18 +4,12 @@ package gov.gtas.error;
  * @author GTAS3 (AB)
  *
  */
-public class RuleServiceException extends RuntimeException {
+public class RuleServiceException extends CommonServiceException {
 
 	/**
 	 * serial version UID.
 	 */
 	private static final long serialVersionUID = -4115507029260625072L;
-    /* The rule engine error code. */
-	private String errorCode;
-	
-	public String getErrorCode() {
-		return errorCode;
-	}
     /**
      * Constructor taking underlying exception as argument.
      * @param errCode the rule engine error code.
@@ -23,8 +17,7 @@ public class RuleServiceException extends RuntimeException {
      * @param exception the causing exception.
      */
 	public RuleServiceException(final String errCode, final String msg, final Throwable exception) {
-		super(msg, exception);
-		errorCode = errCode;
+		super(errCode, msg, exception);
 	}
     /**
      * Construction taking error code and context dependent message.
@@ -32,8 +25,7 @@ public class RuleServiceException extends RuntimeException {
      * @param errMessage additional context dependent error message.
      */
 	public RuleServiceException(final String errCode, final String errMessage) {
-		super(errMessage);
-		errorCode = errCode;
+		super(errCode, errMessage);
 	}
 	
 }

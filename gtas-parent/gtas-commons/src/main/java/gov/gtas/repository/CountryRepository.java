@@ -15,5 +15,7 @@ public interface CountryRepository extends CrudRepository<Country, Long>{
 	
 	@Query("SELECT c FROM Country c WHERE UPPER(c.iso3) = UPPER(:countryCode)")
 	public List<Country> getCountryByThreeLetterCode(@Param("countryCode") String countryCode);
+	
+	public Country findByName(String name);
 
 }

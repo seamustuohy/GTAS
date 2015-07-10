@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.RuleServiceException;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 
@@ -23,12 +24,12 @@ public class UdrQueryTreeBuilderTest {
 	public void tearDown() throws Exception {
 	}
 
-	@Test(expected=RuleServiceException.class)
+	@Test(expected=CommonServiceException.class)
 	public void testError1() {
 		testTarget.getFlattenedQueryTree();
 	}
 
-	@Test(expected=RuleServiceException.class)
+	@Test(expected=CommonServiceException.class)
 	public void testError2() {
 		testTarget.beginTree(CondOpEnum.AND);
 		testTarget.addLeaf("A", "B", OperatorCodeEnum.EQUAL, 5);

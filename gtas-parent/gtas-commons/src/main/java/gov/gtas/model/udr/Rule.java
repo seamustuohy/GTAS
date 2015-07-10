@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * (This is derived for a parent UDR rule.)
  */
 @Entity
-@Table(name = "rule", catalog = "gtas")
+@Table(name = "rule")
 public class Rule extends BaseEntity {
 
 	/**

@@ -8,9 +8,21 @@ import java.util.List;
 
 public interface LookUpRepository {
 	List<Country> getAllCountries();
+
 	List<Carrier> getAllCarriers();
+
 	List<Airport> getAllAirports();
+
 	public void clearAllEntitiesCache();
+
 	public void clearEntityFromCache(Long id);
-	public void clearHibernateCache();
+
+	public Country saveCountry(Country country);
+
+	public Country getCountry(String countryName);
+
+	public void removeCountryCache(String countryName);
+
+	public void deleteCountryDb(Country country);
+
 }

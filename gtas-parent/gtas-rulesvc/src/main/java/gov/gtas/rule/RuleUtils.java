@@ -1,7 +1,7 @@
 package gov.gtas.rule;
 
 import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.error.BasicErrorHandler;
+import gov.gtas.error.ErrorHandler;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -48,7 +48,7 @@ public class RuleUtils {
 	 * @return the  created KieBase.
 	 * @throws IOException on IO error.
 	 */
-	public static KieBase createKieBaseFromClasspathFile(final String filePath, final BasicErrorHandler errorHandler) throws IOException{
+	public static KieBase createKieBaseFromClasspathFile(final String filePath, final ErrorHandler errorHandler) throws IOException{
 		File file = new File(filePath);
 	    InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream( filePath );
 	    String kfilepath = RuleServiceConstants.KIE_FILE_SYSTEM_ROOT+file.getName();
@@ -61,7 +61,7 @@ public class RuleUtils {
 	 * @return the  created KieBase.
 	 * @throws IOException on IO error.
 	 */
-	public static KieBase createKieBaseFromDrlString(final String drlString, final BasicErrorHandler errorHandler) throws IOException{
+	public static KieBase createKieBaseFromDrlString(final String drlString, final ErrorHandler errorHandler) throws IOException{
 	    File file = File.createTempFile("rule","");
 	    ByteArrayInputStream bis = new ByteArrayInputStream(drlString.getBytes());
 	    String kfilepath = RuleServiceConstants.KIE_FILE_SYSTEM_ROOT+file.getName()+".drl";
@@ -145,7 +145,7 @@ public class RuleUtils {
 	 * @param errorHandler error handler
 	 * @return the created KieBase
 	 */
-    private static KieBase createKieBase(final String kfilepath, final InputStream is, final BasicErrorHandler errorHandler){
+    private static KieBase createKieBase(final String kfilepath, final InputStream is, final ErrorHandler errorHandler){
 	    KieServices ks = KieServices.Factory.get();
 	    KieFileSystem kfs = ks.newKieFileSystem();
 	    kfs.write( kfilepath, ks.getResources().newInputStreamResource( is ) );

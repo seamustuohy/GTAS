@@ -26,7 +26,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * RuleMeta
  */
 @Entity
-@Table(name = "rule_meta", catalog = "gtas")
+@Table(name = "rule_meta")
 public class RuleMeta implements Serializable {
 	/**
 	 * serial version UID

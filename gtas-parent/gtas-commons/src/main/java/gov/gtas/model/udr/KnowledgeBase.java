@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * KnowledgeBase
  */
 @Entity
-@Table(name = "knowledge_base", catalog = "gtas")
+@Table(name = "knowledge_base")
 public class KnowledgeBase extends BaseEntity {
 
 	/**

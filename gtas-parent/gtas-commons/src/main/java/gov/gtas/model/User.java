@@ -1,6 +1,8 @@
 package gov.gtas.model;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -23,6 +26,7 @@ public class User implements Serializable {
 	private String firstName;
 	private String lastName;
 	private Role userRole;
+	private List<Authorities> authoritiesList;
 
 	@Id
 	@Column(name="user_id")
@@ -65,6 +69,15 @@ public class User implements Serializable {
 	public void setUserRole(Role userRole) {
 		this.userRole = userRole;
 	}
+	
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name ="userId")
+	public Collection<Authorities> getAuthorities(){
+		return authoritiesList;
+	}
 
+	public void setAuthorities(List<Authorities> authList){
+		this.authoritiesList = authList;
+	}
 
 }
