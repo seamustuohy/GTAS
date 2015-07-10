@@ -29,7 +29,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.util.CollectionUtils;
 
 @Entity
-@Table(name = "rule_cond", catalog = "gtas")
+@Table(name = "rule_cond")
 public class RuleCond implements Serializable {
     
 	/**

@@ -26,7 +26,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * CondValue
  */
 @Entity
-@Table(name = "cond_value", catalog = "gtas")
+@Table(name = "cond_value")
 public class CondValue implements Serializable {
 
 	/**

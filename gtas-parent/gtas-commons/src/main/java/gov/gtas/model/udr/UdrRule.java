@@ -35,7 +35,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * Rule
  */
 @Entity
-@Table(name = "UDR_RULE", catalog = "GTAS",
+@Table(name = "UDR_RULE",
        uniqueConstraints= {@UniqueConstraint(columnNames={"AUTHOR","TITLE"})})
 public class UdrRule extends BaseEntity {
 

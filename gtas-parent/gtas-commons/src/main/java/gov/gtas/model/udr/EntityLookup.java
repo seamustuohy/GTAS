@@ -9,7 +9,7 @@ import javax.persistence.Table;
  * EntityLookup
  */
 @Entity
-@Table(name = "entity_lookup", catalog = "gtas")
+@Table(name = "entity_lookup")
 public class EntityLookup implements java.io.Serializable {
 
 	/**
