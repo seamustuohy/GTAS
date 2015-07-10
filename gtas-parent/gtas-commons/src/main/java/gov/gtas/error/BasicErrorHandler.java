@@ -14,6 +14,9 @@ import static gov.gtas.error.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_ME
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+
+
 //import gov.gtas.error.CommonErrorConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +42,11 @@ public class BasicErrorHandler implements ErrorHandler {
 	private final Map<String, String> errorMap;
 
 	/*
+	 * The map of all exception processors used by this handler.
+	 */
+	private final Map<String, Function<Exception, ErrorDetails>> exceptionProcessorMap;
+	
+	/*
 	 * The first handler in the delegate chain for this error handler;
 	 */
 	private  ErrorHandler delegate;
@@ -52,6 +60,8 @@ public class BasicErrorHandler implements ErrorHandler {
 				UPDATE_RECORD_MISSING_ERROR_MESSAGE);
 		errorMap.put(QUERY_RESULT_EMPTY_ERROR_CODE,
 				QUERY_RESULT_EMPTY_ERROR_MESSAGE);
+		
+		exceptionProcessorMap = new HashMap<String, Function<Exception,ErrorDetails>>();
 	}
 
 	/* (non-Javadoc)
@@ -92,33 +102,49 @@ public class BasicErrorHandler implements ErrorHandler {
 	 */
 	@Override
 	public ErrorDetails processError(final Exception exception) {
-		logger.error(exception.getMessage());
-		return new ErrorDetails() {
-			
-			@Override
-			public List<String> getWarningMessages() {
-				return null;
-			}
-			
-			@Override
-			public String getFatalErrorMessage() {
-				if(exception instanceof CommonServiceException){
-					return ((CommonServiceException)exception).getMessage();
-				}else{
-				    return String.format(CommonErrorConstants.SYSTEM_ERROR_MESSAGE,
-							System.currentTimeMillis());
+		Function<Exception, ErrorDetails> processor = exceptionProcessorMap.get(exception.getClass().getName());
+		if(processor != null){
+			return processor.apply(exception);
+		} else if(this.delegate != null){
+			return delegate.processError(exception);
+		} else {
+			logger.error(exception.getMessage());
+			return new ErrorDetails() {				
+				@Override
+				public List<String> getWarningMessages() {
+					return null;
+				}				
+				@Override
+				public String getFatalErrorMessage() {
+					if(exception instanceof CommonServiceException){
+						return ((CommonServiceException)exception).getMessage();
+					}else{
+					    return String.format(CommonErrorConstants.SYSTEM_ERROR_MESSAGE,
+								System.currentTimeMillis());
+					}
+				}				
+				@Override
+				public String getFatalErrorCode() {
+					if(exception instanceof CommonServiceException){
+						return ((CommonServiceException)exception).getErrorCode();
+					}else{
+					    return CommonErrorConstants.SYSTEM_ERROR_CODE;
+					}
 				}
-			}
-			
-			@Override
-			public String getFatalErrorCode() {
-				if(exception instanceof CommonServiceException){
-					return ((CommonServiceException)exception).getErrorCode();
-				}else{
-				    return CommonErrorConstants.SYSTEM_ERROR_CODE;
-				}
-			}
-		};
+			};
+
+		}
+	}
+
+    /**
+     * Adds a custom exception handler using a lambda.
+     * @param exceptionClass the exception class to handle.
+     * @param processor the lambda.
+     */
+	protected void addCustomErrorProcesssor(
+			Class<? extends Exception> exceptionClass,
+			Function<Exception, ErrorDetails> processor) {
+		exceptionProcessorMap.put(exceptionClass.getName(), processor);		
 	}
 
 	/**
