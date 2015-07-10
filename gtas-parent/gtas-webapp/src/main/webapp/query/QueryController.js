@@ -482,7 +482,7 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
     $scope.loadSummary = function (summary) {
         $scope.ruleId = summary.id || null;
         $scope.title = summary.title;
-        $scope.description = summary.description
+        $scope.description = summary.description;
         $scope.startDate = summary.startDate;
         $scope.endDate = summary.endDate;
         $scope.enabled = summary.enabled;
@@ -520,7 +520,12 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
             $scope.tableParams.total($scope.tableData.length);
             $scope.tableParams.reload();
 
-            queryService.ruleSave(ruleObject, $scope.authorId).then(function () {
+            queryService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
+                if (myData.errorCode !== undefined)
+                {
+                    alert(myData.errorMessage);
+                    return;
+                }
                 $scope.ruleId = null;
                 $scope.resetQueryBuilder();
                 $scope.resetSummary();

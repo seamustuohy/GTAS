@@ -1132,26 +1132,30 @@
         return this.change('getRules', out);
     };
 
-    var entityTableLookup = {
-        'DOCUMENT': 'Document',
-        'FLIGHT': 'Flight',
-        'PASSENGER': 'Pax',
-        'Pax': 'PASSENGER'
+    var getEntityTableAlias = function (key) {
+        var entityTableLookup = {
+            'DOCUMENT': 'Document',
+            'FLIGHT': 'Flight',
+            'PASSENGER': 'Pax',
+            'Pax': 'PASSENGER'
+        };
+        return entityTableLookup[key] || key === key.toUpperCase() ? key.charAt(0).toUpperCase() + key.substr(1).toLowerCase() : key.toUpperCase();
     };
 
-    var getEntityTableAlias = function (key) {
-        return entityTableLookup[key] || key === key.toUpperCase() ? key.charAt(0).toUpperCase() + key.substr(1).toLowerCase() : key.toUpperCase();
-    }
-
-    function prepareDroolsJSON (data, notRoot) {
+    var prepareDroolsJSON = function (data, notRoot) {
         if (notRoot === undefined || notRoot === false ) {
-            data['class'] = 'gov.gtas.model.udr.json.QueryObject';
+            if (typeof data === 'string') {
+                data = JSON.parse(data);
+            }
+
+            data['@class'] = 'gov.gtas.model.udr.json.QueryObject';
             data.summary = {
                 "title":"Hello Rule 1",
                 "description":"This is a test",
                 "startDate":"2015-06-29",
                 "endDate":null,
-                "author":"jpjones",
+                /* TODO: not hard code authoer */
+                "author":"adelorie",
                 "enabled":false
             };
         }
@@ -1172,10 +1176,13 @@
             }
         });
         return data;
-    }
+    };
 
-    function interpretDroolsJSON (data, notRoot) {
+    var interpretDroolsJSON = function (data, notRoot) {
         if (notRoot === undefined || notRoot === false) {
+            if (typeof data === 'string') {
+                data = JSON.parse(data);
+            }
             delete data['@class'];
             delete data.summary;
         }
@@ -1193,32 +1200,13 @@
             delete rule['@class'];
         });
         return data;
-    }
-
-    var droolsOut = function (data) {
-        return prepareDroolsJSON(data);
     };
-
-    var droolsIn = function (data) {
-        return interpretDroolsJSON( data );
-    };
-
-    var queryBuilderOut = function (queryBuilder) {
-        console.log('inside ' + 'queryBuilderOut');
-        return queryBuilder.getRules();
-    };
-
-    var queryBuilderIn = function (queryBuilder) {
-        console.log('inside ' + 'queryBuilderIn');
-        return queryBuilder.getRules();
-    };
-
 
     var adapterLookup = {
-        'DROOLS.IN': droolsIn,
-        'DROOLS.OUT': droolsOut,
-        'QueryBuilder.IN': droolsIn,
-        'QueryBuilder.OUT': droolsOut
+        'DROOLS.IN': interpretDroolsJSON,
+        'DROOLS.OUT': prepareDroolsJSON,
+        'QueryBuilder.IN': interpretDroolsJSON,
+        'QueryBuilder.OUT': prepareDroolsJSON
     };
 
     /** RULES Wrapper */
@@ -1291,7 +1279,7 @@
                         plugin: 'selectize',
                         operator: op,
                         value: lookup[key][operator].value
-                    })
+                    });
                 }
             });
         });
