@@ -3,16 +3,14 @@ package gov.gtas.parsers.paxlst;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
-import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
 public abstract class PaxlstParser {
-    private String filePath;
+    private String message;
     private String segmentPackageName;
 
     protected enum GROUP {
@@ -25,11 +23,11 @@ public abstract class PaxlstParser {
     
     protected GROUP currentGroup;
 
-    protected ApisMessageVo message;
+    protected ApisMessageVo parsedMessage;
     protected List<Segment> segments;
     
-    public PaxlstParser(String filePath, String segmentPackageName) {
-        this.filePath = filePath;
+    public PaxlstParser(String message, String segmentPackageName) {
+        this.message = message;
         this.segmentPackageName = segmentPackageName;
     }
 
@@ -37,26 +35,17 @@ public abstract class PaxlstParser {
     
     public ApisMessageVo parse() throws ParseException {
         this.segments = new LinkedList<>();
-        this.message = new ApisMessageVo();
-
-        byte[] raw = FileUtils.readSmallFile(this.filePath);
-        if (raw == null) {
-            return null;
-        }
-        
-        this.message.setRaw(raw);
-        String msg = new String(raw, StandardCharsets.US_ASCII);
-        processMessageAndGetSegments(msg);
+        this.parsedMessage = new ApisMessageVo();        
+        processMessageAndGetSegments();
         parseSegments();
-
-        return this.message;
+        return this.parsedMessage;
     }
     
-    private void processMessageAndGetSegments(String msg) throws ParseException {
-        String txt = ParseUtils.stripApisHeaderAndFooter(msg);
+    private void processMessageAndGetSegments() throws ParseException {
+        String txt = ParseUtils.stripApisHeaderAndFooter(message);
         txt = txt.toUpperCase();
         txt = txt.replaceAll("\\n|\\r", "");
-        
+                
         SegmentFactory factory = new SegmentFactory(segmentPackageName);
         EdifactParser p = new EdifactParser();
         LinkedList<Segment> edifactSegments = p.parse(txt);

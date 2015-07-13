@@ -1147,17 +1147,7 @@
             if (typeof data === 'string') {
                 data = JSON.parse(data);
             }
-
             data['@class'] = 'gov.gtas.model.udr.json.QueryObject';
-            data.summary = {
-                "title":"Hello Rule 1",
-                "description":"This is a test",
-                "startDate":"2015-06-29",
-                "endDate":null,
-                /* TODO: not hard code authoer */
-                "author":"adelorie",
-                "enabled":false
-            };
         }
         data.rules.forEach(function(rule){
             if (rule.entity === undefined && rule.id !== undefined) {

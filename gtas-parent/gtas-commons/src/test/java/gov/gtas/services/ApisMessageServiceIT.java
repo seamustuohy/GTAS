@@ -1,12 +1,11 @@
 package gov.gtas.services;
 
+import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 
 import java.io.File;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
@@ -42,27 +40,5 @@ public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringConte
     public void testRunService() throws ParseException {
         ApisMessageVo msg = svc.parseApisMessage(this.apisFilePath);
         assertNotNull(msg);
-    }
-
-    public List<String> listFilesForFolder(final File folder) {
-        List<String> rv = new ArrayList<>();
-        for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
-                listFilesForFolder(fileEntry);
-            } else {
-                rv.add(fileEntry.getAbsolutePath());
-            }
-        }
-        return rv;
-    }
-    
-    @Test
-    public void testeverything() throws ParseException {
-        final File folder = new File("c:/temp/APIS-test-files");
-        List<String> files = listFilesForFolder(folder);
-        for (String f : files) {
-            ApisMessageVo msg = svc.parseApisMessage(f);
-            svc.loadApisMessage(msg);
-        }
     }
 }
