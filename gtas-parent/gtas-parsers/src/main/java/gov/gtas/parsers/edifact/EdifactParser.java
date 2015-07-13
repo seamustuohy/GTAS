@@ -6,12 +6,7 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class EdifactParser {
-    private static final Logger logger = LoggerFactory.getLogger(EdifactParser.class);
-
     private SegmentParser segmentParser;
     
     private UNA una;

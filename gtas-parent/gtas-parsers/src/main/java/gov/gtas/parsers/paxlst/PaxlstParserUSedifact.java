@@ -25,8 +25,8 @@ public class PaxlstParserUSedifact extends PaxlstParser {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);
     
     
-    public PaxlstParserUSedifact(String filePath) {
-        super(filePath, UNB.class.getPackage().getName());
+    public PaxlstParserUSedifact(String message) {
+        super(message, UNB.class.getPackage().getName());
     }
     
     public void parseSegments() {
@@ -84,7 +84,7 @@ public class PaxlstParserUSedifact extends PaxlstParser {
     private void processFlight(Segment seg, ListIterator<Segment> i) {
         TDT tdt = (TDT)seg;
         FlightVo f = new FlightVo();
-        message.addFlight(f);
+        parsedMessage.addFlight(f);
 
         f.setFlightNumber(tdt.getC_flightNumber());
         f.setCarrier(tdt.getC_airlineCode());
@@ -126,7 +126,7 @@ public class PaxlstParserUSedifact extends PaxlstParser {
 
     private void processPax(Segment s) {
         PaxVo p = new PaxVo();
-        message.addPax(p);
+        parsedMessage.addPax(p);
 
         PDT pdt = (PDT)s;
         p.setFirstName(pdt.getLastName());
@@ -161,7 +161,7 @@ public class PaxlstParserUSedifact extends PaxlstParser {
     private void processReportingParty(Segment s) {
         CTA cta = (CTA)s;
         ReportingPartyVo rp = new ReportingPartyVo();
-        message.addReportingParty(rp);
+        parsedMessage.addReportingParty(rp);
         rp.setPartyName(cta.getName());
         rp.setTelephone(cta.getTelephoneNumber());
         rp.setFax(cta.getFaxNumber());

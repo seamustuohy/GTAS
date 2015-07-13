@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
 public final class PaxlstParserUNedifact extends PaxlstParser {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUNedifact.class);
 
-    public PaxlstParserUNedifact(String filePath) {
-        super(filePath, UNB.class.getPackage().getName());
+    public PaxlstParserUNedifact(String message) {
+        super(message, UNB.class.getPackage().getName());
     }
     
     public void parseSegments() {
@@ -90,7 +90,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     private void processReportingParty(Segment seg, ListIterator<Segment> i) {
         NAD nad = (NAD)seg;        
         ReportingPartyVo rp = new ReportingPartyVo();
-        message.addReportingParty(rp);
+        parsedMessage.addReportingParty(rp);
         rp.setPartyName(nad.getPartyName());
 
         Segment nextSeg = i.next();
@@ -106,7 +106,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     
     private void processPax(Segment seg, ListIterator<Segment> i) {
         PaxVo p = new PaxVo();
-        message.addPax(p);
+        parsedMessage.addPax(p);
 
         NAD nad = (NAD)seg;
         p.setFirstName(nad.getFirstName());
@@ -205,7 +205,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     private void processFlight(Segment seg, ListIterator<Segment> i) {
         TDT tdt = (TDT)seg;
         FlightVo f = new FlightVo();
-        message.addFlight(f);
+        parsedMessage.addFlight(f);
         f.setFlightNumber(tdt.getC_journeyIdentifier());
         
         String tmp = tdt.getC_carrierIdentifier();

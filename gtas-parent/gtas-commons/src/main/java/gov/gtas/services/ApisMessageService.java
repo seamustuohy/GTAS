@@ -17,18 +17,24 @@ import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.util.FileUtils;
+import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.repository.ApisMessageRepository;
 
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ApisMessageService {
+    private static final Logger logger = LoggerFactory.getLogger(ApisMessageService.class);
+
     @Autowired
     private CountryService countryService;
     
@@ -43,23 +49,49 @@ public class ApisMessageService {
     
     @Autowired
     private FlightService flightService;
-    
-    public ApisMessageVo parseApisMessage(String filePath) throws ParseException {
-        byte[] raw = FileUtils.readSmallFile(filePath);
-        String msg = new String(raw, StandardCharsets.US_ASCII);
 
+    @Autowired
+    private ApisMessageRepository msgDao;
+    
+    private ApisMessage apisMessage;
+    
+    public ApisMessageVo parseApisMessage(String filePath) {
+        this.apisMessage = new ApisMessage();
+        this.apisMessage.setCreateDate(new Date());
+
+        byte[] raw = FileUtils.readSmallFile(filePath);
+        this.apisMessage.setRaw(raw);
+        msgDao.save(this.apisMessage);
+        
+        String message = new String(raw, StandardCharsets.US_ASCII);
+        String payload = getApisMessagePayload(message);
+        if (payload == null) {
+            handleFatalError("Could not extract message payload. Missing NAD or UNT segment.");
+        }
+        String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
+        this.apisMessage.setHashCode(md5);
+
+        
         PaxlstParser parser = null;
-        if (isUSEdifactFile(msg)) {
-            parser = new PaxlstParserUSedifact(filePath);
+        if (isUSEdifactFile(message)) {
+            parser = new PaxlstParserUSedifact(message);
         } else {
-            parser= new PaxlstParserUNedifact(filePath);
+            parser= new PaxlstParserUNedifact(message);
         }
 
-//        ApisMessage apisMessage = new ApisMessage();
-//        apisMessage.set
+        ApisMessageVo vo = null;
+        try {
+            vo = parser.parse();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
-        // TODO: save apis message here with status?
-        return parser.parse();
+        return vo;
+    }
+    
+    private void handleFatalError(String error) {
+        logger.error(error);
+        // TODO: create error column in message class, set it here
     }
     
     private boolean isUSEdifactFile(String msg) {
@@ -67,8 +99,7 @@ public class ApisMessageService {
     }
     
     public void loadApisMessage(ApisMessageVo m) {
-        Set<Traveler> pax = new HashSet<>();
-        
+        Set<Traveler> pax = new HashSet<>();        
         for (PaxVo pvo : m.getPassengers()) {
             Traveler p = convertPaxVo(pvo);
             pax.add(p);
@@ -78,7 +109,7 @@ public class ApisMessageService {
         for (FlightVo fvo : m.getFlights()) {
             f = convertFlightVo(fvo);
             f.setPassengers(pax);
-//            System.out.println(f);
+            System.out.println(f);
             flightService.create(f);
         }
     }
@@ -164,4 +195,26 @@ public class ApisMessageService {
         
         return null;
     }
+    
+    /**
+     * Return everything from the start of the first NAD segment to the
+     * start of the UNT trailing header segment.
+     */
+    private String getApisMessagePayload(String text) {
+        if (text == null) return null;
+        
+        int nadIndex = text.indexOf("NAD");
+        if (nadIndex == -1) {
+            return null;
+        }
+        
+        int untIndex = text.indexOf("UNT");
+        if (untIndex == -1) {
+            return null;
+        }
+        
+        return text.substring(nadIndex, untIndex);
+    }
+    
+    
 }
