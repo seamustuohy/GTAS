@@ -1,7 +1,6 @@
 package gov.gtas.model.udr.json.util;
 
 import gov.gtas.error.CommonErrorConstants;
-import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
@@ -47,6 +46,7 @@ public class JsonToDomainObjectConverter {
 
 	public static RuleMeta extractRuleMeta(UdrSpecification inputJson) {
 		final MetaData metaData = inputJson.getSummary();
+		
 		JsonValidationUtils.validateMetaData(metaData);
 
 		final Long id = inputJson.getId();
@@ -147,12 +147,10 @@ public class JsonToDomainObjectConverter {
 	public static UdrRule createUdrRuleFromJson(UdrSpecification inputJson,
 			User author) throws IOException {
 		if (inputJson == null) {
-			throw new CommonServiceException(
+			throw ErrorHandlerFactory.getErrorHandler().createException(
 					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
-					String.format(
-							CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE,
 							"inputJson",
-							"JsonToDomainObjectConverter.createUdrRuleFromJson()"));
+							"JsonToDomainObjectConverter.createUdrRuleFromJson()");
 		}
 		
 		final RuleMeta metaData = extractRuleMeta(inputJson);
@@ -176,12 +174,10 @@ public class JsonToDomainObjectConverter {
 			UdrSpecification inputJson) {
 		QueryObject qobj = inputJson.getDetails();
 		if(qobj == null){
-			throw new CommonServiceException(
+			throw ErrorHandlerFactory.getErrorHandler().createException(
 					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
-					String.format(
-							CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE,
 							"details",
-							"Create new UDR"));			
+							"Create UDR");			
 		}
 		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
 		int indx = 0;
@@ -235,8 +231,9 @@ public class JsonToDomainObjectConverter {
 	        		bldr.append(val).append(",");
 	        	}
 	        	bldr.append("]");
-	        	throw ErrorHandlerFactory.getErrorHandler().createException(CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE, 
-	        			bldr.toString(), trm.getType(), "'Engine Rule Creation'");
+				throw ErrorHandlerFactory.getErrorHandler().createException(
+						CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE,
+						bldr.toString(), trm.getType(), "Engine Rule Creation");
 	        }
 			ret.addConditionToRule(cond);
 		}
@@ -285,8 +282,6 @@ public class JsonToDomainObjectConverter {
 		rule.setEditDt(new Date());
 		rule.setAuthor(author);
 		rule.setTitle(meta.getTitle());
-//		RuleMeta meta = createRuleMeta(id, title, descr, startDate, endDate,
-//				enabled);
 		rule.setMetaData(meta);
 		rule.setUdrConditionObject(queryObjectBlob);
 		return rule;

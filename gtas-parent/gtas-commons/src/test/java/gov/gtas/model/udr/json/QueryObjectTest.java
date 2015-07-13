@@ -2,6 +2,7 @@ package gov.gtas.model.udr.json;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
@@ -24,15 +25,13 @@ public class QueryObjectTest {
 	public void tearDown() throws Exception {
 	}
 
-	@Test
-	public void testEmpty() {
+	@Test(expected=CommonServiceException.class)
+	public void testEmptyError() {
 		UdrSpecificationBuilder builder = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
 
 		QueryObject qobj = builder.build().getDetails();
 		List<List<QueryTerm>> flatList = qobj.createFlattenedList();
-		assertNotNull(flatList);
-		assertEquals(0,flatList.size());
 	}
 
 	@Test
