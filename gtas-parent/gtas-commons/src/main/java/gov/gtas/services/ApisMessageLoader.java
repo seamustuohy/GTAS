@@ -2,9 +2,9 @@ package gov.gtas.services;
 
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
+import gov.gtas.parsers.util.FileUtils;
 
 import java.io.File;
-import java.text.ParseException;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -12,15 +12,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class ApisMessageLoader {
     public static void processSingleFile(ApisMessageService svc, String filePath) {
         System.out.println("processing file " + filePath);
-        ApisMessageVo m = null;
-        try {
-            m = svc.parseApisMessage(filePath);
-        } catch (ParseException pe) {
-            pe.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        byte[] raw = FileUtils.readSmallFile(filePath);
+        ApisMessageVo m = svc.parseApisMessage(raw);
         if (m == null) {
             System.out.println("error parsing " + filePath);
             return;
