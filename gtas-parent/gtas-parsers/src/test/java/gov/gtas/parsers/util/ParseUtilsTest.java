@@ -1,6 +1,8 @@
 package gov.gtas.parsers.util;
 import static org.junit.Assert.assertEquals;
 
+import java.nio.charset.StandardCharsets;
+
 import org.junit.Test;
 
 public class ParseUtilsTest {
@@ -41,5 +43,13 @@ public class ParseUtilsTest {
         assertEquals(elements[0], "ANDREWS");
         assertEquals(elements[1], "TIFFANY");
         assertEquals(elements[2], "PAGE");
+    }
+    
+    @Test
+    public void testMd5() {
+        String str1 = "unoshriram";
+        String expected = "95E5F0B6988EC703E832172F70CE7DC7";
+        String actual = ParseUtils.getMd5Hash(str1, StandardCharsets.US_ASCII);
+        assertEquals(expected, actual);
     }
 }

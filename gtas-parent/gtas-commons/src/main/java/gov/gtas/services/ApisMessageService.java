@@ -1,13 +1,14 @@
 package gov.gtas.services;
 
+import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
+import gov.gtas.model.Gender;
 import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
-import gov.gtas.model.lookup.Gender;
 import gov.gtas.parsers.paxlst.PaxlstParser;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
@@ -53,6 +54,9 @@ public class ApisMessageService {
         } else {
             parser= new PaxlstParserUNedifact(filePath);
         }
+
+//        ApisMessage apisMessage = new ApisMessage();
+//        apisMessage.set
         
         // TODO: save apis message here with status?
         return parser.parse();
