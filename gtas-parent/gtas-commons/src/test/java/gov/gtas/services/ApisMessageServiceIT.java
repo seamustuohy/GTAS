@@ -43,26 +43,4 @@ public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringConte
         ApisMessageVo msg = svc.parseApisMessage(this.apisFilePath);
         assertNotNull(msg);
     }
-
-    public List<String> listFilesForFolder(final File folder) {
-        List<String> rv = new ArrayList<>();
-        for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
-                listFilesForFolder(fileEntry);
-            } else {
-                rv.add(fileEntry.getAbsolutePath());
-            }
-        }
-        return rv;
-    }
-    
-    @Test
-    public void testeverything() throws ParseException {
-        final File folder = new File("c:/temp/APIS-test-files");
-        List<String> files = listFilesForFolder(folder);
-        for (String f : files) {
-            ApisMessageVo msg = svc.parseApisMessage(f);
-            svc.loadApisMessage(msg);
-        }
-    }
 }
