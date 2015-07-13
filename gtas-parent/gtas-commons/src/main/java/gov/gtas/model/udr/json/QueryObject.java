@@ -1,5 +1,8 @@
 package gov.gtas.model.udr.json;
 
+import gov.gtas.error.CommonErrorConstants;
+import gov.gtas.error.ErrorHandlerFactory;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,72 +10,111 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
  * Recursive query condition object.
+ * 
  * @author GTAS3 (AB)
  *
  */
-@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
-public class QueryObject implements QueryEntity{
-   /**
-	 * serial  version UID.
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+public class QueryObject implements QueryEntity {
+	/**
+	 * serial version UID.
 	 */
 	private static final long serialVersionUID = -1825443604051080662L;
-	
-    private String condition;
-    private List<QueryEntity> rules;
+
+	private String condition;
+	private List<QueryEntity> rules;
+
 	/**
 	 * @return the condition
 	 */
 	public String getCondition() {
 		return condition;
 	}
+
 	/**
-	 * @param condition the condition to set
+	 * @param condition
+	 *            the condition to set
 	 */
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
+
 	/**
 	 * @return the rules
 	 */
 	public List<QueryEntity> getRules() {
 		return rules;
 	}
+
 	/**
-	 * @param rules the rules to set
+	 * @param rules
+	 *            the rules to set
 	 */
 	public void setRules(List<QueryEntity> rules) {
 		this.rules = rules;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gov.gtas.model.udr.json.QueryEntity#getFlattenedList()
 	 */
 	@Override
-	public List<List<QueryTerm>> createFlattenedList(){
+	public List<List<QueryTerm>> createFlattenedList() {
 		List<List<QueryTerm>> flatList = new LinkedList<List<QueryTerm>>();
-		final QueryConditionEnum condOp = QueryConditionEnum.valueOf(this.condition);
-		if(condOp == QueryConditionEnum.OR){
-			for(QueryEntity qtn:this.getRules()){
-				flatList.addAll(qtn.createFlattenedList());
-			}
-		} else if(condOp == QueryConditionEnum.AND){
-			for(QueryEntity qtn:this.getRules()){
-				if(flatList.isEmpty()){
-					flatList.addAll(qtn.createFlattenedList());
-				} else {
-				   flatList = multiplyFlatLists(flatList, qtn.createFlattenedList());
+		try {
+			final QueryConditionEnum condOp = QueryConditionEnum
+					.valueOf(this.condition);
+			switch (condOp) {
+			case OR:
+				List<QueryEntity> termList = this.getRules();
+				if (termList == null || termList.size() < 2) {
+					throw ErrorHandlerFactory
+							.getErrorHandler()
+							.createException(
+									CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+									"rules", "JSON object details");
 				}
+				for (QueryEntity qtn : termList) {
+					flatList.addAll(qtn.createFlattenedList());
+				}
+				break;
+			case AND:
+				termList = this.getRules();
+				if (termList == null || termList.size() < 2) {
+					throw ErrorHandlerFactory
+							.getErrorHandler()
+							.createException(
+									CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+									"rules", "JSON object details");
+				}
+				for (QueryEntity qtn : termList) {
+					if (flatList.isEmpty()) {
+						flatList.addAll(qtn.createFlattenedList());
+					} else {
+						flatList = multiplyFlatLists(flatList,
+								qtn.createFlattenedList());
+					}
+				}
+				break;
+			default:
+				throw ErrorHandlerFactory.getErrorHandler().createException(
+						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+						"condition", "JSON object details");
 			}
-			
-		}else{
-			//TODO Error
+		} catch (IllegalArgumentException iae) {
+			throw ErrorHandlerFactory.getErrorHandler().createException(
+					CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+					"condition", "JSON object details");
 		}
 		return flatList;
 	}
-	private List<List<QueryTerm>> multiplyFlatLists(List<List<QueryTerm>> list1, List<List<QueryTerm>> list2){
+
+	private List<List<QueryTerm>> multiplyFlatLists(
+			List<List<QueryTerm>> list1, List<List<QueryTerm>> list2) {
 		List<List<QueryTerm>> flatList = new LinkedList<List<QueryTerm>>();
-		for(List<QueryTerm> l1:list1){
-			for(List<QueryTerm> l2:list2){
+		for (List<QueryTerm> l1 : list1) {
+			for (List<QueryTerm> l2 : list2) {
 				List<QueryTerm> newList = new LinkedList<QueryTerm>();
 				newList.addAll(l1);
 				newList.addAll(l2);
@@ -81,5 +123,5 @@ public class QueryObject implements QueryEntity{
 		}
 		return flatList;
 	}
-  
+
 }

@@ -2,6 +2,8 @@ package gov.gtas.error;
 
 import static gov.gtas.error.CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE;
 import static gov.gtas.error.CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_MESSAGE;
+import static gov.gtas.error.CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE;
+import static gov.gtas.error.CommonErrorConstants.INVALID_ARGUMENT_ERROR_MESSAGE;
 import static gov.gtas.error.CommonErrorConstants.INVALID_USER_ID_ERROR_CODE;
 import static gov.gtas.error.CommonErrorConstants.INVALID_USER_ID_ERROR_MESSAGE;
 import static gov.gtas.error.CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE;
@@ -12,22 +14,18 @@ import static gov.gtas.error.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CO
 import static gov.gtas.error.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_MESSAGE;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-
-//import gov.gtas.error.CommonErrorConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Error Handler for the Rule Engine related functionality.
+ * Common Error Handler for the Rule Engine related functionality.
  * 
  * @author GTAS3 (AB)
  *
  */
-//@Component
 public class BasicErrorHandler implements ErrorHandler {
 	
 	/*
@@ -54,6 +52,7 @@ public class BasicErrorHandler implements ErrorHandler {
 	public BasicErrorHandler() {
 		errorMap = new HashMap<String, String>();
 		errorMap.put(NULL_ARGUMENT_ERROR_CODE, NULL_ARGUMENT_ERROR_MESSAGE);
+		errorMap.put(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE);
 		errorMap.put(INVALID_USER_ID_ERROR_CODE, INVALID_USER_ID_ERROR_MESSAGE);
 		errorMap.put(INPUT_JSON_FORMAT_ERROR_CODE, INPUT_JSON_FORMAT_ERROR_MESSAGE);
 		errorMap.put(UPDATE_RECORD_MISSING_ERROR_CODE,
@@ -109,30 +108,7 @@ public class BasicErrorHandler implements ErrorHandler {
 			return delegate.processError(exception);
 		} else {
 			logger.error(exception.getMessage());
-			return new ErrorDetails() {				
-				@Override
-				public List<String> getWarningMessages() {
-					return null;
-				}				
-				@Override
-				public String getFatalErrorMessage() {
-					if(exception instanceof CommonServiceException){
-						return ((CommonServiceException)exception).getMessage();
-					}else{
-					    return String.format(CommonErrorConstants.SYSTEM_ERROR_MESSAGE,
-								System.currentTimeMillis());
-					}
-				}				
-				@Override
-				public String getFatalErrorCode() {
-					if(exception instanceof CommonServiceException){
-						return ((CommonServiceException)exception).getErrorCode();
-					}else{
-					    return CommonErrorConstants.SYSTEM_ERROR_CODE;
-					}
-				}
-			};
-
+			return new BasicErrorDetails(exception);
 		}
 	}
 

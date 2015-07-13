@@ -1,6 +1,5 @@
 package gov.gtas.error;
 
-import java.util.function.Function;
 
 /**
  * The error Handler

@@ -29,3 +29,4 @@ INSERT INTO `authorities` VALUES('4','bstygar','7','bstygar');
 INSERT INTO `authorities` VALUES('5','mcopenhafer','3','mcopenhafer');
 INSERT INTO `authorities` VALUES('6','mcopenhafer','4','mcopenhafer');
 INSERT INTO `authorities` VALUES('7','mcopenhafer','5','mcopenhafer');
+INSERT INTO `authorities` VALUES('8','abandopadhay','7','abandopadhay');

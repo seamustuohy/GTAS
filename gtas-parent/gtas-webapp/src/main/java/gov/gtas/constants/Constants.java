@@ -2,12 +2,13 @@ package gov.gtas.constants;
 
 public final class Constants {
 
+	// Query URI
 	public static final String QUERY_SERVICE = "/query";
 	public static final String INIT = "/init";
 	public static final String RUN_QUERY_FLIGHT_URI = "/queryFlights";
 	public static final String RUN_QUERY_PASSENGER_URI = "/queryPassengers";
 	public static final String SAVE_QUERY_URI = "/saveQuery";
-	public static final String VIEW_QUERY_URI = "/viewQuery";
+	public static final String LIST_QUERY_URI = "/listQuery";
 	public static final String EDIT_QUERY_URI = "/editQuery";
 	public static final String DELETE_QUERY_URI = "/deleteQuery";
 	
@@ -22,4 +23,9 @@ public final class Constants {
 	public static final String UDR_TEST = "/testUdr";
 	public static final String UDR_RULE = "/rules";
 	
+	// Query Messages
+	public static final String QUERY_SAVED_SUCCESS_MSG = "Query saved successfully";
+	public static final String QUERY_EDITED_SUCCESS_MSG = "Query updated successfully";
+	public static final String QUERY_DELETED_SUCCESS_MSG = "Query deleted successfully";
+	public static final String QUERY_SERVICE_ERROR_MSG = "An error occurred while trying to process your request";
 }

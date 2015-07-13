@@ -22,6 +22,12 @@ public class CommonErrorConstants {
 	 */
 	public static final String NULL_ARGUMENT_ERROR_CODE = "NULL_ARGUMENT";
 	/*
+	 * This is the error code for an internal system error indicating invalid
+	 * program logic causing a service API method being called with an invalid
+	 * argument.
+	 */
+	public static final String INVALID_ARGUMENT_ERROR_CODE = "INVALID_ARGUMENT";
+	/*
 	 * This is the error code indicating that the user indicated by a supplied
 	 * userId cannot be found.
 	 */
@@ -57,6 +63,12 @@ public class CommonErrorConstants {
 	 */
 	public static final String NULL_ARGUMENT_ERROR_MESSAGE = "The parameter '%s' passed to the method '%s' should not be null.";
 	/*
+	 * This is the error message for an internal system error indicating invalid
+	 * program logic causing a service API method being called with an invalid
+	 * argument.
+	 */
+	public static final String INVALID_ARGUMENT_ERROR_MESSAGE = "The parameter '%s' in '%s' is invalid.";
+	/*
 	 * This is the error message indicating that the user indicated by a
 	 * supplied userId cannot be found.
 	 */
@@ -65,7 +77,7 @@ public class CommonErrorConstants {
 	/*
 	 * This error message indicates that an input JSON field has an incorrect format.
 	 */
-	public static final String INPUT_JSON_FORMAT_ERROR_MESSAGE = "Parse error for values %s with type %s for %s.";
+	public static final String INPUT_JSON_FORMAT_ERROR_MESSAGE = "Parse error for values %s with type %s for '%s'.";
 	
 	/*
 	 * This is the error message indicating that the record to be updated does

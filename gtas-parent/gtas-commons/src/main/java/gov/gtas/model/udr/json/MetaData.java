@@ -3,7 +3,11 @@ package gov.gtas.model.udr.json;
 import gov.gtas.model.udr.UdrConstants;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 /**
@@ -20,7 +24,7 @@ public class MetaData implements Serializable {
 	
 	private String title;
 	private String description;
-	
+		
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = UdrConstants.UDR_DATE_FORMAT)
 	private Date startDate;
 	
@@ -35,7 +39,9 @@ public class MetaData implements Serializable {
     public MetaData(String title, String descr, Date startDate, String auth){
     	this.title = title;
     	this.description = descr;
+    	//this.startDate = GregorianCalendar.getInstance();
     	this.startDate = startDate;
+    	startDate.setTime(startDate.getTime());
     	this.author = auth;
     }
 
@@ -79,6 +85,8 @@ public class MetaData implements Serializable {
 	 */
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+//		this.startDate = GregorianCalendar.getInstance();
+//		startDate.setTime(startDate.getTime());
 	}
 
 	/**
@@ -93,6 +101,8 @@ public class MetaData implements Serializable {
 	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+//		this.endDate = GregorianCalendar.getInstance();
+//		endDate.setTime(endDate.getTime());
 	}
 
 	/**

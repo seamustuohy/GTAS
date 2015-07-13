@@ -3,13 +3,20 @@ package gov.gtas.querybuilder.service;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Traveler;
+import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.config.QueryBuilderAppConfig;
+import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.model.Query;
+import gov.gtas.querybuilder.util.Constants;
 import gov.gtas.querybuilder.util.EntityEnum;
+import gov.gtas.querybuilder.util.OperatorEnum;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.After;
@@ -20,25 +27,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {CommonServicesConfig.class, QueryBuilderAppConfig.class})
 public class QueryBuilderServiceIT {
 
 	@Autowired
 	QueryBuilderService queryService;
+	QueryObject query;
+	QueryTerm rule;
+	List<QueryEntity> rules;
 	
 	@Before
 	public void setUp() throws Exception {
+		query = new QueryObject();
+		rule = new QueryTerm();
+		rules = new ArrayList<>();
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		query = null;
+		rule = null;
+		rules = null;
 	}
 
 	//----------------------------------------
 	// Flight Queries
 	//----------------------------------------
-	@Test
+//	@Test
 	public void testRunQueryAgainstFlights() {
 		QueryObject query = buildSimpleQuery();
 		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
@@ -55,7 +74,7 @@ public class QueryBuilderServiceIT {
 		}
 	}
 
-	@Test
+//	@Test
 	public void testSimpleDateQueryAgainstFlights() {
 		QueryObject query = buildSimpleDateQuery();
 		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
@@ -72,7 +91,7 @@ public class QueryBuilderServiceIT {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testSimpleIsNullQueryAgainstFlights() {
 		QueryObject query = buildSimpleIsNullQuery();
 		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
@@ -89,7 +108,7 @@ public class QueryBuilderServiceIT {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testSimpleContainsQueryAgainstFlights() {
 		QueryObject query = buildSimpleContainsQuery();
 		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
@@ -106,10 +125,15 @@ public class QueryBuilderServiceIT {
 		}
 	}
 	
+//	@Test
+	public void testComplexQueryAgainstFlights() throws JsonProcessingException {
+//		buildComplexQuery();
+		testing();
+	}
 	//-------------------------------
 	// Passenger Queries
 	//-------------------------------
-	@Test
+//	@Test
 	public void testRunQueryAgainstPassengers() {
 		QueryObject query = buildSimpleQuery();
 		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
@@ -126,7 +150,7 @@ public class QueryBuilderServiceIT {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testSimpleIsNullQueryAgainstPassengers() {
 		QueryObject query = buildSimpleIsNullQuery();
 		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
@@ -143,7 +167,7 @@ public class QueryBuilderServiceIT {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testSimpleContainsQueryAgainstPassengers() {
 		QueryObject query = buildSimpleContainsQuery();
 		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
@@ -160,7 +184,7 @@ public class QueryBuilderServiceIT {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testSimpleBetweenQueryAgainstPassengers() {
 		QueryObject query = buildSimpleBetweenQuery();
 		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
@@ -177,14 +201,138 @@ public class QueryBuilderServiceIT {
 		}
 	}
 	
+	
+//	@Test
+	public void display() throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		Query queryToSave = new Query();
+		User user = new User();
+		
+		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
+		
+		user.setUserId("ladebiyi");
+		queryToSave = new Query();
+		queryToSave.setCreatedBy(user);
+		queryToSave.setCreatedDt(new Date());
+		queryToSave.setTitle("Test Query 1");
+		queryToSave.setDescription("Test description ");
+		queryToSave.setQueryText(queryText);
+		
+		System.out.println("query: " + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(queryToSave));
+	}
+	/**
+	 * 
+	 * @throws JsonProcessingException
+	 * @throws QueryAlreadyExistsException 
+	 * @throws InterruptedException 
+	 */
+	@Test
+	public void testSaveQuery() throws JsonProcessingException, QueryAlreadyExistsException, InterruptedException {
+		ObjectMapper mapper = new ObjectMapper();
+		Query queryToSave = new Query();
+		User user = new User();
+		
+		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
+		
+		user.setUserId("ladebiyi");
+		for(int i = 1; i <= 3; i++) {
+			queryToSave = new Query();
+			queryToSave.setCreatedBy(user);
+			queryToSave.setCreatedDt(new Date());
+			queryToSave.setTitle("Test Query " + i);
+			queryToSave.setDescription("Test description " + i);
+			queryToSave.setQueryText(queryText);
+			
+			queryService.saveQuery(queryToSave);
+			Thread.sleep(5000); // wait for 5 seconds
+		}
+		
+		user.setUserId("bstygar");
+		for(int i = 1; i <= 4; i++) {
+			queryToSave = new Query();
+			queryToSave.setCreatedBy(user);
+			queryToSave.setCreatedDt(new Date());
+			queryToSave.setTitle("Test Query " + i);
+			queryToSave.setDescription("Test description " + i);
+			queryToSave.setQueryText(queryText);
+			
+			queryService.saveQuery(queryToSave);
+			Thread.sleep(5000); // wait for 5 seconds
+		}
+		
+	}
+	
+//	@Test
+	public void addDuplicateQuery() throws JsonProcessingException, QueryAlreadyExistsException, InterruptedException {
+		ObjectMapper mapper = new ObjectMapper();
+		Query queryToSave = new Query();
+		User user = new User();
+		
+		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
+		
+		user.setUserId("ladebiyi");
+		queryToSave = new Query();
+		queryToSave.setCreatedBy(user);
+		queryToSave.setCreatedDt(new Date());
+		queryToSave.setTitle("Test Query 1");
+		queryToSave.setDescription("Test description ");
+		queryToSave.setQueryText(queryText);
+			
+		queryService.saveQuery(queryToSave);
+	}
+	
+//	@Test 
+	public void testEditQuery() throws JsonProcessingException, QueryAlreadyExistsException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Query query = queryService.getQuery(5);
+		
+		query.setTitle("SimpleQuery");
+		query.setDescription("Updated query from SimpleBetweenQuery to  SimpleQuery");
+		query.setQueryText(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleQuery()));
+		
+		Query editedQuery = queryService.editQuery(query);
+		
+		System.out.println("-----------------------------------");
+		System.out.println("Edited Query");
+		System.out.println("id: " + editedQuery.getId());
+		System.out.println("query title: " + editedQuery.getTitle());
+		System.out.println("query description: " + editedQuery.getDescription());
+		System.out.println("query text: " + editedQuery.getQueryText());
+		System.out.println("-----------------------------------\n");
+	}
+	
+//	@Test
+	public void testListQueryByUser() {
+		List<Query> queryList = queryService.listQueryByUser("bstygar");
+		
+		if(queryList != null && queryList.size() > 0) {
+			System.out.println("\nnumber of queries: " + queryList.size());
+			
+			for(Query query : queryList) {
+				System.out.println("-----------------------------------");
+				System.out.println("id: " + query.getId());
+				System.out.println("query title: " + query.getTitle());
+				System.out.println("query description: " + query.getDescription());
+				System.out.println("query text: " + query.getQueryText());
+				System.out.println("-----------------------------------\n");
+			}
+		}
+		else {
+			System.out.println("query list size: " + queryList.size());
+		}
+	}
+
+//	@Test
+	public void testDeleteQuery() {
+		queryService.deleteQuery("bstygar", 6);
+	}
+	
 	//---------------------------------------
 	// Build Query Objects
 	//---------------------------------------
 	
 	private QueryObject buildSimpleQuery() {
-		QueryObject query = new QueryObject();
-		QueryTerm rule = new QueryTerm();
-		List<QueryEntity> rules = new ArrayList<>();
 		
 		rule.setEntity("Pax");
 		rule.setField("firstName");
@@ -201,9 +349,6 @@ public class QueryBuilderServiceIT {
 	}
 	
 	private QueryObject buildSimpleDateQuery() {
-		QueryObject query = new QueryObject();
-		QueryTerm rule = new QueryTerm();
-		List<QueryEntity> rules = new ArrayList<>();
 		
 		rule.setEntity("Flight");
 		rule.setField("eta");
@@ -220,9 +365,6 @@ public class QueryBuilderServiceIT {
 	}
 	
 	private QueryObject buildSimpleIsNullQuery() {
-		QueryObject query = new QueryObject();
-		QueryTerm rule = new QueryTerm();
-		List<QueryEntity> rules = new ArrayList<>();
 		
 		rule.setEntity("Pax");
 		rule.setField("middleName");
@@ -239,9 +381,6 @@ public class QueryBuilderServiceIT {
 	}
 		
 	private QueryObject buildSimpleContainsQuery() {
-		QueryObject query = new QueryObject();
-		QueryTerm rule = new QueryTerm();
-		List<QueryEntity> rules = new ArrayList<>();
 		
 		rule.setEntity("Pax");
 		rule.setField("firstName");
@@ -258,9 +397,6 @@ public class QueryBuilderServiceIT {
 	}
 	
 	private QueryObject buildSimpleBetweenQuery() {
-		QueryObject query = new QueryObject();
-		QueryTerm rule = new QueryTerm();
-		List<QueryEntity> rules = new ArrayList<>();
 		List<String> values = new ArrayList<>();
 		
 		values.add("20");
@@ -278,6 +414,76 @@ public class QueryBuilderServiceIT {
 		query.setCondition("AND");
 		query.setRules(rules);
 		
+		return query;
+	}
+	
+	private void testing() throws JsonProcessingException {
+		QueryObject queryObject = new QueryObject();
+		queryObject.setCondition("OR");
+		List<QueryEntity> rules = new LinkedList<QueryEntity>();
+		QueryTerm trm = new QueryTerm("Pax", "embarkationDate","Date","EQUAL", new String[]{new Date().toString()});
+		rules.add(trm);
+		rules.add(new QueryTerm("Pax", "lastName", "String", "EQUAL", new String[]{"Jones"}));
+
+		QueryObject queryObjectEmbedded = new QueryObject();
+		queryObjectEmbedded.setCondition("AND");
+		List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
+		
+		QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name","String", "IN", new String[]{"DBY","PKY","FLT"});
+		rules2.add(trm2);
+		rules2.add(new QueryTerm("Pax", "debarkation.name", "String", "EQUAL", new String[]{"IAD"}));
+		queryObjectEmbedded.setRules(rules2);
+
+		queryObject.setRules(rules);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(queryObject));
+	}
+	
+	private QueryObject buildComplexQuery() throws JsonProcessingException {
+		rule.setEntity("Passenger");
+		rule.setField("firstName");
+		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
+		rule.setType("string");
+		rule.setValue("da");
+		
+		rules.add(rule);
+		
+		rule = new QueryTerm();
+		rule.setEntity("Passenger");
+		rule.setField("lastName");
+		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
+		rule.setType("string");
+		rule.setValue("c");
+		
+		rules.add(rule);
+		
+		query.setCondition("OR");
+		query.setRules(rules);
+		
+		QueryObject query2 = new QueryObject();
+		List<QueryTerm> rules2 = new ArrayList<>();
+		
+		query2.setCondition(Constants.AND);
+		rule = new QueryTerm();
+		rule.setEntity("Passenger");
+		rule.setField("lastName");
+		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
+		rule.setType("string");
+		rule.setValue("c");
+		rules2.add(rule);
+		
+		rule = new QueryTerm();
+		rule.setEntity("Passenger");
+		rule.setField("lastName");
+		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
+		rule.setType("string");
+		rule.setValue("c");
+		rules2.add(rule);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(query));
+		  
 		return query;
 	}
 }
