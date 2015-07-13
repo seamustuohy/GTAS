@@ -4,25 +4,44 @@ import gov.gtas.constants.Constants;
 import gov.gtas.model.BaseEntity;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Traveler;
+import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.model.Query;
 import gov.gtas.querybuilder.service.QueryBuilderService;
 import gov.gtas.querybuilder.util.EntityEnum;
 import gov.gtas.web.querybuilder.model.IQueryBuilderModel;
 import gov.gtas.web.querybuilder.model.QueryBuilderFlightResult;
 import gov.gtas.web.querybuilder.model.QueryBuilderModelFactory;
 import gov.gtas.web.querybuilder.model.QueryBuilderPassengerResult;
+import gov.gtas.web.querybuilder.model.QueryRequest;
+import gov.gtas.web.querybuilder.model.QueryResponse;
+import gov.gtas.web.querybuilder.model.QueryResult;
+import gov.gtas.web.querybuilder.model.Status;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 
@@ -33,19 +52,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(Constants.QUERY_SERVICE)
 public class QueryBuilderController {
-
+	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderController.class);
+	
 	@Autowired
 	QueryBuilderService queryService;
 
 	@RequestMapping(value = Constants.INIT, method = RequestMethod.GET)
 	public Map<String, IQueryBuilderModel> initQueryBuilder() {
 		
+		logger.debug("Getting query builder model");
 		return getQueryBuilderModel();
 	}
 	
 	/**
 	 * 
-	 * @param query
+	 * @param queryObject
+	 * @return
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.POST)
 	public List<QueryBuilderFlightResult> runQueryOnFlight(@RequestBody QueryObject queryObject) {
@@ -60,7 +82,7 @@ public class QueryBuilderController {
 	
 	/**
 	 * 
-	 * @param query
+	 * @param queryObject
 	 * @return
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_PASSENGER_URI, method = RequestMethod.POST)
@@ -77,38 +99,139 @@ public class QueryBuilderController {
 	/**
 	 * 
 	 * @param query
+	 * @return
+	 * @throws QueryAlreadyExistsException
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = Constants.SAVE_QUERY_URI, method = RequestMethod.POST)
-	public void saveQuery(@RequestBody QueryObject queryObject) {
+	public QueryResponse saveQuery(@RequestBody QueryRequest query) throws IOException {
+		QueryResponse response = new QueryResponse();
 		
-		queryService.saveQuery();
+		if(query != null) {
+			List<QueryResult> resultList = new ArrayList<>();
+			QueryResult result = new QueryResult();
+			
+			try {
+				result = mapQueryToQueryResult(queryService.saveQuery(createQuery(query)));
+				resultList.add(result);
+				
+				response = createQueryResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, resultList);
+				
+			} catch (QueryAlreadyExistsException e) {
+				result = mapQueryToQueryResult(createQuery(query));
+				resultList.add(result);
+				
+				response = createQueryResponse(Status.FAILURE, e.getMessage(), resultList);
+			}
+		}
+		
+		return response;
+	}
+
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 * @throws IOException
+	 * @throws QueryAlreadyExistsException
+	 */
+	@RequestMapping(value = Constants.EDIT_QUERY_URI, method = RequestMethod.PUT)
+	public QueryResponse editQuery(@RequestBody QueryRequest query) throws IOException {
+		QueryResponse response = new QueryResponse();
+		
+		if(query != null) {
+			List<QueryResult> resultList = new ArrayList<>();
+			QueryResult result = new QueryResult();
+			
+			try {
+				result = mapQueryToQueryResult(queryService.editQuery(createQuery(query)));
+				resultList.add(result);
+				
+				response = createQueryResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, resultList);
+				
+			} catch (QueryAlreadyExistsException e) {
+				result = mapQueryToQueryResult(createQuery(query));
+				resultList.add(result);
+				
+				response = createQueryResponse(Status.FAILURE, e.getMessage(), resultList);
+			}
+		}
+		
+		return response;
 	}
 	
 	/**
 	 * 
+	 * @param userId
+	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
 	 */
-	@RequestMapping(value = Constants.VIEW_QUERY_URI)
-	public void viewQuery() {
+	@RequestMapping(value = Constants.LIST_QUERY_URI, method = RequestMethod.GET)
+	public QueryResponse listQueryByUser(@RequestParam("userId") String userId) throws JsonParseException, JsonMappingException, IOException {
+		QueryResponse response = new QueryResponse();
 		
+		if(userId != null) {
+			List<QueryResult> resultList = new ArrayList<>();
+			resultList = mapQueryListToResultList(queryService.listQueryByUser(userId));
+			
+			response = createQueryResponse(Status.SUCCESS, "", resultList);
+		}
+		
+		return response;
 	}
 	
 	/**
 	 * 
+	 * @param userId
+	 * @param id
 	 */
-	@RequestMapping(value = Constants.EDIT_QUERY_URI)
-	public void editQuery() {
+	@RequestMapping(value = Constants.DELETE_QUERY_URI, method = RequestMethod.DELETE)
+	public QueryResponse deleteQuery(String userId, int id) {
+		QueryResponse response = new QueryResponse();
 		
+		if(userId == null && id > 0) {
+			queryService.deleteQuery(userId, id);
+			response = createQueryResponse(Status.SUCCESS, Constants.QUERY_DELETED_SUCCESS_MSG, null);
+		}
+		
+		return response;
+	}
+	
+	private Query createQuery(QueryRequest req) throws JsonProcessingException {
+		Query query = new Query();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		if(req != null) {
+			User user = new User();
+			user.setUserId(req.getUserId());
+			
+			query.setId(req.getId());
+			query.setCreatedBy(user);
+			query.setTitle(req.getTitle());
+			query.setDescription(req.getDescription());
+			query.setQueryText(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(req.getQuery()));
+			
+		}
+		
+		return query;
+	}
+	
+	private QueryResponse createQueryResponse(Status status, String message, List<QueryResult> resultList) {
+		QueryResponse response = new QueryResponse();
+		
+		response.setStatus(status);
+		response.setMessage(message);
+		response.setResult(resultList);
+		
+		return response;
 	}
 	
 	/**
 	 * 
+	 * @return
 	 */
-	@RequestMapping(value = Constants.DELETE_QUERY_URI)
-	public void deleteQuery() {
-		
-		queryService.deleteQuery();
-	}
-	
 	private Map<String, IQueryBuilderModel> getQueryBuilderModel() {
 		Map<String, IQueryBuilderModel> modelMap = new LinkedHashMap<>();
 		
@@ -129,6 +252,11 @@ public class QueryBuilderController {
 		return modelMap;
 	}
 	
+	/**
+	 * 
+	 * @param modelType
+	 * @return
+	 */
 	private IQueryBuilderModel getModel(EntityEnum modelType) {
 		QueryBuilderModelFactory factory = new QueryBuilderModelFactory();
 		
@@ -137,6 +265,11 @@ public class QueryBuilderController {
 		return model;
 	}
 	
+	/**
+	 * 
+	 * @param list
+	 * @return
+	 */
 	private List<QueryBuilderFlightResult> mapFlightToQueryFlightResult(List<? extends BaseEntity> list) {
 		List<QueryBuilderFlightResult> qbFlights = new ArrayList<>();
 		SimpleDateFormat sdFormat = new SimpleDateFormat("MM/dd/yyyy h:mm a");
@@ -165,6 +298,11 @@ public class QueryBuilderController {
 		return qbFlights;
 	}
 	
+	/**
+	 * 
+	 * @param list
+	 * @return
+	 */
 	private List<QueryBuilderPassengerResult> mapFlightToQueryPassengerResult(List<? extends BaseEntity> list) {
 		List<QueryBuilderPassengerResult> qbPassengers = new ArrayList<>();
 		SimpleDateFormat sdFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -203,4 +341,59 @@ public class QueryBuilderController {
 		return qbPassengers;
 	}
 	
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
+	 */
+	private QueryResult mapQueryToQueryResult(Query query) throws JsonParseException, JsonMappingException, IOException {
+		QueryResult result = new QueryResult();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		result.setId(query.getId());
+		result.setTitle(query.getTitle());
+		result.setDescription(query.getDescription());
+		result.setQuery(mapper.readValue(query.getQueryText(), QueryObject.class));
+		
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param queryList
+	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
+	 */
+	private List<QueryResult> mapQueryListToResultList(List<Query> queryList) throws JsonParseException, JsonMappingException, IOException {
+		List<QueryResult> resultList = new ArrayList<>();
+		
+		if(queryList != null && queryList.size() > 0) {
+			for(Query query : queryList) {
+				resultList.add(mapQueryToQueryResult(query));
+			}
+		}
+		
+		return resultList;
+	}
+		
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
+	@ExceptionHandler
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	public QueryResponse handleExceptions(Exception e) {
+		QueryResponse response = new QueryResponse();
+		
+		response = createQueryResponse(Status.FAILURE, Constants.QUERY_SERVICE_ERROR_MSG, null);
+		logger.error(e.getMessage());
+		
+	    return response;
+	}
 }

@@ -4,6 +4,8 @@ import gov.gtas.model.BaseEntity;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.model.Query;
 import gov.gtas.querybuilder.repository.QueryBuilderRepository;
 import gov.gtas.querybuilder.util.Constants;
 import gov.gtas.querybuilder.util.EntityEnum;
@@ -11,6 +13,7 @@ import gov.gtas.querybuilder.util.OperatorEnum;
 import gov.gtas.querybuilder.util.QueryBuilderUtil;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -51,33 +54,44 @@ public class QueryBuilderService {
 	}
 	
 	/**
+	 * @throws QueryAlreadyExistsException 
 	 * 
 	 */
-	public void saveQuery() {
+	public Query saveQuery(Query query) throws QueryAlreadyExistsException {
 		
+		return queryRepository.saveQuery(query);
 	}
 	
 	/**
 	 * 
 	 */
-	public void viewQuery() {
+	public List<Query> listQueryByUser(String userId) {
 		
+		return queryRepository.listQueryByUser(userId);
+	}
+	
+	public Query getQuery(int id) {
+		
+		return queryRepository.getQuery(id);
+	}
+	
+	/**
+	 * @throws QueryAlreadyExistsException 
+	 * 
+	 */
+	public Query editQuery(Query query) throws QueryAlreadyExistsException {
+		
+		return queryRepository.editQuery(query);
 	}
 	
 	/**
 	 * 
 	 */
-	public void editQuery() {
+	public void deleteQuery(String userId, int id) {
 		
+		queryRepository.deleteQuery(userId, id);
 	}
-	
-	/**
-	 * 
-	 */
-	public void deleteQuery() {
 		
-	}
-	
 	private String getQuery(QueryObject queryObject, EntityEnum queryType) {
 		String query = "";
 		

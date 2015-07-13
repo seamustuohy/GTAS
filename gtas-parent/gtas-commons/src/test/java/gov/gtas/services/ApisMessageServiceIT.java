@@ -56,6 +56,7 @@ public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringConte
         return rv;
     }
     
+    @Test
     public void testeverything() throws ParseException {
         final File folder = new File("c:/temp/APIS-test-files");
         List<String> files = listFilesForFolder(folder);
