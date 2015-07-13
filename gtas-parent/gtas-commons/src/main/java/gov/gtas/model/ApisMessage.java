@@ -31,8 +31,8 @@ public class ApisMessage extends Message {
     )
     @JoinTable(
         name="message_flight",
-        joinColumns=@JoinColumn(name="flight_id"),
-        inverseJoinColumns=@JoinColumn(name="message_id")
+        joinColumns=@JoinColumn(name="message_id"),
+        inverseJoinColumns=@JoinColumn(name="flight_id")
     )        
     private Set<Flight> flights = new HashSet<>();
 

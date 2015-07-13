@@ -35,7 +35,8 @@ public abstract class PaxlstParser {
     
     public ApisMessageVo parse() throws ParseException {
         this.segments = new LinkedList<>();
-        this.parsedMessage = new ApisMessageVo();        
+        this.parsedMessage = new ApisMessageVo();
+        this.currentGroup = GROUP.NONE;    
         processMessageAndGetSegments();
         parseSegments();
         return this.parsedMessage;

@@ -3,6 +3,7 @@ package gov.gtas.services;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Gender;
+import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
@@ -16,7 +17,6 @@ import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
-import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.ApisMessageRepository;
 
@@ -45,32 +45,27 @@ public class ApisMessageService {
     private CarrierService carrierService;
     
     @Autowired
-    private PassengerService passengerService;
-    
-    @Autowired
-    private FlightService flightService;
-
-    @Autowired
     private ApisMessageRepository msgDao;
     
     private ApisMessage apisMessage;
     
-    public ApisMessageVo parseApisMessage(String filePath) {
+    public ApisMessageVo parseApisMessage(byte[] raw) {
         this.apisMessage = new ApisMessage();
         this.apisMessage.setCreateDate(new Date());
-
-        byte[] raw = FileUtils.readSmallFile(filePath);
         this.apisMessage.setRaw(raw);
+        apisMessage.setStatus(MessageStatus.RECEIVED);
         msgDao.save(this.apisMessage);
         
         String message = new String(raw, StandardCharsets.US_ASCII);
         String payload = getApisMessagePayload(message);
         if (payload == null) {
-            handleFatalError("Could not extract message payload. Missing NAD or UNT segment.");
+            logger.error("Could not extract message payload. Missing NAD or UNT segment.");
+            apisMessage.setStatus(MessageStatus.FAILED_PARSING);
+            msgDao.save(apisMessage);
+            return null;
         }
         String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
         this.apisMessage.setHashCode(md5);
-
         
         PaxlstParser parser = null;
         if (isUSEdifactFile(message)) {
@@ -82,36 +77,42 @@ public class ApisMessageService {
         ApisMessageVo vo = null;
         try {
             vo = parser.parse();
+            apisMessage.setStatus(MessageStatus.PARSED);
+            msgDao.save(apisMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }
         
         return vo;
     }
-    
-    private void handleFatalError(String error) {
-        logger.error(error);
-        // TODO: create error column in message class, set it here
-    }
-    
+        
     private boolean isUSEdifactFile(String msg) {
         return (msg.contains("CDT") || msg.contains("PDT"));
     }
     
     public void loadApisMessage(ApisMessageVo m) {
-        Set<Traveler> pax = new HashSet<>();        
-        for (PaxVo pvo : m.getPassengers()) {
-            Traveler p = convertPaxVo(pvo);
-            pax.add(p);
+        try {
+            Set<Traveler> pax = new HashSet<>();        
+            for (PaxVo pvo : m.getPassengers()) {
+                Traveler p = convertPaxVo(pvo);
+                pax.add(p);
+            }
+    
+            Flight f = null;
+            for (FlightVo fvo : m.getFlights()) {
+                f = convertFlightVo(fvo);
+                f.setPassengers(pax);
+                this.apisMessage.getFlights().add(f);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            apisMessage.setStatus(MessageStatus.FAILED_LOADING);
+            msgDao.save(apisMessage);
+            return;
         }
 
-        Flight f = null;
-        for (FlightVo fvo : m.getFlights()) {
-            f = convertFlightVo(fvo);
-            f.setPassengers(pax);
-            System.out.println(f);
-            flightService.create(f);
-        }
+        apisMessage.setStatus(MessageStatus.LOADED);
+        msgDao.save(apisMessage);
     }
     
     private Traveler convertPaxVo(PaxVo vo) {
@@ -214,7 +215,5 @@ public class ApisMessageService {
         }
         
         return text.substring(nadIndex, untIndex);
-    }
-    
-    
+    }   
 }

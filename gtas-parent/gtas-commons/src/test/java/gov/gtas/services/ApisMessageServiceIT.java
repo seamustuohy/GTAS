@@ -3,6 +3,7 @@ package gov.gtas.services;
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
+import gov.gtas.parsers.util.FileUtils;
 
 import java.io.File;
 import java.text.ParseException;
@@ -38,7 +39,8 @@ public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringConte
 
     @Test()
     public void testRunService() throws ParseException {
-        ApisMessageVo msg = svc.parseApisMessage(this.apisFilePath);
+        byte[] raw = FileUtils.readSmallFile(this.apisFilePath);
+        ApisMessageVo msg = svc.parseApisMessage(raw);
         assertNotNull(msg);
     }
 }
