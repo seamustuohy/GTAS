@@ -1,4 +1,4 @@
-package gov.gtas.model.lookup;
+package gov.gtas.model;
 
 public enum Gender {
     M, 

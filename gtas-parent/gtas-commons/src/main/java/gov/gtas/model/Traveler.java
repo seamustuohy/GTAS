@@ -2,7 +2,6 @@ package gov.gtas.model;
 
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Country;
-import gov.gtas.model.lookup.Gender;
 
 import java.util.Date;
 import java.util.HashSet;
