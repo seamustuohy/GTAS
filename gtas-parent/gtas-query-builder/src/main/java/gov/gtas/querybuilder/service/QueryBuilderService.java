@@ -13,7 +13,6 @@ import gov.gtas.querybuilder.util.OperatorEnum;
 import gov.gtas.querybuilder.util.QueryBuilderUtil;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -244,3 +243,4 @@ public class QueryBuilderService {
 		}
 	}
 }
+

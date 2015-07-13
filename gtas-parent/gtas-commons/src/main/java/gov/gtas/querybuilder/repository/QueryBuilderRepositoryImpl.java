@@ -3,6 +3,7 @@ package gov.gtas.querybuilder.repository;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
+import gov.gtas.querybuilder.exceptions.Constants;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.model.Query;
 
@@ -69,7 +70,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				entityManager.persist(query);
 			}
 			else {
-				throw new QueryAlreadyExistsException("A query with the same title already exists. Please rename this query or edit the existing one.");
+				throw new QueryAlreadyExistsException(Constants.QUERY_EXISTS_ERROR_MSG);
 			}
 		}
 		
@@ -98,7 +99,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					entityManager.flush();
 				}
 				else {
-					throw new QueryAlreadyExistsException("A query with the same title already exists. Please rename this query or edit the existing one.");
+					throw new QueryAlreadyExistsException(Constants.QUERY_EXISTS_ERROR_MSG);
 				}
 		}
 	
