@@ -188,10 +188,10 @@ public class QueryBuilderController {
 	 * @param id
 	 */
 	@RequestMapping(value = Constants.DELETE_QUERY_URI, method = RequestMethod.DELETE)
-	public QueryResponse deleteQuery(String userId, int id) {
+	public QueryResponse deleteQuery(@RequestParam("userId") String userId, @RequestParam("id") int id) {
 		QueryResponse response = new QueryResponse();
 		
-		if(userId == null && id > 0) {
+		if(userId != null && id > 0) {
 			queryService.deleteQuery(userId, id);
 			response = createQueryResponse(Status.SUCCESS, Constants.QUERY_DELETED_SUCCESS_MSG, null);
 		}
