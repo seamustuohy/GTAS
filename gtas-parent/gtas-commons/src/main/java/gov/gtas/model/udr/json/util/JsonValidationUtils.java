@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class JsonValidationUtils {
 	
-	public static void validateMetaData(final MetaData metaData){
+	public static void validateMetaData(final MetaData metaData, final boolean checkStartDate){
 		if (metaData == null) {
 			throw new CommonServiceException(
 					UdrErrorConstants.NO_META_ERROR_CODE,
@@ -33,16 +33,22 @@ public class JsonValidationUtils {
 		final Date startDate = metaData.getStartDate();
 		final Date endDate = metaData.getEndDate();
 		
-		validateDates(startDate, endDate);
+		validateDates(startDate, endDate, checkStartDate);
 	}
-    public static void validateDates(final Date startDate, final Date endDate){
+	/**
+	 * Checks the start aand end dates of the UDR meta data for validity.
+	 * @param startDate the start date.
+	 * @param endDate the end date.
+	 * @param checkStartDate if true checks that the start date is greater than or equal to today.
+	 */
+    private static void validateDates(final Date startDate, final Date endDate, final boolean checkStartDate){
     	Date now = new Date();
 		if (startDate == null) {
 			throw new CommonServiceException(
 					UdrErrorConstants.INVALID_START_DATE_ERROR_CODE,
 					UdrErrorConstants.INVALID_START_DATE_ERROR_MESSAGE);
 		}
-        if(DateCalendarUtils.dateRoundedGreater(now, startDate, Calendar.DATE)){
+        if(checkStartDate && DateCalendarUtils.dateRoundedGreater(now, startDate, Calendar.DATE)){
 			throw new CommonServiceException(
 					UdrErrorConstants.PAST_START_DATE_ERROR_CODE,
 					UdrErrorConstants.PAST_START_DATE_ERROR_MESSAGE);

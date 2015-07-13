@@ -44,10 +44,10 @@ public class JsonToDomainObjectConverter {
 	 * @return RuleMeta domain object
 	 */
 
-	public static RuleMeta extractRuleMeta(UdrSpecification inputJson) {
+	private static RuleMeta extractRuleMeta(final UdrSpecification inputJson, final boolean checkStartDate) {
 		final MetaData metaData = inputJson.getSummary();
 		
-		JsonValidationUtils.validateMetaData(metaData);
+		JsonValidationUtils.validateMetaData(metaData, checkStartDate);
 
 		final Long id = inputJson.getId();
 		final String title = metaData.getTitle();
@@ -61,7 +61,13 @@ public class JsonToDomainObjectConverter {
 				enabled);
 		return ret;
 	}
+	public static RuleMeta extractRuleMeta(final UdrSpecification inputJson) {
+		return extractRuleMeta(inputJson, true);
+	}
 
+	public static RuleMeta extractRuleMetaUpdates(UdrSpecification inputJson) {
+		return extractRuleMeta(inputJson, false);
+	}
 	/**
 	 * Converts the rule details portion of the UDR JSON specifications object
 	 * (i.e., QueryObject) object to a blob.

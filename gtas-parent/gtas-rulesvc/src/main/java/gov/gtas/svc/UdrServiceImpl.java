@@ -233,7 +233,7 @@ public class UdrServiceImpl implements UdrService {
 		}
 		// update the meta data
 		RuleMeta ruleMeta = JsonToDomainObjectConverter
-				.extractRuleMeta(udrToUpdate);
+				.extractRuleMetaUpdates(udrToUpdate);
 		ruleToUpdate.setMetaData(ruleMeta);
 		ruleToUpdate.setTitle(ruleMeta.getTitle());
 

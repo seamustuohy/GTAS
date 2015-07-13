@@ -1,7 +1,6 @@
 package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
-import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.ErrorDetails;
@@ -160,7 +159,6 @@ public class UdrManagementController {
 		ErrorDetails err = errorHandler.processError(ex);
 		return new GtasJsonError(err.getFatalErrorCode(),
 				err.getFatalErrorMessage());
-		// return new GtasJsonError(ex.getErrorCode(), ex.getMessage());
 	}
 
 	@ExceptionHandler(Exception.class)

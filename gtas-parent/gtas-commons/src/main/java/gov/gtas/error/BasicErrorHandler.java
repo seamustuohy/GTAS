@@ -2,19 +2,18 @@ package gov.gtas.error;
 
 import static gov.gtas.error.CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE;
 import static gov.gtas.error.CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_MESSAGE;
+import static gov.gtas.error.CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE;
+import static gov.gtas.error.CommonErrorConstants.INVALID_ARGUMENT_ERROR_MESSAGE;
 import static gov.gtas.error.CommonErrorConstants.INVALID_USER_ID_ERROR_CODE;
 import static gov.gtas.error.CommonErrorConstants.INVALID_USER_ID_ERROR_MESSAGE;
 import static gov.gtas.error.CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE;
 import static gov.gtas.error.CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE;
-import static gov.gtas.error.CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE;
-import static gov.gtas.error.CommonErrorConstants.INVALID_ARGUMENT_ERROR_MESSAGE;
 import static gov.gtas.error.CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE;
 import static gov.gtas.error.CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_MESSAGE;
 import static gov.gtas.error.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE;
 import static gov.gtas.error.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_MESSAGE;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 

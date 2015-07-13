@@ -2,16 +2,10 @@ package gov.gtas.svc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
 import static org.mockito.Matchers.any;
-
-import java.io.IOException;
-import java.util.Date;
-
-import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.error.BasicErrorHandler;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.udr.UdrErrorConstants;
@@ -23,6 +17,8 @@ import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.services.UserService;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.util.DateCalendarUtils;
+
+import java.util.Date;
 
 import org.junit.After;
 import org.junit.Before;
