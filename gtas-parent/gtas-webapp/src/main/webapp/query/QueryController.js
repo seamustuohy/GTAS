@@ -413,7 +413,7 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
         $scope.$result.addClass('hide').find('pre').empty();
     };
     $scope.loadRule = function () {
-        queryService.loadRuleById(this.summary.id).then(function (myData) {
+        queryService.loadRuleById(this.$data[0].id).then(function (myData) {
             $scope.ruleId = myData.id;
             $scope.loadSummary(myData.summary);
             $scope.$builder.queryBuilder('loadRules', myData.details);
@@ -488,14 +488,14 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
         $scope.enabled = summary.enabled;
     };
 
-    $scope.today = new moment().format('YYYY-MM-DD').toString();
-    $scope.startDate = new moment().format('YYYY-MM-DD').toString();
+    $scope.today = moment().format('YYYY-MM-DD').toString();
+    $scope.startDate = $scope.today.toString();
 
     $scope.resetSummary = function () {
         $scope.title = '';
-        $scope.description = '';
+        $scope.description = null;
         $scope.startDate = $scope.today;
-        $scope.endDate = '';
+        $scope.endDate = null;
         $scope.enabled = true;
     };
     $scope.enabled = true;
@@ -505,12 +505,21 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
             id: $scope.ruleId,
             details: $scope.$builder.queryBuilder('saveRules')
         };
-        if ($scope.title && $scope.description) {
+        $scope.title = $scope.title.trim();
+        if (!$scope.title.length ) {
+            alert('Risk Criteria title summary can not be blank!');
+            return;
+        }
+        if (moment($scope.startDate) < $scope.today ) {
+            alert('Risk Criteria start date must be today or later.');
+            return;
+        }
+
             summary = {
                 title: $scope.title,
-                description: $scope.description,
+                description: $scope.description || null,
                 startDate: $scope.startDate,
-                endDate: $scope.endDate,
+                endDate: $scope.endDate || null,
                 enabled: $scope.enabled
             };
             data.push(summary);
@@ -530,9 +539,5 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
                 $scope.resetQueryBuilder();
                 $scope.resetSummary();
             });
-        }
-        else {
-            alert('All required fields required');
-        }
     };
 });
