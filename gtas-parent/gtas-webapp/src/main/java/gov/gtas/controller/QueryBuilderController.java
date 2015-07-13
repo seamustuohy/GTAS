@@ -2,7 +2,9 @@ package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
 import gov.gtas.model.BaseEntity;
+import gov.gtas.model.Crew;
 import gov.gtas.model.Flight;
+import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryObject;
@@ -284,10 +286,10 @@ public class QueryBuilderController {
 					qbFlight.setFlightNumber(flight.getFlightNumber());
 					qbFlight.setCarrierCode(flight.getCarrier() != null ? flight.getCarrier().getIata() : "");
 					qbFlight.setOrigin(flight.getOrigin() != null ? flight.getOrigin().getCity() : "");
-					qbFlight.setOriginCountry(flight.getOriginCountry() != null ? flight.getOriginCountry().getIso3() : "");
+					qbFlight.setOriginCountry(flight.getOriginCountry() != null ? flight.getOriginCountry().getIso2() : "");
 					qbFlight.setDepartureDt(sdFormat.format(flight.getEtd()));
 					qbFlight.setDestination(flight.getDestination() != null ? flight.getDestination().getCity() : "");
-					qbFlight.setDestinationCountry(flight.getDestinationCountry() != null ? flight.getDestinationCountry().getIso3() : "");
+					qbFlight.setDestinationCountry(flight.getDestinationCountry() != null ? flight.getDestinationCountry().getIso2() : "");
 					qbFlight.setArrivalDt(sdFormat.format(flight.getEta()));
 					
 					qbFlights.add(qbFlight);
@@ -317,13 +319,20 @@ public class QueryBuilderController {
 					qbPassenger.setOnWatchList(true);
 					qbPassenger.setFirstName(traveler.getFirstName());
 					qbPassenger.setLastName(traveler.getLastName());
-					qbPassenger.setPassengerType("not yet provided");
+					if(traveler instanceof Pax) {
+						qbPassenger.setPassengerType("P");
+					}
+					else if(traveler instanceof Crew) {
+						qbPassenger.setPassengerType("C");
+					}
 					qbPassenger.setGender(traveler.getGender() != null ? traveler.getGender().toString() : "");
 					qbPassenger.setDob(sdFormat.format(traveler.getDob()));
-					qbPassenger.setCitizenship(traveler.getCitizenshipCountry() != null ? traveler.getCitizenshipCountry().getIso3() : "");
+					qbPassenger.setCitizenship(traveler.getCitizenshipCountry() != null ? traveler.getCitizenshipCountry().getIso2() : "");
+					
 					qbPassenger.setDocumentNumber("");
 					qbPassenger.setDocumentType("");
 					qbPassenger.setDocumentIssuanceContry("");
+					
 					qbPassenger.setCarrierCode("");
 					qbPassenger.setFlightNumber("");
 					qbPassenger.setOrigin("");
