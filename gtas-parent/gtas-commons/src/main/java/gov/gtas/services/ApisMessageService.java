@@ -1,5 +1,6 @@
 package gov.gtas.services;
 
+import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
@@ -53,6 +54,9 @@ public class ApisMessageService {
         } else {
             parser= new PaxlstParserUNedifact(filePath);
         }
+
+//        ApisMessage apisMessage = new ApisMessage();
+//        apisMessage.set
         
         // TODO: save apis message here with status?
         return parser.parse();

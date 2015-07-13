@@ -1,5 +1,7 @@
 package gov.gtas.parsers.util;
 
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,5 +63,21 @@ public class ParseUtils {
         }
         
         return rv;
+    }
+    
+    public static String getMd5Hash(String txt, Charset encoding) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(txt.getBytes(encoding));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : array) {
+                sb.append(String.format("%02X", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 }

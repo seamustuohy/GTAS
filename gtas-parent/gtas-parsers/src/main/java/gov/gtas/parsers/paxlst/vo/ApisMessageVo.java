@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class ApisMessageVo {
     private byte[] raw;
+    private String hashCode;
     private List<FlightVo> flights = new ArrayList<>();
     private List<PaxVo> passengers = new ArrayList<>();
     private List<ReportingPartyVo> reportingParties = new ArrayList<>();
@@ -36,8 +37,14 @@ public class ApisMessageVo {
     public List<ReportingPartyVo> getReportingParties() {
         return reportingParties;
     }
+    public String getHashCode() {
+        return hashCode;
+    }
+    public void setHashCode(String hashCode) {
+        this.hashCode = hashCode;
+    }            
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
-    }            
+    }
 }
