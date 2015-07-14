@@ -386,26 +386,6 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
             queryNameInput.value = '';
         };
 
-        $(document)
-            // RESET rules on UI
-            .on('click', '.reset', $scope.resetQueryBuilder)
-            // SAVE AS rules on UI
-            .on('click', '.save-as', function () {
-//      queryName = [queryName, author].join(' | ');
-                if ($builder.queryBuilder('saveRules', queryName, true)) {
-                    savedQueryNames.addUnique(queryName);
-                    updateSavedQueryNamesList();
-                }
-            })
-            // Delete rules on UI
-            .on('click', '.delete', function () {
-//    queryName = [queryName, author].join(' | ');
-                savedQueryNames.remove(queryName);
-                $builder.queryBuilder('deleteRules', queryName, savedQueryNames);
-                updateSavedQueryNamesList();
-                $scope.resetQueryBuilder();
-            });
-
         return $builder;
     };
     $scope.resetQueryBuilder = function () {
@@ -459,7 +439,6 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
         $scope.tableParams.reload();
         // $scope.$apply();
     });
-    $scope.ruleId = null;
     $scope.newRule = function () {
         $scope.ruleId = null;
         $scope.resetQueryBuilder();
@@ -480,7 +459,6 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
     };
 
     $scope.loadSummary = function (summary) {
-        $scope.ruleId = summary.id || null;
         $scope.title = summary.title;
         $scope.description = summary.description;
         $scope.startDate = summary.startDate;
