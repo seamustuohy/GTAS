@@ -21,9 +21,12 @@ import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.ApisMessageRepository;
 
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,39 +56,44 @@ public class ApisMessageService {
         this.apisMessage = new ApisMessage();
         this.apisMessage.setCreateDate(new Date());
         this.apisMessage.setRaw(raw);
-        apisMessage.setStatus(MessageStatus.RECEIVED);
-        msgDao.save(this.apisMessage);
+        this.apisMessage.setStatus(MessageStatus.RECEIVED);
         
-        String message = new String(raw, StandardCharsets.US_ASCII);
-        String payload = getApisMessagePayload(message);
-        if (payload == null) {
-            logger.error("Could not extract message payload. Missing NAD or UNT segment.");
-            apisMessage.setStatus(MessageStatus.FAILED_PARSING);
-            msgDao.save(apisMessage);
-            return null;
-        }
-        String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
-        this.apisMessage.setHashCode(md5);
-        
-        PaxlstParser parser = null;
-        if (isUSEdifactFile(message)) {
-            parser = new PaxlstParserUSedifact(message);
-        } else {
-            parser= new PaxlstParserUNedifact(message);
-        }
-
         ApisMessageVo vo = null;
-        try {
+        try {            
+            String message = new String(raw, StandardCharsets.US_ASCII);
+            String payload = getApisMessagePayload(message);
+            if (payload == null) {
+                throw new ParseException("Could not extract message payload. Missing NAD and/or UNT segments", -1);
+            }
+            String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
+            this.apisMessage.setHashCode(md5);
+            
+            PaxlstParser parser = null;
+            if (isUSEdifactFile(message)) {
+                parser = new PaxlstParserUSedifact(message);
+            } else {
+                parser= new PaxlstParserUNedifact(message);
+            }
+    
             vo = parser.parse();
-            apisMessage.setStatus(MessageStatus.PARSED);
-            msgDao.save(apisMessage);
+            this.apisMessage.setStatus(MessageStatus.PARSED);
+
         } catch (Exception e) {
+            apisMessage.setStatus(MessageStatus.FAILED_PARSING);
+            this.apisMessage.setError(e.getMessage());
             e.printStackTrace();
+        } finally {
+            createMessage(apisMessage);
         }
         
         return vo;
     }
-        
+
+    @Transactional
+    public ApisMessage createMessage(ApisMessage m) {
+        return msgDao.save(m);
+    }
+
     private boolean isUSEdifactFile(String msg) {
         return (msg.contains("CDT") || msg.contains("PDT"));
     }
@@ -104,15 +112,15 @@ public class ApisMessageService {
                 f.setPassengers(pax);
                 this.apisMessage.getFlights().add(f);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            apisMessage.setStatus(MessageStatus.FAILED_LOADING);
-            msgDao.save(apisMessage);
-            return;
-        }
+            this.apisMessage.setStatus(MessageStatus.LOADED);
 
-        apisMessage.setStatus(MessageStatus.LOADED);
-        msgDao.save(apisMessage);
+        } catch (Exception e) {
+            this.apisMessage.setStatus(MessageStatus.FAILED_LOADING);
+            this.apisMessage.setError(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            createMessage(apisMessage);            
+        }
     }
     
     private Traveler convertPaxVo(PaxVo vo) {

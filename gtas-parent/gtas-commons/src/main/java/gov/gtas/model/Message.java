@@ -31,7 +31,9 @@ public class Message extends BaseEntity {
 
     @Enumerated(EnumType.ORDINAL)
     private MessageStatus status;
-    
+
+    private String error;
+
     public byte[] getRaw() {
         return raw;
     }
@@ -56,7 +58,13 @@ public class Message extends BaseEntity {
     public void setStatus(MessageStatus status) {
         this.status = status;
     }    
-
+    public String getError() {
+        return error;
+    }
+    public void setError(String error) {
+        this.error = error;
+    }
+    
     @Override
     public int hashCode() {
        return Objects.hash(this.createDate, this.hashCode);
