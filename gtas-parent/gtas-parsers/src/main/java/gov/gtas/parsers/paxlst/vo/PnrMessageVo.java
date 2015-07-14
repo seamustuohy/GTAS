@@ -8,9 +8,17 @@ public class PnrMessageVo {
 	  private byte[] raw;
 	  private String updateMode;
 	  private List<FlightVo> flights = new ArrayList<>();
-	  private List<PaxVo> passengers = new ArrayList<>();
-	  private List<ReportingPartyVo> reportingParties = new ArrayList<>();
-	  public byte[] getRaw() {
+	  private List<PnrVo> passengers = new ArrayList<>();
+	  private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
+	  private Integer numberOfPassengers;
+	  
+	public Integer getNumberOfPassengers() {
+		return numberOfPassengers;
+	}
+	public void setNumberOfPassengers(Integer numberOfPassengers) {
+		this.numberOfPassengers = numberOfPassengers;
+	}
+	public byte[] getRaw() {
 		return raw;
 	}
 	public void setRaw(byte[] raw) {
@@ -28,19 +36,17 @@ public class PnrMessageVo {
 	public void setFlights(List<FlightVo> flights) {
 		this.flights = flights;
 	}
-	public List<PaxVo> getPassengers() {
+	public List<PnrVo> getPassengers() {
 		return passengers;
 	}
-	public void setPassengers(List<PaxVo> passengers) {
+	public void setPassengers(List<PnrVo> passengers) {
 		this.passengers = passengers;
 	}
-	public List<ReportingPartyVo> getReportingParties() {
+	public List<PnrReportingAgentVo> getReportingParties() {
 		return reportingParties;
 	}
-	public void setReportingParties(List<ReportingPartyVo> reportingParties) {
+	public void setReportingParties(List<PnrReportingAgentVo> reportingParties) {
 		this.reportingParties = reportingParties;
 	}
-	  
-	  
 
 }

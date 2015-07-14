@@ -19,11 +19,7 @@ public class ApisMessageLoader {
             return;
         }
 
-        try {
-            svc.loadApisMessage(m);
-        } catch (Exception e) {
-            System.out.println("error loading " + filePath);
-        }
+        svc.loadApisMessage(m);
     }
 
     public static void main(String[] args) {
