@@ -44,9 +44,10 @@ public class JsonToDomainObjectConverter {
 	 * @return RuleMeta domain object
 	 */
 
-	private static RuleMeta extractRuleMeta(final UdrSpecification inputJson, final boolean checkStartDate) {
+	private static RuleMeta extractRuleMeta(final UdrSpecification inputJson,
+			final boolean checkStartDate) {
 		final MetaData metaData = inputJson.getSummary();
-		
+
 		JsonValidationUtils.validateMetaData(metaData, checkStartDate);
 
 		final Long id = inputJson.getId();
@@ -61,6 +62,7 @@ public class JsonToDomainObjectConverter {
 				enabled);
 		return ret;
 	}
+
 	public static RuleMeta extractRuleMeta(final UdrSpecification inputJson) {
 		return extractRuleMeta(inputJson, true);
 	}
@@ -68,6 +70,7 @@ public class JsonToDomainObjectConverter {
 	public static RuleMeta extractRuleMetaUpdates(UdrSpecification inputJson) {
 		return extractRuleMeta(inputJson, false);
 	}
+
 	/**
 	 * Converts the rule details portion of the UDR JSON specifications object
 	 * (i.e., QueryObject) object to a blob.
@@ -154,36 +157,38 @@ public class JsonToDomainObjectConverter {
 			User author) throws IOException {
 		if (inputJson == null) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
-					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
-							"inputJson",
-							"JsonToDomainObjectConverter.createUdrRuleFromJson()");
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "inputJson",
+					"JsonToDomainObjectConverter.createUdrRuleFromJson()");
 		}
-		
+
 		final RuleMeta metaData = extractRuleMeta(inputJson);
-		
-        final UdrRule rule = createUdrRule(inputJson.getId(), metaData, 
-        		createQueryObjectBlob(inputJson),
-        		author);
+
+		final UdrRule rule = createUdrRule(inputJson.getId(), metaData,
+				createQueryObjectBlob(inputJson), author);
 		createEngineRules(rule, inputJson);
 
 		return rule;
 
 	}
-    /**
-     * Creates engine rules from "minterms" (i.e., sets of AND conditions).
-     * This method is called from the UDR service when a new UDR is being created.
-     * @param parent the parent UDR
-     * @param inputJson the JSON UDR object
-     * @throws ParseException on error
-     */
+
+	/**
+	 * Creates engine rules from "minterms" (i.e., sets of AND conditions). This
+	 * method is called from the UDR service when a new UDR is being created.
+	 * 
+	 * @param parent
+	 *            the parent UDR
+	 * @param inputJson
+	 *            the JSON UDR object
+	 * @throws ParseException
+	 *             on error
+	 */
 	public static void createEngineRules(UdrRule parent,
 			UdrSpecification inputJson) {
 		QueryObject qobj = inputJson.getDetails();
-		if(qobj == null){
+		if (qobj == null) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
-					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
-							"details",
-							"Create UDR");			
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "details",
+					"Create UDR");
 		}
 		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
 		int indx = 0;
@@ -192,10 +197,14 @@ public class JsonToDomainObjectConverter {
 			++indx;
 		}
 	}
+
 	/**
 	 * Creates a new list of engine rules when a UDR is being updated.
-	 * @param parent the UDR.
-	 * @param inputJson the update JSON object.
+	 * 
+	 * @param parent
+	 *            the UDR.
+	 * @param inputJson
+	 *            the update JSON object.
 	 * @return list of engine rules to replace the existing rules.
 	 */
 	public static List<Rule> listEngineRules(UdrRule parent,
@@ -212,35 +221,56 @@ public class JsonToDomainObjectConverter {
 		}
 		return ret;
 	}
-   /**
-    * Creates a single engine rule from a minterm.
-    * @param ruleData the minterm.
-    * @param parent the parent UDR rule.
-    * @param indx the ordering index of the rule with respect to the parent.
-    * @return the engine rule created.
-    * @throws ParseException parse exception.
-    */
-	private static Rule createEngineRule(List<QueryTerm> ruleData, UdrRule parent,
-			int indx) {
+
+	/**
+	 * Creates a single engine rule from a minterm.
+	 * 
+	 * @param ruleData
+	 *            the minterm.
+	 * @param parent
+	 *            the parent UDR rule.
+	 * @param indx
+	 *            the ordering index of the rule with respect to the parent.
+	 * @return the engine rule created.
+	 * @throws ParseException
+	 *             parse exception.
+	 */
+	private static Rule createEngineRule(List<QueryTerm> ruleData,
+			UdrRule parent, int indx) {
 		Rule ret = new Rule(parent, indx, null);
 		int seq = 0;
 		for (QueryTerm trm : ruleData) {
-			RuleCondPk pk = new RuleCondPk(indx, seq++);
-			RuleCond cond = new RuleCond(pk, EntityLookupEnum.valueOf(trm
-					.getEntity()), trm.getField(), OperatorCodeEnum.valueOf(trm
-					.getOperator()));
-			try{
-			     cond.addValueToCondition(trm.getValues(), ValueTypesEnum.valueOf(trm.getType()));
-	        } catch(ParseException pe){
-	        	StringBuilder bldr = new StringBuilder("[");
-	        	for(String val:trm.getValues()){
-	        		bldr.append(val).append(",");
-	        	}
-	        	bldr.append("]");
+			RuleCond cond = null;
+			try {
+				OperatorCodeEnum op = OperatorCodeEnum.valueOf(trm
+						.getOperator().toUpperCase());
+				ValueTypesEnum type = ValueTypesEnum.valueOf(trm.getType()
+						.toUpperCase());
+				RuleCondPk pk = new RuleCondPk(indx, seq++);
+				cond = new RuleCond(pk, EntityLookupEnum.valueOf(trm
+						.getEntity()), trm.getField(), op);
+				if(op == OperatorCodeEnum.IN || op == OperatorCodeEnum.NOT_IN || op == OperatorCodeEnum.BETWEEN){
+				   cond.addValuesToCondition(trm.getValues(), type);
+				} else {
+					cond.addValueToCondition(trm.getValue(), type);
+				}
+			} catch (ParseException pe) {
+				StringBuilder bldr = new StringBuilder("[");
+				for (String val : trm.getValues()) {
+					bldr.append(val).append(",");
+				}
+				bldr.append("]");
 				throw ErrorHandlerFactory.getErrorHandler().createException(
 						CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE,
 						bldr.toString(), trm.getType(), "Engine Rule Creation");
-	        }
+			} catch (NullPointerException | IllegalArgumentException ex) {
+				throw ErrorHandlerFactory.getErrorHandler().createException(
+						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+						String.format("QueryTerm (operator=%s, type=%s)",
+								trm.getOperator(), trm.getType()),
+						"Engine Rule Creation");
+
+			}
 			ret.addConditionToRule(cond);
 		}
 		return ret;
@@ -251,13 +281,14 @@ public class JsonToDomainObjectConverter {
 	 * data for saving in the database as a BLOB.
 	 * 
 	 * @param json
-	 *            the json object to serialize.
+	 *            the JSON object to serialize.
 	 * @return the binary blob object
 	 */
-	private static byte[] createQueryObjectBlob(UdrSpecification json) throws IOException {
+	private static byte[] createQueryObjectBlob(UdrSpecification json)
+			throws IOException {
 		QueryObject qObj = json.getDetails();
 		byte[] retBlob = null;
-		if(qObj != null){
+		if (qObj != null) {
 			final ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			final GZIPOutputStream gzipOutStream = new GZIPOutputStream(bos);
 			final ObjectOutputStream out = new ObjectOutputStream(gzipOutStream);
@@ -281,7 +312,8 @@ public class JsonToDomainObjectConverter {
 	 *            enabled state of the rule.
 	 * @return the UDR rule domain object.
 	 */
-	private static UdrRule createUdrRule(Long id, RuleMeta meta, byte[] queryObjectBlob, User author) {
+	private static UdrRule createUdrRule(Long id, RuleMeta meta,
+			byte[] queryObjectBlob, User author) {
 		UdrRule rule = new UdrRule();
 		rule.setId(id);
 		rule.setDeleted(YesNoEnum.N);

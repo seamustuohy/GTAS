@@ -60,27 +60,27 @@ public class CondValue implements Serializable {
 
 	public CondValue(CondValuePk id, String value) {
 		this.id = id;
-		this.valType = ValueTypesEnum.String;
+		this.valType = ValueTypesEnum.STRING;
 		this.charVal = value;
 	}
 	public CondValue(CondValuePk id, long value) {
 		this.id = id;
-		this.valType = ValueTypesEnum.Long;
+		this.valType = ValueTypesEnum.LONG;
 		this.numVal = new BigDecimal(value);
 	}
 	public CondValue(CondValuePk id, double value) {
 		this.id = id;
-		this.valType = ValueTypesEnum.Double;
+		this.valType = ValueTypesEnum.DOUBLE;
 		this.numVal = new BigDecimal(value);
 	}
 	public CondValue(CondValuePk id, int value) {
 		this.id = id;
-		this.valType = ValueTypesEnum.Integer;
+		this.valType = ValueTypesEnum.INTEGER;
 		this.numVal = new BigDecimal(value);
 	}
 	public CondValue(CondValuePk id, Date value) {
 		this.id = id;
-		this.valType = ValueTypesEnum.Date;
+		this.valType = ValueTypesEnum.DATE;
 		this.dtVal = value;
 	}
 

@@ -58,6 +58,8 @@ public class ErrorHandlerFactoryTest {
 			super(ex);
 		}
 	}
-	private static class TestException extends Exception{}
+	private static class TestException extends Exception{
+		private static final long serialVersionUID = 1L;		
+	}
 }
 

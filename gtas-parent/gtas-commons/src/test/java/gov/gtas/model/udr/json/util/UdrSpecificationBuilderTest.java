@@ -43,16 +43,16 @@ public class UdrSpecificationBuilderTest {
 		// add terms and then another query object
 		builder.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
-				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		builder.addNestedQueryObject(QueryConditionEnum.AND);
 		builder.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
-				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		builder.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
-				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "DBY" });
 
 		UdrSpecification spec = builder.build();
@@ -68,7 +68,7 @@ public class UdrSpecificationBuilderTest {
 		assertEquals(2, rules.size());
 		verifyQueryTerm(rules.get(0), EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
-				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		assertTrue(rules.get(1) instanceof QueryObject);
 		QueryObject embedded = (QueryObject) (rules.get(1));
@@ -77,11 +77,11 @@ public class UdrSpecificationBuilderTest {
 		assertEquals(2, rules.size());
 		verifyQueryTerm(rules.get(0), EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
-				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		verifyQueryTerm(rules.get(1), EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
-				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "DBY" });
 	}
 

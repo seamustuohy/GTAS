@@ -115,20 +115,20 @@ public class UdrSpecificationBuilder {
 				QueryConditionEnum.OR);
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_DOB,
-				ValueTypesEnum.Date, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.DATE, OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date())});
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
-				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
-				ValueTypesEnum.String, OperatorCodeEnum.IN,
+				ValueTypesEnum.STRING, OperatorCodeEnum.IN,
 				new String[] { "DBY", "PKY", "FLT" });
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
-				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		bldr.addMeta(title, description, new Date(), null, true,
 				userId);
@@ -139,11 +139,11 @@ public class UdrSpecificationBuilder {
 				QueryConditionEnum.AND);
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_DOB,
-				ValueTypesEnum.Date, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.DATE, OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date())});
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
-				ValueTypesEnum.String, OperatorCodeEnum.EQUAL,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addMeta(title, description, new Date(), null, true,
 				userId);

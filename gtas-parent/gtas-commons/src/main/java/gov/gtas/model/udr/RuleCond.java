@@ -4,6 +4,7 @@ import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.util.DateCalendarUtils;
+import gov.gtas.util.ValidationUtils;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -37,7 +38,7 @@ public class RuleCond implements Serializable {
 	 */
 	private static final long serialVersionUID = 1969876980229903470L;
 	
-	private static final String VALUE_NAME_PREFIX = "val";
+	private static final String VALUE_NAME_PREFIX = "value";
 	
 	@EmbeddedId
 	private RuleCondPk id;
@@ -96,7 +97,7 @@ public class RuleCond implements Serializable {
      * @param valName the name of the value (e.g., "start date").
      * @param val the value.
      */
-    public void  addValueToCondition(String[] valueArray, ValueTypesEnum type) throws ParseException{
+    public void  addValuesToCondition(String[] valueArray, ValueTypesEnum type) throws ParseException{
 		if(this.values == null){
 			this.values = new LinkedList<CondValue>();
 		}
@@ -105,6 +106,12 @@ public class RuleCond implements Serializable {
 		     this.values.add(createCondValue(VALUE_NAME_PREFIX+valIndx, type, val));
 		     ++valIndx;
 		}
+    }
+    public void  addValueToCondition(String value, ValueTypesEnum type) throws ParseException{
+		if(this.values == null){
+			this.values = new LinkedList<CondValue>();
+		}
+		this.values.add(createCondValue(VALUE_NAME_PREFIX, type, value));
     }
     /**
      * Creates a value and adds it to the list of values.
@@ -115,22 +122,25 @@ public class RuleCond implements Serializable {
     private CondValue createCondValue(String valName, ValueTypesEnum type, String val) throws ParseException{
  	   CondValuePk pk = new CondValuePk(this.id, valName);
  	   switch(type){
-	 	   case String:
+	 	   case STRING:
 	 		  return new CondValue(pk, val);
-	 	   case Integer:
+	 	   case INTEGER:
 	 		  return new CondValue(pk, Integer.valueOf(val));
-	 	   case Long:
+	 	   case LONG:
 	 		  return new CondValue(pk, Long.valueOf(val));
-	 	   case Double:
+	 	   case DOUBLE:
 	 		  return new CondValue(pk, Double.valueOf(val));
-	 	   case Date:
+	 	   case DATE:
 	 		  return new CondValue(pk, DateCalendarUtils.parseJsonDate(val));
-	 	   case Timestamp:
+	 	   case TIMESTAMP:
 	 		  return new CondValue(pk, DateCalendarUtils.parseJsonDate(val));
- 		   default:
- 			  return new CondValue(pk, val);		   
+	 	   case BOOLEAN:
+	 		  return new CondValue(pk, ValidationUtils.isStringTruthy(val)?"Y":"N");
+	 	   default:
+	 		   return new CondValue(pk, val);
  	   }
     }
+    
 	/**
 	 * @return the entityName
 	 */
