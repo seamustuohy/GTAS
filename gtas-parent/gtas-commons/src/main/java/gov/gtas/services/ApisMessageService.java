@@ -162,7 +162,7 @@ public class ApisMessageService {
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #
         String tmp = vo.getFlightNumber();
-        String flightNum = tmp.substring(3);
+        String flightNum = tmp.substring(2);
         StringBuffer buff = new StringBuffer();
         for (int j=0; j<4 - flightNum.length(); j++) {
             buff.append("0");
