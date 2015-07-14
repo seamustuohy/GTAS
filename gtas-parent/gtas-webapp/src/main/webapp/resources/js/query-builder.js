@@ -1202,15 +1202,14 @@
                 rule.value = rule.values && rule.values.length > 1 ? rule.values : rule.values;
                 rule.field = [rule.entity, rule.field].join('.');
                 rule.operator = rule.operator.toUpperCase();
+                // remove when Amit gives go ahead..
+                rule.type = rule.type.toLowerCase();
+                // end remove
                 delete rule.entity;
                 delete rule.values;
             } else if (rule["@class"] === "QueryObject") {
                 interpretDroolsJSON(rule, true);
             }
-
-            //remove when Amit gives go ahead..
-            rule.type = rule.type.toLowerCase();
-            //end remove
 
             delete rule['@class'];
         });
@@ -3957,7 +3956,7 @@
     QueryBuilder.regional['en'] = {
         "__locale": "English (en)",
         "__author": "Damien \"Mistic\" Sorel, http://www.strangeplanet.fr",
-        "add_rule": "Add rule",
+        "add_rule": "Add condition",
         "add_group": "Add group",
         "delete_rule": "Delete",
         "delete_group": "Delete",

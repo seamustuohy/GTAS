@@ -401,6 +401,7 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
     };
     $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
+        counts: [],         // disable / hide page row count toggle
         count: 10,          // count per page
         filter: {},
         sorting: {
