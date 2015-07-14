@@ -1176,11 +1176,12 @@
                 prepareDroolsJSON(rule, true);
             }
         });
-        // DELETE when Amit gives ok
-        if (notRoot === undefined && data.rules.length === 1) {
-            data.rules.push(data.rules[0]);
-        }
-        // END DELETE
+        /*
+         // DELETE when Amit gives ok
+         if (notRoot === undefined && data.rules.length === 1) {
+         data.rules.push(data.rules[0]);
+         }
+         // END DELETE */
 
         return data;
     };
@@ -1391,6 +1392,7 @@
                     model.filter = that.getFilterById(item.id);
                     model.table = item.id.split('.')[0];
                     model.column = item.id.split('.')[1];
+                    item.operator = item.operator.toLowerCase();
                     model.operator = that.getOperatorByType(item.operator);
                     model.flags = that.parseRuleFlags(item);
 

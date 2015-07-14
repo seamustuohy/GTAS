@@ -446,7 +446,7 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
     };
 
     $scope.deleteRule = function () {
-        var msg = this.summary.title + ' | #' + this.summary.id;
+        var msg = $scope.title + ' | #' + $scope.ruleId;
         queryService.ruleDelete($scope.ruleId, $scope.authorId).then(function (myData) {
             $scope.ruleId = null;
             $scope.resetQueryBuilder();
@@ -454,7 +454,8 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
 
             //TODO: SHOULD REMOVE FROM DATA AND REFRESH ng-table
             alert('successfully deleted: ' + msg);
-            window.location.reload();
+            //window.location.reload();
+            $scope.tableParams.reload();
         });
     };
 
@@ -476,9 +477,15 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
         $scope.endDate = null;
         $scope.enabled = true;
     };
+    $scope.resetSummary();
     $scope.enabled = true;
+    $scope.formats =["YYYY-MM-DD"];
+
     $scope.submit = function() {
         var summary;
+        var startDate = moment($scope.startDate, $scope.formats, true);
+        var endDate = $scope.endDate || moment($scope.endDate, $scope.formats, true);
+
         var ruleObject = {
             id: $scope.ruleId,
             details: $scope.$builder.queryBuilder('saveRules')
@@ -488,34 +495,59 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
             alert('Risk Criteria title summary can not be blank!');
             return;
         }
-        if (moment($scope.startDate) < $scope.today ) {
-            alert('Risk Criteria start date must be today or later.');
-            return;
+
+        /* was told startDate ignored on updates so only matters on new rules */
+        if ($scope.ruleId === null) {
+            if (!startDate.isValid())
+            {
+                alert('Dates must be in this format: ' + $scope.formats.toString());
+                return;
+            }
+            if (startDate < $scope.today ) {
+                alert('Risk Criteria start date must be today or later when created new.');
+                return;
+            }
         }
 
-            summary = {
-                title: $scope.title,
-                description: $scope.description || null,
-                startDate: $scope.startDate,
-                endDate: $scope.endDate || null,
-                enabled: $scope.enabled
-            };
-            data.push(summary);
-            ruleObject.summary = summary;
-            $scope.tableData = data;
+        if ($scope.endDate !== null) {
+            if (!endDate.isValid() ) {
+                alert('End Date must be empty/open or in this format: ' + $scope.formats.toString());
+                return;
+            }
+            if (endDate < startDate ) {
+                alert('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
+                return;
+            }
+        }
 
-            $scope.tableParams.total($scope.tableData.length);
+        summary = {
+            title: $scope.title,
+            description: $scope.description || null,
+            startDate: $scope.startDate,
+            endDate: $scope.endDate || null,
+            enabled: $scope.enabled
+        };
+        data.push(summary);
+        ruleObject.summary = summary;
+        $scope.tableData = data;
+
+        $scope.tableParams.total($scope.tableData.length);
+        $scope.tableParams.reload();
+
+        queryService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
+            if (typeof myData.errorCode !== "undefined")
+            {
+                alert(myData.errorMessage);
+                return;
+            }
+            /* only reset ruleId, Summary Conditions, on successful upload */
+            $scope.ruleId = null;
+            $scope.resetQueryBuilder();
+            $scope.resetSummary();
+
+            /* TODO: refresh tabledata without page reload */
+            //document.location.reload();
             $scope.tableParams.reload();
-
-            queryService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
-                if (myData.errorCode !== undefined)
-                {
-                    alert(myData.errorMessage);
-                    return;
-                }
-                $scope.ruleId = null;
-                $scope.resetQueryBuilder();
-                $scope.resetSummary();
-            });
+        });
     };
 });
