@@ -1,6 +1,7 @@
 package gov.gtas.config;
 
 import java.util.Properties;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -11,7 +12,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.event.ApplicationEventMulticaster;
+import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.core.env.Environment;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -130,4 +134,12 @@ public class CommonServicesConfig {
 	HazelcastInstance hazelcastInstance() throws Exception {
 		return Hazelcast.newHazelcastInstance();
 	}
+	
+	@Bean(name="applicationEventMulticaster")
+	public ApplicationEventMulticaster applicationEventMulticaster() {
+		SimpleApplicationEventMulticaster applicationEventMulticaster = new SimpleApplicationEventMulticaster();
+		applicationEventMulticaster.setTaskExecutor(Executors.newFixedThreadPool(10));
+		return applicationEventMulticaster;
+	}
+	
 }

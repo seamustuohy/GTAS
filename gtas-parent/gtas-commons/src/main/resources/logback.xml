@@ -39,6 +39,9 @@
 	<logger name="org.apache.catalina.util.LifecycleBase" level="ERROR" />
 	<logger name="org.hibernate.validator.internal.util.Version"
 		level="WARN" />
+	<logger name="org.springframework.beans"
+		level="DEBUG" />		
+		
 
 	<root level="INFO">
 		<appender-ref ref="CONSOLE" />
