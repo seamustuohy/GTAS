@@ -40,6 +40,21 @@ public class JsonServiceResponse implements Serializable {
 		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();
 	}
 	/**
+	 * Fetches the value of an attribute by name.
+	 * @param responseDetailName the name of the attribute to fetch.
+	 * @return the attribute value or null if not found.
+	 */
+	public String findResponseDetailValue(final String responseDetailName){
+		String ret = null;
+		for(ServiceResponseDetailAttribute attr:this.responseDetails){
+			if(responseDetailName.equals(attr.getAttributeName())){
+				ret = attr.getAttributeValue();
+				break;
+			}
+		}
+		return ret;
+	}
+	/**
 	 * @return the status
 	 */
 	public String getStatus() {

@@ -3,25 +3,6 @@
 <button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
 <button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
 
-<table ng-table="tableParams" show-filter="true" class="table" data-ng-click="loadRule()">
-    <tr ng-repeat="summary in $data" data-id="{{summary.id}}">
-        <td data-title="'title'" sortable="'title'" filter="{ 'title': 'text' }">
-            {{summary.title}}
-        </td>
-        <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">
-            {{summary.description}}
-        </td>
-        <td data-title="'Start Date'" sortable="'startDate'" filter="{ 'startDate': 'text' }">
-            {{summary.startDate}}
-        </td>
-        <td data-title="'End Date'" sortable="'endDate'" filter="{ 'endDate': 'text' }">
-            {{summary.endDate}}
-        </td>
-        <td data-title="'Enabled'" sortable="'enabled'" filter="{ 'enabled': 'text' }">
-            {{summary.enabled}}
-        </td>
-    </tr>
-</table>
 <style>
     form {
 
@@ -41,29 +22,41 @@
     .udr-add-form label.hide {
         position: absolute;
         left: -99999px;
-    }.udr-add-form input {
+    }
+    .udr-add-form input {
          display: inline-block;
-     }
+    }
+    .table tr:hover {
+        cursor: pointer;
+    }
+
+    .table tr:nth-child(odd) {
+        background: lightblue;
+    }
 </style>
+<table ng-table="tableParams" class="table" data-ng-click="loadRule()">
+    <tr ng-repeat="summary in $data" data-id="{{summary.id}}">
+        <td data-title="'title'" sortable="'title'" filter="{ 'title': 'text' }">
+            {{summary.title}}
+        </td>
+        <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">
+            {{summary.description}}
+        </td>
+        <td data-title="'Start Date'" sortable="'startDate'" filter="{ 'startDate': 'text' }">
+            {{summary.startDate}}
+        </td>
+        <td data-title="'End Date'" sortable="'endDate'" filter="{ 'endDate': 'text' }">
+            {{summary.endDate}}
+        </td>
+        <td data-title="'Enabled'" sortable="'enabled'" filter="{ 'enabled': 'text' }">
+            {{summary.enabled}}
+        </td>
+    </tr>
+</table>
 
 
-<h3>Conditons:</h3>
-<div id="builder"></div>
-<div id="load-container" class="hide">
-    <label for="saved-query-names">Load:</label>
-    <select id="saved-query-names">
-        <option value=""> - </option>
-        <option value="sample">sample</option>
-    </select>
 
-</div>
-
-<button class="btn btn-warning reset pull-right" data->Clear Conditions</button>
-
-<div id="result" class="hide">
-    <h3>Output</h3>
-    <pre></pre>
-</div>
+<h3>Risk Criteria:</h3>
 
 <form ng-submit="submit()" class="udr-add-form">
     <fieldset>
@@ -80,6 +73,25 @@
         <input type="text" ng-model="description" id="description" placeholder="Description:"/>
 
     </fieldset>
+    <fieldset>
+        <legend>Conditions:</legend>
+        <div id="builder"></div>
+        <div id="load-container" class="hide">
+            <label for="saved-query-names">Load:</label>
+            <select id="saved-query-names">
+                <option value=""> - </option>
+                <option value="sample">sample</option>
+            </select>
+
+        </div>
+    </fieldset>
+
+    <button data-ng-click="resetQueryBuilder()" class="btn btn-warning reset pull-right" data->Clear Conditions</button>
+
+    <div id="result" class="hide">
+        <h3>Output</h3>
+        <pre></pre>
+    </div>
     <button data-ng-click="deleteRule()" type="button" class="btn btn-danger pull-right" title="delete">Delete</button>
     <button id="submit" class="btn btn-primary pull-right">Save</button>
 </form>

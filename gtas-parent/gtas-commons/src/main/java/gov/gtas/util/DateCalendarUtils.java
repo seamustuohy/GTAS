@@ -79,4 +79,16 @@ public class DateCalendarUtils {
 				UdrConstants.UDR_DATE_FORMAT);
 		return format.format(date);
 	}
+	public static Date parseRuleEngineDate(final String dateString)
+			throws ParseException {
+		SimpleDateFormat format = new SimpleDateFormat(
+				UdrConstants.RULE_ENGINE_DATE_FORMAT);
+		return format.parse(dateString);
+	}
+
+	public static String formatRuleEngineDate(final Date date) {
+		SimpleDateFormat format = new SimpleDateFormat(
+				UdrConstants.RULE_ENGINE_DATE_FORMAT);
+		return format.format(date);
+	}
 }

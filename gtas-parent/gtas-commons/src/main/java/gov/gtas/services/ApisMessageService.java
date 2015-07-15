@@ -3,6 +3,7 @@ package gov.gtas.services;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Gender;
+import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
@@ -16,14 +17,16 @@ import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
-import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.ApisMessageRepository;
 
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,72 +48,78 @@ public class ApisMessageService {
     private CarrierService carrierService;
     
     @Autowired
-    private PassengerService passengerService;
-    
-    @Autowired
-    private FlightService flightService;
-
-    @Autowired
     private ApisMessageRepository msgDao;
     
     private ApisMessage apisMessage;
     
-    public ApisMessageVo parseApisMessage(String filePath) {
+    public ApisMessageVo parseApisMessage(byte[] raw) {
         this.apisMessage = new ApisMessage();
         this.apisMessage.setCreateDate(new Date());
-
-        byte[] raw = FileUtils.readSmallFile(filePath);
         this.apisMessage.setRaw(raw);
-        msgDao.save(this.apisMessage);
+        this.apisMessage.setStatus(MessageStatus.RECEIVED);
         
-        String message = new String(raw, StandardCharsets.US_ASCII);
-        String payload = getApisMessagePayload(message);
-        if (payload == null) {
-            handleFatalError("Could not extract message payload. Missing NAD or UNT segment.");
-        }
-        String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
-        this.apisMessage.setHashCode(md5);
-
-        
-        PaxlstParser parser = null;
-        if (isUSEdifactFile(message)) {
-            parser = new PaxlstParserUSedifact(message);
-        } else {
-            parser= new PaxlstParserUNedifact(message);
-        }
-
         ApisMessageVo vo = null;
-        try {
+        try {            
+            String message = new String(raw, StandardCharsets.US_ASCII);
+            String payload = getApisMessagePayload(message);
+            if (payload == null) {
+                throw new ParseException("Could not extract message payload. Missing NAD and/or UNT segments", -1);
+            }
+            String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
+            this.apisMessage.setHashCode(md5);
+            
+            PaxlstParser parser = null;
+            if (isUSEdifactFile(message)) {
+                parser = new PaxlstParserUSedifact(message);
+            } else {
+                parser= new PaxlstParserUNedifact(message);
+            }
+    
             vo = parser.parse();
+            this.apisMessage.setStatus(MessageStatus.PARSED);
+
         } catch (Exception e) {
+            apisMessage.setStatus(MessageStatus.FAILED_PARSING);
+            this.apisMessage.setError(e.getMessage());
             e.printStackTrace();
+        } finally {
+            createMessage(apisMessage);
         }
         
         return vo;
     }
-    
-    private void handleFatalError(String error) {
-        logger.error(error);
-        // TODO: create error column in message class, set it here
+
+    @Transactional
+    public ApisMessage createMessage(ApisMessage m) {
+        return msgDao.save(m);
     }
-    
+
     private boolean isUSEdifactFile(String msg) {
         return (msg.contains("CDT") || msg.contains("PDT"));
     }
     
     public void loadApisMessage(ApisMessageVo m) {
-        Set<Traveler> pax = new HashSet<>();        
-        for (PaxVo pvo : m.getPassengers()) {
-            Traveler p = convertPaxVo(pvo);
-            pax.add(p);
-        }
+        try {
+            Set<Traveler> pax = new HashSet<>();        
+            for (PaxVo pvo : m.getPassengers()) {
+                Traveler p = convertPaxVo(pvo);
+                pax.add(p);
+            }
+    
+            Flight f = null;
+            for (FlightVo fvo : m.getFlights()) {
+                f = convertFlightVo(fvo);
+                f.setPassengers(pax);
+                this.apisMessage.getFlights().add(f);
+            }
+            this.apisMessage.setStatus(MessageStatus.LOADED);
 
-        Flight f = null;
-        for (FlightVo fvo : m.getFlights()) {
-            f = convertFlightVo(fvo);
-            f.setPassengers(pax);
-            System.out.println(f);
-            flightService.create(f);
+        } catch (Exception e) {
+            this.apisMessage.setStatus(MessageStatus.FAILED_LOADING);
+            this.apisMessage.setError(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            createMessage(apisMessage);            
         }
     }
     
@@ -153,7 +162,7 @@ public class ApisMessageService {
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #
         String tmp = vo.getFlightNumber();
-        String flightNum = tmp.substring(3);
+        String flightNum = tmp.substring(2);
         StringBuffer buff = new StringBuffer();
         for (int j=0; j<4 - flightNum.length(); j++) {
             buff.append("0");
@@ -214,7 +223,5 @@ public class ApisMessageService {
         }
         
         return text.substring(nadIndex, untIndex);
-    }
-    
-    
+    }   
 }

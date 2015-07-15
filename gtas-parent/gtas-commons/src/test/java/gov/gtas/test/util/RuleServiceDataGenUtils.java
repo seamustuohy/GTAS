@@ -97,17 +97,17 @@ public class RuleServiceDataGenUtils {
 	}
   private void addCondValue(RuleCond cond, Object val) throws ParseException{
 	   if(val instanceof Date){
-		   cond.addValueToCondition(new String[]{DateCalendarUtils.formatJsonDate((Date)val)}, ValueTypesEnum.Date);
+		   cond.addValuesToCondition(new String[]{DateCalendarUtils.formatJsonDate((Date)val)}, ValueTypesEnum.DATE);
 	   } else if(val instanceof String){
-		   cond.addValueToCondition(new String[]{(String)val}, ValueTypesEnum.String);
+		   cond.addValuesToCondition(new String[]{(String)val}, ValueTypesEnum.STRING);
 	   } else if(val instanceof Double){
-		   cond.addValueToCondition(new String[]{val.toString()}, ValueTypesEnum.Double);
+		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.DOUBLE);
 	   } else if(val instanceof Long){
-		   cond.addValueToCondition(new String[]{val.toString()}, ValueTypesEnum.Long);
+		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.LONG);
 	   } else if(val instanceof Integer){
-		   cond.addValueToCondition(new String[]{val.toString()}, ValueTypesEnum.Integer);
+		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.INTEGER);
 	   } else {
-		   cond.addValueToCondition(new String[]{val.toString()}, ValueTypesEnum.String);
+		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.STRING);
 	   }
  }
 	

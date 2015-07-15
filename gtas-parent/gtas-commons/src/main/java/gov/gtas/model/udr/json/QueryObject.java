@@ -68,12 +68,12 @@ public class QueryObject implements QueryEntity {
 			switch (condOp) {
 			case OR:
 				List<QueryEntity> termList = this.getRules();
-				if (termList == null || termList.size() < 2) {
+				if (termList == null || termList.size() < 1) {
 					throw ErrorHandlerFactory
 							.getErrorHandler()
 							.createException(
 									CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-									"rules", "JSON object details");
+									"rules (null or empty)", "JSON object details");
 				}
 				for (QueryEntity qtn : termList) {
 					flatList.addAll(qtn.createFlattenedList());
@@ -81,12 +81,12 @@ public class QueryObject implements QueryEntity {
 				break;
 			case AND:
 				termList = this.getRules();
-				if (termList == null || termList.size() < 2) {
+				if (termList == null || termList.size() < 1) {
 					throw ErrorHandlerFactory
 							.getErrorHandler()
 							.createException(
 									CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-									"rules", "JSON object details");
+									"rules (null or empty)", "JSON object details");
 				}
 				for (QueryEntity qtn : termList) {
 					if (flatList.isEmpty()) {
@@ -100,12 +100,12 @@ public class QueryObject implements QueryEntity {
 			default:
 				throw ErrorHandlerFactory.getErrorHandler().createException(
 						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-						"condition", "JSON object details");
+						"condition:"+this.condition, "JSON object details");
 			}
 		} catch (IllegalArgumentException iae) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
 					CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-					"condition", "JSON object details");
+					"condition:"+this.condition, "JSON object details");
 		}
 		return flatList;
 	}

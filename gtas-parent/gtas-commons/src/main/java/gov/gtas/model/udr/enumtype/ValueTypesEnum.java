@@ -5,11 +5,12 @@ package gov.gtas.model.udr.enumtype;
  *
  */
 public enum ValueTypesEnum {
-  Integer,
-  Long,
-  Double,
-  String,
-  Date,
-  Timestamp,
-  Boolean
+  INTEGER,
+  LONG,
+  DOUBLE,
+  STRING,
+  DATE,
+  TIMESTAMP,
+  BOOLEAN,
+  OBJECT_REF
 }

@@ -41,6 +41,60 @@ public class PnrVo extends PaxVo{
 	private String creditCardHolderName;
 	private String freequentFlyerNumber;
 	private String freequentFlyerAirline;
+	private String flightNumber;
+	private FlightVo flight;
+	private String passengerType;
+	private String frequentMemberLevelInfo;
+	
+	
+	public String getFrequentMemberLevelInfo() {
+		return frequentMemberLevelInfo;
+	}
+	public void setFrequentMemberLevelInfo(String frequentMemberLevelInfo) {
+		this.frequentMemberLevelInfo = frequentMemberLevelInfo;
+	}
+	public String getPassengerType() {
+		return passengerType;
+	}
+	public void setPassengerType(String passengerType) {
+		this.passengerType = passengerType;
+	}
+	public String getPnrAgencyName() {
+		return pnrAgencyName;
+	}
+	public void setPnrAgencyName(String pnrAgencyName) {
+		this.pnrAgencyName = pnrAgencyName;
+	}
+	public String getPnrAgencyCity() {
+		return pnrAgencyCity;
+	}
+	public void setPnrAgencyCity(String pnrAgencyCity) {
+		this.pnrAgencyCity = pnrAgencyCity;
+	}
+	public String getPnrAgencyState() {
+		return pnrAgencyState;
+	}
+	public void setPnrAgencyState(String pnrAgencyState) {
+		this.pnrAgencyState = pnrAgencyState;
+	}
+	public String getPnrAgencyCountry() {
+		return pnrAgencyCountry;
+	}
+	public void setPnrAgencyCountry(String pnrAgencyCountry) {
+		this.pnrAgencyCountry = pnrAgencyCountry;
+	}
+	public String getFlightNumber() {
+		return flightNumber;
+	}
+	public void setFlightNumber(String flightNumber) {
+		this.flightNumber = flightNumber;
+	}
+	public FlightVo getFlight() {
+		return flight;
+	}
+	public void setFlight(FlightVo flight) {
+		this.flight = flight;
+	}
 	public String getRecordLocator() {
 		return recordLocator;
 	}
@@ -239,7 +293,5 @@ public class PnrVo extends PaxVo{
 	public void setFreequentFlyerAirline(String freequentFlyerAirline) {
 		this.freequentFlyerAirline = freequentFlyerAirline;
 	}
-	
-	
 	
 }

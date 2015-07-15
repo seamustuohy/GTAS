@@ -386,26 +386,6 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
             queryNameInput.value = '';
         };
 
-        $(document)
-            // RESET rules on UI
-            .on('click', '.reset', $scope.resetQueryBuilder)
-            // SAVE AS rules on UI
-            .on('click', '.save-as', function () {
-//      queryName = [queryName, author].join(' | ');
-                if ($builder.queryBuilder('saveRules', queryName, true)) {
-                    savedQueryNames.addUnique(queryName);
-                    updateSavedQueryNamesList();
-                }
-            })
-            // Delete rules on UI
-            .on('click', '.delete', function () {
-//    queryName = [queryName, author].join(' | ');
-                savedQueryNames.remove(queryName);
-                $builder.queryBuilder('deleteRules', queryName, savedQueryNames);
-                updateSavedQueryNamesList();
-                $scope.resetQueryBuilder();
-            });
-
         return $builder;
     };
     $scope.resetQueryBuilder = function () {
@@ -413,7 +393,7 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
         $scope.$result.addClass('hide').find('pre').empty();
     };
     $scope.loadRule = function () {
-        queryService.loadRuleById(this.summary.id).then(function (myData) {
+        queryService.loadRuleById(this.$data[0].id).then(function (myData) {
             $scope.ruleId = myData.id;
             $scope.loadSummary(myData.summary);
             $scope.$builder.queryBuilder('loadRules', myData.details);
@@ -421,6 +401,7 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
     };
     $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
+        counts: [],         // disable / hide page row count toggle
         count: 10,          // count per page
         filter: {},
         sorting: {
@@ -459,7 +440,6 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
         $scope.tableParams.reload();
         // $scope.$apply();
     });
-    $scope.ruleId = null;
     $scope.newRule = function () {
         $scope.ruleId = null;
         $scope.resetQueryBuilder();
@@ -467,7 +447,7 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
     };
 
     $scope.deleteRule = function () {
-        var msg = this.summary.title + ' | #' + this.summary.id;
+        var msg = $scope.title + ' | #' + $scope.ruleId;
         queryService.ruleDelete($scope.ruleId, $scope.authorId).then(function (myData) {
             $scope.ruleId = null;
             $scope.resetQueryBuilder();
@@ -475,12 +455,12 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
 
             //TODO: SHOULD REMOVE FROM DATA AND REFRESH ng-table
             alert('successfully deleted: ' + msg);
-            window.location.reload();
+            //window.location.reload();
+            $scope.tableParams.reload();
         });
     };
 
     $scope.loadSummary = function (summary) {
-        $scope.ruleId = summary.id || null;
         $scope.title = summary.title;
         $scope.description = summary.description;
         $scope.startDate = summary.startDate;
@@ -488,51 +468,87 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
         $scope.enabled = summary.enabled;
     };
 
-    $scope.today = new moment().format('YYYY-MM-DD').toString();
-    $scope.startDate = new moment().format('YYYY-MM-DD').toString();
+    $scope.today = moment().format('YYYY-MM-DD').toString();
+    $scope.startDate = $scope.today.toString();
 
     $scope.resetSummary = function () {
         $scope.title = '';
-        $scope.description = '';
+        $scope.description = null;
         $scope.startDate = $scope.today;
-        $scope.endDate = '';
+        $scope.endDate = null;
         $scope.enabled = true;
     };
+    $scope.resetSummary();
     $scope.enabled = true;
+    $scope.formats =["YYYY-MM-DD"];
+
     $scope.submit = function() {
         var summary;
+        var startDate = moment($scope.startDate, $scope.formats, true);
+        var endDate = $scope.endDate || moment($scope.endDate, $scope.formats, true);
+
         var ruleObject = {
             id: $scope.ruleId,
             details: $scope.$builder.queryBuilder('saveRules')
         };
-        if ($scope.title && $scope.description) {
-            summary = {
-                title: $scope.title,
-                description: $scope.description,
-                startDate: $scope.startDate,
-                endDate: $scope.endDate,
-                enabled: $scope.enabled
-            };
-            data.push(summary);
-            ruleObject.summary = summary;
-            $scope.tableData = data;
+        $scope.title = $scope.title.trim();
+        if (!$scope.title.length ) {
+            alert('Risk Criteria title summary can not be blank!');
+            return;
+        }
 
-            $scope.tableParams.total($scope.tableData.length);
+        /* was told startDate ignored on updates so only matters on new rules */
+        if ($scope.ruleId === null) {
+            if (!startDate.isValid())
+            {
+                alert('Dates must be in this format: ' + $scope.formats.toString());
+                return;
+            }
+            if (startDate < $scope.today ) {
+                alert('Risk Criteria start date must be today or later when created new.');
+                return;
+            }
+        }
+
+        if ($scope.endDate !== null) {
+            if (!endDate.isValid() ) {
+                alert('End Date must be empty/open or in this format: ' + $scope.formats.toString());
+                return;
+            }
+            if (endDate < startDate ) {
+                alert('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
+                return;
+            }
+        }
+
+        summary = {
+            title: $scope.title,
+            description: $scope.description || null,
+            startDate: $scope.startDate,
+            endDate: $scope.endDate || null,
+            enabled: $scope.enabled
+        };
+        data.push(summary);
+        ruleObject.summary = summary;
+        $scope.tableData = data;
+
+        $scope.tableParams.total($scope.tableData.length);
+        $scope.tableParams.reload();
+
+        queryService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
+            if (typeof myData.errorCode !== "undefined")
+            {
+                alert(myData.errorMessage);
+                return;
+            }
+            /* only reset ruleId, Summary Conditions, on successful upload */
+            $scope.ruleId = null;
+            $scope.resetQueryBuilder();
+            $scope.resetSummary();
+
+            /* TODO: refresh tabledata without page reload */
+            //document.location.reload();
             $scope.tableParams.reload();
-
-            queryService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
-                if (myData.errorCode !== undefined)
-                {
-                    alert(myData.errorMessage);
-                    return;
-                }
-                $scope.ruleId = null;
-                $scope.resetQueryBuilder();
-                $scope.resetSummary();
-            });
-        }
-        else {
-            alert('All required fields required');
-        }
+        });
     };
 });

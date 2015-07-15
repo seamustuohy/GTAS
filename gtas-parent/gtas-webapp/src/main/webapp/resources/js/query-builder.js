@@ -1143,6 +1143,7 @@
     };
 
     var prepareDroolsJSON = function (data, notRoot) {
+        var properties;
         if (notRoot === undefined || notRoot === false ) {
             if (typeof data === 'string') {
                 data = JSON.parse(data);
@@ -1151,12 +1152,22 @@
         }
         data.rules.forEach(function(rule){
             if (rule.entity === undefined && rule.id !== undefined) {
-                rule.entity = getEntityTableAlias(rule.id.split('.')[0]);
+                properties = rule.id.split('.');
+                rule.entity = getEntityTableAlias(properties.shift());
                 rule["@class"] = "QueryTerm";
-                if (Array.isArray(rule.value)) {
+                rule.operator = rule.operator.toUpperCase();
+                if (rule.value.indexOf('[') === 0 || Array.isArray(rule.value)) {
                     rule.values = rule.value;
                     rule.value = null;
+                } else {
+                    rule.values = [rule.value];
                 }
+
+                //remove when Amit gives go ahead..
+                rule.type = rule.type.replace(/\b\w/g, function (txt) { return txt.toUpperCase(); });
+                //end remove
+
+                rule.field = properties.join('.');
                 delete rule.column;
                 delete rule.id;
                 delete rule.table;
@@ -1165,6 +1176,13 @@
                 prepareDroolsJSON(rule, true);
             }
         });
+        /*
+         // DELETE when Amit gives ok
+         if (notRoot === undefined && data.rules.length === 1) {
+         data.rules.push(data.rules[0]);
+         }
+         // END DELETE */
+
         return data;
     };
 
@@ -1176,19 +1194,26 @@
             delete data['@class'];
             delete data.summary;
         }
-        data.rules.forEach(function(rule){
+        data.rules.forEach(function(rule) {
             if (rule["@class"] === "QueryTerm") {
                 rule.table = getEntityTableAlias(rule.entity);
                 rule.column = rule.field.split('.').pop();
                 rule.id = [rule.table, rule.column].join('.');
-                rule.value = rule.value || rule.values;
+                rule.value = rule.values && rule.values.length > 1 ? rule.values : rule.values;
+                rule.field = [rule.entity, rule.field].join('.');
+                rule.operator = rule.operator.toUpperCase();
+                // remove when Amit gives go ahead..
+                rule.type = rule.type.toLowerCase();
+                // end remove
                 delete rule.entity;
                 delete rule.values;
             } else if (rule["@class"] === "QueryObject") {
                 interpretDroolsJSON(rule, true);
             }
+
             delete rule['@class'];
         });
+
         return data;
     };
 
@@ -1366,6 +1391,7 @@
                     model.filter = that.getFilterById(item.id);
                     model.table = item.id.split('.')[0];
                     model.column = item.id.split('.')[1];
+                    item.operator = item.operator.toLowerCase();
                     model.operator = that.getOperatorByType(item.operator);
                     model.flags = that.parseRuleFlags(item);
 
@@ -3930,7 +3956,7 @@
     QueryBuilder.regional['en'] = {
         "__locale": "English (en)",
         "__author": "Damien \"Mistic\" Sorel, http://www.strangeplanet.fr",
-        "add_rule": "Add rule",
+        "add_rule": "Add condition",
         "add_group": "Add group",
         "delete_rule": "Delete",
         "delete_group": "Delete",

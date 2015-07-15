@@ -32,35 +32,35 @@ public class ValueObject implements Serializable {
 	}
 
 	public ValueObject(final int value){
-		this.type = ValueTypesEnum.Integer.toString();
+		this.type = ValueTypesEnum.INTEGER.toString();
 		values = new String[]{String.valueOf(value)};
 	}
 	public ValueObject(final long value){
-		this.type = ValueTypesEnum.Long.toString();
+		this.type = ValueTypesEnum.LONG.toString();
 		values = new String[]{String.valueOf(value)};
 	}
 	public ValueObject(final double value){
-		this.type = ValueTypesEnum.Double.toString();
+		this.type = ValueTypesEnum.DOUBLE.toString();
 		values = new String[]{String.valueOf(value)};
 	}
 	public ValueObject(final boolean value){
-		this.type = ValueTypesEnum.Boolean.toString();
+		this.type = ValueTypesEnum.BOOLEAN.toString();
 		values = new String[]{String.valueOf(value)};
 	}
 	public ValueObject(final Date value){
-		this.type = ValueTypesEnum.Date.toString();
+		this.type = ValueTypesEnum.DATE.toString();
 		values = new String[]{String.valueOf(value)};
 	}
 	public ValueObject(final java.sql.Date value){
-		this.type = ValueTypesEnum.Date.toString();
+		this.type = ValueTypesEnum.DATE.toString();
 		values = new String[]{String.valueOf(value)};
 	}
 	public ValueObject(final String value){
-		this.type = ValueTypesEnum.String.toString();
+		this.type = ValueTypesEnum.STRING.toString();
 		values = new String[]{value};
 	}
 	public ValueObject(final Timestamp value){
-		this.type = ValueTypesEnum.Timestamp.toString();
+		this.type = ValueTypesEnum.TIMESTAMP.toString();
 		values = new String[]{String.valueOf(value)};
 	}
 	public ValueObject(final ValueTypesEnum type, final Collection<? extends Serializable> values){
