@@ -47,11 +47,6 @@ public class RuleServiceConfig {
 	@Value("${some.interesting.property}")
 	private String someInterestingProperty;
 
-	@Bean(name = "ruleEngine")
-	public RuleService getRuleService() {
-		return new RuleServiceImpl();
-	}
-
 	@Bean(name = "cacheManager")
 	HazelcastCacheManager hazelcastcacheManager() throws Exception {
 		return new HazelcastCacheManager(hazelcastInstance());
