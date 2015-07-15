@@ -46,7 +46,6 @@ public class TargetingServiceTest {
 	public void testInitialization() {		
 		assertNotNull("Autowire of targeting service failed",targetingService);
 		assertNotNull("Autowire of rule service failed",ReflectionTestUtils.getField(targetingService, "ruleService"));
-		assertNotNull("Autowire of error handler failed",ReflectionTestUtils.getField(targetingService, "errorHandler"));
 	}
 	@Test
 	public void testAnalyzeApisMessage() {

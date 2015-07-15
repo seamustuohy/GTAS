@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.RuleCond;
-import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;

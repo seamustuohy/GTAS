@@ -7,12 +7,20 @@ import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-
+/**
+ * Generates the "when" part of a DRL rule.
+ * @author GTAS3 (AB)
+ *
+ */
 public class RuleConditionBuilder {
 	private StringBuilder passengerConditionBuilder;
 	private StringBuilder flightConditionBuilder;
 	private StringBuilder documentConditionBuilder;
-
+	/**
+	 * Appends the generated "when" part of the rule to the rule document.
+	 * @param parentStringBuilder the rule document builder.
+	 * @throws ParseException if the UDR has invalid formatting.
+	 */
 	public void buildConditionsAndApppend(
 			final StringBuilder parentStringBuilder) throws ParseException{
 		if (documentConditionBuilder != null) {
@@ -44,7 +52,10 @@ public class RuleConditionBuilder {
 		flightConditionBuilder = null;
 		documentConditionBuilder = null;
 	}
-
+    /**
+     * Adds a rule condition to the builder.
+     * @param cond the condition to add.
+     */
 	public void addRuleCondition(final RuleCond cond) {
 		switch (cond.getEntityName()) {
 		case Pax:

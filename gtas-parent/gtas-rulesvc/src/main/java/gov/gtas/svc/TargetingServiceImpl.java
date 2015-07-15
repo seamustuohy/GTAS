@@ -2,6 +2,7 @@ package gov.gtas.svc;
 
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.BasicErrorHandler;
+import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.rule.RuleService;
 import gov.gtas.rule.RuleServiceResult;
@@ -15,9 +16,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TargetingServiceImpl implements TargetingService {
-	/* The spring context supplied error handler component. */
-	@Autowired
-	private BasicErrorHandler errorHandler;
     /* The rule engine to be used. */
 	private final RuleService ruleService;
     /**
@@ -38,7 +36,7 @@ public class TargetingServiceImpl implements TargetingService {
 	@Override
 	public RuleServiceResult analyzeApisMessage(ApisMessage message) {
 		if (null == message) {
-			throw errorHandler.createException(
+			throw ErrorHandlerFactory.getErrorHandler().createException(
 					RuleServiceConstants.NULL_ARGUMENT_ERROR_CODE,
 					"ApisMessage", "TargetingServiceImpl.analyzeApisMessage()");
 		}

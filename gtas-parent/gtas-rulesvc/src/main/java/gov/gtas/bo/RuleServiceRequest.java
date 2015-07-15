@@ -1,6 +1,6 @@
 package gov.gtas.bo;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * An interface for input requests to the Rule Engine.
@@ -15,7 +15,7 @@ public interface RuleServiceRequest {
 	 * 
 	 * @return list of objects to be inserted into the working memory.
 	 */
-	List<?> getRequestObjects();
+	Collection<?> getRequestObjects();
 
 	/**
 	 * Gets the type of the request.<br>
