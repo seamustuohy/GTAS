@@ -10,7 +10,6 @@ import gov.gtas.querybuilder.repository.QueryBuilderRepository;
 import gov.gtas.querybuilder.util.Constants;
 import gov.gtas.querybuilder.util.EntityEnum;
 import gov.gtas.querybuilder.util.OperatorEnum;
-import gov.gtas.querybuilder.util.QueryBuilderUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +32,12 @@ public class QueryBuilderService {
 	@Autowired
 	QueryBuilderRepository queryRepository;
 	
+	/**
+	 * 
+	 * @param queryObject
+	 * @param queryType
+	 * @return
+	 */
 	public List<? extends BaseEntity> runQuery(QueryObject queryObject, EntityEnum queryType) {
 		String query = "";
 						
@@ -53,8 +58,10 @@ public class QueryBuilderService {
 	}
 	
 	/**
-	 * @throws QueryAlreadyExistsException 
 	 * 
+	 * @param query
+	 * @return
+	 * @throws QueryAlreadyExistsException
 	 */
 	public Query saveQuery(Query query) throws QueryAlreadyExistsException {
 		
@@ -63,20 +70,29 @@ public class QueryBuilderService {
 	
 	/**
 	 * 
+	 * @param userId
+	 * @return
 	 */
 	public List<Query> listQueryByUser(String userId) {
 		
 		return queryRepository.listQueryByUser(userId);
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public Query getQuery(int id) {
 		
 		return queryRepository.getQuery(id);
 	}
 	
 	/**
-	 * @throws QueryAlreadyExistsException 
 	 * 
+	 * @param query
+	 * @return
+	 * @throws QueryAlreadyExistsException
 	 */
 	public Query editQuery(Query query) throws QueryAlreadyExistsException {
 		
@@ -85,12 +101,20 @@ public class QueryBuilderService {
 	
 	/**
 	 * 
+	 * @param userId
+	 * @param id
 	 */
 	public void deleteQuery(String userId, int id) {
 		
 		queryRepository.deleteQuery(userId, id);
 	}
 		
+	/**
+	 * 
+	 * @param queryObject
+	 * @param queryType
+	 * @return
+	 */
 	private String getQuery(QueryObject queryObject, EntityEnum queryType) {
 		String query = "";
 		
@@ -110,8 +134,45 @@ public class QueryBuilderService {
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			else if(queryType == EntityEnum.PAX) {
+				String flightsJoinStmt = " join fetch " + EntityEnum.PAX.getAlias() + ".flights " + EntityEnum.FLIGHT.getAlias();
+				String documentJoinStmt = " join fetch " + EntityEnum.PAX.getAlias() + ".documents " + EntityEnum.DOCUMENT.getAlias();
+				
 				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.PAX.getAlias() + 
 						" " + Constants.FROM + " " + EntityEnum.PAX.getEntityName() + " " + EntityEnum.PAX.getAlias();
+				
+				if(join.length() == 0) {
+					join.append(flightsJoinStmt);
+					join.append(documentJoinStmt);
+				}
+				else {
+					if(!join.toString().contains("flights")) {
+						join.append(flightsJoinStmt);
+					}
+					else {
+						String condition = " join " + EntityEnum.PAX.getAlias() + ".flights ";
+						String joinFetchCondition = " join fetch " + EntityEnum.PAX.getAlias() + ".flights ";
+						int startIndex = join.indexOf(condition);
+						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
+					}
+						
+					
+					if(!join.toString().contains("documents")) {
+						join.append(documentJoinStmt);
+					}
+					else {
+						String condition = " join " + EntityEnum.PAX.getAlias() + ".documents ";
+						String joinFetchCondition = " join fetch " + EntityEnum.PAX.getAlias() + ".documents ";
+						int startIndex = join.indexOf(condition);
+						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
+						
+						// if this is a passenger query, you don't need the passenger join again because that is already part of the queryPrefix
+						// so remove it
+						condition = " join " + EntityEnum.FLIGHT.getAlias() + ".passengers " + EntityEnum.PAX.getAlias();
+						startIndex = join.indexOf(condition);
+						join.replace(startIndex, (startIndex + condition.length()), "");
+					}
+				}
+				
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			
@@ -121,6 +182,14 @@ public class QueryBuilderService {
 		return query;
 	}
 	
+	/**
+	 * 
+	 * @param queryEntity
+	 * @param queryType
+	 * @param join
+	 * @param where
+	 * @param level
+	 */
 	private void parseQueryObject(QueryEntity queryEntity, EntityEnum queryType, StringBuilder join, StringBuilder where, MutableInt level) {
 		QueryObject queryObject = null;
 		QueryTerm queryTerm = null;
@@ -222,25 +291,45 @@ public class QueryBuilderService {
 				}
 			}
 			
-			if(entity != null && !(queryType.getEntityName().equalsIgnoreCase(entity) || queryType.getEntityName().equalsIgnoreCase(entity))) { 
+			if(entity != null && !queryType.getEntityName().equalsIgnoreCase(entity)) { 
 				String joinCondition = "";
 				
 				if(entity.equalsIgnoreCase(EntityEnum.DOCUMENT.getEntityName())) {
-					joinCondition = QueryBuilderUtil.getJoinCondition(EntityEnum.PAX);
+					joinCondition = getJoinCondition(EntityEnum.PAX);
 					
 					if(join.indexOf(joinCondition) == -1) {
 						join.append(joinCondition);
 					}
 				}
 				
-				joinCondition = QueryBuilderUtil.getJoinCondition(EntityEnum.valueOf(entity.toUpperCase()));
+				joinCondition = getJoinCondition(EntityEnum.valueOf(entity.toUpperCase()));
 				if(join.indexOf(joinCondition) == -1) {
-					join.append(QueryBuilderUtil.getJoinCondition(EntityEnum.valueOf(entity.toUpperCase())));
+					join.append(getJoinCondition(EntityEnum.valueOf(entity.toUpperCase())));
 				}
 			}
 			
 			where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " " + valueStr);
 		}
+	}
+	
+	private String getJoinCondition(EntityEnum entity) {
+		String joinCondition = "";
+		
+		switch (entity.getEntityName()) {
+			case "Flight":
+				joinCondition = " join " + EntityEnum.PAX.getAlias() + ".flights " + EntityEnum.FLIGHT.getAlias();
+				break;
+	        case "Pax":
+	        	joinCondition = " join " + EntityEnum.FLIGHT.getAlias() + ".passengers " + EntityEnum.PAX.getAlias();
+	        	break;
+	        case "Document":
+	        	joinCondition = " join " + EntityEnum.PAX.getAlias() + ".documents " + EntityEnum.DOCUMENT.getAlias();
+	            break;
+	        default:
+	            throw new IllegalArgumentException("Invalid entity");
+		}
+		
+		return joinCondition;
 	}
 }
 

@@ -1,9 +1,12 @@
 package gov.gtas.querybuilder.service;
 
 import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.Passport;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
+import gov.gtas.model.Visa;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
@@ -13,11 +16,16 @@ import gov.gtas.querybuilder.model.Query;
 import gov.gtas.querybuilder.util.Constants;
 import gov.gtas.querybuilder.util.EntityEnum;
 import gov.gtas.querybuilder.util.OperatorEnum;
+import gov.gtas.repository.DocumentRepository;
+import gov.gtas.repository.PassengerRepository;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -36,6 +44,11 @@ public class QueryBuilderServiceIT {
 
 	@Autowired
 	QueryBuilderService queryService;
+//	@Autowired
+//	DocumentRepository docDao;
+//	@Autowired
+//	PassengerRepository passRepo;
+	
 	QueryObject query;
 	QueryTerm rule;
 	List<QueryEntity> rules;
@@ -65,6 +78,7 @@ public class QueryBuilderServiceIT {
 		if(flights != null && flights.size() > 0) {
 			System.out.println("Number of flights: " + flights.size());
 			System.out.println("Flight Information:");
+			
 			for(Flight flight : flights) {
 				System.out.println("\tfight number: " + flight.getFlightNumber());
 			}
@@ -133,16 +147,70 @@ public class QueryBuilderServiceIT {
 	//-------------------------------
 	// Passenger Queries
 	//-------------------------------
-//	@Test
+	@Test
 	public void testRunQueryAgainstPassengers() {
 		QueryObject query = buildSimpleQuery();
 		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
+		SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 		
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
 			System.out.println("Passenger Information:");
 			for(Traveler passenger : passengers) {
+				String docNumber = "";
+				String docType = "";
+				String docIssuanceCountry = "";
+				String carrierCode = "";
+				String flightNumber = "";
+				String origin = "";
+				String destination = "";
+				String departureDt = "";
+				String arrivalDt = "";
+				
 				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
+				
+				Set<Document> docs = passenger.getDocuments();
+				System.out.println("number of docs: " + docs.size());
+				if(docs != null) {
+					if(docs.iterator().hasNext()) {
+						Document doc = docs.iterator().next();
+						
+						docNumber = doc.getDocumentNumber();
+						
+						if(doc instanceof Passport) {
+							docType = "P";
+						}
+						else if(doc instanceof Visa) {
+							docType = "V";
+						}
+						docIssuanceCountry = doc.getIssuanceCountry().getIso2();
+					}
+				}
+
+				System.out.println("doc number: " + docNumber);
+				System.out.println("doc type: " + docType);
+				System.out.println("issuance country: " + docIssuanceCountry);
+				
+				Set<Flight> flights = passenger.getFlights();
+				if(flights != null) {
+					if(flights.iterator().hasNext()) {
+						Flight flight = flights.iterator().next();
+						
+						carrierCode = flight.getCarrier() != null ? flight.getCarrier().getIata() : "";
+						flightNumber = flight.getFlightNumber();
+						origin = flight.getOrigin() != null ? flight.getOrigin().getIata() : "";
+						destination  = flight.getDestination() != null ? flight.getDestination().getIata() : "";
+						departureDt = dtFormat.format(flight.getEtd());
+						arrivalDt = dtFormat.format(flight.getEta());
+					}
+				}
+				
+				System.out.println("carrierCode: " + carrierCode);
+				System.out.println("flightNumber: " + flightNumber);
+				System.out.println("origin: " + origin);
+				System.out.println("destination: " + destination);
+				System.out.println("departureDt: " + departureDt);
+				System.out.println("arrivalDt: " + arrivalDt);
 			}
 		}
 		else {
@@ -226,7 +294,7 @@ public class QueryBuilderServiceIT {
 	 * @throws QueryAlreadyExistsException 
 	 * @throws InterruptedException 
 	 */
-	@Test
+//	@Test
 	public void testSaveQuery() throws JsonProcessingException, QueryAlreadyExistsException, InterruptedException {
 		ObjectMapper mapper = new ObjectMapper();
 		Query queryToSave = new Query();

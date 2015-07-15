@@ -3,11 +3,15 @@ package gov.gtas.controller;
 import gov.gtas.constants.Constants;
 import gov.gtas.model.BaseEntity;
 import gov.gtas.model.Crew;
+import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
+import gov.gtas.model.Visa;
 import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.parsers.paxlst.usedifact.PDT.PersonStatus;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.model.Query;
 import gov.gtas.querybuilder.service.QueryBuilderService;
@@ -27,11 +31,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +63,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping(Constants.QUERY_SERVICE)
 public class QueryBuilderController {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderController.class);
+	SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 	
 	@Autowired
 	QueryBuilderService queryService;
@@ -72,7 +81,7 @@ public class QueryBuilderController {
 	 * @return
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.POST)
-	public List<QueryBuilderFlightResult> runQueryOnFlight(@RequestBody QueryObject queryObject) {
+	public List<QueryBuilderFlightResult> runQueryOnFlight(@Valid @RequestBody QueryObject queryObject) {
 		List<QueryBuilderFlightResult> qbFlights = new ArrayList<>();
 		
 		if(queryObject != null) {
@@ -88,7 +97,7 @@ public class QueryBuilderController {
 	 * @return
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_PASSENGER_URI, method = RequestMethod.POST)
-	public List<QueryBuilderPassengerResult> runQueryOnPassenger(@RequestBody QueryObject queryObject) {
+	public List<QueryBuilderPassengerResult> runQueryOnPassenger(@Valid @RequestBody QueryObject queryObject) {
 		List<QueryBuilderPassengerResult> qbPassengers = new ArrayList<>();
 		
 		if(queryObject != null) {
@@ -106,7 +115,7 @@ public class QueryBuilderController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = Constants.SAVE_QUERY_URI, method = RequestMethod.POST)
-	public QueryResponse saveQuery(@RequestBody QueryRequest query) throws IOException {
+	public QueryResponse saveQuery(@Valid @RequestBody QueryRequest query) throws IOException {
 		QueryResponse response = new QueryResponse();
 		
 		if(query != null) {
@@ -138,7 +147,7 @@ public class QueryBuilderController {
 	 * @throws QueryAlreadyExistsException
 	 */
 	@RequestMapping(value = Constants.EDIT_QUERY_URI, method = RequestMethod.PUT)
-	public QueryResponse editQuery(@RequestBody QueryRequest query) throws IOException {
+	public QueryResponse editQuery(@Valid @RequestBody QueryRequest query) throws IOException {
 		QueryResponse response = new QueryResponse();
 		
 		if(query != null) {
@@ -274,7 +283,6 @@ public class QueryBuilderController {
 	 */
 	private List<QueryBuilderFlightResult> mapFlightToQueryFlightResult(List<? extends BaseEntity> list) {
 		List<QueryBuilderFlightResult> qbFlights = new ArrayList<>();
-		SimpleDateFormat sdFormat = new SimpleDateFormat("MM/dd/yyyy h:mm a");
 		
 		if(list != null && list.size() > 0) {
 			List<Flight> flights = (List<Flight>) list;
@@ -285,12 +293,12 @@ public class QueryBuilderController {
 					qbFlight.setId(flight.getId());
 					qbFlight.setFlightNumber(flight.getFlightNumber());
 					qbFlight.setCarrierCode(flight.getCarrier() != null ? flight.getCarrier().getIata() : "");
-					qbFlight.setOrigin(flight.getOrigin() != null ? flight.getOrigin().getCity() : "");
+					qbFlight.setOrigin(flight.getOrigin() != null ? flight.getOrigin().getIata() : "");
 					qbFlight.setOriginCountry(flight.getOriginCountry() != null ? flight.getOriginCountry().getIso2() : "");
-					qbFlight.setDepartureDt(sdFormat.format(flight.getEtd()));
-					qbFlight.setDestination(flight.getDestination() != null ? flight.getDestination().getCity() : "");
+					qbFlight.setDepartureDt(dtFormat.format(flight.getEtd()));
+					qbFlight.setDestination(flight.getDestination() != null ? flight.getDestination().getIata() : "");
 					qbFlight.setDestinationCountry(flight.getDestinationCountry() != null ? flight.getDestinationCountry().getIso2() : "");
-					qbFlight.setArrivalDt(sdFormat.format(flight.getEta()));
+					qbFlight.setArrivalDt(dtFormat.format(flight.getEta()));
 					
 					qbFlights.add(qbFlight);
 				}
@@ -307,40 +315,85 @@ public class QueryBuilderController {
 	 */
 	private List<QueryBuilderPassengerResult> mapFlightToQueryPassengerResult(List<? extends BaseEntity> list) {
 		List<QueryBuilderPassengerResult> qbPassengers = new ArrayList<>();
-		SimpleDateFormat sdFormat = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat dobFormat = new SimpleDateFormat("MM/dd/yyyy");
 		
 		if(list != null && list.size() > 0) {
 			List<Traveler> travelers = (List<Traveler>) list;
 			for(Traveler traveler : travelers) {
 				if(traveler != null) {
 					QueryBuilderPassengerResult qbPassenger = new QueryBuilderPassengerResult();
+					String docNumber = "";
+					String docType = "";
+					String docIssuanceCountry = "";
+					String carrierCode = "";
+					String flightNumber = "";
+					String origin = "";
+					String destination = "";
+					String departureDt = "";
+					String arrivalDt = "";
+					String seatNumber = "Not available";
+					String status = "Not available";
 					
+					qbPassenger.setId(traveler.getId());
 					qbPassenger.setOnSomethingList(true);
 					qbPassenger.setOnWatchList(true);
 					qbPassenger.setFirstName(traveler.getFirstName());
 					qbPassenger.setLastName(traveler.getLastName());
+					// Passenger type
 					if(traveler instanceof Pax) {
-						qbPassenger.setPassengerType("P");
+						qbPassenger.setPassengerType(PersonStatus.PAX.toString());
 					}
 					else if(traveler instanceof Crew) {
-						qbPassenger.setPassengerType("C");
+						qbPassenger.setPassengerType(PersonStatus.CREW.toString());
 					}
+					
 					qbPassenger.setGender(traveler.getGender() != null ? traveler.getGender().toString() : "");
-					qbPassenger.setDob(sdFormat.format(traveler.getDob()));
+					qbPassenger.setDob(dobFormat.format(traveler.getDob()));
 					qbPassenger.setCitizenship(traveler.getCitizenshipCountry() != null ? traveler.getCitizenshipCountry().getIso2() : "");
 					
-					qbPassenger.setDocumentNumber("");
-					qbPassenger.setDocumentType("");
-					qbPassenger.setDocumentIssuanceContry("");
+					// Document information
+					Set<Document> docs = traveler.getDocuments();
+					if(docs != null) {
+						if(docs.iterator().hasNext()) {
+							Document doc = docs.iterator().next();
+							
+							docNumber = doc.getDocumentNumber();
+							
+							if(doc instanceof Passport) {
+								docType = "P";
+							}
+							else if(doc instanceof Visa) {
+								docType = "V";
+							}
+							docIssuanceCountry = doc.getIssuanceCountry().getIso2();
+						}
+					}
+					qbPassenger.setDocumentNumber(docNumber);
+					qbPassenger.setDocumentType(docType);
+					qbPassenger.setDocumentIssuanceContry(docIssuanceCountry);
 					
-					qbPassenger.setCarrierCode("");
-					qbPassenger.setFlightNumber("");
-					qbPassenger.setOrigin("");
-					qbPassenger.setDestination("");
-					qbPassenger.setDepartureDt("");
-					qbPassenger.setArrivalDt("");
-					qbPassenger.setSeatNumber("");
-					qbPassenger.setStatus("");
+					// flight information
+					Set<Flight> flights = traveler.getFlights();
+					if(flights != null) {
+						if(flights.iterator().hasNext()) {
+							Flight flight = flights.iterator().next();
+							
+							carrierCode = flight.getCarrier() != null ? flight.getCarrier().getIata() : "";
+							flightNumber = flight.getFlightNumber();
+							origin = flight.getOrigin() != null ? flight.getOrigin().getIata() : "";
+							destination  = flight.getDestination() != null ? flight.getDestination().getIata() : "";
+							departureDt = dtFormat.format(flight.getEtd());
+							arrivalDt = dtFormat.format(flight.getEta());
+						}
+					}
+					qbPassenger.setCarrierCode(carrierCode);
+					qbPassenger.setFlightNumber(flightNumber);
+					qbPassenger.setOrigin(origin);
+					qbPassenger.setDestination(destination);
+					qbPassenger.setDepartureDt(departureDt);
+					qbPassenger.setArrivalDt(arrivalDt);
+					qbPassenger.setSeatNumber(seatNumber);
+					qbPassenger.setStatus(status);
 					
 					qbPassengers.add(qbPassenger);
 				}
@@ -390,6 +443,16 @@ public class QueryBuilderController {
 		return resultList;
 	}
 		
+	@ExceptionHandler
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public QueryResponse handleMethodArgumentException(MethodArgumentNotValidException exception) {
+		QueryResponse response = new QueryResponse();
+		
+		response = createQueryResponse(Status.FAILURE, Constants.QUERY_SERVICE_ERROR_MSG, null);
+		
+		return response;
+    }
+
 	/**
 	 * 
 	 * @param e
@@ -401,7 +464,8 @@ public class QueryBuilderController {
 		QueryResponse response = new QueryResponse();
 		
 		response = createQueryResponse(Status.FAILURE, Constants.QUERY_SERVICE_ERROR_MSG, null);
-		logger.error(e.getMessage());
+		
+		logger.error(e.getStackTrace().toString());
 		
 	    return response;
 	}
