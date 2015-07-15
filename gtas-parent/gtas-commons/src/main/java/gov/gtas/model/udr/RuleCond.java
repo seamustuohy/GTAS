@@ -136,8 +136,10 @@ public class RuleCond implements Serializable {
 	 		  return new CondValue(pk, DateCalendarUtils.parseJsonDate(val));
 	 	   case BOOLEAN:
 	 		  return new CondValue(pk, ValidationUtils.isStringTruthy(val)?"Y":"N");
+	 	   case OBJECT_REF:
+	 		  return new CondValue(pk, val, true);
 	 	   default:
-	 		   return new CondValue(pk, val);
+	 		  return new CondValue(pk, val);  
  	   }
     }
     

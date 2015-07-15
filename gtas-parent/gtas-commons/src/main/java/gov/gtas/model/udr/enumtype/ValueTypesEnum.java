@@ -11,5 +11,6 @@ public enum ValueTypesEnum {
   STRING,
   DATE,
   TIMESTAMP,
-  BOOLEAN
+  BOOLEAN,
+  OBJECT_REF
 }
