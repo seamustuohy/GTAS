@@ -17,6 +17,7 @@ import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
+import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.ApisMessageRepository;
 
@@ -52,14 +53,17 @@ public class ApisMessageService {
     
     private ApisMessage apisMessage;
     
-    public ApisMessageVo parseApisMessage(byte[] raw) {
+    public ApisMessageVo parseApisMessage(String filePath) {
         this.apisMessage = new ApisMessage();
         this.apisMessage.setCreateDate(new Date());
-        this.apisMessage.setRaw(raw);
         this.apisMessage.setStatus(MessageStatus.RECEIVED);
+        this.apisMessage.setSource(filePath);
         
         ApisMessageVo vo = null;
         try {            
+            byte[] raw = FileUtils.readSmallFile(filePath);
+            this.apisMessage.setRaw(raw);
+
             String message = new String(raw, StandardCharsets.US_ASCII);
             String payload = getApisMessagePayload(message);
             if (payload == null) {
@@ -161,13 +165,11 @@ public class ApisMessageService {
         }
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #
-        String tmp = vo.getFlightNumber();
-        String flightNum = tmp.substring(2);
         StringBuffer buff = new StringBuffer();
-        for (int j=0; j<4 - flightNum.length(); j++) {
+        for (int j=0; j<4 - vo.getFlightNumber().length(); j++) {
             buff.append("0");
         }
-        buff.append(flightNum);
+        buff.append(vo.getFlightNumber());
         f.setFlightNumber(buff.toString());
         return f;
     }
