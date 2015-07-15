@@ -9,5 +9,7 @@ public enum OperatorCodeEnum {
   LESS_OR_EQUAL,
   IN,
   NOT_IN,
-  BETWEEN
+  BETWEEN,
+  MEMBER_OF,
+  NOT_MEMBER_OF
 }

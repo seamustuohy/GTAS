@@ -57,7 +57,12 @@ public class CondValue implements Serializable {
 	 */
 	public CondValue() {
 	}
-
+	
+	public CondValue(CondValuePk id, String value, boolean isObjRef) {
+		this.id = id;
+		this.valType = ValueTypesEnum.OBJECT_REF;
+		this.charVal = value;
+	}
 	public CondValue(CondValuePk id, String value) {
 		this.id = id;
 		this.valType = ValueTypesEnum.STRING;
