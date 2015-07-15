@@ -136,6 +136,27 @@ public class RuleConditionBuilder {
 			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
 					.get(1), bldr);
 			break;
+		case NOT_BETWEEN:
+			bldr.append("(").append(cond.getAttrName()).append(" < ");
+			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
+					.get(0), bldr);
+			bldr.append(" || ").append(cond.getAttrName()).append(" > ");
+			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
+					.get(1), bldr);
+			bldr.append(")");
+			break;
+		case BEGINS_WITH:
+		case NOT_BEGINS_WITH:
+		case ENDS_WITH:
+		case NOT_ENDS_WITH:
+		case CONTAINS:
+		case NOT_CONTAINS:
+		case IS_EMPTY:
+		case IS_NOT_EMPTY:
+		case IS_NULL:
+		case IS_NOT_NULL:
+			//TODO
+			break;
 		case MEMBER_OF:
 			bldr.append(cond.getAttrName()).append(" memberOf ");
 			RuleConditionBuilderHelper.addConditionValue(cond.getValues().get(0), bldr);

@@ -1,7 +1,6 @@
 package gov.gtas.svc;
 
 import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.rule.RuleService;

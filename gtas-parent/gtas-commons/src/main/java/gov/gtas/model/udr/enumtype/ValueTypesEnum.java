@@ -10,7 +10,7 @@ public enum ValueTypesEnum {
   DOUBLE("double"),
   STRING("string"),
   DATE("date"),
-  TIMESTAMP("datetime"),
+  DATETIME("datetime"),
   BOOLEAN("boolean"),
   OBJECT_REF("OBJECT_REF");
   
