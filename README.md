@@ -30,7 +30,7 @@
 2. replace your local hibernate.properties with this one.
 3. do a full build
 4. move the war over to your local aws account, e.g., if you're using putty on windows
-> pscp gtas.war mcopenhafer@96.127.68.183:.
+> pscp gtas.war mcopenhafer@[app server IP]:.
 5. login to your aws appserver account and move the war to /tmp
 > mv gtas.war /tmp
 6. deploy to tomcat
