@@ -1,6 +1,10 @@
 package gov.gtas.parsers.paxlst.vo;
 
+import gov.gtas.parsers.pnrgov.TKT;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PnrVo extends PaxVo{
 
@@ -20,7 +24,11 @@ public class PnrVo extends PaxVo{
 	private String formOfPayment;
 	private String totalDwellTimeMins;
 	private String pnrAgencyId;
+	private String pnrAgentIdentification;
 	private String pnrAgencyName;
+	private String pnrAgencyAirlineCode;
+	private String pnrAgencyLocationCode;
+	private String pnrAgencyTypeCode;
 	private String pnrAgencyCity;
 	private String pnrAgencyState;
 	private String pnrAgencyCountry;
@@ -45,8 +53,94 @@ public class PnrVo extends PaxVo{
 	private FlightVo flight;
 	private String passengerType;
 	private String frequentMemberLevelInfo;
-	
-	
+	private String reservationControlNumber;//M*
+	private String airlineCode;
+	private String chkDateQualifier;
+	private Date checkInDate;
+	private String otherServiceInformation;
+	private List<AddressVo> adresses=new ArrayList<>();
+	private String ticketNumber;
+	private String ticketType;
+	private String numberOfBooklets;
+
+	public String getPnrAgencyTypeCode() {
+		return pnrAgencyTypeCode;
+	}
+	public void setPnrAgencyTypeCode(String pnrAgencyTypeCode) {
+		this.pnrAgencyTypeCode = pnrAgencyTypeCode;
+	}
+	public String getPnrAgentIdentification() {
+		return pnrAgentIdentification;
+	}
+	public void setPnrAgentIdentification(String pnrAgentIdentification) {
+		this.pnrAgentIdentification = pnrAgentIdentification;
+	}
+	public String getPnrAgencyAirlineCode() {
+		return pnrAgencyAirlineCode;
+	}
+	public void setPnrAgencyAirlineCode(String pnrAgencyAirlineCode) {
+		this.pnrAgencyAirlineCode = pnrAgencyAirlineCode;
+	}
+	public String getPnrAgencyLocationCode() {
+		return pnrAgencyLocationCode;
+	}
+	public void setPnrAgencyLocationCode(String pnrAgencyCountryCode) {
+		this.pnrAgencyLocationCode = pnrAgencyCountryCode;
+	}
+	public String getTicketNumber() {
+		return ticketNumber;
+	}
+	public void setTicketNumber(String ticketNumber) {
+		this.ticketNumber = ticketNumber;
+	}
+	public String getTicketType() {
+		return ticketType;
+	}
+	public void setTicketType(String ticketType) {
+		this.ticketType = ticketType;
+	}
+	public String getNumberOfBooklets() {
+		return numberOfBooklets;
+	}
+	public void setNumberOfBooklets(String numberOfBooklets) {
+		this.numberOfBooklets = numberOfBooklets;
+	}
+	public List<AddressVo> getAdresses() {
+		return adresses;
+	}
+	public void setAdresses(List<AddressVo> adresses) {
+		this.adresses = adresses;
+	}
+	public String getOtherServiceInformation() {
+		return otherServiceInformation;
+	}
+	public void setOtherServiceInformation(String otherServiceInformation) {
+		this.otherServiceInformation = otherServiceInformation;
+	}
+	public String getChkDateQualifier() {
+		return chkDateQualifier;
+	}
+	public void setChkDateQualifier(String chkDateQualifier) {
+		this.chkDateQualifier = chkDateQualifier;
+	}
+	public Date getCheckInDate() {
+		return checkInDate;
+	}
+	public void setCheckInDate(Date checkInDate) {
+		this.checkInDate = checkInDate;
+	}
+	public String getReservationControlNumber() {
+		return reservationControlNumber;
+	}
+	public void setReservationControlNumber(String reservationControlNumber) {
+		this.reservationControlNumber = reservationControlNumber;
+	}
+	public String getAirlineCode() {
+		return airlineCode;
+	}
+	public void setAirlineCode(String airlineCode) {
+		this.airlineCode = airlineCode;
+	}
 	public String getFrequentMemberLevelInfo() {
 		return frequentMemberLevelInfo;
 	}
