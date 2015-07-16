@@ -7,14 +7,16 @@
     <link rel="stylesheet" href="resources/bower_components/ng-table/dist/ng-table.css" />
     <link rel="stylesheet" href="resources/css/gtas.css" />
 
-    <link rel="stylesheet" href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css">
-    <link rel="stylesheet" href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
-    <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css">
+    <link rel="stylesheet" href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+    <link rel="stylesheet" href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
+    <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
+    <link rel="stylesheet" href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+    <link rel="stylesheet" href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 
-    <link rel="stylesheet" href="resources/css/query-builder.default.css" id="qb-theme">
+    <link rel="stylesheet" href="resources/css/query-builder.default.css" id="qb-theme" />
 
-    <link rel="stylesheet" href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css">
+    <link rel="stylesheet" href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css" />
 
     <script src="resources/bower_components/angular/angular.js"></script>
     <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
@@ -22,7 +24,7 @@
     <script src="resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
     <script src="resources/bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js"></script>
-
+    <script src="resources/bower_components/moment/min/moment.min.js"></script>
 
     <script src="resources/bower_components/jquery/dist/jquery.js"></script>
     <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -30,12 +32,12 @@
     <script src="resources/bower_components/bootbox/bootbox.js"></script>
     <script src="resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
     <script src="resources/bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
+    <script src="resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
     <script src="resources/bower_components/sql-parser/browser/sql-parser.js"></script>
-    <script src="resources/bower_components/moment/min/moment.min.js"></script>
+
     <script src="resources/js/query-builder.js"></script>
-
-
 
     <script src="app.js"></script>
     <script src="flights/FlightsController.js"></script>
@@ -63,13 +65,15 @@
                         <li>
                             <a ui-sref="pax">Passengers</a>
                         </li>
-                        <li>
-                            <a ui-sref="query">Risk Criteria</a>
-                        </li>
                     </ul>
                 </li>
                 <li class="dropdown" dropdown>
                     <a role="button" class="dropdown-toggle" dropdown-toggle>Manage <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a ui-sref="query">Risk Criteria</a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="dropdown" dropdown>
                     <a role="button" class="dropdown-toggle" dropdown-toggle>Admin <b class="caret"></b></a>
