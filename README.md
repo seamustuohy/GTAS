@@ -51,8 +51,11 @@
 6. deploy to tomcat
 
 > cd /data/atsg/tomcat/
+
 > sudo -u tomcat sh bin/catalina.sh stop
+
 > mv /tmp/gtas.war webapps
+
 > sudo -u tomcat sh bin/catalina.sh start
 
 7. check the logs for errors
