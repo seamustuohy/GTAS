@@ -90,12 +90,6 @@
       <artifactId>javax.inject</artifactId>
     </dependency>
 
-<dependency>
-    <groupId>org.springframework.security</groupId>
-    <artifactId>spring-security-taglibs</artifactId>
-    <type>jar</type>
-
-</dependency>
 
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -108,32 +102,29 @@
       <version>2.2</version>
       <scope>provided</scope>
     </dependency>
-
     <dependency>
       <groupId>jstl</groupId>
       <artifactId>jstl</artifactId>
       <version>1.2</version>
     </dependency>
 
-
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-taglibs</artifactId>
+      <type>jar</type>
+    </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
-
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
-
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-config</artifactId>
-
     </dependency>
-
-
-
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
@@ -185,11 +176,10 @@
       <artifactId>jstl</artifactId>
     </dependency>
 
-
-  <dependency>
-    <groupId>org.apache.tiles</groupId>
-    <artifactId>tiles-jsp</artifactId>
-  </dependency>
+    <dependency>
+      <groupId>org.apache.tiles</groupId>
+      <artifactId>tiles-jsp</artifactId>
+    </dependency>
 
   </dependencies>
   <build>
@@ -208,28 +198,6 @@
           <downloadJavadocs>true</downloadJavadocs>
         </configuration>
       </plugin>
-<!-- 
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.1</version>
-        <executions>
-          <execution>
-            <id>exec-bower-install</id>
-            <phase>compile</phase>
-            <configuration>
-              <executable>bower</executable>
-              <arguments>
-                <argument>install</argument>
-              </arguments>
-            </configuration>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
- -->
     </plugins>
     <finalName>gtas</finalName>
   </build>
