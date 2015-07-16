@@ -6,11 +6,11 @@
 * Maven 3, npm, bower
 * Apache Tomcat (7.0.62)
 * MariaDB (10.0.19 Stable)
-  * https://downloads.mariadb.org/
-  * https://tomcat.apache.org/download-70.cgi
+    * https://downloads.mariadb.org/
+    * https://tomcat.apache.org/download-70.cgi
 * Drools (6.2)
-  * http://www.drools.org/download/download.html
-  * http://download.jboss.org/drools/release/6.2.0.Final/org.drools.updatesite/
+    * http://www.drools.org/download/download.html
+    * http://download.jboss.org/drools/release/6.2.0.Final/org.drools.updatesite/
 
 ### Build and Deployment
 
