@@ -29,6 +29,8 @@ public class Message extends BaseEntity {
     @Column(name = "hash_code")
     private String hashCode;
 
+    private String source;
+
     @Enumerated(EnumType.ORDINAL)
     private MessageStatus status;
 
@@ -51,6 +53,12 @@ public class Message extends BaseEntity {
     }
     public void setHashCode(String hashCode) {
         this.hashCode = hashCode;
+    }
+    public String getSource() {
+        return source;
+    }
+    public void setSource(String source) {
+        this.source = source;
     }
     public MessageStatus getStatus() {
         return status;

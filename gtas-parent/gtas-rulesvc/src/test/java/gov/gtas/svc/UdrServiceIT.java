@@ -5,12 +5,20 @@ import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
+import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.RuleCond;
+import gov.gtas.model.udr.UdrConstants;
+import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
+import gov.gtas.model.udr.json.QueryEntity;
+import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.services.UserService;
+import gov.gtas.services.udr.RulePersistenceService;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -24,7 +32,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 /**
- * Integration tests for the UDR maanageement service.
+ * Integration tests for the UDR management service.
  * @author GTAS3 (AB)
  *
  */
@@ -36,11 +44,14 @@ public class UdrServiceIT {
 	private static final String RULE_DESCRIPTION1 = "This is a test";
 	private static final String RULE_TITLE2 = "Hello Rule 2";
 	private static final String RULE_DESCRIPTION2 = "This is a test2";
-
+	
 	@Autowired
     UdrService udrService;
     
-    @Autowired
+	@Autowired
+    RulePersistenceService ruleService;
+
+	@Autowired
     UserService userService;
 
 	@Before
@@ -58,6 +69,54 @@ public class UdrServiceIT {
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
 		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+	}
+	@Test
+	@Transactional
+	public void testCreateUdrWithSingleConditionAND() {
+		User user = createUser();
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
+		QueryObject details = spec.getDetails();
+		details.setCondition("AND");
+		List<QueryEntity> terms =  details.getRules();
+		List<QueryEntity> newterms = new LinkedList<QueryEntity>();
+		newterms.add(terms.get(0));
+		details.setRules(newterms);
+		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
+		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		Long id = Long.valueOf(resp.findResponseDetailValue(UdrConstants.UDR_ID_ATTRIBUTE_NAME));
+		assertNotNull("The saved ID is null",id);
+		UdrRule rule = ruleService.findById(id);
+		assertNotNull(rule);
+		List<Rule> engineRules = rule.getEngineRules();
+		assertNotNull(engineRules);
+		assertEquals(1, engineRules.size());
+		List<RuleCond> conds =  engineRules.get(0).getRuleConds();
+		assertNotNull(conds);
+		assertEquals(1, conds.size());
+	}
+	@Test
+	@Transactional
+	public void testCreateUdrWithSingleConditionOR() {
+		User user = createUser();
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
+		QueryObject details = spec.getDetails();
+		details.setCondition("OR");
+		List<QueryEntity> terms =  details.getRules();
+		List<QueryEntity> newterms = new LinkedList<QueryEntity>();
+		newterms.add(terms.get(0));
+		details.setRules(newterms);
+		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
+		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		Long id = Long.valueOf(resp.findResponseDetailValue(UdrConstants.UDR_ID_ATTRIBUTE_NAME));
+		assertNotNull("The saved ID is null",id);
+		UdrRule rule = ruleService.findById(id);
+		assertNotNull(rule);
+		List<Rule> engineRules = rule.getEngineRules();
+		assertNotNull(engineRules);
+		assertEquals(1, engineRules.size());
+		List<RuleCond> conds =  engineRules.get(0).getRuleConds();
+		assertNotNull(conds);
+		assertEquals(1, conds.size());
 	}
 	@Test
 	@Transactional

@@ -1,7 +1,7 @@
 package gov.gtas.rule;
 
 import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.error.ErrorHandler;
+import gov.gtas.error.RuleServiceException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -44,28 +44,26 @@ public class RuleUtils {
 	 * Creates a KieSession from a DRL file.<br>
 	 * (see for example http://stackoverflow.com/questions/27488034/with-drools-6-x-how-do-i-avoid-maven-and-the-compiler)
 	 * @param filePath the input DRL file on the class path.
-	 * @param errorHandler error handler.
 	 * @return the  created KieBase.
 	 * @throws IOException on IO error.
 	 */
-	public static KieBase createKieBaseFromClasspathFile(final String filePath, final ErrorHandler errorHandler) throws IOException{
+	public static KieBase createKieBaseFromClasspathFile(final String filePath) throws IOException{
 		File file = new File(filePath);
 	    InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream( filePath );
 	    String kfilepath = RuleServiceConstants.KIE_FILE_SYSTEM_ROOT+file.getName();
-	    return createKieBase(kfilepath, is, errorHandler);
+	    return createKieBase(kfilepath, is);
 	}
 	/**
 	 * Creates a KieBase from DRL string data.
 	 * @param drlString the DRL data as a string.
-	 * @param errorHandler error handler.
 	 * @return the  created KieBase.
 	 * @throws IOException on IO error.
 	 */
-	public static KieBase createKieBaseFromDrlString(final String drlString, final ErrorHandler errorHandler) throws IOException{
+	public static KieBase createKieBaseFromDrlString(final String drlString) throws IOException{
 	    File file = File.createTempFile("rule","");
 	    ByteArrayInputStream bis = new ByteArrayInputStream(drlString.getBytes());
 	    String kfilepath = RuleServiceConstants.KIE_FILE_SYSTEM_ROOT+file.getName()+".drl";
-	    return createKieBase(kfilepath, bis, errorHandler);
+	    return createKieBase(kfilepath, bis);
 	}
 	/**
 	 * Thread-safe creation of KieSession from a KieBase.
@@ -145,18 +143,22 @@ public class RuleUtils {
 	 * @param errorHandler error handler
 	 * @return the created KieBase
 	 */
-    private static KieBase createKieBase(final String kfilepath, final InputStream is, final ErrorHandler errorHandler){
+    private static KieBase createKieBase(final String kfilepath, final InputStream is){
 	    KieServices ks = KieServices.Factory.get();
 	    KieFileSystem kfs = ks.newKieFileSystem();
 	    kfs.write( kfilepath, ks.getResources().newInputStreamResource( is ) );
 	    KieBuilder kieBuilder = ks.newKieBuilder( kfs ).buildAll();
 	    Results results = kieBuilder.getResults();
 	    if( results.hasMessages( Message.Level.ERROR ) ){
+	    	RuleServiceException ruleException = new RuleServiceException(RuleServiceConstants.RULE_COMPILE_ERROR_CODE, 
+	    			String.format(RuleServiceConstants.RULE_COMPILE_ERROR_MESSAGE, kfilepath));
 	    	List<Message> errors = results.getMessages();
 	        for(Message msg:errors){
 	        	logger.error(msg.getText());
+	        	ruleException.addRuleCompilationError(msg);
 	        }
-	        throw errorHandler.createException(RuleServiceConstants.RULE_COMPILE_ERROR_CODE, kfilepath, errors);
+	        throw ruleException;
+	        //throw errorHandler.createException(RuleServiceConstants.RULE_COMPILE_ERROR_CODE, kfilepath, errors);
 	    }
 	    KieContainer kieContainer =
 	        ks.newKieContainer( ks.getRepository().getDefaultReleaseId() );
@@ -166,7 +168,7 @@ public class RuleUtils {
 	    config.setOption( EventProcessingOption.STREAM );
 	    KieBase kieBase = kieContainer.newKieBase( config );
 	    
-//	    KieBase kieBase = kieContainer.getKieBase();//alternative way to gewt the default KieBase
+//	    KieBase kieBase = kieContainer.getKieBase();//alternative way to get the default KieBase
 	    
 	    return kieBase;
     	

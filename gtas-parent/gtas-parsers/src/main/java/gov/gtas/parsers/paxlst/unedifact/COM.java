@@ -13,7 +13,7 @@ public class COM extends Segment {
         for (int i=0; i<this.composites.length; i++) {
             Composite c = this.composites[i];
             Element[] e = c.getElements();
-            if (e.length == 2) {
+            if (e != null && e.length == 2) {
                 String type = e[1].getValue();
                 switch (type) {
                 case "TE":

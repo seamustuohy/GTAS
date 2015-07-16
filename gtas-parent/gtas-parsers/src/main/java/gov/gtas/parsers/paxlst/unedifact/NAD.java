@@ -43,6 +43,8 @@ public class NAD extends Segment {
             case 0:
                 switch (c.getValue()) {
                 case "MS":
+                case "IC":
+                    // "IC" is not in the official documentation, but appears in sample files
                     this.isReportingParty = true;
                     this.partyFunctionCodeQualifier = PartyCode.REPORTING_PARTY;
                     break;

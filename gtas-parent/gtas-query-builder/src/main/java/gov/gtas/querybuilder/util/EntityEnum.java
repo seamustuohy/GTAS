@@ -11,7 +11,7 @@ public enum EntityEnum {
 		FREQUENT_FLYER ("FREQUENT FLYER", "FrequentFlyer", "ff"),
 		HITS ("HITS", "Hits", "h"),
 		NAME_ORIGIN ("NAME ORIGIN", "NameOrigin", "n"),
-		PAX("PASSENGER", "Pax", "p"),
+		PAX("PAX", "Pax", "p"),
 		PHONE ("PHONE", "Phone", "ph"),
 		PNR ("PNR", "PNR", "pnr"),
 		TRAVEL_AGENCY ("TRAVEL AGENCY", "TravelAgency", "t");

@@ -2,12 +2,20 @@ package gov.gtas.web.querybuilder.model;
 
 import gov.gtas.model.udr.json.QueryObject;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class QueryRequest {
 	
 	private int id;
+	@NotNull(message = "User cannot be found")
 	private String userId;
+	@NotNull(message = "Title is required")
+	@Size(max=50)
 	private String title;
+	@Size(max=250)
 	private String description;
+	@NotNull(message = "Query is required")
 	private QueryObject query;
 	
 	public int getId() {

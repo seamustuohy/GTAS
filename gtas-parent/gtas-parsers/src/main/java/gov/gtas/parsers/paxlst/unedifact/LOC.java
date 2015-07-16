@@ -74,6 +74,8 @@ public class LOC extends Segment {
                 case 91:
                     this.functionCode = LocCode.PLACE_OF_DOCUMENT_ISSUE;
                     break;
+                default:
+                    logger.error("LOC: invalid party function code: " + c.getValue());                    
                 }
                 break;
 
@@ -81,17 +83,17 @@ public class LOC extends Segment {
                 this.locationNameCode = c.getValue();
                 break;
                 
-            case 2:
-                if (e.length >= 3) {
-                    this.firstRelatedLocationName = e[2].getValue();
-                }
-                break;
-
-            case 3:
-                if (e.length >= 3) {
-                    this.secondRelatedLocationName = e[2].getValue();
-                }
-                break;
+//            case 2:
+//                if (e.length >= 3) {
+//                    this.firstRelatedLocationName = e[2].getValue();
+//                }
+//                break;
+//
+//            case 3:
+//                if (e.length >= 3) {
+//                    this.secondRelatedLocationName = e[2].getValue();
+//                }
+//                break;
             }
         }
     }

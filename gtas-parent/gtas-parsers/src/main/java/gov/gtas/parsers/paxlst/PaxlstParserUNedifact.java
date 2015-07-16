@@ -36,7 +36,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         
         for (ListIterator<Segment> i=segments.listIterator(); i.hasNext(); ) {
             Segment s = i.next();
-//            System.out.println(s);
+            logger.debug("" + s);
 
             switch (s.getName()) {
             case "UNB":
@@ -116,7 +116,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         
         while (i.hasNext()) {
             Segment s = i.next();
-//            System.out.println("\t" + s);
+            logger.debug("\t" + s);
             switch (s.getName()) {
             
             case "ATT":
@@ -179,7 +179,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
 
         while (i.hasNext()) {
             Segment s = i.next();
-//            System.out.println("\t" + "\t" + s);
+            logger.debug("\t" + "\t" + s);
             switch (s.getName()) {
             case "DTM":
                 DTM dtm = (DTM)s;
@@ -206,20 +206,13 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         TDT tdt = (TDT)seg;
         FlightVo f = new FlightVo();
         parsedMessage.addFlight(f);
-        f.setFlightNumber(tdt.getC_journeyIdentifier());
+        f.setFlightNumber(tdt.getFlightNumber());
+        f.setCarrier(tdt.getC_carrierIdentifier());
         
-        String tmp = tdt.getC_carrierIdentifier();
-        if (tmp != null) {
-            f.setCarrier(tmp);
-        } else {
-            // assume first 2 letters of flight number is carrier iata code
-            String iata = tdt.getC_journeyIdentifier().substring(0, 2);
-            f.setCarrier(iata);
-        }
-        
+        boolean loc92Seen = false;
         while (i.hasNext()) {
             Segment s = i.next();
-//            System.out.println("\t" + s);
+            logger.debug("\t" + s);
             switch (s.getName()) {
             case "LOC":
                 LOC loc = (LOC)s;
@@ -230,8 +223,13 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 } else if (locCode == LocCode.ARRIVAL_AIRPORT) {
                     f.setDestination(airport);
                 } else if (locCode == LocCode.BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT) {
-                    f.setOrigin(airport);
-                    f.setDestination(airport);
+                    if (loc92Seen) {
+                        f.setDestination(airport);
+                        loc92Seen = false;
+                    } else {
+                        f.setOrigin(airport);
+                        loc92Seen = true;
+                    }
                 }
                 break;
             case "DTM":
@@ -255,7 +253,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         
         while (i.hasNext()) {
             Segment s = i.next();
-//            System.out.println("\t" + s);
+//            logger.debug("\t" + s);
             switch (s.getName()) {
             case "UNG":
                 break;

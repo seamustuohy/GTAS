@@ -1,6 +1,5 @@
 package gov.gtas.services.udr;
 
-import gov.gtas.error.BasicErrorHandler;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;

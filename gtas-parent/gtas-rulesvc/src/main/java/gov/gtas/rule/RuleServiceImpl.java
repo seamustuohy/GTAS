@@ -5,13 +5,18 @@ import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.ErrorHandler;
+import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.error.RuleServiceErrorHandler;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EventListener;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import org.kie.api.KieServices;
 import org.kie.api.event.rule.AfterMatchFiredEvent;
@@ -24,18 +29,20 @@ import org.kie.api.event.rule.ObjectUpdatedEvent;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 /**
- * Implementation of the Rule Engine.
+ * Implementation of the Rule Engine Service.
  * @author GTAS3 (AB)
  *
  */
+@Service
 public class RuleServiceImpl implements RuleService {
-	private static final String DEFAULT_RULESET_NAME = "gtas.drl";
-
-	@Autowired
-	private ErrorHandler errorHandler;
-
+	
+	@PostConstruct
+	public void initializeErrorHandling(){
+		ErrorHandler errorHandler = new RuleServiceErrorHandler();
+		ErrorHandlerFactory.registerErrorHandler(errorHandler);
+	}
 	/* (non-Javadoc)
 	 * @see gov.gtas.rule.RuleService#invokeRuleset(java.lang.String, gov.gtas.bo.RuleServiceRequest)
 	 */	
@@ -43,7 +50,7 @@ public class RuleServiceImpl implements RuleService {
 	public RuleServiceResult invokeRuleset(String ruleSetName,
 			RuleServiceRequest req) {
 		if (null == req) {
-			throw errorHandler.createException(
+			throw ErrorHandlerFactory.getErrorHandler().createException(
 					RuleServiceConstants.NULL_ARGUMENT_ERROR_CODE,
 					"RuleServiceRequest", "RuleServiceImpl.invokeRuleset()");
 		}
@@ -52,11 +59,11 @@ public class RuleServiceImpl implements RuleService {
 		 */
 		final RuleExecutionStatistics stats = new RuleExecutionStatistics();
 
-		KieSession ksession = initSessionFromClasspath("GtasKS",
+		KieSession ksession = initSessionFromClasspath(RuleServiceConstants.KNOWLEDGE_SESSION_NAME,
 				createEventListeners(stats));
 
-		List<?> reqObjectList = req.getRequestObjects();
-		for (Object x : reqObjectList) {
+		Collection<?> requestObjects = req.getRequestObjects();
+		for (Object x : requestObjects) {
 			ksession.insert(x);
 		}
 
@@ -64,7 +71,7 @@ public class RuleServiceImpl implements RuleService {
 		ksession.fireAllRules();
 
 		// extract the result
-		final List<?> resList = (List<?>) ksession.getGlobal("resultList");
+		final List<?> resList = (List<?>) ksession.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
 
 		RuleServiceResult res = new RuleServiceResult() {
 			public List<?> getResultList() {
@@ -90,7 +97,7 @@ public class RuleServiceImpl implements RuleService {
 	 */
 	@Override
 	public RuleServiceResult invokeRuleset(RuleServiceRequest req) {
-		return invokeRuleset(DEFAULT_RULESET_NAME, req);
+		return invokeRuleset(RuleServiceConstants.DEFAULT_RULESET_NAME, req);
 	}
 
 	/* (non-Javadoc)
@@ -241,7 +248,7 @@ public class RuleServiceImpl implements RuleService {
 		// Once the session is created, the application can interact with it
 		// In this case it is setting a global as defined in the
 		// gov/gtas/rule/gtas.drl file
-		ksession.setGlobal("resultList", new ArrayList<Object>());
+		ksession.setGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME, new ArrayList<Object>());
 
 		// The application can also setup listeners
 		if (eventListenerList != null) {

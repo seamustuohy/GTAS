@@ -1,10 +1,18 @@
 package gov.gtas.error;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import org.kie.api.builder.Message;
+
 /**
  * Exception class for errors generated during Rule Engine execution.
  * @author GTAS3 (AB)
  *
  */
 public class RuleServiceException extends CommonServiceException {
+	
+	private List<String> errorMessages;
 
 	/**
 	 * serial version UID.
@@ -18,6 +26,7 @@ public class RuleServiceException extends CommonServiceException {
      */
 	public RuleServiceException(final String errCode, final String msg, final Throwable exception) {
 		super(errCode, msg, exception);
+		this.errorMessages = new LinkedList<String>();
 	}
     /**
      * Construction taking error code and context dependent message.
@@ -26,6 +35,30 @@ public class RuleServiceException extends CommonServiceException {
      */
 	public RuleServiceException(final String errCode, final String errMessage) {
 		super(errCode, errMessage);
+		this.errorMessages = new LinkedList<String>();
 	}
+	
+	/**
+	 * Captures Rule Engine specific errors.
+	 * @param msg rule engine error message.
+	 */
+	public void addRuleCompilationError(Message msg){
+		this.errorMessages.add(msg.getText());
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Throwable#getMessage()
+	 */
+	@Override
+	public String getMessage() {
+		StringBuilder msgBuilder  = new StringBuilder(super.getMessage());
+		if(!errorMessages.isEmpty()){
+			msgBuilder.append("\nRule Engine errors:\n");
+			for(String msg:errorMessages){
+				msgBuilder.append(msg).append("\n");
+			}
+		}
+		return msgBuilder.toString();
+	}
+	
 	
 }

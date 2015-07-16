@@ -17,6 +17,7 @@ public class SegmentFactory {
             Object[] args = {s.getComposites()};
             return (Segment)c.getDeclaredConstructor(Composite[].class).newInstance(args);
         } catch (Exception e) {
+            System.err.println("Could not create " + this.segmentPackageName + "." + segmentName);
             return s;
         }
     }

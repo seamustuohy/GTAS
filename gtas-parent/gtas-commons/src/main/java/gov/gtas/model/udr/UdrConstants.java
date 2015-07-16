@@ -6,6 +6,7 @@ package gov.gtas.model.udr;
  */
 public class UdrConstants {
 	public static final String UDR_DATE_FORMAT = "yyyy-MM-dd";  
+	public static final String RULE_ENGINE_DATE_FORMAT = "dd-MMM-yyyy";  
 	
 	public static final String UDR_ID_ATTRIBUTE_NAME = "id";
 	public static final String UDR_TITLE_ATTRIBUTE_NAME = "title";

@@ -3,7 +3,6 @@ package gov.gtas.rule;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
 
 import java.io.IOException;
@@ -40,39 +39,6 @@ public class RuleUtilsIT {
                       +"resultList.add(m.getTransmissionDate()); "
               +"end";
     
-    private static final String testJson =
-    	"{ \"details\": {"
-          +"  \"@class\": \"gov.gtas.model.udr.json.QueryObject\","
-           +" \"condition\": \"OR\","
-           +" \"rules\": ["
-             +  " {"
-               +"   \"@class\": \"QueryTerm\","
-                    + " \"entity\": \"Pax\","
-                    + " \"attribute\": \"firstName\","
-                    + " \"operator\": \"EQUAL\","
-                    + " \"value\": \"John\" "
-                    + " \"values\": [\"John\"] "
-               +" },"
-               + " {"
-                    + " \"@class\": \"QueryTerm\","
-                    + " \"entity\": \"Pax\","
-                    + " \"attribute\": \"lastName\","
-                    + " \"operator\": \"EQUAL\","
-                    + " \"value\": \"Jones\" "
-                    + " \"values\": [\"Jones\"] "
-                +"}"
-            +"]"
-        +"},"
-        + " \"summary\": {"
-            + " \"title\": \"Hello Rule 1\","
-            + " \"description\": \"This is a test\","
-            + " \"startDate\": \"2015-06-24\","
-            + " \"endDate\": null,"
-            +" \"author\": \"jpjones\","
-            + " \"enabled\": false"
-        + "}"
-    +"}";
-    
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -83,7 +49,7 @@ public class RuleUtilsIT {
 
 	@Test
 	public void testCreateKieBaseFromString() throws IOException{
-		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, ErrorHandlerFactory.getErrorHandler());
+		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl);
 		assertNotNull("Expected non null KieBase", kbase);
 		KieSession ksession = RuleUtils.createSession(kbase);
 		assertNotNull("Expected non null KieSession", ksession);
@@ -114,7 +80,7 @@ public class RuleUtilsIT {
 	@Test
 	public void testMultipleSession() throws IOException{
 		//verify that multiple sessions can be created with different IDs
-		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, ErrorHandlerFactory.getErrorHandler());
+		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl);
 		KieSession s1 = RuleUtils.createSession(kbase);
 		KieSession s2 = RuleUtils.createSession(kbase);
 		assertNotEquals("Unexpected - got identical ids for two sessions", s1.getId(), s2.getId());
@@ -123,7 +89,7 @@ public class RuleUtilsIT {
 	}
     @Test
     public void testBinarySerializationOfKieBase()  throws IOException, ClassNotFoundException{
-		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl, ErrorHandlerFactory.getErrorHandler());
+		KieBase kbase = RuleUtils.createKieBaseFromDrlString(testDrl);
     	byte[] blob = RuleUtils.convertKieBaseToBytes(kbase);
     	assertNotNull("ERROR - KieBase blob is null", blob);
     	byte[] blobCopy = Arrays.copyOf(blob, blob.length);
