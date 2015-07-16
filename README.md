@@ -1,47 +1,62 @@
-development environment:
+# GTAS
 
-1. Java 8 
-http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+## Environment
 
-2. Eclipse 
-http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/luna/R/eclipse-jee-luna-R-win32-x86_64.zip
+* Java 8 
+* Maven 3, npm, bower
+* Apache Tomcat (7.0.62)
+* MariaDB (10.0.19 Stable)
+  * https://downloads.mariadb.org/
+  * https://tomcat.apache.org/download-70.cgi
+* Drools (6.2)
+  * http://www.drools.org/download/download.html
+  * http://download.jboss.org/drools/release/6.2.0.Final/org.drools.updatesite/
 
-3. Drools (6.2.0) plugin for Eclipse
-http://download.jboss.org/drools/release/6.2.0.Final/org.drools.updatesite/
+## Build and Deployment
 
-4. MariaDB (10.0.19 Stable)
-https://downloads.mariadb.org/
+1. Standard build with unit tests:
 
-5. Apache Maven (3.3.3)
-https://maven.apache.org/download.cgi?Preferred=ftp://mirror.reverse.net/pub/apache/
+> mvn clean install
 
-6. Apache Tomcat (7.0.62)
-https://tomcat.apache.org/download-70.cgi
+2. Build without unit tests
 
-7. 7-Zip for 64-bit Windows x64
-http://www.7-zip.org/download.html
+> mvn clean install -Dskip.unit.tests=true
 
-8. Drools (6.2)
-http://www.drools.org/download/download.html
+3. Build with integration tests (and unit tests)
 
-9. angular js (1.3.15)   
-https://angularjs.org/
+> mvn clean install -Dskip.integration.tests=false
 
-10. jQuery (2.1.4)
-https://jquery.com/download/
-NOTE:does not support Internet Explorer 6, 7, or 8
+4. Deploy to tomcat
 
-11. Spring Framework (4.1.6)
+> cp gtas-webapp/gtas.war [tomcat home]/webapps
 
+5. Access site at http://localhost:8080/gtas
 
+## Deployment to AWS
 
+1. download hibernate.aws.properties from our google drive folder under the 'config' directory.
 
+2. replace your local hibernate.properties with this one.
 
+3. do a full build
 
+4. move the war over to your local aws account, e.g., if you're using putty on windows
 
+> pscp gtas.war mcopenhafer@96.127.68.183:.
 
+5. login to your aws appserver account and move the war to /tmp
 
+> mv gtas.war /tmp
 
+6. deploy to tomcat
 
+> cd /data/atsg/tomcat/
+> sudo -u tomcat sh bin/catalina.sh stop
+> mv /tmp/gtas.war webapps
+> sudo -u tomcat sh bin/catalina.sh start
 
+7. check the logs for errors
 
+> tail -f logs/catalina.out
+
+## Importing Test Data
