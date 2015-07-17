@@ -54,7 +54,7 @@ public class TargetingServiceTest {
 		when(mockRuleService.createRuleServiceRequest(message)).thenReturn(null);
 		targetingService.analyzeApisMessage(message);
 		verify(mockRuleService).createRuleServiceRequest(message);
-		verify(mockRuleService).invokeRuleset(null);
+		verify(mockRuleService).invokeRuleEngine(null);
 	}
 
 }

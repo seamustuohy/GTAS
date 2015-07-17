@@ -1,5 +1,6 @@
 package gov.gtas.repository.udr;
 
+import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.YesNoEnum;
 
@@ -18,4 +19,7 @@ public interface UdrRuleRepository extends CrudRepository<UdrRule, Long>, JpaSpe
     
 	@Query("SELECT udr FROM UdrRule udr WHERE udr.metaData.title = :title and udr.author.userId = :authorUserId")
 	public UdrRule getUdrRuleByTitleAndAuthor(@Param("title") String title, @Param("authorUserId") String authorUserId);
+
+	@Query("SELECT kb FROM KnowledgeBase kb WHERE kb.kbName = :name")
+	public KnowledgeBase getKnowledgeBaseByName(@Param("name") String name);
 }

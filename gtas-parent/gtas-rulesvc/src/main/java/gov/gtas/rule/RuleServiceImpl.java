@@ -2,65 +2,135 @@ package gov.gtas.rule;
 
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.bo.RuleServiceRequestType;
 import gov.gtas.constant.RuleServiceConstants;
+import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
 import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Flight;
+import gov.gtas.services.udr.RulePersistenceService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventListener;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.kie.api.KieBase;
 import org.kie.api.KieServices;
-import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.kie.api.event.rule.AgendaEventListener;
-import org.kie.api.event.rule.DebugAgendaEventListener;
-import org.kie.api.event.rule.DebugRuleRuntimeEventListener;
-import org.kie.api.event.rule.ObjectDeletedEvent;
-import org.kie.api.event.rule.ObjectInsertedEvent;
-import org.kie.api.event.rule.ObjectUpdatedEvent;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 /**
  * Implementation of the Rule Engine Service.
+ * 
  * @author GTAS3 (AB)
  *
  */
 @Service
 public class RuleServiceImpl implements RuleService {
-	
+	@Autowired
+	private RulePersistenceService rulePersistenceService;
+
 	@PostConstruct
-	public void initializeErrorHandling(){
+	public void initializeErrorHandling() {
 		ErrorHandler errorHandler = new RuleServiceErrorHandler();
 		ErrorHandlerFactory.registerErrorHandler(errorHandler);
 	}
-	/* (non-Javadoc)
-	 * @see gov.gtas.rule.RuleService#invokeRuleset(java.lang.String, gov.gtas.bo.RuleServiceRequest)
-	 */	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.gtas.rule.RuleService#invokeRuleset(java.lang.String,
+	 * gov.gtas.bo.RuleServiceRequest)
+	 */
 	@Override
-	public RuleServiceResult invokeRuleset(String ruleSetName,
+	public RuleServiceResult invokeAdhocRules(String rulesFilePath,
 			RuleServiceRequest req) {
 		if (null == req) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
-					RuleServiceConstants.NULL_ARGUMENT_ERROR_CODE,
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					"RuleServiceRequest", "RuleServiceImpl.invokeRuleset()");
 		}
+		KieBase kbase = null;
+		try {
+			kbase = RuleUtils.createKieBaseFromClasspathFile(rulesFilePath);
+		} catch (IOException ioe) {
+			throw ErrorHandlerFactory.getErrorHandler().createException(
+					RuleServiceConstants.KB_CREATION_IO_ERROR_CODE, ioe,
+					"RuleServiceImpl.invokeAdhocRules() with file:"+rulesFilePath);
+		}
+		return createSessionAndExecuteRules(kbase, req);
+		// /*
+		// * object where execution statistics are collected.
+		// */
+		// final RuleExecutionStatistics stats = new RuleExecutionStatistics();
+		//
+		// KieSession ksession =
+		// initSessionFromClasspath(RuleServiceConstants.KNOWLEDGE_SESSION_NAME,
+		// RuleEngineHelper.createEventListeners(stats));
+		//
+		// Collection<?> requestObjects = req.getRequestObjects();
+		// for (Object x : requestObjects) {
+		// ksession.insert(x);
+		// }
+		//
+		// // and fire the rules
+		// ksession.fireAllRules();
+		//
+		// // extract the result
+		// final List<?> resList = (List<?>)
+		// ksession.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
+		//
+		// RuleServiceResult res = new RuleServiceResult() {
+		// public List<?> getResultList() {
+		// return resList;
+		// }
+		//
+		// public RuleExecutionStatistics getExecutionStatistics() {
+		// return stats;
+		// }
+		// };
+		//
+		// // Remove comment if using logging
+		// // logger.close();
+		//
+		// // and then dispose the session
+		// ksession.dispose();
+		//
+		// return res;
+	}
+
+	/**
+	 * Creates a session from a KieBase, loads the request objects and fires all
+	 * rules.
+	 * 
+	 * @param kbase
+	 *            the KIE knowledge base containing the rules.
+	 * @param req
+	 *            the request object container.
+	 * @return the rule execution result.
+	 */
+	private RuleServiceResult createSessionAndExecuteRules(KieBase kbase,
+			RuleServiceRequest req) {
+		KieSession ksession = kbase.newKieSession();
+		ksession.setGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME,
+				new ArrayList<Object>());
+
 		/*
 		 * object where execution statistics are collected.
 		 */
 		final RuleExecutionStatistics stats = new RuleExecutionStatistics();
 
-		KieSession ksession = initSessionFromClasspath(RuleServiceConstants.KNOWLEDGE_SESSION_NAME,
-				createEventListeners(stats));
+		List<EventListener> listeners = RuleEngineHelper
+				.createEventListeners(stats);
+		RuleEngineHelper.addEventListenersToKieSEssion(ksession, listeners);
 
 		Collection<?> requestObjects = req.getRequestObjects();
 		for (Object x : requestObjects) {
@@ -71,7 +141,8 @@ public class RuleServiceImpl implements RuleService {
 		ksession.fireAllRules();
 
 		// extract the result
-		final List<?> resList = (List<?>) ksession.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
+		final List<?> resList = (List<?>) ksession
+				.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
 
 		RuleServiceResult res = new RuleServiceResult() {
 			public List<?> getResultList() {
@@ -92,134 +163,57 @@ public class RuleServiceImpl implements RuleService {
 		return res;
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.rule.RuleService#invokeRuleset(gov.gtas.bo.RuleServiceRequest)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.rule.RuleService#invokeRuleset(gov.gtas.bo.RuleServiceRequest)
 	 */
 	@Override
-	public RuleServiceResult invokeRuleset(RuleServiceRequest req) {
-		return invokeRuleset(RuleServiceConstants.DEFAULT_RULESET_NAME, req);
+	public RuleServiceResult invokeRuleEngine(RuleServiceRequest req) {
+		return invokeAdhocRules(RuleServiceConstants.DEFAULT_RULESET_NAME, req);
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.rule.RuleService#createRuleServiceRequest(gov.gtas.model.Message)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.rule.RuleService#createRuleServiceRequest(gov.gtas.model.Message
+	 * )
 	 */
 	@Override
 	public RuleServiceRequest createRuleServiceRequest(
 			final gov.gtas.model.Message requestMessage) {
 		RuleServiceRequest ret = null;
 		if (requestMessage instanceof ApisMessage) {
-			ret = createApisRequest((ApisMessage) requestMessage);
+			ret = RuleEngineHelper
+					.createApisRequest((ApisMessage) requestMessage);
 		} else {
 			// arbitrary Message object
-			ret = createRequest(requestMessage);
+			ret = RuleEngineHelper.createRequest(requestMessage);
 		}
 		return ret;
 	}
 
-
-	/**
-	 * Creates a request from a API message.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param req
-	 *            the API message.
-	 * @return RuleServiceRequest object.
+	 * @see
+	 * gov.gtas.rule.RuleService#invokeAdhocRulesFRomString(java.lang.String,
+	 * gov.gtas.bo.RuleServiceRequest)
 	 */
-	private RuleServiceRequest createApisRequest(final ApisMessage req) {
-		final List<Flight> requestList = new ArrayList<Flight>(req.getFlights());
-		return new RuleServiceRequest() {
-			public List<?> getRequestObjects() {
-				return requestList;
-			}
-
-			public RuleServiceRequestType getRequestType() {
-				return RuleServiceRequestType.APIS_MESSAGE;
-			}
-
-		};
-	}
-
-	/**
-	 * Creates a request from an arbitrary object.
-	 * 
-	 * @param req
-	 *            the input object.
-	 * @return RuleServiceRequest object.
-	 */
-	private RuleServiceRequest createRequest(
-			final gov.gtas.model.Message req) {
-		final List<gov.gtas.model.Message> requestList = new ArrayList<gov.gtas.model.Message>();
-		requestList.add(req);
-		return new RuleServiceRequest() {
-			public List<?> getRequestObjects() {
-				return requestList;
-			}
-
-			public RuleServiceRequestType getRequestType() {
-				return RuleServiceRequestType.ANY_MESSAGE;
-			}
-
-		};
-	}
-
-	/**
-	 * Creates a list of KieSession event listeners.
-	 * 
-	 * @return list of event listeners.
-	 */
-	private List<EventListener> createEventListeners(
-			final RuleExecutionStatistics stats) {
-		List<EventListener> eventListenerList = new LinkedList<EventListener>();
-
-		eventListenerList.add(new DebugAgendaEventListener() {
-
-			@Override
-			public void afterMatchFired(AfterMatchFiredEvent event) {
-				stats.incrementTotalRulesFired();
-				stats.addRuleFired(event.getMatch().getRule().getName());
-				super.afterMatchFired(event);
-			}
-
-		});
-		eventListenerList.add(new DebugRuleRuntimeEventListener() {
-
-			@Override
-			public void objectUpdated(ObjectUpdatedEvent event) {
-				stats.incrementTotalObjectsModified();
-				stats.addModifiedObject(event.getObject());
-				super.objectUpdated(event);
-			}
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.kie.api.event.rule.DebugRuleRuntimeEventListener#objectDeleted
-			 * (org.kie.api.event.rule.ObjectDeletedEvent)
-			 */
-			@Override
-			public void objectDeleted(ObjectDeletedEvent event) {
-				stats.incrementTotalObjectsModified();
-				stats.addDeletedObject(event.getOldObject());
-				super.objectDeleted(event);
-			}
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.kie.api.event.rule.DebugRuleRuntimeEventListener#objectInserted
-			 * (org.kie.api.event.rule.ObjectInsertedEvent)
-			 */
-			@Override
-			public void objectInserted(ObjectInsertedEvent event) {
-				stats.incrementTotalObjectsModified();
-				stats.addInsertedObject(event.getObject());
-				super.objectInserted(event);
-			}
-
-		});
-
-		return eventListenerList;
+	@Override
+	public RuleServiceResult invokeAdhocRulesFRomString(String rules,
+			RuleServiceRequest req) {
+		KieBase kbase = null;
+		try {
+			kbase = RuleUtils.createKieBaseFromDrlString(rules);
+		} catch (IOException ioe) {
+			throw ErrorHandlerFactory.getErrorHandler().createException(
+					RuleServiceConstants.KB_CREATION_IO_ERROR_CODE, ioe,
+					"RuleServiceImpl.invokeAdhocRulesFRomString()");
+		}
+		return createSessionAndExecuteRules(kbase, req);
 	}
 
 	/**
@@ -248,7 +242,8 @@ public class RuleServiceImpl implements RuleService {
 		// Once the session is created, the application can interact with it
 		// In this case it is setting a global as defined in the
 		// gov/gtas/rule/gtas.drl file
-		ksession.setGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME, new ArrayList<Object>());
+		ksession.setGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME,
+				new ArrayList<Object>());
 
 		// The application can also setup listeners
 		if (eventListenerList != null) {

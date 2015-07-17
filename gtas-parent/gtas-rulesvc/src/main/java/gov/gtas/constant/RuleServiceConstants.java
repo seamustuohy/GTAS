@@ -8,7 +8,7 @@ package gov.gtas.constant;
  *
  */
 public class RuleServiceConstants {
-	public static final String DEFAULT_RULESET_NAME = "gtas.drl";
+	public static final String DEFAULT_RULESET_NAME = "gov/gtas/rule/gts.drl";
 	/*
 	 * All generated rules depend on this global object for returning results.
 	 * When a knowledge session is created the global object should be created and associated with
@@ -30,11 +30,10 @@ public class RuleServiceConstants {
 	// ERROR CODES
 	// //////////////////////////////////////////////////////////////////////////////////////
 	/*
-	 * This is the error code for an internal system error indicating invalid
-	 * program logic causing the rule engine being called with a null
-	 * argument.
+	 * This is the error code for an internal system error indicating IO error
+	 * during the creation of the Knowledge Base.
 	 */
-	public static final String NULL_ARGUMENT_ERROR_CODE = "NULL_ARGUMENT";
+	public static final String KB_CREATION_IO_ERROR_CODE = "KB_CREATION_IO_ERROR";
 	/*
 	 * This is the error code for an internal system error indicating that the
 	 * UDR generated rule could not be compiled.
@@ -47,11 +46,10 @@ public class RuleServiceConstants {
 	// ERROR Messages
 	// //////////////////////////////////////////////////////////////////////////////////////
 	/*
-	 * This is the error message for an internal system error indicating invalid
-	 * program logic causing the rule engine being called with a null
-	 * argument.
+	 * This is the error message for an internal system error indicating IO error
+	 * during the creation of the Knowledge Base.
 	 */
-	public static final String NULL_ARGUMENT_ERROR_MESSAGE = "The parameter '%s' passed to the method '%s' should not be null.";
+	public static final String KB_CREATION_IO_ERROR_MESSAGE = "IO error while creating KIE Knowledge Base (details:%s).";
 	/*
 	 * This is the error message for an internal system error indicating that the
 	 * UDR generated rule could not be compiled.

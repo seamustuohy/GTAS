@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -23,7 +24,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * KnowledgeBase
  */
 @Entity
-@Table(name = "knowledge_base")
+@Table(name = "knowledge_base",
+       uniqueConstraints= {@UniqueConstraint(columnNames={"KB_NAME"})})
 public class KnowledgeBase extends BaseEntity {
 
 	/**
@@ -35,9 +37,16 @@ public class KnowledgeBase extends BaseEntity {
 	@Column(name = "VERSION")
 	private long version;
 	
+	@Column(name = "KB_NAME", nullable=false, length = 20)
+	private String kbName;
+	
 	@Lob @Basic(fetch=FetchType.EAGER)
 	@Column(name="KB_BLOB", columnDefinition="BLOB NOT NULL")
 	private byte[] kbBlob;
+	
+	@Lob @Basic(fetch=FetchType.EAGER)
+	@Column(name="RL_BLOB", columnDefinition="BLOB NOT NULL")
+	private byte[] rulesBlob;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATION_DT", nullable = false, length = 19)
@@ -46,7 +55,11 @@ public class KnowledgeBase extends BaseEntity {
 	@OneToMany(mappedBy="knowledgeBase", fetch=FetchType.LAZY)
 	private List<Rule> rulesInKB;
 	
-	public KnowledgeBase() {
+	public KnowledgeBase(){
+		
+	}
+	public KnowledgeBase(String kbName) {
+		this.kbName = kbName;
 	}
 
 	public KnowledgeBase(long id, Date creationDt) {
@@ -84,6 +97,32 @@ public class KnowledgeBase extends BaseEntity {
 		this.creationDt = creationDt;
 	}
 
+	/**
+	 * @return the rulesBlob
+	 */
+	public byte[] getRulesBlob() {
+		return rulesBlob;
+	}
+
+	/**
+	 * @param rulesBlob the rulesBlob to set
+	 */
+	public void setRulesBlob(byte[] rulesBlob) {
+		this.rulesBlob = rulesBlob;
+	}
+
+	/**
+	 * @return the kbName
+	 */
+	public String getKbName() {
+		return kbName;
+	}
+	/**
+	 * @param kbName the kbName to set
+	 */
+	public void setKbName(String kbName) {
+		this.kbName = kbName;
+	}
 	@Override
 	public int hashCode() {
 		HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();

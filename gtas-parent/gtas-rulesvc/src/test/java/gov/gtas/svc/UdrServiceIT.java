@@ -135,6 +135,7 @@ public class UdrServiceIT {
 	@Test
 	@Transactional
 	public void testFetchUdrById() {
+		try{
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
@@ -145,6 +146,9 @@ public class UdrServiceIT {
 		UdrSpecification specFetched = udrService.fetchUdr(id);
 		assertNotNull(specFetched);
 		assertEquals(spec.getSummary().getTitle(), specFetched.getSummary().getTitle());
+		} catch (Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	@Test
 	@Transactional

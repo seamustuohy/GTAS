@@ -41,10 +41,6 @@ public class UdrServiceImpl implements UdrService {
 	private static Logger logger = LoggerFactory
 			.getLogger(UdrServiceImpl.class);
 
-//	/* The spring context supplied error handler component. */
-//	@Autowired
-//	private ErrorHandler errorHandler;
-
 	@Autowired
 	private RulePersistenceService rulePersistenceService;
 
@@ -52,10 +48,11 @@ public class UdrServiceImpl implements UdrService {
 	UserService userService;
 
 	@PostConstruct
-	private void initializeErrorHandler(){
+	private void initializeErrorHandler() {
 		ErrorHandler errorHandler = new UdrServiceErrorHandler();
 		ErrorHandlerFactory.registerErrorHandler(errorHandler);
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -116,9 +113,6 @@ public class UdrServiceImpl implements UdrService {
 				.findByAuthor(userId);
 		if (fetchedRuleList == null || fetchedRuleList.isEmpty()) {
 			return new LinkedList<JsonUdrListElement>();
-//			throw ErrorHandlerFactory.getErrorHandler().createException(
-//					CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE,
-//					"UDR List", "userId=" + userId);
 		}
 		List<JsonUdrListElement> ret = new LinkedList<JsonUdrListElement>();
 		try {
@@ -153,8 +147,8 @@ public class UdrServiceImpl implements UdrService {
 		MetaData meta = udrToCreate.getSummary();
 		if (meta == null) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
-					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
-					"summary", "Create UDR");
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "summary",
+					"Create UDR");
 		}
 		// get the author object
 		String authorUserId = meta.getAuthor();
@@ -171,9 +165,9 @@ public class UdrServiceImpl implements UdrService {
 
 		UdrRule savedRule = rulePersistenceService.create(ruleToSave, userId);
 
-		processRuleGeneration();// TODO placeholder
+		UdrServiceHelper.processRuleGeneration(rulePersistenceService);
 
-		return createResponse(true, UdrConstants.UDR_CREATE_OP_NAME, savedRule);
+		return UdrServiceHelper.createResponse(true, UdrConstants.UDR_CREATE_OP_NAME, savedRule);
 	}
 
 	private User fetchRuleAuthor(final String userId, final String authorUserId) {
@@ -257,7 +251,7 @@ public class UdrServiceImpl implements UdrService {
 			updatedRule = rulePersistenceService.update(ruleToUpdate,
 					newEngineRules, userId);
 
-			processRuleGeneration();// TODO placeholder
+			UdrServiceHelper.processRuleGeneration(rulePersistenceService);
 
 		} else {
 			// simple update - meta data only
@@ -265,7 +259,7 @@ public class UdrServiceImpl implements UdrService {
 					userId);
 		}
 
-		return createResponse(true, UdrConstants.UDR_UPDATE_OP_NAME,
+		return UdrServiceHelper.createResponse(true, UdrConstants.UDR_UPDATE_OP_NAME,
 				updatedRule);
 	}
 
@@ -278,56 +272,12 @@ public class UdrServiceImpl implements UdrService {
 	public JsonServiceResponse deleteUdr(String userId, Long id) {
 		UdrRule deletedRule = rulePersistenceService.delete(id, userId);
 		if (deletedRule != null) {
-			return createResponse(true, UdrConstants.UDR_DELETE_OP_NAME,
+			return UdrServiceHelper.createResponse(true, UdrConstants.UDR_DELETE_OP_NAME,
 					deletedRule);
 		} else {
-			return createResponse(false, UdrConstants.UDR_DELETE_OP_NAME,
+			return UdrServiceHelper.createResponse(false, UdrConstants.UDR_DELETE_OP_NAME,
 					deletedRule);
 		}
 	}
 
-	private JsonServiceResponse createResponse(boolean success, String op,
-			UdrRule rule) {
-		JsonServiceResponse resp = null;
-		if (success) {
-			resp = new JsonServiceResponse(
-					JsonServiceResponse.SUCCESS_RESPONSE,
-					"UDR Service",
-					op,
-					String.format(
-							op
-									+ " on UDR Rule with title='%s' and ID='%s' was successful.",
-							rule.getTitle(), rule.getId()));
-			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					UdrConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(rule
-							.getId())));
-			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					UdrConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(rule
-							.getTitle())));
-		} else {
-			if (rule != null) {
-				resp = new JsonServiceResponse(
-						JsonServiceResponse.FAILURE_RESPONSE,
-						"UDR Service",
-						op,
-						String.format(
-								op
-										+ " on UDR Rule with title='%s' and ID='%s' failed.",
-								rule.getTitle(), rule.getId()));
-			} else {
-				resp = new JsonServiceResponse(
-						JsonServiceResponse.FAILURE_RESPONSE, "UDR Service",
-						op, op + " failed.");
-
-			}
-
-		}
-		return resp;
-
-	}
-
-	// placeholder
-	private void processRuleGeneration() {
-
-	}
 }

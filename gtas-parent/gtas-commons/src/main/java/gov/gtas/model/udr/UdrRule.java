@@ -55,7 +55,7 @@ public class UdrRule extends BaseEntity {
     @JoinColumn(name="AUTHOR", referencedColumnName="user_id", nullable = false)     
     private User author;
 	
-	@Column(name = "TITLE", nullable=false, length = 64)
+	@Column(name = "TITLE", nullable=false, length = 20)
 	private String title;
 
 	@Column(name = "EDIT_DT", nullable = false)

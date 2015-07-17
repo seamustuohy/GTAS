@@ -30,7 +30,7 @@ public class RuleServiceDataGenUtils {
 
 	public static final int TEST_ROLE1_ID = 1;
 	public static final String TEST_ROLE1_DESCRIPTION = "admin";
-	public static final String TEST_USER1_ID = "jpjones";
+	public static final String TEST_USER1_ID = "abandopadhay";
 
 	public static final int TEST_ROLE2_ID = 99;
 	public static final String TEST_ROLE2_DESCRIPTION = "readonly";

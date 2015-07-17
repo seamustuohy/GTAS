@@ -1,6 +1,6 @@
 package gov.gtas.svc;
 
-import gov.gtas.constant.RuleServiceConstants;
+import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.rule.RuleService;
@@ -36,11 +36,11 @@ public class TargetingServiceImpl implements TargetingService {
 	public RuleServiceResult analyzeApisMessage(ApisMessage message) {
 		if (null == message) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
-					RuleServiceConstants.NULL_ARGUMENT_ERROR_CODE,
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					"ApisMessage", "TargetingServiceImpl.analyzeApisMessage()");
 		}
 
-		RuleServiceResult res = ruleService.invokeRuleset(ruleService
+		RuleServiceResult res = ruleService.invokeRuleEngine(ruleService
 				.createRuleServiceRequest(message));
 		return res;
 	}

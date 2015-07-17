@@ -4,9 +4,11 @@ import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.User;
+import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleMeta;
+import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.repository.udr.UdrRuleRepository;
@@ -207,5 +209,25 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	public List<UdrRule> findByAuthor(String authorUserId) {
 		return udrRuleRepository.getUdrRuleByAuthor(authorUserId);
 	}
-
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.udr.RulePersistenceService#findDefaultKnowledgeBase()
+	 */
+	@Override
+	public KnowledgeBase findUdrKnowledgeBase() {
+		return udrRuleRepository.getKnowledgeBaseByName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+	}
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.udr.RulePersistenceService#saveKnowledgeBase(gov.gtas.model.udr.KnowledgeBase)
+	 */
+	@Override
+	public KnowledgeBase saveKnowledgeBase(KnowledgeBase kb) {
+		kb.setCreationDt(new Date());
+		if(kb.getId() == null){
+		  entityManager.persist(kb);
+		} else {
+			entityManager.merge(kb);
+		}
+		return kb;
+	}
+	
 }

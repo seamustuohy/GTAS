@@ -5,6 +5,10 @@ package gov.gtas.model.udr;
  *
  */
 public class UdrConstants {
+	public static final String UDR_KNOWLEDGE_BASE_NAME = "UDR Knowledge Base";
+	
+	public static final String UDR_EXTERNAL_CHARACTER_ENCODING = "UTF-8";
+	
 	public static final String UDR_DATE_FORMAT = "yyyy-MM-dd";  
 	public static final String RULE_ENGINE_DATE_FORMAT = "dd-MMM-yyyy";  
 	
