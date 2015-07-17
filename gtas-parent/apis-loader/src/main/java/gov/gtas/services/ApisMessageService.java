@@ -1,26 +1,5 @@
 package gov.gtas.services;
 
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Gender;
-import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Passport;
-import gov.gtas.model.Pax;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
-import gov.gtas.model.lookup.Country;
-import gov.gtas.parsers.paxlst.PaxlstParser;
-import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
-import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
-import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
-import gov.gtas.parsers.paxlst.vo.DocumentVo;
-import gov.gtas.parsers.paxlst.vo.FlightVo;
-import gov.gtas.parsers.paxlst.vo.PaxVo;
-import gov.gtas.parsers.util.FileUtils;
-import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.repository.ApisMessageRepository;
-
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.Date;
@@ -34,6 +13,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Gender;
+import gov.gtas.model.MessageStatus;
+import gov.gtas.model.Passport;
+import gov.gtas.model.Pax;
+import gov.gtas.model.ReportingParty;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.lookup.Airport;
+import gov.gtas.model.lookup.Carrier;
+import gov.gtas.model.lookup.Country;
+import gov.gtas.parsers.paxlst.PaxlstParser;
+import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
+import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
+import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
+import gov.gtas.parsers.paxlst.vo.DocumentVo;
+import gov.gtas.parsers.paxlst.vo.FlightVo;
+import gov.gtas.parsers.paxlst.vo.PaxVo;
+import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
+import gov.gtas.parsers.util.FileUtils;
+import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.repository.ApisMessageRepository;
 
 @Service
 public class ApisMessageService {
@@ -104,6 +106,12 @@ public class ApisMessageService {
     
     public void loadApisMessage(ApisMessageVo m) {
         try {
+            for (ReportingPartyVo rvo : m.getReportingParties()) {
+                ReportingParty rp = convertReportingPartyVo(rvo);
+                rp.setApisMessage(this.apisMessage);
+                this.apisMessage.getReportingParties().add(rp);
+            }
+            
             Set<Traveler> pax = new HashSet<>();        
             for (PaxVo pvo : m.getPassengers()) {
                 Traveler p = convertPaxVo(pvo);
@@ -147,6 +155,12 @@ public class ApisMessageService {
         }
 
         return p;
+    }
+    
+    private ReportingParty convertReportingPartyVo(ReportingPartyVo vo) {
+        ReportingParty rp = new ReportingParty();
+        BeanUtils.copyProperties(vo, rp);
+        return rp;
     }
     
     private Flight convertFlightVo(FlightVo vo) {
