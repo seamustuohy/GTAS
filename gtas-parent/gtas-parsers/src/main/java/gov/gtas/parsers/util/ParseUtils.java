@@ -11,9 +11,16 @@ import java.util.Locale;
 
 public class ParseUtils {
     /**
-     * https://en.wikipedia.org/wiki/Control_characters
+     * Some telecommunications transmission protocols require various
+     * communication type headers and trailers to facilitate addressing,
+     * routing, security, and other purposes.
+     * 
+     * These headers and trailers are typically delimited by special control
+     * characters STX and ETX. This method removes the header and trailer from
+     * the message. See https://en.wikipedia.org/wiki/Control_characters
+     * 
      * @param text
-     * @return
+     * @return message text without header or footer
      */
     public static String stripStxEtxHeaderAndFooter(String text) {
         String rv = text;

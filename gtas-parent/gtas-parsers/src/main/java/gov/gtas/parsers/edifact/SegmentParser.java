@@ -1,7 +1,12 @@
 package gov.gtas.parsers.edifact;
 
+import org.apache.commons.lang3.StringUtils;
+
 import gov.gtas.parsers.util.ParseUtils;
 
+/**
+ * Parses a segment text into composites and elements.
+ */
 public class SegmentParser {
     private UNA una;
     
@@ -13,7 +18,7 @@ public class SegmentParser {
     }
     
     public Composite[] parseSegment(String segmentText) {
-        if (segmentText == null) return null;
+        if (StringUtils.isBlank(segmentText)) return null;
         
         String[] stringComposites = ParseUtils.splitWithEscapeChar(
                 segmentText, 

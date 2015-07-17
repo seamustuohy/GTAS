@@ -9,6 +9,12 @@ import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * A transmitted message to DHS may include only one instance of a PAXLST
+ * message. Batching of multiple PAXLST messages into a single envelope (UNB-
+ * UNZ) or batching of multiple envelopes containing PAXLST messages into a
+ * single message transmission will result in a rejection of the message(s).
+ */
 public abstract class PaxlstParser {
     private String message;
     private String segmentPackageName;
@@ -22,7 +28,6 @@ public abstract class PaxlstParser {
     }
     
     protected GROUP currentGroup;
-
     protected ApisMessageVo parsedMessage;
     protected List<Segment> segments;
     
@@ -34,9 +39,9 @@ public abstract class PaxlstParser {
     protected abstract void parseSegments();
     
     public ApisMessageVo parse() throws ParseException {
-        this.segments = new LinkedList<>();
-        this.parsedMessage = new ApisMessageVo();
         this.currentGroup = GROUP.NONE;    
+        this.parsedMessage = new ApisMessageVo();
+        this.segments = new LinkedList<>();
         processMessageAndGetSegments();
         parseSegments();
         return this.parsedMessage;
