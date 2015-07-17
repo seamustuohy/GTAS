@@ -1,15 +1,23 @@
 package gov.gtas.querybuilder.service;
 
-import gov.gtas.model.BaseEntity;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.constants.Constants;
+import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.querybuilder.enums.OperatorEnum;
+import gov.gtas.querybuilder.enums.TypeEnum;
+import gov.gtas.querybuilder.exceptions.InvalidQueryObjectException;
+import gov.gtas.querybuilder.exceptions.InvalidQueryRequestException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.exceptions.QueryRepositoryException;
 import gov.gtas.querybuilder.model.Query;
+import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.repository.QueryBuilderRepository;
-import gov.gtas.querybuilder.util.Constants;
-import gov.gtas.querybuilder.util.EntityEnum;
-import gov.gtas.querybuilder.util.OperatorEnum;
+import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 
@@ -37,24 +49,28 @@ public class QueryBuilderService {
 	 * @param queryObject
 	 * @param queryType
 	 * @return
+	 * @throws InvalidQueryObjectException 
 	 */
-	public List<? extends BaseEntity> runQuery(QueryObject queryObject, EntityEnum queryType) {
-		String query = "";
-						
-		query = getQuery(queryObject, queryType);
+	public List<Flight> runFlightQuery(QueryObject queryObject, EntityEnum queryType) throws InvalidQueryObjectException {
+			
+		Errors errors = QueryValidationUtils.validateQueryObject(queryObject, Constants.QUERYOBJECT_OBJECTNAME);
 		
-		if(query != null && !query.isEmpty()) {
-			if(queryType == EntityEnum.FLIGHT) {
-				
-				return (queryRepository.getFlightsByDynamicQuery(query));
-			}
-			else if(queryType == EntityEnum.PAX) {
-				
-				return (queryRepository.getPassengersByDynamicQuery(query));
-			}
+		if(errors != null && errors.hasErrors()) {
+			throw new InvalidQueryObjectException(QueryValidationUtils.getErrorString(errors), queryObject);
+		}
+
+		return queryRepository.getFlightsByDynamicQuery(getQuery(queryObject, queryType));
+	}
+	
+	public List<Traveler> runPassengerQuery(QueryObject queryObject, EntityEnum queryType) throws InvalidQueryObjectException {
+		
+		Errors errors = QueryValidationUtils.validateQueryObject(queryObject, Constants.QUERYOBJECT_OBJECTNAME);
+		
+		if(errors != null && errors.hasErrors()) {
+			throw new InvalidQueryObjectException(QueryValidationUtils.getErrorString(errors), queryObject);
 		}
 		
-		return null;
+		return queryRepository.getPassengersByDynamicQuery(getQuery(queryObject, queryType));
 	}
 	
 	/**
@@ -62,10 +78,49 @@ public class QueryBuilderService {
 	 * @param query
 	 * @return
 	 * @throws QueryAlreadyExistsException
+	 * @throws JsonProcessingException 
+	 * @throws InvalidQueryObjectException 
 	 */
-	public Query saveQuery(Query query) throws QueryAlreadyExistsException {
+	public Query saveQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, JsonProcessingException, InvalidQueryRequestException {
+		Query result = null;
+		Errors errors = QueryValidationUtils.validateQueryRequest(queryRequest, Constants.QUERYREQUEST_OBJECTNAME);
 		
-		return queryRepository.saveQuery(query);
+		if(errors != null && errors.hasErrors()) {
+			throw new InvalidQueryRequestException(QueryValidationUtils.getErrorString(errors), queryRequest);
+		}
+		
+		try {
+			result = queryRepository.saveQuery(createQuery(queryRequest));
+			
+		} catch(QueryRepositoryException ex) {
+			throw new QueryAlreadyExistsException(Constants.QUERY_EXISTS_ERROR_MSG, queryRequest);
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 * @throws QueryAlreadyExistsException
+	 * @throws JsonProcessingException 
+	 * @throws InvalidQueryObjectException 
+	 */
+	public Query editQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, JsonProcessingException, InvalidQueryRequestException {
+		Query result = null;
+		Errors errors = QueryValidationUtils.validateQueryRequest(queryRequest, Constants.QUERYREQUEST_OBJECTNAME);
+		
+		if(errors != null && errors.hasErrors()) {
+			throw new InvalidQueryRequestException(QueryValidationUtils.getErrorString(errors), queryRequest);
+		}
+		
+		try {
+			result = queryRepository.editQuery(createQuery(queryRequest));
+		} catch(QueryRepositoryException ex) {
+			throw new QueryAlreadyExistsException(Constants.QUERY_EXISTS_ERROR_MSG, queryRequest);
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -90,17 +145,6 @@ public class QueryBuilderService {
 	
 	/**
 	 * 
-	 * @param query
-	 * @return
-	 * @throws QueryAlreadyExistsException
-	 */
-	public Query editQuery(Query query) throws QueryAlreadyExistsException {
-		
-		return queryRepository.editQuery(query);
-	}
-	
-	/**
-	 * 
 	 * @param userId
 	 * @param id
 	 */
@@ -109,6 +153,25 @@ public class QueryBuilderService {
 		queryRepository.deleteQuery(userId, id);
 	}
 		
+
+	private Query createQuery(QueryRequest req) throws JsonProcessingException {
+		Query query = new Query();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		if(req != null) {
+			User user = new User();
+			user.setUserId(req.getUserId());
+			
+			query.setId(req.getId());
+			query.setCreatedBy(user);
+			query.setTitle(req.getTitle());
+			query.setDescription(req.getDescription());
+			query.setQueryText(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(req.getQuery()));
+		}
+		
+		return query;
+	}
+	
 	/**
 	 * 
 	 * @param queryObject
@@ -198,13 +261,8 @@ public class QueryBuilderService {
 		if(queryEntity instanceof QueryObject) {
 			queryObject = (QueryObject) queryEntity;
 			condition = queryObject.getCondition();
-		}
-		else if(queryEntity instanceof QueryTerm) {
-			queryTerm = (QueryTerm) queryEntity;
-		}
-		
-		if(condition != null && !condition.isEmpty()) {
 			level.increment();
+			
 			List<QueryEntity> rules = queryObject.getRules();
 			
 			if(level.intValue() > 1) {
@@ -226,7 +284,9 @@ public class QueryBuilderService {
 				level.setValue(1);
 			}
 		}
-		else {
+		else if(queryEntity instanceof QueryTerm) {
+			queryTerm = (QueryTerm) queryEntity;
+			
 			String entity = queryTerm.getEntity();
 			String field = queryTerm.getField();
 			String operator = queryTerm.getOperator();
@@ -286,7 +346,9 @@ public class QueryBuilderService {
 						valueStr.append("'%" + value + "'");
 					}
 					else {
-						valueStr.append(type.equalsIgnoreCase("string") || type.equalsIgnoreCase("date") ? "'" + value + "'" : value);
+						valueStr.append(type.equalsIgnoreCase(TypeEnum.STRING.toString()) || 
+								type.equalsIgnoreCase(TypeEnum.DATE.toString()) || 
+								type.equalsIgnoreCase(TypeEnum.DATETIME.toString())? "'" + value + "'" : value);
 					}
 				}
 			}

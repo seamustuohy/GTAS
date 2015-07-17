@@ -3,7 +3,7 @@ package gov.gtas.controller.querybuilder;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
-import gov.gtas.web.querybuilder.model.QueryRequest;
+import gov.gtas.querybuilder.model.QueryRequest;
 
 import java.util.ArrayList;
 import java.util.List;

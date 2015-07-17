@@ -28,4 +28,7 @@ public final class Constants {
 	public static final String QUERY_EDITED_SUCCESS_MSG = "Query updated successfully";
 	public static final String QUERY_DELETED_SUCCESS_MSG = "Query deleted successfully";
 	public static final String QUERY_SERVICE_ERROR_MSG = "An error occurred while trying to process your request";
+	
+	public static final String QUERYOBJECT_OBJECTNAME = "queryObject";
+	public static final String QUERYREQUEST_OBJECTNAME = "queryRequest";
 }

@@ -1,29 +1,35 @@
 package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
-import gov.gtas.model.BaseEntity;
 import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
-import gov.gtas.model.User;
 import gov.gtas.model.Visa;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.parsers.paxlst.usedifact.PDT.PersonStatus;
+import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.querybuilder.enums.Status;
+import gov.gtas.querybuilder.exceptions.InvalidQueryObjectException;
+import gov.gtas.querybuilder.exceptions.InvalidQueryRequestException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.mappings.QueryBuilderMapping;
+import gov.gtas.querybuilder.mappings.QueryBuilderMappingFactory;
+import gov.gtas.querybuilder.model.IQueryResponse;
+import gov.gtas.querybuilder.model.IQueryResult;
 import gov.gtas.querybuilder.model.Query;
+import gov.gtas.querybuilder.model.QueryErrorResponse;
+import gov.gtas.querybuilder.model.QueryFlightsResult;
+import gov.gtas.querybuilder.model.QueryPassengersResult;
+import gov.gtas.querybuilder.model.QueryRequest;
+import gov.gtas.querybuilder.model.QueryResponse;
+import gov.gtas.querybuilder.model.QueryResult;
 import gov.gtas.querybuilder.service.QueryBuilderService;
-import gov.gtas.querybuilder.util.EntityEnum;
-import gov.gtas.web.querybuilder.model.IQueryBuilderModel;
-import gov.gtas.web.querybuilder.model.QueryBuilderFlightResult;
-import gov.gtas.web.querybuilder.model.QueryBuilderModelFactory;
-import gov.gtas.web.querybuilder.model.QueryBuilderPassengerResult;
-import gov.gtas.web.querybuilder.model.QueryRequest;
-import gov.gtas.web.querybuilder.model.QueryResponse;
-import gov.gtas.web.querybuilder.model.QueryResult;
-import gov.gtas.web.querybuilder.model.Status;
+import gov.gtas.querybuilder.validation.QueryObjectValidator;
+import gov.gtas.querybuilder.validation.QueryRequestValidator;
+import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -40,7 +46,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,72 +76,76 @@ public class QueryBuilderController {
 	@Autowired
 	QueryBuilderService queryService;
 
+	@InitBinder(Constants.QUERYOBJECT_OBJECTNAME)
+	protected void initQueryObjectBinder(WebDataBinder binder) {
+	    binder.setValidator(new QueryObjectValidator());
+	}
+	
+	@InitBinder(Constants.QUERYREQUEST_OBJECTNAME)
+	protected void initQueryRequestBinder(WebDataBinder binder) {
+	    binder.setValidator(new QueryRequestValidator());
+	}
+	
 	@RequestMapping(value = Constants.INIT, method = RequestMethod.GET)
-	public Map<String, IQueryBuilderModel> initQueryBuilder() {
+	public Map<String, QueryBuilderMapping> initQueryBuilder() {
 		
 		logger.debug("Getting query builder model");
-		return getQueryBuilderModel();
+		return getQueryBuilderMapping();
 	}
 	
 	/**
 	 * 
 	 * @param queryObject
 	 * @return
+	 * @throws InvalidQueryObjectException 
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.POST)
-	public List<QueryBuilderFlightResult> runQueryOnFlight(@Valid @RequestBody QueryObject queryObject) {
-		List<QueryBuilderFlightResult> qbFlights = new ArrayList<>();
+	public IQueryResponse runFlightQuery(@Valid @RequestBody QueryObject queryObject) throws InvalidQueryObjectException {
+		IQueryResponse response = new QueryResponse();
 		
 		if(queryObject != null) {
-			qbFlights = mapFlightToQueryFlightResult(queryService.runQuery(queryObject, EntityEnum.FLIGHT));
+			response = createQueryResponse(Status.SUCCESS, "", mapToQueryFlightResult(queryService.runFlightQuery(queryObject, EntityEnum.FLIGHT)));
 		}
 		
-		return qbFlights;
+		return response;
 	}
 	
 	/**
 	 * 
 	 * @param queryObject
 	 * @return
+	 * @throws InvalidQueryObjectException 
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_PASSENGER_URI, method = RequestMethod.POST)
-	public List<QueryBuilderPassengerResult> runQueryOnPassenger(@Valid @RequestBody QueryObject queryObject) {
-		List<QueryBuilderPassengerResult> qbPassengers = new ArrayList<>();
+	public IQueryResponse runPassengerQuery(@Valid @RequestBody QueryObject queryObject) throws InvalidQueryObjectException {
+		IQueryResponse response = new QueryResponse();
 		
 		if(queryObject != null) {
-			qbPassengers = mapFlightToQueryPassengerResult(queryService.runQuery(queryObject, EntityEnum.PAX));
+			response = createQueryResponse(Status.SUCCESS, "", mapToQueryPassengerResult(queryService.runPassengerQuery(queryObject, EntityEnum.PAX)));
 		}
 		
-		return qbPassengers;
+		return response;
 	}
 	
 	/**
 	 * 
-	 * @param query
+	 * @param queryRequest
 	 * @return
 	 * @throws QueryAlreadyExistsException
-	 * @throws IOException 
+	 * @throws IOException
+	 * @throws InvalidQueryObjectException
+	 * @throws InvalidQueryRequestException 
 	 */
 	@RequestMapping(value = Constants.SAVE_QUERY_URI, method = RequestMethod.POST)
-	public QueryResponse saveQuery(@Valid @RequestBody QueryRequest query) throws IOException {
-		QueryResponse response = new QueryResponse();
+	public IQueryResponse saveQuery(@Valid @RequestBody QueryRequest queryRequest) throws QueryAlreadyExistsException, IOException, InvalidQueryRequestException {
+		IQueryResponse response = new QueryResponse();
 		
-		if(query != null) {
-			List<QueryResult> resultList = new ArrayList<>();
-			QueryResult result = new QueryResult();
+		if(queryRequest != null) {
+			List<IQueryResult> resultList = new ArrayList<>();
+
+			resultList.add(mapQueryToQueryResult(queryService.saveQuery(queryRequest)));
 			
-			try {
-				result = mapQueryToQueryResult(queryService.saveQuery(createQuery(query)));
-				resultList.add(result);
-				
-				response = createQueryResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, resultList);
-				
-			} catch (QueryAlreadyExistsException e) {
-				result = mapQueryToQueryResult(createQuery(query));
-				resultList.add(result);
-				
-				response = createQueryResponse(Status.FAILURE, e.getMessage(), resultList);
-			}
+			response = createQueryResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, resultList);
 		}
 		
 		return response;
@@ -141,31 +153,22 @@ public class QueryBuilderController {
 
 	/**
 	 * 
-	 * @param query
+	 * @param queryRequest
 	 * @return
-	 * @throws IOException
 	 * @throws QueryAlreadyExistsException
+	 * @throws IOException
+	 * @throws InvalidQueryRequestException
 	 */
 	@RequestMapping(value = Constants.EDIT_QUERY_URI, method = RequestMethod.PUT)
-	public QueryResponse editQuery(@Valid @RequestBody QueryRequest query) throws IOException {
-		QueryResponse response = new QueryResponse();
+	public IQueryResponse editQuery(@Valid @RequestBody QueryRequest queryRequest) throws QueryAlreadyExistsException, IOException, InvalidQueryRequestException  {
+		IQueryResponse response = new QueryResponse();
 		
-		if(query != null) {
-			List<QueryResult> resultList = new ArrayList<>();
-			QueryResult result = new QueryResult();
+		if(queryRequest != null) {
+			List<IQueryResult> resultList = new ArrayList<>();
 			
-			try {
-				result = mapQueryToQueryResult(queryService.editQuery(createQuery(query)));
-				resultList.add(result);
-				
-				response = createQueryResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, resultList);
-				
-			} catch (QueryAlreadyExistsException e) {
-				result = mapQueryToQueryResult(createQuery(query));
-				resultList.add(result);
-				
-				response = createQueryResponse(Status.FAILURE, e.getMessage(), resultList);
-			}
+			resultList.add(mapQueryToQueryResult(queryService.editQuery(queryRequest)));
+			
+			response = createQueryResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, resultList);
 		}
 		
 		return response;
@@ -180,11 +183,12 @@ public class QueryBuilderController {
 	 * @throws JsonParseException 
 	 */
 	@RequestMapping(value = Constants.LIST_QUERY_URI, method = RequestMethod.GET)
-	public QueryResponse listQueryByUser(@RequestParam("userId") String userId) throws JsonParseException, JsonMappingException, IOException {
-		QueryResponse response = new QueryResponse();
+	public IQueryResponse listQueryByUser(@RequestParam("userId") String userId) throws JsonParseException, JsonMappingException, IOException {
+		IQueryResponse response = new QueryResponse();
 		
 		if(userId != null) {
-			List<QueryResult> resultList = new ArrayList<>();
+			List<IQueryResult> resultList = new ArrayList<>();
+			
 			resultList = mapQueryListToResultList(queryService.listQueryByUser(userId));
 			
 			response = createQueryResponse(Status.SUCCESS, "", resultList);
@@ -199,8 +203,8 @@ public class QueryBuilderController {
 	 * @param id
 	 */
 	@RequestMapping(value = Constants.DELETE_QUERY_URI, method = RequestMethod.DELETE)
-	public QueryResponse deleteQuery(@RequestParam("userId") String userId, @RequestParam("id") int id) {
-		QueryResponse response = new QueryResponse();
+	public IQueryResponse deleteQuery(@RequestParam("userId") String userId, @RequestParam("id") int id) {
+		IQueryResponse response = new QueryResponse();
 		
 		if(userId != null && id > 0) {
 			queryService.deleteQuery(userId, id);
@@ -210,26 +214,7 @@ public class QueryBuilderController {
 		return response;
 	}
 	
-	private Query createQuery(QueryRequest req) throws JsonProcessingException {
-		Query query = new Query();
-		ObjectMapper mapper = new ObjectMapper();
-		
-		if(req != null) {
-			User user = new User();
-			user.setUserId(req.getUserId());
-			
-			query.setId(req.getId());
-			query.setCreatedBy(user);
-			query.setTitle(req.getTitle());
-			query.setDescription(req.getDescription());
-			query.setQueryText(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(req.getQuery()));
-			
-		}
-		
-		return query;
-	}
-	
-	private QueryResponse createQueryResponse(Status status, String message, List<QueryResult> resultList) {
+	private IQueryResponse createQueryResponse(Status status, String message, List<IQueryResult> resultList) {
 		QueryResponse response = new QueryResponse();
 		
 		response.setStatus(status);
@@ -239,28 +224,38 @@ public class QueryBuilderController {
 		return response;
 	}
 	
+	private IQueryResponse createQueryErrorResponse(Status status, String message, String request) {
+		QueryErrorResponse response = new QueryErrorResponse();
+		
+		response.setStatus(status);
+		response.setMessage(message);
+		response.setRequest(request);
+		
+		return response;
+	}
+	
 	/**
 	 * 
 	 * @return
 	 */
-	private Map<String, IQueryBuilderModel> getQueryBuilderModel() {
-		Map<String, IQueryBuilderModel> modelMap = new LinkedHashMap<>();
+	private Map<String, QueryBuilderMapping> getQueryBuilderMapping() {
+		Map<String, QueryBuilderMapping> qbMap = new LinkedHashMap<>();
 		
-		modelMap.put(EntityEnum.ADDRESS.getFriendlyName(), getModel(EntityEnum.ADDRESS));
-		modelMap.put(EntityEnum.API.getFriendlyName(), getModel(EntityEnum.API));
-		modelMap.put(EntityEnum.CREDIT_CARD.getFriendlyName(), getModel(EntityEnum.CREDIT_CARD));
-		modelMap.put(EntityEnum.DOCUMENT.getFriendlyName(), getModel(EntityEnum.DOCUMENT));
-		modelMap.put(EntityEnum.EMAIL.getFriendlyName(), getModel(EntityEnum.EMAIL));
-		modelMap.put(EntityEnum.FLIGHT.getFriendlyName(), getModel(EntityEnum.FLIGHT));
-		modelMap.put(EntityEnum.FREQUENT_FLYER.getFriendlyName(), getModel(EntityEnum.FREQUENT_FLYER));
-		modelMap.put(EntityEnum.HITS.getFriendlyName(), getModel(EntityEnum.HITS));
-		modelMap.put(EntityEnum.NAME_ORIGIN.getFriendlyName(), getModel(EntityEnum.NAME_ORIGIN));
-		modelMap.put(EntityEnum.PAX.getFriendlyName(), getModel(EntityEnum.PAX));
-		modelMap.put(EntityEnum.PHONE.getFriendlyName(), getModel(EntityEnum.PHONE));
-		modelMap.put(EntityEnum.PNR.getFriendlyName(), getModel(EntityEnum.PNR));
-		modelMap.put(EntityEnum.TRAVEL_AGENCY.getFriendlyName(), getModel(EntityEnum.TRAVEL_AGENCY));
+		qbMap.put(EntityEnum.ADDRESS.toString(), getMapping(EntityEnum.ADDRESS));
+		qbMap.put(EntityEnum.API.toString(), getMapping(EntityEnum.API));
+		qbMap.put(EntityEnum.CREDIT_CARD.toString(), getMapping(EntityEnum.CREDIT_CARD));
+		qbMap.put(EntityEnum.DOCUMENT.toString(), getMapping(EntityEnum.DOCUMENT));
+		qbMap.put(EntityEnum.EMAIL.toString(), getMapping(EntityEnum.EMAIL));
+		qbMap.put(EntityEnum.FLIGHT.toString(), getMapping(EntityEnum.FLIGHT));
+		qbMap.put(EntityEnum.FREQUENT_FLYER.toString(), getMapping(EntityEnum.FREQUENT_FLYER));
+		qbMap.put(EntityEnum.HITS.toString(), getMapping(EntityEnum.HITS));
+		qbMap.put(EntityEnum.NAME_ORIGIN.toString(), getMapping(EntityEnum.NAME_ORIGIN));
+		qbMap.put(EntityEnum.PAX.toString(), getMapping(EntityEnum.PAX));
+		qbMap.put(EntityEnum.PHONE.toString(), getMapping(EntityEnum.PHONE));
+		qbMap.put(EntityEnum.PNR.toString(), getMapping(EntityEnum.PNR));
+		qbMap.put(EntityEnum.TRAVEL_AGENCY.toString(), getMapping(EntityEnum.TRAVEL_AGENCY));
 		
-		return modelMap;
+		return qbMap;
 	}
 	
 	/**
@@ -268,10 +263,10 @@ public class QueryBuilderController {
 	 * @param modelType
 	 * @return
 	 */
-	private IQueryBuilderModel getModel(EntityEnum modelType) {
-		QueryBuilderModelFactory factory = new QueryBuilderModelFactory();
+	private QueryBuilderMapping getMapping(EntityEnum entityType) {
+		QueryBuilderMappingFactory factory = new QueryBuilderMappingFactory();
 		
-		IQueryBuilderModel model = factory.getQueryBuilderModel(modelType);
+		QueryBuilderMapping model = factory.getQueryBuilderMapping(entityType);
 		
 		return model;
 	}
@@ -281,14 +276,13 @@ public class QueryBuilderController {
 	 * @param list
 	 * @return
 	 */
-	private List<QueryBuilderFlightResult> mapFlightToQueryFlightResult(List<? extends BaseEntity> list) {
-		List<QueryBuilderFlightResult> qbFlights = new ArrayList<>();
+	private List<IQueryResult> mapToQueryFlightResult(List<Flight> flights) {
+		List<IQueryResult> qbFlights = new ArrayList<>();
 		
-		if(list != null && list.size() > 0) {
-			List<Flight> flights = (List<Flight>) list;
+		if(flights != null && flights.size() > 0) {
 			for(Flight flight : flights) {
 				if(flight != null) {
-					QueryBuilderFlightResult qbFlight = new QueryBuilderFlightResult();
+					QueryFlightsResult qbFlight = new QueryFlightsResult();
 					
 					qbFlight.setId(flight.getId());
 					qbFlight.setFlightNumber(flight.getFlightNumber());
@@ -313,15 +307,14 @@ public class QueryBuilderController {
 	 * @param list
 	 * @return
 	 */
-	private List<QueryBuilderPassengerResult> mapFlightToQueryPassengerResult(List<? extends BaseEntity> list) {
-		List<QueryBuilderPassengerResult> qbPassengers = new ArrayList<>();
+	private List<IQueryResult> mapToQueryPassengerResult(List<Traveler> travelers) {
+		List<IQueryResult> qbPassengers = new ArrayList<>();
 		SimpleDateFormat dobFormat = new SimpleDateFormat("MM/dd/yyyy");
 		
-		if(list != null && list.size() > 0) {
-			List<Traveler> travelers = (List<Traveler>) list;
+		if(travelers != null && travelers.size() > 0) {
 			for(Traveler traveler : travelers) {
 				if(traveler != null) {
-					QueryBuilderPassengerResult qbPassenger = new QueryBuilderPassengerResult();
+					QueryPassengersResult qbPassenger = new QueryPassengersResult();
 					String docNumber = "";
 					String docType = "";
 					String docIssuanceCountry = "";
@@ -332,7 +325,6 @@ public class QueryBuilderController {
 					String departureDt = "";
 					String arrivalDt = "";
 					String seatNumber = "Not available";
-					String status = "Not available";
 					
 					qbPassenger.setId(traveler.getId());
 					qbPassenger.setOnSomethingList(true);
@@ -393,7 +385,6 @@ public class QueryBuilderController {
 					qbPassenger.setDepartureDt(departureDt);
 					qbPassenger.setArrivalDt(arrivalDt);
 					qbPassenger.setSeatNumber(seatNumber);
-					qbPassenger.setStatus(status);
 					
 					qbPassengers.add(qbPassenger);
 				}
@@ -431,8 +422,8 @@ public class QueryBuilderController {
 	 * @throws JsonMappingException 
 	 * @throws JsonParseException 
 	 */
-	private List<QueryResult> mapQueryListToResultList(List<Query> queryList) throws JsonParseException, JsonMappingException, IOException {
-		List<QueryResult> resultList = new ArrayList<>();
+	private List<IQueryResult> mapQueryListToResultList(List<Query> queryList) throws JsonParseException, JsonMappingException, IOException {
+		List<IQueryResult> resultList = new ArrayList<>();
 		
 		if(queryList != null && queryList.size() > 0) {
 			for(Query query : queryList) {
@@ -443,14 +434,37 @@ public class QueryBuilderController {
 		return resultList;
 	}
 		
-	@ExceptionHandler
+	@ExceptionHandler(QueryAlreadyExistsException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public QueryResponse handleMethodArgumentException(MethodArgumentNotValidException exception) {
-		QueryResponse response = new QueryResponse();
+    public IQueryResponse handleQueryExistsException(QueryAlreadyExistsException exception) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
 		
-		response = createQueryResponse(Status.FAILURE, Constants.QUERY_SERVICE_ERROR_MSG, null);
+		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), mapper.writeValueAsString(exception.getQueryRequest()));
+    }
+
+	@ExceptionHandler(InvalidQueryRequestException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public IQueryResponse handleInvalidQueryRequestException(InvalidQueryRequestException exception) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
 		
-		return response;
+		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), mapper.writeValueAsString(exception.getRequest()));
+    }
+	
+	@ExceptionHandler(InvalidQueryObjectException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public IQueryResponse handleInvalidQueryObjectException(InvalidQueryObjectException exception) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), mapper.writeValueAsString(exception.getQueryObject()));
+    }
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public IQueryResponse handleMethodArgumentException(MethodArgumentNotValidException exception) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		return createQueryErrorResponse(Status.FAILURE, QueryValidationUtils.getErrorString(exception.getBindingResult()), 
+				mapper.writeValueAsString(exception.getBindingResult().getTarget()));
     }
 
 	/**
@@ -460,13 +474,10 @@ public class QueryBuilderController {
 	 */
 	@ExceptionHandler
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-	public QueryResponse handleExceptions(Exception e) {
-		QueryResponse response = new QueryResponse();
+	public IQueryResponse handleExceptions(Exception e) {
 		
-		response = createQueryResponse(Status.FAILURE, Constants.QUERY_SERVICE_ERROR_MSG, null);
+		e.printStackTrace();
 		
-		logger.error(e.getStackTrace().toString());
-		
-	    return response;
+		return createQueryErrorResponse(Status.FAILURE, Constants.QUERY_SERVICE_ERROR_MSG, null);
 	}
 }
