@@ -9,9 +9,10 @@ import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.vo.AddressVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
-import gov.gtas.parsers.paxlst.vo.PnrMessageVo;
-import gov.gtas.parsers.paxlst.vo.PnrReportingAgentVo;
-import gov.gtas.parsers.paxlst.vo.PnrVo;
+import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
+import gov.gtas.parsers.pnrgov.vo.PnrReportingAgentVo;
+import gov.gtas.parsers.pnrgov.vo.PnrVo;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class PnrMessageBuilder {
