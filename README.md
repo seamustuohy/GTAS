@@ -43,7 +43,7 @@ sudo -u tomcat sh bin/catalina.sh start
 ### Importing Test Data
 
 1. The lookup data is located in gtas-commons/src/main/resources/sql.  Load these files from the mysql command line as you may experience problems with special characters from Heidisql:
-> mysql -u root -p
+> mysql -u root -p  
 source [sql filename]
 2. Sample users and roles are in config/db/gtas_data.sql 
 3. To load sample APIS data (flights, passengers), download keith_msgs.zip from the google drive folder/APIS.
@@ -51,5 +51,5 @@ source [sql filename]
 5. Use the generated jar under the apis-loader module to load one or more files.
 6. For example, to load one file:
 > java -jar apis-loader/target/apis-loader-0.1-SNAPSHOT-jar-with-dependencies.jar 10.txt
-7. To load all of the sample files, you need to provide two directories -- for the source files and one where the loader will place the processed files.  e.g.,
+7. To load all of the sample files, you need to provide two directories -- one for the source files and one where the loader will place the processed files.  e.g.,
 > java -jar apis-loader/target/apis-loader-0.1-SNAPSHOT-jar-with-dependencies.jar /tmp/keith_msgs/ /tmp/out/
