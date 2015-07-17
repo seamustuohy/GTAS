@@ -47,7 +47,7 @@ public class PnrGovParser {
     	System.out.println("passengers in flight : "+message.getPassengers().size());
     }
     private void processMessageAndGetSegments(String msg) throws ParseException {
-    	String txt = ParseUtils.stripApisHeaderAndFooter(msg);
+    	String txt = ParseUtils.stripStxEtxHeaderAndFooter(msg);
         txt = txt.toUpperCase();
         txt = txt.replaceAll("\\n|\\r", "");
         SegmentFactory factory = new SegmentFactory(segmentPackageName);

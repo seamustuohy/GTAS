@@ -52,4 +52,12 @@ public class ParseUtilsTest {
         String actual = ParseUtils.getMd5Hash(str1, StandardCharsets.US_ASCII);
         assertEquals(expected, actual);
     }
+    
+    @Test
+    public void testConvertToSingleLine() {
+        String input = "   hello    \r\n\r\n  there\r   gtas team\n";
+        String actual = ParseUtils.convertToSingleLine(input);
+        System.out.println(actual);
+        assertEquals("hellotheregtas team", actual);
+    }
 }
