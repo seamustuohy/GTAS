@@ -1,9 +1,15 @@
-<h3>Risk Criteria</h3>
-<button ng-click="newRule()" class="btn btn-success pull-right" data-add="rule">New Rule</button>
-<button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
-<button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
-
 <style>
+    .table .glyphicon-pencil{
+        left: -1em;
+        transform: scaleX(-1);
+        margin-right: -.75em;
+        top: -.25em;
+    }
+    h1,legend {
+        font-size: 1em;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
     form {
 
     }
@@ -24,19 +30,28 @@
         left: -99999px;
     }
     .udr-add-form input {
-         display: inline-block;
+        display: inline-block;
     }
-    .table tr:hover {
+
+    .table thead th:hover,
+    .table tbody tr:hover {
         cursor: pointer;
     }
 
-    .table tr:nth-child(odd) {
-        background: lightblue;
+    .table tbody tr:nth-child(odd) {
+        background: rgba(245,245,255,0.5);
     }
 </style>
-<table ng-table="tableParams" class="table" data-ng-click="loadRule()">
-    <tr ng-repeat="summary in $data" data-id="{{summary.id}}">
+<h1>Risk Criteria:</h1>
+<button data-ng-click="newRule()" class="btn btn-success pull-right" data-add="rule">New Rule</button>
+<!--
+<button data-ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
+<button data-ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
+//-->
+<table ng-table="tableParams" class="table">
+    <tr ng-repeat="summary in $data" data-id="{{summary.id}}" data-ng-click="loadRule()">
         <td data-title="'title'" sortable="'title'" filter="{ 'title': 'text' }">
+            <i ng-show="isBeingEdited(summary.id)" class="glyphicon glyphicon-pencil" title="Editing this rule"></i>
             {{summary.title}}
         </td>
         <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">
@@ -54,19 +69,15 @@
     </tr>
 </table>
 
-
-
-<h3>Risk Criteria:</h3>
-
 <form ng-submit="submit()" class="udr-add-form">
     <fieldset>
         <legend>Summary:</legend>
         <label for="title" class="hide">Title:</label>
         <input placeholder="Title:" type="text" ng-model="title" id="title" />
         <label for="start-date" class="hide">Start Date:</label>
-        <input placeholder="Start Date:" type="text" ng-model="startDate" id="start-date" />
+        <input placeholder="Start Date:" type="text" ng-model="startDate" id="start-date" class="datepicker" />
         <label for="end-date" class="hide">End Date:</label>
-        <input placeholder="End Date:" type="text" ng-model="endDate" id="end-date" />
+        <input placeholder="End Date:" type="text" ng-model="endDate" id="end-date" class="datepicker" />
         <label for="enabled">Enabled:</label>
         <input type="checkbox" ng-model="enabled" id="enabled" />
         <label for="description" class="hide">Description:</label>

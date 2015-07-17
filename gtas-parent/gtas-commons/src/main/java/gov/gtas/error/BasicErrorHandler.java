@@ -76,24 +76,33 @@ public class BasicErrorHandler implements ErrorHandler {
 	}
 	
 	/* (non-Javadoc)
+	 * @see gov.gtas.error.ErrorHandler#createException(java.lang.String, java.lang.Exception, java.lang.Object[])
+	 */
+	@Override
+	public CommonServiceException createException(String errorCode,
+			Exception cause, Object... args) {
+		CommonServiceException ret = null;
+		final String errorMessage = errorMap.get(errorCode);
+		if (errorMessage != null) {
+			ret = createExceptionAndLog(errorCode, cause, errorMessage, args);
+		} else if (this.delegate != null){
+			ret = this.delegate.createException(errorCode, cause, args);
+		}
+		if (ret == null) {
+			ret = createExceptionAndLog(
+					CommonErrorConstants.UNKNOWN_ERROR_CODE, cause,
+					CommonErrorConstants.UNKNOWN_ERROR_CODE_MESSAGE, errorCode);
+		}
+		return ret;
+	}
+
+	/* (non-Javadoc)
 	 * @see gov.gtas.error.GtasErrorHandler#createException(java.lang.String, java.lang.Object[])
 	 */
 	@Override
 	public CommonServiceException createException(String errorCode,
 			Object... args) {
-		CommonServiceException ret = null;
-		final String errorMessage = errorMap.get(errorCode);
-		if (errorMessage != null) {
-			ret = createExceptionAndLog(errorCode, errorMessage, args);
-		} else if (this.delegate != null){
-			ret = this.delegate.createException(errorCode, args);
-		}
-		if (ret == null) {
-			ret = createExceptionAndLog(
-					CommonErrorConstants.UNKNOWN_ERROR_CODE,
-					CommonErrorConstants.UNKNOWN_ERROR_CODE_MESSAGE, errorCode);
-		}
-		return ret;
+		return createException(errorCode, null, args);
 	}
 	
     /* (non-Javadoc)
@@ -151,11 +160,15 @@ public class BasicErrorHandler implements ErrorHandler {
 	 *            the arguments for the error message template.
 	 * @return the exception object.
 	 */
-	protected CommonServiceException createExceptionAndLog(String errorCode,
+	protected CommonServiceException createExceptionAndLog(String errorCode, Exception cause,
 			String errorMessageTemplate, Object... errorMessageArgs) {
 		String message = String.format(errorMessageTemplate, errorMessageArgs);
 		logger.error(message);
-		return new CommonServiceException(errorCode, message);
+		if(cause == null){
+		   return new CommonServiceException(errorCode, message);
+		} else {
+			return new CommonServiceException(errorCode, message, cause);
+		}
 
 	}
 }

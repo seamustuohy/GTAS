@@ -4,16 +4,13 @@ import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.vo.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.MSG;
-import gov.gtas.parsers.pnrgov.UNA;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.util.PnrMessageBuilder;
-
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class PnrGovParser {
@@ -46,19 +43,18 @@ public class PnrGovParser {
     private void parseSegments() throws ParseException{
     	PnrMessageBuilder builder = new PnrMessageBuilder(message,segments);
     	builder.buildMessageObject();
-    	System.out.println("Flight no : "+message.getFlights().size());
-    	System.out.println("passenger no : "+message.getPassengers().size());
+    	System.out.println("Number of Flights  : "+message.getFlights().size());
+    	System.out.println("passengers in flight : "+message.getPassengers().size());
     }
     private void processMessageAndGetSegments(String msg) throws ParseException {
-    	String txt = ParseUtils.stripApisHeaderAndFooter(msg);
+    	String txt = ParseUtils.stripStxEtxHeaderAndFooter(msg);
         txt = txt.toUpperCase();
         txt = txt.replaceAll("\\n|\\r", "");
-        System.out.println(txt);
         SegmentFactory factory = new SegmentFactory(segmentPackageName);
         EdifactParser p = new EdifactParser();
         LinkedList<Segment> edifactSegments = p.parse(txt);
         for (Segment s: edifactSegments) {
-        	System.out.println("SEGMENT ---"+s.toString());
+        	System.out.println("SEGMENT >>> "+s.toString());
             Segment paxlstSegment = factory.build(s);
             segments.add(paxlstSegment);
         }

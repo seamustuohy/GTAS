@@ -41,7 +41,7 @@ public class RuleMeta implements Serializable {
 	@JoinColumn(name="ID", referencedColumnName="ID", insertable=false, updatable=false)
 	private UdrRule parent;
 	
-	@Column(name = "TITLE", nullable=false, length = 64)
+	@Column(name = "TITLE", nullable=false, length = 20)
 	private String title;
 	
 	@Column(name = "DESCRIPTION", length = 1024)

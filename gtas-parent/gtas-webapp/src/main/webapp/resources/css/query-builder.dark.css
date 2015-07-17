@@ -13,7 +13,7 @@
   background: rgba(40, 40, 40, 0.9);
 }
 
-.query-builder .rule-container .rule-table-container,
+.query-builder .rule-container .rule-entity-container,
 .query-builder .rule-container .rule-field-container,
 .query-builder .rule-container .rule-filter-container,
 .query-builder .rule-container .rule-operator-container,

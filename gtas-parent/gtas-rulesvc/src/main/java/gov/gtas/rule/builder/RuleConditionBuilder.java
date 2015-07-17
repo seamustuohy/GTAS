@@ -7,12 +7,20 @@ import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-
+/**
+ * Generates the "when" part of a DRL rule.
+ * @author GTAS3 (AB)
+ *
+ */
 public class RuleConditionBuilder {
 	private StringBuilder passengerConditionBuilder;
 	private StringBuilder flightConditionBuilder;
 	private StringBuilder documentConditionBuilder;
-
+	/**
+	 * Appends the generated "when" part of the rule to the rule document.
+	 * @param parentStringBuilder the rule document builder.
+	 * @throws ParseException if the UDR has invalid formatting.
+	 */
 	public void buildConditionsAndApppend(
 			final StringBuilder parentStringBuilder) throws ParseException{
 		if (documentConditionBuilder != null) {
@@ -44,7 +52,10 @@ public class RuleConditionBuilder {
 		flightConditionBuilder = null;
 		documentConditionBuilder = null;
 	}
-
+    /**
+     * Adds a rule condition to the builder.
+     * @param cond the condition to add.
+     */
 	public void addRuleCondition(final RuleCond cond) {
 		switch (cond.getEntityName()) {
 		case Pax:
@@ -124,6 +135,27 @@ public class RuleConditionBuilder {
 			bldr.append(", ").append(cond.getAttrName()).append(" <= ");
 			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
 					.get(1), bldr);
+			break;
+		case NOT_BETWEEN:
+			bldr.append("(").append(cond.getAttrName()).append(" < ");
+			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
+					.get(0), bldr);
+			bldr.append(" || ").append(cond.getAttrName()).append(" > ");
+			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
+					.get(1), bldr);
+			bldr.append(")");
+			break;
+		case BEGINS_WITH:
+		case NOT_BEGINS_WITH:
+		case ENDS_WITH:
+		case NOT_ENDS_WITH:
+		case CONTAINS:
+		case NOT_CONTAINS:
+		case IS_EMPTY:
+		case IS_NOT_EMPTY:
+		case IS_NULL:
+		case IS_NOT_NULL:
+			//TODO
 			break;
 		case MEMBER_OF:
 			bldr.append(cond.getAttrName()).append(" memberOf ");

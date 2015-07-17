@@ -6,12 +6,16 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class EdifactParser {
-    private SegmentParser segmentParser;
-    
-    private UNA una;
     
     public LinkedList<Segment> parse(String txt) throws ParseException {
+        if (StringUtils.isEmpty(txt)) return null;
+        txt = ParseUtils.convertToSingleLine(txt);
+        txt = txt.toUpperCase();
+        
+        UNA una = null;
         int unaIndex = txt.indexOf("UNA");
         if (unaIndex != -1) {
             int endIndex = unaIndex + "UNA".length() + UNA.NUM_UNA_CHARS;
@@ -21,7 +25,7 @@ public class EdifactParser {
             una = new UNA();
         }
         
-        this.segmentParser = new SegmentParser(una);
+        SegmentParser segmentParser = new SegmentParser(una);
 
         int unbIndex = txt.indexOf("UNB");
         if (unbIndex == -1) {
@@ -36,7 +40,7 @@ public class EdifactParser {
                 una.getReleaseCharacter());
 
         for (String s : stringSegments) {
-            Composite[] parsed = this.segmentParser.parseSegment(s);
+            Composite[] parsed = segmentParser.parseSegment(s);
             if (parsed.length == 0) { 
                 continue;
             }

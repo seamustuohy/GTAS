@@ -38,14 +38,14 @@ public class RuleRepositoryIT {
 	
 	@Test(expected=CommonServiceException.class)
 	public void testNullRequest() {
-      testTarget.invokeRuleset("gtas.drl", null);
+      testTarget.invokeAdhocRules("gtas.drl", null);
     }
 
 	@Test
 	public void testBasicApisRequest() {
 	  Pax p1 = createPassenger("Medulla", "Oblongata", "Timbuktu");
 	  ApisMessage msg = createBasicApisMessage(p1);
-      RuleServiceResult res = testTarget.invokeRuleset(testTarget.createRuleServiceRequest(msg));
+      RuleServiceResult res = testTarget.invokeRuleEngine(testTarget.createRuleServiceRequest(msg));
       assertNotNull(res);
       assertNotNull(res.getResultList());
       assertEquals("Result list is empty", 1, res.getResultList().size());

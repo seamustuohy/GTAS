@@ -11,26 +11,35 @@ import gov.gtas.model.Message;
  */
 public interface RuleService {
 	/**
-	 * Execute the rule engine on the specified request for the specified rule
-	 * set.
+	 * Execute the rule engine on the specified request for the specified rule file.
+	 * (Note: the file should be on the class path.)
 	 * 
-	 * @param ruleSetName
-	 *            the name of the rule set to invoke the engine on.
+	 * @param ruleFilePath
+	 *            the path name of the rule file to invoke the engine on.
 	 * @param req
 	 *            the rule request message.
 	 * @return the result of the rule engine invocation.
 	 */
-	RuleServiceResult invokeRuleset(String ruleSetName, RuleServiceRequest req);
+	RuleServiceResult invokeAdhocRules(String ruleFilePath, RuleServiceRequest req);
 
 	/**
-	 * Execute the rule engine on the specified request for the default rule
-	 * set.
+	 * Execute the rule engine on the specified request for the specified rules provided as a DRL string.
+	 * 
+	 * @param rules
+	 *            the rules to invoke the engine on.
+	 * @param req
+	 *            the rule request message.
+	 * @return the result of the rule engine invocation.
+	 */
+	RuleServiceResult invokeAdhocRulesFRomString(String rules, RuleServiceRequest req);
+	/**
+	 * Execute the rule engine on the specified request for the default KnowledgeBase.
 	 * 
 	 * @param req
 	 *            the rule request message.
 	 * @return the result of the rule engine invocation.
 	 */
-	RuleServiceResult invokeRuleset(RuleServiceRequest req);
+	RuleServiceResult invokeRuleEngine(RuleServiceRequest req);
 
 	/**
 	 * Create a rule engine request message from a message object from the

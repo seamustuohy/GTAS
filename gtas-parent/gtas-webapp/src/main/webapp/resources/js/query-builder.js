@@ -233,6 +233,30 @@
             {type: 'is_not_empty',     nb_inputs: 0, multiple: false, apply_to: ['string']},
             {type: 'is_null',          nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean']},
             {type: 'is_not_null',      nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean']}
+            /* extending operators for DROOLS */
+            ,
+            {type: 'EQUAL',            nb_inputs: 1, multiple: false, apply_to: ['string', 'number', 'datetime', 'date', 'boolean']},
+            {type: 'NOT_EQUAL',        nb_inputs: 1, multiple: false, apply_to: ['string', 'number', 'datetime', 'date', 'boolean']},
+            {type: 'IN',               nb_inputs: 1, multiple: true,  apply_to: ['string', 'number', 'datetime', 'date']},
+            {type: 'NOT_IN',           nb_inputs: 1, multiple: true,  apply_to: ['string', 'number', 'datetime', 'date']},
+            {type: 'LESS',             nb_inputs: 1, multiple: false, apply_to: ['number', 'datetime', 'date']},
+            {type: 'LESS_OR_EQUAL',    nb_inputs: 1, multiple: false, apply_to: ['number', 'datetime', 'date']},
+            {type: 'GREATER',          nb_inputs: 1, multiple: false, apply_to: ['number', 'datetime', 'date']},
+            {type: 'GREATER_OR_EQUAL', nb_inputs: 1, multiple: false, apply_to: ['number', 'datetime', 'date']},
+            {type: 'BETWEEN',          nb_inputs: 2, multiple: false, apply_to: ['number', 'datetime', 'date']},
+            {type: 'NOT_BETWEEN',      nb_inputs: 2, multiple: false, apply_to: ['number', 'datetime', 'date']},
+            {type: 'BEGINS_WITH',      nb_inputs: 1, multiple: false, apply_to: ['string']},
+            {type: 'NOT_BEGINS_WITH',  nb_inputs: 1, multiple: false, apply_to: ['string']},
+            {type: 'CONTAINS',         nb_inputs: 1, multiple: false, apply_to: ['string']},
+            {type: 'NOT_CONTAINS',     nb_inputs: 1, multiple: false, apply_to: ['string']},
+            {type: 'ENDS_WITH',        nb_inputs: 1, multiple: false, apply_to: ['string']},
+            {type: 'NOT_ENDS_WITH',    nb_inputs: 1, multiple: false, apply_to: ['string']},
+            {type: 'IS_EMPTY',         nb_inputs: 0, multiple: false, apply_to: ['string']},
+            {type: 'IS_NOT_EMPTY',     nb_inputs: 0, multiple: false, apply_to: ['string']},
+            {type: 'IS_NULL',          nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'date', 'boolean']},
+            {type: 'IS_NOT_NULL',      nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'date', 'boolean']}
+
+            /* end extending operators */
         ],
 
         icons: {
@@ -274,7 +298,7 @@
         }
 
         // SETTINGS SHORTCUTS
-        this.tables = this.settings.tables;
+        this.entities = this.settings.entities;
         this.filters = this.settings.filters;
         this.icons = this.settings.icons;
         this.operators = this.settings.operators;
@@ -418,11 +442,11 @@
             Model($group).condition = this.value;
         });
 
-        // rule table change
-        this.$el.on('change.queryBuilder', '.rule-table-container select', function() {
+        // rule entity change
+        this.$el.on('change.queryBuilder', '.rule-entity-container select', function() {
             var $this = $(this);
             var $rule = $this.closest('.rule-container');
-            Model($rule).table = that.getTableByName($this.val());
+            Model($rule).entity = that.getEntityByName($this.val());
         });
 
         // rule field change
@@ -436,7 +460,7 @@
                 error('Can\'t be null');
             }
             Model($rule).__.column = value;
-            Model($rule).filter = that.getFilterById( [Model($rule).table, value].join('.') );
+            Model($rule).filter = that.getFilterById( [Model($rule).entity, value].join('.') );
         });
 
         // rule filter change
@@ -501,8 +525,8 @@
                         that.displayError(node);
                         return;
 
-                    case 'table':
-                        that.updateRuleTable(node);
+                    case 'entity':
+                        that.updateRuleEntity(node);
                         return;
 
                     case 'column':
@@ -664,7 +688,7 @@
 
         this.trigger('afterAddRule', model);
 
-        this.createRuleTables(model);
+        this.createRuleEntities(model);
         this.createRuleFilters(model);
 
         return model;
@@ -693,25 +717,25 @@
     };
 
     /**
-     * Create the tables <select> for a rule
+     * Create the entities <select> for a rule
      * @param rule {Rule}
      */
-    QueryBuilder.prototype.createRuleTables = function(rule) {
-        var $tablesSelect = $(this.getRuleTableSelect(rule));
+    QueryBuilder.prototype.createRuleEntities = function(rule) {
+        var $entitiesSelect = $(this.getRuleEntitySelect(rule));
 
-        rule.$el.find('.rule-table-container').append($tablesSelect);
-        this.trigger('afterCreateTables', rule);
+        rule.$el.find('.rule-entity-container').append($entitiesSelect);
+        this.trigger('afterCreateEntities', rule);
     };
 
     /**
-     * Create the table's fields <select> for a rule
+     * Create the entity's fields <select> for a rule
      * @param rule {Rule}
      */
-    QueryBuilder.prototype.createRuleTableFields = function(rule) {
-        var $filterSelect = $(this.getRuleTableFieldSelect(rule));
+    QueryBuilder.prototype.createRuleEntityFields = function(rule) {
+        var $filterSelect = $(this.getRuleEntityFieldSelect(rule));
 
         rule.$el.find('.rule-field-container').html($filterSelect);
-        this.trigger('afterCreateTableFields', rule);
+        this.trigger('afterCreateEntityFields', rule);
     };
 
     /**
@@ -799,13 +823,13 @@
     };
 
     /**
-     * Perform action when rule's table is changed
+     * Perform action when rule's entity is changed
      * @param rule {Rule}
      */
-    QueryBuilder.prototype.updateRuleTable = function(rule) {
-        rule.$el.find('.rule-table-container select').val(rule.table ? rule.table : '-1');
-        this.createRuleTableFields(rule);
-        this.trigger('afterUpdateRuleTable', rule);
+    QueryBuilder.prototype.updateRuleEntity = function(rule) {
+        rule.$el.find('.rule-entity-container select').val(rule.entity ? rule.entity : '-1');
+        this.createRuleEntityFields(rule);
+        this.trigger('afterUpdateRuleEntity', rule);
     };
 
     /**
@@ -1105,7 +1129,7 @@
                 var rule = {
                     id: model.filter.id,
                     field: model.filter.field,
-                    table: model.table,
+                    entity: model.entity,
                     column: model.column,
                     'type': model.filter.type,
                     input: model.filter.input,
@@ -1132,16 +1156,6 @@
         return this.change('getRules', out);
     };
 
-    var getEntityTableAlias = function (key) {
-        var entityTableLookup = {
-            'DOCUMENT': 'Document',
-            'FLIGHT': 'Flight',
-            'PASSENGER': 'Pax',
-            'Pax': 'PASSENGER'
-        };
-        return entityTableLookup[key] || key === key.toUpperCase() ? key.charAt(0).toUpperCase() + key.substr(1).toLowerCase() : key.toUpperCase();
-    };
-
     var prepareDroolsJSON = function (data, notRoot) {
         var properties;
         if (notRoot === undefined || notRoot === false ) {
@@ -1151,11 +1165,10 @@
             data['@class'] = 'gov.gtas.model.udr.json.QueryObject';
         }
         data.rules.forEach(function(rule){
-            if (rule.entity === undefined && rule.id !== undefined) {
+            if (rule.id !== undefined) {
                 properties = rule.id.split('.');
-                rule.entity = getEntityTableAlias(properties.shift());
+                rule.entity = properties.shift();
                 rule["@class"] = "QueryTerm";
-                rule.operator = rule.operator.toUpperCase();
                 if (rule.value.indexOf('[') === 0 || Array.isArray(rule.value)) {
                     rule.values = rule.value;
                     rule.value = null;
@@ -1170,7 +1183,6 @@
                 rule.field = properties.join('.');
                 delete rule.column;
                 delete rule.id;
-                delete rule.table;
             } else if (rule.rules !== undefined) {
                 rule["@class"] = "QueryObject";
                 prepareDroolsJSON(rule, true);
@@ -1196,16 +1208,13 @@
         }
         data.rules.forEach(function(rule) {
             if (rule["@class"] === "QueryTerm") {
-                rule.table = getEntityTableAlias(rule.entity);
                 rule.column = rule.field.split('.').pop();
-                rule.id = [rule.table, rule.column].join('.');
+                rule.id = [rule.entity, rule.column].join('.');
                 rule.value = rule.values && rule.values.length > 1 ? rule.values : rule.values;
                 rule.field = [rule.entity, rule.field].join('.');
-                rule.operator = rule.operator.toUpperCase();
                 // remove when Amit gives go ahead..
                 rule.type = rule.type.toLowerCase();
                 // end remove
-                delete rule.entity;
                 delete rule.values;
             } else if (rule["@class"] === "QueryObject") {
                 interpretDroolsJSON(rule, true);
@@ -1389,7 +1398,7 @@
                     }
 
                     model.filter = that.getFilterById(item.id);
-                    model.table = item.id.split('.')[0];
+                    model.entity = item.id.split('.')[0];
                     model.column = item.id.split('.')[1];
                     item.operator = item.operator.toLowerCase();
                     model.operator = that.getOperatorByType(item.operator);
@@ -1695,22 +1704,22 @@
     };
 
     /**
-     * Return a particular table by its table's name
+     * Return a particular entity by its entity's name
      * @param type {string}
      * @return {object|null}
      */
-    QueryBuilder.prototype.getTableByName = function(tableName) {
-        if (tableName == '-1') {
+    QueryBuilder.prototype.getEntityByName = function(entityName) {
+        if (entityName == '-1') {
             return null;
         }
-        var tableKeys = Object.keys(this.tables);
-        for (var i=0, l=tableKeys.length; i<l; i++) {
-            if (tableKeys[i] === tableName) {
-                return tableKeys[i];
+        var entityKeys = Object.keys(this.entities);
+        for (var i=0, l=entityKeys.length; i<l; i++) {
+            if (entityKeys[i] === entityName) {
+                return entityKeys[i];
             }
         }
 
-        error('Undefined table name  "{0}"', tableName);
+        error('Undefined entity name  "{0}"', entityName);
     };
 
     /**
@@ -1928,7 +1937,7 @@
   '+ (this.settings.display_errors ?
             '<div class="error-container"><i class="' + this.icons.error + '"></i></div>'
                 :'') +'\
-  <div class="rule-table-container"></div> \
+  <div class="rule-entity-container"></div> \
   <div class="rule-field-container"></div> \
   <div class="rule-filter-container"></div> \
   <div class="rule-operator-container"></div> \
@@ -1986,41 +1995,41 @@
     };
 
     /**
-     * Returns rule table <select> HTML
+     * Returns rule entity <select> HTML
      * @param rule {Rule}
-     * @param tables {object}
+     * @param entities {object}
      * @return {string}
      */
-    QueryBuilder.prototype.getRuleTableSelect = function(rule) {
-        var tables = Object.keys(this.tables);
-        var h = '<label for="'+ rule.id +'_table">Table:</label> \
-            <select class="form-control table-name" name="'+ rule.id +'_table" id="'+ rule.id +'_table">';
+    QueryBuilder.prototype.getRuleEntitySelect = function(rule) {
+        var entities = Object.keys(this.entities);
+        var h = '<label for="'+ rule.id +'_entity">Entity:</label> \
+            <select class="form-control entity-name" name="'+ rule.id +'_entity" id="'+ rule.id +'_entity">';
 
         h+= '<option value="-1"> - </option>';
 
-        for (var i=0, l=tables.length, id, label, selected; i<l; i++) {
-            id = tables[i];
-            label = tables[i]; //this.lang.tables[tables[i].id] || tables[i].id;
+        for (var i=0, l=entities.length, id, label, selected; i<l; i++) {
+            id = entities[i];
+            label = this.entities[entities[i]].label;
             selected = rule.filter && rule.filter.id.split('.')[0] === id ? 'selected' : '';
             h+= '<option value="'+ id +'" '+ selected +'>'+ label +'</option>';
         }
 
         h+= '</select>';
 
-        return this.change('getRuleTableSelect', h, rule);
+        return this.change('getRuleEntitySelect', h, rule);
     };
 
     /**
-     * Returns rule table field <select> HTML
+     * Returns rule entity field <select> HTML
      * @param rule {Rule}
-     * @param tables {object}
+     * @param entities {object}
      * @return {string}
      */
-    QueryBuilder.prototype.getRuleTableFieldSelect = function(rule) {
-        var tableKey = this.tables[rule.table],
-            columns = tableKey ? tableKey.columns : [],
-            h = '<label for="'+ rule.id +'_table">Field:</label> \
-            <select class="form-control table-corresponding-fields" name="'+ rule.id +'_field">';
+    QueryBuilder.prototype.getRuleEntityFieldSelect = function(rule) {
+        var entityKey = this.entities[rule.entity],
+            columns = entityKey ? entityKey.columns : [],
+            h = '<label for="'+ rule.id +'_entity">Field:</label> \
+            <select class="form-control entity-corresponding-fields" name="'+ rule.id +'_field">';
 
         h+= '<option value="-1"> - </option>';
 
@@ -2033,7 +2042,7 @@
 
         h+= '</select>';
 
-        return this.change('getRuleTableFieldSelect', h, rule);
+        return this.change('getRuleEntityFieldSelect', h, rule);
     };
 
     /**
@@ -2507,7 +2516,7 @@
 
         Node.call(this, parent, $el);
 
-        this.__.table = null;
+        this.__.entity = null;
         this.__.column = null;
         this.__.filter = null;
         this.__.operator = null;
@@ -2518,7 +2527,7 @@
     Rule.prototype = Object.create(Node.prototype);
     Rule.prototype.constructor = Rule;
 
-    defineModelProperties(Rule, ['table', 'column', 'filter', 'operator', 'flags', 'value']);
+    defineModelProperties(Rule, ['entity', 'column', 'filter', 'operator', 'flags', 'value']);
 
 
     QueryBuilder.Group = Group;
@@ -2725,11 +2734,11 @@
         }
 
         // init selectpicker
-        this.on('afterCreateTables', function(e, rule) {
-            rule.$el.find('.rule-table-container select').removeClass('form-control').selectpicker(options);
+        this.on('afterCreateEntities', function(e, rule) {
+            rule.$el.find('.rule-entity-container select').removeClass('form-control').selectpicker(options);
         });
 
-        this.on('afterCreateTableFields', function(e, rule) {
+        this.on('afterCreateEntityFields', function(e, rule) {
             rule.$el.find('.rule-field-container select').removeClass('form-control').selectpicker(options);
         });
 
@@ -2752,8 +2761,8 @@
         });
 
         // update selectpicker on change
-        this.on('afterUpdateRuleTable', function(e, rule) {
-            rule.$el.find('.rule-table-container select').selectpicker('render');
+        this.on('afterUpdateRuleEntity', function(e, rule) {
+            rule.$el.find('.rule-entity-container select').selectpicker('render');
         });
 
         this.on('afterUpdateRuleColumn', function(e, rule) {
@@ -3964,14 +3973,6 @@
             "AND": "AND",
             "OR": "OR"
         },
-        "tables": {
-            "FLIGHT": "FLIGHT",
-            "PASSENGER": "PASSENGER"
-        },
-        "tableFields": {
-            "in_stock": "HasHits",
-            "cob": "COB"
-        },
         "operators": {
             "equal": "equal",
             "not_equal": "not equal",
@@ -3993,6 +3994,29 @@
             "is_not_empty": "is not empty",
             "is_null": "is null",
             "is_not_null": "is not null"
+            /* begin DROOLS extension */
+            ,
+            "EQUAL": "equal",
+            "NOT_EQUAL": "not equal",
+            "IN": "in",
+            "NOT_IN": "not in",
+            "LESS": "less",
+            "LESS_OR_EQUAL": "less or equal",
+            "GREATER": "greater",
+            "GREATER_OR_EQUAL": "greater or equal",
+            "BETWEEN": "between",
+            "NOT_BETWEEN": "not between",
+            "BEGINS_WITH": "begins with",
+            "NOT_BEGINS_WITH": "doesn't begin with",
+            "CONTAINS": "contains",
+            "NOT_CONTAINS": "doesn't contain",
+            "ENDS_WITH": "ends with",
+            "NOT_ENDS_WITH": "doesn't end with",
+            "IS_EMPTY": "is empty",
+            "IS_NOT_EMPTY": "is not empty",
+            "IS_NULL": "is null",
+            "IS_NOT_NULL": "is not null"
+            /* end DROOLS extension */
         },
         "errors": {
             "no_filter": "No filter selected",

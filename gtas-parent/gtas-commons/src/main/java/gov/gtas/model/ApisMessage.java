@@ -23,6 +23,7 @@ public class ApisMessage extends Message {
     private String transmissionSource;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "apisMessage")
+//    @JoinColumn(name = "apis_message_id")    
     Set<ReportingParty> reportingParties = new HashSet<>();
     
     @ManyToMany(

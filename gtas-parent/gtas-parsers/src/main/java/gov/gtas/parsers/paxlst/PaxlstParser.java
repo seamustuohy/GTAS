@@ -43,10 +43,7 @@ public abstract class PaxlstParser {
     }
     
     private void processMessageAndGetSegments() throws ParseException {
-        String txt = ParseUtils.stripApisHeaderAndFooter(message);
-        txt = txt.toUpperCase();
-        txt = txt.replaceAll("\\n|\\r", "");
-                
+        String txt = ParseUtils.stripStxEtxHeaderAndFooter(message);               
         SegmentFactory factory = new SegmentFactory(segmentPackageName);
         EdifactParser p = new EdifactParser();
         LinkedList<Segment> edifactSegments = p.parse(txt);

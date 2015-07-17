@@ -11,6 +11,7 @@ import java.text.ParseException;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
@@ -36,6 +37,7 @@ public class DrlRuleFileBuilder {
 		this.stringBuilder.append(GLOBAL_RESULT_DECLARATION);
 	}  
 	public DrlRuleFileBuilder addRule(final UdrRule udrRule){
+		logger.info("DrlRuleFileBuilder - generating DRL code for UDR with title:"+udrRule.getTitle());
 		for(Rule rule: udrRule.getEngineRules()){
 			addRuleHeader(udrRule, rule);
 			for(RuleCond cond:rule.getRuleConds()){
@@ -58,6 +60,7 @@ public class DrlRuleFileBuilder {
 		this.stringBuilder.append(RULE_PACKAGE_NAME)
 		.append(IMPORT_PREFIX).append(RuleHitDetail.class.getName()).append(";").append(NEW_LINE)
 		.append(IMPORT_PREFIX).append(Traveler.class.getName()).append(";").append(NEW_LINE)
+	    .append(IMPORT_PREFIX).append(Pax.class.getName()).append(";").append(NEW_LINE)
 		.append(IMPORT_PREFIX).append(Flight.class.getName()).append(";").append(NEW_LINE)
 		.append(IMPORT_PREFIX).append(Document.class.getName()).append(";").append(NEW_LINE)
 		.append("\n");
@@ -69,7 +72,7 @@ public class DrlRuleFileBuilder {
     }
     private void addRuleAction(UdrRule parent, Rule rule){
     	this.stringBuilder.append("then\n")
-    	.append(String.format(ACTION_PASSENGER_HIT, parent.getId(), rule.getRuleIndex())).append("\n")
+    	.append(String.format(ACTION_PASSENGER_HIT, parent.getId(), rule.getRuleIndex()))
     	.append("end\n");
     }
 }

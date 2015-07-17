@@ -1,5 +1,6 @@
 package gov.gtas.services.udr;
 
+import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 
@@ -59,4 +60,15 @@ public interface RulePersistenceService {
      * @return list of rules authored by the specified author or an empty list.
      */
     public List<UdrRule> findByAuthor(String authorUserId);
+    /**
+     * Fetches the latest version of the default knowledge base.
+     * @return the knowledge base.
+     */
+    public KnowledgeBase findUdrKnowledgeBase();
+    /**
+     * Saves or updates the knowledge base.
+     * @param kb the knowledge base.
+     * @return the saved knowledge base.
+     */
+    public KnowledgeBase saveKnowledgeBase(KnowledgeBase kb);
 }

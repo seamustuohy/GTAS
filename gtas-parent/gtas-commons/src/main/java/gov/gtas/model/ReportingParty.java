@@ -18,6 +18,12 @@ public class ReportingParty extends BaseEntity {
     @JoinColumn(name = "apis_message_id")
     private ApisMessage apisMessage;
     
+    public ApisMessage getApisMessage() {
+        return apisMessage;
+    }
+    public void setApisMessage(ApisMessage apisMessage) {
+        this.apisMessage = apisMessage;
+    }
     public String getPartyName() {
         return partyName;
     }

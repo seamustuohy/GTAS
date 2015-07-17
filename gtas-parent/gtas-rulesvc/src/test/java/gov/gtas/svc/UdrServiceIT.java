@@ -32,7 +32,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 /**
- * Integration tests for the UDR maanageement service.
+ * Integration tests for the UDR management service.
  * @author GTAS3 (AB)
  *
  */
@@ -44,7 +44,7 @@ public class UdrServiceIT {
 	private static final String RULE_DESCRIPTION1 = "This is a test";
 	private static final String RULE_TITLE2 = "Hello Rule 2";
 	private static final String RULE_DESCRIPTION2 = "This is a test2";
-
+	
 	@Autowired
     UdrService udrService;
     
@@ -135,6 +135,7 @@ public class UdrServiceIT {
 	@Test
 	@Transactional
 	public void testFetchUdrById() {
+		try{
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
@@ -145,6 +146,9 @@ public class UdrServiceIT {
 		UdrSpecification specFetched = udrService.fetchUdr(id);
 		assertNotNull(specFetched);
 		assertEquals(spec.getSummary().getTitle(), specFetched.getSummary().getTitle());
+		} catch (Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	@Test
 	@Transactional

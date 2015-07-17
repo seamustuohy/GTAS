@@ -26,7 +26,7 @@ public class RuleConditionBuilderHelper {
    	    case DATE:
    	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDate(val.getDtVal())).append("\"");
    	    	break;
-   	    case TIMESTAMP:
+   	    case DATETIME:
    	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDate(val.getDtVal())).append("\"");
    	    	break;
     	case INTEGER:

@@ -3,11 +3,7 @@ package gov.gtas.model.udr.json;
 import gov.gtas.model.udr.UdrConstants;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 /**

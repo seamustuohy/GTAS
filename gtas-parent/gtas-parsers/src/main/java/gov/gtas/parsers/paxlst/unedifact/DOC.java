@@ -17,13 +17,20 @@ public class DOC extends Segment {
             Element[] e = c.getElements();
             switch (i) {
             case 0:
-                this.docCode = e[0].getValue();
-                if (e.length >= 2) {
-                    this.c_codeListIdentificationCode = e[1].getValue();
+                if (e != null) {
+                    // DOC+L:110:111+AA299167
+                    this.docCode = e[0].getValue();
+                    if (e.length >= 2) {
+                        this.c_codeListIdentificationCode = e[1].getValue();
+                    }
+                    if (e.length >= 3) {
+                        this.c_codeListResponsibleAgencyCode = e[2].getValue();
+                    }
+                } else {
+                    // DOC+P+QG176295
+                    this.docCode = c.getValue();
                 }
-                if (e.length >= 3) {
-                    this.c_codeListResponsibleAgencyCode = e[2].getValue();
-                }
+                
                 break;
                 
             case 1:
