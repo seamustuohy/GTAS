@@ -71,11 +71,15 @@ public class EdifactParser {
     }
     
     /**
+     * Strip any extraneous header or trailer info, make sure the file is
+     * upper case text only.
+     * 
      * Messages must be transmitted as a continuous bit stream. "Lines" have no
      * meaning; there is no such thing as a "maximum" or "minimum" segment
      * length, other than that specified in the segment definitions.
      */
-    private String preprocessMessage(String txt) {
+    private String preprocessMessage(String message) {
+        String txt = ParseUtils.stripStxEtxHeaderAndFooter(message);
         return ParseUtils.convertToSingleLine(txt).toUpperCase();
     }
 }

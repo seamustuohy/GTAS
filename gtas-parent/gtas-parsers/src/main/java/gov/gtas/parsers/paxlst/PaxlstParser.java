@@ -1,13 +1,12 @@
 package gov.gtas.parsers.paxlst;
 
-import gov.gtas.parsers.edifact.EdifactParser;
-import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
-import gov.gtas.parsers.util.ParseUtils;
-
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
+
+import gov.gtas.parsers.edifact.EdifactParser;
+import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 
 /**
  * A transmitted message to DHS may include only one instance of a PAXLST
@@ -17,7 +16,7 @@ import java.util.List;
  */
 public abstract class PaxlstParser {
     private String message;
-    private String segmentPackageName;
+    private SegmentFactory factory;
 
     protected enum GROUP {
         NONE,
@@ -30,10 +29,10 @@ public abstract class PaxlstParser {
     protected GROUP currentGroup;
     protected ApisMessageVo parsedMessage;
     protected List<Segment> segments;
-    
+
     public PaxlstParser(String message, String segmentPackageName) {
         this.message = message;
-        this.segmentPackageName = segmentPackageName;
+        factory = new SegmentFactory(segmentPackageName);
     }
 
     protected abstract void parseSegments();
@@ -48,10 +47,8 @@ public abstract class PaxlstParser {
     }
     
     private void processMessageAndGetSegments() throws ParseException {
-        String txt = ParseUtils.stripStxEtxHeaderAndFooter(message);               
-        SegmentFactory factory = new SegmentFactory(segmentPackageName);
         EdifactParser p = new EdifactParser();
-        LinkedList<Segment> edifactSegments = p.parse(txt);
+        LinkedList<Segment> edifactSegments = p.parse(message);
         for (Segment s: edifactSegments) {
             Segment paxlstSegment = factory.build(s);
             segments.add(paxlstSegment);
