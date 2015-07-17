@@ -1,12 +1,7 @@
 package gov.gtas.rule;
 
 import gov.gtas.bo.RuleExecutionStatistics;
-import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.bo.RuleServiceRequestType;
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Flight;
 
-import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,50 +37,6 @@ public class RuleEngineHelper {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Creates a request from an arbitrary object.
-	 * 
-	 * @param req
-	 *            the input object.
-	 * @return RuleServiceRequest object.
-	 */
-	public static RuleServiceRequest createRequest(
-			final gov.gtas.model.Message req) {
-		final List<gov.gtas.model.Message> requestList = new ArrayList<gov.gtas.model.Message>();
-		requestList.add(req);
-		return new RuleServiceRequest() {
-			public List<?> getRequestObjects() {
-				return requestList;
-			}
-
-			public RuleServiceRequestType getRequestType() {
-				return RuleServiceRequestType.ANY_MESSAGE;
-			}
-
-		};
-	}
-
-	/**
-	 * Creates a request from a API message.
-	 * 
-	 * @param req
-	 *            the API message.
-	 * @return RuleServiceRequest object.
-	 */
-	public static RuleServiceRequest createApisRequest(final ApisMessage req) {
-		final List<Flight> requestList = new ArrayList<Flight>(req.getFlights());
-		return new RuleServiceRequest() {
-			public List<?> getRequestObjects() {
-				return requestList;
-			}
-
-			public RuleServiceRequestType getRequestType() {
-				return RuleServiceRequestType.APIS_MESSAGE;
-			}
-
-		};
 	}
 
 	/**

@@ -1,12 +1,12 @@
 package gov.gtas.svc;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.rule.RuleService;
-import gov.gtas.svc.TargetingService;
 
 import org.junit.After;
 import org.junit.Before;
@@ -51,10 +51,8 @@ public class TargetingServiceTest {
 	public void testAnalyzeApisMessage() {
 		ReflectionTestUtils.setField(targetingService, "ruleService", mockRuleService);
 		ApisMessage message = new ApisMessage();
-		when(mockRuleService.createRuleServiceRequest(message)).thenReturn(null);
 		targetingService.analyzeApisMessage(message);
-		verify(mockRuleService).createRuleServiceRequest(message);
-		verify(mockRuleService).invokeRuleEngine(null);
+		verify(mockRuleService).invokeRuleEngine(any(RuleServiceRequest.class));
 	}
 
 }
