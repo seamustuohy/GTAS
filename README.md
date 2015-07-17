@@ -7,7 +7,6 @@
 * Apache Tomcat (7.0.62)
 * MariaDB (10.0.19 Stable)
     * https://downloads.mariadb.org/
-    * https://tomcat.apache.org/download-70.cgi
 * Drools (6.2)
     * http://www.drools.org/download/download.html
     * http://download.jboss.org/drools/release/6.2.0.Final/org.drools.updatesite/
@@ -42,3 +41,15 @@ sudo -u tomcat sh bin/catalina.sh start
 > tail -f logs/catalina.out
 
 ### Importing Test Data
+
+1. The lookup data is located in gtas-commons/src/main/resources/sql.  Load these files from the mysql command line as you may experience problems with special characters from Heidisql:
+> mysql -u root -p
+source [sql filename]
+2. Sample users and roles are in config/db/gtas_data.sql 
+3. To load sample APIS data (flights, passengers), download keith_msgs.zip from the google drive folder/APIS.
+4. unzip the folder into a temp directory
+5. Use the generated jar under the apis-loader module to load one or more files.
+6. For example, to load one file:
+> java -jar apis-loader/target/apis-loader-0.1-SNAPSHOT-jar-with-dependencies.jar 10.txt
+7. To load all of the sample files, you need to provide two directories -- for the source files and one where the loader will place the processed files.  e.g.,
+> java -jar apis-loader/target/apis-loader-0.1-SNAPSHOT-jar-with-dependencies.jar /tmp/keith_msgs/ /tmp/out/
