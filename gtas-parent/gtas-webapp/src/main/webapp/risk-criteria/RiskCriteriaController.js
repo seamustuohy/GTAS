@@ -267,26 +267,30 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
                     "id": "Flight.eta",
                     "label": "Flight.eta",
                     "type": "datetime",
+                    operators: ['BETWEEN', 'EQUAL', 'GREATER_OR_EQUAL', 'LESSER_OR_EQUAL'],
                     plugin: 'datetimepicker',
                     plugin_config: datetimepickerOptions
                 }, {
                     "id": "Flight.etd",
                     "label": "Flight.etd",
                     "type": "datetime",
+                    operators: ['BETWEEN', 'EQUAL', 'GREATER_OR_EQUAL', 'LESSER_OR_EQUAL'],
                     plugin: 'datetimepicker',
                     plugin_config: datetimepickerOptions
                 }, {
                     "id": "Flight.flightNumber",
                     "label": "Flight.flightNumber",
-                    "type": "string"
+                    "type": "string",
+                    operators: ['EQUAL', 'IN']
                 }, {
                     "id": "Flight.thru",
                     "label": "Flight.thru",
                     "type": "string"
-                }, {
+                }, {`
                     "id": "Pax.age",
                     "label": "Pax.age",
-                    "type": "integer"
+                    "type": "integer",
+                    operators: ['BETWEEN', 'EQUAL', 'GREATER_OR_EQUAL', 'LESSER_OR_EQUAL']
                 }, {
                     "id": "Pax.citizenship_country",
                     "label": "Pax.citizenship_country",

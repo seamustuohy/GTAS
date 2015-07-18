@@ -44,8 +44,11 @@
     <script src="flights/FlightsService.js"></script>
     <script src="pax/PaxController.js"></script>
     <script src="pax/PaxService.js"></script>
-    <script src="query/QueryController.js"></script>
-    <script src="query/QueryService.js"></script>
+    <script src="risk-criteria/RiskCriteriaController.js"></script>
+    <script src="risk-criteria/RiskCriteriaService.js"></script>
+    <script src="query-builder/QueryBuilderController.js"></script>
+    <script src="query-builder/QueryBuilderService.js"></script>
+
 </head>
 <body>
 <header class="navbar navbar-custom navbar-fixed-top">
@@ -71,7 +74,10 @@
                     <a role="button" class="dropdown-toggle" dropdown-toggle>Manage <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a ui-sref="query">Risk Criteria</a>
+                            <a ui-sref="query-builder">Query Builder</a>
+                        </li>
+                        <li>
+                            <a ui-sref="risk-criteria">Risk Criteria</a>
                         </li>
                     </ul>
                 </li>
