@@ -45,10 +45,10 @@ public class Query implements Serializable {
 	@JoinColumn(name = "deleted_by")
 	private User deletedBy;
 	
-	@Column(name = "query_title", length = 50, nullable = false)
+	@Column(name = "query_title", length = 20, nullable = false)
 	private String title;
 	
-	@Column(name = "query_description", length = 250)
+	@Column(name = "query_description", length = 100)
 	private String description;
 	
 	@Column(name = "query_text", nullable = false, columnDefinition = "LONGTEXT")

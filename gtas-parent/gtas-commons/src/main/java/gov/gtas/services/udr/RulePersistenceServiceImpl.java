@@ -216,6 +216,14 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	public KnowledgeBase findUdrKnowledgeBase() {
 		return udrRuleRepository.getKnowledgeBaseByName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
 	}
+	
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.udr.RulePersistenceService#findUdrKnowledgeBase(java.lang.String)
+	 */
+	@Override
+	public KnowledgeBase findUdrKnowledgeBase(String kbName) {
+		return udrRuleRepository.getKnowledgeBaseByName(kbName);
+	}
 	/* (non-Javadoc)
 	 * @see gov.gtas.services.udr.RulePersistenceService#saveKnowledgeBase(gov.gtas.model.udr.KnowledgeBase)
 	 */

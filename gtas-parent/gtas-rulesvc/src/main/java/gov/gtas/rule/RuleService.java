@@ -1,7 +1,6 @@
 package gov.gtas.rule;
 
 import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.model.Message;
 
 /**
  * The interface for the Rule Engine.
@@ -31,7 +30,7 @@ public interface RuleService {
 	 *            the rule request message.
 	 * @return the result of the rule engine invocation.
 	 */
-	RuleServiceResult invokeAdhocRulesFRomString(String rules, RuleServiceRequest req);
+	RuleServiceResult invokeAdhocRulesFromString(String rules, RuleServiceRequest req);
 	/**
 	 * Execute the rule engine on the specified request for the default KnowledgeBase.
 	 * 
@@ -40,15 +39,15 @@ public interface RuleService {
 	 * @return the result of the rule engine invocation.
 	 */
 	RuleServiceResult invokeRuleEngine(RuleServiceRequest req);
-
 	/**
-	 * Create a rule engine request message from a message object from the
-	 * domain model.
+	 * Execute the rule engine on the specified request for the default KnowledgeBase.
 	 * 
-	 * @param requestMessage
-	 *            the message object.
-	 * @return the constructed rule engine request suitable for Rule Engine
-	 *         invocation.
+	 * @param req
+	 *            the rule request message.
+	 * @param kbName
+	 *            The name of the knowledge base to use for executing the request.
+	 * @return the result of the rule engine invocation.
 	 */
-	RuleServiceRequest createRuleServiceRequest(Message requestMessage);
+	RuleServiceResult invokeRuleEngine(RuleServiceRequest req, String kbName);
+
 }

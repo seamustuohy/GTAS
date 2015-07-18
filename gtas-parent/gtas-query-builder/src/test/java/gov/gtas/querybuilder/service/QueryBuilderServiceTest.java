@@ -8,9 +8,9 @@ import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.constants.Constants;
+import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.model.Query;
-import gov.gtas.querybuilder.util.Constants;
-import gov.gtas.querybuilder.util.EntityEnum;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

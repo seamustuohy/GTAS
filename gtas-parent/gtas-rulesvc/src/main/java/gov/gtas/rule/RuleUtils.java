@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -23,6 +25,8 @@ import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.Message;
 import org.kie.api.builder.Results;
 import org.kie.api.conf.EventProcessingOption;
+import org.kie.api.event.rule.AgendaEventListener;
+import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
@@ -170,7 +174,62 @@ public class RuleUtils {
 	    
 //	    KieBase kieBase = kieContainer.getKieBase();//alternative way to get the default KieBase
 	    
-	    return kieBase;
-    	
+	    return kieBase;   	
     }
+
+	/**
+	 * Creates a simple rule session from the provided session name. Note: The
+	 * session name must be configured in the KieModule configuration file
+	 * (META-INF/kmodule.xml).
+	 * 
+	 * @param sessionName
+	 *            the session name.
+	 * @param eventListenerList
+	 *            the list of event listeners to attach to the session.
+	 * @return the created session.
+	 */
+	public static KieSession initSessionFromClasspath(final String sessionName,
+			final List<EventListener> eventListenerList) {
+		// KieServices is the factory for all KIE services
+		KieServices ks = KieServices.Factory.get();
+
+		// From the KIE services, a container is created from the class-path
+		KieContainer kc = ks.getKieClasspathContainer();
+
+		// From the container, a session is created based on
+		// its definition and configuration in the META-INF/kmodule.xml file
+		KieSession ksession = kc.newKieSession(sessionName);
+
+		// Once the session is created, the application can interact with it
+		// In this case it is setting a global as defined in the
+		// gov/gtas/rule/gtas.drl file
+		ksession.setGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME,
+				new ArrayList<Object>());
+
+		// The application can also setup listeners
+		if (eventListenerList != null) {
+			for (EventListener el : eventListenerList) {
+				if (el instanceof AgendaEventListener) {
+					ksession.addEventListener((AgendaEventListener) el);
+				} else if (el instanceof RuleRuntimeEventListener) {
+					ksession.addEventListener((RuleRuntimeEventListener) el);
+				}
+			}
+		}
+
+		// To setup a file based audit logger, uncomment the next line
+		// KieRuntimeLogger logger = ks.getLoggers().newFileLogger( ksession,
+		// "./helloworld" );
+
+		// To setup a ThreadedFileLogger, so that the audit view reflects events
+		// whilst debugging,
+		// uncomment the next line
+		// KieRuntimeLogger logger = ks.getLoggers().newThreadedFileLogger(
+		// ksession, "./helloworld", 1000 );
+
+		// Remove comment if using logging
+		// logger.close();
+
+		return ksession;
+	}
 }

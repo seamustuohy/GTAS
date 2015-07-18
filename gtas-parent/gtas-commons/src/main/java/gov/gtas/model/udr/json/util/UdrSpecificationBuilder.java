@@ -17,6 +17,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * A builder pattern object for creating UDR objects programmatically.
+ * 
+ * @author GTAS3
+ *
+ */
 public class UdrSpecificationBuilder {
 	private Stack<QueryObject> queryObjectStack;
 	private Long id;
@@ -55,8 +61,7 @@ public class UdrSpecificationBuilder {
 	}
 
 	public UdrSpecificationBuilder addTerm(EntityLookupEnum entity,
-			String attr, ValueTypesEnum type, OperatorCodeEnum op,
-			String[] val) {
+			String attr, ValueTypesEnum type, OperatorCodeEnum op, String[] val) {
 		queryObjectStack
 				.peek()
 				.getRules()
@@ -79,7 +84,7 @@ public class UdrSpecificationBuilder {
 			QueryConditionEnum condition) {
 		if (queryObjectStack.size() <= 1) {
 			throw new RuntimeException(
-					"UdrSpecificationBuilder.addSiblingQueryObject() - Cannot add sibling to stack size ="
+					"UdrSpecificationBuilder.addSiblingQueryObject() - Cannot add sibling to Root Query Object. Stack size ="
 							+ queryObjectStack.size());
 		}
 		// first add the previous sibling to parent
@@ -95,6 +100,22 @@ public class UdrSpecificationBuilder {
 	}
 
 	/**
+	 * Pops the last child from the stack and adds it as a child to its parent.
+	 * 
+	 * @return
+	 */
+	public UdrSpecificationBuilder endCurrentQueryObject() {
+		if (queryObjectStack.size() <= 1) {
+			throw new RuntimeException(
+					"UdrSpecificationBuilder.endCurrentQueryObject() - There is no child Query object to be ended. Stack size ="
+							+ queryObjectStack.size());
+		}
+		QueryObject lastChild = queryObjectStack.pop();
+		queryObjectStack.peek().getRules().add(lastChild);
+		return this;
+	}
+
+	/**
 	 * Creates a sample UDR specification JSON object.
 	 * 
 	 * @return UDR JSON object.
@@ -102,21 +123,24 @@ public class UdrSpecificationBuilder {
 	public static UdrSpecification createSampleSpec() {
 		return createSampleSpec("jpjones", "Test1", "Test Description");
 	}
+
 	/**
-	 * Creates a sample UDR specification JSON object.
-	 * (This is used for testing.)
+	 * Creates a sample UDR specification JSON object. (This is used for
+	 * testing.)
+	 * 
 	 * @param userId
 	 * @param title
 	 * @param description
 	 * @return
 	 */
-	public static UdrSpecification createSampleSpec(String userId, String title, String description) {
+	public static UdrSpecification createSampleSpec(String userId,
+			String title, String description) {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
 		bldr.addTerm(EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_DOB,
-				ValueTypesEnum.DATE, OperatorCodeEnum.EQUAL,
-				new String[] { DateCalendarUtils.formatJsonDate(new Date())});
+				EntityAttributeConstants.PAX_ATTTR_DOB, ValueTypesEnum.DATE,
+				OperatorCodeEnum.EQUAL,
+				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
@@ -124,29 +148,29 @@ public class UdrSpecificationBuilder {
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
-				ValueTypesEnum.STRING, OperatorCodeEnum.IN,
-				new String[] { "DBY", "PKY", "FLT" });
+				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
+						"DBY", "PKY", "FLT" });
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
-		bldr.addMeta(title, description, new Date(), null, true,
-				userId);
+		bldr.addMeta(title, description, new Date(), null, true, userId);
 		return bldr.build();
 	}
-	public static UdrSpecification createSampleSpec2(String userId, String title, String description) {
+
+	public static UdrSpecification createSampleSpec2(String userId,
+			String title, String description) {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.AND);
 		bldr.addTerm(EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_DOB,
-				ValueTypesEnum.DATE, OperatorCodeEnum.EQUAL,
-				new String[] { DateCalendarUtils.formatJsonDate(new Date())});
+				EntityAttributeConstants.PAX_ATTTR_DOB, ValueTypesEnum.DATE,
+				OperatorCodeEnum.EQUAL,
+				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
 		bldr.addTerm(EntityLookupEnum.Pax,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
-		bldr.addMeta(title, description, new Date(), null, true,
-				userId);
+		bldr.addMeta(title, description, new Date(), null, true, userId);
 		return bldr.build();
 	}
 }

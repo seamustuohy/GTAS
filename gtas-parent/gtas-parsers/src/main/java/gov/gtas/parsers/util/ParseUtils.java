@@ -2,6 +2,7 @@ package gov.gtas.parsers.util;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,11 +11,18 @@ import java.util.Locale;
 
 public class ParseUtils {
     /**
-     * Strip the header of APIS messages
+     * Some telecommunications transmission protocols require various
+     * communication type headers and trailers to facilitate addressing,
+     * routing, security, and other purposes.
+     * 
+     * These headers and trailers are typically delimited by special control
+     * characters STX and ETX. This method removes the header and trailer from
+     * the message. See https://en.wikipedia.org/wiki/Control_characters
+     * 
      * @param text
-     * @return
+     * @return message text without header or footer
      */
-    public static String stripApisHeaderAndFooter(String text) {
+    public static String stripStxEtxHeaderAndFooter(String text) {
         String rv = text;
         final int STX_CODEPOINT = 2;
         final int ETX_CODEPOINT = 3;
@@ -65,6 +73,26 @@ public class ParseUtils {
         return rv;
     }
     
+    /**
+     * @param str input string
+     * @return a concatenation of all the lines in 'str'.  Trim each line of
+     * leading and trailing whitespace.  Empty lines get clobbered.
+     */
+    public static String convertToSingleLine(String str) {
+        if (str == null) return null;
+        String[] lines = str.split("[\r\n]+");
+        StringBuilder sb = new StringBuilder();
+        for (String s : lines) {
+            sb.append(s.trim());
+        }
+        return sb.toString();
+    }
+    
+    /**
+     * @param txt input string
+     * @param encoding character encoding of the input string
+     * @return an md5 hash of the input string
+     */
     public static String getMd5Hash(String txt, Charset encoding) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -74,7 +102,7 @@ public class ParseUtils {
                 sb.append(String.format("%02X", b));
             }
             return sb.toString();
-        } catch (Exception e) {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         

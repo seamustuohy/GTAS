@@ -40,6 +40,17 @@ public class RuleServiceConstants {
 	 */
 	public static final String RULE_COMPILE_ERROR_CODE = "RULE_COMPILE_ERROR_CODE";
 
+	/*
+	 * This is the error code for an internal system error indicating that the
+	 * UDR generated knowledge base could not be retrieved from the data base.
+	 */
+	public static final String KB_NOT_FOUND_ERROR_CODE = "KB_NOT_FOUND";
+	/*
+	 * This is the error code for an internal system error indicating that the
+	 * UDR generated knowledge base could not de-serialized from the DB record.
+	 */
+	public static final String KB_DESERIALIZATION_ERROR_CODE = "KB_DESERIALIZATION_ERROR";
+
 	public static final String INCOMPLETE_TREE_ERROR_CODE = "INCOMPLETE_TREE_ERROR_CODE";
 	
 	// //////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +66,18 @@ public class RuleServiceConstants {
 	 * UDR generated rule could not be compiled.
 	 */
 	public static final String RULE_COMPILE_ERROR_MESSAGE = "The rule file '%s' could not be compiled.";
+	/*
+	 * This is the error message for an internal system error indicating that the
+	 * UDR generated knowledge base could not be retrieved from the data base.
+	 */
+	public static final String KB_NOT_FOUND_ERROR_MESSAGE = "The Knowledge Base named %s could not be retrieved from the data base.";
 	
+	/*
+	 * This is the error code for an internal system error indicating that the
+	 * UDR generated knowledge base could not de-serialized from the DB record.
+	 */
+	public static final String KB_DESERIALIZATION_ERROR_MESSAGE = "The Kie Knowledge Base could not be de-serialized from the DB record with ID = $d";
+
 	public static final String INCOMPLETE_TREE_ERROR_MESSAGE = "The query tree is incomplete at level %d.";
 	
 }

@@ -9,7 +9,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ApisMessageLoader {
-    public static void processSingleFile(ApisMessageService svc, String filePath) {
+    public static void processSingleFile(ApisMessageService svc, File f) {
+        String filePath = f.getAbsolutePath();
+        if (exceedsMaxSize(f)) {
+            System.err.println(filePath + " exceeds max file size");
+            return;
+        }
+        
         System.out.println("processing file " + filePath);
         ApisMessageVo m = svc.parseApisMessage(filePath);
         if (m == null) {
@@ -18,6 +24,12 @@ public class ApisMessageLoader {
         }
 
         svc.loadApisMessage(m);
+    }
+    
+    public static boolean exceedsMaxSize(File f) {
+        final int MAX_SIZE = 10;  // kilobytes
+        double size = (f.length()) / 1024;  
+        return size > MAX_SIZE;
     }
 
     public static void main(String[] args) {
@@ -35,7 +47,7 @@ public class ApisMessageLoader {
                 for (int i = 0; i < args.length; i++) {
                     File f = new File(args[i]);
                     if (f.isFile()) {
-                        processSingleFile(svc, args[i]);
+                        processSingleFile(svc, f);
                     }
                 }
                 
@@ -54,7 +66,7 @@ public class ApisMessageLoader {
                 for (int i = 0; i < listOfFiles.length; i++) {
                     File f = listOfFiles[i];
                     if (f.isFile()) {
-                        processSingleFile(svc, f.getAbsolutePath());
+                        processSingleFile(svc, f);
                         f.renameTo(new File(outgoingDir + File.separator + f.getName()));
                     }
                 }

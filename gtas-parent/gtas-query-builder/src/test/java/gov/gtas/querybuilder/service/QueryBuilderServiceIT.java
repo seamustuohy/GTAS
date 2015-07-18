@@ -11,11 +11,13 @@ import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.config.QueryBuilderAppConfig;
+import gov.gtas.querybuilder.constants.Constants;
+import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.querybuilder.enums.OperatorEnum;
+import gov.gtas.querybuilder.exceptions.InvalidQueryObjectException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.model.Query;
-import gov.gtas.querybuilder.util.Constants;
-import gov.gtas.querybuilder.util.EntityEnum;
-import gov.gtas.querybuilder.util.OperatorEnum;
+import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.repository.PassengerRepository;
 
@@ -44,10 +46,6 @@ public class QueryBuilderServiceIT {
 
 	@Autowired
 	QueryBuilderService queryService;
-//	@Autowired
-//	DocumentRepository docDao;
-//	@Autowired
-//	PassengerRepository passRepo;
 	
 	QueryObject query;
 	QueryTerm rule;
@@ -71,9 +69,9 @@ public class QueryBuilderServiceIT {
 	// Flight Queries
 	//----------------------------------------
 //	@Test
-	public void testRunQueryAgainstFlights() {
+	public void testRunQueryAgainstFlights() throws InvalidQueryObjectException {
 		QueryObject query = buildSimpleQuery();
-		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
+		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query, EntityEnum.FLIGHT);
 		
 		if(flights != null && flights.size() > 0) {
 			System.out.println("Number of flights: " + flights.size());
@@ -89,9 +87,9 @@ public class QueryBuilderServiceIT {
 	}
 
 //	@Test
-	public void testSimpleDateQueryAgainstFlights() {
+	public void testSimpleDateQueryAgainstFlights() throws InvalidQueryObjectException {
 		QueryObject query = buildSimpleDateQuery();
-		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
+		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query, EntityEnum.FLIGHT);
 		
 		if(flights != null && flights.size() > 0) {
 			System.out.println("Number of flights: " + flights.size());
@@ -106,9 +104,9 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleIsNullQueryAgainstFlights() {
+	public void testSimpleIsNullQueryAgainstFlights() throws InvalidQueryObjectException {
 		QueryObject query = buildSimpleIsNullQuery();
-		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
+		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query, EntityEnum.FLIGHT);
 		
 		if(flights != null && flights.size() > 0) {
 			System.out.println("Number of flights: " + flights.size());
@@ -123,9 +121,9 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleContainsQueryAgainstFlights() {
+	public void testSimpleContainsQueryAgainstFlights() throws InvalidQueryObjectException {
 		QueryObject query = buildSimpleContainsQuery();
-		List<Flight> flights = (List<Flight>) queryService.runQuery(query, EntityEnum.FLIGHT);
+		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query, EntityEnum.FLIGHT);
 		
 		if(flights != null && flights.size() > 0) {
 			System.out.println("Number of flights: " + flights.size());
@@ -148,9 +146,10 @@ public class QueryBuilderServiceIT {
 	// Passenger Queries
 	//-------------------------------
 	@Test
-	public void testRunQueryAgainstPassengers() {
+	public void testRunQueryAgainstPassengers() throws InvalidQueryObjectException {
 		QueryObject query = buildSimpleQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
+		
+		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query, EntityEnum.PAX);
 		SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 		
 		if(passengers != null && passengers.size() > 0) {
@@ -219,9 +218,9 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleIsNullQueryAgainstPassengers() {
+	public void testSimpleIsNullQueryAgainstPassengers() throws InvalidQueryObjectException {
 		QueryObject query = buildSimpleIsNullQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
+		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query, EntityEnum.PAX);
 		
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
@@ -236,9 +235,9 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleContainsQueryAgainstPassengers() {
+	public void testSimpleContainsQueryAgainstPassengers() throws InvalidQueryObjectException {
 		QueryObject query = buildSimpleContainsQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
+		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query, EntityEnum.PAX);
 		
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
@@ -253,9 +252,9 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleBetweenQueryAgainstPassengers() {
+	public void testSimpleBetweenQueryAgainstPassengers() throws InvalidQueryObjectException {
 		QueryObject query = buildSimpleBetweenQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runQuery(query, EntityEnum.PAX);
+		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query, EntityEnum.PAX);
 
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
@@ -311,7 +310,7 @@ public class QueryBuilderServiceIT {
 			queryToSave.setDescription("Test description " + i);
 			queryToSave.setQueryText(queryText);
 			
-			queryService.saveQuery(queryToSave);
+//			queryService.saveQuery(queryToSave);
 			Thread.sleep(5000); // wait for 5 seconds
 		}
 		
@@ -324,7 +323,7 @@ public class QueryBuilderServiceIT {
 			queryToSave.setDescription("Test description " + i);
 			queryToSave.setQueryText(queryText);
 			
-			queryService.saveQuery(queryToSave);
+//			queryService.saveQuery(queryToSave);
 			Thread.sleep(5000); // wait for 5 seconds
 		}
 		
@@ -346,7 +345,7 @@ public class QueryBuilderServiceIT {
 		queryToSave.setDescription("Test description ");
 		queryToSave.setQueryText(queryText);
 			
-		queryService.saveQuery(queryToSave);
+//		queryService.saveQuery(queryToSave);
 	}
 	
 //	@Test 
@@ -359,15 +358,15 @@ public class QueryBuilderServiceIT {
 		query.setDescription("Updated query from SimpleBetweenQuery to  SimpleQuery");
 		query.setQueryText(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleQuery()));
 		
-		Query editedQuery = queryService.editQuery(query);
+//		Query editedQuery = queryService.editQuery(query);
 		
-		System.out.println("-----------------------------------");
-		System.out.println("Edited Query");
-		System.out.println("id: " + editedQuery.getId());
-		System.out.println("query title: " + editedQuery.getTitle());
-		System.out.println("query description: " + editedQuery.getDescription());
-		System.out.println("query text: " + editedQuery.getQueryText());
-		System.out.println("-----------------------------------\n");
+//		System.out.println("-----------------------------------");
+//		System.out.println("Edited Query");
+//		System.out.println("id: " + editedQuery.getId());
+//		System.out.println("query title: " + editedQuery.getTitle());
+//		System.out.println("query description: " + editedQuery.getDescription());
+//		System.out.println("query text: " + editedQuery.getQueryText());
+//		System.out.println("-----------------------------------\n");
 	}
 	
 //	@Test
@@ -402,10 +401,10 @@ public class QueryBuilderServiceIT {
 	
 	private QueryObject buildSimpleQuery() {
 		
-		rule.setEntity("Pax");
-		rule.setField("firstName");
+		rule.setEntity("Paxi");
+		rule.setField("firstNamei");
 		rule.setOperator("equal");
-		rule.setType("string");
+		rule.setType("stringi");
 		rule.setValue("David");
 		
 		rules.add(rule);

@@ -3,8 +3,7 @@ package gov.gtas.querybuilder.repository;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
-import gov.gtas.querybuilder.exceptions.Constants;
-import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.exceptions.QueryRepositoryException;
 import gov.gtas.querybuilder.model.Query;
 
 import java.util.ArrayList;
@@ -58,7 +57,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 
 	@Override
 	@Transactional
-	public Query saveQuery(Query query) throws QueryAlreadyExistsException {
+	public Query saveQuery(Query query) throws QueryRepositoryException {
 		if(query != null & query.getQueryText() != null) {
 			
 			if(isUniqueTitle(query)) {
@@ -70,7 +69,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				entityManager.persist(query);
 			}
 			else {
-				throw new QueryAlreadyExistsException(Constants.QUERY_EXISTS_ERROR_MSG);
+				throw new QueryRepositoryException();
 			}
 		}
 		
@@ -79,7 +78,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 
 	@Override
 	@Transactional
-	public Query editQuery(Query query) throws QueryAlreadyExistsException {
+	public Query editQuery(Query query) throws QueryRepositoryException {
 		Query queryToSave = new Query();
 		boolean uniqueTitle = true;
 		
@@ -99,7 +98,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					entityManager.flush();
 				}
 				else {
-					throw new QueryAlreadyExistsException(Constants.QUERY_EXISTS_ERROR_MSG);
+					throw new QueryRepositoryException();
 				}
 		}
 	
