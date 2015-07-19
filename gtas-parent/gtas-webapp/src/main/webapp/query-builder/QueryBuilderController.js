@@ -1,8 +1,8 @@
-app.controller('QueryController', function($scope, $filter, $q, ngTableParams, queryService) {
+app.controller('QueryBuilderController', function($scope, $filter, $q, ngTableParams, service) {
     var datepickerOptions = {
         format: 'yyyy-mm-dd',
-        todayBtn: 'linked',
-        todayHighlight: true,
+//        todayBtn: 'linked',
+//        todayHighlight: true,
         autoClose: true
     };
 
@@ -385,52 +385,6 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
                         .find('.selectize-control').removeClass('form-control');
                 }
             });
-        // expects array of strings
-        var getOptions = function (strings, selectedValue) {
-            return '<option value="Empty / New">Empty / New</option>' + $.map(strings, function (val) {
-                    return '<option value="' + val + '" ' + (selectedValue === val ? 'selected' : '') + '>' + val.split(' | ')[0] + '</option>';
-                }).join('');
-        };
-
-        Array.prototype.addUnique = function (name) {
-            if (this.indexOf(name) < 0) {
-                this.push(name);
-                return true;
-            }
-            return false;
-        };
-
-        Array.prototype.remove = function () {
-            var what, a = arguments, L = a.length, ax;
-            while (L && this.length) {
-                what = a[--L];
-                while ((ax = this.indexOf(what)) !== -1) {
-                    this.splice(ax, 1);
-                }
-            }
-            return this;
-        };
-
-        $savedQueryNamesList = $(document.querySelector('#saved-query-names'));
-        queryNameInput = document.querySelector('#query-name');
-
-        var queryName;
-        var convertToArray = function (string) {
-            return string === null || string === "[]" ? [] : string.split(',');
-        };
-
-        var savedQueryNames = convertToArray(localStorage.getItem('savedQueryNames'));
-        var updateSavedQueryNamesList = function () {
-            if (savedQueryNames.length) {
-                $savedQueryNamesList.html(getOptions(savedQueryNames, queryName)).selectpicker('refresh');
-                localStorage.setItem('savedQueryNames', savedQueryNames);
-                $savedQueryNamesList.parent().removeClass('hide');
-            } else {
-                $savedQueryNamesList.parent().addClass('hide');
-            }
-            queryName = null;
-            queryNameInput.value = '';
-        };
 
         return $builder;
     };
@@ -443,7 +397,7 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
     };
     $scope.loadRule = function () {
         //<i class="glyphicon glyphicon-pencil"></i>
-        queryService.loadRuleById(this.summary.id).then(function (myData) {
+        service.loadRuleById(this.summary.id).then(function (myData) {
             $scope.ruleId = myData.id;
             $scope.loadSummary(myData.summary);
             $scope.$builder.queryBuilder('loadRules', myData.details);
@@ -461,7 +415,8 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
         counts: [],         // disable / hide page row count toggle
         total: data.length, // length of data
         getData: function ($defer, params) {
-            queryService.getList($scope.authorId).then(function (myData) {
+            service.getList($scope.authorId).then(function (myData) {
+                var filteredData, orderedData;
                 data = [];
                 myData.forEach(function (obj) {
                     // add id to summary obj
@@ -471,10 +426,10 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
                 });
                 //vm.tableParams.total(result.total);
                 // use build-in angular filter
-                var filteredData = params.filter() ?
+                filteredData = params.filter() ?
                     $filter('filter')(data, params.filter()) :
                     data;
-                var orderedData = params.sorting() ?
+                orderedData = params.sorting() ?
                     $filter('orderBy')(filteredData, params.orderBy()) :
                     data;
                 params.total(orderedData.length); // set total for recalc pagination
@@ -496,16 +451,11 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
         $scope.resetSummary();
     };
 
-    $scope.deleteRule = function () {
-        var msg = $scope.title + ' | #' + $scope.ruleId;
-        queryService.ruleDelete($scope.ruleId, $scope.authorId).then(function (myData) {
+    $scope.delete = function () {
+        service.deleteQuery($scope.ruleId, $scope.authorId).then(function (myData) {
             $scope.ruleId = null;
             $scope.resetQueryBuilder();
             $scope.resetSummary();
-
-            //TODO: SHOULD REMOVE FROM DATA AND REFRESH ng-table
-            alert('successfully deleted: ' + msg);
-            //window.location.reload();
             $scope.tableParams.reload();
         });
     };
@@ -522,71 +472,29 @@ app.controller('QueryController', function($scope, $filter, $q, ngTableParams, q
     $scope.startDate = $scope.today.toString();
 
     $scope.resetSummary = function () {
-        $scope.title = '';
         $scope.description = null;
-        $scope.startDate = $scope.today;
-        $scope.endDate = null;
-        $scope.enabled = true;
+        $scope.ruleId = null;
+        $scope.title = '';
     };
     $scope.resetSummary();
-    $scope.enabled = true;
     $scope.ruleId = null;
-    $scope.formats =["YYYY-MM-DD"];
 
     $scope.submit = function() {
-        var summary;
-        var startDate = moment($scope.startDate, $scope.formats, true);
-        var endDate = $scope.endDate || moment($scope.endDate, $scope.formats, true);
-
-        var ruleObject = {
-            id: $scope.ruleId,
-            details: $scope.$builder.queryBuilder('saveRules')
-        };
+        var queryObject;
         $scope.title = $scope.title.trim();
         if (!$scope.title.length ) {
             alert('Risk Criteria title summary can not be blank!');
             return;
         }
-
-        /* was told startDate ignored on updates so only matters on new rules */
-        if ($scope.ruleId === null) {
-            if (!startDate.isValid())
-            {
-                alert('Dates must be in this format: ' + $scope.formats.toString());
-                return;
-            }
-            if (startDate < $scope.today ) {
-                alert('Risk Criteria start date must be today or later when created new.');
-                return;
-            }
-        }
-
-        if ($scope.endDate !== null) {
-            if (!endDate.isValid() ) {
-                alert('End Date must be empty/open or in this format: ' + $scope.formats.toString());
-                return;
-            }
-            if (endDate < startDate ) {
-                alert('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
-                return;
-            }
-        }
-
-        summary = {
+        queryObject = {
+            id: $scope.ruleId,
             title: $scope.title,
             description: $scope.description || null,
-            startDate: $scope.startDate,
-            endDate: $scope.endDate || null,
-            enabled: $scope.enabled
+            userId: $scope.authorId,
+            query: $scope.$builder.queryBuilder('saveRules')
         };
-        data.push(summary);
-        ruleObject.summary = summary;
-        $scope.tableData = data;
 
-        $scope.tableParams.total($scope.tableData.length);
-        $scope.tableParams.reload();
-
-        queryService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
+        service.saveQuery(queryObject).then(function (myData) {
             if (typeof myData.errorCode !== "undefined")
             {
                 alert(myData.errorMessage);

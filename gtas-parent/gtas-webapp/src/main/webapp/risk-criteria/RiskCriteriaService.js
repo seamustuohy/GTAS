@@ -1,61 +1,83 @@
 app.service("queryService", function( $rootScope, $http, $q ) {
+    var baseUrl = '/gtas/udr/';
+
     // Return public API.
     return({
         getList: getListByAuthor,
         loadRuleById: loadRuleById,
         ruleDelete: ruleDelete,
-        ruleSave: ruleSave,
-        broadcast: broadcast
+        ruleSave: ruleSave
     });
 
     function loadRuleById(ruleId) {
-        var request = $http({
+        var request;
+
+        if (typeof ruleId === 'undefined' || ruleId === null ) {
+            console.log('not valid ruleId');
+            return;
+        }
+
+        request = $http({
             method: "get",
-            url: "/gtas/udr/get/" + ruleId,
+            url: baseUrl + "get/" + ruleId,
             params: {
                 action: "get"
             }
         });
+
         return( request.then( handleSuccess, handleError ) );
     }
 
-    function ruleDelete(ruleId, authorId) {
+    function ruleDelete(ruleId, userId) {
         var request;
 
-        if (ruleId === null) return;
+        if (typeof userId === 'undefined' || userId === null ) {
+            console.log('not valid user');
+            return;
+        }
+
+        if (typeof ruleId === 'undefined' || ruleId === null ) {
+            console.log('not valid ruleId');
+            return;
+        }
 
         request = $http({
             method: 'delete',
-            url: '/gtas/udr/'+ authorId + '/' + ruleId
+            url: baseUrl + userId + '/' + ruleId
         });
+
         return( request.then( handleSuccess, handleError ) );
     }
 
-    function ruleSave(ruleObj, authorId) {
-        var method = ruleObj.id === null ? 'post' : 'put';
-        var request = $http({
+    function ruleSave(ruleObj, userId) {
+        var method, request;
+
+        if (typeof userId === 'undefined' || userId === null ) {
+            console.log('not valid user');
+            return;
+        }
+
+        method = ruleObj.id === null ? 'post' : 'put';
+        request = $http({
             method: method,
-            url: '/gtas/udr/'+ authorId,
+            url: baseUrl + userId,
             data: ruleObj
         });
+
         return( request.then( handleSuccess, handleError ) );
     }
 
-    function getListByAuthor(authorId) {
-        var request = $http({
-            method: "get",
-            url: "/gtas/udr/list/" + authorId,
-            params: {
-                action: "get"
-            }
-        });
-        return( request.then( handleSuccess, handleError ) );
-    }
+    function getListByAuthor(userId) {
+        var request;
 
-    function getListForAnthony() {
-        var request = $http({
+        if (typeof userId === 'undefined' || userId === null ) {
+            console.log('not valid user');
+            return;
+        }
+
+        request = $http({
             method: "get",
-            url: "/gtas/udr/list/adelorie",
+            url: baseUrl + "list/" + userId,
             params: {
                 action: "get"
             }
@@ -72,9 +94,5 @@ app.service("queryService", function( $rootScope, $http, $q ) {
 
     function handleSuccess( response ) {
         return( response.data );
-    }
-
-    function broadcast(authorId) {
-        $rootScope.$broadcast('handleBroadcast', flightId);
     }
 });

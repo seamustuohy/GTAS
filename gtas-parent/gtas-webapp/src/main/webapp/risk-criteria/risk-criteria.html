@@ -82,19 +82,10 @@
         <input type="checkbox" ng-model="enabled" id="enabled" />
         <label for="description" class="hide">Description:</label>
         <input type="text" ng-model="description" id="description" placeholder="Description:"/>
-
     </fieldset>
     <fieldset>
         <legend>Conditions:</legend>
         <div id="builder"></div>
-        <div id="load-container" class="hide">
-            <label for="saved-query-names">Load:</label>
-            <select id="saved-query-names">
-                <option value=""> - </option>
-                <option value="sample">sample</option>
-            </select>
-
-        </div>
     </fieldset>
 
     <button data-ng-click="resetQueryBuilder()" class="btn btn-warning reset pull-right" data->Clear Conditions</button>
@@ -103,6 +94,6 @@
         <h3>Output</h3>
         <pre></pre>
     </div>
-    <button data-ng-click="deleteRule()" type="button" class="btn btn-danger pull-right" title="delete">Delete</button>
+    <button data-ng-click="delete()" type="button" class="btn btn-danger pull-right" title="delete">Delete</button>
     <button id="submit" class="btn btn-primary pull-right">Save</button>
 </form>
