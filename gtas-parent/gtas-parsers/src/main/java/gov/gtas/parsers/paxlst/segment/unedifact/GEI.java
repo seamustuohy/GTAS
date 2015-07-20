@@ -3,6 +3,7 @@ package gov.gtas.parsers.paxlst.segment.unedifact;
 import java.text.ParseException;
 
 import gov.gtas.parsers.edifact.Composite;
+import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
@@ -23,6 +24,7 @@ public class GEI extends Segment {
         super(GEI.class.getSimpleName(), composites);
         for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
+            Element[] e = c.getElements();
             switch (i) {
             case 0:
                 if (Integer.valueOf(c.getValue()) != 4) {
@@ -31,7 +33,16 @@ public class GEI extends Segment {
                 break;
 
             case 1:
-                switch (c.getValue()) {
+                String code = null;
+                if (c.getValue() != null) {
+                    code = c.getValue();
+                } else if (e != null && e.length >= 1) {
+                    code = e[0].getValue();
+                } else {
+                    throw new ParseException("unknown verification code", -1);
+                }
+                
+                switch (code) {
                 case "173":
                 case "ZZZ":
                     this.verified = true;

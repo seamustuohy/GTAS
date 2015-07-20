@@ -41,10 +41,7 @@ public class UNB extends Segment {
                 this.syntaxVersion = e[1].getValue();
                 break;
             case 1:
-                this.senderIdentification = e[0].getValue();
-                if (e.length > 1) {
-                    this.c_partnerIdentificationCodeQualifier = e[1].getValue();
-                }
+                this.senderIdentification = c.getValue();
                 break;
             case 2:
                 this.recipientIdentification = e[0].getValue();
