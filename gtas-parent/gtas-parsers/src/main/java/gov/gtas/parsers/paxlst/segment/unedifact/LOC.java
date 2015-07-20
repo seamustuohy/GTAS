@@ -1,17 +1,20 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.text.ParseException;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 public class LOC extends Segment {
     public enum LocCode {
-        GATE_PASS_LOCATION,
         DEPARTURE_AIRPORT,
         ARRIVAL_AIRPORT,
         BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT,
+        FINAL_DESTINATION,
         FILING_LOCATION,
         REPORTING_LOCATION,
+        GATE_PASS_LOCATION,
         
         // from pax LOC
         AIRPORT_OF_FIRST_US_ARRIVAL,
@@ -27,7 +30,7 @@ public class LOC extends Segment {
     private String firstRelatedLocationName;
     private String secondRelatedLocationName;
     
-    public LOC(Composite[] composites) {
+    public LOC(Composite[] composites) throws ParseException {
         super(LOC.class.getSimpleName(), composites);
         for (int i=0; i<this.composites.length; i++) {
             Composite c = this.composites[i];
@@ -36,25 +39,28 @@ public class LOC extends Segment {
             switch (i) {
             case 0:
                 switch(Integer.valueOf(c.getValue())) {
-                case 87:
-                    this.functionCode = LocCode.ARRIVAL_AIRPORT;
-                    break;                    
                 case 125:
                     this.functionCode = LocCode.DEPARTURE_AIRPORT;
+                    break;                    
+                case 87:
+                    this.functionCode = LocCode.ARRIVAL_AIRPORT;
                     break;                    
                 case 92:
                     this.functionCode = LocCode.BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT;
                     break;                   
-// ambiguous?
-//                case 91:
-//                    this.functionCode = LocCode.GATE_PASS_LOCATION;
-//                    break;                    
+                case 130:
+                    this.functionCode = LocCode.FINAL_DESTINATION;
+                    break;                   
                 case 188:
                     this.functionCode = LocCode.FILING_LOCATION;
                     break;                    
                 case 172:
                     this.functionCode = LocCode.REPORTING_LOCATION;
                     break;                    
+                // ambiguous?
+//                case 91:
+//                    this.functionCode = LocCode.GATE_PASS_LOCATION;
+//                    break;
                     
                 case 22:
                     this.functionCode = LocCode.AIRPORT_OF_FIRST_US_ARRIVAL;
@@ -75,7 +81,7 @@ public class LOC extends Segment {
                     this.functionCode = LocCode.PLACE_OF_DOCUMENT_ISSUE;
                     break;
                 default:
-                    logger.error("LOC: invalid party function code: " + c.getValue());                    
+                    throw new ParseException("LOC: invalid party function code: " + c.getValue(), -1);                    
                 }
                 break;
 
@@ -83,17 +89,17 @@ public class LOC extends Segment {
                 this.locationNameCode = c.getValue();
                 break;
                 
-//            case 2:
-//                if (e.length >= 3) {
-//                    this.firstRelatedLocationName = e[2].getValue();
-//                }
-//                break;
-//
-//            case 3:
-//                if (e.length >= 3) {
-//                    this.secondRelatedLocationName = e[2].getValue();
-//                }
-//                break;
+            case 2:
+                if (e != null && e.length >= 4) {
+                    this.firstRelatedLocationName = e[3].getValue();
+                }
+                break;
+
+            case 3:
+                if (e != null && e.length >= 4) {
+                    this.secondRelatedLocationName = e[3].getValue();
+                }
+                break;
             }
         }
     }

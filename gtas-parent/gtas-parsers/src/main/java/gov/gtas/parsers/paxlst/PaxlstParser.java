@@ -35,7 +35,7 @@ public abstract class PaxlstParser {
         factory = new SegmentFactory(segmentPackageName);
     }
 
-    protected abstract void parseSegments();
+    protected abstract void parseSegments() throws ParseException;
     
     public ApisMessageVo parse() throws ParseException {
         this.currentGroup = GROUP.NONE;    
