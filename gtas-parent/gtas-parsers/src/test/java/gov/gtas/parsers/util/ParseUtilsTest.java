@@ -10,39 +10,47 @@ public class ParseUtilsTest {
     public void testSplitHappyPath() {
         String segmentText = "DTM*36:10109$LOC*31*USA$NAD*FL***ANDREWS:TIFFANY:PAGE$ATT*2**F$";
         String segs[] = ParseUtils.splitWithEscapeChar(segmentText, '$', '?');
-        assertEquals(segs.length, 4);
-        assertEquals(segs[0], "DTM*36:10109");
-        assertEquals(segs[1], "LOC*31*USA");
-        assertEquals(segs[2], "NAD*FL***ANDREWS:TIFFANY:PAGE");
-        assertEquals(segs[3], "ATT*2**F");
+        assertEquals(4, segs.length);
+        assertEquals("DTM*36:10109", segs[0]);
+        assertEquals("LOC*31*USA", segs[1]);
+        assertEquals("NAD*FL***ANDREWS:TIFFANY:PAGE", segs[2]);
+        assertEquals("ATT*2**F", segs[3]);
     }
 
     @Test
     public void testSplitWithEscaped() {
         String segmentText = "DTM*36:10109'LOC*31*USA'NAD*FL***MC?'ANDREWS:TIFFANY:PAGE'ATT*2**F'";
         String segs[] = ParseUtils.splitWithEscapeChar(segmentText, '\'', '?');
-        assertEquals(segs.length, 4);
-        assertEquals(segs[2], "NAD*FL***MC'ANDREWS:TIFFANY:PAGE");
+        assertEquals(4, segs.length);
+        assertEquals("NAD*FL***MC'ANDREWS:TIFFANY:PAGE", segs[2]);
+    }
+    
+    @Test
+    public void testEscapedEscaped() {
+        String segmentText = "DTM*36:10109'LOC*31*USA'NAD*FL***MC?'ANDREWS?:TIFF??ANY:PAGE'ATT*2**F'";
+        String segs[] = ParseUtils.splitWithEscapeChar(segmentText, '\'', '?');
+        assertEquals(4, segs.length);
+        assertEquals("NAD*FL***MC'ANDREWS?:TIFF??ANY:PAGE", segs[2]);
     }
 
     @Test
     public void testSplitSegmentsWithExtraneousWhitespace() {
         String segmentText = "DTM*36:10109  $   LOC*31*USA  $NAD*FL***ANDREWS:TIFFANY:PAGE\r\n $\n\n\n\n ATT*2**F$";
         String segs[] = ParseUtils.splitWithEscapeChar(segmentText, '$', '?');
-        assertEquals(segs.length, 4);
-        assertEquals(segs[0], "DTM*36:10109");
-        assertEquals(segs[1], "LOC*31*USA");
-        assertEquals(segs[2], "NAD*FL***ANDREWS:TIFFANY:PAGE");
-        assertEquals(segs[3], "ATT*2**F");
+        assertEquals(4, segs.length, 4);
+        assertEquals("DTM*36:10109", segs[0]);
+        assertEquals("LOC*31*USA", segs[1]);
+        assertEquals("NAD*FL***ANDREWS:TIFFANY:PAGE", segs[2]);
+        assertEquals("ATT*2**F", segs[3]);
     }
 
     @Test
     public void testSplitElementsWithExtraneousWhitespace() {
         String segmentText = " ANDREWS:    TIFFANY : PAGE ";
         String elements[] = ParseUtils.splitWithEscapeChar(segmentText, ':', '?');
-        assertEquals(elements[0], "ANDREWS");
-        assertEquals(elements[1], "TIFFANY");
-        assertEquals(elements[2], "PAGE");
+        assertEquals("ANDREWS", elements[0]);
+        assertEquals("TIFFANY", elements[1]);
+        assertEquals("PAGE", elements[2]);
     }
     
     @Test
@@ -57,7 +65,6 @@ public class ParseUtilsTest {
     public void testConvertToSingleLine() {
         String input = "   hello    \r\n\r\n  there\r   gtas team\n";
         String actual = ParseUtils.convertToSingleLine(input);
-        System.out.println(actual);
         assertEquals("hellotheregtas team", actual);
     }
 }

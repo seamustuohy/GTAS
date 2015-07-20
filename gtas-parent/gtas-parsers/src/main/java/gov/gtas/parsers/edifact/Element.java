@@ -1,5 +1,8 @@
 package gov.gtas.parsers.edifact;
 
+/**
+ * Smallest part of a segment.
+ */
 public final class Element {
     private String value;
 

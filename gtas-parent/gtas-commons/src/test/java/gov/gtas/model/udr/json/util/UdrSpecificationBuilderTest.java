@@ -36,6 +36,13 @@ public class UdrSpecificationBuilderTest {
 		builder.addSiblingQueryObject(QueryConditionEnum.AND);
 	}
 
+	@Test(expected = RuntimeException.class)
+	public void testInvalidConstructon2() {
+		UdrSpecificationBuilder builder = new UdrSpecificationBuilder(null,
+				QueryConditionEnum.OR);
+		// cannot pop the root
+		builder.endCurrentQueryObject();
+	}
 	@Test
 	public void testSimple() {
 		UdrSpecificationBuilder builder = new UdrSpecificationBuilder(null,

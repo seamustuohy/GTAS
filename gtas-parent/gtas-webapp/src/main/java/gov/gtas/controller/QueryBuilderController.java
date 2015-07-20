@@ -9,7 +9,7 @@ import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.Visa;
 import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.parsers.paxlst.usedifact.PDT.PersonStatus;
+import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
 import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.enums.Status;
 import gov.gtas.querybuilder.exceptions.InvalidQueryObjectException;
