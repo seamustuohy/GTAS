@@ -1,4 +1,5 @@
-app.controller('QueryBuilderController', function($scope, $filter, $q, ngTableParams, service) {
+app.controller('QueryBuilderController', function($scope, $filter, $q, ngTableParams, queryBuilderService) {
+    'use strict';
     var datepickerOptions = {
         format: 'yyyy-mm-dd',
 //        todayBtn: 'linked',
@@ -60,115 +61,115 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
             */
             entities: {
                 "Document": {
-                    "label": "DOCUMENT",
+                    label: "DOCUMENT",
                     "columns": [{
-                        "id": "citizenship",
-                        "label": "Citizenship OR Issuance Country",
+                        id: "citizenship",
+                        label: "Citizenship OR Issuance Country",
                         "type": "string"
                     }, {
-                        "id": "exp_date",
-                        "label": "Expiration Date",
+                        id: "exp_date",
+                        label: "Expiration Date",
                         "type": "date"
                     }, {
-                        "id": "issuance_country",
-                        "label": "Issuance Country",
+                        id: "issuance_country",
+                        label: "Issuance Country",
                         "type": "string"
                     }, {
-                        "id": "doc_number",
-                        "label": "Number",
+                        id: "doc_number",
+                        label: "Number",
                         "type": "string"
                     }, {
-                        "id": "doc_type", "label": "Type", "type": "string"
+                        id: "doc_type", label: "Type", "type": "string"
                     }]
                 },
                 "Flight": {
-                    "label": 'FLIGHT',
+                    label: 'FLIGHT',
                     "columns": [{
-                        "id": "airport_destination",
-                        "label": "Airport - Destination",
+                        id: "airport_destination",
+                        label: "Airport - Destination",
                         "type": "string"
                     }, {
-                        "id": "airport_origin",
-                        "label": "Airport - Origin",
+                        id: "airport_origin",
+                        label: "Airport - Origin",
                         "type": "string"
                     }, {
-                        "id": "carrier",
-                        "label": "Carrier",
+                        id: "carrier",
+                        label: "Carrier",
                         "type": "string"
                     }, {
-                        "id": "dest_country",
-                        "label": "Country - Destination",
+                        id: "dest_country",
+                        label: "Country - Destination",
                         "type": "string"
                     }, {
-                        "id": "origin_country",
-                        "label": "Country - Origin",
+                        id: "origin_country",
+                        label: "Country - Origin",
                         "type": "string"
                     }, {
-                        "id": "direction",
-                        "label": "Direction",
+                        id: "direction",
+                        label: "Direction",
                         "type": "string"
                     }, {
-                        "id": "eta",
-                        "label": "ETA",
+                        id: "eta",
+                        label: "ETA",
                         "type": "datetime"
                     }, {
-                        "id": "etd",
-                        "label": "ETD",
+                        id: "etd",
+                        label: "ETD",
                         "type": "datetime"
                     }, {
-                        "id": "flightNumber",
-                        "label": "Number",
+                        id: "flightNumber",
+                        label: "Number",
                         "type": "string"
                     }, {
-                        "id": "thru",
-                        "label": "Thru",
+                        id: "thru",
+                        label: "Thru",
                         "type": "string"
                     }]
                 },
                 "Pax": {
-                    "label": "PASSENGER",
+                    label: "PASSENGER",
                     "columns": [{
-                        "id": "age", "label": "Age", "type": "integer"
+                        id: "age", label: "Age", "type": "integer"
                     }, {
-                        "id": "citizenship_country", "label": "Citizenship Country", "type": "string"
+                        id: "citizenship_country", label: "Citizenship Country", "type": "string"
                     }, {
-                        "id": "debarkation", "label": "Debarkation", "type": "string"
+                        id: "debarkation", label: "Debarkation", "type": "string"
                     }, {
-                        "id": "debarkation_country", "label": "Debarkation Country", "type": "string"
+                        id: "debarkation_country", label: "Debarkation Country", "type": "string"
                     }, {
-                        "id": "dob", "label": "DOB", "type": "date"
+                        id: "dob", label: "DOB", "type": "date"
                     }, {
-                        "id": "embarkation", "label": "Embarkation", "type": "string"
+                        id: "embarkation", label: "Embarkation", "type": "string"
                     }, {
-                        "id": "embarkationDate", "label": "Embarkation Date", "type": "date"
+                        id: "embarkationDate", label: "Embarkation Date", "type": "date"
                     }, {
-                        "id": "embarkation_country", "label": "Embarkation Country", "type": "string"
+                        id: "embarkation_country", label: "Embarkation Country", "type": "string"
                     }, {
-                        "id": "gender", "label": "Gender", "type": "string"
+                        id: "gender", label: "Gender", "type": "string"
                     }, {
-                        "id": "first_name", "label": "Name - First", "type": "string"
+                        id: "first_name", label: "Name - First", "type": "string"
                     }, {
-                        "id": "last_name", "label": "Name - Last", "type": "string"
+                        id: "last_name", label: "Name - Last", "type": "string"
                     }, {
-                        "id": "middle_name", "label": "Name - Middle", "type": "string"
+                        id: "middle_name", label: "Name - Middle", "type": "string"
                     }, {
-                        "id": "residency_country", "label": "Residency Country", "type": "string"
+                        id: "residency_country", label: "Residency Country", "type": "string"
                     }, {
-                        "id": "seat", "label": "Seat", "type": "string"
+                        id: "seat", label: "Seat", "type": "string"
                     }, {
-                        "id": "type", "label": "Type", "type": "string"
+                        id: "type", label: "Type", "type": "string"
                     }]
                 }
             },
             filters: [
                 {
-                    "id": "Document.citizenship",
-                    "label": "Document.citizenship",
+                    id: "Document.citizenship",
+                    label: "Document.citizenship",
                     "type": "string",
                      operators: ['EQUAL', 'NOT_EQUAL', 'IN', 'NOT_IN']
                 }, {
-                    "id": "Document.exp_date",
-                    "label": "Document.exp_date",
+                    id: "Document.exp_date",
+                    label: "Document.exp_date",
                     type: 'date',
                     validation: {
                         format: 'YYYY-MM-DD'
@@ -176,16 +177,16 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
                     plugin: 'datepicker',
                     plugin_config: datepickerOptions
                 }, {
-                    "id": "Document.issuance_country",
-                    "label": "Document.issuance_country",
+                    id: "Document.issuance_country",
+                    label: "Document.issuance_country",
                     "type": "string"
                 }, {
-                    "id": "Document.doc_number",
-                    "label": "Document.doc_number",
+                    id: "Document.doc_number",
+                    label: "Document.doc_number",
                     "type": "string"
                 }, {
-                    "id": "Document.doc_type",
-                    "label": "Document.doc_type",
+                    id: "Document.doc_type",
+                    label: "Document.doc_type",
                     "type": "string",
                     operators: ['EQUAL', 'NOT_EQUAL', 'IN', 'NOT_IN'],
                     input: 'select',
@@ -206,8 +207,8 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
                     }
 
                 }, {
-                    "id": "Flight.airport_destination",
-                    "label": "Flight.airport_destination",
+                    id: "Flight.airport_destination",
+                    label: "Flight.airport_destination",
                     "type": "string",
                     operators: ['EQUAL', 'NOT_EQUAL', 'IN', 'NOT_IN'],
                     input: 'select',
@@ -227,24 +228,24 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
                         rule.$el.find('.rule-value-container input')[0].selectize.setValue(value);
                     }
                 }, {
-                    "id": "Flight.airport_origin",
-                    "label": "Flight.airport_origin",
+                    id: "Flight.airport_origin",
+                    label: "Flight.airport_origin",
                     "type": "string"
                 }, {
-                    "id": "Flight.carrier",
-                    "label": "Flight.carrier",
+                    id: "Flight.carrier",
+                    label: "Flight.carrier",
                     "type": "string"
                 }, {
-                    "id": "Flight.dest_country",
-                    "label": "Flight.dest_country",
+                    id: "Flight.dest_country",
+                    label: "Flight.dest_country",
                     "type": "string"
                 }, {
-                    "id": "Flight.origin_country",
-                    "label": "Flight.origin_country",
+                    id: "Flight.origin_country",
+                    label: "Flight.origin_country",
                     "type": "string"
                 }, {
-                    "id": "Flight.direction",
-                    "label": "Flight.direction",
+                    id: "Flight.direction",
+                    label: "Flight.direction",
                     "type": "string",
                     operators: ['EQUAL'],
                     input: 'select',
@@ -264,44 +265,44 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
                         rule.$el.find('.rule-value-container input')[0].selectize.setValue(value);
                     }
                 }, {
-                    "id": "Flight.eta",
-                    "label": "Flight.eta",
+                    id: "Flight.eta",
+                    label: "Flight.eta",
                     "type": "datetime",
                     plugin: 'datetimepicker',
                     plugin_config: datetimepickerOptions
                 }, {
-                    "id": "Flight.etd",
-                    "label": "Flight.etd",
+                    id: "Flight.etd",
+                    label: "Flight.etd",
                     "type": "datetime",
                     plugin: 'datetimepicker',
                     plugin_config: datetimepickerOptions
                 }, {
-                    "id": "Flight.flightNumber",
-                    "label": "Flight.flightNumber",
+                    id: "Flight.flightNumber",
+                    label: "Flight.flightNumber",
                     "type": "string"
                 }, {
-                    "id": "Flight.thru",
-                    "label": "Flight.thru",
+                    id: "Flight.thru",
+                    label: "Flight.thru",
                     "type": "string"
                 }, {
-                    "id": "Pax.age",
-                    "label": "Pax.age",
+                    id: "Pax.age",
+                    label: "Pax.age",
                     "type": "integer"
                 }, {
-                    "id": "Pax.citizenship_country",
-                    "label": "Pax.citizenship_country",
+                    id: "Pax.citizenship_country",
+                    label: "Pax.citizenship_country",
                     "type": "string"
                 }, {
-                    "id": "Pax.debarkation",
-                    "label": "Pax.debarkation",
+                    id: "Pax.debarkation",
+                    label: "Pax.debarkation",
                     "type": "string"
                 }, {
-                    "id": "Pax.debarkation_country",
-                    "label": "Pax.debarkation_country",
+                    id: "Pax.debarkation_country",
+                    label: "Pax.debarkation_country",
                     "type": "string"
                 }, {
-                    "id": "Pax.dob",
-                    "label": "Pax.dob",
+                    id: "Pax.dob",
+                    label: "Pax.dob",
                     "type": 'date',
                     validation: {
                         format: 'YYYY-MM-DD'
@@ -309,12 +310,12 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
                     plugin: 'datepicker',
                     plugin_config: datepickerOptions
                 }, {
-                    "id": "Pax.embarkation",
-                    "label": "Pax.embarkation",
+                    id: "Pax.embarkation",
+                    label: "Pax.embarkation",
                     "type": "string"
                 }, {
-                    "id": "Pax.embarkationDate",
-                    "label": "Pax.embarkationDate",
+                    id: "Pax.embarkationDate",
+                    label: "Pax.embarkationDate",
                     type: 'date',
                     validation: {
                         format: 'YYYY-MM-DD'
@@ -322,12 +323,12 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
                     plugin: 'datepicker',
                     plugin_config: datepickerOptions
                 }, {
-                    "id": "Pax.embarkation_country",
-                    "label": "Pax.embarkation_country",
+                    id: "Pax.embarkation_country",
+                    label: "Pax.embarkation_country",
                     "type": "string"
                 }, {
-                    "id": "Pax.gender",
-                    "label": "Pax.gender",
+                    id: "Pax.gender",
+                    label: "Pax.gender",
                     "type": "string",
                     operators: ['EQUAL', 'NOT_EQUAL', 'IN', 'NOT_IN'],
                     input: 'select',
@@ -348,28 +349,28 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
                         rule.$el.find('.rule-value-container input')[0].selectize.setValue(value);
                     }
                 }, {
-                    "id": "Pax.first_name",
-                    "label": "Pax.first_name",
+                    id: "Pax.first_name",
+                    label: "Pax.first_name",
                     "type": "string"
                 }, {
-                    "id": "Pax.last_name",
-                    "label": "Pax.last_name",
+                    id: "Pax.last_name",
+                    label: "Pax.last_name",
                     "type": "string"
                 }, {
-                    "id": "Pax.middle_name",
-                    "label": "Pax.middle_name",
+                    id: "Pax.middle_name",
+                    label: "Pax.middle_name",
                     "type": "string"
                 }, {
-                    "id": "Pax.residency_country",
-                    "label": "Pax.residency_country",
+                    id: "Pax.residency_country",
+                    label: "Pax.residency_country",
                     "type": "string"
                 }, {
-                    "id": "Pax.seat",
-                    "label": "Pax.seat",
+                    id: "Pax.seat",
+                    label: "Pax.seat",
                     "type": "string"
                 }, {
-                    "id": "Pax.type",
-                    "label": "Pax.type",
+                    id: "Pax.type",
+                    label: "Pax.type",
                     "type": "string"
                 }
             ]
@@ -397,7 +398,7 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
     };
     $scope.loadRule = function () {
         //<i class="glyphicon glyphicon-pencil"></i>
-        service.loadRuleById(this.summary.id).then(function (myData) {
+        queryBuilderService.loadRuleById(this.summary.id).then(function (myData) {
             $scope.ruleId = myData.id;
             $scope.loadSummary(myData.summary);
             $scope.$builder.queryBuilder('loadRules', myData.details);
@@ -415,23 +416,28 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
         counts: [],         // disable / hide page row count toggle
         total: data.length, // length of data
         getData: function ($defer, params) {
-            service.getList($scope.authorId).then(function (myData) {
+            queryBuilderService.getList($scope.authorId).then(function (myData) {
                 var filteredData, orderedData;
                 data = [];
-                myData.forEach(function (obj) {
+
+                if (myData.result === undefined || !Array.isArray(myData.result)) {
+                    return;
+                }
+
+                myData.result.forEach(function (obj) {
                     // add id to summary obj
                     obj.summary.id = obj.id;
                     // add summary obj to data array
                     data.push(obj.summary);
                 });
-                //vm.tableParams.total(result.total);
-                // use build-in angular filter
+
                 filteredData = params.filter() ?
                     $filter('filter')(data, params.filter()) :
                     data;
                 orderedData = params.sorting() ?
                     $filter('orderBy')(filteredData, params.orderBy()) :
                     data;
+
                 params.total(orderedData.length); // set total for recalc pagination
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             });
@@ -452,7 +458,7 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
     };
 
     $scope.delete = function () {
-        service.deleteQuery($scope.ruleId, $scope.authorId).then(function (myData) {
+        queryBuilderService.deleteQuery($scope.ruleId, $scope.authorId).then(function (myData) {
             $scope.ruleId = null;
             $scope.resetQueryBuilder();
             $scope.resetSummary();
@@ -494,7 +500,7 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
             query: $scope.$builder.queryBuilder('saveRules')
         };
 
-        service.saveQuery(queryObject).then(function (myData) {
+        queryBuilderService.saveQuery(queryObject).then(function (myData) {
             if (typeof myData.errorCode !== "undefined")
             {
                 alert(myData.errorMessage);

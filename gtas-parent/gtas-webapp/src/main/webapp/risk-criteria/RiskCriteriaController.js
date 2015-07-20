@@ -1,4 +1,4 @@
-app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTableParams, service) {
+app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTableParams, riskCriteriaService) {
     var datepickerOptions = {
         format: 'yyyy-mm-dd',
         todayBtn: 'linked',
@@ -391,7 +391,7 @@ app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTablePa
     };
     $scope.loadRule = function () {
         //<i class="glyphicon glyphicon-pencil"></i>
-        service.loadRuleById(this.summary.id).then(function (myData) {
+        riskCriteriaService.loadRuleById(this.summary.id).then(function (myData) {
             $scope.ruleId = myData.id;
             $scope.loadSummary(myData.summary);
             $scope.$builder.queryBuilder('loadRules', myData.details);
@@ -409,23 +409,26 @@ app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTablePa
         counts: [],         // disable / hide page row count toggle
         total: data.length, // length of data
         getData: function ($defer, params) {
-            service.getList($scope.authorId).then(function (myData) {
+            riskCriteriaService.getList($scope.authorId).then(function (myData) {
                 var filteredData, orderedData;
                 data = [];
+
+                if (!Array.isArray(myData)) return;
+
                 myData.forEach(function (obj) {
                     // add id to summary obj
                     obj.summary.id = obj.id;
                     // add summary obj to data array
                     data.push(obj.summary);
                 });
-                //vm.tableParams.total(result.total);
-                // use build-in angular filter
+
                 filteredData = params.filter() ?
                     $filter('filter')(data, params.filter()) :
                     data;
                 orderedData = params.sorting() ?
                     $filter('orderBy')(filteredData, params.orderBy()) :
                     data;
+
                 params.total(orderedData.length); // set total for recalc pagination
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             });
@@ -446,7 +449,7 @@ app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTablePa
     };
 
     $scope.delete = function () {
-        service.ruleDelete($scope.ruleId, $scope.authorId).then(function (myData) {
+        riskCriteriaService.ruleDelete($scope.ruleId, $scope.authorId).then(function (myData) {
             $scope.ruleId = null;
             $scope.resetQueryBuilder();
             $scope.resetSummary();
@@ -463,9 +466,9 @@ app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTablePa
     };
 
     $scope.today = moment().format('YYYY-MM-DD').toString();
-    $scope.startDate = $scope.today.toString();
 
     $scope.resetSummary = function () {
+        $scope.ruleId = null;
         $scope.title = '';
         $scope.description = null;
         $scope.startDate = $scope.today;
@@ -473,8 +476,6 @@ app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTablePa
         $scope.enabled = true;
     };
     $scope.resetSummary();
-    $scope.enabled = true;
-    $scope.ruleId = null;
     $scope.formats =["YYYY-MM-DD"];
 
     $scope.submit = function() {
@@ -530,7 +531,7 @@ app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTablePa
         $scope.tableParams.total($scope.tableData.length);
         $scope.tableParams.reload();
 
-        service.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
+        riskCriteriaService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
             if (typeof myData.errorCode !== "undefined")
             {
                 alert(myData.errorMessage);
