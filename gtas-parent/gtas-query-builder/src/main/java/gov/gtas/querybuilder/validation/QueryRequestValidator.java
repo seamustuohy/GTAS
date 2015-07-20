@@ -22,9 +22,8 @@ public class QueryRequestValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		logger.debug("In Query Request's validate method");
 		QueryRequest request = (QueryRequest) target;
-		String objectName = "queryRequest";
 		
-		errors.addAllErrors(QueryValidationUtils.validateQueryRequest(request, objectName));
+		errors.addAllErrors(QueryValidationUtils.validateQueryRequest(request));
 	}
 
 }
