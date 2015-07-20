@@ -2,13 +2,13 @@ package gov.gtas.querybuilder.model;
 
 public class QueryErrorResponse extends BaseQueryResponse {
 
-	private String request;
+	private Object request;
 
-	public String getRequest() {
+	public Object getRequest() {
 		return request;
 	}
 
-	public void setRequest(String request) {
+	public void setRequest(Object request) {
 		this.request = request;
 	}
 
