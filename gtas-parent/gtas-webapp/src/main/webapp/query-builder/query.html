@@ -49,23 +49,17 @@
 <button data-ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
 //-->
 <table ng-table="tableParams" class="table">
-    <tr ng-repeat="summary in $data" data-id="{{summary.id}}" data-ng-click="loadRule()">
-        <td data-title="'title'" sortable="'title'" filter="{ 'title': 'text' }">
+    <tr ng-repeat="obj in $data" data-id="{{summary.id}}" data-ng-click="loadRule()">
+        <td data-title="'Title'" sortable="'title'" filter="{ 'title': 'text' }">
             <i ng-show="isBeingEdited(summary.id)" class="glyphicon glyphicon-pencil" title="Editing this rule"></i>
-            {{summary.title}}
+            {{obj.title}}
         </td>
         <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">
-            {{summary.description}}
+            {{obj.description}}
         </td>
-        <td data-title="'Start Date'" sortable="'startDate'" filter="{ 'startDate': 'text' }">
-            {{summary.startDate}}
-        </td>
-        <td data-title="'End Date'" sortable="'endDate'" filter="{ 'endDate': 'text' }">
-            {{summary.endDate}}
-        </td>
-        <td data-title="'Enabled'" sortable="'enabled'" filter="{ 'enabled': 'text' }">
-            {{summary.enabled}}
-        </td>
+        <!--<td data-title="'Created Date'" sortable="'createdDate'" filter="{ 'createdDate': 'text' }">-->
+        <!--{{obj.createdDate}}-->
+        <!--</td>-->
     </tr>
 </table>
 

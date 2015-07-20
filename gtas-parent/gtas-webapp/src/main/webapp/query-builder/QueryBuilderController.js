@@ -396,14 +396,14 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
         $scope.$builder.queryBuilder('reset');
         $scope.$result.addClass('hide').find('pre').empty();
     };
-    $scope.loadRule = function () {
-        //<i class="glyphicon glyphicon-pencil"></i>
-        queryBuilderService.loadRuleById(this.summary.id).then(function (myData) {
-            $scope.ruleId = myData.id;
-            $scope.loadSummary(myData.summary);
-            $scope.$builder.queryBuilder('loadRules', myData.details);
-        });
+
+    $scope.loadRule = function (e, i) {
+        var obj = this.$data[this.$index];
+        $scope.ruleId = obj.id;
+        $scope.loadSummary(obj);
+        $scope.$builder.queryBuilder('loadRules', obj.query);
     };
+
     $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
         count: 10,          // count per page
@@ -425,10 +425,7 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
                 }
 
                 myData.result.forEach(function (obj) {
-                    // add id to summary obj
-                    obj.summary.id = obj.id;
-                    // add summary obj to data array
-                    data.push(obj.summary);
+                    data.push(obj);
                 });
 
                 filteredData = params.filter() ?
@@ -469,9 +466,9 @@ app.controller('QueryBuilderController', function($scope, $filter, $q, ngTablePa
     $scope.loadSummary = function (summary) {
         $scope.title = summary.title;
         $scope.description = summary.description;
-        $scope.startDate = summary.startDate;
-        $scope.endDate = summary.endDate;
-        $scope.enabled = summary.enabled;
+        //$scope.startDate = summary.startDate;
+        //$scope.endDate = summary.endDate;
+        //$scope.enabled = summary.enabled;
     };
 
     $scope.today = moment().format('YYYY-MM-DD').toString();
