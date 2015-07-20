@@ -47,8 +47,6 @@ public class FTX extends Segment {
                 case "BAG":
                     this.ftxCode = FtxCode.BAG;
                     break;
-                default:
-                    throw new ParseException("unknown ftx code: " + c.getValue(), -1);
                 }
                 break;
 

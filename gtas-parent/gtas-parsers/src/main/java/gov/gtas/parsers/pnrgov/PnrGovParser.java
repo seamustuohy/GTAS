@@ -2,6 +2,7 @@ package gov.gtas.parsers.pnrgov;
 
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.paxlst.SegmentFactory;
 import gov.gtas.parsers.pnrgov.segment.MSG;
 import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
@@ -51,7 +52,7 @@ public class PnrGovParser {
     	String txt = ParseUtils.stripStxEtxHeaderAndFooter(msg);
         txt = txt.toUpperCase();
         txt = txt.replaceAll("\\n|\\r", "");
-        SegmentFactory factory = new SegmentFactory(segmentPackageName);
+        SegmentFactory factory = new SegmentFactory(UNA.class.getPackage().getName(), segmentPackageName);
         EdifactParser p = new EdifactParser();
         LinkedList<Segment> edifactSegments = p.parse(txt);
         for (Segment s: edifactSegments) {

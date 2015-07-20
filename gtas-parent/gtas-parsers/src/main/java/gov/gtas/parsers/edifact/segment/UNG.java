@@ -1,4 +1,4 @@
-package gov.gtas.parsers.paxlst.segment.unedifact;
+package gov.gtas.parsers.edifact.segment;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
@@ -11,10 +11,7 @@ import java.util.Date;
  * <p>
  * UNG: FUNCTIONAL GROUP HEADER
  * <p>
- * Function: To head, identify and specify a Functional Group. The conditional
- * Status (C) of elements within this segment is used to indicate that Border
- * Control Agencies may establish bilateral requirements for these data
- * elements.
+ * Function: To head, identify and specify a Functional Group. 
  */
 public class UNG extends Segment {
     private static final String DATE_TIME_FORMAT = "yyMMddhhmm";

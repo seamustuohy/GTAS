@@ -1,4 +1,4 @@
-package gov.gtas.parsers.paxlst.segment.unedifact;
+package gov.gtas.parsers.edifact.segment;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;

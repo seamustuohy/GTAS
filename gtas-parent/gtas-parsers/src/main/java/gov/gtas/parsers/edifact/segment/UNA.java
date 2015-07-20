@@ -1,4 +1,4 @@
-package gov.gtas.parsers.edifact;
+package gov.gtas.parsers.edifact.segment;
 
 /**
  * <p>

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.edifact.segment.UNB;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.COM;
 import gov.gtas.parsers.paxlst.segment.unedifact.DOC;
@@ -20,7 +21,6 @@ import gov.gtas.parsers.paxlst.segment.unedifact.LOC.LocCode;
 import gov.gtas.parsers.paxlst.segment.unedifact.NAD;
 import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
-import gov.gtas.parsers.paxlst.segment.unedifact.UNB;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
@@ -30,7 +30,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUNedifact.class);
 
     public PaxlstParserUNedifact(String message) {
-        super(message, UNB.class.getPackage().getName());
+        super(message, NAD.class.getPackage().getName());
     }
     
     @Override

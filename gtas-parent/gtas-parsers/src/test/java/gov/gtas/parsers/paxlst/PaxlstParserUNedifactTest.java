@@ -184,7 +184,6 @@ LOC+130+YVR' Indicates the final destination airport in the country of destinati
                 "RFF+SEA:35F'" + 
                 "RFF+ACD:AA1234567890'" + 
                 "RFF+CBA:09-87-654321'" + 
-                "MOA+11:435.50:EUR'" + 
                 "DOC+P+YY3478621G'" + 
                 "DTM+36:081230'" + 
                 "LOC+91+FRA:::PARIS'" + 
@@ -201,13 +200,11 @@ LOC+130+YVR' Indicates the final destination airport in the country of destinati
                 "RFF+ABO:WWT098L31E'" + 
                 "RFF+SEA:35E'" + 
                 "RFF+CBA:09-87-654325'" + 
-                "MOA+11:435.50:EUR'" + 
                 "DOC+P+YY3478621G'" + 
                 "DTM+36:081230'" + 
                 "LOC+91+ESP'" + 
                 "CNT+42:2'" + 
                 "CNT+59:3'" + 
-                "UNS+S'" + 
                 "FTX+OSI+++CTCA 703-555-1212 STEVEN WILSON TVL/X33566153/JOESEPH'" + 
                 "FTX+OSI+++CTCT NYC 888-555-1111 COOL TRAVEL SCA I 12 234234'" + 
                 "FTX+SSR+++FQTVQQHK1/ QQ8270000/BARRE/TODDMR'" + 
@@ -227,8 +224,6 @@ LOC+130+YVR' Indicates the final destination airport in the country of destinati
         parser = new PaxlstParserUNedifact(apis);
         ApisMessageVo vo = parser.parse();
         List<FlightVo> flights = vo.getFlights();
-        System.out.println(flights);
-        System.out.println(vo.getPassengers());
-        System.out.println(vo.getReportingParties());
+        assertEquals(3, flights.size());
     }
 }

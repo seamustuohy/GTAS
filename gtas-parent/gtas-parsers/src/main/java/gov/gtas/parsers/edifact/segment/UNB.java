@@ -1,31 +1,29 @@
-package gov.gtas.parsers.paxlst.segment.unedifact;
+package gov.gtas.parsers.edifact.segment;
+
+import java.util.Date;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.util.ParseUtils;
 
-import java.util.Date;
-
 /**
  * <p>
  * UNB: INTERCHANGE HEADER
  * <p>
- * Function: To start, identify and specify an interchange.
+ * Function: To start, identify and specify an interchange.  Specifies
+ * the sender and intended recipient of the message.
+ * 
  * <p>
- * The conditional Status (C) of elements within this segment is used to
- * indicate that Border Control Agencies may establish bilateral requirements
- * for these data elements.
+ * Example: UNB+UNOA:4+APIS*ABE+USADHS+070429:0900+000000001++USADHS'
  */
 public class UNB extends Segment {
     private static final String DATE_TIME_FORMAT = "yyMMddhhmm";
 
     private String syntaxIdentifier;
     private String syntaxVersion;
-    private String senderIdentification;
-    private String c_partnerIdentificationCodeQualifier;
-    private String recipientIdentification;
-    private String c_partnerIdentificationCodeQualifier2;
+    private String sender;
+    private String recipient;
     private Date dateAndTimeOfPreparation;
     private String interchangeControlReference;
     private String applicationReference;
@@ -41,12 +39,17 @@ public class UNB extends Segment {
                 this.syntaxVersion = e[1].getValue();
                 break;
             case 1:
-                this.senderIdentification = c.getValue();
+                if (c.getValue() != null) {
+                    this.sender = c.getValue();
+                } else if (e != null && e.length >= 1) {
+                    this.sender = e[0].getValue();
+                }
                 break;
             case 2:
-                this.recipientIdentification = e[0].getValue();
-                if (e.length > 1) {
-                    this.c_partnerIdentificationCodeQualifier2 = e[1].getValue();
+                if (c.getValue() != null) {
+                    this.recipient = c.getValue();
+                } else if (e != null && e.length >= 1) {
+                    this.recipient = e[0].getValue();
                 }
                 break;
             case 3:
@@ -75,19 +78,11 @@ public class UNB extends Segment {
     }
 
     public String getSenderIdentification() {
-        return senderIdentification;
-    }
-
-    public String getC_partnerIdentificationCodeQualifier() {
-        return c_partnerIdentificationCodeQualifier;
+        return sender;
     }
 
     public String getRecipientIdentification() {
-        return recipientIdentification;
-    }
-
-    public String getC_partnerIdentificationCodeQualifier2() {
-        return c_partnerIdentificationCodeQualifier2;
+        return recipient;
     }
 
     public Date getDateAndTimeOfPreparation() {
