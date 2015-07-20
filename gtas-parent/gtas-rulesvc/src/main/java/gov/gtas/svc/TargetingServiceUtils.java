@@ -4,9 +4,11 @@ import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
+import gov.gtas.model.Traveler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class TargetingServiceUtils {
 	/**
@@ -61,7 +63,11 @@ public class TargetingServiceUtils {
 	 * @return RuleServiceRequest object.
 	 */
 	public static RuleServiceRequest createApisRequest(final ApisMessage req) {
-		final List<Flight> requestList = new ArrayList<Flight>(req.getFlights());
+		//add flights
+		final List<Object> requestList = new ArrayList<Object>(req.getFlights());
+		//add Passengers and documents
+		addPassengersAndDocuments(req.getFlights(), requestList);
+		
 		return new RuleServiceRequest() {
 			public List<?> getRequestObjects() {
 				return requestList;
@@ -73,6 +79,17 @@ public class TargetingServiceUtils {
 
 		};
 	}
+    private static void addPassengersAndDocuments(Set<Flight> flights, List<Object> requestList){
+    	for(Flight flight:flights){
+    		Set<Traveler> travelers = flight.getPassengers();
+    		requestList.addAll(travelers);
+    		addDocuments(travelers, requestList);
+    	}
+    }
 
-
+    private static void addDocuments(Set<Traveler> travelers, List<Object> requestList){
+    	for(Traveler traveler:travelers){
+    		requestList.addAll(traveler.getDocuments());
+    	}
+    }
 }

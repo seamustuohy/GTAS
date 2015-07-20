@@ -63,7 +63,7 @@ public class UdrServiceHelper {
 	}
 
 	/**
-	 * Generates DROOLS Knowledge Base from generate3d rules and persists them
+	 * Generates DROOLS Knowledge Base from generated rules and persists them
 	 * in the DB.
 	 * 
 	 * @param rulePersistenceService the rule persistence service to use.
