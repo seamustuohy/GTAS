@@ -53,7 +53,7 @@ public class QueryBuilderService {
 	 */
 	public List<Flight> runFlightQuery(QueryObject queryObject, EntityEnum queryType) throws InvalidQueryObjectException {
 			
-		Errors errors = QueryValidationUtils.validateQueryObject(queryObject, Constants.QUERYOBJECT_OBJECTNAME);
+		Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
 		
 		if(errors != null && errors.hasErrors()) {
 			throw new InvalidQueryObjectException(QueryValidationUtils.getErrorString(errors), queryObject);
@@ -64,7 +64,7 @@ public class QueryBuilderService {
 	
 	public List<Traveler> runPassengerQuery(QueryObject queryObject, EntityEnum queryType) throws InvalidQueryObjectException {
 		
-		Errors errors = QueryValidationUtils.validateQueryObject(queryObject, Constants.QUERYOBJECT_OBJECTNAME);
+		Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
 		
 		if(errors != null && errors.hasErrors()) {
 			throw new InvalidQueryObjectException(QueryValidationUtils.getErrorString(errors), queryObject);
@@ -83,7 +83,7 @@ public class QueryBuilderService {
 	 */
 	public Query saveQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, JsonProcessingException, InvalidQueryRequestException {
 		Query result = null;
-		Errors errors = QueryValidationUtils.validateQueryRequest(queryRequest, Constants.QUERYREQUEST_OBJECTNAME);
+		Errors errors = QueryValidationUtils.validateQueryRequest(queryRequest);
 		
 		if(errors != null && errors.hasErrors()) {
 			throw new InvalidQueryRequestException(QueryValidationUtils.getErrorString(errors), queryRequest);
@@ -108,7 +108,7 @@ public class QueryBuilderService {
 	 */
 	public Query editQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, JsonProcessingException, InvalidQueryRequestException {
 		Query result = null;
-		Errors errors = QueryValidationUtils.validateQueryRequest(queryRequest, Constants.QUERYREQUEST_OBJECTNAME);
+		Errors errors = QueryValidationUtils.validateQueryRequest(queryRequest);
 		
 		if(errors != null && errors.hasErrors()) {
 			throw new InvalidQueryRequestException(QueryValidationUtils.getErrorString(errors), queryRequest);

@@ -39,29 +39,25 @@ import org.springframework.validation.ValidationUtils;
 public class QueryValidationUtils {
 	private static final Logger logger = LoggerFactory.getLogger(QueryValidationUtils.class);
 	
-	public static Errors validateQueryObject(QueryObject queryObject, String objectName) {
-		logger.debug("Validating " + objectName);
+	public static Errors validateQueryObject(QueryObject queryObject) {
+		String objectName = Constants.QUERYOBJECT_OBJECTNAME;
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(QueryObject.class, objectName);
 		
-		// validate user query
-		validate(queryObject, errors);
-		
-		String errorMsg = getErrorString(errors);
-		
-		if(errorMsg != null && !errorMsg.isEmpty()) {
-			logger.debug("Invalid " + objectName + " Error: " + errorMsg);
+		logger.debug("Validating " + objectName);
+		if(queryObject != null) {
+			// validate user query
+			validate(queryObject, errors);
 		}
-		else {
-			logger.debug("Valid " + objectName);
-		}
-			
+		
 		return errors;
 	}
 	
-	public static Errors validateQueryRequest(QueryRequest queryRequest, String objectName) {
-		logger.debug("Validating " + objectName);
+	public static Errors validateQueryRequest(QueryRequest queryRequest) {
+		String objectName = Constants.QUERYREQUEST_OBJECTNAME;
+
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(QueryRequest.class, objectName);
 		
+		logger.debug("Validating " + objectName);
 		if(queryRequest != null) {
 			if(StringUtils.isEmpty(queryRequest.getUserId())) {
 				errors.reject("", "userId must be provided; ");

@@ -21,9 +21,8 @@ public class QueryObjectValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		logger.debug("In Query Object's validate method");
 		QueryObject query = (QueryObject) target;
-		String objectName = "queryObject";
 		
-		errors.addAllErrors(QueryValidationUtils.validateQueryObject(query, objectName));
+		errors.addAllErrors(QueryValidationUtils.validateQueryObject(query));
 	}
 
 }

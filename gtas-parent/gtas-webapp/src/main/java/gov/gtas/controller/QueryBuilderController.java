@@ -224,7 +224,7 @@ public class QueryBuilderController {
 		return response;
 	}
 	
-	private IQueryResponse createQueryErrorResponse(Status status, String message, String request) {
+	private IQueryResponse createQueryErrorResponse(Status status, String message, Object request) {
 		QueryErrorResponse response = new QueryErrorResponse();
 		
 		response.setStatus(status);
@@ -437,34 +437,30 @@ public class QueryBuilderController {
 	@ExceptionHandler(QueryAlreadyExistsException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public IQueryResponse handleQueryExistsException(QueryAlreadyExistsException exception) throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
 		
-		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), mapper.writeValueAsString(exception.getQueryRequest()));
+		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), exception.getQueryRequest());
     }
 
 	@ExceptionHandler(InvalidQueryRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public IQueryResponse handleInvalidQueryRequestException(InvalidQueryRequestException exception) throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
 		
-		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), mapper.writeValueAsString(exception.getRequest()));
+		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), exception.getRequest());
     }
 	
 	@ExceptionHandler(InvalidQueryObjectException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public IQueryResponse handleInvalidQueryObjectException(InvalidQueryObjectException exception) throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
 		
-		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), mapper.writeValueAsString(exception.getQueryObject()));
+		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), exception.getQueryObject());
     }
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public IQueryResponse handleMethodArgumentException(MethodArgumentNotValidException exception) throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
 		
 		return createQueryErrorResponse(Status.FAILURE, QueryValidationUtils.getErrorString(exception.getBindingResult()), 
-				mapper.writeValueAsString(exception.getBindingResult().getTarget()));
+				exception.getBindingResult().getTarget());
     }
 
 	/**
