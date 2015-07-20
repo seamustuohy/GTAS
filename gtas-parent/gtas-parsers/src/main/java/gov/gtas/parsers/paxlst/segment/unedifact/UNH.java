@@ -4,12 +4,21 @@ import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
+/**
+ * <p>
+ * UNH: MESSAGE HEADER
+ * <p>
+ * A service segment starting and uniquely identifying a message. The message
+ * type code for the Passenger list message is PAXLST. Note: Passenger list
+ * messages conforming to this document must contain the following data in
+ * segment UNH, composite S009: Data element 0065 PAXLST 0052 D UN
+ *
+ */
 public class UNH extends Segment {
-    public enum TransferIndicator { 
-        CONTINUANCE,
-        FINAL 
+    public enum TransferIndicator {
+        CONTINUANCE, FINAL
     }
-    
+
     private String messageReferenceNumber;
     private String messageType;
     private String messageTypeVersion;
@@ -19,10 +28,10 @@ public class UNH extends Segment {
     private String c_commonAccessReference;
     private String c_sequenceMessageTransferNumber;
     private TransferIndicator c_transferIndicator;
-    
+
     public UNH(Composite[] composites) {
         super(UNH.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
+        for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
             Element[] e = c.getElements();
             switch (i) {
@@ -47,9 +56,11 @@ public class UNH extends Segment {
                 }
                 if (e.length > 1) {
                     /*
-                     * A value of 'C' indicates this transmission is a continuance of previously
-                     * transmitted data for a particular flight. A value of 'F' must be used to
-                     * indicate a FINAL transmission of passenger/crew data reporting.
+                     * A value of 'C' indicates this transmission is a
+                     * continuance of previously transmitted data for a
+                     * particular flight. A value of 'F' must be used to
+                     * indicate a FINAL transmission of passenger/crew data
+                     * reporting.
                      */
                     String tmp = e[1].getValue();
                     if (tmp.equals("C")) {
@@ -99,5 +110,5 @@ public class UNH extends Segment {
 
     public TransferIndicator getC_transferIndicator() {
         return c_transferIndicator;
-    }   
+    }
 }

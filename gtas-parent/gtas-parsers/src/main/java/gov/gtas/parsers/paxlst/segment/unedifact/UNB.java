@@ -7,9 +7,19 @@ import gov.gtas.parsers.util.ParseUtils;
 
 import java.util.Date;
 
+/**
+ * <p>
+ * UNB: INTERCHANGE HEADER
+ * <p>
+ * Function: To start, identify and specify an interchange.
+ * <p>
+ * The conditional Status (C) of elements within this segment is used to
+ * indicate that Border Control Agencies may establish bilateral requirements
+ * for these data elements.
+ */
 public class UNB extends Segment {
     private static final String DATE_TIME_FORMAT = "yyMMddhhmm";
-    
+
     private String syntaxIdentifier;
     private String syntaxVersion;
     private String senderIdentification;
@@ -19,10 +29,10 @@ public class UNB extends Segment {
     private Date dateAndTimeOfPreparation;
     private String interchangeControlReference;
     private String applicationReference;
-    
+
     public UNB(Composite[] composites) {
         super(UNB.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
+        for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
             Element[] e = c.getElements();
             switch (i) {
@@ -40,7 +50,7 @@ public class UNB extends Segment {
                 this.recipientIdentification = e[0].getValue();
                 if (e.length > 1) {
                     this.c_partnerIdentificationCodeQualifier2 = e[1].getValue();
-                }                
+                }
                 break;
             case 3:
                 String tmp = e[0].getValue() + e[1].getValue();

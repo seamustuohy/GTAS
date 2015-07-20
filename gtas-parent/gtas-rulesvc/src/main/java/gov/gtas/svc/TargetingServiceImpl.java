@@ -4,24 +4,36 @@ import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
+import gov.gtas.model.MessageStatus;
+import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.rule.RuleServiceResult;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 /**
  * Implementation of the Targeting Service API.
+ * 
  * @author GTAS3 (AB)
  *
  */
 @Service
 public class TargetingServiceImpl implements TargetingService {
-    /* The rule engine to be used. */
+	/* The rule engine to be used. */
 	private final RuleService ruleService;
-    /**
-     * Constructor obtained from the spring context by auto-wiring.
-     * @param rulesvc the auto-wired rule engine instance.
-     */
+
+	@Autowired
+	private ApisMessageRepository apisMsgRepository;
+
+	/**
+	 * Constructor obtained from the spring context by auto-wiring.
+	 * 
+	 * @param rulesvc
+	 *            the auto-wired rule engine instance.
+	 */
 	@Autowired
 	public TargetingServiceImpl(final RuleService rulesvc) {
 		ruleService = rulesvc;
@@ -31,7 +43,8 @@ public class TargetingServiceImpl implements TargetingService {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * gov.gtas.svc.TargetingService#analyzeApisMessage(gov.gtas.model.ApisMessage)
+	 * gov.gtas.svc.TargetingService#analyzeApisMessage(gov.gtas.model.ApisMessage
+	 * )
 	 */
 	@Override
 	public RuleServiceResult analyzeApisMessage(ApisMessage message) {
@@ -40,9 +53,15 @@ public class TargetingServiceImpl implements TargetingService {
 					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					"ApisMessage", "TargetingServiceImpl.analyzeApisMessage()");
 		}
-        RuleServiceRequest req = TargetingServiceUtils.createApisRequest(message);
+		RuleServiceRequest req = TargetingServiceUtils
+				.createApisRequest(message);
 		RuleServiceResult res = ruleService.invokeRuleEngine(req);
 		return res;
+	}
+
+	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus) {
+		return apisMsgRepository.findByStatus(messageStatus);
+
 	}
 
 }

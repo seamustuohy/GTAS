@@ -1,9 +1,12 @@
 package gov.gtas.repository;
 
+import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Gender;
+import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
@@ -17,8 +20,11 @@ import gov.gtas.services.FlightService;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import org.junit.After;
 import org.junit.Before;
@@ -50,6 +56,9 @@ public class ServiceRepositoryIT {
 
 	@Autowired
 	private LookUpRepository lookupDao;
+
+	@Autowired
+	private ApisMessageRepository apisMessageRepository;
 
 	@Before
 	public void setUp() throws Exception {
@@ -148,10 +157,10 @@ public class ServiceRepositoryIT {
 
 	}
 
-	@Test()
+	// @Test()
 	public void testSecondaryCahe() {
 		System.out.println("\n>>>>> testSecondaryCahe <<<<<\n");
-		
+
 		List<Airport> airports = lookupDao.getAllAirports();
 		System.out
 				.println("***********************AIRPORTS*******************************"
@@ -164,10 +173,10 @@ public class ServiceRepositoryIT {
 		System.out
 				.println("*************COUNTRIES*******************************"
 						+ countries.size());
-		
+
 		// next, get data from cache without going to db
 		// verification: no sql execution on console output
-		
+
 		airports = lookupDao.getAllAirports();
 		System.out
 				.println("***********************AIRPORTS*******************************"
@@ -182,10 +191,10 @@ public class ServiceRepositoryIT {
 						+ countries.size());
 	}
 
-	@Test()
+	// @Test()
 	public void testEmptyCache() {
 		System.out.println("\n>>>>> testEmptyCache <<<<<\n");
-		
+
 		List<Carrier> carriers = lookupDao.getAllCarriers();
 		System.out
 				.println("***********************CARRIERS- get from db*******************************"
@@ -198,21 +207,21 @@ public class ServiceRepositoryIT {
 
 		lookupDao.clearAllEntitiesCache();
 		System.out
-		.println("***********************CARRIERS- empty cache *******************************");
+				.println("***********************CARRIERS- empty cache *******************************");
 
 		carriers = lookupDao.getAllCarriers();
 		System.out
 				.println("*************CARRIERS- retrieve from db again*******************************"
 						+ carriers.size());
-		
+
 		carriers = lookupDao.getAllCarriers();
 		System.out
 				.println("***********************CARRIERS- get from cache again *******************************"
 						+ carriers.size());
-		
+
 		lookupDao.clearAllEntitiesCache();
 		System.out
-		.println("***********************CARRIERS- empty cache -final *******************************\n");
+				.println("***********************CARRIERS- empty cache -final *******************************\n");
 
 	}
 
@@ -231,17 +240,17 @@ public class ServiceRepositoryIT {
 		return country;
 	}
 
-	@Test
+	// @Test
 	public void testSingleEntityCache() {
 		System.out.println("\n>>>>> testSingleEntityCache <<<<<\n");
-		
+
 		Country country = createCountry();
 		lookupDao.saveCountry(country);
-		
+
 		System.out
 				.println("*************save country*****************************"
 						+ country.getName());
-		
+
 		lookupDao.getCountry(country.getName());
 		System.out
 				.println("*************get country from db*****************************"
@@ -260,5 +269,42 @@ public class ServiceRepositoryIT {
 						+ country.getName());
 		lookupDao.deleteCountryDb(country);
 		System.out.println("************* Done***********************\n");
+	}
+
+	@Test
+	@Transactional
+	public void testGetApisMessageByStatus() {
+		MessageStatus messageStatus = MessageStatus.LOADED;
+
+		List<ApisMessage> listApisMessages = apisMessageRepository
+				.findByStatus(messageStatus);
+		assertNotNull(listApisMessages);
+		if (listApisMessages.size() > 0) {
+			for (ApisMessage apisMessage : listApisMessages) {
+				Set<Flight> flights = apisMessage.getFlights();
+				if (flights.size() > 0) {
+					assertNotNull(flights);
+
+					Iterator<Flight> itr = flights.iterator();
+					while (itr.hasNext()) {
+						System.out.println("Flights are not null \n");
+						Flight aFlight = (Flight) itr.next();
+						assertNotNull(aFlight);
+						Set<Traveler> travelers = aFlight.getPassengers();
+						if (travelers.size() > 0) {
+							assertNotNull(travelers);
+							Iterator<Traveler> itr2 = travelers.iterator();
+							while (itr2.hasNext()) {
+								Traveler traveler = itr2.next();
+								assertNotNull(traveler);
+								// System.out.println("Travelers are not null \n");
+							}
+						}
+					}
+					//System.out.println("happy faces!\n");
+				}
+			}
+		}
+		//System.out.println("happy faces again!\n");
 	}
 }
