@@ -14,6 +14,7 @@ public class ApisMessageVo {
     private Date transmissionDate;
     private String messageType;
     private String version;
+    private String messageCode;
     
     private List<ReportingPartyVo> reportingParties = new ArrayList<>();
     private List<FlightVo> flights = new ArrayList<>();
@@ -81,6 +82,14 @@ public class ApisMessageVo {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public void setMessageCode(String messageCode) {
+        this.messageCode = messageCode;
+    }
+
+    public String getMessageCode() {
+        return messageCode;
     }
 
     @Override

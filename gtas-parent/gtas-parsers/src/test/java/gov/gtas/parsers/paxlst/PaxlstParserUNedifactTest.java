@@ -144,7 +144,7 @@ LOC+130+YVR' Indicates the final destination airport in the country of destinati
                 "UNB+UNOA:4+ZZAIR+DHS+080708:0545+000000001++DHS' " + 
                 "UNG+PAXLST+ZZAIR+ DHS+080708:0545+1+UN+D:05B' " + 
                 "UNH+PAX001+PAXLST:D:05B:UN:IATA' " + 
-                "BGM+745+PNR'" + 
+                "BGM+745'" + 
                 "RFF+AVF:A1B2C3'" + 
                 "RFF+ACE:D4E5F6::P'" + 
                 "DTM+179:20080610'" + 

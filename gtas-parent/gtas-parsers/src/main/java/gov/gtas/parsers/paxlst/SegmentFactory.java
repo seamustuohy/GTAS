@@ -1,9 +1,16 @@
 package gov.gtas.parsers.paxlst;
 
+import java.util.Arrays;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
 public class SegmentFactory {
+    private static final Logger logger = LoggerFactory.getLogger(SegmentFactory.class);
+    
     private String edifactSegmentPackageName;
     private String segmentPackageName;
     
@@ -30,11 +37,12 @@ public class SegmentFactory {
         }
         
         try {
+            logger.debug(s.getName() + " " + Arrays.toString(s.getComposites()));
             Class<?> c = Class.forName(pkg + "." + segmentName);
             Object[] args = {s.getComposites()};
             return (Segment)c.getDeclaredConstructor(Composite[].class).newInstance(args);
         } catch (Exception e) {
-            System.err.println("Could not create " + pkg + "." + segmentName);
+            logger.error("Could not create " + pkg + "." + segmentName);
             return s;
         }
     }

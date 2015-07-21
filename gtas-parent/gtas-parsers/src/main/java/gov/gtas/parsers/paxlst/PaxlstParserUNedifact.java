@@ -12,6 +12,7 @@ import gov.gtas.parsers.edifact.segment.UNB;
 import gov.gtas.parsers.edifact.segment.UNG;
 import gov.gtas.parsers.edifact.segment.UNH;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
+import gov.gtas.parsers.paxlst.segment.unedifact.BGM;
 import gov.gtas.parsers.paxlst.segment.unedifact.COM;
 import gov.gtas.parsers.paxlst.segment.unedifact.DOC;
 import gov.gtas.parsers.paxlst.segment.unedifact.DTM;
@@ -41,7 +42,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         
         for (ListIterator<Segment> i=segments.listIterator(); i.hasNext(); ) {
             Segment s = i.next();
-            logger.debug("" + s);
 
             switch (s.getName()) {
             case "UNB":
@@ -121,7 +121,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         
         while (i.hasNext()) {
             Segment s = i.next();
-            logger.debug("\t" + s);
             switch (s.getName()) {
             
             case "ATT":
@@ -184,7 +183,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
 
         while (i.hasNext()) {
             Segment s = i.next();
-            logger.debug("\t" + "\t" + s);
             switch (s.getName()) {
             case "DTM":
                 DTM dtm = (DTM)s;
@@ -219,7 +217,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
 
         while (i.hasNext()) {
             Segment s = i.next();
-            logger.debug("\t" + s);
             
             String segName = s.getName();
             if (segName.equals("LOC")) {
@@ -304,7 +301,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         
         while (i.hasNext()) {
             Segment s = i.next();
-            logger.debug("\t" + s);
             switch (s.getName()) {
             case "UNG":
                 UNG ung = (UNG)s;
@@ -316,6 +312,8 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 parsedMessage.setMessageType(unh.getMessageType());
                 break;
             case "BGM":
+                BGM bgm = (BGM)s;
+                parsedMessage.setMessageCode(bgm.getCode());
                 break;
             case "RFF":
                 break;
