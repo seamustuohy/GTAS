@@ -59,6 +59,16 @@ public class TargetingServiceImpl implements TargetingService {
 		return res;
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.TargetingService#applyRules(gov.gtas.bo.RuleServiceRequest, java.lang.String)
+	 */
+	@Override
+	public RuleServiceResult applyRules(RuleServiceRequest request,
+			String drlRules) {
+		RuleServiceResult res = ruleService.invokeAdhocRulesFromString(drlRules, request);
+		return res;
+	}
+
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus) {
 		return apisMsgRepository.findByStatus(messageStatus);
 

@@ -11,6 +11,7 @@ import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.testdatagen.ApisDataGenerator;
 
 import java.util.Set;
 
@@ -37,6 +38,9 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 public class TargetingServiceIT {
     @Autowired
     TargetingService targetingService;
+    
+    @Autowired
+    ApisDataGenerator apisLoader;
 
 	@Resource
     private ApisMessageRepository apisMessageRepository;
@@ -47,6 +51,22 @@ public class TargetingServiceIT {
 
 	@After
 	public void tearDown() throws Exception {
+	}
+	@Test
+	@Transactional
+	public void testDataGeneration(){
+		ApisMessage msg = apisLoader.createSimpleTestApisMesssage();
+		assertNotNull(msg);
+		assertNotNull(msg.getId());
+		assertEquals(1,msg.getFlights().size());
+		Flight flight = msg.getFlights().iterator().next();
+		assertEquals(2, flight.getPassengers().size());
+		Traveler pax = flight.getPassengers().iterator().next();
+		assertTrue(pax instanceof Pax);
+		assertEquals(1, pax.getDocuments().size());
+		Document doc = pax.getDocuments().iterator().next();
+		assertNotNull(doc.getId());
+		assertEquals(ApisDataGenerator.DOCUMENT_NUMBER, doc.getDocumentNumber());
 	}
 //	@Test
 //	@Transactional

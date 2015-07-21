@@ -28,11 +28,11 @@ public class RuleBuilderTestUtils {
 		engineRule.addConditionToRule(cond);
 		cond = RuleBuilderTestUtils.createRuleCondition(EntityLookupEnum.Document,
 				EntityAttributeConstants.DOCUMENT_ATTR_ISSUANCE_DATE,
-				OperatorCodeEnum.GREATER_OR_EQUAL, "2010-01-01", ValueTypesEnum.DATE);
+				OperatorCodeEnum.GREATER_OR_EQUAL, "2012-01-01", ValueTypesEnum.DATE);
 		engineRule.addConditionToRule(cond);
 		cond = RuleBuilderTestUtils.createRuleCondition(EntityLookupEnum.Flight,
 				EntityAttributeConstants.FLIGHT_ATTR_FLIGHT_NUMBER,
-				OperatorCodeEnum.EQUAL, "12125", ValueTypesEnum.INTEGER);
+				OperatorCodeEnum.EQUAL, "0012", ValueTypesEnum.STRING);
 		engineRule.addConditionToRule(cond);
 		
 		ret.addEngineRule(engineRule);

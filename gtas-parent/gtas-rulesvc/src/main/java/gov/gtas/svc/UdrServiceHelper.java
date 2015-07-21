@@ -88,6 +88,7 @@ public class UdrServiceHelper {
 				kb.setRulesBlob(rules
 						.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
 				kb.setKbBlob(kbBlob);
+				kb.setKbName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
 				rulePersistenceService.saveKnowledgeBase(kb);
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
