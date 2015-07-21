@@ -225,5 +225,6 @@ LOC+130+YVR' Indicates the final destination airport in the country of destinati
         ApisMessageVo vo = parser.parse();
         List<FlightVo> flights = vo.getFlights();
         assertEquals(3, flights.size());
+        System.out.println(vo);
     }
 }

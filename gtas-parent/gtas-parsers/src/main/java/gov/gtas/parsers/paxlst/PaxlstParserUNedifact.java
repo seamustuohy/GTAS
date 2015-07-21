@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.edifact.segment.UNB;
+import gov.gtas.parsers.edifact.segment.UNG;
+import gov.gtas.parsers.edifact.segment.UNH;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.COM;
 import gov.gtas.parsers.paxlst.segment.unedifact.DOC;
@@ -45,7 +47,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             case "UNB":
                 if (currentGroup == GROUP.NONE) {
                     currentGroup = GROUP.HEADER;
-//                    processHeader(s, i);
+                    processHeader(s, i);
                 } else {
                     handleUnexpectedSegment(s);
                     return;
@@ -205,11 +207,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
     }
 
-    /**
-     * @param seg
-     * @param i
-     * @throws ParseException
-     */
     private void processFlight(Segment seg, ListIterator<Segment> i) throws ParseException {
         TDT tdt = (TDT)seg;
 
@@ -300,71 +297,23 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
     }
     
-    private void processFlight_old(Segment seg, ListIterator<Segment> i) throws ParseException {
-        TDT tdt = (TDT)seg;
-        FlightVo f = new FlightVo();
-        parsedMessage.addFlight(f);
-        f.setFlightNumber(tdt.getFlightNumber());
-        f.setCarrier(tdt.getC_carrierIdentifier());
+    private void processHeader(Segment seg, ListIterator<Segment> i) {
+        UNB unb = (UNB)seg;
+        parsedMessage.setTransmissionSource(unb.getSenderIdentification());
+        parsedMessage.setTransmissionDate(unb.getDateAndTimeOfPreparation());
         
-        boolean loc92Seen = false;
         while (i.hasNext()) {
             Segment s = i.next();
             logger.debug("\t" + s);
             switch (s.getName()) {
-            case "LOC":
-                LOC loc = (LOC)s;
-                LocCode locCode = loc.getFunctionCode();
-                String airport = loc.getLocationNameCode();
-                if (locCode == LocCode.DEPARTURE_AIRPORT) {
-                    f.setOrigin(airport);
-                } else if (locCode == LocCode.ARRIVAL_AIRPORT) {
-                    f.setDestination(airport);
-                } else if (locCode == LocCode.BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT) {
-                    if (loc92Seen) {
-                        f.setDestination(airport);
-                        loc92Seen = false;
-                    } else {
-                        f.setOrigin(airport);
-                        loc92Seen = true;
-                    }
-                } else if (locCode == LocCode.FINAL_DESTINATION) {
-                    if (loc92Seen) {
-                        f.setDestination(airport);
-                        loc92Seen = false;
-                    } else {
-                        throw new ParseException("LOC+" + LocCode.FINAL_DESTINATION + " found but no corresponding LOC+" + LocCode.BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT, -1);
-                    }                    
-                }
-                break;
-            
-            case "DTM":
-                DTM dtm = (DTM)s;
-                DtmCode dtmCode = dtm.getDtmCodeQualifier();
-                if (dtmCode == DtmCode.DEPARTURE) {
-                    f.setEtd(dtm.getDtmValue());
-                } else if (dtmCode == DtmCode.ARRIVAL) {
-                    f.setEta(dtm.getDtmValue());
-                }
-                break;
-            
-            default:
-                i.previous();
-                return;
-            }
-        }
-    }
-    
-    private void processHeader(Segment seg, ListIterator<Segment> i) {
-        UNB unb = (UNB)seg;
-        
-        while (i.hasNext()) {
-            Segment s = i.next();
-//            logger.debug("\t" + s);
-            switch (s.getName()) {
             case "UNG":
+                UNG ung = (UNG)s;
+                String v = ung.getMessageVersionNumber() + ung.getMessageReleaseNumber();
+                parsedMessage.setVersion(v);
                 break;
             case "UNH":
+                UNH unh = (UNH)s;
+                parsedMessage.setMessageType(unh.getMessageType());
                 break;
             case "BGM":
                 break;

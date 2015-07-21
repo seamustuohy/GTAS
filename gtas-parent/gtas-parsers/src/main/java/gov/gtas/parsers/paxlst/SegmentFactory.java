@@ -1,7 +1,5 @@
 package gov.gtas.parsers.paxlst;
 
-import java.util.Arrays;
-
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -32,7 +30,6 @@ public class SegmentFactory {
         }
         
         try {
-            System.out.println(segmentName + " " + Arrays.toString(s.getComposites()));
             Class<?> c = Class.forName(pkg + "." + segmentName);
             Object[] args = {s.getComposites()};
             return (Segment)c.getDeclaredConstructor(Composite[].class).newInstance(args);
