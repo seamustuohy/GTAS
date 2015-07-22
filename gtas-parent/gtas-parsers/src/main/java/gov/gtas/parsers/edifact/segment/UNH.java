@@ -51,6 +51,8 @@ public class UNH extends Segment {
                 this.c_commonAccessReference = c.getValue();
                 break;
             case 3:
+                if (e == null) break;
+                
                 if (e.length > 0) {
                     this.c_sequenceMessageTransferNumber = e[0].getValue();
                 }

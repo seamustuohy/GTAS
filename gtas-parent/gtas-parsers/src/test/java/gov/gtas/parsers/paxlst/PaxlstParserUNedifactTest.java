@@ -12,10 +12,15 @@ import gov.gtas.parsers.paxlst.vo.FlightVo;
 public final class PaxlstParserUNedifactTest {
     PaxlstParser parser; 
     
+    String header = 
+            "UNA:+.? '" + 
+            "UNB+UNOA:4+APIS*ABE+USADHS+070429:0900+000000001++USADHS'" + 
+            "UNH+PAX001+PAXLST:D:05B:UN:IATA'" +
+            "BGM+745'";
+    
     @Test
     public void testSingleTdtWithOneLeg() throws ParseException {
-        String apis = "UNA:+.? '" + 
-                "UNB+UNOA:4+APIS*ABE+USADHS+070429:0900+000000001++USADHS'" + 
+        String apis = header + 
                 "TDT+20+UA123+++UA'" + 
                 "LOC+125+YVR'" + 
                 "DTM+189:0704291230:201'" + 
@@ -34,8 +39,7 @@ public final class PaxlstParserUNedifactTest {
 
     @Test
     public void testMultipleTdtWithOneLegEach() throws ParseException {
-        String apis = "UNA:+.? '" + 
-                "UNB+UNOA:4+APIS*ABE+USADHS+070429:0900+000000001++USADHS'" + 
+        String apis = header + 
                 "TDT+20+UA123+++UA'" + 
                 "LOC+125+YVR'" + 
                 "DTM+189:0704291230:201'" + 
@@ -63,8 +67,7 @@ public final class PaxlstParserUNedifactTest {
     
     @Test
     public void testMultipleTdtWithLoc92() throws ParseException {
-        String apis = "UNA:+.? '" + 
-                "UNB+UNOA:4+APIS*ABE+USADHS+070429:0900+000000001++USADHS'" + 
+        String apis = header + 
                 "TDT+20+KE250+++KE'" +
                 "LOC+92+JFK'" +
                 "DTM+189:1402010220:201'" +
@@ -97,8 +100,7 @@ public final class PaxlstParserUNedifactTest {
      */
     @Test
     public void testSingleTdtWithLoc92() throws ParseException {
-        String apis = "UNA:+.? '" + 
-                "UNB+UNOA:4+APIS*ABE+USADHS+070429:0900+000000001++USADHS'" + 
+        String apis = header +
                 "TDT+20+KE250+++KE'" +
                 "LOC+92+JFK'" +
                 "DTM+189:1402010220:201'" +
@@ -125,31 +127,30 @@ public final class PaxlstParserUNedifactTest {
         assertEquals("ICN", f2.getDestination());        
     } 
 
-    @Test
-    public void testWithLoc130() throws ParseException {
-/*
- * LOC+125+LHR' Indicates the last airport of departure from a foreign country, i.e. London Heathrow
-LOC+87+YUL' Indicates the first airport of arrival in the country of destination, i.e. Montreal Dorval
-21
-￼
-LOC+92+YOW' Indicates the next airport in the country of destination, i.e. Ottawa International
-LOC+130+YVR' Indicates the final destination airport in the country of destination, i.e.         
- */
-        
-    }
-    
+//    @Test
+//    public void testWithLoc130() throws ParseException {
+///*
+// * LOC+125+LHR' Indicates the last airport of departure from a foreign country, i.e. London Heathrow
+//LOC+87+YUL' Indicates the first airport of arrival in the country of destination, i.e. Montreal Dorval
+//21
+//￼
+//LOC+92+YOW' Indicates the next airport in the country of destination, i.e. Ottawa International
+//LOC+130+YVR' Indicates the final destination airport in the country of destination, i.e.         
+// */
+//        
+//    }
+   
     @Test
     public void testRandomApis() throws ParseException {
         String apis = "UNA:+.?*'" + 
                 "UNB+UNOA:4+ZZAIR+DHS+080708:0545+000000001++DHS' " + 
                 "UNG+PAXLST+ZZAIR+ DHS+080708:0545+1+UN+D:05B' " + 
                 "UNH+PAX001+PAXLST:D:05B:UN:IATA' " + 
-                "BGM+745+PNR'" + 
+                "BGM+745+CP'" + 
                 "RFF+AVF:A1B2C3'" + 
-                "RFF+ACE:D4E5F6::P'" + 
                 "DTM+179:20080610'" + 
                 "DTM+558:20080612'" + 
-                "DTM+183:20080630'" + 
+                "DTM+183:20080630'" +
                 "NAD+MS+++C UNDERWOOD'" + 
                 "COM+703-555-1212:TE+703-555-4545:FX' " + 
                 "NAD+BA+ORION TRAVEL++J JAVERT'" + 
@@ -225,6 +226,5 @@ LOC+130+YVR' Indicates the final destination airport in the country of destinati
         ApisMessageVo vo = parser.parse();
         List<FlightVo> flights = vo.getFlights();
         assertEquals(3, flights.size());
-        System.out.println(vo);
     }
 }

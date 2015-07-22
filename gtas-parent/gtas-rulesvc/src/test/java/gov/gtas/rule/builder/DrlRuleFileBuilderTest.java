@@ -1,6 +1,5 @@
 package gov.gtas.rule.builder;
 
-import static gov.gtas.rule.builder.RuleBuilderTestUtils.ENGINE_RULE_INDX1;
 import static gov.gtas.rule.builder.RuleBuilderTestUtils.UDR_RULE_TITLE;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -29,21 +28,35 @@ public class DrlRuleFileBuilderTest {
 	}
 
 	@Test
-	public void testSimpleRuleGenerationAndCompilation() {
+	public void testSimpleRuleGenerationAndCompilation1() {
 		try{
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule();
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(1);
 		testTarget.addRule(udrRule);
 		String result = testTarget.build();
 		System.out.println(result);
-		verifyDrl(result);
+		verifyDrl(result, 1);
 		testKnowledgeBaseTest(result);
 		}catch (Exception ex){
 			ex.printStackTrace();
 			fail("Not expecting exception.");
 		}
 	}
-	public static void verifyDrl(String drl){
-		String target = "rule \""+UDR_RULE_TITLE+":"+ENGINE_RULE_INDX1+"\"";
+	@Test
+	public void testSimpleRuleGenerationAndCompilation2() {
+		try{
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(2);
+		testTarget.addRule(udrRule);
+		String result = testTarget.build();
+		System.out.println(result);
+		verifyDrl(result, 2);
+		testKnowledgeBaseTest(result);
+		}catch (Exception ex){
+			ex.printStackTrace();
+			fail("Not expecting exception.");
+		}
+	}
+	public static void verifyDrl(String drl, int indx){
+		String target = "rule \""+UDR_RULE_TITLE+":"+indx+"\"";
 		assertTrue(drl.indexOf(target) > 0);
 	}
     private void testKnowledgeBaseTest(String testDrl) throws IOException, ClassNotFoundException{
