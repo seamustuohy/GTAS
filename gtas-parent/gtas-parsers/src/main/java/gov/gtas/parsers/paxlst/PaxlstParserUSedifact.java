@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.edifact.segment.UNB;
 import gov.gtas.parsers.paxlst.segment.usedifact.CTA;
 import gov.gtas.parsers.paxlst.segment.usedifact.DTM;
 import gov.gtas.parsers.paxlst.segment.usedifact.DTM.DtmCode;
@@ -26,7 +25,7 @@ public class PaxlstParserUSedifact extends PaxlstParser {
     
     
     public PaxlstParserUSedifact(String message) {
-        super(message, UNB.class.getPackage().getName());
+        super(message);
     }
     
     public void parseSegments() {

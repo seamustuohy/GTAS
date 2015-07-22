@@ -13,34 +13,16 @@ import gov.gtas.parsers.edifact.Segment;
 public class SegmentFactory {
     private static final Logger logger = LoggerFactory.getLogger(SegmentFactory.class);
     
-    private String edifactSegmentPackageName;
     private String segmentPackageName;
     
-    public SegmentFactory(String edifactSegmentPackageName, String segmentPackageName) {
-        this.edifactSegmentPackageName = edifactSegmentPackageName;
+    public SegmentFactory(String segmentPackageName) {
         this.segmentPackageName = segmentPackageName;
     }
 
     public Segment build(Segment s) throws ParseException {
-        String segmentName = s.getName();
-        String pkg = null;
-        switch(segmentName) {
-        case "UNA":
-        case "UNB":
-        case "UNG":
-        case "UNH":
-        case "UNT":
-        case "UNE":
-        case "UNZ":
-            pkg = this.edifactSegmentPackageName;
-            break;
-        default:
-            pkg = this.segmentPackageName;
-        }
-
         try {
             logger.debug(s.getName() + " " + Arrays.toString(s.getComposites()));
-            Class<?> c = Class.forName(pkg + "." + segmentName);
+            Class<?> c = Class.forName(this.segmentPackageName + "." + s.getName());
             Object[] args = {s.getComposites()};
             return (Segment)c.getDeclaredConstructor(Composite[].class).newInstance(args);
         } catch (InvocationTargetException e) {
@@ -52,9 +34,7 @@ public class SegmentFactory {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
 
-//        logger.error("Could not create " + pkg + "." + segmentName);
-//        return s;
+        return null;
     }
 }

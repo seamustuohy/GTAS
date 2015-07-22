@@ -6,7 +6,6 @@ import java.util.List;
 
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 
 /**
@@ -17,7 +16,6 @@ import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
  */
 public abstract class PaxlstParser {
     private String message;
-    protected SegmentFactory factory;
 
     protected enum GROUP {
         NONE,
@@ -31,9 +29,8 @@ public abstract class PaxlstParser {
     protected ApisMessageVo parsedMessage;
     protected List<Segment> segments;
 
-    public PaxlstParser(String message, String segmentPackageName) {
+    public PaxlstParser(String message) {
         this.message = message;
-        factory = new SegmentFactory(UNA.class.getPackage().getName(), segmentPackageName);
     }
 
     protected abstract void parseSegments() throws ParseException;

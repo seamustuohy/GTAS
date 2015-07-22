@@ -1,7 +1,6 @@
 package gov.gtas.parsers.paxlst;
 
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.ListIterator;
 
@@ -9,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.edifact.segment.UNB;
 import gov.gtas.parsers.edifact.segment.UNG;
 import gov.gtas.parsers.edifact.segment.UNH;
@@ -18,12 +18,9 @@ import gov.gtas.parsers.paxlst.segment.unedifact.COM;
 import gov.gtas.parsers.paxlst.segment.unedifact.DOC;
 import gov.gtas.parsers.paxlst.segment.unedifact.DTM;
 import gov.gtas.parsers.paxlst.segment.unedifact.DTM.DtmCode;
-import gov.gtas.parsers.paxlst.segment.unedifact.FTX;
-import gov.gtas.parsers.paxlst.segment.unedifact.GEI;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC.LocCode;
 import gov.gtas.parsers.paxlst.segment.unedifact.NAD;
-import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
@@ -33,14 +30,34 @@ import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
 public final class PaxlstParserUNedifact extends PaxlstParser {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUNedifact.class);
+    private SegmentFactory paxlstFactory;
+    private SegmentFactory edifactFactory;
 
     public PaxlstParserUNedifact(String message) {
-        super(message, NAD.class.getPackage().getName());
+        super(message);
+        paxlstFactory = new SegmentFactory(NAD.class.getPackage().getName());
+        edifactFactory = new SegmentFactory(UNA.class.getPackage().getName());
     }
 
+    private SegmentFactory getFactory(String segmentName) {
+        switch (segmentName) {
+        case "UNA":
+        case "UNB":
+        case "UNG":
+        case "UNH":
+        case "UNT":
+        case "UNE":
+        case "UNZ":
+            return edifactFactory;
+        default:
+           return paxlstFactory;
+        }
+    }
+    
     private Segment getMandatorySegment(ListIterator<Segment> i, String segmentName) throws ParseException {
         if (i.hasNext()) {
             Segment s = i.next();
+            SegmentFactory factory = getFactory(segmentName);
             if (s.getName().equals(segmentName)) {
                 return factory.build(s);
             } else {
@@ -54,6 +71,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     private Segment getConditionalSegment(ListIterator<Segment> i, String segmentName) throws ParseException {
         if (i.hasNext()) {
             Segment s = i.next();
+            SegmentFactory factory = getFactory(segmentName);
             if (s.getName().equals(segmentName)) {
                 return factory.build(s);
             } else {
@@ -94,9 +112,8 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             s = getConditionalSegment(i, "DTM");
             if (s == null) {
                 break;
-            } else {
-                System.out.println((DTM) s);
             }
+            DTM dtm = (DTM) s;
         }
 
         for (;;) {
