@@ -90,8 +90,9 @@ public class QueryValidationUtils {
 			// validate entity
 			boolean validEntity = false;
 			for(EntityEnum e : EntityEnum.values()) {
-				if(e.getEntityName().equalsIgnoreCase(entity)) {
+				if(e.getEntityName().equals(entity)) {
 					validEntity = true;
+					break;
 				}
 			}
 			if(!validEntity) {
@@ -209,7 +210,7 @@ public class QueryValidationUtils {
 		boolean validField = false;
 		
 		for(IEntityMapping e : entityEnum) {
-			if(e.getFieldName().equalsIgnoreCase(field)) {
+			if(e.getFieldName().equals(field)) {
 				validField = true;
 				break;
 			}

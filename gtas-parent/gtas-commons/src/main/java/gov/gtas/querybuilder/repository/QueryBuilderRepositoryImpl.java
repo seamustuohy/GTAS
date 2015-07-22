@@ -340,6 +340,9 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					where.append(" " + Constants.AND + " ?" + positionalParameter);
 				}
 			}
+			else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator)) {
+				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " (?" + positionalParameter + ")");
+			}
 			else {
 				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " ?" + positionalParameter);
 			}
@@ -426,17 +429,62 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				}
 				else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator)) {
 					List<String> values = Arrays.asList(queryTerm.getValues());
-					StringBuilder valueStr = new StringBuilder();
-					int index = 0;
 					
-					for(String val : values) {
-						if(index > 0) {
-							valueStr.append(", ");
+					if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
+						List<Integer> vals = new ArrayList<>();
+						if(values != null) {
+							for(String val : values) {
+								vals.add(Integer.parseInt(val));
+							}
 						}
-						valueStr.append(val);
-						index++;
+						query.setParameter(positionalParameter.intValue(), vals);
 					}
-					query.setParameter(positionalParameter.intValue(), valueStr);
+					else if(TypeEnum.DOUBLE.toString().equalsIgnoreCase(type)) {
+						List<Double> vals = new ArrayList<>();
+						if(values != null) {
+							for(String val : values) {
+								vals.add(Double.parseDouble(val));
+							}
+						}
+						query.setParameter(positionalParameter.intValue(), vals);
+					}
+					else if(TypeEnum.DATE.toString().equalsIgnoreCase(type)) {
+						List<Date> vals = new ArrayList<>();
+						if(values != null) {
+							for(String val : values) {
+								vals.add(sdf.parse(val));
+							}
+						}
+						query.setParameter(positionalParameter.intValue(), vals);
+					}
+					else if(TypeEnum.DATETIME.toString().equalsIgnoreCase(type)) {
+						List<Date> vals = new ArrayList<>();
+						if(values != null) {
+							for(String val : values) {
+								vals.add(dtFormat.parse(val));
+							}
+						}
+						query.setParameter(positionalParameter.intValue(), vals);
+					}
+					else {
+						if(field != null && field.equals("gender")) {
+							List<Gender> vals = new ArrayList<>();
+							if(values != null) {
+								for(String val : values) {
+									if(val.equalsIgnoreCase("Female")) {
+										vals.add(Gender.F);
+									}
+									else {
+										vals.add(Gender.M);
+									}
+								}
+							}
+							query.setParameter(positionalParameter.intValue(), vals);
+						}
+						else {
+							query.setParameter(positionalParameter.intValue(), values);
+						}
+					}
 				}
 				else if(OperatorEnum.BEGINS_WITH.toString().equalsIgnoreCase(operator) || 
 						OperatorEnum.NOT_BEGINS_WITH.toString().equalsIgnoreCase(operator) ) {
@@ -451,27 +499,26 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					query.setParameter(positionalParameter.intValue(), "%" + value);
 				}
 				else {
-					if(field != null && field.equalsIgnoreCase("gender")) {
-						if(value != null && value.equalsIgnoreCase("Female")) {
-							query.setParameter(positionalParameter.intValue(), Gender.F);
-						} else {
-							query.setParameter(positionalParameter.intValue(), Gender.M);
-						}
+					if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
+						query.setParameter(positionalParameter.intValue(), Integer.parseInt(value));
+					}
+					else if(TypeEnum.DOUBLE.toString().equalsIgnoreCase(type)) {
+						query.setParameter(positionalParameter.intValue(), Double.parseDouble(value));
+					}
+					else if(TypeEnum.DATE.toString().equalsIgnoreCase(type)) {
+						query.setParameter(positionalParameter.intValue(), sdf.parse(value), TemporalType.DATE);
+					}
+					else if(TypeEnum.DATETIME.toString().equalsIgnoreCase(type)) {
+						query.setParameter(positionalParameter.intValue(), dtFormat.parse(value), TemporalType.DATE);
 					}
 					else {
-						if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
-							query.setParameter(positionalParameter.intValue(), Integer.parseInt(value));
-						}
-						else if(TypeEnum.DOUBLE.toString().equalsIgnoreCase(type)) {
-							query.setParameter(positionalParameter.intValue(), Double.parseDouble(value));
-						}
-						else if(TypeEnum.DATE.toString().equalsIgnoreCase(type)) {
-							query.setParameter(positionalParameter.intValue(), sdf.parse(value), TemporalType.DATE);
-						}
-						else if(TypeEnum.DATETIME.toString().equalsIgnoreCase(type)) {
-							query.setParameter(positionalParameter.intValue(), dtFormat.parse(value), TemporalType.DATE);
-						}
-						else {
+						if(field != null && field.equals("gender")) {
+							if(value != null && value.equalsIgnoreCase("Female")) {
+								query.setParameter(positionalParameter.intValue(), Gender.F);
+							} else {
+								query.setParameter(positionalParameter.intValue(), Gender.M);
+							}
+						} else {
 							query.setParameter(positionalParameter.intValue(), value);
 						}
 					}
