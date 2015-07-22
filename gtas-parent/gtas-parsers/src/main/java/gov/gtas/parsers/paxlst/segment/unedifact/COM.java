@@ -7,6 +7,7 @@ import gov.gtas.parsers.edifact.Segment;
 public class COM extends Segment {
     private String phoneNumber;
     private String faxNumber;
+    private String email;
     
     public COM(Composite[] composites) {
         super(COM.class.getSimpleName(), composites);
@@ -22,6 +23,9 @@ public class COM extends Segment {
                 case "FX":
                     this.faxNumber = e[0].getValue();
                     break;
+                case "EM":
+                    this.email = e[0].getValue();
+                    break;                    
                 }
             }
         }
@@ -33,5 +37,9 @@ public class COM extends Segment {
 
     public String getFaxNumber() {
         return faxNumber;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
