@@ -20,12 +20,16 @@ import javax.persistence.Table;
 @Table(name = "user_query")
 @NamedQueries({
 	@NamedQuery(name = "UserQuery.checkUniqueTitle", query = "select q.id from UserQuery q where q.deletedDt is null and q.createdBy = :createdBy and q.title = :title"),
-	@NamedQuery(name = "UserQuery.listQueryByUser", query = "select q from UserQuery q where q.createdBy.userId = :createdBy and q.deletedDt is null order by q.id"),
+	@NamedQuery(name = "UserQuery.listQueryByUser", query = "select q from UserQuery q where q.createdBy = :createdBy and q.deletedDt is null order by q.id"),
 })
 public class UserQuery implements Serializable {
 
-	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
