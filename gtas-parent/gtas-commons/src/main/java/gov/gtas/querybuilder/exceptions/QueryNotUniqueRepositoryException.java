@@ -1,6 +1,6 @@
 package gov.gtas.querybuilder.exceptions;
 
-public class QueryRepositoryException extends Exception {
+public class QueryNotUniqueRepositoryException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 

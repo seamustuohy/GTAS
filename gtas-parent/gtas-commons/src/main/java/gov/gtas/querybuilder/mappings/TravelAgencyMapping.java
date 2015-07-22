@@ -1,10 +1,12 @@
 package gov.gtas.querybuilder.mappings;
 
+import gov.gtas.querybuilder.enums.TypeEnum;
+
 public enum TravelAgencyMapping implements IEntityMapping {
 
-	CITY ("city", "City", "string"),
-	NAME ("name", "Name", "string"),
-	PHONE ("phone", "Phone", "string");
+	CITY ("city", "City", TypeEnum.STRING.getType()),
+	NAME ("name", "Name", TypeEnum.STRING.getType()),
+	PHONE ("phone", "Phone", TypeEnum.STRING.getType());
 	
 	private String fieldName;
 	private String friendlyName;

@@ -7,20 +7,28 @@ import gov.gtas.model.Passport;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
 import gov.gtas.model.Visa;
+import gov.gtas.model.udr.EntityAttributeConstants;
+import gov.gtas.model.udr.enumtype.EntityLookupEnum;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+import gov.gtas.model.udr.json.QueryConditionEnum;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.querybuilder.config.QueryBuilderAppConfig;
 import gov.gtas.querybuilder.constants.Constants;
 import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.enums.OperatorEnum;
 import gov.gtas.querybuilder.exceptions.InvalidQueryObjectException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
-import gov.gtas.querybuilder.model.Query;
+import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.repository.PassengerRepository;
+import gov.gtas.util.DateCalendarUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,9 +77,9 @@ public class QueryBuilderServiceIT {
 	// Flight Queries
 	//----------------------------------------
 //	@Test
-	public void testRunQueryAgainstFlights() throws InvalidQueryObjectException {
+	public void testRunQueryAgainstFlights() throws InvalidQueryObjectException, ParseException {
 		QueryObject query = buildSimpleQuery();
-		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query, EntityEnum.FLIGHT);
+		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
 		
 		if(flights != null && flights.size() > 0) {
 			System.out.println("Number of flights: " + flights.size());
@@ -87,9 +95,9 @@ public class QueryBuilderServiceIT {
 	}
 
 //	@Test
-	public void testSimpleDateQueryAgainstFlights() throws InvalidQueryObjectException {
+	public void testSimpleDateQueryAgainstFlights() throws InvalidQueryObjectException, ParseException {
 		QueryObject query = buildSimpleDateQuery();
-		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query, EntityEnum.FLIGHT);
+		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
 		
 		if(flights != null && flights.size() > 0) {
 			System.out.println("Number of flights: " + flights.size());
@@ -104,9 +112,9 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleIsNullQueryAgainstFlights() throws InvalidQueryObjectException {
+	public void testSimpleIsNullQueryAgainstFlights() throws InvalidQueryObjectException, ParseException {
 		QueryObject query = buildSimpleIsNullQuery();
-		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query, EntityEnum.FLIGHT);
+		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
 		
 		if(flights != null && flights.size() > 0) {
 			System.out.println("Number of flights: " + flights.size());
@@ -121,9 +129,26 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleContainsQueryAgainstFlights() throws InvalidQueryObjectException {
+	public void testSimpleContainsQueryAgainstFlights() throws InvalidQueryObjectException, ParseException {
 		QueryObject query = buildSimpleContainsQuery();
-		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query, EntityEnum.FLIGHT);
+		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
+		
+		if(flights != null && flights.size() > 0) {
+			System.out.println("Number of flights: " + flights.size());
+			System.out.println("Flight Information:");
+			for(Flight flight : flights) {
+				System.out.println("\tfight number: " + flight.getFlightNumber());
+			}
+		}
+		else {
+			System.out.println("No flights");
+		}
+	}
+	
+//	@Test
+	public void testSimpleBetweenQuery() throws InvalidQueryObjectException, ParseException {
+		QueryObject query = buildSimpleBetweenQuery();
+		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
 		
 		if(flights != null && flights.size() > 0) {
 			System.out.println("Number of flights: " + flights.size());
@@ -145,11 +170,11 @@ public class QueryBuilderServiceIT {
 	//-------------------------------
 	// Passenger Queries
 	//-------------------------------
-	@Test
-	public void testRunQueryAgainstPassengers() throws InvalidQueryObjectException {
+//	@Test
+	public void testRunQueryAgainstPassengers() throws InvalidQueryObjectException, ParseException {
 		QueryObject query = buildSimpleQuery();
 		
-		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query, EntityEnum.PAX);
+		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
 		SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 		
 		if(passengers != null && passengers.size() > 0) {
@@ -218,9 +243,9 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleIsNullQueryAgainstPassengers() throws InvalidQueryObjectException {
+	public void testSimpleIsNullQueryAgainstPassengers() throws InvalidQueryObjectException, ParseException {
 		QueryObject query = buildSimpleIsNullQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query, EntityEnum.PAX);
+		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
 		
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
@@ -235,9 +260,9 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleContainsQueryAgainstPassengers() throws InvalidQueryObjectException {
+	public void testSimpleContainsQueryAgainstPassengers() throws InvalidQueryObjectException, ParseException {
 		QueryObject query = buildSimpleContainsQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query, EntityEnum.PAX);
+		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
 		
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
@@ -252,9 +277,9 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleBetweenQueryAgainstPassengers() throws InvalidQueryObjectException {
+	public void testSimpleBetweenQueryAgainstPassengers() throws InvalidQueryObjectException, ParseException {
 		QueryObject query = buildSimpleBetweenQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query, EntityEnum.PAX);
+		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
 
 		if(passengers != null && passengers.size() > 0) {
 			System.out.println("Number of Passengers: " + passengers.size());
@@ -272,13 +297,13 @@ public class QueryBuilderServiceIT {
 //	@Test
 	public void display() throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
-		Query queryToSave = new Query();
+		UserQuery queryToSave = new UserQuery();
 		User user = new User();
 		
 		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
 		
 		user.setUserId("ladebiyi");
-		queryToSave = new Query();
+		queryToSave = new UserQuery();
 		queryToSave.setCreatedBy(user);
 		queryToSave.setCreatedDt(new Date());
 		queryToSave.setTitle("Test Query 1");
@@ -296,14 +321,14 @@ public class QueryBuilderServiceIT {
 //	@Test
 	public void testSaveQuery() throws JsonProcessingException, QueryAlreadyExistsException, InterruptedException {
 		ObjectMapper mapper = new ObjectMapper();
-		Query queryToSave = new Query();
+		UserQuery queryToSave = new UserQuery();
 		User user = new User();
 		
 		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
 		
 		user.setUserId("ladebiyi");
 		for(int i = 1; i <= 3; i++) {
-			queryToSave = new Query();
+			queryToSave = new UserQuery();
 			queryToSave.setCreatedBy(user);
 			queryToSave.setCreatedDt(new Date());
 			queryToSave.setTitle("Test Query " + i);
@@ -316,7 +341,7 @@ public class QueryBuilderServiceIT {
 		
 		user.setUserId("bstygar");
 		for(int i = 1; i <= 4; i++) {
-			queryToSave = new Query();
+			queryToSave = new UserQuery();
 			queryToSave.setCreatedBy(user);
 			queryToSave.setCreatedDt(new Date());
 			queryToSave.setTitle("Test Query " + i);
@@ -332,13 +357,13 @@ public class QueryBuilderServiceIT {
 //	@Test
 	public void addDuplicateQuery() throws JsonProcessingException, QueryAlreadyExistsException, InterruptedException {
 		ObjectMapper mapper = new ObjectMapper();
-		Query queryToSave = new Query();
+		UserQuery queryToSave = new UserQuery();
 		User user = new User();
 		
 		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
 		
 		user.setUserId("ladebiyi");
-		queryToSave = new Query();
+		queryToSave = new UserQuery();
 		queryToSave.setCreatedBy(user);
 		queryToSave.setCreatedDt(new Date());
 		queryToSave.setTitle("Test Query 1");
@@ -352,12 +377,13 @@ public class QueryBuilderServiceIT {
 	public void testEditQuery() throws JsonProcessingException, QueryAlreadyExistsException {
 		ObjectMapper mapper = new ObjectMapper();
 		
-		Query query = queryService.getQuery(5);
+//		Query query = queryService.listQueryByUser("ladebiyi").get(0);
+//		Query query = queryService.getQuery(1);
 		
-		query.setTitle("SimpleQuery");
-		query.setDescription("Updated query from SimpleBetweenQuery to  SimpleQuery");
-		query.setQueryText(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleQuery()));
-		
+//		query.setTitle("SimpleQuery");
+//		query.setDescription("Updated query from SimpleBetweenQuery to  SimpleQuery");
+//		query.setQueryText(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleQuery()));
+//		
 //		Query editedQuery = queryService.editQuery(query);
 		
 //		System.out.println("-----------------------------------");
@@ -371,12 +397,12 @@ public class QueryBuilderServiceIT {
 	
 //	@Test
 	public void testListQueryByUser() {
-		List<Query> queryList = queryService.listQueryByUser("bstygar");
+		List<UserQuery> queryList = queryService.listQueryByUser("bstygar");
 		
 		if(queryList != null && queryList.size() > 0) {
 			System.out.println("\nnumber of queries: " + queryList.size());
 			
-			for(Query query : queryList) {
+			for(UserQuery query : queryList) {
 				System.out.println("-----------------------------------");
 				System.out.println("id: " + query.getId());
 				System.out.println("query title: " + query.getTitle());
@@ -392,7 +418,7 @@ public class QueryBuilderServiceIT {
 
 //	@Test
 	public void testDeleteQuery() {
-		queryService.deleteQuery("bstygar", 6);
+//		queryService.deleteQuery("bstygar", 6);
 	}
 	
 	//---------------------------------------
@@ -401,11 +427,11 @@ public class QueryBuilderServiceIT {
 	
 	private QueryObject buildSimpleQuery() {
 		
-		rule.setEntity("Paxi");
-		rule.setField("firstNamei");
+		rule.setEntity("Pax");
+		rule.setField("gender");
 		rule.setOperator("equal");
-		rule.setType("stringi");
-		rule.setValue("David");
+		rule.setType("string");
+		rule.setValue("male");
 		
 		rules.add(rule);
 		
@@ -421,7 +447,7 @@ public class QueryBuilderServiceIT {
 		rule.setField("eta");
 		rule.setOperator("equal");
 		rule.setType("date");
-		rule.setValue("2014-05-11");
+		rule.setValue("05/11/2014 5:00:00 PM");
 		
 		rules.add(rule);
 		
@@ -507,6 +533,29 @@ public class QueryBuilderServiceIT {
 		System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(queryObject));
 	}
 	
+	private QueryObject buildComplexQueryObject() {
+		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
+				QueryConditionEnum.OR);
+		bldr.addTerm(EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_DOB, ValueTypesEnum.DATE,
+				OperatorCodeEnum.EQUAL,
+				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
+		bldr.addTerm(EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				new String[] { "Jones" });
+		bldr.addNestedQueryObject(QueryConditionEnum.AND);
+		bldr.addTerm(EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
+						"DBY", "PKY", "FLT" });
+		bldr.addTerm(EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				new String[] { "IAD" });
+
+		return bldr.build().getDetails();
+	}
 	private QueryObject buildComplexQuery() throws JsonProcessingException {
 		rule.setEntity("Passenger");
 		rule.setField("firstName");

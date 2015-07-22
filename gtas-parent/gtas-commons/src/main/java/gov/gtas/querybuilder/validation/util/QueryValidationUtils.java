@@ -22,19 +22,15 @@ import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
 import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
-import gov.gtas.querybuilder.model.Query;
-import gov.gtas.querybuilder.model.QueryRequest;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.ValidationUtils;
 
 public class QueryValidationUtils {
 	private static final Logger logger = LoggerFactory.getLogger(QueryValidationUtils.class);
@@ -43,34 +39,10 @@ public class QueryValidationUtils {
 		String objectName = Constants.QUERYOBJECT_OBJECTNAME;
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(QueryObject.class, objectName);
 		
-		logger.debug("Validating " + objectName);
+		logger.info("Validating " + objectName);
 		if(queryObject != null) {
 			// validate user query
 			validate(queryObject, errors);
-		}
-		
-		return errors;
-	}
-	
-	public static Errors validateQueryRequest(QueryRequest queryRequest) {
-		String objectName = Constants.QUERYREQUEST_OBJECTNAME;
-
-		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(QueryRequest.class, objectName);
-		
-		logger.debug("Validating " + objectName);
-		if(queryRequest != null) {
-			if(StringUtils.isEmpty(queryRequest.getUserId())) {
-				errors.reject("", "userId must be provided; ");
-			}
-			if(StringUtils.isEmpty(queryRequest.getTitle())) {
-				errors.reject("", "Title cannot be empty; ");
-			}
-			if(queryRequest.getQuery() == null) {
-				errors.reject("", "Query cannot be empty; ");
-			}
-			
-			// validate user query
-			validate(queryRequest.getQuery(), errors);
 		}
 		
 		return errors;
