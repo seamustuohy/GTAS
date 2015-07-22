@@ -8,13 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.edifact.segment.UNB;
-import gov.gtas.parsers.edifact.segment.UNG;
 import gov.gtas.parsers.edifact.segment.UNH;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.BGM;
 import gov.gtas.parsers.paxlst.segment.unedifact.COM;
+import gov.gtas.parsers.paxlst.segment.unedifact.CTA;
 import gov.gtas.parsers.paxlst.segment.unedifact.DOC;
 import gov.gtas.parsers.paxlst.segment.unedifact.DTM;
 import gov.gtas.parsers.paxlst.segment.unedifact.DTM.DtmCode;
@@ -31,12 +30,10 @@ import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 public final class PaxlstParserUNedifact extends PaxlstParser {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUNedifact.class);
     private SegmentFactory paxlstFactory;
-    private SegmentFactory edifactFactory;
 
     public PaxlstParserUNedifact(String message) {
         super(message);
-        paxlstFactory = new SegmentFactory(NAD.class.getPackage().getName());
-        edifactFactory = new SegmentFactory(UNA.class.getPackage().getName());
+        this.paxlstFactory = new SegmentFactory(NAD.class.getPackage().getName());
     }
 
     private SegmentFactory getFactory(String segmentName) {
@@ -91,21 +88,17 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         parsedMessage.setTransmissionDate(unb.getDateAndTimeOfPreparation());
 
         Segment s = getConditionalSegment(i, "UNG");
-        if (s != null) {
-            UNG ung = (UNG) s;
-            String v = ung.getMessageVersionNumber() + ung.getMessageReleaseNumber();
-            parsedMessage.setVersion(v);
-        }
 
         UNH unh = (UNH) getMandatorySegment(i, "UNH");
         parsedMessage.setMessageType(unh.getMessageType());
+        parsedMessage.setVersion(unh.getMessageTypeVersion());
 
         BGM bgm = (BGM) getMandatorySegment(i, "BGM");
         parsedMessage.setMessageCode(bgm.getCode());
 
         s = getConditionalSegment(i, "RFF");
         if (s != null) {
-            RFF ung = (RFF) s;
+            RFF rff = (RFF) s;
         }
 
         for (;;) {
@@ -120,9 +113,8 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             s = getConditionalSegment(i, "NAD");
             if (s == null) {
                 break;
-            } else {
-                processReportingParty((NAD) s, i);
             }
+            processReportingParty((NAD) s, i);
         }
 
         // at least one TDT is mandatory
@@ -132,45 +124,61 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             s = getConditionalSegment(i, "TDT");
             if (s == null) {
                 break;
-            } else {
-                processFlight((TDT) s, i);
             }
+            processFlight((TDT) s, i);
         }
         
         for (;;) {
             s = getConditionalSegment(i, "NAD");
             if (s == null) {
                 break;
-            } else {
-                processPax((NAD) s, i);
             }
-        }
-        
+            processPax((NAD) s, i);
+        }       
     }
 
+    /**
+     * Segment group 1: reporting party
+     */
     private void processReportingParty(NAD nad, ListIterator<Segment> i) throws ParseException {
         ReportingPartyVo rp = new ReportingPartyVo();
         parsedMessage.addReportingParty(rp);
         rp.setPartyName(nad.getPartyName());
 
-        Segment nextSeg = getConditionalSegment(i, "COM");
+        Segment nextSeg = getConditionalSegment(i, "CTA");
         if (nextSeg != null) {
-            // optional COM segment
+            CTA cta = (CTA) nextSeg;
+        }
+
+        for (;;) {
+            nextSeg = getConditionalSegment(i, "COM");
+            if (nextSeg == null) {
+                break;
+            }
             COM com = (COM) nextSeg;
             rp.setTelephone(com.getPhoneNumber());
             rp.setFax(com.getFaxNumber());
         }
     }
 
+    /**
+     * Segment group 2: flight details
+     */
     private void processFlight(TDT tdt, ListIterator<Segment> i) throws ParseException {
         String dest = null;
-        String previousDest = null;
         String origin = null;
         Date eta = null;
         Date etd = null;
         boolean loc92Seen = false;
 
-        // process loc-dtm loop
+        for (;;) {
+            Segment s = getConditionalSegment(i, "DTM");
+            if (s == null) {
+                break;
+            }
+        }       
+        
+        // Segment group 3: loc-dtm loop
         for (;;) {
             Segment s = getConditionalSegment(i, "LOC");
             if (s == null) {
@@ -194,10 +202,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                     loc92Seen = false;
                 } else {
                     origin = airport;
-                    if (origin != previousDest) {
-                        // TODO: do we have to create an intermediate flight
-                        // here?
-                    }
                     loc92Seen = true;
                 }
                 break;
@@ -235,7 +239,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 f.setEta(eta);
                 f.setEtd(etd);
 
-                previousDest = dest;
                 dest = null;
                 origin = null;
                 eta = null;
@@ -245,6 +248,9 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
     }
     
+    /**
+     * Segment group 4: passenger details
+     */
     private void processPax(NAD nad, ListIterator<Segment> i) throws ParseException {
         PaxVo p = new PaxVo();
         parsedMessage.addPax(p);
@@ -252,7 +258,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         p.setFirstName(nad.getFirstName());
         p.setLastName(nad.getLastName());
         p.setMiddleName(nad.getMiddleName());
-        p.setPaxType(nad.getPartyFunctionCodeQualifier().toString());
+        p.setPaxType(nad.getNadCode().getCode());
 
         Segment s = null;
 
@@ -262,9 +268,11 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 break;
             }
             ATT att = (ATT) s;
-            // TODO: get code
-            p.setGender(att.getAttributeDescriptionCode());
-
+            switch (att.getFunctionCode()) {
+            case GENDER:
+                p.setGender(att.getAttributeDescriptionCode());
+                break;
+            }
         }
 
         for (;;) {
@@ -307,12 +315,14 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             }
 
             LOC loc = (LOC) s;
-            LocCode locCode = loc.getFunctionCode();
             String val = loc.getLocationNameCode();
-            if (locCode == LocCode.PORT_OF_DEBARKATION) {
+            switch (loc.getFunctionCode()) {
+            case PORT_OF_DEBARKATION:
                 p.setDebarkation(val);
-            } else if (locCode == LocCode.PORT_OF_EMBARKATION) {
+                break;
+            case PORT_OF_EMBARKATION:
                 p.setEmbarkation(val);
+                break;
             }
         }
 
@@ -349,8 +359,14 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             }
             processDocument(p, (DOC) s, i);
         }
+        
+        // TODO: implement segment group 6
+        // TODO: implement segment group 7
     }
 
+    /**
+     * Segment group 5: Passenger documents
+     */
     private void processDocument(PaxVo p, DOC doc, ListIterator<Segment> i) throws ParseException {
         DocumentVo d = new DocumentVo();
         p.addDocument(d);

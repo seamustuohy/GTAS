@@ -1,5 +1,6 @@
 package gov.gtas.parsers.edifact.segment;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import gov.gtas.parsers.edifact.Composite;
@@ -13,30 +14,37 @@ import gov.gtas.parsers.util.ParseUtils;
  * <p>
  * Function: To start, identify and specify an interchange.  Specifies
  * the sender and intended recipient of the message.
- * 
  * <p>
- * Example: UNB+UNOA:4+APIS*ABE+USADHS+070429:0900+000000001++USADHS'
+ * Example: UNB+UNOA:4+AIRLINE1+NZCS+130628:0900+000000001’
  */
 public class UNB extends Segment {
     private static final String DATE_TIME_FORMAT = "yyMMddhhmm";
 
-    private String syntaxIdentifier;
-    private String syntaxVersion;
     private String sender;
     private String recipient;
     private Date dateAndTimeOfPreparation;
-    private String interchangeControlReference;
-    private String applicationReference;
 
-    public UNB(Composite[] composites) {
+    public UNB(Composite[] composites) throws ParseException {
         super(UNB.class.getSimpleName(), composites);
         for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
             Element[] e = c.getElements();
             switch (i) {
             case 0:
-                this.syntaxIdentifier = e[0].getValue();
-                this.syntaxVersion = e[1].getValue();
+                if (e == null || e.length < 2) {
+                    throw new ParseException("UNB: missing syntax identifier and version", -1);
+                }
+                if (e[0].getValue().equals("UNOA")) {
+                    // ok
+                } else {
+                    throw new ParseException("UNB: syntax identifier is not UNOA", -1);
+                }
+                
+                if (e[1].getValue().equals("4")) {
+                    // ok
+                } else {
+                    throw new ParseException("UNB: syntax identifier is not UNOA", -1);
+                }
                 break;
             case 1:
                 if (c.getValue() != null) {
@@ -56,25 +64,8 @@ public class UNB extends Segment {
                 String tmp = e[0].getValue() + e[1].getValue();
                 this.dateAndTimeOfPreparation = ParseUtils.parseDateTime(tmp, DATE_TIME_FORMAT);
                 break;
-            case 4:
-                this.interchangeControlReference = c.getValue();
-                break;
-            case 5:
-                // blank
-                break;
-            case 6:
-                this.applicationReference = c.getValue();
-                break;
             }
         }
-    }
-
-    public String getSyntaxIdentifier() {
-        return syntaxIdentifier;
-    }
-
-    public String getSyntaxVersion() {
-        return syntaxVersion;
     }
 
     public String getSenderIdentification() {
@@ -87,13 +78,5 @@ public class UNB extends Segment {
 
     public Date getDateAndTimeOfPreparation() {
         return dateAndTimeOfPreparation;
-    }
-
-    public String getInterchangeControlReference() {
-        return interchangeControlReference;
-    }
-
-    public String getApplicationReference() {
-        return applicationReference;
     }
 }

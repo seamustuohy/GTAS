@@ -19,9 +19,16 @@
 > mvn clean install -Dskip.unit.tests=true
 3. Build with integration tests (and unit tests)
 > mvn clean install -Dskip.integration.tests=false
-4. Deploy to tomcat
+4. Create the database (make sure the settings in hibernate.properties are correct).
+> mysql -u root -p  
+create database 'gtas'
+5. Create the schema
+> cd gtas-commons  
+mvn hibernate4:export
+6. Deploy to tomcat
 > cp gtas-webapp/gtas.war [tomcat home]/webapps
-5. Access site at http://localhost:8080/gtas
+7. Start tomcat and access site at http://localhost:8080/gtas
+8. See section below on adding lookup data, sample apis messages and flights.
 
 ### Deployment to AWS
 
@@ -42,7 +49,7 @@ sudo -u tomcat sh bin/catalina.sh start
 
 ### Importing Test Data
 
-1. The lookup data is located in gtas-commons/src/main/resources/sql.  Load these files from the mysql command line as you may experience problems with special characters from Heidisql:
+1. The lookup data (countries, airports, carriers) is located in gtas-commons/src/main/resources/sql.  Load these files from the mysql command line as you may experience problems with special characters from Heidisql:
 > mysql -u root -p  
 source [sql filename]
 2. Sample users and roles are in config/db/gtas_data.sql 
@@ -50,6 +57,6 @@ source [sql filename]
 4. unzip the folder into a temp directory
 5. Use the generated jar under the apis-loader module to load one or more files.
 6. For example, to load one file:
-> java -jar apis-loader/target/apis-loader-0.1-SNAPSHOT-jar-with-dependencies.jar 10.txt
-7. To load all of the sample files, you need to provide two directories -- one for the source files and one where the loader will place the processed files.  e.g.,
+> java -jar apis-loader/target/apis-loader-0.1-SNAPSHOT-jar-with-dependencies.jar 101.txt
+7. To load all of the sample files, you need to provide two directories -- one for the source files and one where the loader will place the processed files.  Note that some of the files are invalid and will not import.  e.g.,
 > java -jar apis-loader/target/apis-loader-0.1-SNAPSHOT-jar-with-dependencies.jar /tmp/keith_msgs/ /tmp/out/

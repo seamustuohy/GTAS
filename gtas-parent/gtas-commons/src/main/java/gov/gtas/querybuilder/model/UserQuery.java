@@ -19,13 +19,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user_query")
 @NamedQueries({
-	@NamedQuery(name = "Query.checkUniqueTitle", query = "select q.id from Query q where q.deletedDt is null and q.createdBy = :createdBy and q.title = :title"),
-	@NamedQuery(name = "Query.listQueryByUser", query = "select q from Query q where q.createdBy.userId = :createdBy and q.deletedDt is null order by q.id"),
+	@NamedQuery(name = "UserQuery.checkUniqueTitle", query = "select q.id from UserQuery q where q.deletedDt is null and q.createdBy = :createdBy and q.title = :title"),
+	@NamedQuery(name = "UserQuery.listQueryByUser", query = "select q from UserQuery q where q.createdBy = :createdBy and q.deletedDt is null order by q.id"),
 })
-public class Query implements Serializable {
+public class UserQuery implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
@@ -34,8 +34,7 @@ public class Query implements Serializable {
 	@Column(name = "created_dt", nullable = false)
 	private Date createdDt;
 	
-	@ManyToOne(optional = false)
-	@JoinColumn(name="created_by")
+	@JoinColumn(name="created_by", nullable = false)
 	private User createdBy;
 	
 	@Column(name = "deleted_dt")
@@ -54,7 +53,7 @@ public class Query implements Serializable {
 	@Column(name = "query_text", nullable = false, columnDefinition = "LONGTEXT")
 	private String queryText;
 	
-	public Query() {
+	public UserQuery() {
 	}
 
 	public Integer getId() {

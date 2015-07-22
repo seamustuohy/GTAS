@@ -1,21 +1,46 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
+/**
+ * <p>
+ * NAD: NAME AND ADDRESS
+ * <p>
+ * To specify a contact responsible for the message content. This may either be
+ * an assigned profile or the name of the contact person.
+ * <p>
+ * Example: NAD+MS+ABC9876'
+ */
 public class NAD extends Segment {
-    public enum PartyCode {
-        REPORTING_PARTY,
-        PASSENGER,
-        CREW_MEMBER,
-        INTRANSIT_PASSENGER,
-        INTRANSIT_CREW_MEMBER,
-        INVOLVED_PARTY_GATE_PASS_REQUEST,
-        CANCEL_RESERVATION_OR_FLIGHT_CLOSE_OUT
+    public enum NadCode {
+        REPORTING_PARTY("MS"),
+        PASSENGER("FL"),
+        CREW_MEMBER("FM"),
+        INTRANSIT_PASSENGER("DDU"),
+        INTRANSIT_CREW_MEMBER("DDT");
+        
+        private final String code;
+        private NadCode(String code) { this.code = code; }        
+        public String getCode() { return code; }
+        
+        private static final Map<String, NadCode> BY_CODE_MAP = new LinkedHashMap<>();
+        static {
+            for (NadCode rae : NadCode.values()) {
+                BY_CODE_MAP.put(rae.code, rae);
+            }
+        }
+
+        public static NadCode forCode(String code) {
+            return BY_CODE_MAP.get(code);
+        }        
     }
     
-    private PartyCode partyFunctionCodeQualifier;
+    private NadCode nadCode;
     
     /** only used if isReportingParty == true */
     private String partyName;
@@ -41,36 +66,8 @@ public class NAD extends Segment {
             
             switch (i) {
             case 0:
-                switch (c.getValue()) {
-                case "MS":
-                case "IC":
-                case "BA":
-                case "AG":
-                    // IC, BA, AG are not in the official documentation, but appear in sample files
-                    this.isReportingParty = true;
-                    this.partyFunctionCodeQualifier = PartyCode.REPORTING_PARTY;
-                    break;
-                case "FL":
-                    this.partyFunctionCodeQualifier = PartyCode.PASSENGER;
-                    break;
-                case "FM":
-                    this.partyFunctionCodeQualifier = PartyCode.CREW_MEMBER;
-                    break;
-                case "DDU":
-                    this.partyFunctionCodeQualifier = PartyCode.INTRANSIT_PASSENGER;
-                    break;
-                case "DDT":
-                    this.partyFunctionCodeQualifier = PartyCode.INTRANSIT_CREW_MEMBER;
-                    break;
-                case "COT":
-                    this.partyFunctionCodeQualifier = PartyCode.INVOLVED_PARTY_GATE_PASS_REQUEST;
-                    break;
-                case "ZZZ":
-                    this.partyFunctionCodeQualifier = PartyCode.CANCEL_RESERVATION_OR_FLIGHT_CLOSE_OUT;
-                    break;
-                default:
-                    logger.error("NAD: invalid party function code");
-                }
+                this.nadCode = NadCode.forCode(c.getValue());
+                this.isReportingParty = (this.nadCode == NadCode.REPORTING_PARTY);
                 break;
 
             case 3:
@@ -107,8 +104,8 @@ public class NAD extends Segment {
         }
     }
 
-    public PartyCode getPartyFunctionCodeQualifier() {
-        return partyFunctionCodeQualifier;
+    public NadCode getNadCode() {
+        return nadCode;
     }
 
     public String getPartyName() {

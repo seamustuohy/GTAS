@@ -15,11 +15,12 @@ import gov.gtas.querybuilder.enums.Status;
 import gov.gtas.querybuilder.exceptions.InvalidQueryObjectException;
 import gov.gtas.querybuilder.exceptions.InvalidQueryRequestException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
 import gov.gtas.querybuilder.mappings.QueryBuilderMapping;
 import gov.gtas.querybuilder.mappings.QueryBuilderMappingFactory;
 import gov.gtas.querybuilder.model.IQueryResponse;
 import gov.gtas.querybuilder.model.IQueryResult;
-import gov.gtas.querybuilder.model.Query;
+import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.model.QueryErrorResponse;
 import gov.gtas.querybuilder.model.QueryFlightsResult;
 import gov.gtas.querybuilder.model.QueryPassengersResult;
@@ -32,6 +33,7 @@ import gov.gtas.querybuilder.validation.QueryRequestValidator;
 import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -71,21 +73,37 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping(Constants.QUERY_SERVICE)
 public class QueryBuilderController {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderController.class);
-	SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
+	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 	
 	@Autowired
 	QueryBuilderService queryService;
+	@Autowired
+	QueryObjectValidator queryObjectValidator;
+	@Autowired
+	QueryRequestValidator queryRequestValidator;
 
+	/**
+	 * 
+	 * @param binder
+	 */
 	@InitBinder(Constants.QUERYOBJECT_OBJECTNAME)
 	protected void initQueryObjectBinder(WebDataBinder binder) {
-	    binder.setValidator(new QueryObjectValidator());
+	    binder.setValidator(queryObjectValidator);
 	}
 	
+	/**
+	 * 
+	 * @param binder
+	 */
 	@InitBinder(Constants.QUERYREQUEST_OBJECTNAME)
 	protected void initQueryRequestBinder(WebDataBinder binder) {
-	    binder.setValidator(new QueryRequestValidator());
+	    binder.setValidator(queryRequestValidator);
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = Constants.INIT, method = RequestMethod.GET)
 	public Map<String, QueryBuilderMapping> initQueryBuilder() {
 		
@@ -97,15 +115,14 @@ public class QueryBuilderController {
 	 * 
 	 * @param queryObject
 	 * @return
-	 * @throws InvalidQueryObjectException 
+	 * @throws InvalidQueryObjectException
+	 * @throws ParseException
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.POST)
-	public IQueryResponse runFlightQuery(@Valid @RequestBody QueryObject queryObject) throws InvalidQueryObjectException {
+	public IQueryResponse runFlightQuery(@Valid @RequestBody QueryObject queryObject) throws InvalidQueryObjectException, ParseException {
 		IQueryResponse response = new QueryResponse();
 		
-		if(queryObject != null) {
-			response = createQueryResponse(Status.SUCCESS, "", mapToQueryFlightResult(queryService.runFlightQuery(queryObject, EntityEnum.FLIGHT)));
-		}
+		response = createQueryResponse(Status.SUCCESS, "", mapToQueryFlightResult(queryService.runFlightQuery(queryObject)));
 		
 		return response;
 	}
@@ -114,43 +131,18 @@ public class QueryBuilderController {
 	 * 
 	 * @param queryObject
 	 * @return
-	 * @throws InvalidQueryObjectException 
+	 * @throws InvalidQueryObjectException
+	 * @throws ParseException
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_PASSENGER_URI, method = RequestMethod.POST)
-	public IQueryResponse runPassengerQuery(@Valid @RequestBody QueryObject queryObject) throws InvalidQueryObjectException {
+	public IQueryResponse runPassengerQuery(@Valid @RequestBody QueryObject queryObject) throws InvalidQueryObjectException, ParseException {
 		IQueryResponse response = new QueryResponse();
 		
-		if(queryObject != null) {
-			response = createQueryResponse(Status.SUCCESS, "", mapToQueryPassengerResult(queryService.runPassengerQuery(queryObject, EntityEnum.PAX)));
-		}
+		response = createQueryResponse(Status.SUCCESS, "", mapToQueryPassengerResult(queryService.runPassengerQuery(queryObject)));
 		
 		return response;
 	}
 	
-	/**
-	 * 
-	 * @param queryRequest
-	 * @return
-	 * @throws QueryAlreadyExistsException
-	 * @throws IOException
-	 * @throws InvalidQueryObjectException
-	 * @throws InvalidQueryRequestException 
-	 */
-	@RequestMapping(value = Constants.SAVE_QUERY_URI, method = RequestMethod.POST)
-	public IQueryResponse saveQuery(@Valid @RequestBody QueryRequest queryRequest) throws QueryAlreadyExistsException, IOException, InvalidQueryRequestException {
-		IQueryResponse response = new QueryResponse();
-		
-		if(queryRequest != null) {
-			List<IQueryResult> resultList = new ArrayList<>();
-
-			resultList.add(mapQueryToQueryResult(queryService.saveQuery(queryRequest)));
-			
-			response = createQueryResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, resultList);
-		}
-		
-		return response;
-	}
-
 	/**
 	 * 
 	 * @param queryRequest
@@ -159,17 +151,35 @@ public class QueryBuilderController {
 	 * @throws IOException
 	 * @throws InvalidQueryRequestException
 	 */
-	@RequestMapping(value = Constants.EDIT_QUERY_URI, method = RequestMethod.PUT)
-	public IQueryResponse editQuery(@Valid @RequestBody QueryRequest queryRequest) throws QueryAlreadyExistsException, IOException, InvalidQueryRequestException  {
+	@RequestMapping(value = Constants.SAVE_QUERY_URI, method = RequestMethod.POST)
+	public IQueryResponse saveQuery(@Valid @RequestBody QueryRequest queryRequest) throws QueryAlreadyExistsException, IOException, InvalidQueryRequestException {
 		IQueryResponse response = new QueryResponse();
+		List<IQueryResult> resultList = new ArrayList<>();
+
+		resultList.add(mapQueryToQueryResult(queryService.saveQuery(queryRequest)));
 		
-		if(queryRequest != null) {
-			List<IQueryResult> resultList = new ArrayList<>();
+		response = createQueryResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, resultList);
+		
+		return response;
+	}
+
+	/**
+	 * 
+	 * @param queryRequest
+	 * @return
+	 * @throws QueryAlreadyExistsException
+	 * @throws QueryDoesNotExistException
+	 * @throws IOException
+	 * @throws InvalidQueryRequestException
+	 */
+	@RequestMapping(value = Constants.EDIT_QUERY_URI, method = RequestMethod.PUT)
+	public IQueryResponse editQuery(@Valid @RequestBody QueryRequest queryRequest) throws QueryAlreadyExistsException, QueryDoesNotExistException, IOException, InvalidQueryRequestException  {
+		IQueryResponse response = new QueryResponse();
+		List<IQueryResult> resultList = new ArrayList<>();
 			
-			resultList.add(mapQueryToQueryResult(queryService.editQuery(queryRequest)));
-			
-			response = createQueryResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, resultList);
-		}
+		resultList.add(mapQueryToQueryResult(queryService.editQuery(queryRequest)));
+		
+		response = createQueryResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, resultList);
 		
 		return response;
 	}
@@ -178,9 +188,9 @@ public class QueryBuilderController {
 	 * 
 	 * @param userId
 	 * @return
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonParseException 
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
 	 */
 	@RequestMapping(value = Constants.LIST_QUERY_URI, method = RequestMethod.GET)
 	public IQueryResponse listQueryByUser(@RequestParam("userId") String userId) throws JsonParseException, JsonMappingException, IOException {
@@ -201,9 +211,11 @@ public class QueryBuilderController {
 	 * 
 	 * @param userId
 	 * @param id
+	 * @return
+	 * @throws QueryDoesNotExistException
 	 */
 	@RequestMapping(value = Constants.DELETE_QUERY_URI, method = RequestMethod.DELETE)
-	public IQueryResponse deleteQuery(@RequestParam("userId") String userId, @RequestParam("id") int id) {
+	public IQueryResponse deleteQuery(@RequestParam("userId") String userId, @RequestParam("id") int id) throws QueryDoesNotExistException {
 		IQueryResponse response = new QueryResponse();
 		
 		if(userId != null && id > 0) {
@@ -214,6 +226,13 @@ public class QueryBuilderController {
 		return response;
 	}
 	
+	/**
+	 * 
+	 * @param status
+	 * @param message
+	 * @param resultList
+	 * @return
+	 */
 	private IQueryResponse createQueryResponse(Status status, String message, List<IQueryResult> resultList) {
 		QueryResponse response = new QueryResponse();
 		
@@ -224,6 +243,13 @@ public class QueryBuilderController {
 		return response;
 	}
 	
+	/**
+	 * 
+	 * @param status
+	 * @param message
+	 * @param request
+	 * @return
+	 */
 	private IQueryResponse createQueryErrorResponse(Status status, String message, Object request) {
 		QueryErrorResponse response = new QueryErrorResponse();
 		
@@ -260,7 +286,7 @@ public class QueryBuilderController {
 	
 	/**
 	 * 
-	 * @param modelType
+	 * @param entityType
 	 * @return
 	 */
 	private QueryBuilderMapping getMapping(EntityEnum entityType) {
@@ -273,7 +299,7 @@ public class QueryBuilderController {
 	
 	/**
 	 * 
-	 * @param list
+	 * @param flights
 	 * @return
 	 */
 	private List<IQueryResult> mapToQueryFlightResult(List<Flight> flights) {
@@ -304,7 +330,7 @@ public class QueryBuilderController {
 	
 	/**
 	 * 
-	 * @param list
+	 * @param travelers
 	 * @return
 	 */
 	private List<IQueryResult> mapToQueryPassengerResult(List<Traveler> travelers) {
@@ -398,11 +424,11 @@ public class QueryBuilderController {
 	 * 
 	 * @param query
 	 * @return
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonParseException 
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
 	 */
-	private QueryResult mapQueryToQueryResult(Query query) throws JsonParseException, JsonMappingException, IOException {
+	private QueryResult mapQueryToQueryResult(UserQuery query) throws JsonParseException, JsonMappingException, IOException {
 		QueryResult result = new QueryResult();
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -418,15 +444,15 @@ public class QueryBuilderController {
 	 * 
 	 * @param queryList
 	 * @return
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonParseException 
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
 	 */
-	private List<IQueryResult> mapQueryListToResultList(List<Query> queryList) throws JsonParseException, JsonMappingException, IOException {
+	private List<IQueryResult> mapQueryListToResultList(List<UserQuery> queryList) throws JsonParseException, JsonMappingException, IOException {
 		List<IQueryResult> resultList = new ArrayList<>();
 		
 		if(queryList != null && queryList.size() > 0) {
-			for(Query query : queryList) {
+			for(UserQuery query : queryList) {
 				resultList.add(mapQueryToQueryResult(query));
 			}
 		}
@@ -434,20 +460,50 @@ public class QueryBuilderController {
 		return resultList;
 	}
 		
+	/**
+	 * 
+	 * @param exception
+	 * @return
+	 * @throws JsonProcessingException
+	 */
 	@ExceptionHandler(QueryAlreadyExistsException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public IQueryResponse handleQueryExistsException(QueryAlreadyExistsException exception) throws JsonProcessingException {
 		
 		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), exception.getQueryRequest());
     }
+	
+	/**
+	 * 
+	 * @param exception
+	 * @return
+	 */
+	@ExceptionHandler(QueryDoesNotExistException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public IQueryResponse handleQueryDoesNotExistException(QueryDoesNotExistException exception) {
+		
+		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), exception.getQueryRequest());
+	}
 
+	/**
+	 * 
+	 * @param exception
+	 * @return
+	 * @throws JsonProcessingException
+	 */
 	@ExceptionHandler(InvalidQueryRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public IQueryResponse handleInvalidQueryRequestException(InvalidQueryRequestException exception) throws JsonProcessingException {
-		
+
 		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), exception.getRequest());
     }
 	
+	/**
+	 * 
+	 * @param exception
+	 * @return
+	 * @throws JsonProcessingException
+	 */
 	@ExceptionHandler(InvalidQueryObjectException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public IQueryResponse handleInvalidQueryObjectException(InvalidQueryObjectException exception) throws JsonProcessingException {
@@ -455,6 +511,12 @@ public class QueryBuilderController {
 		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), exception.getQueryObject());
     }
 	
+	/**
+	 * 
+	 * @param exception
+	 * @return
+	 * @throws JsonProcessingException
+	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public IQueryResponse handleMethodArgumentException(MethodArgumentNotValidException exception) throws JsonProcessingException {
@@ -472,7 +534,7 @@ public class QueryBuilderController {
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	public IQueryResponse handleExceptions(Exception e) {
 		
-		e.printStackTrace();
+		logger.info("An error occurred", e);
 		
 		return createQueryErrorResponse(Status.FAILURE, Constants.QUERY_SERVICE_ERROR_MSG, null);
 	}
