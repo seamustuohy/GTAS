@@ -14,6 +14,7 @@ public class DTM extends Segment {
         DEPARTURE,
         ARRIVAL,
         ARRIVAL_AND_DEPARTURE_MCL,
+        
         DATE_OF_BIRTH,
         PASSPORT_EXPIRATION_DATE,
         UNKNOWN

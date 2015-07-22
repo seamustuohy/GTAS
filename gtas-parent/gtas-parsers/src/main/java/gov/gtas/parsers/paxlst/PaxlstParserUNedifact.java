@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.edifact.segment.UNB;
 import gov.gtas.parsers.edifact.segment.UNG;
 import gov.gtas.parsers.edifact.segment.UNH;
@@ -31,12 +30,10 @@ import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 public final class PaxlstParserUNedifact extends PaxlstParser {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUNedifact.class);
     private SegmentFactory paxlstFactory;
-    private SegmentFactory edifactFactory;
 
     public PaxlstParserUNedifact(String message) {
         super(message);
-        paxlstFactory = new SegmentFactory(NAD.class.getPackage().getName());
-        edifactFactory = new SegmentFactory(UNA.class.getPackage().getName());
+        this.paxlstFactory = new SegmentFactory(NAD.class.getPackage().getName());
     }
 
     private SegmentFactory getFactory(String segmentName) {
@@ -120,9 +117,8 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             s = getConditionalSegment(i, "NAD");
             if (s == null) {
                 break;
-            } else {
-                processReportingParty((NAD) s, i);
             }
+            processReportingParty((NAD) s, i);
         }
 
         // at least one TDT is mandatory
@@ -132,20 +128,17 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             s = getConditionalSegment(i, "TDT");
             if (s == null) {
                 break;
-            } else {
-                processFlight((TDT) s, i);
             }
+            processFlight((TDT) s, i);
         }
         
         for (;;) {
             s = getConditionalSegment(i, "NAD");
             if (s == null) {
                 break;
-            } else {
-                processPax((NAD) s, i);
             }
-        }
-        
+            processPax((NAD) s, i);
+        }       
     }
 
     private void processReportingParty(NAD nad, ListIterator<Segment> i) throws ParseException {
@@ -155,7 +148,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
 
         Segment nextSeg = getConditionalSegment(i, "COM");
         if (nextSeg != null) {
-            // optional COM segment
             COM com = (COM) nextSeg;
             rp.setTelephone(com.getPhoneNumber());
             rp.setFax(com.getFaxNumber());
@@ -164,7 +156,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
 
     private void processFlight(TDT tdt, ListIterator<Segment> i) throws ParseException {
         String dest = null;
-        String previousDest = null;
         String origin = null;
         Date eta = null;
         Date etd = null;
@@ -194,10 +185,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                     loc92Seen = false;
                 } else {
                     origin = airport;
-                    if (origin != previousDest) {
-                        // TODO: do we have to create an intermediate flight
-                        // here?
-                    }
                     loc92Seen = true;
                 }
                 break;
@@ -235,7 +222,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 f.setEta(eta);
                 f.setEtd(etd);
 
-                previousDest = dest;
                 dest = null;
                 origin = null;
                 eta = null;
@@ -262,9 +248,11 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 break;
             }
             ATT att = (ATT) s;
-            // TODO: get code
-            p.setGender(att.getAttributeDescriptionCode());
-
+            switch (att.getFunctionCode()) {
+            case GENDER:
+                p.setGender(att.getAttributeDescriptionCode());
+                break;
+            }
         }
 
         for (;;) {
@@ -307,12 +295,14 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             }
 
             LOC loc = (LOC) s;
-            LocCode locCode = loc.getFunctionCode();
             String val = loc.getLocationNameCode();
-            if (locCode == LocCode.PORT_OF_DEBARKATION) {
+            switch (loc.getFunctionCode()) {
+            case PORT_OF_DEBARKATION:
                 p.setDebarkation(val);
-            } else if (locCode == LocCode.PORT_OF_EMBARKATION) {
+                break;
+            case PORT_OF_EMBARKATION:
                 p.setEmbarkation(val);
+                break;
             }
         }
 

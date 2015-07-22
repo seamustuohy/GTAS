@@ -142,89 +142,49 @@ public final class PaxlstParserUNedifactTest {
    
     @Test
     public void testRandomApis() throws ParseException {
-        String apis = "UNA:+.?*'" + 
-                "UNB+UNOA:4+ZZAIR+DHS+080708:0545+000000001++DHS' " + 
-                "UNG+PAXLST+ZZAIR+ DHS+080708:0545+1+UN+D:05B' " + 
+        String apis = "UNA:+.?*' " + 
+                "UNB+UNOA:4+AIR1+DHS+070218:1545+000006640++DHS' " + 
+                "UNG+PAXLST+AIR1+ DHS+070218:1545+1+UN+D:05B' " + 
                 "UNH+PAX001+PAXLST:D:05B:UN:IATA' " + 
-                "BGM+745+CP'" + 
-                "RFF+AVF:A1B2C3'" + 
-                "DTM+179:20080610'" + 
-                "DTM+558:20080612'" + 
-                "DTM+183:20080630'" +
-                "NAD+MS+++C UNDERWOOD'" + 
+                "BGM+745'" + 
+                "RFF+TN:AJYTR1070219:::001'" + 
+                "NAD+MS+++JOHN SMITH' " + 
                 "COM+703-555-1212:TE+703-555-4545:FX' " + 
-                "NAD+BA+ORION TRAVEL++J JAVERT'" + 
-                "NAD+AG+ORION TRAVEL++D SONET'" + 
-                "TDT+20+QQ827+++QQ'" + 
-                "LOC+92+VIE'" + 
-                "DTM+189:200807102140:201'" + 
-                "LOC+92+BRU'" + 
-                "DTM+232:200807102355:201'" + 
-                "TDT+20+ QQ827+++QQ'" + 
-                "LOC+92+BRU'" + 
-                "DTM+189:200807102140:201'" + 
-                "LOC+92+CDG'" + 
-                "DTM+232:200807102300:201'" + 
-                "TDT+20+QQ827+++QQ '" + 
-                "LOC+125+CDG'" + 
-                "DTM+189:200807110200:201'" + 
-                "LOC+87+IAD'" + 
-                "DTM+232:200807111035:201'" + 
-                "NAD+FL+++BARRE:TODD+123 E MAIN ST+STAFFORD+VA+22554+USA'" + 
-                "ATT+2++M'" + 
-                "DTM+329:680223'" + 
-                "GEI+4+ZZZ:::HK'" + 
-                "LOC+178+VIE'" + 
-                "LOC+179+IAD'" + 
-                "LOC+174+FRA'" + 
-                "LOC+22+IAD'" + 
-                "COM+55 121212:TE+033:AI'" + 
-                "NAT+2+FRA'" + 
-                "RFF+AVF:A1B2C3'" + 
-                "RFF+ABO:UUI34T543'" + 
-                "RFF+SEA:35F'" + 
-                "RFF+ACD:AA1234567890'" + 
-                "RFF+CBA:09-87-654321'" + 
-                "DOC+P+YY3478621G'" + 
-                "DTM+36:081230'" + 
-                "LOC+91+FRA:::PARIS'" + 
-                "NAD+FL+++LANG:KRISTIN+123 E MAIN ST+ STAFFORD+VA+22554+USA'" + 
+                "TDT+20+AA123+++AA'" + 
+                "LOC+92+ATL'" + 
+                "DTM+189:0702191540:201'" + 
+                "LOC+92+ORD'" + 
+                "DTM+232:0702191740:201'" + 
+                "TDT+20+AA124+++AA'" + 
+                "LOC+92+ORD'" + 
+                "DTM+189:0702191840:201'" + 
+                "LOC+92+JFK'" + 
+                "DTM+232:0702191955:201'" + 
+                "NAD+FL+++CLARK:MICHAEL' " + 
+                "ATT+2++M' " + 
+                "DTM+329:720907'" + 
+                "LOC+178+ATL'" + 
+                "LOC+179+JFK'" + 
+                "RFF+AVF:TYR123'" + 
+                "RFF+ABO:ABC123'" + 
+                "RFF+AEA:1234567890ABC'" + 
+                "RFF+CR:20060907NY123'" + 
+                "NAD+FL+++CLARK:CHERYL' " + 
                 "ATT+2++F'" + 
-                "DTM+329:700606'" + 
-                "GEI+4+ZZZ:::HK'" + 
-                "LOC+178+VIE'" + 
-                "LOC+179+IAD'" + 
-                "LOC+174+ESP'" + 
-                "COM+55 343434:TE+033:AI'" + 
-                "NAT+2+ESP'" + 
-                "RFF+AVF:A1B2C3'" + 
-                "RFF+ABO:WWT098L31E'" + 
-                "RFF+SEA:35E'" + 
-                "RFF+CBA:09-87-654325'" + 
-                "DOC+P+YY3478621G'" + 
-                "DTM+36:081230'" + 
-                "LOC+91+ESP'" + 
+                "DTM+329:730407'" + 
+                "LOC+178+ORD'" + 
+                "LOC+179+JFK'" + 
+                "RFF+AVF:TYR123'" + 
+                "RFF+ABO:TYL009'" + 
                 "CNT+42:2'" + 
-                "CNT+59:3'" + 
-                "FTX+OSI+++CTCA 703-555-1212 STEVEN WILSON TVL/X33566153/JOESEPH'" + 
-                "FTX+OSI+++CTCT NYC 888-555-1111 COOL TRAVEL SCA I 12 234234'" + 
-                "FTX+SSR+++FQTVQQHK1/ QQ8270000/BARRE/TODDMR'" + 
-                "FTX+SSR+++TKNEBAHK2/ QQ8270000/LANG/KRISTINMS'" + 
-                "FTX+SSR+++PLS SEE QQ SEAT POLICY - SEAT REQUEST NOT PERMITTED'" + 
-                "FTX+HST+C++EI 166 Y 08JUL10 VIEBRU HK1 1340 1555/HK'" + 
-                "FTX+PMT++AB+300, AV SUFFREN 75015 Paris, France'" + 
-                "FTX+PMT++TYP+CASH'" + 
-                "FTX+MKS+++QQ-123-11111111'" + 
-                "FTX+MKS+++QQ-123-22222222'" + 
-                "FTX+MKS+++QQ-123-33333333'" + 
-                "FTX+AAI+++VALUED PASSENGER'" + 
-                "UNT+78+PAX001' " + 
+                "UNT+33+PAX001' " + 
                 "UNE+1+1' " + 
-                "UNZ+1+000000001'";
+                "UNZ+1+000006640'";
         
         parser = new PaxlstParserUNedifact(apis);
         ApisMessageVo vo = parser.parse();
         List<FlightVo> flights = vo.getFlights();
-        assertEquals(3, flights.size());
+        assertEquals(2, flights.size());
+        System.out.println(vo);
     }
 }
