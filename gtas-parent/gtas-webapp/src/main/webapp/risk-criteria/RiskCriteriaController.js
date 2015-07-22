@@ -1,31 +1,64 @@
 app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTableParams, riskCriteriaService) {
     var datepickerOptions = {
         format: 'yyyy-mm-dd',
-        todayBtn: 'linked',
-        todayHighlight: true,
         autoClose: true
     };
 
-    var datetimepickerOptions = {};
     $('.datepicker').datepicker(datepickerOptions);
-    function execute_param(func) {
-        func();
+
+    var valueSetter = function (rule, value) {
+        var $input = rule.$el.find(".rule-value-container input");
+        $input.focus();
+        if (Array.isArray(value)) {
+            value.forEach(function(v){
+                $('[data-value="' + v + '"]').click();
+            });
+        } else {
+            $('[data-value="' + value + '"]').click();
+        }
+        document.getElementById('title').focus();
+        $input.blur();
+    };
+
+    function returnData (property) {
+        try {
+            if (localStorage[property] === undefined) {
+                $.getJSON('./data/' + property + '.json', function (data) {
+                    localStorage[property] = JSON.stringify(data);
+                    return data;
+                });
+            } else {
+                return JSON.parse(localStorage[property]);
+            }
+        } catch (exception) {
+            throw exception;
+        }
     }
-    function getData (that, property) {
+
+    function getOptionsFromJSONArray (that, property) {
         if (localStorage[property] === undefined) {
-            $.getJSON('./data/'+property+'.json', function(data) {
+            $.getJSON('./data/' + property + '.json', function (data) {
                 localStorage[property] = JSON.stringify(data);
-                data.forEach(function(item) {
+                try {
+                    data.forEach(function (item) {
+                        that.addOption(item);
+                    });
+                }
+                catch (exception) {
+                    throw exception;
+                }
+            });
+        } else {
+            try {
+                JSON.parse(localStorage[property]).forEach(function (item) {
                     that.addOption(item);
                 });
-            });
-        }
-        else {
-            JSON.parse(localStorage[property]).forEach(function(item) {
-                that.addOption(item);
-            });
+            } catch (exception) {
+                throw exception;
+            }
         }
     }
+
     var data = [];
     $scope.authorId = 'adelorie';
     $scope.$result = $('#result');
@@ -48,325 +81,344 @@ app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTablePa
                 'unique-filter': null,
                 'bt-checkbox': { color: 'primary' }
             },
-            entities: {
-                "Document": {
-                    "label": "DOCUMENT",
-                    "columns": [{
-                        "id": "citizenship",
-                        "label": "Citizenship OR Issuance Country",
-                        "type": "string"
-                    }, {
-                        "id": "exp_date",
-                        "label": "Expiration Date",
-                        "type": "date"
-                    }, {
-                        "id": "issuance_country",
-                        "label": "Issuance Country",
-                        "type": "string"
-                    }, {
-                        "id": "doc_number",
-                        "label": "Number",
-                        "type": "string"
-                    }, {
-                        "id": "doc_type", "label": "Type", "type": "string"
-                    }]
+            entities: returnData('entities'),
+            filters: [{
+                "id": "DOCUMENT.issuanceCountry",
+                "label": "Citizenship OR Issuance Country",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "multiple": true,
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "countries");
+                    }
                 },
-                "Flight": {
-                    "label": 'FLIGHT',
-                    "columns": [{
-                        "id": "airport_destination",
-                        "label": "Airport - Destination",
-                        "type": "string"
-                    }, {
-                        "id": "airport_origin",
-                        "label": "Airport - Origin",
-                        "type": "string"
-                    }, {
-                        "id": "carrier",
-                        "label": "Carrier",
-                        "type": "string"
-                    }, {
-                        "id": "dest_country",
-                        "label": "Country - Destination",
-                        "type": "string"
-                    }, {
-                        "id": "origin_country",
-                        "label": "Country - Origin",
-                        "type": "string"
-                    }, {
-                        "id": "direction",
-                        "label": "Direction",
-                        "type": "string"
-                    }, {
-                        "id": "eta",
-                        "label": "ETA",
-                        "type": "datetime"
-                    }, {
-                        "id": "etd",
-                        "label": "ETD",
-                        "type": "datetime"
-                    }, {
-                        "id": "flightNumber",
-                        "label": "Number",
-                        "type": "string"
-                    }, {
-                        "id": "thru",
-                        "label": "Thru",
-                        "type": "string"
-                    }]
+                "valueSetter": valueSetter
+            }, {
+                "id": "DOCUMENT.expirationDate",
+                "label": "Expiration Date",
+                "type": "date",
+                "validation": {
+                    "format": "YYYY-MM-DD"
                 },
-                "Pax": {
-                    "label": "PASSENGER",
-                    "columns": [{
-                        "id": "age", "label": "Age", "type": "integer"
-                    }, {
-                        "id": "citizenship_country", "label": "Citizenship Country", "type": "string"
-                    }, {
-                        "id": "debarkation", "label": "Debarkation", "type": "string"
-                    }, {
-                        "id": "debarkation_country", "label": "Debarkation Country", "type": "string"
-                    }, {
-                        "id": "dob", "label": "DOB", "type": "date"
-                    }, {
-                        "id": "embarkation", "label": "Embarkation", "type": "string"
-                    }, {
-                        "id": "embarkationDate", "label": "Embarkation Date", "type": "date"
-                    }, {
-                        "id": "embarkation_country", "label": "Embarkation Country", "type": "string"
-                    }, {
-                        "id": "gender", "label": "Gender", "type": "string"
-                    }, {
-                        "id": "first_name", "label": "Name - First", "type": "string"
-                    }, {
-                        "id": "last_name", "label": "Name - Last", "type": "string"
-                    }, {
-                        "id": "middle_name", "label": "Name - Middle", "type": "string"
-                    }, {
-                        "id": "residency_country", "label": "Residency Country", "type": "string"
-                    }, {
-                        "id": "seat", "label": "Seat", "type": "string"
-                    }, {
-                        "id": "type", "label": "Type", "type": "string"
-                    }]
+                "plugin": "datepicker",
+                "plugin_config": {
+                    "format": "yyyy-mm-dd",
+                    "autoClose": true
                 }
-            },
-            filters: [
-                {
-                    "id": "Document.citizenship",
-                    "label": "Document.citizenship",
-                    "type": "string",
-                     operators: ['EQUAL', 'NOT_EQUAL', 'IN', 'NOT_IN']
-                }, {
-                    "id": "Document.exp_date",
-                    "label": "Document.exp_date",
-                    type: 'date',
-                    validation: {
-                        format: 'YYYY-MM-DD'
-                    },
-                    plugin: 'datepicker',
-                    plugin_config: datepickerOptions
-                }, {
-                    "id": "Document.issuance_country",
-                    "label": "Document.issuance_country",
-                    "type": "string"
-                }, {
-                    "id": "Document.doc_number",
-                    "label": "Document.doc_number",
-                    "type": "string"
-                }, {
-                    "id": "Document.doc_type",
-                    "label": "Document.doc_type",
-                    "type": "string",
-                    operators: ['EQUAL', 'NOT_EQUAL', 'IN', 'NOT_IN'],
-                    input: 'select',
-                    plugin: 'selectize',
-                    plugin_config: {
-                        valueField: 'id',
-                        labelField: 'name',
-                        searchField: 'name',
-                        sortField: 'name',
-                        create: true,
-                        plugins: ['remove_button'],
-                        onInitialize: function() {
-                            getData(this, 'doc_types');
-                        }
-                    },
-                    valueSetter: function(rule, value) {
-                        rule.$el.find('.rule-value-container input')[0].selectize.setValue(value);
+            }, {
+                "id": "DOCUMENT.documentNumber",
+                "label": "Number",
+                "type": "string"
+            }, {
+                "id": "DOCUMENT.documentType",
+                "label": "Type",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "doc_types");
                     }
-
-                }, {
-                    "id": "Flight.airport_destination",
-                    "label": "Flight.airport_destination",
-                    "type": "string",
-                    operators: ['EQUAL', 'NOT_EQUAL', 'IN', 'NOT_IN'],
-                    input: 'select',
-                    plugin: 'selectize',
-                    plugin_config: {
-                        valueField: 'id',
-                        labelField: 'name',
-                        searchField: 'name',
-                        sortField: 'name',
-                        create: true,
-                        plugins: ['remove_button'],
-                        onInitialize: function() {
-                            getData(this, 'airports');
-                        }
-                    },
-                    valueSetter: function(rule, value) {
-                        rule.$el.find('.rule-value-container input')[0].selectize.setValue(value);
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "FLIGHT.destination.iata",
+                "label": "Airport Destination",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "airports");
                     }
-                }, {
-                    "id": "Flight.airport_origin",
-                    "label": "Flight.airport_origin",
-                    "type": "string"
-                }, {
-                    "id": "Flight.carrier",
-                    "label": "Flight.carrier",
-                    "type": "string"
-                }, {
-                    "id": "Flight.dest_country",
-                    "label": "Flight.dest_country",
-                    "type": "string"
-                }, {
-                    "id": "Flight.origin_country",
-                    "label": "Flight.origin_country",
-                    "type": "string"
-                }, {
-                    "id": "Flight.direction",
-                    "label": "Flight.direction",
-                    "type": "string",
-                    operators: ['EQUAL'],
-                    input: 'select',
-                    plugin: 'selectize',
-                    plugin_config: {
-                        valueField: 'id',
-                        labelField: 'name',
-                        searchField: 'name',
-                        sortField: 'name',
-                        create: true,
-                        plugins: ['remove_button'],
-                        onInitialize: function() {
-                            getData(this, 'direction');
-                        }
-                    },
-                    valueSetter: function(rule, value) {
-                        rule.$el.find('.rule-value-container input')[0].selectize.setValue(value);
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "FLIGHT.origin.iata",
+                "label": "Airport Origin",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "airports");
                     }
-                }, {
-                    "id": "Flight.eta",
-                    "label": "Flight.eta",
-                    "type": "datetime",
-                    operators: ['BETWEEN', 'EQUAL', 'GREATER_OR_EQUAL', 'LESSER_OR_EQUAL'],
-                    plugin: 'datetimepicker',
-                    plugin_config: datetimepickerOptions
-                }, {
-                    "id": "Flight.etd",
-                    "label": "Flight.etd",
-                    "type": "datetime",
-                    operators: ['BETWEEN', 'EQUAL', 'GREATER_OR_EQUAL', 'LESSER_OR_EQUAL'],
-                    plugin: 'datetimepicker',
-                    plugin_config: datetimepickerOptions
-                }, {
-                    "id": "Flight.flightNumber",
-                    "label": "Flight.flightNumber",
-                    "type": "string",
-                    operators: ['EQUAL', 'IN']
-                }, {
-                    "id": "Flight.thru",
-                    "label": "Flight.thru",
-                    "type": "string"
-                }, {
-                    "id": "Pax.age",
-                    "label": "Pax.age",
-                    "type": "integer",
-                    operators: ['BETWEEN', 'EQUAL', 'GREATER_OR_EQUAL', 'LESSER_OR_EQUAL']
-                }, {
-                    "id": "Pax.citizenship_country",
-                    "label": "Pax.citizenship_country",
-                    "type": "string"
-                }, {
-                    "id": "Pax.debarkation",
-                    "label": "Pax.debarkation",
-                    "type": "string"
-                }, {
-                    "id": "Pax.debarkation_country",
-                    "label": "Pax.debarkation_country",
-                    "type": "string"
-                }, {
-                    "id": "Pax.dob",
-                    "label": "Pax.dob",
-                    "type": 'date',
-                    validation: {
-                        format: 'YYYY-MM-DD'
-                    },
-                    plugin: 'datepicker',
-                    plugin_config: datepickerOptions
-                }, {
-                    "id": "Pax.embarkation",
-                    "label": "Pax.embarkation",
-                    "type": "string"
-                }, {
-                    "id": "Pax.embarkationDate",
-                    "label": "Pax.embarkationDate",
-                    type: 'date',
-                    validation: {
-                        format: 'YYYY-MM-DD'
-                    },
-                    plugin: 'datepicker',
-                    plugin_config: datepickerOptions
-                }, {
-                    "id": "Pax.embarkation_country",
-                    "label": "Pax.embarkation_country",
-                    "type": "string"
-                }, {
-                    "id": "Pax.gender",
-                    "label": "Pax.gender",
-                    "type": "string",
-                    operators: ['EQUAL', 'NOT_EQUAL', 'IN', 'NOT_IN'],
-                    input: 'select',
-                    multiple: true,
-                    plugin: 'selectize',
-                    plugin_config: {
-                        valueField: 'id',
-                        labelField: 'name',
-                        searchField: 'name',
-                        sortField: 'name',
-                        create: true,
-                        plugins: ['remove_button'],
-                        onInitialize: function() {
-                            getData(this, 'genders');
-                        }
-                    },
-                    valueSetter: function(rule, value) {
-                        rule.$el.find('.rule-value-container input')[0].selectize.setValue(value);
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "FLIGHT.carrier.iata",
+                "label": "Carrier",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "multiple": true,
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "carriers");
                     }
-                }, {
-                    "id": "Pax.first_name",
-                    "label": "Pax.first_name",
-                    "type": "string"
-                }, {
-                    "id": "Pax.last_name",
-                    "label": "Pax.last_name",
-                    "type": "string"
-                }, {
-                    "id": "Pax.middle_name",
-                    "label": "Pax.middle_name",
-                    "type": "string"
-                }, {
-                    "id": "Pax.residency_country",
-                    "label": "Pax.residency_country",
-                    "type": "string"
-                }, {
-                    "id": "Pax.seat",
-                    "label": "Pax.seat",
-                    "type": "string"
-                }, {
-                    "id": "Pax.type",
-                    "label": "Pax.type",
-                    "type": "string"
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "FLIGHT.destinationCountry.iso3",
+                "label": "Destination Country",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "multiple": true,
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "countries");
+                    }
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "FLIGHT.originCountry.iso3",
+                "label": "Origin Country",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "multiple": true,
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "countries");
+                    }
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "FLIGHT.direction",
+                "label": "Direction",
+                "type": "string",
+                "operators": ["EQUAL"],
+                "input": "select",
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "direction");
+                    }
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "FLIGHT.eta",
+                "label": "ETA",
+                "type": "datetime",
+                "plugin": "datetimepicker",
+                "plugin_config": {}
+            }, {
+                "id": "FLIGHT.etd",
+                "label": "ETD",
+                "type": "datetime",
+                "plugin": "datetimepicker",
+                "plugin_config": {}
+            }, {
+                "id": "FLIGHT.flightNumber",
+                "label": "Number",
+                "type": "string"
+            }, {
+                "id": "FLIGHT.thru",
+                "label": "Thru",
+                "type": "string"
+            }, {
+                "id": "PAX.age",
+                "label": "PAX.age",
+                "type": "integer"
+            }, {
+                "id": "PAX.citizenshipCountry.iso2",
+                "label": "Citizenship Country",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "multiple": true,
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "countries");
+                    }
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "PAX.debarkation.iata",
+                "label": "Debarkation",
+                "type": "string"
+            }, {
+                "id": "PAX.debarkCountry.iso2",
+                "label": "Debarkation Country",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "multiple": true,
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "countries");
+                    }
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "PAX.dob",
+                "label": "DOB",
+                "type": "date",
+                "validation": {
+                    "format": "YYYY-MM-DD"
+                },
+                "plugin": "datepicker",
+                "plugin_config": {
+                    "format": "yyyy-mm-dd",
+                    "autoClose": true
                 }
-            ]
+            }, {
+                "id": "PAX.embarkation.iata",
+                "label": "Embarkation",
+                "type": "string"
+            }, {
+                "id": "PAX.embarkCountry.iso2",
+                "label": "Embarkation Country",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "multiple": true,
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "countries");
+                    }
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "PAX.gender",
+                "label": "PAX.gender",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "multiple": true,
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "genders");
+                    }
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "PAX.firstName",
+                "label": "First Name",
+                "type": "string"
+            }, {
+                "id": "PAX.lastName",
+                "label": "Last Name",
+                "type": "string"
+            }, {
+                "id": "PAX.middleName",
+                "label": "Middle Name",
+                "type": "string"
+            }, {
+                "id": "PAX.residencyCountry.iso2",
+                "label": "Residency Country",
+                "type": "string",
+                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+                "input": "select",
+                "multiple": true,
+                "plugin": "selectize",
+                "plugin_config": {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, "countries");
+                    }
+                },
+                "valueSetter": valueSetter
+            }, {
+                "id": "PAX.seat",
+                "label": "PAX.seat",
+                "type": "string"
+            }, {
+                "id": "PAX.traveler_type",
+                "label": "Traveler Type",
+                "type": "string"
+            }]
         };
 
         // init

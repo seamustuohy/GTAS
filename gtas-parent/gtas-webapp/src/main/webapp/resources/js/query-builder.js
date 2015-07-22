@@ -1400,7 +1400,7 @@
                     model.filter = that.getFilterById(item.id);
                     model.entity = item.id.split('.')[0];
                     model.column = item.id.split('.')[1];
-                    item.operator = item.operator.toLowerCase();
+                    //item.operator = item.operator.toLowerCase();
                     model.operator = that.getOperatorByType(item.operator);
                     model.flags = that.parseRuleFlags(item);
 
