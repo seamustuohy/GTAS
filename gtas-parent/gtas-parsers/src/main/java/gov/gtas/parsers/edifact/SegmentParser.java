@@ -2,6 +2,7 @@ package gov.gtas.parsers.edifact;
 
 import org.apache.commons.lang3.StringUtils;
 
+import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.util.ParseUtils;
 
 /**

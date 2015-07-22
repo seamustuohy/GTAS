@@ -13,6 +13,10 @@ import gov.gtas.model.udr.enumtype.ValueTypesEnum;
  *
  */
 public class RuleConditionBuilder {
+	private static final String FLIGHT_PASSENGER_LINK_CONDITION =
+			EntityLookupEnum.Pax.toString()
+			+"(id == $p.id) from $f.passengers\n";
+	
 	private StringBuilder passengerConditionBuilder;
 	private StringBuilder flightConditionBuilder;
 	private StringBuilder documentConditionBuilder;
@@ -34,19 +38,27 @@ public class RuleConditionBuilder {
 			parentStringBuilder.append(documentConditionBuilder.append(")\n")
 					.toString());
 		}
+		boolean addFlightPassengerCondition = false;
 		if (flightConditionBuilder != null) {
-			RuleCond cond = RuleConditionBuilderHelper.createRuleCondition(
-					EntityLookupEnum.Pax,
-					"this",
-					OperatorCodeEnum.MEMBER_OF, "$f."+EntityAttributeConstants.FLIGHT_ATTR_PASSENGERS, 
-					   ValueTypesEnum.OBJECT_REF);
-			addRuleCondition(cond);
+//			RuleCond cond = RuleConditionBuilderHelper.createRuleCondition(
+//					EntityLookupEnum.Pax,
+//					"this",
+//					OperatorCodeEnum.MEMBER_OF, "$f."+EntityAttributeConstants.FLIGHT_ATTR_PASSENGERS, 
+//					   ValueTypesEnum.OBJECT_REF);
+//			addRuleCondition(cond);
+			addFlightPassengerCondition = true;
 			parentStringBuilder.append(flightConditionBuilder.append(")\n")
 					.toString());
 		}
 		if (passengerConditionBuilder != null) {
 			parentStringBuilder.append(passengerConditionBuilder.append(")\n")
 					.toString());
+			if(addFlightPassengerCondition){
+			   parentStringBuilder.append(FLIGHT_PASSENGER_LINK_CONDITION);
+			}
+		} else{
+			//TODO error no passenger condition
+			
 		}
 		passengerConditionBuilder = null;
 		flightConditionBuilder = null;

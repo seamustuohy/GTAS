@@ -16,7 +16,6 @@ import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
  */
 public abstract class PaxlstParser {
     private String message;
-    private SegmentFactory factory;
 
     protected enum GROUP {
         NONE,
@@ -30,28 +29,21 @@ public abstract class PaxlstParser {
     protected ApisMessageVo parsedMessage;
     protected List<Segment> segments;
 
-    public PaxlstParser(String message, String segmentPackageName) {
+    public PaxlstParser(String message) {
         this.message = message;
-        factory = new SegmentFactory(segmentPackageName);
     }
 
-    protected abstract void parseSegments();
+    protected abstract void parseSegments() throws ParseException;
     
     public ApisMessageVo parse() throws ParseException {
         this.currentGroup = GROUP.NONE;    
         this.parsedMessage = new ApisMessageVo();
         this.segments = new LinkedList<>();
-        processMessageAndGetSegments();
-        parseSegments();
-        return this.parsedMessage;
-    }
-    
-    private void processMessageAndGetSegments() throws ParseException {
+        
         EdifactParser p = new EdifactParser();
-        LinkedList<Segment> edifactSegments = p.parse(message);
-        for (Segment s: edifactSegments) {
-            Segment paxlstSegment = factory.build(s);
-            segments.add(paxlstSegment);
-        }
+        segments = p.parse(message);
+        parseSegments();
+        
+        return this.parsedMessage;
     }
 }

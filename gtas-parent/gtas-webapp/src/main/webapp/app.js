@@ -17,10 +17,15 @@ $stateProvider
         templateUrl: 'pax/pax.html',
         controller: 'PaxController'
     })
-    .state('query', {
-        url: '/query',
-        templateUrl: 'query/query.html',
-        controller: 'QueryController'
+    .state('risk-criteria', {
+        url: '/risk-criteria',
+        templateUrl: 'risk-criteria/risk-criteria.html',
+        controller: 'RiskCriteriaController'
+    })
+    .state('query-builder', {
+        url: '/query-builder',
+        templateUrl: 'query-builder/query.html',
+        controller: 'QueryBuilderController'
     })
     .state('admin', {
         url: '/admin',

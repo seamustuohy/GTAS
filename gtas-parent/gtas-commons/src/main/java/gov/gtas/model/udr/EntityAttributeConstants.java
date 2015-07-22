@@ -13,6 +13,9 @@ public class EntityAttributeConstants {
   public static final String PAX_ATTTR_EMBARKATION_COUNTRY_NAME = "embarkCountry.name";
   
   public static final String FLIGHT_ATTR_FLIGHT_NUMBER = "flightNumber";
+  public static final String FLIGHT_ATTR_ORIGIN_IATA = "origin.iata";
+  public static final String FLIGHT_ATTR_CARRIER_IATA = "carrier.iata";
+  public static final String FLIGHT_ATTR_DESTINATION_IATA = "destination.iata";
   public static final String FLIGHT_ATTR_DESTINATION_NAME = "destination.name";
   public static final String FLIGHT_ATTR_PASSENGERS = "passengers";
   

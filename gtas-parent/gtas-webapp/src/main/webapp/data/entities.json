@@ -1,0 +1,422 @@
+{
+//  "ADDRESS": {
+//    "label": "ADDRESS",
+//    "columns": [
+//      {
+//        "id": "city",
+//        "label": "City",
+//        "type": "string"
+//      },
+//      {
+//        "id": "country",
+//        "label": "Country",
+//        "type": "string"
+//      },
+//      {
+//        "id": "line1",
+//        "label": "Line 1",
+//        "type": "string"
+//      },
+//      {
+//        "id": "line2",
+//        "label": "Line 2",
+//        "type": "string"
+//      },
+//      {
+//        "id": "line3",
+//        "label": "Line 3",
+//        "type": "string"
+//      },
+//      {
+//        "id": "postalCode",
+//        "label": "Postal Code",
+//        "type": "string"
+//      },
+//      {
+//        "id": "state",
+//        "label": "State/Province",
+//        "type": "string"
+//      }
+//    ]
+//  },
+//  "API": {
+//    "label": "API",
+//    "columns": [
+//      {
+//        "id": "flightDirection",
+//        "label": "Flight Direction",
+//        "type": "string"
+//      }
+//    ]
+//  },
+//  "CREDIT_CARD": {
+//    "label": "CREDIT CARD",
+//    "columns": [
+//      {
+//        "id": "ccNumber",
+//        "label": "Number",
+//        "type": "string"
+//      }
+//    ]
+//  },
+  "DOCUMENT": {
+    "label": "DOCUMENT",
+    "columns": [
+      {
+        "id": "issuanceCountry",
+        "label": "Citizenship OR Issuance Country",
+        "type": "string"
+      },
+      {
+        "id": "expirationDate",
+        "label": "Expiration Date",
+        "type": "date"
+      },
+      {
+        "id": "documentNumber",
+        "label": "Number",
+        "type": "string"
+      },
+      {
+        "id": "documentType",
+        "label": "Type",
+        "type": "string"
+      }
+    ]
+  },
+//  "EMAIL": {
+//    "label": "EMAIL",
+//    "columns": [
+//      {
+//        "id": "email_address",
+//        "label": "Address",
+//        "type": "string"
+//      },
+//      {
+//        "id": "domain",
+//        "label": "Domain",
+//        "type": "string"
+//      }
+//    ]
+//  },
+  "FLIGHT": {
+    "label": "FLIGHT",
+    "columns": [
+      {
+        "id": "destination.iata",
+        "label": "Airport - Destination",
+        "type": "string"
+      },
+      {
+        "id": "origin.iata",
+        "label": "Airport - Origin",
+        "type": "string"
+      },
+      {
+        "id": "carrier.iata",
+        "label": "Carrier",
+        "type": "string"
+      },
+      {
+        "id": "destinationCountry.iso3",
+        "label": "Country - Destination",
+        "type": "string"
+      },
+      {
+        "id": "originCountry.iso3",
+        "label": "Country - Origin",
+        "type": "string"
+      },
+      {
+        "id": "direction",
+        "label": "Direction",
+        "type": "string"
+      },
+      {
+        "id": "eta",
+        "label": "ETA",
+        "type": "datetime"
+      },
+      {
+        "id": "etd",
+        "label": "ETD",
+        "type": "datetime"
+      },
+      {
+        "id": "flightNumber",
+        "label": "Number",
+        "type": "string"
+      },
+      {
+        "id": "thru",
+        "label": "Thru",
+        "type": "string"
+      }
+    ]
+  },
+//  "FREQUENT_FLYER": {
+//    "label": "FREQUENT FLYER",
+//    "columns": [
+//      {
+//        "id": "ff_airline",
+//        "label": "Airline",
+//        "type": "string"
+//      },
+//      {
+//        "id": "ff_number",
+//        "label": "Number",
+//        "type": "string"
+//      }
+//    ]
+//  },
+//  "HITS": {
+//    "label": "HITS",
+//    "columns": [
+//      {
+//        "id": "has_hits",
+//        "label": "Has Hits",
+//        "type": "string"
+//      },
+//      {
+//        "id": "has_list_rule_hit",
+//        "label": "Has List Rule Hit",
+//        "type": "string"
+//      },
+//      {
+//        "id": "has_rule_hit",
+//        "label": "Has Rule Hit",
+//        "type": "string"
+//      },
+//      {
+//        "id": "master_list_id",
+//        "label": "List Rules - Master List Id",
+//        "type": "string"
+//      },
+//      {
+//        "id": "sub_list_id",
+//        "label": "Sub List Id",
+//        "type": "string"
+//      },
+//      {
+//        "id": "rule_id",
+//        "label": "Rules - Rule Id",
+//        "type": "string"
+//      }
+//    ]
+//  },
+//  "NAME_ORIGIN": {
+//    "label": "NAME ORIGIN",
+//    "columns": [
+//      {
+//        "id": "first_name",
+//        "label": "First Name",
+//        "type": "string"
+//      },
+//      {
+//        "id": "first_or_last_name",
+//        "label": "First Name",
+//        "type": "string"
+//      },
+//      {
+//        "id": "last_name",
+//        "label": "Last Name",
+//        "type": "string"
+//      }
+//    ]
+//  },
+  "PAX": {
+    "label": "PASSENGER",
+    "columns": [
+      {
+        "id": "age",
+        "label": "Age",
+        "type": "integer"
+      },
+      {
+        "id": "citizenshipCountry.iso2",
+        "label": "Citizenship Country",
+        "type": "string"
+      },
+      {
+        "id": "debarkation.iata",
+        "label": "Debarkation",
+        "type": "string"
+      },
+      {
+        "id": "debarkCountry.iso2",
+        "label": "Debarkation Country",
+        "type": "string"
+      },
+      {
+        "id": "dob",
+        "label": "DOB",
+        "type": "date"
+      },
+      {
+        "id": "embarkation.iata",
+        "label": "Embarkation",
+        "type": "string"
+      },
+      {
+        "id": "embarkCountry.iso2",
+        "label": "Embarkation Country",
+        "type": "string"
+      },
+      {
+        "id": "gender",
+        "label": "Gender",
+        "type": "string"
+      },
+      {
+        "id": "firstName",
+        "label": "Name - First",
+        "type": "string"
+      },
+      {
+        "id": "lastName",
+        "label": "Name - Last",
+        "type": "string"
+      },
+      {
+        "id": "middleName",
+        "label": "Name - Middle",
+        "type": "string"
+      },
+      {
+        "id": "residencyCountry.iso2",
+        "label": "Residency Country",
+        "type": "string"
+      },
+      {
+        "id": "seat",
+        "label": "Seat",
+        "type": "string"
+      },
+      {
+        "id": "traveler_type",
+        "label": "Type",
+        "type": "string"
+      }
+    ]
+  }//,
+//  "PHONE": {
+//    "label": "PHONE",
+//    "columns": [
+//      {
+//        "id": "phone_number",
+//        "label": "Number",
+//        "type": "string"
+//      }
+//    ]
+//  },
+//  "PNR": {
+//    "label": "PNR",
+//    "columns": [
+//      {
+//        "id": "bag_count",
+//        "label": "Bag - Count",
+//        "type": "integer"
+//      },
+//      {
+//        "id": "booking_date",
+//        "label": "Booking Date",
+//        "type": "date"
+//      },
+//      {
+//        "id": "carrier_code",
+//        "label": "Carrier Code",
+//        "type": "string"
+//      },
+//      {
+//        "id": "days_booked_before_trvl",
+//        "label": "Days Booked Before Travel",
+//        "type": "integer"
+//      },
+//      {
+//        "id": "dwell_airport",
+//        "label": "Dwell - Airport",
+//        "type": "string"
+//      },
+//      {
+//        "id": "dwell_country",
+//        "label": "Dwell - Country",
+//        "type": "string"
+//      },
+//      {
+//        "id": "dwell_duration",
+//        "label": "Dwell - Duration",
+//        "type": "integer"
+//      },
+//      {
+//        "id": "dwell_total_duration",
+//        "label": "Dwell - Total Duration",
+//        "type": "integer"
+//      },
+//      {
+//        "id": "form_of_payment",
+//        "label": "Form of Payment",
+//        "type": "string"
+//      },
+//      {
+//        "id": "first_name",
+//        "label": "Name - First",
+//        "type": "string"
+//      },
+//      {
+//        "id": "last_name",
+//        "label": "Name - Last",
+//        "type": "string"
+//      },
+//      {
+//        "id": "middle_name",
+//        "label": "Name - Middle",
+//        "type": "string"
+//      },
+//      {
+//        "id": "origin_airport",
+//        "label": "Origin - Airport",
+//        "type": "string"
+//      },
+//      {
+//        "id": "origin_country",
+//        "label": "Origin - Country",
+//        "type": "string"
+//      },
+//      {
+//        "id": "passenger_count",
+//        "label": "Passenger Count",
+//        "type": "integer"
+//      },
+//      {
+//        "id": "record_locator",
+//        "label": "Record Locator",
+//        "type": "string"
+//      },
+//      {
+//        "id": "route",
+//        "label": "Route",
+//        "type": "string"
+//      }
+//    ]
+//  },
+//  "TRAVEL_AGENCY": {
+//    "label": "TRAVEL AGENCY",
+//    "columns": [
+//      {
+//        "id": "city",
+//        "label": "City",
+//        "type": "string"
+//      },
+//      {
+//        "id": "name",
+//        "label": "Name",
+//        "type": "string"
+//      },
+//      {
+//        "id": "phone",
+//        "label": "Phone",
+//        "type": "string"
+//      }
+//    ]
+//  }
+}

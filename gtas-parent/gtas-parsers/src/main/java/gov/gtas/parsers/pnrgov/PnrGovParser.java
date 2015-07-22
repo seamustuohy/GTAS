@@ -1,5 +1,13 @@
 package gov.gtas.parsers.pnrgov;
 
+import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.SegmentFactory;
@@ -8,12 +16,6 @@ import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.util.PnrMessageBuilder;
-import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.util.LinkedList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 public class PnrGovParser {
 
 	private static final Logger logger = LoggerFactory.getLogger(PnrGovParser.class);

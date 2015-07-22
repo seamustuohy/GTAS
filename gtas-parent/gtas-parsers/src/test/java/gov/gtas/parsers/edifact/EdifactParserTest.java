@@ -7,6 +7,8 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
+import gov.gtas.parsers.edifact.segment.UNA;
+
 public class EdifactParserTest {
     EdifactParser parser = new EdifactParser();
     

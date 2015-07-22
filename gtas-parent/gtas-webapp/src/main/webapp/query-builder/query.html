@@ -1,0 +1,87 @@
+<style>
+    .table .glyphicon-pencil{
+        left: -1em;
+        transform: scaleX(-1);
+        margin-right: -.75em;
+        top: -.25em;
+    }
+    h1,legend {
+        font-size: 1em;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+    form {
+
+    }
+    input[placeholder="Title:"] {
+        width: 60%;
+    }
+    input[placeholder="Description:"] {
+        width: 100%;
+    }
+
+    input[placeholder="Start Date:"],
+    input[placeholder="End Date:"],
+    label[for="enabled"] {
+        width: 6em;
+    }
+    .udr-add-form label.hide {
+        position: absolute;
+        left: -99999px;
+    }
+    .udr-add-form input {
+        display: inline-block;
+    }
+
+    .table thead th:hover,
+    .table tbody tr:hover {
+        cursor: pointer;
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background: rgba(245,245,255,0.5);
+    }
+</style>
+<h1>Query Builder:</h1>
+<button data-ng-click="newRule()" class="btn btn-success pull-right" data-add="rule">New Rule</button>
+<!--
+<button data-ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
+<button data-ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
+//-->
+<table ng-table="tableParams" class="table">
+    <tr ng-repeat="obj in $data" data-id="{{summary.id}}" data-ng-click="loadRule()">
+        <td data-title="'Title'" sortable="'title'" filter="{ 'title': 'text' }">
+            <i ng-show="isBeingEdited(summary.id)" class="glyphicon glyphicon-pencil" title="Editing this rule"></i>
+            {{obj.title}}
+        </td>
+        <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">
+            {{obj.description}}
+        </td>
+        <!--<td data-title="'Created Date'" sortable="'createdDate'" filter="{ 'createdDate': 'text' }">-->
+        <!--{{obj.createdDate}}-->
+        <!--</td>-->
+    </tr>
+</table>
+
+<form ng-submit="submit()" class="udr-add-form">
+    <fieldset>
+        <legend>Summary:</legend>
+        <label for="title" class="hide">Title:</label>
+        <input placeholder="Title:" type="text" ng-model="title" id="title" />
+        <label for="description" class="hide">Description:</label>
+        <input type="text" ng-model="description" id="description" placeholder="Description:"/>
+    </fieldset>
+    <fieldset>
+        <legend>Conditions:</legend>
+        <div id="builder"></div>
+    </fieldset>
+
+    <button data-ng-click="resetQueryBuilder()" class="btn btn-warning reset pull-right" data->Clear Conditions</button>
+
+    <div id="result" class="hide">
+        <h3>Output</h3>
+        <pre></pre>
+    </div>
+    <button data-ng-click="delete()" type="button" class="btn btn-danger pull-right" title="delete">Delete</button>
+    <button id="submit" class="btn btn-primary pull-right">Save</button>
+</form>

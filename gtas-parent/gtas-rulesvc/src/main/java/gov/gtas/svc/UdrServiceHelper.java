@@ -63,7 +63,7 @@ public class UdrServiceHelper {
 	}
 
 	/**
-	 * Generates DROOLS Knowledge Base from generate3d rules and persists them
+	 * Generates DROOLS Knowledge Base from generated rules and persists them
 	 * in the DB.
 	 * 
 	 * @param rulePersistenceService the rule persistence service to use.
@@ -88,6 +88,7 @@ public class UdrServiceHelper {
 				kb.setRulesBlob(rules
 						.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
 				kb.setKbBlob(kbBlob);
+				kb.setKbName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
 				rulePersistenceService.saveKnowledgeBase(kb);
 			} catch (IOException ioe) {
 				ioe.printStackTrace();

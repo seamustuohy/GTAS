@@ -1,5 +1,6 @@
 package gov.gtas.parsers.edifact;
 
+import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.util.ParseUtils;
 
 import java.text.ParseException;
