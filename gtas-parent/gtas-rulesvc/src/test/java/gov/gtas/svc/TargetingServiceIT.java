@@ -3,6 +3,7 @@ package gov.gtas.svc;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.model.ApisMessage;
@@ -10,9 +11,15 @@ import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
+import gov.gtas.model.udr.UdrRule;
 import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.PassengerRepository;
+import gov.gtas.rule.RuleServiceResult;
+import gov.gtas.rule.builder.DrlRuleFileBuilder;
+import gov.gtas.rule.builder.RuleBuilderTestUtils;
 import gov.gtas.testdatagen.ApisDataGenerator;
 
+import java.text.ParseException;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -36,16 +43,39 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 @ContextConfiguration(classes=RuleServiceConfig.class)
 @TransactionConfiguration(defaultRollback = true)
 public class TargetingServiceIT {
+	
+//	private static String DRL =
+//		"package gov.gtas.rule;\n"
+//		+"import gov.gtas.bo.RuleHitDetail;\n"
+//		+"import gov.gtas.model.Traveler;\n"
+//		+"import gov.gtas.model.Pax;\n"
+//		+"import gov.gtas.model.Flight;\n"
+//		+"import gov.gtas.model.Document;\n"
+//		+"global java.util.List resultList;\n"
+//		+"rule \"UDR_TEST_RULE:5\"\n"
+//		+"when\n"
+//		+"$d:Document(issuanceCountry.iso2 != \"US\", issuanceDate >= \"01-Jan-2012\")\n"
+//		+"$p:Pax(id == $d.traveler.id)\n"
+//		+"$f:Flight(flightNumber == \"0012\")\n"
+//		+"Pax(id == $p.id) from $f.passengers\n"
+//		//+"$p:Pax(id == $d.traveler.id, this memberOf $f.passengers)\n"
+//		+"then\n"
+//		+"resultList.add(new RuleHitDetail(33L, 5, $p.getId()));\n"
+//		+"end\n";
+	
     @Autowired
     TargetingService targetingService;
     
     @Autowired
-    ApisDataGenerator apisLoader;
+    ApisDataGenerator apisDataGenerator;
 
 	@Resource
     private ApisMessageRepository apisMessageRepository;
 
-    @Before
+	@Resource
+    private PassengerRepository passengerRepository;
+
+	@Before
 	public void setUp() throws Exception {
 	}
 
@@ -55,38 +85,58 @@ public class TargetingServiceIT {
 	@Test
 	@Transactional
 	public void testDataGeneration(){
-		ApisMessage msg = apisLoader.createSimpleTestApisMesssage();
+		ApisMessage msg = apisDataGenerator.createSimpleTestApisMesssage();
 		assertNotNull(msg);
 		assertNotNull(msg.getId());
-		assertEquals(1,msg.getFlights().size());
+		assertEquals(2,msg.getFlights().size());
 		Flight flight = msg.getFlights().iterator().next();
 		assertEquals(2, flight.getPassengers().size());
 		Traveler pax = flight.getPassengers().iterator().next();
 		assertTrue(pax instanceof Pax);
+		assertNotNull("Pax ID is null", pax.getId());
 		assertEquals(1, pax.getDocuments().size());
 		Document doc = pax.getDocuments().iterator().next();
 		assertNotNull(doc.getId());
+		assertNotNull("Traveller is null", doc.getTraveler());
+		assertNotNull("Traveler ID is null", doc.getTraveler().getId());
 		assertEquals(ApisDataGenerator.DOCUMENT_NUMBER, doc.getDocumentNumber());
 	}
-//	@Test
-//	@Transactional
-//	public void testApisRuleExecution() {
-//		Iterable<ApisMessage> messages = apisMessageRepository.findAll();
-//		assertNotNull(messages);
-//		int count = 0;
-//		for(ApisMessage msg:messages){
-//			++count;
-//			System.out.println("Processsing APIs message:"+msg.getId());
-//			Set<Flight> flights = msg.getFlights();
-//			assertTrue("ApisMessage has no flights:"+ msg.getId(), flights.size() > 0);
-//            for(Flight flt:flights){
-//            	verifyPassengers(flt, flt.getPassengers());
-//            }
-//		}
-//		assertTrue("There are no API messsages", count > 0);
-//		System.out.println("APIs message count = "+ count);
-//	}
+	@Test
+	@Transactional
+	public void testApisRuleExecution1() throws ParseException{
+		ApisMessage msg = apisDataGenerator.createSimpleTestApisMesssage();
+		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(1);
+		String drlRules = drlBuilder.addRule(udrRule).build();
+		System.out.println(drlRules);
+		RuleServiceRequest request = TargetingServiceUtils.createApisRequest(msg);
+		RuleServiceResult result = targetingService.applyRules(request, drlRules);
+		assertNotNull(result);
+		assertEquals("Expected 1 hit", 1, result.getResultList().size());
+		RuleHitDetail res = (RuleHitDetail)(result.getResultList().get(0));
+		assertNotNull("passenger ID in result is null", res.getPassengerId());
+		Traveler pax = passengerRepository.findOne(res.getPassengerId());
+		assertNotNull("passenger in result is null", pax);
+	}
 
+	@Test
+	@Transactional
+	public void testApisRuleExecution2() throws ParseException{
+		ApisMessage msg = apisDataGenerator.createSimpleTestApisMesssage();
+		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(2);
+		String drlRules = drlBuilder.addRule(udrRule).build();
+		System.out.println(drlRules);
+		RuleServiceRequest request = TargetingServiceUtils.createApisRequest(msg);
+		RuleServiceResult result = targetingService.applyRules(request, drlRules);
+		assertNotNull(result);
+		assertEquals("Expected 1 hit", 1, result.getResultList().size());
+		RuleHitDetail res = (RuleHitDetail)(result.getResultList().get(0));
+		assertNotNull("passenger ID in result is null", res.getPassengerId());
+		Traveler pax = passengerRepository.findOne(res.getPassengerId());
+		assertNotNull("passenger in result is null", pax);
+	}
+	
 	@Test
 	@Transactional
 	public void testApisMessage() {
@@ -121,6 +171,11 @@ public class TargetingServiceIT {
     			assertNotNull(docs);
     			assertTrue(docs.size() > 0);
     			docCount += docs.size();
+    			for(Document doc:docs){
+    				assertNotNull(doc.getId());
+    				assertNotNull("Traveller reference is null in Document", doc.getTraveler());
+    				assertNotNull("Traveler ID is null in Document Traveler", doc.getTraveler().getId());    				
+    			}
     		}
     	}
     	assertTrue("Flight has no travelers:"+flt.getFlightNumber(), travCount > 0);

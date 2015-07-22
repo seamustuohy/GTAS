@@ -43,13 +43,13 @@ public class RuleConditionBuilderTest {
 	public void testSingleConditionFlight2() throws ParseException {
 		RuleCond cond = RuleBuilderTestUtils.createRuleCondition(EntityLookupEnum.Flight,
 				EntityAttributeConstants.FLIGHT_ATTR_FLIGHT_NUMBER,
-				OperatorCodeEnum.EQUAL, "12345", ValueTypesEnum.INTEGER);
+				OperatorCodeEnum.EQUAL, "12345", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_FLIGHT_NUMBER+" == 12345)\n"
-				+"$p:Pax(this memberOf $f.passengers)", 
+		System.out.println(result);
+		assertEquals("$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_FLIGHT_NUMBER+" == \"12345\")",
 				result.toString().trim());
 	}
 
@@ -62,8 +62,7 @@ public class RuleConditionBuilderTest {
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_DESTINATION_NAME+" in (\"DBY\",\"XYZ\",\"PQR\"))\n"
-				+"$p:Pax(this memberOf $f.passengers)", 
+		assertEquals("$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_DESTINATION_NAME+" in (\"DBY\",\"XYZ\",\"PQR\"))",
 				result.toString().trim());
 	}
 	@Test
@@ -130,7 +129,7 @@ public class RuleConditionBuilderTest {
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		//System.out.println(result.toString());
+		System.out.println(result.toString());
 		assertEquals(
 				"$d:Document("+EntityAttributeConstants.DOCUMENT_ATTR_ISO2+" != \"US\", "
 		            +EntityAttributeConstants.DOCUMENT_ATTR_ISSUANCE_DATE+" >= \"01-Jan-2010\")\n"
@@ -140,7 +139,8 @@ public class RuleConditionBuilderTest {
 						+EntityAttributeConstants.PAX_ATTTR_DOB+" >= \"01-Jan-1990\", "
 						+EntityAttributeConstants.PAX_ATTTR_DOB+" <= \"31-Dec-1998\", "
 		        +EntityAttributeConstants.PAX_ATTTR_LAST_NAME+" == \"Jones\", "
-		           +"id == $d.traveler.id, this memberOf $f.passengers)",
+		           +"id == $d.traveler.id)\n"
+		        +"Pax(id == $p.id) from $f.passengers",
 		result.toString().trim());
 	}
 }
