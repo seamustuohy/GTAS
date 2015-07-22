@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.edifact.segment.UNB;
-import gov.gtas.parsers.edifact.segment.UNG;
 import gov.gtas.parsers.edifact.segment.UNH;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.BGM;
@@ -89,14 +88,10 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         parsedMessage.setTransmissionDate(unb.getDateAndTimeOfPreparation());
 
         Segment s = getConditionalSegment(i, "UNG");
-        if (s != null) {
-            UNG ung = (UNG) s;
-            String v = ung.getMessageVersionNumber() + ung.getMessageReleaseNumber();
-            parsedMessage.setVersion(v);
-        }
 
         UNH unh = (UNH) getMandatorySegment(i, "UNH");
         parsedMessage.setMessageType(unh.getMessageType());
+        parsedMessage.setVersion(unh.getMessageTypeVersion());
 
         BGM bgm = (BGM) getMandatorySegment(i, "BGM");
         parsedMessage.setMessageCode(bgm.getCode());
@@ -263,7 +258,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         p.setFirstName(nad.getFirstName());
         p.setLastName(nad.getLastName());
         p.setMiddleName(nad.getMiddleName());
-        p.setPaxType(nad.getPartyFunctionCodeQualifier().toString());
+        p.setPaxType(nad.getNadCode().getCode());
 
         Segment s = null;
 

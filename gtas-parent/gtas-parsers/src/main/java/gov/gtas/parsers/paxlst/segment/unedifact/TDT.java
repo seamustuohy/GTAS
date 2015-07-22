@@ -3,33 +3,48 @@ package gov.gtas.parsers.paxlst.segment.unedifact;
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
+/**
+ * <p>
+ * TDT: DETAILS OF TRANSPORT-
+ * <p>
+ * A segment to specify details of transport related to each leg, including
+ * means of transport, mode of transport name and/or number of vessel and/or
+ * vehicle and/or flight.
+ * <p>
+ * Examples:
+ * <ul>
+ * <li>TDT+20+DL123+++DL' Indicates flight identification DL123, Carrier Code DL
+ * <li>TDT+20+EK456' Indicates flight identification EK456, Carrier Code not
+ * required TDT+34+AF986+++AF' Indicates flight identification AF986, Carrier
+ * Code AF, Over-flight.
+ * </ul>
+ */
 public class TDT extends Segment {
     private enum TdtType {
-        ARRIVING_OR_DEPARTING_FLIGHT,
-        OVER_FLIGHT
+        ARRIVING_OR_DEPARTING_FLIGHT, OVER_FLIGHT
     }
 
-    private TdtType  transportStageQualifier;
+    private TdtType transportStageQualifier;
     private String c_journeyIdentifier;
-    private String c_carrierIdentifier;    
+    private String c_carrierIdentifier;
     private String flightNumber;
     private boolean isMasterCrewList;
-    
+
     public TDT(Composite[] composites) {
         super(TDT.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
+        for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
             switch (i) {
             case 0:
                 int code = Integer.valueOf(c.getValue());
                 if (code == 20) {
-                    this.transportStageQualifier = TdtType.ARRIVING_OR_DEPARTING_FLIGHT;    
+                    this.transportStageQualifier = TdtType.ARRIVING_OR_DEPARTING_FLIGHT;
                 } else if (code == 34) {
                     this.transportStageQualifier = TdtType.OVER_FLIGHT;
                 } else {
                     logger.error("unknown TDT type: " + c.getValue());
                 }
-                
+
                 break;
             case 1:
                 this.isMasterCrewList = c.getValue().endsWith("MCL");
@@ -40,13 +55,13 @@ public class TDT extends Segment {
                 break;
             }
         }
-        
+
         if (this.c_carrierIdentifier != null) {
             this.flightNumber = this.c_journeyIdentifier.replace(this.c_carrierIdentifier, "");
         } else {
             StringBuffer fn = new StringBuffer();
             int j;
-            for (j=this.c_journeyIdentifier.length() - 1; j>=0; j--) {
+            for (j = this.c_journeyIdentifier.length() - 1; j >= 0; j--) {
                 char c = this.c_journeyIdentifier.charAt(j);
                 if (Character.isDigit(c)) {
                     fn.append(c);
@@ -58,10 +73,8 @@ public class TDT extends Segment {
                 }
             }
             this.flightNumber = fn.reverse().toString();
-            this.c_carrierIdentifier = this.c_journeyIdentifier.substring(0, j+1); 
+            this.c_carrierIdentifier = this.c_journeyIdentifier.substring(0, j + 1);
         }
-        
-//        System.out.println("MAC: " + c_carrierIdentifier + " " +  flightNumber);
     }
 
     public String getFlightNumber() {

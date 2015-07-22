@@ -10,10 +10,8 @@ import gov.gtas.parsers.edifact.Segment;
 /**
  * <p>
  * BGM: BEGINNING OF MESSAGE
- * 
  * <p>
  * A segment to indicate the type and function of the message.
- * 
  * <p>
  * This segment is mandatory. The BGM Segment is used to determine the nature of
  * the transaction as it applies to Passenger information reporting, Flight
