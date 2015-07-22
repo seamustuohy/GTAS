@@ -16,6 +16,19 @@ public class ApisMessageVo {
     private String version;
     private String messageCode;
     
+    /**
+     * The sender may choose to use fields in the UNH segment to specify a block
+     * sequence number and indicate the initial and final blocks that are being
+     * sent. It is ￼￼￼Customs and Border Protection Page 9 DHS Consolidated User
+     * Guide Part 4 – UN/EDIFACT Implementation Guide v3.5 03 Jan 2011 important
+     * to note, there is no guarantee that DHS will receive and process the
+     * blocks in the order that they were sent. While DHS may use the block
+     * sequence numbers and the initial/final indicators as a reference for
+     * troubleshooting missing or corrupted blocks, DHS will not employ an
+     * automated validation or reporting of “missing” blocks.
+     */
+    private String sequenceNumber;
+    
     private List<ReportingPartyVo> reportingParties = new ArrayList<>();
     private List<FlightVo> flights = new ArrayList<>();
     private List<PaxVo> passengers = new ArrayList<>();

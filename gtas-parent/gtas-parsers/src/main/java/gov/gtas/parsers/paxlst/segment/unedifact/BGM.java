@@ -108,6 +108,9 @@ public class BGM extends Segment {
             switch (i) {
             case 0:
                 this.documentCode = DocumentNameCode.forCode(c.getValue());
+                if (this.documentCode == null) {
+                    throw new ParseException("BGM unknown document name code: " + c.getValue(), -1);
+                }
                 break;
  
             case 1:

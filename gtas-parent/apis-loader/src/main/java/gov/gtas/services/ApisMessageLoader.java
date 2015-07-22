@@ -26,10 +26,14 @@ public class ApisMessageLoader {
         svc.loadApisMessage(m);
     }
     
+    /**
+     * Type “B” messages are no longer limited to a length of 3840 bytes. SITA
+     * and ARInc now support Type “B” message lengths up to 64,000 bytes.
+     */
     public static boolean exceedsMaxSize(File f) {
-        final int MAX_SIZE = 10;  // kilobytes
-        double size = (f.length()) / 1024;  
-        return size > MAX_SIZE;
+        final int MAX_SIZE = 64000;
+        double numBytes = f.length();  
+        return numBytes > MAX_SIZE;
     }
 
     public static void main(String[] args) {
