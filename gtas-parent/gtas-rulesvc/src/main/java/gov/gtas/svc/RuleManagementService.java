@@ -1,4 +1,4 @@
-package gov.gtas.rule;
+package gov.gtas.svc;
 
 import java.util.Collection;
 
