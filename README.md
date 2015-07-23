@@ -3,32 +3,37 @@
 ### Environment
 
 * Java 8 
-* Maven 3, npm, bower
+* Build: Maven 3, npm, bower
 * Apache Tomcat (7.0.62)
 * MariaDB (10.0.19 Stable)
-    * https://downloads.mariadb.org/
 * Drools (6.2)
     * http://www.drools.org/download/download.html
     * http://download.jboss.org/drools/release/6.2.0.Final/org.drools.updatesite/
 
 ### Build and Deployment
 
-1. Standard build with unit tests:
-> mvn clean install
-2. Build without unit tests
+0. Get the latest code from BitBucket
+> git clone https://[username]@bitbucket.org/sanandreas/sanandreas.git
+1. Download Bower components if you're going to deploy the web app.
+> cd gtas-parent/gtas-webapp    
+bower install 
+2. Standard build with unit tests.  
+> cd gtas-parent  
+mvn clean install
+3. Build without unit tests
 > mvn clean install -Dskip.unit.tests=true
-3. Build with integration tests (and unit tests)
+4. Build with integration tests (and unit tests)
 > mvn clean install -Dskip.integration.tests=false
-4. Create the database (make sure the settings in hibernate.properties are correct).
+5. Create the database (make sure the settings in hibernate.properties are correct).
 > mysql -u root -p  
 create database 'gtas'
-5. Create the schema
+6. Create the schema
 > cd gtas-commons  
 mvn hibernate4:export
-6. Deploy to tomcat
+7. Deploy to tomcat
 > cp gtas-webapp/gtas.war [tomcat home]/webapps
-7. Start tomcat and access site at http://localhost:8080/gtas
-8. See section below on adding lookup data, sample apis messages and flights.
+8. Start tomcat and access site at http://localhost:8080/gtas
+9. See section below on adding lookup data, sample apis messages and flights.
 
 ### Deployment to AWS
 
