@@ -12,6 +12,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -64,6 +66,9 @@ public class Flight extends BaseEntityAudit {
     
     private Date etd;
     private Date eta;
+    
+    @Enumerated(EnumType.STRING)
+    private FlightDirection direction;
     
     @ManyToMany(
         cascade = {CascadeType.PERSIST, CascadeType.MERGE},
@@ -131,6 +136,12 @@ public class Flight extends BaseEntityAudit {
     }
     public void setDestinationCountry(Country destinationCountry) {
         this.destinationCountry = destinationCountry;
+    }
+    public FlightDirection getDirection() {
+        return direction;
+    }
+    public void setDirection(FlightDirection direction) {
+        this.direction = direction;
     }
 
     @Override
