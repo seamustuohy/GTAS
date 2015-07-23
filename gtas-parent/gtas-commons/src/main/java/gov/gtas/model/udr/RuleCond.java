@@ -133,7 +133,7 @@ public class RuleCond implements Serializable {
 	 	   case DATE:
 	 		  return new CondValue(pk, DateCalendarUtils.parseJsonDate(val));
 	 	   case DATETIME:
-	 		  return new CondValue(pk, DateCalendarUtils.parseJsonDate(val));
+	 		  return new CondValue(pk, DateCalendarUtils.parseJsonDateTime(val),true);
 	 	   case BOOLEAN:
 	 		  return new CondValue(pk, ValidationUtils.isStringTruthy(val)?"Y":"N");
 	 	   case OBJECT_REF:

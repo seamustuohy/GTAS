@@ -31,7 +31,7 @@ public class RuleConditionBuilderHelper {
    	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDate(val.getDtVal())).append("\"");
    	    	break;
    	    case DATETIME:
-   	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDate(val.getDtVal())).append("\"");
+   	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDateTime(val.getDtVal())).append("\"");
    	    	break;
     	case INTEGER:
     	case LONG:

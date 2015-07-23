@@ -84,8 +84,15 @@ public class CondValue implements Serializable {
 		this.numVal = new BigDecimal(value);
 	}
 	public CondValue(CondValuePk id, Date value) {
+		this(id,value,false);
+	}
+	public CondValue(CondValuePk id, Date value, boolean isDateTime) {
 		this.id = id;
-		this.valType = ValueTypesEnum.DATE;
+		if(isDateTime){
+			this.valType = ValueTypesEnum.DATETIME;
+		} else {
+		    this.valType = ValueTypesEnum.DATE;
+		}
 		this.dtVal = value;
 	}
 

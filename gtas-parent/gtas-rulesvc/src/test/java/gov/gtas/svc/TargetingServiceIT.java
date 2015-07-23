@@ -90,7 +90,7 @@ public class TargetingServiceIT {
 		assertNotNull(msg.getId());
 		assertEquals(2,msg.getFlights().size());
 		Flight flight = msg.getFlights().iterator().next();
-		assertEquals(2, flight.getPassengers().size());
+		assertEquals(3, flight.getPassengers().size());
 		Traveler pax = flight.getPassengers().iterator().next();
 		assertTrue(pax instanceof Pax);
 		assertNotNull("Pax ID is null", pax.getId());
@@ -117,6 +117,7 @@ public class TargetingServiceIT {
 		assertNotNull("passenger ID in result is null", res.getPassengerId());
 		Traveler pax = passengerRepository.findOne(res.getPassengerId());
 		assertNotNull("passenger in result is null", pax);
+		assertEquals("Hit Passenger Name mismatch", "Ragner", pax.getFirstName());
 	}
 
 	@Test
@@ -130,11 +131,31 @@ public class TargetingServiceIT {
 		RuleServiceRequest request = TargetingServiceUtils.createApisRequest(msg);
 		RuleServiceResult result = targetingService.applyRules(request, drlRules);
 		assertNotNull(result);
-		assertEquals("Expected 1 hit", 1, result.getResultList().size());
+		assertEquals("Expected 2 hits", 2, result.getResultList().size());
 		RuleHitDetail res = (RuleHitDetail)(result.getResultList().get(0));
 		assertNotNull("passenger ID in result is null", res.getPassengerId());
 		Traveler pax = passengerRepository.findOne(res.getPassengerId());
 		assertNotNull("passenger in result is null", pax);
+		assertTrue("Hit Passenger Name mismatch", pax.getFirstName().equals("Iphsatz")||pax.getFirstName().equals("Ikstar"));
+	}
+	@Test
+	@Transactional
+	public void testApisRuleExecution3() throws ParseException{
+		//select all passengers in a flight
+		ApisMessage msg = apisDataGenerator.createSimpleTestApisMesssage();
+		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(3);
+		String drlRules = drlBuilder.addRule(udrRule).build();
+		System.out.println(drlRules);
+		RuleServiceRequest request = TargetingServiceUtils.createApisRequest(msg);
+		RuleServiceResult result = targetingService.applyRules(request, drlRules);
+		assertNotNull(result);
+		assertEquals("Expected 3 hits", 3, result.getResultList().size());
+		RuleHitDetail res = (RuleHitDetail)(result.getResultList().get(0));
+		assertNotNull("passenger ID in result is null", res.getPassengerId());
+		Traveler pax = passengerRepository.findOne(res.getPassengerId());
+		assertNotNull("passenger in result is null", pax);
+		assertTrue("Hit Passenger Name mismatch", pax.getFirstName().equals("Iphsatz")||pax.getFirstName().equals("Ikstar")||pax.getFirstName().equals("Loopy"));
 	}
 	
 	@Test

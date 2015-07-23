@@ -7,9 +7,9 @@ public class EntityAttributeConstants {
   public static final String PAX_ATTTR_MIDDLE_NAME = "middleName";
   public static final String PAX_ATTTR_DOB = "dob";
   public static final String PAX_ATTTR_CITIZENSHIP_COUNTRY = "citizenshipCountry";
-  public static final String PAX_ATTTR_DEBARKATION_AIRPORT_NAME = "debarkation.name";
+  public static final String PAX_ATTTR_DEBARKATION_AIRPORT_NAME = "debarkation.iata";
   public static final String PAX_ATTTR_DEBARKATION_COUNTRY_NAME = "debarkCountry.name";
-  public static final String PAX_ATTTR_EMBARKATION_AIRPORT_NAME = "embarkation.name";
+  public static final String PAX_ATTTR_EMBARKATION_AIRPORT_NAME = "embarkation.iata";
   public static final String PAX_ATTTR_EMBARKATION_COUNTRY_NAME = "embarkCountry.name";
   
   public static final String FLIGHT_ATTR_FLIGHT_NUMBER = "flightNumber";
@@ -18,6 +18,7 @@ public class EntityAttributeConstants {
   public static final String FLIGHT_ATTR_DESTINATION_IATA = "destination.iata";
   public static final String FLIGHT_ATTR_DESTINATION_NAME = "destination.name";
   public static final String FLIGHT_ATTR_PASSENGERS = "passengers";
+  public static final String FLIGHT_ATTR_DATE = "flightDate";
   
   public static final String DOCUMENT_ATTR_NUMBER = "documentNumber";
   public static final String DOCUMENT_ATTR_ISSUANCE_DATE = "issuanceDate";
