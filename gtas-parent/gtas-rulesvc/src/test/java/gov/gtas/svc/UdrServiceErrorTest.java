@@ -220,7 +220,9 @@ public class UdrServiceErrorTest {
 		 try{
 				ObjectMapper mapper = new ObjectMapper();
 			    //de-serialize
-				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+36000000L));
+				//add arbitrary offset to counteract Jackson GMT interpretation
+				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+864000000L));
+
 				UdrSpecification testObj = mapper.readValue(
 						String.format(TEST_JSON, "foo", "bar", "equal", startDate), 
 						UdrSpecification.class);	
@@ -249,7 +251,10 @@ public class UdrServiceErrorTest {
 		 try{
 				ObjectMapper mapper = new ObjectMapper();
 			    //de-serialize
-				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+36000000L));
+				
+				//add arbitrary offset to counteract Jackson GMT interpretation
+				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+864000000L));
+
 				UdrSpecification testObj = mapper.readValue(
 						String.format(TEST_JSON, "Pax", "bar", "equal", startDate), 
 						UdrSpecification.class);	
@@ -278,7 +283,9 @@ public class UdrServiceErrorTest {
 		 try{
 				ObjectMapper mapper = new ObjectMapper();
 			    //de-serialize
-				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+36000000L));
+				//add arbitrary offset to counteract Jackson GMT interpretation
+				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+864000000L));
+
 				UdrSpecification testObj = mapper.readValue(
 						String.format(TEST_JSON, EntityLookupEnum.Pax.toString(), EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME, "equal", startDate), 
 						UdrSpecification.class);	
