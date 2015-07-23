@@ -37,6 +37,10 @@ public class CommonErrorConstants {
 	 * This error code indicates that an input JSON field has an incorrect format.
 	 */
 	public static final String INPUT_JSON_FORMAT_ERROR_CODE = "INPUT_FORMAT_ERROR";
+	/*
+	 * This error code indicates that an input JSON failed validation.
+	 */
+	public static final String JSON_INPUT_VALIDATION_ERROR_CODE = "JSON_INPUT_VALIDATION_ERROR";
 	
 	/*
 	 * This is the error code indicating that the a query returned no result.
@@ -78,6 +82,11 @@ public class CommonErrorConstants {
 	 * This error message indicates that an input JSON field has an incorrect format.
 	 */
 	public static final String INPUT_JSON_FORMAT_ERROR_MESSAGE = "Parse error for values %s with type %s for '%s'.";
+	
+	/*
+	 * This error message indicates that an input JSON failed validation.
+	 */
+	public static final String JSON_INPUT_VALIDATION_ERROR_MESSAGE = "The JSON UDR specification is invalid.";
 	
 	/*
 	 * This is the error message indicating that the record to be updated does

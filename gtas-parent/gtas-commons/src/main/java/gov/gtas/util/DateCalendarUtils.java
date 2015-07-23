@@ -73,6 +73,12 @@ public class DateCalendarUtils {
 				UdrConstants.UDR_DATE_FORMAT);
 		return format.parse(dateString);
 	}
+	public static Date parseJsonDateTime(final String dateString)
+			throws ParseException {
+		SimpleDateFormat format = new SimpleDateFormat(
+				UdrConstants.UDR_DATETIME_FORMAT);
+		return format.parse(dateString);
+	}
 
 	public static String formatJsonDate(final Date date) {
 		SimpleDateFormat format = new SimpleDateFormat(
@@ -89,6 +95,11 @@ public class DateCalendarUtils {
 	public static String formatRuleEngineDate(final Date date) {
 		SimpleDateFormat format = new SimpleDateFormat(
 				UdrConstants.RULE_ENGINE_DATE_FORMAT);
+		return format.format(date);
+	}
+	public static String formatRuleEngineDateTime(final Date date) {
+		SimpleDateFormat format = new SimpleDateFormat(
+				UdrConstants.RULE_ENGINE_DATETIME_FORMAT);
 		return format.format(date);
 	}
 }

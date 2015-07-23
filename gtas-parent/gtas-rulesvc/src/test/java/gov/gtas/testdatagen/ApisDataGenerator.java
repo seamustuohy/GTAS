@@ -71,15 +71,6 @@ public class ApisDataGenerator {
 	    	passenger.setEmbarkation(airportRepository.getAirportByThreeLetterCode(args[5]).get(0));
 	    	travelers.add(passenger);
     	}
-    	
-//    	passenger = new Pax();
-//    	passenger.setDocuments(createDocuments(new String[]{"US"}, new String[]{"2010-01-15"}));
-//    	passenger.setFirstName("Gitstash");
-//    	passenger.setLastName("Garbled");
-//    	passenger.setCitizenshipCountry(countryRepository.getCountryByTwoLetterCode("US").get(0));
-//    	passenger.setEmbarkation(airportRepository.getAirportByThreeLetterCode("BOB").get(0));//Bora Bora
-//    	travelers.add(passenger);
-    	
    	    return travelers;
     }
     private Set<Flight> createFlights(){
@@ -87,8 +78,9 @@ public class ApisDataGenerator {
     	
     	Flight flight = new Flight();
     	Set<Traveler> travelers = createPassengerAndDocument(new String[][]{
-    			{"GB","2012-01-15", "Ragner", "Yilmaz", "GB", "YHZ"},
-    			{"US", "2010-01-15", "Gitstash", "Garbled", "US", "BOB"}
+    			{/*document*/"GB","2012-01-15", /*passenger(name, citzenship, embarkation*/"Ragner", "Yilmaz", "GB", "YHZ"},
+    			{"US", "2010-01-15", "Gitstash", "Garbled", "US", "BOB"},
+    			{"CA", "2011-12-31", "Kalimar", "Rultan", "CA", "YHZ"}
     	       }
     			);
     	flight.setPassengers(travelers);
@@ -96,20 +88,28 @@ public class ApisDataGenerator {
     	flight.setDestination(airportRepository.getAirportByThreeLetterCode("BOB").get(0));
     	flight.setFlightDate(new Date());
     	flight.setFlightNumber("0012");
-    	flight.setOrigin(airportRepository.getAirportByThreeLetterCode("YHZ").get(0));//Bora Bora
+    	flight.setOrigin(airportRepository.getAirportByThreeLetterCode("YHZ").get(0));
     	flight.setOriginCountry(countryRepository.getCountryByTwoLetterCode("CA").get(0));
     	flights.add(flight);
     	
     	flight = new Flight();
     	travelers = createPassengerAndDocument(new String[][]{
     			{"YE","2012-01-15", "Iphsatz", "Zaglib", "PF", "YHZ"},
-    			{"US", "2010-01-15", "Loopy", "Lair", "US", "BOB"}
+    			{"US", "2010-01-15", "Loopy", "Lair", "US", "BOB"},
+    			{"GB", "2010-01-15", "Ikstar", "Crondite", "GB", "LHR"}
     	       }
     			);
     	flight.setPassengers(travelers);
     	flight.setCarrier( carrierRepository.getCarrierByTwoLetterCode("CO").get(0));//Continental
     	flight.setDestination(airportRepository.getAirportByThreeLetterCode("HOD").get(0));
-    	flight.setFlightDate(new Date());
+    	Date flDate = null;
+    	try{
+    	    flDate = DateCalendarUtils.parseJsonDate("2015-07-20");
+        	flDate = new Date(flDate.getTime()+36000000L);//add 10 hours
+        	flight.setFlightDate(flDate);
+    	}catch(ParseException pe){
+    		pe.printStackTrace();
+    	}
     	flight.setFlightNumber("0017");
     	flight.setOrigin(airportRepository.getAirportByThreeLetterCode("LHR").get(0));//Bora Bora
     	flight.setOriginCountry(countryRepository.getCountryByTwoLetterCode("GB").get(0));

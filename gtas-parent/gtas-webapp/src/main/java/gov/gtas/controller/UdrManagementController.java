@@ -6,6 +6,7 @@ import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.ErrorDetails;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.MetaData;
@@ -13,6 +14,7 @@ import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.error.GtasJsonError;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.svc.UdrService;
+import gov.gtas.svc.UdrServiceHelper;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
@@ -74,6 +76,13 @@ public class UdrManagementController {
 		return resp;
 	}
 
+	@RequestMapping(value = Constants.UDR_GETDRL, method = RequestMethod.GET)
+	public @ResponseBody JsonServiceResponse getDrl() {
+		String rules = "To be implemented";
+		JsonServiceResponse resp = new JsonServiceResponse(JsonServiceResponse.SUCCESS_RESPONSE, 
+				"getDrl", "getDrl", rules);
+		return resp;
+	}
 	@RequestMapping(value = Constants.UDR_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JsonServiceResponse createUDR(
 			@PathVariable String userId, @RequestBody UdrSpecification inputSpec) {
@@ -153,6 +162,7 @@ public class UdrManagementController {
 		return resp;
 	}
 
+	/////////////////////////////////////////////////////////////////////////////
 	@ExceptionHandler(CommonServiceException.class)
 	public @ResponseBody GtasJsonError handleError(CommonServiceException ex) {
 		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
@@ -179,7 +189,7 @@ public class UdrManagementController {
 		if (ex instanceof HttpMessageNotReadableException) {
 			ret = new GtasJsonError("MALFORMED_JSON_INPUT",
 					"Input JSON is malformed:" + ex.getMessage());
-		} else if (ex instanceof JpaSystemException) {
+		} else if (ex instanceof JpaSystemException) {//TODO need to check the constraint
 			ret = new GtasJsonError("DUPLICATE_UDR_TITLE",
 					"This author has already created a UDR with this title:"
 							+ ex.getMessage());

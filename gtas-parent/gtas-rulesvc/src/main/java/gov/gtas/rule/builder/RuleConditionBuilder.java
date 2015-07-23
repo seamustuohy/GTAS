@@ -16,6 +16,9 @@ public class RuleConditionBuilder {
 	private static final String FLIGHT_PASSENGER_LINK_CONDITION =
 			EntityLookupEnum.Pax.toString()
 			+"(id == $p.id) from $f.passengers\n";
+	private static final String FLIGHT_PASSENGER_LINK_CONDITION2 =
+			"$p:"+EntityLookupEnum.Pax.toString()
+			+"() from $f.passengers\n";
 	
 	private StringBuilder passengerConditionBuilder;
 	private StringBuilder flightConditionBuilder;
@@ -40,12 +43,6 @@ public class RuleConditionBuilder {
 		}
 		boolean addFlightPassengerCondition = false;
 		if (flightConditionBuilder != null) {
-//			RuleCond cond = RuleConditionBuilderHelper.createRuleCondition(
-//					EntityLookupEnum.Pax,
-//					"this",
-//					OperatorCodeEnum.MEMBER_OF, "$f."+EntityAttributeConstants.FLIGHT_ATTR_PASSENGERS, 
-//					   ValueTypesEnum.OBJECT_REF);
-//			addRuleCondition(cond);
 			addFlightPassengerCondition = true;
 			parentStringBuilder.append(flightConditionBuilder.append(")\n")
 					.toString());
@@ -57,7 +54,10 @@ public class RuleConditionBuilder {
 			   parentStringBuilder.append(FLIGHT_PASSENGER_LINK_CONDITION);
 			}
 		} else{
-			//TODO error no passenger condition
+			//There is no passenger condition
+			if(addFlightPassengerCondition){
+				   parentStringBuilder.append(FLIGHT_PASSENGER_LINK_CONDITION2);
+			}
 			
 		}
 		passengerConditionBuilder = null;
@@ -103,42 +103,31 @@ public class RuleConditionBuilder {
 	private void addCondition(final RuleCond cond, final StringBuilder bldr) {
 		switch (cond.getOpCode()) {
 		case EQUAL:
-			bldr.append(cond.getAttrName()).append(" == ");
-			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
-					.get(0), bldr);
-			break;
 		case NOT_EQUAL:
-			bldr.append(cond.getAttrName()).append(" != ");
-			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
-					.get(0), bldr);
-			break;
 		case GREATER:
-			bldr.append(cond.getAttrName()).append(" > ");
-			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
-					.get(0), bldr);
-			break;
 		case GREATER_OR_EQUAL:
-			bldr.append(cond.getAttrName()).append(" >= ");
-			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
-					.get(0), bldr);
-			break;
 		case LESS:
-			bldr.append(cond.getAttrName()).append(" < ");
-			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
-					.get(0), bldr);
-			break;
 		case LESS_OR_EQUAL:
-			bldr.append(cond.getAttrName()).append(" <= ");
+		case BEGINS_WITH:
+		case NOT_BEGINS_WITH:
+		case ENDS_WITH:
+		case NOT_ENDS_WITH:
+		case CONTAINS:
+		case NOT_CONTAINS:
+			bldr.append(cond.getAttrName()).append(" ").append(cond.getOpCode().getOperatorString()).append(" ");
 			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
 					.get(0), bldr);
 			break;
 		case IN:
-			bldr.append(cond.getAttrName()).append(" in ");
+		case NOT_IN:
+			bldr.append(cond.getAttrName()).append(" ").append(cond.getOpCode().getOperatorString()).append(" ");
 			RuleConditionBuilderHelper.addConditionValues(cond, bldr);
 			break;
-		case NOT_IN:
-			bldr.append(cond.getAttrName()).append(" not in ");
-			RuleConditionBuilderHelper.addConditionValues(cond, bldr);
+		case IS_EMPTY:
+		case IS_NOT_EMPTY:
+		case IS_NULL:
+		case IS_NOT_NULL:
+			bldr.append(cond.getAttrName()).append(" ").append(cond.getOpCode().getOperatorString()).append(" ");
 			break;
 		case BETWEEN:
 			bldr.append(cond.getAttrName()).append(" >= ");
@@ -148,7 +137,7 @@ public class RuleConditionBuilder {
 			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
 					.get(1), bldr);
 			break;
-		case NOT_BETWEEN:
+		case NOT_BETWEEN://TODO convert all commas to &&
 			bldr.append("(").append(cond.getAttrName()).append(" < ");
 			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
 					.get(0), bldr);
@@ -156,18 +145,6 @@ public class RuleConditionBuilder {
 			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
 					.get(1), bldr);
 			bldr.append(")");
-			break;
-		case BEGINS_WITH:
-		case NOT_BEGINS_WITH:
-		case ENDS_WITH:
-		case NOT_ENDS_WITH:
-		case CONTAINS:
-		case NOT_CONTAINS:
-		case IS_EMPTY:
-		case IS_NOT_EMPTY:
-		case IS_NULL:
-		case IS_NOT_NULL:
-			//TODO
 			break;
 		case MEMBER_OF:
 			bldr.append(cond.getAttrName()).append(" memberOf ");
