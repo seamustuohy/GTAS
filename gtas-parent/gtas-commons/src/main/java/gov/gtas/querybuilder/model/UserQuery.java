@@ -20,7 +20,7 @@ import javax.persistence.Table;
 @Table(name = "user_query")
 @NamedQueries({
 	@NamedQuery(name = "UserQuery.checkUniqueTitle", query = "select q.id from UserQuery q where q.deletedDt is null and q.createdBy = :createdBy and q.title = :title"),
-	@NamedQuery(name = "UserQuery.listQueryByUser", query = "select q from UserQuery q where q.createdBy = :createdBy and q.deletedDt is null order by q.id"),
+	@NamedQuery(name = "UserQuery.listQueryByUser", query = "select q from UserQuery q where q.createdBy.userId = :createdBy and q.deletedDt is null order by q.id"),
 })
 public class UserQuery implements Serializable {
 
@@ -34,7 +34,8 @@ public class UserQuery implements Serializable {
 	@Column(name = "created_dt", nullable = false)
 	private Date createdDt;
 	
-	@JoinColumn(name="created_by", nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "created_by")
 	private User createdBy;
 	
 	@Column(name = "deleted_dt")

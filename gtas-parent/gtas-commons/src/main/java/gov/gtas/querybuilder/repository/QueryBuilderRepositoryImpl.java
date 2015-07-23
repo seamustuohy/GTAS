@@ -56,7 +56,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			// you can't have queries with duplicate titles for the same user
 			if(isUniqueTitle(query)) {
 				query.setId(null);
-				query.setTitle(query.getTitle().trim());
+				query.setTitle(query.getTitle() != null ? query.getTitle().trim() : query.getTitle());
+				query.setDescription(query.getDescription() != null ? query.getDescription().trim() : query.getDescription());
 				query.setCreatedDt(new Date());
 				
 				// save query to database
@@ -93,8 +94,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			
 			// update the query
 			if(isUniqueTitle) {
-				queryToSave.setTitle(query.getTitle().trim());
-				queryToSave.setDescription(query.getDescription().trim());
+				queryToSave.setTitle(query.getTitle() != null ? query.getTitle().trim() : query.getTitle());
+				queryToSave.setDescription(query.getDescription() != null ? query.getDescription().trim() : query.getDescription());
 				queryToSave.setQueryText(query.getQueryText());
 				
 				entityManager.flush();
