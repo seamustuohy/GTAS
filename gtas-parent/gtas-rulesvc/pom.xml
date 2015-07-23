@@ -79,13 +79,13 @@
       <artifactId>kie-internal</artifactId>
     </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <!-- Enable generation of Javadoc for source -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </build>
+<!--   <build> -->
+<!--     <plugins> -->
+<!--       Enable generation of Javadoc for source -->
+<!--       <plugin> -->
+<!--         <groupId>org.apache.maven.plugins</groupId> -->
+<!--         <artifactId>maven-javadoc-plugin</artifactId> -->
+<!--       </plugin> -->
+<!--     </plugins> -->
+<!--   </build> -->
 </project>

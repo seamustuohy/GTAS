@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -137,6 +138,7 @@ public class UdrServiceImpl implements UdrService {
 	 * )
 	 */
 	@Override
+	@Transactional
 	public JsonServiceResponse createUdr(String userId,
 			UdrSpecification udrToCreate) {
 		if (udrToCreate == null) {

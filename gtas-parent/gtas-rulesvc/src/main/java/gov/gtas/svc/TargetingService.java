@@ -41,8 +41,8 @@ public interface TargetingService {
 	RuleServiceResult applyRules(RuleServiceRequest request, String drlRules);
 
 	/**
-	 * 
-	 * @param messageStatus
+	 * Retrieves the list of API messages with a given status.
+	 * @param messageStatus the status
 	 * @return the retrieved ApisMessage
 	 */
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus);
