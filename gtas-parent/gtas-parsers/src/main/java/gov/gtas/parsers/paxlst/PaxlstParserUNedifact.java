@@ -1,12 +1,16 @@
 package gov.gtas.parsers.paxlst;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.ListIterator;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.edifact.segment.UNB;
 import gov.gtas.parsers.edifact.segment.UNH;
@@ -28,6 +32,10 @@ import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 public final class PaxlstParserUNedifact extends PaxlstParser {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUNedifact.class);
     private SegmentFactory paxlstFactory;
+    
+    private static final String[] SEGMENT_NAMES = new String[] { "ATT", "AUT", "BGM", "CNT", "COM", "CPI", "CTA", "DOC",
+            "DTM", "EMP", "FTX", "GEI", "GID", "LOC", "MEA", "NAD", "NAT", "QTY", "RFF", "TDT", "UNH", "UNT" };
+    public static final Set<String> UN_EDIFACT_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
 
     public PaxlstParserUNedifact(String message) {
         super(message);
@@ -49,9 +57,18 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
     }
     
+    private void validateSegmentName(String segmentName) throws ParseException {
+        boolean valid = UN_EDIFACT_SEGMENT_INDEX.contains(segmentName) 
+                || EdifactParser.EDIFACT_SEGMENT_INDEX.contains(segmentName);
+        if (!valid) {
+            throw new ParseException("Invalid segment: " + segmentName, -1);
+        }
+    }
+    
     private Segment getMandatorySegment(ListIterator<Segment> i, String segmentName) throws ParseException {
         if (i.hasNext()) {
             Segment s = i.next();
+            validateSegmentName(s.getName());
             SegmentFactory factory = getFactory(segmentName);
             if (s.getName().equals(segmentName)) {
                 return factory.build(s);
@@ -66,6 +83,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     private Segment getConditionalSegment(ListIterator<Segment> i, String segmentName) throws ParseException {
         if (i.hasNext()) {
             Segment s = i.next();
+            validateSegmentName(s.getName());
             SegmentFactory factory = getFactory(segmentName);
             if (s.getName().equals(segmentName)) {
                 return factory.build(s);

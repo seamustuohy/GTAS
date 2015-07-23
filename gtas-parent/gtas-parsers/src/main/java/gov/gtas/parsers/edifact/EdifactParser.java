@@ -1,13 +1,15 @@
 package gov.gtas.parsers.edifact;
 
-import gov.gtas.parsers.edifact.segment.UNA;
-import gov.gtas.parsers.util.ParseUtils;
-
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+
+import gov.gtas.parsers.edifact.segment.UNA;
+import gov.gtas.parsers.util.ParseUtils;
 
 /**
  * The class takes as input any Edifact file
@@ -23,6 +25,8 @@ import org.apache.commons.lang3.StringUtils;
  * to parse the input text into segments and return them.
  */
 public class EdifactParser {
+    private static final String[] SEGMENT_NAMES = { "UNA", "UNB", "UNG", "UNH", "UNT", "UNE", "UNZ" };
+    public static final Set<String> EDIFACT_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
     
     public static UNA getUnaSegment(String txt) {
         String regex = String.format("UNA.{%d}UNB", UNA.NUM_UNA_CHARS);
