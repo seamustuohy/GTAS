@@ -454,7 +454,7 @@
             var $this = $(this);
             var $rule = $this.closest('.rule-container');
             // get last fieldname
-            var value = $this.val().split('.').pop();
+            var value = $this.val();
 
             if ( value === '-1' ) {
                 error('Can\'t be null');
@@ -1208,7 +1208,7 @@
         }
         data.rules.forEach(function(rule) {
             if (rule["@class"] === "QueryTerm") {
-                rule.column = rule.field.split('.').pop();
+                rule.column = rule.field;
                 rule.id = [rule.entity, rule.column].join('.');
                 rule.value = rule.values && rule.values.length > 1 ? rule.values : rule.values;
                 rule.field = [rule.entity, rule.field].join('.');
@@ -1373,7 +1373,7 @@
             group.condition = data.condition;
 
             data.rules.forEach(function(item) {
-                var model;
+                var model, periods;
                 if (item.rules && item.rules.length>0) {
                     if (that.settings.allow_groups != -1 && that.settings.allow_groups < group.level) {
                         that.reset();
@@ -1397,9 +1397,11 @@
                         return;
                     }
 
+                    periods = item.id.split('.');
+
                     model.filter = that.getFilterById(item.id);
-                    model.entity = item.id.split('.')[0];
-                    model.column = item.id.split('.')[1];
+                    model.entity = periods.shift();
+                    model.column = periods.join('.');
                     //item.operator = item.operator.toLowerCase();
                     model.operator = that.getOperatorByType(item.operator);
                     model.flags = that.parseRuleFlags(item);
