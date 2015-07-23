@@ -13,6 +13,7 @@ import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.error.GtasJsonError;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
+import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.UdrService;
 import gov.gtas.svc.UdrServiceHelper;
 import gov.gtas.util.DateCalendarUtils;
@@ -53,6 +54,9 @@ public class UdrManagementController {
 	@Autowired
 	private UdrService udrService;
 
+	@Autowired
+	private RuleManagementService ruleManagementService;
+
 	@RequestMapping(value = Constants.UDR_GET, method = RequestMethod.GET)
 	public @ResponseBody UdrSpecification getUDR(@PathVariable String userId,
 			@PathVariable String title) {
@@ -78,9 +82,22 @@ public class UdrManagementController {
 
 	@RequestMapping(value = Constants.UDR_GETDRL, method = RequestMethod.GET)
 	public @ResponseBody JsonServiceResponse getDrl() {
-		String rules = "To be implemented";
+		String rules = ruleManagementService.fetchDefaultDrlRulesFromKnowledgeBase();
+		return createDrlRulesResponse(rules);
+	}
+	@RequestMapping(value = Constants.UDR_GETDRL_BY_NAME, method = RequestMethod.GET)
+	public @ResponseBody JsonServiceResponse getDrlByName(@PathVariable String kbName) {
+		String rules = ruleManagementService.fetchDrlRulesFromKnowledgeBase(kbName);
+		return createDrlRulesResponse(rules);
+	}
+	private JsonServiceResponse createDrlRulesResponse(String rules){
+		System.out.println("******* The rules:\n"+rules+"\n***************\n");
 		JsonServiceResponse resp = new JsonServiceResponse(JsonServiceResponse.SUCCESS_RESPONSE, 
-				"getDrl", "getDrl", rules);
+				"Rule Management Service", "fetchDefaultDrlRulesFromKnowledgeBase", "Drools rules fetched successsfully");
+		String[] lines = rules.split("\n");
+		for(int i = 0; i < lines.length; ++i){
+			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(String.valueOf(i+1)+":", lines[i]));
+		}
 		return resp;
 	}
 	@RequestMapping(value = Constants.UDR_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

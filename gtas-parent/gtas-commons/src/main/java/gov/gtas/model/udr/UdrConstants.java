@@ -1,4 +1,5 @@
 package gov.gtas.model.udr;
+
 /**
  * UDR and JSON related constants.
  * @author GTAS3 (AB)
@@ -7,7 +8,7 @@ package gov.gtas.model.udr;
 public class UdrConstants {
 	public static final String UDR_KNOWLEDGE_BASE_NAME = "UDR Knowledge Base";
 	
-	public static final String UDR_EXTERNAL_CHARACTER_ENCODING = "UTF-8";
+	public static final String UDR_EXTERNAL_CHARACTER_ENCODING = "UTF-8";//StandardCharsets.UTF_8.name()
 	
 	public static final String UDR_DATE_FORMAT = "yyyy-MM-dd";  
 	public static final String UDR_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";  
