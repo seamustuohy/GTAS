@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user_query")
@@ -36,6 +38,7 @@ public class UserQuery implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "created_by")
+	@NotNull
 	private User createdBy;
 	
 	@Column(name = "deleted_dt")
@@ -46,12 +49,16 @@ public class UserQuery implements Serializable {
 	private User deletedBy;
 	
 	@Column(name = "query_title", length = 20, nullable = false)
+	@NotNull
+	@Size(min=1, max=20)
 	private String title;
 	
 	@Column(name = "query_description", length = 100)
+	@Size(max=100, message = "Length cannot be greater than 100")
 	private String description;
 	
 	@Column(name = "query_text", nullable = false, columnDefinition = "LONGTEXT")
+	@NotNull
 	private String queryText;
 	
 	public UserQuery() {
