@@ -14,7 +14,14 @@ import gov.gtas.parsers.edifact.Segment;
  * To specify a contact responsible for the message content. This may either be
  * an assigned profile or the name of the contact person.
  * <p>
- * Example: NAD+MS+ABC9876'
+ * Examples:
+ * <ul>
+ * <li>NAD+MS+ABC9876' Indicates that a profile has been established for this
+ * contact with this assigned identification
+ * <li>NAD+MS+++WILLIAMS:JANE' Indicates the name of the contact person
+ * <li>NAD+FL+++DOE:JOHN:WAYNE+20 MAIN STREET+ANYCITY+VA+10053+USA Passenger on
+ * an inbound international flight.
+ * </ul>
  */
 public class NAD extends Segment {
     public enum NadCode {
@@ -42,10 +49,9 @@ public class NAD extends Segment {
     
     private NadCode nadCode;
     
-    /** only used if isReportingParty == true */
-    private String partyName;
+    /** Used only with reporting party */
+    private String profileName;
     
-    /** following only used if isReportingParty == false */
     private String lastName;
     private String firstName;
     private String middleName;
@@ -54,9 +60,6 @@ public class NAD extends Segment {
     private String countrySubCode;
     private String postalCode;
     private String countryCode;
-    
-    /** to distinguish the two major kinds of NAD segments */
-    private boolean isReportingParty = false;
     
     public NAD(Composite[] composites) {
         super(NAD.class.getSimpleName(), composites);
@@ -67,13 +70,12 @@ public class NAD extends Segment {
             switch (i) {
             case 0:
                 this.nadCode = NadCode.forCode(c.getValue());
-                this.isReportingParty = (this.nadCode == NadCode.REPORTING_PARTY);
                 break;
 
             case 3:
-                if (this.isReportingParty) {
-                    this.partyName = c.getValue();
-                } else {
+                if (c.getValue() != null) {
+                    this.profileName = c.getValue();
+                } else if (e != null) {
                     if (e.length > 0) {
                         this.lastName = e[0].getValue();
                     }
@@ -108,8 +110,8 @@ public class NAD extends Segment {
         return nadCode;
     }
 
-    public String getPartyName() {
-        return partyName;
+    public String getProfileName() {
+        return profileName;
     }
 
     public String getLastName() {
@@ -142,9 +144,5 @@ public class NAD extends Segment {
 
     public String getCountryCode() {
         return countryCode;
-    }
-
-    public boolean isReportingParty() {
-        return isReportingParty;
     }
 }

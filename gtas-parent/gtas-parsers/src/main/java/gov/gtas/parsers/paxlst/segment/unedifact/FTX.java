@@ -13,11 +13,11 @@ import gov.gtas.parsers.edifact.Segment;
  * This segment is optional and may be used to report Bag Tag Identification.
  * <p>
  * Examples:
- * <ol>
+ * <ul>
  * <li>FTX+BAG+++BA987654’ - Single Bag Tag reference
  * <li>FTX+BAG+++AF012345:3’ - Indicates 3 bags checked beginning with a
  * sequential reference of AF012345.
- * </ol>
+ * </ul>
  */
 public class FTX extends Segment {
     public enum FtxCode {

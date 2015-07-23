@@ -4,37 +4,44 @@ import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
+/**
+ * <p>
+ * DOC DOCUMENT/MESSAGE DETAILS
+ * <p>
+ * Function: To identify the official travel document and/or other document used
+ * for travel.
+ * <ul>
+ * <li>P: Indicates that the document type is a passport and its number.
+ * <li>V: Indicates that the document type is a visa and its number.
+ * <li>I: Indicates that the document type is state issued document of identity
+ * and its number.
+ * </ul>
+ */
 public class DOC extends Segment {
     private String docCode;
-    private String c_codeListIdentificationCode;
-    private String c_codeListResponsibleAgencyCode;
     private String documentIdentifier;
-    
+
     public DOC(Composite[] composites) {
         super(DOC.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
+        for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
             Element[] e = c.getElements();
             switch (i) {
             case 0:
                 if (e != null) {
+                    // DHS specification
                     // DOC+L:110:111+AA299167
                     this.docCode = e[0].getValue();
-                    if (e.length >= 2) {
-                        this.c_codeListIdentificationCode = e[1].getValue();
-                    }
-                    if (e.length >= 3) {
-                        this.c_codeListResponsibleAgencyCode = e[2].getValue();
-                    }
                 } else {
                     // DOC+P+QG176295
                     this.docCode = c.getValue();
                 }
-                
+
                 break;
-                
+
             case 1:
                 this.documentIdentifier = c.getValue();
+                break;
             }
         }
     }
@@ -45,23 +52,6 @@ public class DOC extends Segment {
 
     public void setDocCode(String docCode) {
         this.docCode = docCode;
-    }
-
-    public String getC_codeListIdentificationCode() {
-        return c_codeListIdentificationCode;
-    }
-
-    public void setC_codeListIdentificationCode(String c_codeListIdentificationCode) {
-        this.c_codeListIdentificationCode = c_codeListIdentificationCode;
-    }
-
-    public String getC_codeListResponsibleAgencyCode() {
-        return c_codeListResponsibleAgencyCode;
-    }
-
-    public void setC_codeListResponsibleAgencyCode(
-            String c_codeListResponsibleAgencyCode) {
-        this.c_codeListResponsibleAgencyCode = c_codeListResponsibleAgencyCode;
     }
 
     public String getDocumentIdentifier() {

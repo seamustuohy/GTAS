@@ -8,6 +8,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ParseUtils {
     /**
@@ -39,14 +41,9 @@ public class ParseUtils {
         return rv;
     }
     
-    public static Date parseDateTime(String dt, String format) {
+    public static Date parseDateTime(String dt, String format) throws ParseException {
         DateFormat timeFormat = new SimpleDateFormat(format, Locale.ENGLISH);
-        try {
-            return timeFormat.parse(dt);
-        } catch (ParseException pe) {
-            pe.printStackTrace();
-        }
-        return null;
+        return timeFormat.parse(dt);
     }
     
     /**
@@ -107,5 +104,17 @@ public class ParseUtils {
         }
         
         return null;
+    }
+    
+    /**
+     * Just like String.indexOf but allows use of a regex
+     */
+    public static int indexOfRegex(String regex, CharSequence input) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        if (matcher.find()) {
+            return matcher.start();
+        }        
+        return -1;
     }
 }

@@ -1,9 +1,13 @@
 package gov.gtas.parsers.util;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.ListIterator;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
@@ -12,8 +16,6 @@ import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.vo.PnrReportingAgentVo;
 import gov.gtas.parsers.pnrgov.vo.PnrVo;
-
-import org.apache.commons.lang3.StringUtils;
 
 public class PnrMessageBuilder {
 
@@ -304,8 +306,11 @@ public class PnrMessageBuilder {
 				vo.setChkDateQualifier(e[0].getValue());
 				String temp=e[1].getValue()+e[2].getValue();
 				if(StringUtils.isNumeric(temp)){
-					
-					vo.setCheckInDate(ParseUtils.parseDateTime(temp, DATE_TIME_FORMAT));
+					try {
+					    vo.setCheckInDate(ParseUtils.parseDateTime(temp, DATE_TIME_FORMAT));
+					} catch (ParseException pe) {
+					    pe.printStackTrace();
+					}
 				}
 			}
 		}
@@ -448,8 +453,12 @@ public class PnrMessageBuilder {
 	        	Composite c = s.getComposites()[i];
 	        		Element[] e = c.getElements();
 	        		if(i == 0 && e !=null && e.length == 2){
-	        			flight.setFlightDate(ParseUtils.parseDateTime(e[0].getValue()+e[1].getValue(), DATE_TIME_FORMAT));
-	        			System.out.println("---flight date----"+flight.getFlightDate());
+	        		    try {
+    	        			flight.setFlightDate(ParseUtils.parseDateTime(e[0].getValue()+e[1].getValue(), DATE_TIME_FORMAT));
+    	        			System.out.println("---flight date----"+flight.getFlightDate());
+	        		    } catch (ParseException pe) {
+	        		        pe.printStackTrace();
+	        		    }
 	        		}
 	        		if(i == 1 && c.getValue() != null){
 	        			flight.setOrigin(c.getValue());

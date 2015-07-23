@@ -1,77 +1,74 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.text.ParseException;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.util.ParseUtils;
 
-import java.util.Date;
-
+/**
+ * <p>
+ * DTM DATE/TIME/PERIOD
+ * <p>
+ * Function: To specify date, and/or time, or period. In Group 3 (LOC-DTM) this
+ * segment specifies the departure and arrival date/time of a flight. In Group
+ * 5, it specifies the date of birth of a passenger or crew member.
+ * <p>
+ * Examples: DTM+329:640217' Indicates the date of birth of the passenger or
+ * crew member (i.e. February 17, 1964.)
+ */
 public class DTM extends Segment {
+    private static final String DATE_ONLY_FORMAT = "yyMMdd";
     private static final String DATE_TIME_FORMAT = "yyMMddhhmm";
-    
-    public enum DtmCode {
-        DEPARTURE,
-        ARRIVAL,
-        ARRIVAL_AND_DEPARTURE_MCL,
-        
-        DATE_OF_BIRTH,
-        PASSPORT_EXPIRATION_DATE,
-        UNKNOWN
-    }
-    
-    private DtmCode dtmCodeQualifier;
-    private Date dtmValue;
-    private String dtmFormatCode;
-    
-    public DTM(Composite[] composites) {
-        super(DTM.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
-            Element[] e = c.getElements();
 
-            String dateFormat = DATE_TIME_FORMAT;
-            switch(Integer.valueOf(e[0].getValue())) {
-            case 189:
-                this.dtmCodeQualifier = DtmCode.DEPARTURE;
-                break;
-            case 232:
-                this.dtmCodeQualifier = DtmCode.ARRIVAL;
-                break;
-            case 554:
-                this.dtmCodeQualifier = DtmCode.ARRIVAL_AND_DEPARTURE_MCL;
-                break;
-            case 329:
-                this.dtmCodeQualifier = DtmCode.DATE_OF_BIRTH;                    
-                dateFormat = "yyMMdd";
-                break;
-            case 36:
-                this.dtmCodeQualifier = DtmCode.PASSPORT_EXPIRATION_DATE;                    
-                dateFormat = "yyMMdd";
-                break;
-            default:
-                logger.error("DTM: invalid dtm code: " + e[0].getValue());
-                this.dtmCodeQualifier = DtmCode.UNKNOWN;                    
-                dateFormat = "yyMMdd";
-            }
-            
-            this.dtmValue = ParseUtils.parseDateTime(e[1].getValue(), dateFormat);
-            
-            if (e.length > 2) {
-                this.dtmFormatCode = e[2].getValue();
+    public enum DtmCode {
+        DEPARTURE("189"), 
+        ARRIVAL("232"), 
+        ARRIVAL_AND_DEPARTURE_MCL("554"),
+
+        DATE_OF_BIRTH("329"), 
+        PASSPORT_EXPIRATION_DATE("36");
+        
+        private final String code;
+        private DtmCode(String code) { this.code = code; }        
+        public String getCode() { return code; }
+        
+        private static final Map<String, DtmCode> BY_CODE_MAP = new LinkedHashMap<>();
+        static {
+            for (DtmCode rae : DtmCode.values()) {
+                BY_CODE_MAP.put(rae.code, rae);
             }
         }
+
+        public static DtmCode forCode(String code) {
+            return BY_CODE_MAP.get(code);
+        }                
     }
 
-    public DtmCode getDtmCodeQualifier() {
-        return dtmCodeQualifier;
+    private DtmCode dtmCode;
+    private Date dtmValue;
+
+    public DTM(Composite[] composites) throws ParseException {
+        super(DTM.class.getSimpleName(), composites);
+        Composite c = this.composites[0];
+        Element[] e = c.getElements();
+        
+        this.dtmCode = DtmCode.forCode(e[0].getValue());
+
+        String d = e[1].getValue();
+        String dateFormat = (d.length() == DATE_TIME_FORMAT.length()) ? DATE_TIME_FORMAT : DATE_ONLY_FORMAT;
+        this.dtmValue = ParseUtils.parseDateTime(d, dateFormat);
+    }
+
+    public DtmCode getDtmCode() {
+        return dtmCode;
     }
 
     public Date getDtmValue() {
         return dtmValue;
-    }
-
-    public String getDtmFormatCode() {
-        return dtmFormatCode;
     }
 }

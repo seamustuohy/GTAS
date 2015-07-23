@@ -6,15 +6,21 @@ import java.util.Map;
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
-public class ATT extends Segment {    
+/**
+ * <p>
+ * ATT ATTRIBUTE
+ * <p>
+ * Function: To identify a specific attribute of a passenger, such as gender.
+ */
+public class ATT extends Segment {
     public enum AttCode {
         GENDER("2");
-        
+
         private final String code;
-        private AttCode(String code) { this.code = code; }        
+        private AttCode(String code) { this.code = code; }
         public String getCode() { return code; }
-        
         private static final Map<String, AttCode> BY_CODE_MAP = new LinkedHashMap<>();
+
         static {
             for (AttCode rae : AttCode.values()) {
                 BY_CODE_MAP.put(rae.code, rae);
@@ -23,16 +29,16 @@ public class ATT extends Segment {
 
         public static AttCode forCode(String code) {
             return BY_CODE_MAP.get(code);
-        }        
-        
+        }
+
     }
 
     private AttCode functionCode;
     private String attributeDescriptionCode;
-    
+
     public ATT(Composite[] composites) {
         super(ATT.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
+        for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
             switch (i) {
             case 0:

@@ -30,22 +30,6 @@ public class UNB extends Segment {
             Composite c = this.composites[i];
             Element[] e = c.getElements();
             switch (i) {
-            case 0:
-                if (e == null || e.length < 2) {
-                    throw new ParseException("UNB: missing syntax identifier and version", -1);
-                }
-                if (e[0].getValue().equals("UNOA")) {
-                    // ok
-                } else {
-                    throw new ParseException("UNB: syntax identifier is not UNOA", -1);
-                }
-                
-                if (e[1].getValue().equals("4")) {
-                    // ok
-                } else {
-                    throw new ParseException("UNB: syntax identifier is not UNOA", -1);
-                }
-                break;
             case 1:
                 if (c.getValue() != null) {
                     this.sender = c.getValue();

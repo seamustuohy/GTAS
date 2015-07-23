@@ -24,24 +24,35 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class EdifactParser {
     
+    public static UNA getUnaSegment(String txt) {
+        String regex = String.format("UNA.{%d}UNB", UNA.NUM_UNA_CHARS);
+        int unaIndex = ParseUtils.indexOfRegex(regex, txt);
+        if (unaIndex != -1) {
+            int endIndex = unaIndex + "UNA".length() + UNA.NUM_UNA_CHARS;
+            String delims = txt.substring(unaIndex, endIndex);
+            return new UNA(delims);
+        }   
+        
+        return new UNA();
+    }
+    
+    /**
+     * @return the starting index of the 'segmentName' in 'txt'.
+     */
+    public static int getStartOfSegment(String segmentName, String txt, UNA una) {
+        String regex = String.format("%s\\s*\\%c", segmentName, una.getDataElementSeparator());
+        return ParseUtils.indexOfRegex(regex, txt);
+    }
+    
     public LinkedList<Segment> parse(String txt) throws ParseException {
         if (StringUtils.isEmpty(txt)) return null;
         txt = preprocessMessage(txt);
         
-        UNA una = null;
-        int unaIndex = txt.indexOf("UNA");
-        if (unaIndex != -1) {
-            int endIndex = unaIndex + "UNA".length() + UNA.NUM_UNA_CHARS;
-            String delims = txt.substring(unaIndex, endIndex);
-            una = new UNA(delims);
-        } else {
-            una = new UNA();
-        }
-        
+        UNA una = getUnaSegment(txt);
         SegmentParser segmentParser = new SegmentParser(una);
 
-        // start with the UNB segment
-        int unbIndex = txt.indexOf("UNB");
+        // start parsing with the UNB segment
+        int unbIndex = getStartOfSegment("UNB", txt, una);
         if (unbIndex == -1) {
             throw new ParseException("No UNB segment found", -1);
         }

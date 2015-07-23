@@ -34,6 +34,7 @@ public class Message extends BaseEntity {
     @Enumerated(EnumType.ORDINAL)
     private MessageStatus status;
 
+    @Column(length = 4000)
     private String error;
 
     public byte[] getRaw() {

@@ -1,23 +1,20 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
- * Contact information
- * appears in 13b
+ * <p>
+ * CTA CONTACT INFORMATION
+ * <p>
+ * Function: To identify a person or a department to whom communication should
+ * be directed.Contact information
+ * <p>
+ * Note: this segment appears in version 13b of the UN paxlst spec. It does not
+ * exist in prior versions.
  */
 public class CTA extends Segment {
     public CTA(Composite[] composites) {
         super(CTA.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
-            Element[] e = c.getElements();
-            switch (i) {
-            case 0:
-            }
-        }
     }
-
 }
