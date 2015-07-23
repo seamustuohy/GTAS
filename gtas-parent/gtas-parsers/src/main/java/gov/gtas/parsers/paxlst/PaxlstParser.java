@@ -10,10 +10,6 @@ import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 
 /**
- * A transmitted message to DHS may include only one instance of a PAXLST
- * message. Batching of multiple PAXLST messages into a single envelope (UNB-
- * UNZ) or batching of multiple envelopes containing PAXLST messages into a
- * single message transmission will result in a rejection of the message(s).
  */
 public abstract class PaxlstParser {
     private String message;

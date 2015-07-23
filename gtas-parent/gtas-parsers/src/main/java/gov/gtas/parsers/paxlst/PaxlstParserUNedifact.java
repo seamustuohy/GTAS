@@ -13,14 +13,12 @@ import gov.gtas.parsers.edifact.segment.UNH;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.BGM;
 import gov.gtas.parsers.paxlst.segment.unedifact.COM;
-import gov.gtas.parsers.paxlst.segment.unedifact.CTA;
 import gov.gtas.parsers.paxlst.segment.unedifact.DOC;
 import gov.gtas.parsers.paxlst.segment.unedifact.DTM;
 import gov.gtas.parsers.paxlst.segment.unedifact.DTM.DtmCode;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC.LocCode;
 import gov.gtas.parsers.paxlst.segment.unedifact.NAD;
-import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
@@ -97,16 +95,12 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         parsedMessage.setMessageCode(bgm.getCode());
 
         s = getConditionalSegment(i, "RFF");
-        if (s != null) {
-            RFF rff = (RFF) s;
-        }
 
         for (;;) {
             s = getConditionalSegment(i, "DTM");
             if (s == null) {
                 break;
             }
-            DTM dtm = (DTM) s;
         }
 
         for (;;) {
@@ -143,12 +137,13 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     private void processReportingParty(NAD nad, ListIterator<Segment> i) throws ParseException {
         ReportingPartyVo rp = new ReportingPartyVo();
         parsedMessage.addReportingParty(rp);
-        rp.setPartyName(nad.getPartyName());
+        String partyName = nad.getProfileName();
+        if (partyName == null) {
+            partyName = nad.getFirstName() + " " + nad.getLastName();
+        }
+        rp.setPartyName(partyName);
 
         Segment nextSeg = getConditionalSegment(i, "CTA");
-        if (nextSeg != null) {
-            CTA cta = (CTA) nextSeg;
-        }
 
         for (;;) {
             nextSeg = getConditionalSegment(i, "COM");
@@ -221,7 +216,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             if (nextSeg != null) {
                 DTM dtm = (DTM) nextSeg;
                 Date d = dtm.getDtmValue();
-                DtmCode dtmCode = dtm.getDtmCodeQualifier();
+                DtmCode dtmCode = dtm.getDtmCode();
                 if (dtmCode == DtmCode.DEPARTURE) {
                     etd = d;
                 } else if (dtmCode == DtmCode.ARRIVAL) {
@@ -281,7 +276,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 break;
             }
             DTM dtm = (DTM) s;
-            DtmCode dtmCode = dtm.getDtmCodeQualifier();
+            DtmCode dtmCode = dtm.getDtmCode();
             if (dtmCode == DtmCode.DATE_OF_BIRTH) {
                 p.setDob(dtm.getDtmValue());
             }
@@ -327,9 +322,6 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
 
         s = getConditionalSegment(i, "COM");
-        if (s != null) {
-            COM com = (COM) s;
-        }
         
         for (;;) {
             s = getConditionalSegment(i, "EMP");
@@ -380,7 +372,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
                 break;
             }
             DTM dtm = (DTM) s;
-            DtmCode dtmCode = dtm.getDtmCodeQualifier();
+            DtmCode dtmCode = dtm.getDtmCode();
             if (dtmCode == DtmCode.PASSPORT_EXPIRATION_DATE) {
                 d.setExpirationDate(dtm.getDtmValue());
             }

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +26,8 @@ import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
+import gov.gtas.parsers.edifact.EdifactParser;
+import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.paxlst.PaxlstParser;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
@@ -69,7 +72,7 @@ public class ApisMessageService {
             String message = new String(raw, StandardCharsets.US_ASCII);
             String payload = getApisMessagePayload(message);
             if (payload == null) {
-                throw new ParseException("Could not extract message payload. Missing NAD and/or UNT segments", -1);
+                throw new ParseException("Could not extract message payload. Missing BGM and/or UNT segments", -1);
             }
             String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
             this.apisMessage.setHashCode(md5);
@@ -85,8 +88,8 @@ public class ApisMessageService {
             this.apisMessage.setStatus(MessageStatus.PARSED);
 
         } catch (Exception e) {
-            apisMessage.setStatus(MessageStatus.FAILED_PARSING);
-            this.apisMessage.setError(e.getMessage());
+            this.apisMessage.setStatus(MessageStatus.FAILED_PARSING);
+            this.apisMessage.setError(ExceptionUtils.getStackTrace(e));
             e.printStackTrace();
         } finally {
             createMessage(apisMessage);
@@ -128,7 +131,7 @@ public class ApisMessageService {
 
         } catch (Exception e) {
             this.apisMessage.setStatus(MessageStatus.FAILED_LOADING);
-            this.apisMessage.setError(e.getMessage());
+            this.apisMessage.setError(ExceptionUtils.getStackTrace(e));
             e.printStackTrace();
         } finally {
             createMessage(apisMessage);            
@@ -222,22 +225,23 @@ public class ApisMessageService {
     }
     
     /**
-     * Return everything from the start of the first NAD segment to the
+     * Return everything from the start of the first BGM segment to the
      * start of the UNT trailing header segment.
      */
     private String getApisMessagePayload(String text) {
         if (text == null) return null;
         
-        int nadIndex = text.indexOf("NAD");
-        if (nadIndex == -1) {
+        UNA una = EdifactParser.getUnaSegment(text);
+        int bgmIndex = EdifactParser.getStartOfSegment("BGM", text, una);
+        if (bgmIndex == -1) {
             return null;
         }
-        
-        int untIndex = text.indexOf("UNT");
+
+        int untIndex = EdifactParser.getStartOfSegment("UNT", text, una);
         if (untIndex == -1) {
             return null;
         }
         
-        return text.substring(nadIndex, untIndex);
+        return text.substring(bgmIndex, untIndex);
     }   
 }

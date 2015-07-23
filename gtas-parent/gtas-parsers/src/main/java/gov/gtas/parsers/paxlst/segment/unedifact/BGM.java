@@ -19,7 +19,13 @@ import gov.gtas.parsers.edifact.Segment;
  * passenger or crew who was previously reported and cleared for the flight, DHS
  * will use the data supplied in the duplicate message to replace the previous
  * version. If a full replacement is sent, all required data elements must be
- * sent with the new transmission. ￼
+ * sent with the new transmission.
+ * <p>
+ * <ul>
+ * <li>BGM+745'
+ * <li>BGM+745+CP' Clear Passenger Request (Message type used to identify new
+ * passengers to DHS or to obtain updated ESTA status)
+ * </ul>
  */
 public class BGM extends Segment {
     public enum DocumentNameCode {
