@@ -1,8 +1,5 @@
 package gov.gtas.config;
 
-import gov.gtas.rule.RuleService;
-import gov.gtas.rule.RuleServiceImpl;
-
 import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
