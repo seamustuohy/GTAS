@@ -201,7 +201,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		// check uniqueness of query title for this user
 		List<Integer> ids = entityManager.createNamedQuery("UserQuery.checkUniqueTitle", Integer.class)
 				.setParameter("createdBy", query.getCreatedBy())
-				.setParameter("title", query.getTitle().trim()).getResultList();
+				.setParameter("title", query.getTitle() != null ? query.getTitle().trim() : query.getTitle()).getResultList();
 		
 		if(ids == null || ids.size() == 0) {
 			unique = true;
