@@ -82,7 +82,20 @@ public class RuleBuilderTestUtils {
 						EntityAttributeConstants.FLIGHT_ATTR_CARRIER_IATA,
 						OperatorCodeEnum.EQUAL, "CO", ValueTypesEnum.STRING);
 				break;
-			case 3:
+			case 3:/* flight.origin.iata == LHR && flight.carrier.iata==CO  */
+				cond = createRuleCondition(EntityLookupEnum.Flight,
+						EntityAttributeConstants.FLIGHT_ATTR_ORIGIN_IATA,
+						OperatorCodeEnum.EQUAL, "LHR", ValueTypesEnum.STRING);
+				engineRule.addConditionToRule(cond);
+				cond = createRuleCondition(EntityLookupEnum.Flight,
+						EntityAttributeConstants.FLIGHT_ATTR_CARRIER_IATA,
+						OperatorCodeEnum.EQUAL, "CO", ValueTypesEnum.STRING);
+				engineRule.addConditionToRule(cond);
+				cond = createRuleCondition(EntityLookupEnum.Flight,
+						EntityAttributeConstants.FLIGHT_ATTR_DATE,
+						OperatorCodeEnum.GREATER, "2015-07-20 14:00:00", ValueTypesEnum.DATETIME);
+				engineRule.addConditionToRule(cond);
+				break;
 			case 4:
 			case 5:
 		}

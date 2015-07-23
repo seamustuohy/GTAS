@@ -17,6 +17,8 @@ public final class Constants {
 	public static final String UDR_GET = "/{userId}/{title}";
 	public static final String UDR_GET_BY_ID = "/get/{id}";
 	public static final String UDR_GETALL = "/list/{userId}";
+	public static final String UDR_GETDRL = "/drl";
+	public static final String UDR_GETDRL_BY_NAME = "/drl/{kbName}";
 	public static final String UDR_POST = "/{userId}";
 	public static final String UDR_PUT = "/{userId}";
 	public static final String UDR_DELETE = "/{userId}/{id}";

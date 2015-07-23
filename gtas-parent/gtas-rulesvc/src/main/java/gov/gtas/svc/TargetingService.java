@@ -19,7 +19,7 @@ import java.util.List;
 
 public interface TargetingService {
 	/**
-	 * Targeting service invocation for API messages.
+	 * Invokes the Targeting service for an API messages.
 	 * 
 	 * @param message
 	 *            the API message.
@@ -28,10 +28,12 @@ public interface TargetingService {
 	RuleServiceResult analyzeApisMessage(ApisMessage message);
 
 	/**
-	 * Targeting service invocation for API messages.
+	 * Invokes the Rule Engine on an arbitrary list of objects using the
+	 * specified DRL rules string
 	 * 
 	 * @param request
-	 *            The rule request.
+	 *            The rule request containing an arbitrary list of request objects to be
+	 *            inserted into the Rule Engine context.
 	 * @param drlRules
 	 *            The DROOLS rules to apply on the request objects.
 	 * @return the result of the invocation.
@@ -39,8 +41,8 @@ public interface TargetingService {
 	RuleServiceResult applyRules(RuleServiceRequest request, String drlRules);
 
 	/**
-	 * 
-	 * @param messageStatus
+	 * Retrieves the list of API messages with a given status.
+	 * @param messageStatus the status
 	 * @return the retrieved ApisMessage
 	 */
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus);

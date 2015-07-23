@@ -6,6 +6,20 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
     };
     $('.datepicker').datepicker(datepickerOptions);
 
+    var valueSetter = function (rule, value) {
+        var $input = rule.$el.find(".rule-value-container input");
+        $input.focus();
+        if (Array.isArray(value)) {
+            value.forEach(function(v){
+                $('[data-value="' + v + '"]').click();
+            });
+        } else {
+            $('[data-value="' + value + '"]').click();
+        }
+        document.getElementById('title').focus();
+        $input.blur();
+    };
+
     function returnData (property) {
         try {
             if (localStorage[property] === undefined) {
@@ -87,9 +101,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "countries");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "DOCUMENT.expirationDate",
                 "label": "Expiration Date",
@@ -124,9 +136,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "doc_types");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "FLIGHT.destination.iata",
                 "label": "Airport Destination",
@@ -145,9 +155,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "airports");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "FLIGHT.origin.iata",
                 "label": "Airport Origin",
@@ -166,9 +174,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "airports");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "FLIGHT.carrier.iata",
                 "label": "Carrier",
@@ -188,9 +194,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "carriers");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "FLIGHT.destinationCountry.iso3",
                 "label": "Destination Country",
@@ -210,9 +214,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "countries");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "FLIGHT.originCountry.iso3",
                 "label": "Origin Country",
@@ -232,9 +234,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "countries");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "FLIGHT.direction",
                 "label": "Direction",
@@ -253,9 +253,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "direction");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "FLIGHT.eta",
                 "label": "ETA",
@@ -299,9 +297,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "countries");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "PAX.debarkation.iata",
                 "label": "Debarkation",
@@ -325,9 +321,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "countries");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "PAX.dob",
                 "label": "DOB",
@@ -363,9 +357,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "countries");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "PAX.gender",
                 "label": "PAX.gender",
@@ -385,9 +377,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "genders");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "PAX.firstName",
                 "label": "First Name",
@@ -419,9 +409,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                         getOptionsFromJSONArray(this, "countries");
                     }
                 },
-                "valueSetter": function (rule, value) {
-                    rule.$el.find(".rule-value-container input")[0].selectize.setValue(value);
-                }
+                "valueSetter": valueSetter
             }, {
                 "id": "PAX.seat",
                 "label": "PAX.seat",

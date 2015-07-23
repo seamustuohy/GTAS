@@ -1,6 +1,7 @@
 package gov.gtas.model.udr.json.util;
 
 import gov.gtas.error.CommonErrorConstants;
+import gov.gtas.error.CommonValidationException;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
@@ -16,6 +17,7 @@ import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,6 +30,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import org.springframework.validation.Errors;
 
 /**
  * Utility functions to convert JSON objects to JPA domain objects.
@@ -189,6 +193,11 @@ public class JsonToDomainObjectConverter {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
 					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "details",
 					"Create UDR");
+		}
+		//validate the input JSON object
+		Errors errors = QueryValidationUtils.validateQueryObject(qobj);
+		if(errors.hasErrors()){
+			throw new CommonValidationException("JsonToDomainObjectConverter.createEngineRules() - validation errors:", errors);
 		}
 		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
 		int indx = 0;

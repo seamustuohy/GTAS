@@ -9,69 +9,34 @@ import gov.gtas.parsers.edifact.Segment;
  * UNH: MESSAGE HEADER
  * <p>
  * A service segment starting and uniquely identifying a message. The message
- * type code for the Passenger list message is PAXLST. Note: Passenger list
- * messages conforming to this document must contain the following data in
- * segment UNH, composite S009: Data element 0065 PAXLST 0052 D UN
- *
+ * type code for the Passenger list message is PAXLST.
+ * <p>
+ * Example: UNH+MSG001+PAXLST:D:12B:UN:IATA
  */
 public class UNH extends Segment {
-    public enum TransferIndicator {
-        CONTINUANCE, FINAL
-    }
-
     private String messageReferenceNumber;
     private String messageType;
     private String messageTypeVersion;
     private String messageTypeReleaseNumber;
     private String controllingAgency;
-    private String c_associationAssignedCode;
-    private String c_commonAccessReference;
-    private String c_sequenceMessageTransferNumber;
-    private TransferIndicator c_transferIndicator;
+    private String associationAssignedCode;
 
     public UNH(Composite[] composites) {
         super(UNH.class.getSimpleName(), composites);
         for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
-            Element[] e = c.getElements();
             switch (i) {
             case 0:
                 this.messageReferenceNumber = c.getValue();
                 break;
             case 1:
+                Element[] e = c.getElements();
                 this.messageType = e[0].getValue();
                 this.messageTypeVersion = e[1].getValue();
                 this.messageTypeReleaseNumber = e[2].getValue();
                 this.controllingAgency = e[3].getValue();
                 if (e.length > 4) {
-                    this.c_associationAssignedCode = e[4].getValue();
-                }
-                break;
-            case 2:
-                this.c_commonAccessReference = c.getValue();
-                break;
-            case 3:
-                if (e == null) break;
-                
-                if (e.length > 0) {
-                    this.c_sequenceMessageTransferNumber = e[0].getValue();
-                }
-                if (e.length > 1) {
-                    /*
-                     * A value of 'C' indicates this transmission is a
-                     * continuance of previously transmitted data for a
-                     * particular flight. A value of 'F' must be used to
-                     * indicate a FINAL transmission of passenger/crew data
-                     * reporting.
-                     */
-                    String tmp = e[1].getValue();
-                    if (tmp.equals("C")) {
-                        this.c_transferIndicator = TransferIndicator.CONTINUANCE;
-                    } else if (tmp.equals("F")) {
-                        this.c_transferIndicator = TransferIndicator.FINAL;
-                    } else {
-                        logger.error("UNH: invalid transfer indicator");
-                    }
+                    this.associationAssignedCode = e[4].getValue();
                 }
                 break;
             }
@@ -98,19 +63,7 @@ public class UNH extends Segment {
         return controllingAgency;
     }
 
-    public String getC_associationAssignedCode() {
-        return c_associationAssignedCode;
-    }
-
-    public String getC_commonAccessReference() {
-        return c_commonAccessReference;
-    }
-
-    public String getC_sequenceMessageTransferNumber() {
-        return c_sequenceMessageTransferNumber;
-    }
-
-    public TransferIndicator getC_transferIndicator() {
-        return c_transferIndicator;
+    public String getAssociationAssignedCode() {
+        return associationAssignedCode;
     }
 }

@@ -49,7 +49,8 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		System.out.println(result);
-		assertEquals("$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_FLIGHT_NUMBER+" == \"12345\")",
+		assertEquals("$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_FLIGHT_NUMBER+" == \"12345\")\n"
+				+"$p:Pax() from $f.passengers",
 				result.toString().trim());
 	}
 
@@ -62,7 +63,8 @@ public class RuleConditionBuilderTest {
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_DESTINATION_NAME+" in (\"DBY\",\"XYZ\",\"PQR\"))",
+		assertEquals("$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_DESTINATION_NAME+" in (\"DBY\",\"XYZ\",\"PQR\"))\n"
+				+"$p:Pax() from $f.passengers",
 				result.toString().trim());
 	}
 	@Test

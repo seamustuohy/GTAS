@@ -1,6 +1,7 @@
 package gov.gtas.svc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
@@ -8,9 +9,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
+import gov.gtas.error.CommonValidationException;
 import gov.gtas.error.udr.UdrErrorConstants;
 import gov.gtas.model.User;
+import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.UdrRule;
+import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
@@ -27,7 +31,43 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class UdrServiceErrorTest {
+    private static final String TEST_JSON =
+        	"{ \"details\": {"
+              +"  \"@class\": \"gov.gtas.model.udr.json.QueryObject\","
+               +" \"condition\": \"OR\","
+               +" \"rules\": ["
+                 +  " {"
+                   +"   \"@class\": \"QueryTerm\","
+                        + " \"entity\": \"%s\","
+                        + " \"field\": \"%s\","
+                        + " \"operator\": \"%s\","
+                        + " \"type\": \"string\","
+                        + " \"value\": \"John\","
+                        + " \"values\": null "
+                   +" },"
+                   + " {"
+                        + " \"@class\": \"QueryTerm\","
+                        + " \"entity\": \"Pax\","
+                        + " \"field\": \"lastName\","
+                        + " \"operator\": \"EQUAL\","
+                        + " \"type\": \"string\","
+                        + " \"value\": \"Jones\","
+                        + " \"values\": null "
+                    +"}"
+                +"]"
+            +"},"
+            + " \"summary\": {"
+                + " \"title\": \"Hello Rule 1\","
+                + " \"description\": \"This is a test\","
+                + " \"startDate\": \"%s\","
+                + " \"endDate\": null,"
+                +" \"author\": \"jpjones\","
+                + " \"enabled\": false"
+            + "}"
+        +"}";
     private UdrService udrService;
     
     @Mock
@@ -105,8 +145,8 @@ public class UdrServiceErrorTest {
 		try{
 		 udrService.createUdr(authorId, spec);
 		 fail("Expecting Exception");
-		} catch (CommonServiceException cse){
-			assertEquals(CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE, cse.getErrorCode());
+		} catch (CommonValidationException cse){
+			assertEquals(CommonErrorConstants.JSON_INPUT_VALIDATION_ERROR_CODE, cse.getErrorCode());
 		}
 		verify(mockUserService, times(1)).findById(authorId);
 	}
@@ -173,5 +213,97 @@ public class UdrServiceErrorTest {
 				fail("Not Expecting Exception");
 		  }
 		  verify(mockUserService, times(0)).findById(authorId);
+	}
+	@Test
+	public void testInvalidEntity() {
+		String authorId = null;
+		 try{
+				ObjectMapper mapper = new ObjectMapper();
+			    //de-serialize
+				//add arbitrary offset to counteract Jackson GMT interpretation
+				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+864000000L));
+
+				UdrSpecification testObj = mapper.readValue(
+						String.format(TEST_JSON, "foo", "bar", "equal", startDate), 
+						UdrSpecification.class);	
+				assertNotNull(testObj);
+				 authorId = testObj.getSummary().getAuthor();
+				 User author = new User();
+				 author.setUserId(authorId);
+			     UdrRule rule = JsonToDomainObjectConverter.createUdrRuleFromJson(
+						testObj, author);
+			     rule.setId(1L);
+	             when(mockRulePersistenceSvc.create(any(UdrRule.class), any())).thenReturn(rule);
+			     when(mockUserService.findById(authorId)).thenReturn(author);
+			     udrService.createUdr(authorId, testObj);
+			     fail("Expecting exception");
+		  } catch (CommonValidationException cve){
+				assertEquals(CommonErrorConstants.JSON_INPUT_VALIDATION_ERROR_CODE, cve.getErrorCode());		     
+		  } catch (Exception ex){
+				ex.printStackTrace();
+				fail("Not Expecting Exception");
+		  }
+		  verify(mockUserService, times(0)).findById(authorId);
+	}
+	@Test
+	public void testInvalidAttribute() {
+		String authorId = null;
+		 try{
+				ObjectMapper mapper = new ObjectMapper();
+			    //de-serialize
+				
+				//add arbitrary offset to counteract Jackson GMT interpretation
+				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+864000000L));
+
+				UdrSpecification testObj = mapper.readValue(
+						String.format(TEST_JSON, "Pax", "bar", "equal", startDate), 
+						UdrSpecification.class);	
+				assertNotNull(testObj);
+				 authorId = testObj.getSummary().getAuthor();
+				 User author = new User();
+				 author.setUserId(authorId);
+			     UdrRule rule = JsonToDomainObjectConverter.createUdrRuleFromJson(
+						testObj, author);
+			     rule.setId(1L);
+	             when(mockRulePersistenceSvc.create(any(UdrRule.class), any())).thenReturn(rule);
+			     when(mockUserService.findById(authorId)).thenReturn(author);
+			     udrService.createUdr(authorId, testObj);
+			     fail("Expecting exception");
+		  } catch (CommonValidationException cve){
+				assertEquals(CommonErrorConstants.JSON_INPUT_VALIDATION_ERROR_CODE, cve.getErrorCode());		     
+		  } catch (Exception ex){
+				ex.printStackTrace();
+				fail("Not Expecting Exception");
+		  }
+		  verify(mockUserService, times(0)).findById(authorId);
+	}
+	@Test
+	public void testValidEntityAttribute() {
+		String authorId = null;
+		 try{
+				ObjectMapper mapper = new ObjectMapper();
+			    //de-serialize
+				//add arbitrary offset to counteract Jackson GMT interpretation
+				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+864000000L));
+
+				UdrSpecification testObj = mapper.readValue(
+						String.format(TEST_JSON, EntityLookupEnum.Pax.toString(), EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME, "equal", startDate), 
+						UdrSpecification.class);	
+				assertNotNull(testObj);
+				 authorId = testObj.getSummary().getAuthor();
+				 User author = new User();
+				 author.setUserId(authorId);
+			     UdrRule rule = JsonToDomainObjectConverter.createUdrRuleFromJson(
+						testObj, author);
+			     rule.setId(1L);
+	             when(mockRulePersistenceSvc.create(any(UdrRule.class), any())).thenReturn(rule);
+			     when(mockUserService.findById(authorId)).thenReturn(author);
+			     udrService.createUdr(authorId, testObj);
+		  } catch (Exception ex){
+				ex.printStackTrace();
+				fail("Not Expecting Exception");
+		  }
+		  verify(mockUserService, times(1)).findById(authorId);
+		  verify(mockRulePersistenceSvc, times(1)).create(any(UdrRule.class), any());
 	}
 }
