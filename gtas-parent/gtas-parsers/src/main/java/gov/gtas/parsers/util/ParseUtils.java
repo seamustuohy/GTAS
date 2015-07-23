@@ -41,14 +41,9 @@ public class ParseUtils {
         return rv;
     }
     
-    public static Date parseDateTime(String dt, String format) {
+    public static Date parseDateTime(String dt, String format) throws ParseException {
         DateFormat timeFormat = new SimpleDateFormat(format, Locale.ENGLISH);
-        try {
-            return timeFormat.parse(dt);
-        } catch (ParseException pe) {
-            pe.printStackTrace();
-        }
-        return null;
+        return timeFormat.parse(dt);
     }
     
     /**

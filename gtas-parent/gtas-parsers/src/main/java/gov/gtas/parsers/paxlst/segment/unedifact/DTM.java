@@ -1,5 +1,6 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -51,11 +52,10 @@ public class DTM extends Segment {
     private DtmCode dtmCode;
     private Date dtmValue;
 
-    public DTM(Composite[] composites) {
+    public DTM(Composite[] composites) throws ParseException {
         super(DTM.class.getSimpleName(), composites);
         Composite c = this.composites[0];
         Element[] e = c.getElements();
-
         
         this.dtmCode = DtmCode.forCode(e[0].getValue());
 

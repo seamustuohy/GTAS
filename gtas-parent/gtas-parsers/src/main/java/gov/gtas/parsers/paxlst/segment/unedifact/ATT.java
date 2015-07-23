@@ -17,15 +17,8 @@ public class ATT extends Segment {
         GENDER("2");
 
         private final String code;
-
-        private AttCode(String code) {
-            this.code = code;
-        }
-
-        public String getCode() {
-            return code;
-        }
-
+        private AttCode(String code) { this.code = code; }
+        public String getCode() { return code; }
         private static final Map<String, AttCode> BY_CODE_MAP = new LinkedHashMap<>();
 
         static {
