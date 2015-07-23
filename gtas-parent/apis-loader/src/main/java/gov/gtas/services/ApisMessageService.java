@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
+import gov.gtas.model.FlightDirection;
 import gov.gtas.model.Gender;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passport;
@@ -44,6 +45,8 @@ import gov.gtas.repository.ApisMessageRepository;
 public class ApisMessageService {
     private static final Logger logger = LoggerFactory.getLogger(ApisMessageService.class);
 
+    private Country homeCountry;
+    
     @Autowired
     private CountryService countryService;
     
@@ -142,10 +145,19 @@ public class ApisMessageService {
         Pax p = new Pax();
         BeanUtils.copyProperties(vo, p);
         p.setGender(Gender.valueOf(vo.getGender()));
-        p.setDebarkCountry(convertCountry(vo.getDebarkCountry()));
-        p.setDebarkation(convertAirport(vo.getDebarkation()));
-        p.setEmbarkCountry(convertCountry(vo.getEmbarkCountry()));
-        p.setEmbarkation(convertAirport(vo.getEmbarkation()));
+        
+        Airport debark = convertAirport(vo.getDebarkation());
+        if (debark != null) {
+            p.setDebarkation(debark);
+            p.setDebarkCountry(debark.getCountry());
+        }
+
+        Airport embark = convertAirport(vo.getEmbarkation());
+        if (embark != null) {
+            p.setEmbarkation(embark);
+            p.setEmbarkCountry(embark.getCountry());
+        }
+        
         p.setCitizenshipCountry(convertCountry(vo.getCitizenshipCountry()));
         p.setResidencyCountry(convertCountry(vo.getResidencyCountry()));
         
@@ -167,18 +179,37 @@ public class ApisMessageService {
     }
     
     private Flight convertFlightVo(FlightVo vo) {
+        // TODO: hardcoded for now
+        homeCountry = countryService.getCountryByThreeLetterCode("USA");
+                
         Flight f = new Flight();
         BeanUtils.copyProperties(vo, f);
         f.setCarrier(convertCarrier(vo.getCarrier()));
+        
         Airport dest = convertAirport(vo.getDestination());
-        f.setDestination(dest);
+        Country destCountry = null;
         if (dest != null) {
-            f.setDestinationCountry(dest.getCountry());
+            destCountry = dest.getCountry();
         }
+        f.setDestination(dest);
+        f.setDestinationCountry(destCountry);
+        
         Airport origin = convertAirport(vo.getOrigin());
-        f.setOrigin(origin);
+        Country originCountry = null;
         if (origin != null) {
-            f.setOriginCountry(origin.getCountry());
+            originCountry = origin.getCountry();
+        }
+        f.setOrigin(origin);
+        f.setOriginCountry(originCountry);
+        
+        if (destCountry != null && originCountry != null) {
+            if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
+                f.setDirection(FlightDirection.CONTINUANCE);
+            } else if (homeCountry.equals(originCountry)) {
+                f.setDirection(FlightDirection.OUTBOUND);            
+            } else if (homeCountry.equals(destCountry)) {
+                f.setDirection(FlightDirection.INBOUND);                        
+            }
         }
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #
