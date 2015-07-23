@@ -1177,7 +1177,7 @@
                 }
 
                 //remove when Amit gives go ahead..
-                rule.type = rule.type.replace(/\b\w/g, function (txt) { return txt.toUpperCase(); });
+//                rule.type = rule.type.replace(/\b\w/g, function (txt) { return txt.toUpperCase(); });
                 //end remove
 
                 rule.field = properties.join('.');
