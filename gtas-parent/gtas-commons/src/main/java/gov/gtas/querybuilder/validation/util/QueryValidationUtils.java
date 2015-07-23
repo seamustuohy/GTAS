@@ -48,7 +48,7 @@ public class QueryValidationUtils {
 		return errors;
 	}
 	
-	private static void validate(QueryEntity queryEntity, Errors errors) {
+	public static void validate(QueryEntity queryEntity, Errors errors) {
 		QueryObject queryObject = null;
 		QueryTerm queryTerm = null;
 		String condition = null;
@@ -90,7 +90,7 @@ public class QueryValidationUtils {
 			// validate entity
 			boolean validEntity = false;
 			for(EntityEnum e : EntityEnum.values()) {
-				if(e.getEntityName().equals(entity)) {
+				if(e.getEntityName().equalsIgnoreCase(entity)) {
 					validEntity = true;
 					break;
 				}

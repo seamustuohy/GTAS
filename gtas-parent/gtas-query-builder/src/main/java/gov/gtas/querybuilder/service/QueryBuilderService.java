@@ -51,11 +51,11 @@ public class QueryBuilderService {
 	 */
 	public UserQuery saveQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, JsonProcessingException, InvalidQueryRequestException {
 		UserQuery result = null;
-		Errors errors = QueryRequestValidationUtils.validateQueryRequest(queryRequest);
-		
-		if(errors != null && errors.hasErrors()) {
-			throw new InvalidQueryRequestException(QueryValidationUtils.getErrorString(errors), queryRequest);
-		}
+//		Errors errors = QueryRequestValidationUtils.validateQueryRequest(queryRequest);
+//		
+//		if(errors != null && errors.hasErrors()) {
+//			throw new InvalidQueryRequestException(QueryValidationUtils.getErrorString(errors), queryRequest);
+//		}
 		
 		try {
 			
@@ -78,11 +78,11 @@ public class QueryBuilderService {
 	 */
 	public UserQuery editQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, JsonProcessingException, InvalidQueryRequestException, QueryDoesNotExistException {
 		UserQuery result = null;
-		Errors errors = QueryRequestValidationUtils.validateQueryRequest(queryRequest);
-		
-		if(errors != null && errors.hasErrors()) {
-			throw new InvalidQueryRequestException(QueryValidationUtils.getErrorString(errors), queryRequest);
-		}
+//		Errors errors = QueryRequestValidationUtils.validateQueryRequest(queryRequest);
+//		
+//		if(errors != null && errors.hasErrors()) {
+//			throw new InvalidQueryRequestException(QueryValidationUtils.getErrorString(errors), queryRequest);
+//		}
 		
 		try {
 			

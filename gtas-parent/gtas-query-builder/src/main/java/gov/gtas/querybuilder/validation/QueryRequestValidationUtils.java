@@ -31,7 +31,8 @@ public class QueryRequestValidationUtils {
 			}
 			
 			// validate user query
-			errors.addAllErrors(QueryValidationUtils.validateQueryObject(queryRequest.getQuery()));
+			QueryValidationUtils.validate(queryRequest.getQuery(), errors);
+//			errors.addAllErrors(QueryValidationUtils.validateQueryObject(queryRequest.getQuery()));
 		}
 		
 		return errors;

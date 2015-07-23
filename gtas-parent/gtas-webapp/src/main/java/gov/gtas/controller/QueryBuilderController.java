@@ -536,6 +536,6 @@ public class QueryBuilderController {
 		
 		logger.info("An error occurred", e);
 		
-		return createQueryErrorResponse(Status.FAILURE, Constants.QUERY_SERVICE_ERROR_MSG, null);
+		return createQueryErrorResponse(Status.FAILURE, e.getMessage(), null);
 	}
 }
