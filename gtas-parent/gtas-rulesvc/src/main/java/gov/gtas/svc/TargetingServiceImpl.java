@@ -1,5 +1,6 @@
 package gov.gtas.svc;
 
+import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
@@ -84,7 +85,16 @@ public class TargetingServiceImpl implements TargetingService {
 	@Scheduled(fixedDelay = 4000)
 	public void RunningRuleEngine() {
 		System.out.println(new Date() + " a fixed delay running");
-
+		List<ApisMessage> apisMessageList = retrieveApisMessage(MessageStatus.LOADED);
+		System.out
+				.println("retrieved message size-> " + apisMessageList.size());
+		if (apisMessageList.size() > 0) {
+			for (ApisMessage apiMessage : apisMessageList) {
+				RuleServiceResult ruleRunningResult = analyzeApisMessage(apiMessage);
+				RuleExecutionStatistics ruleExeStatus = ruleRunningResult
+						.getExecutionStatistics();
+				List<?> results = ruleRunningResult.getResultList();
+			}
+		}
 	}
-
 }
