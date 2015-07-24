@@ -143,7 +143,7 @@ public class ApisMessageService {
         }
     }
     
-    private Traveler convertPaxVo(PaxVo vo) {
+    private Traveler convertPaxVo(PaxVo vo) throws ParseException {
         Traveler p = null;
         switch (vo.getPaxType()) {
         case "P":
@@ -192,7 +192,7 @@ public class ApisMessageService {
         return rp;
     }
     
-    private Flight convertFlightVo(FlightVo vo) {
+    private Flight convertFlightVo(FlightVo vo) throws ParseException {
         // TODO: hardcoded for now
         homeCountry = countryService.getCountryByThreeLetterCode("USA");
                 
@@ -236,37 +236,55 @@ public class ApisMessageService {
         return f;
     }
     
-    private Country convertCountry(String c) {
+    private Country convertCountry(String c) throws ParseException {
         if (c == null) return null;
+        
+        Country rv = null;
         if (c.length() == 2) {
-            return countryService.getCountryByTwoLetterCode(c);
+            rv = countryService.getCountryByTwoLetterCode(c);
         } else if (c.length() == 3) {
-            return countryService.getCountryByThreeLetterCode(c);
+            rv = countryService.getCountryByThreeLetterCode(c);
         }
         
-        return null;
+        if (rv == null) {
+            throw new ParseException("Unknown country code: " + c, -1);
+        }
+        
+        return rv;
     }
     
-    private Airport convertAirport(String a) {
+    private Airport convertAirport(String a) throws ParseException {
         if (a == null) return null;
-        if (a.length() == 3) {
-            return airportService.getAirportByThreeLetterCode(a);
-        } else if (a.length() == 4) {
-            return airportService.getAirportByFourLetterCode(a);
-        }
         
-        return null;
+        Airport rv = null;
+        if (a.length() == 3) {
+            rv = airportService.getAirportByThreeLetterCode(a);
+        } else if (a.length() == 4) {
+            rv = airportService.getAirportByFourLetterCode(a);
+        }
+
+        if (rv == null) {
+            throw new ParseException("Unknown airport code: " + a, -1);
+        }
+
+        return rv;
     }
     
-    private Carrier convertCarrier(String c) {
+    private Carrier convertCarrier(String c) throws ParseException {
         if (c == null) return null;
+        
+        Carrier rv = null;
         if (c.length() == 3) {
-            return carrierService.getCarrierByThreeLetterCode(c);
+            rv = carrierService.getCarrierByThreeLetterCode(c);
         } else if (c.length() == 2) {
-            return carrierService.getCarrierByTwoLetterCode(c);
+            rv = carrierService.getCarrierByTwoLetterCode(c);
         }
         
-        return null;
+        if (rv == null) {
+            throw new ParseException("Unknown carrier code: " + c, -1);
+        }
+
+        return rv;
     }
     
     /**

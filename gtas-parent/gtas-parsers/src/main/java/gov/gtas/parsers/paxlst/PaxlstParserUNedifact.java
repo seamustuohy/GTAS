@@ -23,6 +23,7 @@ import gov.gtas.parsers.paxlst.segment.unedifact.DTM.DtmCode;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC.LocCode;
 import gov.gtas.parsers.paxlst.segment.unedifact.NAD;
+import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
@@ -353,6 +354,15 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             case PORT_OF_EMBARKATION:
                 p.setEmbarkation(val);
                 break;
+            case AIRPORT_OF_FIRST_US_ARRIVAL:
+                // TODO: not sure how to handle this.
+                break;
+            case COUNTRY_OF_RESIDENCE:
+                p.setResidencyCountry(val);
+                break;
+            case PLACE_OF_BIRTH:
+                // TODO: we don't have a field for this
+                break;
             }
         }
 
@@ -370,6 +380,8 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             if (s == null) {
                 break;
             }
+            NAT nat = (NAT)s;
+            p.setCitizenshipCountry(nat.getNationalityCode());
         }
 
         for (;;) {
@@ -436,7 +448,14 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             LocCode locCode = loc.getFunctionCode();
             if (locCode == LocCode.PLACE_OF_DOCUMENT_ISSUE) {
                 d.setIssuanceCountry(loc.getLocationNameCode());
-            }            
+
+                if (p.getCitizenshipCountry() == null) {
+                    // wasn't set by NAD:LOC, so derive it here from issuance country
+                    if ("P".equals(d.getDocumentType())) {
+                        p.setCitizenshipCountry(d.getIssuanceCountry());
+                    }
+                }
+            }
         }
         
         s = getConditionalSegment(i, "CPI");

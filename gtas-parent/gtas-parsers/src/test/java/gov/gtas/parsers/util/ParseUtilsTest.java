@@ -2,6 +2,7 @@ package gov.gtas.parsers.util;
 import static org.junit.Assert.assertEquals;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -66,5 +67,19 @@ public class ParseUtilsTest {
         String input = "   hello    \r\n\r\n  there\r   gtas team\n";
         String actual = ParseUtils.convertToSingleLine(input);
         assertEquals("hellotheregtas team", actual);
+    }
+    
+    @Test
+    public void testSeparateCarrierAndFlightNumber() {
+        String[] tests = {
+                "UA0341",
+                "UA123",
+                "Q545",
+                "BA1"
+        };
+        for (String s : tests) {
+            String[] r = ParseUtils.separateCarrierAndFlightNumber(s);
+            System.out.println(Arrays.toString(r));            
+        }
     }
 }
