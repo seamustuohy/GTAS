@@ -20,15 +20,20 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
         $input.blur();
     };
 
-    function returnData (property) {
+    function getEntities (options, $builder) {
+        var property = 'entities';
         try {
             if (localStorage[property] === undefined) {
                 $.getJSON('./data/' + property + '.json', function (data) {
                     localStorage[property] = JSON.stringify(data);
-                    return data;
+                    options.entities = data;
+                    $builder.queryBuilder(options);
+                    return $builder;
                 });
             } else {
-                return JSON.parse(localStorage[property]);
+                options.entities = JSON.parse(localStorage[property]);
+                $builder.queryBuilder(options);
+                return $builder;
             }
         } catch (exception) {
             throw exception;
@@ -81,7 +86,6 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                 'unique-filter': null,
                 'bt-checkbox': { color: 'primary' }
             },
-            entities: returnData('entities'),
             filters: [{
                 "id": "DOCUMENT.issuanceCountry.iso2",
                 "label": "Citizenship OR Issuance Country",
@@ -422,8 +426,6 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
         };
 
         // init
-        $builder.queryBuilder(options);
-
         $builder
             .on('afterCreateRuleInput.queryBuilder', function (e, rule) {
                 if (rule.filter.plugin == 'selectize') {
@@ -432,7 +434,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                 }
             });
 
-        return $builder;
+        return getEntities(options, $builder);
     };
     $scope.isBeingEdited = function (ruleId) {
         return $scope.ruleId === ruleId;
