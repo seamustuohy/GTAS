@@ -271,7 +271,24 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         p.setFirstName(nad.getFirstName());
         p.setLastName(nad.getLastName());
         p.setMiddleName(nad.getMiddleName());
-        p.setPaxType(nad.getNadCode().getCode());
+        
+        String paxType = null;
+        if (nad.getNadCode() == null) {
+            paxType = "P";
+        } else {
+            switch (nad.getNadCode()) {
+            case CREW_MEMBER:
+            case INTRANSIT_CREW_MEMBER:
+                paxType = "C";
+                break;
+            case INTRANSIT_PASSENGER:
+                paxType = "I";
+            default:
+                paxType = "P";
+                break;
+            }
+        }
+        p.setPaxType(paxType);
 
         Segment s = null;
 

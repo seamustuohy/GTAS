@@ -16,12 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Crew;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FlightDirection;
 import gov.gtas.model.Gender;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
+import gov.gtas.model.PaxInTransit;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
@@ -142,7 +144,19 @@ public class ApisMessageService {
     }
     
     private Traveler convertPaxVo(PaxVo vo) {
-        Pax p = new Pax();
+        Traveler p = null;
+        switch (vo.getPaxType()) {
+        case "P":
+            p = new Pax();
+            break;
+        case "C":
+            p = new Crew();
+            break;
+        case "I":
+            p = new PaxInTransit();
+            break;
+        }
+
         BeanUtils.copyProperties(vo, p);
         p.setGender(Gender.valueOf(vo.getGender()));
         
