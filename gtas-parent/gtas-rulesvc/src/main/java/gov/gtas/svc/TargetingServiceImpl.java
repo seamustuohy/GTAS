@@ -13,6 +13,8 @@ import gov.gtas.rule.RuleServiceResult;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,7 @@ public class TargetingServiceImpl implements TargetingService {
 	 * )
 	 */
 	@Override
+	@Transactional
 	public RuleServiceResult analyzeApisMessage(ApisMessage message) {
 		if (null == message) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
@@ -82,19 +85,19 @@ public class TargetingServiceImpl implements TargetingService {
 
 	}
 
-	@Scheduled(fixedDelay = 4000)
-	public void RunningRuleEngine() {
-		System.out.println(new Date() + " a fixed delay running");
-		List<ApisMessage> apisMessageList = retrieveApisMessage(MessageStatus.LOADED);
-		System.out
-				.println("retrieved message size-> " + apisMessageList.size());
-		if (apisMessageList.size() > 0) {
-			for (ApisMessage apiMessage : apisMessageList) {
-				RuleServiceResult ruleRunningResult = analyzeApisMessage(apiMessage);
-				RuleExecutionStatistics ruleExeStatus = ruleRunningResult
-						.getExecutionStatistics();
-				List<?> results = ruleRunningResult.getResultList();
-			}
-		}
-	}
+//	@Scheduled(fixedDelay = 4000)
+//	public void RunningRuleEngine() {
+//		System.out.println(new Date() + " a fixed delay running");
+//		List<ApisMessage> apisMessageList = retrieveApisMessage(MessageStatus.LOADED);
+//		System.out
+//				.println("retrieved message size-> " + apisMessageList.size());
+//		if (apisMessageList.size() > 0) {
+//			for (ApisMessage apiMessage : apisMessageList) {
+//				RuleServiceResult ruleRunningResult = analyzeApisMessage(apiMessage);
+//				RuleExecutionStatistics ruleExeStatus = ruleRunningResult
+//						.getExecutionStatistics();
+//				List<?> results = ruleRunningResult.getResultList();
+//			}
+//		}
+//	}
 }

@@ -1,7 +1,11 @@
 package gov.gtas.model.udr.json.error;
 
 import java.io.Serializable;
-
+/**
+ * Class representing JSON error response.
+ * @author GTAS3 (AB)
+ *
+ */
 public class GtasJsonError implements Serializable {
 
 	/**

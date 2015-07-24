@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * 
+ * The back-end service for persisting rules.
  * @author GTAS3 (AB)
  *
  */
@@ -52,8 +52,6 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
     
     @Autowired
     private UserService userService;
-    
-    //private ErrorHandler errorHandler;
     
 	@Override
 	@Transactional
