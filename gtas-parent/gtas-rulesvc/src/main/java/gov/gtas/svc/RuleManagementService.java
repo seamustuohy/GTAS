@@ -36,4 +36,10 @@ public interface RuleManagementService {
      * @return the created Knowledge Base.
      */
     KnowledgeBase createKnowledgeBaseFromUdrRules(String kbName, Collection<UdrRule> rules);
+    /**
+     * Deletes the named Knowledge Base.
+     * @param kbName the knowledge base name.
+     * @return the deleted knowledge base, or null if the knowledge base could not be found.
+     */
+    KnowledgeBase deleteKnowledgeBase(String kbName);
 }

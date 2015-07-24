@@ -1,26 +1,28 @@
 package gov.gtas.svc;
 
 import gov.gtas.constant.RuleServiceConstants;
+import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
-import gov.gtas.error.UdrServiceErrorHandler;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.rule.RuleUtils;
+import gov.gtas.rule.builder.DrlRuleFileBuilder;
 import gov.gtas.services.UserService;
 import gov.gtas.services.udr.RulePersistenceService;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 
+import org.kie.api.KieBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 @Service
 public class RuleManagementServiceImpl implements RuleManagementService{
@@ -43,8 +45,26 @@ public class RuleManagementServiceImpl implements RuleManagementService{
 	@Override
 	public KnowledgeBase createKnowledgeBaseFromDRLString(String kbName,
 			String drlString) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			KieBase kieBase = RuleUtils.createKieBaseFromDrlString(drlString);
+			byte[] kbBlob = RuleUtils.convertKieBaseToBytes(kieBase);
+			KnowledgeBase kb = rulePersistenceService
+					.findUdrKnowledgeBase();
+			if (kb == null) {
+				kb = new KnowledgeBase();
+			}
+			kb.setRulesBlob(drlString
+					.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
+			kb.setKbBlob(kbBlob);
+			kb.setKbName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+			kb = rulePersistenceService.saveKnowledgeBase(kb);
+			return kb;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			throw ErrorHandlerFactory.getErrorHandler().createException(
+					CommonErrorConstants.SYSTEM_ERROR_CODE,
+					System.currentTimeMillis(), ioe);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -80,8 +100,25 @@ public class RuleManagementServiceImpl implements RuleManagementService{
 	@Override
 	public KnowledgeBase createKnowledgeBaseFromUdrRules(String kbName,
 			Collection<UdrRule> rules) {
-		// TODO Auto-generated method stub
-		return null;
+		if (!CollectionUtils.isEmpty(rules)) {
+			DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
+			for (UdrRule rule : rules) {
+				ruleFileBuilder.addRule(rule);
+			}
+			String drlRules = ruleFileBuilder.build();
+			return createKnowledgeBaseFromDRLString(kbName, drlRules);
+		}else{
+		    return null;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.RuleManagementService#deleteKnowledgeBase(java.lang.String)
+	 */
+	@Override
+	public KnowledgeBase deleteKnowledgeBase(String kbName) {
+		KnowledgeBase kb = rulePersistenceService.deleteKnowledgeBase(kbName);
+		return kb;
 	}
 
 }

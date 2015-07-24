@@ -68,35 +68,35 @@ public class UdrServiceHelper {
 	 * 
 	 * @param rulePersistenceService the rule persistence service to use.
 	 */
-	public static void processRuleGeneration(
-			RulePersistenceService rulePersistenceService) {
-		List<UdrRule> ruleList = rulePersistenceService.findAll();
-		if (!CollectionUtils.isEmpty(ruleList)) {
-			DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
-			for (UdrRule rule : ruleList) {
-				ruleFileBuilder.addRule(rule);
-			}
-			try {
-				String rules = ruleFileBuilder.build();
-				KieBase kieBase = RuleUtils.createKieBaseFromDrlString(rules);
-				byte[] kbBlob = RuleUtils.convertKieBaseToBytes(kieBase);
-				KnowledgeBase kb = rulePersistenceService
-						.findUdrKnowledgeBase();
-				if (kb == null) {
-					kb = new KnowledgeBase();
-				}
-				kb.setRulesBlob(rules
-						.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
-				kb.setKbBlob(kbBlob);
-				kb.setKbName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
-				rulePersistenceService.saveKnowledgeBase(kb);
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-				throw ErrorHandlerFactory.getErrorHandler().createException(
-						CommonErrorConstants.SYSTEM_ERROR_CODE,
-						System.currentTimeMillis());
-			}
-		}
-	}
+//	public static void processRuleGeneration(
+//			RulePersistenceService rulePersistenceService) {
+//		List<UdrRule> ruleList = rulePersistenceService.findAll();
+//		if (!CollectionUtils.isEmpty(ruleList)) {
+//			DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
+//			for (UdrRule rule : ruleList) {
+//				ruleFileBuilder.addRule(rule);
+//			}
+//			try {
+//				String rules = ruleFileBuilder.build();
+//				KieBase kieBase = RuleUtils.createKieBaseFromDrlString(rules);
+//				byte[] kbBlob = RuleUtils.convertKieBaseToBytes(kieBase);
+//				KnowledgeBase kb = rulePersistenceService
+//						.findUdrKnowledgeBase();
+//				if (kb == null) {
+//					kb = new KnowledgeBase();
+//				}
+//				kb.setRulesBlob(rules
+//						.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
+//				kb.setKbBlob(kbBlob);
+//				kb.setKbName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+//				rulePersistenceService.saveKnowledgeBase(kb);
+//			} catch (IOException ioe) {
+//				ioe.printStackTrace();
+//				throw ErrorHandlerFactory.getErrorHandler().createException(
+//						CommonErrorConstants.SYSTEM_ERROR_CODE,
+//						System.currentTimeMillis());
+//			}
+//		}
+//	}
 
 }

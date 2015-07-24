@@ -6,7 +6,6 @@ import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.ErrorDetails;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
-import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.MetaData;
@@ -15,7 +14,6 @@ import gov.gtas.model.udr.json.error.GtasJsonError;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.UdrService;
-import gov.gtas.svc.UdrServiceHelper;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
@@ -90,14 +88,17 @@ public class UdrManagementController {
 		String rules = ruleManagementService.fetchDrlRulesFromKnowledgeBase(kbName);
 		return createDrlRulesResponse(rules);
 	}
+	/**
+	 * Creates the DRL rule response JSON object.
+	 * @param rules the DRL rules.
+	 * @return the JSON response object containing the rules.
+	 */
 	private JsonServiceResponse createDrlRulesResponse(String rules){
 		System.out.println("******* The rules:\n"+rules+"\n***************\n");
 		JsonServiceResponse resp = new JsonServiceResponse(JsonServiceResponse.SUCCESS_RESPONSE, 
 				"Rule Management Service", "fetchDefaultDrlRulesFromKnowledgeBase", "Drools rules fetched successsfully");
 		String[] lines = rules.split("\n");
-		for(int i = 0; i < lines.length; ++i){
-			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(String.valueOf(i+1)+":", lines[i]));
-		}
+		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute("DRL Rules", lines));
 		return resp;
 	}
 	@RequestMapping(value = Constants.UDR_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -119,8 +120,10 @@ public class UdrManagementController {
 		 * previous day. The following 3 lines of code reverses this interpretation.
 		 */
 		MetaData meta = inputSpec.getSummary();
-		meta.setStartDate(fixMetaDataDates(meta.getStartDate()));
-		meta.setEndDate(fixMetaDataDates(meta.getEndDate()));
+		if(meta != null){
+			meta.setStartDate(fixMetaDataDates(meta.getStartDate()));
+			meta.setEndDate(fixMetaDataDates(meta.getEndDate()));
+		}
 		
 		JsonServiceResponse resp = udrService.createUdr(userId, inputSpec);
 
@@ -155,8 +158,10 @@ public class UdrManagementController {
 		 * previous day. The following 3 lines of code reverses this interpretation.
 		 */
 		MetaData meta = inputSpec.getSummary();
-		meta.setStartDate(fixMetaDataDates(meta.getStartDate()));
-		meta.setEndDate(fixMetaDataDates(meta.getEndDate()));
+		if(meta != null){
+			meta.setStartDate(fixMetaDataDates(meta.getStartDate()));
+			meta.setEndDate(fixMetaDataDates(meta.getEndDate()));
+		}
 				
 		JsonServiceResponse resp = udrService.updateUdr(userId, inputSpec);
 

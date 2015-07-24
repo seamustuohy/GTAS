@@ -86,6 +86,7 @@ public class TargetingServiceImpl implements TargetingService {
 	}
 
 	@Scheduled(fixedDelay = 4000)
+	@Transactional
 	public void RunningRuleEngine() {
 		System.out.println(new Date() + " a fixed delay running");
 		List<ApisMessage> apisMessageList = retrieveApisMessage(MessageStatus.LOADED);

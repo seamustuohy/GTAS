@@ -235,5 +235,16 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		}
 		return kb;
 	}
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.udr.RulePersistenceService#deleteKnowledgeBase(java.lang.String)
+	 */
+	@Override
+	public KnowledgeBase deleteKnowledgeBase(String kbName) {
+		KnowledgeBase kb = findUdrKnowledgeBase(kbName);
+		if(kb != null){
+			entityManager.remove(kb);
+		}
+		return kb;
+	}
 	
 }

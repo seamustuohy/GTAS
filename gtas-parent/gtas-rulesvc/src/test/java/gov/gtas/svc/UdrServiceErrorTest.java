@@ -76,12 +76,16 @@ public class UdrServiceErrorTest {
     @Mock
     private UserService mockUserService;
     
+    @Mock
+    private RuleManagementService mockRuleManagementService;
+    
 	@Before
 	public void setUp() throws Exception {
 		udrService = new UdrServiceImpl();
 		MockitoAnnotations.initMocks(this);
 		ReflectionTestUtils.setField(udrService, "rulePersistenceService", mockRulePersistenceSvc);
 		ReflectionTestUtils.setField(udrService, "userService", mockUserService);
+		ReflectionTestUtils.setField(udrService, "ruleManagementService", mockRuleManagementService);
 	}
 
 	@After
@@ -189,6 +193,8 @@ public class UdrServiceErrorTest {
 		}
 		verify(mockUserService, times(1)).findById(authorId);
 		verify(mockRulePersistenceSvc).create(any(), any());
+		verify(mockRulePersistenceSvc).findAll();
+		verify(mockRuleManagementService).createKnowledgeBaseFromUdrRules(any(), any());
 	}
 	@Test
 	public void testCreateYesterdayDateError() {
@@ -305,5 +311,7 @@ public class UdrServiceErrorTest {
 		  }
 		  verify(mockUserService, times(1)).findById(authorId);
 		  verify(mockRulePersistenceSvc, times(1)).create(any(UdrRule.class), any());
+		  verify(mockRulePersistenceSvc).findAll();
+		  verify(mockRuleManagementService).createKnowledgeBaseFromUdrRules(any(), any());
 	}
 }

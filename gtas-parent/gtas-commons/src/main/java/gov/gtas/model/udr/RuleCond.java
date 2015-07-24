@@ -72,7 +72,7 @@ public class RuleCond implements Serializable {
 	}
     /**
      * Set the parent rule's ID to the dependent objects. 
-     * @param ruleId
+     * @param ruleId the id of the rule.
      */
 	public void refreshParentRuleId(Long ruleId){
 		if(ruleId != null){
@@ -94,8 +94,8 @@ public class RuleCond implements Serializable {
 
 	/**
      * Adds a value to the rule condition.
-     * @param valName the name of the value (e.g., "start date").
-     * @param val the value.
+     * @param valueArray the array of values to add to the condition.
+     * @param type the type of values in the array.
      */
     public void  addValuesToCondition(String[] valueArray, ValueTypesEnum type) throws ParseException{
 		if(this.values == null){
