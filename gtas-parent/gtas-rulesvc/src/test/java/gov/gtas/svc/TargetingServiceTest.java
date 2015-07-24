@@ -27,16 +27,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 /**
- * Unit tests for the TargetingService using spring support and Mockito.
+ * Unit tests for the TargetingService using Mockito.
  * 
  * @author GTAS3 (AB)
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = RuleServiceConfig.class)
 public class TargetingServiceTest {
-	@Autowired
-	TargetingService targetingService;
+	private TargetingService targetingService;
 
 	@Mock
 	private RuleService mockRuleService;
@@ -47,6 +44,8 @@ public class TargetingServiceTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
+		targetingService = new TargetingServiceImpl(mockRuleService);
+		ReflectionTestUtils.setField(targetingService, "apisMsgRepository", mockApisMsgRepository);
 	}
 
 	@After
