@@ -3,6 +3,7 @@ package gov.gtas.testdatagen;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.FlightDirection;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
@@ -42,10 +43,11 @@ public class ApisDataGenerator {
 	 */
     public ApisMessage createSimpleTestApisMesssage(){
     	ApisMessage msg = new ApisMessage();
+    	msg.setId(123L);
     	msg.setFlights(createFlights());
     	msg.setCreateDate(new Date());
     	msg.setStatus(MessageStatus.LOADED);
-    	apisRepository.save(msg);
+    	//apisRepository.save(msg);
     	fixReferences(msg);
     	return msg;
     }
@@ -64,6 +66,7 @@ public class ApisDataGenerator {
     	Set<Traveler> travelers = new HashSet<Traveler>();
     	for(String[] args:param){
 	    	Pax passenger = new Pax();
+	    	passenger.setId(new Long(args[6]));
 	    	passenger.setDocuments(createDocuments(new String[]{args[0]}, new String[]{args[1]}));
 	    	passenger.setFirstName(args[2]);
 	    	passenger.setLastName(args[3]);
@@ -78,9 +81,9 @@ public class ApisDataGenerator {
     	
     	Flight flight = new Flight();
     	Set<Traveler> travelers = createPassengerAndDocument(new String[][]{
-    			{/*document*/"GB","2012-01-15", /*passenger(name, citzenship, embarkation*/"Ragner", "Yilmaz", "GB", "YHZ"},
-    			{"US", "2010-01-15", "Gitstash", "Garbled", "US", "BOB"},
-    			{"CA", "2011-12-31", "Kalimar", "Rultan", "CA", "YHZ"}
+    			{/*document*/"GB","2012-01-15", /*passenger(name, citzenship, embarkation*/"Ragner", "Yilmaz", "GB", "YHZ","11"},
+    			{"US", "2010-01-15", "Gitstash", "Garbled", "US", "BOB","22"},
+    			{"CA", "2011-12-31", "Kalimar", "Rultan", "CA", "YHZ","33"}
     	       }
     			);
     	flight.setPassengers(travelers);
@@ -90,13 +93,14 @@ public class ApisDataGenerator {
     	flight.setFlightNumber("0012");
     	flight.setOrigin(airportRepository.getAirportByThreeLetterCode("YHZ").get(0));
     	flight.setOriginCountry(countryRepository.getCountryByTwoLetterCode("CA").get(0));
+    	flight.setDirection(FlightDirection.INBOUND);
     	flights.add(flight);
     	
     	flight = new Flight();
     	travelers = createPassengerAndDocument(new String[][]{
-    			{"YE","2012-01-15", "Iphsatz", "Zaglib", "PF", "YHZ"},
-    			{"US", "2010-01-15", "Loopy", "Lair", "US", "BOB"},
-    			{"GB", "2010-01-15", "Ikstar", "Crondite", "GB", "LHR"}
+    			{"YE","2012-01-15", "Iphsatz", "Zaglib", "PF", "YHZ","44"},
+    			{"US", "2010-01-15", "Loopy", "Lair", "US", "BOB","55"},
+    			{"GB", "2010-01-15", "Ikstar", "Crondite", "GB", "LHR","66"}
     	       }
     			);
     	flight.setPassengers(travelers);
@@ -113,6 +117,7 @@ public class ApisDataGenerator {
     	flight.setFlightNumber("0017");
     	flight.setOrigin(airportRepository.getAirportByThreeLetterCode("LHR").get(0));//Bora Bora
     	flight.setOriginCountry(countryRepository.getCountryByTwoLetterCode("GB").get(0));
+    	flight.setDirection(FlightDirection.INBOUND);
     	flights.add(flight);
 
     	return flights;
@@ -122,6 +127,7 @@ public class ApisDataGenerator {
     	for(int i = 0; i < iso2Array.length; ++i){
     		String iso2 = iso2Array[i];
     		Document doc = new Passport();
+    		doc.setId(7786L);
     		doc.setDocumentNumber(DOCUMENT_NUMBER);
     		doc.setIssuanceCountry(countryRepository.getCountryByTwoLetterCode(iso2).get(0));
     		try{

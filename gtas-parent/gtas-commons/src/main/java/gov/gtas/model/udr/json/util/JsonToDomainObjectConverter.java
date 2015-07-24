@@ -18,6 +18,7 @@ import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
+import gov.gtas.util.ValidationUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -256,8 +257,13 @@ public class JsonToDomainObjectConverter {
 				ValueTypesEnum type = ValueTypesEnum.valueOf(trm.getType()
 						.toUpperCase());
 				RuleCondPk pk = new RuleCondPk(indx, seq++);
-				cond = new RuleCond(pk, EntityLookupEnum.valueOf(trm
-						.getEntity()), trm.getField(), op);
+				EntityLookupEnum entity = ValidationUtils.convertStringToEnum(trm.getEntity());
+				if(entity == null){
+					throw ErrorHandlerFactory.getErrorHandler().createException(CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE, 
+							"entity:"+trm.getEntity(),
+							"createEngineRule()");
+				}
+				cond = new RuleCond(pk, entity, trm.getField(), op);
 				if(op == OperatorCodeEnum.IN || op == OperatorCodeEnum.NOT_IN || op == OperatorCodeEnum.BETWEEN){
 				   cond.addValuesToCondition(trm.getValues(), type);
 				} else {
