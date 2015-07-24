@@ -20,26 +20,6 @@ app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTablePa
         $input.blur();
     };
 
-    function getEntities (options, $builder) {
-        var property = 'entities';
-        try {
-            if (localStorage[property] === undefined) {
-                $.getJSON('./data/' + property + '.json', function (data) {
-                    localStorage[property] = JSON.stringify(data);
-                    options.entities = data;
-                    $builder.queryBuilder(options);
-                    return $builder;
-                });
-            } else {
-                options.entities = JSON.parse(localStorage[property]);
-                $builder.queryBuilder(options);
-                return $builder;
-            }
-        } catch (exception) {
-            throw exception;
-        }
-    }
-
     function getOptionsFromJSONArray (that, property) {
         if (localStorage[property] === undefined) {
             $.getJSON('./data/' + property + '.json', function (data) {
@@ -434,7 +414,23 @@ app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTablePa
                 }
             });
 
-        return getEntities(options, $builder);
+        var property = 'entities';
+        try {
+            if (localStorage[property] === undefined) {
+                $.getJSON('./data/' + property + '.json', function (data) {
+                    localStorage[property] = JSON.stringify(data);
+                    options.entities = data;
+                    $builder.queryBuilder(options);
+                    $scope.$builder = $builder;
+                });
+            } else {
+                options.entities = JSON.parse(localStorage[property]);
+                $builder.queryBuilder(options);
+                $scope.$builder = $builder;
+            }
+        } catch (exception) {
+            throw exception;
+        }
     };
     $scope.isBeingEdited = function (ruleId) {
         return $scope.ruleId === ruleId;
@@ -489,7 +485,7 @@ app.controller('RiskCriteriaController', function($scope, $filter, $q, ngTablePa
         }
     });
 
-    $scope.$builder = loadQueryBuilder();
+    loadQueryBuilder();
 
     $scope.$on('handleBroadcast', function (event, id) {
         $scope.authorId = id;
