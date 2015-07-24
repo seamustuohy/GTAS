@@ -46,4 +46,9 @@ public interface TargetingService {
 	 * @return the retrieved ApisMessage
 	 */
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus);
+	
+	/**
+	 * Running Rule Engine through Scheduler
+	 */
+	public void RunningRuleEngine() ;
 }
