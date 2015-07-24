@@ -1,6 +1,8 @@
 
 app.controller('FlightsController', function($scope, $filter, $q, ngTableParams, flightService, paxService) {
+	var paxData = [];
 	var data = [];
+	
     $scope.tableParams = new ngTableParams(
     {
         page: 1,            // show first page
@@ -30,8 +32,13 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
         }
 	});
     
-  $scope.updatePax = function(flightId) {
-  	paxService.broadcast(flightId);
+  $scope.updatePax = function(flightId) {  
+  	paxService.getPax(flightId);			
+  //paxService.broadcast(flightId);
   };    
     
+  $scope.$on('paxDataResponse', function (evnt, data) {
+	    $scope.paxData = data;
+	  });
+  
 });

@@ -19,7 +19,8 @@ public interface PassengerRepository extends CrudRepository<Traveler, Long>{
 //    @Query("SELECT t FROM Traveler t join flight_traveler ft on ft.traveler_id = t.id where ft.flight_id = (:flightId)")
 //    public List<Traveler> getPassengersByFlightId(@Param("flightId") Long flightId);
 
-    @Query("SELECT p FROM Flight f join f.passengers p where f.id = (:flightId)")
+//    @Query("SELECT p FROM Flight f join f.passengers p where f.id = (:flightId)")
+	@Query("SELECT p FROM Traveler p, Flight f, FlightTraveler ft where p.id = ft.traveler_id and ft.flight_id = f.id and f.id = (:flightId)")
     public List<Traveler> getPassengersByFlightId(@Param("flightId") Long flightId);
 
 }

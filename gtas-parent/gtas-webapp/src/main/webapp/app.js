@@ -12,6 +12,11 @@ $stateProvider
         templateUrl: 'flights/flights.html',
         controller: 'FlightsController'
     })
+     .state('travelers', {
+        url: '/travelers',
+        templateUrl: 'pax/pax.html',
+        controller: 'PaxController'
+    })
     .state('pax', {
         url: '/pax',
         templateUrl: 'pax/pax.html',
