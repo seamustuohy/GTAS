@@ -83,7 +83,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
             },
             entities: returnData('entities'),
             filters: [{
-                "id": "DOCUMENT.issuanceCountry",
+                "id": "DOCUMENT.issuanceCountry.iso2",
                 "label": "Citizenship OR Issuance Country",
                 "type": "string",
                 "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
