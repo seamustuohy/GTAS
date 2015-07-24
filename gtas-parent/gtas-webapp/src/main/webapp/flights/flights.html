@@ -1,12 +1,16 @@
 <h3>Flights</h3>
 <button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
 <button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
-<table ng-table="tableParams" show-filter="true" class="table">
-    <tr ng-repeat="flight in $data">
+<table ng-table="tableParams" show-filter="true" class="table table-condensed">
+   
+   <tbody ng-repeat="flight in $data track by $index" style="border-collapse:collapse;"  data-toggle="collapse" data-target="#demo{{$index}}" class="accordion-toggle">
+   
+    <tr ng-click="getPaxInfo(flight.flightId);" ng-controller="PaxController">
+     
         <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'select' }">{{flight.hits}}</td>
         <td data-title="'Carrier'" sortable="'carrier'" filter="{ 'carrier': 'select' }" filter-data="values($column, 'carrier')">{{flight.carrier}}</td>
         <td data-title="'Flight #'" sortable="'flightNumber'" filter="{ 'flightNumber': 'text' }">
-            <a ng-click="updatePax(flight.flightId)">{{flight.flightNumber}}</a>
+         {{flight.flightNumber}}
         </td>
         <td data-title="'Origin'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">{{flight.origin}}</td>
         <td data-title="'Country'" sortable="'originCountry'" filter="{ 'originCountry': 'select' }" filter-data="values($column, 'originCountry')">{{flight.originCountry}}</td>
@@ -16,4 +20,68 @@
         filter-data="values($column, 'destinationCountry')">{{flight.destinationCountry}}</td>
         <td data-title="'ETA'" sortable="'eta'" filter="{ 'eta': 'text' }">{{flight.eta}}</td>
     </tr>
+
+<tr>    	
+    	    <td colspan="12" class="hiddenRow" >
+  			  <!--  <h2>Passengers</h2> -->
+     	    <!--    <div class="accordian-body collapse"> -->
+            <!-- <table class="table table-condensed">
+            	<tr>
+             -->
+           <!--  		<td style="width:100%;"> -->
+            				<div class="accordian-body collapse" id="demo{{$index}}"  style="border-collapse:collapse; width: 100%;" > 
+            				
+									<table id="paxTable" ng-table="tableParams" show-filter="false" class="table table-condensed table-hover" >
+												<thead>
+													<tr>
+														<th>#</th>
+														<th>R</th>
+														<th>L</th>
+														<th>Last Name</th>
+														<th>First Name</th>
+														<th>Middle Name</th>
+														<th>Pax Type</th>
+														<th>Gender</th>
+														<th>DOB</th>
+														<th>Citizenship</th>
+														<th>Document #</th>
+														<th>T</th>
+														<th>Issuance Country</th>
+														<th>Seat</th>
+														
+													</tr>
+												</thead>
+												<tbody ng-repeat="pax in paxData"> <!--  style="border-collapse:collapse;"  data-toggle="collapse" -->
+													<tr>
+														<td>#</td>
+														<td>#</td>
+														<td>#</td>
+														<td>{{pax.lastName}}</td>
+														<td>{{pax.middleName}}</td>
+														<td>{{pax.firstName}}</td>
+														<td>PAX</td>
+														<td>M</td>
+														<td>4/21/1960</td>
+														<td>NZ</td>
+														<td>189232993</td>
+														<td>P</td>
+														<td>NZ</td>
+														<td>59B</td>
+													</tr>
+													
+												</tbody>
+											</table>
+            				
+            				 </div>
+            <!-- 		</td> -->
+            <!-- 	</tr> 
+            	</table> -->
+            <!-- 	</div> -->
+            
+            </td>
+        
+     </tr>
+    
+    </tbody>
 </table>
+
