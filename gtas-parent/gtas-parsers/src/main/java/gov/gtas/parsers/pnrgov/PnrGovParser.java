@@ -55,7 +55,7 @@ public class PnrGovParser {
         txt = txt.replaceAll("\\n|\\r", "");
         SegmentFactory factory = new SegmentFactory();
         EdifactLexer p = new EdifactLexer();
-        LinkedList<Segment> edifactSegments = p.parse(txt);
+        LinkedList<Segment> edifactSegments = p.tokenize(txt);
         for (Segment s: edifactSegments) {
         	System.out.println("SEGMENT >>> "+s.toString());
 //            Segment paxlstSegment = factory.build(s);

@@ -8,6 +8,16 @@ import gov.gtas.parsers.edifact.segment.UNB;
 import gov.gtas.parsers.edifact.segment.UNG;
 import gov.gtas.parsers.edifact.segment.UNH;
 
+/**
+ * The parser takes the output from the Edifact lexer and starts the process of
+ * parsing the individual segments and extracting data. This class implements
+ * the template pattern so subclasses can implement specific rules for parsing a
+ * particular message payload. The generic Edifact segments -- UNB, UNH, etc. --
+ * are parsed in this class.
+ * 
+ * @param <T>
+ *            the specific message class that will be returned after parsing.
+ */
 public abstract class EdifactParser <T extends MessageVo> {
     /** factory for creating segment classes */
     protected SegmentFactory segmentFactory;
@@ -21,13 +31,13 @@ public abstract class EdifactParser <T extends MessageVo> {
     /** the final parsed message we ultimately return */
     protected T parsedMessage;
 
-    private EdifactLexer edifactParser = new EdifactLexer();
+    private EdifactLexer lexer = new EdifactLexer();
 
     public EdifactParser() { }
 
     public T parse(String message) throws ParseException {
         this.segmentFactory = new SegmentFactory();
-        this.segments = edifactParser.parse(message);
+        this.segments = lexer.tokenize(message);
         iter = segments.listIterator();
 
         parseHeader();

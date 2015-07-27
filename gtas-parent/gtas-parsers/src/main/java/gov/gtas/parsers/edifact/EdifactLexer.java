@@ -13,16 +13,10 @@ import gov.gtas.parsers.util.ParseUtils;
 
 /**
  * The class takes as input any Edifact file
- * (https://en.wikipedia.org/wiki/EDIFACT) and parses the file into a series of
+ * (https://en.wikipedia.org/wiki/EDIFACT) and breaks the file up into
  * 'Segments'. Segments have three-letter names, such as UNA, UNB, NAD, etc.
  * Each segment is further broken down into an array of composites, and each
  * composite has an array of elements.
- * 
- * This parser is very simple -- performing only basic string manipulations and
- * splits based on the delimiters contained in the UNA segment. It does not
- * check for edifact message structure; e.g., for example it will not check if a
- * UNH segment has a corresponding UNT segment at the end. The only purpose is
- * to parse the input text into segments and return them.
  */
 public class EdifactLexer {
     private static final String[] SEGMENT_NAMES = { "UNA", "UNB", "UNG", "UNH", "UNT", "UNE", "UNZ" };
@@ -48,7 +42,7 @@ public class EdifactLexer {
         return ParseUtils.indexOfRegex(regex, txt);
     }
     
-    public LinkedList<Segment> parse(String txt) throws ParseException {
+    public LinkedList<Segment> tokenize(String txt) throws ParseException {
         if (StringUtils.isEmpty(txt)) return null;
         txt = preprocessMessage(txt);
         
