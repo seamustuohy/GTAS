@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.segment.usedifact.CTA;
 import gov.gtas.parsers.paxlst.segment.usedifact.DTM;
@@ -16,12 +17,13 @@ import gov.gtas.parsers.paxlst.segment.usedifact.PDT;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.DocType;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
 import gov.gtas.parsers.paxlst.segment.usedifact.TDT;
+import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
-public class PaxlstParserUSedifact extends PaxlstParser {
+public class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);
     
     protected enum GROUP {
@@ -37,7 +39,9 @@ public class PaxlstParserUSedifact extends PaxlstParser {
     protected void validateSegmentName(String segmentName) throws ParseException {
     }
     
-    public PaxlstParserUSedifact() { }
+    public PaxlstParserUSedifact() { 
+        this.parsedMessage = new ApisMessageVo();
+    }
     
     public void parsePayload() {
         currentGroup = GROUP.NONE;

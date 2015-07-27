@@ -1,17 +1,19 @@
 package gov.gtas.parsers.paxlst;
 
+import static org.junit.Assert.assertEquals;
+
 import java.text.ParseException;
 import java.util.List;
-import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 
 public final class PaxlstParserUNedifactTest {
-    PaxlstParser parser; 
+    EdifactParser<ApisMessageVo> parser; 
     
     String header = 
             "UNA:+.? '" + 

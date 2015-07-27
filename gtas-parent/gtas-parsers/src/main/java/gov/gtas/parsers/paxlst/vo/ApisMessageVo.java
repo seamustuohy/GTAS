@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import gov.gtas.parsers.edifact.MessageVo;
+
 public class ApisMessageVo extends MessageVo {
     private List<ReportingPartyVo> reportingParties = new ArrayList<>();
     private List<FlightVo> flights = new ArrayList<>();

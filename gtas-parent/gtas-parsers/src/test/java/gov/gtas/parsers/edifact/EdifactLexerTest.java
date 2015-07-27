@@ -9,8 +9,8 @@ import org.junit.Test;
 
 import gov.gtas.parsers.edifact.segment.UNA;
 
-public class EdifactParserTest {
-    EdifactParser parser = new EdifactParser();
+public class EdifactLexerTest {
+    EdifactLexer parser = new EdifactLexer();
     
     /**
      * taken from https://en.wikipedia.org/wiki/EDIFACT
