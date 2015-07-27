@@ -26,7 +26,7 @@ mvn clean install
 > mvn clean install -Dskip.integration.tests=false
 5. Create the database (make sure the settings in hibernate.properties are correct).
 > mysql -u root -p  
-create database 'gtas'
+create database gtas
 6. Create the schema
 > cd gtas-commons  
 mvn hibernate4:export
