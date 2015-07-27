@@ -84,12 +84,12 @@ public class ApisMessageService {
             
             PaxlstParser parser = null;
             if (isUSEdifactFile(message)) {
-                parser = new PaxlstParserUSedifact(message);
+                parser = new PaxlstParserUSedifact();
             } else {
-                parser= new PaxlstParserUNedifact(message);
+                parser= new PaxlstParserUNedifact();
             }
     
-            vo = parser.parse();
+            vo = parser.parse(message);
             this.apisMessage.setStatus(MessageStatus.PARSED);
 
         } catch (Exception e) {

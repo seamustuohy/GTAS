@@ -24,12 +24,20 @@ import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 public class PaxlstParserUSedifact extends PaxlstParser {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);
     
+    protected enum GROUP {
+        NONE,
+        HEADER,
+        REPORTING_PARTY,
+        FLIGHT,
+        PAX
+    }
+    
+    protected GROUP currentGroup;
+    
     protected void validateSegmentName(String segmentName) throws ParseException {
     }
     
-    public PaxlstParserUSedifact(String message) {
-        super(message);
-    }
+    public PaxlstParserUSedifact() { }
     
     public void parseSegments() {
         currentGroup = GROUP.NONE;

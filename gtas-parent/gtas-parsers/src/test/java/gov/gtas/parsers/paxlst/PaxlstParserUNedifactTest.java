@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.List;
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
@@ -18,6 +19,11 @@ public final class PaxlstParserUNedifactTest {
             "UNH+PAX001+PAXLST:D:05B:UN:IATA'" +
             "BGM+745'";
     
+    @Before
+    public void setUp() {
+        this.parser = new PaxlstParserUNedifact();
+    }
+
     @Test
     public void testSingleTdtWithOneLeg() throws ParseException {
         String apis = header + 
@@ -27,8 +33,7 @@ public final class PaxlstParserUNedifactTest {
                 "LOC+87+JFK'" + 
                 "DTM+232:0704291600:201'";
 
-        parser = new PaxlstParserUNedifact(apis);
-        ApisMessageVo vo = parser.parse();
+        ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
         assertEquals(1, flights.size());
         FlightVo f = flights.get(0);
@@ -51,8 +56,7 @@ public final class PaxlstParserUNedifactTest {
                 "LOC+92+ATL'" + 
                 "DTM+232:0704291945:201'";
 
-        parser = new PaxlstParserUNedifact(apis);
-        ApisMessageVo vo = parser.parse();
+        ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
         assertEquals(2, flights.size());
         FlightVo f1 = flights.get(0);
@@ -79,8 +83,7 @@ public final class PaxlstParserUNedifactTest {
                 "LOC+87+ICN'" +
                 "DTM+232:1402020840:201'";
         
-        parser = new PaxlstParserUNedifact(apis);
-        ApisMessageVo vo = parser.parse();
+        ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
         assertEquals(2, flights.size());
         
@@ -111,8 +114,7 @@ public final class PaxlstParserUNedifactTest {
                 "LOC+87+ICN'" +
                 "DTM+232:1402020840:201'";
         
-        parser = new PaxlstParserUNedifact(apis);
-        ApisMessageVo vo = parser.parse();
+        ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
         assertEquals(2, flights.size());
         
@@ -181,8 +183,7 @@ public final class PaxlstParserUNedifactTest {
                 "UNE+1+1' " + 
                 "UNZ+1+000006640'";
         
-        parser = new PaxlstParserUNedifact(apis);
-        ApisMessageVo vo = parser.parse();
+        ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
         assertEquals(2, flights.size());
         System.out.println(vo);

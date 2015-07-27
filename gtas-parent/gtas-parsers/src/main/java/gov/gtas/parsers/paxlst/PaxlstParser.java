@@ -9,33 +9,19 @@ import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 
-/**
- */
 public abstract class PaxlstParser {
-    private String message;
+    /** factory for creating segment classes */
     protected SegmentFactory segmentFactory;
 
-    protected enum GROUP {
-        NONE,
-        HEADER,
-        REPORTING_PARTY,
-        FLIGHT,
-        PAX
-    }
-    
-    protected GROUP currentGroup;
-    protected ApisMessageVo parsedMessage;
+    /** output from the edifact parser */ 
     protected List<Segment> segments;
 
-    public PaxlstParser(String message) {
-        this.message = message;
-    }
+    /** the final parsed message we ultimately return */
+    protected ApisMessageVo parsedMessage;
 
-    protected abstract void parseSegments() throws ParseException;
-    protected abstract void validateSegmentName(String segmentName) throws ParseException;
-    
-    public ApisMessageVo parse() throws ParseException {
-        this.currentGroup = GROUP.NONE;    
+    public PaxlstParser() { }
+
+    public ApisMessageVo parse(String message) throws ParseException {
         this.parsedMessage = new ApisMessageVo();
         this.segments = new LinkedList<>();
         this.segmentFactory = new SegmentFactory();
@@ -46,6 +32,19 @@ public abstract class PaxlstParser {
         
         return this.parsedMessage;
     }
+
+    /**
+     * Takes the list of segments, extracts data and fills the ApisMessageVo.
+     * @throws ParseException
+     */
+    protected abstract void parseSegments() throws ParseException;
+    
+    /**
+     * Throws an exception if the given segmentName is not valid.
+     * @param segmentName
+     * @throws ParseException
+     */
+    protected abstract void validateSegmentName(String segmentName) throws ParseException;
     
     protected Segment getMandatorySegment(ListIterator<Segment> i, Class<?> clazz) throws ParseException {
         if (i.hasNext()) {

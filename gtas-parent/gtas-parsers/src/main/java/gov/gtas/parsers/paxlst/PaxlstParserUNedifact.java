@@ -46,8 +46,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             "DTM", "EMP", "FTX", "GEI", "GID", "LOC", "MEA", "NAD", "NAT", "QTY", "RFF", "TDT", "UNH", "UNT" };
     public static final Set<String> UN_EDIFACT_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
 
-    public PaxlstParserUNedifact(String message) {
-        super(message);
+    public PaxlstParserUNedifact() {
     }
 
     protected void validateSegmentName(String segmentName) throws ParseException {
