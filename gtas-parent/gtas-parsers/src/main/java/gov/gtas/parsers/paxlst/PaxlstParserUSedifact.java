@@ -1,5 +1,6 @@
 package gov.gtas.parsers.paxlst;
 
+import java.text.ParseException;
 import java.util.ListIterator;
 
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 public class PaxlstParserUSedifact extends PaxlstParser {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);
     
+    protected void validateSegmentName(String segmentName) throws ParseException {
+    }
     
     public PaxlstParserUSedifact(String message) {
         super(message);

@@ -53,13 +53,13 @@ public class PnrGovParser {
     	String txt = ParseUtils.stripStxEtxHeaderAndFooter(msg);
         txt = txt.toUpperCase();
         txt = txt.replaceAll("\\n|\\r", "");
-        SegmentFactory factory = new SegmentFactory(segmentPackageName);
+        SegmentFactory factory = new SegmentFactory();
         EdifactParser p = new EdifactParser();
         LinkedList<Segment> edifactSegments = p.parse(txt);
         for (Segment s: edifactSegments) {
         	System.out.println("SEGMENT >>> "+s.toString());
-            Segment paxlstSegment = factory.build(s);
-            segments.add(paxlstSegment);
+//            Segment paxlstSegment = factory.build(s);
+//            segments.add(paxlstSegment);
         }
     }
 

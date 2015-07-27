@@ -14,29 +14,11 @@ import gov.gtas.parsers.edifact.Segment;
 public class SegmentFactory {
     private static final Logger logger = LoggerFactory.getLogger(SegmentFactory.class);
     
-    private String segmentPackageName;
-    
-    public SegmentFactory(String segmentPackageName) {
-        this.segmentPackageName = segmentPackageName;
-    }
-
-    public Segment build(Segment s) throws ParseException {
-        return build(s, null);
-    }
-    
     public Segment build(Segment s, Class<?> clazz) throws ParseException {
         try {
             logger.debug(s.getName() + " " + Arrays.toString(s.getComposites()));
-            
-            Class<?> c = null;
-            if (clazz != null) {
-                c = clazz;
-            } else {
-                c = Class.forName(this.segmentPackageName + "." + s.getName());
-            }
-            
             Object[] args = {s.getComposites()};
-            return (Segment)c.getDeclaredConstructor(Composite[].class).newInstance(args);
+            return (Segment)clazz.getDeclaredConstructor(Composite[].class).newInstance(args);
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
             if (t != null) {
