@@ -47,7 +47,7 @@ public class EdifactLexer {
         txt = preprocessMessage(txt);
         
         UNA una = getUnaSegment(txt);
-        SegmentParser segmentParser = new SegmentParser(una);
+        SegmentTokenizer segmentParser = new SegmentTokenizer(una);
 
         // start parsing with the UNB segment
         int unbIndex = getStartOfSegment("UNB", txt, una);
@@ -63,15 +63,15 @@ public class EdifactLexer {
                 una.getReleaseCharacter());
 
         for (String s : stringSegments) {
-            Composite[] parsed = segmentParser.parseSegment(s);
-            if (parsed == null) { 
+            Composite[] tokens = segmentParser.tokenize(s);
+            if (tokens == null) { 
                 throw new ParseException("Could not tokenize segment " + s);
             }
             
-            String segmentType = parsed[0].getValue();
+            String segmentType = tokens[0].getValue();
             Composite[] composites = null;
-            if (parsed.length > 1) {
-                composites = Arrays.copyOfRange(parsed, 1, parsed.length);
+            if (tokens.length > 1) {
+                composites = Arrays.copyOfRange(tokens, 1, tokens.length);
             }
             Segment newSegment = new Segment(segmentType, composites);
             segments.add(newSegment);

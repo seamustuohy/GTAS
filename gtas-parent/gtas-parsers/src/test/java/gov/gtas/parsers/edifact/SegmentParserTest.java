@@ -10,12 +10,12 @@ import org.junit.Test;
 import gov.gtas.parsers.edifact.segment.UNA;
 
 public class SegmentParserTest {
-    SegmentParser parser;
+    SegmentTokenizer parser;
     
     @Before
     public void setUp() throws Exception {
         UNA una = new UNA();
-        this.parser = new SegmentParser(una);
+        this.parser = new SegmentTokenizer(una);
     }
 
     @After
@@ -24,18 +24,18 @@ public class SegmentParserTest {
     
     @Test
     public void testNullOrEmpty() {
-        Composite[] c = parser.parseSegment(null);
+        Composite[] c = parser.tokenize(null);
         assertNull(c);
-        c = parser.parseSegment("");
+        c = parser.tokenize("");
         assertNull(c);
-        c = parser.parseSegment("   ");
+        c = parser.tokenize("   ");
         assertNull(c);
     }
     
     @Test
     public void testHappyPath() {
         String seg = "NAD+FL+++PAGE:TIFFANY:ANNE";
-        Composite[] composites = parser.parseSegment(seg);
+        Composite[] composites = parser.tokenize(seg);
         assertEquals(5, composites.length, 5);
         assertEquals("NAD", composites[0].getValue());
         assertEquals("FL", composites[1].getValue());
@@ -50,7 +50,7 @@ public class SegmentParserTest {
 
     @Test
     public void testSegmentNameOnly() {
-        Composite[] composites = parser.parseSegment("NAD");        
+        Composite[] composites = parser.tokenize("NAD");        
         assertEquals(1, composites.length);
         assertEquals("NAD", composites[0].getValue());
         assertTrue(composites[0].getElements() == null);
@@ -59,7 +59,7 @@ public class SegmentParserTest {
     @Test
     public void testEscapedDelimiters() {
         String seg = "NAD+FL?+MC?:MD+++PAGE:TIFFANY:ANNE";
-        Composite[] composites = parser.parseSegment(seg);
+        Composite[] composites = parser.tokenize(seg);
         assertEquals(5, composites.length);
         assertEquals("FL+MC:MD", composites[1].getValue());
     }
