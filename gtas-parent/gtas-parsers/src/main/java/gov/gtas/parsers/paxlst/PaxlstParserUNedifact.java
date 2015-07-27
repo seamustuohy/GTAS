@@ -11,9 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.edifact.segment.UNB;
-import gov.gtas.parsers.edifact.segment.UNG;
-import gov.gtas.parsers.edifact.segment.UNH;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.BGM;
 import gov.gtas.parsers.paxlst.segment.unedifact.COM;
@@ -33,6 +30,7 @@ import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.QTY;
 import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
+import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
@@ -46,6 +44,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     public static final Set<String> UN_EDIFACT_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
 
     public PaxlstParserUNedifact() {
+        this.parsedMessage = new ApisMessageVo();
     }
 
     protected void validateSegmentName(String segmentName) throws ParseException {
@@ -57,17 +56,8 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     }
     
     @Override
-    public void parseSegments() throws ParseException {
-        UNB unb = (UNB) getMandatorySegment(UNB.class);
-        parsedMessage.setTransmissionSource(unb.getSenderIdentification());
-        parsedMessage.setTransmissionDate(unb.getDateAndTimeOfPreparation());
-
-        Segment s = getConditionalSegment(UNG.class);
-
-        UNH unh = (UNH) getMandatorySegment(UNH.class);
-        parsedMessage.setMessageType(unh.getMessageType());
-        parsedMessage.setVersion(unh.getMessageTypeVersion());
-
+    public void parsePayload() throws ParseException {
+        Segment s = null;
         BGM bgm = (BGM) getMandatorySegment(BGM.class);
         parsedMessage.setMessageCode(bgm.getCode());
 

@@ -7,6 +7,9 @@ import java.util.ListIterator;
 
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.edifact.segment.UNB;
+import gov.gtas.parsers.edifact.segment.UNG;
+import gov.gtas.parsers.edifact.segment.UNH;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
 
 public abstract class PaxlstParser {
@@ -33,16 +36,35 @@ public abstract class PaxlstParser {
         segments = p.parse(message);
         iter = segments.listIterator();
 
-        parseSegments();
+        parseHeader();
+        parsePayload();
+        parseTrailer();
         
         return this.parsedMessage;
     }
 
+    private void parseHeader() throws ParseException {
+        UNB unb = (UNB) getMandatorySegment(UNB.class);
+        parsedMessage.setTransmissionSource(unb.getSenderIdentification());
+        parsedMessage.setTransmissionDate(unb.getDateAndTimeOfPreparation());
+
+        UNG ung = (UNG) getConditionalSegment(UNG.class);
+
+        UNH unh = (UNH) getMandatorySegment(UNH.class);
+        parsedMessage.setMessageType(unh.getMessageType());
+        parsedMessage.setVersion(unh.getMessageTypeVersion());
+    }
+
+    private void parseTrailer() throws ParseException {
+        // TBD
+    }
+    
     /**
-     * Takes the list of segments, extracts data and fills the ApisMessageVo.
+     * Subclasses implement this method to parse the message payload/body
+     * that's specific to the message type.
      * @throws ParseException
      */
-    protected abstract void parseSegments() throws ParseException;
+    protected abstract void parsePayload() throws ParseException;
     
     /**
      * Throws an exception if the given segmentName is not valid.

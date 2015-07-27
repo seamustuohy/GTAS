@@ -39,7 +39,7 @@ public class PaxlstParserUSedifact extends PaxlstParser {
     
     public PaxlstParserUSedifact() { }
     
-    public void parseSegments() {
+    public void parsePayload() {
         currentGroup = GROUP.NONE;
         
         for (ListIterator<Segment> i=segments.listIterator(); i.hasNext(); ) {
