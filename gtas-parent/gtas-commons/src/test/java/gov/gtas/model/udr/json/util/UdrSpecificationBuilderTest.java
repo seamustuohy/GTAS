@@ -2,6 +2,7 @@ package gov.gtas.model.udr.json.util;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.List;
 
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
@@ -13,6 +14,7 @@ import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.util.DateCalendarUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -92,6 +94,47 @@ public class UdrSpecificationBuilderTest {
 				new String[] { "DBY" });
 	}
 
+	@Test
+	public void testOrAnd() {
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec3("jpjones", "Test OR of AND", "OR condition with two AND children");
+		assertNotNull(spec);
+		assertNotNull(spec.getDetails());
+		QueryObject topLevel = spec.getDetails();
+		assertEquals(QueryConditionEnum.OR.toString(), topLevel.getCondition());
+		assertNull(spec.getId());
+		
+		assertEquals(2, topLevel.getRules().size());
+		List<QueryEntity> rules = topLevel.getRules();
+		assertEquals(2, rules.size());
+		
+		QueryEntity entity = rules.get(0);
+		assertTrue(entity instanceof QueryObject);
+		QueryObject qobj = (QueryObject) entity;
+		rules = qobj.getRules();
+		assertEquals(2, rules.size());		
+		verifyQueryTerm(rules.get(0), EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_DOB,
+				ValueTypesEnum.DATE, OperatorCodeEnum.EQUAL,
+				new String[] {  DateCalendarUtils.formatJsonDate(new Date()) });
+		verifyQueryTerm(rules.get(1), EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				new String[] {  "Jones" });
+		
+		assertTrue(topLevel.getRules().get(1) instanceof QueryObject);
+		QueryObject qobj2 = (QueryObject)topLevel.getRules().get(1);
+		assertEquals(QueryConditionEnum.AND.toString(), qobj2.getCondition());
+		rules = qobj2.getRules();
+		assertEquals(2, rules.size());
+		verifyQueryTerm(rules.get(0), EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				ValueTypesEnum.STRING, OperatorCodeEnum.IN,
+				new String[] { "DBY", "PKY", "FLT"});
+		verifyQueryTerm(rules.get(1), EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				new String[] { "IAD" });
+	}
 	private void verifyQueryTerm(QueryEntity obj, EntityLookupEnum entity,
 			String attr, ValueTypesEnum type, OperatorCodeEnum op,
 			String[] val) {
