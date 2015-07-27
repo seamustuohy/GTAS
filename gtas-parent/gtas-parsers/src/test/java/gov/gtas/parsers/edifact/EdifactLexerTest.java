@@ -2,12 +2,12 @@ package gov.gtas.parsers.edifact;
 
 import static org.junit.Assert.*;
 
-import java.text.ParseException;
 import java.util.LinkedList;
 
 import org.junit.Test;
 
 import gov.gtas.parsers.edifact.segment.UNA;
+import gov.gtas.parsers.exception.ParseException;
 
 public class EdifactLexerTest {
     EdifactLexer lexer = new EdifactLexer();

@@ -1,7 +1,6 @@
 package gov.gtas.services;
 
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +31,7 @@ import gov.gtas.model.lookup.Country;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.segment.UNA;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
@@ -77,7 +77,7 @@ public class ApisMessageService {
             String message = new String(raw, StandardCharsets.US_ASCII);
             String payload = getApisMessagePayload(message);
             if (payload == null) {
-                throw new ParseException("Could not extract message payload. Missing BGM and/or UNT segments", -1);
+                throw new ParseException("Could not extract message payload. Missing BGM and/or UNT segments");
             }
             String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
             this.apisMessage.setHashCode(md5);
@@ -247,7 +247,7 @@ public class ApisMessageService {
         }
         
         if (rv == null) {
-            throw new ParseException("Unknown country code: " + c, -1);
+            throw new ParseException("Unknown country code: " + c);
         }
         
         return rv;
@@ -264,7 +264,7 @@ public class ApisMessageService {
         }
 
         if (rv == null) {
-            throw new ParseException("Unknown airport code: " + a, -1);
+            throw new ParseException("Unknown airport code: " + a);
         }
 
         return rv;
@@ -281,7 +281,7 @@ public class ApisMessageService {
         }
         
         if (rv == null) {
-            throw new ParseException("Unknown carrier code: " + c, -1);
+            throw new ParseException("Unknown carrier code: " + c);
         }
 
         return rv;

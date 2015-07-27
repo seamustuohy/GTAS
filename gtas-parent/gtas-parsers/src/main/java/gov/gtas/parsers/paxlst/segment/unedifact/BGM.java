@@ -1,11 +1,11 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
-import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
 
 /**
  * <p>
@@ -113,7 +113,7 @@ public class BGM extends Segment {
             case 0:
                 this.documentCode = DocumentNameCode.forCode(c.getValue());
                 if (this.documentCode == null) {
-                    throw new ParseException("BGM unknown document name code: " + c.getValue(), -1);
+                    throw new ParseException("BGM unknown document name code: " + c.getValue());
                 }
                 break;
  

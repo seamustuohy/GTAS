@@ -1,6 +1,5 @@
 package gov.gtas.parsers.edifact;
 
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,6 +8,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.edifact.segment.UNA;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.util.ParseUtils;
 
 /**
@@ -52,7 +52,7 @@ public class EdifactLexer {
         // start parsing with the UNB segment
         int unbIndex = getStartOfSegment("UNB", txt, una);
         if (unbIndex == -1) {
-            throw new ParseException("No UNB segment found", -1);
+            throw new ParseException("No UNB segment found");
         }
         txt = txt.substring(unbIndex);
         
@@ -65,7 +65,7 @@ public class EdifactLexer {
         for (String s : stringSegments) {
             Composite[] parsed = segmentParser.parseSegment(s);
             if (parsed == null) { 
-                throw new ParseException("Could not parse segment " + s, -1);
+                throw new ParseException("Could not tokenize segment " + s);
             }
             
             String segmentType = parsed[0].getValue();

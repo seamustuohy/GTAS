@@ -1,10 +1,9 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
-import java.text.ParseException;
-
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
 
 public class LOC extends Segment {
     public enum LocCode {
@@ -85,7 +84,7 @@ public class LOC extends Segment {
                     this.functionCode = LocCode.PLACE_OF_DOCUMENT_ISSUE;
                     break;
                 default:
-                    throw new ParseException("LOC: invalid party function code: " + c.getValue(), -1);                    
+                    throw new ParseException("LOC: invalid party function code: " + c.getValue());                    
                 }
                 break;
 

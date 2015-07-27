@@ -1,16 +1,13 @@
 package gov.gtas.parsers.paxlst;
 
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.BGM;
 import gov.gtas.parsers.paxlst.segment.unedifact.COM;
@@ -36,27 +33,17 @@ import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
-public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
-    private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUNedifact.class);
-    
+public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {   
     private static final String[] SEGMENT_NAMES = new String[] { "ATT", "AUT", "BGM", "CNT", "COM", "CPI", "CTA", "DOC",
             "DTM", "EMP", "FTX", "GEI", "GID", "LOC", "MEA", "NAD", "NAT", "QTY", "RFF", "TDT", "UNH", "UNT" };
-    public static final Set<String> UN_EDIFACT_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
+    public static final Set<String> UN_EDIFACT_PAXLST_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
 
     public PaxlstParserUNedifact() {
         this.parsedMessage = new ApisMessageVo();
     }
 
-    protected void validateSegmentName(String segmentName) throws ParseException {
-        boolean valid = UN_EDIFACT_SEGMENT_INDEX.contains(segmentName) 
-                || EdifactLexer.EDIFACT_SEGMENT_INDEX.contains(segmentName);
-        if (!valid) {
-            throw new ParseException("Invalid segment: " + segmentName, -1);
-        }
-    }
-    
     @Override
-    public void parsePayload() throws ParseException {
+    protected void parsePayload() throws ParseException {
         BGM bgm = getMandatorySegment(BGM.class);
         parsedMessage.setMessageCode(bgm.getCode());
 
@@ -97,6 +84,15 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
         }       
     }
 
+    @Override
+    protected void validateSegmentName(String segmentName) throws ParseException {
+        boolean valid = UN_EDIFACT_PAXLST_SEGMENT_INDEX.contains(segmentName)
+                || EdifactLexer.EDIFACT_SEGMENT_INDEX.contains(segmentName);
+        if (!valid) {
+            throw new ParseException("Invalid segment: " + segmentName);
+        }
+    }
+    
     /**
      * Segment group 1: reporting party
      */
@@ -170,7 +166,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
                     loc92Seen = false;
                 } else {
                     throw new ParseException("LOC+" + LocCode.FINAL_DESTINATION + " found but no corresponding LOC+"
-                            + LocCode.BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT, -1);
+                            + LocCode.BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT);
                 }
                 break;
             }

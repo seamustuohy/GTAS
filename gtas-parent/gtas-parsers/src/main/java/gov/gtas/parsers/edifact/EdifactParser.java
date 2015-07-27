@@ -1,12 +1,12 @@
 package gov.gtas.parsers.edifact;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.ListIterator;
 
 import gov.gtas.parsers.edifact.segment.UNB;
 import gov.gtas.parsers.edifact.segment.UNG;
 import gov.gtas.parsers.edifact.segment.UNH;
+import gov.gtas.parsers.exception.ParseException;
 
 /**
  * The parser takes the output from the Edifact lexer and starts the process of
@@ -84,7 +84,7 @@ public abstract class EdifactParser <T extends MessageVo> {
             return segmentFactory.build(s, clazz);
         }
 
-        throw new ParseException("No segments left! ", -1);
+        throw new ParseException("No segments left! ");
     }
     
     protected <S extends Segment> S getConditionalSegment(Class<?> clazz, String segmentName) throws ParseException {
