@@ -37,9 +37,6 @@ public class Flight extends BaseEntityAudit {
     )    
     private Set<Traveler> passengers = new HashSet<>();
 
-    @Column(name = "id", updatable = false, insertable = false)
-    private Integer flightId;
-
     @ManyToOne
     @JoinColumn(referencedColumnName="id")     
     private Carrier carrier;
@@ -79,13 +76,6 @@ public class Flight extends BaseEntityAudit {
         targetEntity = ApisMessage.class
     )    
     private Set<ApisMessage> messages = new HashSet<>();
-    
-    public Integer getFlightId() {
-		return flightId;
-	}
-	public void setFlightId(Integer flightId) {
-		this.flightId = flightId;
-	}
     
     public Set<Traveler> getPassengers() {
         return passengers;
