@@ -199,6 +199,7 @@ public class UdrServiceImpl implements UdrService {
 	 * )
 	 */
 	@Override
+	@Transactional
 	public JsonServiceResponse updateUdr(String userId,
 			UdrSpecification udrToUpdate) {
 		if (udrToUpdate == null) {

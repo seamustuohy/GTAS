@@ -8,9 +8,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.gtas.parsers.edifact.EdifactParser;
+import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.paxlst.SegmentFactory;
+import gov.gtas.parsers.edifact.SegmentFactory;
 import gov.gtas.parsers.pnrgov.segment.MSG;
 import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
 import gov.gtas.parsers.util.FileUtils;
@@ -54,8 +54,8 @@ public class PnrGovParser {
         txt = txt.toUpperCase();
         txt = txt.replaceAll("\\n|\\r", "");
         SegmentFactory factory = new SegmentFactory();
-        EdifactParser p = new EdifactParser();
-        LinkedList<Segment> edifactSegments = p.parse(txt);
+        EdifactLexer p = new EdifactLexer();
+        LinkedList<Segment> edifactSegments = p.tokenize(txt);
         for (Segment s: edifactSegments) {
         	System.out.println("SEGMENT >>> "+s.toString());
 //            Segment paxlstSegment = factory.build(s);

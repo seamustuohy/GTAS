@@ -1,101 +1,109 @@
 package gov.gtas.parsers.edifact;
 
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.List;
+import java.util.ListIterator;
 
-import org.apache.commons.lang3.StringUtils;
-
-import gov.gtas.parsers.edifact.segment.UNA;
-import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.edifact.segment.UNB;
+import gov.gtas.parsers.edifact.segment.UNG;
+import gov.gtas.parsers.edifact.segment.UNH;
 
 /**
- * The class takes as input any Edifact file
- * (https://en.wikipedia.org/wiki/EDIFACT) and parses the file into a series of
- * 'Segments'. Segments have three-letter names, such as UNA, UNB, NAD, etc.
- * Each segment is further broken down into an array of composites, and each
- * composite has an array of elements.
+ * The parser takes the output from the Edifact lexer and starts the process of
+ * parsing the individual segments and extracting data. This class implements
+ * the template pattern so subclasses can implement specific rules for parsing a
+ * particular message payload. The generic Edifact segments -- UNB, UNH, etc. --
+ * are parsed in this class.
  * 
- * This parser is very simple -- performing only basic string manipulations and
- * splits based on the delimiters contained in the UNA segment. It does not
- * check for edifact message structure; e.g., for example it will not check if a
- * UNH segment has a corresponding UNT segment at the end. The only purpose is
- * to parse the input text into segments and return them.
+ * @param <T>
+ *            the specific message class that will be returned after parsing.
  */
-public class EdifactParser {
-    private static final String[] SEGMENT_NAMES = { "UNA", "UNB", "UNG", "UNH", "UNT", "UNE", "UNZ" };
-    public static final Set<String> EDIFACT_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
+public abstract class EdifactParser <T extends MessageVo> {
+    /** factory for creating segment classes */
+    protected SegmentFactory segmentFactory;
+
+    /** output from the edifact parser */ 
+    protected List<Segment> segments;
     
-    public static UNA getUnaSegment(String txt) {
-        String regex = String.format("UNA.{%d}UNB", UNA.NUM_UNA_CHARS);
-        int unaIndex = ParseUtils.indexOfRegex(regex, txt);
-        if (unaIndex != -1) {
-            int endIndex = unaIndex + "UNA".length() + UNA.NUM_UNA_CHARS;
-            String delims = txt.substring(unaIndex, endIndex);
-            return new UNA(delims);
-        }   
+    /** iterator for segment list */
+    private ListIterator<Segment> iter;
+
+    /** the final parsed message we ultimately return */
+    protected T parsedMessage;
+
+    private EdifactLexer lexer = new EdifactLexer();
+
+    public EdifactParser() { }
+
+    public T parse(String message) throws ParseException {
+        this.segmentFactory = new SegmentFactory();
+        this.segments = lexer.tokenize(message);
+        iter = segments.listIterator();
+
+        parseHeader();
+        parsePayload();
+        parseTrailer();
         
-        return new UNA();
+        return this.parsedMessage;
+    }
+
+    private void parseHeader() throws ParseException {
+        UNB unb = getMandatorySegment(UNB.class);
+        parsedMessage.setTransmissionSource(unb.getSenderIdentification());
+        parsedMessage.setTransmissionDate(unb.getDateAndTimeOfPreparation());
+
+        getConditionalSegment(UNG.class);
+
+        UNH unh = getMandatorySegment(UNH.class);
+        parsedMessage.setMessageType(unh.getMessageType());
+        parsedMessage.setVersion(unh.getMessageTypeVersion());
+    }
+
+    private void parseTrailer() throws ParseException {
+        // TBD
     }
     
     /**
-     * @return the starting index of the 'segmentName' in 'txt'.
+     * Subclasses implement this method to parse the message payload/body
+     * that's specific to the message type.
+     * @throws ParseException
      */
-    public static int getStartOfSegment(String segmentName, String txt, UNA una) {
-        String regex = String.format("%s\\s*\\%c", segmentName, una.getDataElementSeparator());
-        return ParseUtils.indexOfRegex(regex, txt);
-    }
-    
-    public LinkedList<Segment> parse(String txt) throws ParseException {
-        if (StringUtils.isEmpty(txt)) return null;
-        txt = preprocessMessage(txt);
-        
-        UNA una = getUnaSegment(txt);
-        SegmentParser segmentParser = new SegmentParser(una);
-
-        // start parsing with the UNB segment
-        int unbIndex = getStartOfSegment("UNB", txt, una);
-        if (unbIndex == -1) {
-            throw new ParseException("No UNB segment found", -1);
-        }
-        txt = txt.substring(unbIndex);
-        
-        LinkedList<Segment> segments = new LinkedList<>();
-        
-        String[] stringSegments = ParseUtils.splitWithEscapeChar(txt, 
-                una.getSegmentTerminator(), 
-                una.getReleaseCharacter());
-
-        for (String s : stringSegments) {
-            Composite[] parsed = segmentParser.parseSegment(s);
-            if (parsed == null) { 
-                throw new ParseException("Could not parse segment " + s, -1);
-            }
-            
-            String segmentType = parsed[0].getValue();
-            Composite[] composites = null;
-            if (parsed.length > 1) {
-                composites = Arrays.copyOfRange(parsed, 1, parsed.length);
-            }
-            Segment newSegment = new Segment(segmentType, composites);
-            segments.add(newSegment);
-        }
-        
-        return segments;
-    }
+    protected abstract void parsePayload() throws ParseException;
     
     /**
-     * Strip any extraneous header or trailer info, make sure the file is
-     * upper case text only.
-     * 
-     * Messages must be transmitted as a continuous bit stream. "Lines" have no
-     * meaning; there is no such thing as a "maximum" or "minimum" segment
-     * length, other than that specified in the segment definitions.
+     * Throws an exception if the given segmentName is not valid.
+     * @param segmentName
+     * @throws ParseException
      */
-    private String preprocessMessage(String message) {
-        String txt = ParseUtils.stripStxEtxHeaderAndFooter(message);
-        return ParseUtils.convertToSingleLine(txt).toUpperCase();
+    protected abstract void validateSegmentName(String segmentName) throws ParseException;
+    
+    protected <S extends Segment> S getMandatorySegment(Class<?> clazz) throws ParseException {
+        if (iter.hasNext()) {
+            Segment s = iter.next();
+            validateSegmentName(s.getName());
+            return segmentFactory.build(s, clazz);
+        }
+
+        throw new ParseException("No segments left! ", -1);
+    }
+    
+    protected <S extends Segment> S getConditionalSegment(Class<?> clazz, String segmentName) throws ParseException {
+        if (iter.hasNext()) {
+            Segment s = iter.next();
+            validateSegmentName(s.getName());
+            String myName = (segmentName != null) ? segmentName : clazz.getSimpleName();
+            if (s.getName().equals(myName)) {
+                return segmentFactory.build(s, clazz);
+            } else {
+                iter.previous();
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    protected <S extends Segment> S getConditionalSegment(Class<?> clazz) throws ParseException {
+        return getConditionalSegment(clazz, null);
     }
 }

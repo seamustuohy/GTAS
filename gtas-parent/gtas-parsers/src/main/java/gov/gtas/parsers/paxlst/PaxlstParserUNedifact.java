@@ -9,8 +9,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
-import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.BGM;
 import gov.gtas.parsers.paxlst.segment.unedifact.COM;
@@ -36,7 +36,7 @@ import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
-public final class PaxlstParserUNedifact extends PaxlstParser {
+public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUNedifact.class);
     
     private static final String[] SEGMENT_NAMES = new String[] { "ATT", "AUT", "BGM", "CNT", "COM", "CPI", "CTA", "DOC",
@@ -49,7 +49,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
 
     protected void validateSegmentName(String segmentName) throws ParseException {
         boolean valid = UN_EDIFACT_SEGMENT_INDEX.contains(segmentName) 
-                || EdifactParser.EDIFACT_SEGMENT_INDEX.contains(segmentName);
+                || EdifactLexer.EDIFACT_SEGMENT_INDEX.contains(segmentName);
         if (!valid) {
             throw new ParseException("Invalid segment: " + segmentName, -1);
         }
@@ -57,44 +57,43 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     
     @Override
     public void parsePayload() throws ParseException {
-        Segment s = null;
-        BGM bgm = (BGM) getMandatorySegment(BGM.class);
+        BGM bgm = getMandatorySegment(BGM.class);
         parsedMessage.setMessageCode(bgm.getCode());
 
-        s = getConditionalSegment(RFF.class);
+        getConditionalSegment(RFF.class);
 
         for (;;) {
-            s = getConditionalSegment(DTM.class);
-            if (s == null) {
+            DTM dtm = getConditionalSegment(DTM.class);
+            if (dtm == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(NAD.class);
-            if (s == null) {
+            NAD nad = getConditionalSegment(NAD.class);
+            if (nad == null) {
                 break;
             }
-            processReportingParty((NAD) s);
+            processReportingParty(nad);
         }
 
         // at least one TDT is mandatory
-        TDT tdt = (TDT) getMandatorySegment(TDT.class);
+        TDT tdt = getMandatorySegment(TDT.class);
         processFlight(tdt);
         for (;;) {
-            s = getConditionalSegment(TDT.class);
-            if (s == null) {
+            tdt = getConditionalSegment(TDT.class);
+            if (tdt == null) {
                 break;
             }
-            processFlight((TDT) s);
+            processFlight(tdt);
         }
         
         for (;;) {
-            s = getConditionalSegment(NAD.class);
-            if (s == null) {
+            NAD nad = getConditionalSegment(NAD.class);
+            if (nad == null) {
                 break;
             }
-            processPax((NAD) s);
+            processPax(nad);
         }       
     }
 
@@ -110,14 +109,13 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
         rp.setPartyName(partyName);
 
-        Segment nextSeg = getConditionalSegment(CTA.class);
+        getConditionalSegment(CTA.class);
 
         for (;;) {
-            nextSeg = getConditionalSegment(COM.class);
-            if (nextSeg == null) {
+            COM com = getConditionalSegment(COM.class);
+            if (com == null) {
                 break;
             }
-            COM com = (COM) nextSeg;
             rp.setTelephone(com.getPhoneNumber());
             rp.setFax(com.getFaxNumber());
         }
@@ -134,20 +132,19 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         boolean loc92Seen = false;
 
         for (;;) {
-            Segment s = getConditionalSegment(DTM.class);
-            if (s == null) {
+            DTM dtm = getConditionalSegment(DTM.class);
+            if (dtm == null) {
                 break;
             }
         }       
         
         // Segment group 3: loc-dtm loop
         for (;;) {
-            Segment s = getConditionalSegment(LOC.class);
-            if (s == null) {
+            LOC loc = getConditionalSegment(LOC.class);
+            if (loc == null) {
                 break;
             }
 
-            LOC loc = (LOC) s;
             LocCode locCode = loc.getFunctionCode();
             String airport = loc.getLocationNameCode();
 
@@ -179,9 +176,8 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             }
 
             // get corresponding DTM, if it exists
-            Segment nextSeg = getConditionalSegment(DTM.class);
-            if (nextSeg != null) {
-                DTM dtm = (DTM) nextSeg;
+            DTM dtm = getConditionalSegment(DTM.class);
+            if (dtm != null) {
                 Date d = dtm.getDtmValue();
                 DtmCode dtmCode = dtm.getDtmCode();
                 if (dtmCode == DtmCode.DEPARTURE) {
@@ -239,14 +235,11 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
         p.setPaxType(paxType);
 
-        Segment s = null;
-
         for (;;) {
-            s = getConditionalSegment(ATT.class);
-            if (s == null) {
+            ATT att = getConditionalSegment(ATT.class);
+            if (att == null) {
                 break;
             }
-            ATT att = (ATT) s;
             switch (att.getFunctionCode()) {
             case GENDER:
                 p.setGender(att.getAttributeDescriptionCode());
@@ -255,11 +248,10 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
 
         for (;;) {
-            s = getConditionalSegment(DTM.class);
-            if (s == null) {
+            DTM dtm = getConditionalSegment(DTM.class);
+            if (dtm == null) {
                 break;
             }
-            DTM dtm = (DTM) s;
             DtmCode dtmCode = dtm.getDtmCode();
             if (dtmCode == DtmCode.DATE_OF_BIRTH) {
                 p.setDob(dtm.getDtmValue());
@@ -267,33 +259,32 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
 
         for (;;) {
-            s = getConditionalSegment(MEA.class);
-            if (s == null) {
+            MEA mea = getConditionalSegment(MEA.class);
+            if (mea == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(GEI.class);
-            if (s == null) {
+            GEI gei = getConditionalSegment(GEI.class);
+            if (gei == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(FTX.class);
-            if (s == null) {
+            FTX ftx = getConditionalSegment(FTX.class);
+            if (ftx == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(LOC.class);
-            if (s == null) {
+            LOC loc = getConditionalSegment(LOC.class);
+            if (loc == null) {
                 break;
             }
 
-            LOC loc = (LOC) s;
             String val = loc.getLocationNameCode();
             switch (loc.getFunctionCode()) {
             case PORT_OF_DEBARKATION:
@@ -314,37 +305,36 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             }
         }
 
-        s = getConditionalSegment(COM.class);
+        getConditionalSegment(COM.class);
         
         for (;;) {
-            s = getConditionalSegment(EMP.class);
-            if (s == null) {
+            EMP emp = getConditionalSegment(EMP.class);
+            if (emp == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(NAT.class);
-            if (s == null) {
+            NAT nat = getConditionalSegment(NAT.class);
+            if (nat == null) {
                 break;
             }
-            NAT nat = (NAT)s;
             p.setCitizenshipCountry(nat.getNationalityCode());
         }
 
         for (;;) {
-            s = getConditionalSegment(RFF.class);
-            if (s == null) {
+            RFF rff = getConditionalSegment(RFF.class);
+            if (rff == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(DOC.class);
-            if (s == null) {
+            DOC doc = getConditionalSegment(DOC.class);
+            if (doc == null) {
                 break;
             }
-            processDocument(p, (DOC) s);
+            processDocument(p, doc);
         }
         
         // TODO: implement segment group 6
@@ -360,13 +350,11 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         d.setDocumentType(doc.getDocCode());
         d.setDocumentNumber(doc.getDocumentIdentifier());
         
-        Segment s = null;
         for (;;) {
-            s = getConditionalSegment(DTM.class);
-            if (s == null) {
+            DTM dtm = getConditionalSegment(DTM.class);
+            if (dtm == null) {
                 break;
             }
-            DTM dtm = (DTM) s;
             DtmCode dtmCode = dtm.getDtmCode();
             if (dtmCode == DtmCode.PASSPORT_EXPIRATION_DATE) {
                 d.setExpirationDate(dtm.getDtmValue());
@@ -374,25 +362,24 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
         
         for (;;) {
-            s = getConditionalSegment(GEI.class);
-            if (s == null) {
+            GEI gei = getConditionalSegment(GEI.class);
+            if (gei == null) {
                 break;
             }
         }        
 
         for (;;) {
-            s = getConditionalSegment(RFF.class);
-            if (s == null) {
+            RFF rff = getConditionalSegment(RFF.class);
+            if (rff == null) {
                 break;
             }
         }        
 
         for (;;) {
-            s = getConditionalSegment(LOC.class);
-            if (s == null) {
+            LOC loc = getConditionalSegment(LOC.class);
+            if (loc == null) {
                 break;
             }
-            LOC loc = (LOC) s;
             LocCode locCode = loc.getFunctionCode();
             if (locCode == LocCode.PLACE_OF_DOCUMENT_ISSUE) {
                 d.setIssuanceCountry(loc.getLocationNameCode());
@@ -406,14 +393,11 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             }
         }
         
-        s = getConditionalSegment(CPI.class);
-        if (s != null) {
-            
-        }
+        getConditionalSegment(CPI.class);
 
         for (;;) {
-            s = getConditionalSegment(QTY.class);
-            if (s == null) {
+            QTY qty = getConditionalSegment(QTY.class);
+            if (qty == null) {
                 break;
             }
         }   

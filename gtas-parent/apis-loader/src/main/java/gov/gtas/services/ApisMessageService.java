@@ -29,9 +29,9 @@ import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
+import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.segment.UNA;
-import gov.gtas.parsers.paxlst.PaxlstParser;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
@@ -82,11 +82,11 @@ public class ApisMessageService {
             String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
             this.apisMessage.setHashCode(md5);
             
-            PaxlstParser parser = null;
+            EdifactParser<ApisMessageVo> parser = null;
             if (isUSEdifactFile(message)) {
                 parser = new PaxlstParserUSedifact();
             } else {
-                parser= new PaxlstParserUNedifact();
+                parser = new PaxlstParserUNedifact();                
             }
     
             vo = parser.parse(message);
@@ -294,13 +294,13 @@ public class ApisMessageService {
     private String getApisMessagePayload(String text) {
         if (text == null) return null;
         
-        UNA una = EdifactParser.getUnaSegment(text);
-        int bgmIndex = EdifactParser.getStartOfSegment("BGM", text, una);
+        UNA una = EdifactLexer.getUnaSegment(text);
+        int bgmIndex = EdifactLexer.getStartOfSegment("BGM", text, una);
         if (bgmIndex == -1) {
             return null;
         }
 
-        int untIndex = EdifactParser.getStartOfSegment("UNT", text, una);
+        int untIndex = EdifactLexer.getStartOfSegment("UNT", text, una);
         if (untIndex == -1) {
             return null;
         }
