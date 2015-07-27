@@ -15,10 +15,13 @@ public abstract class PaxlstParser {
 
     /** output from the edifact parser */ 
     protected List<Segment> segments;
+    
+    /** iterator for segment list */
+    private ListIterator<Segment> iter;
 
     /** the final parsed message we ultimately return */
     protected ApisMessageVo parsedMessage;
-
+    
     public PaxlstParser() { }
 
     public ApisMessageVo parse(String message) throws ParseException {
@@ -28,6 +31,8 @@ public abstract class PaxlstParser {
         
         EdifactParser p = new EdifactParser();
         segments = p.parse(message);
+        iter = segments.listIterator();
+
         parseSegments();
         
         return this.parsedMessage;
@@ -46,9 +51,9 @@ public abstract class PaxlstParser {
      */
     protected abstract void validateSegmentName(String segmentName) throws ParseException;
     
-    protected Segment getMandatorySegment(ListIterator<Segment> i, Class<?> clazz) throws ParseException {
-        if (i.hasNext()) {
-            Segment s = i.next();
+    protected Segment getMandatorySegment(Class<?> clazz) throws ParseException {
+        if (iter.hasNext()) {
+            Segment s = iter.next();
             validateSegmentName(s.getName());
             return segmentFactory.build(s, clazz);
         }
@@ -56,15 +61,15 @@ public abstract class PaxlstParser {
         throw new ParseException("No segments left! ", -1);
     }
     
-    protected Segment getConditionalSegment(ListIterator<Segment> i, Class<?> clazz, String segmentName) throws ParseException {
-        if (i.hasNext()) {
-            Segment s = i.next();
+    protected Segment getConditionalSegment(Class<?> clazz, String segmentName) throws ParseException {
+        if (iter.hasNext()) {
+            Segment s = iter.next();
             validateSegmentName(s.getName());
             String myName = (segmentName != null) ? segmentName : clazz.getSimpleName();
             if (s.getName().equals(myName)) {
                 return segmentFactory.build(s, clazz);
             } else {
-                i.previous();
+                iter.previous();
                 return null;
             }
         }
@@ -72,7 +77,7 @@ public abstract class PaxlstParser {
         return null;
     }
 
-    protected Segment getConditionalSegment(ListIterator<Segment> i, Class<?> clazz) throws ParseException {
-        return getConditionalSegment(i, clazz, null);
+    protected Segment getConditionalSegment(Class<?> clazz) throws ParseException {
+        return getConditionalSegment(clazz, null);
     }
 }

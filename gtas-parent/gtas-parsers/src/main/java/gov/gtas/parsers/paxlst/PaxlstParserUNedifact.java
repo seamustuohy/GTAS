@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.ListIterator;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -59,61 +58,60 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     
     @Override
     public void parseSegments() throws ParseException {
-        ListIterator<Segment> i = segments.listIterator();
-        UNB unb = (UNB) getMandatorySegment(i, UNB.class);
+        UNB unb = (UNB) getMandatorySegment(UNB.class);
         parsedMessage.setTransmissionSource(unb.getSenderIdentification());
         parsedMessage.setTransmissionDate(unb.getDateAndTimeOfPreparation());
 
-        Segment s = getConditionalSegment(i, UNG.class);
+        Segment s = getConditionalSegment(UNG.class);
 
-        UNH unh = (UNH) getMandatorySegment(i, UNH.class);
+        UNH unh = (UNH) getMandatorySegment(UNH.class);
         parsedMessage.setMessageType(unh.getMessageType());
         parsedMessage.setVersion(unh.getMessageTypeVersion());
 
-        BGM bgm = (BGM) getMandatorySegment(i, BGM.class);
+        BGM bgm = (BGM) getMandatorySegment(BGM.class);
         parsedMessage.setMessageCode(bgm.getCode());
 
-        s = getConditionalSegment(i, RFF.class);
+        s = getConditionalSegment(RFF.class);
 
         for (;;) {
-            s = getConditionalSegment(i, DTM.class);
+            s = getConditionalSegment(DTM.class);
             if (s == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(i, NAD.class);
+            s = getConditionalSegment(NAD.class);
             if (s == null) {
                 break;
             }
-            processReportingParty((NAD) s, i);
+            processReportingParty((NAD) s);
         }
 
         // at least one TDT is mandatory
-        TDT tdt = (TDT) getMandatorySegment(i, TDT.class);
-        processFlight(tdt, i);
+        TDT tdt = (TDT) getMandatorySegment(TDT.class);
+        processFlight(tdt);
         for (;;) {
-            s = getConditionalSegment(i, TDT.class);
+            s = getConditionalSegment(TDT.class);
             if (s == null) {
                 break;
             }
-            processFlight((TDT) s, i);
+            processFlight((TDT) s);
         }
         
         for (;;) {
-            s = getConditionalSegment(i, NAD.class);
+            s = getConditionalSegment(NAD.class);
             if (s == null) {
                 break;
             }
-            processPax((NAD) s, i);
+            processPax((NAD) s);
         }       
     }
 
     /**
      * Segment group 1: reporting party
      */
-    private void processReportingParty(NAD nad, ListIterator<Segment> i) throws ParseException {
+    private void processReportingParty(NAD nad) throws ParseException {
         ReportingPartyVo rp = new ReportingPartyVo();
         parsedMessage.addReportingParty(rp);
         String partyName = nad.getProfileName();
@@ -122,10 +120,10 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
         rp.setPartyName(partyName);
 
-        Segment nextSeg = getConditionalSegment(i, CTA.class);
+        Segment nextSeg = getConditionalSegment(CTA.class);
 
         for (;;) {
-            nextSeg = getConditionalSegment(i, COM.class);
+            nextSeg = getConditionalSegment(COM.class);
             if (nextSeg == null) {
                 break;
             }
@@ -138,7 +136,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     /**
      * Segment group 2: flight details
      */
-    private void processFlight(TDT tdt, ListIterator<Segment> i) throws ParseException {
+    private void processFlight(TDT tdt) throws ParseException {
         String dest = null;
         String origin = null;
         Date eta = null;
@@ -146,7 +144,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         boolean loc92Seen = false;
 
         for (;;) {
-            Segment s = getConditionalSegment(i, DTM.class);
+            Segment s = getConditionalSegment(DTM.class);
             if (s == null) {
                 break;
             }
@@ -154,7 +152,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         
         // Segment group 3: loc-dtm loop
         for (;;) {
-            Segment s = getConditionalSegment(i, LOC.class);
+            Segment s = getConditionalSegment(LOC.class);
             if (s == null) {
                 break;
             }
@@ -191,7 +189,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             }
 
             // get corresponding DTM, if it exists
-            Segment nextSeg = getConditionalSegment(i, DTM.class);
+            Segment nextSeg = getConditionalSegment(DTM.class);
             if (nextSeg != null) {
                 DTM dtm = (DTM) nextSeg;
                 Date d = dtm.getDtmValue();
@@ -225,7 +223,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     /**
      * Segment group 4: passenger details
      */
-    private void processPax(NAD nad, ListIterator<Segment> i) throws ParseException {
+    private void processPax(NAD nad) throws ParseException {
         PaxVo p = new PaxVo();
         parsedMessage.addPax(p);
 
@@ -254,7 +252,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         Segment s = null;
 
         for (;;) {
-            s = getConditionalSegment(i, ATT.class);
+            s = getConditionalSegment(ATT.class);
             if (s == null) {
                 break;
             }
@@ -267,7 +265,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
 
         for (;;) {
-            s = getConditionalSegment(i, DTM.class);
+            s = getConditionalSegment(DTM.class);
             if (s == null) {
                 break;
             }
@@ -279,28 +277,28 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
 
         for (;;) {
-            s = getConditionalSegment(i, MEA.class);
+            s = getConditionalSegment(MEA.class);
             if (s == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(i, GEI.class);
+            s = getConditionalSegment(GEI.class);
             if (s == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(i, FTX.class);
+            s = getConditionalSegment(FTX.class);
             if (s == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(i, LOC.class);
+            s = getConditionalSegment(LOC.class);
             if (s == null) {
                 break;
             }
@@ -326,17 +324,17 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             }
         }
 
-        s = getConditionalSegment(i, COM.class);
+        s = getConditionalSegment(COM.class);
         
         for (;;) {
-            s = getConditionalSegment(i, EMP.class);
+            s = getConditionalSegment(EMP.class);
             if (s == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(i, NAT.class);
+            s = getConditionalSegment(NAT.class);
             if (s == null) {
                 break;
             }
@@ -345,18 +343,18 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
 
         for (;;) {
-            s = getConditionalSegment(i, RFF.class);
+            s = getConditionalSegment(RFF.class);
             if (s == null) {
                 break;
             }
         }
 
         for (;;) {
-            s = getConditionalSegment(i, DOC.class);
+            s = getConditionalSegment(DOC.class);
             if (s == null) {
                 break;
             }
-            processDocument(p, (DOC) s, i);
+            processDocument(p, (DOC) s);
         }
         
         // TODO: implement segment group 6
@@ -366,7 +364,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
     /**
      * Segment group 5: Passenger documents
      */
-    private void processDocument(PaxVo p, DOC doc, ListIterator<Segment> i) throws ParseException {
+    private void processDocument(PaxVo p, DOC doc) throws ParseException {
         DocumentVo d = new DocumentVo();
         p.addDocument(d);
         d.setDocumentType(doc.getDocCode());
@@ -374,7 +372,7 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         
         Segment s = null;
         for (;;) {
-            s = getConditionalSegment(i, DTM.class);
+            s = getConditionalSegment(DTM.class);
             if (s == null) {
                 break;
             }
@@ -386,21 +384,21 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
         }
         
         for (;;) {
-            s = getConditionalSegment(i, GEI.class);
+            s = getConditionalSegment(GEI.class);
             if (s == null) {
                 break;
             }
         }        
 
         for (;;) {
-            s = getConditionalSegment(i, RFF.class);
+            s = getConditionalSegment(RFF.class);
             if (s == null) {
                 break;
             }
         }        
 
         for (;;) {
-            s = getConditionalSegment(i, LOC.class);
+            s = getConditionalSegment(LOC.class);
             if (s == null) {
                 break;
             }
@@ -418,13 +416,13 @@ public final class PaxlstParserUNedifact extends PaxlstParser {
             }
         }
         
-        s = getConditionalSegment(i, CPI.class);
+        s = getConditionalSegment(CPI.class);
         if (s != null) {
             
         }
 
         for (;;) {
-            s = getConditionalSegment(i, QTY.class);
+            s = getConditionalSegment(QTY.class);
             if (s == null) {
                 break;
             }
