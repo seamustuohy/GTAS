@@ -1,0 +1,124 @@
+package gov.gtas.parsers.pnrgov.segment;
+
+import java.util.Date;
+
+import gov.gtas.parsers.edifact.Composite;
+import gov.gtas.parsers.edifact.Element;
+import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.util.ParseUtils;
+
+/**
+ * <p>
+ * TVL: TRAVEL PRODUCT INFORMATION (LEVEL 0)
+ * <p>
+ * Specifies flight (departure date/time, origin, destination, operating airline
+ * code, flight number, and operation suffix) for which passenger data is being
+ * sent.
+ *
+ * <p>
+ * Dates and times in the TVL are in Local Time Departure and arrival points of
+ * the transborder segment for a given country are the ones of the leg which
+ * makes the segment eligible for push to a given country
+ * 
+ * <p>
+ * Examples
+ * 
+ * <p>
+ * The passenger information being sent is for Delta flight 10 from ATL to LGW
+ * on 30MAR which departs at 5:00 pm.(TVL+300310:1700+ATL+DFW+DL+10’)
+ * 
+ * <p>
+ * The passenger information being sent is for Delta flight 9375 from ATL to AMS
+ * on 24 FEB which departs at 9:35 pm.(TVL+240210:2135+ATL+AMS+DL+9375’)
+ */
+public class TVL_L0 extends Segment {
+    private Date etd;
+    private Date eta;
+    private String origin;
+    private String destination;
+    private String carrier;
+    private String flightNumber;
+
+    public TVL_L0(Composite[] composites) throws ParseException {
+        super("TVL", composites);
+        for (int i = 0; i < this.composites.length; i++) {
+            Composite c = this.composites[i];
+            Element[] e = c.getElements();
+
+            switch (i) {
+            case 0:
+                String departureDt = null;
+                String arrivalDt = null;
+                if (e.length >= 1) {
+                    departureDt = e[0].getValue();
+                    if (e.length >= 2) {
+                        departureDt += e[1].getValue();
+                    }
+                }
+                if (e.length >= 3) {
+                    arrivalDt = e[2].getValue();
+                    if (e.length >= 4) {
+                        arrivalDt += e[3].getValue();
+                    }
+                }
+
+                etd = parseDateTime(departureDt);
+                if (eta != null) {
+                    eta = parseDateTime(arrivalDt);
+                }
+                break;
+
+            case 1:
+                origin = c.getValue();
+                break;
+            case 2:
+                destination = c.getValue();
+                break;
+            case 3:
+                carrier = c.getValue();
+                break;
+            case 4:
+                flightNumber = c.getValue();
+                break;
+            }
+        }
+    }
+
+    private Date parseDateTime(String dt) throws ParseException {
+        final String DATE_ONLY_FORMAT = "ddMMyy";
+        final String DATE_TIME_FORMAT = "ddMMyyhhmm";
+
+        if (dt.length() == DATE_ONLY_FORMAT.length()) {
+            return ParseUtils.parseDateTime(dt, DATE_ONLY_FORMAT);
+        } else if (dt.length() == DATE_TIME_FORMAT.length()) {
+            return ParseUtils.parseDateTime(dt, DATE_TIME_FORMAT);
+        }
+
+        return null;
+    }
+
+    public Date getEtd() {
+        return etd;
+    }
+
+    public Date getEta() {
+        return eta;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getCarrier() {
+        return carrier;
+    }
+
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+}
