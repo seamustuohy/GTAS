@@ -20,49 +20,7 @@ public class TKT extends Segment{
 	private String dataIndicator;
 	private String documentNumberEMD;
 	
-	public TKT(String name, Composite[] composites) {
-		super(name, composites);
-		// TODO Auto-generated constructor stub
+	public TKT(Composite[] composites) {
+		super(TKT.class.getSimpleName(), composites);
 	}
-
-	public String getTicketNumber() {
-		return ticketNumber;
-	}
-
-	public void setTicketNumber(String ticketNumber) {
-		this.ticketNumber = ticketNumber;
-	}
-
-	public String getTicketType() {
-		return ticketType;
-	}
-
-	public void setTicketType(String ticketType) {
-		this.ticketType = ticketType;
-	}
-
-	public String getNumberOfBooklets() {
-		return numberOfBooklets;
-	}
-
-	public void setNumberOfBooklets(String numberOfBooklets) {
-		this.numberOfBooklets = numberOfBooklets;
-	}
-
-	public String getDataIndicator() {
-		return dataIndicator;
-	}
-
-	public void setDataIndicator(String dataIndicator) {
-		this.dataIndicator = dataIndicator;
-	}
-
-	public String getDocumentNumberEMD() {
-		return documentNumberEMD;
-	}
-
-	public void setDocumentNumberEMD(String documentNumberEMD) {
-		this.documentNumberEMD = documentNumberEMD;
-	}
-
 }

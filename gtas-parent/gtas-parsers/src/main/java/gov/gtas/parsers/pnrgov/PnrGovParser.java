@@ -8,18 +8,27 @@ import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.segment.ADD;
+import gov.gtas.parsers.pnrgov.segment.DAT;
 import gov.gtas.parsers.pnrgov.segment.DAT_G1;
 import gov.gtas.parsers.pnrgov.segment.EBD;
 import gov.gtas.parsers.pnrgov.segment.EQN_L0;
+import gov.gtas.parsers.pnrgov.segment.FAR;
+import gov.gtas.parsers.pnrgov.segment.FTI;
 import gov.gtas.parsers.pnrgov.segment.IFT;
+import gov.gtas.parsers.pnrgov.segment.MON;
 import gov.gtas.parsers.pnrgov.segment.MSG;
 import gov.gtas.parsers.pnrgov.segment.ORG_G1;
 import gov.gtas.parsers.pnrgov.segment.ORG_L0;
+import gov.gtas.parsers.pnrgov.segment.PTK;
 import gov.gtas.parsers.pnrgov.segment.RCI;
+import gov.gtas.parsers.pnrgov.segment.REF;
 import gov.gtas.parsers.pnrgov.segment.SRC;
+import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.SSR_G1;
 import gov.gtas.parsers.pnrgov.segment.TIF;
+import gov.gtas.parsers.pnrgov.segment.TKT;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
+import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
 
 public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
@@ -119,5 +128,71 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
 
     public void processGroup2(TIF tif) throws ParseException {
         System.out.println(tif);
+        
+        FTI fti = getConditionalSegment(FTI.class);
+
+        for (;;) {
+            IFT ift = getConditionalSegment(IFT.class);
+            if (ift == null) {
+                break;
+            }
+            System.out.println(ift);
+        }
+
+        REF ref = getConditionalSegment(REF.class);
+        EBD ebd = getConditionalSegment(EBD.class);
+        for (;;) {
+            FAR far = getConditionalSegment(FAR.class);
+            if (far == null) {
+                break;
+            }
+            System.out.println(far);
+        }
+
+        for (;;) {
+            SSR ssr = getConditionalSegment(SSR.class);
+            if (ssr == null) {
+                break;
+            }
+            System.out.println(ssr);
+        }
+
+        for (;;) {
+            ADD add = getConditionalSegment(ADD.class);
+            if (add == null) {
+                break;
+            }
+            System.out.println(add);
+        }
+
+        for (;;) {
+            TKT tkt = getConditionalSegment(TKT.class);
+            if (tkt == null) {
+                break;
+            }
+            processGroup3(tkt);
+        }
+    }
+    
+    public void processGroup3(TKT tkt) throws ParseException {
+        System.out.println(tkt);
+        MON mon = getConditionalSegment(MON.class);
+        System.out.println(mon);
+
+        PTK ptk = getConditionalSegment(PTK.class);
+        System.out.println(ptk);
+
+        for (;;) {
+            TXD txd = getConditionalSegment(TXD.class);
+            if (txd == null) {
+                break;
+            }
+            System.out.println(txd);
+        }
+
+        DAT dat = getConditionalSegment(DAT.class);
+        System.out.println(dat);
+
+        // process group 4
     }
 }

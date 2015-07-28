@@ -4,9 +4,10 @@ import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
- * Class SSR holds Special Requirements Details
- * SSR’s in GR.1 apply to all flights and may apply to all passengers or may apply to specific 
- *   passenger based on the traveler reference number in SSR/9944 and TIF/9944.
+ * <p>
+ * SSR: SPECIAL REQUIREMENTS DETAILS
+ * <p>To specify special requests or services information relating to a traveler.
+ * SSR’s in GR.2 apply to the specific passenger.
  */
 public class SSR_G2 extends Segment {
 
