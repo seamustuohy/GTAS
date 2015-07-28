@@ -12,7 +12,9 @@ import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.error.GtasJsonError;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
+import gov.gtas.rule.RuleServiceResult;
 import gov.gtas.svc.RuleManagementService;
+import gov.gtas.svc.TargetingService;
 import gov.gtas.svc.UdrService;
 import gov.gtas.util.DateCalendarUtils;
 
@@ -51,6 +53,9 @@ public class UdrManagementController {
 
 	@Autowired
 	private UdrService udrService;
+	
+	@Autowired
+	private TargetingService targetingService;
 
 	@Autowired
 	private RuleManagementService ruleManagementService;
@@ -61,6 +66,12 @@ public class UdrManagementController {
 		System.out.println("******** user =" + userId + ", title=" + title);
 		UdrSpecification resp = udrService.fetchUdr(userId, title);
 		return resp;
+	}
+
+	@RequestMapping(value = Constants.UDR_TARGET, method = RequestMethod.GET)
+	public @ResponseBody List<?> getTargetingResult(@PathVariable Long id) {
+		RuleServiceResult resp = targetingService.analyzeApisMessage(id);
+		return resp.getResultList();
 	}
 
 	@RequestMapping(value = Constants.UDR_GET_BY_ID, method = RequestMethod.GET)

@@ -50,15 +50,16 @@ public class UserQuery implements Serializable {
 	
 	@Column(name = "query_title", length = 20, nullable = false)
 	@NotNull
-	@Size(min=1, max=20)
+	@Size(min = 1, max = 20)
 	private String title;
 	
 	@Column(name = "query_description", length = 100)
-	@Size(max=100, message = "Length cannot be greater than 100")
+	@Size(max = 100)
 	private String description;
 	
 	@Column(name = "query_text", nullable = false, columnDefinition = "LONGTEXT")
 	@NotNull
+	@Size(min = 1)
 	private String queryText;
 	
 	public UserQuery() {

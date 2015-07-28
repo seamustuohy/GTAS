@@ -1,6 +1,5 @@
 package gov.gtas.parsers.edifact;
 
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,6 +8,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.edifact.segment.UNA;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.util.ParseUtils;
 
 /**
@@ -47,12 +47,12 @@ public class EdifactLexer {
         txt = preprocessMessage(txt);
         
         UNA una = getUnaSegment(txt);
-        SegmentParser segmentParser = new SegmentParser(una);
+        SegmentTokenizer segmentParser = new SegmentTokenizer(una);
 
         // start parsing with the UNB segment
         int unbIndex = getStartOfSegment("UNB", txt, una);
         if (unbIndex == -1) {
-            throw new ParseException("No UNB segment found", -1);
+            throw new ParseException("No UNB segment found");
         }
         txt = txt.substring(unbIndex);
         
@@ -63,15 +63,15 @@ public class EdifactLexer {
                 una.getReleaseCharacter());
 
         for (String s : stringSegments) {
-            Composite[] parsed = segmentParser.parseSegment(s);
-            if (parsed == null) { 
-                throw new ParseException("Could not parse segment " + s, -1);
+            Composite[] tokens = segmentParser.tokenize(s);
+            if (tokens == null) { 
+                throw new ParseException("Could not tokenize segment " + s);
             }
             
-            String segmentType = parsed[0].getValue();
+            String segmentType = tokens[0].getValue();
             Composite[] composites = null;
-            if (parsed.length > 1) {
-                composites = Arrays.copyOfRange(parsed, 1, parsed.length);
+            if (tokens.length > 1) {
+                composites = Arrays.copyOfRange(tokens, 1, tokens.length);
             }
             Segment newSegment = new Segment(segmentType, composites);
             segments.add(newSegment);

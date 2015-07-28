@@ -1,64 +1,69 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import gov.gtas.parsers.edifact.Composite;
+import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
- * MSG class holds the MSG segment value and specifies the function of the message.
- * (Message action details)
- * @author GTAS4
- * Value 22 means a Full transmission of all PNR data for a flight 
- * Value 141 means changed PNRs only.Ex:MSG+:22' or MSG+:141'
- * Business Function, Coded (Element 4025) is only used in the MSG Gr9 of PNRGOV to specify the 
- * type of service (car, hotel, train, etc.)
- * If MSG is used at Level 0 of PNRGOV or ACKRES, 4025 is not needed
- * Data element responseCode is N/A if the MSG is used in the PNRGOV and GOVREQ messages.
- * Data element responseCode is M* if the MSG is used in the ACKRES message
+ * <p>
+ * MSG: MESSAGE ACTION DETAILS
+ * <p>
+ * Specifies the function of the message. (Message action details) Value 22
+ * means a Full transmission of all PNR data for a flight Value 141 means
+ * changed PNRs only.Ex:MSG+:22' or MSG+:141' Business Function, Coded (Element
+ * 4025) is only used in the MSG Gr9 of PNRGOV to specify the type of service
+ * (car, hotel, train, etc.)
  * 
- * To specify that the TVL is for a hotel segment.(MSG+8')
- * Push PNR data to States(MSG+:22’)
- * To identify a change PNRGOV message(MSG+:141’)
+ * <p>
+ * To specify that the TVL is for a hotel segment.(MSG+8') Push PNR data to
+ * States(MSG+:22’) To identify a change PNRGOV message(MSG+:141’)
  */
 
-public class MSG extends Segment{
+public class MSG extends Segment {
+    public enum MsgCode {
+        PUSH_PNR("22"),
+        CHANGE_PNR("141");
+        
+        private final String code;
+        private MsgCode(String code) { this.code = code; }        
+        public String getCode() { return code; }
+        
+        private static final Map<String, MsgCode> BY_CODE_MAP = new LinkedHashMap<>();
+        static {
+            for (MsgCode rae : MsgCode.values()) {
+                BY_CODE_MAP.put(rae.code, rae);
+            }
+        }
 
-	private String messageTypeCode;
-	private String actionRequested;
-	private String responseCode;//Not Applicable for PNRGOV
+        public static MsgCode forCode(String code) {
+            return BY_CODE_MAP.get(code);
+        }        
+    }
+    
+	private MsgCode messageTypeCode;
 	
-	
-	public MSG(String name, Composite[] composites) {
-		super(name, composites);
+	public MSG(Composite[] composites) {
+		super(MSG.class.getSimpleName(), composites);
+		
+		String code = null;
+        Composite c = this.composites[0];
+
+		if (c.getValue() != null) {
+		    code = c.getValue();
+		} else {
+            Element[] e = c.getElements();
+            if (e[1].getValue() != null) {
+                code = e[1].getValue();
+            }
+		}
+        this.messageTypeCode = MsgCode.forCode(code);
 	}
 
 
-	public String getMessageTypeCode() {
+	public MsgCode getMessageTypeCode() {
 		return messageTypeCode;
 	}
-
-
-	public void setMessageTypeCode(String messageTypeCode) {
-		this.messageTypeCode = messageTypeCode;
-	}
-
-
-	public String getActionRequested() {
-		return actionRequested;
-	}
-
-
-	public void setActionRequested(String actionRequested) {
-		this.actionRequested = actionRequested;
-	}
-
-
-	public String getResponseCode() {
-		return responseCode;
-	}
-
-
-	public void setResponseCode(String responseCode) {
-		this.responseCode = responseCode;
-	}
-
 }

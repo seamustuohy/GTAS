@@ -1,10 +1,10 @@
 package gov.gtas.parsers.paxlst.segment.usedifact;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.util.ParseUtils;
 
 public class DTM extends Segment {

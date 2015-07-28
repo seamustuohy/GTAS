@@ -1,6 +1,5 @@
 package gov.gtas.parsers.paxlst;
 
-import java.text.ParseException;
 import java.util.ListIterator;
 
 import org.slf4j.Logger;
@@ -8,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.segment.usedifact.CTA;
 import gov.gtas.parsers.paxlst.segment.usedifact.DTM;
 import gov.gtas.parsers.paxlst.segment.usedifact.DTM.DtmCode;
@@ -23,7 +23,7 @@ import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
-public class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
+public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);
     
     protected enum GROUP {

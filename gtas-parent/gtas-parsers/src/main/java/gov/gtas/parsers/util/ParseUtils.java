@@ -4,7 +4,6 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -12,6 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+
+import gov.gtas.parsers.exception.ParseException;
 
 public class ParseUtils {
     /**
@@ -44,8 +45,12 @@ public class ParseUtils {
     }
     
     public static Date parseDateTime(String dt, String format) throws ParseException {
-        DateFormat timeFormat = new SimpleDateFormat(format, Locale.ENGLISH);
-        return timeFormat.parse(dt);
+        try {
+            DateFormat timeFormat = new SimpleDateFormat(format, Locale.ENGLISH);
+            return timeFormat.parse(dt);
+        } catch (java.text.ParseException pe) {
+            throw new ParseException(pe.getMessage());
+        }
     }
     
     /**

@@ -1,6 +1,5 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,6 +7,7 @@ import java.util.Map;
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.util.ParseUtils;
 
 /**

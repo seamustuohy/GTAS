@@ -1,103 +1,98 @@
 package gov.gtas.parsers.pnrgov.segment;
 
 import gov.gtas.parsers.edifact.Composite;
+import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
- * Class ADD to hold Address Information of a traveler in PNR
- * @author GTAS4
- * 
+ * <p>
+ * ADD: Address Information
+ * <p>
+ * Address Information of a traveler in PNR
+ * <p>
  * The ADD in GR.1 at level 2 may contain a contact address for the PNR.
- * The ADD in GR.2 at level 3 may contain emergency contact information and or/ UMNR delivery and collection
-	addresses
- * The ADD in GR.4 at level 5 may contain the address of the payer of the ticket.
- * If the address and/or telephone information cannot be broken down in separate elements, the information may
-	be found in OSIs and SSRs.
- *	Ex:The contact address is 4532 Wilson Street, Philadelphia, zip code 34288
+ * <p>
+ * The ADD in GR.2 at level 3 may contain emergency contact information and or/
+ * UMNR delivery and collection addresses
+ * <p>
+ * The ADD in GR.4 at level 5 may contain the address of the payer of the
+ * ticket.
+ * <p>
+ * If the address and/or telephone information cannot be broken down in separate
+ * elements, the information may be found in OSIs and SSRs.
+ * <p>
+ * Ex:The contact address is 4532 Wilson Street, Philadelphia, zip code 34288
  * (ADD++700:4532 WILSON STREET:PHILADELPHIA:PA::US:34288’)
  */
-public class ADD extends Segment{
+public class ADD extends Segment {
 
-	private String addressType;
-	private String streetDetails;
-	private String cityName;
-	private String stateCode;
-	private String countryCode;
-	private String zipCode;
-	private String telePhoneText;
-	
-	
-	public ADD(String name, Composite[] composites) {
-		super(name, composites);
-		// TODO Auto-generated constructor stub
-	}
-	public String getAddressType() {
-		return addressType;
-	}
+    private String addressType;
+    private String streetNumberAndName;
+    private String city;
+    private String stateOrProvinceCode;
 
+    /** ISO 3166-1-alpha 2 code */
+    private String countryCode;
 
-	public void setAddressType(String addressType) {
-		this.addressType = addressType;
-	}
+    private String postalCode;
 
+    private String telephone;
 
-	public String getStreetDetails() {
-		return streetDetails;
-	}
+    public ADD(Composite[] composites) {
+        super(ADD.class.getSimpleName(), composites);
+        Element[] e = this.composites[1].getElements();
+        if (e.length >= 1) {
+            this.addressType = e[0].getValue();
+        }
+        if (e.length >= 2) {
+            this.streetNumberAndName = e[1].getValue();
+        }
+        if (e.length >= 3) {
+            this.city = e[2].getValue();
+        }
+        if (e.length >= 4) {
+            this.stateOrProvinceCode = e[3].getValue();
+        }
+        if (e.length >= 5) {
+            // Country sub-entity name
+            // not recorded
+        }
+        if (e.length >= 6) {
+            this.countryCode = e[5].getValue();
+        }
+        if (e.length >= 7) {
+            this.postalCode = e[6].getValue();
+        }
+        if (e.length >= 8) {
+            this.telephone = e[7].getValue();
+        }
+    }
 
+    public String getAddressType() {
+        return addressType;
+    }
 
-	public void setStreetDetails(String streetDetails) {
-		this.streetDetails = streetDetails;
-	}
+    public String getStreetNumberAndName() {
+        return streetNumberAndName;
+    }
 
+    public String getCity() {
+        return city;
+    }
 
-	public String getCityName() {
-		return cityName;
-	}
+    public String getStateOrProvinceCode() {
+        return stateOrProvinceCode;
+    }
 
+    public String getCountryCode() {
+        return countryCode;
+    }
 
-	public void setCityName(String cityName) {
-		this.cityName = cityName;
-	}
+    public String getPostalCode() {
+        return postalCode;
+    }
 
-
-	public String getStateCode() {
-		return stateCode;
-	}
-
-
-	public void setStateCode(String stateCode) {
-		this.stateCode = stateCode;
-	}
-
-
-	public String getCountryCode() {
-		return countryCode;
-	}
-
-
-	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
-	}
-
-
-	public String getZipCode() {
-		return zipCode;
-	}
-
-
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
-	}
-
-
-	public String getTelePhoneText() {
-		return telePhoneText;
-	}
-
-
-	public void setTelePhoneText(String telePhoneText) {
-		this.telePhoneText = telePhoneText;
-	}
-
+    public String getTelephone() {
+        return telephone;
+    }
 }

@@ -18,28 +18,21 @@ import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.querybuilder.config.QueryBuilderAppConfig;
 import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.enums.OperatorEnum;
-import gov.gtas.querybuilder.exceptions.InvalidQueryObjectException;
+import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.model.UserQuery;
-import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
-import gov.gtas.repository.DocumentRepository;
-import gov.gtas.repository.PassengerRepository;
 import gov.gtas.util.DateCalendarUtils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -77,7 +70,7 @@ public class QueryBuilderServiceIT {
 	// Flight Queries
 	//----------------------------------------
 //	@Test
-	public void testRunQueryAgainstFlights() throws InvalidQueryObjectException, ParseException {
+	public void testRunQueryAgainstFlights() throws InvalidQueryException  {
 		QueryObject query = buildSimpleQuery();
 		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
 		
@@ -95,7 +88,7 @@ public class QueryBuilderServiceIT {
 	}
 
 //	@Test
-	public void testSimpleDateQueryAgainstFlights() throws InvalidQueryObjectException, ParseException {
+	public void testSimpleDateQueryAgainstFlights() throws InvalidQueryException {
 		QueryObject query = buildSimpleDateQuery();
 		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
 		
@@ -112,7 +105,7 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleIsNullQueryAgainstFlights() throws InvalidQueryObjectException, ParseException {
+	public void testSimpleIsNullQueryAgainstFlights() throws InvalidQueryException {
 		QueryObject query = buildSimpleIsNullQuery();
 		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
 		
@@ -129,7 +122,7 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleContainsQueryAgainstFlights() throws InvalidQueryObjectException, ParseException {
+	public void testSimpleContainsQueryAgainstFlights() throws InvalidQueryException {
 		QueryObject query = buildSimpleContainsQuery();
 		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
 		
@@ -146,7 +139,7 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleBetweenQuery() throws InvalidQueryObjectException, ParseException {
+	public void testSimpleBetweenQuery() throws InvalidQueryException {
 		QueryObject query = buildSimpleBetweenQuery();
 		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
 		
@@ -171,7 +164,7 @@ public class QueryBuilderServiceIT {
 	// Passenger Queries
 	//-------------------------------
 //	@Test
-	public void testRunQueryAgainstPassengers() throws InvalidQueryObjectException, ParseException {
+	public void testRunQueryAgainstPassengers() throws InvalidQueryException {
 		QueryObject query = buildSimpleQuery();
 		
 		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
@@ -243,7 +236,7 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleIsNullQueryAgainstPassengers() throws InvalidQueryObjectException, ParseException {
+	public void testSimpleIsNullQueryAgainstPassengers() throws InvalidQueryException {
 		QueryObject query = buildSimpleIsNullQuery();
 		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
 		
@@ -260,7 +253,7 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleContainsQueryAgainstPassengers() throws InvalidQueryObjectException, ParseException {
+	public void testSimpleContainsQueryAgainstPassengers() throws InvalidQueryException {
 		QueryObject query = buildSimpleContainsQuery();
 		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
 		
@@ -277,7 +270,7 @@ public class QueryBuilderServiceIT {
 	}
 	
 //	@Test
-	public void testSimpleBetweenQueryAgainstPassengers() throws InvalidQueryObjectException, ParseException {
+	public void testSimpleBetweenQueryAgainstPassengers() throws InvalidQueryException {
 		QueryObject query = buildSimpleBetweenQuery();
 		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
 

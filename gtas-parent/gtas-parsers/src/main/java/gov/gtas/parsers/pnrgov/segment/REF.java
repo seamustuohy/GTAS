@@ -14,9 +14,8 @@ public class REF extends Segment{
 
 	private String referenceNumber;
 	
-	public REF(String name, Composite[] composites) {
-		super(name, composites);
-		// TODO Auto-generated constructor stub
+	public REF(Composite[] composites) {
+		super(REF.class.getSimpleName(), composites);
 	}
 
 	public String getReferenceNumber() {

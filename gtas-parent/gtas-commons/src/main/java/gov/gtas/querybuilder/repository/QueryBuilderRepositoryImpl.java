@@ -11,12 +11,13 @@ import gov.gtas.querybuilder.constants.Constants;
 import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.enums.OperatorEnum;
 import gov.gtas.querybuilder.enums.TypeEnum;
-import gov.gtas.querybuilder.exceptions.InvalidQueryObjectException;
+import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
-import gov.gtas.querybuilder.exceptions.QueryNotUniqueRepositoryException;
+import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +38,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.Errors;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Repository
 public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderRepository.class);
@@ -48,10 +53,20 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 
 	@Override
 	@Transactional
-	public UserQuery saveQuery(UserQuery query) throws QueryNotUniqueRepositoryException {
+	public UserQuery saveQuery(UserQuery query) throws QueryAlreadyExistsRepositoryException, 
+		InvalidQueryRepositoryException {
 		
 		if(query != null) {
-			
+			try {
+				Errors errors = QueryValidationUtils.validateQueryRequest(query);
+				
+				if(errors != null && errors.hasErrors()) {
+					throw new InvalidQueryRepositoryException(QueryValidationUtils.getErrorString(errors), query);
+				}
+			} catch (IOException e) {
+				throw new InvalidQueryRepositoryException(e.getMessage(), query);
+			} 
+				
 			// check whether the title is unique before saving
 			// you can't have queries with duplicate titles for the same user
 			if(isUniqueTitle(query)) {
@@ -64,7 +79,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				entityManager.persist(query);
 			}
 			else {
-				throw new QueryNotUniqueRepositoryException();
+				throw new QueryAlreadyExistsRepositoryException(Constants.QUERY_EXISTS_ERROR_MSG, query);
 			}
 		}
 		
@@ -73,25 +88,36 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 
 	@Override
 	@Transactional
-	public UserQuery editQuery(UserQuery query) throws QueryNotUniqueRepositoryException, QueryDoesNotExistRepositoryException {
+	public UserQuery editQuery(UserQuery query) throws QueryAlreadyExistsRepositoryException, 
+		QueryDoesNotExistRepositoryException, InvalidQueryRepositoryException {
 		UserQuery queryToSave = new UserQuery();
 		boolean isUniqueTitle = true;
 		
 		if(query != null && query.getId() != null) {
+			
+			try {
+				Errors errors = QueryValidationUtils.validateQueryRequest(query);
+				
+				if(errors != null && errors.hasErrors()) {
+					throw new InvalidQueryRepositoryException(QueryValidationUtils.getErrorString(errors), query);
+				}
+			} catch (IOException e) {
+				throw new InvalidQueryRepositoryException(e.getMessage(), query);
+			} 
 			
 			queryToSave = entityManager.find(UserQuery.class, query.getId());
 			
 			// check whether the query exists or has not been deleted
 			// before updating
 			if(queryToSave == null || queryToSave.getDeletedDt() != null) {
-				throw new QueryDoesNotExistRepositoryException();
+				throw new QueryDoesNotExistRepositoryException(Constants.QUERY_DOES_NOT_EXIST_ERROR_MSG, query);
 			}
 			
 			// check if the query's title is unique
 			if(!query.getTitle().trim().equalsIgnoreCase(queryToSave.getTitle().trim())) {
 				isUniqueTitle = isUniqueTitle(query);
 			}
-			
+						
 			// update the query
 			if(isUniqueTitle) {
 				queryToSave.setTitle(query.getTitle() != null ? query.getTitle().trim() : query.getTitle());
@@ -101,7 +127,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				entityManager.flush();
 			}
 			else {
-				throw new QueryNotUniqueRepositoryException();
+				throw new QueryAlreadyExistsRepositoryException(Constants.QUERY_EXISTS_ERROR_MSG, query);
 			}
 		}
 	
@@ -131,7 +157,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			// check whether the query exists or has not been deleted
 			// before deleting
 			if(query == null || query.getDeletedDt() != null) {
-				throw new QueryDoesNotExistRepositoryException();
+				throw new QueryDoesNotExistRepositoryException(Constants.QUERY_DOES_NOT_EXIST_ERROR_MSG, null);
 			}
 			
 			// delete the query
@@ -146,50 +172,58 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	}
 	
 	@Override
-	public List<Flight> getFlightsByDynamicQuery(QueryObject queryObject) throws InvalidQueryObjectException, ParseException {
+	public List<Flight> getFlightsByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException {
 		List<Flight> flights = new ArrayList<>();
 		
 		if(queryObject != null) {
 			Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
 			
 			if(errors != null && errors.hasErrors()) {
-				throw new InvalidQueryObjectException(QueryValidationUtils.getErrorString(errors), queryObject);
+				throw new InvalidQueryRepositoryException(QueryValidationUtils.getErrorString(errors), queryObject);
 			}
 			
-			String jpqlQuery = generateQuery(queryObject, EntityEnum.FLIGHT);
-			logger.info("Getting Flights by this query: " + jpqlQuery);
-			TypedQuery<Flight> query = entityManager.createQuery(jpqlQuery, Flight.class);
-			MutableInt positionalParameter = new MutableInt();
-			setJPQLParameters(query, queryObject, positionalParameter);
-			
-			flights = query.getResultList();
-			
-			logger.info("Number of Flights returned: " + (flights != null ? flights.size() : "Flight result is null"));
+			try {
+				String jpqlQuery = generateQuery(queryObject, EntityEnum.FLIGHT);
+				logger.info("Getting Flights by this query: " + jpqlQuery);
+				TypedQuery<Flight> query = entityManager.createQuery(jpqlQuery, Flight.class);
+				MutableInt positionalParameter = new MutableInt();
+				setJPQLParameters(query, queryObject, positionalParameter);
+				
+				flights = query.getResultList();
+				
+				logger.info("Number of Flights returned: " + (flights != null ? flights.size() : "Flight result is null"));
+			} catch (InvalidQueryRepositoryException | ParseException e) {
+				throw new InvalidQueryRepositoryException(e.getMessage(), queryObject);
+			}
 		}
 		
 		return flights;
 	}
 
 	@Override
-	public List<Traveler> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryObjectException, ParseException {
+	public List<Traveler> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException {
 		List<Traveler> passengers = new ArrayList<>();
 		
 		if(queryObject != null) {
 			Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
 			
 			if(errors != null && errors.hasErrors()) {
-				throw new InvalidQueryObjectException(QueryValidationUtils.getErrorString(errors), queryObject);
+				throw new InvalidQueryRepositoryException(QueryValidationUtils.getErrorString(errors), queryObject);
 			}
 			
-			String jpqlQuery = generateQuery(queryObject, EntityEnum.PAX);
-			logger.info("Getting Passengers by this query: " + jpqlQuery);
-			TypedQuery<Traveler> query = entityManager.createQuery(jpqlQuery, Traveler.class);
-			MutableInt positionalParameter = new MutableInt();
-			setJPQLParameters(query, queryObject, positionalParameter);
-			
-			passengers = query.getResultList();
-			
-			logger.info("Number of Passengers returned: " + (passengers != null ? passengers.size() : "Passenger result is null"));
+			try {
+				String jpqlQuery = generateQuery(queryObject, EntityEnum.PAX);
+				logger.info("Getting Passengers by this query: " + jpqlQuery);
+				TypedQuery<Traveler> query = entityManager.createQuery(jpqlQuery, Traveler.class);
+				MutableInt positionalParameter = new MutableInt();
+				setJPQLParameters(query, queryObject, positionalParameter);
+				
+				passengers = query.getResultList();
+				
+				logger.info("Number of Passengers returned: " + (passengers != null ? passengers.size() : "Passenger result is null"));
+			} catch (InvalidQueryRepositoryException | ParseException e) {
+				throw new InvalidQueryRepositoryException(e.getMessage(), queryObject);
+			}
 		}
 		
 		return passengers;
@@ -215,8 +249,9 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	 * @param queryObject
 	 * @param queryType
 	 * @return
+	 * @throws InvalidQueryRepositoryException 
 	 */
-	private String generateQuery(QueryObject queryObject, EntityEnum queryType) {
+	private String generateQuery(QueryObject queryObject, EntityEnum queryType) throws InvalidQueryRepositoryException {
 		String query = "";
 		
 		if(queryObject != null && queryType != null) {
@@ -284,7 +319,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		return query;
 	}
 	
-	private void parseQueryObject(QueryEntity queryEntity, EntityEnum queryType, StringBuilder join, StringBuilder where, MutableInt positionalParameter, MutableInt level) {
+	private void parseQueryObject(QueryEntity queryEntity, EntityEnum queryType, StringBuilder join, StringBuilder where, MutableInt positionalParameter, MutableInt level) throws InvalidQueryRepositoryException {
 		QueryObject queryObject = null;
 		QueryTerm queryTerm = null;
 		String condition = null;
@@ -528,7 +563,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		}
 	}
 	
-	private String getJoinCondition(EntityEnum entity) {
+	private String getJoinCondition(EntityEnum entity) throws InvalidQueryRepositoryException {
 		String joinCondition = "";
 		
 		switch (entity.getEntityName().toUpperCase()) {
@@ -542,7 +577,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	        	joinCondition = " join " + EntityEnum.PAX.getAlias() + ".documents " + EntityEnum.DOCUMENT.getAlias();
 	            break;
 	        default:
-	            throw new IllegalArgumentException("Invalid Entity");
+	            throw new InvalidQueryRepositoryException("Invalid Entity: " + entity.getEntityName(), null);
 		}
 		
 		return joinCondition;

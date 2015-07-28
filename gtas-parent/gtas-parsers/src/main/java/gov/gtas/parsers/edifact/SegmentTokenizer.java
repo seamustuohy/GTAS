@@ -8,17 +8,17 @@ import gov.gtas.parsers.util.ParseUtils;
 /**
  * Parses a segment text into composites and elements.
  */
-public class SegmentParser {
+public class SegmentTokenizer {
     private UNA una;
     
     @SuppressWarnings("unused")
-    private SegmentParser() { }
+    private SegmentTokenizer() { }
     
-    public SegmentParser(UNA una) {
+    public SegmentTokenizer(UNA una) {
         this.una = una;
     }
     
-    public Composite[] parseSegment(String segmentText) {
+    public Composite[] tokenize(String segmentText) {
         if (StringUtils.isBlank(segmentText)) return null;
         
         String[] stringComposites = ParseUtils.splitWithEscapeChar(

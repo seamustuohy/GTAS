@@ -21,49 +21,7 @@ public class FTI extends Segment{
 	private String itemDescription;//tier description
 	private String companyIdentification;//
 	
-	public FTI(String name, Composite[] composites) {
-		super(name, composites);
-		
+	public FTI(Composite[] composites) {
+		super(FTI.class.getSimpleName(), composites);
 	}
-
-	public String getAirlineCode() {
-		return airlineCode;
-	}
-
-	public void setAirlineCode(String airlineCode) {
-		this.airlineCode = airlineCode;
-	}
-
-	public String getFreqTravelerNumber() {
-		return freqTravelerNumber;
-	}
-
-	public void setFreqTravelerNumber(String freqTravelerNumber) {
-		this.freqTravelerNumber = freqTravelerNumber;
-	}
-
-	public String getMemberInfo() {
-		return memberInfo;
-	}
-
-	public void setMemberInfo(String memberInfo) {
-		this.memberInfo = memberInfo;
-	}
-
-	public String getItemDescription() {
-		return itemDescription;
-	}
-
-	public void setItemDescription(String itemDescription) {
-		this.itemDescription = itemDescription;
-	}
-
-	public String getCompanyIdentification() {
-		return companyIdentification;
-	}
-
-	public void setCompanyIdentification(String companyIdentification) {
-		this.companyIdentification = companyIdentification;
-	}
-
 }
