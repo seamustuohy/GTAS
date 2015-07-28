@@ -4,9 +4,10 @@ import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
- * class ORG specifies the sender of the message.(To specify the point of sale details.)
+ * <p>ORG: ORIGINATOR OF REQUEST DETAILS 
+ * <p>
+ * Specifies the sender of the message.(To specify the point of sale details.)
  * (Originator of request details)
- * @author GTAS4
  *
  * The ORG at level 0 is the sender of the data.
  *  The ORG in GR.1 at level 2 is the originator of the booking. For “update” pushes when the push 

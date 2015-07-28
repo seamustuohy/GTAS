@@ -7,6 +7,11 @@ import java.util.Set;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.pnrgov.segment.EQN_L0;
+import gov.gtas.parsers.pnrgov.segment.MSG;
+import gov.gtas.parsers.pnrgov.segment.ORG_L0;
+import gov.gtas.parsers.pnrgov.segment.SRC;
+import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
 
 public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
@@ -21,10 +26,20 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     
     @Override
     public void parsePayload() throws ParseException {
-//        PnrMessageBuilder builder = new PnrMessageBuilder(message, segments);
-//        builder.buildMessageObject();
-//        System.out.println("Number of Flights  : "+message.getFlights().size());
-//        System.out.println("passengers in flight : "+message.getPassengers().size());
+        MSG msg = getMandatorySegment(MSG.class);
+        System.out.println(msg);
+
+        ORG_L0 org = getMandatorySegment(ORG_L0.class);
+        System.out.println(org);
+
+        TVL_L0 tvl = getMandatorySegment(TVL_L0.class);
+        System.out.println(tvl);
+
+        EQN_L0 eqn = getMandatorySegment(EQN_L0.class);
+        System.out.println(eqn);
+
+        getMandatorySegment(SRC.class);
+
     }
     
     @Override
