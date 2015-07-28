@@ -46,6 +46,11 @@ public class RuleServiceConstants {
 	 */
 	public static final String KB_NOT_FOUND_ERROR_CODE = "KB_NOT_FOUND";
 	/*
+	 * This is the error code for an internal system error indicating that 
+	 * an API or PNR message intended for processing could not be retrieved from the data base.
+	 */
+	public static final String MESSAGE_NOT_FOUND_ERROR_CODE = "MESSAGE_NOT_FOUND";
+	/*
 	 * This is the error code for an internal system error indicating that the
 	 * UDR generated knowledge base retrieved from the data base has invalid content.
 	 */
@@ -77,6 +82,12 @@ public class RuleServiceConstants {
 	 */
 	public static final String KB_NOT_FOUND_ERROR_MESSAGE = "The Knowledge Base named '%s' could not be retrieved from the data base.";
 	
+	/*
+	 * This is the error messsage for an internal system error indicating that 
+	 * an API or PNR message intended for processing could not be retrieved from the data base.
+	 */
+	public static final String MESSAGE_NOT_FOUND_ERROR_MESSAGE= "The API/PNR message with ID '%d' could not be retrieved from the data base.";
+
 	/*
 	 * This is the error message for an internal system error indicating that the
 	 * UDR generated knowledge base retrieved from the data base has invalid content.

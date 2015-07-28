@@ -2,6 +2,7 @@ package gov.gtas.svc;
 
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
@@ -77,6 +78,20 @@ public class TargetingServiceImpl implements TargetingService {
 			String drlRules) {
 		RuleServiceResult res = ruleService.invokeAdhocRulesFromString(
 				drlRules, request);
+		return res;
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.TargetingService#analyzeApisMessage(long)
+	 */
+	@Override
+	@Transactional
+	public RuleServiceResult analyzeApisMessage(long messageId) {
+		ApisMessage msg = apisMsgRepository.findOne(messageId);
+		if(msg == null){
+			throw ErrorHandlerFactory.getErrorHandler().createException(RuleServiceConstants.MESSAGE_NOT_FOUND_ERROR_CODE, messageId);
+		}
+		RuleServiceResult res = this.analyzeApisMessage(msg);
 		return res;
 	}
 

@@ -23,7 +23,8 @@ public final class Constants {
 	public static final String UDR_PUT = "/{userId}";
 	public static final String UDR_DELETE = "/{userId}/{id}";
 	public static final String UDR_TEST = "/testUdr";
-	public static final String UDR_RULE = "/rules";
+	public static final String UDR_TARGET = "/apis/{id}";
+	//public static final String UDR_RULE = "/rules";
 	
 	// Query Messages
 	public static final String QUERY_SAVED_SUCCESS_MSG = "Query saved successfully";

@@ -12,21 +12,11 @@ public class RuleHitDetail implements Serializable {
 	private long udrRuleId;
 	private int engineRuleIndex;
 	private long passengerId;
-	private Long documentId;
-	private Long flightId;
 	
 	public RuleHitDetail(final long udrRuleId, final int engineRuleIndex, final long passengerId){
 		this.udrRuleId = udrRuleId;
 		this.engineRuleIndex = engineRuleIndex;
 		this.passengerId = passengerId;
-	}
-
-	public RuleHitDetail(final long udrRuleId, final int engineRuleIndex, final long passengerId, final Long documentId, final Long flightId){
-		this.udrRuleId = udrRuleId;
-		this.engineRuleIndex = engineRuleIndex;
-		this.passengerId = passengerId;
-		this.documentId = documentId;
-		this.flightId = flightId;
 	}
 
 	/**
@@ -44,21 +34,6 @@ public class RuleHitDetail implements Serializable {
 		return engineRuleIndex;
 	}
 
-
-	/**
-	 * @return the documentId
-	 */
-	public Long getDocumentId() {
-		return documentId;
-	}
-
-
-	/**
-	 * @return the flightId
-	 */
-	public Long getFlightId() {
-		return flightId;
-	}
 
 
 	/**
