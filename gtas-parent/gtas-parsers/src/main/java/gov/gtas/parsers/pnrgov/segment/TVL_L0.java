@@ -6,7 +6,7 @@ import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.pnrgov.PnrUtils;
 
 /**
  * <p>
@@ -63,9 +63,9 @@ public class TVL_L0 extends Segment {
                     }
                 }
 
-                etd = parseDateTime(departureDt);
+                etd = PnrUtils.parseDateTime(departureDt);
                 if (eta != null) {
-                    eta = parseDateTime(arrivalDt);
+                    eta = PnrUtils.parseDateTime(arrivalDt);
                 }
                 break;
 
@@ -83,19 +83,6 @@ public class TVL_L0 extends Segment {
                 break;
             }
         }
-    }
-
-    private Date parseDateTime(String dt) throws ParseException {
-        final String DATE_ONLY_FORMAT = "ddMMyy";
-        final String DATE_TIME_FORMAT = "ddMMyyhhmm";
-
-        if (dt.length() == DATE_ONLY_FORMAT.length()) {
-            return ParseUtils.parseDateTime(dt, DATE_ONLY_FORMAT);
-        } else if (dt.length() == DATE_TIME_FORMAT.length()) {
-            return ParseUtils.parseDateTime(dt, DATE_TIME_FORMAT);
-        }
-
-        return null;
     }
 
     public Date getEtd() {
