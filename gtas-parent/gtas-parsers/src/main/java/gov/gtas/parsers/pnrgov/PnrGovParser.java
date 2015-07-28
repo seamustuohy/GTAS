@@ -9,6 +9,7 @@ import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.segment.DAT_G1;
 import gov.gtas.parsers.pnrgov.segment.EQN_L0;
+import gov.gtas.parsers.pnrgov.segment.IFT;
 import gov.gtas.parsers.pnrgov.segment.MSG;
 import gov.gtas.parsers.pnrgov.segment.ORG_L0;
 import gov.gtas.parsers.pnrgov.segment.RCI;
@@ -76,5 +77,14 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
 
         DAT_G1 dat = getConditionalSegment(DAT_G1.class, "DAT");
         System.out.println(dat);
+
+        for (;;) {
+            IFT ift = getConditionalSegment(IFT.class);
+            if (ift == null) {
+                break;
+            }
+            System.out.println(ift);
+        }
+
     }
 }
