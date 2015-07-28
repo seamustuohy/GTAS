@@ -2,6 +2,7 @@ package gov.gtas.parsers.paxlst.segment.unedifact;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.util.ParseUtils;
 
 /**
  * <p>
@@ -59,21 +60,9 @@ public class TDT extends Segment {
         if (this.c_carrierIdentifier != null) {
             this.flightNumber = this.c_journeyIdentifier.replace(this.c_carrierIdentifier, "");
         } else {
-            StringBuffer fn = new StringBuffer();
-            int j;
-            for (j = this.c_journeyIdentifier.length() - 1; j >= 0; j--) {
-                char c = this.c_journeyIdentifier.charAt(j);
-                if (Character.isDigit(c)) {
-                    fn.append(c);
-                    if (fn.length() == 4) {
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
-            this.flightNumber = fn.reverse().toString();
-            this.c_carrierIdentifier = this.c_journeyIdentifier.substring(0, j + 1);
+            String[] tmp = ParseUtils.separateCarrierAndFlightNumber(this.c_journeyIdentifier);
+            this.c_carrierIdentifier = tmp[0];
+            this.flightNumber = tmp[1];
         }
     }
 

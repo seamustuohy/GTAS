@@ -1,10 +1,9 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
-import java.text.ParseException;
-
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
 
 /**
  * <p>
@@ -28,7 +27,7 @@ public class GEI extends Segment {
             switch (i) {
             case 0:
                 if (Integer.valueOf(c.getValue()) != 4) {
-                    throw new ParseException("unknown gei qualifier: " + c.getValue(), -1);
+                    throw new ParseException("unknown gei qualifier: " + c.getValue());
                 }
                 break;
 
@@ -39,7 +38,7 @@ public class GEI extends Segment {
                 } else if (e != null && e.length >= 1) {
                     code = e[0].getValue();
                 } else {
-                    throw new ParseException("unknown verification code", -1);
+                    throw new ParseException("unknown verification code");
                 }
                 
                 switch (code) {
@@ -51,7 +50,7 @@ public class GEI extends Segment {
                     this.verified = false;
                     break;
                 default:
-                    throw new ParseException("unknown verification code: " + c.getValue(), -1);
+                    throw new ParseException("unknown verification code: " + c.getValue());
                 }
                 break;
             }

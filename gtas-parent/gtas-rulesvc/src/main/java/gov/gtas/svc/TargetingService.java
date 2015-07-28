@@ -19,13 +19,21 @@ import java.util.List;
 
 public interface TargetingService {
 	/**
-	 * Invokes the Targeting service for an API messages.
+	 * Invokes the Targeting service for an API message.
 	 * 
 	 * @param message
 	 *            the API message.
 	 * @return the result of the invocation.
 	 */
 	RuleServiceResult analyzeApisMessage(ApisMessage message);
+	/**
+	 * Invokes the Targeting service for an API message.
+	 * 
+	 * @param message
+	 *            the API message.
+	 * @return the result of the invocation.
+	 */
+	RuleServiceResult analyzeApisMessage(long messageId);
 
 	/**
 	 * Invokes the Rule Engine on an arbitrary list of objects using the
@@ -46,4 +54,9 @@ public interface TargetingService {
 	 * @return the retrieved ApisMessage
 	 */
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus);
+	
+	/**
+	 * Running Rule Engine through Scheduler
+	 */
+	public void RunningRuleEngine() ;
 }

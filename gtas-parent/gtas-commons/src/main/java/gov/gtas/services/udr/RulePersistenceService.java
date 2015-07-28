@@ -113,4 +113,11 @@ public interface RulePersistenceService {
 	 * @return the saved knowledge base.
 	 */
 	public KnowledgeBase saveKnowledgeBase(KnowledgeBase kb);
+	
+	/**
+	 * Deletes the knowledge base.
+	 * @param kbName the name of the knowledge base
+	 * @return the deleted knowledge base or null if it does not exist.
+	 */
+	public KnowledgeBase deleteKnowledgeBase(String kbName);
 }

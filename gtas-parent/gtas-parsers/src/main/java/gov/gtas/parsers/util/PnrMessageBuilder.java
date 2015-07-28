@@ -1,6 +1,5 @@
 package gov.gtas.parsers.util;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -11,8 +10,9 @@ import org.slf4j.LoggerFactory;
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.paxlst.vo.AddressVo;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
+import gov.gtas.parsers.pnrgov.vo.AddressVo;
 import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.vo.PnrReportingAgentVo;
 import gov.gtas.parsers.pnrgov.vo.PnrVo;

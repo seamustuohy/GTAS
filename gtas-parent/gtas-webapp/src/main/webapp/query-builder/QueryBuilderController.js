@@ -20,21 +20,6 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
         $input.blur();
     };
 
-    function returnData (property) {
-        try {
-            if (localStorage[property] === undefined) {
-                $.getJSON('./data/' + property + '.json', function (data) {
-                    localStorage[property] = JSON.stringify(data);
-                    return data;
-                });
-            } else {
-                return JSON.parse(localStorage[property]);
-            }
-        } catch (exception) {
-            throw exception;
-        }
-    }
-
     function getOptionsFromJSONArray (that, property) {
         if (localStorage[property] === undefined) {
             $.getJSON('./data/' + property + '.json', function (data) {
@@ -81,9 +66,8 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                 'unique-filter': null,
                 'bt-checkbox': { color: 'primary' }
             },
-            entities: returnData('entities'),
             filters: [{
-                "id": "DOCUMENT.issuanceCountry",
+                "id": "DOCUMENT.issuanceCountry.iso2",
                 "label": "Citizenship OR Issuance Country",
                 "type": "string",
                 "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
@@ -422,8 +406,6 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
         };
 
         // init
-        $builder.queryBuilder(options);
-
         $builder
             .on('afterCreateRuleInput.queryBuilder', function (e, rule) {
                 if (rule.filter.plugin == 'selectize') {
@@ -432,7 +414,23 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
                 }
             });
 
-        return $builder;
+        var property = 'entities';
+        try {
+            if (localStorage[property] === undefined) {
+                $.getJSON('./data/' + property + '.json', function (data) {
+                    localStorage[property] = JSON.stringify(data);
+                    options.entities = data;
+                    $builder.queryBuilder(options);
+                    $scope.$builder = $builder;
+                });
+            } else {
+                options.entities = JSON.parse(localStorage[property]);
+                $builder.queryBuilder(options);
+                $scope.$builder = $builder;
+            }
+        } catch (exception) {
+            throw exception;
+        }
     };
     $scope.isBeingEdited = function (ruleId) {
         return $scope.ruleId === ruleId;
@@ -486,7 +484,7 @@ app.controller('QueryBuilderController', function ($scope, $filter, $q, ngTableP
         }
     });
 
-    $scope.$builder = loadQueryBuilder();
+    loadQueryBuilder();
 
     $scope.$on('handleBroadcast', function (event, id) {
         $scope.authorId = id;

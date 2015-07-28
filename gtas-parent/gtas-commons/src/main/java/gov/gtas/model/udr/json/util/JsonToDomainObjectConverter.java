@@ -18,6 +18,7 @@ import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
+import gov.gtas.util.ValidationUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.Errors;
 
 /**
@@ -194,10 +196,12 @@ public class JsonToDomainObjectConverter {
 					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "details",
 					"Create UDR");
 		}
-		//validate the input JSON object
+		// validate the input JSON object
 		Errors errors = QueryValidationUtils.validateQueryObject(qobj);
-		if(errors.hasErrors()){
-			throw new CommonValidationException("JsonToDomainObjectConverter.createEngineRules() - validation errors:", errors);
+		if (errors.hasErrors()) {
+			throw new CommonValidationException(
+					"JsonToDomainObjectConverter.createEngineRules() - validation errors:",
+					errors);
 		}
 		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
 		int indx = 0;
@@ -256,13 +260,18 @@ public class JsonToDomainObjectConverter {
 				ValueTypesEnum type = ValueTypesEnum.valueOf(trm.getType()
 						.toUpperCase());
 				RuleCondPk pk = new RuleCondPk(indx, seq++);
-				cond = new RuleCond(pk, EntityLookupEnum.valueOf(trm
-						.getEntity()), trm.getField(), op);
-				if(op == OperatorCodeEnum.IN || op == OperatorCodeEnum.NOT_IN || op == OperatorCodeEnum.BETWEEN){
-				   cond.addValuesToCondition(trm.getValues(), type);
-				} else {
-					cond.addValueToCondition(trm.getValue(), type);
+				EntityLookupEnum entity = ValidationUtils
+						.convertStringToEnum(trm.getEntity());
+				if (entity == null) {
+					throw ErrorHandlerFactory
+							.getErrorHandler()
+							.createException(
+									CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+									"entity:" + trm.getEntity(),
+									"createEngineRule()");
 				}
+				cond = new RuleCond(pk, entity, trm.getField(), op);
+				addValuesToCond(cond, op, type, trm.getValue(), trm.getValues());
 			} catch (ParseException pe) {
 				StringBuilder bldr = new StringBuilder("[");
 				for (String val : trm.getValues()) {
@@ -283,6 +292,46 @@ public class JsonToDomainObjectConverter {
 			ret.addConditionToRule(cond);
 		}
 		return ret;
+	}
+    /**
+     * Does validation check and adds condition value(s) to the Rule condition object.
+     * @param cond the rule condition object
+     * @param op the operator.
+     * @param type the type of value.
+     * @param value single value.
+     * @param values multiple values for multi-value operator.
+     * @throws ParseException on format exception.
+     */
+	private static void addValuesToCond(RuleCond cond, OperatorCodeEnum op,
+			ValueTypesEnum type, String value, String[] values)
+			throws ParseException {
+		if (op == OperatorCodeEnum.IN || op == OperatorCodeEnum.NOT_IN) {
+			if (values != null && values.length > 0) {
+				cond.addValuesToCondition(values, type);
+			} else if (!StringUtils.isEmpty(value)) {
+				cond.addValuesToCondition(new String[] { value }, type);
+			} else {
+				throw ErrorHandlerFactory.getErrorHandler().createException(
+						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+						"values", "createEngineRule");
+			}
+		} else if (op == OperatorCodeEnum.BETWEEN) {
+			if (values != null && values.length == 2) {
+			  cond.addValuesToCondition(values, type);
+			} else {
+				throw ErrorHandlerFactory.getErrorHandler().createException(
+						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+						"values (requires 2 values)", "createEngineRule");
+			}
+		} else {
+			String valueToAdd = value;
+			if (StringUtils.isEmpty(valueToAdd) && values != null
+					&& values.length > 0) {
+				valueToAdd = values[0];
+			}
+			cond.addValueToCondition(valueToAdd, type);
+		}
+
 	}
 
 	/**

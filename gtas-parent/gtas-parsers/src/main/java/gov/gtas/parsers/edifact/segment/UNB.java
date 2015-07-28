@@ -1,11 +1,11 @@
 package gov.gtas.parsers.edifact.segment;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.util.ParseUtils;
 
 /**

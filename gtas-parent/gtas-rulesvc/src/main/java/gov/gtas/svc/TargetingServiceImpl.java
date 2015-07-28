@@ -2,6 +2,7 @@ package gov.gtas.svc;
 
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
@@ -12,6 +13,8 @@ import gov.gtas.rule.RuleServiceResult;
 
 import java.util.Date;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -50,6 +53,7 @@ public class TargetingServiceImpl implements TargetingService {
 	 * )
 	 */
 	@Override
+	@Transactional
 	public RuleServiceResult analyzeApisMessage(ApisMessage message) {
 		if (null == message) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
@@ -77,12 +81,27 @@ public class TargetingServiceImpl implements TargetingService {
 		return res;
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.TargetingService#analyzeApisMessage(long)
+	 */
+	@Override
+	@Transactional
+	public RuleServiceResult analyzeApisMessage(long messageId) {
+		ApisMessage msg = apisMsgRepository.findOne(messageId);
+		if(msg == null){
+			throw ErrorHandlerFactory.getErrorHandler().createException(RuleServiceConstants.MESSAGE_NOT_FOUND_ERROR_CODE, messageId);
+		}
+		RuleServiceResult res = this.analyzeApisMessage(msg);
+		return res;
+	}
+
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus) {
 		return apisMsgRepository.findByStatus(messageStatus);
 
 	}
 
 	@Scheduled(fixedDelay = 4000)
+	@Transactional
 	public void RunningRuleEngine() {
 		System.out.println(new Date() + " a fixed delay running");
 		List<ApisMessage> apisMessageList = retrieveApisMessage(MessageStatus.LOADED);

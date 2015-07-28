@@ -1,4 +1,4 @@
-package gov.gtas.parsers.paxlst.vo;
+package gov.gtas.parsers.pnrgov.vo;
 
 public class AddressVo {
 

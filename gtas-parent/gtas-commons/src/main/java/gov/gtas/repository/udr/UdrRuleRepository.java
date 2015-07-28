@@ -10,7 +10,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-
+/**
+ * Rule Repository with custom queries.
+ * @author GTAS3 (AB)
+ *
+ */
 public interface UdrRuleRepository extends CrudRepository<UdrRule, Long>, JpaSpecificationExecutor<UdrRule> {
     public List<UdrRule> findByDeleted(YesNoEnum deleted);
     

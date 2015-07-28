@@ -141,7 +141,7 @@ public class UdrServiceIT {
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
 		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
 		assertNotNull(resp.getResponseDetails());
-		Long id = Long.valueOf(resp.getResponseDetails().get(0).getAttributeValue());       
+		Long id = Long.valueOf((String)(resp.getResponseDetails().get(0).getAttributeValue()));       
 		assertNotNull(id);
 		UdrSpecification specFetched = udrService.fetchUdr(id);
 		assertNotNull(specFetched);
@@ -158,7 +158,7 @@ public class UdrServiceIT {
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
 		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
 		assertNotNull(resp.getResponseDetails());
-		String title = resp.getResponseDetails().get(1).getAttributeValue();       
+		String title = (String)resp.getResponseDetails().get(1).getAttributeValue();       
 		assertEquals(RULE_TITLE1, title);
 		UdrSpecification specFetched = udrService.fetchUdr(user.getUserId(), title);
 		assertNotNull(specFetched);
@@ -172,7 +172,7 @@ public class UdrServiceIT {
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
 		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
 		assertNotNull(resp.getResponseDetails());
-		String title = resp.getResponseDetails().get(1).getAttributeValue();       
+		String title = (String)resp.getResponseDetails().get(1).getAttributeValue();       
 		assertEquals(RULE_TITLE1, title);
 		UdrSpecification specFetched = udrService.fetchUdr(user.getUserId(), title);
 		//specFetched.getSummary().setDescription(RULE_DESCRIPTION2);
@@ -191,7 +191,7 @@ public class UdrServiceIT {
 		UdrSpecification spec2 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE2, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec1);
 		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
-		Long id = Long.valueOf(resp.getResponseDetails().get(0).getAttributeValue());       
+		Long id = Long.valueOf((String)(resp.getResponseDetails().get(0).getAttributeValue()));       
 
 		resp = udrService.createUdr(user.getUserId(), spec2);
 		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());

@@ -1,10 +1,9 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
-import java.text.ParseException;
-
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
 
 /**
  * <p>

@@ -1,7 +1,11 @@
 package gov.gtas.model.udr.json;
 
 import java.io.Serializable;
-
+/**
+ * Class representing summary listing element for UDR.
+ * @author GTAS3
+ *
+ */
 public class JsonUdrListElement implements Serializable {
 
 	/**

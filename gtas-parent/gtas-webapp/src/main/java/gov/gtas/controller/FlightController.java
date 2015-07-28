@@ -28,8 +28,13 @@ public class FlightController {
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/flights", method = RequestMethod.GET)
     public List<FlightVo> getAllFlights() {
+    	
+    	
+    	
         List<FlightVo> rv = new ArrayList<>();
 
+        try{
+        	
         List<Flight> flights = flightService.findAll();
         for (Flight f : flights) {
             logger.debug(f.getFlightNumber());
@@ -50,6 +55,10 @@ public class FlightController {
             vo.setEta(f.getEta());
             rv.add(vo);
         }
+    
+    	}catch(Exception ex){
+    		ex.printStackTrace();
+    	}
         
         return rv;
     }

@@ -4,12 +4,15 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
+
+import gov.gtas.parsers.exception.ParseException;
 
 public class ParseUtils {
     /**
@@ -42,8 +45,12 @@ public class ParseUtils {
     }
     
     public static Date parseDateTime(String dt, String format) throws ParseException {
-        DateFormat timeFormat = new SimpleDateFormat(format, Locale.ENGLISH);
-        return timeFormat.parse(dt);
+        try {
+            DateFormat timeFormat = new SimpleDateFormat(format, Locale.ENGLISH);
+            return timeFormat.parse(dt);
+        } catch (java.text.ParseException pe) {
+            throw new ParseException(pe.getMessage());
+        }
     }
     
     /**
@@ -116,5 +123,40 @@ public class ParseUtils {
             return matcher.start();
         }        
         return -1;
+    }
+
+    /**
+     * assumptions:
+     *   - carrier must be at least 2 chars
+     *   - carrier can end in number
+     *   - flight number can be between 1 and 4 numbers
+     * TODO: flight numbers ending in letters?  or with letters?
+     * TODO: can we assume carrier is always 2 letter?
+     * @param s
+     * @return
+     */
+    public static String[] separateCarrierAndFlightNumber(String s) {
+        if (StringUtils.isBlank(s)) return null;
+        final int MAX_FLIGHT_NUM_LENG = 4;
+        final int MIN_CARRIER_LENG = 2;
+        
+        StringBuffer fn = new StringBuffer();
+        int j;
+        for (j = s.length() - 1; j >= 0; j--) {
+            char c = s.charAt(j);
+            if (Character.isDigit(c)) {
+                fn.append(c);
+                if (s.length() - fn.length() == MIN_CARRIER_LENG) {
+                    break;
+                } else if (fn.length() == MAX_FLIGHT_NUM_LENG) {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        
+        String carrier = s.substring(0, s.length() - fn.length());
+        return new String[] { carrier, fn.reverse().toString() };
     }
 }

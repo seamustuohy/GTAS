@@ -6,15 +6,16 @@ import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.ErrorDetails;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
-import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.error.GtasJsonError;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
+import gov.gtas.rule.RuleServiceResult;
+import gov.gtas.svc.RuleManagementService;
+import gov.gtas.svc.TargetingService;
 import gov.gtas.svc.UdrService;
-import gov.gtas.svc.UdrServiceHelper;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
@@ -52,6 +53,12 @@ public class UdrManagementController {
 
 	@Autowired
 	private UdrService udrService;
+	
+	@Autowired
+	private TargetingService targetingService;
+
+	@Autowired
+	private RuleManagementService ruleManagementService;
 
 	@RequestMapping(value = Constants.UDR_GET, method = RequestMethod.GET)
 	public @ResponseBody UdrSpecification getUDR(@PathVariable String userId,
@@ -59,6 +66,12 @@ public class UdrManagementController {
 		System.out.println("******** user =" + userId + ", title=" + title);
 		UdrSpecification resp = udrService.fetchUdr(userId, title);
 		return resp;
+	}
+
+	@RequestMapping(value = Constants.UDR_TARGET, method = RequestMethod.GET)
+	public @ResponseBody List<?> getTargetingResult(@PathVariable Long id) {
+		RuleServiceResult resp = targetingService.analyzeApisMessage(id);
+		return resp.getResultList();
 	}
 
 	@RequestMapping(value = Constants.UDR_GET_BY_ID, method = RequestMethod.GET)
@@ -78,9 +91,25 @@ public class UdrManagementController {
 
 	@RequestMapping(value = Constants.UDR_GETDRL, method = RequestMethod.GET)
 	public @ResponseBody JsonServiceResponse getDrl() {
-		String rules = "To be implemented";
+		String rules = ruleManagementService.fetchDefaultDrlRulesFromKnowledgeBase();
+		return createDrlRulesResponse(rules);
+	}
+	@RequestMapping(value = Constants.UDR_GETDRL_BY_NAME, method = RequestMethod.GET)
+	public @ResponseBody JsonServiceResponse getDrlByName(@PathVariable String kbName) {
+		String rules = ruleManagementService.fetchDrlRulesFromKnowledgeBase(kbName);
+		return createDrlRulesResponse(rules);
+	}
+	/**
+	 * Creates the DRL rule response JSON object.
+	 * @param rules the DRL rules.
+	 * @return the JSON response object containing the rules.
+	 */
+	private JsonServiceResponse createDrlRulesResponse(String rules){
+		System.out.println("******* The rules:\n"+rules+"\n***************\n");
 		JsonServiceResponse resp = new JsonServiceResponse(JsonServiceResponse.SUCCESS_RESPONSE, 
-				"getDrl", "getDrl", rules);
+				"Rule Management Service", "fetchDefaultDrlRulesFromKnowledgeBase", "Drools rules fetched successsfully");
+		String[] lines = rules.split("\n");
+		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute("DRL Rules", lines));
 		return resp;
 	}
 	@RequestMapping(value = Constants.UDR_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -102,8 +131,10 @@ public class UdrManagementController {
 		 * previous day. The following 3 lines of code reverses this interpretation.
 		 */
 		MetaData meta = inputSpec.getSummary();
-		meta.setStartDate(fixMetaDataDates(meta.getStartDate()));
-		meta.setEndDate(fixMetaDataDates(meta.getEndDate()));
+		if(meta != null){
+			meta.setStartDate(fixMetaDataDates(meta.getStartDate()));
+			meta.setEndDate(fixMetaDataDates(meta.getEndDate()));
+		}
 		
 		JsonServiceResponse resp = udrService.createUdr(userId, inputSpec);
 
@@ -138,8 +169,10 @@ public class UdrManagementController {
 		 * previous day. The following 3 lines of code reverses this interpretation.
 		 */
 		MetaData meta = inputSpec.getSummary();
-		meta.setStartDate(fixMetaDataDates(meta.getStartDate()));
-		meta.setEndDate(fixMetaDataDates(meta.getEndDate()));
+		if(meta != null){
+			meta.setStartDate(fixMetaDataDates(meta.getStartDate()));
+			meta.setEndDate(fixMetaDataDates(meta.getEndDate()));
+		}
 				
 		JsonServiceResponse resp = udrService.updateUdr(userId, inputSpec);
 

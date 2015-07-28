@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of the UDR Service API.
@@ -46,7 +47,10 @@ public class UdrServiceImpl implements UdrService {
 	private RulePersistenceService rulePersistenceService;
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
+	
+	@Autowired
+	private RuleManagementService ruleManagementService;
 
 	@PostConstruct
 	private void initializeErrorHandler() {
@@ -167,7 +171,9 @@ public class UdrServiceImpl implements UdrService {
 
 		UdrRule savedRule = rulePersistenceService.create(ruleToSave, userId);
 
-		UdrServiceHelper.processRuleGeneration(rulePersistenceService);
+		//UdrServiceHelper.processRuleGeneration(rulePersistenceService);
+		List<UdrRule> ruleList = rulePersistenceService.findAll();
+		ruleManagementService.createKnowledgeBaseFromUdrRules(UdrConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList);
 
 		return UdrServiceHelper.createResponse(true, UdrConstants.UDR_CREATE_OP_NAME, savedRule);
 	}
@@ -193,6 +199,7 @@ public class UdrServiceImpl implements UdrService {
 	 * )
 	 */
 	@Override
+	@Transactional
 	public JsonServiceResponse updateUdr(String userId,
 			UdrSpecification udrToUpdate) {
 		if (udrToUpdate == null) {
@@ -253,7 +260,9 @@ public class UdrServiceImpl implements UdrService {
 			updatedRule = rulePersistenceService.update(ruleToUpdate,
 					newEngineRules, userId);
 
-			UdrServiceHelper.processRuleGeneration(rulePersistenceService);
+			//UdrServiceHelper.processRuleGeneration(rulePersistenceService);
+			List<UdrRule> ruleList = rulePersistenceService.findAll();
+			ruleManagementService.createKnowledgeBaseFromUdrRules(UdrConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList);
 
 		} else {
 			// simple update - meta data only
@@ -271,9 +280,16 @@ public class UdrServiceImpl implements UdrService {
 	 * @see gov.gtas.svc.UdrService#deleteUdr(java.lang.Long)
 	 */
 	@Override
+	@Transactional
 	public JsonServiceResponse deleteUdr(String userId, Long id) {
 		UdrRule deletedRule = rulePersistenceService.delete(id, userId);
 		if (deletedRule != null) {
+			List<UdrRule> ruleList = rulePersistenceService.findAll();
+			if(!CollectionUtils.isEmpty(ruleList)){
+			    ruleManagementService.createKnowledgeBaseFromUdrRules(UdrConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList);
+			} else {
+				ruleManagementService.deleteKnowledgeBase(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+			}
 			return UdrServiceHelper.createResponse(true, UdrConstants.UDR_DELETE_OP_NAME,
 					deletedRule);
 		} else {

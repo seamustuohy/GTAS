@@ -173,4 +173,30 @@ public class UdrSpecificationBuilder {
 		bldr.addMeta(title, description, new Date(), null, true, userId);
 		return bldr.build();
 	}
+	public static UdrSpecification createSampleSpec3(String userId,
+			String title, String description) {
+		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
+				QueryConditionEnum.OR);
+		bldr.addNestedQueryObject(QueryConditionEnum.AND);
+		bldr.addTerm(EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_DOB, ValueTypesEnum.DATE,
+				OperatorCodeEnum.EQUAL,
+				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
+		bldr.addTerm(EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				new String[] { "Jones" });
+		bldr.endCurrentQueryObject();
+		bldr.addNestedQueryObject(QueryConditionEnum.AND);
+		bldr.addTerm(EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
+						"DBY", "PKY", "FLT" });
+		bldr.addTerm(EntityLookupEnum.Pax,
+				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
+				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				new String[] { "IAD" });
+		bldr.addMeta(title, description, new Date(), null, true, userId);
+		return bldr.build();
+	}
 }

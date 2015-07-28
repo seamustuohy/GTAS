@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * 
+ * The back-end service for persisting rules.
  * @author GTAS3 (AB)
  *
  */
@@ -52,8 +52,6 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
     
     @Autowired
     private UserService userService;
-    
-    //private ErrorHandler errorHandler;
     
 	@Override
 	@Transactional
@@ -234,6 +232,17 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		  entityManager.persist(kb);
 		} else {
 			entityManager.merge(kb);
+		}
+		return kb;
+	}
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.udr.RulePersistenceService#deleteKnowledgeBase(java.lang.String)
+	 */
+	@Override
+	public KnowledgeBase deleteKnowledgeBase(String kbName) {
+		KnowledgeBase kb = findUdrKnowledgeBase(kbName);
+		if(kb != null){
+			entityManager.remove(kb);
 		}
 		return kb;
 	}

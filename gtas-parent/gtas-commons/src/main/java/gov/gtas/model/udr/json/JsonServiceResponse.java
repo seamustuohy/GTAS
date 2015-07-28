@@ -48,7 +48,7 @@ public class JsonServiceResponse implements Serializable {
 		String ret = null;
 		for(ServiceResponseDetailAttribute attr:this.responseDetails){
 			if(responseDetailName.equals(attr.getAttributeName())){
-				ret = attr.getAttributeValue();
+				ret = (String)attr.getAttributeValue();
 				break;
 			}
 		}
@@ -120,8 +120,12 @@ public class JsonServiceResponse implements Serializable {
 	/////////////////////////////////////////////////////////////////////////////////////////
 	public static class ServiceResponseDetailAttribute{
 		private String attributeName;
-		private String attributeValue;
+		private Serializable attributeValue;
 		public ServiceResponseDetailAttribute(String attrName, String attrValue){
+			attributeName = attrName;
+			attributeValue = attrValue;
+		}
+		public ServiceResponseDetailAttribute(String attrName, Serializable attrValue){
 			attributeName = attrName;
 			attributeValue = attrValue;
 		}
@@ -134,7 +138,7 @@ public class JsonServiceResponse implements Serializable {
 		/**
 		 * @return the attributeValue
 		 */
-		public String getAttributeValue() {
+		public Serializable getAttributeValue() {
 			return attributeValue;
 		}
 		

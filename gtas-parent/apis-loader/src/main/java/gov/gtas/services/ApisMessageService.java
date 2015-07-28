@@ -1,7 +1,6 @@
 package gov.gtas.services;
 
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,19 +15,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Crew;
 import gov.gtas.model.Flight;
+import gov.gtas.model.FlightDirection;
 import gov.gtas.model.Gender;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
+import gov.gtas.model.PaxInTransit;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
+import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.segment.UNA;
-import gov.gtas.parsers.paxlst.PaxlstParser;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
 import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
@@ -44,6 +47,8 @@ import gov.gtas.repository.ApisMessageRepository;
 public class ApisMessageService {
     private static final Logger logger = LoggerFactory.getLogger(ApisMessageService.class);
 
+    private Country homeCountry;
+    
     @Autowired
     private CountryService countryService;
     
@@ -72,19 +77,19 @@ public class ApisMessageService {
             String message = new String(raw, StandardCharsets.US_ASCII);
             String payload = getApisMessagePayload(message);
             if (payload == null) {
-                throw new ParseException("Could not extract message payload. Missing BGM and/or UNT segments", -1);
+                throw new ParseException("Could not extract message payload. Missing BGM and/or UNT segments");
             }
             String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
             this.apisMessage.setHashCode(md5);
             
-            PaxlstParser parser = null;
+            EdifactParser<ApisMessageVo> parser = null;
             if (isUSEdifactFile(message)) {
-                parser = new PaxlstParserUSedifact(message);
+                parser = new PaxlstParserUSedifact();
             } else {
-                parser= new PaxlstParserUNedifact(message);
+                parser = new PaxlstParserUNedifact();                
             }
     
-            vo = parser.parse();
+            vo = parser.parse(message);
             this.apisMessage.setStatus(MessageStatus.PARSED);
 
         } catch (Exception e) {
@@ -138,14 +143,35 @@ public class ApisMessageService {
         }
     }
     
-    private Traveler convertPaxVo(PaxVo vo) {
-        Pax p = new Pax();
+    private Traveler convertPaxVo(PaxVo vo) throws ParseException {
+        Traveler p = null;
+        switch (vo.getPaxType()) {
+        case "P":
+            p = new Pax();
+            break;
+        case "C":
+            p = new Crew();
+            break;
+        case "I":
+            p = new PaxInTransit();
+            break;
+        }
+
         BeanUtils.copyProperties(vo, p);
         p.setGender(Gender.valueOf(vo.getGender()));
-        p.setDebarkCountry(convertCountry(vo.getDebarkCountry()));
-        p.setDebarkation(convertAirport(vo.getDebarkation()));
-        p.setEmbarkCountry(convertCountry(vo.getEmbarkCountry()));
-        p.setEmbarkation(convertAirport(vo.getEmbarkation()));
+        
+        Airport debark = convertAirport(vo.getDebarkation());
+        if (debark != null) {
+            p.setDebarkation(debark);
+            p.setDebarkCountry(debark.getCountry());
+        }
+
+        Airport embark = convertAirport(vo.getEmbarkation());
+        if (embark != null) {
+            p.setEmbarkation(embark);
+            p.setEmbarkCountry(embark.getCountry());
+        }
+        
         p.setCitizenshipCountry(convertCountry(vo.getCitizenshipCountry()));
         p.setResidencyCountry(convertCountry(vo.getResidencyCountry()));
         
@@ -166,19 +192,38 @@ public class ApisMessageService {
         return rp;
     }
     
-    private Flight convertFlightVo(FlightVo vo) {
+    private Flight convertFlightVo(FlightVo vo) throws ParseException {
+        // TODO: hardcoded for now
+        homeCountry = countryService.getCountryByThreeLetterCode("USA");
+                
         Flight f = new Flight();
         BeanUtils.copyProperties(vo, f);
         f.setCarrier(convertCarrier(vo.getCarrier()));
+        
         Airport dest = convertAirport(vo.getDestination());
-        f.setDestination(dest);
+        Country destCountry = null;
         if (dest != null) {
-            f.setDestinationCountry(dest.getCountry());
+            destCountry = dest.getCountry();
         }
+        f.setDestination(dest);
+        f.setDestinationCountry(destCountry);
+        
         Airport origin = convertAirport(vo.getOrigin());
-        f.setOrigin(origin);
+        Country originCountry = null;
         if (origin != null) {
-            f.setOriginCountry(origin.getCountry());
+            originCountry = origin.getCountry();
+        }
+        f.setOrigin(origin);
+        f.setOriginCountry(originCountry);
+        
+        if (destCountry != null && originCountry != null) {
+            if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
+                f.setDirection(FlightDirection.CONTINUANCE);
+            } else if (homeCountry.equals(originCountry)) {
+                f.setDirection(FlightDirection.OUTBOUND);            
+            } else if (homeCountry.equals(destCountry)) {
+                f.setDirection(FlightDirection.INBOUND);                        
+            }
         }
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #
@@ -191,37 +236,55 @@ public class ApisMessageService {
         return f;
     }
     
-    private Country convertCountry(String c) {
+    private Country convertCountry(String c) throws ParseException {
         if (c == null) return null;
+        
+        Country rv = null;
         if (c.length() == 2) {
-            return countryService.getCountryByTwoLetterCode(c);
+            rv = countryService.getCountryByTwoLetterCode(c);
         } else if (c.length() == 3) {
-            return countryService.getCountryByThreeLetterCode(c);
+            rv = countryService.getCountryByThreeLetterCode(c);
         }
         
-        return null;
+        if (rv == null) {
+            throw new ParseException("Unknown country code: " + c);
+        }
+        
+        return rv;
     }
     
-    private Airport convertAirport(String a) {
+    private Airport convertAirport(String a) throws ParseException {
         if (a == null) return null;
-        if (a.length() == 3) {
-            return airportService.getAirportByThreeLetterCode(a);
-        } else if (a.length() == 4) {
-            return airportService.getAirportByFourLetterCode(a);
-        }
         
-        return null;
+        Airport rv = null;
+        if (a.length() == 3) {
+            rv = airportService.getAirportByThreeLetterCode(a);
+        } else if (a.length() == 4) {
+            rv = airportService.getAirportByFourLetterCode(a);
+        }
+
+        if (rv == null) {
+            throw new ParseException("Unknown airport code: " + a);
+        }
+
+        return rv;
     }
     
-    private Carrier convertCarrier(String c) {
+    private Carrier convertCarrier(String c) throws ParseException {
         if (c == null) return null;
+        
+        Carrier rv = null;
         if (c.length() == 3) {
-            return carrierService.getCarrierByThreeLetterCode(c);
+            rv = carrierService.getCarrierByThreeLetterCode(c);
         } else if (c.length() == 2) {
-            return carrierService.getCarrierByTwoLetterCode(c);
+            rv = carrierService.getCarrierByTwoLetterCode(c);
         }
         
-        return null;
+        if (rv == null) {
+            throw new ParseException("Unknown carrier code: " + c);
+        }
+
+        return rv;
     }
     
     /**
@@ -231,13 +294,13 @@ public class ApisMessageService {
     private String getApisMessagePayload(String text) {
         if (text == null) return null;
         
-        UNA una = EdifactParser.getUnaSegment(text);
-        int bgmIndex = EdifactParser.getStartOfSegment("BGM", text, una);
+        UNA una = EdifactLexer.getUnaSegment(text);
+        int bgmIndex = EdifactLexer.getStartOfSegment("BGM", text, una);
         if (bgmIndex == -1) {
             return null;
         }
 
-        int untIndex = EdifactParser.getStartOfSegment("UNT", text, una);
+        int untIndex = EdifactLexer.getStartOfSegment("UNT", text, una);
         if (untIndex == -1) {
             return null;
         }

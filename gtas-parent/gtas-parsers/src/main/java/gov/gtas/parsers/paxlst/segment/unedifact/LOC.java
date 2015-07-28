@@ -1,13 +1,13 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
-import java.text.ParseException;
-
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
 
 public class LOC extends Segment {
     public enum LocCode {
+        // DTM
         DEPARTURE_AIRPORT,
         ARRIVAL_AIRPORT,
         BOTH_DEPARTURE_AND_ARRIVAL_AIRPORT,
@@ -16,12 +16,14 @@ public class LOC extends Segment {
         REPORTING_LOCATION,
         GATE_PASS_LOCATION,
         
-        // from pax LOC
+        // NAD
         AIRPORT_OF_FIRST_US_ARRIVAL,
         COUNTRY_OF_RESIDENCE,
         PORT_OF_EMBARKATION,
         PORT_OF_DEBARKATION,
         PLACE_OF_BIRTH,
+        
+        // DOC
         PLACE_OF_DOCUMENT_ISSUE
     }
     
@@ -77,16 +79,24 @@ public class LOC extends Segment {
                 case 180:
                     this.functionCode = LocCode.PLACE_OF_BIRTH;
                     break;
+                    
                 case 91:
                     this.functionCode = LocCode.PLACE_OF_DOCUMENT_ISSUE;
                     break;
                 default:
-                    throw new ParseException("LOC: invalid party function code: " + c.getValue(), -1);                    
+                    throw new ParseException("LOC: invalid party function code: " + c.getValue());                    
                 }
                 break;
 
             case 1:
-                this.locationNameCode = c.getValue();
+                if (c.getValue() != null) {
+                    // LOC+174+CAN'
+                    this.locationNameCode = c.getValue();
+                } else if (e != null && e.length >= 4) {
+                    // LOC+180+:::AMBER HILL GBR'
+                    // TODO: in this case set a flag indicating it's not a country code
+                    this.locationNameCode = e[3].getValue();
+                }
                 break;
                 
             case 2:
