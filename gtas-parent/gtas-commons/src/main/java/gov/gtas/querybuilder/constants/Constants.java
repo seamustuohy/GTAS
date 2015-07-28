@@ -24,7 +24,7 @@ public final class Constants {
 	public static final String TRAVELAGENCY = "TRAVELAGENCY";
 	
 	public static final String QUERYOBJECT_OBJECTNAME = "queryObject";
-	public static final String QUERYREQUEST_OBJECTNAME = "queryRequest";
+	public static final String USERQUERY_OBJECTNAME = "userQuery";
 	
 	public static final String QUERY_EXISTS_ERROR_MSG = "A query with the same title already exists. Please rename this query or edit the existing one.";
 	public static final String QUERY_DOES_NOT_EXIST_ERROR_MSG = "Query cannot be found.";

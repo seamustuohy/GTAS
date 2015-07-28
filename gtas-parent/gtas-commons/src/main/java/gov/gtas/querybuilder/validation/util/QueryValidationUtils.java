@@ -22,15 +22,22 @@ import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
 import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
+import gov.gtas.querybuilder.model.UserQuery;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class QueryValidationUtils {
 	private static final Logger logger = LoggerFactory.getLogger(QueryValidationUtils.class);
@@ -48,14 +55,38 @@ public class QueryValidationUtils {
 		return errors;
 	}
 	
-	public static void validate(QueryEntity queryEntity, Errors errors) {
-		QueryObject queryObject = null;
-		QueryTerm queryTerm = null;
-		String condition = null;
+	public static Errors validateQueryRequest(UserQuery userQuery) throws JsonParseException, JsonMappingException, IOException {
+		String objectName = Constants.USERQUERY_OBJECTNAME;
+		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(UserQuery.class, objectName);
+		
+		logger.debug("Validating " + objectName);
+		if(userQuery != null) {
+			
+			if(userQuery.getCreatedBy() == null || StringUtils.isEmpty(userQuery.getCreatedBy().getUserId())) {
+				errors.reject("", "userId must be provided");
+			}
+			if(StringUtils.isEmpty(userQuery.getTitle())) {
+				errors.reject("", "Title cannot be empty");
+			}
+			if(StringUtils.isEmpty(userQuery.getQueryText())) {
+				errors.reject("", "Query cannot be empty");
+			}
+			else {
+				ObjectMapper mapper = new ObjectMapper();
+				QueryObject queryObject = mapper.readValue(userQuery.getQueryText(), QueryObject.class);
+				validate(queryObject, errors);
+			}
+			
+		}
+		
+		return errors;
+	}
+	
+	private static void validate(QueryEntity queryEntity, Errors errors) {
 		
 		if(queryEntity instanceof QueryObject) {
-			queryObject = (QueryObject) queryEntity;
-			condition = queryObject.getCondition();
+			QueryObject queryObject = (QueryObject) queryEntity;
+			String condition = queryObject.getCondition();
 			
 			// validate condition
 			boolean validCondition = false;
@@ -77,10 +108,10 @@ public class QueryValidationUtils {
 					validate(rule, errors);
 				}
 			}
-						
+						 
 		}
 		else if(queryEntity instanceof QueryTerm) {
-			queryTerm = (QueryTerm) queryEntity;
+			QueryTerm queryTerm = (QueryTerm) queryEntity;
 			
 			String entity = queryTerm.getEntity();
 			String field = queryTerm.getField();
@@ -174,17 +205,44 @@ public class QueryValidationUtils {
 				errors.reject("", "operator: \'" + operator + "\' is invalid");
 			}
 			else {
-				// validate that there are two values if the operator is BETWEEN
-				if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator)) {
-					List<String> values = Arrays.asList(queryTerm.getValues());
+				// validate value/values
+				// ignore the value/values on these four operators because they shouldn't
+				// have one and will not be used if it's provided
+				if(!OperatorEnum.IS_EMPTY.toString().equalsIgnoreCase(operator) &&
+						!OperatorEnum.IS_NOT_EMPTY.toString().equalsIgnoreCase(operator) &&
+						!OperatorEnum.IS_NULL.toString().equalsIgnoreCase(operator) &&
+						!OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator)) {
 					
-					if(values != null && values.size() != 2) {
-						errors.reject("BETWEEN operator must have two parameters");
+					// validate that there are two values if the operator is BETWEEN
+					if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator)) {
+						List<String> values = Arrays.asList(queryTerm.getValues());
+						
+						if(values == null || values.size() != 2) {
+							errors.reject("", "values: BETWEEN operator must have two parameters");
+						}
 					}
-					
+					// for IN operator, verify that values is not null and it has at least one parameter
+					else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator)) {
+						List<String> values = Arrays.asList(queryTerm.getValues());
+						
+						if(values == null || values.size() == 0) {
+							errors.reject("", "values: IN operator must have at least one parameter");
+						}
+					}
+					else {
+						String value = queryTerm.getValue();
+						
+						// verify that value is not null
+						if(value == null) {
+							errors.reject("", "value: null is invalid");
+						}
+					}
 				}
 			}
 			
+		}
+		else {
+			errors.reject("", "Invalid query");
 		}
 				
 	}
