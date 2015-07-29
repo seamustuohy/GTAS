@@ -60,7 +60,6 @@ public abstract class EdifactParser <T extends MessageVo> {
     }
 
     private void parseTrailer() throws ParseException {
-        // TBD
     }
     
     /**
@@ -81,7 +80,9 @@ public abstract class EdifactParser <T extends MessageVo> {
         if (iter.hasNext()) {
             Segment s = iter.next();
             validateSegmentName(s.getName());
-            return segmentFactory.build(s, clazz);
+            S rv = segmentFactory.build(s, clazz);
+            System.out.println(rv);
+            return rv;
         }
 
         throw new ParseException("No segments left! ");
@@ -93,7 +94,9 @@ public abstract class EdifactParser <T extends MessageVo> {
             validateSegmentName(s.getName());
             String myName = (segmentName != null) ? segmentName : clazz.getSimpleName();
             if (s.getName().equals(myName)) {
-                return segmentFactory.build(s, clazz);
+                S rv = segmentFactory.build(s, clazz);
+                System.out.println(rv);
+                return rv;
             } else {
                 iter.previous();
                 return null;

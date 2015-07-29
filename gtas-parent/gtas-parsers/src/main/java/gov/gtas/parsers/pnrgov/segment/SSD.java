@@ -14,29 +14,7 @@ public class SSD extends Segment{
 	private String cabinClass;
 	
 	
-	public SSD(String name, Composite[] composites) {
-		super(name, composites);
-		// TODO Auto-generated constructor stub
+	public SSD(Composite[] composites) {
+		super(SSD.class.getSimpleName(), composites);
 	}
-
-
-	public String getSeatNumber() {
-		return seatNumber;
-	}
-
-
-	public void setSeatNumber(String seatNumber) {
-		this.seatNumber = seatNumber;
-	}
-
-
-	public String getCabinClass() {
-		return cabinClass;
-	}
-
-
-	public void setCabinClass(String cabinClass) {
-		this.cabinClass = cabinClass;
-	}
-
 }

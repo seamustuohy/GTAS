@@ -6,7 +6,6 @@ import gov.gtas.parsers.edifact.Segment;
 /**
  * Class TRA holds Transport identifier
  * To specify transport service(s) which is/are to be updated or cancelled.
- * @author GTAS4
  *
  * Examples:
  * Flight number 123 operated by Delta(TRA+DL+123:Y”)
@@ -25,49 +24,7 @@ public class TRA extends Segment{
 	private String flightSuffix;
 		
 
-	public TRA(String name, Composite[] composites) {
-		super(name, composites);
-		// TODO Auto-generated constructor stub
+	public TRA(Composite[] composites) {
+		super(TRA.class.getSimpleName(), composites);
 	}
-
-
-	public String getAirlineDesignatorCode() {
-		return airlineDesignatorCode;
-	}
-
-
-	public void setAirlineDesignatorCode(String airlineDesignatorCode) {
-		this.airlineDesignatorCode = airlineDesignatorCode;
-	}
-
-
-	public String getFlightNumber() {
-		return flightNumber;
-	}
-
-
-	public void setFlightNumber(String flightNumber) {
-		this.flightNumber = flightNumber;
-	}
-
-
-	public String getBookingDesignator() {
-		return bookingDesignator;
-	}
-
-
-	public void setBookingDesignator(String bookingDesignator) {
-		this.bookingDesignator = bookingDesignator;
-	}
-
-
-	public String getFlightSuffix() {
-		return flightSuffix;
-	}
-
-
-	public void setFlightSuffix(String flightSuffix) {
-		this.flightSuffix = flightSuffix;
-	}
-
 }
