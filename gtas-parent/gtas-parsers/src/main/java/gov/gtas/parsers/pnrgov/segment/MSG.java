@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
@@ -51,12 +50,11 @@ public class MSG extends Segment {
 		String code = null;
         Composite c = this.composites[0];
 
-		if (c.getValue() != null) {
-		    code = c.getValue();
+		if (c.getElement(0) != null) {
+		    code = c.getElement(0);
 		} else {
-            Element[] e = c.getElements();
-            if (e[1].getValue() != null) {
-                code = e[1].getValue();
+            if (c.getElement(1) != null) {
+                code = c.getElement(1);
             }
 		}
         this.messageTypeCode = MsgCode.forCode(code);

@@ -3,10 +3,8 @@ package gov.gtas.parsers.pnrgov.segment;
 import java.util.Date;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.pnrgov.PnrUtils;
 
 /**
  * <p>
@@ -40,25 +38,24 @@ public class TVL_L0 extends Segment {
         super("TVL", composites);
         for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
-            Element[] e = c.getElements();
 
             switch (i) {
             case 0:
-                Date[] tmp = TVL.getEtdEta(e);
+                Date[] tmp = TVL.getEtdEta(c);
                 etd = tmp[0];
                 eta = tmp[1];
                 break;
             case 1:
-                origin = c.getValue();
+                origin = c.getElement(0);
                 break;
             case 2:
-                destination = c.getValue();
+                destination = c.getElement(0);
                 break;
             case 3:
-                carrier = c.getValue();
+                carrier = c.getElement(0);
                 break;
             case 4:
-                flightNumber = c.getValue();
+                flightNumber = c.getElement(0);
                 break;
             }
         }

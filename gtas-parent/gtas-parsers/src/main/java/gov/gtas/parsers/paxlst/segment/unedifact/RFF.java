@@ -1,7 +1,6 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
@@ -30,14 +29,13 @@ public class RFF extends Segment {
         super(RFF.class.getSimpleName(), composites);
         for (int i=0; i<this.composites.length; i++) {
             Composite c = this.composites[i];
-            Element[] e = c.getElements();
             switch (i) {
             case 0:
-                this.referenceCodeQualifier = e[0].getValue();
+                this.referenceCodeQualifier = c.getElement(0);
                 if (this.referenceCodeQualifier.equals("TN")) {
-                    this.referenceIdentifier = e[1].getValue();
-                    if (e.length >= 5) {
-                        this.revisionIdentifier = Integer.valueOf(e[4].getValue());
+                    this.referenceIdentifier = c.getElement(1);
+                    if (c.numElements() >= 5) {
+                        this.revisionIdentifier = Integer.valueOf(c.getElement(4));
                     }
                 }
             }

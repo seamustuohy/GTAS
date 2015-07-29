@@ -24,7 +24,7 @@ public class EQN_L0 extends Segment {
     public EQN_L0(Composite[] composites) {
         super("EQN", composites);
         Composite c = this.composites[0];
-        this.numberOfPnrRecords = Integer.valueOf(c.getValue());
+        this.numberOfPnrRecords = Integer.valueOf(c.getElement(0));
     }
 
     public Integer getNumberOfPnrRecords() {

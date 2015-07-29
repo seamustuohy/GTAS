@@ -17,10 +17,10 @@ public class UNZ extends Segment {
             Composite c = this.composites[i];
             switch (i) {
             case 0:
-                this.interchangeControlCount = c.getValue();
+                this.interchangeControlCount = c.getElement(0);
                 break;
             case 1:
-                this.interchangeControlReference = c.getValue();
+                this.interchangeControlReference = c.getElement(0);
                 break;
             }
         }

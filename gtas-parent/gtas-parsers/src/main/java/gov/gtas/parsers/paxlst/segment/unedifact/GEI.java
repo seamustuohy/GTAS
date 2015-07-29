@@ -1,9 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.exception.ParseException;
 
 /**
  * <p>
@@ -19,29 +17,13 @@ import gov.gtas.parsers.exception.ParseException;
 public class GEI extends Segment {
     private boolean verified;
 
-    public GEI(Composite[] composites) throws ParseException {
+    public GEI(Composite[] composites) {
         super(GEI.class.getSimpleName(), composites);
         for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
-            Element[] e = c.getElements();
             switch (i) {
-            case 0:
-                if (Integer.valueOf(c.getValue()) != 4) {
-                    throw new ParseException("unknown gei qualifier: " + c.getValue());
-                }
-                break;
-
             case 1:
-                String code = null;
-                if (c.getValue() != null) {
-                    code = c.getValue();
-                } else if (e != null && e.length >= 1) {
-                    code = e[0].getValue();
-                } else {
-                    throw new ParseException("unknown verification code");
-                }
-                
-                switch (code) {
+                switch (c.getElement(0)) {
                 case "173":
                 case "ZZZ":
                     this.verified = true;
@@ -50,7 +32,7 @@ public class GEI extends Segment {
                     this.verified = false;
                     break;
                 default:
-                    throw new ParseException("unknown verification code: " + c.getValue());
+                    this.verified = false;
                 }
                 break;
             }

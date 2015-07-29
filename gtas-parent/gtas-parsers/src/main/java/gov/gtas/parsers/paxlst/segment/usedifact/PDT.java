@@ -3,7 +3,6 @@ package gov.gtas.parsers.paxlst.segment.usedifact;
 import java.util.Date;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.util.ParseUtils;
@@ -40,10 +39,9 @@ public class PDT extends Segment {
         super(PDT.class.getSimpleName(), composites);
         for (int i=0; i<this.composites.length; i++) {
             Composite c = this.composites[i];
-            Element[] e = c.getElements();
             switch (i) {
             case 0:
-                char code = e[0].getValue().charAt(0);
+                char code = c.getElement(0).charAt(0);
                 switch (code) {
                 case 'V':
                     this.documentType = DocType.VISA;
@@ -56,31 +54,29 @@ public class PDT extends Segment {
                     break;
                 }
             
-                String[] tmp = e[0].getValue().split("/");
+                String[] tmp = c.getElement(0).split("/");
                 if (tmp.length >= 2) {
                     this.documentNumber = tmp[1];
                 }
                 
-                if (e.length >= 2) {                    
-                    this.c_dateOfExpiration = ParseUtils.parseDateTime(e[1].getValue(), DATE_FORMAT);
+                if (c.getElement(1) != null) {                    
+                    this.c_dateOfExpiration = ParseUtils.parseDateTime(c.getElement(1), DATE_FORMAT);
                 }
-                if (e.length >= 3) {
-                    this.iataOriginatingCountry = e[2].getValue();
-                }
+                
+                this.iataOriginatingCountry = c.getElement(2);
                 break;
                 
             case 1:
-                this.lastName = e[0].getValue();
-                this.firstName = e[1].getValue();
-                if (e.length >= 3) {
-                    this.c_middleNameOrInitial = e[2].getValue();
-                }
-                this.dob = ParseUtils.parseDateTime(e[3].getValue(), DATE_FORMAT);
-                this.gender = e[4].getValue();
+                this.lastName = c.getElement(0);
+                this.firstName = c.getElement(1);
+                this.c_middleNameOrInitial = c.getElement(2);
+                
+                this.dob = ParseUtils.parseDateTime(c.getElement(3), DATE_FORMAT);
+                this.gender = c.getElement(4);
                 break;
             
             case 2:
-                switch (c.getValue()) {
+                switch (c.getElement(0)) {
                 case "PAX":
                     this.personStatus = PersonStatus.PAX;
                     break;
@@ -91,16 +87,16 @@ public class PDT extends Segment {
                     this.personStatus = PersonStatus.IN_TRANSIT;
                     break;
                 default:
-                    logger.error("unknown person type: " + c.getValue());
+                    logger.error("unknown person type: " + c.getElement(0));
                     return;
                 }
                 break;
                 
             case 3:
-                String emb = e[0].getValue();
+                String emb = c.getElement(0);
                 this.iataEmbarkationCountry = emb.substring(0, 2);
                 this.iataEmbarkationAirport = emb.substring(2, emb.length());
-                String deb = e[1].getValue();
+                String deb = c.getElement(1);
                 this.iataDebarkationCountry = deb.substring(0, 2);
                 this.iataDebarkationAirport = deb.substring(2, deb.length());
                 break;

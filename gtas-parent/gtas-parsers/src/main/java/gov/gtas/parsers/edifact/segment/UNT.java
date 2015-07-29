@@ -22,10 +22,10 @@ public class UNT extends Segment {
             Composite c = this.composites[i];
             switch (i) {
             case 0:
-                this.numberOfSegments = Integer.valueOf(c.getValue());
+                this.numberOfSegments = Integer.valueOf(c.getElement(0));
                 break;
             case 1:
-                this.messageRefNumber = c.getValue();
+                this.messageRefNumber = c.getElement(0);
                 break;
             }
         }

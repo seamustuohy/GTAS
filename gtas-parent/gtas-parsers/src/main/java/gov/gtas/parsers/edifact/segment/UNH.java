@@ -1,7 +1,6 @@
 package gov.gtas.parsers.edifact.segment;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
@@ -26,13 +25,12 @@ public class UNH extends Segment {
             Composite c = this.composites[i];
             switch (i) {
             case 0:
-                this.messageReferenceNumber = c.getValue();
+                this.messageReferenceNumber = c.getElement(0);
                 break;
             case 1:
-                Element[] e = c.getElements();
-                this.messageType = e[0].getValue();
-                this.messageTypeVersion = e[1].getValue();
-                this.messageTypeReleaseNumber = e[2].getValue();
+                this.messageType = c.getElement(0);
+                this.messageTypeVersion = c.getElement(1);
+                this.messageTypeReleaseNumber = c.getElement(2);
                 break;
             }
         }

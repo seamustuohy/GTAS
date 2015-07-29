@@ -1,7 +1,6 @@
 package gov.gtas.parsers.pnrgov.segment;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
@@ -40,32 +39,16 @@ public class ADD extends Segment {
 
     public ADD(Composite[] composites) {
         super(ADD.class.getSimpleName(), composites);
-        Element[] e = this.composites[1].getElements();
-        if (e.length >= 1) {
-            this.addressType = e[0].getValue();
-        }
-        if (e.length >= 2) {
-            this.streetNumberAndName = e[1].getValue();
-        }
-        if (e.length >= 3) {
-            this.city = e[2].getValue();
-        }
-        if (e.length >= 4) {
-            this.stateOrProvinceCode = e[3].getValue();
-        }
-        if (e.length >= 5) {
-            // Country sub-entity name
-            // not recorded
-        }
-        if (e.length >= 6) {
-            this.countryCode = e[5].getValue();
-        }
-        if (e.length >= 7) {
-            this.postalCode = e[6].getValue();
-        }
-        if (e.length >= 8) {
-            this.telephone = e[7].getValue();
-        }
+        Composite c = composites[0];
+        this.addressType = c.getElement(0);
+        this.streetNumberAndName = c.getElement(1);
+        this.city = c.getElement(2);
+        this.stateOrProvinceCode = c.getElement(3);
+        // Country sub-entity name
+        // not recorded
+        this.countryCode = c.getElement(5);
+        this.postalCode = c.getElement(6);
+        this.telephone = c.getElement(7);
     }
 
     public String getAddressType() {

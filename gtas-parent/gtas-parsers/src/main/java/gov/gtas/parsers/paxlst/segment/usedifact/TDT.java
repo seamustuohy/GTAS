@@ -15,7 +15,7 @@ public class TDT extends Segment {
             Composite c = this.composites[i];
             switch (i) {
             case 1:
-                this.c_flightNumber = c.getValue();
+                this.c_flightNumber = c.getElement(0);
                 if (this.c_flightNumber != null && this.c_flightNumber.endsWith("C")) {
                     isCrewOnlyManifest = true;
                 } else {
@@ -23,10 +23,10 @@ public class TDT extends Segment {
                 }
                 break;
             case 2:
-                this.c_modeOfTransport = c.getValue();
+                this.c_modeOfTransport = c.getElement(0);
                 break;
             case 3:
-                this.c_airlineCode = c.getValue();
+                this.c_airlineCode = c.getElement(0);
                 break;
             }
         }

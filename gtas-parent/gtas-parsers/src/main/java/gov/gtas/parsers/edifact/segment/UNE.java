@@ -18,10 +18,10 @@ public class UNE extends Segment {
             Composite c = this.composites[i];
             switch (i) {
             case 0:
-                this.numberOfMessages = Integer.valueOf(c.getValue());
+                this.numberOfMessages = Integer.valueOf(c.getElement(0));
                 break;
             case 1:
-                this.identificationNumber = c.getValue();
+                this.identificationNumber = c.getElement(0);
                 break;
             }
         }

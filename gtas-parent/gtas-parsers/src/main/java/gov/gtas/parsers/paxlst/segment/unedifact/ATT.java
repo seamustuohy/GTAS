@@ -30,7 +30,6 @@ public class ATT extends Segment {
         public static AttCode forCode(String code) {
             return BY_CODE_MAP.get(code);
         }
-
     }
 
     private AttCode functionCode;
@@ -42,10 +41,10 @@ public class ATT extends Segment {
             Composite c = this.composites[i];
             switch (i) {
             case 0:
-                this.functionCode = AttCode.forCode(c.getValue());
+                this.functionCode = AttCode.forCode(c.getElement(0));
                 break;
             case 2:
-                this.attributeDescriptionCode = c.getValue();
+                this.attributeDescriptionCode = c.getElement(0);
                 break;
             }
         }

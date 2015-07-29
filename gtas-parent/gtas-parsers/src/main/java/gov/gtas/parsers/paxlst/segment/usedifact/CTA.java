@@ -1,7 +1,6 @@
 package gov.gtas.parsers.paxlst.segment.usedifact;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 public class CTA extends Segment {
@@ -13,24 +12,21 @@ public class CTA extends Segment {
         super(CTA.class.getSimpleName(), composites);
         for (int i=0; i<this.composites.length; i++) {
             Composite c = this.composites[i];
-            Element[] e = c.getElements();
             switch (i) {
             case 0:
-                this.contactFunctionCode = c.getValue();
+                this.contactFunctionCode = c.getElement(0);
                 break;
             case 1:
-                if (e.length >= 2) {
-                    this.c_departmentOrEmployee = e[1].getValue();
-                }
+                this.c_departmentOrEmployee = c.getElement(1);
                 break;
             case 2:
             case 3:
-                if (e.length >= 2) {
-                    String code = e[1].getValue();
+                String code = c.getElement(1);
+                if (code != null) {
                     if (code.equals("TE")) {
-                        this.telephoneNumber = e[0].getValue();
+                        this.telephoneNumber = c.getElement(0);
                     } else if (code.equals("FX")) {
-                        this.faxNumber = e[0].getValue();
+                        this.faxNumber =c.getElement(0);
                     }
                 }
                 break;

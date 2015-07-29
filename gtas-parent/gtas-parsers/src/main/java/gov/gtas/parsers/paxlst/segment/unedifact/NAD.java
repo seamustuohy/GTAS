@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
@@ -65,42 +64,34 @@ public class NAD extends Segment {
         super(NAD.class.getSimpleName(), composites);
         for (int i=0; i<this.composites.length; i++) {
             Composite c = this.composites[i];
-            Element[] e = c.getElements();
             
             switch (i) {
             case 0:
-                this.nadCode = NadCode.forCode(c.getValue());
+                this.nadCode = NadCode.forCode(c.getElement(0));
                 break;
-
             case 3:
-                if (c.getValue() != null) {
-                    this.profileName = c.getValue();
-                } else if (e != null) {
-                    if (e.length > 0) {
-                        this.lastName = e[0].getValue();
-                    }
-                    if (e.length > 1) {
-                        this.firstName = e[1].getValue();
-                    }
-                    if (e.length > 2) {
-                        this.middleName = e[2].getValue();
-                    }
+                if (c.numElements() == 1) {
+                    this.profileName = c.getElement(0);
+                } else {
+                    this.lastName = c.getElement(0);
+                    this.firstName = c.getElement(1);
+                    this.middleName = c.getElement(2);
                 }
                 break;
             case 4:
-                this.numberAndStreetIdentifier = c.getValue();
+                this.numberAndStreetIdentifier = c.getElement(0);
                 break;
             case 5:
-                this.city = c.getValue();
+                this.city = c.getElement(0);
                 break;
             case 6:
-                this.countrySubCode = c.getValue();
+                this.countrySubCode = c.getElement(0);
                 break;
             case 7:
-                this.postalCode = c.getValue();
+                this.postalCode = c.getElement(0);
                 break;
             case 8:
-                this.countryCode = c.getValue();
+                this.countryCode = c.getElement(0);
                 break;
             }
         }

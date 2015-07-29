@@ -68,7 +68,7 @@ public class EdifactLexer {
                 throw new ParseException("Could not tokenize segment " + s);
             }
             
-            String segmentType = tokens[0].getValue();
+            String segmentType = tokens[0].getElement(0);
             Composite[] composites = null;
             if (tokens.length > 1) {
                 composites = Arrays.copyOfRange(tokens, 1, tokens.length);

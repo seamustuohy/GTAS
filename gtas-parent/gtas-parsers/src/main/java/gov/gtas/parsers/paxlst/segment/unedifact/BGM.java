@@ -111,14 +111,14 @@ public class BGM extends Segment {
             Composite c = this.composites[i];
             switch (i) {
             case 0:
-                this.documentCode = DocumentNameCode.forCode(c.getValue());
+                this.documentCode = DocumentNameCode.forCode(c.getElement(0));
                 if (this.documentCode == null) {
-                    throw new ParseException("BGM unknown document name code: " + c.getValue());
+                    throw new ParseException("BGM unknown document name code: " + c.getElement(0));
                 }
                 break;
  
             case 1:
-                this.documentSubCode = DocumentIdentifier.forCode(c.getValue());
+                this.documentSubCode = DocumentIdentifier.forCode(c.getElement(0));
                 break;
             }
         }
