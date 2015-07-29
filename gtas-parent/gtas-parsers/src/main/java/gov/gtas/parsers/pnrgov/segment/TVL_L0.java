@@ -15,19 +15,15 @@ import gov.gtas.parsers.pnrgov.PnrUtils;
  * Specifies flight (departure date/time, origin, destination, operating airline
  * code, flight number, and operation suffix) for which passenger data is being
  * sent.
- *
  * <p>
  * Dates and times in the TVL are in Local Time Departure and arrival points of
  * the transborder segment for a given country are the ones of the leg which
  * makes the segment eligible for push to a given country
- * 
  * <p>
  * Examples
- * 
  * <p>
  * The passenger information being sent is for Delta flight 10 from ATL to LGW
  * on 30MAR which departs at 5:00 pm.(TVL+300310:1700+ATL+DFW+DL+10’)
- * 
  * <p>
  * The passenger information being sent is for Delta flight 9375 from ATL to AMS
  * on 24 FEB which departs at 9:35 pm.(TVL+240210:2135+ATL+AMS+DL+9375’)
@@ -48,27 +44,10 @@ public class TVL_L0 extends Segment {
 
             switch (i) {
             case 0:
-                String departureDt = null;
-                String arrivalDt = null;
-                if (e.length >= 1) {
-                    departureDt = e[0].getValue();
-                    if (e.length >= 2) {
-                        departureDt += e[1].getValue();
-                    }
-                }
-                if (e.length >= 3) {
-                    arrivalDt = e[2].getValue();
-                    if (e.length >= 4) {
-                        arrivalDt += e[3].getValue();
-                    }
-                }
-
-                etd = PnrUtils.parseDateTime(departureDt);
-                if (eta != null) {
-                    eta = PnrUtils.parseDateTime(arrivalDt);
-                }
+                Date[] tmp = TVL.getEtdEta(e);
+                etd = tmp[0];
+                eta = tmp[1];
                 break;
-
             case 1:
                 origin = c.getValue();
                 break;

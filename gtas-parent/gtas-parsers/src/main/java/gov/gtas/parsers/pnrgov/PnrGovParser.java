@@ -7,6 +7,7 @@ import java.util.Set;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.pnrgov.segment.ABI;
 import gov.gtas.parsers.pnrgov.segment.ADD;
 import gov.gtas.parsers.pnrgov.segment.APD;
@@ -71,7 +72,15 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
 
         ORG_L0 org = getMandatorySegment(ORG_L0.class);
 
-        TVL_L0 tvl_l0 = getMandatorySegment(TVL_L0.class);
+        TVL_L0 tvl = getMandatorySegment(TVL_L0.class);
+        FlightVo f = new FlightVo();
+        f.setCarrier(tvl.getCarrier());
+        f.setDestination(tvl.getDestination());
+        f.setOrigin(tvl.getOrigin());
+        f.setEta(tvl.getEta());
+        f.setEtd(tvl.getEtd());
+        f.setFlightNumber(tvl.getFlightNumber());
+        this.parsedMessage.getFlights().add(f);
 
         EQN_L0 eqn = getMandatorySegment(EQN_L0.class);
 
@@ -82,6 +91,8 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
             processGroup1();
         }
+        
+        System.out.println(this.parsedMessage);
     }
 
     public void processGroup1() throws ParseException {
