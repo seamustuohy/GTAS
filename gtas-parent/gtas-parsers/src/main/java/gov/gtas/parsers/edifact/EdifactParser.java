@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.ListIterator;
 
 import gov.gtas.parsers.edifact.segment.UNB;
+import gov.gtas.parsers.edifact.segment.UNE;
 import gov.gtas.parsers.edifact.segment.UNG;
 import gov.gtas.parsers.edifact.segment.UNH;
+import gov.gtas.parsers.edifact.segment.UNT;
+import gov.gtas.parsers.edifact.segment.UNZ;
 import gov.gtas.parsers.exception.ParseException;
 
 /**
@@ -22,7 +25,7 @@ public abstract class EdifactParser <T extends MessageVo> {
     /** factory for creating segment classes */
     protected SegmentFactory segmentFactory;
 
-    /** output from the edifact parser */ 
+    /** output from the edifact lexer. The first segment will always be UNB */
     protected List<Segment> segments;
     
     /** iterator for segment list */
@@ -35,10 +38,28 @@ public abstract class EdifactParser <T extends MessageVo> {
 
     public EdifactParser() { }
 
+    /**
+     * As per ISO 9735, the service segments are sequenced in a message in the
+     * following order:
+     * <ol>
+     * <li>UNA Service String Advice
+     * <li>UNB Interchange Header Segment
+     * <li>UNG Functional Group Header
+     * <li>UNH Message Header
+     * <li>(BODY of MESSAGE)
+     * <li>UNT Message Trailer
+     * <li>UNE Functional Group Trailer
+     * <li>UNZ Interchange Trailer
+     * </ol>
+     * 
+     * @param message
+     * @return
+     * @throws ParseException
+     */
     public T parse(String message) throws ParseException {
         this.segmentFactory = new SegmentFactory();
         this.segments = lexer.tokenize(message);
-        iter = segments.listIterator();
+        this.iter = segments.listIterator();
 
         parseHeader();
         parsePayload();
@@ -60,6 +81,9 @@ public abstract class EdifactParser <T extends MessageVo> {
     }
 
     private void parseTrailer() throws ParseException {
+        getMandatorySegment(UNT.class);
+        getConditionalSegment(UNE.class);
+        getMandatorySegment(UNZ.class);
     }
     
     /**

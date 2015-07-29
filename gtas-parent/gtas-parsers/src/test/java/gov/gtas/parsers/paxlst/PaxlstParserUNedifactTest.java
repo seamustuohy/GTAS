@@ -21,6 +21,11 @@ public final class PaxlstParserUNedifactTest {
             "UNH+PAX001+PAXLST:D:05B:UN:IATA'" +
             "BGM+745'";
     
+    String trailer = 
+            "CNT+3:2'" +
+            "UNT+135+1'" + 
+            "UNZ+1+020A07'";
+    
     @Before
     public void setUp() {
         this.parser = new PaxlstParserUNedifact();
@@ -33,7 +38,8 @@ public final class PaxlstParserUNedifactTest {
                 "LOC+125+YVR'" + 
                 "DTM+189:0704291230:201'" + 
                 "LOC+87+JFK'" + 
-                "DTM+232:0704291600:201'";
+                "DTM+232:0704291600:201'" +
+                trailer;
 
         ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
@@ -56,7 +62,8 @@ public final class PaxlstParserUNedifactTest {
                 "LOC+92+JFK'" + 
                 "DTM+189:0704291730:201'" + 
                 "LOC+92+ATL'" + 
-                "DTM+232:0704291945:201'";
+                "DTM+232:0704291945:201'" +
+                trailer;
 
         ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
@@ -83,7 +90,8 @@ public final class PaxlstParserUNedifactTest {
                 "LOC+125+ANC'" +
                 "DTM+189:1402010650:201'" +
                 "LOC+87+ICN'" +
-                "DTM+232:1402020840:201'";
+                "DTM+232:1402020840:201'" +
+                trailer;
         
         ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
@@ -114,7 +122,8 @@ public final class PaxlstParserUNedifactTest {
                 "LOC+125+ANC'" +
                 "DTM+189:1402010650:201'" +
                 "LOC+87+ICN'" +
-                "DTM+232:1402020840:201'";
+                "DTM+232:1402020840:201'" +
+                trailer;
         
         ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
@@ -131,18 +140,10 @@ public final class PaxlstParserUNedifactTest {
         assertEquals("ICN", f2.getDestination());        
     } 
 
-//    @Test
-//    public void testWithLoc130() throws ParseException {
-///*
-// * LOC+125+LHR' Indicates the last airport of departure from a foreign country, i.e. London Heathrow
-//LOC+87+YUL' Indicates the first airport of arrival in the country of destination, i.e. Montreal Dorval
-//21
-//￼
-//LOC+92+YOW' Indicates the next airport in the country of destination, i.e. Ottawa International
-//LOC+130+YVR' Indicates the final destination airport in the country of destination, i.e.         
-// */
-//        
-//    }
+    @Test
+    public void testWithLoc130() throws ParseException {
+        // TODO
+    }
    
     @Test
     public void testRandomApis() throws ParseException {

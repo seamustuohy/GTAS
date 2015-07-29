@@ -10,6 +10,7 @@ import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.BGM;
+import gov.gtas.parsers.paxlst.segment.unedifact.CNT;
 import gov.gtas.parsers.paxlst.segment.unedifact.COM;
 import gov.gtas.parsers.paxlst.segment.unedifact.CPI;
 import gov.gtas.parsers.paxlst.segment.unedifact.CTA;
@@ -81,7 +82,9 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
                 break;
             }
             processPax(nad);
-        }       
+        }
+        
+        getMandatorySegment(CNT.class);
     }
 
     @Override
