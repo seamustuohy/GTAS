@@ -15,25 +15,7 @@ public class RPI extends Segment{
 	private String numberOfPassengersToTVL;
 	private String statusCode;
 	
-	public RPI(String name, Composite[] composites) {
-		super(name, composites);
-		// TODO Auto-generated constructor stub
+	public RPI(Composite[] composites) {
+		super(RPI.class.getSimpleName(), composites);
 	}
-
-	public String getNumberOfPassengersToTVL() {
-		return numberOfPassengersToTVL;
-	}
-
-	public void setNumberOfPassengersToTVL(String numberOfPassengersToTVL) {
-		this.numberOfPassengersToTVL = numberOfPassengersToTVL;
-	}
-
-	public String getStatusCode() {
-		return statusCode;
-	}
-
-	public void setStatusCode(String statusCode) {
-		this.statusCode = statusCode;
-	}
-
 }

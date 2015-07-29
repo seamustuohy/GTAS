@@ -17,27 +17,7 @@ public class SAC extends Segment{
 	private String statusIndicator;
 	private String locationIndicator;
 	private String statusCode;
-	public SAC(String name, Composite[] composites) {
-		super(name, composites);
-		// TODO Auto-generated constructor stub
+	public SAC(Composite[] composites) {
+		super(SAC.class.getSimpleName(), composites);
 	}
-	public String getStatusIndicator() {
-		return statusIndicator;
-	}
-	public void setStatusIndicator(String statusIndicator) {
-		this.statusIndicator = statusIndicator;
-	}
-	public String getLocationIndicator() {
-		return locationIndicator;
-	}
-	public void setLocationIndicator(String locationIndicator) {
-		this.locationIndicator = locationIndicator;
-	}
-	public String getStatusCode() {
-		return statusCode;
-	}
-	public void setStatusCode(String statusCode) {
-		this.statusCode = statusCode;
-	}
-
 }

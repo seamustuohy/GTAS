@@ -23,9 +23,7 @@ public class TXD extends Segment{
 	private String taxQualifier;
 	
 	
-	public TXD(String name, Composite[] composites) {
-		super(name, composites);
-		// TODO Auto-generated constructor stub
+	public TXD(Composite[] composites) {
+		super(TXD.class.getSimpleName(), composites);
 	}
-
 }

@@ -12,6 +12,8 @@ import gov.gtas.parsers.edifact.Segment;
  * behalf an aircraft operator, this segment should specify the identity of the
  * aircraft operator of record (not the transmitter of the message). ￼
  * <p>
+ * We don't need any info from UNG for our implementation.
+ * <p>
  * Example: UNG+PAXLST+AIRLINE1+NZCS+130628:0900+000000001+UN+D:12B'
  */
 public class UNG extends Segment {

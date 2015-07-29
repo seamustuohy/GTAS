@@ -29,21 +29,7 @@ public class TRI extends Segment{
 	//Used to indicate which passenger is being checked in refer to TIF in GR2 level 2.
 	private String travelerRefNumber;
 	
-	public TRI(String name, Composite[] composites) {
-		super(name, composites);
-		// TODO Auto-generated constructor stub
+	public TRI(Composite[] composites) {
+		super(TRI.class.getSimpleName(), composites);
 	}
-	public String getBoardingNumber() {
-		return boardingNumber;
-	}
-	public void setBoardingNumber(String boardingNumber) {
-		this.boardingNumber = boardingNumber;
-	}
-	public String getTravelerRefNumber() {
-		return travelerRefNumber;
-	}
-	public void setTravelerRefNumber(String travelerRefNumber) {
-		this.travelerRefNumber = travelerRefNumber;
-	}
-
 }

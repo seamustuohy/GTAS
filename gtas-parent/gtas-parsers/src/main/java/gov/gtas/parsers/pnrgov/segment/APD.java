@@ -13,8 +13,8 @@ import gov.gtas.parsers.edifact.Segment;
 public class APD extends Segment{
 
 
-	public APD(String name, Composite[] composites) {
-		super(name, composites);
+	public APD(Composite[] composites) {
+		super(APD.class.getSimpleName(), composites);
 		
 	}
 	

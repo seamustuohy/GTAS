@@ -22,16 +22,7 @@ public class EQN extends Segment{
 	private Integer numberOfPnrRecords;
 	
 
-	public EQN(String name, Composite[] composites) {
-		super(name, composites);
+	public EQN(Composite[] composites) {
+		super(EQN.class.getSimpleName(), composites);
 	}
-	
-	public Integer getNumberOfPnrRecords() {
-		return numberOfPnrRecords;
-	}
-
-	public void setNumberOfPnrRecords(Integer numberOfPnrRecords) {
-		this.numberOfPnrRecords = numberOfPnrRecords;
-	}
-
 }

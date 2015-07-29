@@ -3,7 +3,9 @@ package gov.gtas.rule.builder;
 import java.text.ParseException;
 
 import gov.gtas.model.udr.EntityAttributeConstants;
+import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
+import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
@@ -13,16 +15,33 @@ import gov.gtas.model.udr.enumtype.ValueTypesEnum;
  *
  */
 public class RuleConditionBuilder {
-	private static final String FLIGHT_PASSENGER_LINK_CONDITION =
-			EntityLookupEnum.Pax.toString()
-			+"(id == $p.id) from $f.passengers\n";
-	private static final String FLIGHT_PASSENGER_LINK_CONDITION2 =
-			"$p:"+EntityLookupEnum.Pax.toString()
-			+"() from $f.passengers\n";
+	private static final String ACTION_TRAVELER_HIT = "resultList.add(new RuleHitDetail(%dL, %d, $t.getId()));\n";
+	public void addRuleAction(StringBuilder ruleStringBuilder, UdrRule parent, Rule rule) {
+		ruleStringBuilder
+				.append("then\n")
+				.append(String.format(ACTION_TRAVELER_HIT, parent.getId(),
+						rule.getRuleIndex())).append("end\n");
+	}
+
+	private static final String TRAVELER_VARIABLE_NAME="$t";
+	private static final String DOCUMENT_VARIABLE_NAME="$d";
+	private static final String FLIGHT_VARIABLE_NAME="$f";
 	
-	private StringBuilder passengerConditionBuilder;
+	private static final String FLIGHT_TRAVELER_LINK_CONDITION =
+			EntityLookupEnum.Traveler.toString()
+			+"(id == "+TRAVELER_VARIABLE_NAME+".id) from "+FLIGHT_VARIABLE_NAME+".passengers\n";
+	private static final String FLIGHT_TRAVELER_LINK_CONDITION2 =
+			TRAVELER_VARIABLE_NAME+":"+EntityLookupEnum.Traveler.toString()
+			+"() from "+FLIGHT_VARIABLE_NAME+".passengers\n";
+	
+	private StringBuilder travelerConditionBuilder;	
 	private StringBuilder flightConditionBuilder;
 	private StringBuilder documentConditionBuilder;
+	
+	private boolean travelerIsPassenger;
+	private boolean travelerIsCrew;
+	private boolean documentIsPassport;
+	private boolean documentIsVisa;
 	/**
 	 * Appends the generated "when" part of the rule to the rule document.
 	 * @param parentStringBuilder the rule document builder.
@@ -32,35 +51,35 @@ public class RuleConditionBuilder {
 			final StringBuilder parentStringBuilder) throws ParseException{
 		if (documentConditionBuilder != null) {
 			RuleCond cond = RuleConditionBuilderHelper.createRuleCondition(
-					EntityLookupEnum.Pax,
-					EntityAttributeConstants.PAX_ATTR_ID,
+					EntityLookupEnum.Traveler,
+					EntityAttributeConstants.TRAVELER_ATTR_ID,
 					OperatorCodeEnum.EQUAL, 
-					   "$d."+EntityAttributeConstants.DOCUMENT_ATTR_TRAVELER_ID, 
+					DOCUMENT_VARIABLE_NAME+"."+EntityAttributeConstants.DOCUMENT_ATTR_TRAVELER_ID, 
 					   ValueTypesEnum.OBJECT_REF);
 			addRuleCondition(cond);
 			parentStringBuilder.append(documentConditionBuilder.append(")\n")
 					.toString());
 		}
-		boolean addFlightPassengerCondition = false;
+		boolean addFlightTravelerCondition = false;
 		if (flightConditionBuilder != null) {
-			addFlightPassengerCondition = true;
+			addFlightTravelerCondition = true;
 			parentStringBuilder.append(flightConditionBuilder.append(")\n")
 					.toString());
 		}
-		if (passengerConditionBuilder != null) {
-			parentStringBuilder.append(passengerConditionBuilder.append(")\n")
+		if (travelerConditionBuilder != null) {
+			parentStringBuilder.append(travelerConditionBuilder.append(")\n")
 					.toString());
-			if(addFlightPassengerCondition){
-			   parentStringBuilder.append(FLIGHT_PASSENGER_LINK_CONDITION);
+			if(addFlightTravelerCondition){
+			   parentStringBuilder.append(FLIGHT_TRAVELER_LINK_CONDITION);
 			}
 		} else{
-			//There is no passenger condition
-			if(addFlightPassengerCondition){
-				   parentStringBuilder.append(FLIGHT_PASSENGER_LINK_CONDITION2);
+			//There is no traveler condition
+			if(addFlightTravelerCondition){
+				   parentStringBuilder.append(FLIGHT_TRAVELER_LINK_CONDITION2);
 			}
 			
 		}
-		passengerConditionBuilder = null;
+		travelerConditionBuilder = null;
 		flightConditionBuilder = null;
 		documentConditionBuilder = null;
 	}
@@ -71,16 +90,20 @@ public class RuleConditionBuilder {
 	public void addRuleCondition(final RuleCond cond) {
 		switch (cond.getEntityName()) {
 		case Pax:
-			if (passengerConditionBuilder == null) {
-				passengerConditionBuilder = new StringBuilder("$p:Pax(");
+		case Crew:
+		case Traveler:
+			if (travelerConditionBuilder == null) {
+				travelerConditionBuilder = new StringBuilder(TRAVELER_VARIABLE_NAME+":Traveler(");
 			} else {
-				passengerConditionBuilder.append(", ");
+				travelerConditionBuilder.append(", ");
 			}
-			addCondition(cond, passengerConditionBuilder);
+			addCondition(cond, travelerConditionBuilder);
 			break;
+		case Passport:
+		case Visa:
 		case Document:
 			if (documentConditionBuilder == null) {
-				documentConditionBuilder = new StringBuilder("$d:Document(");
+				documentConditionBuilder = new StringBuilder(DOCUMENT_VARIABLE_NAME+":Document(");
 			} else {
 				documentConditionBuilder.append(", ");
 			}
@@ -88,7 +111,7 @@ public class RuleConditionBuilder {
 			break;
 		case Flight:
 			if (flightConditionBuilder == null) {
-				flightConditionBuilder = new StringBuilder("$f:Flight(");
+				flightConditionBuilder = new StringBuilder(FLIGHT_VARIABLE_NAME+":Flight(");
 			} else {
 				flightConditionBuilder.append(", ");
 			}
@@ -99,7 +122,7 @@ public class RuleConditionBuilder {
 		}
 
 	}
-
+    
 	private void addCondition(final RuleCond cond, final StringBuilder bldr) {
 		switch (cond.getOpCode()) {
 		case EQUAL:

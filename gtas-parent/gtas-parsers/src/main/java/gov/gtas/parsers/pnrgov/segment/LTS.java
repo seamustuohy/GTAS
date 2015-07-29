@@ -14,15 +14,8 @@ public class LTS extends Segment{
 
 	
 	private String unstructuredHistory;
-	public LTS(String name, Composite[] composites) {
-		super(name, composites);
+	public LTS(Composite[] composites) {
+		super(LTS.class.getSimpleName(), composites);
 		
 	}
-	public String getUnstructuredHistory() {
-		return unstructuredHistory;
-	}
-	public void setUnstructuredHistory(String unstructuredHistory) {
-		this.unstructuredHistory = unstructuredHistory;
-	}
-
 }

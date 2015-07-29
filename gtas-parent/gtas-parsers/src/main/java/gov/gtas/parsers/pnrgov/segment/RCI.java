@@ -1,95 +1,93 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
+import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.pnrgov.PnrUtils;
 
 /**
- * Class RCI to hold Reservation control information
- * @author GTAS4
+ * <p>
+ * RCI: RESERVATION CONTROL INFORMATION
  * 
- * The composite will appear at least once and may be repeated up to eight more times.
- * Examples:
- * SAS passenger record reference.(RCI+SK:12DEF')
+ * <p>
+ * The composite will appear at least once and may be repeated up to eight more
+ * times.
+ * <p>
+ * Examples: SAS passenger record reference.(RCI+SK:12DEF')
+ * <p>
  * Galileo and SAS record references.(RCI+SK:123EF+1G:345ABC')
- * Delta is the operating carrier and the PNR was created on 24 February 2010 at 2230 GMT.
- * (RCI+DL:ABC456789::240210:2230')
- * CX is the operating carrier and no PNR was received from the reservation system at a station 
- * handled by a ground handler; therefore the CX reservation PNR locator is not available and 
- * “DCS reference” is the Reservation Control Type.(RCI+CX:89QM3LABML:C’)
- * 
- *
+ * <p>
+ * Delta is the operating carrier and the PNR was created on 24 February 2010 at
+ * 2230 GMT. (RCI+DL:ABC456789::240210:2230')
+ * <p>
+ * CX is the operating carrier and no PNR was received from the reservation
+ * system at a station handled by a ground handler; therefore the CX reservation
+ * PNR locator is not available and “DCS reference” is the Reservation Control
+ * Type.(RCI+CX:89QM3LABML:C’)
  */
-public class RCI extends Segment{
+public class RCI extends Segment {
+    public class PnrReservation {
+        private String airlineCode;
+        private String reservationControlNumber;
+        private String reservationControlType;
+        private Date dateCreated;
+        
+        public String getAirlineCode() {
+            return airlineCode;
+        }
+        public void setAirlineCode(String airlineCode) {
+            this.airlineCode = airlineCode;
+        }
+        public String getReservationControlNumber() {
+            return reservationControlNumber;
+        }
+        public void setReservationControlNumber(String reservationControlNumber) {
+            this.reservationControlNumber = reservationControlNumber;
+        }
+        public String getReservationControlType() {
+            return reservationControlType;
+        }
+        public void setReservationControlType(String reservationControlType) {
+            this.reservationControlType = reservationControlType;
+        }
+        public Date getDateCreated() {
+            return dateCreated;
+        }
+        public void setDateCreated(Date dateCreated) {
+            this.dateCreated = dateCreated;
+        }
+    }
 
-	private String reservationControlNumber;//M*
-	private String airlineCode;//M*
-	private String reservationControType;
-	private String dateCreated;//ddmmyy
-	private String timeCreated;//msmsms
-	private String[] reservationControlNumbers;
-	private String[] airlineCodes;
-	
-	
-	
-	public RCI(String name, Composite[] composites) {
-		super(name, composites);
-		// TODO Auto-generated constructor stub
-	}
+    private List<PnrReservation> reservations;
+    
+    public RCI(Composite[] composites) throws ParseException {
+        super(RCI.class.getSimpleName(), composites);
+        reservations = new ArrayList<>(composites.length);
+        for (int i=0; i<composites.length; i++) {
+            Element[] e = this.composites[i].getElements();
+            PnrReservation r = new PnrReservation();
+            r.setAirlineCode(e[0].getValue());
+            r.setReservationControlNumber(e[1].getValue());
+            if (e.length >= 3) {
+                r.setReservationControlType(e[2].getValue());
+            }
+            if (e.length >= 4) {
+                String dt = e[3].getValue();
+                if (e.length >=5) {
+                    dt += e[4].getValue();
+                }
+                r.setDateCreated(PnrUtils.parseDateTime(dt));
+            }
+            reservations.add(r);
+        }
+    }
 
-	public String getReservationControlNumber() {
-		return reservationControlNumber;
-	}
-
-	public void setReservationControlNumber(String reservationControlNumber) {
-		this.reservationControlNumber = reservationControlNumber;
-	}
-
-	public String getAirlineCode() {
-		return airlineCode;
-	}
-
-	public void setAirlineCode(String airlineCode) {
-		this.airlineCode = airlineCode;
-	}
-
-	public String getReservationControType() {
-		return reservationControType;
-	}
-
-	public void setReservationControType(String reservationControType) {
-		this.reservationControType = reservationControType;
-	}
-
-	public String getDateCreated() {
-		return dateCreated;
-	}
-
-	public void setDateCreated(String dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-
-	public String getTimeCreated() {
-		return timeCreated;
-	}
-
-	public void setTimeCreated(String timeCreated) {
-		this.timeCreated = timeCreated;
-	}
-
-	public String[] getReservationControlNumbers() {
-		return reservationControlNumbers;
-	}
-
-	public void setReservationControlNumbers(String[] reservationControlNumbers) {
-		this.reservationControlNumbers = reservationControlNumbers;
-	}
-
-	public String[] getAirlineCodes() {
-		return airlineCodes;
-	}
-
-	public void setAirlineCodes(String[] airlineCodes) {
-		this.airlineCodes = airlineCodes;
-	}
-
+    public List<PnrReservation> getReservations() {
+        return reservations;
+    }
 }

@@ -15,14 +15,16 @@ import gov.gtas.parsers.pnrgov.PnrUtils;
  * To convey information regarding estimated or actual dates and times of
  * operational events.
  * <p>
+ * DAT at GR10 will hold PNR History transaction date/time
+ * <p>
  * Unless specifically stated otherwise in bilateral agreement, the time is in
  * Universal Time Coordinated (UTC)
  */
-public class DAT extends Segment {
-	private Date dateTime;
+public class DAT_G10 extends Segment {
+	private Date pnrHistorytDateTime;
 	
-	public DAT(Composite[] composites) throws ParseException {
-		super(DAT.class.getSimpleName(), composites);
+	public DAT_G10(Composite[] composites) throws ParseException {
+		super(DAT_G10.class.getSimpleName(), composites);
         Element[] e = this.composites[0].getElements();
         String dt = null;
         if (e.length >= 2) {
@@ -30,11 +32,11 @@ public class DAT extends Segment {
             if (e.length >= 3) {
                 dt += e[2].getValue();
             }
-            this.dateTime = PnrUtils.parseDateTime(dt);
+            this.pnrHistorytDateTime = PnrUtils.parseDateTime(dt);
         }
 	}
 
-    public Date getDateTime() {
-        return dateTime;
+    public Date getPnrHistorytDateTime() {
+        return pnrHistorytDateTime;
     }
 }
