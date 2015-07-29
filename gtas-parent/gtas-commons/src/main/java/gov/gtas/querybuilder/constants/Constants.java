@@ -18,7 +18,7 @@ public final class Constants {
 	public static final String FREQUENTFLYER = "FREQUENTFLYER";
 	public static final String HITS = "HITS";
 	public static final String NAMEORIGIN = "NAMEORIGIN";
-	public static final String PAX = "PAX";
+	public static final String TRAVELER = "TRAVELER";
 	public static final String PHONE = "PHONE";
 	public static final String PNR = "PNR";
 	public static final String TRAVELAGENCY = "TRAVELAGENCY";

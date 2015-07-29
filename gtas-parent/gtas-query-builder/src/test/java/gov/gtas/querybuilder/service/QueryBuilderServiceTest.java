@@ -30,10 +30,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 @Ignore
+ 
 public class QueryBuilderServiceTest {
 
 	QueryBuilderService service;
-	
+	 
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -91,8 +92,8 @@ public class QueryBuilderServiceTest {
 	
 //	@Test()
 	public void testGetQueryForPassengersWithSimpleQuery() throws Exception {
-		final String expectedQuery = Constants.SELECT_DISTINCT + " " + EntityEnum.PAX.getAlias() + 
-				" " + Constants.FROM + " " + EntityEnum.PAX.getEntityName() + " " + EntityEnum.PAX.getAlias() +
+		final String expectedQuery = Constants.SELECT_DISTINCT + " " + EntityEnum.TRAVELER.getAlias() + 
+				" " + Constants.FROM + " " + EntityEnum.TRAVELER.getEntityName() + " " + EntityEnum.TRAVELER.getAlias() +
 				" " + Constants.WHERE + " p.firstName = 'DAVID'";
 		
 		QueryObject query = buildSimpleQuery();
@@ -100,7 +101,7 @@ public class QueryBuilderServiceTest {
 		Method privateGetQueryMethod = QueryBuilderService.class.getDeclaredMethod("getQuery", QueryObject.class, EntityEnum.class);
 		privateGetQueryMethod.setAccessible(true);
 		
-		String actualQuery = (String) privateGetQueryMethod.invoke(service, query, EntityEnum.PAX);
+		String actualQuery = (String) privateGetQueryMethod.invoke(service, query, EntityEnum.TRAVELER);
 		
 		assertEquals(expectedQuery, actualQuery);
 		

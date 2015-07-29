@@ -21,6 +21,7 @@ import gov.gtas.querybuilder.constants.Constants;
 import gov.gtas.querybuilder.enums.OperatorEnum;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.util.DateCalendarUtils;
 
@@ -33,6 +34,7 @@ import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -46,7 +48,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class QueryBuilderServiceIT {
 
 	@Autowired
-	QueryBuilderService queryService;
+	private QueryBuilderService queryService;
+	private static final String TITLE = "Sample Query";
+	private static final String DESCRIPTION = "A simple query";
+	private static final String USER_ID = "ladebiyi";
 	
 	QueryObject query;
 	QueryTerm rule;
@@ -66,6 +71,26 @@ public class QueryBuilderServiceIT {
 		rules = null;
 	}
 
+	@Test
+	public void testSaveQuery() throws JsonProcessingException, QueryAlreadyExistsException, InvalidQueryException {
+		QueryRequest request = new QueryRequest();
+		
+		request.setTitle(TITLE);
+		request.setDescription(DESCRIPTION);
+		request.setQuery(buildSimpleBetweenQuery());
+		request.setUserId(USER_ID);
+		
+		queryService.saveQuery(request);
+	}
+	
+	public void testSaveDuplicateQuery() {
+		
+	}
+	
+	public void testSaveInvalidQuery() {
+		
+	}
+	
 	//----------------------------------------
 	// Flight Queries
 	//----------------------------------------
@@ -312,7 +337,7 @@ public class QueryBuilderServiceIT {
 	 * @throws InterruptedException 
 	 */
 //	@Test
-	public void testSaveQuery() throws JsonProcessingException, QueryAlreadyExistsException, InterruptedException {
+	public void testSaveQuery2() throws JsonProcessingException, QueryAlreadyExistsException, InterruptedException {
 		ObjectMapper mapper = new ObjectMapper();
 		UserQuery queryToSave = new UserQuery();
 		User user = new User();

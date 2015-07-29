@@ -39,8 +39,8 @@ public class QueryBuilderMappingFactory {
 	      else if(modelType == EntityEnum.NAME_ORIGIN) {
 	    	  return createQueryBuilderMapping(EntityEnum.NAME_ORIGIN, NameOriginMapping.values());
 	      }
-	      else if(modelType == EntityEnum.PAX) {
-	    	  return createQueryBuilderMapping(EntityEnum.PAX, PassengerMapping.values());
+	      else if(modelType == EntityEnum.TRAVELER) {
+	    	  return createQueryBuilderMapping(EntityEnum.TRAVELER, TravelerMapping.values());
 	      }
 	      else if(modelType == EntityEnum.PHONE) {
 	    	  return createQueryBuilderMapping(EntityEnum.PHONE, PhoneMapping.values());
