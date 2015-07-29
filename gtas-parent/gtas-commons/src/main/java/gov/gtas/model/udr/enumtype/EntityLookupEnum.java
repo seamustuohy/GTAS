@@ -8,5 +8,9 @@ public enum EntityLookupEnum {
 	Airport,
 	Pax,
 	Flight,
-	Document
+	Document,
+	Passport,
+	Visa,
+	Traveler,
+	Crew
 }

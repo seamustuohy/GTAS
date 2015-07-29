@@ -35,7 +35,7 @@ public class RuleConditionBuilderTest {
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$p:Pax("+EntityAttributeConstants.PAX_ATTTR_DOB+" >= \"01-Jan-1990\", "
+		assertEquals("$t:Traveler("+EntityAttributeConstants.PAX_ATTTR_DOB+" >= \"01-Jan-1990\", "
 		+EntityAttributeConstants.PAX_ATTTR_DOB+" <= \"31-Dec-1998\")", result.toString().trim());
 	}
 
@@ -50,7 +50,7 @@ public class RuleConditionBuilderTest {
 		assertTrue(result.length() > 0);
 		System.out.println(result);
 		assertEquals("$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_FLIGHT_NUMBER+" == \"12345\")\n"
-				+"$p:Pax() from $f.passengers",
+				+"$t:Traveler() from $f.passengers",
 				result.toString().trim());
 	}
 
@@ -64,7 +64,7 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		assertEquals("$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_DESTINATION_NAME+" in (\"DBY\",\"XYZ\",\"PQR\"))\n"
-				+"$p:Pax() from $f.passengers",
+				+"$t:Traveler() from $f.passengers",
 				result.toString().trim());
 	}
 	@Test
@@ -77,7 +77,7 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		assertEquals("$d:Document("+EntityAttributeConstants.DOCUMENT_ATTR_ISO2+" != \"US\")\n"
-				+"$p:Pax(id == $d.traveler.id)", 
+				+"$t:Traveler(id == $d.traveler.id)", 
 				result.toString().trim());
 	}
 	@Test
@@ -95,7 +95,7 @@ public class RuleConditionBuilderTest {
 		assertTrue(result.length() > 0);
 		assertEquals("$d:Document("+EntityAttributeConstants.DOCUMENT_ATTR_ISO2+" != \"US\", "
 		+EntityAttributeConstants.DOCUMENT_ATTR_ISSUANCE_DATE+" >= \"01-Jan-2010\")\n"
-		+"$p:Pax(id == $d.traveler.id)", 
+		+"$t:Traveler(id == $d.traveler.id)", 
 		result.toString().trim());
 	}
 	@Test
@@ -137,12 +137,12 @@ public class RuleConditionBuilderTest {
 		            +EntityAttributeConstants.DOCUMENT_ATTR_ISSUANCE_DATE+" >= \"01-Jan-2010\")\n"
 		        + "$f:Flight("+EntityAttributeConstants.FLIGHT_ATTR_DESTINATION_NAME+" == \"DBY\", "
 		           +EntityAttributeConstants.FLIGHT_ATTR_FLIGHT_NUMBER+" == 2231)\n"
-		           				+"$p:Pax("
+		           				+"$t:Traveler("
 						+EntityAttributeConstants.PAX_ATTTR_DOB+" >= \"01-Jan-1990\", "
 						+EntityAttributeConstants.PAX_ATTTR_DOB+" <= \"31-Dec-1998\", "
 		        +EntityAttributeConstants.PAX_ATTTR_LAST_NAME+" == \"Jones\", "
 		           +"id == $d.traveler.id)\n"
-		        +"Pax(id == $p.id) from $f.passengers",
+		        +"Traveler(id == $t.id) from $f.passengers",
 		result.toString().trim());
 	}
 }

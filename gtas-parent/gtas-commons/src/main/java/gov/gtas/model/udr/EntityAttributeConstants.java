@@ -1,7 +1,7 @@
 package gov.gtas.model.udr;
 
 public class EntityAttributeConstants {
-  public static final String PAX_ATTR_ID = "id";
+  public static final String TRAVELER_ATTR_ID = "id";
   public static final String PAX_ATTR_FIRST_NAME = "firstName";
   public static final String PAX_ATTTR_LAST_NAME = "lastName";
   public static final String PAX_ATTTR_MIDDLE_NAME = "middleName";

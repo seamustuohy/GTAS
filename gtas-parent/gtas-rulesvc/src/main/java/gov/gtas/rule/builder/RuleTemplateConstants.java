@@ -11,5 +11,4 @@ public class RuleTemplateConstants {
 	public static final String IMPORT_PREFIX = "import ";
 	public static final String NEW_LINE = "\n";
 	public static final String GLOBAL_RESULT_DECLARATION = "global java.util.List "+RuleServiceConstants.RULE_RESULT_LIST_NAME+";\n\n";
-	public static final String ACTION_PASSENGER_HIT = "resultList.add(new RuleHitDetail(%dL, %d, $p.getId()));\n";
 }
