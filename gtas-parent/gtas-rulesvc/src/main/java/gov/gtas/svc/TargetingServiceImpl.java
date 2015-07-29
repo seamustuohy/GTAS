@@ -100,9 +100,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 	}
 
-	@Scheduled(fixedDelay = 4000)
+//	@Scheduled(fixedDelay = 4000)
 	@Transactional
-	public void RunningRuleEngine() {
+	public void runningRuleEngine() {
 		System.out.println(new Date() + " a fixed delay running");
 		List<ApisMessage> apisMessageList = retrieveApisMessage(MessageStatus.LOADED);
 		System.out
@@ -112,6 +112,7 @@ public class TargetingServiceImpl implements TargetingService {
 				RuleServiceResult ruleRunningResult = analyzeApisMessage(apiMessage);
 				RuleExecutionStatistics ruleExeStatus = ruleRunningResult
 						.getExecutionStatistics();
+				System.out.println("\nTotal Rules fired. --> " + ruleExeStatus.getTotalRulesFired());
 				List<?> results = ruleRunningResult.getResultList();
 			}
 		}
