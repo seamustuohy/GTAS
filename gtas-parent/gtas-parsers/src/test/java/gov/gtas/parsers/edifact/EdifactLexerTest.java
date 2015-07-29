@@ -46,7 +46,7 @@ public class EdifactLexerTest {
                 assertEquals("PAORES", c[1].getElement(0));
                 break;
             case "ODI":
-                assertNull(c);
+                assertTrue(c.length == 0);
                 break;
             case "ERC":
                 assertEquals(1, c.length);

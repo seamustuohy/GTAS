@@ -19,8 +19,8 @@ public class COM extends Segment {
 
     public COM(Composite[] composites) {
         super(COM.class.getSimpleName(), composites);
-        for (int i = 0; i < this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             String type = c.getElement(1);
             if (type == null) {
                 continue;

@@ -27,8 +27,8 @@ public class RFF extends Segment {
     
     public RFF(Composite[] composites) {
         super(RFF.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             switch (i) {
             case 0:
                 this.referenceCodeQualifier = c.getElement(0);

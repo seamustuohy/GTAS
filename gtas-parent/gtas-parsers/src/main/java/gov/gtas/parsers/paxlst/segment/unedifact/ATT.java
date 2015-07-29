@@ -37,8 +37,8 @@ public class ATT extends Segment {
 
     public ATT(Composite[] composites) {
         super(ATT.class.getSimpleName(), composites);
-        for (int i = 0; i < this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             switch (i) {
             case 0:
                 this.functionCode = AttCode.forCode(c.getElement(0));

@@ -62,8 +62,8 @@ public class NAD extends Segment {
     
     public NAD(Composite[] composites) {
         super(NAD.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i=0; i<numComposites(); i++) {
+            Composite c = getComposite(i);
             
             switch (i) {
             case 0:

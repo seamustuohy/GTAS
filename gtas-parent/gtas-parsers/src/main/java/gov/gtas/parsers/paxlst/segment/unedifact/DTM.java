@@ -53,7 +53,7 @@ public class DTM extends Segment {
 
     public DTM(Composite[] composites) throws ParseException {
         super(DTM.class.getSimpleName(), composites);
-        Composite c = this.composites[0];
+        Composite c = getComposite(0);
         
         this.dtmCode = DtmCode.forCode(c.getElement(0));
 

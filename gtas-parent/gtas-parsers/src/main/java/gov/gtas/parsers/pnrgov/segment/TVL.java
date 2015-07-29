@@ -60,8 +60,8 @@ public class TVL extends Segment {
 
     public TVL(Composite[] composites) throws ParseException {
         super(TVL.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             
             switch (i) {
             case 0:

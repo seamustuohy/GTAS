@@ -107,8 +107,8 @@ public class BGM extends Segment {
     
     public BGM(Composite[] composites) throws ParseException {
         super(BGM.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             switch (i) {
             case 0:
                 this.documentCode = DocumentNameCode.forCode(c.getElement(0));

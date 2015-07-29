@@ -48,7 +48,7 @@ public class MSG extends Segment {
 		super(MSG.class.getSimpleName(), composites);
 		
 		String code = null;
-        Composite c = this.composites[0];
+        Composite c = getComposite(0);
 
 		if (c.getElement(0) != null) {
 		    code = c.getElement(0);

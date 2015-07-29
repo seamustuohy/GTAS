@@ -30,8 +30,8 @@ public class DAT_G1 extends Segment {
 	
 	public DAT_G1(Composite[] composites) throws ParseException {
 		super(DAT_G1.class.getSimpleName(), composites);
-		for (int i=0; i<this.composites.length; i++) {
-	        Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
 		    String code = c.getElement(0);
 		    if (code.equals(LAST_PNR_TRANS)) {
 		        this.pnrTransactionDate = DAT.processDt(c);

@@ -22,8 +22,8 @@ public class DOC extends Segment {
 
     public DOC(Composite[] composites) {
         super(DOC.class.getSimpleName(), composites);
-        for (int i = 0; i < this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             switch (i) {
             case 0:
                 // DOC+L:110:111+AA299167

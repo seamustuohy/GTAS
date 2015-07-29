@@ -17,7 +17,7 @@ public class ORG_L0 extends Segment {
     
     public ORG_L0(Composite[] composites) {
         super("ORG", composites);
-        Composite c = this.composites[0];
+        Composite c = getComposite(0);
         this.airlineCode = c.getElement(0);
         this.airportCode = c.getElement(1);
     }
