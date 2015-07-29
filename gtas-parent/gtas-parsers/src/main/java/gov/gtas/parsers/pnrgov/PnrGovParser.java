@@ -75,8 +75,6 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
 
         EQN_L0 eqn = getMandatorySegment(EQN_L0.class);
 
-        getMandatorySegment(SRC.class);
-        processGroup1();
         for (;;) {
             SRC src = getConditionalSegment(SRC.class);
             if (src == null) {
@@ -84,8 +82,6 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
             processGroup1();
         }
-
-        System.out.println("END");
     }
 
     public void processGroup1() throws ParseException {

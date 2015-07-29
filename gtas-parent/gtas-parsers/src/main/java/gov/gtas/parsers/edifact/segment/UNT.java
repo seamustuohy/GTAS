@@ -1,7 +1,5 @@
 package gov.gtas.parsers.edifact.segment;
 
-import java.util.Arrays;
-
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -20,7 +18,6 @@ public class UNT extends Segment {
 
     public UNT(Composite[] composites) {
         super(UNT.class.getSimpleName(), composites);
-        System.out.println("mac" + Arrays.toString(composites));
         for (int i = 0; i < this.composites.length; i++) {
             Composite c = this.composites[i];
             switch (i) {

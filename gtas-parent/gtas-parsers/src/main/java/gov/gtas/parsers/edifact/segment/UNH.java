@@ -8,8 +8,9 @@ import gov.gtas.parsers.edifact.Segment;
  * <p>
  * UNH: MESSAGE HEADER
  * <p>
- * A service segment starting and uniquely identifying a message. The message
- * type code for the Passenger list message is PAXLST.
+ * A service segment starting and uniquely identifying a message. This tends to
+ * vary for different message types, but generally they all contain message type
+ * and version, which is all we store here.
  * <p>
  * Example: UNH+MSG001+PAXLST:D:12B:UN:IATA
  */
@@ -18,8 +19,6 @@ public class UNH extends Segment {
     private String messageType;
     private String messageTypeVersion;
     private String messageTypeReleaseNumber;
-    private String controllingAgency;
-    private String associationAssignedCode;
 
     public UNH(Composite[] composites) {
         super(UNH.class.getSimpleName(), composites);
@@ -34,10 +33,6 @@ public class UNH extends Segment {
                 this.messageType = e[0].getValue();
                 this.messageTypeVersion = e[1].getValue();
                 this.messageTypeReleaseNumber = e[2].getValue();
-                this.controllingAgency = e[3].getValue();
-                if (e.length > 4) {
-                    this.associationAssignedCode = e[4].getValue();
-                }
                 break;
             }
         }
@@ -57,13 +52,5 @@ public class UNH extends Segment {
 
     public String getMessageTypeReleaseNumber() {
         return messageTypeReleaseNumber;
-    }
-
-    public String getControllingAgency() {
-        return controllingAgency;
-    }
-
-    public String getAssociationAssignedCode() {
-        return associationAssignedCode;
     }
 }

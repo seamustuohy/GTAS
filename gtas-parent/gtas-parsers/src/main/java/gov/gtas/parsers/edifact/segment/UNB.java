@@ -12,10 +12,16 @@ import gov.gtas.parsers.util.ParseUtils;
  * <p>
  * UNB: INTERCHANGE HEADER
  * <p>
- * Function: To start, identify and specify an interchange.  Specifies
- * the sender and intended recipient of the message.
+ * Function: To start, identify and specify an interchange. Specifies the sender
+ * and intended recipient of the message.
  * <p>
- * Example: UNB+UNOA:4+AIRLINE1+NZCS+130628:0900+000000001’
+ * Segment format should be standard across message types.
+ * <p>
+ * Examples:
+ * <ul>
+ * <li>UNB+UNOA:4+AIRLINE1+NZCS+130628:0900+000000001’
+ * <li>UNB+IATA:1+DL++101209:2100+020A07'
+ * </ul>
  */
 public class UNB extends Segment {
     private static final String DATE_TIME_FORMAT = "yyMMddhhmm";
