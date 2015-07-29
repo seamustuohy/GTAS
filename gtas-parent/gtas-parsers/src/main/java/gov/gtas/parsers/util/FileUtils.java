@@ -6,13 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileUtils {
-    public static byte[] readSmallFile(String filePath) {
+    public static byte[] readSmallFile(String filePath) throws IOException {
         Path path = Paths.get(filePath);
-        try {
-            return Files.readAllBytes(path);
-        } catch (IOException e) {
-          e.printStackTrace();
-          return null;
-        }       
+        return Files.readAllBytes(path);
     }
 }

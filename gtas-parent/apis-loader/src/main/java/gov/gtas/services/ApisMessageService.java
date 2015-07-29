@@ -94,8 +94,9 @@ public class ApisMessageService {
 
         } catch (Exception e) {
             this.apisMessage.setStatus(MessageStatus.FAILED_PARSING);
-            this.apisMessage.setError(ExceptionUtils.getStackTrace(e));
-            e.printStackTrace();
+            String stacktrace = ExceptionUtils.getStackTrace(e);
+            this.apisMessage.setError(stacktrace);
+            logger.error(stacktrace);
         } finally {
             createMessage(apisMessage);
         }
@@ -136,8 +137,9 @@ public class ApisMessageService {
 
         } catch (Exception e) {
             this.apisMessage.setStatus(MessageStatus.FAILED_LOADING);
-            this.apisMessage.setError(ExceptionUtils.getStackTrace(e));
-            e.printStackTrace();
+            String stacktrace = ExceptionUtils.getStackTrace(e);
+            this.apisMessage.setError(stacktrace);
+            logger.error(stacktrace);
         } finally {
             createMessage(apisMessage);            
         }
