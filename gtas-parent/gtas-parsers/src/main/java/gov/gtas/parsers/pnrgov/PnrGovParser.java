@@ -13,6 +13,7 @@ import gov.gtas.parsers.pnrgov.segment.DAT_G1;
 import gov.gtas.parsers.pnrgov.segment.EBD;
 import gov.gtas.parsers.pnrgov.segment.EQN_L0;
 import gov.gtas.parsers.pnrgov.segment.FAR;
+import gov.gtas.parsers.pnrgov.segment.FOP;
 import gov.gtas.parsers.pnrgov.segment.FTI;
 import gov.gtas.parsers.pnrgov.segment.IFT;
 import gov.gtas.parsers.pnrgov.segment.MON;
@@ -27,6 +28,7 @@ import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.SSR_G1;
 import gov.gtas.parsers.pnrgov.segment.TIF;
 import gov.gtas.parsers.pnrgov.segment.TKT;
+import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
@@ -58,8 +60,8 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         ORG_L0 org = getMandatorySegment(ORG_L0.class);
         System.out.println(org);
 
-        TVL_L0 tvl = getMandatorySegment(TVL_L0.class);
-        System.out.println(tvl);
+        TVL_L0 tvl_l0 = getMandatorySegment(TVL_L0.class);
+        System.out.println(tvl_l0);
 
         EQN_L0 eqn = getMandatorySegment(EQN_L0.class);
         System.out.println(eqn);
@@ -82,6 +84,14 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
                 break;
             }
             processGroup2(tif);
+        }
+        
+        for (;;) {
+            TVL tvl = getConditionalSegment(TVL.class);
+            if (tvl == null) {
+                break;
+            }
+            processGroup5(tvl);
         }
     }
     
@@ -193,6 +203,18 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         DAT dat = getConditionalSegment(DAT.class);
         System.out.println(dat);
 
-        // process group 4
+        FOP fop = getConditionalSegment(FOP.class);
+        System.out.println(fop);
+        processGroup4(fop);
+    }
+    
+    public void processGroup4(FOP fop) throws ParseException {
+        IFT ift = getConditionalSegment(IFT.class);
+        ADD add = getConditionalSegment(ADD.class);
+        
+    }
+    
+    public void processGroup5(TVL tvl) throws ParseException {
+        System.out.println(tvl);
     }
 }

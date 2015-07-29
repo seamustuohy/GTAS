@@ -106,8 +106,8 @@ public class TVL extends Segment{
 	private String serviceProductCode;//HH/ZE etc for hotel,car
 	private String serviceIdentificationCode;
 
-	public TVL(String name, Composite[] composites) {
-		super(name, composites);
+	public TVL(Composite[] composites) {
+		super(TVL.class.getSimpleName(), composites);
 		
 	}
 
