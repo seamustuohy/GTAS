@@ -169,6 +169,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
         }
 
+        // SSR’s in GR.2 apply to the specific passenger.
         for (;;) {
             SSR ssr = getConditionalSegment(SSR.class);
             if (ssr == null) {
