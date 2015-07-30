@@ -180,7 +180,7 @@ public class QueryBuilderController {
 		qbMap.put(EntityEnum.FREQUENT_FLYER.toString(), getMapping(EntityEnum.FREQUENT_FLYER));
 		qbMap.put(EntityEnum.HITS.toString(), getMapping(EntityEnum.HITS));
 		qbMap.put(EntityEnum.NAME_ORIGIN.toString(), getMapping(EntityEnum.NAME_ORIGIN));
-		qbMap.put(EntityEnum.PAX.toString(), getMapping(EntityEnum.PAX));
+		qbMap.put(EntityEnum.TRAVELER.toString(), getMapping(EntityEnum.TRAVELER));
 		qbMap.put(EntityEnum.PHONE.toString(), getMapping(EntityEnum.PHONE));
 		qbMap.put(EntityEnum.PNR.toString(), getMapping(EntityEnum.PNR));
 		qbMap.put(EntityEnum.TRAVEL_AGENCY.toString(), getMapping(EntityEnum.TRAVEL_AGENCY));
