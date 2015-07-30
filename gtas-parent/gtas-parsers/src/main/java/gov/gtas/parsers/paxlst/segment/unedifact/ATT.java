@@ -30,7 +30,6 @@ public class ATT extends Segment {
         public static AttCode forCode(String code) {
             return BY_CODE_MAP.get(code);
         }
-
     }
 
     private AttCode functionCode;
@@ -38,14 +37,14 @@ public class ATT extends Segment {
 
     public ATT(Composite[] composites) {
         super(ATT.class.getSimpleName(), composites);
-        for (int i = 0; i < this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             switch (i) {
             case 0:
-                this.functionCode = AttCode.forCode(c.getValue());
+                this.functionCode = AttCode.forCode(c.getElement(0));
                 break;
             case 2:
-                this.attributeDescriptionCode = c.getValue();
+                this.attributeDescriptionCode = c.getElement(0);
                 break;
             }
         }

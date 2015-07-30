@@ -3,7 +3,6 @@ package gov.gtas.parsers.pnrgov.segment;
 import java.util.Date;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrUtils;
@@ -31,30 +30,17 @@ public class DAT_G1 extends Segment {
 	
 	public DAT_G1(Composite[] composites) throws ParseException {
 		super(DAT_G1.class.getSimpleName(), composites);
-		for (int i=0; i<this.composites.length; i++) {
-	        Element[] e = this.composites[i].getElements();
-		    String code = e[0].getValue();
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
+		    String code = c.getElement(0);
 		    if (code.equals(LAST_PNR_TRANS)) {
-		        this.pnrTransactionDate = processDt(e);
+		        this.pnrTransactionDate = DAT.processDt(c);
 		    } else if (code.equals(TICKET_ISSUE_DATE)) {
-		        this.ticketIssueDate = processDt(e);
+		        this.ticketIssueDate = DAT.processDt(c);
 		    }
 		}
 	}
 	
-	private Date processDt(Element[] e) throws ParseException {
-	    String dt = null;
-	    if (e.length >= 2) {
-            dt = e[1].getValue();
-            if (e.length >= 3) {
-                dt += e[2].getValue();
-            }
-            return PnrUtils.parseDateTime(dt);
-        }
-	    
-	    return null;
-	}
-
     public Date getPnrTransactionDate() {
         return pnrTransactionDate;
     }

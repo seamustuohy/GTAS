@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.util.ParseUtils;
@@ -54,12 +53,11 @@ public class DTM extends Segment {
 
     public DTM(Composite[] composites) throws ParseException {
         super(DTM.class.getSimpleName(), composites);
-        Composite c = this.composites[0];
-        Element[] e = c.getElements();
+        Composite c = getComposite(0);
         
-        this.dtmCode = DtmCode.forCode(e[0].getValue());
+        this.dtmCode = DtmCode.forCode(c.getElement(0));
 
-        String d = e[1].getValue();
+        String d = c.getElement(1);
         String dateFormat = (d.length() == DATE_TIME_FORMAT.length()) ? DATE_TIME_FORMAT : DATE_ONLY_FORMAT;
         this.dtmValue = ParseUtils.parseDateTime(d, dateFormat);
     }

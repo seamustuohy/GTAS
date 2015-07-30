@@ -13,14 +13,14 @@ public class UNZ extends Segment {
 
     public UNZ(Composite[] composites) {
         super(UNZ.class.getSimpleName(), composites);
-        for (int i = 0; i < this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             switch (i) {
             case 0:
-                this.interchangeControlCount = c.getValue();
+                this.interchangeControlCount = c.getElement(0);
                 break;
             case 1:
-                this.interchangeControlReference = c.getValue();
+                this.interchangeControlReference = c.getElement(0);
                 break;
             }
         }

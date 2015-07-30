@@ -33,26 +33,26 @@ public class TDT extends Segment {
 
     public TDT(Composite[] composites) {
         super(TDT.class.getSimpleName(), composites);
-        for (int i = 0; i < this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             switch (i) {
             case 0:
-                int code = Integer.valueOf(c.getValue());
+                int code = Integer.valueOf(c.getElement(0));
                 if (code == 20) {
                     this.transportStageQualifier = TdtType.ARRIVING_OR_DEPARTING_FLIGHT;
                 } else if (code == 34) {
                     this.transportStageQualifier = TdtType.OVER_FLIGHT;
                 } else {
-                    logger.error("unknown TDT type: " + c.getValue());
+                    logger.error("unknown TDT type: " + c.getElement(0));
                 }
 
                 break;
             case 1:
-                this.isMasterCrewList = c.getValue().endsWith("MCL");
-                this.c_journeyIdentifier = c.getValue().replace("MCL", "");
+                this.isMasterCrewList = c.getElement(0).endsWith("MCL");
+                this.c_journeyIdentifier = c.getElement(0).replace("MCL", "");
                 break;
             case 4:
-                this.c_carrierIdentifier = c.getValue();
+                this.c_carrierIdentifier = c.getElement(0);
                 break;
             }
         }

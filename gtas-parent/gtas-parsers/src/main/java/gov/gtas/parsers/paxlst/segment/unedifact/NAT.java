@@ -17,7 +17,7 @@ public class NAT extends Segment {
     
     public NAT(Composite[] composites) {
         super(NAT.class.getSimpleName(), composites);
-        this.nationalityCode = composites[1].getValue();
+        this.nationalityCode = composites[1].getElement(0);
     }
 
     public String getNationalityCode() {

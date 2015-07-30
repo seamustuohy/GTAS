@@ -20,11 +20,11 @@ public class DTM extends Segment {
     
     public DTM(Composite[] composites) throws ParseException {
         super(DTM.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             switch (i) {
             case 0:
-                switch (c.getValue()) {
+                switch (c.getElement(0)) {
                 case "136":
                     this.dtmCode = DtmCode.DEPARTURE_DATETIME;
                     break;
@@ -32,16 +32,16 @@ public class DTM extends Segment {
                     this.dtmCode = DtmCode.ARRIVAL_DATETIME;
                     break;
                 default:
-                    logger.error("unknown dtm code: " + c.getValue());
+                    logger.error("unknown dtm code: " + c.getElement(0));
                     return;
                 }
                 break;
                 
             case 1:
-                this.date = c.getValue();
+                this.date = c.getElement(0);
                 break;
             case 2:
-                this.time = c.getValue();
+                this.time = c.getElement(0);
                 break;
             case 3:
                 // TODO: handle timezone

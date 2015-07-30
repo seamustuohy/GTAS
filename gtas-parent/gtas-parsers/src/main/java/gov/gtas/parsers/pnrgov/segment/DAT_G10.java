@@ -3,10 +3,8 @@ package gov.gtas.parsers.pnrgov.segment;
 import java.util.Date;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.pnrgov.PnrUtils;
 
 /**
  * <p>
@@ -25,15 +23,7 @@ public class DAT_G10 extends Segment {
 	
 	public DAT_G10(Composite[] composites) throws ParseException {
 		super(DAT_G10.class.getSimpleName(), composites);
-        Element[] e = this.composites[0].getElements();
-        String dt = null;
-        if (e.length >= 2) {
-            dt = e[1].getValue();
-            if (e.length >= 3) {
-                dt += e[2].getValue();
-            }
-            this.pnrHistorytDateTime = PnrUtils.parseDateTime(dt);
-        }
+        this.pnrHistorytDateTime = DAT.processDt(composites[0]);
 	}
 
     public Date getPnrHistorytDateTime() {

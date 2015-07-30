@@ -42,17 +42,15 @@ public class EdifactLexerTest {
             switch(s.getName()) {
             case "UNH":
                 assertEquals(2, c.length);
-                assertEquals("1", c[0].getValue());
-                assertNull(c[0].getElements());
-                assertNull(c[1].getValue());
-                assertEquals("PAORES", c[1].getElements()[0].getValue());
+                assertEquals("1", c[0].getElement(0));
+                assertEquals("PAORES", c[1].getElement(0));
                 break;
             case "ODI":
-                assertNull(c);
+                assertTrue(c.length == 0);
                 break;
             case "ERC":
                 assertEquals(1, c.length);
-                assertEquals("A7V", c[0].getElements()[0].getValue());
+                assertEquals("A7V", c[0].getElement(0));
                 break;
             }
             System.out.println(s);

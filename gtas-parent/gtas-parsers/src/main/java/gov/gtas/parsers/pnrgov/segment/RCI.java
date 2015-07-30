@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrUtils;
@@ -69,18 +68,13 @@ public class RCI extends Segment {
         super(RCI.class.getSimpleName(), composites);
         reservations = new ArrayList<>(composites.length);
         for (int i=0; i<composites.length; i++) {
-            Element[] e = this.composites[i].getElements();
             PnrReservation r = new PnrReservation();
-            r.setAirlineCode(e[0].getValue());
-            r.setReservationControlNumber(e[1].getValue());
-            if (e.length >= 3) {
-                r.setReservationControlType(e[2].getValue());
-            }
-            if (e.length >= 4) {
-                String dt = e[3].getValue();
-                if (e.length >=5) {
-                    dt += e[4].getValue();
-                }
+            Composite c = composites[0];
+            r.setAirlineCode(c.getElement(0));
+            r.setReservationControlNumber(c.getElement(1));
+            r.setReservationControlType(c.getElement(2));
+            if (c.numElements() >= 4) {
+                String dt = c.getElement(3) + c.getElement(4);
                 r.setDateCreated(PnrUtils.parseDateTime(dt));
             }
             reservations.add(r);

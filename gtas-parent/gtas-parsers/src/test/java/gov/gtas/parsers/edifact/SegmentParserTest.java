@@ -37,23 +37,21 @@ public class SegmentParserTest {
         String seg = "NAD+FL+++PAGE:TIFFANY:ANNE";
         Composite[] composites = parser.tokenize(seg);
         assertEquals(5, composites.length, 5);
-        assertEquals("NAD", composites[0].getValue());
-        assertEquals("FL", composites[1].getValue());
-        assertEquals("", composites[2].getValue());
-        assertEquals("", composites[3].getValue());
-        assertEquals(null, composites[4].getValue());
-        assertEquals(3, composites[4].getElements().length);
-        assertEquals("PAGE", composites[4].getElements()[0].getValue());
-        assertEquals("TIFFANY", composites[4].getElements()[1].getValue());
-        assertEquals("ANNE", composites[4].getElements()[2].getValue());
+        assertEquals("NAD", composites[0].getElement(0));
+        assertEquals("FL", composites[1].getElement(0));
+        assertEquals("", composites[2].getElement(0));
+        assertEquals("", composites[3].getElement(0));
+        assertEquals(3, composites[4].numElements());
+        assertEquals("PAGE", composites[4].getElement(0));
+        assertEquals("TIFFANY", composites[4].getElement(1));
+        assertEquals("ANNE", composites[4].getElement(2));
     }
 
     @Test
     public void testSegmentNameOnly() {
         Composite[] composites = parser.tokenize("NAD");        
         assertEquals(1, composites.length);
-        assertEquals("NAD", composites[0].getValue());
-        assertTrue(composites[0].getElements() == null);
+        assertEquals("NAD", composites[0].getElement(0));
     }
     
     @Test
@@ -61,7 +59,7 @@ public class SegmentParserTest {
         String seg = "NAD+FL?+MC?:MD+++PAGE:TIFFANY:ANNE";
         Composite[] composites = parser.tokenize(seg);
         assertEquals(5, composites.length);
-        assertEquals("FL+MC:MD", composites[1].getValue());
+        assertEquals("FL+MC:MD", composites[1].getElement(0));
     }
 
 }

@@ -1,7 +1,6 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
@@ -20,22 +19,23 @@ public class COM extends Segment {
 
     public COM(Composite[] composites) {
         super(COM.class.getSimpleName(), composites);
-        for (int i = 0; i < this.composites.length; i++) {
-            Composite c = this.composites[i];
-            Element[] e = c.getElements();
-            if (e != null && e.length == 2) {
-                String type = e[1].getValue();
-                switch (type) {
-                case "TE":
-                    this.phoneNumber = e[0].getValue();
-                    break;
-                case "FX":
-                    this.faxNumber = e[0].getValue();
-                    break;
-                case "EM":
-                    this.email = e[0].getValue();
-                    break;
-                }
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
+            String type = c.getElement(1);
+            if (type == null) {
+                continue;
+            }
+            
+            switch (type) {
+            case "TE":
+                this.phoneNumber = c.getElement(0);
+                break;
+            case "FX":
+                this.faxNumber = c.getElement(0);
+                break;
+            case "EM":
+                this.email = c.getElement(0);
+                break;
             }
         }
     }

@@ -1,7 +1,6 @@
 package gov.gtas.parsers.pnrgov.segment;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
@@ -31,17 +30,10 @@ public class FOP extends Segment {
 
     public FOP(Composite[] composites) {
         super(FOP.class.getSimpleName(), composites);
-        Element[] e = this.composites[0].getElements();
-        this.paymentType = e[0].getValue();
-        if (e.length >= 2) {
-            
-        }
-        if (e.length >= 3) {
-            this.paymentAmount = e[2].getValue();
-        }
-        if (e.length >= 4) {
-            this.vendorCode = e[3].getValue();
-        }
+        Composite c = composites[0];
+        this.paymentType = c.getElement(0);
+        this.paymentAmount = c.getElement(2);
+        this.vendorCode = c.getElement(3);
     }
 
     public String getPaymentType() {
@@ -91,5 +83,4 @@ public class FOP extends Segment {
     public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
     }
-
 }

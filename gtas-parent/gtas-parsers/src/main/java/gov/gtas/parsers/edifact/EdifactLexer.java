@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.edifact.segment.UNA;
@@ -20,6 +21,7 @@ import gov.gtas.parsers.util.ParseUtils;
  */
 public class EdifactLexer {
     private static final String[] SEGMENT_NAMES = { "UNA", "UNB", "UNG", "UNH", "UNT", "UNE", "UNZ" };
+    public static final int MAX_SEGMENT_NAME_LENG = 3;
     public static final Set<String> EDIFACT_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
     
     public static UNA getUnaSegment(String txt) {
@@ -47,7 +49,7 @@ public class EdifactLexer {
         txt = preprocessMessage(txt);
         
         UNA una = getUnaSegment(txt);
-        SegmentTokenizer segmentParser = new SegmentTokenizer(una);
+        SegmentTokenizer segmentTokenizer = new SegmentTokenizer(una);
 
         // start parsing with the UNB segment
         int unbIndex = getStartOfSegment("UNB", txt, una);
@@ -63,18 +65,21 @@ public class EdifactLexer {
                 una.getReleaseCharacter());
 
         for (String s : stringSegments) {
-            Composite[] tokens = segmentParser.tokenize(s);
-            if (tokens == null) { 
-                throw new ParseException("Could not tokenize segment " + s);
+            Composite[] tokens = segmentTokenizer.tokenize(s);
+            if (ArrayUtils.isEmpty(tokens)) { 
+                throw new ParseException("Error tokenizing segment " + s);
             }
             
-            String segmentType = tokens[0].getValue();
+            String segmentName = tokens[0].getElement(0);
+            if (StringUtils.isBlank(segmentName) || segmentName.length() > MAX_SEGMENT_NAME_LENG) {
+                throw new ParseException("Illegal segment name " + segmentName);                
+            }
+            
             Composite[] composites = null;
             if (tokens.length > 1) {
                 composites = Arrays.copyOfRange(tokens, 1, tokens.length);
             }
-            Segment newSegment = new Segment(segmentType, composites);
-            segments.add(newSegment);
+            segments.add(new Segment(segmentName, composites));
         }
         
         return segments;

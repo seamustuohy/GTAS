@@ -58,5 +58,5 @@ public interface TargetingService {
 	/**
 	 * Running Rule Engine through Scheduler
 	 */
-	public void RunningRuleEngine() ;
+	public void runningRuleEngine() ;
 }

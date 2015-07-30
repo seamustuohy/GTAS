@@ -1,7 +1,6 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 
@@ -34,13 +33,12 @@ public class LOC extends Segment {
     
     public LOC(Composite[] composites) throws ParseException {
         super(LOC.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
-            Element[] e = c.getElements();
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             
             switch (i) {
             case 0:
-                switch(Integer.valueOf(c.getValue())) {
+                switch(Integer.valueOf(c.getElement(0))) {
                 case 125:
                     this.functionCode = LocCode.DEPARTURE_AIRPORT;
                     break;                    
@@ -84,31 +82,27 @@ public class LOC extends Segment {
                     this.functionCode = LocCode.PLACE_OF_DOCUMENT_ISSUE;
                     break;
                 default:
-                    throw new ParseException("LOC: invalid party function code: " + c.getValue());                    
+                    throw new ParseException("LOC: invalid party function code: " + c.getElement(0));                    
                 }
                 break;
 
             case 1:
-                if (c.getValue() != null) {
+                if (c.numElements() == 1) {
                     // LOC+174+CAN'
-                    this.locationNameCode = c.getValue();
-                } else if (e != null && e.length >= 4) {
+                    this.locationNameCode = c.getElement(0);
+                } else {
                     // LOC+180+:::AMBER HILL GBR'
                     // TODO: in this case set a flag indicating it's not a country code
-                    this.locationNameCode = e[3].getValue();
+                    this.locationNameCode = c.getElement(3);
                 }
                 break;
                 
             case 2:
-                if (e != null && e.length >= 4) {
-                    this.firstRelatedLocationName = e[3].getValue();
-                }
+                this.firstRelatedLocationName = c.getElement(3);
                 break;
 
             case 3:
-                if (e != null && e.length >= 4) {
-                    this.secondRelatedLocationName = e[3].getValue();
-                }
+                this.secondRelatedLocationName = c.getElement(3);
                 break;
             }
         }

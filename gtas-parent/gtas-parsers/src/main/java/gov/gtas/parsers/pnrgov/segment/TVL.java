@@ -3,7 +3,6 @@ package gov.gtas.parsers.pnrgov.segment;
 import java.util.Date;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrUtils;
@@ -61,36 +60,25 @@ public class TVL extends Segment {
 
     public TVL(Composite[] composites) throws ParseException {
         super(TVL.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
-            Element[] e = c.getElements();
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             
             switch (i) {
             case 0:
-                Date[] tmp = getEtdEta(e);
+                Date[] tmp = getEtdEta(c);
                 etd = tmp[0];
                 eta = tmp[1];
                 break;
             case 1:
-                this.origin = c.getValue();
+                this.origin = c.getElement(0);
                 break;
             case 2:
-                this.destination = c.getValue();
+                this.destination = c.getElement(0);
                 break;
-                
             case 3:
-                if (c.getValue() != null) {
-                    this.carrier = c.getValue();
-                } else if (e != null) {
-                    if (e.length >= 1) {
-                        this.carrier = e[0].getValue();
-                    }
-                    if (e.length >=2) {
-                        this.operatingCarrier = e[1].getValue();
-                    }
-                }
+                this.carrier = c.getElement(0);
+                this.operatingCarrier = c.getElement(1);
                 break;
-                
             case 4:
                 
             }                
@@ -100,29 +88,22 @@ public class TVL extends Segment {
     /**
      * @return [etd, eta]
      */
-    public static Date[] getEtdEta(Element[] e) throws ParseException {
+    public static Date[] getEtdEta(Composite c) throws ParseException {
         Date[] rv = new Date[2];
-        if (e == null) {
-            return rv;
-        }
-        
         String departureDt = null;
         String arrivalDt = null;
         
-        if (e.length >= 1) {
-            departureDt = e[0].getValue();
-            if (e.length >= 2) {
-                departureDt += e[1].getValue();
-            }
+        departureDt = c.getElement(0);
+        String time = c.getElement(1);
+        if (time != null) {
+            departureDt += time;
+        }
+        arrivalDt = c.getElement(2);
+        time = c.getElement(3);
+        if (time != null) {
+            arrivalDt += time;
         }
         
-        if (e.length >= 3) {
-            arrivalDt = e[2].getValue();
-            if (e.length >= 4) {
-                arrivalDt += e[3].getValue();
-            }
-        }
-
         if (departureDt != null) {
             rv[0] = PnrUtils.parseDateTime(departureDt);
         }

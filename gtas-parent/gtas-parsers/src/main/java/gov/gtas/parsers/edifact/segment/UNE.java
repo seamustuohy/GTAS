@@ -14,14 +14,14 @@ public class UNE extends Segment {
 
     public UNE(Composite[] composites) {
         super(UNE.class.getSimpleName(), composites);
-        for (int i = 0; i < this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             switch (i) {
             case 0:
-                this.numberOfMessages = Integer.valueOf(c.getValue());
+                this.numberOfMessages = Integer.valueOf(c.getElement(0));
                 break;
             case 1:
-                this.identificationNumber = c.getValue();
+                this.identificationNumber = c.getElement(0);
                 break;
             }
         }

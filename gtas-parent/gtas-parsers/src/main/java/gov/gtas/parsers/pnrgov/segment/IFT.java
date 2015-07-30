@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
@@ -43,28 +42,17 @@ public class IFT extends Segment {
     public IFT(Composite[] composites) {
         super(IFT.class.getSimpleName(), composites);
         this.messages = new ArrayList<>();
+        Composite c = getComposite(0);
+        this.iftCode = c.getElement(0);
+        this.freetextType = c.getElement(1);
+        this.pricingIndicator = c.getElement(2);
+        this.airline = c.getElement(3);
+        this.freeTextLanguageCode = c.getElement(4);
         
-        Element[] e = this.composites[0].getElements();
-        if (e.length >= 1) {
-            this.iftCode = e[0].getValue();
-        }
-        if (e.length >= 2) {
-            this.freetextType = e[1].getValue();
-        }
-        if (e.length >= 3) {
-            this.pricingIndicator = e[2].getValue();
-        }
-        if (e.length >= 4) {
-            this.airline = e[3].getValue();
-        }
-        if (e.length > 5) {
-            this.freeTextLanguageCode = e[4].getValue();
-        }
-        
-        for (int i=1; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
+        for (int i=1; i<numComposites(); i++) {
+            c = getComposite(i);
             if (c != null) {
-                messages.add(c.getValue());
+                messages.add(c.getElement(0));
             }
         }
     }

@@ -1,7 +1,6 @@
 package gov.gtas.parsers.paxlst.segment.usedifact;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Element;
 import gov.gtas.parsers.edifact.Segment;
 
 public class LOC extends Segment {
@@ -17,12 +16,11 @@ public class LOC extends Segment {
 
     public LOC(Composite[] composites) {
         super(LOC.class.getSimpleName(), composites);
-        for (int i=0; i<this.composites.length; i++) {
-            Composite c = this.composites[i];
-            Element[] e = c.getElements();
+        for (int i = 0; i < numComposites(); i++) {
+            Composite c = getComposite(i);
             switch (i) {
             case 0:
-                switch (c.getValue()) {
+                switch (c.getElement(0)) {
                 case "005":
                     this.locationCode = LocCode.DEPARTURE;
                     break;
@@ -30,20 +28,19 @@ public class LOC extends Segment {
                     this.locationCode = LocCode.ARRIVAL;
                     break;
                 default:
-                    logger.error("unknown location code: " + c.getValue());
+                    logger.error("unknown location code: " + c.getElement(0));
                     return;
                 }
                 break;
             
             case 1:
                 // Two-character Country code (IATA), followed by a 3-character Airport code (IATA)
-                String code = e[0].getValue();
-                this.iataCountryCode = code.substring(0, 2);
-                this.iataAirportCode = code.substring(2, code.length());
-                
-                if (e.length >= 2) {
-                    this.c_codeListIdentifier = e[1].getValue();
-                }
+                String code = c.getElement(0);
+                if (code != null) {
+                    this.iataCountryCode = code.substring(0, 2);
+                    this.iataAirportCode = code.substring(2, code.length());
+                }                
+                this.c_codeListIdentifier = c.getElement(1);
                 break;
             }
         }
