@@ -1,5 +1,7 @@
 package gov.gtas.parsers.edifact.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -11,7 +13,7 @@ public class UNZ extends Segment {
     private String interchangeControlCount;
     private String interchangeControlReference;
 
-    public UNZ(Composite[] composites) {
+    public UNZ(List<Composite> composites) {
         super(UNZ.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

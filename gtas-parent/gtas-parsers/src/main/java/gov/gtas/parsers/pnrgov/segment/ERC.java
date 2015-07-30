@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 /**
@@ -14,7 +16,7 @@ public class ERC extends Segment{
 
 	private String errorCode;
 	
-	public ERC(String name, Composite[] composites) {
+	public ERC(String name, List<Composite> composites) {
 		super(name, composites);
 		// TODO Auto-generated constructor stub
 	}

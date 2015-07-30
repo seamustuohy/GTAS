@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -24,7 +26,7 @@ public class TRA extends Segment{
 	private String flightSuffix;
 		
 
-	public TRA(Composite[] composites) {
+	public TRA(List<Composite> composites) {
 		super(TRA.class.getSimpleName(), composites);
 	}
 }

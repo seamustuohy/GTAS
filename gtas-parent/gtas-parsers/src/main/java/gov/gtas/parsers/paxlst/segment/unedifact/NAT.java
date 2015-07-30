@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -15,9 +17,9 @@ public class NAT extends Segment {
     /** ICAO 9303/ISO 3166 codes */
     private String nationalityCode;
     
-    public NAT(Composite[] composites) {
+    public NAT(List<Composite> composites) {
         super(NAT.class.getSimpleName(), composites);
-        this.nationalityCode = composites[1].getElement(0);
+        this.nationalityCode = getComposite(1).getElement(0);
     }
 
     public String getNationalityCode() {

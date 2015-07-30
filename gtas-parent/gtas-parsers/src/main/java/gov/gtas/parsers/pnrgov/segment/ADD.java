@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -37,9 +39,9 @@ public class ADD extends Segment {
 
     private String telephone;
 
-    public ADD(Composite[] composites) {
+    public ADD(List<Composite> composites) {
         super(ADD.class.getSimpleName(), composites);
-        Composite c = composites[0];
+        Composite c = getComposite(0);
         this.addressType = c.getElement(0);
         this.streetNumberAndName = c.getElement(1);
         this.city = c.getElement(2);

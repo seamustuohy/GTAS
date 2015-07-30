@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -11,7 +13,7 @@ import gov.gtas.parsers.edifact.Segment;
  * message. This trigger segment is sent as an empty segment.(Ex: SRC')
  */
 public class SRC extends Segment {
-    public SRC(Composite[] composites) {
+    public SRC(List<Composite> composites) {
         super(SRC.class.getSimpleName(), composites);
     }
 }

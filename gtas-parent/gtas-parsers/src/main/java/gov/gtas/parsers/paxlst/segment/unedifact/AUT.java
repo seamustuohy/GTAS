@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -14,7 +16,7 @@ import gov.gtas.parsers.edifact.Segment;
  * yet to see a message in the wild with one.
  */
 public class AUT extends Segment {
-    public AUT(Composite[] composites) {
+    public AUT(List<Composite> composites) {
         super(AUT.class.getSimpleName(), composites);
     }
 }

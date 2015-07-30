@@ -1,6 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.usedifact;
 
 import java.util.Date;
+import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
@@ -18,7 +19,7 @@ public class DTM extends Segment {
     private Date c_dateTime;
     private String c_timezone;
     
-    public DTM(Composite[] composites) throws ParseException {
+    public DTM(List<Composite> composites) throws ParseException {
         super(DTM.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

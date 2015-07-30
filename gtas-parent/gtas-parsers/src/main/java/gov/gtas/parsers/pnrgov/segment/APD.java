@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -13,7 +15,7 @@ import gov.gtas.parsers.edifact.Segment;
 public class APD extends Segment{
 
 
-	public APD(Composite[] composites) {
+	public APD(List<Composite> composites) {
 		super(APD.class.getSimpleName(), composites);
 		
 	}

@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -38,7 +40,7 @@ public class PTK extends Segment {
     private String providerAccountingCode;
     private String ticketLocationCountryCode;
 
-    public PTK(Composite[] composites) {
+    public PTK(List<Composite> composites) {
         super(PTK.class.getSimpleName(), composites);
     }
 }

@@ -1,6 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
 import java.util.Date;
+import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
@@ -20,9 +21,9 @@ import gov.gtas.parsers.pnrgov.PnrUtils;
 public class DAT extends Segment {
 	private Date dateTime;
 	
-	public DAT(Composite[] composites) throws ParseException {
+	public DAT(List<Composite> composites) throws ParseException {
 		super(DAT.class.getSimpleName(), composites);
-        this.dateTime = processDt(composites[0]);
+        this.dateTime = processDt(getComposite(0));
 	}
 	
     public static Date processDt(Composite c) throws ParseException {

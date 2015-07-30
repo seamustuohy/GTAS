@@ -1,6 +1,7 @@
 package gov.gtas.parsers.edifact.segment;
 
 import java.util.Date;
+import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
@@ -29,7 +30,7 @@ public class UNB extends Segment {
     private String recipient;
     private Date dateAndTimeOfPreparation;
 
-    public UNB(Composite[] composites) throws ParseException {
+    public UNB(List<Composite> composites) throws ParseException {
         super(UNB.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);
@@ -41,7 +42,13 @@ public class UNB extends Segment {
                 this.recipient = c.getElement(0);
                 break;
             case 3:
-                String tmp = c.getElement(0) + c.getElement(1);
+                String tmp = c.getElement(0);
+                if (tmp != null) {
+                    String time = c.getElement(1);
+                    if (time != null) {
+                        tmp += time;
+                    }
+                }
                 this.dateAndTimeOfPreparation = ParseUtils.parseDateTime(tmp, DATE_TIME_FORMAT);
                 break;
             }

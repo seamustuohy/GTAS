@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -40,7 +42,7 @@ public class TIF extends Segment {
     private String travelerNumber;
     private String accompaniedBy;
 
-    public TIF(Composite[] composites) {
+    public TIF(List<Composite> composites) {
         super(TIF.class.getSimpleName(), composites);
     }
 }

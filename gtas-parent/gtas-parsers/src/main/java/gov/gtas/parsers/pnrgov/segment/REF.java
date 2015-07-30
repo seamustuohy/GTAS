@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -14,7 +16,7 @@ public class REF extends Segment{
 
 	private String referenceNumber;
 	
-	public REF(Composite[] composites) {
+	public REF(List<Composite> composites) {
 		super(REF.class.getSimpleName(), composites);
 	}
 

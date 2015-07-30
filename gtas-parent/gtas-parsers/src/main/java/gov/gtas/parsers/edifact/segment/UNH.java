@@ -1,5 +1,7 @@
 package gov.gtas.parsers.edifact.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -19,7 +21,7 @@ public class UNH extends Segment {
     private String messageTypeVersion;
     private String messageTypeReleaseNumber;
 
-    public UNH(Composite[] composites) {
+    public UNH(List<Composite> composites) {
         super(UNH.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

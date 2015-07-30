@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -15,7 +17,7 @@ public class ORG_L0 extends Segment {
     private String airlineCode;
     private String airportCode;
     
-    public ORG_L0(Composite[] composites) {
+    public ORG_L0(List<Composite> composites) {
         super("ORG", composites);
         Composite c = getComposite(0);
         this.airlineCode = c.getElement(0);

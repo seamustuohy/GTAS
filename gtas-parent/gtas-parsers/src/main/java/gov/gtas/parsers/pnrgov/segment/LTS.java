@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -14,7 +16,7 @@ public class LTS extends Segment{
 
 	
 	private String unstructuredHistory;
-	public LTS(Composite[] composites) {
+	public LTS(List<Composite> composites) {
 		super(LTS.class.getSimpleName(), composites);
 		
 	}

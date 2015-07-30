@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -20,7 +22,7 @@ public class DOC extends Segment {
     private String docCode;
     private String documentIdentifier;
 
-    public DOC(Composite[] composites) {
+    public DOC(List<Composite> composites) {
         super(DOC.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

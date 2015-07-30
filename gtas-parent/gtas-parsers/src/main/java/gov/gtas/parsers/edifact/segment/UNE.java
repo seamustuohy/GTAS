@@ -1,5 +1,7 @@
 package gov.gtas.parsers.edifact.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -12,7 +14,7 @@ public class UNE extends Segment {
     private int numberOfMessages;
     private String identificationNumber;
 
-    public UNE(Composite[] composites) {
+    public UNE(List<Composite> composites) {
         super(UNE.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

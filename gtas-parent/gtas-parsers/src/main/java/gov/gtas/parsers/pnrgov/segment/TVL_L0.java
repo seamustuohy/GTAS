@@ -1,6 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
 import java.util.Date;
+import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
@@ -34,7 +35,7 @@ public class TVL_L0 extends Segment {
     private String carrier;
     private String flightNumber;
 
-    public TVL_L0(Composite[] composites) throws ParseException {
+    public TVL_L0(List<Composite> composites) throws ParseException {
         super("TVL", composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

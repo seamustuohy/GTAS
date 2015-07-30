@@ -1,6 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import gov.gtas.parsers.edifact.Composite;
@@ -44,7 +45,7 @@ public class MSG extends Segment {
     
 	private MsgCode messageTypeCode;
 	
-	public MSG(Composite[] composites) {
+	public MSG(List<Composite> composites) {
 		super(MSG.class.getSimpleName(), composites);
 		
 		String code = null;

@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -17,7 +19,7 @@ import gov.gtas.parsers.edifact.Segment;
 public class GEI extends Segment {
     private boolean verified;
 
-    public GEI(Composite[] composites) {
+    public GEI(List<Composite> composites) {
         super(GEI.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

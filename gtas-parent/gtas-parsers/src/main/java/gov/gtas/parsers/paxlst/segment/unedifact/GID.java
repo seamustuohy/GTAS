@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -10,7 +12,7 @@ import gov.gtas.parsers.edifact.Segment;
  * Function: To indicate totals of a goods item.
  */
 public class GID extends Segment {
-    public GID(Composite[] composites) {
+    public GID(List<Composite> composites) {
         super(GID.class.getSimpleName(), composites);
     }
 }

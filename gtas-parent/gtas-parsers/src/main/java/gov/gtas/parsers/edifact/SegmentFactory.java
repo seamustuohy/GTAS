@@ -1,7 +1,7 @@
 package gov.gtas.parsers.edifact;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -14,9 +14,9 @@ public class SegmentFactory {
     
     public <T extends Segment> T build(Segment s, Class<?> clazz) throws ParseException {
         try {
-            logger.debug(s.getName() + " " + Arrays.toString(s.getComposites()));
+            logger.debug(s.getName() + " " + s.getComposites());
             Object[] args = {s.getComposites()};
-            return (T)clazz.getDeclaredConstructor(Composite[].class).newInstance(args);
+            return (T)clazz.getDeclaredConstructor(List.class).newInstance(args);
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
             if (t != null) {

@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -14,7 +16,7 @@ import gov.gtas.parsers.edifact.Segment;
  * exist in prior versions.
  */
 public class CTA extends Segment {
-    public CTA(Composite[] composites) {
+    public CTA(List<Composite> composites) {
         super(CTA.class.getSimpleName(), composites);
     }
 }

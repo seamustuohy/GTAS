@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -19,7 +21,7 @@ public class FAR extends Segment {
     private String fareType;
     private String fareBasisCode;
 
-    public FAR(Composite[] composites) {
+    public FAR(List<Composite> composites) {
         super(FAR.class.getSimpleName(), composites);
 
     }

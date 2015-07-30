@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -10,7 +12,7 @@ import gov.gtas.parsers.edifact.Segment;
  * Function: To identify a charge.
  */
 public class CPI extends Segment {
-    public CPI(Composite[] composites) {
+    public CPI(List<Composite> composites) {
         super(CPI.class.getSimpleName(), composites);
     }
 }

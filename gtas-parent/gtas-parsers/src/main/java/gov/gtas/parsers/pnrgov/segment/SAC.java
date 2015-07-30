@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -17,7 +19,7 @@ public class SAC extends Segment{
 	private String statusIndicator;
 	private String locationIndicator;
 	private String statusCode;
-	public SAC(Composite[] composites) {
+	public SAC(List<Composite> composites) {
 		super(SAC.class.getSimpleName(), composites);
 	}
 }

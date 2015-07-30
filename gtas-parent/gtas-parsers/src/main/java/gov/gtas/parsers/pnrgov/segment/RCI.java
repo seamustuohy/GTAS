@@ -89,7 +89,7 @@ public class RCI extends Segment {
 
     private List<PnrReservation> reservations;
 
-    public RCI(Composite[] composites) throws ParseException {
+    public RCI(List<Composite> composites) throws ParseException {
         super(RCI.class.getSimpleName(), composites);
         reservations = new ArrayList<>(numComposites());
         

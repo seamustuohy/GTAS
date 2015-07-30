@@ -1,5 +1,7 @@
 package gov.gtas.parsers.edifact.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -17,7 +19,7 @@ import gov.gtas.parsers.edifact.Segment;
  * Example: UNG+PAXLST+AIRLINE1+NZCS+130628:0900+000000001+UN+D:12B'
  */
 public class UNG extends Segment {
-    public UNG(Composite[] composites) {
+    public UNG(List<Composite> composites) {
         super(UNG.class.getSimpleName(), composites);
     }
 }

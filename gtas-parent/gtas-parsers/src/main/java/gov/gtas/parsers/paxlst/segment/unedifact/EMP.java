@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -10,7 +12,7 @@ import gov.gtas.parsers.edifact.Segment;
  * Function: To specify employment details.
  */
 public class EMP extends Segment {
-    public EMP(Composite[] composites) {
+    public EMP(List<Composite> composites) {
         super(EMP.class.getSimpleName(), composites);
     }
 }

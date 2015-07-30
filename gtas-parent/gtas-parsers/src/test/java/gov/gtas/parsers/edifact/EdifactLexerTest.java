@@ -1,8 +1,10 @@
 package gov.gtas.parsers.edifact;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -38,19 +40,19 @@ public class EdifactLexerTest {
         assertEquals(15, segments.size());
         for (Segment s : segments) {
             // random checks
-            Composite[] c = s.getComposites();
+            List<Composite> c = s.getComposites();
             switch(s.getName()) {
             case "UNH":
-                assertEquals(2, c.length);
-                assertEquals("1", c[0].getElement(0));
-                assertEquals("PAORES", c[1].getElement(0));
+                assertEquals(2, c.size());
+                assertEquals("1", c.get(0).getElement(0));
+                assertEquals("PAORES", c.get(1).getElement(0));
                 break;
             case "ODI":
-                assertTrue(c.length == 0);
+                assertTrue(c.size() == 0);
                 break;
             case "ERC":
-                assertEquals(1, c.length);
-                assertEquals("A7V", c[0].getElement(0));
+                assertEquals(1, c.size());
+                assertEquals("A7V", c.get(0).getElement(0));
                 break;
             }
             System.out.println(s);

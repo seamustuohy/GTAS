@@ -1,6 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import gov.gtas.parsers.edifact.Composite;
@@ -60,7 +61,7 @@ public class NAD extends Segment {
     private String postalCode;
     private String countryCode;
     
-    public NAD(Composite[] composites) {
+    public NAD(List<Composite> composites) {
         super(NAD.class.getSimpleName(), composites);
         for (int i=0; i<numComposites(); i++) {
             Composite c = getComposite(i);

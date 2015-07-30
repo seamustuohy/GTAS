@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -11,7 +13,7 @@ import gov.gtas.parsers.edifact.Segment;
  * number of Checked Bags.
  */
 public class MEA extends Segment {
-    public MEA(Composite[] composites) {
+    public MEA(List<Composite> composites) {
         super(MEA.class.getSimpleName(), composites);
     }
 }

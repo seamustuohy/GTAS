@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
@@ -34,7 +36,7 @@ public class FTX extends Segment {
      */
     private String numBags;
 
-    public FTX(Composite[] composites) throws ParseException {
+    public FTX(List<Composite> composites) throws ParseException {
         super(FTX.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

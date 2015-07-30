@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -18,7 +20,7 @@ public class MON extends Segment {
     private String allowenceOrChargeNumber;
     private String placeIdentification;
 
-    public MON(Composite[] composites) {
+    public MON(List<Composite> composites) {
         super(MON.class.getSimpleName(), composites);
     }
 }

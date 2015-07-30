@@ -1,6 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import gov.gtas.parsers.edifact.Composite;
@@ -105,7 +106,7 @@ public class BGM extends Segment {
      */
     private DocumentIdentifier documentSubCode;
     
-    public BGM(Composite[] composites) throws ParseException {
+    public BGM(List<Composite> composites) throws ParseException {
         super(BGM.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

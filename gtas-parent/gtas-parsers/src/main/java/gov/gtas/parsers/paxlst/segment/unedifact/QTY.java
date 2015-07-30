@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -10,7 +12,7 @@ import gov.gtas.parsers.edifact.Segment;
  * Function: To specify a pertinent quantity.
  */
 public class QTY extends Segment {
-    public QTY(Composite[] composites) {
+    public QTY(List<Composite> composites) {
         super(QTY.class.getSimpleName(), composites);
     }
 }

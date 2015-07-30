@@ -1,6 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
 import java.util.Date;
+import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
@@ -32,9 +33,9 @@ import gov.gtas.parsers.exception.ParseException;
 public class DAT_G6 extends Segment {
     private Date checkinTime;
 
-    public DAT_G6(Composite[] composites) throws ParseException {
+    public DAT_G6(List<Composite> composites) throws ParseException {
         super(DAT_G6.class.getSimpleName(), composites);
-        this.checkinTime = DAT.processDt(composites[0]);
+        this.checkinTime = DAT.processDt(getComposite(0));
     }
 
     public Date getCheckinTime() {

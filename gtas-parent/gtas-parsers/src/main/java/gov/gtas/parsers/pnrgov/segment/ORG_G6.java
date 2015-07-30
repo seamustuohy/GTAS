@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -29,7 +31,7 @@ public class ORG_G6 extends Segment {
     private String originatorCurrencyCode;
     private String originatorLanguageCode;
 
-    public ORG_G6(Composite[] composites) {
+    public ORG_G6(List<Composite> composites) {
         super("ORG", composites);
 
     }

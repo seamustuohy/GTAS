@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.usedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -14,7 +16,7 @@ public class LOC extends Segment {
     private String iataAirportCode;
     private String c_codeListIdentifier;
 
-    public LOC(Composite[] composites) {
+    public LOC(List<Composite> composites) {
         super(LOC.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

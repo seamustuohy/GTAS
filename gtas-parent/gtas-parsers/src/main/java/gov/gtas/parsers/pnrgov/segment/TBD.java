@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -43,7 +45,7 @@ public class TBD extends Segment{
 	private String releaseBaggageCode;
 	
 
-	public TBD(Composite[] composites) {
+	public TBD(List<Composite> composites) {
 		super(TBD.class.getSimpleName(), composites);
 	}
 }

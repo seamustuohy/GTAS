@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -19,7 +21,7 @@ public class ABI extends Segment{
 	private String agentLocation;
 	private String airlineCrsCode;
 	
-	public ABI(Composite[] composites) {
+	public ABI(List<Composite> composites) {
 		super(ABI.class.getSimpleName(), composites);
 		
 	}

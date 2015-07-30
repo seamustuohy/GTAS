@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -14,7 +16,7 @@ public class SSD extends Segment{
 	private String cabinClass;
 	
 	
-	public SSD(Composite[] composites) {
+	public SSD(List<Composite> composites) {
 		super(SSD.class.getSimpleName(), composites);
 	}
 }

@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -20,7 +22,7 @@ public class TKT extends Segment{
 	private String dataIndicator;
 	private String documentNumberEMD;
 	
-	public TKT(Composite[] composites) {
+	public TKT(List<Composite> composites) {
 		super(TKT.class.getSimpleName(), composites);
 	}
 }

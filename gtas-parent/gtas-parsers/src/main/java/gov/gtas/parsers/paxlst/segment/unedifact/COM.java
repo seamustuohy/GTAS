@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -17,7 +19,7 @@ public class COM extends Segment {
     private String faxNumber;
     private String email;
 
-    public COM(Composite[] composites) {
+    public COM(List<Composite> composites) {
         super(COM.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

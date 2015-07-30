@@ -1,6 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.usedifact;
 
 import java.util.Date;
+import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
@@ -35,7 +36,7 @@ public class PDT extends Segment {
     private String iataDebarkationCountry;    
     private String iataDebarkationAirport;
     
-    public PDT(Composite[] composites) throws ParseException {
+    public PDT(List<Composite> composites) throws ParseException {
         super(PDT.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

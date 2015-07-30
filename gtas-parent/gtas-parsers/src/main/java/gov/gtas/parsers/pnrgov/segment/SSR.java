@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -50,7 +52,9 @@ public class SSR extends Segment {
 	private String travellerReferenceNumber;
 	private String seatCharacteristics;
 	
-	public SSR(Composite[] composites) {
+	public SSR(List<Composite> composites) {
 		super(SSR.class.getSimpleName(), composites);
+		Composite m1 = getComposite(0);
+		
 	}
 }

@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -21,7 +23,7 @@ import gov.gtas.parsers.edifact.Segment;
 public class EQN_L0 extends Segment {
     private Integer numberOfPnrRecords;
 
-    public EQN_L0(Composite[] composites) {
+    public EQN_L0(List<Composite> composites) {
         super("EQN", composites);
         Composite c = getComposite(0);
         this.numberOfPnrRecords = Integer.valueOf(c.getElement(0));

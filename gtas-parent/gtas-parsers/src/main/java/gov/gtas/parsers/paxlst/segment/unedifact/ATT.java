@@ -1,6 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import gov.gtas.parsers.edifact.Composite;
@@ -35,7 +36,7 @@ public class ATT extends Segment {
     private AttCode functionCode;
     private String attributeDescriptionCode;
 
-    public ATT(Composite[] composites) {
+    public ATT(List<Composite> composites) {
         super(ATT.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

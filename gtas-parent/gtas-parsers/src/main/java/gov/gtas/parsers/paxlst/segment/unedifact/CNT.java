@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -10,7 +12,7 @@ import gov.gtas.parsers.edifact.Segment;
  * Function: To provide control total (total # of passengers in this message).
  */
 public class CNT extends Segment {
-    public CNT(Composite[] composites) {
+    public CNT(List<Composite> composites) {
         super(CNT.class.getSimpleName(), composites);
     }
 }

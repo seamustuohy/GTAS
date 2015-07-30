@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -29,7 +31,7 @@ public class TRI extends Segment{
 	//Used to indicate which passenger is being checked in refer to TIF in GR2 level 2.
 	private String travelerRefNumber;
 	
-	public TRI(Composite[] composites) {
+	public TRI(List<Composite> composites) {
 		super(TRI.class.getSimpleName(), composites);
 	}
 }

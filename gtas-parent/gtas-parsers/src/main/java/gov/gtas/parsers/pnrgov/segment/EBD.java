@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -17,7 +19,7 @@ public class EBD extends Segment {
     private String pieceOrWeight;
     private String kgsOrPounds;
 
-    public EBD(Composite[] composites) {
+    public EBD(List<Composite> composites) {
         super(EBD.class.getSimpleName(), composites);
     }
 }

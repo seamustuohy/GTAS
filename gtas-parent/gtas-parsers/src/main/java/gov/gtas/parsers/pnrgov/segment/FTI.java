@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -21,7 +23,7 @@ public class FTI extends Segment{
 	private String itemDescription;//tier description
 	private String companyIdentification;//
 	
-	public FTI(Composite[] composites) {
+	public FTI(List<Composite> composites) {
 		super(FTI.class.getSimpleName(), composites);
 	}
 }

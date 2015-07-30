@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.unedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
@@ -31,7 +33,7 @@ public class LOC extends Segment {
     private String firstRelatedLocationName;
     private String secondRelatedLocationName;
     
-    public LOC(Composite[] composites) throws ParseException {
+    public LOC(List<Composite> composites) throws ParseException {
         super(LOC.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

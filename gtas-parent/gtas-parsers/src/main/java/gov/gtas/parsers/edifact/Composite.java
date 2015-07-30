@@ -1,33 +1,40 @@
 package gov.gtas.parsers.edifact;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  */
 public final class Composite {
-    private String[] elements;
+    private List<String> elements;
 
     @SuppressWarnings("unused")
     private Composite() { }
 
-    public Composite(String[] elements) {
+    public Composite(List<String> elements) {
         if (elements != null) {
             this.elements = elements;
         } else {
-            this.elements = new String[0];
+            this.elements = new ArrayList<>();
         }
     }
     
-    public String getElement(int i) {
-        if (i < 0 || i >= elements.length) {
+    public List<String> getElements() {
+        return this.elements;
+    }
+    
+    public String getElement(int index) {
+        if (index < 0 || index >= elements.size()) {
             return null;
         }
-        return elements[i];
+        return this.elements.get(index);
     }
     
     public int numElements() {
-        return elements.length;
+        return this.elements.size();
     }
 
     @Override

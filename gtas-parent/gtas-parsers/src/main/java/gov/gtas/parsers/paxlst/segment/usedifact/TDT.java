@@ -1,5 +1,7 @@
 package gov.gtas.parsers.paxlst.segment.usedifact;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -9,7 +11,7 @@ public class TDT extends Segment {
     private String c_airlineCode;
     private boolean isCrewOnlyManifest;
     
-    public TDT(Composite[] composites) {
+    public TDT(List<Composite> composites) {
         super(TDT.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

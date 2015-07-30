@@ -1,6 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
 import java.util.Date;
+import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
@@ -58,7 +59,7 @@ public class TVL extends Segment {
     private String serviceProductCode;
     private String serviceIdentificationCode;
 
-    public TVL(Composite[] composites) throws ParseException {
+    public TVL(List<Composite> composites) throws ParseException {
         super(TVL.class.getSimpleName(), composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);

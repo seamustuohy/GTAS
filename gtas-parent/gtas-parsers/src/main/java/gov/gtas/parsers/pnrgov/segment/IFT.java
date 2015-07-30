@@ -39,7 +39,7 @@ public class IFT extends Segment {
     /** Free text message */
     private List<String> messages;
 
-    public IFT(Composite[] composites) {
+    public IFT(List<Composite> composites) {
         super(IFT.class.getSimpleName(), composites);
         this.messages = new ArrayList<>();
         Composite c = getComposite(0);

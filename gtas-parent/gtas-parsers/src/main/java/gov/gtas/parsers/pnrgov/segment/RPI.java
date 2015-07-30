@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
@@ -15,7 +17,7 @@ public class RPI extends Segment{
 	private String numberOfPassengersToTVL;
 	private String statusCode;
 	
-	public RPI(Composite[] composites) {
+	public RPI(List<Composite> composites) {
 		super(RPI.class.getSimpleName(), composites);
 	}
 }

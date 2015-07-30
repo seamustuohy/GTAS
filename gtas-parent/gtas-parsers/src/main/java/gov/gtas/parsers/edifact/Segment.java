@@ -1,5 +1,8 @@
 package gov.gtas.parsers.edifact;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -13,7 +16,7 @@ public class Segment {
     protected static final Logger logger = LoggerFactory.getLogger(Segment.class);
 
     private String name;
-    private Composite[] composites;
+    private List<Composite> composites;
 
     @SuppressWarnings("unused")
     private Segment() { }
@@ -22,7 +25,7 @@ public class Segment {
      * If the array of Composites is null, the segment is acting as just a
      * "marker" segment, and doesn't contain any data.
      */
-    public Segment(String name, Composite[] composites) {
+    public Segment(String name, List<Composite> composites) {
         if (name == null) {
             throw new IllegalArgumentException("name cannot be null");
         }
@@ -31,27 +34,27 @@ public class Segment {
         if (composites != null) {
             this.composites = composites;            
         } else {
-            this.composites = new Composite[0];
+            this.composites = new ArrayList<>();
         }
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public Composite[] getComposites() {
-        return composites;
+    public List<Composite> getComposites() {
+        return this.composites;
     }
 
-    public Composite getComposite(int i) {
-        if (i < 0 || i >= composites.length) {
+    public Composite getComposite(int index) {
+        if (index < 0 || index >= this.composites.size()) {
             return null;
         }
-        return composites[i];
+        return this.composites.get(index);
     }
     
     public int numComposites() {
-        return composites.length;
+        return this.composites.size();
     }
 
     @Override

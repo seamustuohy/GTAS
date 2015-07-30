@@ -1,5 +1,7 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 /**
@@ -23,7 +25,7 @@ public class TXD extends Segment{
 	private String taxQualifier;
 	
 	
-	public TXD(Composite[] composites) {
+	public TXD(List<Composite> composites) {
 		super(TXD.class.getSimpleName(), composites);
 	}
 }
