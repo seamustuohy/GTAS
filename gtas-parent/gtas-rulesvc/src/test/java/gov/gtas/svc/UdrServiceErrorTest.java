@@ -50,7 +50,7 @@ public class UdrServiceErrorTest {
                    +" },"
                    + " {"
                         + " \"@class\": \"QueryTerm\","
-                        + " \"entity\": \"Pax\","
+                        + " \"entity\": \"Traveler\","
                         + " \"field\": \"lastName\","
                         + " \"operator\": \"EQUAL\","
                         + " \"type\": \"string\","
@@ -293,7 +293,7 @@ public class UdrServiceErrorTest {
 				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+864000000L));
 
 				UdrSpecification testObj = mapper.readValue(
-						String.format(TEST_JSON, EntityLookupEnum.Pax.toString(), EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME, "equal", startDate), 
+						String.format(TEST_JSON, EntityLookupEnum.Traveler.toString(), EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME, "equal", startDate), 
 						UdrSpecification.class);	
 				assertNotNull(testObj);
 				 authorId = testObj.getSummary().getAuthor();

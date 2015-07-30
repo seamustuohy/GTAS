@@ -7,6 +7,7 @@ import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Pax;
@@ -181,14 +182,16 @@ public class TargetingServiceIT {
 			++count;
 			System.out.println("Processsing APIs message:" + msg.getId());
 			Set<Flight> flights = msg.getFlights();
-			assertTrue("ApisMessage has no flights:" + msg.getId(),
-					flights.size() > 0);
-			for (Flight flt : flights) {
-				reqObjCount += verifyPassengers(flt, flt.getPassengers());
+			if(flights.size() > 0){
+				for (Flight flt : flights) {
+					reqObjCount += verifyPassengers(flt, flt.getPassengers());
+				}
+				RuleServiceRequest req = TargetingServiceUtils
+						.createApisRequest(msg);
+				assertEquals(reqObjCount, req.getRequestObjects().size());
+			} else {
+				System.out.println("********???Message has no flights:"+ msg.getId());
 			}
-			RuleServiceRequest req = TargetingServiceUtils
-					.createApisRequest(msg);
-			assertEquals(reqObjCount, req.getRequestObjects().size());
 		}
 		assertTrue("There are no API messsages", count > 0);
 
@@ -198,28 +201,31 @@ public class TargetingServiceIT {
 	private int verifyPassengers(Flight flt, Set<Traveler> passengers) {
 		int travCount = 0;
 		int paxCount = 0;
+		int crewCount = 0;
 		int docCount = 0;
 		for (Traveler traveler : passengers) {
 			++travCount;
 			if (traveler instanceof Pax) {
 				++paxCount;
-				Set<Document> docs = traveler.getDocuments();
-				assertNotNull(docs);
-				assertTrue(docs.size() > 0);
-				docCount += docs.size();
-				for (Document doc : docs) {
-					assertNotNull(doc.getId());
-					assertNotNull("Traveller reference is null in Document",
-							doc.getTraveler());
-					assertNotNull("Traveler ID is null in Document Traveler",
-							doc.getTraveler().getId());
-				}
+			} else if(traveler instanceof Crew){
+				++crewCount;
+			}
+			Set<Document> docs = traveler.getDocuments();
+			assertNotNull(docs);
+			assertTrue(docs.size() > 0);
+			docCount += docs.size();
+			for (Document doc : docs) {
+				assertNotNull(doc.getId());
+				assertNotNull("Traveller reference is null in Document",
+						doc.getTraveler());
+				assertNotNull("Traveler ID is null in Document Traveler",
+						doc.getTraveler().getId());
 			}
 		}
 		assertTrue("Flight has no travelers:" + flt.getFlightNumber(),
 				travCount > 0);
-		assertTrue("Flight has no passengers:" + flt.getFlightNumber(),
-				paxCount > 0);
+		assertTrue("Flight passenger+crew <> traveler:" + flt.getFlightNumber(),
+				paxCount+crewCount == travCount);
 		System.out.println("Flight:" + flt.getFlightNumber()
 				+ " - Traveler count = " + travCount + ", Passenger count ="
 				+ paxCount);

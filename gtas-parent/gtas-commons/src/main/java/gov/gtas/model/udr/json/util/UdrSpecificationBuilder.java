@@ -137,20 +137,20 @@ public class UdrSpecificationBuilder {
 			String title, String description) {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
-		bldr.addTerm(EntityLookupEnum.Pax,
+		bldr.addTerm(EntityLookupEnum.Traveler,
 				EntityAttributeConstants.PAX_ATTTR_DOB, ValueTypesEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
-		bldr.addTerm(EntityLookupEnum.Pax,
+		bldr.addTerm(EntityLookupEnum.Traveler,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
-		bldr.addTerm(EntityLookupEnum.Pax,
+		bldr.addTerm(EntityLookupEnum.Traveler,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
-		bldr.addTerm(EntityLookupEnum.Pax,
+		bldr.addTerm(EntityLookupEnum.Traveler,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
