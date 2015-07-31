@@ -1,6 +1,7 @@
 app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService) {
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
+    var data = [];
 
     $scope.loadRule = function () {
         var obj = this.$data[this.$index];
@@ -22,8 +23,8 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         total: data.length, // length of data
         getData: function ($defer, params) {
             queryBuilderService.getList($scope.authorId).then(function (myData) {
-                var filteredData, orderedData, data;
-                data = $scope.data || [];
+                var filteredData, orderedData;
+                data = [];
 
                 if (myData.result === undefined || !Array.isArray(myData.result)) {
                     return;
@@ -40,7 +41,6 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
                     $filter('orderBy')(filteredData, params.orderBy()) :
                     data;
 
-                $scope.data = data;
                 params.total(orderedData.length); // set total for recalc pagination
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
             });
