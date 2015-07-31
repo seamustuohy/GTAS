@@ -8,6 +8,7 @@ var app = angular.module('myApp', [
 app.factory('QueryBuilderCtrl',function(){
     return function ($scope) {
         var valueSetter = function (rule, value) {
+            debugger;
             var $input = rule.$el.find(".rule-value-container input");
             $input.focus();
             if (Array.isArray(value)) {
@@ -255,11 +256,11 @@ app.factory('QueryBuilderCtrl',function(){
                 "label": "Thru",
                 "type": "string"
             }, {
-                "id": "PAX.age",
-                "label": "PAX.age",
+                "id": "TRAVELER.age",
+                "label": "TRAVELER.age",
                 "type": "integer"
             }, {
-                "id": "PAX.citizenshipCountry.iso2",
+                "id": "TRAVELER.citizenshipCountry.iso2",
                 "label": "Citizenship Country",
                 "type": "string",
                 "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
@@ -279,11 +280,11 @@ app.factory('QueryBuilderCtrl',function(){
                 },
                 "valueSetter": valueSetter
             }, {
-                "id": "PAX.debarkation.iata",
+                "id": "TRAVELER.debarkation.iata",
                 "label": "Debarkation",
                 "type": "string"
             }, {
-                "id": "PAX.debarkCountry.iso2",
+                "id": "TRAVELER.debarkCountry.iso2",
                 "label": "Debarkation Country",
                 "type": "string",
                 "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
@@ -303,7 +304,7 @@ app.factory('QueryBuilderCtrl',function(){
                 },
                 "valueSetter": valueSetter
             }, {
-                "id": "PAX.dob",
+                "id": "TRAVELER.dob",
                 "label": "DOB",
                 "type": "date",
                 "validation": {
@@ -315,11 +316,11 @@ app.factory('QueryBuilderCtrl',function(){
                     "autoClose": true
                 }
             }, {
-                "id": "PAX.embarkation.iata",
+                "id": "TRAVELER.embarkation.iata",
                 "label": "Embarkation",
                 "type": "string"
             }, {
-                "id": "PAX.embarkCountry.iso2",
+                "id": "TRAVELER.embarkCountry.iso2",
                 "label": "Embarkation Country",
                 "type": "string",
                 "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
@@ -339,8 +340,8 @@ app.factory('QueryBuilderCtrl',function(){
                 },
                 "valueSetter": valueSetter
             }, {
-                "id": "PAX.gender",
-                "label": "PAX.gender",
+                "id": "TRAVELER.gender",
+                "label": "TRAVELER.gender",
                 "type": "string",
                 "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
                 "input": "select",
@@ -359,19 +360,19 @@ app.factory('QueryBuilderCtrl',function(){
                 },
                 "valueSetter": valueSetter
             }, {
-                "id": "PAX.firstName",
+                "id": "TRAVELER.firstName",
                 "label": "First Name",
                 "type": "string"
             }, {
-                "id": "PAX.lastName",
+                "id": "TRAVELER.lastName",
                 "label": "Last Name",
                 "type": "string"
             }, {
-                "id": "PAX.middleName",
+                "id": "TRAVELER.middleName",
                 "label": "Middle Name",
                 "type": "string"
             }, {
-                "id": "PAX.residencyCountry.iso2",
+                "id": "TRAVELER.residencyCountry.iso2",
                 "label": "Residency Country",
                 "type": "string",
                 "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
@@ -391,11 +392,11 @@ app.factory('QueryBuilderCtrl',function(){
                 },
                 "valueSetter": valueSetter
             }, {
-                "id": "PAX.seat",
-                "label": "PAX.seat",
+                "id": "TRAVELER.seat",
+                "label": "TRAVELER.seat",
                 "type": "string"
             }, {
-                "id": "PAX.traveler_type",
+                "id": "TRAVELER.traveler_type",
                 "label": "Traveler Type",
                 "type": "string"
             }]
@@ -411,7 +412,8 @@ app.factory('QueryBuilderCtrl',function(){
                         rule.$el.find('.rule-value-container').css('min-width', '200px')
                             .find('.selectize-control').removeClass('form-control');
                     }
-                });
+                })
+                .on('onAfterSetValue.queryBuilder', function () {alert('test')});
             try {
                 if (localStorage[property] === undefined) {
                     $.getJSON('./data/' + property + '.json', function (data) {
