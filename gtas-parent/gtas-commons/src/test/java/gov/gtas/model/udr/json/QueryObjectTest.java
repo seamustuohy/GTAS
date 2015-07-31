@@ -83,7 +83,7 @@ public class QueryObjectTest {
 		assertEquals(entity.toString(), trm.getEntity());
 		assertEquals(attr, trm.getField());
 		assertEquals(op.toString(), trm.getOperator());
-		assertEquals(val[0], trm.getValue());
+		assertEquals(val[0], trm.getValue()[0]);
 		
 	}
 

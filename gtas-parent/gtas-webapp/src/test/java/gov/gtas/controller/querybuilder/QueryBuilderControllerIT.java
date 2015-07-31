@@ -42,7 +42,7 @@ public class QueryBuilderControllerIT {
 		rule.setField("firstName");
 		rule.setOperator("equal");
 		rule.setType("string");
-		rule.setValue("DAVID");
+		rule.setValue(new String[]{"DAVID"});
 		
 		rules.add(rule);
 		

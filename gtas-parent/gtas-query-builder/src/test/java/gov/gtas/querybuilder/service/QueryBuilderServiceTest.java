@@ -173,7 +173,7 @@ public class QueryBuilderServiceTest {
 		rule.setField("firstName");
 		rule.setOperator("equal");
 		rule.setType("string");
-		rule.setValue("DAVID");
+		rule.setValue(new String[]{"DAVID"});
 		
 		rules.add(rule);
 		
@@ -192,7 +192,7 @@ public class QueryBuilderServiceTest {
 		rule.setField("eta");
 		rule.setOperator("equal");
 		rule.setType("date");
-		rule.setValue("05/11/2014");
+		rule.setValue(new String[]{"05/11/2014"});
 		
 		rules.add(rule);
 		
@@ -211,7 +211,7 @@ public class QueryBuilderServiceTest {
 		rule.setField("middleName");
 		rule.setOperator("is_null");
 		rule.setType("boolean");
-		rule.setValue("");
+		rule.setValue(new String[]{""});
 		
 		rules.add(rule);
 		
@@ -230,7 +230,7 @@ public class QueryBuilderServiceTest {
 		rule.setField("firstName");
 		rule.setOperator("contains");
 		rule.setType("string");
-		rule.setValue("avi");
+		rule.setValue(new String[]{"avi"});
 		
 		rules.add(rule);
 		

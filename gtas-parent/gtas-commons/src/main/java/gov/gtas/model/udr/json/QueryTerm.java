@@ -22,8 +22,8 @@ public class QueryTerm implements QueryEntity {
      private String field;
      private String type;
      private String operator;
-     private String value;
-     private String[] values;
+     private String[] value;
+    // private String[] values;
      
      public QueryTerm(){
     	 
@@ -33,8 +33,7 @@ public class QueryTerm implements QueryEntity {
     	 this.field = field;
     	 this.type = type;
     	 this.operator = op;
-    	 this.value = val != null ? val[0] : null;
-    	 this.values = val;
+    	 this.value = val;
      }
      
 	/* (non-Javadoc)
@@ -104,26 +103,14 @@ public class QueryTerm implements QueryEntity {
 	/**
 	 * @return the value
 	 */
-	public String getValue() {
+	public String[] getValue() {
 		return value;
 	}
 	/**
 	 * @param value the value to set
 	 */
-	public void setValue(String value) {
+	public void setValue(String[] value) {
 		this.value = value;
-	}
-	/**
-	 * @return the values
-	 */
-	public String[] getValues() {
-		return values;
-	}
-	/**
-	 * @param values the values to set
-	 */
-	public void setValues(String[] values) {
-		this.values = values;
 	}
      
 }
