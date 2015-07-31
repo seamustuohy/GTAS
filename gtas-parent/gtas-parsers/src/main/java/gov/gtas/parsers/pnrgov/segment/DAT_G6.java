@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 
 /**
@@ -30,12 +29,21 @@ import gov.gtas.parsers.exception.ParseException;
  * 
  * TODO: handle free text date time
  */
-public class DAT_G6 extends Segment {
+public class DAT_G6 extends DAT {
+    private static final String CHECKIN_CODE = "2";
+    private static final String CHECKIN_FREE_TEXT_CODE = "3";
+
     private Date checkinTime;
 
     public DAT_G6(List<Composite> composites) throws ParseException {
-        super(DAT_G6.class.getSimpleName(), composites);
-        this.checkinTime = DAT.processDt(getComposite(0));
+        super(composites);
+        
+        for (DatDetails d : getDateTimes()) {
+            String code = d.getType();
+            if (CHECKIN_CODE.equals(code) || CHECKIN_FREE_TEXT_CODE.equals(code)) {
+                this.checkinTime = d.getDateTime();
+            }
+        }
     }
 
     public Date getCheckinTime() {

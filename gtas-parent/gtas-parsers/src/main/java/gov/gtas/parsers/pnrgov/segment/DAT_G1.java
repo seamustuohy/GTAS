@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 
 /**
@@ -21,7 +20,7 @@ import gov.gtas.parsers.exception.ParseException;
  * <p>
  * Examples: Ticket issuance date and time( DAT+710:041159:0730') 
  */
-public class DAT_G1 extends Segment {
+public class DAT_G1 extends DAT {
     private static String LAST_PNR_TRANS = "700";
     private static String TICKET_ISSUE_DATE = "710";
    
@@ -29,14 +28,14 @@ public class DAT_G1 extends Segment {
 	private Date ticketIssueDate;
 	
 	public DAT_G1(List<Composite> composites) throws ParseException {
-		super(DAT_G1.class.getSimpleName(), composites);
-        for (int i = 0; i < numComposites(); i++) {
-            Composite c = getComposite(i);
-		    String code = c.getElement(0);
+		super(composites);
+		
+        for (DatDetails d : getDateTimes()) {
+		    String code = d.getType();
 		    if (code.equals(LAST_PNR_TRANS)) {
-		        this.pnrTransactionDate = DAT.processDt(c);
+		        this.pnrTransactionDate = d.getDateTime();
 		    } else if (code.equals(TICKET_ISSUE_DATE)) {
-		        this.ticketIssueDate = DAT.processDt(c);
+		        this.ticketIssueDate = d.getDateTime();
 		    }
 		}
 	}

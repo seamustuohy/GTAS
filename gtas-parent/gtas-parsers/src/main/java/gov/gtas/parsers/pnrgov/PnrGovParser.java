@@ -11,7 +11,6 @@ import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.pnrgov.segment.ABI;
 import gov.gtas.parsers.pnrgov.segment.ADD;
 import gov.gtas.parsers.pnrgov.segment.APD;
-import gov.gtas.parsers.pnrgov.segment.DAT;
 import gov.gtas.parsers.pnrgov.segment.DAT_G1;
 import gov.gtas.parsers.pnrgov.segment.DAT_G10;
 import gov.gtas.parsers.pnrgov.segment.DAT_G6;
@@ -204,7 +203,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
         }
 
-        DAT dat = getConditionalSegment(DAT.class);
+        DAT_G1 dat = getConditionalSegment(DAT_G1.class, "DAT");
 
         FOP fop = getConditionalSegment(FOP.class);
         processGroup4(fop);

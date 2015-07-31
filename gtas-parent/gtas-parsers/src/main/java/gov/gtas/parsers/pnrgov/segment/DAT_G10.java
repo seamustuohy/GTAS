@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
-import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 
 /**
@@ -19,12 +18,18 @@ import gov.gtas.parsers.exception.ParseException;
  * Unless specifically stated otherwise in bilateral agreement, the time is in
  * Universal Time Coordinated (UTC)
  */
-public class DAT_G10 extends Segment {
+public class DAT_G10 extends DAT {
+    private static final String PNR_HISTORY = "T";
 	private Date pnrHistorytDateTime;
 	
 	public DAT_G10(List<Composite> composites) throws ParseException {
-		super(DAT_G10.class.getSimpleName(), composites);
-        this.pnrHistorytDateTime = DAT.processDt(getComposite(0));
+		super(composites);
+		
+		for (DatDetails d : getDateTimes()) {
+            if (PNR_HISTORY.equals(d.getType())) {
+                this.pnrHistorytDateTime = d.getDateTime();
+            }
+        }
 	}
 
     public Date getPnrHistorytDateTime() {
