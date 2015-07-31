@@ -231,10 +231,13 @@ public class QueryValidationUtils {
 					}
 					else {
 						String value = queryTerm.getValue();
+						if(StringUtils.isEmpty(value) && queryTerm.getValues() != null && queryTerm.getValues().length == 1){
+							value = queryTerm.getValues()[0];
+						}
 						
 						// verify that value is not null
 						if(value == null) {
-							errors.reject("", "value: null is invalid");
+							errors.reject("", "entity:"+entity+" has a null attribute value for field:"+field);
 						}
 					}
 				}

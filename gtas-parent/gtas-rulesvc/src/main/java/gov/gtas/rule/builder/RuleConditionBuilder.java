@@ -1,7 +1,10 @@
 package gov.gtas.rule.builder;
 
 import java.text.ParseException;
+import java.util.LinkedList;
+import java.util.List;
 
+import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
@@ -15,12 +18,16 @@ import gov.gtas.model.udr.enumtype.ValueTypesEnum;
  *
  */
 public class RuleConditionBuilder {
-	private static final String ACTION_TRAVELER_HIT = "resultList.add(new RuleHitDetail(%dL, %d, $t.getId()));\n";
+//	private static final String ACTION_TRAVELER_HIT = "resultList.add(new RuleHitDetail(%dL, %d, $t.getId()));\n";
+	private static final String ACTION_TRAVELER_HIT = "resultList.add(RuleHitDetail.createRuleHitDetail(%dL, %d, \"%s\", $t, \"%s\"));\n";
 	public void addRuleAction(StringBuilder ruleStringBuilder, UdrRule parent, Rule rule) {
+		String cause = conditionDescriptionBuilder.toString().replace("\"", "'");
+	    System.out.println("***** cause="+cause);
 		ruleStringBuilder
 				.append("then\n")
 				.append(String.format(ACTION_TRAVELER_HIT, parent.getId(),
-						rule.getRuleIndex())).append("end\n");
+						rule.getRuleIndex(), parent.getTitle(), cause)).append("end\n");
+		conditionDescriptionBuilder = null;
 	}
 
 	private static final String TRAVELER_VARIABLE_NAME="$t";
@@ -42,6 +49,9 @@ public class RuleConditionBuilder {
 	private boolean travelerIsCrew;
 	private boolean documentIsPassport;
 	private boolean documentIsVisa;
+	
+	private StringBuilder conditionDescriptionBuilder;
+	
 	/**
 	 * Appends the generated "when" part of the rule to the rule document.
 	 * @param parentStringBuilder the rule document builder.
@@ -88,6 +98,12 @@ public class RuleConditionBuilder {
      * @param cond the condition to add.
      */
 	public void addRuleCondition(final RuleCond cond) {
+		if(conditionDescriptionBuilder == null){
+			conditionDescriptionBuilder = new StringBuilder(RuleConditionBuilderHelper.createConditionDescription(cond));
+		}else{
+		    conditionDescriptionBuilder.append(RuleHitDetail.HIT_REASON_SEPARATOR).append(RuleConditionBuilderHelper.createConditionDescription(cond));
+		}
+		
 		switch (cond.getEntityName()) {
 		case Pax:
 		case Crew:

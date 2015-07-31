@@ -16,29 +16,56 @@ import java.util.List;
  *
  */
 public class RuleConditionBuilderHelper {
-    public static void addConditionValue(final CondValue val, StringBuilder bldr){
+	private static String convertCondValToString(final CondValue val){
+		String ret = null;
      	switch(val.getValType()){
      	case OBJECT_REF:
-     		bldr.append(val.getCharVal());
+     		ret = val.getCharVal();
      		break;
     	case BOOLEAN:
-    		bldr.append(val.getCharVal().charAt(0)=='Y'?"true":"false");
+    		ret = val.getCharVal().charAt(0)=='Y'?"true":"false";
     		break;
     	case STRING:
-    		bldr.append("\"").append(val.getCharVal()).append("\"");
+    		ret = "\"" + val.getCharVal() + "\"";
     		break;
    	    case DATE:
-   	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDate(val.getDtVal())).append("\"");
+   	    	ret = "\"" + DateCalendarUtils.formatRuleEngineDate(val.getDtVal()) + "\"";
    	    	break;
    	    case DATETIME:
-   	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDateTime(val.getDtVal())).append("\"");
+   	    	ret = "\"" + DateCalendarUtils.formatRuleEngineDateTime(val.getDtVal()) + "\"";
    	    	break;
     	case INTEGER:
     	case LONG:
     	case DOUBLE:
-    		bldr.append(val.getNumVal());
+    		ret = val.getNumVal().toString();
     		break;
     	}
+		return ret;
+	}
+    public static void addConditionValue(final CondValue val, StringBuilder bldr){
+    	bldr.append(convertCondValToString(val));
+//     	switch(val.getValType()){
+//     	case OBJECT_REF:
+//     		bldr.append(val.getCharVal());
+//     		break;
+//    	case BOOLEAN:
+//    		bldr.append(val.getCharVal().charAt(0)=='Y'?"true":"false");
+//    		break;
+//    	case STRING:
+//    		bldr.append("\"").append(val.getCharVal()).append("\"");
+//    		break;
+//   	    case DATE:
+//   	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDate(val.getDtVal())).append("\"");
+//   	    	break;
+//   	    case DATETIME:
+//   	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDateTime(val.getDtVal())).append("\"");
+//   	    	break;
+//    	case INTEGER:
+//    	case LONG:
+//    	case DOUBLE:
+//    		bldr.append(val.getNumVal());
+//    		break;
+//    	}
     }
     public static void addConditionValues(final RuleCond cond, StringBuilder bldr){
     	List<CondValue> values = cond.getValues();
@@ -54,7 +81,27 @@ public class RuleConditionBuilderHelper {
     	}
     	bldr.append(")");
     }
-
+    public static String createConditionDescription(final RuleCond cond){
+    	StringBuilder bldr = new StringBuilder();
+    	bldr.append(cond.getEntityName()).append(" ")
+    	     .append(cond.getAttrName()).append(" ")
+    	     .append(cond.getOpCode().getDisplayName());
+    	List<CondValue> valList = cond.getValues();
+    	if( valList != null && valList.size() > 1){
+    		bldr.append(" [");
+    		boolean firstTime = true;
+    		for(CondValue val: valList){
+    			if(!firstTime){
+    				bldr.append(", ");
+    			}
+    			bldr.append(convertCondValToString(val));
+    		}
+    		bldr.append("]");
+    	} else if(valList != null && valList.size() == 1){
+    	     bldr.append(convertCondValToString(valList.get(0)));
+    	}
+    	return bldr.toString();
+    }
 	public static RuleCond createRuleCondition(EntityLookupEnum entity,
 			String attribute, OperatorCodeEnum op, String value,
 			ValueTypesEnum type) throws ParseException {

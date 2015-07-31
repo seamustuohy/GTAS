@@ -1,8 +1,8 @@
 package gov.gtas.svc;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.config.RuleServiceConfig;
@@ -120,9 +120,9 @@ public class TargetingServiceIT {
 		assertNotNull(result);
 		assertEquals("Expected 1 hit", 1, result.getResultList().size());
 		RuleHitDetail res = (RuleHitDetail) (result.getResultList().get(0));
-		assertNotNull("passenger ID in result is null", res.getPassengerId());
+		assertNotNull("passenger ID in result is null", res.getTravelerId());
 		assertEquals("Expected passenger with id = 11", 11L,
-				res.getPassengerId());
+				res.getTravelerId());
 	}
 
 	@Test
@@ -140,11 +140,11 @@ public class TargetingServiceIT {
 		assertNotNull(result);
 		assertEquals("Expected 2 hits", 2, result.getResultList().size());
 		RuleHitDetail res = (RuleHitDetail) (result.getResultList().get(0));
-		assertNotNull("passenger ID in result is null", res.getPassengerId());
+		assertNotNull("passenger ID in result is null", res.getTravelerId());
 		assertTrue(
 				"Hit Passenger id mismatch",
-				new Long(44L).equals(res.getPassengerId())
-						|| new Long(66L).equals(res.getPassengerId()));
+				new Long(44L).equals(res.getTravelerId())
+						|| new Long(66L).equals(res.getTravelerId()));
 	}
 
 	@Test
@@ -163,12 +163,12 @@ public class TargetingServiceIT {
 		assertNotNull(result);
 		assertEquals("Expected 3 hits", 3, result.getResultList().size());
 		RuleHitDetail res = (RuleHitDetail) (result.getResultList().get(0));
-		assertNotNull("passenger ID in result is null", res.getPassengerId());
+		assertNotNull("passenger ID in result is null", res.getTravelerId());
 		assertTrue(
 				"Hit Passenger id mismatch",
-				new Long(44L).equals(res.getPassengerId())
-						|| new Long(55L).equals(res.getPassengerId())
-						|| new Long(66L).equals(res.getPassengerId()));
+				new Long(44L).equals(res.getTravelerId())
+						|| new Long(55L).equals(res.getTravelerId())
+						|| new Long(66L).equals(res.getTravelerId()));
 	}
 
 	@Test
