@@ -33,9 +33,6 @@ import gov.gtas.parsers.pnrgov.PnrUtils;
  * city/airport codes as contained in the passenger’s booked itinerary.
  */
 public class TVL extends Segment {
-    private String groupName;
-    private String level;
-    
     private Date etd;
     private Date eta;
     private String origin;
@@ -44,17 +41,6 @@ public class TVL extends Segment {
     private String operatingCarrier;
     private String flightNumber;
     private String reservationBookingDesignator;
-
-    private String dateVariation;
-    private String lastIataCode;
-    private String lastIataName;
-
-    private String operationFlightSuffix;
-    private String placeOfDeparture;
-    private String placeOfArrival;
-    private String airlineCode;
-    private String serviceProductCode;
-    private String serviceIdentificationCode;
 
     public TVL(List<Composite> composites) throws ParseException {
         super(TVL.class.getSimpleName(), composites);
@@ -78,7 +64,8 @@ public class TVL extends Segment {
                 this.operatingCarrier = c.getElement(1);
                 break;
             case 4:
-                
+                this.flightNumber = c.getElement(0);
+                this.reservationBookingDesignator = c.getElement(1);
             }                
         }
     }
@@ -110,5 +97,37 @@ public class TVL extends Segment {
         }
         
         return rv;
+    }
+
+    public Date getEtd() {
+        return etd;
+    }
+
+    public Date getEta() {
+        return eta;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getCarrier() {
+        return carrier;
+    }
+
+    public String getOperatingCarrier() {
+        return operatingCarrier;
+    }
+
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
+    public String getReservationBookingDesignator() {
+        return reservationBookingDesignator;
     }
 }
