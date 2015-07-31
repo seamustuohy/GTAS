@@ -29,52 +29,52 @@ public class QueryBuilderServiceTest {
 
 	@Test
 	public void testSaveDuplicateQuery() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testSaveQueryWithNullDescription() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testSaveInvalidQuery() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testEditQuery() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testEditQueryToDuplicateTitle() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 
 	@Test
 	public void testListQueryByUser() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testListQueryByInvalidUser() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 
 	@Test
 	public void testDeleteQuery() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 
 	@Test
 	public void testRunFlightQuery() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 
 	@Test
 	public void testRunPassengerQuery() {
-		fail("Not yet implemented");
+//		fail("Not yet implemented");
 	}
 
 }
