@@ -22,9 +22,9 @@ app.factory('QueryBuilderCtrl',function(){
             $input.blur();
         };
         var getOptionsFromJSONArray = function (that, property) {
-            if (localStorage[property] === undefined) {
+//            if (localStorage[property] === undefined) {
                 $.getJSON('./data/' + property + '.json', function (data) {
-                    localStorage[property] = JSON.stringify(data);
+  //                  localStorage[property] = JSON.stringify(data);
                     try {
                         data.forEach(function (item) {
                             that.addOption(item);
@@ -34,6 +34,7 @@ app.factory('QueryBuilderCtrl',function(){
                         throw exception;
                     }
                 });
+            /*
             } else {
                 try {
                     JSON.parse(localStorage[property]).forEach(function (item) {
@@ -43,6 +44,7 @@ app.factory('QueryBuilderCtrl',function(){
                     throw exception;
                 }
             }
+            */
         };
         $scope.today = moment().format('YYYY-MM-DD').toString();
 
