@@ -17,7 +17,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
@@ -81,26 +80,40 @@ public class TargetingServiceImpl implements TargetingService {
 		return res;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gov.gtas.svc.TargetingService#analyzeApisMessage(long)
 	 */
 	@Override
 	@Transactional
 	public RuleServiceResult analyzeApisMessage(long messageId) {
 		ApisMessage msg = apisMsgRepository.findOne(messageId);
-		if(msg == null){
-			throw ErrorHandlerFactory.getErrorHandler().createException(RuleServiceConstants.MESSAGE_NOT_FOUND_ERROR_CODE, messageId);
+		if (msg == null) {
+			throw ErrorHandlerFactory.getErrorHandler().createException(
+					RuleServiceConstants.MESSAGE_NOT_FOUND_ERROR_CODE,
+					messageId);
 		}
 		RuleServiceResult res = this.analyzeApisMessage(msg);
 		return res;
 	}
 
+	@Override
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus) {
 		return apisMsgRepository.findByStatus(messageStatus);
 
 	}
 
-//	@Scheduled(fixedDelay = 4000)
+	@Override
+	public void updateApisMessage(ApisMessage message,
+			MessageStatus messageStatus) {
+		ApisMessage apisMessage = apisMsgRepository.findOne(message.getId());
+		if (apisMessage != null) {
+			apisMessage.setStatus(messageStatus);
+		}
+	}
+
+	// @Scheduled(fixedDelay = 4000)
 	@Transactional
 	public void runningRuleEngine() {
 		System.out.println(new Date() + " a fixed delay running");
@@ -108,12 +121,15 @@ public class TargetingServiceImpl implements TargetingService {
 		System.out
 				.println("retrieved message size-> " + apisMessageList.size());
 		if (apisMessageList.size() > 0) {
-			for (ApisMessage apiMessage : apisMessageList) {
-				RuleServiceResult ruleRunningResult = analyzeApisMessage(apiMessage);
+			for (ApisMessage apisMessage : apisMessageList) {
+				RuleServiceResult ruleRunningResult = analyzeApisMessage(apisMessage);
 				RuleExecutionStatistics ruleExeStatus = ruleRunningResult
 						.getExecutionStatistics();
-				System.out.println("\nTotal Rules fired. --> " + ruleExeStatus.getTotalRulesFired());
+				System.out.println("\nTotal Rules fired. --> "
+						+ ruleExeStatus.getTotalRulesFired());
 				List<?> results = ruleRunningResult.getResultList();
+
+				// updateApisMessage(apisMessage, MessageStatus.ANALYZED);
 			}
 		}
 	}

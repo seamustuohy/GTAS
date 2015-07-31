@@ -26,6 +26,7 @@ public interface TargetingService {
 	 * @return the result of the invocation.
 	 */
 	RuleServiceResult analyzeApisMessage(ApisMessage message);
+
 	/**
 	 * Invokes the Targeting service for an API message.
 	 * 
@@ -40,8 +41,8 @@ public interface TargetingService {
 	 * specified DRL rules string
 	 * 
 	 * @param request
-	 *            The rule request containing an arbitrary list of request objects to be
-	 *            inserted into the Rule Engine context.
+	 *            The rule request containing an arbitrary list of request
+	 *            objects to be inserted into the Rule Engine context.
 	 * @param drlRules
 	 *            The DROOLS rules to apply on the request objects.
 	 * @return the result of the invocation.
@@ -50,13 +51,25 @@ public interface TargetingService {
 
 	/**
 	 * Retrieves the list of API messages with a given status.
-	 * @param messageStatus the status
+	 * 
+	 * @param messageStatus
+	 *            the status
 	 * @return the retrieved ApisMessage
 	 */
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus);
-	
+
+	/**
+	 * Updates the API message with the processing status.
+	 * 
+	 * @param messageStatus
+	 *            the status
+	 * @return the retrieved ApisMessage
+	 */
+	public void updateApisMessage(ApisMessage message,
+			MessageStatus messageStatus);
+
 	/**
 	 * Running Rule Engine through Scheduler
 	 */
-	public void runningRuleEngine() ;
+	public void runningRuleEngine();
 }
