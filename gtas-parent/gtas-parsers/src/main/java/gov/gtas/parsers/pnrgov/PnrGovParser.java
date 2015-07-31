@@ -36,7 +36,6 @@ import gov.gtas.parsers.pnrgov.segment.SAC;
 import gov.gtas.parsers.pnrgov.segment.SRC;
 import gov.gtas.parsers.pnrgov.segment.SSD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
-import gov.gtas.parsers.pnrgov.segment.SSR_G1;
 import gov.gtas.parsers.pnrgov.segment.TBD;
 import gov.gtas.parsers.pnrgov.segment.TIF;
 import gov.gtas.parsers.pnrgov.segment.TKT;
@@ -99,7 +98,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         RCI rci = getMandatorySegment(RCI.class);
 
         for (;;) {
-            SSR_G1 ssr = getConditionalSegment(SSR_G1.class, "SSR");
+            SSR ssr = getConditionalSegment(SSR.class, "SSR");
             if (ssr == null) {
                 break;
             }
