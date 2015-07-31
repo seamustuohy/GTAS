@@ -24,9 +24,7 @@ import gov.gtas.parsers.pnrgov.segment.IFT;
 import gov.gtas.parsers.pnrgov.segment.LTS;
 import gov.gtas.parsers.pnrgov.segment.MON;
 import gov.gtas.parsers.pnrgov.segment.MSG;
-import gov.gtas.parsers.pnrgov.segment.ORG_G1;
-import gov.gtas.parsers.pnrgov.segment.ORG_G6;
-import gov.gtas.parsers.pnrgov.segment.ORG_L0;
+import gov.gtas.parsers.pnrgov.segment.ORG;
 import gov.gtas.parsers.pnrgov.segment.PTK;
 import gov.gtas.parsers.pnrgov.segment.RCI;
 import gov.gtas.parsers.pnrgov.segment.REF;
@@ -68,7 +66,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     public void parsePayload() throws ParseException {
         MSG msg = getMandatorySegment(MSG.class);
 
-        ORG_L0 org = getMandatorySegment(ORG_L0.class);
+        ORG org = getMandatorySegment(ORG.class);
 
         TVL_L0 tvl = getMandatorySegment(TVL_L0.class);
         FlightVo f = new FlightVo();
@@ -112,7 +110,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
         }
 
-        ORG_G1 org = getMandatorySegment(ORG_G1.class);
+        ORG org = getMandatorySegment(ORG.class);
 
         for (;;) {
             ADD add = getConditionalSegment(ADD.class);
@@ -277,7 +275,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     }
     
     public void processGroup6(DAT_G6 dat) throws ParseException {
-        ORG_G6 rci = getConditionalSegment(ORG_G6.class, "ORG");
+        ORG org = getConditionalSegment(ORG.class, "ORG");
 
         TRI tri = getMandatorySegment(TRI.class);
         processGroup7(tri);

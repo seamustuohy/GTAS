@@ -21,5 +21,42 @@ public class EBD extends Segment {
 
     public EBD(List<Composite> composites) {
         super(EBD.class.getSimpleName(), composites);
+        
+        for (int i=0; i<numComposites(); i++) {
+            Composite c = getComposite(i);
+            
+            switch (i) {
+            case 0:
+                this.currencyCode = c.getElement(0);
+                this.ratePerUnit = c.getElement(1);
+                break;
+            case 1:
+                // TODO: technically this composite can be repeated up to 3x
+                this.numberInExcess = c.getElement(0);
+                this.pieceOrWeight = c.getElement(1);
+                this.kgsOrPounds = c.getElement(2);
+                break;
+            }
+        }
+    }
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public String getRatePerUnit() {
+        return ratePerUnit;
+    }
+
+    public String getNumberInExcess() {
+        return numberInExcess;
+    }
+
+    public String getPieceOrWeight() {
+        return pieceOrWeight;
+    }
+
+    public String getKgsOrPounds() {
+        return kgsOrPounds;
     }
 }

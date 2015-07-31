@@ -41,7 +41,8 @@ public class ADD extends Segment {
 
     public ADD(List<Composite> composites) {
         super(ADD.class.getSimpleName(), composites);
-        Composite c = getComposite(0);
+        
+        Composite c = getComposite(1);
         this.addressType = c.getElement(0);
         this.streetNumberAndName = c.getElement(1);
         this.city = c.getElement(2);

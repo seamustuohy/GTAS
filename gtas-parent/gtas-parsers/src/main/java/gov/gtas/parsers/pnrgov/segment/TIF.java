@@ -1,6 +1,10 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
@@ -31,18 +35,79 @@ import gov.gtas.parsers.edifact.Segment;
  * Infant no seat Passenger(TIF+RUITER+MISTY:IN’)
  */
 public class TIF extends Segment {
-
     private String travelerSurname;
     private String travelerNameQualifier;
-    private String travelerGivenNameTitle;
-    private String travelerType;
 
-    // Used as a cross reference between data segments. In GR2 must be unique
-    // per passenger
-    private String travelerNumber;
-    private String accompaniedBy;
+    public class TravelerDetails {
+        private String travelerGivenName;
+        private String travelerType;
+
+        /**
+         * Used as a cross reference between data segments. In GR2 must be
+         * unique per passenger
+         */
+        private String travelerReferenceNumber;
+        private String accompaniedBy;
+        public String getTravelerGivenName() {
+            return travelerGivenName;
+        }
+        public void setTravelerGivenName(String travelerGivenName) {
+            this.travelerGivenName = travelerGivenName;
+        }
+        public String getTravelerType() {
+            return travelerType;
+        }
+        public void setTravelerType(String travelerType) {
+            this.travelerType = travelerType;
+        }
+        public String getTravelerReferenceNumber() {
+            return travelerReferenceNumber;
+        }
+        public void setTravelerReferenceNumber(String travelerReferenceNumber) {
+            this.travelerReferenceNumber = travelerReferenceNumber;
+        }
+        public String getAccompaniedBy() {
+            return accompaniedBy;
+        }
+        public void setAccompaniedBy(String accompaniedBy) {
+            this.accompaniedBy = accompaniedBy;
+        }
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+        }        
+    }
+    
+    private List<TravelerDetails> travelerDetails;
 
     public TIF(List<Composite> composites) {
         super(TIF.class.getSimpleName(), composites);
+
+        this.travelerDetails = new ArrayList<>();
+        Composite c = getComposite(0);
+        this.travelerSurname = c.getElement(0);
+        this.travelerNameQualifier = c.getElement(1);
+
+        for (int i = 1; i < numComposites(); i++) {
+            c = getComposite(i);
+            TravelerDetails d = new TravelerDetails();
+            d.setTravelerGivenName(c.getElement(0));
+            d.setTravelerType(c.getElement(1));
+            d.setTravelerReferenceNumber(c.getElement(2));
+            d.setAccompaniedBy(c.getElement(3));
+            this.travelerDetails.add(d);
+        }
+    }
+
+    public String getTravelerSurname() {
+        return travelerSurname;
+    }
+
+    public String getTravelerNameQualifier() {
+        return travelerNameQualifier;
+    }
+
+    public List<TravelerDetails> getTravelerDetails() {
+        return travelerDetails;
     }
 }
