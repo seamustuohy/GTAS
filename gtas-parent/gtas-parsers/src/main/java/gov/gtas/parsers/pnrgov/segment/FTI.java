@@ -1,29 +1,64 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
- * Class FTI to hold Frequent Traveler Information for a passenger
- * @author GTAS4
- *
- * Ex:A United Airlines Frequent Traveller.(FTI+UA:12345678964')
- * Passenger is using frequent flyer account on airline ZZ.(FTI+ZZ:001012693109')
- * Passenger has a British Airways Frequent Traveller number, is a BA GOLD member and description 
- * of tier level is GOLD. Passenger also has a One World (code 701) alliance Emerald member.
- * (FTI+BA:12345678:::GOLD::GOLD+BA:12345678:::EMER::EMERALD:701')
+ * <p>
+ * FTI: FREQUENT TRAVELLER INFORMATION
  */
-public class FTI extends Segment{
+public class FTI extends Segment {
+    public class FrequentFlierDetails {
+        private String airlineCode;
+        private String freqTravelerNumber;
+        private String travelerReferenceNumber;
+        
+        public String getAirlineCode() {
+            return airlineCode;
+        }
+        public void setAirlineCode(String airlineCode) {
+            this.airlineCode = airlineCode;
+        }
+        public String getFreqTravelerNumber() {
+            return freqTravelerNumber;
+        }
+        public void setFreqTravelerNumber(String freqTravelerNumber) {
+            this.freqTravelerNumber = freqTravelerNumber;
+        }
+        public String getTravelerReferenceNumber() {
+            return travelerReferenceNumber;
+        }
+        public void setTravelerReferenceNumber(String travelerReferenceNumber) {
+            this.travelerReferenceNumber = travelerReferenceNumber;
+        }
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+        }
+    }
+    
+    private List<FrequentFlierDetails> frequentFlierInfo; 
+    
+    public FTI(List<Composite> composites) {
+        super(FTI.class.getSimpleName(), composites);
+        
+        frequentFlierInfo = new ArrayList<>();
+        for (Composite c : getComposites()) {
+            FrequentFlierDetails d = new FrequentFlierDetails();
+            d.setAirlineCode(c.getElement(0));
+            d.setFreqTravelerNumber(c.getElement(1));
+            d.setTravelerReferenceNumber(c.getElement(2));
+            frequentFlierInfo.add(d);
+        }
+    }
 
-	private String airlineCode;
-	private String freqTravelerNumber;
-	private String memberInfo;//membership level
-	private String itemDescription;//tier description
-	private String companyIdentification;//
-	
-	public FTI(List<Composite> composites) {
-		super(FTI.class.getSimpleName(), composites);
-	}
+    public List<FrequentFlierDetails> getFrequentFlierInfo() {
+        return frequentFlierInfo;
+    }
 }

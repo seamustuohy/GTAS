@@ -21,7 +21,6 @@ import gov.gtas.parsers.edifact.Segment;
  * To specify that the TVL is for a hotel segment.(MSG+8') Push PNR data to
  * States(MSG+:22’) To identify a change PNRGOV message(MSG+:141’)
  */
-
 public class MSG extends Segment {
     public enum MsgCode {
         PUSH_PNR("22"),
