@@ -16,7 +16,6 @@ import gov.gtas.parsers.pnrgov.segment.DAT_G10;
 import gov.gtas.parsers.pnrgov.segment.DAT_G6;
 import gov.gtas.parsers.pnrgov.segment.EBD;
 import gov.gtas.parsers.pnrgov.segment.EQN;
-import gov.gtas.parsers.pnrgov.segment.EQN;
 import gov.gtas.parsers.pnrgov.segment.FAR;
 import gov.gtas.parsers.pnrgov.segment.FOP;
 import gov.gtas.parsers.pnrgov.segment.FTI;
@@ -35,6 +34,7 @@ import gov.gtas.parsers.pnrgov.segment.SSD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TBD;
 import gov.gtas.parsers.pnrgov.segment.TIF;
+import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
 import gov.gtas.parsers.pnrgov.segment.TKT;
 import gov.gtas.parsers.pnrgov.segment.TRA;
 import gov.gtas.parsers.pnrgov.segment.TRI;
@@ -42,6 +42,8 @@ import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
+import gov.gtas.parsers.pnrgov.vo.PnrPax;
+import gov.gtas.parsers.pnrgov.vo.PnrVo;
 
 public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private static final String[] SEGMENT_NAMES = new String[] { "ABI", "ADD", "APD", "DAT", "EBD", "EQN", "FAR", "FOP",
@@ -49,6 +51,8 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             "TIF", "TKT", "TRA", "TRI", "TVL", "TXD" };
     public static final Set<String> PNRGOV_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
 
+    private PnrVo currentPnr;
+    
     public PnrGovParser() {
         this.parsedMessage = new PnrMessageVo();
     }
@@ -69,14 +73,6 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         ORG org = getMandatorySegment(ORG.class);
 
         TVL_L0 tvl = getMandatorySegment(TVL_L0.class);
-        FlightVo f = new FlightVo();
-        f.setCarrier(tvl.getCarrier());
-        f.setDestination(tvl.getDestination());
-        f.setOrigin(tvl.getOrigin());
-        f.setEta(tvl.getEta());
-        f.setEtd(tvl.getEtd());
-        f.setFlightNumber(tvl.getFlightNumber());
-        this.parsedMessage.getFlights().add(f);
 
         EQN eqn = getMandatorySegment(EQN.class);
 
@@ -91,7 +87,14 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         System.out.println(this.parsedMessage);
     }
 
-    public void processGroup1() throws ParseException {
+    /**
+     * start of a new PNR
+     */
+    private void processGroup1() throws ParseException {
+        PnrVo pnr = new PnrVo();
+        parsedMessage.getPnrRecords().add(pnr);
+        currentPnr = pnr;
+        
         RCI rci = getMandatorySegment(RCI.class);
 
         for (;;) {
@@ -145,7 +148,17 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
     }
 
-    public void processGroup2(TIF tif) throws ParseException {
+    /**
+     * Passenger
+     */
+    private void processGroup2(TIF tif) throws ParseException {
+        for (TravelerDetails td : tif.getTravelerDetails()) {
+            PnrPax p = new PnrPax();
+            p.setLastName(tif.getTravelerSurname());
+            p.setFirstName(td.getTravelerGivenName());
+            p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());
+            currentPnr.getPassengers().add(p);
+        }
 
         FTI fti = getConditionalSegment(FTI.class);
 
@@ -189,7 +202,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
     }
 
-    public void processGroup3(TKT tkt) throws ParseException {
+    private void processGroup3(TKT tkt) throws ParseException {
         MON mon = getConditionalSegment(MON.class);
 
         PTK ptk = getConditionalSegment(PTK.class);
@@ -207,13 +220,22 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         processGroup4(fop);
     }
 
-    public void processGroup4(FOP fop) throws ParseException {
+    private void processGroup4(FOP fop) throws ParseException {
         IFT ift = getConditionalSegment(IFT.class);
         ADD add = getConditionalSegment(ADD.class);
 
     }
 
-    public void processGroup5(TVL tvl) throws ParseException {
+    private void processGroup5(TVL tvl) throws ParseException {
+        FlightVo f = new FlightVo();
+        f.setCarrier(tvl.getCarrier());
+        f.setDestination(tvl.getDestination());
+        f.setOrigin(tvl.getOrigin());
+        f.setEta(tvl.getEta());
+        f.setEtd(tvl.getEtd());
+        f.setFlightNumber(tvl.getFlightNumber());
+        currentPnr.getFlights().add(f);
+        
         TRA tra = getConditionalSegment(TRA.class);
         RPI rpi = getConditionalSegment(RPI.class);
         APD apd = getConditionalSegment(APD.class);
@@ -274,7 +296,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }        
     }
     
-    public void processGroup6(DAT_G6 dat) throws ParseException {
+    private void processGroup6(DAT_G6 dat) throws ParseException {
         ORG org = getConditionalSegment(ORG.class, "ORG");
 
         TRI tri = getMandatorySegment(TRI.class);
@@ -288,17 +310,20 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }        
     }
     
-    public void processGroup7(TRI tri) throws ParseException {
+    private void processGroup7(TRI tri) throws ParseException {
         TIF tif = getConditionalSegment(TIF.class);
         SSD ssd = getConditionalSegment(SSD.class);
         TBD tbd = getConditionalSegment(TBD.class);
     }
     
-    public void processGroup8(EQN eqn) throws ParseException {
+    private void processGroup8(EQN eqn) throws ParseException {
         RCI rci = getMandatorySegment(RCI.class);
     }
 
-    public void processGroup9(MSG msg) throws ParseException {
+    /**
+     * hotel
+     */
+    private void processGroup9(MSG msg) throws ParseException {
         for (;;) {
             TVL tvl = getConditionalSegment(TVL.class);
             if (tvl == null) {
@@ -307,7 +332,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
     }
 
-    public void processGroup10(ABI abi) throws ParseException {
+    private void processGroup10(ABI abi) throws ParseException {
         DAT_G10 dat = getConditionalSegment(DAT_G10.class, "DAT");
         for (;;) {
             SAC sac = getConditionalSegment(SAC.class);
@@ -318,7 +343,10 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }        
     }
 
-    public void processGroup11(SAC sac) throws ParseException {
+    /**
+     * history information
+     */
+    private void processGroup11(SAC sac) throws ParseException {
         TIF tif = getConditionalSegment(TIF.class);
         SSR ssr = getConditionalSegment(SSR.class);
         IFT ift = getConditionalSegment(IFT.class);
@@ -333,7 +361,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
 
     }
 
-    public void processGroup12(TVL tvl) throws ParseException {
+    private void processGroup12(TVL tvl) throws ParseException {
         RPI rpi = getConditionalSegment(RPI.class);
    
     }

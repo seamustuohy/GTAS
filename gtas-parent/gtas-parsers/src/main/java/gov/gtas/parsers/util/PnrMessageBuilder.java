@@ -12,9 +12,9 @@ import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.pnrgov.vo.AddressVo;
-import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
-import gov.gtas.parsers.pnrgov.vo.PnrReportingAgentVo;
 import gov.gtas.parsers.pnrgov.vo.PnrVo;
+import gov.gtas.parsers.pnrgov.vo.PnrReportingAgentVo;
+import gov.gtas.parsers.pnrgov.vo.PnrPax;
 
 public class PnrMessageBuilder {
 //
