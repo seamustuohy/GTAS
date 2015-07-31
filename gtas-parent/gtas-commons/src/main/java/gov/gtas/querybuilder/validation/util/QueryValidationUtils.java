@@ -176,7 +176,7 @@ public class QueryValidationUtils {
 					
 				}
 				if(!validField) {
-					errors.reject("", "field: \'" + field + "\' is invalid");
+					errors.reject("", "entity: \'"+ entity + "\' has an invalid field value, field: \'" + field + "\' is invalid");
 				}																		
 			}
 			
@@ -189,7 +189,7 @@ public class QueryValidationUtils {
 				}
 			}
 			if(!validType) {
-				errors.reject("", "type: \'" + type + "\' is invalid");
+				errors.reject("", "entity: \'"+ entity + "\' has an invalid type value, type: \'" + type + "\' is invalid");
 			}
 			
 			//validate operator
@@ -202,11 +202,11 @@ public class QueryValidationUtils {
 			}
 			
 			if(!validOperator) {
-				errors.reject("", "operator: \'" + operator + "\' is invalid");
+				errors.reject("", "entity: \'"+ entity + "\' has an invalid operator value, operator: \'" + operator + "\' is invalid");
 			}
 			else {
-				// validate value/values
-				// ignore the value/values on these four operators because they shouldn't
+				// validate value
+				// ignore the value on these four operators because they shouldn't
 				// have one and will not be used if it's provided
 				if(!OperatorEnum.IS_EMPTY.toString().equalsIgnoreCase(operator) &&
 						!OperatorEnum.IS_NOT_EMPTY.toString().equalsIgnoreCase(operator) &&
@@ -215,29 +215,27 @@ public class QueryValidationUtils {
 					
 					// validate that there are two values if the operator is BETWEEN
 					if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator)) {
-						List<String> values = Arrays.asList(queryTerm.getValue());
 						
-						if(values == null || values.size() != 2) {
-							errors.reject("", "values: BETWEEN operator must have two parameters");
+						if(queryTerm.getValue() == null || queryTerm.getValue().length != 2) {
+							errors.reject("", "entity: \'" + entity + "\' has an incorrect number of arguments, BETWEEN operator must have two parameters in value attribute");
 						}
 					}
-					// for IN operator, verify that values is not null and it has at least one parameter
-					else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator)) {
-						List<String> values = Arrays.asList(queryTerm.getValue());
-						
-						if(values == null || values.size() == 0) {
-							errors.reject("", "values: IN operator must have at least one parameter");
+					// for IN or NOT_IN operator, verify that values is not null and it has at least one parameter
+					else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator) ||
+							OperatorEnum.NOT_IN.toString().equalsIgnoreCase(operator)) {
+											
+						if(queryTerm.getValue() == null || queryTerm.getValue().length == 0) {
+							errors.reject("", "entity: \'" + entity + "\' has an incorrect number of arguments, " + operator + " operator must have at least one parameter in value attribute");
 						}
 					}
 					else {
-						String value = null;
-						if(queryTerm.getValue() != null && queryTerm.getValue().length == 1){
-							value = queryTerm.getValue()[0];
-						}
 						
-						// verify that value is not null
-						if(value == null) {
-							errors.reject("", "entity:"+entity+" has a null attribute value for field:"+field);
+						// verify that value is not null 
+						if(queryTerm.getValue() == null) {
+							errors.reject("", "entity: \'"+ entity + "\' has a null attribute value for field: \'"+ field + "\'");
+						}
+						else if(queryTerm.getValue().length != 1) {
+							errors.reject("", "entity: \'"+ entity + "\' must have one value for field: \'"+ field + "\' and operator: \'" + operator + "\'");
 						}
 					}
 				}

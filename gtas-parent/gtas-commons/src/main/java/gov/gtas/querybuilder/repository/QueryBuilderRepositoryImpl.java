@@ -363,7 +363,11 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator());
 			}
 			else if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator) ) {
-				List<String> values = Arrays.asList(queryTerm.getValue());
+				List<String> values = null;
+				
+				if(queryTerm.getValue() != null && queryTerm.getValue().length > 0) {
+					values = Arrays.asList(queryTerm.getValue());
+				}
 				
 				if(values != null && values.size() == 2) {
 					
@@ -372,7 +376,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					where.append(" " + Constants.AND + " ?" + positionalParameter);
 				}
 			}
-			else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator)) {
+			else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator) || 
+					OperatorEnum.NOT_IN.toString().equalsIgnoreCase(operator)) {
 				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " (?" + positionalParameter + ")");
 			}
 			else {
@@ -417,7 +422,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			String field = queryTerm.getField();
 			String type = queryTerm.getType();
 			String operator = queryTerm.getOperator();
-			String value = (queryTerm.getValue() != null && queryTerm.getValue().length > 1) ? queryTerm.getValue()[0]:null;
+			String value = (queryTerm.getValue() != null && queryTerm.getValue().length == 1) ? queryTerm.getValue()[0]:null;
 			
 			positionalParameter.increment();
 			
@@ -428,7 +433,11 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				!OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator)) {
 				
 				if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator) ) {
-					List<String> values = Arrays.asList(queryTerm.getValue());
+					List<String> values = null;
+					
+					if(queryTerm.getValue() != null && queryTerm.getValue().length > 0) {
+						values = Arrays.asList(queryTerm.getValue());
+					}
 					
 					if(values != null && values.size() == 2) {
 						
@@ -459,8 +468,13 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						}
 					}
 				}
-				else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator)) {
-					List<String> values = Arrays.asList(queryTerm.getValue());
+				else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator) ||
+						OperatorEnum.NOT_IN.toString().equalsIgnoreCase(operator)) {
+					List<String> values = null;
+					
+					if(queryTerm.getValue() != null && queryTerm.getValue().length > 0) {
+						values = Arrays.asList(queryTerm.getValue());
+					}
 					
 					if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
 						List<Integer> vals = new ArrayList<>();
