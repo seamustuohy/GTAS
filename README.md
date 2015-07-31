@@ -32,7 +32,7 @@ create database gtas
 mvn hibernate4:export
 7. Deploy to tomcat
 > cp gtas-webapp/gtas.war [tomcat home]/webapps
-8. The lookup data (countries, airports, carriers) is located in gtas-commons/src/main/resources/sql.  Load these files from the mysql command line as you may experience problems with special characters from Heidisql:
+8. The lookup data (countries, airports, carriers) is located in gtas-commons/src/main/resources/sql.  Make sure you load countries.sql before airports.sql.  Load these files from the mysql command line as you may experience problems with special characters from Heidisql:
 > mysql -u root -p  
 source [sql filename]
 9. Sample users and roles are in gtas_data.sql 
