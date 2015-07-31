@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.Errors;
 
 /**
@@ -271,10 +270,10 @@ public class JsonToDomainObjectConverter {
 									"createEngineRule()");
 				}
 				cond = new RuleCond(pk, entity, trm.getField(), op);
-				addValuesToCond(cond, op, type, trm.getValue(), trm.getValues());
+				addValuesToCond(cond, op, type, trm.getValue());
 			} catch (ParseException pe) {
 				StringBuilder bldr = new StringBuilder("[");
-				for (String val : trm.getValues()) {
+				for (String val : trm.getValue()) {
 					bldr.append(val).append(",");
 				}
 				bldr.append("]");
@@ -293,41 +292,50 @@ public class JsonToDomainObjectConverter {
 		}
 		return ret;
 	}
-    /**
-     * Does validation check and adds condition value(s) to the Rule condition object.
-     * @param cond the rule condition object
-     * @param op the operator.
-     * @param type the type of value.
-     * @param value single value.
-     * @param values multiple values for multi-value operator.
-     * @throws ParseException on format exception.
-     */
+
+	/**
+	 * Does validation check and adds condition value(s) to the Rule condition
+	 * object.
+	 * 
+	 * @param cond
+	 *            the rule condition object
+	 * @param op
+	 *            the operator.
+	 * @param type
+	 *            the type of value.
+	 * @param value
+	 *            single value.
+	 * @param values
+	 *            multiple values for multi-value operator.
+	 * @throws ParseException
+	 *             on format exception.
+	 */
 	private static void addValuesToCond(RuleCond cond, OperatorCodeEnum op,
-			ValueTypesEnum type, String value, String[] values)
-			throws ParseException {
+			ValueTypesEnum type, String[] values) throws ParseException {
 		if (op == OperatorCodeEnum.IN || op == OperatorCodeEnum.NOT_IN) {
 			if (values != null && values.length > 0) {
 				cond.addValuesToCondition(values, type);
-			} else if (!StringUtils.isEmpty(value)) {
-				cond.addValuesToCondition(new String[] { value }, type);
 			} else {
 				throw ErrorHandlerFactory.getErrorHandler().createException(
 						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-						"values", "createEngineRule");
+						"value", "createEngineRule");
 			}
 		} else if (op == OperatorCodeEnum.BETWEEN) {
 			if (values != null && values.length == 2) {
-			  cond.addValuesToCondition(values, type);
+				cond.addValuesToCondition(values, type);
 			} else {
 				throw ErrorHandlerFactory.getErrorHandler().createException(
 						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-						"values (requires 2 values)", "createEngineRule");
+						"value (requires an array of 2 strings)", "createEngineRule");
 			}
 		} else {
-			String valueToAdd = value;
-			if (StringUtils.isEmpty(valueToAdd) && values != null
-					&& values.length > 0) {
+			String valueToAdd = null;
+			if (values != null && values.length == 1) {
 				valueToAdd = values[0];
+			} else {
+				throw ErrorHandlerFactory.getErrorHandler().createException(
+						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+						"value (requires exactly 1 value)", "createEngineRule");
 			}
 			cond.addValueToCondition(valueToAdd, type);
 		}

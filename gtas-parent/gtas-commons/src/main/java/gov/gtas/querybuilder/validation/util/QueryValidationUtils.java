@@ -215,7 +215,7 @@ public class QueryValidationUtils {
 					
 					// validate that there are two values if the operator is BETWEEN
 					if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator)) {
-						List<String> values = Arrays.asList(queryTerm.getValues());
+						List<String> values = Arrays.asList(queryTerm.getValue());
 						
 						if(values == null || values.size() != 2) {
 							errors.reject("", "values: BETWEEN operator must have two parameters");
@@ -223,16 +223,16 @@ public class QueryValidationUtils {
 					}
 					// for IN operator, verify that values is not null and it has at least one parameter
 					else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator)) {
-						List<String> values = Arrays.asList(queryTerm.getValues());
+						List<String> values = Arrays.asList(queryTerm.getValue());
 						
 						if(values == null || values.size() == 0) {
 							errors.reject("", "values: IN operator must have at least one parameter");
 						}
 					}
 					else {
-						String value = queryTerm.getValue();
-						if(StringUtils.isEmpty(value) && queryTerm.getValues() != null && queryTerm.getValues().length == 1){
-							value = queryTerm.getValues()[0];
+						String value = null;
+						if(queryTerm.getValue() != null && queryTerm.getValue().length == 1){
+							value = queryTerm.getValue()[0];
 						}
 						
 						// verify that value is not null

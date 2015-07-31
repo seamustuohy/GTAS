@@ -6,5 +6,6 @@ public enum MessageStatus {
     LOADED,
     FAILED_PARSING,
     FAILED_LOADING,
+    FAILED_ANALYZING,
     ANALYZED
 }

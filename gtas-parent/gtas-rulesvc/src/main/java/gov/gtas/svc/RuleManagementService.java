@@ -12,7 +12,7 @@ import gov.gtas.model.udr.UdrRule;
 public interface RuleManagementService {
 	/**
 	 * Creates a named Knowledge Base from the given DRL rules string and saves it in the DB.
-	 * Note: the KBB name must not be the default KB name.
+	 * Note: the KB name must not be the default KB name.
 	 * @param kbName the Knowledge Base name.
 	 * @param drlString the rules.
 	 * @return the KnowledgeBase object.

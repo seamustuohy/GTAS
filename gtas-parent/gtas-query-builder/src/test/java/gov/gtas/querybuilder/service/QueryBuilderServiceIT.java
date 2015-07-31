@@ -449,7 +449,7 @@ public class QueryBuilderServiceIT {
 		rule.setField("gender");
 		rule.setOperator("equal");
 		rule.setType("string");
-		rule.setValue("male");
+		rule.setValue(new String[]{"male"});
 		
 		rules.add(rule);
 		
@@ -465,7 +465,7 @@ public class QueryBuilderServiceIT {
 		rule.setField("eta");
 		rule.setOperator("equal");
 		rule.setType("date");
-		rule.setValue("05/11/2014 5:00:00 PM");
+		rule.setValue(new String[]{"05/11/2014 5:00:00 PM"});
 		
 		rules.add(rule);
 		
@@ -481,7 +481,7 @@ public class QueryBuilderServiceIT {
 		rule.setField("middleName");
 		rule.setOperator("is_null");
 		rule.setType("boolean");
-		rule.setValue("");
+		rule.setValue(new String[]{""});
 		
 		rules.add(rule);
 		
@@ -497,7 +497,7 @@ public class QueryBuilderServiceIT {
 		rule.setField("firstName");
 		rule.setOperator("contains");
 		rule.setType("string");
-		rule.setValue("avi");
+		rule.setValue(new String[]{"avi"});
 		
 		rules.add(rule);
 		
@@ -517,8 +517,8 @@ public class QueryBuilderServiceIT {
 		rule.setField("age");
 		rule.setOperator("between");
 		rule.setType("integer");
-		rule.setValue("");
-		rule.setValues(values.toArray(new String[values.size()]));
+		///rule.setValue(new String[]{""});
+		rule.setValue(values.toArray(new String[values.size()]));
 		
 		rules.add(rule);
 		
@@ -579,7 +579,7 @@ public class QueryBuilderServiceIT {
 		rule.setField("firstName");
 		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
 		rule.setType("string");
-		rule.setValue("da");
+		rule.setValue(new String[]{"da"});
 		
 		rules.add(rule);
 		
@@ -588,7 +588,7 @@ public class QueryBuilderServiceIT {
 		rule.setField("lastName");
 		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
 		rule.setType("string");
-		rule.setValue("c");
+		rule.setValue(new String[]{"c"});
 		
 		rules.add(rule);
 		
@@ -604,7 +604,7 @@ public class QueryBuilderServiceIT {
 		rule.setField("lastName");
 		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
 		rule.setType("string");
-		rule.setValue("c");
+		rule.setValue(new String[]{"c"});
 		rules2.add(rule);
 		
 		rule = new QueryTerm();
@@ -612,7 +612,7 @@ public class QueryBuilderServiceIT {
 		rule.setField("lastName");
 		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
 		rule.setType("string");
-		rule.setValue("c");
+		rule.setValue(new String[]{"c"});
 		rules2.add(rule);
 		
 		ObjectMapper mapper = new ObjectMapper();

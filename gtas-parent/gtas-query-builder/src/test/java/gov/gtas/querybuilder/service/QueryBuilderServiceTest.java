@@ -1,13 +1,11 @@
 package gov.gtas.querybuilder.service;
 
-import static org.junit.Assert.*;
 import gov.gtas.querybuilder.repository.QueryBuilderRepository;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 public class QueryBuilderServiceTest {
@@ -57,21 +55,6 @@ public class QueryBuilderServiceTest {
 //		fail("Not yet implemented");
 	}
 	
-	@Test
-	public void testListQueryByInvalidUser() {
-//		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testDeleteQuery() {
-//		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRunFlightQuery() {
-//		fail("Not yet implemented");
-	}
-
 	@Test
 	public void testRunPassengerQuery() {
 //		fail("Not yet implemented");

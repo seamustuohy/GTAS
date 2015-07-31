@@ -144,6 +144,6 @@ public class UdrSpecificationBuilderTest {
 		assertEquals("verifyQueryTerm - attribute does not match", attr, term.getField());
 		assertEquals("verifyQueryTerm - type does not match", type.toString(), term.getType());
 		assertEquals("verifyQueryTerm - operator does not match", op.toString(), term.getOperator());
-		assertEquals("verifyQueryTerm - value does not match", val[0], term.getValues()[0]);
+		assertEquals("verifyQueryTerm - value does not match", val[0], term.getValue()[0]);
 	}
 }

@@ -363,7 +363,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator());
 			}
 			else if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator) ) {
-				List<String> values = Arrays.asList(queryTerm.getValues());
+				List<String> values = Arrays.asList(queryTerm.getValue());
 				
 				if(values != null && values.size() == 2) {
 					
@@ -417,7 +417,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			String field = queryTerm.getField();
 			String type = queryTerm.getType();
 			String operator = queryTerm.getOperator();
-			String value = queryTerm.getValue();
+			String value = (queryTerm.getValue() != null && queryTerm.getValue().length > 1) ? queryTerm.getValue()[0]:null;
 			
 			positionalParameter.increment();
 			
@@ -428,7 +428,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				!OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator)) {
 				
 				if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator) ) {
-					List<String> values = Arrays.asList(queryTerm.getValues());
+					List<String> values = Arrays.asList(queryTerm.getValue());
 					
 					if(values != null && values.size() == 2) {
 						
@@ -460,7 +460,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					}
 				}
 				else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator)) {
-					List<String> values = Arrays.asList(queryTerm.getValues());
+					List<String> values = Arrays.asList(queryTerm.getValue());
 					
 					if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
 						List<Integer> vals = new ArrayList<>();
