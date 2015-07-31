@@ -6,17 +6,25 @@ import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
- * Class SSD holds Seat Selection Details
- * @author GTAS4
+ * <p>
+ * SSD: SEAT SELECTION DETAILS
+ * <p>
+ * Cabin class is not standardized.
+ * <p>
  * Ex:The passenger has been assigned seat 24A in coach.(SSD+24A++++Y’)
  */
-public class SSD extends Segment{
+public class SSD extends Segment {
+    private String seatNumber;
 
-	private String seatNumber;
-	private String cabinClass;
-	
-	
-	public SSD(List<Composite> composites) {
-		super(SSD.class.getSimpleName(), composites);
-	}
+    public SSD(List<Composite> composites) {
+        super(SSD.class.getSimpleName(), composites);
+        Composite c = getComposite(0);
+        if (c != null) {
+            this.seatNumber = c.getElement(0);
+        }
+    }
+
+    public String getSeatNumber() {
+        return seatNumber;
+    }
 }

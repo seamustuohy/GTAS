@@ -19,18 +19,15 @@ import gov.gtas.parsers.pnrgov.PnrUtils;
  * Dates and times in the TVL are in Local Time Departure and arrival points of
  * the transborder segment for a given country are the ones of the leg which
  * makes the segment eligible for push to a given country
- * 
  * <p>
  * For OPEN and ARNK segments, the date, place of departure and place of arrival
  * are conditional. For an Airline/ Flight Number / class/ date / segment, the
  * date, place of departure and place of arrival are mandatory.
- * 
  * <p>
  * When referring to a codeshare flight, two TVLs are required (one as difined
  * in 5.28.2 for the marketing flight and one providing the operating flight
  * information as defined in 5.28.3). If the marketing and operating
  * carrier/flight are the same, only one TVL is used as defined in 5.28.2.
- * 
  * <p>
  * Flown segments are to be included in history. Departure and arrival
  * city/airport codes as contained in the passenger’s booked itinerary.

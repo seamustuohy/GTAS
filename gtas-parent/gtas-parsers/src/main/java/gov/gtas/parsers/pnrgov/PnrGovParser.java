@@ -16,7 +16,7 @@ import gov.gtas.parsers.pnrgov.segment.DAT_G10;
 import gov.gtas.parsers.pnrgov.segment.DAT_G6;
 import gov.gtas.parsers.pnrgov.segment.EBD;
 import gov.gtas.parsers.pnrgov.segment.EQN;
-import gov.gtas.parsers.pnrgov.segment.EQN_L0;
+import gov.gtas.parsers.pnrgov.segment.EQN;
 import gov.gtas.parsers.pnrgov.segment.FAR;
 import gov.gtas.parsers.pnrgov.segment.FOP;
 import gov.gtas.parsers.pnrgov.segment.FTI;
@@ -78,7 +78,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         f.setFlightNumber(tvl.getFlightNumber());
         this.parsedMessage.getFlights().add(f);
 
-        EQN_L0 eqn = getMandatorySegment(EQN_L0.class);
+        EQN eqn = getMandatorySegment(EQN.class);
 
         for (;;) {
             SRC src = getConditionalSegment(SRC.class);

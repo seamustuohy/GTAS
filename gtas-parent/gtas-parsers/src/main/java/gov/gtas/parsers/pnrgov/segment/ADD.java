@@ -26,7 +26,6 @@ import gov.gtas.parsers.edifact.Segment;
  * (ADD++700:4532 WILSON STREET:PHILADELPHIA:PA::US:34288’)
  */
 public class ADD extends Segment {
-
     private String addressType;
     private String streetNumberAndName;
     private String city;

@@ -1,31 +1,30 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
- * Class REF to hold Reference information
- * @author GTAS4
+ * <p>
+ * REF: REFERENCE INFORMATION
  *
- *Example:The unique passenger reference identifier is 4928506894.
- *(REF+:4928506894')
+ * <p>Example:The unique passenger reference identifier is 4928506894.
+ * (REF+:4928506894')
  */
-public class REF extends Segment{
+public class REF extends Segment {
+    private List<String> referenceIds;
 
-	private String referenceNumber;
-	
-	public REF(List<Composite> composites) {
-		super(REF.class.getSimpleName(), composites);
-	}
+    public REF(List<Composite> composites) {
+        super(REF.class.getSimpleName(), composites);
+        this.referenceIds = new ArrayList<>();
+        for (Composite c : getComposites()) {
+            this.referenceIds.add(c.getElement(1));
+        }
+    }
 
-	public String getReferenceNumber() {
-		return referenceNumber;
-	}
-
-	public void setReferenceNumber(String referenceNumber) {
-		this.referenceNumber = referenceNumber;
-	}
-
+    public List<String> getReferenceIds() {
+        return referenceIds;
+    }
 }

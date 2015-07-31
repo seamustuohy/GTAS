@@ -6,18 +6,23 @@ import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 
 /**
- * Class LTS to hold Long Text String
- * @author GTAS4
- *
- * Ex:Unstructured PNR history.(LTS+ LAX GS WW D006217 2129Z/09DEC 02961B AS DL1314U 19FEB MCOATL NN/SS1
-1130A 105P AS SEAT RS 29F TRAN/TRINH')
+ * <p>
+ * LTS: LONG TEXT STRING
+ * <p>
+ * Flown segments are to be included in history.
+ * <p>
+ * Ex:Unstructured PNR history.(LTS+ LAX GS WW D006217 2129Z/09DEC 02961B AS
+ * DL1314U 19FEB MCOATL NN/SS1 1130A 105P AS SEAT RS 29F TRAN/TRINH')
  */
-public class LTS extends Segment{
+public class LTS extends Segment {
+    private String text;
 
-	
-	private String unstructuredHistory;
-	public LTS(List<Composite> composites) {
-		super(LTS.class.getSimpleName(), composites);
-		
-	}
+    public LTS(List<Composite> composites) {
+        super(LTS.class.getSimpleName(), composites);
+        this.text = getComposite(0).getElement(0);
+    }
+
+    public String getText() {
+        return text;
+    }
 }

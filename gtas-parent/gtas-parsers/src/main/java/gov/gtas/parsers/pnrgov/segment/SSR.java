@@ -11,7 +11,7 @@ import gov.gtas.parsers.edifact.Segment;
 
 /**
  * <p>
- * SSD: SEAT SELECTION DETAILS
+ * SSR: SPECIAL REQUIREMENTS DETAILS 
  * <p>
  * SSR’s in GR.1 apply to all flights and may apply to all passengers or may
  * apply to specific passenger based on the traveler reference number in
