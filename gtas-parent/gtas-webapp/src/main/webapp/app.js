@@ -6,20 +6,15 @@ var app = angular.module('myApp', [
 ]);
 
 app.factory('QueryBuilderCtrl',function(){
-    return function ($scope) {
-        var valueSetter = function (rule, value) {
-            debugger;
-            var $input = rule.$el.find(".rule-value-container input");
-            $input.focus();
-            if (Array.isArray(value)) {
-                value.forEach(function (v) {
-                    $('[data-value="' + v + '"]').click();
-                });
-            } else {
-                $('[data-value="' + value + '"]').click();
+    return function ($scope, $timeout) {
+        var selectizeValueSetter = function (rule, value) {
+            var $selectize = rule.$el.find(".rule-value-container .selectized");
+            if ($selectize.length) {
+                $timeout(function() {
+                    $selectize[0].selectize.setValue(value);
+                }, 100);
+
             }
-            document.getElementById('title').focus();
-            $input.blur();
         };
         var getOptionsFromJSONArray = function (that, property) {
             //if (localStorage[property] === undefined) {
@@ -35,16 +30,16 @@ app.factory('QueryBuilderCtrl',function(){
                 }
             });
 
-             //} else {
-             //    try {
-             //    JSON.parse(localStorage[property]).forEach(function (item) {
-             //    that.addOption(item);
-             //    });
-             //    } catch (exception) {
-             //       throw exception;
-             //    }
-             //}
-      };
+            //} else {
+            //    try {
+            //    JSON.parse(localStorage[property]).forEach(function (item) {
+            //    that.addOption(item);
+            //    });
+            //    } catch (exception) {
+            //       throw exception;
+            //    }
+            //}
+        };
         $scope.today = moment().format('YYYY-MM-DD').toString();
 
         $scope.authorId = 'adelorie';
@@ -70,20 +65,18 @@ app.factory('QueryBuilderCtrl',function(){
                 $builder = $('#builder');
 
             var supplementSelectize = function(obj) {
-                obj.multiple = true;
-                obj.plugin = "selectize";
                 obj.plugin_config = {
                     "valueField": "id",
                     "labelField": "name",
                     "searchField": "name",
                     "sortField": "name",
-                    "create": true,
+                    "create": false,
                     "plugins": ["remove_button"],
                     "onInitialize": function () {
-                        getOptionsFromJSONArray(this, obj.data);
+                        getOptionsFromJSONArray(this, obj.dataSource);
                     }
                 };
-                obj.valueSetter = valueSetter;
+                obj.valueSetter = selectizeValueSetter;
             };
             // init
             $builder
@@ -92,8 +85,8 @@ app.factory('QueryBuilderCtrl',function(){
                         rule.$el.find('.rule-value-container').css('min-width', '200px')
                             .find('.selectize-control').removeClass('form-control');
                     }
-                })
-                .on('onAfterSetValue.queryBuilder', function () {alert('test')});
+                });
+
             try {
                 //if (localStorage[property] === undefined) {
                 $.getJSON('./data/' + property + '.json', function (data) {
@@ -102,17 +95,12 @@ app.factory('QueryBuilderCtrl',function(){
                     $scope.options.filters = [];
                     Object.keys($scope.options.entities).forEach(function(key){
                         $scope.options.entities[key].columns.forEach(function(column){
+                            if (column.plugin === 'selectize') {
+                                supplementSelectize(column);
+                            }
                             $scope.options.filters.push(column);
                         });
-                    })
-
-                    //TODO load options from entities
-                    //DOCUMENT.documentType, doc_types
-                    //FLIGHT.destination.iata airports
-                    //FLIGHT.carrier.iata carriers
-                    //FLIGHT.direction direction
-                    //TRAVELER.gender genders
-
+                    });
 
                     $builder.queryBuilder($scope.options);
 
