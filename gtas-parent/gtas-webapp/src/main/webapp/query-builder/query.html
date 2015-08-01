@@ -63,25 +63,23 @@
     </tr>
 </table>
 
-<form ng-submit="submit()" class="udr-add-form">
-    <fieldset>
-        <legend>Summary:</legend>
-        <label for="title" class="hide">Title:</label>
-        <input placeholder="Title:" type="text" ng-model="title" id="title" />
-        <label for="description" class="hide">Description:</label>
-        <input type="text" ng-model="description" id="description" placeholder="Description:"/>
-    </fieldset>
-    <fieldset>
-        <legend>Conditions:</legend>
-        <div id="builder"></div>
-    </fieldset>
+<fieldset>
+    <legend>Summary:</legend>
+    <label for="title" class="hide">Title:</label>
+    <input placeholder="Title:" type="text" ng-model="title" id="title" />
+    <label for="description" class="hide">Description:</label>
+    <input type="text" ng-model="description" id="description" placeholder="Description:"/>
+</fieldset>
+<fieldset>
+    <legend>Conditions:</legend>
+    <div id="builder"></div>
+</fieldset>
 
-    <button type="button" data-ng-click="resetQueryBuilder()" class="btn btn-warning reset pull-right" data->Clear Conditions</button>
+<button type="button" data-ng-click="resetQueryBuilder()" class="btn btn-warning reset pull-right" data->Clear Conditions</button>
 
-    <div id="result" class="hide">
-        <h3>Output</h3>
-        <pre></pre>
-    </div>
-    <button type="button" data-ng-click="delete()" type="button" class="btn btn-danger pull-right" title="delete">Delete</button>
-    <button id="submit" class="btn btn-primary pull-right">Save</button>
-</form>
+<div id="result" class="hide">
+    <h3>Output</h3>
+    <pre></pre>
+</div>
+<button type="button" data-ng-click="delete()" type="button" class="btn btn-danger pull-right" title="delete">Delete</button>
+<button type="button" data-ng-click="save()" id="submit" class="btn btn-primary pull-right">Save</button>

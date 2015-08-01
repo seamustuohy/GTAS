@@ -57,9 +57,8 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     };
 
     $scope.summaryDefaults = {description: null, title: null};
-    $scope.newRule();
 
-    $scope.submit = function () {
+    $scope.save = function () {
         var queryObject;
         $scope.title = $scope.title.trim();
         if (!$scope.title.length ) {

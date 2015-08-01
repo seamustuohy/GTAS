@@ -1,8 +1,8 @@
 var app = angular.module('myApp', [
-	'ui.router', 
-	'ui.bootstrap', 
-	'ngTable',
-	'spring-security-csrf-token-interceptor'
+    'ui.router',
+    'ui.bootstrap',
+    'ngTable',
+    'spring-security-csrf-token-interceptor'
 ]);
 
 app.factory('QueryBuilderCtrl',function(){
@@ -22,34 +22,32 @@ app.factory('QueryBuilderCtrl',function(){
             $input.blur();
         };
         var getOptionsFromJSONArray = function (that, property) {
-//            if (localStorage[property] === undefined) {
-                $.getJSON('./data/' + property + '.json', function (data) {
-  //                  localStorage[property] = JSON.stringify(data);
-                    try {
-                        data.forEach(function (item) {
-                            that.addOption(item);
-                        });
-                    }
-                    catch (exception) {
-                        throw exception;
-                    }
-                });
-            /*
-            } else {
+            //if (localStorage[property] === undefined) {
+            $.getJSON('./data/' + property + '.json', function (data) {
+                //localStorage[property] = JSON.stringify(data);
                 try {
-                    JSON.parse(localStorage[property]).forEach(function (item) {
+                    data.forEach(function (item) {
                         that.addOption(item);
                     });
-                } catch (exception) {
+                }
+                catch (exception) {
                     throw exception;
                 }
-            }
-            */
-        };
+            });
+
+             //} else {
+             //    try {
+             //    JSON.parse(localStorage[property]).forEach(function (item) {
+             //    that.addOption(item);
+             //    });
+             //    } catch (exception) {
+             //       throw exception;
+             //    }
+             //}
+      };
         $scope.today = moment().format('YYYY-MM-DD').toString();
 
         $scope.authorId = 'adelorie';
-        $scope.$result = $('#result');
         $scope.calendarOptions = {
             format: 'yyyy-mm-dd',
             autoClose: true
@@ -65,348 +63,28 @@ app.factory('QueryBuilderCtrl',function(){
                 'unique-filter': null,
                 'bt-checkbox': {color: 'primary'}
             },
-            filters: [{
-                "id": "DOCUMENT.issuanceCountry.iso2",
-                "label": "Citizenship OR Issuance Country",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "multiple": true,
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "countries");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "DOCUMENT.expirationDate",
-                "label": "Expiration Date",
-                "type": "date",
-                "validation": {
-                    "format": "YYYY-MM-DD"
-                },
-                "plugin": "datepicker",
-                "plugin_config": {
-                    "format": "yyyy-mm-dd",
-                    "autoClose": true
-                }
-            }, {
-                "id": "DOCUMENT.documentNumber",
-                "label": "Number",
-                "type": "string"
-            }, {
-                "id": "DOCUMENT.documentType",
-                "label": "Type",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "doc_types");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "FLIGHT.destination.iata",
-                "label": "Airport Destination",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "airports");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "FLIGHT.origin.iata",
-                "label": "Airport Origin",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "airports");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "FLIGHT.carrier.iata",
-                "label": "Carrier",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "multiple": true,
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "carriers");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "FLIGHT.destinationCountry.iso3",
-                "label": "Destination Country",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "multiple": true,
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "countries");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "FLIGHT.originCountry.iso3",
-                "label": "Origin Country",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "multiple": true,
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "countries");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "FLIGHT.direction",
-                "label": "Direction",
-                "type": "string",
-                "operators": ["EQUAL"],
-                "input": "select",
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "direction");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "FLIGHT.eta",
-                "label": "ETA",
-                "type": "datetime",
-                "plugin": "datetimepicker",
-                "plugin_config": {}
-            }, {
-                "id": "FLIGHT.etd",
-                "label": "ETD",
-                "type": "datetime",
-                "plugin": "datetimepicker",
-                "plugin_config": {}
-            }, {
-                "id": "FLIGHT.flightNumber",
-                "label": "Number",
-                "type": "string"
-            }, {
-                "id": "FLIGHT.thru",
-                "label": "Thru",
-                "type": "string"
-            }, {
-                "id": "TRAVELER.age",
-                "label": "TRAVELER.age",
-                "type": "integer"
-            }, {
-                "id": "TRAVELER.citizenshipCountry.iso2",
-                "label": "Citizenship Country",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "multiple": true,
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "countries");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "TRAVELER.debarkation.iata",
-                "label": "Debarkation",
-                "type": "string"
-            }, {
-                "id": "TRAVELER.debarkCountry.iso2",
-                "label": "Debarkation Country",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "multiple": true,
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "countries");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "TRAVELER.dob",
-                "label": "DOB",
-                "type": "date",
-                "validation": {
-                    "format": "YYYY-MM-DD"
-                },
-                "plugin": "datepicker",
-                "plugin_config": {
-                    "format": "yyyy-mm-dd",
-                    "autoClose": true
-                }
-            }, {
-                "id": "TRAVELER.embarkation.iata",
-                "label": "Embarkation",
-                "type": "string"
-            }, {
-                "id": "TRAVELER.embarkCountry.iso2",
-                "label": "Embarkation Country",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "multiple": true,
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "countries");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "TRAVELER.gender",
-                "label": "TRAVELER.gender",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "multiple": true,
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "genders");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "TRAVELER.firstName",
-                "label": "First Name",
-                "type": "string"
-            }, {
-                "id": "TRAVELER.lastName",
-                "label": "Last Name",
-                "type": "string"
-            }, {
-                "id": "TRAVELER.middleName",
-                "label": "Middle Name",
-                "type": "string"
-            }, {
-                "id": "TRAVELER.residencyCountry.iso2",
-                "label": "Residency Country",
-                "type": "string",
-                "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
-                "input": "select",
-                "multiple": true,
-                "plugin": "selectize",
-                "plugin_config": {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": true,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, "countries");
-                    }
-                },
-                "valueSetter": valueSetter
-            }, {
-                "id": "TRAVELER.seat",
-                "label": "TRAVELER.seat",
-                "type": "string"
-            }, {
-                "id": "TRAVELER.traveler_type",
-                "label": "Traveler Type",
-                "type": "string"
-            }]
+            filters: []
         };
         $scope.buildAfterEntitiesLoaded = function () {
             var property = 'entities',
                 $builder = $('#builder');
 
+            var supplementSelectize = function(obj) {
+                obj.multiple = true;
+                obj.plugin = "selectize";
+                obj.plugin_config = {
+                    "valueField": "id",
+                    "labelField": "name",
+                    "searchField": "name",
+                    "sortField": "name",
+                    "create": true,
+                    "plugins": ["remove_button"],
+                    "onInitialize": function () {
+                        getOptionsFromJSONArray(this, obj.data);
+                    }
+                };
+                obj.valueSetter = valueSetter;
+            };
             // init
             $builder
                 .on('afterCreateRuleInput.queryBuilder', function (e, rule) {
@@ -417,18 +95,34 @@ app.factory('QueryBuilderCtrl',function(){
                 })
                 .on('onAfterSetValue.queryBuilder', function () {alert('test')});
             try {
-                if (localStorage[property] === undefined) {
-                    $.getJSON('./data/' + property + '.json', function (data) {
-                        localStorage[property] = JSON.stringify(data);
-                        $scope.options.entities = data;
-                        $builder.queryBuilder($scope.options);
-                        $scope.$builder = $builder;
-                    });
-                } else {
-                    $scope.options.entities = JSON.parse(localStorage[property]);
+                //if (localStorage[property] === undefined) {
+                $.getJSON('./data/' + property + '.json', function (data) {
+                    //localStorage[property] = JSON.stringify(data);
+                    $scope.options.entities = data;
+                    $scope.options.filters = [];
+                    Object.keys($scope.options.entities).forEach(function(key){
+                        $scope.options.entities[key].columns.forEach(function(column){
+                            $scope.options.filters.push(column);
+                        });
+                    })
+
+                    //TODO load options from entities
+                    //DOCUMENT.documentType, doc_types
+                    //FLIGHT.destination.iata airports
+                    //FLIGHT.carrier.iata carriers
+                    //FLIGHT.direction direction
+                    //TRAVELER.gender genders
+
+
                     $builder.queryBuilder($scope.options);
+
                     $scope.$builder = $builder;
-                }
+                });
+                //} else {
+                //    $scope.options.entities = JSON.parse(localStorage[property]);
+                //    $builder.queryBuilder($scope.options);
+                //    $scope.$builder = $builder;
+                //}
             } catch (exception) {
                 throw exception;
             }
@@ -436,10 +130,7 @@ app.factory('QueryBuilderCtrl',function(){
         $scope.isBeingEdited = function (ruleId) {
             return $scope.ruleId === ruleId;
         };
-        $scope.resetQueryBuilder = function () {
-            $scope.$builder.queryBuilder('reset');
-            $scope.$result.addClass('hide').find('pre').empty();
-        };
+
 
         $scope.loadSummary = function (summary) {
             Object.keys(summary).forEach( function (key) {
@@ -451,7 +142,7 @@ app.factory('QueryBuilderCtrl',function(){
 
         $scope.newRule = function () {
             $scope.ruleId = null;
-            $scope.resetQueryBuilder();
+            $scope.$builder.queryBuilder('reset');
             $scope.loadSummary($scope.summaryDefaults);
         };
     };
@@ -459,34 +150,34 @@ app.factory('QueryBuilderCtrl',function(){
 
 
 app.config(function($stateProvider){
-$stateProvider
-    .state('flights', {
-        url: '',
-        templateUrl: 'flights/flights.html',
-        controller: 'FlightsController'
-    })
-     .state('travelers', {
-        url: '/travelers',
-        templateUrl: 'pax/pax.html',
-        controller: 'PaxController'
-    })
-    .state('pax', {
-        url: '/pax',
-        templateUrl: 'pax/pax.html',
-        controller: 'PaxController'
-    })
-    .state('risk-criteria', {
-        url: '/risk-criteria',
-        templateUrl: 'risk-criteria/risk-criteria.html',
-        controller: 'RiskCriteriaController'
-    })
-    .state('query-builder', {
-        url: '/query-builder',
-        templateUrl: 'query-builder/query.html',
-        controller: 'QueryBuilderController'
-    })
-    .state('admin', {
-        url: '/admin',
-        templateUrl: 'admin/admin.html'
-    })
-})
+    $stateProvider
+        .state('flights', {
+            url: '',
+            templateUrl: 'flights/flights.html',
+            controller: 'FlightsController'
+        })
+        .state('travelers', {
+            url: '/travelers',
+            templateUrl: 'pax/pax.html',
+            controller: 'PaxController'
+        })
+        .state('pax', {
+            url: '/pax',
+            templateUrl: 'pax/pax.html',
+            controller: 'PaxController'
+        })
+        .state('risk-criteria', {
+            url: '/risk-criteria',
+            templateUrl: 'risk-criteria/risk-criteria.html',
+            controller: 'RiskCriteriaController'
+        })
+        .state('query-builder', {
+            url: '/query-builder',
+            templateUrl: 'query-builder/query.html',
+            controller: 'QueryBuilderController'
+        })
+        .state('admin', {
+            url: '/admin',
+            templateUrl: 'admin/admin.html'
+        })
+});

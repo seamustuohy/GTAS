@@ -66,9 +66,8 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
     };
 
     $scope.summaryDefaults = {title: null, description: null, startDate: $scope.today, endDate: null, enabled: true};
-    $scope.newRule();
 
-    $scope.submit = function() {
+    $scope.save = function() {
         var ruleObject;
         var startDate = moment($scope.startDate, $scope.formats, true);
         var endDate = $scope.endDate || moment($scope.endDate, $scope.formats, true);

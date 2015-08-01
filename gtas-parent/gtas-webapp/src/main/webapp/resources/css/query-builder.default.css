@@ -40,9 +40,6 @@
   padding: 0 0 0 15px;
   margin: 0;
 }
-.query-builder .rule-container .rule-filter-container {
-  display: none;
-}
 .query-builder .rule-container .rule-value-container {
   border-left: 1px solid #ddd;
   padding-left: 5px;

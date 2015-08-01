@@ -449,20 +449,6 @@
             Model($rule).entity = that.getEntityByName($this.val());
         });
 
-        // rule field change
-        this.$el.on('change.queryBuilder', '.rule-field-container select', function() {
-            var $this = $(this);
-            var $rule = $this.closest('.rule-container');
-            // get last fieldname
-            var value = $this.val();
-
-            if ( value === '-1' ) {
-                error('Can\'t be null');
-            }
-            Model($rule).__.column = value;
-            Model($rule).filter = that.getFilterById( [Model($rule).entity, value].join('.') );
-        });
-
         // rule filter change
         this.$el.on('change.queryBuilder', '.rule-filter-container select', function() {
             var $this = $(this);
@@ -527,10 +513,6 @@
 
                     case 'entity':
                         that.updateRuleEntity(node);
-                        return;
-
-                    case 'column':
-                        that.updateRuleColumn(node);
                         return;
 
                     case 'condition':
@@ -689,7 +671,6 @@
         this.trigger('afterAddRule', model);
 
         this.createRuleEntities(model);
-        this.createRuleFilters(model);
 
         return model;
     };
@@ -728,26 +709,16 @@
     };
 
     /**
-     * Create the entity's fields <select> for a rule
-     * @param rule {Rule}
-     */
-    QueryBuilder.prototype.createRuleEntityFields = function(rule) {
-        var $filterSelect = $(this.getRuleEntityFieldSelect(rule));
-
-        rule.$el.find('.rule-field-container').html($filterSelect);
-        this.trigger('afterCreateEntityFields', rule);
-    };
-
-    /**
      * Create the filters <select> for a rule
      * @param rule {Rule}
      */
     QueryBuilder.prototype.createRuleFilters = function(rule) {
+        this.filters = this.entities[rule.entity].columns;
         var filters = this.change('getRuleFilters', this.filters, rule);
 
         var $filterSelect = $(this.getRuleFilterSelect(rule, filters));
 
-        rule.$el.find('.rule-filter-container').append($filterSelect);
+        rule.$el.find('.rule-filter-container').empty().append($filterSelect);
 
         this.trigger('afterCreateRuleFilters', rule);
     };
@@ -828,23 +799,11 @@
      */
     QueryBuilder.prototype.updateRuleEntity = function(rule) {
         rule.$el.find('.rule-entity-container select').val(rule.entity ? rule.entity : '-1');
-        this.createRuleEntityFields(rule);
+        this.createRuleFilters(rule);
         this.trigger('afterUpdateRuleEntity', rule);
     };
 
     /**
-     * Perform action when rule's column is changed
-     * @param rule {Rule}
-     */
-    QueryBuilder.prototype.updateRuleColumn = function(rule) {
-        var value = rule.column ? rule.column : '-1';
-        rule.$el.find('.rule-field-container select').val(value).trigger('change');
-        this.trigger('afterUpdateRuleColumn', rule);
-    };
-
-    /**
-
-     /**
      * Perform action when rule's filter is changed
      * @param rule {Rule}
      */
@@ -1130,7 +1089,6 @@
                     id: model.filter.id,
                     field: model.filter.field,
                     entity: model.entity,
-                    column: model.column,
                     'type': model.filter.type,
                     input: model.filter.input,
                     operator: model.operator.type,
@@ -1169,19 +1127,11 @@
                 properties = rule.id.split('.');
                 rule.entity = properties.shift();
                 rule["@class"] = "QueryTerm";
-                if (rule.value.indexOf('[') === 0 || Array.isArray(rule.value)) {
-                    rule.values = rule.value;
-                    rule.value = null;
-                } else {
-                    rule.values = [rule.value];
+                if (!Array.isArray(rule.value)){
+                    rule.value = [rule.value];
                 }
 
-                //remove when Amit gives go ahead..
-//                rule.type = rule.type.replace(/\b\w/g, function (txt) { return txt.toUpperCase(); });
-                //end remove
-
                 rule.field = properties.join('.');
-                delete rule.column;
                 delete rule.id;
             } else if (rule.rules !== undefined) {
                 rule["@class"] = "QueryObject";
@@ -1208,14 +1158,18 @@
         }
         data.rules.forEach(function(rule) {
             if (rule["@class"] === "QueryTerm") {
-                rule.column = rule.field;
-                rule.id = [rule.entity, rule.column].join('.');
-                rule.value = rule.values && rule.values.length > 1 ? rule.values : rule.values;
+                rule.id = [rule.entity, rule.field].join('.');
+
+                // CONVERT rule from array to string if an array of one and not expected to be an array based on operator
+                if (['IN', 'NOT IN', 'BETWEEN'].indexOf(rule.operator.toUpperCase()) < 0 && Array.isArray(rule.value) && rule.length === 1) {
+                    rule.value = rule.value[0];
+                }
+
                 rule.field = [rule.entity, rule.field].join('.');
                 // remove when Amit gives go ahead..
+                console.log(rule.type);
                 rule.type = rule.type.toLowerCase();
                 // end remove
-                delete rule.values;
             } else if (rule["@class"] === "QueryObject") {
                 interpretDroolsJSON(rule, true);
             }
@@ -1399,10 +1353,8 @@
 
                     periods = item.id.split('.');
 
-                    model.filter = that.getFilterById(item.id);
                     model.entity = periods.shift();
-                    model.column = periods.join('.');
-                    //item.operator = item.operator.toLowerCase();
+                    model.filter = that.getFilterById(item.id);
                     model.operator = that.getOperatorByType(item.operator);
                     model.flags = that.parseRuleFlags(item);
 
@@ -2022,32 +1974,6 @@
     };
 
     /**
-     * Returns rule entity field <select> HTML
-     * @param rule {Rule}
-     * @param entities {object}
-     * @return {string}
-     */
-    QueryBuilder.prototype.getRuleEntityFieldSelect = function(rule) {
-        var entityKey = this.entities[rule.entity],
-            columns = entityKey ? entityKey.columns : [],
-            h = '<label for="'+ rule.id +'_entity">Field:</label> \
-            <select class="form-control entity-corresponding-fields" name="'+ rule.id +'_field">';
-
-        h+= '<option value="-1"> - </option>';
-
-        for (var i=0, l=columns.length, id, label; i<l; i++) {
-            id = columns[i].id;
-            label = columns[i].label; //this.lang.columns[columns[i].id] || columns[i].id;
-
-            h+= '<option value="'+ id +'">'+ label +'</option>';
-        }
-
-        h+= '</select>';
-
-        return this.change('getRuleEntityFieldSelect', h, rule);
-    };
-
-    /**
      * Return the rule value HTML
      * @param rule {Rule}
      * @param filter {object}
@@ -2519,7 +2445,6 @@
         Node.call(this, parent, $el);
 
         this.__.entity = null;
-        this.__.column = null;
         this.__.filter = null;
         this.__.operator = null;
         this.__.flags = {};
@@ -2529,7 +2454,7 @@
     Rule.prototype = Object.create(Node.prototype);
     Rule.prototype.constructor = Rule;
 
-    defineModelProperties(Rule, ['entity', 'column', 'filter', 'operator', 'flags', 'value']);
+    defineModelProperties(Rule, ['entity', 'filter', 'operator', 'flags', 'value']);
 
 
     QueryBuilder.Group = Group;
@@ -2756,6 +2681,7 @@
 
         this.on('afterCreateRuleFilters', function(e, rule) {
             rule.$el.find('.rule-filter-container select').removeClass('form-control').selectpicker(options);
+            rule.$el.find('.rule-operator-container, .rule-value-container').empty();
         });
 
         this.on('afterCreateRuleOperators', function(e, rule) {
