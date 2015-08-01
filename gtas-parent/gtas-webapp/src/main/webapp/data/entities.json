@@ -66,17 +66,23 @@
         "id": "DOCUMENT.issuanceCountry.iso2",
         "label": "Citizenship OR Issuance Country",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
+        "plugin": "selectize",
+        "dataSource": "countries"
       },
       {
         "id": "DOCUMENT.expirationDate",
         "label": "Expiration Date",
         "type": "date",
         "validation": {
-        "format": "YYYY-MM-DD"
+          "format": "YYYY-MM-DD"
         },
         "plugin": "datepicker",
         "plugin_config": {
@@ -93,9 +99,15 @@
         "id": "DOCUMENT.documentType",
         "label": "Type",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
-        "plugin": "selectize"
+        "plugin": "selectize",
+        "dataSource": "doc_types"
       }
     ]
   },
@@ -121,52 +133,85 @@
         "id": "FLIGHT.destination.iata",
         "label": "Airport Destination",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
-        "plugin": "selectize"
+        "plugin": "selectize",
+        "dataSource": "airports"
       },
       {
         "id": "FLIGHT.origin.iata",
         "label": "Airport Origin",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
-        "plugin": "selectize"
+        "plugin": "selectize",
+        "dataSource": "airports"
       },
       {
         "id": "FLIGHT.carrier.iata",
         "label": "Carrier",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
+        "plugin": "selectize",
+        "dataSource": "carriers"
       },
       {
         "id": "FLIGHT.destinationCountry.iso3",
         "label": "Destination Country",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
+        "plugin": "selectize",
+        "dataSource": "countries"
       },
       {
         "id": "FLIGHT.originCountry.iso3",
         "label": "Origin Country",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
+        "plugin": "selectize",
+        "dataSource": "countries"
       },
       {
         "id": "FLIGHT.direction",
         "label": "Direction",
         "type": "string",
-        "operators": ["EQUAL"],
+        "operators": [
+          "EQUAL"
+        ],
         "input": "select",
-        "plugin": "selectize"
+        "plugin": "selectize",
+        "dataSource": "directions"
       },
       {
         "id": "FLIGHT.eta",
@@ -174,17 +219,20 @@
         "type": "datetime",
         "plugin": "datetimepicker",
         "plugin_config": {}
-      }, {
+      },
+      {
         "id": "etd",
         "label": "ETD",
         "type": "datetime",
         "plugin": "datetimepicker",
         "plugin_config": {}
-      }, {
+      },
+      {
         "id": "FLIGHT.flightNumber",
         "label": "Number",
         "type": "string"
-      }, {
+      },
+      {
         "id": "FLIGHT.thru",
         "label": "Thru",
         "type": "string"
@@ -263,31 +311,58 @@
   },
   "TRAVELER": {
     "label": "PASSENGER",
-    "columns": [{
+    "columns": [
+      {
         "id": "TRAVELER.age",
         "label": "Age",
         "type": "integer"
-      }, {
+      },
+      {
         "id": "TRAVELER.citizenshipCountry.iso2",
         "label": "Citizenship Country",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
-      }, {
+        "plugin": "selectize",
+        "dataSource": "countries"
+      },
+      {
         "id": "TRAVELER.debarkation.iata",
         "label": "Debarkation",
-        "type": "string"
-      }, {
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
+        "input": "select",
+        "multiple": true,
+        "plugin": "selectize",
+        "dataSource": "airports"
+      },
+      {
         "id": "TRAVELER.debarkCountry.iso2",
         "label": "Debarkation Country",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
-      }, {
+        "plugin": "selectize",
+        "dataSource": "countries"
+      },
+      {
         "id": "TRAVELER.dob",
         "label": "DOB",
         "type": "date",
@@ -299,51 +374,88 @@
           "format": "yyyy-mm-dd",
           "autoClose": true
         }
-      }, {
+      },
+      {
         "id": "TRAVELER.embarkation.iata",
         "label": "Embarkation",
-        "type": "string"
-      }, {
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
+        "input": "select",
+        "multiple": true,
+        "plugin": "selectize",
+        "dataSource": "airports"
+      },
+      {
         "id": "TRAVELER.embarkCountry.iso2",
         "label": "Embarkation Country",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
-      }, {
+        "plugin": "selectize",
+        "dataSource": "countries"
+      },
+      {
         "id": "TRAVELER.gender",
         "label": "Gender",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
-      }, {
+        "plugin": "selectize",
+        "dataSource": "genders"
+      },
+      {
         "id": "TRAVELER.firstName",
         "label": "Name - First",
         "type": "string"
-      }, {
+      },
+      {
         "id": "TRAVELER.lastName",
         "label": "Name - Last",
         "type": "string"
-      }, {
+      },
+      {
         "id": "TRAVELER.middleName",
         "label": "Name - Middle",
         "type": "string"
-      }, {
+      },
+      {
         "id": "TRAVELER.residencyCountry.iso2",
         "label": "Residency Country",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
-      }, {
+        "plugin": "selectize",
+        "dataSource": "countries"
+      },
+      {
         "id": "TRAVELER.seat",
         "label": "Seat",
         "type": "string"
-      }, {
+      },
+      {
         "id": "TRAVELER.traveler_type",
         "label": "Type",
         "type": "string"
@@ -352,7 +464,8 @@
   },
   "PHONE": {
     "label": "PHONE",
-    "columns": [{
+    "columns": [
+      {
         "id": "PHONE.phone_number",
         "label": "Number",
         "type": "string"
@@ -361,79 +474,128 @@
   },
   "PNR": {
     "label": "PNR",
-    "columns": [{
+    "columns": [
+      {
         "id": "PNR.bag_count",
         "label": "Bag - Count",
         "type": "integer"
-      }, {
+      },
+      {
         "id": "PNR.booking_date",
         "label": "Booking Date",
         "type": "date"
-      }, {
+      },
+      {
         "id": "PNR.carrier_code",
         "label": "Carrier Code",
         "type": "string"
-      }, {
+      },
+      {
         "id": "PNR.days_booked_before_trvl",
         "label": "Days Booked Before Travel",
         "type": "integer"
-      }, {
+      },
+      {
         "id": "PNR.dwell_airport",
         "label": "Dwell - Airport",
-        "type": "string"
-      }, {
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
+        "input": "select",
+        "multiple": true,
+        "plugin": "selectize",
+        "dataSource": "airports"
+      },
+      {
         "id": "PNR.dwell_country",
         "label": "Dwell - Country",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
-      }, {
+        "plugin": "selectize",
+        "dataSource": "countries"
+      },
+      {
         "id": "PNR.dwell_duration",
         "label": "Dwell - Duration",
         "type": "integer"
-      }, {
+      },
+      {
         "id": "PNR.dwell_total_duration",
         "label": "Dwell - Total Duration",
         "type": "integer"
-      }, {
+      },
+      {
         "id": "PNR.form_of_payment",
         "label": "Form of Payment",
         "type": "string"
-      }, {
+      },
+      {
         "id": "PNR.first_name",
         "label": "Name - First",
         "type": "string"
-      }, {
+      },
+      {
         "id": "PNR.last_name",
         "label": "Name - Last",
         "type": "string"
-      }, {
+      },
+      {
         "id": "PNR.middle_name",
         "label": "Name - Middle",
         "type": "string"
-      }, {
+      },
+      {
         "id": "PNR.origin_airport",
         "label": "Origin - Airport",
-        "type": "string"
-      }, {
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
+        "input": "select",
+        "multiple": true,
+        "plugin": "selectize",
+        "dataSource": "airports"
+      },
+      {
         "id": "PNR.origin_country",
         "label": "Origin - Country",
         "type": "string",
-        "operators": ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN"],
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ],
         "input": "select",
         "multiple": true,
-        "plugin": "selectize"
-      }, {
+        "plugin": "selectize",
+        "dataSource": "countries"
+      },
+      {
         "id": "PNR.passenger_count",
         "label": "Passenger Count",
         "type": "integer"
-      }, {
+      },
+      {
         "id": "PNR.record_locator",
         "label": "Record Locator",
         "type": "string"
-      }, {
+      },
+      {
         "id": "PNR.route",
         "label": "Route",
         "type": "string"
@@ -442,7 +604,8 @@
   },
   "TRAVEL_AGENCY": {
     "label": "TRAVEL AGENCY",
-    "columns": [{
+    "columns": [
+      {
         "id": "TRAVEL_AGENCY.city",
         "label": "City",
         "type": "string"
