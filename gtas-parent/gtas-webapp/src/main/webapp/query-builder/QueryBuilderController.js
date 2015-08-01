@@ -62,7 +62,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         var queryObject;
         $scope.title = $scope.title.trim();
         if (!$scope.title.length ) {
-            alert('Risk Criteria title summary can not be blank!');
+            alert('title can not be blank!');
             return;
         }
         queryObject = {
