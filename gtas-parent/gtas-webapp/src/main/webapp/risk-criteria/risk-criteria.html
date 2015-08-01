@@ -5,7 +5,7 @@
         margin-right: -.75em;
         top: -.25em;
     }
-    h1,legend {
+    h1,h2 {
         font-size: 1em;
         text-transform: uppercase;
         font-weight: bold;
@@ -70,29 +70,21 @@
 </table>
 
 
-<fieldset>
-    <legend>Summary:</legend>
-    <label for="title" class="hide">Title:</label>
-    <input placeholder="Title:" type="text" ng-model="title" id="title" />
-    <label for="start-date" class="hide">Start Date:</label>
-    <input placeholder="Start Date:" type="text" ng-model="startDate" id="start-date" class="datepicker" />
-    <label for="end-date" class="hide">End Date:</label>
-    <input placeholder="End Date:" type="text" ng-model="endDate" id="end-date" class="datepicker" />
-    <label for="enabled">Enabled:</label>
-    <input type="checkbox" ng-model="enabled" id="enabled" />
-    <label for="description" class="hide">Description:</label>
-    <input type="text" ng-model="description" id="description" placeholder="Description:"/>
-</fieldset>
-<fieldset>
-    <legend>Conditions:</legend>
-    <div id="builder"></div>
-</fieldset>
+<h2>Summary:</h2>
+<label for="title" class="hide">Title:</label>
+<input placeholder="Title:" type="text" ng-model="title" id="title" />
+<label for="start-date" class="hide">Start Date:</label>
+<input placeholder="Start Date:" type="text" ng-model="startDate" id="start-date" class="datepicker" />
+<label for="end-date" class="hide">End Date:</label>
+<input placeholder="End Date:" type="text" ng-model="endDate" id="end-date" class="datepicker" />
+<label for="enabled">Enabled:</label>
+<input type="checkbox" ng-model="enabled" id="enabled" />
+<label for="description" class="hide">Description:</label>
+<input type="text" ng-model="description" id="description" placeholder="Description:"/>
+
+<h2>Conditions:</h2>
+<div id="builder"></div>
 
 <button type="button" data-ng-click="resetQueryBuilder()" class="btn btn-warning reset pull-right" data->Clear Conditions</button>
-
-<div id="result" class="hide">
-    <h3>Output</h3>
-    <pre></pre>
-</div>
 <button type="button" data-ng-click="delete()" type="button" class="btn btn-danger pull-right" title="delete">Delete</button>
 <button type="button" data-ng-click="save()" id="submit" class="btn btn-primary pull-right">Save</button>
