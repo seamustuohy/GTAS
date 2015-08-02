@@ -34,4 +34,8 @@ public final class Constants {
 	
 	public static final String QUERYOBJECT_OBJECTNAME = "queryObject";
 	public static final String QUERYREQUEST_OBJECTNAME = "queryRequest";
+	
+	// Hits Summary
+	public static final String HITS_SUMMARY_SERVICE = "/hit";
+	public static final String HITS_SUMMARY_RULES_BY_TRAVELER_ID = "/traveler/{id}";
 }
