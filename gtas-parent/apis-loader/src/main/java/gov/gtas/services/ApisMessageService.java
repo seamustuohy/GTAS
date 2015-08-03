@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Crew;
+import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FlightDirection;
 import gov.gtas.model.Gender;
@@ -89,6 +90,12 @@ public class ApisMessageService {
     
             vo = parser.parse(message);
             this.apisMessage.setStatus(MessageStatus.PARSED);
+            EdifactMessage em = new EdifactMessage();
+            em.setTransmissionDate(vo.getTransmissionDate());
+            em.setTransmissionSource(vo.getTransmissionSource());
+            em.setMessageType(vo.getMessageType());
+            em.setVersion(vo.getVersion());
+            this.apisMessage.setEdifactMessage(em);
 
         } catch (Exception e) {
             this.apisMessage.setStatus(MessageStatus.FAILED_PARSING);

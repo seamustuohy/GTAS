@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.model.ApisMessage;
+import gov.gtas.model.EdifactMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,18 +26,18 @@ public class RuleUtilsIT {
             +"rule \"RH1 - Hello Messsage\" "
               +"dialect \"mvel\" "
               + "when "
-              +   "m:ApisMessage( transmissionSource.equals(\"Hello\"), date:transmissionDate ) "
+              +   "m:ApisMessage( edifactMessage.transmissionSource.equals(\"Hello\"), date:edifactMessage.transmissionDate ) "
               +  "then "
                       +"System.out.println( \"Transmission date =\"+date ); "
-                      +"modify ( m ) { transmissionSource = \"Goodbye\"}; "
+                      +"modify ( m ) { edifactMessage.transmissionSource = \"Goodbye\"}; "
               +"end "
               +"rule \"RH2 - GoodBye Messsage\" "
               +"dialect \"java\" "
               + "when "
-              +   "m:ApisMessage( transmissionSource.equals(\"Goodbye\"), date:transmissionDate ) "
+              +   "m:ApisMessage( edifactMessage.transmissionSource.equals(\"Goodbye\"), date:edifactMessage.transmissionDate ) "
               +  "then "
                       +"System.out.println( \"Got Goodbye\"); "
-                      +"resultList.add(m.getTransmissionDate()); "
+                      +"resultList.add(m.getEdifactMessage().getTransmissionDate()); "
               +"end";
     
 	@Before
@@ -60,9 +61,11 @@ public class RuleUtilsIT {
 
         //insert the fact
 		ApisMessage msg = new ApisMessage();
-		msg.setTransmissionSource("Hello");
+		EdifactMessage em = new EdifactMessage();
+		em.setTransmissionSource("Hello");
 		Date transmissionDate = new Date();
-		msg.setTransmissionDate(transmissionDate);
+		em.setTransmissionDate(transmissionDate);
+		msg.setEdifactMessage(em);
         ksession.insert(msg);
         
         // and fire the rules
