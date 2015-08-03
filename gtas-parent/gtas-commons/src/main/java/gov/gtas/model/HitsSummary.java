@@ -46,4 +46,12 @@ public class HitsSummary extends BaseEntity {
 	public void setTravelerId(Long travelerId) {
 		this.travelerId = travelerId;
 	}
+
+	public List<HitDetail> getHitdetails() {
+		return hitdetails;
+	}
+
+	public void setHitdetails(List<HitDetail> hitdetails) {
+		this.hitdetails = hitdetails;
+	}
 }

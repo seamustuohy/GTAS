@@ -22,7 +22,7 @@ public class HitsSummaryServiceImpl implements HitsSummaryService {
 	 */
 	@Override
 	public List<HitDetail> findByTravelerId(Long id) {
-		return null;
-		// return hitsSummaryRepository.findByTravelerId(id);
+
+		return hitsSummaryRepository.findByTravelerId(id);
 	}
 }
