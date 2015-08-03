@@ -34,12 +34,8 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
                     data.push(obj);
                 });
 
-                filteredData = params.filter() ?
-                    $filter('filter')(data, params.filter()) :
-                    data;
-                orderedData = params.sorting() ?
-                    $filter('orderBy')(filteredData, params.orderBy()) :
-                    data;
+                filteredData = params.filter() ? $filter('filter')(data, params.filter()) : data;
+                orderedData = params.sorting() ? $filter('orderBy')(filteredData, params.orderBy()) : data;
 
                 params.total(orderedData.length); // set total for recalc pagination
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
@@ -74,8 +70,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         };
 
         queryBuilderService.saveQuery(queryObject).then(function (myData) {
-            if (typeof myData.errorCode !== "undefined")
-            {
+            if (myData.errorCode !== undefined) {
                 alert(myData.errorMessage);
                 return;
             }
