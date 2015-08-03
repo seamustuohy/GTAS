@@ -13,9 +13,9 @@ app.factory('QueryBuilderCtrl',function(){
                 $timeout(function() {
                     $selectize[0].selectize.setValue(value);
                 }, 100);
-
             }
         };
+
         var getOptionsFromJSONArray = function (that, property) {
             //if (localStorage[property] === undefined) {
             $.getJSON('./data/' + property + '.json', function (data) {
@@ -78,6 +78,7 @@ app.factory('QueryBuilderCtrl',function(){
                 };
                 obj.valueSetter = selectizeValueSetter;
             };
+
             // init
             $builder
                 .on('afterCreateRuleInput.queryBuilder', function (e, rule) {
@@ -95,8 +96,19 @@ app.factory('QueryBuilderCtrl',function(){
                     $scope.options.filters = [];
                     Object.keys($scope.options.entities).forEach(function(key){
                         $scope.options.entities[key].columns.forEach(function(column){
-                            if (column.plugin === 'selectize') {
-                                supplementSelectize(column);
+                            switch (column.plugin) {
+                                case 'selectize':
+                                    supplementSelectize(column);
+                                    break;
+                                case 'datepicker':
+                                    column.validation = { "format": "YYYY-MM-DD" };
+                                    column.plugin_config = {
+                                        "format": "yyyy-mm-dd",
+                                        "autoClose": true
+                                    };
+                                    break;
+                                default:
+                                    break;
                             }
                             $scope.options.filters.push(column);
                         });
