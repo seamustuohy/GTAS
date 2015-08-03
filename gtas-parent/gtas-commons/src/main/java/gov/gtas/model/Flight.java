@@ -1,9 +1,5 @@
 package gov.gtas.model;
 
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
-import gov.gtas.model.lookup.Country;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -19,7 +15,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+
+import gov.gtas.model.lookup.Airport;
+import gov.gtas.model.lookup.Carrier;
+import gov.gtas.model.lookup.Country;
 
 @Entity
 @Table(name = "flight")
@@ -62,9 +64,13 @@ public class Flight extends BaseEntityAudit {
     private Country destinationCountry;
 
     @Column(name = "flight_date")
+    @Temporal(TemporalType.DATE)
     private Date flightDate;
     
+    @Temporal(TemporalType.TIMESTAMP)
     private Date etd;
+    
+    @Temporal(TemporalType.TIMESTAMP)
     private Date eta;
     
     @Enumerated(EnumType.STRING)

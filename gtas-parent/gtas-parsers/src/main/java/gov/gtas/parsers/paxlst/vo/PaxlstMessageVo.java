@@ -6,14 +6,14 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gov.gtas.parsers.edifact.MessageVo;
+import gov.gtas.parsers.edifact.EdifactMessageVo;
 
-public class ApisMessageVo extends MessageVo {
+public class PaxlstMessageVo extends EdifactMessageVo {
     private List<ReportingPartyVo> reportingParties = new ArrayList<>();
     private List<FlightVo> flights = new ArrayList<>();
     private List<PaxVo> passengers = new ArrayList<>();
     
-    public ApisMessageVo() { }
+    public PaxlstMessageVo() { }
     
     public void addFlight(FlightVo f) {
         flights.add(f);

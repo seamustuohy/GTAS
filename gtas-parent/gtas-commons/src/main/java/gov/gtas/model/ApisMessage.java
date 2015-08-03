@@ -16,6 +16,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "apis_message")
 public class ApisMessage extends Message {
+    @Column(name = "message_type")
+    private String messageType;
+    
     @Column(name = "transmission_date")
     private Date transmissionDate;
     

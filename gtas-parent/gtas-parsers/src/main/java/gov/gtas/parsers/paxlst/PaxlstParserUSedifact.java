@@ -17,13 +17,13 @@ import gov.gtas.parsers.paxlst.segment.usedifact.PDT;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.DocType;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
 import gov.gtas.parsers.paxlst.segment.usedifact.TDT;
-import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
+import gov.gtas.parsers.paxlst.vo.PaxlstMessageVo;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
-public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
+public final class PaxlstParserUSedifact extends EdifactParser<PaxlstMessageVo> {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);
     
     protected enum GROUP {
@@ -40,7 +40,7 @@ public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
     }
     
     public PaxlstParserUSedifact() { 
-        this.parsedMessage = new ApisMessageVo();
+        this.parsedMessage = new PaxlstMessageVo();
     }
     
     public void parsePayload() {
