@@ -1,7 +1,10 @@
-[{
-  "id": "P",
-  "name": "PASSPORT"
-}, {
-  "id": "V",
-  "name": "VISA"
-}]
+[
+  {
+    "id": "P",
+    "name": "PASSPORT"
+  },
+  {
+    "id": "V",
+    "name": "VISA"
+  }
+]

@@ -1,10 +1,14 @@
-[{
-  "id": "F",
-  "name": "FEMALE"
-}, {
-  "id": "M",
-  "name": "MALE"
-}, {
-  "id": "U",
-  "name": "UNKNOWN"
-}]
+[
+  {
+    "id": "F",
+    "name": "FEMALE"
+  },
+  {
+    "id": "M",
+    "name": "MALE"
+  },
+  {
+    "id": "U",
+    "name": "UNKNOWN"
+  }
+]
