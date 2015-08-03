@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,7 +27,7 @@ public class HitsSummary extends BaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
 
-	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<HitDetail> hitdetails;
 
 	public Date getCreateDate() {

@@ -1,9 +1,24 @@
 [
-  {"id": "TBJ", "name": "7 Novembre (TBJ)"},
-  {"id": "LCG", "name": "A Coruna (LCG)"},
-  {"id": "AAL", "name": "Aalborg (AAL)"},
-  {"id": "AAR", "name": "Aarhus (AAR)"},
-  {"id": "JEG", "name": "Aasiaat (JEG)"},
+  {
+    "id": "TBJ",
+    "name": "7 Novembre (TBJ)"
+  },
+  {
+    "id": "LCG",
+    "name": "A Coruna (LCG)"
+  },
+  {
+    "id": "AAL",
+    "name": "Aalborg (AAL)"
+  },
+  {
+    "id": "AAR",
+    "name": "Aarhus (AAR)"
+  },
+  {
+    "id": "JEG",
+    "name": "Aasiaat (JEG)"
+  },
   {"id": "ABD", "name": "Abadan (ABD)"},
   {"id": "ABF", "name": "Abaiang Atoll Airport (ABF)"},
   {"id": "ABA", "name": "Abakan (ABA)"},
@@ -329,897 +344,3570 @@
   {"id": "AIU", "name": "Atiu Island Airport (AIU)"},
   {"id": "AKB", "name": "Atka Airport (AKB)"},
   {"id": "FFC", "name": "Atlanta Regional Airport - Falcon Field (FFC)"},
-  {"id": "ACY", "name": "Atlantic City Intl (ACY)"},
-  {"id": "ZRA", "name": "Atlantic City Rail Terminal (ZRA)"},
-  {"id": "369", "name": "Atmautluak Airport (369)"},
-  {"id": "ATK", "name": "Atqasuk Edward Burnell Sr Memorial Airport (ATK)"},
-  {"id": "YAT", "name": "Attawapiskat Airport (YAT)"},
-  {"id": "GUW", "name": "Atyrau (GUW)"},
-  {"id": "AUO", "name": "Auburn University Regional (AUO)"},
-  {"id": "AKL", "name": "Auckland Intl (AKL)"},
-  {"id": "AGB", "name": "Augsburg (AGB)"},
-  {"id": "AUB", "name": "Augsburg HBF (AUB)"},
-  {"id": "ZAU", "name": "Augsburg Railway (ZAU)"},
-  {"id": "AGS", "name": "Augusta Rgnl At Bush Fld (AGS)"},
-  {"id": "AUG", "name": "Augusta State (AUG)"},
-  {"id": "NAT", "name": "Augusto Severo (NAT)"},
-  {"id": "AKS", "name": "Auki Airport (AKS)"},
-  {"id": "YPJ", "name": "Aupaluk Airport (YPJ)"},
-  {"id": "AUL", "name": "Aur Island Airport (AUL)"},
-  {"id": "IXU", "name": "Aurangabad (IXU)"},
-  {"id": "BBU", "name": "Aurel Vlaicu (BBU)"},
-  {"id": "AUR", "name": "Aurillac (AUR)"},
-  {"id": "AUU", "name": "Aurukun Airport (AUU)"},
-  {"id": "AUS", "name": "Austin Bergstrom Intl (AUS)"},
-  {"id": "GRB", "name": "Austin Straubel Intl (GRB)"},
-  {"id": "CFE", "name": "Auvergne (CFE)"},
-  {"id": "AVV", "name": "Avalon (AVV)"},
-  {"id": "AVX", "name": "Avalon (AVX)"},
-  {"id": "WMR", "name": "Avaratra (WMR)"},
-  {"id": "CPC", "name": "Aviador C Campos (CPC)"},
-  {"id": "AVB", "name": "Aviano Ab (AVB)"},
-  {"id": "AWB", "name": "Awaba Airport (AWB)"},
-  {"id": "AWA", "name": "Awasa Airport (AWA)"},
-  {"id": "AXU", "name": "Axum (AXU)"},
-  {"id": "AYQ", "name": "Ayers Rock (AYQ)"},
-  {"id": "MBU", "name": "Babanakira Airport (MBU)"},
-  {"id": "ROR", "name": "Babelthuap (ROR)"},
-  {"id": "IEG", "name": "Babimost (IEG)"},
-  {"id": "BXB", "name": "Babo (BXB)"},
-  {"id": "BFH", "name": "Bacacheri (BFH)"},
-  {"id": "BCM", "name": "Bacau (BCM)"},
-  {"id": "BCO", "name": "Baco Airport (BCO)"},
-  {"id": "BCD", "name": "Bacolod (BCD)"},
-  {"id": "FKB", "name": "Baden Airpark (FKB)"},
-  {"id": "BDD", "name": "Badu Island Airport (BDD)"},
-  {"id": "BFX", "name": "Bafoussam (BFX)"},
-  {"id": "BPE", "name": "Bagan (BPE)"},
-  {"id": "NYU", "name": "Bagan Intl (NYU)"},
-  {"id": "E51", "name": "Bagdad Airport (E51)"},
-  {"id": "IXB", "name": "Bagdogra (IXB)"},
-  {"id": "BGW", "name": "Baghdad International Airport (BGW)"},
-  {"id": "YBG", "name": "Bagotville (YBG)"},
-  {"id": "BPM", "name": "Bagram AFB (BPM)"},
-  {"id": "BAG", "name": "Baguio (BAG)"},
-  {"id": "BHV", "name": "Bahawalpur Airport (BHV)"},
-  {"id": "BFQ", "name": "Bahia Piña Airport (BFQ)"},
-  {"id": "HUX", "name": "Bahias De Huatulco Intl (HUX)"},
-  {"id": "BJR", "name": "Bahir Dar (BJR)"},
-  {"id": "BAH", "name": "Bahrain Intl (BAH)"},
-  {"id": "YBC", "name": "Baie Comeau (YBC)"},
-  {"id": "LZH", "name": "Bailian Airport (LZH)"},
-  {"id": "BBR", "name": "Baillif Airport (BBR)"},
-  {"id": "VMU", "name": "Baimuru Airport (VMU)"},
-  {"id": "BSJ", "name": "Bairnsdale Airport (BSJ)"},
-  {"id": "HET", "name": "Baita Airport (HET)"},
-  {"id": "CAN", "name": "Baiyun Intl (CAN)"},
-  {"id": "BJH", "name": "Bajhang (BJH)"},
-  {"id": "BJU", "name": "Bajura Airport (BJU)"},
-  {"id": "BKM", "name": "Bakalalan Airport (BKM)"},
-  {"id": "BXE", "name": "Bakel (BXE)"},
-  {"id": "YBK", "name": "Baker Lake (YBK)"},
-  {"id": "BWO", "name": "Balakovo Airport (BWO)"},
-  {"id": "CEK", "name": "Balandino (CEK)"},
-  {"id": "MLJ", "name": "Baldwin County Airport (MLJ)"},
-  {"id": "MLH", "name": "Bale Mulhouse (MLH)"},
-  {"id": "DPS", "name": "Bali Ngurah Rai (DPS)"},
-  {"id": "KRK", "name": "Balice (KRK)"},
-  {"id": "BZI", "name": "Balikesir (BZI)"},
-  {"id": "EDO", "name": "Balikesir Korfez Airport (EDO)"},
-  {"id": "OPU", "name": "Balimo Airport (OPU)"},
-  {"id": "BKN", "name": "Balkanabat (BKN)"},
-  {"id": "BXH", "name": "Balkhash Airport (BXH)"},
-  {"id": "BAS", "name": "Ballalae Airport (BAS)"},
-  {"id": "BNK", "name": "Ballina Byron Gateway (BNK)"},
-  {"id": "BBA", "name": "Balmaceda (BBA)"},
-  {"id": "BZY", "name": "Balti International Airport (BZY)"},
-  {"id": "BWI", "name": "Baltimore Washington Intl (BWI)"},
-  {"id": "BXR", "name": "Bam Airport (BXR)"},
-  {"id": "ABM", "name": "Bamaga Injinoo (ABM)"},
-  {"id": "BAM", "name": "Bamberg BF (BAM)"},
-  {"id": "99N", "name": "Bamberg County Airport (99N)"},
-  {"id": "BMQ", "name": "Bamburi (BMQ)"},
-  {"id": "BPC", "name": "Bamenda (BPC)"},
-  {"id": "BIN", "name": "Bamyan Airport (BIN)"},
-  {"id": "OUI", "name": "Ban Huoeisay Airport (OUI)"},
-  {"id": "LKL", "name": "Banak (LKL)"},
-  {"id": "NDA", "name": "Bandanaira Airport (NDA)"},
-  {"id": "BND", "name": "Bandar Abbass Intl (BND)"},
-  {"id": "BDH", "name": "Bandar Lengeh (BDH)"},
-  {"id": "CMB", "name": "Bandaranaike Intl Colombo (CMB)"},
-  {"id": "NWA", "name": "Bandaressalam (NWA)"},
-  {"id": "BDM", "name": "Bandirma (BDM)"},
-  {"id": "FDU", "name": "Bandundu (FDU)"},
-  {"id": "BLR", "name": "Bangalore (BLR)"},
-  {"id": "BGR", "name": "Bangor Intl (BGR)"},
-  {"id": "BGF", "name": "Bangui M Poko (BGF)"},
-  {"id": "BNX", "name": "Banja Luka International Airport (BNX)"},
-  {"id": "BJL", "name": "Banjul Intl (BJL)"},
-  {"id": "ME5", "name": "Banks Airport (ME5)"},
-  {"id": "BMO", "name": "Banmaw Airport (BMO)"},
-  {"id": "BNP", "name": "Bannu Airport (BNP)"},
-  {"id": "BYT", "name": "Bantry Aerodrome (BYT)"},
-  {"id": "SZX", "name": "Baoan Intl (SZX)"},
-  {"id": "BSD", "name": "Baoshan Airport (BSD)"},
-  {"id": "BAV", "name": "Baotou Airport (BAV)"},
-  {"id": "DLL", "name": "Baraboo Wisconsin Dells Airport (DLL)"},
-  {"id": "MGN", "name": "Baracoa (MGN)"},
-  {"id": "MAD", "name": "Barajas (MAD)"},
-  {"id": "ULV", "name": "Barataevka (ULV)"},
-  {"id": "BEJ", "name": "Barau(Kalimaru) Airport (BEJ)"},
-  {"id": "QYR", "name": "Barberey (QYR)"},
-  {"id": "BCI", "name": "Barcaldine Airport (BCI)"},
-  {"id": "BCN", "name": "Barcelona (BCN)"},
-  {"id": "BAZ", "name": "Barcelos Airport (BAZ)"},
-  {"id": "BDU", "name": "Bardufoss (BDU)"},
-  {"id": "BRI", "name": "Bari (BRI)"},
-  {"id": "BNS", "name": "Barinas (BNS)"},
-  {"id": "BBN", "name": "Bario Airport (BBN)"},
-  {"id": "BZL", "name": "Barisal Airport (BZL)"},
-  {"id": "BKH", "name": "Barking Sands Pmrf (BKH)"},
-  {"id": "PAH", "name": "Barkley Regional Airport (PAH)"},
-  {"id": "BAD", "name": "Barksdale Afb (BAD)"},
-  {"id": "BAX", "name": "Barnaul (BAX)"},
-  {"id": "BAF", "name": "Barnes Municipal (BAF)"},
-  {"id": "HYA", "name": "Barnstable Muni Boardman Polando Fld (HYA)"},
-  {"id": "BRM", "name": "Barquisimeto Intl (BRM)"},
-  {"id": "BRR", "name": "Barra Airport (BRR)"},
-  {"id": "BCL", "name": "Barra del Colorado Airport (BCL)"},
-  {"id": "BRA", "name": "Barreiras Airport (BRA)"},
-  {"id": "WDR", "name": "Barrow County Airport (WDR)"},
-  {"id": "BWB", "name": "Barrow Island Airport (BWB)"},
-  {"id": "BTI", "name": "Barter Island Lrrs (BTI)"},
-  {"id": "BBH", "name": "Barth (BBH)"},
-  {"id": "CAW", "name": "Bartolomeu Lisandro (CAW)"},
-  {"id": "BOW", "name": "Bartow Municipal Airport (BOW)"},
-  {"id": "9A5", "name": "Barwick Lafayette Airport (9A5)"},
-  {"id": "HLJ", "name": "Barysiai (HLJ)"},
-  {"id": "KRZ", "name": "Basango Mboliasa Airport (KRZ)"},
-  {"id": "BSU", "name": "Basankusu Airport (BSU)"},
-  {"id": "BSO", "name": "Basco Airport (BSO)"},
-  {"id": "SSZ", "name": "Base Aerea De Santos (SSZ)"},
-  {"id": "BSR", "name": "Basrah Intl (BSR)"},
-  {"id": "MEK", "name": "Bassatine (MEK)"},
-  {"id": "LTK", "name": "Bassel Al Assad Intl (LTK)"},
-  {"id": "PGX", "name": "Bassillac (PGX)"},
-  {"id": "BSG", "name": "Bata (BSG)"},
-  {"id": "AZI", "name": "Bateen (AZI)"},
-  {"id": "BHS", "name": "Bathurst Airport (BHS)"},
-  {"id": "ZBF", "name": "Bathurst Airport (ZBF)"},
-  {"id": "BRT", "name": "Bathurst Island Airport (BRT)"},
-  {"id": "BAL", "name": "Batman (BAL)"},
-  {"id": "BLJ", "name": "Batna Airport (BLJ)"},
-  {"id": "BTR", "name": "Baton Rouge Metro Ryan Fld (BTR)"},
-  {"id": "BJF", "name": "Batsfjord (BJF)"},
-  {"id": "BBM", "name": "Battambang Airport (BBM)"},
-  {"id": "BUS", "name": "Batumi (BUS)"},
-  {"id": "BPF", "name": "Batuna Airport (BPF)"},
-  {"id": "BDE", "name": "Baudette Intl (BDE)"},
-  {"id": "BAU", "name": "Bauru (BAU)"},
-  {"id": "JTC", "name": "Bauru-Arealva (JTC)"},
-  {"id": "BBJ", "name": "Bautzen (BBJ)"},
-  {"id": "BYN", "name": "Bayankhongor Airport (BYN)"},
-  {"id": "RLK", "name": "Bayannur (RLK)"},
-  {"id": "BYU", "name": "Bayreuth (BYU)"},
-  {"id": "BZB", "name": "Bazaruto Island Airport (BZB)"},
-  {"id": "BAB", "name": "Beale Afb (BAB)"},
-  {"id": "XBE", "name": "Bearskin Lake Airport (XBE)"},
-  {"id": "BFT", "name": "Beaufort (BFT)"},
-  {"id": "BMT", "name": "Beaumont Municipal (BMT)"},
-  {"id": "DRI", "name": "Beauregard Rgnl (DRI)"},
-  {"id": "WBQ", "name": "Beaver Airport (WBQ)"},
-  {"id": "BFP", "name": "Beaver Falls (BFP)"},
-  {"id": "BEU", "name": "Bedourie Airport (BEU)"},
-  {"id": "BEC", "name": "Beech Factory Airport (BEC)"},
-  {"id": "NBC", "name": "Begishevo (NBC)"},
-  {"id": "BEI", "name": "Beica Airport (BEI)"},
-  {"id": "BHY", "name": "Beihai Airport (BHY)"},
-  {"id": "BHN", "name": "Beihan (BHN)"},
-  {"id": "NAY", "name": "Beijing Nanyuan Airport (NAY)"},
-  {"id": "BEW", "name": "Beira (BEW)"},
-  {"id": "OVA", "name": "Bekily (OVA)"},
-  {"id": "BLG", "name": "Belaga Airport (BLG)"},
-  {"id": "UKS", "name": "Belbek Sevastopol International Airport (UKS)"},
-  {"id": "BMY", "name": "Belep Islands Airport (BMY)"},
-  {"id": "BHD", "name": "Belfast City (BHD)"},
-  {"id": "BFS", "name": "Belfast Intl (BFS)"},
-  {"id": "IXG", "name": "Belgaum (IXG)"},
-  {"id": "EGO", "name": "Belgorod International Airport (EGO)"},
-  {"id": "TZA", "name": "Belize City Municipal Airport (TZA)"},
-  {"id": "ZEL", "name": "Bella Bella Airport (ZEL)"},
-  {"id": "QBC", "name": "Bella Coola Airport (QBC)"},
-  {"id": "BEP", "name": "Bellary (BEP)"},
-  {"id": "LIG", "name": "Bellegarde (LIG)"},
-  {"id": "BLI", "name": "Bellingham Intl (BLI)"},
-  {"id": "BN1", "name": "Bellona (BN1)"},
-  {"id": "BNY", "name": "Bellona (BNY)"},
-  {"id": "BEO", "name": "Belmont Airport (BEO)"},
-  {"id": "BMD", "name": "Belo sur Tsiribihina Airport (BMD)"},
-  {"id": "EYK", "name": "Beloyarsky (EYK)"},
-  {"id": "BBP", "name": "Bembridge (BBP)"},
-  {"id": "BJI", "name": "Bemidji Regional Airport (BJI)"},
-  {"id": "TLV", "name": "Ben Gurion (TLV)"},
-  {"id": "BEB", "name": "Benbecula (BEB)"},
-  {"id": "BUG", "name": "Benguela (BUG)"},
-  {"id": "BCW", "name": "Benguera Island Airport (BCW)"},
-  {"id": "BNI", "name": "Benin (BNI)"},
-  {"id": "BEN", "name": "Benina (BEN)"},
-  {"id": "NVA", "name": "Benito Salas (NVA)"},
-  {"id": "BJT", "name": "Bentota Airport (BJT)"},
-  {"id": "BEG", "name": "Beograd (BEG)"},
-  {"id": "BPU", "name": "Beppu Airport (BPU)"},
-  {"id": "BBO", "name": "Berbera (BBO)"},
-  {"id": "BBT", "name": "Berberati (BBT)"},
-  {"id": "YBV", "name": "Berens River (YBV)"},
-  {"id": "NBB", "name": "Berezovo (NBB)"},
-  {"id": "BGY", "name": "Bergamo Orio Al Serio (BGY)"},
-  {"id": "BVG", "name": "Berlevag (BVG)"},
-  {"id": "BER", "name": "Berlin Brandenburg Willy Brandt (BER)"},
-  {"id": "GWW", "name": "Berlin Gatow (GWW)"},
-  {"id": "QPP", "name": "Berlin Hauptbahnhof (QPP)"},
-  {"id": "BJO", "name": "Bermejo (BJO)"},
-  {"id": "UDD", "name": "Bermuda Dunes Airport (UDD)"},
-  {"id": "BDA", "name": "Bermuda Intl (BDA)"},
-  {"id": "BRN", "name": "Bern Belp (BRN)"},
-  {"id": "BTM", "name": "Bert Mooney Airport (BTM)"},
-  {"id": "BEZ", "name": "Beru Island Airport (BEZ)"},
-  {"id": "BPY", "name": "Besalampy (BPY)"},
-  {"id": "OGZ", "name": "Beslan Airport (OGZ)"},
-  {"id": "EKY", "name": "Bessemer (EKY)"},
-  {"id": "BET", "name": "Bethel (BET)"},
-  {"id": "BTT", "name": "Bettles (BTT)"},
-  {"id": "BVY", "name": "Beverly Municipal Airport (BVY)"},
-  {"id": "BFT", "name": "BFT County Airport (BFT)"},
-  {"id": "BWA", "name": "Bhairahawa (BWA)"},
-  {"id": "BHR", "name": "Bharatpur Airport (BHR)"},
-  {"id": "BHU", "name": "Bhavnagar (BHU)"},
-  {"id": "BIY", "name": "Bhisho (BIY)"},
-  {"id": "BHP", "name": "Bhojpur (BHP)"},
-  {"id": "BHO", "name": "Bhopal (BHO)"},
-  {"id": "BBI", "name": "Bhubaneshwar (BBI)"},
-  {"id": "BHJ", "name": "Bhuj (BHJ)"},
-  {"id": "PIS", "name": "Biard (PIS)"},
-  {"id": "BYS", "name": "Bicycle Lake Aaf (BYS)"},
-  {"id": "BIE", "name": "Biessenhofen BF (BIE)"},
-  {"id": "YRR", "name": "Big Bay Water Aerodrome (YRR)"},
-  {"id": "L35", "name": "Big Bear City (L35)"},
-  {"id": "BGK", "name": "Big Creek Airport (BGK)"},
-  {"id": "BMX", "name": "Big Mountain Afs (BMX)"},
-  {"id": "6S0", "name": "Big Timber Airport (6S0)"},
-  {"id": "YTL", "name": "Big Trout Lake Airport (YTL)"},
-  {"id": "BQH", "name": "Biggin Hill (BQH)"},
-  {"id": "BIF", "name": "Biggs Aaf (BIF)"},
-  {"id": "BFJ", "name": "Bijie Feixiong Airport (BFJ)"},
-  {"id": "PAB", "name": "Bilaspur (PAB)"},
-  {"id": "BIO", "name": "Bilbao (BIO)"},
-  {"id": "BIU", "name": "Bildudalur Airport (BIU)"},
-  {"id": "BIL", "name": "Billings Logan International Airport (BIL)"},
-  {"id": "BLL", "name": "Billund (BLL)"},
-  {"id": "NSB", "name": "Bimini North Seaplane Base (NSB)"},
-  {"id": "GNS", "name": "Binaka (GNS)"},
-  {"id": "BGG", "name": "Bingol (BGG)"},
-  {"id": "TSN", "name": "Binhai (TSN)"},
-  {"id": "BTU", "name": "Bintulu (BTU)"},
-  {"id": "BIR", "name": "Biratnagar (BIR)"},
-  {"id": "KBC", "name": "Birch Creek Airport (KBC)"},
-  {"id": "BDI", "name": "Bird Island Airport (BDI)"},
-  {"id": "BVI", "name": "Birdsville Airport (BVI)"},
-  {"id": "XBJ", "name": "Birjand (XBJ)"},
-  {"id": "BHX", "name": "Birmingham (BHX)"},
-  {"id": "BHM", "name": "Birmingham Intl (BHM)"},
-  {"id": "IXR", "name": "Birsa Munda (IXR)"},
-  {"id": "DUG", "name": "Bisbee Douglas Intl (DUG)"},
-  {"id": "BHH", "name": "Bisha (BHH)"},
-  {"id": "FNT", "name": "Bishop International (FNT)"},
-  {"id": "BSK", "name": "Biskra (BSK)"},
-  {"id": "BIS", "name": "Bismarck Municipal Airport (BIS)"},
-  {"id": "BMM", "name": "Bitam (BMM)"},
-  {"id": "SPF", "name": "Black Hills Airport-Clyde Ice Field (SPF)"},
-  {"id": "ZUN", "name": "Black Rock (ZUN)"},
-  {"id": "YBI", "name": "Black Tickle Airport (YBI)"},
-  {"id": "BKQ", "name": "Blackall (BKQ)"},
-  {"id": "BBS", "name": "Blackbushe (BBS)"},
-  {"id": "BLK", "name": "Blackpool (BLK)"},
-  {"id": "BLT", "name": "Blackwater Airport (BLT)"},
-  {"id": "TLS", "name": "Blagnac (TLS)"},
-  {"id": "BYW", "name": "Blakely Island Airport (BYW)"},
-  {"id": "BID", "name": "Block Island State Airport (BID)"},
-  {"id": "BFN", "name": "Bloemfontein Intl (BFN)"},
-  {"id": "Y72", "name": "Bloyer Field (Y72)"},
-  {"id": "LEX", "name": "Blue Grass (LEX)"},
-  {"id": "BEF", "name": "Bluefields (BEF)"},
-  {"id": "BLH", "name": "Blythe Airport (BLH)"},
-  {"id": "KBS", "name": "Bo Airport (KBS)"},
-  {"id": "BVB", "name": "Boa Vista (BVB)"},
-  {"id": "IAN", "name": "Bob Baker Memorial Airport (IAN)"},
-  {"id": "BUR", "name": "Bob Hope (BUR)"},
-  {"id": "YBO", "name": "Bob Quinn Lake (YBO)"},
-  {"id": "CEW", "name": "Bob Sikes (CEW)"},
-  {"id": "BOY", "name": "Bobo Dioulasso (BOY)"},
-  {"id": "BCT", "name": "Boca Raton (BCT)"},
-  {"id": "BOC", "name": "Bocas Del Toro Intl (BOC)"},
-  {"id": "BOX", "name": "Bochum HBF (BOX)"},
-  {"id": "EBO", "name": "Bochum Railway (EBO)"},
-  {"id": "ODO", "name": "Bodaibo (ODO)"},
-  {"id": "BOO", "name": "Bodo (BOO)"},
-  {"id": "BJV", "name": "Bodrum - Milas (BJV)"},
-  {"id": "BFI", "name": "Boeing Fld King Co Intl (BFI)"},
-  {"id": "XBG", "name": "Bogande Airport (XBG)"},
-  {"id": "GIC", "name": "Boigu Airport (GIC)"},
-  {"id": "ASH", "name": "Boire Field Airport (ASH)"},
-  {"id": "BOI", "name": "Boise Air Terminal (BOI)"},
-  {"id": "BJB", "name": "Bojnourd Airport (BJB)"},
-  {"id": "BUI", "name": "Bokondini Airport (BUI)"},
-  {"id": "ADD", "name": "Bole Intl (ADD)"},
-  {"id": "BLQ", "name": "Bologna (BLQ)"},
-  {"id": "PEE", "name": "Bolshoye Savino (PEE)"},
-  {"id": "TZR", "name": "Bolton Field (TZR)"},
-  {"id": "BZO", "name": "Bolzano (BZO)"},
-  {"id": "LVR", "name": "Bom Futuro Airport (LVR)"},
-  {"id": "LAZ", "name": "Bom Jesus Da Lapa (LAZ)"},
-  {"id": "BOA", "name": "Boma Airport (BOA)"},
-  {"id": "BZA", "name": "Bonanza Airport (BZA)"},
-  {"id": "YVB", "name": "Bonaventure Airport (YVB)"},
-  {"id": "BYO", "name": "Bonito Airport (BYO)"},
-  {"id": "YBY", "name": "Bonnyville Airport (YBY)"},
-  {"id": "TRW", "name": "Bonriki Intl (TRW)"},
-  {"id": "HRO", "name": "Boone Co (HRO)"},
-  {"id": "BXX", "name": "Boorama Airport (BXX)"},
-  {"id": "BOB", "name": "Bora Bora (BOB)"},
-  {"id": "RBB", "name": "Borba Airport (RBB)"},
-  {"id": "BMW", "name": "Bordj Badji Mokhtar Airport (BMW)"},
-  {"id": "HBE", "name": "Borg El Arab Intl (HBE)"},
-  {"id": "BMK", "name": "Borkum (BMK)"},
-  {"id": "BLE", "name": "Borlange (BLE)"},
-  {"id": "RNN", "name": "Bornholm Ronne (RNN)"},
-  {"id": "BPR", "name": "Borongan Airport (BPR)"},
-  {"id": "BXS", "name": "Borrego Valley Airport (BXS)"},
-  {"id": "KBP", "name": "Boryspil Intl (KBP)"},
-  {"id": "BSA", "name": "Bosaso Airport (BSA)"},
-  {"id": "OCJ", "name": "Boscobel (OCJ)"},
-  {"id": "BOT", "name": "Bosset Airport (BOT)"},
-  {"id": "BST", "name": "Bost Airport (BST)"},
-  {"id": "ZTY", "name": "Boston Back Bay Station (ZTY)"},
-  {"id": "BTO", "name": "Botopassi Airstrip (BTO)"},
-  {"id": "QCJ", "name": "Botucatu (QCJ)"},
-  {"id": "TID", "name": "Bou Chekif (TID)"},
-  {"id": "BYK", "name": "Bouake (BYK)"},
-  {"id": "QFD", "name": "Boufarik (QFD)"},
-  {"id": "BLD", "name": "Boulder City Municipal Airport (BLD)"},
-  {"id": "WBU", "name": "Boulder Municipal (WBU)"},
-  {"id": "BQL", "name": "Boulia Airport (BQL)"},
-  {"id": "YDT", "name": "Boundary Bay Airport (YDT)"},
-  {"id": "BOU", "name": "Bourges (BOU)"},
-  {"id": "BRK", "name": "Bourke Airport (BRK)"},
-  {"id": "BOH", "name": "Bournemouth (BOH)"},
-  {"id": "EBU", "name": "Boutheon (EBU)"},
-  {"id": "HQM", "name": "Bowerman Field (HQM)"},
-  {"id": "BWG", "name": "Bowling Green-Warren County Regional Airport (BWG)"},
-  {"id": "LOU", "name": "Bowman Fld (LOU)"},
-  {"id": "BWK", "name": "Brac (BWK)"},
-  {"id": "41N", "name": "Braceville Airport (41N)"},
-  {"id": "POC", "name": "Brackett Field (POC)"},
-  {"id": "BFD", "name": "Bradford Regional Airport (BFD)"},
-  {"id": "BDL", "name": "Bradley Intl (BDL)"},
-  {"id": "BSF", "name": "Bradshaw Aaf (BSF)"},
-  {"id": "BGC", "name": "Braganca (BGC)"},
-  {"id": "BRD", "name": "Brainerd Lakes Rgnl (BRD)"},
-  {"id": "BMP", "name": "Brampton Island (BMP)"},
-  {"id": "OEB", "name": "Branch County Memorial Airport (OEB)"},
-  {"id": "AUF", "name": "Branches (AUF)"},
-  {"id": "YBR", "name": "Brandon Muni (YBR)"},
-  {"id": "OQN", "name": "Brandywine Airport (OQN)"},
-  {"id": "BKG", "name": "Branson LLC (BKG)"},
-  {"id": "YFD", "name": "Brantford (YFD)"},
-  {"id": "BTK", "name": "Bratsk (BTK)"},
-  {"id": "BWE", "name": "Braunschweig Wolfsburg (BWE)"},
-  {"id": "BRV", "name": "Bremerhaven (BRV)"},
-  {"id": "PWT", "name": "Bremerton National (PWT)"},
-  {"id": "MEN", "name": "Brenoux (MEN)"},
-  {"id": "BQT", "name": "Brest (BQT)"},
-  {"id": "BVS", "name": "Breves Airport (BVS)"},
-  {"id": "KTS", "name": "Brevig Mission Airport (KTS)"},
-  {"id": "ORE", "name": "Bricy (ORE)"},
-  {"id": "ANG", "name": "Brie Champniers (ANG)"},
-  {"id": "BMC", "name": "Brigham City (BMC)"},
-  {"id": "BNE", "name": "Brisbane Intl (BNE)"},
-  {"id": "BRS", "name": "Bristol (BRS)"},
-  {"id": "FZO", "name": "Bristol Filton (FZO)"},
-  {"id": "BZZ", "name": "Brize Norton (BZZ)"},
-  {"id": "YBT", "name": "Brochet Airport (YBT)"},
-  {"id": "BHQ", "name": "Broken Hill Airport (BHQ)"},
-  {"id": "BMA", "name": "Bromma (BMA)"},
-  {"id": "ZBM", "name": "Bromont Airport (ZBM)"},
-  {"id": "LYN", "name": "Bron (LYN)"},
-  {"id": "BNN", "name": "Bronnoy (BNN)"},
-  {"id": "BKX", "name": "Brookings Regional Airport (BKX)"},
-  {"id": "RMY", "name": "Brooks Field Airport (RMY)"},
-  {"id": "BME", "name": "Broome (BME)"},
-  {"id": "SDM", "name": "Brown Field Municipal Airport (SDM)"},
-  {"id": "BRO", "name": "Brownsville South Padre Island Intl (BRO)"},
-  {"id": "BWN", "name": "Brunei Intl (BWN)"},
-  {"id": "BQK", "name": "Brunswick Golden Isles Airport (BQK)"},
-  {"id": "BHG", "name": "Brus Laguna Airport (BHG)"},
-  {"id": "ZYR", "name": "Brussels Gare du Midi (ZYR)"},
-  {"id": "BRU", "name": "Brussels Natl (BRU)"},
-  {"id": "CRL", "name": "Brussels South (CRL)"},
-  {"id": "BQB", "name": "Brusselton (BQB)"},
-  {"id": "BZK", "name": "Bryansk (BZK)"},
-  {"id": "FRN", "name": "Bryant Ahp (FRN)"},
-  {"id": "BCE", "name": "Bryce Canyon (BCE)"},
-  {"id": "LUW", "name": "Bubung (LUW)"},
-  {"id": "CCR", "name": "Buchanan Field Airport (CCR)"},
-  {"id": "BUH", "name": "Buchloe BF (BUH)"},
-  {"id": "KWA", "name": "Bucholz Aaf (KWA)"},
-  {"id": "BXK", "name": "Buckeye Municipal Airport (BXK)"},
-  {"id": "BKC", "name": "Buckland Airport (BKC)"},
-  {"id": "BKF", "name": "Buckley Afb (BKF)"},
-  {"id": "YVT", "name": "Buffalo Narrows (YVT)"},
-  {"id": "BUF", "name": "Buffalo Niagara Intl (BUF)"},
-  {"id": "BFO", "name": "Buffalo Range (BFO)"},
-  {"id": "UUA", "name": "Bugulma Airport (UUA)"},
-  {"id": "BJM", "name": "Bujumbura Intl (BJM)"},
-  {"id": "BUA", "name": "Buka Airport (BUA)"},
-  {"id": "BKY", "name": "Bukavu Kavumu (BKY)"},
-  {"id": "BHK", "name": "Bukhara (BHK)"},
-  {"id": "BKZ", "name": "Bukoba Airport (BKZ)"},
-  {"id": "UGA", "name": "Bulgan Airport (UGA)"},
-  {"id": "BDB", "name": "Bundaberg (BDB)"},
-  {"id": "BUX", "name": "Bunia (BUX)"},
-  {"id": "BXO", "name": "Buochs Airport (BXO)"},
-  {"id": "BMV", "name": "Buon Ma Thuot Airport (BMV)"},
-  {"id": "BUO", "name": "Burao Airport (BUO)"},
-  {"id": "BVV", "name": "Burevestnik Airport (BVV)"},
-  {"id": "BOJ", "name": "Burgas (BOJ)"},
-  {"id": "RGS", "name": "Burgos Airport (RGS)"},
-  {"id": "BFV", "name": "Buri Ram (BFV)"},
-  {"id": "BKL", "name": "Burke Lakefront Airport (BKL)"},
-  {"id": "BUC", "name": "Burketown Airport (BUC)"},
-  {"id": "BTV", "name": "Burlington Intl (BTV)"},
-  {"id": "BUY", "name": "Burlington-Alamance Regional Airport (BUY)"},
-  {"id": "K27", "name": "Burrello-Mechanicville Airport (K27)"},
-  {"id": "BTZ", "name": "Bursa Airport (BTZ)"},
-  {"id": "YDB", "name": "Burwash (YDB)"},
-  {"id": "BUZ", "name": "Bushehr (BUZ)"},
-  {"id": "USU", "name": "Busuanga (USU)"},
-  {"id": "BBG", "name": "Butaritari Atoll Airport (BBG)"},
-  {"id": "YKZ", "name": "Buttonville Muni (YKZ)"},
-  {"id": "FCS", "name": "Butts Aaf (FCS)"},
-  {"id": "BXU", "name": "Butuan (BXU)"},
-  {"id": "BZG", "name": "Bydgoszcz Ignacy Jan Paderewski Airport (BZG)"},
-  {"id": "BKA", "name": "Bykovo (BKA)"},
-  {"id": "CBH", "name": "Béchar Boudghene Ben Ali Lotfi Airport (CBH)"},
-  {"id": "VSA", "name": "C P A Carlos Rovirosa Intl (VSA)"},
-  {"id": "CAH", "name": "Ca Mau (CAH)"},
-  {"id": "LHC", "name": "Caballococha Airport (LHC)"},
-  {"id": "CAB", "name": "Cabinda (CAB)"},
-  {"id": "CFB", "name": "Cabo Frio International Airport (CFB)"},
-  {"id": "TNO", "name": "Cabo Velas Airport (TNO)"},
-  {"id": "ITB", "name": "Cachimbo (ITB)"},
-  {"id": "TPP", "name": "Cadete Guillermo Del Castillo Paredes (TPP)"},
-  {"id": "COO", "name": "Cadjehoun (COO)"},
-  {"id": "CGY", "name": "Cagayan De Oro (CGY)"},
-  {"id": "CNS", "name": "Cairns Intl (CNS)"},
-  {"id": "CAI", "name": "Cairo Intl (CAI)"},
-  {"id": "70J", "name": "Cairo-Grady County Airport (70J)"},
-  {"id": "CBQ", "name": "Calabar (CBQ)"},
-  {"id": "CQF", "name": "Calais Dunkerque (CQF)"},
-  {"id": "CYP", "name": "Calbayog Airport (CYP)"},
-  {"id": "CLV", "name": "Caldas Novas (CLV)"},
-  {"id": "CDW", "name": "Caldwell Essex County Airport (CDW)"},
-  {"id": "CVI", "name": "Caleta Olivia (CVI)"},
-  {"id": "CXL", "name": "Calexico Intl (CXL)"},
-  {"id": "YYC", "name": "Calgary Intl (YYC)"},
-  {"id": "YBW", "name": "Calgary Springbank Airport (YBW)"},
-  {"id": "CCJ", "name": "Calicut (CCJ)"},
-  {"id": "CXR", "name": "Cam Ranh Airport (CXR)"},
-  {"id": "CBG", "name": "Cambridge (CBG)"},
-  {"id": "YCB", "name": "Cambridge Bay (YCB)"},
-  {"id": "CDI", "name": "Cambridge Municipal Airport (CDI)"},
-  {"id": "CDU", "name": "Camden (CDU)"},
-  {"id": "CGM", "name": "Camiguin Airport (CGM)"},
-  {"id": "CUC", "name": "Camilo Daza (CUC)"},
-  {"id": "LOH", "name": "Camilo Ponce Enriquez Airport (LOH)"},
-  {"id": "ATT", "name": "Camp Mabry Austin City (ATT)"},
-  {"id": "HOP", "name": "Campbell Aaf (HOP)"},
-  {"id": "YBL", "name": "Campbell River (YBL)"},
-  {"id": "CAL", "name": "Campbeltown Airport (CAL)"},
-  {"id": "CMP", "name": "Campo Alegre Airport (CMP)"},
-  {"id": "AJA", "name": "Campo Dell Oro (AJA)"},
-  {"id": "CXJ", "name": "Campo Dos Bugres (CXJ)"},
-  {"id": "QPS", "name": "Campo Fontenelle (QPS)"},
-  {"id": "CGR", "name": "Campo Grande (CGR)"},
-  {"id": "YXC", "name": "Canadian Rockies Intl (YXC)"},
-  {"id": "CAJ", "name": "Canaima (CAJ)"},
-  {"id": "CKZ", "name": "Canakkale Airport (CKZ)"},
-  {"id": "ZOS", "name": "Canal Bajo Carlos Hott Siebert (ZOS)"},
-  {"id": "CBR", "name": "Canberra (CBR)"},
-  {"id": "CUN", "name": "Cancun Intl (CUN)"},
-  {"id": "DCF", "name": "Canefield (DCF)"},
-  {"id": "CVS", "name": "Cannon Afb (CVS)"},
-  {"id": "CIW", "name": "Canouan (CIW)"},
-  {"id": "CIS", "name": "Canton (CIS)"},
-  {"id": "CNY", "name": "Canyonlands Field (CNY)"},
-  {"id": "PCL", "name": "Cap Fap David Abenzur Rengifo Intl (PCL)"},
-  {"id": "CAP", "name": "Cap Haitien Intl (CAP)"},
-  {"id": "CHX", "name": "Cap Manuel Nino Intl (CHX)"},
-  {"id": "CSK", "name": "Cap Skiring (CSK)"},
-  {"id": "YTE", "name": "Cape Dorset (YTE)"},
-  {"id": "CGI", "name": "Cape Girardeau Regional Airport (CGI)"},
-  {"id": "LUR", "name": "Cape Lisburne Lrrs (LUR)"},
-  {"id": "WWD", "name": "Cape May Co (WWD)"},
-  {"id": "EHM", "name": "Cape Newenham Lrrs (EHM)"},
-  {"id": "CPA", "name": "Cape Palmas Airport (CPA)"},
-  {"id": "CZF", "name": "Cape Romanzof Lrrs (CZF)"},
-  {"id": "CPT", "name": "Cape Town Intl (CPT)"},
-  {"id": "LAN", "name": "Capital City (LAN)"},
-  {"id": "CXY", "name": "Capital City Airport (CXY)"},
-  {"id": "FFT", "name": "Capital City Airport (FFT)"},
-  {"id": "PEK", "name": "Capital Intl (PEK)"},
-  {"id": "TRU", "name": "Capitan Carlos Martinez De Pinillos (TRU)"},
-  {"id": "PDP", "name": "Capitan Corbeta C A Curbelo International Airport (PDP)"},
-  {"id": "PIU", "name": "Capitan Fap Guillermo Concha Iberico (PIU)"},
-  {"id": "TYL", "name": "Capitan Montes (TYL)"},
-  {"id": "POI", "name": "Capitan Nicolas Rojas (POI)"},
-  {"id": "TJA", "name": "Capitan Oriel Lea Plaza (TJA)"},
-  {"id": "SRJ", "name": "Capitán Av. German Quiroga G. Airport (SRJ)"},
-  {"id": "RIB", "name": "Capitán Av. Selin Zeitun Lopez Airport (RIB)"},
-  {"id": "GYA", "name": "Capitán de Av. Emilio Beltrán Airport (GYA)"},
-  {"id": "NAP", "name": "Capodichino (NAP)"},
-  {"id": "CIX", "name": "Capt Jose A Quinones Gonzales Intl (CIX)"},
-  {"id": "PLP", "name": "Captain Ramon Xatruch Airport (PLP)"},
-  {"id": "CYW", "name": "Captain Rogelio Castillo National Airport (CYW)"},
-  {"id": "CPB", "name": "Capurgana Airport (CPB)"},
-  {"id": "CKS", "name": "Carajas Airport (CKS)"},
-  {"id": "CSB", "name": "Caransebes (CSB)"},
-  {"id": "CAF", "name": "Carauari Airport (CAF)"},
-  {"id": "CRQ", "name": "Caravelas (CRQ)"},
-  {"id": "PUC", "name": "Carbon County Regional-Buck Davis Field (PUC)"},
-  {"id": "DNZ", "name": "Cardak (DNZ)"},
-  {"id": "CWL", "name": "Cardiff (CWL)"},
-  {"id": "CAR", "name": "Caribou Muni (CAR)"},
-  {"id": "CAX", "name": "Carlisle (CAX)"},
-  {"id": "CFC", "name": "Carlos Alberto da Costa Neves Airport (CFC)"},
-  {"id": "PUQ", "name": "Carlos Ibanez Del Campo Intl (PUQ)"},
-  {"id": "BYM", "name": "Carlos Manuel De Cespedes (BYM)"},
-  {"id": "CVQ", "name": "Carnarvon Airport (CVQ)"},
-  {"id": "CLN", "name": "Carolina (CLN)"},
-  {"id": "CFR", "name": "Carpiquet (CFR)"},
-  {"id": "MVD", "name": "Carrasco Intl (MVD)"},
-  {"id": "CCP", "name": "Carriel Sur Intl (CCP)"},
-  {"id": "RIK", "name": "Carrillo Airport (RIK)"},
-  {"id": "VPC", "name": "Cartersville Airport (VPC)"},
-  {"id": "TUN", "name": "Carthage (TUN)"},
-  {"id": "YRF", "name": "Cartwright Airport (YRF)"},
-  {"id": "CAU", "name": "Caruaru Airport (CAU)"},
-  {"id": "LRM", "name": "Casa De Campo Intl (LRM)"},
-  {"id": "CGZ", "name": "Casa Grande Municipal Airport (CGZ)"},
-  {"id": "BDS", "name": "Casale (BDS)"},
-  {"id": "CAC", "name": "Cascavel (CAC)"},
-  {"id": "PYH", "name": "Casique Aramare (PYH)"},
-  {"id": "CXI", "name": "Cassidy Intl (CXI)"},
-  {"id": "MER", "name": "Castle (MER)"},
-  {"id": "YCG", "name": "Castlegar (YCG)"},
-  {"id": "HPH", "name": "Cat Bi International Airport (HPH)"},
-  {"id": "YAC", "name": "Cat Lake Airport (YAC)"},
-  {"id": "TCE", "name": "Cataloi (TCE)"},
-  {"id": "CTC", "name": "Catamarca (CTC)"},
-  {"id": "CTA", "name": "Catania Fontanarossa (CTA)"},
-  {"id": "IGR", "name": "Cataratas Del Iguazu (IGR)"},
-  {"id": "IGU", "name": "Cataratas Intl (IGU)"},
-  {"id": "CRM", "name": "Catarman National Airport (CRM)"},
-  {"id": "CBT", "name": "Catumbela Airport (CBT)"},
-  {"id": "CYZ", "name": "Cauayan Airport (CYZ)"},
-  {"id": "LQM", "name": "Caucaya Airport (LQM)"},
-  {"id": "AVN", "name": "Caumont (AVN)"},
-  {"id": "CNM", "name": "Cavern City Air Terminal (CNM)"},
-  {"id": "AAJ", "name": "Cayana Airstrip (AAJ)"},
-  {"id": "CUK", "name": "Caye Caulker Airport (CUK)"},
-  {"id": "CYC", "name": "Caye Chapel Airport (CYC)"},
-  {"id": "CCC", "name": "Cayo Coco Airport (CCC)"},
-  {"id": "NZC", "name": "Cecil Field (NZC)"},
-  {"id": "CDC", "name": "Cedar City Rgnl (CDC)"},
-  {"id": "CID", "name": "Cedar Rapids (CID)"},
-  {"id": "CDK", "name": "CedarKey (CDK)"},
-  {"id": "CED", "name": "Ceduna Airport (CED)"},
-  {"id": "ZCN", "name": "Celle (ZCN)"},
-  {"id": "APA", "name": "Centennial (APA)"},
-  {"id": "QRH", "name": "Centraal (QRH)"},
-  {"id": "ZWE", "name": "Centraal (ZWE)"},
-  {"id": "RTW", "name": "Central (RTW)"},
-  {"id": "ZGH", "name": "Central (ZGH)"},
-  {"id": "CEM", "name": "Central Airport (CEM)"},
-  {"id": "BMI", "name": "Central Illinois Rgnl (BMI)"},
-  {"id": "GRI", "name": "Central Nebraska Regional Airport (GRI)"},
-  {"id": "YMY", "name": "Central Railway Station (YMY)"},
-  {"id": "QYX", "name": "Central Station (QYX)"},
-  {"id": "XEV", "name": "Central Station (XEV)"},
-  {"id": "ZGG", "name": "Central Station (ZGG)"},
-  {"id": "CWA", "name": "Central Wisconsin (CWA)"},
-  {"id": "PYP", "name": "Centre-Piedmont-Cherokee County Regional Airport (PYP)"},
-  {"id": "ANF", "name": "Cerro Moreno Intl (ANF)"},
-  {"id": "CES", "name": "Cessnock Airport (CES)"},
-  {"id": "JCU", "name": "Ceuta Heliport (JCU)"},
-  {"id": "XBK", "name": "Ceyzeriat (XBK)"},
-  {"id": "VAF", "name": "Chabeuil (VAF)"},
-  {"id": "ARI", "name": "Chacalluta (ARI)"},
-  {"id": "CHH", "name": "Chachapoyas (CHH)"},
-  {"id": "ATF", "name": "Chachoan (ATF)"},
-  {"id": "CDR", "name": "Chadron Municipal Airport (CDR)"},
-  {"id": "CCN", "name": "Chaghcharan Airport (CCN)"},
-  {"id": "ZBR", "name": "Chah Bahar (ZBR)"},
-  {"id": "WCH", "name": "Chaiten (WCH)"},
-  {"id": "ISB", "name": "Chaklala (ISB)"},
-  {"id": "CIK", "name": "Chalkyitsik Airport (CIK)"},
-  {"id": "RHE", "name": "Champagne (RHE)"},
-  {"id": "CMI", "name": "Champaign (CMI)"},
-  {"id": "XCD", "name": "Champforgeuil (XCD)"},
-  {"id": "YKN", "name": "Chan Gurney (YKN)"},
-  {"id": "IXC", "name": "Chandigarh (IXC)"},
-  {"id": "BDP", "name": "Chandragadhi Airport (BDP)"},
-  {"id": "NBS", "name": "Changbaishan Airport (NBS)"},
-  {"id": "KHN", "name": "Changbei Intl (KHN)"},
-  {"id": "CGQ", "name": "Changchun (CGQ)"},
-  {"id": "CGD", "name": "Changde Airport (CGD)"},
-  {"id": "CNI", "name": "Changhai (CNI)"},
-  {"id": "SIN", "name": "Changi Intl (SIN)"},
-  {"id": "FOC", "name": "Changle (FOC)"},
-  {"id": "CIH", "name": "Changzhi Airport (CIH)"},
-  {"id": "CZX", "name": "Changzhou (CZX)"},
-  {"id": "WUZ", "name": "Changzhoudao Airport (WUZ)"},
-  {"id": "CHG", "name": "Chaoyang Airport (CHG)"},
-  {"id": "LEC", "name": "Chapada Diamantina Airport (LEC)"},
-  {"id": "YMT", "name": "Chapais Airport (YMT)"},
-  {"id": "XAP", "name": "Chapeco (XAP)"},
-  {"id": "YLD", "name": "Chapleau (YLD)"},
-  {"id": "CDG", "name": "Charles De Gaulle (CDG)"},
-  {"id": "STS", "name": "Charles M Schulz Sonoma Co (STS)"},
-  {"id": "CHS", "name": "Charleston Afb Intl (CHS)"},
-  {"id": "CTL", "name": "Charleville (CTL)"},
-  {"id": "CVX", "name": "Charlevoix Municipal Airport (CVX)"},
-  {"id": "YCL", "name": "Charlo (YCL)"},
-  {"id": "PGD", "name": "Charlotte County-Punta Gorda Airport (PGD)"},
-  {"id": "CLT", "name": "Charlotte Douglas Intl (CLT)"},
-  {"id": "CHO", "name": "Charlottesville-Albemarle (CHO)"},
-  {"id": "YYG", "name": "Charlottetown (YYG)"},
-  {"id": "VHY", "name": "Charmeil (VHY)"},
-  {"id": "QNX", "name": "Charnay (QNX)"},
-  {"id": "CNG", "name": "Chateaubernard (CNG)"},
-  {"id": "CHT", "name": "Chatham Islands (CHT)"},
-  {"id": "CYM", "name": "Chatham Seaplane Base (CYM)"},
-  {"id": "HRJ", "name": "Chaurjhari (HRJ)"},
-  {"id": "DKK", "name": "Chautauqua County-Dunkirk Airport (DKK)"},
-  {"id": "JHW", "name": "Chautauqua County-Jamestown (JHW)"},
-  {"id": "CSY", "name": "Cheboksary Airport (CSY)"},
-  {"id": "GEO", "name": "Cheddi Jagan Intl (GEO)"},
-  {"id": "CYF", "name": "Chefornak Airport (CYF)"},
-  {"id": "CLS", "name": "Chehalis-Centralia (CLS)"},
-  {"id": "TEE", "name": "Cheikh Larbi Tebessi (TEE)"},
-  {"id": "49X", "name": "Chemehuevi Valley (49X)"},
-  {"id": "NCN", "name": "Chenega Bay Airport (NCN)"},
-  {"id": "MAA", "name": "Chennai Intl (MAA)"},
-  {"id": "CJJ", "name": "Cheongju International Airport (CJJ)"},
-  {"id": "CEE", "name": "Cherepovets Airport (CEE)"},
-  {"id": "AHU", "name": "Cherif El Idrissi (AHU)"},
-  {"id": "CKC", "name": "Cherkassy (CKC)"},
-  {"id": "CEJ", "name": "Chernigov (CEJ)"},
-  {"id": "CWC", "name": "Chernivtsi International Airport (CWC)"},
-  {"id": "KHE", "name": "Chernobayevka Airport (KHE)"},
-  {"id": "47A", "name": "Cherokee County Airport (47A)"},
-  {"id": "TVC", "name": "Cherry Capital Airport (TVC)"},
-  {"id": "NKT", "name": "Cherry Point Mcas (NKT)"},
-  {"id": "CYX", "name": "Cherskiy Airport (CYX)"},
-  {"id": "VOZ", "name": "Chertovitskoye (VOZ)"},
-  {"id": "CTH", "name": "Chester County G O Carlson Airport (CTH)"},
-  {"id": "YCS", "name": "Chesterfield Inlet Airport (YCS)"},
-  {"id": "CTM", "name": "Chetumal Intl (CTM)"},
-  {"id": "VAK", "name": "Chevak Airport (VAK)"},
-  {"id": "YHR", "name": "Chevery Airport (YHR)"},
-  {"id": "CYS", "name": "Cheyenne Rgnl Jerry Olson Fld (CYS)"},
-  {"id": "BOM", "name": "Chhatrapati Shivaji Intl (BOM)"},
-  {"id": "CNX", "name": "Chiang Mai Intl (CNX)"},
-  {"id": "CEI", "name": "Chiang Rai Intl (CEI)"},
-  {"id": "CYI", "name": "Chiayi (CYI)"},
-  {"id": "PWK", "name": "Chicago Executive (PWK)"},
-  {"id": "MDW", "name": "Chicago Midway Intl (MDW)"},
-  {"id": "ORD", "name": "Chicago Ohare Intl (ORD)"},
-  {"id": "RFD", "name": "Chicago Rockford International Airport  (RFD)"},
-  {"id": "CIC", "name": "Chico Muni (CIC)"},
-  {"id": "CIF", "name": "Chifeng Airport (CIF)"},
-  {"id": "KBW", "name": "Chignik Bay Seaplane Base (KBW)"},
-  {"id": "KCL", "name": "Chignik Lagoon Airport (KCL)"},
-  {"id": "KCQ", "name": "Chignik Lake Airport (KCQ)"},
-  {"id": "CDS", "name": "Childress Muni (CDS)"},
-  {"id": "CCH", "name": "Chile Chico (CCH)"},
-  {"id": "BLZ", "name": "Chileka Intl (BLZ)"},
-  {"id": "YCW", "name": "Chilliwack (YCW)"},
-  {"id": "CMU", "name": "Chimbu Airport (CMU)"},
-  {"id": "VPY", "name": "Chimoio Airport (VPY)"},
-  {"id": "TRR", "name": "China Bay (TRR)"},
-  {"id": "NID", "name": "China Lake Naws (NID)"},
-  {"id": "CCL", "name": "Chinchilla (CCL)"},
-  {"id": "RMQ", "name": "Ching Chuang Kang (RMQ)"},
-  {"id": "ULN", "name": "Chinggis Khaan Intl (ULN)"},
-  {"id": "E91", "name": "Chinle Municipal Airport (E91)"},
-  {"id": "JKH", "name": "Chios (JKH)"},
-  {"id": "CIP", "name": "Chipata Airport (CIP)"},
-  {"id": "CIU", "name": "Chippewa County International Airport (CIU)"},
-  {"id": "EAU", "name": "Chippewa Valley Regional Airport (EAU)"},
-  {"id": "CZN", "name": "Chisana Airport (CZN)"},
-  {"id": "YKU", "name": "Chisasibi Airport (YKU)"},
-  {"id": "HIB", "name": "Chisholm Hibbing (HIB)"},
-  {"id": "KIV", "name": "Chisinau Intl (KIV)"},
-  {"id": "SPK", "name": "Chitose (SPK)"},
-  {"id": "CJL", "name": "Chitral Airport (CJL)"},
-  {"id": "CKL", "name": "Chkalovsky Airport (CKL)"},
-  {"id": "COQ", "name": "Choibalsan Airport (COQ)"},
-  {"id": "CHY", "name": "Choiseul Bay Airport (CHY)"},
-  {"id": "CKH", "name": "Chokurdakh Airport (CKH)"},
-  {"id": "RGO", "name": "Chongjin Airport (RGO)"},
-  {"id": "YZR", "name": "Chris Hadfield (YZR)"},
-  {"id": "CHC", "name": "Christchurch Intl (CHC)"},
-  {"id": "SSB", "name": "Christiansted Harbor Seaplane Base (SSB)"},
-  {"id": "XCH", "name": "Christmas Island (XCH)"},
-  {"id": "VCL", "name": "Chu Lai (VCL)"},
-  {"id": "CHU", "name": "Chuathbaluk Airport (CHU)"},
-  {"id": "CCZ", "name": "Chub Cay (CCZ)"},
-  {"id": "NGO", "name": "Chubu Centrair Intl (NGO)"},
-  {"id": "CNN", "name": "Chulman (CNN)"},
-  {"id": "CJM", "name": "Chumphon (CJM)"},
-  {"id": "YYQ", "name": "Churchill (YYQ)"},
-  {"id": "ZUM", "name": "Churchill Falls Airport (ZUM)"},
-  {"id": "TKK", "name": "Chuuk Intl (TKK)"},
-  {"id": "CIA", "name": "Ciampino (CIA)"},
-  {"id": "STI", "name": "Cibao Intl (STI)"},
-  {"id": "ICI", "name": "Cicia Airport (ICI)"},
-  {"id": "IGL", "name": "Cigli (IGL)"},
-  {"id": "CMJ", "name": "Cimei Airport (CMJ)"},
-  {"id": "LUK", "name": "Cincinnati Muni Lunken Fld (LUK)"},
-  {"id": "CVG", "name": "Cincinnati Northern Kentucky Intl (CVG)"},
-  {"id": "IRC", "name": "Circle City Airport (IRC)"},
-  {"id": "LCY", "name": "City (LCY)"},
-  {"id": "YTZ", "name": "City Centre (YTZ)"},
-  {"id": "COS", "name": "City Of Colorado Springs Muni (COS)"},
-  {"id": "LDY", "name": "City of Derry (LDY)"},
-  {"id": "CBL", "name": "Ciudad Bolivar (CBL)"},
-  {"id": "CUA", "name": "Ciudad Constitución Airport (CUA)"},
-  {"id": "CME", "name": "Ciudad Del Carmen Intl (CME)"},
-  {"id": "AGT", "name": "Ciudad del Este (AGT)"},
-  {"id": "CEN", "name": "Ciudad Obregon Intl (CEN)"},
-  {"id": "CQM", "name": "Ciudad Real Central Airport (CQM)"},
-  {"id": "CKV", "name": "Clarksville-Montgomery County Regional Airport (CKV)"},
-  {"id": "4A7", "name": "Clayton County Tara Field (4A7)"},
-  {"id": "Z84", "name": "Clear (Z84)"},
-  {"id": "CLC", "name": "Clear Lake Metroport (CLC)"},
-  {"id": "CLW", "name": "Clearwater Air Park (CLW)"},
-  {"id": "CEU", "name": "Clemson (CEU)"},
-  {"id": "CLE", "name": "Cleveland Hopkins Intl (CLE)"},
-  {"id": "CWI", "name": "Clinton Municipal (CWI)"},
-  {"id": "CNJ", "name": "Cloncurry Airport (CNJ)"},
-  {"id": "CVN", "name": "Clovis Muni (CVN)"},
-  {"id": "1CS", "name": "Clow International Airport (1CS)"},
-  {"id": "CMK", "name": "Club Makokola Airport (CMK)"},
-  {"id": "CLJ", "name": "Cluj Napoca (CLJ)"},
-  {"id": "YCY", "name": "Clyde River (YCY)"},
-  {"id": "VCS", "name": "Co Ong Airport (VCS)"},
-  {"id": "CIZ", "name": "Coari Airport (CIZ)"},
-  {"id": "CBV", "name": "Coban (CBV)"},
-  {"id": "CAZ", "name": "Cobar Airport (CAZ)"},
-  {"id": "RYY", "name": "Cobb County Airport-Mc Collum Field (RYY)"},
-  {"id": "COK", "name": "Cochin (COK)"},
-  {"id": "YCN", "name": "Cochrane (YCN)"},
-  {"id": "CNC", "name": "Coconut Island Airport (CNC)"},
-  {"id": "CCK", "name": "Cocos Keeling Island Airport (CCK)"},
-  {"id": "CSC", "name": "Codela Airport (CSC)"},
-  {"id": "BBQ", "name": "Codrington Airport (BBQ)"},
-  {"id": "CUQ", "name": "Coen Airport (CUQ)"},
-  {"id": "KCC", "name": "Coffman Cove Seaplane Base (KCC)"},
-  {"id": "CFS", "name": "Coffs Harbour (CFS)"},
-  {"id": "CJB", "name": "Coimbatore (CJB)"},
-  {"id": "CDB", "name": "Cold Bay (CDB)"},
-  {"id": "YOD", "name": "Cold Lake (YOD)"},
-  {"id": "CXF", "name": "Coldfoot Airport (CXF)"},
-  {"id": "DET", "name": "Coleman A Young Muni (DET)"},
-  {"id": "CLQ", "name": "Colima (CLQ)"},
-  {"id": "COL", "name": "Coll Airport (COL)"},
-  {"id": "TKI", "name": "Collin County Regional Airport at Mc Kinney (TKI)"},
-  {"id": "QKL", "name": "Cologne Railway (QKL)"},
-  {"id": "RML", "name": "Colombo Ratmalana (RML)"},
-  {"id": "CRI", "name": "Colonel Hill Airport (CRI)"},
-  {"id": "OLN", "name": "Colonia Sarmiento (OLN)"},
-  {"id": "CSA", "name": "Colonsay Airport (CSA)"},
-  {"id": "A50", "name": "Colorado Springs East (A50)"},
-  {"id": "HCC", "name": "Columbia County (HCC)"},
-  {"id": "CAE", "name": "Columbia Metropolitan (CAE)"},
-  {"id": "COU", "name": "Columbia Rgnl (COU)"},
-  {"id": "CBM", "name": "Columbus Afb (CBM)"},
-  {"id": "CSG", "name": "Columbus Metropolitan Airport (CSG)"},
-  {"id": "YCK", "name": "Colville Lake Airport (YCK)"},
-  {"id": "BHI", "name": "Comandante Espora (BHI)"},
-  {"id": "ATA", "name": "Comandante Fap German Arias Graziani (ATA)"},
-  {"id": "BGX", "name": "Comandante Gustavo Kraemer (BGX)"},
-  {"id": "DSE", "name": "Combolcha Airport (DSE)"},
-  {"id": "JCO", "name": "Comino Airport (JCO)"},
-  {"id": "CIY", "name": "Comiso (CIY)"},
-  {"id": "COC", "name": "Comodoro Pierrestegui (COC)"},
-  {"id": "CRD", "name": "Comodoro Rivadavia (CRD)"},
-  {"id": "YQQ", "name": "Comox (YQQ)"},
-  {"id": "CKY", "name": "Conakry (CKY)"},
-  {"id": "CDJ", "name": "Conceicao Do Araguaia (CDJ)"},
-  {"id": "CON", "name": "Concord Municipal (CON)"},
-  {"id": "CCI", "name": "Concordia Airport (CCI)"},
-  {"id": "WSD", "name": "Condron Aaf (WSD)"},
-  {"id": "CFO", "name": "Confresa Airport (CFO)"},
-  {"id": "STZ", "name": "Confresa Airport (STZ)"},
-  {"id": "COX", "name": "Congo Town Airport (COX)"},
-  {"id": "CGH", "name": "Congonhas (CGH)"},
-  {"id": "QCY", "name": "Coningsby (QCY)"},
-  {"id": "NNR", "name": "Connemara Regional Airport (NNR)"},
-  {"id": "COZ", "name": "Constanza Airport (COZ)"},
-  {"id": "OTD", "name": "Contadora Airport (OTD)"},
-  {"id": "CPD", "name": "Coober Pedy Airport (CPD)"},
-  {"id": "COH", "name": "Cooch Behar (COH)"},
-  {"id": "CDA", "name": "Cooinda (CDA)"},
-  {"id": "CTN", "name": "Cooktown Airport (CTN)"},
-  {"id": "P08", "name": "Coolidge Municipal Airport (P08)"},
-  {"id": "OOM", "name": "Cooma Snowy Mountains Airport (OOM)"},
-  {"id": "COJ", "name": "Coonabarabran (COJ)"},
-  {"id": "CNB", "name": "Coonamble Airport (CNB)"},
-  {"id": "CPO", "name": "Copiapo (CPO)"},
-  {"id": "ODB", "name": "Cordoba (ODB)"},
-  {"id": "ORK", "name": "Cork (ORK)"},
-  {"id": "POX", "name": "Cormeilles En Vexin (POX)"},
-  {"id": "RNI", "name": "Corn Island Airport (RNI)"},
-  {"id": "YCC", "name": "Cornwall Regional Airport (YCC)"},
-  {"id": "YCT", "name": "Coronation (YCT)"},
-  {"id": "TCQ", "name": "Coronel Carlos Ciriani Santa Rosa Intl (TCQ)"},
-  {"id": "XMS", "name": "Coronel E Carvajal (XMS)"},
-  {"id": "AYP", "name": "Coronel Fap Alfredo Mendivil Duarte (AYP)"},
-  {"id": "IQT", "name": "Coronel Francisco Secada Vignetta Intl (IQT)"},
-  {"id": "CRP", "name": "Corpus Christi Intl (CRP)"},
-  {"id": "NGP", "name": "Corpus Christi NAS (NGP)"},
-  {"id": "CNQ", "name": "Corrientes (CNQ)"},
-  {"id": "CEZ", "name": "Cortez Muni (CEZ)"},
-  {"id": "CMG", "name": "Corumba Intl (CMG)"},
-  {"id": "CVU", "name": "Corvo Airport (CVU)"},
-  {"id": "CBO", "name": "Cotabato (CBO)"},
-  {"id": "NCE", "name": "Cote D\'Azur (NCE)"},
-  {"id": "OTR", "name": "Coto 47 (OTR)"},
-  {"id": "LTX", "name": "Cotopaxi International Airport (LTX)"},
-  {"id": "P52", "name": "Cottonwood Airport (P52)"},
-  {"id": "COT", "name": "Cotulla Lasalle Co (COT)"},
-  {"id": "CFD", "name": "Coulter Fld (CFD)"},
-  {"id": "CIL", "name": "Council Airport (CIL)"},
-  {"id": "OBE", "name": "County (OBE)"},
-  {"id": "CVF", "name": "Courchevel Airport (CVF)"},
-  {"id": "CVT", "name": "Coventry (CVT)"},
-  {"id": "9A1", "name": "Covington Municipal Airport (9A1)"},
-  {"id": "CCO", "name": "Coweta County Airport (CCO)"},
-  {"id": "CXB", "name": "Coxs Bazar (CXB)"},
-  {"id": "CZM", "name": "Cozumel Intl (CZM)"},
-  {"id": "CCV", "name": "Craig Cove Airport (CCV)"},
-  {"id": "SEM", "name": "Craig Fld (SEM)"},
-  {"id": "CGA", "name": "Craig Seaplane Base (CGA)"},
-  {"id": "CRA", "name": "Craiova (CRA)"},
-  {"id": "EWN", "name": "Craven Co Rgnl (EWN)"},
-  {"id": "INS", "name": "Creech Afb (INS)"},
-  {"id": "CSF", "name": "Creil (CSF)"},
-  {"id": "CKF", "name": "Crisp County Cordele Airport (CKF)"},
-  {"id": "JCA", "name": "Croisette Heliport (JCA)"},
-  {"id": "CKD", "name": "Crooked Creek Airport (CKD)"},
-  {"id": "CTY", "name": "Cross City (CTY)"},
-  {"id": "YCR", "name": "Cross Lake - Charlie Sinclair Memorial Airport (YCR)"},
-  {"id": "CRV", "name": "Crotone (CRV)"},
-  {"id": "TAB", "name": "Crown Point (TAB)"},
-  {"id": "CZS", "name": "Cruzeiro do Sul (CZS)"},
-  {"id": "CGC", "name": "Crystal River (CGC)"},
-  {"id": "FXO", "name": "Cuamba (FXO)"},
-  {"id": "CDP", "name": "Cuddapah (CDP)"},
-  {"id": "CPX", "name": "Culebra Airport (CPX)"},
-  {"id": "CUL", "name": "Culiacan Intl (CUL)"},
-  {"id": "CMA", "name": "Cunnamulla Airport (CMA)"},
-  {"id": "CTB", "name": "Cut Bank Muni (CTB)"},
-  {"id": "NDZ", "name": "Cuxhaven Airport (NDZ)"},
+  {
+    "id": "ACY",
+    "name": "Atlantic City Intl (ACY)"
+  },
+  {
+    "id": "ZRA",
+    "name": "Atlantic City Rail Terminal (ZRA)"
+  },
+  {
+    "id": "369",
+    "name": "Atmautluak Airport (369)"
+  },
+  {
+    "id": "ATK",
+    "name": "Atqasuk Edward Burnell Sr Memorial Airport (ATK)"
+  },
+  {
+    "id": "YAT",
+    "name": "Attawapiskat Airport (YAT)"
+  },
+  {
+    "id": "GUW",
+    "name": "Atyrau (GUW)"
+  },
+  {
+    "id": "AUO",
+    "name": "Auburn University Regional (AUO)"
+  },
+  {
+    "id": "AKL",
+    "name": "Auckland Intl (AKL)"
+  },
+  {
+    "id": "AGB",
+    "name": "Augsburg (AGB)"
+  },
+  {
+    "id": "AUB",
+    "name": "Augsburg HBF (AUB)"
+  },
+  {
+    "id": "ZAU",
+    "name": "Augsburg Railway (ZAU)"
+  },
+  {
+    "id": "AGS",
+    "name": "Augusta Rgnl At Bush Fld (AGS)"
+  },
+  {
+    "id": "AUG",
+    "name": "Augusta State (AUG)"
+  },
+  {
+    "id": "NAT",
+    "name": "Augusto Severo (NAT)"
+  },
+  {
+    "id": "AKS",
+    "name": "Auki Airport (AKS)"
+  },
+  {
+    "id": "YPJ",
+    "name": "Aupaluk Airport (YPJ)"
+  },
+  {
+    "id": "AUL",
+    "name": "Aur Island Airport (AUL)"
+  },
+  {
+    "id": "IXU",
+    "name": "Aurangabad (IXU)"
+  },
+  {
+    "id": "BBU",
+    "name": "Aurel Vlaicu (BBU)"
+  },
+  {
+    "id": "AUR",
+    "name": "Aurillac (AUR)"
+  },
+  {
+    "id": "AUU",
+    "name": "Aurukun Airport (AUU)"
+  },
+  {
+    "id": "AUS",
+    "name": "Austin Bergstrom Intl (AUS)"
+  },
+  {
+    "id": "GRB",
+    "name": "Austin Straubel Intl (GRB)"
+  },
+  {
+    "id": "CFE",
+    "name": "Auvergne (CFE)"
+  },
+  {
+    "id": "AVV",
+    "name": "Avalon (AVV)"
+  },
+  {
+    "id": "AVX",
+    "name": "Avalon (AVX)"
+  },
+  {
+    "id": "WMR",
+    "name": "Avaratra (WMR)"
+  },
+  {
+    "id": "CPC",
+    "name": "Aviador C Campos (CPC)"
+  },
+  {
+    "id": "AVB",
+    "name": "Aviano Ab (AVB)"
+  },
+  {
+    "id": "AWB",
+    "name": "Awaba Airport (AWB)"
+  },
+  {
+    "id": "AWA",
+    "name": "Awasa Airport (AWA)"
+  },
+  {
+    "id": "AXU",
+    "name": "Axum (AXU)"
+  },
+  {
+    "id": "AYQ",
+    "name": "Ayers Rock (AYQ)"
+  },
+  {
+    "id": "MBU",
+    "name": "Babanakira Airport (MBU)"
+  },
+  {
+    "id": "ROR",
+    "name": "Babelthuap (ROR)"
+  },
+  {
+    "id": "IEG",
+    "name": "Babimost (IEG)"
+  },
+  {
+    "id": "BXB",
+    "name": "Babo (BXB)"
+  },
+  {
+    "id": "BFH",
+    "name": "Bacacheri (BFH)"
+  },
+  {
+    "id": "BCM",
+    "name": "Bacau (BCM)"
+  },
+  {
+    "id": "BCO",
+    "name": "Baco Airport (BCO)"
+  },
+  {
+    "id": "BCD",
+    "name": "Bacolod (BCD)"
+  },
+  {
+    "id": "FKB",
+    "name": "Baden Airpark (FKB)"
+  },
+  {
+    "id": "BDD",
+    "name": "Badu Island Airport (BDD)"
+  },
+  {
+    "id": "BFX",
+    "name": "Bafoussam (BFX)"
+  },
+  {
+    "id": "BPE",
+    "name": "Bagan (BPE)"
+  },
+  {
+    "id": "NYU",
+    "name": "Bagan Intl (NYU)"
+  },
+  {
+    "id": "E51",
+    "name": "Bagdad Airport (E51)"
+  },
+  {
+    "id": "IXB",
+    "name": "Bagdogra (IXB)"
+  },
+  {
+    "id": "BGW",
+    "name": "Baghdad International Airport (BGW)"
+  },
+  {
+    "id": "YBG",
+    "name": "Bagotville (YBG)"
+  },
+  {
+    "id": "BPM",
+    "name": "Bagram AFB (BPM)"
+  },
+  {
+    "id": "BAG",
+    "name": "Baguio (BAG)"
+  },
+  {
+    "id": "BHV",
+    "name": "Bahawalpur Airport (BHV)"
+  },
+  {
+    "id": "BFQ",
+    "name": "Bahia Piña Airport (BFQ)"
+  },
+  {
+    "id": "HUX",
+    "name": "Bahias De Huatulco Intl (HUX)"
+  },
+  {
+    "id": "BJR",
+    "name": "Bahir Dar (BJR)"
+  },
+  {
+    "id": "BAH",
+    "name": "Bahrain Intl (BAH)"
+  },
+  {
+    "id": "YBC",
+    "name": "Baie Comeau (YBC)"
+  },
+  {
+    "id": "LZH",
+    "name": "Bailian Airport (LZH)"
+  },
+  {
+    "id": "BBR",
+    "name": "Baillif Airport (BBR)"
+  },
+  {
+    "id": "VMU",
+    "name": "Baimuru Airport (VMU)"
+  },
+  {
+    "id": "BSJ",
+    "name": "Bairnsdale Airport (BSJ)"
+  },
+  {
+    "id": "HET",
+    "name": "Baita Airport (HET)"
+  },
+  {
+    "id": "CAN",
+    "name": "Baiyun Intl (CAN)"
+  },
+  {
+    "id": "BJH",
+    "name": "Bajhang (BJH)"
+  },
+  {
+    "id": "BJU",
+    "name": "Bajura Airport (BJU)"
+  },
+  {
+    "id": "BKM",
+    "name": "Bakalalan Airport (BKM)"
+  },
+  {
+    "id": "BXE",
+    "name": "Bakel (BXE)"
+  },
+  {
+    "id": "YBK",
+    "name": "Baker Lake (YBK)"
+  },
+  {
+    "id": "BWO",
+    "name": "Balakovo Airport (BWO)"
+  },
+  {
+    "id": "CEK",
+    "name": "Balandino (CEK)"
+  },
+  {
+    "id": "MLJ",
+    "name": "Baldwin County Airport (MLJ)"
+  },
+  {
+    "id": "MLH",
+    "name": "Bale Mulhouse (MLH)"
+  },
+  {
+    "id": "DPS",
+    "name": "Bali Ngurah Rai (DPS)"
+  },
+  {
+    "id": "KRK",
+    "name": "Balice (KRK)"
+  },
+  {
+    "id": "BZI",
+    "name": "Balikesir (BZI)"
+  },
+  {
+    "id": "EDO",
+    "name": "Balikesir Korfez Airport (EDO)"
+  },
+  {
+    "id": "OPU",
+    "name": "Balimo Airport (OPU)"
+  },
+  {
+    "id": "BKN",
+    "name": "Balkanabat (BKN)"
+  },
+  {
+    "id": "BXH",
+    "name": "Balkhash Airport (BXH)"
+  },
+  {
+    "id": "BAS",
+    "name": "Ballalae Airport (BAS)"
+  },
+  {
+    "id": "BNK",
+    "name": "Ballina Byron Gateway (BNK)"
+  },
+  {
+    "id": "BBA",
+    "name": "Balmaceda (BBA)"
+  },
+  {
+    "id": "BZY",
+    "name": "Balti International Airport (BZY)"
+  },
+  {
+    "id": "BWI",
+    "name": "Baltimore Washington Intl (BWI)"
+  },
+  {
+    "id": "BXR",
+    "name": "Bam Airport (BXR)"
+  },
+  {
+    "id": "ABM",
+    "name": "Bamaga Injinoo (ABM)"
+  },
+  {
+    "id": "BAM",
+    "name": "Bamberg BF (BAM)"
+  },
+  {
+    "id": "99N",
+    "name": "Bamberg County Airport (99N)"
+  },
+  {
+    "id": "BMQ",
+    "name": "Bamburi (BMQ)"
+  },
+  {
+    "id": "BPC",
+    "name": "Bamenda (BPC)"
+  },
+  {
+    "id": "BIN",
+    "name": "Bamyan Airport (BIN)"
+  },
+  {
+    "id": "OUI",
+    "name": "Ban Huoeisay Airport (OUI)"
+  },
+  {
+    "id": "LKL",
+    "name": "Banak (LKL)"
+  },
+  {
+    "id": "NDA",
+    "name": "Bandanaira Airport (NDA)"
+  },
+  {
+    "id": "BND",
+    "name": "Bandar Abbass Intl (BND)"
+  },
+  {
+    "id": "BDH",
+    "name": "Bandar Lengeh (BDH)"
+  },
+  {
+    "id": "CMB",
+    "name": "Bandaranaike Intl Colombo (CMB)"
+  },
+  {
+    "id": "NWA",
+    "name": "Bandaressalam (NWA)"
+  },
+  {
+    "id": "BDM",
+    "name": "Bandirma (BDM)"
+  },
+  {
+    "id": "FDU",
+    "name": "Bandundu (FDU)"
+  },
+  {
+    "id": "BLR",
+    "name": "Bangalore (BLR)"
+  },
+  {
+    "id": "BGR",
+    "name": "Bangor Intl (BGR)"
+  },
+  {
+    "id": "BGF",
+    "name": "Bangui M Poko (BGF)"
+  },
+  {
+    "id": "BNX",
+    "name": "Banja Luka International Airport (BNX)"
+  },
+  {
+    "id": "BJL",
+    "name": "Banjul Intl (BJL)"
+  },
+  {
+    "id": "ME5",
+    "name": "Banks Airport (ME5)"
+  },
+  {
+    "id": "BMO",
+    "name": "Banmaw Airport (BMO)"
+  },
+  {
+    "id": "BNP",
+    "name": "Bannu Airport (BNP)"
+  },
+  {
+    "id": "BYT",
+    "name": "Bantry Aerodrome (BYT)"
+  },
+  {
+    "id": "SZX",
+    "name": "Baoan Intl (SZX)"
+  },
+  {
+    "id": "BSD",
+    "name": "Baoshan Airport (BSD)"
+  },
+  {
+    "id": "BAV",
+    "name": "Baotou Airport (BAV)"
+  },
+  {
+    "id": "DLL",
+    "name": "Baraboo Wisconsin Dells Airport (DLL)"
+  },
+  {
+    "id": "MGN",
+    "name": "Baracoa (MGN)"
+  },
+  {
+    "id": "MAD",
+    "name": "Barajas (MAD)"
+  },
+  {
+    "id": "ULV",
+    "name": "Barataevka (ULV)"
+  },
+  {
+    "id": "BEJ",
+    "name": "Barau(Kalimaru) Airport (BEJ)"
+  },
+  {
+    "id": "QYR",
+    "name": "Barberey (QYR)"
+  },
+  {
+    "id": "BCI",
+    "name": "Barcaldine Airport (BCI)"
+  },
+  {
+    "id": "BCN",
+    "name": "Barcelona (BCN)"
+  },
+  {
+    "id": "BAZ",
+    "name": "Barcelos Airport (BAZ)"
+  },
+  {
+    "id": "BDU",
+    "name": "Bardufoss (BDU)"
+  },
+  {
+    "id": "BRI",
+    "name": "Bari (BRI)"
+  },
+  {
+    "id": "BNS",
+    "name": "Barinas (BNS)"
+  },
+  {
+    "id": "BBN",
+    "name": "Bario Airport (BBN)"
+  },
+  {
+    "id": "BZL",
+    "name": "Barisal Airport (BZL)"
+  },
+  {
+    "id": "BKH",
+    "name": "Barking Sands Pmrf (BKH)"
+  },
+  {
+    "id": "PAH",
+    "name": "Barkley Regional Airport (PAH)"
+  },
+  {
+    "id": "BAD",
+    "name": "Barksdale Afb (BAD)"
+  },
+  {
+    "id": "BAX",
+    "name": "Barnaul (BAX)"
+  },
+  {
+    "id": "BAF",
+    "name": "Barnes Municipal (BAF)"
+  },
+  {
+    "id": "HYA",
+    "name": "Barnstable Muni Boardman Polando Fld (HYA)"
+  },
+  {
+    "id": "BRM",
+    "name": "Barquisimeto Intl (BRM)"
+  },
+  {
+    "id": "BRR",
+    "name": "Barra Airport (BRR)"
+  },
+  {
+    "id": "BCL",
+    "name": "Barra del Colorado Airport (BCL)"
+  },
+  {
+    "id": "BRA",
+    "name": "Barreiras Airport (BRA)"
+  },
+  {
+    "id": "WDR",
+    "name": "Barrow County Airport (WDR)"
+  },
+  {
+    "id": "BWB",
+    "name": "Barrow Island Airport (BWB)"
+  },
+  {
+    "id": "BTI",
+    "name": "Barter Island Lrrs (BTI)"
+  },
+  {
+    "id": "BBH",
+    "name": "Barth (BBH)"
+  },
+  {
+    "id": "CAW",
+    "name": "Bartolomeu Lisandro (CAW)"
+  },
+  {
+    "id": "BOW",
+    "name": "Bartow Municipal Airport (BOW)"
+  },
+  {
+    "id": "9A5",
+    "name": "Barwick Lafayette Airport (9A5)"
+  },
+  {
+    "id": "HLJ",
+    "name": "Barysiai (HLJ)"
+  },
+  {
+    "id": "KRZ",
+    "name": "Basango Mboliasa Airport (KRZ)"
+  },
+  {
+    "id": "BSU",
+    "name": "Basankusu Airport (BSU)"
+  },
+  {
+    "id": "BSO",
+    "name": "Basco Airport (BSO)"
+  },
+  {
+    "id": "SSZ",
+    "name": "Base Aerea De Santos (SSZ)"
+  },
+  {
+    "id": "BSR",
+    "name": "Basrah Intl (BSR)"
+  },
+  {
+    "id": "MEK",
+    "name": "Bassatine (MEK)"
+  },
+  {
+    "id": "LTK",
+    "name": "Bassel Al Assad Intl (LTK)"
+  },
+  {
+    "id": "PGX",
+    "name": "Bassillac (PGX)"
+  },
+  {
+    "id": "BSG",
+    "name": "Bata (BSG)"
+  },
+  {
+    "id": "AZI",
+    "name": "Bateen (AZI)"
+  },
+  {
+    "id": "BHS",
+    "name": "Bathurst Airport (BHS)"
+  },
+  {
+    "id": "ZBF",
+    "name": "Bathurst Airport (ZBF)"
+  },
+  {
+    "id": "BRT",
+    "name": "Bathurst Island Airport (BRT)"
+  },
+  {
+    "id": "BAL",
+    "name": "Batman (BAL)"
+  },
+  {
+    "id": "BLJ",
+    "name": "Batna Airport (BLJ)"
+  },
+  {
+    "id": "BTR",
+    "name": "Baton Rouge Metro Ryan Fld (BTR)"
+  },
+  {
+    "id": "BJF",
+    "name": "Batsfjord (BJF)"
+  },
+  {
+    "id": "BBM",
+    "name": "Battambang Airport (BBM)"
+  },
+  {
+    "id": "BUS",
+    "name": "Batumi (BUS)"
+  },
+  {
+    "id": "BPF",
+    "name": "Batuna Airport (BPF)"
+  },
+  {
+    "id": "BDE",
+    "name": "Baudette Intl (BDE)"
+  },
+  {
+    "id": "BAU",
+    "name": "Bauru (BAU)"
+  },
+  {
+    "id": "JTC",
+    "name": "Bauru-Arealva (JTC)"
+  },
+  {
+    "id": "BBJ",
+    "name": "Bautzen (BBJ)"
+  },
+  {
+    "id": "BYN",
+    "name": "Bayankhongor Airport (BYN)"
+  },
+  {
+    "id": "RLK",
+    "name": "Bayannur (RLK)"
+  },
+  {
+    "id": "BYU",
+    "name": "Bayreuth (BYU)"
+  },
+  {
+    "id": "BZB",
+    "name": "Bazaruto Island Airport (BZB)"
+  },
+  {
+    "id": "BAB",
+    "name": "Beale Afb (BAB)"
+  },
+  {
+    "id": "XBE",
+    "name": "Bearskin Lake Airport (XBE)"
+  },
+  {
+    "id": "BFT",
+    "name": "Beaufort (BFT)"
+  },
+  {
+    "id": "BMT",
+    "name": "Beaumont Municipal (BMT)"
+  },
+  {
+    "id": "DRI",
+    "name": "Beauregard Rgnl (DRI)"
+  },
+  {
+    "id": "WBQ",
+    "name": "Beaver Airport (WBQ)"
+  },
+  {
+    "id": "BFP",
+    "name": "Beaver Falls (BFP)"
+  },
+  {
+    "id": "BEU",
+    "name": "Bedourie Airport (BEU)"
+  },
+  {
+    "id": "BEC",
+    "name": "Beech Factory Airport (BEC)"
+  },
+  {
+    "id": "NBC",
+    "name": "Begishevo (NBC)"
+  },
+  {
+    "id": "BEI",
+    "name": "Beica Airport (BEI)"
+  },
+  {
+    "id": "BHY",
+    "name": "Beihai Airport (BHY)"
+  },
+  {
+    "id": "BHN",
+    "name": "Beihan (BHN)"
+  },
+  {
+    "id": "NAY",
+    "name": "Beijing Nanyuan Airport (NAY)"
+  },
+  {
+    "id": "BEW",
+    "name": "Beira (BEW)"
+  },
+  {
+    "id": "OVA",
+    "name": "Bekily (OVA)"
+  },
+  {
+    "id": "BLG",
+    "name": "Belaga Airport (BLG)"
+  },
+  {
+    "id": "UKS",
+    "name": "Belbek Sevastopol International Airport (UKS)"
+  },
+  {
+    "id": "BMY",
+    "name": "Belep Islands Airport (BMY)"
+  },
+  {
+    "id": "BHD",
+    "name": "Belfast City (BHD)"
+  },
+  {
+    "id": "BFS",
+    "name": "Belfast Intl (BFS)"
+  },
+  {
+    "id": "IXG",
+    "name": "Belgaum (IXG)"
+  },
+  {
+    "id": "EGO",
+    "name": "Belgorod International Airport (EGO)"
+  },
+  {
+    "id": "TZA",
+    "name": "Belize City Municipal Airport (TZA)"
+  },
+  {
+    "id": "ZEL",
+    "name": "Bella Bella Airport (ZEL)"
+  },
+  {
+    "id": "QBC",
+    "name": "Bella Coola Airport (QBC)"
+  },
+  {
+    "id": "BEP",
+    "name": "Bellary (BEP)"
+  },
+  {
+    "id": "LIG",
+    "name": "Bellegarde (LIG)"
+  },
+  {
+    "id": "BLI",
+    "name": "Bellingham Intl (BLI)"
+  },
+  {
+    "id": "BN1",
+    "name": "Bellona (BN1)"
+  },
+  {
+    "id": "BNY",
+    "name": "Bellona (BNY)"
+  },
+  {
+    "id": "BEO",
+    "name": "Belmont Airport (BEO)"
+  },
+  {
+    "id": "BMD",
+    "name": "Belo sur Tsiribihina Airport (BMD)"
+  },
+  {
+    "id": "EYK",
+    "name": "Beloyarsky (EYK)"
+  },
+  {
+    "id": "BBP",
+    "name": "Bembridge (BBP)"
+  },
+  {
+    "id": "BJI",
+    "name": "Bemidji Regional Airport (BJI)"
+  },
+  {
+    "id": "TLV",
+    "name": "Ben Gurion (TLV)"
+  },
+  {
+    "id": "BEB",
+    "name": "Benbecula (BEB)"
+  },
+  {
+    "id": "BUG",
+    "name": "Benguela (BUG)"
+  },
+  {
+    "id": "BCW",
+    "name": "Benguera Island Airport (BCW)"
+  },
+  {
+    "id": "BNI",
+    "name": "Benin (BNI)"
+  },
+  {
+    "id": "BEN",
+    "name": "Benina (BEN)"
+  },
+  {
+    "id": "NVA",
+    "name": "Benito Salas (NVA)"
+  },
+  {
+    "id": "BJT",
+    "name": "Bentota Airport (BJT)"
+  },
+  {
+    "id": "BEG",
+    "name": "Beograd (BEG)"
+  },
+  {
+    "id": "BPU",
+    "name": "Beppu Airport (BPU)"
+  },
+  {
+    "id": "BBO",
+    "name": "Berbera (BBO)"
+  },
+  {
+    "id": "BBT",
+    "name": "Berberati (BBT)"
+  },
+  {
+    "id": "YBV",
+    "name": "Berens River (YBV)"
+  },
+  {
+    "id": "NBB",
+    "name": "Berezovo (NBB)"
+  },
+  {
+    "id": "BGY",
+    "name": "Bergamo Orio Al Serio (BGY)"
+  },
+  {
+    "id": "BVG",
+    "name": "Berlevag (BVG)"
+  },
+  {
+    "id": "BER",
+    "name": "Berlin Brandenburg Willy Brandt (BER)"
+  },
+  {
+    "id": "GWW",
+    "name": "Berlin Gatow (GWW)"
+  },
+  {
+    "id": "QPP",
+    "name": "Berlin Hauptbahnhof (QPP)"
+  },
+  {
+    "id": "BJO",
+    "name": "Bermejo (BJO)"
+  },
+  {
+    "id": "UDD",
+    "name": "Bermuda Dunes Airport (UDD)"
+  },
+  {
+    "id": "BDA",
+    "name": "Bermuda Intl (BDA)"
+  },
+  {
+    "id": "BRN",
+    "name": "Bern Belp (BRN)"
+  },
+  {
+    "id": "BTM",
+    "name": "Bert Mooney Airport (BTM)"
+  },
+  {
+    "id": "BEZ",
+    "name": "Beru Island Airport (BEZ)"
+  },
+  {
+    "id": "BPY",
+    "name": "Besalampy (BPY)"
+  },
+  {
+    "id": "OGZ",
+    "name": "Beslan Airport (OGZ)"
+  },
+  {
+    "id": "EKY",
+    "name": "Bessemer (EKY)"
+  },
+  {
+    "id": "BET",
+    "name": "Bethel (BET)"
+  },
+  {
+    "id": "BTT",
+    "name": "Bettles (BTT)"
+  },
+  {
+    "id": "BVY",
+    "name": "Beverly Municipal Airport (BVY)"
+  },
+  {
+    "id": "BFT",
+    "name": "BFT County Airport (BFT)"
+  },
+  {
+    "id": "BWA",
+    "name": "Bhairahawa (BWA)"
+  },
+  {
+    "id": "BHR",
+    "name": "Bharatpur Airport (BHR)"
+  },
+  {
+    "id": "BHU",
+    "name": "Bhavnagar (BHU)"
+  },
+  {
+    "id": "BIY",
+    "name": "Bhisho (BIY)"
+  },
+  {
+    "id": "BHP",
+    "name": "Bhojpur (BHP)"
+  },
+  {
+    "id": "BHO",
+    "name": "Bhopal (BHO)"
+  },
+  {
+    "id": "BBI",
+    "name": "Bhubaneshwar (BBI)"
+  },
+  {
+    "id": "BHJ",
+    "name": "Bhuj (BHJ)"
+  },
+  {
+    "id": "PIS",
+    "name": "Biard (PIS)"
+  },
+  {
+    "id": "BYS",
+    "name": "Bicycle Lake Aaf (BYS)"
+  },
+  {
+    "id": "BIE",
+    "name": "Biessenhofen BF (BIE)"
+  },
+  {
+    "id": "YRR",
+    "name": "Big Bay Water Aerodrome (YRR)"
+  },
+  {
+    "id": "L35",
+    "name": "Big Bear City (L35)"
+  },
+  {
+    "id": "BGK",
+    "name": "Big Creek Airport (BGK)"
+  },
+  {
+    "id": "BMX",
+    "name": "Big Mountain Afs (BMX)"
+  },
+  {
+    "id": "6S0",
+    "name": "Big Timber Airport (6S0)"
+  },
+  {
+    "id": "YTL",
+    "name": "Big Trout Lake Airport (YTL)"
+  },
+  {
+    "id": "BQH",
+    "name": "Biggin Hill (BQH)"
+  },
+  {
+    "id": "BIF",
+    "name": "Biggs Aaf (BIF)"
+  },
+  {
+    "id": "BFJ",
+    "name": "Bijie Feixiong Airport (BFJ)"
+  },
+  {
+    "id": "PAB",
+    "name": "Bilaspur (PAB)"
+  },
+  {
+    "id": "BIO",
+    "name": "Bilbao (BIO)"
+  },
+  {
+    "id": "BIU",
+    "name": "Bildudalur Airport (BIU)"
+  },
+  {
+    "id": "BIL",
+    "name": "Billings Logan International Airport (BIL)"
+  },
+  {
+    "id": "BLL",
+    "name": "Billund (BLL)"
+  },
+  {
+    "id": "NSB",
+    "name": "Bimini North Seaplane Base (NSB)"
+  },
+  {
+    "id": "GNS",
+    "name": "Binaka (GNS)"
+  },
+  {
+    "id": "BGG",
+    "name": "Bingol (BGG)"
+  },
+  {
+    "id": "TSN",
+    "name": "Binhai (TSN)"
+  },
+  {
+    "id": "BTU",
+    "name": "Bintulu (BTU)"
+  },
+  {
+    "id": "BIR",
+    "name": "Biratnagar (BIR)"
+  },
+  {
+    "id": "KBC",
+    "name": "Birch Creek Airport (KBC)"
+  },
+  {
+    "id": "BDI",
+    "name": "Bird Island Airport (BDI)"
+  },
+  {
+    "id": "BVI",
+    "name": "Birdsville Airport (BVI)"
+  },
+  {
+    "id": "XBJ",
+    "name": "Birjand (XBJ)"
+  },
+  {
+    "id": "BHX",
+    "name": "Birmingham (BHX)"
+  },
+  {
+    "id": "BHM",
+    "name": "Birmingham Intl (BHM)"
+  },
+  {
+    "id": "IXR",
+    "name": "Birsa Munda (IXR)"
+  },
+  {
+    "id": "DUG",
+    "name": "Bisbee Douglas Intl (DUG)"
+  },
+  {
+    "id": "BHH",
+    "name": "Bisha (BHH)"
+  },
+  {
+    "id": "FNT",
+    "name": "Bishop International (FNT)"
+  },
+  {
+    "id": "BSK",
+    "name": "Biskra (BSK)"
+  },
+  {
+    "id": "BIS",
+    "name": "Bismarck Municipal Airport (BIS)"
+  },
+  {
+    "id": "BMM",
+    "name": "Bitam (BMM)"
+  },
+  {
+    "id": "SPF",
+    "name": "Black Hills Airport-Clyde Ice Field (SPF)"
+  },
+  {
+    "id": "ZUN",
+    "name": "Black Rock (ZUN)"
+  },
+  {
+    "id": "YBI",
+    "name": "Black Tickle Airport (YBI)"
+  },
+  {
+    "id": "BKQ",
+    "name": "Blackall (BKQ)"
+  },
+  {
+    "id": "BBS",
+    "name": "Blackbushe (BBS)"
+  },
+  {
+    "id": "BLK",
+    "name": "Blackpool (BLK)"
+  },
+  {
+    "id": "BLT",
+    "name": "Blackwater Airport (BLT)"
+  },
+  {
+    "id": "TLS",
+    "name": "Blagnac (TLS)"
+  },
+  {
+    "id": "BYW",
+    "name": "Blakely Island Airport (BYW)"
+  },
+  {
+    "id": "BID",
+    "name": "Block Island State Airport (BID)"
+  },
+  {
+    "id": "BFN",
+    "name": "Bloemfontein Intl (BFN)"
+  },
+  {
+    "id": "Y72",
+    "name": "Bloyer Field (Y72)"
+  },
+  {
+    "id": "LEX",
+    "name": "Blue Grass (LEX)"
+  },
+  {
+    "id": "BEF",
+    "name": "Bluefields (BEF)"
+  },
+  {
+    "id": "BLH",
+    "name": "Blythe Airport (BLH)"
+  },
+  {
+    "id": "KBS",
+    "name": "Bo Airport (KBS)"
+  },
+  {
+    "id": "BVB",
+    "name": "Boa Vista (BVB)"
+  },
+  {
+    "id": "IAN",
+    "name": "Bob Baker Memorial Airport (IAN)"
+  },
+  {
+    "id": "BUR",
+    "name": "Bob Hope (BUR)"
+  },
+  {
+    "id": "YBO",
+    "name": "Bob Quinn Lake (YBO)"
+  },
+  {
+    "id": "CEW",
+    "name": "Bob Sikes (CEW)"
+  },
+  {
+    "id": "BOY",
+    "name": "Bobo Dioulasso (BOY)"
+  },
+  {
+    "id": "BCT",
+    "name": "Boca Raton (BCT)"
+  },
+  {
+    "id": "BOC",
+    "name": "Bocas Del Toro Intl (BOC)"
+  },
+  {
+    "id": "BOX",
+    "name": "Bochum HBF (BOX)"
+  },
+  {
+    "id": "EBO",
+    "name": "Bochum Railway (EBO)"
+  },
+  {
+    "id": "ODO",
+    "name": "Bodaibo (ODO)"
+  },
+  {
+    "id": "BOO",
+    "name": "Bodo (BOO)"
+  },
+  {
+    "id": "BJV",
+    "name": "Bodrum - Milas (BJV)"
+  },
+  {
+    "id": "BFI",
+    "name": "Boeing Fld King Co Intl (BFI)"
+  },
+  {
+    "id": "XBG",
+    "name": "Bogande Airport (XBG)"
+  },
+  {
+    "id": "GIC",
+    "name": "Boigu Airport (GIC)"
+  },
+  {
+    "id": "ASH",
+    "name": "Boire Field Airport (ASH)"
+  },
+  {
+    "id": "BOI",
+    "name": "Boise Air Terminal (BOI)"
+  },
+  {
+    "id": "BJB",
+    "name": "Bojnourd Airport (BJB)"
+  },
+  {
+    "id": "BUI",
+    "name": "Bokondini Airport (BUI)"
+  },
+  {
+    "id": "ADD",
+    "name": "Bole Intl (ADD)"
+  },
+  {
+    "id": "BLQ",
+    "name": "Bologna (BLQ)"
+  },
+  {
+    "id": "PEE",
+    "name": "Bolshoye Savino (PEE)"
+  },
+  {
+    "id": "TZR",
+    "name": "Bolton Field (TZR)"
+  },
+  {
+    "id": "BZO",
+    "name": "Bolzano (BZO)"
+  },
+  {
+    "id": "LVR",
+    "name": "Bom Futuro Airport (LVR)"
+  },
+  {
+    "id": "LAZ",
+    "name": "Bom Jesus Da Lapa (LAZ)"
+  },
+  {
+    "id": "BOA",
+    "name": "Boma Airport (BOA)"
+  },
+  {
+    "id": "BZA",
+    "name": "Bonanza Airport (BZA)"
+  },
+  {
+    "id": "YVB",
+    "name": "Bonaventure Airport (YVB)"
+  },
+  {
+    "id": "BYO",
+    "name": "Bonito Airport (BYO)"
+  },
+  {
+    "id": "YBY",
+    "name": "Bonnyville Airport (YBY)"
+  },
+  {
+    "id": "TRW",
+    "name": "Bonriki Intl (TRW)"
+  },
+  {
+    "id": "HRO",
+    "name": "Boone Co (HRO)"
+  },
+  {
+    "id": "BXX",
+    "name": "Boorama Airport (BXX)"
+  },
+  {
+    "id": "BOB",
+    "name": "Bora Bora (BOB)"
+  },
+  {
+    "id": "RBB",
+    "name": "Borba Airport (RBB)"
+  },
+  {
+    "id": "BMW",
+    "name": "Bordj Badji Mokhtar Airport (BMW)"
+  },
+  {
+    "id": "HBE",
+    "name": "Borg El Arab Intl (HBE)"
+  },
+  {
+    "id": "BMK",
+    "name": "Borkum (BMK)"
+  },
+  {
+    "id": "BLE",
+    "name": "Borlange (BLE)"
+  },
+  {
+    "id": "RNN",
+    "name": "Bornholm Ronne (RNN)"
+  },
+  {
+    "id": "BPR",
+    "name": "Borongan Airport (BPR)"
+  },
+  {
+    "id": "BXS",
+    "name": "Borrego Valley Airport (BXS)"
+  },
+  {
+    "id": "KBP",
+    "name": "Boryspil Intl (KBP)"
+  },
+  {
+    "id": "BSA",
+    "name": "Bosaso Airport (BSA)"
+  },
+  {
+    "id": "OCJ",
+    "name": "Boscobel (OCJ)"
+  },
+  {
+    "id": "BOT",
+    "name": "Bosset Airport (BOT)"
+  },
+  {
+    "id": "BST",
+    "name": "Bost Airport (BST)"
+  },
+  {
+    "id": "ZTY",
+    "name": "Boston Back Bay Station (ZTY)"
+  },
+  {
+    "id": "BTO",
+    "name": "Botopassi Airstrip (BTO)"
+  },
+  {
+    "id": "QCJ",
+    "name": "Botucatu (QCJ)"
+  },
+  {
+    "id": "TID",
+    "name": "Bou Chekif (TID)"
+  },
+  {
+    "id": "BYK",
+    "name": "Bouake (BYK)"
+  },
+  {
+    "id": "QFD",
+    "name": "Boufarik (QFD)"
+  },
+  {
+    "id": "BLD",
+    "name": "Boulder City Municipal Airport (BLD)"
+  },
+  {
+    "id": "WBU",
+    "name": "Boulder Municipal (WBU)"
+  },
+  {
+    "id": "BQL",
+    "name": "Boulia Airport (BQL)"
+  },
+  {
+    "id": "YDT",
+    "name": "Boundary Bay Airport (YDT)"
+  },
+  {
+    "id": "BOU",
+    "name": "Bourges (BOU)"
+  },
+  {
+    "id": "BRK",
+    "name": "Bourke Airport (BRK)"
+  },
+  {
+    "id": "BOH",
+    "name": "Bournemouth (BOH)"
+  },
+  {
+    "id": "EBU",
+    "name": "Boutheon (EBU)"
+  },
+  {
+    "id": "HQM",
+    "name": "Bowerman Field (HQM)"
+  },
+  {
+    "id": "BWG",
+    "name": "Bowling Green-Warren County Regional Airport (BWG)"
+  },
+  {
+    "id": "LOU",
+    "name": "Bowman Fld (LOU)"
+  },
+  {
+    "id": "BWK",
+    "name": "Brac (BWK)"
+  },
+  {
+    "id": "41N",
+    "name": "Braceville Airport (41N)"
+  },
+  {
+    "id": "POC",
+    "name": "Brackett Field (POC)"
+  },
+  {
+    "id": "BFD",
+    "name": "Bradford Regional Airport (BFD)"
+  },
+  {
+    "id": "BDL",
+    "name": "Bradley Intl (BDL)"
+  },
+  {
+    "id": "BSF",
+    "name": "Bradshaw Aaf (BSF)"
+  },
+  {
+    "id": "BGC",
+    "name": "Braganca (BGC)"
+  },
+  {
+    "id": "BRD",
+    "name": "Brainerd Lakes Rgnl (BRD)"
+  },
+  {
+    "id": "BMP",
+    "name": "Brampton Island (BMP)"
+  },
+  {
+    "id": "OEB",
+    "name": "Branch County Memorial Airport (OEB)"
+  },
+  {
+    "id": "AUF",
+    "name": "Branches (AUF)"
+  },
+  {
+    "id": "YBR",
+    "name": "Brandon Muni (YBR)"
+  },
+  {
+    "id": "OQN",
+    "name": "Brandywine Airport (OQN)"
+  },
+  {
+    "id": "BKG",
+    "name": "Branson LLC (BKG)"
+  },
+  {
+    "id": "YFD",
+    "name": "Brantford (YFD)"
+  },
+  {
+    "id": "BTK",
+    "name": "Bratsk (BTK)"
+  },
+  {
+    "id": "BWE",
+    "name": "Braunschweig Wolfsburg (BWE)"
+  },
+  {
+    "id": "BRV",
+    "name": "Bremerhaven (BRV)"
+  },
+  {
+    "id": "PWT",
+    "name": "Bremerton National (PWT)"
+  },
+  {
+    "id": "MEN",
+    "name": "Brenoux (MEN)"
+  },
+  {
+    "id": "BQT",
+    "name": "Brest (BQT)"
+  },
+  {
+    "id": "BVS",
+    "name": "Breves Airport (BVS)"
+  },
+  {
+    "id": "KTS",
+    "name": "Brevig Mission Airport (KTS)"
+  },
+  {
+    "id": "ORE",
+    "name": "Bricy (ORE)"
+  },
+  {
+    "id": "ANG",
+    "name": "Brie Champniers (ANG)"
+  },
+  {
+    "id": "BMC",
+    "name": "Brigham City (BMC)"
+  },
+  {
+    "id": "BNE",
+    "name": "Brisbane Intl (BNE)"
+  },
+  {
+    "id": "BRS",
+    "name": "Bristol (BRS)"
+  },
+  {
+    "id": "FZO",
+    "name": "Bristol Filton (FZO)"
+  },
+  {
+    "id": "BZZ",
+    "name": "Brize Norton (BZZ)"
+  },
+  {
+    "id": "YBT",
+    "name": "Brochet Airport (YBT)"
+  },
+  {
+    "id": "BHQ",
+    "name": "Broken Hill Airport (BHQ)"
+  },
+  {
+    "id": "BMA",
+    "name": "Bromma (BMA)"
+  },
+  {
+    "id": "ZBM",
+    "name": "Bromont Airport (ZBM)"
+  },
+  {
+    "id": "LYN",
+    "name": "Bron (LYN)"
+  },
+  {
+    "id": "BNN",
+    "name": "Bronnoy (BNN)"
+  },
+  {
+    "id": "BKX",
+    "name": "Brookings Regional Airport (BKX)"
+  },
+  {
+    "id": "RMY",
+    "name": "Brooks Field Airport (RMY)"
+  },
+  {
+    "id": "BME",
+    "name": "Broome (BME)"
+  },
+  {
+    "id": "SDM",
+    "name": "Brown Field Municipal Airport (SDM)"
+  },
+  {
+    "id": "BRO",
+    "name": "Brownsville South Padre Island Intl (BRO)"
+  },
+  {
+    "id": "BWN",
+    "name": "Brunei Intl (BWN)"
+  },
+  {
+    "id": "BQK",
+    "name": "Brunswick Golden Isles Airport (BQK)"
+  },
+  {
+    "id": "BHG",
+    "name": "Brus Laguna Airport (BHG)"
+  },
+  {
+    "id": "ZYR",
+    "name": "Brussels Gare du Midi (ZYR)"
+  },
+  {
+    "id": "BRU",
+    "name": "Brussels Natl (BRU)"
+  },
+  {
+    "id": "CRL",
+    "name": "Brussels South (CRL)"
+  },
+  {
+    "id": "BQB",
+    "name": "Brusselton (BQB)"
+  },
+  {
+    "id": "BZK",
+    "name": "Bryansk (BZK)"
+  },
+  {
+    "id": "FRN",
+    "name": "Bryant Ahp (FRN)"
+  },
+  {
+    "id": "BCE",
+    "name": "Bryce Canyon (BCE)"
+  },
+  {
+    "id": "LUW",
+    "name": "Bubung (LUW)"
+  },
+  {
+    "id": "CCR",
+    "name": "Buchanan Field Airport (CCR)"
+  },
+  {
+    "id": "BUH",
+    "name": "Buchloe BF (BUH)"
+  },
+  {
+    "id": "KWA",
+    "name": "Bucholz Aaf (KWA)"
+  },
+  {
+    "id": "BXK",
+    "name": "Buckeye Municipal Airport (BXK)"
+  },
+  {
+    "id": "BKC",
+    "name": "Buckland Airport (BKC)"
+  },
+  {
+    "id": "BKF",
+    "name": "Buckley Afb (BKF)"
+  },
+  {
+    "id": "YVT",
+    "name": "Buffalo Narrows (YVT)"
+  },
+  {
+    "id": "BUF",
+    "name": "Buffalo Niagara Intl (BUF)"
+  },
+  {
+    "id": "BFO",
+    "name": "Buffalo Range (BFO)"
+  },
+  {
+    "id": "UUA",
+    "name": "Bugulma Airport (UUA)"
+  },
+  {
+    "id": "BJM",
+    "name": "Bujumbura Intl (BJM)"
+  },
+  {
+    "id": "BUA",
+    "name": "Buka Airport (BUA)"
+  },
+  {
+    "id": "BKY",
+    "name": "Bukavu Kavumu (BKY)"
+  },
+  {
+    "id": "BHK",
+    "name": "Bukhara (BHK)"
+  },
+  {
+    "id": "BKZ",
+    "name": "Bukoba Airport (BKZ)"
+  },
+  {
+    "id": "UGA",
+    "name": "Bulgan Airport (UGA)"
+  },
+  {
+    "id": "BDB",
+    "name": "Bundaberg (BDB)"
+  },
+  {
+    "id": "BUX",
+    "name": "Bunia (BUX)"
+  },
+  {
+    "id": "BXO",
+    "name": "Buochs Airport (BXO)"
+  },
+  {
+    "id": "BMV",
+    "name": "Buon Ma Thuot Airport (BMV)"
+  },
+  {
+    "id": "BUO",
+    "name": "Burao Airport (BUO)"
+  },
+  {
+    "id": "BVV",
+    "name": "Burevestnik Airport (BVV)"
+  },
+  {
+    "id": "BOJ",
+    "name": "Burgas (BOJ)"
+  },
+  {
+    "id": "RGS",
+    "name": "Burgos Airport (RGS)"
+  },
+  {
+    "id": "BFV",
+    "name": "Buri Ram (BFV)"
+  },
+  {
+    "id": "BKL",
+    "name": "Burke Lakefront Airport (BKL)"
+  },
+  {
+    "id": "BUC",
+    "name": "Burketown Airport (BUC)"
+  },
+  {
+    "id": "BTV",
+    "name": "Burlington Intl (BTV)"
+  },
+  {
+    "id": "BUY",
+    "name": "Burlington-Alamance Regional Airport (BUY)"
+  },
+  {
+    "id": "K27",
+    "name": "Burrello-Mechanicville Airport (K27)"
+  },
+  {
+    "id": "BTZ",
+    "name": "Bursa Airport (BTZ)"
+  },
+  {
+    "id": "YDB",
+    "name": "Burwash (YDB)"
+  },
+  {
+    "id": "BUZ",
+    "name": "Bushehr (BUZ)"
+  },
+  {
+    "id": "USU",
+    "name": "Busuanga (USU)"
+  },
+  {
+    "id": "BBG",
+    "name": "Butaritari Atoll Airport (BBG)"
+  },
+  {
+    "id": "YKZ",
+    "name": "Buttonville Muni (YKZ)"
+  },
+  {
+    "id": "FCS",
+    "name": "Butts Aaf (FCS)"
+  },
+  {
+    "id": "BXU",
+    "name": "Butuan (BXU)"
+  },
+  {
+    "id": "BZG",
+    "name": "Bydgoszcz Ignacy Jan Paderewski Airport (BZG)"
+  },
+  {
+    "id": "BKA",
+    "name": "Bykovo (BKA)"
+  },
+  {
+    "id": "CBH",
+    "name": "Béchar Boudghene Ben Ali Lotfi Airport (CBH)"
+  },
+  {
+    "id": "VSA",
+    "name": "C P A Carlos Rovirosa Intl (VSA)"
+  },
+  {
+    "id": "CAH",
+    "name": "Ca Mau (CAH)"
+  },
+  {
+    "id": "LHC",
+    "name": "Caballococha Airport (LHC)"
+  },
+  {
+    "id": "CAB",
+    "name": "Cabinda (CAB)"
+  },
+  {
+    "id": "CFB",
+    "name": "Cabo Frio International Airport (CFB)"
+  },
+  {
+    "id": "TNO",
+    "name": "Cabo Velas Airport (TNO)"
+  },
+  {
+    "id": "ITB",
+    "name": "Cachimbo (ITB)"
+  },
+  {
+    "id": "TPP",
+    "name": "Cadete Guillermo Del Castillo Paredes (TPP)"
+  },
+  {
+    "id": "COO",
+    "name": "Cadjehoun (COO)"
+  },
+  {
+    "id": "CGY",
+    "name": "Cagayan De Oro (CGY)"
+  },
+  {
+    "id": "CNS",
+    "name": "Cairns Intl (CNS)"
+  },
+  {
+    "id": "CAI",
+    "name": "Cairo Intl (CAI)"
+  },
+  {
+    "id": "70J",
+    "name": "Cairo-Grady County Airport (70J)"
+  },
+  {
+    "id": "CBQ",
+    "name": "Calabar (CBQ)"
+  },
+  {
+    "id": "CQF",
+    "name": "Calais Dunkerque (CQF)"
+  },
+  {
+    "id": "CYP",
+    "name": "Calbayog Airport (CYP)"
+  },
+  {
+    "id": "CLV",
+    "name": "Caldas Novas (CLV)"
+  },
+  {
+    "id": "CDW",
+    "name": "Caldwell Essex County Airport (CDW)"
+  },
+  {
+    "id": "CVI",
+    "name": "Caleta Olivia (CVI)"
+  },
+  {
+    "id": "CXL",
+    "name": "Calexico Intl (CXL)"
+  },
+  {
+    "id": "YYC",
+    "name": "Calgary Intl (YYC)"
+  },
+  {
+    "id": "YBW",
+    "name": "Calgary Springbank Airport (YBW)"
+  },
+  {
+    "id": "CCJ",
+    "name": "Calicut (CCJ)"
+  },
+  {
+    "id": "CXR",
+    "name": "Cam Ranh Airport (CXR)"
+  },
+  {
+    "id": "CBG",
+    "name": "Cambridge (CBG)"
+  },
+  {
+    "id": "YCB",
+    "name": "Cambridge Bay (YCB)"
+  },
+  {
+    "id": "CDI",
+    "name": "Cambridge Municipal Airport (CDI)"
+  },
+  {
+    "id": "CDU",
+    "name": "Camden (CDU)"
+  },
+  {
+    "id": "CGM",
+    "name": "Camiguin Airport (CGM)"
+  },
+  {
+    "id": "CUC",
+    "name": "Camilo Daza (CUC)"
+  },
+  {
+    "id": "LOH",
+    "name": "Camilo Ponce Enriquez Airport (LOH)"
+  },
+  {
+    "id": "ATT",
+    "name": "Camp Mabry Austin City (ATT)"
+  },
+  {
+    "id": "HOP",
+    "name": "Campbell Aaf (HOP)"
+  },
+  {
+    "id": "YBL",
+    "name": "Campbell River (YBL)"
+  },
+  {
+    "id": "CAL",
+    "name": "Campbeltown Airport (CAL)"
+  },
+  {
+    "id": "CMP",
+    "name": "Campo Alegre Airport (CMP)"
+  },
+  {
+    "id": "AJA",
+    "name": "Campo Dell Oro (AJA)"
+  },
+  {
+    "id": "CXJ",
+    "name": "Campo Dos Bugres (CXJ)"
+  },
+  {
+    "id": "QPS",
+    "name": "Campo Fontenelle (QPS)"
+  },
+  {
+    "id": "CGR",
+    "name": "Campo Grande (CGR)"
+  },
+  {
+    "id": "YXC",
+    "name": "Canadian Rockies Intl (YXC)"
+  },
+  {
+    "id": "CAJ",
+    "name": "Canaima (CAJ)"
+  },
+  {
+    "id": "CKZ",
+    "name": "Canakkale Airport (CKZ)"
+  },
+  {
+    "id": "ZOS",
+    "name": "Canal Bajo Carlos Hott Siebert (ZOS)"
+  },
+  {
+    "id": "CBR",
+    "name": "Canberra (CBR)"
+  },
+  {
+    "id": "CUN",
+    "name": "Cancun Intl (CUN)"
+  },
+  {
+    "id": "DCF",
+    "name": "Canefield (DCF)"
+  },
+  {
+    "id": "CVS",
+    "name": "Cannon Afb (CVS)"
+  },
+  {
+    "id": "CIW",
+    "name": "Canouan (CIW)"
+  },
+  {
+    "id": "CIS",
+    "name": "Canton (CIS)"
+  },
+  {
+    "id": "CNY",
+    "name": "Canyonlands Field (CNY)"
+  },
+  {
+    "id": "PCL",
+    "name": "Cap Fap David Abenzur Rengifo Intl (PCL)"
+  },
+  {
+    "id": "CAP",
+    "name": "Cap Haitien Intl (CAP)"
+  },
+  {
+    "id": "CHX",
+    "name": "Cap Manuel Nino Intl (CHX)"
+  },
+  {
+    "id": "CSK",
+    "name": "Cap Skiring (CSK)"
+  },
+  {
+    "id": "YTE",
+    "name": "Cape Dorset (YTE)"
+  },
+  {
+    "id": "CGI",
+    "name": "Cape Girardeau Regional Airport (CGI)"
+  },
+  {
+    "id": "LUR",
+    "name": "Cape Lisburne Lrrs (LUR)"
+  },
+  {
+    "id": "WWD",
+    "name": "Cape May Co (WWD)"
+  },
+  {
+    "id": "EHM",
+    "name": "Cape Newenham Lrrs (EHM)"
+  },
+  {
+    "id": "CPA",
+    "name": "Cape Palmas Airport (CPA)"
+  },
+  {
+    "id": "CZF",
+    "name": "Cape Romanzof Lrrs (CZF)"
+  },
+  {
+    "id": "CPT",
+    "name": "Cape Town Intl (CPT)"
+  },
+  {
+    "id": "LAN",
+    "name": "Capital City (LAN)"
+  },
+  {
+    "id": "CXY",
+    "name": "Capital City Airport (CXY)"
+  },
+  {
+    "id": "FFT",
+    "name": "Capital City Airport (FFT)"
+  },
+  {
+    "id": "PEK",
+    "name": "Capital Intl (PEK)"
+  },
+  {
+    "id": "TRU",
+    "name": "Capitan Carlos Martinez De Pinillos (TRU)"
+  },
+  {
+    "id": "PDP",
+    "name": "Capitan Corbeta C A Curbelo International Airport (PDP)"
+  },
+  {
+    "id": "PIU",
+    "name": "Capitan Fap Guillermo Concha Iberico (PIU)"
+  },
+  {
+    "id": "TYL",
+    "name": "Capitan Montes (TYL)"
+  },
+  {
+    "id": "POI",
+    "name": "Capitan Nicolas Rojas (POI)"
+  },
+  {
+    "id": "TJA",
+    "name": "Capitan Oriel Lea Plaza (TJA)"
+  },
+  {
+    "id": "SRJ",
+    "name": "Capitán Av. German Quiroga G. Airport (SRJ)"
+  },
+  {
+    "id": "RIB",
+    "name": "Capitán Av. Selin Zeitun Lopez Airport (RIB)"
+  },
+  {
+    "id": "GYA",
+    "name": "Capitán de Av. Emilio Beltrán Airport (GYA)"
+  },
+  {
+    "id": "NAP",
+    "name": "Capodichino (NAP)"
+  },
+  {
+    "id": "CIX",
+    "name": "Capt Jose A Quinones Gonzales Intl (CIX)"
+  },
+  {
+    "id": "PLP",
+    "name": "Captain Ramon Xatruch Airport (PLP)"
+  },
+  {
+    "id": "CYW",
+    "name": "Captain Rogelio Castillo National Airport (CYW)"
+  },
+  {
+    "id": "CPB",
+    "name": "Capurgana Airport (CPB)"
+  },
+  {
+    "id": "CKS",
+    "name": "Carajas Airport (CKS)"
+  },
+  {
+    "id": "CSB",
+    "name": "Caransebes (CSB)"
+  },
+  {
+    "id": "CAF",
+    "name": "Carauari Airport (CAF)"
+  },
+  {
+    "id": "CRQ",
+    "name": "Caravelas (CRQ)"
+  },
+  {
+    "id": "PUC",
+    "name": "Carbon County Regional-Buck Davis Field (PUC)"
+  },
+  {
+    "id": "DNZ",
+    "name": "Cardak (DNZ)"
+  },
+  {
+    "id": "CWL",
+    "name": "Cardiff (CWL)"
+  },
+  {
+    "id": "CAR",
+    "name": "Caribou Muni (CAR)"
+  },
+  {
+    "id": "CAX",
+    "name": "Carlisle (CAX)"
+  },
+  {
+    "id": "CFC",
+    "name": "Carlos Alberto da Costa Neves Airport (CFC)"
+  },
+  {
+    "id": "PUQ",
+    "name": "Carlos Ibanez Del Campo Intl (PUQ)"
+  },
+  {
+    "id": "BYM",
+    "name": "Carlos Manuel De Cespedes (BYM)"
+  },
+  {
+    "id": "CVQ",
+    "name": "Carnarvon Airport (CVQ)"
+  },
+  {
+    "id": "CLN",
+    "name": "Carolina (CLN)"
+  },
+  {
+    "id": "CFR",
+    "name": "Carpiquet (CFR)"
+  },
+  {
+    "id": "MVD",
+    "name": "Carrasco Intl (MVD)"
+  },
+  {
+    "id": "CCP",
+    "name": "Carriel Sur Intl (CCP)"
+  },
+  {
+    "id": "RIK",
+    "name": "Carrillo Airport (RIK)"
+  },
+  {
+    "id": "VPC",
+    "name": "Cartersville Airport (VPC)"
+  },
+  {
+    "id": "TUN",
+    "name": "Carthage (TUN)"
+  },
+  {
+    "id": "YRF",
+    "name": "Cartwright Airport (YRF)"
+  },
+  {
+    "id": "CAU",
+    "name": "Caruaru Airport (CAU)"
+  },
+  {
+    "id": "LRM",
+    "name": "Casa De Campo Intl (LRM)"
+  },
+  {
+    "id": "CGZ",
+    "name": "Casa Grande Municipal Airport (CGZ)"
+  },
+  {
+    "id": "BDS",
+    "name": "Casale (BDS)"
+  },
+  {
+    "id": "CAC",
+    "name": "Cascavel (CAC)"
+  },
+  {
+    "id": "PYH",
+    "name": "Casique Aramare (PYH)"
+  },
+  {
+    "id": "CXI",
+    "name": "Cassidy Intl (CXI)"
+  },
+  {
+    "id": "MER",
+    "name": "Castle (MER)"
+  },
+  {
+    "id": "YCG",
+    "name": "Castlegar (YCG)"
+  },
+  {
+    "id": "HPH",
+    "name": "Cat Bi International Airport (HPH)"
+  },
+  {
+    "id": "YAC",
+    "name": "Cat Lake Airport (YAC)"
+  },
+  {
+    "id": "TCE",
+    "name": "Cataloi (TCE)"
+  },
+  {
+    "id": "CTC",
+    "name": "Catamarca (CTC)"
+  },
+  {
+    "id": "CTA",
+    "name": "Catania Fontanarossa (CTA)"
+  },
+  {
+    "id": "IGR",
+    "name": "Cataratas Del Iguazu (IGR)"
+  },
+  {
+    "id": "IGU",
+    "name": "Cataratas Intl (IGU)"
+  },
+  {
+    "id": "CRM",
+    "name": "Catarman National Airport (CRM)"
+  },
+  {
+    "id": "CBT",
+    "name": "Catumbela Airport (CBT)"
+  },
+  {
+    "id": "CYZ",
+    "name": "Cauayan Airport (CYZ)"
+  },
+  {
+    "id": "LQM",
+    "name": "Caucaya Airport (LQM)"
+  },
+  {
+    "id": "AVN",
+    "name": "Caumont (AVN)"
+  },
+  {
+    "id": "CNM",
+    "name": "Cavern City Air Terminal (CNM)"
+  },
+  {
+    "id": "AAJ",
+    "name": "Cayana Airstrip (AAJ)"
+  },
+  {
+    "id": "CUK",
+    "name": "Caye Caulker Airport (CUK)"
+  },
+  {
+    "id": "CYC",
+    "name": "Caye Chapel Airport (CYC)"
+  },
+  {
+    "id": "CCC",
+    "name": "Cayo Coco Airport (CCC)"
+  },
+  {
+    "id": "NZC",
+    "name": "Cecil Field (NZC)"
+  },
+  {
+    "id": "CDC",
+    "name": "Cedar City Rgnl (CDC)"
+  },
+  {
+    "id": "CID",
+    "name": "Cedar Rapids (CID)"
+  },
+  {
+    "id": "CDK",
+    "name": "CedarKey (CDK)"
+  },
+  {
+    "id": "CED",
+    "name": "Ceduna Airport (CED)"
+  },
+  {
+    "id": "ZCN",
+    "name": "Celle (ZCN)"
+  },
+  {
+    "id": "APA",
+    "name": "Centennial (APA)"
+  },
+  {
+    "id": "QRH",
+    "name": "Centraal (QRH)"
+  },
+  {
+    "id": "ZWE",
+    "name": "Centraal (ZWE)"
+  },
+  {
+    "id": "RTW",
+    "name": "Central (RTW)"
+  },
+  {
+    "id": "ZGH",
+    "name": "Central (ZGH)"
+  },
+  {
+    "id": "CEM",
+    "name": "Central Airport (CEM)"
+  },
+  {
+    "id": "BMI",
+    "name": "Central Illinois Rgnl (BMI)"
+  },
+  {
+    "id": "GRI",
+    "name": "Central Nebraska Regional Airport (GRI)"
+  },
+  {
+    "id": "YMY",
+    "name": "Central Railway Station (YMY)"
+  },
+  {
+    "id": "QYX",
+    "name": "Central Station (QYX)"
+  },
+  {
+    "id": "XEV",
+    "name": "Central Station (XEV)"
+  },
+  {
+    "id": "ZGG",
+    "name": "Central Station (ZGG)"
+  },
+  {
+    "id": "CWA",
+    "name": "Central Wisconsin (CWA)"
+  },
+  {
+    "id": "PYP",
+    "name": "Centre-Piedmont-Cherokee County Regional Airport (PYP)"
+  },
+  {
+    "id": "ANF",
+    "name": "Cerro Moreno Intl (ANF)"
+  },
+  {
+    "id": "CES",
+    "name": "Cessnock Airport (CES)"
+  },
+  {
+    "id": "JCU",
+    "name": "Ceuta Heliport (JCU)"
+  },
+  {
+    "id": "XBK",
+    "name": "Ceyzeriat (XBK)"
+  },
+  {
+    "id": "VAF",
+    "name": "Chabeuil (VAF)"
+  },
+  {
+    "id": "ARI",
+    "name": "Chacalluta (ARI)"
+  },
+  {
+    "id": "CHH",
+    "name": "Chachapoyas (CHH)"
+  },
+  {
+    "id": "ATF",
+    "name": "Chachoan (ATF)"
+  },
+  {
+    "id": "CDR",
+    "name": "Chadron Municipal Airport (CDR)"
+  },
+  {
+    "id": "CCN",
+    "name": "Chaghcharan Airport (CCN)"
+  },
+  {
+    "id": "ZBR",
+    "name": "Chah Bahar (ZBR)"
+  },
+  {
+    "id": "WCH",
+    "name": "Chaiten (WCH)"
+  },
+  {
+    "id": "ISB",
+    "name": "Chaklala (ISB)"
+  },
+  {
+    "id": "CIK",
+    "name": "Chalkyitsik Airport (CIK)"
+  },
+  {
+    "id": "RHE",
+    "name": "Champagne (RHE)"
+  },
+  {
+    "id": "CMI",
+    "name": "Champaign (CMI)"
+  },
+  {
+    "id": "XCD",
+    "name": "Champforgeuil (XCD)"
+  },
+  {
+    "id": "YKN",
+    "name": "Chan Gurney (YKN)"
+  },
+  {
+    "id": "IXC",
+    "name": "Chandigarh (IXC)"
+  },
+  {
+    "id": "BDP",
+    "name": "Chandragadhi Airport (BDP)"
+  },
+  {
+    "id": "NBS",
+    "name": "Changbaishan Airport (NBS)"
+  },
+  {
+    "id": "KHN",
+    "name": "Changbei Intl (KHN)"
+  },
+  {
+    "id": "CGQ",
+    "name": "Changchun (CGQ)"
+  },
+  {
+    "id": "CGD",
+    "name": "Changde Airport (CGD)"
+  },
+  {
+    "id": "CNI",
+    "name": "Changhai (CNI)"
+  },
+  {
+    "id": "SIN",
+    "name": "Changi Intl (SIN)"
+  },
+  {
+    "id": "FOC",
+    "name": "Changle (FOC)"
+  },
+  {
+    "id": "CIH",
+    "name": "Changzhi Airport (CIH)"
+  },
+  {
+    "id": "CZX",
+    "name": "Changzhou (CZX)"
+  },
+  {
+    "id": "WUZ",
+    "name": "Changzhoudao Airport (WUZ)"
+  },
+  {
+    "id": "CHG",
+    "name": "Chaoyang Airport (CHG)"
+  },
+  {
+    "id": "LEC",
+    "name": "Chapada Diamantina Airport (LEC)"
+  },
+  {
+    "id": "YMT",
+    "name": "Chapais Airport (YMT)"
+  },
+  {
+    "id": "XAP",
+    "name": "Chapeco (XAP)"
+  },
+  {
+    "id": "YLD",
+    "name": "Chapleau (YLD)"
+  },
+  {
+    "id": "CDG",
+    "name": "Charles De Gaulle (CDG)"
+  },
+  {
+    "id": "STS",
+    "name": "Charles M Schulz Sonoma Co (STS)"
+  },
+  {
+    "id": "CHS",
+    "name": "Charleston Afb Intl (CHS)"
+  },
+  {
+    "id": "CTL",
+    "name": "Charleville (CTL)"
+  },
+  {
+    "id": "CVX",
+    "name": "Charlevoix Municipal Airport (CVX)"
+  },
+  {
+    "id": "YCL",
+    "name": "Charlo (YCL)"
+  },
+  {
+    "id": "PGD",
+    "name": "Charlotte County-Punta Gorda Airport (PGD)"
+  },
+  {
+    "id": "CLT",
+    "name": "Charlotte Douglas Intl (CLT)"
+  },
+  {
+    "id": "CHO",
+    "name": "Charlottesville-Albemarle (CHO)"
+  },
+  {
+    "id": "YYG",
+    "name": "Charlottetown (YYG)"
+  },
+  {
+    "id": "VHY",
+    "name": "Charmeil (VHY)"
+  },
+  {
+    "id": "QNX",
+    "name": "Charnay (QNX)"
+  },
+  {
+    "id": "CNG",
+    "name": "Chateaubernard (CNG)"
+  },
+  {
+    "id": "CHT",
+    "name": "Chatham Islands (CHT)"
+  },
+  {
+    "id": "CYM",
+    "name": "Chatham Seaplane Base (CYM)"
+  },
+  {
+    "id": "HRJ",
+    "name": "Chaurjhari (HRJ)"
+  },
+  {
+    "id": "DKK",
+    "name": "Chautauqua County-Dunkirk Airport (DKK)"
+  },
+  {
+    "id": "JHW",
+    "name": "Chautauqua County-Jamestown (JHW)"
+  },
+  {
+    "id": "CSY",
+    "name": "Cheboksary Airport (CSY)"
+  },
+  {
+    "id": "GEO",
+    "name": "Cheddi Jagan Intl (GEO)"
+  },
+  {
+    "id": "CYF",
+    "name": "Chefornak Airport (CYF)"
+  },
+  {
+    "id": "CLS",
+    "name": "Chehalis-Centralia (CLS)"
+  },
+  {
+    "id": "TEE",
+    "name": "Cheikh Larbi Tebessi (TEE)"
+  },
+  {
+    "id": "49X",
+    "name": "Chemehuevi Valley (49X)"
+  },
+  {
+    "id": "NCN",
+    "name": "Chenega Bay Airport (NCN)"
+  },
+  {
+    "id": "MAA",
+    "name": "Chennai Intl (MAA)"
+  },
+  {
+    "id": "CJJ",
+    "name": "Cheongju International Airport (CJJ)"
+  },
+  {
+    "id": "CEE",
+    "name": "Cherepovets Airport (CEE)"
+  },
+  {
+    "id": "AHU",
+    "name": "Cherif El Idrissi (AHU)"
+  },
+  {
+    "id": "CKC",
+    "name": "Cherkassy (CKC)"
+  },
+  {
+    "id": "CEJ",
+    "name": "Chernigov (CEJ)"
+  },
+  {
+    "id": "CWC",
+    "name": "Chernivtsi International Airport (CWC)"
+  },
+  {
+    "id": "KHE",
+    "name": "Chernobayevka Airport (KHE)"
+  },
+  {
+    "id": "47A",
+    "name": "Cherokee County Airport (47A)"
+  },
+  {
+    "id": "TVC",
+    "name": "Cherry Capital Airport (TVC)"
+  },
+  {
+    "id": "NKT",
+    "name": "Cherry Point Mcas (NKT)"
+  },
+  {
+    "id": "CYX",
+    "name": "Cherskiy Airport (CYX)"
+  },
+  {
+    "id": "VOZ",
+    "name": "Chertovitskoye (VOZ)"
+  },
+  {
+    "id": "CTH",
+    "name": "Chester County G O Carlson Airport (CTH)"
+  },
+  {
+    "id": "YCS",
+    "name": "Chesterfield Inlet Airport (YCS)"
+  },
+  {
+    "id": "CTM",
+    "name": "Chetumal Intl (CTM)"
+  },
+  {
+    "id": "VAK",
+    "name": "Chevak Airport (VAK)"
+  },
+  {
+    "id": "YHR",
+    "name": "Chevery Airport (YHR)"
+  },
+  {
+    "id": "CYS",
+    "name": "Cheyenne Rgnl Jerry Olson Fld (CYS)"
+  },
+  {
+    "id": "BOM",
+    "name": "Chhatrapati Shivaji Intl (BOM)"
+  },
+  {
+    "id": "CNX",
+    "name": "Chiang Mai Intl (CNX)"
+  },
+  {
+    "id": "CEI",
+    "name": "Chiang Rai Intl (CEI)"
+  },
+  {
+    "id": "CYI",
+    "name": "Chiayi (CYI)"
+  },
+  {
+    "id": "PWK",
+    "name": "Chicago Executive (PWK)"
+  },
+  {
+    "id": "MDW",
+    "name": "Chicago Midway Intl (MDW)"
+  },
+  {
+    "id": "ORD",
+    "name": "Chicago Ohare Intl (ORD)"
+  },
+  {
+    "id": "RFD",
+    "name": "Chicago Rockford International Airport  (RFD)"
+  },
+  {
+    "id": "CIC",
+    "name": "Chico Muni (CIC)"
+  },
+  {
+    "id": "CIF",
+    "name": "Chifeng Airport (CIF)"
+  },
+  {
+    "id": "KBW",
+    "name": "Chignik Bay Seaplane Base (KBW)"
+  },
+  {
+    "id": "KCL",
+    "name": "Chignik Lagoon Airport (KCL)"
+  },
+  {
+    "id": "KCQ",
+    "name": "Chignik Lake Airport (KCQ)"
+  },
+  {
+    "id": "CDS",
+    "name": "Childress Muni (CDS)"
+  },
+  {
+    "id": "CCH",
+    "name": "Chile Chico (CCH)"
+  },
+  {
+    "id": "BLZ",
+    "name": "Chileka Intl (BLZ)"
+  },
+  {
+    "id": "YCW",
+    "name": "Chilliwack (YCW)"
+  },
+  {
+    "id": "CMU",
+    "name": "Chimbu Airport (CMU)"
+  },
+  {
+    "id": "VPY",
+    "name": "Chimoio Airport (VPY)"
+  },
+  {
+    "id": "TRR",
+    "name": "China Bay (TRR)"
+  },
+  {
+    "id": "NID",
+    "name": "China Lake Naws (NID)"
+  },
+  {
+    "id": "CCL",
+    "name": "Chinchilla (CCL)"
+  },
+  {
+    "id": "RMQ",
+    "name": "Ching Chuang Kang (RMQ)"
+  },
+  {
+    "id": "ULN",
+    "name": "Chinggis Khaan Intl (ULN)"
+  },
+  {
+    "id": "E91",
+    "name": "Chinle Municipal Airport (E91)"
+  },
+  {
+    "id": "JKH",
+    "name": "Chios (JKH)"
+  },
+  {
+    "id": "CIP",
+    "name": "Chipata Airport (CIP)"
+  },
+  {
+    "id": "CIU",
+    "name": "Chippewa County International Airport (CIU)"
+  },
+  {
+    "id": "EAU",
+    "name": "Chippewa Valley Regional Airport (EAU)"
+  },
+  {
+    "id": "CZN",
+    "name": "Chisana Airport (CZN)"
+  },
+  {
+    "id": "YKU",
+    "name": "Chisasibi Airport (YKU)"
+  },
+  {
+    "id": "HIB",
+    "name": "Chisholm Hibbing (HIB)"
+  },
+  {
+    "id": "KIV",
+    "name": "Chisinau Intl (KIV)"
+  },
+  {
+    "id": "SPK",
+    "name": "Chitose (SPK)"
+  },
+  {
+    "id": "CJL",
+    "name": "Chitral Airport (CJL)"
+  },
+  {
+    "id": "CKL",
+    "name": "Chkalovsky Airport (CKL)"
+  },
+  {
+    "id": "COQ",
+    "name": "Choibalsan Airport (COQ)"
+  },
+  {
+    "id": "CHY",
+    "name": "Choiseul Bay Airport (CHY)"
+  },
+  {
+    "id": "CKH",
+    "name": "Chokurdakh Airport (CKH)"
+  },
+  {
+    "id": "RGO",
+    "name": "Chongjin Airport (RGO)"
+  },
+  {
+    "id": "YZR",
+    "name": "Chris Hadfield (YZR)"
+  },
+  {
+    "id": "CHC",
+    "name": "Christchurch Intl (CHC)"
+  },
+  {
+    "id": "SSB",
+    "name": "Christiansted Harbor Seaplane Base (SSB)"
+  },
+  {
+    "id": "XCH",
+    "name": "Christmas Island (XCH)"
+  },
+  {
+    "id": "VCL",
+    "name": "Chu Lai (VCL)"
+  },
+  {
+    "id": "CHU",
+    "name": "Chuathbaluk Airport (CHU)"
+  },
+  {
+    "id": "CCZ",
+    "name": "Chub Cay (CCZ)"
+  },
+  {
+    "id": "NGO",
+    "name": "Chubu Centrair Intl (NGO)"
+  },
+  {
+    "id": "CNN",
+    "name": "Chulman (CNN)"
+  },
+  {
+    "id": "CJM",
+    "name": "Chumphon (CJM)"
+  },
+  {
+    "id": "YYQ",
+    "name": "Churchill (YYQ)"
+  },
+  {
+    "id": "ZUM",
+    "name": "Churchill Falls Airport (ZUM)"
+  },
+  {
+    "id": "TKK",
+    "name": "Chuuk Intl (TKK)"
+  },
+  {
+    "id": "CIA",
+    "name": "Ciampino (CIA)"
+  },
+  {
+    "id": "STI",
+    "name": "Cibao Intl (STI)"
+  },
+  {
+    "id": "ICI",
+    "name": "Cicia Airport (ICI)"
+  },
+  {
+    "id": "IGL",
+    "name": "Cigli (IGL)"
+  },
+  {
+    "id": "CMJ",
+    "name": "Cimei Airport (CMJ)"
+  },
+  {
+    "id": "LUK",
+    "name": "Cincinnati Muni Lunken Fld (LUK)"
+  },
+  {
+    "id": "CVG",
+    "name": "Cincinnati Northern Kentucky Intl (CVG)"
+  },
+  {
+    "id": "IRC",
+    "name": "Circle City Airport (IRC)"
+  },
+  {
+    "id": "LCY",
+    "name": "City (LCY)"
+  },
+  {
+    "id": "YTZ",
+    "name": "City Centre (YTZ)"
+  },
+  {
+    "id": "COS",
+    "name": "City Of Colorado Springs Muni (COS)"
+  },
+  {
+    "id": "LDY",
+    "name": "City of Derry (LDY)"
+  },
+  {
+    "id": "CBL",
+    "name": "Ciudad Bolivar (CBL)"
+  },
+  {
+    "id": "CUA",
+    "name": "Ciudad Constitución Airport (CUA)"
+  },
+  {
+    "id": "CME",
+    "name": "Ciudad Del Carmen Intl (CME)"
+  },
+  {
+    "id": "AGT",
+    "name": "Ciudad del Este (AGT)"
+  },
+  {
+    "id": "CEN",
+    "name": "Ciudad Obregon Intl (CEN)"
+  },
+  {
+    "id": "CQM",
+    "name": "Ciudad Real Central Airport (CQM)"
+  },
+  {
+    "id": "CKV",
+    "name": "Clarksville-Montgomery County Regional Airport (CKV)"
+  },
+  {
+    "id": "4A7",
+    "name": "Clayton County Tara Field (4A7)"
+  },
+  {
+    "id": "Z84",
+    "name": "Clear (Z84)"
+  },
+  {
+    "id": "CLC",
+    "name": "Clear Lake Metroport (CLC)"
+  },
+  {
+    "id": "CLW",
+    "name": "Clearwater Air Park (CLW)"
+  },
+  {
+    "id": "CEU",
+    "name": "Clemson (CEU)"
+  },
+  {
+    "id": "CLE",
+    "name": "Cleveland Hopkins Intl (CLE)"
+  },
+  {
+    "id": "CWI",
+    "name": "Clinton Municipal (CWI)"
+  },
+  {
+    "id": "CNJ",
+    "name": "Cloncurry Airport (CNJ)"
+  },
+  {
+    "id": "CVN",
+    "name": "Clovis Muni (CVN)"
+  },
+  {
+    "id": "1CS",
+    "name": "Clow International Airport (1CS)"
+  },
+  {
+    "id": "CMK",
+    "name": "Club Makokola Airport (CMK)"
+  },
+  {
+    "id": "CLJ",
+    "name": "Cluj Napoca (CLJ)"
+  },
+  {
+    "id": "YCY",
+    "name": "Clyde River (YCY)"
+  },
+  {
+    "id": "VCS",
+    "name": "Co Ong Airport (VCS)"
+  },
+  {
+    "id": "CIZ",
+    "name": "Coari Airport (CIZ)"
+  },
+  {
+    "id": "CBV",
+    "name": "Coban (CBV)"
+  },
+  {
+    "id": "CAZ",
+    "name": "Cobar Airport (CAZ)"
+  },
+  {
+    "id": "RYY",
+    "name": "Cobb County Airport-Mc Collum Field (RYY)"
+  },
+  {
+    "id": "COK",
+    "name": "Cochin (COK)"
+  },
+  {
+    "id": "YCN",
+    "name": "Cochrane (YCN)"
+  },
+  {
+    "id": "CNC",
+    "name": "Coconut Island Airport (CNC)"
+  },
+  {
+    "id": "CCK",
+    "name": "Cocos Keeling Island Airport (CCK)"
+  },
+  {
+    "id": "CSC",
+    "name": "Codela Airport (CSC)"
+  },
+  {
+    "id": "BBQ",
+    "name": "Codrington Airport (BBQ)"
+  },
+  {
+    "id": "CUQ",
+    "name": "Coen Airport (CUQ)"
+  },
+  {
+    "id": "KCC",
+    "name": "Coffman Cove Seaplane Base (KCC)"
+  },
+  {
+    "id": "CFS",
+    "name": "Coffs Harbour (CFS)"
+  },
+  {
+    "id": "CJB",
+    "name": "Coimbatore (CJB)"
+  },
+  {
+    "id": "CDB",
+    "name": "Cold Bay (CDB)"
+  },
+  {
+    "id": "YOD",
+    "name": "Cold Lake (YOD)"
+  },
+  {
+    "id": "CXF",
+    "name": "Coldfoot Airport (CXF)"
+  },
+  {
+    "id": "DET",
+    "name": "Coleman A Young Muni (DET)"
+  },
+  {
+    "id": "CLQ",
+    "name": "Colima (CLQ)"
+  },
+  {
+    "id": "COL",
+    "name": "Coll Airport (COL)"
+  },
+  {
+    "id": "TKI",
+    "name": "Collin County Regional Airport at Mc Kinney (TKI)"
+  },
+  {
+    "id": "QKL",
+    "name": "Cologne Railway (QKL)"
+  },
+  {
+    "id": "RML",
+    "name": "Colombo Ratmalana (RML)"
+  },
+  {
+    "id": "CRI",
+    "name": "Colonel Hill Airport (CRI)"
+  },
+  {
+    "id": "OLN",
+    "name": "Colonia Sarmiento (OLN)"
+  },
+  {
+    "id": "CSA",
+    "name": "Colonsay Airport (CSA)"
+  },
+  {
+    "id": "A50",
+    "name": "Colorado Springs East (A50)"
+  },
+  {
+    "id": "HCC",
+    "name": "Columbia County (HCC)"
+  },
+  {
+    "id": "CAE",
+    "name": "Columbia Metropolitan (CAE)"
+  },
+  {
+    "id": "COU",
+    "name": "Columbia Rgnl (COU)"
+  },
+  {
+    "id": "CBM",
+    "name": "Columbus Afb (CBM)"
+  },
+  {
+    "id": "CSG",
+    "name": "Columbus Metropolitan Airport (CSG)"
+  },
+  {
+    "id": "YCK",
+    "name": "Colville Lake Airport (YCK)"
+  },
+  {
+    "id": "BHI",
+    "name": "Comandante Espora (BHI)"
+  },
+  {
+    "id": "ATA",
+    "name": "Comandante Fap German Arias Graziani (ATA)"
+  },
+  {
+    "id": "BGX",
+    "name": "Comandante Gustavo Kraemer (BGX)"
+  },
+  {
+    "id": "DSE",
+    "name": "Combolcha Airport (DSE)"
+  },
+  {
+    "id": "JCO",
+    "name": "Comino Airport (JCO)"
+  },
+  {
+    "id": "CIY",
+    "name": "Comiso (CIY)"
+  },
+  {
+    "id": "COC",
+    "name": "Comodoro Pierrestegui (COC)"
+  },
+  {
+    "id": "CRD",
+    "name": "Comodoro Rivadavia (CRD)"
+  },
+  {
+    "id": "YQQ",
+    "name": "Comox (YQQ)"
+  },
+  {
+    "id": "CKY",
+    "name": "Conakry (CKY)"
+  },
+  {
+    "id": "CDJ",
+    "name": "Conceicao Do Araguaia (CDJ)"
+  },
+  {
+    "id": "CON",
+    "name": "Concord Municipal (CON)"
+  },
+  {
+    "id": "CCI",
+    "name": "Concordia Airport (CCI)"
+  },
+  {
+    "id": "WSD",
+    "name": "Condron Aaf (WSD)"
+  },
+  {
+    "id": "CFO",
+    "name": "Confresa Airport (CFO)"
+  },
+  {
+    "id": "STZ",
+    "name": "Confresa Airport (STZ)"
+  },
+  {
+    "id": "COX",
+    "name": "Congo Town Airport (COX)"
+  },
+  {
+    "id": "CGH",
+    "name": "Congonhas (CGH)"
+  },
+  {
+    "id": "QCY",
+    "name": "Coningsby (QCY)"
+  },
+  {
+    "id": "NNR",
+    "name": "Connemara Regional Airport (NNR)"
+  },
+  {
+    "id": "COZ",
+    "name": "Constanza Airport (COZ)"
+  },
+  {
+    "id": "OTD",
+    "name": "Contadora Airport (OTD)"
+  },
+  {
+    "id": "CPD",
+    "name": "Coober Pedy Airport (CPD)"
+  },
+  {
+    "id": "COH",
+    "name": "Cooch Behar (COH)"
+  },
+  {
+    "id": "CDA",
+    "name": "Cooinda (CDA)"
+  },
+  {
+    "id": "CTN",
+    "name": "Cooktown Airport (CTN)"
+  },
+  {
+    "id": "P08",
+    "name": "Coolidge Municipal Airport (P08)"
+  },
+  {
+    "id": "OOM",
+    "name": "Cooma Snowy Mountains Airport (OOM)"
+  },
+  {
+    "id": "COJ",
+    "name": "Coonabarabran (COJ)"
+  },
+  {
+    "id": "CNB",
+    "name": "Coonamble Airport (CNB)"
+  },
+  {
+    "id": "CPO",
+    "name": "Copiapo (CPO)"
+  },
+  {
+    "id": "ODB",
+    "name": "Cordoba (ODB)"
+  },
+  {
+    "id": "ORK",
+    "name": "Cork (ORK)"
+  },
+  {
+    "id": "POX",
+    "name": "Cormeilles En Vexin (POX)"
+  },
+  {
+    "id": "RNI",
+    "name": "Corn Island Airport (RNI)"
+  },
+  {
+    "id": "YCC",
+    "name": "Cornwall Regional Airport (YCC)"
+  },
+  {
+    "id": "YCT",
+    "name": "Coronation (YCT)"
+  },
+  {
+    "id": "TCQ",
+    "name": "Coronel Carlos Ciriani Santa Rosa Intl (TCQ)"
+  },
+  {
+    "id": "XMS",
+    "name": "Coronel E Carvajal (XMS)"
+  },
+  {
+    "id": "AYP",
+    "name": "Coronel Fap Alfredo Mendivil Duarte (AYP)"
+  },
+  {
+    "id": "IQT",
+    "name": "Coronel Francisco Secada Vignetta Intl (IQT)"
+  },
+  {
+    "id": "CRP",
+    "name": "Corpus Christi Intl (CRP)"
+  },
+  {
+    "id": "NGP",
+    "name": "Corpus Christi NAS (NGP)"
+  },
+  {
+    "id": "CNQ",
+    "name": "Corrientes (CNQ)"
+  },
+  {
+    "id": "CEZ",
+    "name": "Cortez Muni (CEZ)"
+  },
+  {
+    "id": "CMG",
+    "name": "Corumba Intl (CMG)"
+  },
+  {
+    "id": "CVU",
+    "name": "Corvo Airport (CVU)"
+  },
+  {
+    "id": "CBO",
+    "name": "Cotabato (CBO)"
+  },
+  {
+    "id": "NCE",
+    "name": "Cote D'Azur (NCE)"
+  },
+  {
+    "id": "OTR",
+    "name": "Coto 47 (OTR)"
+  },
+  {
+    "id": "LTX",
+    "name": "Cotopaxi International Airport (LTX)"
+  },
+  {
+    "id": "P52",
+    "name": "Cottonwood Airport (P52)"
+  },
+  {
+    "id": "COT",
+    "name": "Cotulla Lasalle Co (COT)"
+  },
+  {
+    "id": "CFD",
+    "name": "Coulter Fld (CFD)"
+  },
+  {
+    "id": "CIL",
+    "name": "Council Airport (CIL)"
+  },
+  {
+    "id": "OBE",
+    "name": "County (OBE)"
+  },
+  {
+    "id": "CVF",
+    "name": "Courchevel Airport (CVF)"
+  },
+  {
+    "id": "CVT",
+    "name": "Coventry (CVT)"
+  },
+  {
+    "id": "9A1",
+    "name": "Covington Municipal Airport (9A1)"
+  },
+  {
+    "id": "CCO",
+    "name": "Coweta County Airport (CCO)"
+  },
+  {
+    "id": "CXB",
+    "name": "Coxs Bazar (CXB)"
+  },
+  {
+    "id": "CZM",
+    "name": "Cozumel Intl (CZM)"
+  },
+  {
+    "id": "CCV",
+    "name": "Craig Cove Airport (CCV)"
+  },
+  {
+    "id": "SEM",
+    "name": "Craig Fld (SEM)"
+  },
+  {
+    "id": "CGA",
+    "name": "Craig Seaplane Base (CGA)"
+  },
+  {
+    "id": "CRA",
+    "name": "Craiova (CRA)"
+  },
+  {
+    "id": "EWN",
+    "name": "Craven Co Rgnl (EWN)"
+  },
+  {
+    "id": "INS",
+    "name": "Creech Afb (INS)"
+  },
+  {
+    "id": "CSF",
+    "name": "Creil (CSF)"
+  },
+  {
+    "id": "CKF",
+    "name": "Crisp County Cordele Airport (CKF)"
+  },
+  {
+    "id": "JCA",
+    "name": "Croisette Heliport (JCA)"
+  },
+  {
+    "id": "CKD",
+    "name": "Crooked Creek Airport (CKD)"
+  },
+  {
+    "id": "CTY",
+    "name": "Cross City (CTY)"
+  },
+  {
+    "id": "YCR",
+    "name": "Cross Lake - Charlie Sinclair Memorial Airport (YCR)"
+  },
+  {
+    "id": "CRV",
+    "name": "Crotone (CRV)"
+  },
+  {
+    "id": "TAB",
+    "name": "Crown Point (TAB)"
+  },
+  {
+    "id": "CZS",
+    "name": "Cruzeiro do Sul (CZS)"
+  },
+  {
+    "id": "CGC",
+    "name": "Crystal River (CGC)"
+  },
+  {
+    "id": "FXO",
+    "name": "Cuamba (FXO)"
+  },
+  {
+    "id": "CDP",
+    "name": "Cuddapah (CDP)"
+  },
+  {
+    "id": "CPX",
+    "name": "Culebra Airport (CPX)"
+  },
+  {
+    "id": "CUL",
+    "name": "Culiacan Intl (CUL)"
+  },
+  {
+    "id": "CMA",
+    "name": "Cunnamulla Airport (CMA)"
+  },
+  {
+    "id": "CTB",
+    "name": "Cut Bank Muni (CTB)"
+  },
+  {
+    "id": "NDZ",
+    "name": "Cuxhaven Airport (NDZ)"
+  },
   {"id": "CGF", "name": "Cuyahoga County (CGF)"},
   {"id": "CYU", "name": "Cuyo Airport (CYU)"},
   {"id": "STT", "name": "Cyril E King (STT)"},
@@ -1583,9 +4271,9 @@
   {"id": "EXM", "name": "Exmouth Airport (EXM)"},
   {"id": "GGT", "name": "Exuma Intl (GGT)"},
   {"id": "EUX", "name": "F D Roosevelt (EUX)"},
-  {"id": "PPT", "name": "Faa\'a International (PPT)"},
+  {"id": "PPT", "name": "Faa'a International (PPT)"},
   {"id": "MVP", "name": "Fabio Alberto Leon Bentley (MVP)"},
-  {"id": "FGI", "name": "Fagali\'i (FGI)"},
+  {"id": "FGI", "name": "Fagali'i (FGI)"},
   {"id": "FIE", "name": "Fair Isle Airport (FIE)"},
   {"id": "FAI", "name": "Fairbanks Intl (FAI)"},
   {"id": "SKA", "name": "Fairchild Afb (SKA)"},
@@ -3276,7 +5964,7 @@
   {"id": "MAJ", "name": "Marshall Islands Intl (MAJ)"},
   {"id": "GHG", "name": "Marshfield Municipal Airport (GHG)"},
   {"id": "MFI", "name": "Marshfield Municipal Airport (MFI)"},
-  {"id": "MVY", "name": "Martha\'s Vineyard (MVY)"},
+  {"id": "MVY", "name": "Martha's Vineyard (MVY)"},
   {"id": "1A3", "name": "Martin Campbell Field Airport (1A3)"},
   {"id": "MTN", "name": "Martin State (MTN)"},
   {"id": "MUR", "name": "Marudi (MUR)"},
@@ -4200,7 +6888,7 @@
   {"id": "POM", "name": "Port Moresby Jacksons Intl (POM)"},
   {"id": "PRL", "name": "Port Oceanic Airport (PRL)"},
   {"id": "BE2", "name": "Port of Belfast (BE2)"},
-  {"id": "S46", "name": "Port O\'Connor Airfield (S46)"},
+  {"id": "S46", "name": "Port O'Connor Airfield (S46)"},
   {"id": "PPV", "name": "Port Protection Seaplane Base (PPV)"},
   {"id": "PSD", "name": "Port Said (PSD)"},
   {"id": "PZU", "name": "Port Sudan New International Airport (PZU)"},
@@ -5743,7 +8431,7 @@
   {"id": "ACX", "name": "Xingyi Airport (ACX)"},
   {"id": "XNN", "name": "Xining Caojiabu Airport (XNN)"},
   {"id": "CGO", "name": "Xinzheng (CGO)"},
-  {"id": "SIA", "name": "Xi\'An Xiguan (SIA)"},
+  {"id": "SIA", "name": "Xi'An Xiguan (SIA)"},
   {"id": "OAX", "name": "Xoxocotlan Intl (OAX)"},
   {"id": "XUZ", "name": "Xuzhou Guanyin Airport (XUZ)"},
   {"id": "BYC", "name": "Yacuiba (BYC)"},
