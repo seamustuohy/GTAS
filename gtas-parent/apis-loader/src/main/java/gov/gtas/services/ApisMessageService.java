@@ -34,7 +34,7 @@ import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
-import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
+import gov.gtas.parsers.paxlst.vo.PaxlstMessageVo;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
@@ -63,13 +63,13 @@ public class ApisMessageService {
     
     private ApisMessage apisMessage;
     
-    public ApisMessageVo parseApisMessage(String filePath) {
+    public PaxlstMessageVo parseApisMessage(String filePath) {
         this.apisMessage = new ApisMessage();
         this.apisMessage.setCreateDate(new Date());
         this.apisMessage.setStatus(MessageStatus.RECEIVED);
         this.apisMessage.setFilePath(filePath);
         
-        ApisMessageVo vo = null;
+        PaxlstMessageVo vo = null;
         try {            
             byte[] raw = FileUtils.readSmallFile(filePath);
             String message = new String(raw, StandardCharsets.US_ASCII);
@@ -80,7 +80,7 @@ public class ApisMessageService {
             String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
             this.apisMessage.setHashCode(md5);
             
-            EdifactParser<ApisMessageVo> parser = null;
+            EdifactParser<PaxlstMessageVo> parser = null;
             if (isUSEdifactFile(message)) {
                 parser = new PaxlstParserUSedifact();
             } else {
@@ -111,7 +111,7 @@ public class ApisMessageService {
         return (msg.contains("CDT") || msg.contains("PDT"));
     }
     
-    public void loadApisMessage(ApisMessageVo m) {
+    public void loadApisMessage(PaxlstMessageVo m) {
         try {
             for (ReportingPartyVo rvo : m.getReportingParties()) {
                 ReportingParty rp = convertReportingPartyVo(rvo);

@@ -28,19 +28,19 @@ import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.QTY;
 import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
-import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
+import gov.gtas.parsers.paxlst.vo.PaxlstMessageVo;
 import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
-public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {   
+public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> {   
     private static final String[] SEGMENT_NAMES = new String[] { "ATT", "AUT", "BGM", "CNT", "COM", "CPI", "CTA", "DOC",
             "DTM", "EMP", "FTX", "GEI", "GID", "LOC", "MEA", "NAD", "NAT", "QTY", "RFF", "TDT", "UNH", "UNT" };
     public static final Set<String> UN_EDIFACT_PAXLST_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
 
     public PaxlstParserUNedifact() {
-        this.parsedMessage = new ApisMessageVo();
+        this.parsedMessage = new PaxlstMessageVo();
     }
 
     @Override

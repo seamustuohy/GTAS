@@ -1,7 +1,7 @@
 package gov.gtas.services;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.parsers.paxlst.vo.ApisMessageVo;
+import gov.gtas.parsers.paxlst.vo.PaxlstMessageVo;
 
 import java.io.File;
 
@@ -17,7 +17,7 @@ public class ApisMessageLoader {
         }
         
         System.out.println("processing file " + filePath);
-        ApisMessageVo m = svc.parseApisMessage(filePath);
+        PaxlstMessageVo m = svc.parseApisMessage(filePath);
         if (m == null) {
             System.out.println("error parsing " + filePath);
             return;
