@@ -67,7 +67,10 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
 
     $scope.summaryDefaults = {title: null, description: null, startDate: $scope.today, endDate: null, enabled: true};
 
+    $scope.saving = false;
     $scope.save = function() {
+        if ($scope.saving) return;
+        $scope.saving = true;
         var ruleObject;
         var startDate = moment($scope.startDate, $scope.formats, true);
         var endDate = $scope.endDate || moment($scope.endDate, $scope.formats, true);
@@ -75,6 +78,7 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
         $scope.title = $scope.title.trim();
         if (!$scope.title.length ) {
             alert('Risk Criteria title summary can not be blank!');
+            $scope.saving = false;
             return;
         }
 
@@ -83,10 +87,12 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
             if (!startDate.isValid())
             {
                 alert('Dates must be in this format: ' + $scope.formats.toString());
+                $scope.saving = false;
                 return;
             }
             if (startDate < $scope.today ) {
                 alert('Risk Criteria start date must be today or later when created new.');
+                $scope.saving = false;
                 return;
             }
         }
@@ -94,10 +100,12 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
         if ($scope.endDate !== null) {
             if (!endDate.isValid() ) {
                 alert('End Date must be empty/open or in this format: ' + $scope.formats.toString());
+                $scope.saving = false;
                 return;
             }
             if (endDate < startDate ) {
                 alert('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
+                $scope.saving = false;
                 return;
             }
         }
@@ -127,6 +135,7 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
                 return;
             }
             $scope.tableParams.reload();
+            $scope.saving = false;
         });
     };
 });

@@ -5,6 +5,9 @@ target/
 *.ear
 *.class
 
+# spring
+logs/
+
 # intellij
 .idea/
 

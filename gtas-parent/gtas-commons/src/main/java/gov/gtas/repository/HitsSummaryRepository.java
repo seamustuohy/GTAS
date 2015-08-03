@@ -1,5 +1,6 @@
 package gov.gtas.repository;
 
+import gov.gtas.model.HitDetail;
 import gov.gtas.model.HitsSummary;
 
 import java.util.List;
@@ -11,7 +12,6 @@ import org.springframework.data.repository.query.Param;
 public interface HitsSummaryRepository extends
 		CrudRepository<HitsSummary, Long> {
 
-	@Query("SELECT hits.ruleId FROM HitsSummary hits WHERE hits.travelerId = (:id)")
-	List<Long> findByTravelerId(@Param("id") Long id);
-
+	@Query("SELECT hits.hitdetails FROM HitsSummary hits WHERE hits.travelerId = (:id)")
+	List<HitDetail> findByTravelerId(@Param("id") Long id);
 }

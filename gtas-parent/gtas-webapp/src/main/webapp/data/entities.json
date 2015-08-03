@@ -81,14 +81,7 @@
         "id": "DOCUMENT.expirationDate",
         "label": "Expiration Date",
         "type": "date",
-        "validation": {
-          "format": "YYYY-MM-DD"
-        },
-        "plugin": "datepicker",
-        "plugin_config": {
-          "format": "yyyy-mm-dd",
-          "autoClose": true
-        }
+        "plugin": "datepicker"
       },
       {
         "id": "DOCUMENT.documentNumber",
@@ -216,16 +209,14 @@
       {
         "id": "FLIGHT.eta",
         "label": "ETA",
-        "type": "datetime",
-        "plugin": "datetimepicker",
-        "plugin_config": {}
+        "type": "date",
+        "plugin": "datetpicker"
       },
       {
-        "id": "etd",
+        "id": "FLIGHT.etd",
         "label": "ETD",
-        "type": "datetime",
-        "plugin": "datetimepicker",
-        "plugin_config": {}
+        "type": "date",
+        "plugin": "datepicker"
       },
       {
         "id": "FLIGHT.flightNumber",
@@ -366,14 +357,7 @@
         "id": "TRAVELER.dob",
         "label": "DOB",
         "type": "date",
-        "validation": {
-          "format": "YYYY-MM-DD"
-        },
-        "plugin": "datepicker",
-        "plugin_config": {
-          "format": "yyyy-mm-dd",
-          "autoClose": true
-        }
+        "plugin": "datepicker"
       },
       {
         "id": "TRAVELER.embarkation.iata",

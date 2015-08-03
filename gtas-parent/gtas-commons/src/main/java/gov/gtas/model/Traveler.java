@@ -31,6 +31,7 @@ import org.hibernate.annotations.Type;
     discriminatorType=DiscriminatorType.STRING
 )
 public abstract class Traveler extends BaseEntityAudit {
+	
     public Traveler() { }
     
     @ManyToMany(
@@ -38,8 +39,14 @@ public abstract class Traveler extends BaseEntityAudit {
         targetEntity = Flight.class
     )    
     private Set<Flight> flights = new HashSet<>();
+    
+    @ManyToMany(
+        mappedBy = "passengers",
+        targetEntity = PnrData.class
+    ) 
+    private Set<PnrData> pnrs = new HashSet<>();
 
-    private String title;
+	private String title;
     
     @Column(name = "first_name")
     private String firstName;
@@ -180,6 +187,13 @@ public abstract class Traveler extends BaseEntityAudit {
         this.documents = documents;
     }
 
+    public Set<PnrData> getPnrs() {
+		return pnrs;
+	}
+	public void setPnrs(Set<PnrData> pnrs) {
+		this.pnrs = pnrs;
+	}
+	
     @Override
     public int hashCode() {
         final int prime = 31;
