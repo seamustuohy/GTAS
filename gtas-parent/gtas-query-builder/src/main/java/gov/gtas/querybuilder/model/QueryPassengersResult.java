@@ -18,6 +18,7 @@ public class QueryPassengersResult extends BaseFlightPaxQueryResult {
 	private String documentIssuanceContry;
 	private String seatNumber;
 	private boolean isRuleHit;
+	private boolean isOnWatchList;
 	
 	public String getFirstName() {
 		return firstName;
@@ -105,6 +106,14 @@ public class QueryPassengersResult extends BaseFlightPaxQueryResult {
 	
 	public void setRuleHit(boolean isRuleHit) {
 		this.isRuleHit = isRuleHit;
+	}
+
+	public boolean isOnWatchList() {
+		return isOnWatchList;
+	}
+
+	public void setOnWatchList(boolean isOnWatchList) {
+		this.isOnWatchList = isOnWatchList;
 	}
 	
 }

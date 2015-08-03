@@ -244,7 +244,8 @@ public class QueryBuilderController {
 					String seatNumber = "Not available";
 					
 					qbPassenger.setId(traveler.getId());
-					qbPassenger.setRuleHit(true);
+					qbPassenger.setRuleHit(false);
+					qbPassenger.setOnWatchList(false);
 					qbPassenger.setFirstName(traveler.getFirstName());
 					qbPassenger.setLastName(traveler.getLastName());
 					// Passenger type

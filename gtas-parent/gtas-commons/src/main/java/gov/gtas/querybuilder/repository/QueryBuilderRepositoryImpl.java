@@ -45,9 +45,10 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 	private String GENDER = "gender";
-	private String FEMALE = "Female";
+	private String FEMALE = "F";
+	private String MALE = "M";
 	private String DIRECTION = "direction";
-	private String INBOUND = "Indbound";
+	private String INBOUND = "I";
 	
 	@PersistenceContext 
  	private EntityManager entityManager;
@@ -524,8 +525,10 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 								for(String val : values) {
 									if(val.equalsIgnoreCase(FEMALE)) {
 										vals.add(Gender.F);
-									} else {
+									} else if(val.equalsIgnoreCase(MALE)){
 										vals.add(Gender.M);
+									} else {
+										vals.add(Gender.U);
 									}
 								}
 							}
