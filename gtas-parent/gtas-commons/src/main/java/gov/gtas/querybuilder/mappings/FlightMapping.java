@@ -10,8 +10,8 @@ public enum FlightMapping implements IEntityMapping {
 	COUNTRY_DESTINATION ("destinationCountry.iso3", "Country - Destination", TypeEnum.STRING.getType()),
 	COUNTRY_ORIGIN ("originCountry.iso3", "Country - Origin", TypeEnum.STRING.getType()),
 	DIRECTION ("direction", "Direction", TypeEnum.STRING.getType()),
-	ETA ("eta", "ETA", TypeEnum.DATETIME.getType()),
-	ETD ("etd", "ETD", TypeEnum.DATETIME.getType()),
+	ETA ("eta", "ETA", TypeEnum.DATE.getType()),
+	ETD ("etd", "ETD", TypeEnum.DATE.getType()),
 	FLIGHT_DATE ("flightDate", "Flight Date", TypeEnum.DATE.getType()),	
 	FLIGHT_NUMBER ("flightNumber", "Number", TypeEnum.STRING.getType()),
 	THRU ("thru", "Thru", TypeEnum.STRING.getType());

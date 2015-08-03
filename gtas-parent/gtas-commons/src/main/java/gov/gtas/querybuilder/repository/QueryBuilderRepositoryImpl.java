@@ -1,6 +1,7 @@
 package gov.gtas.querybuilder.repository;
 
 import gov.gtas.model.Flight;
+import gov.gtas.model.FlightDirection;
 import gov.gtas.model.Gender;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
@@ -43,6 +44,11 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderRepository.class);
 	private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
+	private String GENDER = "gender";
+	private String FEMALE = "F";
+	private String MALE = "M";
+	private String DIRECTION = "direction";
+	private String INBOUND = "I";
 	
 	@PersistenceContext 
  	private EntityManager entityManager;
@@ -513,19 +519,32 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						query.setParameter(positionalParameter.intValue(), vals);
 					}
 					else {
-						if(field != null && field.equals("gender")) {
+						if(field != null && field.equals(GENDER)) {
 							List<Gender> vals = new ArrayList<>();
 							if(values != null) {
 								for(String val : values) {
-									if(val.equalsIgnoreCase("Female")) {
+									if(val.equalsIgnoreCase(FEMALE)) {
 										vals.add(Gender.F);
-									}
-									else {
+									} else if(val.equalsIgnoreCase(MALE)){
 										vals.add(Gender.M);
+									} else {
+										vals.add(Gender.U);
 									}
 								}
 							}
 							query.setParameter(positionalParameter.intValue(), vals);
+						}
+						else if(field != null && field.equals(DIRECTION)) {
+							List<FlightDirection> vals = new ArrayList<>();
+							if(values != null) {
+								for(String val : values) {
+									if(val.equalsIgnoreCase(INBOUND)) {
+										vals.add(FlightDirection.INBOUND);
+									} else {
+										vals.add(FlightDirection.OUTBOUND);
+									}
+								}
+							}
 						}
 						else {
 							query.setParameter(positionalParameter.intValue(), values);
@@ -558,11 +577,18 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						query.setParameter(positionalParameter.intValue(), dtFormat.parse(value), TemporalType.DATE);
 					}
 					else {
-						if(field != null && field.equals("gender")) {
-							if(value != null && value.equalsIgnoreCase("Female")) {
+						if(field != null && field.equals(GENDER)) {
+							if(value != null && value.equalsIgnoreCase(FEMALE)) {
 								query.setParameter(positionalParameter.intValue(), Gender.F);
 							} else {
 								query.setParameter(positionalParameter.intValue(), Gender.M);
+							}
+						}
+						else if(field != null && field.equals(DIRECTION)) { 
+							if(value != null && value.equalsIgnoreCase(INBOUND)) {
+								query.setParameter(positionalParameter.intValue(), FlightDirection.INBOUND);
+							} else {
+								query.setParameter(positionalParameter.intValue(), FlightDirection.OUTBOUND);
 							}
 						} else {
 							query.setParameter(positionalParameter.intValue(), value);

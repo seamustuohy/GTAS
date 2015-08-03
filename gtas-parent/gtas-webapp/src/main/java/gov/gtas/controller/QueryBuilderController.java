@@ -66,6 +66,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class QueryBuilderController {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderController.class);
 	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
+	private String PASSPORT = "P";
+	private String VISA = "V";
 	
 	@Autowired
 	QueryBuilderService queryService;
@@ -242,8 +244,8 @@ public class QueryBuilderController {
 					String seatNumber = "Not available";
 					
 					qbPassenger.setId(traveler.getId());
-					qbPassenger.setOnSomethingList(true);
-					qbPassenger.setOnWatchList(true);
+					qbPassenger.setRuleHit(false);
+					qbPassenger.setOnWatchList(false);
 					qbPassenger.setFirstName(traveler.getFirstName());
 					qbPassenger.setLastName(traveler.getLastName());
 					// Passenger type
@@ -267,10 +269,10 @@ public class QueryBuilderController {
 							docNumber = doc.getDocumentNumber();
 							
 							if(doc instanceof Passport) {
-								docType = "P";
+								docType = PASSPORT;
 							}
 							else if(doc instanceof Visa) {
-								docType = "V";
+								docType = VISA;
 							}
 							docIssuanceCountry = doc.getIssuanceCountry().getIso2();
 						}

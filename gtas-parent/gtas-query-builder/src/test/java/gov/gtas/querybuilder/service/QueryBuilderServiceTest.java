@@ -22,7 +22,7 @@ public class QueryBuilderServiceTest {
 
 	@Test
 	public void testSaveQuery() {
-//		Mockito.when(queryService.saveQuery(null)).
+		
 	}
 
 	@Test
