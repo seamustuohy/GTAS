@@ -26,10 +26,14 @@ public class HitDetail extends BaseEntity {
 	@JoinColumn(name = "hits_summary_id", nullable = false, referencedColumnName = "id")
 	private HitsSummary parent;
 
+	
+	/**
+	 * The serialization version of array of condition strings
+	 */
 	@Lob
 	@Basic(fetch = FetchType.EAGER)
-	@Column(name = "cond_blob", columnDefinition = "BLOB NULL")
-	private String[] ruleConditions;
+	@Column(name = "cond_text", columnDefinition = "TEXT NULL")
+	private String ruleConditions;
 
 	@Column(name = "create_date", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -46,20 +50,28 @@ public class HitDetail extends BaseEntity {
 		this.parent = parent;
 	}
 
-	public String[] getRuleConditions() {
-		return ruleConditions;
-	}
-
-	public void setRuleConditions(String[] ruleConditions) {
-		this.ruleConditions = ruleConditions;
-	}
-
 	public Date getCreateDate() {
 		return createDate;
 	}
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public String getRuleConditions() {
+		return ruleConditions;
+	}
+
+	public void setRuleConditions(String ruleConditions) {
+		this.ruleConditions = ruleConditions;
+	}
+
+	public Long getRuleId() {
+		return ruleId;
+	}
+
+	public void setRuleId(Long ruleId) {
+		this.ruleId = ruleId;
 	}
 
 }
