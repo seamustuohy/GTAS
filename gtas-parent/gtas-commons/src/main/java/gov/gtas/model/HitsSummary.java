@@ -1,7 +1,5 @@
 package gov.gtas.model;
 
-import gov.gtas.model.udr.Rule;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -22,7 +20,7 @@ public class HitsSummary extends BaseEntity {
 	@Column(name = "traveler_id", nullable=false)
 	private Long travelerId;
 
-	@Column(name = "rule_id", nullable=false)
+	@Column(name = "rule_id", nullable = false)
 	private Long ruleId;
 
 	@Column(length = 100, nullable=false)

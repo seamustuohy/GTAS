@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface HitsSummaryRepository extends
 		CrudRepository<HitsSummary, Long> {
 
-	@Query("SELECT hits.ruleId FROM HitsSummary hits WHERE hits.travelerId = (:travelerId)")
-	List<Long> findByTravelerId(@Param("travelerId") Long travelerId);
+	@Query("SELECT hits.ruleId FROM HitsSummary hits WHERE hits.travelerId = (:id)")
+	List<Long> findByTravelerId(@Param("id") Long id);
 
 }

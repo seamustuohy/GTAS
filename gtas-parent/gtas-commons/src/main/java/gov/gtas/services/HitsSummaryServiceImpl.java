@@ -20,7 +20,7 @@ public class HitsSummaryServiceImpl implements HitsSummaryService {
 	 * return list of rule ids that matched the traveler
 	 */
 	@Override
-	public List<Long> findByTravelerId(Long travelId) {
-		return hitsSummaryRepository.findByTravelerId(travelId);
+	public List<Long> findByTravelerId(Long id) {
+		return hitsSummaryRepository.findByTravelerId(id);
 	}
 }
