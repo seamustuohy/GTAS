@@ -26,7 +26,10 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "pnr")
 public class PnrData extends BaseEntityAudit{
-	
+    @ManyToOne
+    @JoinColumn(name = "pnr_message_id")
+    private PnrMessage pnrMessage;
+    
 	@Column(name = "record_locator", length = 20)
 	private String recordLocator;
 	

@@ -9,7 +9,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,10 +17,6 @@ import javax.persistence.TemporalType;
 @Table(name = "message")
 @Inheritance(strategy = InheritanceType.JOINED)  
 public class Message extends BaseEntity {
-    
-    @Lob
-    private byte[] raw;
-    
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)  
     private Date createDate;
@@ -29,7 +24,8 @@ public class Message extends BaseEntity {
     @Column(name = "hash_code")
     private String hashCode;
 
-    private String source;
+    @Column(name = "file_path")
+    private String filePath;
 
     @Enumerated(EnumType.ORDINAL)
     private MessageStatus status;
@@ -37,12 +33,6 @@ public class Message extends BaseEntity {
     @Column(length = 4000)
     private String error;
 
-    public byte[] getRaw() {
-        return raw;
-    }
-    public void setRaw(byte[] raw) {
-        this.raw = raw;
-    }
     public Date getCreateDate() {
         return createDate;
     }
@@ -55,11 +45,11 @@ public class Message extends BaseEntity {
     public void setHashCode(String hashCode) {
         this.hashCode = hashCode;
     }
-    public String getSource() {
-        return source;
+    public String getFilePath() {
+        return filePath;
     }
-    public void setSource(String source) {
-        this.source = source;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
     public MessageStatus getStatus() {
         return status;

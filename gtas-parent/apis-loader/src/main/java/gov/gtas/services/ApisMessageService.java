@@ -67,13 +67,11 @@ public class ApisMessageService {
         this.apisMessage = new ApisMessage();
         this.apisMessage.setCreateDate(new Date());
         this.apisMessage.setStatus(MessageStatus.RECEIVED);
-        this.apisMessage.setSource(filePath);
+        this.apisMessage.setFilePath(filePath);
         
         ApisMessageVo vo = null;
         try {            
             byte[] raw = FileUtils.readSmallFile(filePath);
-            this.apisMessage.setRaw(raw);
-
             String message = new String(raw, StandardCharsets.US_ASCII);
             String payload = getApisMessagePayload(message);
             if (payload == null) {
