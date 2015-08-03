@@ -44,28 +44,6 @@ public class RuleConditionBuilderHelper {
 	}
     public static void addConditionValue(final CondValue val, StringBuilder bldr){
     	bldr.append(convertCondValToString(val));
-//     	switch(val.getValType()){
-//     	case OBJECT_REF:
-//     		bldr.append(val.getCharVal());
-//     		break;
-//    	case BOOLEAN:
-//    		bldr.append(val.getCharVal().charAt(0)=='Y'?"true":"false");
-//    		break;
-//    	case STRING:
-//    		bldr.append("\"").append(val.getCharVal()).append("\"");
-//    		break;
-//   	    case DATE:
-//   	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDate(val.getDtVal())).append("\"");
-//   	    	break;
-//   	    case DATETIME:
-//   	    	bldr.append("\"").append(DateCalendarUtils.formatRuleEngineDateTime(val.getDtVal())).append("\"");
-//   	    	break;
-//    	case INTEGER:
-//    	case LONG:
-//    	case DOUBLE:
-//    		bldr.append(val.getNumVal());
-//    		break;
-//    	}
     }
     public static void addConditionValues(final RuleCond cond, StringBuilder bldr){
     	List<CondValue> values = cond.getValues();
@@ -121,4 +99,11 @@ public class RuleConditionBuilderHelper {
 		return ret;
 	}
 
+	public static String getSingleStringValue(final RuleCond cond){
+		if(cond != null && cond.getValues() != null && cond.getValues().size() == 1){
+			return cond.getValues().get(0).getCharVal();
+		} else {
+			return null;
+		}
+	}
 }

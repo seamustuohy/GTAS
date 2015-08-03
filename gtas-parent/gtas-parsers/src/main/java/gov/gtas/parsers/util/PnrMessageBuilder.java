@@ -14,7 +14,6 @@ import gov.gtas.parsers.paxlst.vo.FlightVo;
 import gov.gtas.parsers.pnrgov.vo.AddressVo;
 import gov.gtas.parsers.pnrgov.vo.PnrVo;
 import gov.gtas.parsers.pnrgov.vo.PnrReportingAgentVo;
-import gov.gtas.parsers.pnrgov.vo.PnrPax;
 
 public class PnrMessageBuilder {
 //

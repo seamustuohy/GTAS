@@ -1,6 +1,5 @@
 package gov.gtas.rule.builder;
 
-import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleCondPk;
@@ -9,6 +8,10 @@ import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.enumtype.YesNoEnum;
+import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.querybuilder.mappings.DocumentMapping;
+import gov.gtas.querybuilder.mappings.FlightMapping;
+import gov.gtas.querybuilder.mappings.IEntityMapping;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -30,19 +33,32 @@ public class RuleBuilderTestUtils {
 		
 		return ret;
 	}
-	public static RuleCond createRuleCondition(EntityLookupEnum entity,
-			String attribute, OperatorCodeEnum op, String value,
+	/**
+	 * Create a Rule condition object using common (query and criteria)
+	 * enums.
+	 * @param ent
+	 * @param attr
+	 * @param op
+	 * @param value
+	 * @param type
+	 * @return
+	 * @throws ParseException
+	 */
+	public static RuleCond createRuleCond(EntityEnum ent,
+			IEntityMapping attr, OperatorCodeEnum op, String value,
 			ValueTypesEnum type) throws ParseException {
 		RuleCondPk pk = new RuleCondPk(1L, 1);
-		RuleCond ret = new RuleCond(pk, entity, attribute, op);
+		EntityLookupEnum entity = EntityLookupEnum.valueOf(ent.getEntityName());
+		RuleCond ret = new RuleCond(pk, entity, attr.getFieldName(), op);
 		ret.addValueToCondition(value, type);
 		return ret;
 	}
-	public static RuleCond createRuleCondition(EntityLookupEnum entity,
-			String attribute, OperatorCodeEnum op, String[] values,
+	public static RuleCond createRuleCond(EntityEnum ent,
+			IEntityMapping attr, OperatorCodeEnum op, String[] values,
 			ValueTypesEnum type) throws ParseException {
 		RuleCondPk pk = new RuleCondPk(1L, 1);
-		RuleCond ret = new RuleCond(pk, entity, attribute, op);
+		EntityLookupEnum entity = EntityLookupEnum.valueOf(ent.getEntityName());
+		RuleCond ret = new RuleCond(pk, entity, attr.getFieldName(), op);
 		for(String value:values){
 		   ret.addValueToCondition(value, type);
 		}
@@ -56,43 +72,43 @@ public class RuleBuilderTestUtils {
 		Rule engineRule = new Rule(parent,indx,null);
 		switch(indx){
 			case 1:/* doc.iso2 != US && doc.issueDate > 2012-01-01 && flight# == 0012  */
-				RuleCond cond = createRuleCondition(EntityLookupEnum.Document,
-						EntityAttributeConstants.DOCUMENT_ATTR_ISO2,
+				RuleCond cond = createRuleCond(EntityEnum.DOCUMENT,
+						DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
 						OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
-				cond = createRuleCondition(EntityLookupEnum.Document,
-						EntityAttributeConstants.DOCUMENT_ATTR_ISSUANCE_DATE,
+				cond = createRuleCond(EntityEnum.DOCUMENT,
+						DocumentMapping.ISSUANCE_DATE,
 						OperatorCodeEnum.GREATER_OR_EQUAL, "2012-01-01", ValueTypesEnum.DATE);
 				engineRule.addConditionToRule(cond);
-				cond = createRuleCondition(EntityLookupEnum.Flight,
-						EntityAttributeConstants.FLIGHT_ATTR_FLIGHT_NUMBER,
+				cond = createRuleCond(EntityEnum.FLIGHT,
+						FlightMapping.FLIGHT_NUMBER,
 						OperatorCodeEnum.EQUAL, "0012", ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
 				break;
 			case 2:/* doc.iso2 in (YE,GB) && flight.origin.iata == LHR && flight.carrier.iata==CO  */
-				cond = createRuleCondition(EntityLookupEnum.Document,
-						EntityAttributeConstants.DOCUMENT_ATTR_ISO2,
+				cond = createRuleCond(EntityEnum.DOCUMENT,
+						DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
 						OperatorCodeEnum.IN, new String[]{"YE", "GB"}, ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
-				cond = createRuleCondition(EntityLookupEnum.Flight,
-						EntityAttributeConstants.FLIGHT_ATTR_ORIGIN_IATA,
+				cond = createRuleCond(EntityEnum.FLIGHT,
+						FlightMapping.AIRPORT_ORIGIN,
 						OperatorCodeEnum.EQUAL, "LHR", ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
-				cond = createRuleCondition(EntityLookupEnum.Flight,
-						EntityAttributeConstants.FLIGHT_ATTR_CARRIER_IATA,
+				cond = createRuleCond(EntityEnum.FLIGHT,
+						FlightMapping.CARRIER,
 						OperatorCodeEnum.EQUAL, "CO", ValueTypesEnum.STRING);
 				break;
 			case 3:/* flight.origin.iata == LHR && flight.carrier.iata==CO  */
-				cond = createRuleCondition(EntityLookupEnum.Flight,
-						EntityAttributeConstants.FLIGHT_ATTR_ORIGIN_IATA,
+				cond = createRuleCond(EntityEnum.FLIGHT,
+						FlightMapping.AIRPORT_ORIGIN,
 						OperatorCodeEnum.EQUAL, "LHR", ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
-				cond = createRuleCondition(EntityLookupEnum.Flight,
-						EntityAttributeConstants.FLIGHT_ATTR_CARRIER_IATA,
+				cond = createRuleCond(EntityEnum.FLIGHT,
+						FlightMapping.CARRIER,
 						OperatorCodeEnum.EQUAL, "CO", ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
-				cond = createRuleCondition(EntityLookupEnum.Flight,
-						EntityAttributeConstants.FLIGHT_ATTR_DATE,
+				cond = createRuleCond(EntityEnum.FLIGHT,
+						FlightMapping.FLIGHT_DATE,
 						OperatorCodeEnum.GREATER, "2015-07-20 14:00:00", ValueTypesEnum.DATETIME);
 				engineRule.addConditionToRule(cond);
 				break;
