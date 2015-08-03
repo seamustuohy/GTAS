@@ -1,70 +1,75 @@
 package gov.gtas.parsers.pnrgov.vo;
 
-public class AddressVo {
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-	private String AddressType;
-	private String AddressLine1;
-	private String AddressLine2;
-	private String AddressLine3;
-	private String AddressCity;
-	private String AddressState;
-	private String AddressCountry;
-	private String AddressPostalCode;
-	private String PhoneNumber;
+public class AddressVo {
+	private String type;
+	private String line1;
+	private String line2;
+	private String line3;
+	private String city;
+	private String state;
+	private String country;
+	private String postalCode;
+	private String phoneNumber;
 	
-	public String getAddressType() {
-		return AddressType;
-	}
-	public void setAddressType(String addressType) {
-		AddressType = addressType;
-	}
-	public String getAddressLine1() {
-		return AddressLine1;
-	}
-	public void setAddressLine1(String addressLine1) {
-		AddressLine1 = addressLine1;
-	}
-	public String getAddressLine2() {
-		return AddressLine2;
-	}
-	public void setAddressLine2(String addressLine2) {
-		AddressLine2 = addressLine2;
-	}
-	public String getAddressLine3() {
-		return AddressLine3;
-	}
-	public void setAddressLine3(String addressLine3) {
-		AddressLine3 = addressLine3;
-	}
-	public String getAddressCity() {
-		return AddressCity;
-	}
-	public void setAddressCity(String addressCity) {
-		AddressCity = addressCity;
-	}
-	public String getAddressState() {
-		return AddressState;
-	}
-	public void setAddressState(String addressState) {
-		AddressState = addressState;
-	}
-	public String getAddressCountry() {
-		return AddressCountry;
-	}
-	public void setAddressCountry(String addressCountry) {
-		AddressCountry = addressCountry;
-	}
-	public String getAddressPostalCode() {
-		return AddressPostalCode;
-	}
-	public void setAddressPostalCode(String addressPostalCode) {
-		AddressPostalCode = addressPostalCode;
-	}
-	public String getPhoneNumber() {
-		return PhoneNumber;
-	}
-	public void setPhoneNumber(String phoneNumber) {
-		PhoneNumber = phoneNumber;
-	}
-	
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+    public String getLine1() {
+        return line1;
+    }
+    public void setLine1(String line1) {
+        this.line1 = line1;
+    }
+    public String getLine2() {
+        return line2;
+    }
+    public void setLine2(String line2) {
+        this.line2 = line2;
+    }
+    public String getLine3() {
+        return line3;
+    }
+    public void setLine3(String line3) {
+        this.line3 = line3;
+    }
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
+    }
+    public String getState() {
+        return state;
+    }
+    public void setState(String state) {
+        this.state = state;
+    }
+    public String getCountry() {
+        return country;
+    }
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    public String getPostalCode() {
+        return postalCode;
+    }
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
 }

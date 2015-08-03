@@ -7,7 +7,9 @@ import java.util.Set;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.paxlst.vo.DocumentVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
+import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.pnrgov.segment.ABI;
 import gov.gtas.parsers.pnrgov.segment.ADD;
 import gov.gtas.parsers.pnrgov.segment.APD;
@@ -41,8 +43,8 @@ import gov.gtas.parsers.pnrgov.segment.TRI;
 import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
+import gov.gtas.parsers.pnrgov.vo.AddressVo;
 import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
-import gov.gtas.parsers.pnrgov.vo.PnrPax;
 import gov.gtas.parsers.pnrgov.vo.PnrVo;
 
 public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
@@ -120,6 +122,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (add == null) {
                 break;
             }
+            currentPnr.getAddresses().add(createAddress(add));
         }
 
         for (;;) {
@@ -152,13 +155,11 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
      * Passenger
      */
     private void processGroup2(TIF tif) throws ParseException {
-        for (TravelerDetails td : tif.getTravelerDetails()) {
-            PnrPax p = new PnrPax();
-            p.setLastName(tif.getTravelerSurname());
-            p.setFirstName(td.getTravelerGivenName());
-            p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());
-            currentPnr.getPassengers().add(p);
-        }
+        PaxVo p = new PaxVo();
+        TravelerDetails td = tif.getTravelerDetails().get(0);
+        p.setLastName(tif.getTravelerSurname());
+        p.setFirstName(td.getTravelerGivenName());
+        currentPnr.getPassengers().add(p);
 
         FTI fti = getConditionalSegment(FTI.class);
 
@@ -184,6 +185,10 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (ssr == null) {
                 break;
             }
+            SSR.SsrCode code = SSR.SsrCode.valueOf(ssr.getTypeOfRequest());
+            if (code == SSR.SsrCode.DOCS) {
+                PnrUtils.createDocument(ssr, p);
+            }
         }
 
         for (;;) {
@@ -191,6 +196,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (add == null) {
                 break;
             }
+            currentPnr.getAddresses().add(createAddress(add));
         }
 
         for (;;) {
@@ -223,7 +229,9 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private void processGroup4(FOP fop) throws ParseException {
         IFT ift = getConditionalSegment(IFT.class);
         ADD add = getConditionalSegment(ADD.class);
-
+        if (add != null) {
+            currentPnr.getAddresses().add(createAddress(add));
+        }
     }
 
     private void processGroup5(TVL tvl) throws ParseException {
@@ -364,5 +372,17 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private void processGroup12(TVL tvl) throws ParseException {
         RPI rpi = getConditionalSegment(RPI.class);
    
+    }
+    
+    private AddressVo createAddress(ADD add) {
+        AddressVo rv = new AddressVo();
+        rv.setType(add.getAddressType());
+        rv.setLine1(add.getStreetNumberAndName());
+        rv.setCity(add.getCity());
+        rv.setState(add.getStateOrProvinceCode());
+        rv.setCountry(add.getCountryCode());
+        rv.setPostalCode(add.getPostalCode());
+        rv.setPhoneNumber(add.getTelephone());
+        return rv;
     }
 }

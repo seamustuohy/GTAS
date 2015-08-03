@@ -6,14 +6,16 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.paxlst.vo.FlightVo;
+import gov.gtas.parsers.paxlst.vo.PaxVo;
 
 public class PnrVo {
     private String updateMode;
     private List<FlightVo> flights = new ArrayList<>();
-    private List<PnrPax> passengers = new ArrayList<>();
+    private List<PaxVo> passengers = new ArrayList<>();
     private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
+    private List<AddressVo> addresses = new ArrayList<>();
+    
     private Integer numberOfPassengers;
 
     public Integer getNumberOfPassengers() {
@@ -40,12 +42,8 @@ public class PnrVo {
         this.flights = flights;
     }
 
-    public List<PnrPax> getPassengers() {
+    public List<PaxVo> getPassengers() {
         return passengers;
-    }
-
-    public void setPassengers(List<PnrPax> passengers) {
-        this.passengers = passengers;
     }
 
     public List<PnrReportingAgentVo> getReportingParties() {
@@ -56,6 +54,14 @@ public class PnrVo {
         this.reportingParties = reportingParties;
     }
     
+    public List<AddressVo> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressVo> addresses) {
+        this.addresses = addresses;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
