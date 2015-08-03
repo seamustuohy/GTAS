@@ -1,6 +1,7 @@
 package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
+import gov.gtas.model.HitDetail;
 import gov.gtas.services.HitsSummaryService;
 
 import java.util.List;
@@ -23,8 +24,9 @@ public class HitsSummaryController {
 	HitsSummaryService hitsSummaryService;
 
 	@RequestMapping(value = Constants.HITS_SUMMARY_RULES_BY_TRAVELER_ID, method = RequestMethod.GET)
-	public List<Long> getRules(@PathVariable Long id) {
+	public List<HitDetail> getRules(@PathVariable Long id) {
 		logger.info("pass in travelerId: " + id);
-		return hitsSummaryService.findByTravelerId(id);
+		return null;
+		// return hitsSummaryService.findByTravelerId(id);
 	}
 }

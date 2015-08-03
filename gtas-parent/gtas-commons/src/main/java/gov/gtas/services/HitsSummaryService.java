@@ -1,9 +1,11 @@
 package gov.gtas.services;
 
+import gov.gtas.model.HitDetail;
+
 import java.util.List;
 
 public interface HitsSummaryService {
 
-	public List<Long> findByTravelerId(Long id);
+	public List<HitDetail> findByTravelerId(Long id);
 
 }
