@@ -1,5 +1,29 @@
 package gov.gtas.controller;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.validation.ConstraintViolationException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.gtas.constants.Constants;
 import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
@@ -27,33 +51,6 @@ import gov.gtas.querybuilder.model.QueryResponse;
 import gov.gtas.querybuilder.model.QueryResult;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.service.QueryBuilderService;
-import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 
@@ -208,12 +205,12 @@ public class QueryBuilderController {
 					
 					qbFlight.setId(flight.getId());
 					qbFlight.setFlightNumber(flight.getFlightNumber());
-					qbFlight.setCarrierCode(flight.getCarrier() != null ? flight.getCarrier().getIata() : "");
-					qbFlight.setOrigin(flight.getOrigin() != null ? flight.getOrigin().getIata() : "");
-					qbFlight.setOriginCountry(flight.getOriginCountry() != null ? flight.getOriginCountry().getIso2() : "");
+					qbFlight.setCarrierCode(flight.getCarrier() != null ? flight.getCarrier() : "");
+					qbFlight.setOrigin(flight.getOrigin() != null ? flight.getOrigin() : "");
+					qbFlight.setOriginCountry(flight.getOriginCountry() != null ? flight.getOriginCountry() : "");
 					qbFlight.setDepartureDt(dtFormat.format(flight.getEtd()));
-					qbFlight.setDestination(flight.getDestination() != null ? flight.getDestination().getIata() : "");
-					qbFlight.setDestinationCountry(flight.getDestinationCountry() != null ? flight.getDestinationCountry().getIso2() : "");
+					qbFlight.setDestination(flight.getDestination() != null ? flight.getDestination() : "");
+					qbFlight.setDestinationCountry(flight.getDestinationCountry() != null ? flight.getDestinationCountry() : "");
 					qbFlight.setArrivalDt(dtFormat.format(flight.getEta()));
 					
 					qbFlights.add(qbFlight);
@@ -258,7 +255,7 @@ public class QueryBuilderController {
 					
 					qbPassenger.setGender(traveler.getGender() != null ? traveler.getGender().toString() : "");
 					qbPassenger.setDob(dobFormat.format(traveler.getDob()));
-					qbPassenger.setCitizenship(traveler.getCitizenshipCountry() != null ? traveler.getCitizenshipCountry().getIso2() : "");
+					qbPassenger.setCitizenship(traveler.getCitizenshipCountry() != null ? traveler.getCitizenshipCountry() : "");
 					
 					// Document information
 					Set<Document> docs = traveler.getDocuments();
@@ -274,7 +271,7 @@ public class QueryBuilderController {
 							else if(doc instanceof Visa) {
 								docType = VISA;
 							}
-							docIssuanceCountry = doc.getIssuanceCountry().getIso2();
+							docIssuanceCountry = doc.getIssuanceCountry();
 						}
 					}
 					qbPassenger.setDocumentNumber(docNumber);
@@ -287,10 +284,10 @@ public class QueryBuilderController {
 						if(flights.iterator().hasNext()) {
 							Flight flight = flights.iterator().next();
 							
-							carrierCode = flight.getCarrier() != null ? flight.getCarrier().getIata() : "";
+							carrierCode = flight.getCarrier() != null ? flight.getCarrier() : "";
 							flightNumber = flight.getFlightNumber();
-							origin = flight.getOrigin() != null ? flight.getOrigin().getIata() : "";
-							destination  = flight.getDestination() != null ? flight.getDestination().getIata() : "";
+							origin = flight.getOrigin() != null ? flight.getOrigin() : "";
+							destination  = flight.getDestination() != null ? flight.getDestination() : "";
 							departureDt = dtFormat.format(flight.getEtd());
 							arrivalDt = dtFormat.format(flight.getEta());
 						}

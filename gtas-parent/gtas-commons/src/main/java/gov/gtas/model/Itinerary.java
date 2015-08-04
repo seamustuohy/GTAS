@@ -12,7 +12,7 @@ public class Itinerary extends BaseEntity {
     @JoinColumn
     private Flight flight;
     
-    private Short legNumber;
+    private Integer legNumber;
     
     @ManyToOne
     @JoinColumn

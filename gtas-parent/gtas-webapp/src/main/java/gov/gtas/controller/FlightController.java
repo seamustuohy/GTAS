@@ -1,9 +1,5 @@
 package gov.gtas.controller;
 
-import gov.gtas.model.Flight;
-import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.services.FlightService;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import gov.gtas.model.Flight;
+import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.services.FlightService;
 
 @Controller
 public class FlightController {
@@ -40,17 +40,17 @@ public class FlightController {
             logger.debug(f.getFlightNumber());
             FlightVo vo = new FlightVo();
             vo.setFlightId(String.valueOf(f.getId()));
-            String carrier = f.getCarrier() != null ? f.getCarrier().getIata() : null;
+            String carrier = f.getCarrier() != null ? f.getCarrier() : null;
             vo.setCarrier(carrier);
             vo.setFlightNumber(f.getFlightNumber());
-            String origin = f.getOrigin() != null ? f.getOrigin().getIata() : null;
+            String origin = f.getOrigin() != null ? f.getOrigin() : null;
             vo.setOrigin(origin);
-            String originCountry = f.getOriginCountry() != null ? f.getOriginCountry().getIso2() : null;
+            String originCountry = f.getOriginCountry() != null ? f.getOriginCountry() : null;
             vo.setOriginCountry(originCountry);
             vo.setEtd(f.getEtd());
-            String dest = f.getDestination() != null ? f.getDestination().getIata() : null;
+            String dest = f.getDestination() != null ? f.getDestination() : null;
             vo.setDestination(dest);
-            String destCountry = f.getDestinationCountry() != null ? f.getDestinationCountry().getIso2() : null;
+            String destCountry = f.getDestinationCountry() != null ? f.getDestinationCountry() : null;
             vo.setDestinationCountry(destCountry);
             vo.setEta(f.getEta());
             rv.add(vo);

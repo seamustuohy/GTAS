@@ -1,22 +1,6 @@
 package gov.gtas.repository;
 
 import static org.junit.Assert.assertNotNull;
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Gender;
-import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Passport;
-import gov.gtas.model.Pax;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
-import gov.gtas.model.lookup.Country;
-import gov.gtas.services.AirportService;
-import gov.gtas.services.CarrierService;
-import gov.gtas.services.CountryService;
-import gov.gtas.services.FlightService;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -37,6 +21,23 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Document;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Gender;
+import gov.gtas.model.MessageStatus;
+import gov.gtas.model.Passport;
+import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.lookup.Airport;
+import gov.gtas.model.lookup.Carrier;
+import gov.gtas.model.lookup.Country;
+import gov.gtas.services.AirportService;
+import gov.gtas.services.CarrierService;
+import gov.gtas.services.CountryService;
+import gov.gtas.services.FlightService;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -44,15 +45,6 @@ public class ServiceRepositoryIT {
 
 	@Autowired
 	private FlightService testTarget;
-
-	@Autowired
-	private AirportService aService;
-
-	@Autowired
-	private CountryService cService;
-
-	@Autowired
-	private CarrierService crService;
 
 	@Autowired
 	private LookUpRepository lookupDao;
@@ -69,30 +61,15 @@ public class ServiceRepositoryIT {
 	}
 
 	// @Test()
-	// public void testFindFlightRequest() {
-	// List<Flight> flights = testTarget.findAll();
-	// assertNotNull(flights);
-	// assertNotNull(flights.size());
-	// assertEquals(2, flights.size());
-	// System.out.println("********************************************************");
-	// assertEquals("Result list expected ", 1, flights.size());
-	//
-	// //for(Flight f : flights){
-	// //System.out.println("Flight detail"+f.getFlightNumber());
-	// //}
-	// System.out.println("********************************************************");
-	//
-	// }
-	// @Test()
 	public void testAddFlight() {
 		Flight f = new Flight();
 		f.setCreatedAt(new Date());
 		f.setCreatedBy("JUNIT");
 		// Airport a = new Airport(3616l,"Washington","IAD","KAID");
-		Airport a = aService.getAirportByThreeLetterCode("IAD");
+		String a = "IAD";
 		System.out.println(a);
 		f.setOrigin(a);
-		Airport b = aService.getAirportByThreeLetterCode("JFK");
+		String b = "JFK";
 		// Airport b = new Airport (3584l,"Atlanta","ATL","KATL");
 
 		f.setDestination(b);
@@ -101,11 +78,11 @@ public class ServiceRepositoryIT {
 		f.setFlightDate(new Date());
 		f.setFlightNumber("8002");
 
-		Country c = cService.getCountryByTwoLetterCode("US");
+		String c = "US";
 		f.setDestinationCountry(c);
 		f.setOriginCountry(c);
 
-		Carrier cr = crService.getCarrierByTwoLetterCode("AA");
+		String cr = "AA";
 		f.setCarrier(cr);
 		f.setUpdatedAt(new Date());
 		f.setUpdatedBy("TEST");

@@ -1,7 +1,5 @@
 package gov.gtas.model;
 
-import gov.gtas.model.lookup.Country;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,7 +8,6 @@ import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -32,9 +29,8 @@ public abstract class Document extends BaseEntity {
     @Column(name = "issuance_date")
     private Date issuanceDate;
     
-    @ManyToOne
-    @JoinColumn(name = "issuance_country_id")
-    private Country issuanceCountry;
+    @Column(name = "issuance_country")
+    private String issuanceCountry;
     
     @ManyToOne
     private Traveler traveler;
@@ -63,11 +59,11 @@ public abstract class Document extends BaseEntity {
         this.issuanceDate = issuanceDate;
     }
 
-    public Country getIssuanceCountry() {
+    public String getIssuanceCountry() {
         return issuanceCountry;
     }
 
-    public void setIssuanceCountry(Country issuanceCountry) {
+    public void setIssuanceCountry(String issuanceCountry) {
         this.issuanceCountry = issuanceCountry;
     }
 

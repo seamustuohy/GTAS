@@ -79,7 +79,7 @@ public class RuleServiceDataGenUtils {
 	public Rule createRuleWithOneCondition(UdrRule parent, int index) {
 		Rule rule = new Rule(parent, index, null);
 		rule.addConditionToRule(createCondition(1, EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				OperatorCodeEnum.EQUAL, "IAD"));
 		return rule;
 	}

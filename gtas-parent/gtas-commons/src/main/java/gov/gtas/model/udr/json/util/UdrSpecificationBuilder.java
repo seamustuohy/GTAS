@@ -147,11 +147,11 @@ public class UdrSpecificationBuilder {
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityLookupEnum.Traveler,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
 		bldr.addTerm(EntityLookupEnum.Traveler,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		bldr.addMeta(title, description, new Date(), null, true, userId);
@@ -189,11 +189,11 @@ public class UdrSpecificationBuilder {
 		bldr.endCurrentQueryObject();
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
 		bldr.addTerm(EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		bldr.addMeta(title, description, new Date(), null, true, userId);

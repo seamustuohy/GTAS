@@ -2,18 +2,13 @@ package gov.gtas.model;
 
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "credit_card")
 public class CreditCard extends BaseEntityAudit {
-
-	
 	@Column(name = "card_type")
     private String cardType;
 	

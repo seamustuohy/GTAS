@@ -1,26 +1,10 @@
 package gov.gtas.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.Address;
-import gov.gtas.model.Agency;
-import gov.gtas.model.CreditCard;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
-import gov.gtas.model.Phone;
-import gov.gtas.model.PnrData;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
-import gov.gtas.model.lookup.Country;
-import gov.gtas.repository.ApisMessageRepository;
-import gov.gtas.repository.LookUpRepository;
-import gov.gtas.services.PnrDataService;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,6 +15,17 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.Address;
+import gov.gtas.model.Agency;
+import gov.gtas.model.CreditCard;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Pax;
+import gov.gtas.model.Phone;
+import gov.gtas.model.PnrData;
+import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.LookUpRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
@@ -94,7 +89,7 @@ public class PnrDataServiceIT {
 	private void preparePnrData(PnrData pnr){
 		pnr.setBagCount(2);
 		pnr.setBooked("Yes");
-		Carrier cr = crService.getCarrierByTwoLetterCode("AA");
+		String cr = "AA";
 		pnr.setCarrier(cr);
 		pnr.setCreatedAt(new Date());
 		pnr.setCreationDate();
@@ -102,8 +97,8 @@ public class PnrDataServiceIT {
 		pnr.setDaysBookedBeforeTravel(30);
 		pnr.setDepartureDate(new Date());
 		pnr.setFormOfPayment("CC");
-		Airport a = aService.getAirportByThreeLetterCode("IAD");
-		Country c = cService.getCountryByTwoLetterCode("US");
+		String a = "IAD";
+		String c = "US";
 		pnr.setOrigin(a);
 		pnr.setOriginCountry(c);
 		pnr.setPassengerCount(1);
@@ -144,16 +139,16 @@ public class PnrDataServiceIT {
 		ag.setAgencyName("Some Test Agency");
 		ag.setCreatedAt(new Date());
 		pnr.setAgency(ag);
-				
 	}
+	
 	private void prepareFlightData(Flight f){
 		f.setCreatedAt(new Date());
 		f.setCreatedBy("JUNIT");
 		// Airport a = new Airport(3616l,"Washington","IAD","KAID");
-		Airport a = aService.getAirportByThreeLetterCode("IAD");
+		String a = "IAD";
 		System.out.println(a);
 		f.setOrigin(a);
-		Airport b = aService.getAirportByThreeLetterCode("JFK");
+		String b = "JFK";
 		// Airport b = new Airport (3584l,"Atlanta","ATL","KATL");
 
 		f.setDestination(b);
@@ -162,19 +157,20 @@ public class PnrDataServiceIT {
 		f.setFlightDate(new Date());
 		f.setFlightNumber("528");
 
-		Country c = cService.getCountryByTwoLetterCode("US");
+		String c = "US";
 		f.setDestinationCountry(c);
 		f.setOriginCountry(c);
 
-		Carrier cr = crService.getCarrierByTwoLetterCode("AA");
+		String cr = "AA";
 		f.setCarrier(cr);
 		f.setUpdatedAt(new Date());
 		f.setUpdatedBy("TEST");
 	}
+	
 	private void preparePassengerData(Pax passengerToUpdate){
 		passengerToUpdate.setAge(30);
-		Country c = cService.getCountryByTwoLetterCode("US");
-		Airport b = aService.getAirportByThreeLetterCode("JFK");
+		String c = "US";
+		String b = "JFK";
 		passengerToUpdate.setCitizenshipCountry(c);
 		passengerToUpdate.setDebarkation(b);
 		passengerToUpdate.setDebarkCountry(c);

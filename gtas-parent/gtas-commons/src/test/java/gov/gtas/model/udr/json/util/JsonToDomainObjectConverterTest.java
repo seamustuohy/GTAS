@@ -34,6 +34,7 @@ public class JsonToDomainObjectConverterTest {
 	@Test
 	public void testBasicWithId() {
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(UDR_AUTHOR, UDR_TITLE, UDR_DESCRIPTION);
+		System.out.println(spec);
 		Date startDate = spec.getSummary().getStartDate();
 		Date endDate = new Date(System.currentTimeMillis() + 86400000L);//one day in the future
         spec.getSummary().setEndDate(endDate);

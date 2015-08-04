@@ -58,7 +58,7 @@ public class QueryObjectTest {
 		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_DOB, 
 				ValueTypesEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
 		builder.addNestedQueryObject(QueryConditionEnum.OR);
-		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME, 
+		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT, 
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"DBY"});
 		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_CITIZENSHIP_COUNTRY, 
 				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"});
@@ -71,7 +71,7 @@ public class QueryObjectTest {
 		assertEquals(3,mintermList.size());
 		verifyTerm(mintermList.get(0), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_LAST_NAME, OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
 		verifyTerm(mintermList.get(1), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_DOB, OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
-		verifyTerm(mintermList.get(2), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME, OperatorCodeEnum.EQUAL, new String[]{"DBY"} );
+		verifyTerm(mintermList.get(2), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT, OperatorCodeEnum.EQUAL, new String[]{"DBY"} );
 		
 		mintermList = flatList.get(1);
 		assertEquals(3,mintermList.size());
@@ -96,7 +96,7 @@ public class QueryObjectTest {
 		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_DOB, 
 				ValueTypesEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
 		builder.addNestedQueryObject(QueryConditionEnum.OR);
-		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME, 
+		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT, 
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"DBY"});
 		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_CITIZENSHIP_COUNTRY, 
 				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"});
@@ -108,7 +108,7 @@ public class QueryObjectTest {
 		builder.addNestedQueryObject(QueryConditionEnum.OR);
 		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.FLIGHT_ATTR_FLIGHT_NUMBER, 
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"12345"});
-		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.FLIGHT_ATTR_DESTINATION_NAME, 
+		builder.addTerm(EntityLookupEnum.Pax, EntityAttributeConstants.FLIGHT_ATTR_DESTINATION, 
 				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"Timbuktu"});
 
 		QueryObject qobj = builder.build().getDetails();
@@ -119,7 +119,7 @@ public class QueryObjectTest {
 		assertEquals(3,mintermList.size());
 		verifyTerm(mintermList.get(0), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_LAST_NAME, OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
 		verifyTerm(mintermList.get(1), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_DOB, OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
-		verifyTerm(mintermList.get(2), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME, OperatorCodeEnum.EQUAL, new String[]{"DBY"} );
+		verifyTerm(mintermList.get(2), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT, OperatorCodeEnum.EQUAL, new String[]{"DBY"} );
 		
 		mintermList = flatList.get(1);
 		assertEquals(3,mintermList.size());
@@ -141,7 +141,7 @@ public class QueryObjectTest {
 		verifyTerm(mintermList.get(1), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_DOB, OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
 		verifyTerm(mintermList.get(2), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTTR_MIDDLE_NAME, OperatorCodeEnum.EQUAL, new String[]{"Paul"} );
 		verifyTerm(mintermList.get(3), EntityLookupEnum.Pax, EntityAttributeConstants.PAX_ATTR_FIRST_NAME, OperatorCodeEnum.NOT_EQUAL, new String[]{"John"} );
-		verifyTerm(mintermList.get(4), EntityLookupEnum.Pax, EntityAttributeConstants.FLIGHT_ATTR_DESTINATION_NAME, OperatorCodeEnum.NOT_EQUAL, new String[]{"Timbuktu"} );
+		verifyTerm(mintermList.get(4), EntityLookupEnum.Pax, EntityAttributeConstants.FLIGHT_ATTR_DESTINATION, OperatorCodeEnum.NOT_EQUAL, new String[]{"Timbuktu"} );
 				
 	}
 }

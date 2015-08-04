@@ -1,16 +1,5 @@
 package gov.gtas.controller;
 
-import gov.gtas.model.Crew;
-import gov.gtas.model.Document;
-import gov.gtas.model.Pax;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Country;
-import gov.gtas.parsers.vo.air.DocumentVo;
-import gov.gtas.parsers.vo.air.PaxVo;
-import gov.gtas.repository.DocumentRepository;
-import gov.gtas.services.PassengerService;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import gov.gtas.model.Crew;
+import gov.gtas.model.Document;
+import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
+import gov.gtas.parsers.vo.air.DocumentVo;
+import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.repository.DocumentRepository;
+import gov.gtas.services.PassengerService;
 
 @Controller
 public class TravelerController {
@@ -56,19 +54,19 @@ public class TravelerController {
             vo.setLastName(t.getLastName());
             vo.setFirstName(t.getFirstName());
             vo.setMiddleName(t.getMiddleName());
-            vo.setCitizenshipCountry(getCountryCode(t.getCitizenshipCountry()));
-            vo.setDebarkation(getAirportCode(t.getDebarkation()));
-            vo.setDebarkCountry(getCountryCode(t.getDebarkCountry()));
+            vo.setCitizenshipCountry(t.getCitizenshipCountry());
+            vo.setDebarkation(t.getDebarkation());
+            vo.setDebarkCountry(t.getDebarkCountry());
             vo.setDob(t.getDob());
-            vo.setEmbarkation(getAirportCode(t.getEmbarkation()));
-            vo.setEmbarkCountry(getCountryCode(t.getEmbarkCountry()));
+            vo.setEmbarkation(t.getEmbarkation());
+            vo.setEmbarkCountry(t.getEmbarkCountry());
             vo.setGender(t.getGender().toString());
             if (t instanceof Pax) {
                 vo.setPaxType("P");
             } else if (t instanceof Crew) {
                 vo.setPaxType("C");
             }
-            vo.setResidencyCountry(getCountryCode(t.getResidencyCountry()));
+            vo.setResidencyCountry(t.getResidencyCountry());
             vo.setSuffix(t.getSuffix());
             vo.setTitle(t.getTitle());
             List<Document> docs = docDao.getTravelerDocuments(t.getId());
@@ -77,7 +75,7 @@ public class TravelerController {
                 DocumentVo docVo = new DocumentVo();
                 docVo.setDocumentNumber(d.getDocumentNumber());
                 docVo.setDocumentType("P");
-                docVo.setIssuanceCountry(getCountryCode(d.getIssuanceCountry()));
+                docVo.setIssuanceCountry(d.getIssuanceCountry());
                 docVo.setExpirationDate(d.getExpirationDate());
                 docVo.setIssuanceDate(d.getIssuanceDate());
                 vo.addDocument(docVo);
@@ -86,13 +84,5 @@ public class TravelerController {
         }
         
         return rv;
-    }
-
-    private String getCountryCode(Country c) {
-        return c != null ? c.getIso2() : null;
-    }
-
-    private String getAirportCode(Airport a) {
-        return a != null ? a.getIata() : null;
     }
 }

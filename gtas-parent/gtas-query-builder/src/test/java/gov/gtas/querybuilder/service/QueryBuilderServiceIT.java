@@ -1,5 +1,23 @@
 package gov.gtas.querybuilder.service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
@@ -24,24 +42,6 @@ import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.util.DateCalendarUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {CommonServicesConfig.class, QueryBuilderAppConfig.class})
@@ -225,7 +225,7 @@ public class QueryBuilderServiceIT {
 						else if(doc instanceof Visa) {
 							docType = "V";
 						}
-						docIssuanceCountry = doc.getIssuanceCountry().getIso2();
+						docIssuanceCountry = doc.getIssuanceCountry();
 					}
 				}
 
@@ -238,10 +238,10 @@ public class QueryBuilderServiceIT {
 					if(flights.iterator().hasNext()) {
 						Flight flight = flights.iterator().next();
 						
-						carrierCode = flight.getCarrier() != null ? flight.getCarrier().getIata() : "";
+						carrierCode = flight.getCarrier() != null ? flight.getCarrier() : "";
 						flightNumber = flight.getFlightNumber();
-						origin = flight.getOrigin() != null ? flight.getOrigin().getIata() : "";
-						destination  = flight.getDestination() != null ? flight.getDestination().getIata() : "";
+						origin = flight.getOrigin() != null ? flight.getOrigin() : "";
+						destination  = flight.getDestination() != null ? flight.getDestination() : "";
 						departureDt = dtFormat.format(flight.getEtd());
 						arrivalDt = dtFormat.format(flight.getEta());
 					}
@@ -564,11 +564,11 @@ public class QueryBuilderServiceIT {
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
 		bldr.addTerm(EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 

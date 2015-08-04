@@ -32,7 +32,7 @@ public class ApisMessage extends Message {
     )        
     private Set<Flight> flights = new HashSet<>();
 
-     public Set<ReportingParty> getReportingParties() {
+    public Set<ReportingParty> getReportingParties() {
         return reportingParties;
     }
 

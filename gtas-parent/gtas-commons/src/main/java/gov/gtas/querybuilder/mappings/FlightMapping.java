@@ -4,11 +4,11 @@ import gov.gtas.querybuilder.enums.TypeEnum;
 
 public enum FlightMapping implements IEntityMapping {
 
-	AIRPORT_DESTINATION ("destination.iata", "Airport - Destination", TypeEnum.STRING.getType()),
-	AIRPORT_ORIGIN ("origin.iata", "Airport - Origin", TypeEnum.STRING.getType()),
-	CARRIER ("carrier.iata", "Carrier", TypeEnum.STRING.getType()),
-	COUNTRY_DESTINATION ("destinationCountry.iso3", "Country - Destination", TypeEnum.STRING.getType()),
-	COUNTRY_ORIGIN ("originCountry.iso3", "Country - Origin", TypeEnum.STRING.getType()),
+	AIRPORT_DESTINATION ("destination", "Airport - Destination", TypeEnum.STRING.getType()),
+	AIRPORT_ORIGIN ("origin", "Airport - Origin", TypeEnum.STRING.getType()),
+	CARRIER ("carrier", "Carrier", TypeEnum.STRING.getType()),
+	COUNTRY_DESTINATION ("destinationCountry", "Country - Destination", TypeEnum.STRING.getType()),
+	COUNTRY_ORIGIN ("originCountry", "Country - Origin", TypeEnum.STRING.getType()),
 	DIRECTION ("direction", "Direction", TypeEnum.STRING.getType()),
 	ETA ("eta", "ETA", TypeEnum.DATE.getType()),
 	ETD ("etd", "ETD", TypeEnum.DATE.getType()),

@@ -169,24 +169,24 @@ public class ApisMessageService {
         
         Airport debark = convertAirport(vo.getDebarkation());
         if (debark != null) {
-            p.setDebarkation(debark);
-            p.setDebarkCountry(debark.getCountry());
+            p.setDebarkation(vo.getDebarkation());
+            p.setDebarkCountry(debark.getCountry().getIso2());
         }
 
         Airport embark = convertAirport(vo.getEmbarkation());
         if (embark != null) {
-            p.setEmbarkation(embark);
-            p.setEmbarkCountry(embark.getCountry());
+            p.setEmbarkation(vo.getEmbarkation());
+            p.setEmbarkCountry(embark.getCountry().getIso2());
         }
         
-        p.setCitizenshipCountry(convertCountry(vo.getCitizenshipCountry()));
-        p.setResidencyCountry(convertCountry(vo.getResidencyCountry()));
+        p.setCitizenshipCountry(vo.getCitizenshipCountry());
+        p.setResidencyCountry(vo.getResidencyCountry());
         
         for (DocumentVo dvo : vo.getDocuments()) {
             Passport d = new Passport();
             BeanUtils.copyProperties(dvo, d);
             d.setTraveler(p);
-            d.setIssuanceCountry(convertCountry(dvo.getIssuanceCountry()));
+            d.setIssuanceCountry(dvo.getIssuanceCountry());
             p.getDocuments().add(d);
         }
 
@@ -205,23 +205,23 @@ public class ApisMessageService {
                 
         Flight f = new Flight();
         BeanUtils.copyProperties(vo, f);
-        f.setCarrier(convertCarrier(vo.getCarrier()));
+        f.setCarrier(vo.getCarrier());
         
         Airport dest = convertAirport(vo.getDestination());
         Country destCountry = null;
         if (dest != null) {
             destCountry = dest.getCountry();
         }
-        f.setDestination(dest);
-        f.setDestinationCountry(destCountry);
+        f.setDestination(vo.getDestination());
+        f.setDestinationCountry(destCountry.getIso2());
         
         Airport origin = convertAirport(vo.getOrigin());
         Country originCountry = null;
         if (origin != null) {
             originCountry = origin.getCountry();
         }
-        f.setOrigin(origin);
-        f.setOriginCountry(originCountry);
+        f.setOrigin(vo.getOrigin());
+        f.setOriginCountry(originCountry.getIso2());
         
         if (destCountry != null && originCountry != null) {
             if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
