@@ -1,11 +1,10 @@
 package gov.gtas.model;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -16,14 +15,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "apis_message")
 public class ApisMessage extends Message {
-    @Column(name = "message_type")
-    private String messageType;
-    
-    @Column(name = "transmission_date")
-    private Date transmissionDate;
-    
-    @Column(name = "transmission_source")
-    private String transmissionSource;
+    @Embedded
+    private EdifactMessage edifactMessage;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "apisMessage")
     Set<ReportingParty> reportingParties = new HashSet<>();
@@ -39,6 +32,14 @@ public class ApisMessage extends Message {
     )        
     private Set<Flight> flights = new HashSet<>();
 
+     public Set<ReportingParty> getReportingParties() {
+        return reportingParties;
+    }
+
+    public void setReportingParties(Set<ReportingParty> reportingParties) {
+        this.reportingParties = reportingParties;
+    }
+
     public Set<Flight> getFlights() {
         return flights;
     }
@@ -47,27 +48,11 @@ public class ApisMessage extends Message {
         this.flights = flights;
     }
 
-    public Set<ReportingParty> getReportingParties() {
-        return reportingParties;
+    public EdifactMessage getEdifactMessage() {
+        return edifactMessage;
     }
 
-    public void setReportingParties(Set<ReportingParty> reportingParties) {
-        this.reportingParties = reportingParties;
-    }
-
-    public Date getTransmissionDate() {
-        return transmissionDate;
-    }
-
-    public void setTransmissionDate(Date transmissionDate) {
-        this.transmissionDate = transmissionDate;
-    }
-
-    public String getTransmissionSource() {
-        return transmissionSource;
-    }
-
-    public void setTransmissionSource(String transmissionSource) {
-        this.transmissionSource = transmissionSource;
+    public void setEdifactMessage(EdifactMessage edifactMessage) {
+        this.edifactMessage = edifactMessage;
     }
 }

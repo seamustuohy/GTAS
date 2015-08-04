@@ -14,13 +14,17 @@ public enum HitsMapping implements IEntityMapping {
 	private String fieldName;
 	private String friendlyName;
 	private String fieldType;
+	private boolean displayField;
 	
-	private HitsMapping(String fieldName, String friendlyName, String fieldType) {
+	private HitsMapping(String fieldName, String friendlyName, String fieldType, boolean displayField) {
 		this.fieldName = fieldName;
 		this.friendlyName = friendlyName;
 		this.fieldType = fieldType;
+		this.displayField = displayField;
 	}
-
+	private HitsMapping(String fieldName, String friendlyName, String fieldType) {
+		this(fieldName, friendlyName, fieldType, true);
+	}
 	public String getFieldName() {
 		return fieldName;
 	}
@@ -31,6 +35,13 @@ public enum HitsMapping implements IEntityMapping {
 
 	public String getFieldType() {
 		return fieldType;
+	}
+	
+	/**
+	 * @return the displayField
+	 */
+	public boolean isDisplayField() {
+		return displayField;
 	}
 	
 }

@@ -23,8 +23,9 @@ public class EdifactLexer {
     public static final Set<String> EDIFACT_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
     
     public static UNA getUnaSegment(String txt) {
-        String regex = String.format("UNA.{%d}UNB", UNA.NUM_UNA_CHARS);
+        String regex = String.format("UNA.{%d}\\s*UNB", UNA.NUM_UNA_CHARS);
         int unaIndex = ParseUtils.indexOfRegex(regex, txt);
+
         if (unaIndex != -1) {
             int endIndex = unaIndex + "UNA".length() + UNA.NUM_UNA_CHARS;
             String delims = txt.substring(unaIndex, endIndex);

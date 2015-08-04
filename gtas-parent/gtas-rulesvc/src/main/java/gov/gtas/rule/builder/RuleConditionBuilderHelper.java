@@ -16,6 +16,8 @@ import java.util.List;
  *
  */
 public class RuleConditionBuilderHelper {
+	private static final char SPACE_CHAR = ' ';
+	
 	private static String convertCondValToString(final CondValue val){
 		String ret = null;
      	switch(val.getValType()){
@@ -47,23 +49,23 @@ public class RuleConditionBuilderHelper {
     }
     public static void addConditionValues(final RuleCond cond, StringBuilder bldr){
     	List<CondValue> values = cond.getValues();
-    	bldr.append("(");
+    	bldr.append('(');
     	boolean firstTime = true;
     	for(CondValue val:values){
     		if(firstTime){
     			firstTime = false;
     		}else{
-    			bldr.append(",");
+    			bldr.append(',');
     		}
     		addConditionValue(val,bldr);
     	}
-    	bldr.append(")");
+    	bldr.append(')');
     }
     public static String createConditionDescription(final RuleCond cond){
     	StringBuilder bldr = new StringBuilder();
-    	bldr.append(cond.getEntityName()).append(" ")
-    	     .append(cond.getAttrName()).append(" ")
-    	     .append(cond.getOpCode().getDisplayName());
+    	bldr.append(cond.getEntityName()).append(SPACE_CHAR)
+    	     .append(cond.getAttrName()).append(SPACE_CHAR)
+    	     .append(cond.getOpCode().getDisplayName()).append(SPACE_CHAR);
     	List<CondValue> valList = cond.getValues();
     	if( valList != null && valList.size() > 1){
     		bldr.append(" [");
@@ -74,7 +76,7 @@ public class RuleConditionBuilderHelper {
     			}
     			bldr.append(convertCondValToString(val));
     		}
-    		bldr.append("]");
+    		bldr.append(']');
     	} else if(valList != null && valList.size() == 1){
     	     bldr.append(convertCondValToString(valList.get(0)));
     	}

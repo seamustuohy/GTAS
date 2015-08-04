@@ -77,7 +77,8 @@ public abstract class EdifactParser <T extends EdifactMessageVo> {
 
         UNH unh = getMandatorySegment(UNH.class);
         parsedMessage.setMessageType(unh.getMessageType());
-        parsedMessage.setVersion(unh.getMessageTypeVersion());
+        String ver = String.format("%s.%s", unh.getMessageTypeVersion(), unh.getMessageTypeReleaseNumber());
+        parsedMessage.setVersion(ver);
     }
 
     private void parseTrailer() throws ParseException {
