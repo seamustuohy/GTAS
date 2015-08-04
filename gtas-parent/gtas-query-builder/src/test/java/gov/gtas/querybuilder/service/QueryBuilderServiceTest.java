@@ -1,5 +1,10 @@
 package gov.gtas.querybuilder.service;
 
+import static org.mockito.Mockito.when;
+import gov.gtas.querybuilder.exceptions.InvalidQueryException;
+import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.model.QueryRequest;
+import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.repository.QueryBuilderRepository;
 
 import org.junit.Before;
@@ -10,10 +15,10 @@ import org.mockito.MockitoAnnotations;
 
 public class QueryBuilderServiceTest {
 
-	@Mock
-	QueryBuilderRepository queryRepository;
 	@InjectMocks
-	QueryBuilderService queryService;
+	private QueryBuilderService queryService;
+	@Mock
+	private QueryBuilderRepository queryRepository;
 	
 	@Before
     public void init() {
@@ -21,8 +26,10 @@ public class QueryBuilderServiceTest {
     }
 
 	@Test
-	public void testSaveQuery() {
-		
+	public void testSaveQuery() throws QueryAlreadyExistsException, InvalidQueryException {
+		QueryRequest request = new QueryRequest();
+		UserQuery query = new UserQuery();;
+		when(queryService.saveQuery(request)).thenReturn(query);
 	}
 
 	@Test
