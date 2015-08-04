@@ -241,12 +241,24 @@
       {
         "id": "HITS.has_rule_hit",
         "label": "Has Rule Hit",
-        "type": "boolean"
+        "type": "boolean",
+        "input": "radio",
+        "operators": "EQUALS",
+        "values": {
+          "1": "Yes",
+          "0": "No"
+        }
       },
       {
         "id": "HITS.has_list_rule_hit",
         "label": "Has Watch List Hit",
-        "type": "boolean"
+        "type": "boolean",
+        "operators": "EQUALS",
+        "input": "radio",
+        "values": {
+          "1": "Yes",
+          "0": "No"
+        }
       },
       {
         "id": "HITS.master_list_id",

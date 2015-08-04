@@ -48,7 +48,7 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
         }
     });
 
-    $scope.buildAfterEntitiesLoaded();
+    $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
 
     $scope.delete = function () {
         riskCriteriaService.ruleDelete($scope.ruleId, $scope.authorId).then(function (myData) {

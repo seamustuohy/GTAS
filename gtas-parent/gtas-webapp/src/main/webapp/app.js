@@ -57,7 +57,7 @@ app.factory('QueryBuilderCtrl', function () {
             },
             filters: []
         };
-        $scope.buildAfterEntitiesLoaded = function () {
+        $scope.buildAfterEntitiesLoaded = function (options) {
             var property = 'entities',
                 $builder = $('#builder'),
                 supplement = {
@@ -96,6 +96,10 @@ app.factory('QueryBuilderCtrl', function () {
                 //if (localStorage[property] === undefined) {
                 $.getJSON('./data/' + property + '.json', function (data) {
                     //localStorage[property] = JSON.stringify(data);
+                    if (options && options.deleteEntity) {
+                        data[options.deleteEntity] = null;
+                        delete data[options.deleteEntity];
+                    }
                     $scope.options.entities = data;
                     $scope.options.filters = [];
                     Object.keys($scope.options.entities).forEach(function (key){
@@ -111,7 +115,6 @@ app.factory('QueryBuilderCtrl', function () {
                             $scope.options.filters.push(column);
                         });
                     });
-
                     $builder.queryBuilder($scope.options);
 
                     $scope.$builder = $builder;

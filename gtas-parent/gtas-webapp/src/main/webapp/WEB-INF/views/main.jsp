@@ -11,7 +11,7 @@
         <link href="resources/css/style.css" rel="stylesheet">
 
         <title>GTAS</title>
-        <link rel="stylesheet" href="resources/css/bootstrap-combined.min.css" />
+        <!-- <link rel="stylesheet" href="resources/css/bootstrap-combined.min.css" /> //-->
         <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href="resources/bower_components/ng-table/dist/ng-table.css" />
         <link rel="stylesheet" href="resources/css/gtas.css" />
