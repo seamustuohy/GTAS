@@ -118,6 +118,7 @@ app.factory('QueryBuilderCtrl', function () {
                     $builder.queryBuilder($scope.options);
 
                     $scope.$builder = $builder;
+                    $scope.newRule();
                 });
                 //} else {
                 //    $scope.options.entities = JSON.parse(localStorage[property]);
