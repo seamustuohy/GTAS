@@ -1,64 +1,61 @@
 package gov.gtas.parsers.vo.air;
 
 public class PnrReportingAgentVo {
-	
-	private String agentAirlineCode;
-	private String agentLocationCode;
-	private String agentIdentificationNumber;
-	private String agentIdentificationCode;
-	private String agentLocationIdentificationCode;
-	private String agentCountryCode;
-	private String agentCurrencyCode;
-	private String agentLocaleCode;
-	
-	public String getAgentAirlineCode() {
-		return agentAirlineCode;
-	}
-	public void setAgentAirlineCode(String agentAirlineCode) {
-		this.agentAirlineCode = agentAirlineCode;
-	}
-	public String getAgentLocationCode() {
-		return agentLocationCode;
-	}
-	public void setAgentLocationCode(String agentLocationCode) {
-		this.agentLocationCode = agentLocationCode;
-	}
-	public String getAgentIdentificationNumber() {
-		return agentIdentificationNumber;
-	}
-	public void setAgentIdentificationNumber(String agentIdentificationNumber) {
-		this.agentIdentificationNumber = agentIdentificationNumber;
-	}
-	public String getAgentIdentificationCode() {
-		return agentIdentificationCode;
-	}
-	public void setAgentIdentificationCode(String agentIdentificationCode) {
-		this.agentIdentificationCode = agentIdentificationCode;
-	}
-	public String getAgentLocationIdentificationCode() {
-		return agentLocationIdentificationCode;
-	}
-	public void setAgentLocationIdentificationCode(
-			String agentLocationIdentificationCode) {
-		this.agentLocationIdentificationCode = agentLocationIdentificationCode;
-	}
-	public String getAgentCountryCode() {
-		return agentCountryCode;
-	}
-	public void setAgentCountryCode(String agentCountryCode) {
-		this.agentCountryCode = agentCountryCode;
-	}
-	public String getAgentCurrencyCode() {
-		return agentCurrencyCode;
-	}
-	public void setAgentCurrencyCode(String agentCurrencyCode) {
-		this.agentCurrencyCode = agentCurrencyCode;
-	}
-	public String getAgentLocaleCode() {
-		return agentLocaleCode;
-	}
-	public void setAgentLocaleCode(String agentLocaleCode) {
-		this.agentLocaleCode = agentLocaleCode;
-	}
-
+    private String airlineCode;
+    private String locationCode;
+    private String identificationNumber;
+    private String identificationCode;
+    private String locationIdentificationCode;
+    private String countryCode;
+    private String currencyCode;
+    private String localeCode;
+    
+    public String getAirlineCode() {
+        return airlineCode;
+    }
+    public void setAirlineCode(String airlineCode) {
+        this.airlineCode = airlineCode;
+    }
+    public String getLocationCode() {
+        return locationCode;
+    }
+    public void setLocationCode(String locationCode) {
+        this.locationCode = locationCode;
+    }
+    public String getIdentificationNumber() {
+        return identificationNumber;
+    }
+    public void setIdentificationNumber(String identificationNumber) {
+        this.identificationNumber = identificationNumber;
+    }
+    public String getIdentificationCode() {
+        return identificationCode;
+    }
+    public void setIdentificationCode(String identificationCode) {
+        this.identificationCode = identificationCode;
+    }
+    public String getLocationIdentificationCode() {
+        return locationIdentificationCode;
+    }
+    public void setLocationIdentificationCode(String locationIdentificationCode) {
+        this.locationIdentificationCode = locationIdentificationCode;
+    }
+    public String getCountryCode() {
+        return countryCode;
+    }
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
+    public String getLocaleCode() {
+        return localeCode;
+    }
+    public void setLocaleCode(String localeCode) {
+        this.localeCode = localeCode;
+    }
 }

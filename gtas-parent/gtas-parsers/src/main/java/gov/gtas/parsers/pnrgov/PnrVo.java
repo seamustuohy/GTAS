@@ -1,6 +1,7 @@
 package gov.gtas.parsers.pnrgov;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,20 +13,95 @@ import gov.gtas.parsers.vo.air.PaxVo;
 import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 
 public class PnrVo {
+    private String recordLocator;
+    private String carrier;
+    private String origin;
+    private String originCountry;
+    
+    private Date dateBooked;
+    private Date dateReceived;
+    private Date dateOfDeparture;
+
+    private Integer numPassengers;
+    private Integer numBags;
+
     private String updateMode;
+    
     private List<FlightVo> flights = new ArrayList<>();
     private List<PaxVo> passengers = new ArrayList<>();
     private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
     private List<AddressVo> addresses = new ArrayList<>();
     
-    private Integer numberOfPassengers;
-
-    public Integer getNumberOfPassengers() {
-        return numberOfPassengers;
+    public String getRecordLocator() {
+        return recordLocator;
     }
 
-    public void setNumberOfPassengers(Integer numberOfPassengers) {
-        this.numberOfPassengers = numberOfPassengers;
+    public void setRecordLocator(String recordLocator) {
+        this.recordLocator = recordLocator;
+    }
+
+    public String getCarrier() {
+        return carrier;
+    }
+
+    public void setCarrier(String carrier) {
+        this.carrier = carrier;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getOriginCountry() {
+        return originCountry;
+    }
+
+    public void setOriginCountry(String originCountry) {
+        this.originCountry = originCountry;
+    }
+
+    public Date getDateBooked() {
+        return dateBooked;
+    }
+
+    public void setDateBooked(Date dateBooked) {
+        this.dateBooked = dateBooked;
+    }
+
+    public Date getDateReceived() {
+        return dateReceived;
+    }
+
+    public void setDateReceived(Date dateReceived) {
+        this.dateReceived = dateReceived;
+    }
+
+    public Date getDateOfDeparture() {
+        return dateOfDeparture;
+    }
+
+    public void setDateOfDeparture(Date dateOfDeparture) {
+        this.dateOfDeparture = dateOfDeparture;
+    }
+
+    public Integer getNumPassengers() {
+        return numPassengers;
+    }
+
+    public void setNumPassengers(Integer numPassengers) {
+        this.numPassengers = numPassengers;
+    }
+
+    public Integer getNumBags() {
+        return numBags;
+    }
+
+    public void setNumBags(Integer numBags) {
+        this.numBags = numBags;
     }
 
     public String getUpdateMode() {
@@ -48,6 +124,10 @@ public class PnrVo {
         return passengers;
     }
 
+    public void setPassengers(List<PaxVo> passengers) {
+        this.passengers = passengers;
+    }
+
     public List<PnrReportingAgentVo> getReportingParties() {
         return reportingParties;
     }
@@ -55,7 +135,7 @@ public class PnrVo {
     public void setReportingParties(List<PnrReportingAgentVo> reportingParties) {
         this.reportingParties = reportingParties;
     }
-    
+
     public List<AddressVo> getAddresses() {
         return addresses;
     }
