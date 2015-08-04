@@ -37,7 +37,6 @@ public class RuleRepositoryIT {
 	public void tearDown() throws Exception {
 	}
 
-	// TODO: where is this file?
 	@Test(expected = CommonServiceException.class)
 	public void testNullRequest() {
 		testTarget.invokeAdhocRules("gtas.drl", null);

@@ -27,7 +27,6 @@ import gov.gtas.model.PaxInTransit;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
@@ -56,9 +55,6 @@ public class ApisMessageService {
     @Autowired
     private AirportService airportService;
 
-    @Autowired
-    private CarrierService carrierService;
-    
     @Autowired
     private ApisMessageRepository msgDao;
     
@@ -243,23 +239,6 @@ public class ApisMessageService {
         return f;
     }
     
-    private Country convertCountry(String c) throws ParseException {
-        if (c == null) return null;
-        
-        Country rv = null;
-        if (c.length() == 2) {
-            rv = countryService.getCountryByTwoLetterCode(c);
-        } else if (c.length() == 3) {
-            rv = countryService.getCountryByThreeLetterCode(c);
-        }
-        
-        if (rv == null) {
-            throw new ParseException("Unknown country code: " + c);
-        }
-        
-        return rv;
-    }
-    
     private Airport convertAirport(String a) throws ParseException {
         if (a == null) return null;
         
@@ -268,27 +247,6 @@ public class ApisMessageService {
             rv = airportService.getAirportByThreeLetterCode(a);
         } else if (a.length() == 4) {
             rv = airportService.getAirportByFourLetterCode(a);
-        }
-
-        if (rv == null) {
-            throw new ParseException("Unknown airport code: " + a);
-        }
-
-        return rv;
-    }
-    
-    private Carrier convertCarrier(String c) throws ParseException {
-        if (c == null) return null;
-        
-        Carrier rv = null;
-        if (c.length() == 3) {
-            rv = carrierService.getCarrierByThreeLetterCode(c);
-        } else if (c.length() == 2) {
-            rv = carrierService.getCarrierByTwoLetterCode(c);
-        }
-        
-        if (rv == null) {
-            throw new ParseException("Unknown carrier code: " + c);
         }
 
         return rv;
