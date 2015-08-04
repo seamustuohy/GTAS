@@ -83,12 +83,6 @@ public class RuleRepositoryIT {
 		return p;
 	}
 
-//	private Airport createAirport(final String airportName) {
-//		Airport airport = new Airport();
-//		ReflectionTestUtils.setField(airport, "name", airportName);
-//		return airport;
-//	}
-//
 	/**
 	 * Creates a simple ApisMessage with a single passenger
 	 */

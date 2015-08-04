@@ -22,7 +22,7 @@ end
 rule "R2 - List Passengers"
     dialect "java"
     when
-        p:Pax( embarkation.name.equals("Timbuktu"), fn:firstName, ln:lastName )
+        p:Pax( embarkation.equals("Timbuktu"), fn:firstName, ln:lastName )
     then
         resultList.add(p);
 end
