@@ -57,7 +57,7 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
         });
     };
 
-    $scope.summaryDefaults = {title: null, description: null, startDate: $scope.today.toString(), endDate: null, enabled: true};
+    $scope.summaryDefaults = {title: '', description: null, startDate: $scope.today.toString(), endDate: null, enabled: true};
 
     $($scope.startDate).datepicker({
         minDate: "today",

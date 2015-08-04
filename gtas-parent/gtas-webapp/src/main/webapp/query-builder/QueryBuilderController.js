@@ -51,14 +51,19 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         });
     };
 
-    $scope.summaryDefaults = {description: null, title: null};
+    $scope.summaryDefaults = {description: null, title: ''};
     $scope.ruleId = null;
+    $scope.saving = false;
 
     $scope.save = function () {
         var queryObject;
+        if ($scope.saving) {
+            return;
+        }
         $scope.title = $scope.title.trim();
         if (!$scope.title.length ) {
             alert('title can not be blank!');
+            $scope.saving = false;
             return;
         }
         queryObject = {
@@ -72,10 +77,12 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         queryBuilderService.saveQuery(queryObject).then(function (myData) {
             if (myData.errorCode !== undefined) {
                 alert(myData.errorMessage);
+                $scope.saving = false;
                 return;
             }
-            $scope.ruleId = myData.responseDetails[0].attributeValue || null;
+            $scope.ruleId = myData.result[0].id || null;
             $scope.tableParams.reload();
+            $scope.saving = false;
         });
     };
 });
