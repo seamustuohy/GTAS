@@ -1,4 +1,4 @@
-app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, riskCriteriaService) {
+app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, riskCriteriaService, $timeout) {
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [];
 
@@ -129,14 +129,20 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
         $scope.tableParams.reload();
 
         riskCriteriaService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
+            var $tableRows = $('table tbody').eq(0).find('tr');
             if (typeof myData.errorCode !== "undefined")
             {
                 alert(myData.errorMessage);
                 return;
             }
-            $scope.ruleId = $scope.ruleId = myData.responseDetails[0].attributeValue || null;
             $scope.tableParams.reload();
-            $scope.saving = false;
+            $timeout(function () {
+                if ($scope.ruleId === null) {
+                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click()
+                }
+                $scope.ruleId = $scope.ruleId = myData.responseDetails[0].attributeValue || null;
+                $scope.saving = false;
+            }, 500);
         });
     };
 });

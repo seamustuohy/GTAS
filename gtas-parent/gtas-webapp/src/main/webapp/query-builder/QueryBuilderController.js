@@ -1,4 +1,4 @@
-app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService) {
+app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService, $timeout) {
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [];
 
@@ -63,7 +63,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         $scope.title = $scope.title.trim();
         if (!$scope.title.length) {
             alert('title can not be blank!');
-                $scope.saving = false;
+            $scope.saving = false;
             return;
         }
         queryObject = {
@@ -75,14 +75,20 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         };
 
         queryBuilderService.saveQuery(queryObject).then(function (myData) {
+            var $tableRows = $('table tbody').eq(0).find('tr');
             if (myData.errorCode !== undefined) {
                 alert(myData.errorMessage);
                 $scope.saving = false;
                 return;
             }
-            $scope.ruleId = myData.result[0].id || null;
             $scope.tableParams.reload();
-            $scope.saving = false;
+            $timeout(function () {
+                if ($scope.ruleId === null) {
+                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click()
+                }
+                $scope.ruleId = $scope.ruleId = myData.responseDetails[0].attributeValue || null;
+                $scope.saving = false;
+            }, 500);
         });
     };
 

@@ -232,9 +232,8 @@
             {type: 'is_empty',         nb_inputs: 0, multiple: false, apply_to: ['string']},
             {type: 'is_not_empty',     nb_inputs: 0, multiple: false, apply_to: ['string']},
             {type: 'is_null',          nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean']},
-            {type: 'is_not_null',      nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean']}
+            {type: 'is_not_null',      nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean']},
             /* extending operators for DROOLS */
-            ,
             {type: 'EQUAL',            nb_inputs: 1, multiple: false, apply_to: ['string', 'number', 'datetime', 'date', 'boolean']},
             {type: 'NOT_EQUAL',        nb_inputs: 1, multiple: false, apply_to: ['string', 'number', 'datetime', 'date', 'boolean']},
             {type: 'IN',               nb_inputs: 1, multiple: true,  apply_to: ['string', 'number', 'datetime', 'date']},
@@ -760,7 +759,8 @@
 
         var that = this,
             $inputs = $(),
-            filter = rule.filter;
+            filter = rule.filter,
+            method, args;
 
         for (var i=0; i<rule.operator.nb_inputs; i++) {
             var $ruleInput = $(this.getRuleInput(rule, i));
@@ -777,8 +777,10 @@
             that.status.updating_value = false;
         });
 
-        if (filter.plugin) {
-            $inputs[filter.plugin](filter.plugin_config || {});
+        if (filter.plugin !== undefined) {
+            method = filter.plugin;
+            args = filter.plugin_config !== undefined ? filter.plugin_config : {};
+            $inputs[method](args);
         }
 
         this.trigger('afterCreateRuleInput', rule);
