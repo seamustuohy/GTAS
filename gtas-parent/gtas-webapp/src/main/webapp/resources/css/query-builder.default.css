@@ -3,6 +3,25 @@
  * Copyright 2014-2015 Damien "Mistic" Sorel (http://www.strangeplanet.fr)
  * Licensed under MIT (http://opensource.org/licenses/MIT)
  */
+.qb-interface thead th {
+  text-align: left;
+  background-color: transparent !important;
+}
+
+.query-builder .group-conditions .btn-primary,
+.qb-interface .btn-primary,
+.query-builder .btn-primary {
+  color: #fff;
+  background-color: #888;
+  border-color: #777;
+}
+
+.query-builder .group-conditions .btn-primary.active,
+.qb-interface .btn-primary:hover,
+.query-builder .btn-primary:hover {
+  background-color: #666;
+  border-color: #555;
+}
 
 .query-builder .rules-group-container, .query-builder .rule-container, .query-builder .rule-placeholder {
   position: relative;

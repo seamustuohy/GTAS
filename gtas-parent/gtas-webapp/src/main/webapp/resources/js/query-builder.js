@@ -1822,16 +1822,16 @@
 <dl id="'+ group_id +'" class="rules-group-container"> \
   <dt class="rules-group-header"> \
     <div class="btn-group pull-right group-actions"> \
-      <button type="button" class="btn btn-xs btn-success" data-add="rule"> \
+      <button type="button" class="btn btn-xs btn-primary" data-add="rule"> \
         <i class="' + this.icons.add_rule + '"></i> '+ this.lang.add_rule +' \
       </button> \
       '+ (this.settings.allow_groups===-1 || this.settings.allow_groups>=level ?
-            '<button type="button" class="btn btn-xs btn-success" data-add="group"> \
+            '<button type="button" class="btn btn-xs btn-primary" data-add="group"> \
           <i class="' + this.icons.add_group + '"></i> '+ this.lang.add_group +' \
         </button>'
                 :'') +' \
       '+ (level>1 ?
-            '<button type="button" class="btn btn-xs btn-danger" data-delete="group"> \
+            '<button type="button" class="btn btn-xs btn-primary" data-delete="group"> \
           <i class="' + this.icons.remove_group + '"></i> '+ this.lang.delete_group +' \
         </button>'
                 : '') +' \
@@ -1883,7 +1883,7 @@
 <li id="'+ rule_id +'" class="rule-container"> \
   <div class="rule-header"> \
   <div class="btn-group pull-right rule-actions"> \
-    <button type="button" class="btn btn-xs btn-danger" data-delete="rule"> \
+    <button type="button" class="btn btn-xs btn-primary" data-delete="rule"> \
       <i class="' + this.icons.remove_rule + '"></i> '+ this.lang.delete_rule +' \
     </button> \
   </div> \
@@ -2685,16 +2685,23 @@
         });
 
         this.on('afterCreateRuleOperators', function(e, rule) {
-            rule.$el.find('.rule-operator-container select').removeClass('form-control').selectpicker(options);
+            if (rule.filter.operators && rule.filter.operators === "EQUALS") {
+                rule.$el.find('.rule-operator-container').hide();
+                return;
+            }
+            rule.$el.find('.rule-operator-container').show().find('select').removeClass('form-control').selectpicker(options);
         });
 
         // update selectpicker on change
         this.on('afterUpdateRuleEntity', function(e, rule) {
+            var $filter = rule.$el.find('.rule-filter-container select');
             rule.$el.find('.rule-entity-container select').selectpicker('render');
-        });
-
-        this.on('afterUpdateRuleColumn', function(e, rule) {
-            rule.$el.find('.rule-field-container select').selectpicker('render');
+            // Auto select if only one option and trigger change / update
+            if ($filter.children().length === 2) {
+                $filter.children().last().prop('selected', true);
+                $filter.selectpicker('render');
+                $filter.trigger('change');
+            }
         });
 
         this.on('afterUpdateRuleFilter', function(e, rule) {

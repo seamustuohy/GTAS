@@ -108,7 +108,7 @@
             class="caret"></span></a>
             <ul class="dropdown-menu">
             <sec:authorize access="hasAnyAuthority('MANAGE_RULES','ADMIN')">
-                <li><a href="">Risk Criteria</a></li>
+                <li><a href="home.action?#/risk-criteria">Risk Criteria</a></li>
             </sec:authorize>
             <sec:authorize access="hasAnyAuthority('MANAGE_WATCHLIST','ADMIN')">
                 <li><a href="">Watchlists</a></li>
