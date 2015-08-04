@@ -37,7 +37,6 @@ public abstract class Document extends BaseEntity {
     private Country issuanceCountry;
     
     @ManyToOne
-    @JoinColumn
     private Traveler traveler;
 
     public Date getExpirationDate() {

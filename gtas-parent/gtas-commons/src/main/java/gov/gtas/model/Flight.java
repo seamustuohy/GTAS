@@ -37,10 +37,9 @@ public class Flight extends BaseEntityAudit {
         joinColumns=@JoinColumn(name="flight_id"),
         inverseJoinColumns=@JoinColumn(name="traveler_id")
     )    
-    private Set<Traveler> passengers = new HashSet<>();
+    private Set<Traveler> travelers = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(referencedColumnName="id")     
     private Carrier carrier;
     
     @Size(min = 4, max = 4)
@@ -48,19 +47,17 @@ public class Flight extends BaseEntityAudit {
     private String flightNumber;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName="id")     
     private Airport origin;
     
     @ManyToOne
-    @JoinColumn(name = "origin_country_id", referencedColumnName="id")     
+    @JoinColumn(name = "origin_country_id")
     private Country originCountry;
     
     @ManyToOne
-    @JoinColumn(referencedColumnName="id")     
     private Airport destination;
     
     @ManyToOne
-    @JoinColumn(name = "destination_country_id", referencedColumnName="id")     
+    @JoinColumn(name = "destination_country_id")
     private Country destinationCountry;
 
     @Column(name = "flight_date")
@@ -76,18 +73,11 @@ public class Flight extends BaseEntityAudit {
     @Enumerated(EnumType.STRING)
     private FlightDirection direction;
     
-    @ManyToMany(
-        cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-        mappedBy = "flights",
-        targetEntity = ApisMessage.class
-    )    
-    private Set<ApisMessage> messages = new HashSet<>();
-    
     public Set<Traveler> getPassengers() {
-        return passengers;
+        return travelers;
     }
     public void setPassengers(Set<Traveler> passengers) {
-        this.passengers = passengers;
+        this.travelers = passengers;
     }
     public Carrier getCarrier() {
         return carrier;

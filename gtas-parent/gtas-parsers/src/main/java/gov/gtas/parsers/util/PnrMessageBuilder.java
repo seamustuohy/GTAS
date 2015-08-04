@@ -10,10 +10,10 @@ import org.slf4j.LoggerFactory;
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.vo.air.AddressVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
-import gov.gtas.parsers.vo.air.PnrVo;
 
 public class PnrMessageBuilder {
 //
