@@ -15,7 +15,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.core.env.Environment;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -58,6 +57,7 @@ public class CommonServicesConfig {
 	private static final String PROPERTY_NAME_HIBERNATE_QUERY_CACHE = "hibernate.cache.use_query_cache";
 	private static final String PROPERTY_NAME_HIBERNATE_USE_MINIMAL_PUTS = "hibernate.cache.use_minimal_puts";
 	private static final String PROPERTY_NAME_SHAREDCACHE_MODE = "javax.persistence.sharedCache.mode";
+	private static final String PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
 
 	private Properties hibProperties() {
 		Properties properties = new Properties();
@@ -80,6 +80,8 @@ public class CommonServicesConfig {
 				env.getRequiredProperty(PROPERTY_NAME_SHAREDCACHE_MODE));
 		properties.put(PROPERTY_NAME_HIBERNATE_USE_MINIMAL_PUTS, env
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_USE_MINIMAL_PUTS));
+		properties.put(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE, env
+				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE));
 
 		return properties;
 	}
@@ -134,12 +136,13 @@ public class CommonServicesConfig {
 	HazelcastInstance hazelcastInstance() throws Exception {
 		return Hazelcast.newHazelcastInstance();
 	}
-	
-	@Bean(name="applicationEventMulticaster")
+
+	@Bean(name = "applicationEventMulticaster")
 	public ApplicationEventMulticaster applicationEventMulticaster() {
 		SimpleApplicationEventMulticaster applicationEventMulticaster = new SimpleApplicationEventMulticaster();
-		applicationEventMulticaster.setTaskExecutor(Executors.newFixedThreadPool(10));
+		applicationEventMulticaster.setTaskExecutor(Executors
+				.newFixedThreadPool(10));
 		return applicationEventMulticaster;
 	}
-	
+
 }

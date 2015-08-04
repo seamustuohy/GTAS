@@ -34,7 +34,7 @@ import gov.gtas.parsers.pnrgov.PnrUtils;
 public class RCI extends Segment {
     private static final String DCS_CONTROL_TYPE = "C";
 
-    public class PnrReservation {
+    public class ReservationControlInfo {
         private String airlineCode;
         private String reservationControlNumber;
         private String reservationControlType;
@@ -87,14 +87,14 @@ public class RCI extends Segment {
         }
     }
 
-    private List<PnrReservation> reservations;
+    private List<ReservationControlInfo> reservations;
 
     public RCI(List<Composite> composites) throws ParseException {
         super(RCI.class.getSimpleName(), composites);
         reservations = new ArrayList<>(numComposites());
         
         for (int i = 0; i < numComposites(); i++) {
-            PnrReservation r = new PnrReservation();
+            ReservationControlInfo r = new ReservationControlInfo();
             Composite c = getComposite(i);
 
             r.setAirlineCode(c.getElement(0));
@@ -116,7 +116,7 @@ public class RCI extends Segment {
         }
     }
 
-    public List<PnrReservation> getReservations() {
+    public List<ReservationControlInfo> getReservations() {
         return reservations;
     }
 }
