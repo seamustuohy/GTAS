@@ -7,10 +7,14 @@ import static gov.gtas.rule.builder.RuleTemplateConstants.RULE_PACKAGE_NAME;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.model.BaseEntity;
+import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
+import gov.gtas.model.Visa;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.UdrRule;
@@ -22,8 +26,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A builder pattern class for constructing a Drools rule "file" (actually a
- * text string) from one or more UDR objects.
- * This DRL string is then compiled into a Knowledge Base (KieBase object).
+ * text string) from one or more UDR objects. This DRL string is then compiled
+ * into a Knowledge Base (KieBase object).
  * 
  * @author GTAS3 (AB)
  *
@@ -34,6 +38,10 @@ public class DrlRuleFileBuilder {
 	 */
 	private static final Logger logger = LoggerFactory
 			.getLogger(DrlRuleFileBuilder.class);
+
+	private static final Class<?>[] IMPORT_LIST = { Flight.class,
+			Traveler.class, Pax.class, Crew.class, Document.class,
+			Passport.class, Visa.class };
 
 	private StringBuilder stringBuilder;
 	private RuleConditionBuilder ruleConditionBuilder;
@@ -76,13 +84,20 @@ public class DrlRuleFileBuilder {
 	private void addPackageAndImport() {
 		this.stringBuilder.append(RULE_PACKAGE_NAME).append(IMPORT_PREFIX)
 				.append(RuleHitDetail.class.getName()).append(";")
-				.append(NEW_LINE).append(IMPORT_PREFIX)
-				.append(Traveler.class.getName()).append(";").append(NEW_LINE)
-				.append(IMPORT_PREFIX).append(Pax.class.getName()).append(";")
-				.append(NEW_LINE).append(IMPORT_PREFIX)
-				.append(Flight.class.getName()).append(";").append(NEW_LINE)
-				.append(IMPORT_PREFIX).append(Document.class.getName())
-				.append(";").append(NEW_LINE).append("\n");
+				.append(NEW_LINE);
+		        for(Class<?> clazz: IMPORT_LIST){
+		        	this.stringBuilder.append(IMPORT_PREFIX)
+		        	.append(clazz.getName()).append(";").append(NEW_LINE);
+		        }
+//				.append(IMPORT_PREFIX)
+//				.append(Traveler.class.getName()).append(";").append(NEW_LINE)
+//				.append(IMPORT_PREFIX).append(Pax.class.getName()).append(";")
+//				.append(NEW_LINE).append(IMPORT_PREFIX)
+//				.append(Flight.class.getName()).append(";").append(NEW_LINE)
+//				.append(IMPORT_PREFIX).append(Passport.class.getName())
+//				.append(";").append(NEW_LINE).append(IMPORT_PREFIX)
+//				.append(Document.class.getName()).append(";").append(NEW_LINE)
+//				.append("\n");
 	}
 
 	private void addRuleHeader(UdrRule parent, Rule rule) {

@@ -12,20 +12,23 @@ public enum FlightMapping implements IEntityMapping {
 	DIRECTION ("direction", "Direction", TypeEnum.STRING.getType()),
 	ETA ("eta", "ETA", TypeEnum.DATE.getType()),
 	ETD ("etd", "ETD", TypeEnum.DATE.getType()),
-	FLIGHT_DATE ("flightDate", "Flight Date", TypeEnum.DATE.getType()),	
+	FLIGHT_DATE ("flightDate", "Flight Date", TypeEnum.DATE.getType(), false),	
 	FLIGHT_NUMBER ("flightNumber", "Number", TypeEnum.STRING.getType()),
 	THRU ("thru", "Thru", TypeEnum.STRING.getType());
 	
 	private String fieldName;
 	private String friendlyName;
 	private String fieldType;
+	private boolean displayField;
 	
-	private FlightMapping(String fieldName, String friendlyName, String fieldType) {
+	private FlightMapping(String fieldName, String friendlyName, String fieldType, boolean displayField) {
 		this.fieldName = fieldName;
 		this.friendlyName = friendlyName;
 		this.fieldType = fieldType;
 	}
-
+	private FlightMapping(String fieldName, String friendlyName, String fieldType) {
+		this(fieldName, friendlyName, fieldType, true);
+	}
 	public String getFieldName() {
 		return fieldName;
 	}
@@ -36,6 +39,13 @@ public enum FlightMapping implements IEntityMapping {
 
 	public String getFieldType() {
 		return fieldType;
+	}
+	
+	/**
+	 * @return the displayField
+	 */
+	public boolean isDisplayField() {
+		return displayField;
 	}
 	
 }

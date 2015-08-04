@@ -15,12 +15,16 @@ public enum AddressMapping implements IEntityMapping {
 	private String fieldName;
 	private String friendlyName;
 	private String fieldType;
+	private boolean displayField;
 	
-	private AddressMapping(String fieldName, String friendlyName, String fieldType) {
-		
+	private AddressMapping(String fieldName, String friendlyName, String fieldType, boolean displayField) {
 		this.fieldName = fieldName;
 		this.friendlyName = friendlyName;
 		this.fieldType = fieldType;
+        this.displayField = displayField;
+	}
+	private AddressMapping(String fieldName, String friendlyName, String fieldType) {
+		this(fieldName, friendlyName, fieldType, true);
 	}
 
 	public String getFieldName() {
@@ -40,4 +44,12 @@ public enum AddressMapping implements IEntityMapping {
 		return this;
 		
     }
+	/**
+	 * @return the displayField
+	 */
+	public boolean isDisplayField() {
+		return displayField;
+	}
+	
+	
 }
