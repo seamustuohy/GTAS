@@ -33,12 +33,6 @@
         <link rel="stylesheet" href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css" />
 
         <style type="text/css">
-        /* temporary highlighting the only 3 entities we support currently */
-        .entity-name ul li:nth-child(5),
-        .entity-name ul li:nth-child(7),
-        .entity-name ul li:nth-child(11) {
-        background: rgba(30,200,200, 0.2);
-        }
         .header{
         background: rgb(247, 250, 250);
         }

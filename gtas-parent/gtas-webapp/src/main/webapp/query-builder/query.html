@@ -41,6 +41,12 @@
     .table tbody tr:nth-child(odd) {
         background: rgba(245,245,255,0.5);
     }
+         /* temporary highlighting the only 3 entities we support currently */
+     .entity-name ul li:nth-child(4),
+     .entity-name ul li:nth-child(6),
+     .entity-name ul li:nth-child(9) {
+         background: rgba(30,200,200, 0.2);
+     }
 </style>
 <h1>Query Builder:</h1>
 <button data-ng-click="newRule()" class="btn btn-success pull-right" data-add="rule">New Rule</button>
