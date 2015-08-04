@@ -37,6 +37,7 @@ public class RuleRepositoryIT {
 	public void tearDown() throws Exception {
 	}
 
+	// TODO: where is this file?
 	@Test(expected = CommonServiceException.class)
 	public void testNullRequest() {
 		testTarget.invokeAdhocRules("gtas.drl", null);
@@ -83,12 +84,6 @@ public class RuleRepositoryIT {
 		return p;
 	}
 
-//	private Airport createAirport(final String airportName) {
-//		Airport airport = new Airport();
-//		ReflectionTestUtils.setField(airport, "name", airportName);
-//		return airport;
-//	}
-//
 	/**
 	 * Creates a simple ApisMessage with a single passenger
 	 */

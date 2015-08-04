@@ -26,10 +26,10 @@ public class UdrBuilderDataUtils {
 		queryObjectEmbedded.setCondition("AND");
 		List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
 
-		QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name", "String",
+		QueryTerm trm2 = new QueryTerm("Pax", "embarkation", "String",
 				"IN", new String[] { "DBY", "PKY", "FLT" });
 		rules2.add(trm2);
-		rules2.add(new QueryTerm("Pax", "debarkation.name", "String", "EQUAL",
+		rules2.add(new QueryTerm("Pax", "debarkation", "String", "EQUAL",
 				new String[] { "IAD" }));
 		queryObjectEmbedded.setRules(rules2);
 
