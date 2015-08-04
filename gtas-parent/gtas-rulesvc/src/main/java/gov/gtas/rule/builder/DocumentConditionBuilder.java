@@ -1,5 +1,7 @@
 package gov.gtas.rule.builder;
 
+import javax.persistence.EnumType;
+
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
@@ -15,6 +17,9 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 	 */
 	private static final Logger logger = LoggerFactory
 			.getLogger(DocumentConditionBuilder.class);
+	
+	private static String[] CLASS_INDICATORS = new String[]{"P","V"};
+	private static String[] CLASS_NAMES = new String[]{EntityLookupEnum.Passport.name(), EntityLookupEnum.Visa.name()};
 	
 	//TODO NOT PASSPORT and NOT VISA conditions
     private boolean passport;
@@ -71,11 +76,11 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 			if(isPassport()){
 				bldr.append(getDrlVariableName()).append(":");
 				bldr.append(EntityLookupEnum.Passport)
-				.append("(").append(DocumentMapping.DOCUMENT_OWNER_ID).append(" == ")
+				.append("(").append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(" == ")
 				.append(travelerVariableName).append(".id)\n");
 			} else if (isVisa()){
 				bldr.append(getDrlVariableName()).append(":").append(EntityLookupEnum.Visa)
-				.append("(").append(DocumentMapping.DOCUMENT_OWNER_ID).append(" == ")
+				.append("(").append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(" == ")
 				.append(travelerVariableName).append(".id)\n");
 	
 			}			

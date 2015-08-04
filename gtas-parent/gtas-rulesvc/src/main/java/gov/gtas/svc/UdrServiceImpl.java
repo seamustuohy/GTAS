@@ -171,7 +171,6 @@ public class UdrServiceImpl implements UdrService {
 
 		UdrRule savedRule = rulePersistenceService.create(ruleToSave, userId);
 
-		//UdrServiceHelper.processRuleGeneration(rulePersistenceService);
 		List<UdrRule> ruleList = rulePersistenceService.findAll();
 		ruleManagementService.createKnowledgeBaseFromUdrRules(UdrConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList);
 

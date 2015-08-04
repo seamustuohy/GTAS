@@ -28,15 +28,15 @@ public class RuleEngineHelper {
 	public static void addEventListenersToKieSEssion(final KieSession ksession,
 			final List<EventListener> eventListenerList) {
 		// The application can also setup listeners
-		if (eventListenerList != null) {
-			for (EventListener el : eventListenerList) {
-				if (el instanceof AgendaEventListener) {
-					ksession.addEventListener((AgendaEventListener) el);
-				} else if (el instanceof RuleRuntimeEventListener) {
-					ksession.addEventListener((RuleRuntimeEventListener) el);
-				}
-			}
-		}
+//		if (eventListenerList != null) {
+//			for (EventListener el : eventListenerList) {
+//				if (el instanceof AgendaEventListener) {
+//					ksession.addEventListener((AgendaEventListener) el);
+//				} else if (el instanceof RuleRuntimeEventListener) {
+//					ksession.addEventListener((RuleRuntimeEventListener) el);
+//				}
+//			}
+//		}
 	}
 
 	/**
