@@ -51,7 +51,7 @@
 <table ng-table="tableParams" class="table">
     <tr ng-repeat="summary in $data" data-id="{{summary.id}}" data-ng-click="loadRule()">
         <td data-title="'title'" sortable="'title'" filter="{ 'title': 'text' }">
-            <i ng-show="isBeingEdited(summary.id)" class="glyphicon glyphicon-pencil" title="Editing this rule"></i>
+            <i ng-show="isBeingEdited()" class="glyphicon glyphicon-pencil" title="Editing this rule"></i>
             {{summary.title}}
         </td>
         <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">

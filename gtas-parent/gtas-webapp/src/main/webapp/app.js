@@ -5,43 +5,40 @@ var app = angular.module('myApp', [
     'spring-security-csrf-token-interceptor'
 ]);
 
-app.factory('QueryBuilderCtrl',function(){
+app.factory('QueryBuilderCtrl', function () {
     return function ($scope, $timeout) {
         var selectizeValueSetter = function (rule, value) {
-            var $selectize = rule.$el.find(".rule-value-container .selectized");
-            if ($selectize.length) {
-                $timeout(function() {
-                    $selectize[0].selectize.setValue(value);
-                }, 100);
-            }
-        };
-
-        var getOptionsFromJSONArray = function (that, property) {
-            //if (localStorage[property] === undefined) {
-            $.getJSON('./data/' + property + '.json', function (data) {
-                //localStorage[property] = JSON.stringify(data);
-                try {
-                    data.forEach(function (item) {
-                        that.addOption(item);
-                    });
+                var $selectize = rule.$el.find(".rule-value-container .selectized");
+                if ($selectize.length) {
+                    $timeout(function () {
+                        $selectize[0].selectize.setValue(value);
+                    }, 100);
                 }
-                catch (exception) {
-                    throw exception;
-                }
-            });
+            },
+            getOptionsFromJSONArray = function (that, property) {
+                //if (localStorage[property] === undefined) {
+                $.getJSON('./data/' + property + '.json', function (data) {
+                    //localStorage[property] = JSON.stringify(data);
+                    try {
+                        data.forEach(function (item) {
+                            that.addOption(item);
+                        });
+                    } catch (exception) {
+                        throw exception;
+                    }
+                });
+                //} else {
+                //    try {
+                //    JSON.parse(localStorage[property]).forEach(function (item) {
+                //    that.addOption(item);
+                //    });
+                //    } catch (exception) {
+                //       throw exception;
+                //    }
+                //}
+            };
 
-            //} else {
-            //    try {
-            //    JSON.parse(localStorage[property]).forEach(function (item) {
-            //    that.addOption(item);
-            //    });
-            //    } catch (exception) {
-            //       throw exception;
-            //    }
-            //}
-        };
         $scope.today = moment().format('YYYY-MM-DD').toString();
-
         $scope.authorId = 'adelorie';
         $scope.calendarOptions = {
             format: 'yyyy-mm-dd',
@@ -62,27 +59,34 @@ app.factory('QueryBuilderCtrl',function(){
         };
         $scope.buildAfterEntitiesLoaded = function () {
             var property = 'entities',
-                $builder = $('#builder');
-
-            var supplementSelectize = function(obj) {
-                obj.plugin_config = {
-                    "valueField": "id",
-                    "labelField": "name",
-                    "searchField": "name",
-                    "sortField": "name",
-                    "create": false,
-                    "plugins": ["remove_button"],
-                    "onInitialize": function () {
-                        getOptionsFromJSONArray(this, obj.dataSource);
+                $builder = $('#builder'),
+                supplement = {
+                    selectize: function (obj) {
+                        obj.plugin_config = {
+                            "valueField": "id",
+                            "labelField": "name",
+                            "searchField": "name",
+                            "sortField": "name",
+                            "create": false,
+                            "plugins": ["remove_button"],
+                            "onInitialize": function () {
+                                getOptionsFromJSONArray(this, obj.dataSource);
+                            }
+                        };
+                        obj.valueSetter = selectizeValueSetter;
+                    },
+                    datepicker: function (obj) {
+                        obj.validation = { "format": "YYYY-MM-DD" };
+                        obj.plugin_config = {
+                            "format": "yyyy-mm-dd",
+                            "autoClose": true
+                        };
                     }
                 };
-                obj.valueSetter = selectizeValueSetter;
-            };
-
             // init
             $builder
                 .on('afterCreateRuleInput.queryBuilder', function (e, rule) {
-                    if (rule.filter.plugin == 'selectize') {
+                    if (rule.filter !== undefined && rule.filter.plugin === 'selectize') {
                         rule.$el.find('.rule-value-container').css('min-width', '200px')
                             .find('.selectize-control').removeClass('form-control');
                     }
@@ -94,18 +98,12 @@ app.factory('QueryBuilderCtrl',function(){
                     //localStorage[property] = JSON.stringify(data);
                     $scope.options.entities = data;
                     $scope.options.filters = [];
-                    Object.keys($scope.options.entities).forEach(function(key){
-                        $scope.options.entities[key].columns.forEach(function(column){
+                    Object.keys($scope.options.entities).forEach(function (key){
+                        $scope.options.entities[key].columns.forEach(function (column){
                             switch (column.plugin) {
                                 case 'selectize':
-                                    supplementSelectize(column);
-                                    break;
                                 case 'datepicker':
-                                    column.validation = { "format": "YYYY-MM-DD" };
-                                    column.plugin_config = {
-                                        "format": "yyyy-mm-dd",
-                                        "autoClose": true
-                                    };
+                                    supplement[column.plugin](column);
                                     break;
                                 default:
                                     break;
@@ -127,29 +125,31 @@ app.factory('QueryBuilderCtrl',function(){
                 throw exception;
             }
         };
-        $scope.isBeingEdited = function (ruleId) {
-            return $scope.ruleId === ruleId;
+
+        $scope.isBeingEdited = function () {
+            return $scope.ruleId === this.$data[this.$index].id;
         };
 
-
         $scope.loadSummary = function (summary) {
-            Object.keys(summary).forEach( function (key) {
+            Object.keys(summary).forEach(function (key) {
                 $scope[key] = summary[key];
             });
         };
 
-        $scope.formats =["YYYY-MM-DD"];
+        $scope.formats = ["YYYY-MM-DD"];
 
         $scope.newRule = function () {
             $scope.ruleId = null;
             $scope.$builder.queryBuilder('reset');
             $scope.loadSummary($scope.summaryDefaults);
         };
+
+        $scope.ruleId = null;
     };
 });
 
 
-app.config(function($stateProvider){
+app.config(function ($stateProvider){
     $stateProvider
         .state('flights', {
             url: '',
@@ -179,5 +179,5 @@ app.config(function($stateProvider){
         .state('admin', {
             url: '/admin',
             templateUrl: 'admin/admin.html'
-        })
+        });
 });

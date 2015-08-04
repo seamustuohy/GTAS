@@ -1,5 +1,4 @@
 app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService) {
-    'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [];
 
@@ -53,6 +52,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     };
 
     $scope.summaryDefaults = {description: null, title: null};
+    $scope.newRule();
 
     $scope.save = function () {
         var queryObject;
@@ -74,6 +74,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
                 alert(myData.errorMessage);
                 return;
             }
+            $scope.ruleId = myData.responseDetails[0].attributeValue || null;
             $scope.tableParams.reload();
         });
     };

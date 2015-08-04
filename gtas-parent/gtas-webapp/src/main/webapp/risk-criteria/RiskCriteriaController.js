@@ -1,14 +1,6 @@
 app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, riskCriteriaService) {
-    'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [];
-
-    var datepickerOptions = {
-        format: 'yyyy-mm-dd',
-        autoClose: true
-    };
-
-    $('.datepicker').datepicker(datepickerOptions);
 
     $scope.loadRule = function () {
         //<i class="glyphicon glyphicon-pencil"></i>
@@ -65,15 +57,23 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
         });
     };
 
-    $scope.summaryDefaults = {title: null, description: null, startDate: $scope.today, endDate: null, enabled: true};
+    $scope.summaryDefaults = {title: null, description: null, startDate: $scope.today.toString(), endDate: null, enabled: true};
 
+    $($scope.startDate).datepicker({
+        minDate: "today",
+        startDate: "today",
+        format: 'yyyy-mm-dd',
+        autoClose: true
+    });
+
+//    $scope.newRule();
     $scope.saving = false;
     $scope.save = function() {
         if ($scope.saving) return;
-        $scope.saving = true;
+//        $scope.saving = true;
         var ruleObject;
         var startDate = moment($scope.startDate, $scope.formats, true);
-        var endDate = $scope.endDate || moment($scope.endDate, $scope.formats, true);
+        var endDate = moment($scope.endDate, $scope.formats, true);
 
         $scope.title = $scope.title.trim();
         if (!$scope.title.length ) {
@@ -134,6 +134,7 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
                 alert(myData.errorMessage);
                 return;
             }
+            $scope.ruleId = $scope.ruleId = myData.responseDetails[0].attributeValue || null;
             $scope.tableParams.reload();
             $scope.saving = false;
         });
