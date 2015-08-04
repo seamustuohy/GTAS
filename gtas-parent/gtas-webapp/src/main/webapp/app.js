@@ -119,6 +119,13 @@ app.factory('QueryBuilderCtrl', function () {
 
                     $scope.$builder = $builder;
                     $scope.newRule();
+
+                    $('.datepicker').datepicker({
+                        startDate: $scope.today.toString(),
+                        minDate: $scope.today.toString(),
+                        format: 'yyyy-mm-dd',
+                        autoClose: true
+                    });
                 });
                 //} else {
                 //    $scope.options.entities = JSON.parse(localStorage[property]);

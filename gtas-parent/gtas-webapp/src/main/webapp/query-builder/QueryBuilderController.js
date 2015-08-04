@@ -61,9 +61,9 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             return;
         }
         $scope.title = $scope.title.trim();
-        if (!$scope.title.length ) {
+        if (!$scope.title.length) {
             alert('title can not be blank!');
-            $scope.saving = false;
+                $scope.saving = false;
             return;
         }
         queryObject = {
@@ -84,5 +84,10 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             $scope.tableParams.reload();
             $scope.saving = false;
         });
+    };
+
+    $scope.viewType = null;
+    $scope.viewTypeChange = function () {
+        console.log($scope.viewType);
     };
 });
