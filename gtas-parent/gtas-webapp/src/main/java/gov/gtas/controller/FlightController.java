@@ -1,7 +1,7 @@
 package gov.gtas.controller;
 
 import gov.gtas.model.Flight;
-import gov.gtas.parsers.paxlst.vo.FlightVo;
+import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.services.FlightService;
 
 import java.util.ArrayList;

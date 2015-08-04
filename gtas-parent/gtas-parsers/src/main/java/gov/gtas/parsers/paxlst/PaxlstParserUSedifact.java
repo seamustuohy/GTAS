@@ -16,12 +16,11 @@ import gov.gtas.parsers.paxlst.segment.usedifact.LOC.LocCode;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.DocType;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
+import gov.gtas.parsers.vo.air.DocumentVo;
+import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.parsers.paxlst.segment.usedifact.TDT;
-import gov.gtas.parsers.paxlst.vo.PaxlstMessageVo;
-import gov.gtas.parsers.paxlst.vo.DocumentVo;
-import gov.gtas.parsers.paxlst.vo.FlightVo;
-import gov.gtas.parsers.paxlst.vo.PaxVo;
-import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
 public final class PaxlstParserUSedifact extends EdifactParser<PaxlstMessageVo> {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);

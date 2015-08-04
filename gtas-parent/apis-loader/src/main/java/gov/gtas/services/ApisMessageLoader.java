@@ -1,7 +1,7 @@
 package gov.gtas.services;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.parsers.paxlst.vo.PaxlstMessageVo;
+import gov.gtas.parsers.paxlst.PaxlstMessageVo;
 
 import java.io.File;
 

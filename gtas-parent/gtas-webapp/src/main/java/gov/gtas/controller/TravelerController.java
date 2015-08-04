@@ -6,8 +6,8 @@ import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Country;
-import gov.gtas.parsers.paxlst.vo.DocumentVo;
-import gov.gtas.parsers.paxlst.vo.PaxVo;
+import gov.gtas.parsers.vo.air.DocumentVo;
+import gov.gtas.parsers.vo.air.PaxVo;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.services.PassengerService;
 

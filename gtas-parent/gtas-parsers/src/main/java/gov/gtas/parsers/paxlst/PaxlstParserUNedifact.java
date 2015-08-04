@@ -22,17 +22,16 @@ import gov.gtas.parsers.paxlst.segment.unedifact.FTX;
 import gov.gtas.parsers.paxlst.segment.unedifact.GEI;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC.LocCode;
+import gov.gtas.parsers.vo.air.DocumentVo;
+import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.parsers.paxlst.segment.unedifact.MEA;
 import gov.gtas.parsers.paxlst.segment.unedifact.NAD;
 import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.QTY;
 import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
-import gov.gtas.parsers.paxlst.vo.PaxlstMessageVo;
-import gov.gtas.parsers.paxlst.vo.DocumentVo;
-import gov.gtas.parsers.paxlst.vo.FlightVo;
-import gov.gtas.parsers.paxlst.vo.PaxVo;
-import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 
 public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> {   
     private static final String[] SEGMENT_NAMES = new String[] { "ATT", "AUT", "BGM", "CNT", "COM", "CPI", "CTA", "DOC",

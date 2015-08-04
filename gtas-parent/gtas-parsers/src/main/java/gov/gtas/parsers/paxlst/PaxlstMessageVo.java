@@ -1,4 +1,4 @@
-package gov.gtas.parsers.paxlst.vo;
+package gov.gtas.parsers.paxlst;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.parsers.edifact.EdifactMessageVo;
+import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.ReportingPartyVo;
 
 public class PaxlstMessageVo extends EdifactMessageVo {
     private List<ReportingPartyVo> reportingParties = new ArrayList<>();
