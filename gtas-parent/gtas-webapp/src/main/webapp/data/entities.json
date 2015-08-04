@@ -39,16 +39,6 @@
       }
     ]
   },
-  "API": {
-    "label": "API",
-    "columns": [
-      {
-        "id": "API.flightDirection",
-        "label": "Flight Direction",
-        "type": "string"
-      }
-    ]
-  },
   "CREDIT_CARD": {
     "label": "CREDIT CARD",
     "columns": [
@@ -249,53 +239,18 @@
     "label": "HITS",
     "columns": [
       {
-        "id": "HITS.has_hits",
-        "label": "Has Hits",
-        "type": "string"
+        "id": "HITS.has_rule_hit",
+        "label": "Has Rule Hit",
+        "type": "boolean"
       },
       {
         "id": "HITS.has_list_rule_hit",
-        "label": "Has List Rule Hit",
-        "type": "string"
-      },
-      {
-        "id": "HITS.has_rule_hit",
-        "label": "Has Rule Hit",
-        "type": "string"
+        "label": "Has Watch List Hit",
+        "type": "boolean"
       },
       {
         "id": "HITS.master_list_id",
-        "label": "List Rules - Master List Id",
-        "type": "string"
-      },
-      {
-        "id": "HITS.sub_list_id",
-        "label": "Sub List Id",
-        "type": "string"
-      },
-      {
-        "id": "HITS.rule_id",
-        "label": "Rules - Rule Id",
-        "type": "string"
-      }
-    ]
-  },
-  "NAME_ORIGIN": {
-    "label": "NAME ORIGIN",
-    "columns": [
-      {
-        "id": "NAME_ORIGIN.first_name",
-        "label": "First Name",
-        "type": "string"
-      },
-      {
-        "id": "NAME_ORIGIN.first_or_last_name",
-        "label": "First Name",
-        "type": "string"
-      },
-      {
-        "id": "NAME_ORIGIN.last_name",
-        "label": "Last Name",
+        "label": "Rules Hit Id",
         "type": "string"
       }
     ]
