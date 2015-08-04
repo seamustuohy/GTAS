@@ -52,7 +52,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     };
 
     $scope.summaryDefaults = {description: null, title: null};
-    $scope.newRule();
+    $scope.ruleId = null;
 
     $scope.save = function () {
         var queryObject;
