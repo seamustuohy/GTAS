@@ -44,7 +44,6 @@ import gov.gtas.parsers.vo.air.AddressVo;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PaxVo;
-import gov.gtas.parsers.vo.air.PnrVo;
 
 public final class PnrGovParser extends EdifactParser<PnrGovMessageVo> {
     private static final String[] SEGMENT_NAMES = new String[] { "ABI", "ADD", "APD", "DAT", "EBD", "EQN", "FAR", "FOP",

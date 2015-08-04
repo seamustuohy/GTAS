@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gov.gtas.parsers.edifact.EdifactMessageVo;
-import gov.gtas.parsers.vo.air.PnrVo;
 
 public class PnrGovMessageVo extends EdifactMessageVo {
     private List<PnrVo> pnrRecords = new ArrayList<>();

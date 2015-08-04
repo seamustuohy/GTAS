@@ -21,6 +21,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Type;
 
@@ -31,21 +33,20 @@ import org.hibernate.annotations.Type;
     discriminatorType=DiscriminatorType.STRING
 )
 public abstract class Traveler extends BaseEntityAudit {
-	
     public Traveler() { }
     
     @ManyToMany(
-        mappedBy = "passengers",
+        mappedBy = "travelers",
         targetEntity = Flight.class
     )    
     private Set<Flight> flights = new HashSet<>();
     
     @ManyToMany(
-        mappedBy = "passengers",
-        targetEntity = PnrData.class
-    ) 
+            mappedBy = "passengers",
+            targetEntity = PnrData.class
+    )
     private Set<PnrData> pnrs = new HashSet<>();
-
+    
 	private String title;
     
     @Column(name = "first_name")
@@ -57,26 +58,25 @@ public abstract class Traveler extends BaseEntityAudit {
     private String suffix;
     
     @Enumerated(EnumType.STRING)
+    @Column(length = 1)
     private Gender gender;
     
     @ManyToOne
-    @JoinColumn(name = "citizenship_country", referencedColumnName="id")     
+    @JoinColumn(name = "citizenship_country")     
     private Country citizenshipCountry;
 
     @ManyToOne
-    @JoinColumn(name = "residency_country", referencedColumnName="id")     
+    @JoinColumn(name = "residency_country")     
     private Country residencyCountry;
 
-    @Type(type="date")
+    @Temporal(TemporalType.DATE)  
     private Date dob;
     private Integer age;
     
     @ManyToOne
-    @JoinColumn
     private Airport embarkation;
 
     @ManyToOne
-    @JoinColumn
     private Airport debarkation;
     
     @ManyToOne
@@ -186,14 +186,13 @@ public abstract class Traveler extends BaseEntityAudit {
     public void setDocuments(Set<Document> documents) {
         this.documents = documents;
     }
-
-    public Set<PnrData> getPnrs() {
-		return pnrs;
-	}
-	public void setPnrs(Set<PnrData> pnrs) {
-		this.pnrs = pnrs;
-	}
 	
+    public Set<PnrData> getPnrs() {
+        return pnrs;
+    }
+    public void setPnrs(Set<PnrData> pnrs) {
+        this.pnrs = pnrs;
+    }
     @Override
     public int hashCode() {
         final int prime = 31;

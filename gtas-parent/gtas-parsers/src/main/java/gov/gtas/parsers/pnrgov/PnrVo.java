@@ -1,10 +1,15 @@
-package gov.gtas.parsers.vo.air;
+package gov.gtas.parsers.pnrgov;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import gov.gtas.parsers.vo.air.AddressVo;
+import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 
 public class PnrVo {
     private String updateMode;
