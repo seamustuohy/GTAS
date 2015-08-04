@@ -6,10 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.paxlst.vo.DocumentVo;
-import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.vo.air.DocumentVo;
+import gov.gtas.parsers.vo.air.PaxVo;
 
 public class PnrUtils {
     public static Date parseDateTime(String dt) throws ParseException {

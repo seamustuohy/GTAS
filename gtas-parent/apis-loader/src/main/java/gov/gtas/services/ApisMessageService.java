@@ -33,15 +33,15 @@ import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.paxlst.PaxlstMessageVo;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
-import gov.gtas.parsers.paxlst.vo.PaxlstMessageVo;
-import gov.gtas.parsers.paxlst.vo.DocumentVo;
-import gov.gtas.parsers.paxlst.vo.FlightVo;
-import gov.gtas.parsers.paxlst.vo.PaxVo;
-import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.vo.air.DocumentVo;
+import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.repository.ApisMessageRepository;
 
 @Service

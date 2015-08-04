@@ -1,4 +1,4 @@
-package gov.gtas.parsers.pnrgov.vo;
+package gov.gtas.parsers.vo.air;
 
 public class PnrReportingAgentVo {
 	

@@ -1,4 +1,4 @@
-package gov.gtas.parsers.paxlst.vo;
+package gov.gtas.parsers.vo.air;
 
 import java.util.ArrayList;
 import java.util.Date;

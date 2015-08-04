@@ -7,9 +7,6 @@ import java.util.Set;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.paxlst.vo.DocumentVo;
-import gov.gtas.parsers.paxlst.vo.FlightVo;
-import gov.gtas.parsers.paxlst.vo.PaxVo;
 import gov.gtas.parsers.pnrgov.segment.ABI;
 import gov.gtas.parsers.pnrgov.segment.ADD;
 import gov.gtas.parsers.pnrgov.segment.APD;
@@ -43,11 +40,13 @@ import gov.gtas.parsers.pnrgov.segment.TRI;
 import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
-import gov.gtas.parsers.pnrgov.vo.AddressVo;
-import gov.gtas.parsers.pnrgov.vo.PnrMessageVo;
-import gov.gtas.parsers.pnrgov.vo.PnrVo;
+import gov.gtas.parsers.vo.air.AddressVo;
+import gov.gtas.parsers.vo.air.DocumentVo;
+import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.PnrVo;
 
-public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
+public final class PnrGovParser extends EdifactParser<PnrGovMessageVo> {
     private static final String[] SEGMENT_NAMES = new String[] { "ABI", "ADD", "APD", "DAT", "EBD", "EQN", "FAR", "FOP",
             "FTI", "IFT", "LTS", "MON", "MSG", "ORG", "PTK", "RCI", "REF", "RPI", "SAC", "SRC", "SSD", "SSR", "TBD",
             "TIF", "TKT", "TRA", "TRI", "TVL", "TXD" };
@@ -56,7 +55,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private PnrVo currentPnr;
     
     public PnrGovParser() {
-        this.parsedMessage = new PnrMessageVo();
+        this.parsedMessage = new PnrGovMessageVo();
     }
 
     @Override
