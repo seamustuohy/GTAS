@@ -6,6 +6,7 @@ var app = angular.module('myApp', [
 ]);
 
 app.factory('QueryBuilderCtrl', function () {
+    'use strict';
     return function ($scope, $timeout) {
         var selectizeValueSetter = function (rule, value) {
                 var $selectize = rule.$el.find(".rule-value-container .selectized");
