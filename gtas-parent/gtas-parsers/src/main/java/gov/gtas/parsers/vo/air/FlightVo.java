@@ -16,6 +16,8 @@ public class FlightVo {
     private String originCountry;
     private String destination;
     private String destinationCountry;
+    private boolean isOverFlight;
+    
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date flightDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -83,7 +85,12 @@ public class FlightVo {
     public void setEta(Date eta) {
         this.eta = eta;
     }
-    
+    public boolean isOverFlight() {
+        return isOverFlight;
+    }
+    public void setOverFlight(boolean isOverFlight) {
+        this.isOverFlight = isOverFlight;
+    }
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 

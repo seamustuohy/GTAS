@@ -70,13 +70,13 @@ public class RuleConditionBuilderTest {
 		 * also test NOT_EQUAL operator.
 		 */
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+				DocumentMapping.ISSUANCE_COUNTRY,
 				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY.getFieldName()+" != \"US\")\n"
+		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\")\n"
 				+"$t:Traveler(id == $d.traveler.id)", 
 				result.toString().trim());
 	}
@@ -106,7 +106,7 @@ public class RuleConditionBuilderTest {
 		 * also test GREATER_EQUAL and NOT_EQUAL.
 		 */
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+				DocumentMapping.ISSUANCE_COUNTRY,
 				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
@@ -117,7 +117,7 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		System.out.println(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY.getFieldName()+" != \"US\", "
+		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 		+DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
 		+"$t:Traveler(id == $d.traveler.id)", 
 		result.toString().trim());
@@ -130,7 +130,7 @@ public class RuleConditionBuilderTest {
 		 * one document condition and one type equality
 		 */
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+				DocumentMapping.ISSUANCE_COUNTRY,
 				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
@@ -140,7 +140,7 @@ public class RuleConditionBuilderTest {
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY.getFieldName()+" != \"US\", "
+		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 						+ DocumentMapping.DOCUMENT_TYPE.getFieldName()+" == \"P\")\n"
 						+"$t:"+ EntityEnum.TRAVELER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
 		result.toString().trim());
@@ -167,7 +167,7 @@ public class RuleConditionBuilderTest {
 		 * one document condition and one type equality
 		 */
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+				DocumentMapping.ISSUANCE_COUNTRY,
 				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
@@ -178,7 +178,7 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		System.out.println(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY.getFieldName()+" != \"US\", "
+		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 			+ DocumentMapping.DOCUMENT_TYPE.getFieldName()+" != \"P\")\n"
 			+"$t:"+ EntityEnum.TRAVELER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
 		result.toString().trim());
@@ -205,7 +205,7 @@ public class RuleConditionBuilderTest {
 		 * conditions for Traveler, document and Flight.
 		 */
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+				DocumentMapping.ISSUANCE_COUNTRY,
 				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
@@ -241,7 +241,7 @@ public class RuleConditionBuilderTest {
 					+TravelerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
 					+TravelerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\", "
 					+TravelerMapping.LAST_NAME.getFieldName()+" == \"Jones\")\n"
-				+"$d:Document("+DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY.getFieldName()+" != \"US\", "
+				+"$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 		            +DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
 		        + "Document(id == $d.id, traveler.id == $t.id)\n"
 		        + "$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" == \"DBY\", "

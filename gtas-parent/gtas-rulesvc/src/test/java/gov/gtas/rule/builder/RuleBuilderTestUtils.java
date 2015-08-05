@@ -72,7 +72,7 @@ public class RuleBuilderTestUtils {
 		switch(indx){
 			case 1:/* doc.iso2 != US && doc.issueDate > 2012-01-01 && flight# == 0012  */
 				RuleCond cond = createRuleCond(EntityEnum.DOCUMENT,
-						DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+						DocumentMapping.ISSUANCE_COUNTRY,
 						OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
 				cond = createRuleCond(EntityEnum.DOCUMENT,
@@ -86,7 +86,7 @@ public class RuleBuilderTestUtils {
 				break;
 			case 2:/* doc.iso2 in (YE,GB) && flight.origin.iata == LHR && flight.carrier.iata==CO  */
 				cond = createRuleCond(EntityEnum.DOCUMENT,
-						DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+						DocumentMapping.ISSUANCE_COUNTRY,
 						OperatorCodeEnum.IN, new String[]{"YE", "GB"}, ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
 				cond = createRuleCond(EntityEnum.FLIGHT,

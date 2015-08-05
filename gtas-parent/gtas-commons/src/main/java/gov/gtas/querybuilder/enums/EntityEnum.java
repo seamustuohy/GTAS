@@ -4,14 +4,12 @@ package gov.gtas.querybuilder.enums;
 public enum EntityEnum {
 	
 		ADDRESS ("ADDRESS", "Address", "a"),
-		API ("API", "API", "api"),
 		CREDIT_CARD ("CREDIT CARD", "CreditCard", "cc"),
 		DOCUMENT ("DOCUMENT", "Document", "d"),
 		EMAIL ("EMAIL", "Email", "e"),
 		FLIGHT ("FLIGHT", "Flight", "f"),
 		FREQUENT_FLYER ("FREQUENT FLYER", "FrequentFlyer", "ff"),
 		HITS ("HITS", "Hits", "h"),
-		NAME_ORIGIN ("NAME ORIGIN", "NameOrigin", "n"),
 		TRAVELER("TRAVELER", "Traveler", "t"),
 		PHONE ("PHONE", "Phone", "ph"),
 		PNR ("PNR", "PNR", "pnr"),

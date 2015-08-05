@@ -32,6 +32,7 @@ import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.QTY;
 import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
+import gov.gtas.parsers.paxlst.segment.unedifact.TDT.TdtType;
 
 public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> {   
     private static final String[] SEGMENT_NAMES = new String[] { "ATT", "AUT", "BGM", "CNT", "COM", "CPI", "CTA", "DOC",
@@ -188,12 +189,22 @@ public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> 
             if (origin != null && dest != null) {
                 FlightVo f = new FlightVo();
                 parsedMessage.addFlight(f);
+                TdtType flightType = tdt.getTransportStageQualifier();
+                f.setOverFlight(flightType.equals(TdtType.OVER_FLIGHT));
                 f.setFlightNumber(tdt.getFlightNumber());
                 f.setCarrier(tdt.getC_carrierIdentifier());
                 f.setOrigin(origin);
                 f.setDestination(dest);
                 f.setEta(eta);
                 f.setEtd(etd);
+                if (etd != null) {
+                    f.setFlightDate(etd);
+                } else if (eta != null) {
+                    f.setFlightDate(eta);
+                } else {
+                    // TODO: verify this case
+                    f.setFlightDate(parsedMessage.getTransmissionDate());
+                }
 
                 dest = null;
                 origin = null;

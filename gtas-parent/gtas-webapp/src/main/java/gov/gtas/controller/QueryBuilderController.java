@@ -1,5 +1,28 @@
 package gov.gtas.controller;
 
+import gov.gtas.constants.Constants;
+import gov.gtas.model.Document;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.querybuilder.enums.Status;
+import gov.gtas.querybuilder.exceptions.InvalidQueryException;
+import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
+import gov.gtas.querybuilder.mappings.QueryBuilderMapping;
+import gov.gtas.querybuilder.mappings.QueryBuilderMappingFactory;
+import gov.gtas.querybuilder.model.IQueryResponse;
+import gov.gtas.querybuilder.model.IQueryResult;
+import gov.gtas.querybuilder.model.QueryErrorResponse;
+import gov.gtas.querybuilder.model.QueryFlightsResult;
+import gov.gtas.querybuilder.model.QueryPassengersResult;
+import gov.gtas.querybuilder.model.QueryRequest;
+import gov.gtas.querybuilder.model.QueryResponse;
+import gov.gtas.querybuilder.model.QueryResult;
+import gov.gtas.querybuilder.model.UserQuery;
+import gov.gtas.querybuilder.service.QueryBuilderService;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,29 +46,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import gov.gtas.constants.Constants;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.Status;
-import gov.gtas.querybuilder.exceptions.InvalidQueryException;
-import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
-import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
-import gov.gtas.querybuilder.mappings.QueryBuilderMapping;
-import gov.gtas.querybuilder.mappings.QueryBuilderMappingFactory;
-import gov.gtas.querybuilder.model.IQueryResponse;
-import gov.gtas.querybuilder.model.IQueryResult;
-import gov.gtas.querybuilder.model.QueryErrorResponse;
-import gov.gtas.querybuilder.model.QueryFlightsResult;
-import gov.gtas.querybuilder.model.QueryPassengersResult;
-import gov.gtas.querybuilder.model.QueryRequest;
-import gov.gtas.querybuilder.model.QueryResponse;
-import gov.gtas.querybuilder.model.QueryResult;
-import gov.gtas.querybuilder.model.UserQuery;
-import gov.gtas.querybuilder.service.QueryBuilderService;
 
 /**
  * 
@@ -164,14 +164,12 @@ public class QueryBuilderController {
 		Map<String, QueryBuilderMapping> qbMap = new LinkedHashMap<>();
 		
 		qbMap.put(EntityEnum.ADDRESS.toString(), getMapping(EntityEnum.ADDRESS));
-		qbMap.put(EntityEnum.API.toString(), getMapping(EntityEnum.API));
 		qbMap.put(EntityEnum.CREDIT_CARD.toString(), getMapping(EntityEnum.CREDIT_CARD));
 		qbMap.put(EntityEnum.DOCUMENT.toString(), getMapping(EntityEnum.DOCUMENT));
 		qbMap.put(EntityEnum.EMAIL.toString(), getMapping(EntityEnum.EMAIL));
 		qbMap.put(EntityEnum.FLIGHT.toString(), getMapping(EntityEnum.FLIGHT));
 		qbMap.put(EntityEnum.FREQUENT_FLYER.toString(), getMapping(EntityEnum.FREQUENT_FLYER));
 		qbMap.put(EntityEnum.HITS.toString(), getMapping(EntityEnum.HITS));
-		qbMap.put(EntityEnum.NAME_ORIGIN.toString(), getMapping(EntityEnum.NAME_ORIGIN));
 		qbMap.put(EntityEnum.TRAVELER.toString(), getMapping(EntityEnum.TRAVELER));
 		qbMap.put(EntityEnum.PHONE.toString(), getMapping(EntityEnum.PHONE));
 		qbMap.put(EntityEnum.PNR.toString(), getMapping(EntityEnum.PNR));

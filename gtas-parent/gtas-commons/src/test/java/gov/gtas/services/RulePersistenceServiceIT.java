@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
@@ -15,6 +14,7 @@ import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.test.util.RuleServiceDataGenUtils;
 import gov.gtas.util.DateCalendarUtils;
@@ -192,7 +192,7 @@ public class RulePersistenceServiceIT {
 		Rule engineRule = testGenUtils.createRuleWithOneCondition(r, 1);
 		engineRule.addConditionToRule(testGenUtils.createCondition(2,
 				EntityEnum.FLIGHT,
-				EntityAttributeConstants.FLIGHT_ATTR_DESTINATION,
+				FlightMapping.AIRPORT_DESTINATION.getFieldName(),
 				OperatorCodeEnum.EQUAL, "DBY"));
 
 		r.addEngineRule(engineRule);

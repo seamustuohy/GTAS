@@ -1,5 +1,21 @@
 package gov.gtas.querybuilder.repository;
 
+import gov.gtas.model.Flight;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.User;
+import gov.gtas.model.udr.json.QueryEntity;
+import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.constants.Constants;
+import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.querybuilder.enums.OperatorEnum;
+import gov.gtas.querybuilder.enums.TypeEnum;
+import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
+import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
+import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
+import gov.gtas.querybuilder.model.UserQuery;
+import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,29 +37,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.Errors;
 
-import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.User;
-import gov.gtas.model.udr.json.QueryEntity;
-import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.model.udr.json.QueryTerm;
-import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
-import gov.gtas.querybuilder.enums.TypeEnum;
-import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
-import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
-import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
-import gov.gtas.querybuilder.model.UserQuery;
-import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
-
 @Repository
 public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderRepository.class);
 	private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-	private String GENDER = "gender";
-	private String DIRECTION = "direction";
+	private static final String JOIN = " join ";
+	private static final String JOIN_FETCH = " join fetch ";
+	private static final String FLIGHT_REF = ".flights ";
+	private static final String TRAVELER_REF = ".travelers ";
+	private static final String DOCUMENT_REF = ".documents ";
 	
 	@PersistenceContext 
  	private EntityManager entityManager;
@@ -199,7 +202,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 
 	@Override
 	public List<Traveler> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException {
-		List<Traveler> passengers = new ArrayList<>();
+		List<Traveler> travelers = new ArrayList<>();
 		
 		if(queryObject != null) {
 			Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
@@ -210,20 +213,20 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			
 			try {
 				String jpqlQuery = generateQuery(queryObject, EntityEnum.TRAVELER);
-				logger.info("Getting Passengers by this query: " + jpqlQuery);
+				logger.info("Getting Travelers by this query: " + jpqlQuery);
 				TypedQuery<Traveler> query = entityManager.createQuery(jpqlQuery, Traveler.class);
 				MutableInt positionalParameter = new MutableInt();
 				setJPQLParameters(query, queryObject, positionalParameter);
 				
-				passengers = query.getResultList();
+				travelers = query.getResultList();
 				
-				logger.info("Number of Passengers returned: " + (passengers != null ? passengers.size() : "Passenger result is null"));
+				logger.info("Number of Travelers returned: " + (travelers != null ? travelers.size() : "Traveler result is null"));
 			} catch (InvalidQueryRepositoryException | ParseException e) {
 				throw new InvalidQueryRepositoryException(e.getMessage(), queryObject);
 			}
 		}
 		
-		return passengers;
+		return travelers;
 	}
 	
 	private boolean isUniqueTitle(UserQuery query) {
@@ -268,8 +271,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			else if(queryType == EntityEnum.TRAVELER) {
-				String flightsJoinStmt = " join fetch " + EntityEnum.TRAVELER.getAlias() + ".flights " + EntityEnum.FLIGHT.getAlias();
-				String documentJoinStmt = " join fetch " + EntityEnum.TRAVELER.getAlias() + ".documents " + EntityEnum.DOCUMENT.getAlias();
+				String flightsJoinStmt = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
+				String documentJoinStmt = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
 				
 				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.TRAVELER.getAlias() + 
 						" " + Constants.FROM + " " + EntityEnum.TRAVELER.getEntityName() + " " + EntityEnum.TRAVELER.getAlias();
@@ -283,8 +286,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						join.append(flightsJoinStmt);
 					}
 					else {
-						String condition = " join " + EntityEnum.TRAVELER.getAlias() + ".flights ";
-						String joinFetchCondition = " join fetch " + EntityEnum.TRAVELER.getAlias() + ".flights ";
+						String condition = JOIN + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF;
+						String joinFetchCondition = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF;
 						int startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
 					}
@@ -294,14 +297,14 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						join.append(documentJoinStmt);
 					}
 					else {
-						String condition = " join " + EntityEnum.TRAVELER.getAlias() + ".documents ";
-						String joinFetchCondition = " join fetch " + EntityEnum.TRAVELER.getAlias() + ".documents ";
+						String condition = JOIN + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF;
+						String joinFetchCondition = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF;
 						int startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
 						
-						// if this is a passenger query, you don't need the passenger join again because that is already part of the queryPrefix
+						// if this is a passenger query, you don't need the traveler join again because that is already part of the queryPrefix
 						// so remove it
-						condition = " join " + EntityEnum.FLIGHT.getAlias() + ".passengers " + EntityEnum.TRAVELER.getAlias();
+						condition = JOIN + EntityEnum.FLIGHT.getAlias() + TRAVELER_REF + EntityEnum.TRAVELER.getAlias();
 						startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), "");
 					}
@@ -420,7 +423,6 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		else if(queryEntity instanceof QueryTerm) {
 			queryTerm = (QueryTerm) queryEntity;
 			
-			String field = queryTerm.getField();
 			String type = queryTerm.getType();
 			String operator = queryTerm.getOperator();
 			String value = (queryTerm.getValue() != null && queryTerm.getValue().length == 1) ? queryTerm.getValue()[0]:null;
@@ -514,26 +516,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						query.setParameter(positionalParameter.intValue(), vals);
 					}
 					else {
-						if(field != null && field.equals(GENDER)) {
-							List<String> vals = new ArrayList<>();
-							if(values != null) {
-								for(String val : values) {
-								    vals.add(val);
-								}
-							}
-							query.setParameter(positionalParameter.intValue(), vals);
-						}
-						else if(field != null && field.equals(DIRECTION)) {
-							List<String> vals = new ArrayList<>();
-							if(values != null) {
-								for(String val : values) {
-								    vals.add(val);
-								}
-							}
-						}
-						else {
-							query.setParameter(positionalParameter.intValue(), values);
-						}
+						query.setParameter(positionalParameter.intValue(), values);
 					}
 				}
 				else if(OperatorEnum.BEGINS_WITH.toString().equalsIgnoreCase(operator) || 
@@ -562,16 +545,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						query.setParameter(positionalParameter.intValue(), dtFormat.parse(value), TemporalType.DATE);
 					}
 					else {
-                        query.setParameter(positionalParameter.intValue(), value);
-
-                        // TODO: review 
-//						if(field != null && field.equals(GENDER)) {
-//						    query.setParameter(positionalParameter.intValue(), value);
-//						}
-//						else if(field != null && field.equals(DIRECTION)) { 
-//                            query.setParameter(positionalParameter.intValue(), value);
-//						} else {
-//						}
+					    query.setParameter(positionalParameter.intValue(), value);
 					}
 				}
 			}
@@ -583,13 +557,13 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		
 		switch (entity.getEntityName().toUpperCase()) {
 			case Constants.FLIGHT:
-				joinCondition = " join " + EntityEnum.TRAVELER.getAlias() + ".flights " + EntityEnum.FLIGHT.getAlias();
+				joinCondition = JOIN + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
 				break;
 	        case Constants.TRAVELER:
-	        	joinCondition = " join " + EntityEnum.FLIGHT.getAlias() + ".passengers " + EntityEnum.TRAVELER.getAlias();
+	        	joinCondition = JOIN + EntityEnum.FLIGHT.getAlias() + TRAVELER_REF + EntityEnum.TRAVELER.getAlias();
 	        	break;
 	        case Constants.DOCUMENT:
-	        	joinCondition = " join " + EntityEnum.TRAVELER.getAlias() + ".documents " + EntityEnum.DOCUMENT.getAlias();
+	        	joinCondition = JOIN + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
 	            break;
 	        default:
 	            throw new InvalidQueryRepositoryException("Invalid Entity: " + entity.getEntityName(), null);

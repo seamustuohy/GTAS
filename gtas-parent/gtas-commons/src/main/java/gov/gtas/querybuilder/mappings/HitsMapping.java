@@ -4,12 +4,9 @@ import gov.gtas.querybuilder.enums.TypeEnum;
 
 public enum HitsMapping implements IEntityMapping {
 
-	HAS_HITS ("has_hits", "Has Hits", TypeEnum.STRING.getType()),
-	HAS_LIST_RULE_HIT ("has_list_rule_hit", "Has List Rule Hit", TypeEnum.STRING.getType()),
-	HAS_RULE_HIT ("has_rule_hit", "Has Rule Hit", TypeEnum.STRING.getType()),
-	LIST_RULES ("master_list_id", "List Rules - Master List Id", TypeEnum.STRING.getType()),
-	SUB_LIST_ID ("sub_list_id", "Sub List Id", TypeEnum.STRING.getType()),
-	RULE_ID ("rule_id", "Rules - Rule Id", TypeEnum.STRING.getType());
+	HAS_RULE_HIT ("has_rule_hit", "Has Rule Hit", TypeEnum.BOOLEAN.getType()),
+	HAS_WATCHLIST_HIT ("", "Has Watch List Hit", TypeEnum.BOOLEAN.getType()), // not yet available
+	RULE_ID ("ruleId", "Rules Hit Id", TypeEnum.STRING.getType());
 	
 	private String fieldName;
 	private String friendlyName;

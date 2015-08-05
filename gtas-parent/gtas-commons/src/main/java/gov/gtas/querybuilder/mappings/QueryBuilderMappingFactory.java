@@ -15,9 +15,6 @@ public class QueryBuilderMappingFactory {
 	      if(modelType == EntityEnum.ADDRESS) {
 	         return createQueryBuilderMapping(EntityEnum.ADDRESS, AddressMapping.values());
 	      } 
-	      else if(modelType == EntityEnum.API) {
-	         return createQueryBuilderMapping(EntityEnum.API, APIMapping.values());
-	      } 
 	      else if(modelType == EntityEnum.CREDIT_CARD) {
 	         return createQueryBuilderMapping(EntityEnum.CREDIT_CARD, CreditCardMapping.values());
 	      }
@@ -35,9 +32,6 @@ public class QueryBuilderMappingFactory {
 	      }
 	      else if(modelType == EntityEnum.HITS) {
 	    	  return createQueryBuilderMapping(EntityEnum.HITS, HitsMapping.values());
-	      }
-	      else if(modelType == EntityEnum.NAME_ORIGIN) {
-	    	  return createQueryBuilderMapping(EntityEnum.NAME_ORIGIN, NameOriginMapping.values());
 	      }
 	      else if(modelType == EntityEnum.TRAVELER) {
 	    	  return createQueryBuilderMapping(EntityEnum.TRAVELER, TravelerMapping.values());
@@ -61,8 +55,10 @@ public class QueryBuilderMappingFactory {
 		
 		model.setLabel(entityEnum.getFriendlyName());
 		for(IEntityMapping iem : entityMapping) {
-			Column col = new Column(iem.getFieldName(), iem.getFriendlyName(), iem.getFieldType());
-			columns.add(col);
+			if(iem.isDisplayField()) {
+				Column col = new Column(iem.getFieldName(), iem.getFriendlyName(), iem.getFieldType());
+				columns.add(col);
+			}
 		}
 		
 		model.setColumns(columns);
