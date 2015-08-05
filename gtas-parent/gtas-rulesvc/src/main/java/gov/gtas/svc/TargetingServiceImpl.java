@@ -1,17 +1,23 @@
 package gov.gtas.svc;
 
 import gov.gtas.bo.RuleExecutionStatistics;
+import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
+import gov.gtas.model.HitDetail;
+import gov.gtas.model.HitsSummary;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.rule.RuleServiceResult;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -32,6 +38,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private ApisMessageRepository apisMsgRepository;
+
+	@Autowired
+	private HitsSummaryRepository hitsSummaryRepository;
 
 	/**
 	 * Constructor obtained from the spring context by auto-wiring.
@@ -120,6 +129,8 @@ public class TargetingServiceImpl implements TargetingService {
 		List<ApisMessage> apisMessageList = retrieveApisMessage(MessageStatus.LOADED);
 		System.out
 				.println("retrieved message size-> " + apisMessageList.size());
+		
+		List<HitsSummary> hitsSummaryList = new ArrayList<HitsSummary>();
 		if (apisMessageList.size() > 0) {
 			for (ApisMessage apisMessage : apisMessageList) {
 				RuleServiceResult ruleRunningResult = analyzeApisMessage(apisMessage);
@@ -127,10 +138,44 @@ public class TargetingServiceImpl implements TargetingService {
 						.getExecutionStatistics();
 				System.out.println("\nTotal Rules fired. --> "
 						+ ruleExeStatus.getTotalRulesFired());
-				List<?> results = ruleRunningResult.getResultList();
+
+				@SuppressWarnings("unchecked")
+				List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
+						.getResultList();
+				Iterator<RuleHitDetail> iter = results.iterator();
+				while (iter.hasNext()) {
+					RuleHitDetail ruleDetail = iter.next();
+
+					String[] hitReasons = ruleDetail.getHitReasons();
+
+					StringBuilder sb = new StringBuilder();
+					for (String hitReason : hitReasons) {
+						sb.append(hitReason);
+						sb.append("$$$");
+					}
+
+					HitsSummary hitsSummary = new HitsSummary();
+					hitsSummary.setTravelerId(ruleDetail.getTravelerId());
+					hitsSummary.setCreateDate(new Date());
+
+					HitDetail hitDetail = new HitDetail();
+					hitDetail.setRuleId(ruleDetail.getUdrRuleId());
+					hitDetail.setRuleConditions(sb.toString());
+					hitDetail.setCreateDate(new Date());
+					hitDetail.setParent(hitsSummary);
+
+					List<HitDetail> detailList = new ArrayList<HitDetail>();
+
+					detailList.add(hitDetail);
+					hitsSummary.setHitdetails(detailList);
+
+					hitsSummaryList.add(hitsSummary);
+					
+				}
 
 				// updateApisMessage(apisMessage, MessageStatus.ANALYZED);
 			}
+			hitsSummaryRepository.save(hitsSummaryList);
 		}
 	}
 }

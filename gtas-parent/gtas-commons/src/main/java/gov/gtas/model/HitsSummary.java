@@ -1,5 +1,6 @@
 package gov.gtas.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class HitsSummary extends BaseEntity {
 	private Date createDate;
 
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<HitDetail> hitdetails;
+	private List<HitDetail> hitdetails = new ArrayList<HitDetail>();
 
 	public Date getCreateDate() {
 		return createDate;
