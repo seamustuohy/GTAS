@@ -14,9 +14,9 @@ import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FlightDirection;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
+import gov.gtas.model.lookup.DocumentTypeCode;
 import gov.gtas.repository.AirportRepository;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.CarrierRepository;
@@ -126,7 +126,8 @@ public class ApisDataGenerator {
     	Set<Document> docs = new HashSet<Document>();
     	for(int i = 0; i < iso2Array.length; ++i){
     		String iso2 = iso2Array[i];
-    		Document doc = new Passport();
+    		Document doc = new Document();
+    		doc.setDocumentType(DocumentTypeCode.P.name());
     		doc.setId(7786L);
     		doc.setDocumentNumber(DOCUMENT_NUMBER);
     		doc.setIssuanceCountry(iso2);

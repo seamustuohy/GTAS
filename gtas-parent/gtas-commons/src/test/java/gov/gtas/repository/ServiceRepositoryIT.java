@@ -25,17 +25,13 @@ import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Gender;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
-import gov.gtas.services.AirportService;
-import gov.gtas.services.CarrierService;
-import gov.gtas.services.CountryService;
+import gov.gtas.model.lookup.DocumentTypeCode;
 import gov.gtas.services.FlightService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -99,7 +95,7 @@ public class ServiceRepositoryIT {
 		Set hs = new HashSet<Flight>();
 		hs.add(f);
 		passengerToUpdate.setFlights(hs);
-		passengerToUpdate.setGender(Gender.M);
+		passengerToUpdate.setGender("M");
 		passengerToUpdate.setLastName("Copenhafer");
 		passengerToUpdate.setResidencyCountry(c);
 		// passengerToUpdate.setDocuments(passenger.getDocuments());
@@ -109,7 +105,8 @@ public class ServiceRepositoryIT {
 		passengerToUpdate.setCreatedAt(new Date());
 		passengerToUpdate.setCreatedBy("JUNIT TEST");
 
-		Passport d = new Passport();
+		Document d = new Document();
+		d.setDocumentType(DocumentTypeCode.P.name());
 		d.setDocumentNumber("T00123456");
 		d.setExpirationDate(new Date("6/6/2020"));
 		d.setIssuanceDate(new Date("6/6/1999"));

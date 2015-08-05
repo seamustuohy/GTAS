@@ -18,7 +18,7 @@ import gov.gtas.parsers.paxlst.segment.usedifact.PDT.DocType;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.parsers.paxlst.segment.usedifact.TDT;
 
@@ -138,7 +138,7 @@ public final class PaxlstParserUSedifact extends EdifactParser<PaxlstMessageVo> 
     }
 
     private void processPax(Segment s) {
-        PaxVo p = new PaxVo();
+        TravelerVo p = new TravelerVo();
         parsedMessage.addPax(p);
 
         PDT pdt = (PDT)s;

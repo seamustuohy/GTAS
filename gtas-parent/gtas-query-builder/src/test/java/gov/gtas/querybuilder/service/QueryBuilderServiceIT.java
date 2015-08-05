@@ -21,10 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Passport;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
-import gov.gtas.model.Visa;
 import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
@@ -216,15 +214,8 @@ public class QueryBuilderServiceIT {
 				if(docs != null) {
 					if(docs.iterator().hasNext()) {
 						Document doc = docs.iterator().next();
-						
 						docNumber = doc.getDocumentNumber();
-						
-						if(doc instanceof Passport) {
-							docType = "P";
-						}
-						else if(doc instanceof Visa) {
-							docType = "V";
-						}
+						docType = doc.getDocumentType();
 						docIssuanceCountry = doc.getIssuanceCountry();
 					}
 				}

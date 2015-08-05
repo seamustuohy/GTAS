@@ -4,25 +4,23 @@ import static gov.gtas.rule.builder.RuleTemplateConstants.GLOBAL_RESULT_DECLARAT
 import static gov.gtas.rule.builder.RuleTemplateConstants.IMPORT_PREFIX;
 import static gov.gtas.rule.builder.RuleTemplateConstants.NEW_LINE;
 import static gov.gtas.rule.builder.RuleTemplateConstants.RULE_PACKAGE_NAME;
-import gov.gtas.bo.RuleHitDetail;
-import gov.gtas.error.CommonErrorConstants;
-import gov.gtas.error.ErrorHandlerFactory;
-import gov.gtas.model.BaseEntity;
-import gov.gtas.model.Crew;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Passport;
-import gov.gtas.model.Pax;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.Visa;
-import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.RuleCond;
-import gov.gtas.model.udr.UdrRule;
 
 import java.text.ParseException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import gov.gtas.bo.RuleHitDetail;
+import gov.gtas.error.CommonErrorConstants;
+import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.model.Crew;
+import gov.gtas.model.Document;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.RuleCond;
+import gov.gtas.model.udr.UdrRule;
 
 /**
  * A builder pattern class for constructing a Drools rule "file" (actually a
@@ -40,8 +38,7 @@ public class DrlRuleFileBuilder {
 			.getLogger(DrlRuleFileBuilder.class);
 
 	private static final Class<?>[] IMPORT_LIST = { Flight.class,
-			Traveler.class, Pax.class, Crew.class, Document.class,
-			Passport.class, Visa.class };
+			Traveler.class, Pax.class, Crew.class, Document.class };
 
 	private StringBuilder stringBuilder;
 	private RuleConditionBuilder ruleConditionBuilder;

@@ -16,12 +16,11 @@ import org.springframework.stereotype.Service;
 
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Crew;
+import gov.gtas.model.Document;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FlightDirection;
-import gov.gtas.model.Gender;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.PaxInTransit;
 import gov.gtas.model.ReportingParty;
@@ -39,8 +38,8 @@ import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PaxVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.repository.ApisMessageRepository;
 
 @Service
@@ -123,8 +122,8 @@ public class ApisMessageService {
             }
             
             Set<Traveler> pax = new HashSet<>();        
-            for (PaxVo pvo : m.getPassengers()) {
-                Traveler p = convertPaxVo(pvo);
+            for (TravelerVo pvo : m.getPassengers()) {
+                Traveler p = convertTravelerVo(pvo);
                 pax.add(p);
             }
     
@@ -146,7 +145,7 @@ public class ApisMessageService {
         }
     }
     
-    private Traveler convertPaxVo(PaxVo vo) throws ParseException {
+    private Traveler convertTravelerVo(TravelerVo vo) throws ParseException {
         Traveler p = null;
         switch (vo.getPaxType()) {
         case "P":
@@ -161,25 +160,26 @@ public class ApisMessageService {
         }
 
         BeanUtils.copyProperties(vo, p);
-        p.setGender(Gender.valueOf(vo.getGender()));
         
-        Airport debark = convertAirport(vo.getDebarkation());
+        String airportCode = vo.getDebarkation();
+        p.setDebarkation(airportCode);
+        Airport debark = getAirport(airportCode);
         if (debark != null) {
-            p.setDebarkation(vo.getDebarkation());
-            p.setDebarkCountry(debark.getCountry().getIso2());
+            p.setDebarkCountry(debark.getCountry());
         }
 
-        Airport embark = convertAirport(vo.getEmbarkation());
+        airportCode = vo.getEmbarkation();
+        p.setEmbarkation(airportCode);
+        Airport embark = getAirport(airportCode);
         if (embark != null) {
-            p.setEmbarkation(vo.getEmbarkation());
-            p.setEmbarkCountry(embark.getCountry().getIso2());
+            p.setEmbarkCountry(embark.getCountry());
         }
         
         p.setCitizenshipCountry(vo.getCitizenshipCountry());
         p.setResidencyCountry(vo.getResidencyCountry());
         
         for (DocumentVo dvo : vo.getDocuments()) {
-            Passport d = new Passport();
+            Document d = new Document();
             BeanUtils.copyProperties(dvo, d);
             d.setTraveler(p);
             d.setIssuanceCountry(dvo.getIssuanceCountry());
@@ -203,30 +203,28 @@ public class ApisMessageService {
         BeanUtils.copyProperties(vo, f);
         f.setCarrier(vo.getCarrier());
         
-        Airport dest = convertAirport(vo.getDestination());
-        Country destCountry = null;
+        f.setDestination(vo.getDestination());
+        Airport dest = getAirport(vo.getDestination());
+        String destCountry = null;
         if (dest != null) {
             destCountry = dest.getCountry();
+            f.setDestinationCountry(destCountry);
         }
-        f.setDestination(vo.getDestination());
-        f.setDestinationCountry(destCountry.getIso2());
         
-        Airport origin = convertAirport(vo.getOrigin());
-        Country originCountry = null;
+        f.setOrigin(vo.getOrigin());
+        Airport origin = getAirport(vo.getOrigin());
+        String originCountry = null;
         if (origin != null) {
             originCountry = origin.getCountry();
+            f.setOriginCountry(originCountry);
         }
-        f.setOrigin(vo.getOrigin());
-        f.setOriginCountry(originCountry.getIso2());
         
-        if (destCountry != null && originCountry != null) {
-            if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
-                f.setDirection(FlightDirection.CONTINUANCE);
-            } else if (homeCountry.equals(originCountry)) {
-                f.setDirection(FlightDirection.OUTBOUND);            
-            } else if (homeCountry.equals(destCountry)) {
-                f.setDirection(FlightDirection.INBOUND);                        
-            }
+        if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
+            f.setDirection(FlightDirection.CONTINUANCE);
+        } else if (homeCountry.equals(originCountry)) {
+            f.setDirection(FlightDirection.OUTBOUND);            
+        } else if (homeCountry.equals(destCountry)) {
+            f.setDirection(FlightDirection.INBOUND);                        
         }
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #
@@ -239,7 +237,7 @@ public class ApisMessageService {
         return f;
     }
     
-    private Airport convertAirport(String a) throws ParseException {
+    private Airport getAirport(String a) throws ParseException {
         if (a == null) return null;
         
         Airport rv = null;
