@@ -33,8 +33,8 @@ public class Flight extends BaseEntityAudit {
     private Set<Traveler> travelers = new HashSet<>();
 
     @ManyToMany(
-            mappedBy = "flights",
-            targetEntity = PnrData.class
+        mappedBy = "flights",
+        targetEntity = PnrData.class
     ) 
     private Set<PnrData> pnrs = new HashSet<>();
     
