@@ -3,23 +3,18 @@ package gov.gtas.model;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "document")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="document_type",
-    discriminatorType=DiscriminatorType.STRING
-)
-public abstract class Document extends BaseEntity {
+public class Document extends BaseEntity {
     public Document() { }
 
+    @Column(name = "document_type", length = 2)
+    private String documentType;
+    
     @Column(name = "document_number")
     private String documentNumber;
     
@@ -34,6 +29,14 @@ public abstract class Document extends BaseEntity {
     
     @ManyToOne
     private Traveler traveler;
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
 
     public Date getExpirationDate() {
         return expirationDate;

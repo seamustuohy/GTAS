@@ -28,10 +28,8 @@ import gov.gtas.constants.Constants;
 import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
-import gov.gtas.model.Visa;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
 import gov.gtas.querybuilder.enums.EntityEnum;
@@ -63,8 +61,6 @@ import gov.gtas.querybuilder.service.QueryBuilderService;
 public class QueryBuilderController {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderController.class);
 	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-	private String PASSPORT = "P";
-	private String VISA = "V";
 	
 	@Autowired
 	QueryBuilderService queryService;
@@ -264,13 +260,7 @@ public class QueryBuilderController {
 							Document doc = docs.iterator().next();
 							
 							docNumber = doc.getDocumentNumber();
-							
-							if(doc instanceof Passport) {
-								docType = PASSPORT;
-							}
-							else if(doc instanceof Visa) {
-								docType = VISA;
-							}
+							docType = doc.getDocumentType();
 							docIssuanceCountry = doc.getIssuanceCountry();
 						}
 					}
