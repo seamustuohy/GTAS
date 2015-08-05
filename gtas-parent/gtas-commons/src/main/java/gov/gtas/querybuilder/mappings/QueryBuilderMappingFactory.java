@@ -55,8 +55,10 @@ public class QueryBuilderMappingFactory {
 		
 		model.setLabel(entityEnum.getFriendlyName());
 		for(IEntityMapping iem : entityMapping) {
-			Column col = new Column(iem.getFieldName(), iem.getFriendlyName(), iem.getFieldType());
-			columns.add(col);
+			if(iem.isDisplayField()) {
+				Column col = new Column(iem.getFieldName(), iem.getFriendlyName(), iem.getFieldType());
+				columns.add(col);
+			}
 		}
 		
 		model.setColumns(columns);

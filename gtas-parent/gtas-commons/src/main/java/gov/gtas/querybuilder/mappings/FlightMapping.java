@@ -25,6 +25,7 @@ public enum FlightMapping implements IEntityMapping {
 		this.fieldName = fieldName;
 		this.friendlyName = friendlyName;
 		this.fieldType = fieldType;
+		this.displayField = displayField;
 	}
 	private FlightMapping(String fieldName, String friendlyName, String fieldType) {
 		this(fieldName, friendlyName, fieldType, true);

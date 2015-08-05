@@ -72,20 +72,20 @@ public class RuleConditionBuilderTest {
 	@Test
 	public void testSingleConditionDocument() throws ParseException {
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+				DocumentMapping.ISSUANCE_COUNTRY,
 				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY.getFieldName()+" != \"US\")\n"
+		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\")\n"
 				+"$t:Traveler(id == $d.traveler.id)", 
 				result.toString().trim());
 	}
 	@Test
 	public void testMultipleConditionsDocument() throws ParseException {
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+				DocumentMapping.ISSUANCE_COUNTRY,
 				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
@@ -96,7 +96,7 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		System.out.println(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY.getFieldName()+" != \"US\", "
+		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 		+DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
 		+"$t:Traveler(id == $d.traveler.id)", 
 		result.toString().trim());
@@ -106,7 +106,7 @@ public class RuleConditionBuilderTest {
 	@Test
 	public void testMultipleConditionsDocument2() throws ParseException {
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+				DocumentMapping.ISSUANCE_COUNTRY,
 				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
@@ -116,7 +116,7 @@ public class RuleConditionBuilderTest {
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY.getFieldName()+" != \"US\")\n"
+		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\")\n"
 		+"Document(documentType == \"P\")\n"
 		+"$t:Traveler(id == $d.traveler.id)", 
 		result.toString().trim());
@@ -124,7 +124,7 @@ public class RuleConditionBuilderTest {
 	@Test
 	public void testMultipleConditionsPersonFlightDocument() throws ParseException {
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
+				DocumentMapping.ISSUANCE_COUNTRY,
 				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
@@ -160,7 +160,7 @@ public class RuleConditionBuilderTest {
 					+TravelerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
 					+TravelerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\", "
 					+TravelerMapping.LAST_NAME.getFieldName()+" == \"Jones\")\n"
-				+"$d:Document("+DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY.getFieldName()+" != \"US\", "
+				+"$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 		            +DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
 		        + "Document(id == $d.id, traveler.id == $t.id)\n"
 		        + "$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" == \"DBY\", "

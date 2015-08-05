@@ -1,5 +1,22 @@
 package gov.gtas.querybuilder.repository;
 
+import gov.gtas.model.Flight;
+import gov.gtas.model.FlightDirection;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.User;
+import gov.gtas.model.udr.json.QueryEntity;
+import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.constants.Constants;
+import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.querybuilder.enums.OperatorEnum;
+import gov.gtas.querybuilder.enums.TypeEnum;
+import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
+import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
+import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
+import gov.gtas.querybuilder.model.UserQuery;
+import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,33 +38,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.Errors;
 
-import gov.gtas.model.Flight;
-import gov.gtas.model.FlightDirection;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.User;
-import gov.gtas.model.udr.json.QueryEntity;
-import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.model.udr.json.QueryTerm;
-import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
-import gov.gtas.querybuilder.enums.TypeEnum;
-import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
-import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
-import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
-import gov.gtas.querybuilder.model.UserQuery;
-import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
-
 @Repository
 public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderRepository.class);
 	private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-	private String GENDER = "gender";
-	private String FEMALE = "F";
-	private String MALE = "M";
-	private String DIRECTION = "direction";
-	private String INBOUND = "I";
+	private static final String JOIN = " join ";
+	private static final String JOIN_FETCH = " join fetch ";
+	private static final String DIRECTION = "direction";
+	private static final String INBOUND = "I";
+	private static final String FLIGHT_REF = ".flights ";
+	private static final String TRAVELER_REF = ".travelers ";
+	private static final String DOCUMENT_REF = ".documents ";
 	
 	@PersistenceContext 
  	private EntityManager entityManager;
@@ -272,8 +274,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			else if(queryType == EntityEnum.TRAVELER) {
-				String flightsJoinStmt = " join fetch " + EntityEnum.TRAVELER.getAlias() + ".flights " + EntityEnum.FLIGHT.getAlias();
-				String documentJoinStmt = " join fetch " + EntityEnum.TRAVELER.getAlias() + ".documents " + EntityEnum.DOCUMENT.getAlias();
+				String flightsJoinStmt = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
+				String documentJoinStmt = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
 				
 				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.TRAVELER.getAlias() + 
 						" " + Constants.FROM + " " + EntityEnum.TRAVELER.getEntityName() + " " + EntityEnum.TRAVELER.getAlias();
@@ -287,8 +289,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						join.append(flightsJoinStmt);
 					}
 					else {
-						String condition = " join " + EntityEnum.TRAVELER.getAlias() + ".flights ";
-						String joinFetchCondition = " join fetch " + EntityEnum.TRAVELER.getAlias() + ".flights ";
+						String condition = JOIN + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF;
+						String joinFetchCondition = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF;
 						int startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
 					}
@@ -298,14 +300,14 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						join.append(documentJoinStmt);
 					}
 					else {
-						String condition = " join " + EntityEnum.TRAVELER.getAlias() + ".documents ";
-						String joinFetchCondition = " join fetch " + EntityEnum.TRAVELER.getAlias() + ".documents ";
+						String condition = JOIN + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF;
+						String joinFetchCondition = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF;
 						int startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
 						
-						// if this is a passenger query, you don't need the passenger join again because that is already part of the queryPrefix
+						// if this is a passenger query, you don't need the traveler join again because that is already part of the queryPrefix
 						// so remove it
-						condition = " join " + EntityEnum.FLIGHT.getAlias() + ".passengers " + EntityEnum.TRAVELER.getAlias();
+						condition = JOIN + EntityEnum.FLIGHT.getAlias() + TRAVELER_REF + EntityEnum.TRAVELER.getAlias();
 						startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), "");
 					}
@@ -518,16 +520,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						query.setParameter(positionalParameter.intValue(), vals);
 					}
 					else {
-						if(field != null && field.equals(GENDER)) {
-							List<String> vals = new ArrayList<>();
-							if(values != null) {
-								for(String val : values) {
-								    vals.add(val);
-								}
-							}
-							query.setParameter(positionalParameter.intValue(), vals);
-						}
-						else if(field != null && field.equals(DIRECTION)) {
+						if(field != null && field.equals(DIRECTION)) {
 							List<FlightDirection> vals = new ArrayList<>();
 							if(values != null) {
 								for(String val : values) {
@@ -570,14 +563,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						query.setParameter(positionalParameter.intValue(), dtFormat.parse(value), TemporalType.DATE);
 					}
 					else {
-						if(field != null && field.equals(GENDER)) {
-							if(value != null && value.equalsIgnoreCase(FEMALE)) {
-								query.setParameter(positionalParameter.intValue(), FEMALE);
-							} else {
-								query.setParameter(positionalParameter.intValue(), MALE);
-							}
-						}
-						else if(field != null && field.equals(DIRECTION)) { 
+						if(field != null && field.equals(DIRECTION)) { 
 							if(value != null && value.equalsIgnoreCase(INBOUND)) {
 								query.setParameter(positionalParameter.intValue(), FlightDirection.INBOUND);
 							} else {
@@ -597,13 +583,13 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		
 		switch (entity.getEntityName().toUpperCase()) {
 			case Constants.FLIGHT:
-				joinCondition = " join " + EntityEnum.TRAVELER.getAlias() + ".flights " + EntityEnum.FLIGHT.getAlias();
+				joinCondition = JOIN + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
 				break;
 	        case Constants.TRAVELER:
-	        	joinCondition = " join " + EntityEnum.FLIGHT.getAlias() + ".travelers " + EntityEnum.TRAVELER.getAlias();
+	        	joinCondition = JOIN + EntityEnum.FLIGHT.getAlias() + TRAVELER_REF + EntityEnum.TRAVELER.getAlias();
 	        	break;
 	        case Constants.DOCUMENT:
-	        	joinCondition = " join " + EntityEnum.TRAVELER.getAlias() + ".documents " + EntityEnum.DOCUMENT.getAlias();
+	        	joinCondition = JOIN + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
 	            break;
 	        default:
 	            throw new InvalidQueryRepositoryException("Invalid Entity: " + entity.getEntityName(), null);
