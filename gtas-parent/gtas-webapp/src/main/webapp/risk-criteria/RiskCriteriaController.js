@@ -71,9 +71,10 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
     $scope.save = function() {
         if ($scope.saving) return;
 //        $scope.saving = true;
-        var ruleObject;
-        var startDate = moment($scope.startDate, $scope.formats, true);
-        var endDate = moment($scope.endDate, $scope.formats, true);
+        var ruleObject,
+            startDate = moment($scope.startDate, $scope.formats, true),
+            endDate = moment($scope.endDate, $scope.formats, true),
+            details;
 
         $scope.title = $scope.title.trim();
         if (!$scope.title.length ) {
@@ -110,39 +111,42 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
             }
         }
 
-        ruleObject = {
-            id: $scope.ruleId,
-            details: $scope.$builder.queryBuilder('saveRules'),
-            summary: {
-                title: $scope.title,
-                description: $scope.description || null,
-                startDate: $scope.startDate,
-                endDate: $scope.endDate || null,
-                enabled: $scope.enabled
-            }
-        };
+        details = $scope.$builder.queryBuilder('saveRules');
 
-        data.push(ruleObject.summary);
-        $scope.tableData = data;
-
-        $scope.tableParams.total($scope.tableData.length);
-        $scope.tableParams.reload();
-
-        riskCriteriaService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
-            var $tableRows = $('table tbody').eq(0).find('tr');
-            if (typeof myData.errorCode !== "undefined")
-            {
-                alert(myData.errorMessage);
-                return;
-            }
-            $scope.tableParams.reload();
-            $timeout(function () {
-                if ($scope.ruleId === null) {
-                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click()
+        if (details !== false) {
+            ruleObject = {
+                id: $scope.ruleId,
+                details: $scope.$builder.queryBuilder('saveRules'),
+                summary: {
+                    title: $scope.title,
+                    description: $scope.description || null,
+                    startDate: $scope.startDate,
+                    endDate: $scope.endDate || null,
+                    enabled: $scope.enabled
                 }
-                $scope.ruleId = $scope.ruleId = myData.responseDetails[0].attributeValue || null;
-                $scope.saving = false;
-            }, 500);
-        });
+            };
+
+            data.push(ruleObject.summary);
+            $scope.tableData = data;
+
+            $scope.tableParams.total($scope.tableData.length);
+            $scope.tableParams.reload();
+
+            riskCriteriaService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
+                var $tableRows = $('table tbody').eq(0).find('tr');
+                if (typeof myData.errorCode !== "undefined") {
+                    alert(myData.errorMessage);
+                    return;
+                }
+                $scope.tableParams.reload();
+                $timeout(function () {
+                    if ($scope.ruleId === null) {
+                        $('table tbody').eq(0).find('tr').eq($tableRows.length).click()
+                    }
+                    $scope.ruleId = $scope.ruleId = myData.responseDetails[0].attributeValue || null;
+                    $scope.saving = false;
+                }, 500);
+            });
+        }
     };
 });
