@@ -1,6 +1,7 @@
 package gov.gtas.rule;
 
 import gov.gtas.bo.RuleExecutionStatistics;
+import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.CommonErrorConstants;
@@ -103,11 +104,11 @@ public class RuleServiceImpl implements RuleService {
 		ksession.fireAllRules();
 
 		// extract the result
-		final List<?> resList = (List<?>) ksession
-				.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
+		@SuppressWarnings("unchecked")
+		final List<RuleHitDetail> resList = (List<RuleHitDetail>) ksession.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
 
 		RuleServiceResult res = new RuleServiceResult() {
-			public List<?> getResultList() {
+			public List<RuleHitDetail> getResultList() {
 				return resList;
 			}
 

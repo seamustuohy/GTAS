@@ -19,7 +19,7 @@ import gov.gtas.model.Document;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.parsers.vo.air.DocumentVo;
-import gov.gtas.parsers.vo.air.TravelerVo;
+import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.services.PassengerService;
 
@@ -36,8 +36,8 @@ public class TravelerController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/travelers", method = RequestMethod.GET)
-    public List<TravelerVo> getAllTravelers(@RequestParam(value = "flightId", required = false) String flightId) {
-        List<TravelerVo> rv = new ArrayList<>();
+    public List<PassengerVo> getAllTravelers(@RequestParam(value = "flightId", required = false) String flightId) {
+        List<PassengerVo> rv = new ArrayList<>();
         List<Traveler> travelers = null;
         if (flightId != null) {
             Long id = Long.valueOf(flightId);
@@ -50,7 +50,7 @@ public class TravelerController {
         
         for (Traveler t : travelers) {
             logger.debug(t.getLastName());
-            TravelerVo vo = new TravelerVo();
+            PassengerVo vo = new PassengerVo();
             vo.setLastName(t.getLastName());
             vo.setFirstName(t.getFirstName());
             vo.setMiddleName(t.getMiddleName());

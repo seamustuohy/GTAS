@@ -1,6 +1,7 @@
 package gov.gtas.rule;
 
 import gov.gtas.bo.RuleExecutionStatistics;
+import gov.gtas.bo.RuleHitDetail;
 
 import java.util.List;
 /**
@@ -13,7 +14,7 @@ public interface RuleServiceResult {
 	 * Gets the list of Passenger IDs "hit" by the rules.
 	 * @return the list of hits.
 	 */
-  List<?> getResultList();
+  List<RuleHitDetail> getResultList();
   /**
    * Gets the statistics of the rule engine execution.
    * @return rule engine execution statistics.
