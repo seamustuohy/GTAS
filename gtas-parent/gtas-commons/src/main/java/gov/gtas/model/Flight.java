@@ -8,8 +8,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -61,8 +59,8 @@ public class Flight extends BaseEntityAudit {
     @Temporal(TemporalType.TIMESTAMP)
     private Date eta;
     
-    @Enumerated(EnumType.STRING)
-    private FlightDirection direction;
+    @Column(length = 3)
+    private String direction;
     
     public Set<Traveler> getPassengers() {
         return travelers;
@@ -94,10 +92,10 @@ public class Flight extends BaseEntityAudit {
     public void setEta(Date eta) {
         this.eta = eta;
     }
-    public FlightDirection getDirection() {
+    public String getDirection() {
         return direction;
     }
-    public void setDirection(FlightDirection direction) {
+    public void setDirection(String direction) {
         this.direction = direction;
     }
     public Set<Traveler> getTravelers() {

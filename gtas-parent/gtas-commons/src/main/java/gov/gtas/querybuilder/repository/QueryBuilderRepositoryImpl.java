@@ -22,7 +22,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.validation.Errors;
 
 import gov.gtas.model.Flight;
-import gov.gtas.model.FlightDirection;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryEntity;
@@ -44,10 +43,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 	private String GENDER = "gender";
-	private String FEMALE = "F";
-	private String MALE = "M";
 	private String DIRECTION = "direction";
-	private String INBOUND = "I";
 	
 	@PersistenceContext 
  	private EntityManager entityManager;
@@ -528,14 +524,10 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 							query.setParameter(positionalParameter.intValue(), vals);
 						}
 						else if(field != null && field.equals(DIRECTION)) {
-							List<FlightDirection> vals = new ArrayList<>();
+							List<String> vals = new ArrayList<>();
 							if(values != null) {
 								for(String val : values) {
-									if(val.equalsIgnoreCase(INBOUND)) {
-										vals.add(FlightDirection.INBOUND);
-									} else {
-										vals.add(FlightDirection.OUTBOUND);
-									}
+								    vals.add(val);
 								}
 							}
 						}
@@ -570,22 +562,16 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						query.setParameter(positionalParameter.intValue(), dtFormat.parse(value), TemporalType.DATE);
 					}
 					else {
-						if(field != null && field.equals(GENDER)) {
-							if(value != null && value.equalsIgnoreCase(FEMALE)) {
-								query.setParameter(positionalParameter.intValue(), FEMALE);
-							} else {
-								query.setParameter(positionalParameter.intValue(), MALE);
-							}
-						}
-						else if(field != null && field.equals(DIRECTION)) { 
-							if(value != null && value.equalsIgnoreCase(INBOUND)) {
-								query.setParameter(positionalParameter.intValue(), FlightDirection.INBOUND);
-							} else {
-								query.setParameter(positionalParameter.intValue(), FlightDirection.OUTBOUND);
-							}
-						} else {
-							query.setParameter(positionalParameter.intValue(), value);
-						}
+                        query.setParameter(positionalParameter.intValue(), value);
+
+                        // TODO: review 
+//						if(field != null && field.equals(GENDER)) {
+//						    query.setParameter(positionalParameter.intValue(), value);
+//						}
+//						else if(field != null && field.equals(DIRECTION)) { 
+//                            query.setParameter(positionalParameter.intValue(), value);
+//						} else {
+//						}
 					}
 				}
 			}
