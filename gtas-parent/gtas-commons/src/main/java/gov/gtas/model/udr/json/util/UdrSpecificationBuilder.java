@@ -1,6 +1,5 @@
 package gov.gtas.model.udr.json.util;
 
-import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.MetaData;

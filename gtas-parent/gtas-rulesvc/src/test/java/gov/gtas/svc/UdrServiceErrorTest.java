@@ -12,7 +12,6 @@ import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.CommonValidationException;
 import gov.gtas.error.udr.UdrErrorConstants;
 import gov.gtas.model.User;
-import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
