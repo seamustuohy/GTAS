@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.QueryConditionEnum;
@@ -13,6 +12,7 @@ import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.querybuilder.mappings.TravelerMapping;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
@@ -53,16 +53,16 @@ public class UdrSpecificationBuilderTest {
 				QueryConditionEnum.OR);
 		// add terms and then another query object
 		builder.addTerm(EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
+				TravelerMapping.DEBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		builder.addNestedQueryObject(QueryConditionEnum.AND);
 		builder.addTerm(EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
+				TravelerMapping.LAST_NAME.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		builder.addTerm(EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
+				TravelerMapping.EMBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "DBY" });
 
@@ -78,7 +78,7 @@ public class UdrSpecificationBuilderTest {
 		List<QueryEntity> rules = topLevel.getRules();
 		assertEquals(2, rules.size());
 		verifyQueryTerm(rules.get(0), EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
+				TravelerMapping.DEBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		assertTrue(rules.get(1) instanceof QueryObject);
@@ -87,11 +87,11 @@ public class UdrSpecificationBuilderTest {
 		rules = embedded.getRules();
 		assertEquals(2, rules.size());
 		verifyQueryTerm(rules.get(0), EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
+				TravelerMapping.LAST_NAME.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		verifyQueryTerm(rules.get(1), EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
+				TravelerMapping.EMBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "DBY" });
 	}
@@ -115,11 +115,11 @@ public class UdrSpecificationBuilderTest {
 		rules = qobj.getRules();
 		assertEquals(2, rules.size());		
 		verifyQueryTerm(rules.get(0), EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_DOB,
+				TravelerMapping.DOB.getFieldName(),
 				ValueTypesEnum.DATE, OperatorCodeEnum.EQUAL,
 				new String[] {  DateCalendarUtils.formatJsonDate(new Date()) });
 		verifyQueryTerm(rules.get(1), EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
+				TravelerMapping.LAST_NAME.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] {  "Jones" });
 		
@@ -129,11 +129,11 @@ public class UdrSpecificationBuilderTest {
 		rules = qobj2.getRules();
 		assertEquals(2, rules.size());
 		verifyQueryTerm(rules.get(0), EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
+				TravelerMapping.EMBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN,
 				new String[] { "DBY", "PKY", "FLT"});
 		verifyQueryTerm(rules.get(1), EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
+				TravelerMapping.DEBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 	}

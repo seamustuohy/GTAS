@@ -5,7 +5,6 @@ import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
-import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.QueryConditionEnum;
@@ -19,6 +18,7 @@ import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.enums.OperatorEnum;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.mappings.TravelerMapping;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.util.DateCalendarUtils;
@@ -546,20 +546,20 @@ public class QueryBuilderServiceIT {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
 		bldr.addTerm(EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_DOB, ValueTypesEnum.DATE,
+				TravelerMapping.DOB.getFieldName(), ValueTypesEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
 		bldr.addTerm(EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
+				TravelerMapping.LAST_NAME.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
+				TravelerMapping.EMBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
 		bldr.addTerm(EntityEnum.TRAVELER,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
+				TravelerMapping.DEBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 
