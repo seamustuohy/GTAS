@@ -14,11 +14,12 @@ public abstract class EntityConditionBuilder {
     protected EntityConditionBuilder(final String varName, final String entityClassName){
     	this.entityClassName = entityClassName;
     	this.drlVariableName = varName;
-    	init();
-    }
-    public void init(){
     	this.andConnectorIsComma = true;
     	this.conditionList = new LinkedList<String>();   	
+    }
+    protected void reset(){
+    	this.andConnectorIsComma = true;
+    	this.conditionList.clear();   	
     }
     public boolean isEmpty(){
     	return conditionList.isEmpty();
@@ -101,6 +102,9 @@ public abstract class EntityConditionBuilder {
 			break;
 		}
 		this.conditionList.add(bldr.toString());
+	}
+	public void addConditionAsString(final String condStr) {
+		this.conditionList.add(condStr);
 	}
 	/**
 	 * @return the drlVariableName

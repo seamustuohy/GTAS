@@ -1,8 +1,8 @@
 package gov.gtas.util;
 
-import org.apache.commons.lang3.StringUtils;
+import gov.gtas.querybuilder.enums.EntityEnum;
 
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utility methods for validation.
@@ -26,9 +26,9 @@ public class ValidationUtils {
     	return isStringInList(target, "TRUE","True","T","true","Yes","Y","yes","YES");
     }
     
-    public static EntityLookupEnum convertStringToEnum(String enumVal){
+    public static EntityEnum convertStringToEnum(String enumVal){
     	if(StringUtils.isNotEmpty(enumVal)){
-	    	for(EntityLookupEnum ent:EntityLookupEnum.values()){
+	    	for(EntityEnum ent:EntityEnum.values()){
 	    		if(enumVal.equalsIgnoreCase(ent.toString())){
 	    			return ent;
 	    		}

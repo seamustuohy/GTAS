@@ -1,20 +1,22 @@
 package gov.gtas.model.udr.json.util;
 
-import static org.junit.Assert.*;
-
-import java.util.Date;
-import java.util.List;
-
-import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import gov.gtas.model.udr.EntityAttributeConstants;
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.QueryConditionEnum;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.util.DateCalendarUtils;
+
+import java.util.Date;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -50,16 +52,16 @@ public class UdrSpecificationBuilderTest {
 		UdrSpecificationBuilder builder = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
 		// add terms and then another query object
-		builder.addTerm(EntityLookupEnum.Pax,
+		builder.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		builder.addNestedQueryObject(QueryConditionEnum.AND);
-		builder.addTerm(EntityLookupEnum.Pax,
+		builder.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
-		builder.addTerm(EntityLookupEnum.Pax,
+		builder.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "DBY" });
@@ -75,7 +77,7 @@ public class UdrSpecificationBuilderTest {
 		assertEquals(2, topLevel.getRules().size());
 		List<QueryEntity> rules = topLevel.getRules();
 		assertEquals(2, rules.size());
-		verifyQueryTerm(rules.get(0), EntityLookupEnum.Pax,
+		verifyQueryTerm(rules.get(0), EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
@@ -84,11 +86,11 @@ public class UdrSpecificationBuilderTest {
 		assertEquals(QueryConditionEnum.AND.toString(), embedded.getCondition());
 		rules = embedded.getRules();
 		assertEquals(2, rules.size());
-		verifyQueryTerm(rules.get(0), EntityLookupEnum.Pax,
+		verifyQueryTerm(rules.get(0), EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
-		verifyQueryTerm(rules.get(1), EntityLookupEnum.Pax,
+		verifyQueryTerm(rules.get(1), EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "DBY" });
@@ -112,11 +114,11 @@ public class UdrSpecificationBuilderTest {
 		QueryObject qobj = (QueryObject) entity;
 		rules = qobj.getRules();
 		assertEquals(2, rules.size());		
-		verifyQueryTerm(rules.get(0), EntityLookupEnum.Pax,
+		verifyQueryTerm(rules.get(0), EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_DOB,
 				ValueTypesEnum.DATE, OperatorCodeEnum.EQUAL,
 				new String[] {  DateCalendarUtils.formatJsonDate(new Date()) });
-		verifyQueryTerm(rules.get(1), EntityLookupEnum.Pax,
+		verifyQueryTerm(rules.get(1), EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] {  "Jones" });
@@ -126,21 +128,21 @@ public class UdrSpecificationBuilderTest {
 		assertEquals(QueryConditionEnum.AND.toString(), qobj2.getCondition());
 		rules = qobj2.getRules();
 		assertEquals(2, rules.size());
-		verifyQueryTerm(rules.get(0), EntityLookupEnum.Pax,
+		verifyQueryTerm(rules.get(0), EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN,
 				new String[] { "DBY", "PKY", "FLT"});
-		verifyQueryTerm(rules.get(1), EntityLookupEnum.Pax,
+		verifyQueryTerm(rules.get(1), EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 	}
-	private void verifyQueryTerm(QueryEntity obj, EntityLookupEnum entity,
+	private void verifyQueryTerm(QueryEntity obj, EntityEnum entity,
 			String attr, ValueTypesEnum type, OperatorCodeEnum op,
 			String[] val) {
 		assertTrue(obj instanceof QueryTerm);
 		QueryTerm term = (QueryTerm)obj;
-		assertEquals("verifyQueryTerm - entity does not match", entity.toString(), term.getEntity());
+		assertEquals("verifyQueryTerm - entity does not match", entity.getEntityName(), term.getEntity());
 		assertEquals("verifyQueryTerm - attribute does not match", attr, term.getField());
 		assertEquals("verifyQueryTerm - type does not match", type.toString(), term.getType());
 		assertEquals("verifyQueryTerm - operator does not match", op.toString(), term.getOperator());

@@ -1,7 +1,6 @@
 package gov.gtas.model.udr.json.util;
 
 import gov.gtas.model.udr.EntityAttributeConstants;
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.MetaData;
@@ -10,6 +9,7 @@ import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
@@ -60,12 +60,12 @@ public class UdrSpecificationBuilder {
 		return this;
 	}
 
-	public UdrSpecificationBuilder addTerm(EntityLookupEnum entity,
+	public UdrSpecificationBuilder addTerm(EntityEnum entity,
 			String attr, ValueTypesEnum type, OperatorCodeEnum op, String[] val) {
 		queryObjectStack
 				.peek()
 				.getRules()
-				.add(new QueryTerm(entity.toString(), attr, type.toString(), op
+				.add(new QueryTerm(entity.getEntityName(), attr, type.toString(), op
 						.toString(), val));
 		return this;
 	}
@@ -137,20 +137,20 @@ public class UdrSpecificationBuilder {
 			String title, String description) {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
-		bldr.addTerm(EntityLookupEnum.Traveler,
+		bldr.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_DOB, ValueTypesEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
-		bldr.addTerm(EntityLookupEnum.Traveler,
+		bldr.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
-		bldr.addTerm(EntityLookupEnum.Traveler,
+		bldr.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
-		bldr.addTerm(EntityLookupEnum.Traveler,
+		bldr.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
@@ -162,11 +162,11 @@ public class UdrSpecificationBuilder {
 			String title, String description) {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.AND);
-		bldr.addTerm(EntityLookupEnum.Pax,
+		bldr.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_DOB, ValueTypesEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
-		bldr.addTerm(EntityLookupEnum.Pax,
+		bldr.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
@@ -178,21 +178,21 @@ public class UdrSpecificationBuilder {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
-		bldr.addTerm(EntityLookupEnum.Pax,
+		bldr.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_DOB, ValueTypesEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
-		bldr.addTerm(EntityLookupEnum.Pax,
+		bldr.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_LAST_NAME,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.endCurrentQueryObject();
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
-		bldr.addTerm(EntityLookupEnum.Pax,
+		bldr.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
-		bldr.addTerm(EntityLookupEnum.Pax,
+		bldr.addTerm(EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
