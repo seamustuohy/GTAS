@@ -10,14 +10,12 @@ public final class Constants {
 	
 	// Entities
 	public static final String ADDRESS = "ADDRESS";
-	public static final String API = "API";
 	public static final String CREDITCARD = "CREDITCARD";
 	public static final String DOCUMENT = "DOCUMENT";
 	public static final String EMAIL = "EMAIL";
 	public static final String FLIGHT = "FLIGHT";
 	public static final String FREQUENTFLYER = "FREQUENTFLYER";
 	public static final String HITS = "HITS";
-	public static final String NAMEORIGIN = "NAMEORIGIN";
 	public static final String TRAVELER = "TRAVELER";
 	public static final String PHONE = "PHONE";
 	public static final String PNR = "PNR";

@@ -8,7 +8,6 @@ import gov.gtas.querybuilder.enums.ConditionEnum;
 import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.enums.OperatorEnum;
 import gov.gtas.querybuilder.enums.TypeEnum;
-import gov.gtas.querybuilder.mappings.APIMapping;
 import gov.gtas.querybuilder.mappings.AddressMapping;
 import gov.gtas.querybuilder.mappings.CreditCardMapping;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
@@ -17,7 +16,6 @@ import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.querybuilder.mappings.FrequentFlyerMapping;
 import gov.gtas.querybuilder.mappings.HitsMapping;
 import gov.gtas.querybuilder.mappings.IEntityMapping;
-import gov.gtas.querybuilder.mappings.NameOriginMapping;
 import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
 import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
@@ -25,7 +23,6 @@ import gov.gtas.querybuilder.mappings.TravelerMapping;
 import gov.gtas.querybuilder.model.UserQuery;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -137,9 +134,6 @@ public class QueryValidationUtils {
 					case Constants.ADDRESS:
 						validField = validateField(AddressMapping.values(), field);
 						break;
-					case Constants.API:
-						validField = validateField(APIMapping.values(), field);
-						break;
 					case Constants.CREDITCARD:
 						validField = validateField(CreditCardMapping.values(), field);
 						break;
@@ -157,9 +151,6 @@ public class QueryValidationUtils {
 						break;
 					case Constants.HITS:
 						validField = validateField(HitsMapping.values(), field);
-						break;
-					case Constants.NAMEORIGIN:
-						validField = validateField(NameOriginMapping.values(), field);
 						break;
 					case Constants.TRAVELER:
 						validField = validateField(TravelerMapping.values(), field);

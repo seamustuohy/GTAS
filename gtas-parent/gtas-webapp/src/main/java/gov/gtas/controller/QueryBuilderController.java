@@ -27,7 +27,6 @@ import gov.gtas.querybuilder.model.QueryResponse;
 import gov.gtas.querybuilder.model.QueryResult;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.service.QueryBuilderService;
-import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -38,13 +37,11 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -174,14 +171,12 @@ public class QueryBuilderController {
 		Map<String, QueryBuilderMapping> qbMap = new LinkedHashMap<>();
 		
 		qbMap.put(EntityEnum.ADDRESS.toString(), getMapping(EntityEnum.ADDRESS));
-		qbMap.put(EntityEnum.API.toString(), getMapping(EntityEnum.API));
 		qbMap.put(EntityEnum.CREDIT_CARD.toString(), getMapping(EntityEnum.CREDIT_CARD));
 		qbMap.put(EntityEnum.DOCUMENT.toString(), getMapping(EntityEnum.DOCUMENT));
 		qbMap.put(EntityEnum.EMAIL.toString(), getMapping(EntityEnum.EMAIL));
 		qbMap.put(EntityEnum.FLIGHT.toString(), getMapping(EntityEnum.FLIGHT));
 		qbMap.put(EntityEnum.FREQUENT_FLYER.toString(), getMapping(EntityEnum.FREQUENT_FLYER));
 		qbMap.put(EntityEnum.HITS.toString(), getMapping(EntityEnum.HITS));
-		qbMap.put(EntityEnum.NAME_ORIGIN.toString(), getMapping(EntityEnum.NAME_ORIGIN));
 		qbMap.put(EntityEnum.TRAVELER.toString(), getMapping(EntityEnum.TRAVELER));
 		qbMap.put(EntityEnum.PHONE.toString(), getMapping(EntityEnum.PHONE));
 		qbMap.put(EntityEnum.PNR.toString(), getMapping(EntityEnum.PNR));
