@@ -9,8 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
@@ -53,9 +51,8 @@ public abstract class Traveler extends BaseEntityAudit {
     
     private String suffix;
     
-    @Enumerated(EnumType.STRING)
-    @Column(length = 1)
-    private Gender gender;
+    @Column(length = 2)
+    private String gender;
     
     @Column(name = "citizenship_country")     
     private String citizenshipCountry;
@@ -117,10 +114,10 @@ public abstract class Traveler extends BaseEntityAudit {
     public void setSuffix(String suffix) {
         this.suffix = suffix;
     }
-    public Gender getGender() {
+    public String getGender() {
         return gender;
     }
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
     public Date getDob() {

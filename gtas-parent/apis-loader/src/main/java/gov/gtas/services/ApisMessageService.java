@@ -20,7 +20,6 @@ import gov.gtas.model.Document;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FlightDirection;
-import gov.gtas.model.Gender;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Pax;
 import gov.gtas.model.PaxInTransit;
@@ -161,7 +160,6 @@ public class ApisMessageService {
         }
 
         BeanUtils.copyProperties(vo, p);
-        p.setGender(Gender.valueOf(vo.getGender()));
         
         String airportCode = vo.getDebarkation();
         p.setDebarkation(airportCode);
@@ -221,14 +219,12 @@ public class ApisMessageService {
             f.setOriginCountry(originCountry);
         }
         
-        if (destCountry != null && originCountry != null) {
-            if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
-                f.setDirection(FlightDirection.CONTINUANCE);
-            } else if (homeCountry.equals(originCountry)) {
-                f.setDirection(FlightDirection.OUTBOUND);            
-            } else if (homeCountry.equals(destCountry)) {
-                f.setDirection(FlightDirection.INBOUND);                        
-            }
+        if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
+            f.setDirection(FlightDirection.CONTINUANCE);
+        } else if (homeCountry.equals(originCountry)) {
+            f.setDirection(FlightDirection.OUTBOUND);            
+        } else if (homeCountry.equals(destCountry)) {
+            f.setDirection(FlightDirection.INBOUND);                        
         }
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #

@@ -25,7 +25,6 @@ import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Gender;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
@@ -96,7 +95,7 @@ public class ServiceRepositoryIT {
 		Set hs = new HashSet<Flight>();
 		hs.add(f);
 		passengerToUpdate.setFlights(hs);
-		passengerToUpdate.setGender(Gender.M);
+		passengerToUpdate.setGender("M");
 		passengerToUpdate.setLastName("Copenhafer");
 		passengerToUpdate.setResidencyCountry(c);
 		// passengerToUpdate.setDocuments(passenger.getDocuments());
