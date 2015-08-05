@@ -1,4 +1,4 @@
-app.service("queryFlightsService", function ($http, $q) {
+app.service("queryService", function ($http, $q) {
     'use strict';
     var handleError = function (response) {
             if (!angular.isObject(response.data) || !response.data.message) {

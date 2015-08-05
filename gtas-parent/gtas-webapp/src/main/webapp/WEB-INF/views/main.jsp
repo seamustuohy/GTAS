@@ -107,14 +107,14 @@
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">Manage <span
             class="caret"></span></a>
             <ul class="dropdown-menu">
-            <sec:authorize access="hasAnyAuthority('MANAGE_RULES','ADMIN')">
+            <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
+                <li><a href="home.action?#/query-builder">Queries</a></li>
+            </sec:authorize>
+            <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
                 <li><a href="home.action?#/risk-criteria">Risk Criteria</a></li>
             </sec:authorize>
-            <sec:authorize access="hasAnyAuthority('MANAGE_WATCHLIST','ADMIN')">
+            <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
                 <li><a href="">Watchlists</a></li>
-            </sec:authorize>
-            <sec:authorize access="hasAnyAuthority('MANAGE_QUERIES','ADMIN')">
-                <li><a href="home.action?#/query-builder">Queries</a></li>
             </sec:authorize>
             </ul>
             </li>
@@ -207,6 +207,6 @@
         <script src="risk-criteria/RiskCriteriaService.js"></script>
         <script src="query-builder/QueryBuilderController.js"></script>
         <script src="query-builder/QueryBuilderService.js"></script>
-
+        <script src="query-builder/QueryService.js"></script>
         </body>
         </html>

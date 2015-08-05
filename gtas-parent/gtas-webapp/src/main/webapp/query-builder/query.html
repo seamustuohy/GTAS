@@ -50,10 +50,10 @@
 </style>
 <section class="qb-interface">
 <h1>Query Builder:</h1>
-<button data-ng-click="newRule()" class="btn  btn-xs btn-primary pull-right" data-add="rule">New Rule</button>
+<button data-ng-click="newRule()" class="btn btn-xs btn-primary pull-right" data-add="rule">New Rule</button>
 <!--
-<button data-ng-click="tableParams.sorting({})" class="btn  btn-xs btn-default pull-right">Clear sorting</button>
-<button data-ng-click="tableParams.filter({})" class="btn  btn-xs btn-default pull-right">Clear filter</button>
+<button data-ng-click="tableParams.sorting({})" class="btn btn-xs btn-default pull-right">Clear sorting</button>
+<button data-ng-click="tableParams.filter({})" class="btn btn-xs btn-default pull-right">Clear filter</button>
 //-->
 <table ng-table="tableParams" class="table">
     <tr ng-repeat="obj in $data" data-id="{{summary.id}}" data-ng-click="loadRule()">
@@ -78,12 +78,12 @@
 
 <h2>Conditions:</h2>
 <div id="builder"></div>
-<select data-ng-change="viewTypeChange()"  ng-model="viewType">
-    <option> -- </option>
-    <option value="FLIGHT"> Flight </option>
-    <option value="PASSENGER"> Passenger </option>
-</select>
-<button type="button" data-ng-click="resetQueryBuilder()" class="btn  btn-xs btn-primary reset pull-right" data->Clear Conditions</button>
-<button type="button" data-ng-click="delete()" type="button" class="btn  btn-xs btn-primary pull-right" title="delete">Delete</button>
-<button type="button" data-ng-click="save()" id="submit" class="btn  btn-xs btn-primary pull-right">Save</button>
+    <select ng-model="viewType">
+        <option value="FLIGHT"> Flight </option>
+        <option value="TRAVELER"> Passenger </option>
+    </select>
+    <button type="button" data-ng-click="viewTypeChange()"  class="btn btn-xs btn-primary" data->Execute Query</button>
+<button type="button" data-ng-click="resetQueryBuilder()" class="btn btn-xs btn-primary reset pull-right" data->Clear Conditions</button>
+<button type="button" data-ng-click="delete()" type="button" class="btn btn-xs btn-primary pull-right" title="delete">Delete</button>
+<button type="button" data-ng-click="save()" id="submit" class="btn btn-xs btn-primary pull-right">Save</button>
 </section>

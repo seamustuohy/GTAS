@@ -1,4 +1,4 @@
-app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService, $timeout) {
+app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService, queryService, $timeout) {
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [];
 
@@ -84,16 +84,29 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             $scope.tableParams.reload();
             $timeout(function () {
                 if ($scope.ruleId === null) {
-                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click()
+                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click();
                 }
-                $scope.ruleId = $scope.ruleId = myData.responseDetails[0].attributeValue || null;
+                $scope.ruleId = myData.result[0].id || null;
                 $scope.saving = false;
             }, 500);
         });
     };
 
+    $scope.serviceURLs = {
+        FLIGHT: '/gtas/queryFlights/',
+        TRAVELER: '/gtas/queryPassengers/'
+    };
+
     $scope.viewType = null;
     $scope.viewTypeChange = function () {
+        var baseUrl = $scope.serviceURLs[$scope.viewType],
+            data = $scope.$builder.queryBuilder('saveRules');
         console.log($scope.viewType);
+        console.log(baseUrl);
+        console.log(data);
+        queryService.executeQuery(baseUrl, data).then(function (myData) {
+            console.log(myData);
+            alert('queryService called');
+        });
     };
 });
