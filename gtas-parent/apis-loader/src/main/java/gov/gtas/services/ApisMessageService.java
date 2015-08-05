@@ -163,16 +163,18 @@ public class ApisMessageService {
         BeanUtils.copyProperties(vo, p);
         p.setGender(Gender.valueOf(vo.getGender()));
         
-        Airport debark = convertAirport(vo.getDebarkation());
+        String airportCode = vo.getDebarkation();
+        p.setDebarkation(airportCode);
+        Airport debark = getAirport(airportCode);
         if (debark != null) {
-            p.setDebarkation(vo.getDebarkation());
-            p.setDebarkCountry(debark.getCountry().getIso2());
+            p.setDebarkCountry(debark.getCountry());
         }
 
-        Airport embark = convertAirport(vo.getEmbarkation());
+        airportCode = vo.getEmbarkation();
+        p.setEmbarkation(airportCode);
+        Airport embark = getAirport(airportCode);
         if (embark != null) {
-            p.setEmbarkation(vo.getEmbarkation());
-            p.setEmbarkCountry(embark.getCountry().getIso2());
+            p.setEmbarkCountry(embark.getCountry());
         }
         
         p.setCitizenshipCountry(vo.getCitizenshipCountry());
@@ -203,21 +205,21 @@ public class ApisMessageService {
         BeanUtils.copyProperties(vo, f);
         f.setCarrier(vo.getCarrier());
         
-        Airport dest = convertAirport(vo.getDestination());
-        Country destCountry = null;
+        f.setDestination(vo.getDestination());
+        Airport dest = getAirport(vo.getDestination());
+        String destCountry = null;
         if (dest != null) {
             destCountry = dest.getCountry();
+            f.setDestinationCountry(destCountry);
         }
-        f.setDestination(vo.getDestination());
-        f.setDestinationCountry(destCountry.getIso2());
         
-        Airport origin = convertAirport(vo.getOrigin());
-        Country originCountry = null;
+        f.setOrigin(vo.getOrigin());
+        Airport origin = getAirport(vo.getOrigin());
+        String originCountry = null;
         if (origin != null) {
             originCountry = origin.getCountry();
+            f.setOriginCountry(originCountry);
         }
-        f.setOrigin(vo.getOrigin());
-        f.setOriginCountry(originCountry.getIso2());
         
         if (destCountry != null && originCountry != null) {
             if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
@@ -239,7 +241,7 @@ public class ApisMessageService {
         return f;
     }
     
-    private Airport convertAirport(String a) throws ParseException {
+    private Airport getAirport(String a) throws ParseException {
         if (a == null) return null;
         
         Airport rv = null;
