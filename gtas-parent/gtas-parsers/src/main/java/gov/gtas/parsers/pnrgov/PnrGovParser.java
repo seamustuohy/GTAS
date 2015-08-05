@@ -45,7 +45,7 @@ import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.vo.air.AddressVo;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.TravelerVo;
+import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 
 public final class PnrGovParser extends EdifactParser<PnrGovMessageVo> {
@@ -178,7 +178,7 @@ public final class PnrGovParser extends EdifactParser<PnrGovMessageVo> {
      * Passenger
      */
     private void processGroup2(TIF tif) throws ParseException {
-        TravelerVo p = new TravelerVo();
+        PassengerVo p = new PassengerVo();
         TravelerDetails td = tif.getTravelerDetails().get(0);
         p.setLastName(tif.getTravelerSurname());
         p.setFirstName(td.getTravelerGivenName());

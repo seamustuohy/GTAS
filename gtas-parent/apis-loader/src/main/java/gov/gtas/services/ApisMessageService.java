@@ -39,7 +39,7 @@ import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
-import gov.gtas.parsers.vo.air.TravelerVo;
+import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.repository.ApisMessageRepository;
 
 @Service
@@ -122,7 +122,7 @@ public class ApisMessageService {
             }
             
             Set<Traveler> pax = new HashSet<>();        
-            for (TravelerVo pvo : m.getPassengers()) {
+            for (PassengerVo pvo : m.getPassengers()) {
                 Traveler p = convertTravelerVo(pvo);
                 pax.add(p);
             }
@@ -145,7 +145,7 @@ public class ApisMessageService {
         }
     }
     
-    private Traveler convertTravelerVo(TravelerVo vo) throws ParseException {
+    private Traveler convertTravelerVo(PassengerVo vo) throws ParseException {
         Traveler p = null;
         switch (vo.getPaxType()) {
         case "P":
