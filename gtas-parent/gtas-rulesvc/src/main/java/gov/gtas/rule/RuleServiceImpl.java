@@ -101,11 +101,12 @@ public class RuleServiceImpl implements RuleService {
 		}
 
 		// and fire the rules
-		ksession.fireAllRules();
+		ksession.   fireAllRules();
 
 		// extract the result
 		@SuppressWarnings("unchecked")
-		final List<RuleHitDetail> resList = (List<RuleHitDetail>) ksession.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
+		final List<RuleHitDetail> resList = (List<RuleHitDetail>) ksession
+				.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
 
 		RuleServiceResult res = new RuleServiceResult() {
 			public List<RuleHitDetail> getResultList() {
@@ -137,15 +138,16 @@ public class RuleServiceImpl implements RuleService {
 	public RuleServiceResult invokeRuleEngine(RuleServiceRequest req,
 			String kbName) {
 		KnowledgeBase kbRecord = null;
-		if(StringUtils.isEmpty(kbName)){
+		if (StringUtils.isEmpty(kbName)) {
 			kbRecord = rulePersistenceService.findUdrKnowledgeBase();
-		}else {
-			kbRecord = rulePersistenceService.findUdrKnowledgeBase(kbName);			
+		} else {
+			kbRecord = rulePersistenceService.findUdrKnowledgeBase(kbName);
 		}
 		if (kbRecord == null) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
 					RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
-					kbName == null ? UdrConstants.UDR_KNOWLEDGE_BASE_NAME:kbName);
+					kbName == null ? UdrConstants.UDR_KNOWLEDGE_BASE_NAME
+							: kbName);
 		}
 		try {
 			KieBase kb = RuleUtils

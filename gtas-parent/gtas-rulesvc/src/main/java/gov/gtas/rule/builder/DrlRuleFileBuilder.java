@@ -36,13 +36,16 @@ public class DrlRuleFileBuilder {
 			.getLogger(DrlRuleFileBuilder.class);
 
 	private static final Class<?>[] IMPORT_LIST = { Flight.class, Traveler.class, Document.class };
+	private static final String TRAVELER_VARIABLE_NAME="$t";
+	private static final String DOCUMENT_VARIABLE_NAME="$d";
+	private static final String FLIGHT_VARIABLE_NAME="$f";
 
 	private StringBuilder stringBuilder;
 	private RuleConditionBuilder ruleConditionBuilder;
 
 	public DrlRuleFileBuilder() {
 		this.stringBuilder = new StringBuilder();
-		this.ruleConditionBuilder = new RuleConditionBuilder();
+		this.ruleConditionBuilder = new RuleConditionBuilder(TRAVELER_VARIABLE_NAME, FLIGHT_VARIABLE_NAME, DOCUMENT_VARIABLE_NAME);
 		addPackageAndImport();
 		// add the global result declaration;
 		this.stringBuilder.append(GLOBAL_RESULT_DECLARATION);
@@ -65,7 +68,7 @@ public class DrlRuleFileBuilder {
 						this.stringBuilder, "DrlRuleFileBuilder.addRule");
 			}
 			this.ruleConditionBuilder.addRuleAction(this.stringBuilder,
-					udrRule, rule);
+					udrRule, rule, TRAVELER_VARIABLE_NAME);
 		}
 		return this;
 	}

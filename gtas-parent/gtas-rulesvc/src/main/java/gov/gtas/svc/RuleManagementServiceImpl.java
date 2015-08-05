@@ -24,9 +24,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+/**
+ * Implementation of the Knowledge Base and Rule management service interface.
+ * 
+ * @author GTAS3
+ *
+ */
 @Service
-public class RuleManagementServiceImpl implements RuleManagementService{
-	
+public class RuleManagementServiceImpl implements RuleManagementService {
+
 	@Autowired
 	private RulePersistenceService rulePersistenceService;
 
@@ -39,8 +45,12 @@ public class RuleManagementServiceImpl implements RuleManagementService{
 		ErrorHandlerFactory.registerErrorHandler(errorHandler);
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromDRLString(java.lang.String, java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromDRLString(java
+	 * .lang.String, java.lang.String)
 	 */
 	@Override
 	public KnowledgeBase createKnowledgeBaseFromDRLString(String kbName,
@@ -48,8 +58,7 @@ public class RuleManagementServiceImpl implements RuleManagementService{
 		try {
 			KieBase kieBase = RuleUtils.createKieBaseFromDrlString(drlString);
 			byte[] kbBlob = RuleUtils.convertKieBaseToBytes(kieBase);
-			KnowledgeBase kb = rulePersistenceService
-					.findUdrKnowledgeBase();
+			KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase();
 			if (kb == null) {
 				kb = new KnowledgeBase();
 			}
@@ -67,35 +76,53 @@ public class RuleManagementServiceImpl implements RuleManagementService{
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.svc.RuleManagementService#fetchDrlRulesFromKnowledgeBase(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.svc.RuleManagementService#fetchDrlRulesFromKnowledgeBase(java
+	 * .lang.String)
 	 */
 	@Override
 	public String fetchDrlRulesFromKnowledgeBase(String kbName) {
 		KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
-		if(kb == null){
-			throw ErrorHandlerFactory.getErrorHandler().createException(RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE, UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+		if (kb == null) {
+			throw ErrorHandlerFactory.getErrorHandler().createException(
+					RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
+					UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
 		}
 		String drlRules = null;
-		try{
-		    drlRules = new String(kb.getRulesBlob(), UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
-		} catch(UnsupportedEncodingException uee){
-			throw ErrorHandlerFactory.getErrorHandler().createException(RuleServiceConstants.KB_INVALID_ERROR_CODE, UdrConstants.UDR_KNOWLEDGE_BASE_NAME, uee);
+		try {
+			drlRules = new String(kb.getRulesBlob(),
+					UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
+		} catch (UnsupportedEncodingException uee) {
+			throw ErrorHandlerFactory.getErrorHandler().createException(
+					RuleServiceConstants.KB_INVALID_ERROR_CODE,
+					UdrConstants.UDR_KNOWLEDGE_BASE_NAME, uee);
 		}
 		return drlRules;
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.svc.RuleManagementService#fetchDefaultDrlRulesFromKnowledgeBase()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.svc.RuleManagementService#fetchDefaultDrlRulesFromKnowledgeBase
+	 * ()
 	 */
 	@Override
 	public String fetchDefaultDrlRulesFromKnowledgeBase() {
-		String drlRules = this.fetchDrlRulesFromKnowledgeBase(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+		String drlRules = this
+				.fetchDrlRulesFromKnowledgeBase(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
 		return drlRules;
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromUdrRules(java.lang.String, java.util.Collection)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromUdrRules(java
+	 * .lang.String, java.util.Collection)
 	 */
 	@Override
 	public KnowledgeBase createKnowledgeBaseFromUdrRules(String kbName,
@@ -107,13 +134,16 @@ public class RuleManagementServiceImpl implements RuleManagementService{
 			}
 			String drlRules = ruleFileBuilder.build();
 			return createKnowledgeBaseFromDRLString(kbName, drlRules);
-		}else{
-		    return null;
+		} else {
+			return null;
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.svc.RuleManagementService#deleteKnowledgeBase(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.svc.RuleManagementService#deleteKnowledgeBase(java.lang.String)
 	 */
 	@Override
 	public KnowledgeBase deleteKnowledgeBase(String kbName) {

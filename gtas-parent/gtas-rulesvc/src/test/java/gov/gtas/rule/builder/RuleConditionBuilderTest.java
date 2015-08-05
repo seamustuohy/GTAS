@@ -17,11 +17,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class RuleConditionBuilderTest {
+	private static final String TRAVELER_VARIABLE_NAME="$t";
+	private static final String DOCUMENT_VARIABLE_NAME="$d";
+	private static final String FLIGHT_VARIABLE_NAME="$f";
+	
 	private RuleConditionBuilder testTarget;
 
 	@Before
 	public void setUp() throws Exception {
-		testTarget = new RuleConditionBuilder();
+		testTarget = new RuleConditionBuilder(TRAVELER_VARIABLE_NAME, FLIGHT_VARIABLE_NAME, DOCUMENT_VARIABLE_NAME);
 	}
 
 	@After

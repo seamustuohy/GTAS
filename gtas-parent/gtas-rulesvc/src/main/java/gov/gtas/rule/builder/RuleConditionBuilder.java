@@ -12,14 +12,12 @@ import java.text.ParseException;
  *
  */
 public class RuleConditionBuilder {
-
-	private static final String TRAVELER_VARIABLE_NAME="$t";
-	private static final String DOCUMENT_VARIABLE_NAME="$d";
-	private static final String FLIGHT_VARIABLE_NAME="$f";
 			
 	private TravelerConditionBuilder travelerConditionBuilder;
 	private DocumentConditionBuilder documentConditionBuilder;
 	private FlightConditionBuilder flightConditionBuilder;
+	
+	private String travelerVariableName;
 	
 	private StringBuilder conditionDescriptionBuilder;
 	
@@ -28,10 +26,11 @@ public class RuleConditionBuilder {
 	 * One Traveler, one document, one flight.
 	 * 
 	 */
-	public RuleConditionBuilder(){
-		this.travelerConditionBuilder = new TravelerConditionBuilder(TRAVELER_VARIABLE_NAME);
-		this.documentConditionBuilder = new DocumentConditionBuilder(DOCUMENT_VARIABLE_NAME, TRAVELER_VARIABLE_NAME);
-		this.flightConditionBuilder = new FlightConditionBuilder(FLIGHT_VARIABLE_NAME, TRAVELER_VARIABLE_NAME);		
+	public RuleConditionBuilder(final String travelerVariableName, final String flightVariableName, final String documentVariableName){
+		this.travelerVariableName = travelerVariableName;
+		this.travelerConditionBuilder = new TravelerConditionBuilder(travelerVariableName);
+		this.documentConditionBuilder = new DocumentConditionBuilder(documentVariableName, travelerVariableName);
+		this.flightConditionBuilder = new FlightConditionBuilder(flightVariableName, travelerVariableName);		
 	}
 	
 	/**
@@ -44,11 +43,11 @@ public class RuleConditionBuilder {
 		
 		if(travelerConditionBuilder.isEmpty()){
 			if(!documentConditionBuilder.isEmpty()){
-			  flightConditionBuilder.addLinkedTraveler(TRAVELER_VARIABLE_NAME);
+			  flightConditionBuilder.addLinkedTraveler(this.travelerVariableName);
 			}
 			documentConditionBuilder.setTravelerHasNoRuleCondition(true);
 		} else {
-			flightConditionBuilder.addLinkedTraveler(TRAVELER_VARIABLE_NAME);
+			flightConditionBuilder.addLinkedTraveler(this.travelerVariableName);
 		}
 	    parentStringBuilder.append(travelerConditionBuilder.build());
 	    parentStringBuilder.append(documentConditionBuilder.build());
@@ -85,14 +84,13 @@ public class RuleConditionBuilder {
 
 	}
 //	private static final String ACTION_TRAVELER_HIT = "resultList.add(new RuleHitDetail(%dL, %d, $t.getId()));\n";
-	private static final String ACTION_TRAVELER_HIT = "resultList.add(RuleHitDetail.createRuleHitDetail(%dL, %d, \"%s\", $t, \"%s\"));\n";
-	public void addRuleAction(StringBuilder ruleStringBuilder, UdrRule parent, Rule rule) {
+	private static final String ACTION_TRAVELER_HIT = "resultList.add(RuleHitDetail.createRuleHitDetail(%dL, %d, \"%s\", %s, \"%s\"));\n";
+	public void addRuleAction(StringBuilder ruleStringBuilder, UdrRule parent, Rule rule, String travelerVariableName) {
 		String cause = conditionDescriptionBuilder.toString().replace("\"", "'");
-	    System.out.println("***** cause="+cause);
 		ruleStringBuilder
 				.append("then\n")
 				.append(String.format(ACTION_TRAVELER_HIT, parent.getId(),
-						rule.getRuleIndex(), parent.getTitle(), cause)).append("end\n");
+						rule.getRuleIndex(), parent.getTitle(), travelerVariableName, cause)).append("end\n");
 		conditionDescriptionBuilder = null;
 	}	
 }
