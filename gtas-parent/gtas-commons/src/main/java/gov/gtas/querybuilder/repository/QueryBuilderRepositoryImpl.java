@@ -600,7 +600,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				joinCondition = " join " + EntityEnum.TRAVELER.getAlias() + ".flights " + EntityEnum.FLIGHT.getAlias();
 				break;
 	        case Constants.TRAVELER:
-	        	joinCondition = " join " + EntityEnum.FLIGHT.getAlias() + ".passengers " + EntityEnum.TRAVELER.getAlias();
+	        	joinCondition = " join " + EntityEnum.FLIGHT.getAlias() + ".travelers " + EntityEnum.TRAVELER.getAlias();
 	        	break;
 	        case Constants.DOCUMENT:
 	        	joinCondition = " join " + EntityEnum.TRAVELER.getAlias() + ".documents " + EntityEnum.DOCUMENT.getAlias();
