@@ -15,14 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FlightDirection;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Pax;
-import gov.gtas.model.PaxInTransit;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
@@ -39,7 +36,7 @@ import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.repository.ApisMessageRepository;
 
 @Service
@@ -122,7 +119,7 @@ public class ApisMessageService {
             }
             
             Set<Traveler> pax = new HashSet<>();        
-            for (PassengerVo pvo : m.getPassengers()) {
+            for (TravelerVo pvo : m.getPassengers()) {
                 Traveler p = convertTravelerVo(pvo);
                 pax.add(p);
             }
@@ -145,20 +142,8 @@ public class ApisMessageService {
         }
     }
     
-    private Traveler convertTravelerVo(PassengerVo vo) throws ParseException {
-        Traveler p = null;
-        switch (vo.getPaxType()) {
-        case "P":
-            p = new Pax();
-            break;
-        case "C":
-            p = new Crew();
-            break;
-        case "I":
-            p = new PaxInTransit();
-            break;
-        }
-
+    private Traveler convertTravelerVo(TravelerVo vo) throws ParseException {
+        Traveler p = new Traveler();
         BeanUtils.copyProperties(vo, p);
         
         String airportCode = vo.getDebarkation();

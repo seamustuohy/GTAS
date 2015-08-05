@@ -21,9 +21,10 @@ import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Phone;
 import gov.gtas.model.PnrData;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.lookup.TravelerTypeCode;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.LookUpRepository;
 
@@ -66,7 +67,7 @@ public class PnrDataServiceIT {
 		System.out.println("##################################################");
 		Flight f = new Flight();
 		prepareFlightData( f);
-		Pax passengerToUpdate = new Pax();
+		Traveler passengerToUpdate = new Traveler();
 		preparePassengerData(passengerToUpdate);
 		PnrData pnr = new PnrData();
 		preparePnrData(pnr);
@@ -167,7 +168,8 @@ public class PnrDataServiceIT {
 		f.setUpdatedBy("TEST");
 	}
 	
-	private void preparePassengerData(Pax passengerToUpdate){
+	private void preparePassengerData(Traveler passengerToUpdate){
+	    passengerToUpdate.setTravelerType(TravelerTypeCode.P.name());
 		passengerToUpdate.setAge(30);
 		String c = "US";
 		String b = "JFK";

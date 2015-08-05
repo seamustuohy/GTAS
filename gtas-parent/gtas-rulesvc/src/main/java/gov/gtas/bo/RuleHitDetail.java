@@ -1,11 +1,10 @@
 package gov.gtas.bo;
 
-import gov.gtas.model.Pax;
-import gov.gtas.model.Traveler;
-
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import gov.gtas.model.Traveler;
 
 public class RuleHitDetail implements Serializable {
     public static final String HIT_REASON_SEPARATOR = "///";
@@ -31,7 +30,7 @@ public class RuleHitDetail implements Serializable {
 		this.engineRuleIndex = engineRuleIndex;
 		this.hitRule = ruleTitle+"("+udrRuleId+"/"+engineRuleIndex+")";
 		this.travelerId = traveler.getId();
-		this.travelerType = traveler instanceof Pax ? "Passenger":"Crew";
+		this.travelerType = traveler.getTravelerType();
 		this.travelerName = traveler.getFirstName()+" "+traveler.getLastName();
 		this.hitReasons = cause.split(HIT_REASON_SEPARATOR);
 	}

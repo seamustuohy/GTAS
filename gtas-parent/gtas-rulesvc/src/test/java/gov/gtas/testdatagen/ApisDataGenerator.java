@@ -14,9 +14,9 @@ import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FlightDirection;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.DocumentTypeCode;
+import gov.gtas.model.lookup.TravelerTypeCode;
 import gov.gtas.repository.AirportRepository;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.CarrierRepository;
@@ -65,7 +65,8 @@ public class ApisDataGenerator {
     private Set<Traveler> createPassengerAndDocument(String[][]param){
     	Set<Traveler> travelers = new HashSet<Traveler>();
     	for(String[] args:param){
-	    	Pax passenger = new Pax();
+	    	Traveler passenger = new Traveler();
+	    	passenger.setTravelerType(TravelerTypeCode.P.name());
 	    	passenger.setId(new Long(args[6]));
 	    	passenger.setDocuments(createDocuments(new String[]{args[0]}, new String[]{args[1]}));
 	    	passenger.setFirstName(args[2]);

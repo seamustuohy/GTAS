@@ -18,7 +18,7 @@ import gov.gtas.parsers.paxlst.segment.usedifact.PDT.DocType;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.parsers.paxlst.segment.usedifact.TDT;
 
@@ -138,7 +138,7 @@ public final class PaxlstParserUSedifact extends EdifactParser<PaxlstMessageVo> 
     }
 
     private void processPax(Segment s) {
-        PassengerVo p = new PassengerVo();
+        TravelerVo p = new TravelerVo();
         parsedMessage.addPax(p);
 
         PDT pdt = (PDT)s;
@@ -148,7 +148,7 @@ public final class PaxlstParserUSedifact extends EdifactParser<PaxlstMessageVo> 
         p.setDob(pdt.getDob());
         p.setGender(pdt.getGender());
         PersonStatus status = pdt.getPersonStatus();
-        p.setPaxType(status.toString());
+        p.setTravelerType(status.toString());
 //        if (status == PersonStatus.PAX) {
 //            p.setType(PaxType.PAX);
 //        } else if (status == PersonStatus.CREW) {

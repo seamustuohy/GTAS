@@ -6,11 +6,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -19,13 +15,12 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "traveler")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="traveler_type",
-    discriminatorType=DiscriminatorType.STRING
-)
-public abstract class Traveler extends BaseEntityAudit {
+public class Traveler extends BaseEntityAudit {
     public Traveler() { }
     
+    @Column(name = "traveler_type", length = 3)
+    private String travelerType;
+
     @ManyToMany(
         mappedBy = "travelers",
         targetEntity = Flight.class
@@ -78,6 +73,12 @@ public abstract class Traveler extends BaseEntityAudit {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "traveler")
     private Set<Document> documents = new HashSet<>();
     
+    public String getTravelerType() {
+        return travelerType;
+    }
+    public void setTravelerType(String travelerType) {
+        this.travelerType = travelerType;
+    }
     public Set<Flight> getFlights() {
         return flights;
     }

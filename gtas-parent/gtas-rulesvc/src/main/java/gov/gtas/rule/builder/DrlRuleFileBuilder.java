@@ -13,10 +13,8 @@ import org.slf4j.LoggerFactory;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
-import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
@@ -37,8 +35,7 @@ public class DrlRuleFileBuilder {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DrlRuleFileBuilder.class);
 
-	private static final Class<?>[] IMPORT_LIST = { Flight.class,
-			Traveler.class, Pax.class, Crew.class, Document.class };
+	private static final Class<?>[] IMPORT_LIST = { Flight.class, Traveler.class, Document.class };
 
 	private StringBuilder stringBuilder;
 	private RuleConditionBuilder ruleConditionBuilder;

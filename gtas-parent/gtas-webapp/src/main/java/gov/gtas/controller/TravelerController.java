@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.parsers.vo.air.DocumentVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.services.PassengerService;
 
@@ -36,8 +34,8 @@ public class TravelerController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/travelers", method = RequestMethod.GET)
-    public List<PassengerVo> getAllTravelers(@RequestParam(value = "flightId", required = false) String flightId) {
-        List<PassengerVo> rv = new ArrayList<>();
+    public List<TravelerVo> getAllTravelers(@RequestParam(value = "flightId", required = false) String flightId) {
+        List<TravelerVo> rv = new ArrayList<>();
         List<Traveler> travelers = null;
         if (flightId != null) {
             Long id = Long.valueOf(flightId);
@@ -50,7 +48,8 @@ public class TravelerController {
         
         for (Traveler t : travelers) {
             logger.debug(t.getLastName());
-            PassengerVo vo = new PassengerVo();
+            TravelerVo vo = new TravelerVo();
+            vo.setTravelerType(t.getTravelerType());
             vo.setLastName(t.getLastName());
             vo.setFirstName(t.getFirstName());
             vo.setMiddleName(t.getMiddleName());
@@ -61,11 +60,6 @@ public class TravelerController {
             vo.setEmbarkation(t.getEmbarkation());
             vo.setEmbarkCountry(t.getEmbarkCountry());
             vo.setGender(t.getGender().toString());
-            if (t instanceof Pax) {
-                vo.setPaxType("P");
-            } else if (t instanceof Crew) {
-                vo.setPaxType("C");
-            }
             vo.setResidencyCountry(t.getResidencyCountry());
             vo.setSuffix(t.getSuffix());
             vo.setTitle(t.getTitle());
@@ -74,7 +68,7 @@ public class TravelerController {
             for (Document d : docs) {
                 DocumentVo docVo = new DocumentVo();
                 docVo.setDocumentNumber(d.getDocumentNumber());
-                docVo.setDocumentType("P");
+                docVo.setDocumentType(d.getDocumentType());
                 docVo.setIssuanceCountry(d.getIssuanceCountry());
                 docVo.setExpirationDate(d.getExpirationDate());
                 docVo.setIssuanceDate(d.getIssuanceDate());
