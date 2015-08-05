@@ -202,7 +202,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 
 	@Override
 	public List<Traveler> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException {
-		List<Traveler> passengers = new ArrayList<>();
+		List<Traveler> travelers = new ArrayList<>();
 		
 		if(queryObject != null) {
 			Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
@@ -213,20 +213,20 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			
 			try {
 				String jpqlQuery = generateQuery(queryObject, EntityEnum.TRAVELER);
-				logger.info("Getting Passengers by this query: " + jpqlQuery);
+				logger.info("Getting Travelers by this query: " + jpqlQuery);
 				TypedQuery<Traveler> query = entityManager.createQuery(jpqlQuery, Traveler.class);
 				MutableInt positionalParameter = new MutableInt();
 				setJPQLParameters(query, queryObject, positionalParameter);
 				
-				passengers = query.getResultList();
+				travelers = query.getResultList();
 				
-				logger.info("Number of Passengers returned: " + (passengers != null ? passengers.size() : "Passenger result is null"));
+				logger.info("Number of Travelers returned: " + (travelers != null ? travelers.size() : "Traveler result is null"));
 			} catch (InvalidQueryRepositoryException | ParseException e) {
 				throw new InvalidQueryRepositoryException(e.getMessage(), queryObject);
 			}
 		}
 		
-		return passengers;
+		return travelers;
 	}
 	
 	private boolean isUniqueTitle(UserQuery query) {
