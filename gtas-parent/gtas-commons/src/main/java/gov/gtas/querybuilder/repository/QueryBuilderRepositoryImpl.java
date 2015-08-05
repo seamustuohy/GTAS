@@ -1,7 +1,6 @@
 package gov.gtas.querybuilder.repository;
 
 import gov.gtas.model.Flight;
-import gov.gtas.model.FlightDirection;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryEntity;
@@ -45,8 +44,6 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 	private static final String JOIN = " join ";
 	private static final String JOIN_FETCH = " join fetch ";
-	private static final String DIRECTION = "direction";
-	private static final String INBOUND = "I";
 	private static final String FLIGHT_REF = ".flights ";
 	private static final String TRAVELER_REF = ".travelers ";
 	private static final String DOCUMENT_REF = ".documents ";
@@ -426,7 +423,6 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		else if(queryEntity instanceof QueryTerm) {
 			queryTerm = (QueryTerm) queryEntity;
 			
-			String field = queryTerm.getField();
 			String type = queryTerm.getType();
 			String operator = queryTerm.getOperator();
 			String value = (queryTerm.getValue() != null && queryTerm.getValue().length == 1) ? queryTerm.getValue()[0]:null;
@@ -520,21 +516,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						query.setParameter(positionalParameter.intValue(), vals);
 					}
 					else {
-						if(field != null && field.equals(DIRECTION)) {
-							List<FlightDirection> vals = new ArrayList<>();
-							if(values != null) {
-								for(String val : values) {
-									if(val.equalsIgnoreCase(INBOUND)) {
-										vals.add(FlightDirection.INBOUND);
-									} else {
-										vals.add(FlightDirection.OUTBOUND);
-									}
-								}
-							}
-						}
-						else {
-							query.setParameter(positionalParameter.intValue(), values);
-						}
+						query.setParameter(positionalParameter.intValue(), values);
 					}
 				}
 				else if(OperatorEnum.BEGINS_WITH.toString().equalsIgnoreCase(operator) || 
@@ -563,15 +545,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 						query.setParameter(positionalParameter.intValue(), dtFormat.parse(value), TemporalType.DATE);
 					}
 					else {
-						if(field != null && field.equals(DIRECTION)) { 
-							if(value != null && value.equalsIgnoreCase(INBOUND)) {
-								query.setParameter(positionalParameter.intValue(), FlightDirection.INBOUND);
-							} else {
-								query.setParameter(positionalParameter.intValue(), FlightDirection.OUTBOUND);
-							}
-						} else {
-							query.setParameter(positionalParameter.intValue(), value);
-						}
+					    query.setParameter(positionalParameter.intValue(), value);
 					}
 				}
 			}

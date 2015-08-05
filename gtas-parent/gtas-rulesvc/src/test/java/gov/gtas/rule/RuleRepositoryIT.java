@@ -19,8 +19,8 @@ import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
+import gov.gtas.model.lookup.TravelerTypeCode;
 import gov.gtas.svc.TargetingServiceUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -44,7 +44,7 @@ public class RuleRepositoryIT {
 
 	@Test
 	public void testBasicApisRequest() {
-		Pax p1 = createPassenger("Medulla", "Oblongata", "Timbuktu");
+		Traveler p1 = createPassenger("Medulla", "Oblongata", "Timbuktu");
 		ApisMessage msg = createBasicApisMessage(p1);
 		RuleServiceResult res = testTarget.invokeAdhocRules(
 				RuleServiceConstants.DEFAULT_RULESET_NAME,
@@ -74,9 +74,10 @@ public class RuleRepositoryIT {
 	 * @param embarkation
 	 * @return
 	 */
-	private Pax createPassenger(final String fn, final String ln,
+	private Traveler createPassenger(final String fn, final String ln,
 			final String embarkation) {
-		Pax p = new Pax();
+	    Traveler p = new Traveler();
+	    p.setTravelerType(TravelerTypeCode.P.name());
 		p.setFirstName(fn);
 		p.setLastName(ln);
 		p.setEmbarkation("Timbuktu");

@@ -15,18 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
-import gov.gtas.model.FlightDirection;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Pax;
-import gov.gtas.model.PaxInTransit;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Country;
+import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.segment.UNA;
@@ -146,19 +143,7 @@ public class ApisMessageService {
     }
     
     private Traveler convertTravelerVo(TravelerVo vo) throws ParseException {
-        Traveler p = null;
-        switch (vo.getPaxType()) {
-        case "P":
-            p = new Pax();
-            break;
-        case "C":
-            p = new Crew();
-            break;
-        case "I":
-            p = new PaxInTransit();
-            break;
-        }
-
+        Traveler p = new Traveler();
         BeanUtils.copyProperties(vo, p);
         
         String airportCode = vo.getDebarkation();
@@ -220,11 +205,11 @@ public class ApisMessageService {
         }
         
         if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
-            f.setDirection(FlightDirection.CONTINUANCE);
+            f.setDirection(FlightDirectionCode.C.name());
         } else if (homeCountry.equals(originCountry)) {
-            f.setDirection(FlightDirection.OUTBOUND);            
+            f.setDirection(FlightDirectionCode.O.name());            
         } else if (homeCountry.equals(destCountry)) {
-            f.setDirection(FlightDirection.INBOUND);                        
+            f.setDirection(FlightDirectionCode.I.name());                        
         }
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #

@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class Document extends BaseEntity {
     public Document() { }
 
-    @Column(name = "document_type", length = 2)
+    @Column(name = "document_type", length = 3)
     private String documentType;
     
     @Column(name = "document_number")

@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.TravelerVo;
@@ -51,6 +49,7 @@ public class TravelerController {
         for (Traveler t : travelers) {
             logger.debug(t.getLastName());
             TravelerVo vo = new TravelerVo();
+            vo.setTravelerType(t.getTravelerType());
             vo.setLastName(t.getLastName());
             vo.setFirstName(t.getFirstName());
             vo.setMiddleName(t.getMiddleName());
@@ -61,11 +60,6 @@ public class TravelerController {
             vo.setEmbarkation(t.getEmbarkation());
             vo.setEmbarkCountry(t.getEmbarkCountry());
             vo.setGender(t.getGender().toString());
-            if (t instanceof Pax) {
-                vo.setPaxType("P");
-            } else if (t instanceof Crew) {
-                vo.setPaxType("C");
-            }
             vo.setResidencyCountry(t.getResidencyCountry());
             vo.setSuffix(t.getSuffix());
             vo.setTitle(t.getTitle());
@@ -74,7 +68,7 @@ public class TravelerController {
             for (Document d : docs) {
                 DocumentVo docVo = new DocumentVo();
                 docVo.setDocumentNumber(d.getDocumentNumber());
-                docVo.setDocumentType("P");
+                docVo.setDocumentType(d.getDocumentType());
                 docVo.setIssuanceCountry(d.getIssuanceCountry());
                 docVo.setExpirationDate(d.getExpirationDate());
                 docVo.setIssuanceDate(d.getIssuanceDate());

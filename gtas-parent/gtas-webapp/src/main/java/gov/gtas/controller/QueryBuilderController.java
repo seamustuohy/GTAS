@@ -1,13 +1,10 @@
 package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
-import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
 import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.enums.Status;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
@@ -240,14 +237,8 @@ public class QueryBuilderController {
 					qbPassenger.setFirstName(traveler.getFirstName());
 					qbPassenger.setLastName(traveler.getLastName());
 					// Passenger type
-					if(traveler instanceof Pax) {
-						qbPassenger.setPassengerType(PersonStatus.PAX.toString());
-					}
-					else if(traveler instanceof Crew) {
-						qbPassenger.setPassengerType(PersonStatus.CREW.toString());
-					}
-					
-					qbPassenger.setGender(traveler.getGender() != null ? traveler.getGender().toString() : "");
+                    qbPassenger.setPassengerType(traveler.getTravelerType());				
+					qbPassenger.setGender(traveler.getGender() != null ? traveler.getGender() : "");
 					qbPassenger.setDob(dobFormat.format(traveler.getDob()));
 					qbPassenger.setCitizenship(traveler.getCitizenshipCountry() != null ? traveler.getCitizenshipCountry() : "");
 					

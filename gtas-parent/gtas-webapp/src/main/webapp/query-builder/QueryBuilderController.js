@@ -56,7 +56,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     $scope.saving = false;
 
     $scope.save = function () {
-        var queryObject;
+        var queryObject, query;
         if ($scope.saving) {
             return;
         }
@@ -66,30 +66,34 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             $scope.saving = false;
             return;
         }
-        queryObject = {
-            id: $scope.ruleId,
-            title: $scope.title,
-            description: $scope.description || null,
-            userId: $scope.authorId,
-            query: $scope.$builder.queryBuilder('saveRules')
-        };
+        query = $scope.$builder.queryBuilder('saveRules');
 
-        queryBuilderService.saveQuery(queryObject).then(function (myData) {
-            var $tableRows = $('table tbody').eq(0).find('tr');
-            if (myData.errorCode !== undefined) {
-                alert(myData.errorMessage);
-                $scope.saving = false;
-                return;
-            }
-            $scope.tableParams.reload();
-            $timeout(function () {
-                if ($scope.ruleId === null) {
-                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click();
+        if (query !== false) {
+            queryObject = {
+                id: $scope.ruleId,
+                title: $scope.title,
+                description: $scope.description || null,
+                userId: $scope.authorId,
+                query: query
+            };
+
+            queryBuilderService.saveQuery(queryObject).then(function (myData) {
+                var $tableRows = $('table tbody').eq(0).find('tr');
+                if (myData.errorCode !== undefined) {
+                    alert(myData.errorMessage);
+                    $scope.saving = false;
+                    return;
                 }
-                $scope.ruleId = myData.result[0].id || null;
-                $scope.saving = false;
-            }, 500);
-        });
+                $scope.tableParams.reload();
+                $timeout(function () {
+                    if ($scope.ruleId === null) {
+                        $('table tbody').eq(0).find('tr').eq($tableRows.length).click();
+                    }
+                    $scope.ruleId = myData.result[0].id || null;
+                    $scope.saving = false;
+                }, 500);
+            });
+        }
     };
 
     $scope.serviceURLs = {

@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.FlightDirection;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.DocumentTypeCode;
+import gov.gtas.model.lookup.FlightDirectionCode;
+import gov.gtas.model.lookup.TravelerTypeCode;
 import gov.gtas.repository.AirportRepository;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.CarrierRepository;
@@ -65,7 +65,8 @@ public class ApisDataGenerator {
     private Set<Traveler> createPassengerAndDocument(String[][]param){
     	Set<Traveler> travelers = new HashSet<Traveler>();
     	for(String[] args:param){
-	    	Pax passenger = new Pax();
+	    	Traveler passenger = new Traveler();
+	    	passenger.setTravelerType(TravelerTypeCode.P.name());
 	    	passenger.setId(new Long(args[6]));
 	    	passenger.setDocuments(createDocuments(new String[]{args[0]}, new String[]{args[1]}));
 	    	passenger.setFirstName(args[2]);
@@ -93,7 +94,7 @@ public class ApisDataGenerator {
     	flight.setFlightNumber("0012");
     	flight.setOrigin("YHZ");
     	flight.setOriginCountry("CA");
-    	flight.setDirection(FlightDirection.INBOUND);
+    	flight.setDirection(FlightDirectionCode.I.name());
     	flights.add(flight);
     	
     	flight = new Flight();
@@ -117,7 +118,7 @@ public class ApisDataGenerator {
     	flight.setFlightNumber("0017");
     	flight.setOrigin("LHR");//Bora Bora
     	flight.setOriginCountry("GB");
-    	flight.setDirection(FlightDirection.INBOUND);
+    	flight.setDirection(FlightDirectionCode.I.name());
     	flights.add(flight);
 
     	return flights;

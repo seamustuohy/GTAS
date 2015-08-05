@@ -26,12 +26,12 @@ import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
 import gov.gtas.model.lookup.DocumentTypeCode;
+import gov.gtas.model.lookup.TravelerTypeCode;
 import gov.gtas.services.FlightService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -83,7 +83,8 @@ public class ServiceRepositoryIT {
 		f.setUpdatedAt(new Date());
 		f.setUpdatedBy("TEST");
 
-		Pax passengerToUpdate = new Pax();
+		Traveler passengerToUpdate = new Traveler();
+		passengerToUpdate.setTravelerType(TravelerTypeCode.P.name());
 		passengerToUpdate.setAge(30);
 		passengerToUpdate.setCitizenshipCountry(c);
 		passengerToUpdate.setDebarkation(b);

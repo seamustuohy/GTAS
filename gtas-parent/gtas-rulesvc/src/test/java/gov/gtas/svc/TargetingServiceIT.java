@@ -3,22 +3,6 @@ package gov.gtas.svc;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import gov.gtas.bo.RuleHitDetail;
-import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.config.RuleServiceConfig;
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Crew;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.udr.UdrRule;
-import gov.gtas.repository.ApisMessageRepository;
-import gov.gtas.repository.PassengerRepository;
-import gov.gtas.rule.RuleServiceResult;
-import gov.gtas.rule.builder.DrlRuleFileBuilder;
-import gov.gtas.rule.builder.RuleBuilderTestUtils;
-import gov.gtas.testdatagen.ApisDataGenerator;
 
 import java.text.ParseException;
 import java.util.Set;
@@ -34,6 +18,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+
+import gov.gtas.bo.RuleHitDetail;
+import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Document;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.lookup.TravelerTypeCode;
+import gov.gtas.model.udr.UdrRule;
+import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.PassengerRepository;
+import gov.gtas.rule.RuleServiceResult;
+import gov.gtas.rule.builder.DrlRuleFileBuilder;
+import gov.gtas.rule.builder.RuleBuilderTestUtils;
+import gov.gtas.testdatagen.ApisDataGenerator;
 
 /**
  * Unit tests for the TargetingService using spring support and Mockito.
@@ -95,7 +95,7 @@ public class TargetingServiceIT {
 		Flight flight = msg.getFlights().iterator().next();
 		assertEquals(3, flight.getPassengers().size());
 		Traveler pax = flight.getPassengers().iterator().next();
-		assertTrue(pax instanceof Pax);
+		assertTrue(pax.getTravelerType().equals(TravelerTypeCode.P.name()));
 		assertNotNull("Pax ID is null", pax.getId());
 		assertEquals(1, pax.getDocuments().size());
 		Document doc = pax.getDocuments().iterator().next();
@@ -206,9 +206,10 @@ public class TargetingServiceIT {
 		int docCount = 0;
 		for (Traveler traveler : passengers) {
 			++travCount;
-			if (traveler instanceof Pax) {
+			String type = traveler.getTravelerType();
+			if (type.equals(TravelerTypeCode.P.name())) {
 				++paxCount;
-			} else if(traveler instanceof Crew){
+			} else if (type.equals(TravelerTypeCode.C.name())) {
 				++crewCount;
 			}
 			Set<Document> docs = traveler.getDocuments();
