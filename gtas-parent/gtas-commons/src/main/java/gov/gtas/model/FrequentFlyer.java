@@ -15,7 +15,7 @@ public class FrequentFlyer extends BaseEntityAudit {
 	@Column(name = "airline_code", length = 4)
     private String airlineCode;
 	
-	@Column(name = "frequent_flyer_number", length = 4)
+	@Column(name = "frequent_flyer_number")
     private String frequentFlyerNumber;
 	
 	public String getAirlineCode() {
