@@ -65,6 +65,17 @@ public class PnrData extends BaseEntityAudit{
     private String email;
  
     @ManyToMany(
+        targetEntity=Flight.class,
+        cascade={CascadeType.ALL}
+    )
+    @JoinTable(
+        name="pnr_flight",
+        joinColumns=@JoinColumn(name="flight_id"),
+        inverseJoinColumns=@JoinColumn(name="pnr_id")
+    )    
+    private Set<Flight> flights = new HashSet<>();
+    
+	@ManyToMany(
         targetEntity = Traveler.class,
         cascade={CascadeType.ALL}
     ) 
@@ -83,6 +94,16 @@ public class PnrData extends BaseEntityAudit{
 	@JoinColumn(name="agency_id",referencedColumnName="id") 
     private Agency agency;
 	
+	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name="ff_id",referencedColumnName="id") 
+    private FrequentFlyer frequentFlyer;	
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
+    private Set<Address> adresses = new HashSet<>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
+    private Set<Phone> phones = new HashSet<>();   
+    
 	public Agency getAgency() {
 		return agency;
 	}
@@ -107,12 +128,7 @@ public class PnrData extends BaseEntityAudit{
 		this.passengers = passengers;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
-    private Set<Address> adresses = new HashSet<>();
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
-    private Set<Phone> phones = new HashSet<>();    
-    
+  
 	public Set<Address> getAdresses() {
 		return adresses;
 	}
@@ -129,15 +145,6 @@ public class PnrData extends BaseEntityAudit{
 		this.phones = phones;
 	}
 
-	/*
-	public Traveler getPassenger() {
-		return passenger;
-	}
-
-	public void setPassenger(Traveler passenger) {
-		this.passenger = passenger;
-	}
-*/
 	public String getEmail() {
 		return email;
 	}
@@ -257,10 +264,26 @@ public class PnrData extends BaseEntityAudit{
 	public void setTotalDwellTime(Integer totalDwellTime) {
 		this.totalDwellTime = totalDwellTime;
 	}
-    
+ 
+    public Set<Flight> getFlights() {
+		return flights;
+	}
+
+	public void setFlights(Set<Flight> flights) {
+		this.flights = flights;
+	}
+
+	public FrequentFlyer getFrequentFlyer() {
+		return frequentFlyer;
+	}
+
+	public void setFrequentFlyer(FrequentFlyer frequentFlyer) {
+		this.frequentFlyer = frequentFlyer;
+	}
+	
     @Override
     public int hashCode() {
-       return Objects.hash(this.carrier, this.departureDate, this.origin,this.id);
+       return Objects.hash(this.carrier, this.departureDate, this.origin);
     }
     
     @Override
@@ -274,7 +297,6 @@ public class PnrData extends BaseEntityAudit{
         final PnrData other = (PnrData)obj;
         return Objects.equals(this.carrier, other.carrier)
                 && Objects.equals(this.departureDate, other.departureDate)
-                 && Objects.equals(this.origin, other.origin)
-                && Objects.equals(this.id, other.id);
+                 && Objects.equals(this.origin, other.origin);
     }    
 }

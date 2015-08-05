@@ -1,6 +1,19 @@
 package gov.gtas.services;
 
 import static org.junit.Assert.assertNotNull;
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.Address;
+import gov.gtas.model.Agency;
+import gov.gtas.model.CreditCard;
+import gov.gtas.model.Flight;
+import gov.gtas.model.FrequentFlyer;
+//import gov.gtas.model.Pax;
+import gov.gtas.model.Phone;
+import gov.gtas.model.PnrData;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.lookup.TravelerTypeCode;
+import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.LookUpRepository;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -15,18 +28,6 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.Address;
-import gov.gtas.model.Agency;
-import gov.gtas.model.CreditCard;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Phone;
-import gov.gtas.model.PnrData;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.lookup.TravelerTypeCode;
-import gov.gtas.repository.ApisMessageRepository;
-import gov.gtas.repository.LookUpRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
@@ -71,16 +72,14 @@ public class PnrDataServiceIT {
 		preparePassengerData(passengerToUpdate);
 		PnrData pnr = new PnrData();
 		preparePnrData(pnr);
-		//Set hs = new HashSet<Flight>();
-		//hs.add(f);
-		passengerToUpdate.getFlights().add(f);
-		//Set<Traveler> passengers = new HashSet<Traveler>();
-		//passengers.add(passengerToUpdate);
-		//f.setPassengers(passengers);
-		f.getPassengers().add(passengerToUpdate);
 		passengerToUpdate.getPnrs().add(pnr);
+		passengerToUpdate.getFlights().add(f);
 		pnr.getPassengers().add(passengerToUpdate);
-		//pnr.setPassenger(passengerToUpdate);
+		
+		
+		f.getPassengers().add(passengerToUpdate);
+		//testTarget.create(f);
+		pnr.getFlights().add(f);
 		pnrService.create(pnr);
 		System.out.println("#####################pnr.getId()#############################"+pnr.getId());
 		assertNotNull(pnr.getId());
@@ -89,7 +88,8 @@ public class PnrDataServiceIT {
 
 	private void preparePnrData(PnrData pnr){
 		pnr.setBagCount(2);
-		pnr.setBooked("Yes");
+		pnr.setBooked("7/7/2015");
+		pnr.setReceived("7/7/2015");
 		String cr = "AA";
 		pnr.setCarrier(cr);
 		pnr.setCreatedAt(new Date());
@@ -139,7 +139,14 @@ public class PnrDataServiceIT {
 		ag.setAgencyIdentifier("123456C");
 		ag.setAgencyName("Some Test Agency");
 		ag.setCreatedAt(new Date());
+		ag.setAgencyState("VA");
 		pnr.setAgency(ag);
+		FrequentFlyer ff = new FrequentFlyer();
+		ff.setFrequentFlyerNumber("1234");
+		ff.setAirlineCode("DL");
+		ff.setCreatedAt(new Date());
+		ff.setCreatedBy("JUNIT");
+		pnr.setFrequentFlyer(ff);
 	}
 	
 	private void prepareFlightData(Flight f){
@@ -180,5 +187,12 @@ public class PnrDataServiceIT {
 		passengerToUpdate.setEmbarkation(b);
 		passengerToUpdate.setEmbarkCountry(c);
 		passengerToUpdate.setFirstName("Srinivas");
+		passengerToUpdate.setLastName("Test");
+		passengerToUpdate.setCreatedBy("JUNIT");
+		passengerToUpdate.setCreationDate();
+		passengerToUpdate.setGender("M");
+		passengerToUpdate.setSuffix("Jr");
+		passengerToUpdate.setTitle("Mr");
+		passengerToUpdate.setResidencyCountry(c);
 	}
 }
