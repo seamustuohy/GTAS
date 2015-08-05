@@ -1,15 +1,16 @@
-app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, riskCriteriaService, $timeout) {
+app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, riskCriteriaService, $timeout) {
+    'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [];
 
     $scope.loadRule = function () {
-        //<i class="glyphicon glyphicon-pencil"></i>
         riskCriteriaService.loadRuleById(this.summary.id).then(function (myData) {
             $scope.ruleId = myData.id;
             $scope.loadSummary(myData.summary);
             $scope.$builder.queryBuilder('loadRules', myData.details);
         });
     };
+
     $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
         count: 10,          // count per page
@@ -69,16 +70,17 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
 //    $scope.newRule();
     $scope.saving = false;
     $scope.save = function() {
+        var ruleObject, startDate, endDate, details;
+
         if ($scope.saving) return;
-//        $scope.saving = true;
-        var ruleObject,
-            startDate = moment($scope.startDate, $scope.formats, true),
-            endDate = moment($scope.endDate, $scope.formats, true),
-            details;
+
+        $scope.saving = true;
+        startDate = moment($scope.startDate, $scope.formats, true);
+        endDate = moment($scope.endDate, $scope.formats, true);
 
         $scope.title = $scope.title.trim();
         if (!$scope.title.length ) {
-            alert('Risk Criteria title summary can not be blank!');
+            $scope.alertError('Title summary can not be blank!');
             $scope.saving = false;
             return;
         }
@@ -87,12 +89,12 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
         if ($scope.ruleId === null) {
             if (!startDate.isValid())
             {
-                alert('Dates must be in this format: ' + $scope.formats.toString());
+                $scope.alertError('Dates must be in this format: ' + $scope.formats.toString());
                 $scope.saving = false;
                 return;
             }
             if (startDate < $scope.today ) {
-                alert('Risk Criteria start date must be today or later when created new.');
+                $scope.alertError('Start date must be today or later when created new.');
                 $scope.saving = false;
                 return;
             }
@@ -100,12 +102,12 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
 
         if ($scope.endDate !== null) {
             if (!endDate.isValid() ) {
-                alert('End Date must be empty/open or in this format: ' + $scope.formats.toString());
+                $scope.alertError('End Date must be empty/open or in this format: ' + $scope.formats.toString());
                 $scope.saving = false;
                 return;
             }
             if (endDate < startDate ) {
-                alert('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
+                $scope.alertError('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
                 $scope.saving = false;
                 return;
             }
@@ -113,40 +115,42 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
 
         details = $scope.$builder.queryBuilder('saveRules');
 
-        if (details !== false) {
-            ruleObject = {
-                id: $scope.ruleId,
-                details: $scope.$builder.queryBuilder('saveRules'),
-                summary: {
-                    title: $scope.title,
-                    description: $scope.description || null,
-                    startDate: $scope.startDate,
-                    endDate: $scope.endDate || null,
-                    enabled: $scope.enabled
-                }
-            };
-
-            data.push(ruleObject.summary);
-            $scope.tableData = data;
-
-            $scope.tableParams.total($scope.tableData.length);
-            $scope.tableParams.reload();
-
-            riskCriteriaService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
-                var $tableRows = $('table tbody').eq(0).find('tr');
-                if (typeof myData.errorCode !== "undefined") {
-                    alert(myData.errorMessage);
-                    return;
-                }
-                $scope.tableParams.reload();
-                $timeout(function () {
-                    if ($scope.ruleId === null) {
-                        $('table tbody').eq(0).find('tr').eq($tableRows.length).click()
-                    }
-                    $scope.ruleId = $scope.ruleId = myData.responseDetails[0].attributeValue || null;
-                    $scope.saving = false;
-                }, 500);
-            });
+        if (details === false) {
+            $scope.saving = false;
+            return;
         }
+        ruleObject = {
+            id: $scope.ruleId,
+            details: $scope.$builder.queryBuilder('saveRules'),
+            summary: {
+                title: $scope.title,
+                description: $scope.description || null,
+                startDate: $scope.startDate,
+                endDate: $scope.endDate || null,
+                enabled: $scope.enabled
+            }
+        };
+
+        data.push(ruleObject.summary);
+        $scope.tableData = data;
+
+        $scope.tableParams.total($scope.tableData.length);
+        $scope.tableParams.reload();
+
+        riskCriteriaService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
+            var $tableRows = $('table tbody').eq(0).find('tr');
+            if (typeof myData.errorCode !== "undefined") {
+                $scope.alertError(myData.errorMessage);
+                return;
+            }
+            $scope.tableParams.reload();
+            $timeout(function () {
+                if ($scope.ruleId === null) {
+                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click()
+                }
+                $scope.ruleId = myData.responseDetails[0].attributeValue || null;
+                $scope.saving = false;
+            }, 500);
+        });
     };
 });

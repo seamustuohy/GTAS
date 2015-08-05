@@ -203,6 +203,7 @@
         <script src="flights/FlightsService.js"></script>
         <script src="pax/PaxController.js"></script>
         <script src="pax/PaxService.js"></script>
+        <script src="factory/QueryBuilderFactory.js"></script>
         <script src="risk-criteria/RiskCriteriaController.js"></script>
         <script src="risk-criteria/RiskCriteriaService.js"></script>
         <script src="query-builder/QueryBuilderController.js"></script>

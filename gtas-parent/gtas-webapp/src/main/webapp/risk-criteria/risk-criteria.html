@@ -47,52 +47,68 @@
     .entity-name ul li:nth-child(8) {
         background: rgba(30,200,200, 0.2);
     }
+    @keyframes fadeOut
+    {
+        from { opacity: 1.0; }
+        to { opacity: 0.0; }
+    }
+
+    @-webkit-keyframes fadeOut
+    {
+        from { opacity: 1.0 }
+        to { opacity: 0.0 }
+    }
+
+    .fade-out
+    {
+        animation: fadeOut 2s infinite;
+        -webkit-animation: fadeOut 2s infinite;
+    }
 </style>
 <section class="qb-interface">
-<h1>Risk Criteria:</h1>
-<button data-ng-click="newRule()" class="btn btn-xs btn-primary pull-right" data-add="rule">New Rule</button>
-<!--
-<button data-ng-click="tableParams.sorting({})" class="btn btn-xs btn-default pull-right">Clear sorting</button>
-<button data-ng-click="tableParams.filter({})" class="btn btn-xs btn-default pull-right">Clear filter</button>
-//-->
-<table ng-table="tableParams" class="table">
-    <tr ng-repeat="summary in $data" data-id="{{summary.id}}" data-ng-click="loadRule()">
-        <td data-title="'title'" sortable="'title'" filter="{ 'title': 'text' }">
-            <i ng-show="isBeingEdited()" class="glyphicon glyphicon-pencil" title="Editing this rule"></i>
-            {{summary.title}}
-        </td>
-        <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">
-            {{summary.description}}
-        </td>
-        <td data-title="'Start Date'" sortable="'startDate'" filter="{ 'startDate': 'text' }">
-            {{summary.startDate}}
-        </td>
-        <td data-title="'End Date'" sortable="'endDate'" filter="{ 'endDate': 'text' }">
-            {{summary.endDate}}
-        </td>
-        <td data-title="'Enabled'" sortable="'enabled'" filter="{ 'enabled': 'text' }">
-            {{summary.enabled}}
-        </td>
-    </tr>
-</table>
+    <h1>Risk Criteria:</h1>
+    <button data-ng-click="newRule()" class="btn btn-xs btn-primary pull-right" data-add="rule">New Rule</button>
+    <!--
+    <button data-ng-click="tableParams.sorting({})" class="btn btn-xs btn-default pull-right">Clear sorting</button>
+    <button data-ng-click="tableParams.filter({})" class="btn btn-xs btn-default pull-right">Clear filter</button>
+    //-->
+    <table ng-table="tableParams" class="table">
+        <tr ng-repeat="summary in $data" data-id="{{summary.id}}" data-ng-click="loadRule()">
+            <td data-title="'title'" sortable="'title'" filter="{ 'title': 'text' }">
+                <i ng-show="isBeingEdited()" class="glyphicon glyphicon-pencil" title="Editing this rule"></i>
+                {{summary.title}}
+            </td>
+            <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">
+                {{summary.description}}
+            </td>
+            <td data-title="'Start Date'" sortable="'startDate'" filter="{ 'startDate': 'text' }">
+                {{summary.startDate}}
+            </td>
+            <td data-title="'End Date'" sortable="'endDate'" filter="{ 'endDate': 'text' }">
+                {{summary.endDate}}
+            </td>
+            <td data-title="'Enabled'" sortable="'enabled'" filter="{ 'enabled': 'text' }">
+                {{summary.enabled}}
+            </td>
+        </tr>
+    </table>
 
+    <h2>Summary:</h2>
+    <label for="title" class="hide">Title:</label>
+    <input title="Title" placeholder="Title:" type="text" ng-model="title" id="title" maxlength="20" />
+    <label for="start-date" class="hide">Start Date:</label>
+    <input placeholder="Start Date:" type="text" ng-model="startDate" id="start-date" class="datepicker" />
+    <label for="end-date" class="hide">End Date:</label>
+    <input placeholder="End Date:" type="text" ng-model="endDate" id="end-date" class="datepicker" />
+    <label for="enabled">Enabled:</label>
+    <input type="checkbox" ng-model="enabled" id="enabled" />
+    <label for="description" class="hide">Description:</label>
+    <input title="Description" type="text" ng-model="description" id="description" placeholder="Description:" maxlength="100" />
 
-<h2>Summary:</h2>
-<label for="title" class="hide">Title:</label>
-<input title="Title" placeholder="Title:" type="text" ng-model="title" id="title" maxlength="20" />
-<label for="start-date" class="hide">Start Date:</label>
-<input placeholder="Start Date:" type="text" ng-model="startDate" id="start-date" class="datepicker" />
-<label for="end-date" class="hide">End Date:</label>
-<input placeholder="End Date:" type="text" ng-model="endDate" id="end-date" class="datepicker" />
-<label for="enabled">Enabled:</label>
-<input type="checkbox" ng-model="enabled" id="enabled" />
-<label for="description" class="hide">Description:</label>
-<input title="Description" type="text" ng-model="description" id="description" placeholder="Description:" maxlength="100" />
-
-<h2>Conditions:</h2>
-<div id="builder"></div>
-
-<button type="button" data-ng-click="resetQueryBuilder()" class="btn btn-xs btn-primary reset pull-right" data->Clear Conditions</button>
-<button type="button" data-ng-click="delete()" type="button" class="btn btn-xs btn-primary pull-right" title="delete">Delete</button>
-<button type="button" data-ng-click="save()" id="submit" class="btn btn-xs btn-primary pull-right">Save</button>
+    <h2>Conditions:</h2>
+    <div id="builder"></div>
+    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
+    <button type="button" data-ng-click="resetQueryBuilder()" class="btn btn-xs btn-primary reset pull-right" data->Clear Conditions</button>
+    <button type="button" data-ng-click="delete()" type="button" class="btn btn-xs btn-primary pull-right" title="delete">Delete</button>
+    <button type="button" data-ng-click="save()" id="submit" class="btn btn-xs btn-primary pull-right">Save</button>
 </section>

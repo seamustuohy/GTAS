@@ -1,89 +1,75 @@
-app.service("riskCriteriaService", function($rootScope, $http, $q) {
+app.service("riskCriteriaService", function ($http, $q) {
     'use strict';
-    var baseUrl = '/gtas/udr/';
+    var baseUrl = '/gtas/udr/',
+        handleError = function (response) {
+            if (!angular.isObject(response.data) || !response.data.message) {
+                return ($q.reject("An unknown error occurred."));
+            }
+            return ($q.reject(response.data.message));
+        },
+        handleSuccess = function (response) {
+            return (response.data);
+        },
+        loadRuleById = function (ruleId) {
+            var request;
 
-    function loadRuleById(ruleId) {
-        var request;
+            if (ruleId === undefined || ruleId === null) {
+                return;
+            }
 
-        if (ruleId === undefined || ruleId === null) {
-            //console.log('not valid ruleId');
-        } else {
             request = $http({
                 method: "get",
                 url: baseUrl + "get/" + ruleId
             });
 
             return (request.then(handleSuccess, handleError));
-        }
-    }
+        },
+        ruleDelete = function (ruleId, userId) {
+            var request;
 
-    function ruleDelete(ruleId, userId) {
-        var request;
-
-        if (userId === undefined || userId === null) {
-            //console.log('not valid user');
-            return;
-        }
-
-        if (ruleId === undefined || ruleId === null) {
-            //console.log('not valid ruleId');
-            return;
-        }
-
-        request = $http({
-            method: 'delete',
-            url: baseUrl + userId + '/' + ruleId
-        });
-
-        return (request.then(handleSuccess, handleError));
-    }
-
-    function ruleSave(ruleObj, userId) {
-        var method, request;
-
-        if (userId === undefined || userId === null) {
-            //console.log('not valid user');
-            return;
-        }
-
-        method = ruleObj.id === null ? 'post' : 'put';
-        request = $http({
-            method: method,
-            url: baseUrl + userId,
-            data: ruleObj
-        });
-
-        return (request.then(handleSuccess, handleError));
-    }
-
-    function getListByAuthor(userId) {
-        var request;
-
-        if (userId === undefined || userId === null) {
-            //console.log('not valid user');
-            return;
-        }
-
-        request = $http({
-            method: "get",
-            url: baseUrl + "list/" + userId,
-            params: {
-                action: "get"
+            if (userId === undefined || userId === null || ruleId === undefined || ruleId === null) {
+                return;
             }
-        });
-        return (request.then(handleSuccess, handleError));
-    }
 
-    function handleError(response) {
-        if (!angular.isObject(response.data) || !response.data.message) {
-            return ($q.reject("An unknown error occurred."));
-        }
-        return ($q.reject(response.data.message));
-    }
+            request = $http({
+                method: 'delete',
+                url: baseUrl + userId + '/' + ruleId
+            });
 
-    function handleSuccess(response) {
-        return (response.data);
-    }
+            return (request.then(handleSuccess, handleError));
+        },
+        ruleSave = function (ruleObj, userId) {
+            var method, request;
+
+            if (userId === undefined || userId === null) {
+                return;
+            }
+
+            method = ruleObj.id === null ? 'post' : 'put';
+            request = $http({
+                method: method,
+                url: baseUrl + userId,
+                data: ruleObj
+            });
+
+            return (request.then(handleSuccess, handleError));
+        },
+        getListByAuthor = function (userId) {
+            var request;
+
+            if (userId === undefined || userId === null) {
+                return;
+            }
+
+            request = $http({
+                method: "get",
+                url: baseUrl + "list/" + userId,
+                params: {
+                    action: "get"
+                }
+            });
+            return (request.then(handleSuccess, handleError));
+        };
 
     // Return public API.
     return ({
