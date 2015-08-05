@@ -3,6 +3,7 @@ package gov.gtas.model;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,13 +23,13 @@ public class HitDetail extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 5219262569468670275L;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "hits_summary_id", nullable = false, referencedColumnName = "id")
 	private HitsSummary parent;
 
-	
 	/**
-	 * The serialization version of array of condition strings
+	 * String representation of matched conditions; it can be splitted into
+	 * String[]
 	 */
 	@Lob
 	@Basic(fetch = FetchType.EAGER)
