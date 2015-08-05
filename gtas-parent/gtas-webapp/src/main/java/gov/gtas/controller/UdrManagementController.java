@@ -196,37 +196,37 @@ public class UdrManagementController {
 	}
 
 	/////////////////////////////////////////////////////////////////////////////
-	@ExceptionHandler(CommonServiceException.class)
-	public @ResponseBody GtasJsonError handleError(CommonServiceException ex) {
-		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-		ErrorDetails err = errorHandler.processError(ex);
-		return new GtasJsonError(err.getFatalErrorCode(),
-				err.getFatalErrorMessage());
-	}
-
-	@ExceptionHandler(Exception.class)
-	public @ResponseBody GtasJsonError handleError(Exception ex) {
-		ex.printStackTrace();
-		GtasJsonError ret = handleSpecialError(ex);
-		if (ret == null) {
-			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			ErrorDetails err = errorHandler.processError(ex);
-			ret = new GtasJsonError(err.getFatalErrorCode(),
-					err.getFatalErrorMessage());
-		}
-		return ret;
-	}
-
-	private GtasJsonError handleSpecialError(Exception ex) {
-		GtasJsonError ret = null;
-		if (ex instanceof HttpMessageNotReadableException) {
-			ret = new GtasJsonError("MALFORMED_JSON_INPUT",
-					"Input JSON is malformed:" + ex.getMessage());
-		} else if (ex instanceof JpaSystemException) {//TODO need to check the constraint
-			ret = new GtasJsonError("DUPLICATE_UDR_TITLE",
-					"This author has already created a UDR with this title:"
-							+ ex.getMessage());
-		}
-		return ret;
-	}
+//	@ExceptionHandler(CommonServiceException.class)
+//	public @ResponseBody GtasJsonError handleError(CommonServiceException ex) {
+//		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
+//		ErrorDetails err = errorHandler.processError(ex);
+//		return new GtasJsonError(err.getFatalErrorCode(),
+//				err.getFatalErrorMessage());
+//	}
+//
+//	@ExceptionHandler(Exception.class)
+//	public @ResponseBody GtasJsonError handleError(Exception ex) {
+//		ex.printStackTrace();
+//		GtasJsonError ret = handleSpecialError(ex);
+//		if (ret == null) {
+//			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
+//			ErrorDetails err = errorHandler.processError(ex);
+//			ret = new GtasJsonError(err.getFatalErrorCode(),
+//					err.getFatalErrorMessage());
+//		}
+//		return ret;
+//	}
+//
+//	private GtasJsonError handleSpecialError(Exception ex) {
+//		GtasJsonError ret = null;
+//		if (ex instanceof HttpMessageNotReadableException) {
+//			ret = new GtasJsonError("MALFORMED_JSON_INPUT",
+//					"Input JSON is malformed:" + ex.getMessage());
+//		} else if (ex instanceof JpaSystemException) {//TODO need to check the constraint
+//			ret = new GtasJsonError("DUPLICATE_UDR_TITLE",
+//					"This author has already created a UDR with this title:"
+//							+ ex.getMessage());
+//		}
+//		return ret;
+//	}
 }

@@ -116,12 +116,14 @@ public class TargetingServiceImpl implements TargetingService {
 	}
 
 	@Override
+	@Transactional
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus) {
 		return apisMsgRepository.findByStatus(messageStatus);
 
 	}
 
 	@Override
+	@Transactional
 	public void updateApisMessage(ApisMessage message,
 			MessageStatus messageStatus) {
 		ApisMessage apisMessage = apisMsgRepository.findOne(message.getId());
@@ -134,7 +136,6 @@ public class TargetingServiceImpl implements TargetingService {
 	@Transactional
 	public void runningRuleEngine() {
 		logger.info(new Date() + " a fixed delay running");
-		System.out.println(new Date() + " a fixed delay running");
 		List<ApisMessage> apisMessageList = retrieveApisMessage(MessageStatus.LOADED);
 		System.out
 				.println("retrieved message size-> " + apisMessageList.size());
@@ -145,8 +146,6 @@ public class TargetingServiceImpl implements TargetingService {
 				RuleServiceResult ruleRunningResult = analyzeApisMessage(apisMessage);
 				RuleExecutionStatistics ruleExeStatus = ruleRunningResult
 						.getExecutionStatistics();
-				System.out.println("\nTotal Rules fired. --> "
-						+ ruleExeStatus.getTotalRulesFired());
 				logger.info(("\nTotal Rules fired. --> " + ruleExeStatus
 						.getTotalRulesFired()));
 				List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
@@ -157,7 +156,7 @@ public class TargetingServiceImpl implements TargetingService {
 					HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
 					hitsSummaryList.add(hitsSummary);
 				}
-				// updateApisMessage(apisMessage, MessageStatus.ANALYZED);
+				updateApisMessage(apisMessage, MessageStatus.ANALYZED);
 			}
 			hitsSummaryRepository.save(hitsSummaryList);
 		}

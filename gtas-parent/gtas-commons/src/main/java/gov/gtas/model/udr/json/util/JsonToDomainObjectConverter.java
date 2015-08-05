@@ -9,7 +9,6 @@ import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.enumtype.YesNoEnum;
@@ -17,6 +16,7 @@ import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 import gov.gtas.util.ValidationUtils;
 
@@ -259,7 +259,7 @@ public class JsonToDomainObjectConverter {
 				ValueTypesEnum type = ValueTypesEnum.valueOf(trm.getType()
 						.toUpperCase());
 				RuleCondPk pk = new RuleCondPk(indx, seq++);
-				EntityLookupEnum entity = ValidationUtils
+				EntityEnum entity = ValidationUtils
 						.convertStringToEnum(trm.getEntity());
 				if (entity == null) {
 					throw ErrorHandlerFactory

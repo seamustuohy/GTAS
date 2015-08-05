@@ -15,13 +15,9 @@ public class FrequentFlyer extends BaseEntityAudit {
 	@Column(name = "airline_code", length = 4)
     private String airlineCode;
 	
-	@Column(name = "frequent_flyer_number", length = 4)
+	@Column(name = "frequent_flyer_number")
     private String frequentFlyerNumber;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="pnr_id",referencedColumnName="id")     
-    private PnrData pnrData;
-
 	public String getAirlineCode() {
 		return airlineCode;
 	}
@@ -36,14 +32,6 @@ public class FrequentFlyer extends BaseEntityAudit {
 
 	public void setFrequentFlyerNumber(String frequentFlyerNumber) {
 		this.frequentFlyerNumber = frequentFlyerNumber;
-	}
-
-	public PnrData getPnrData() {
-		return pnrData;
-	}
-
-	public void setPnrData(PnrData pnrData) {
-		this.pnrData = pnrData;
 	}
 	
     @Override

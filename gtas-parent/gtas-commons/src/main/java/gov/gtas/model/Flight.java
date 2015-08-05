@@ -32,6 +32,12 @@ public class Flight extends BaseEntityAudit {
     )    
     private Set<Traveler> travelers = new HashSet<>();
 
+    @ManyToMany(
+            mappedBy = "flights",
+            targetEntity = PnrData.class
+    ) 
+    private Set<PnrData> pnrs = new HashSet<>();
+    
     private String carrier;
     
     @Size(min = 4, max = 4)
@@ -135,6 +141,13 @@ public class Flight extends BaseEntityAudit {
         this.destinationCountry = destinationCountry;
     }
 
+    public Set<PnrData> getPnrs() {
+		return pnrs;
+	}
+	public void setPnrs(Set<PnrData> pnrs) {
+		this.pnrs = pnrs;
+	}
+	
     @Override
     public int hashCode() {
        return Objects.hash(this.carrier, this.flightNumber, this.flightDate, this.origin, this.destination);

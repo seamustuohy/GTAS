@@ -14,10 +14,10 @@ import gov.gtas.error.udr.UdrErrorConstants;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.EntityAttributeConstants;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
+import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.services.UserService;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.util.DateCalendarUtils;
@@ -291,7 +291,7 @@ public class UdrServiceErrorTest {
 				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+864000000L));
 
 				UdrSpecification testObj = mapper.readValue(
-						String.format(TEST_JSON, EntityLookupEnum.Traveler.toString(), EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT, "equal", startDate), 
+						String.format(TEST_JSON, EntityEnum.TRAVELER.getEntityName(), EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT, "equal", startDate), 
 						UdrSpecification.class);	
 				assertNotNull(testObj);
 				 authorId = testObj.getSummary().getAuthor();

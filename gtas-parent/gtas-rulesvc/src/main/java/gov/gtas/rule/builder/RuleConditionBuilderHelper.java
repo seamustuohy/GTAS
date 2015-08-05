@@ -3,9 +3,9 @@ package gov.gtas.rule.builder;
 import gov.gtas.model.udr.CondValue;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleCondPk;
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.text.ParseException;
@@ -82,7 +82,7 @@ public class RuleConditionBuilderHelper {
     	}
     	return bldr.toString();
     }
-	public static RuleCond createRuleCondition(EntityLookupEnum entity,
+	public static RuleCond createRuleCondition(EntityEnum entity,
 			String attribute, OperatorCodeEnum op, String value,
 			ValueTypesEnum type) throws ParseException {
 		RuleCondPk pk = new RuleCondPk(1L, 1);
@@ -90,7 +90,7 @@ public class RuleConditionBuilderHelper {
 		ret.addValueToCondition(value, type);
 		return ret;
 	}
-	public static RuleCond createRuleCondition(EntityLookupEnum entity,
+	public static RuleCond createRuleCondition(EntityEnum entity,
 			String attribute, OperatorCodeEnum op, String[] values,
 			ValueTypesEnum type) throws ParseException {
 		RuleCondPk pk = new RuleCondPk(1L, 1);

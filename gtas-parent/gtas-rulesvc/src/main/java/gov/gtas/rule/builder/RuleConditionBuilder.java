@@ -53,9 +53,9 @@ public class RuleConditionBuilder {
 	    parentStringBuilder.append(travelerConditionBuilder.build());
 	    parentStringBuilder.append(documentConditionBuilder.build());
 	    parentStringBuilder.append(flightConditionBuilder.build());
-	    travelerConditionBuilder.init();
-	    documentConditionBuilder.init();
-	    flightConditionBuilder.init();
+	    travelerConditionBuilder.reset();
+	    documentConditionBuilder.reset();
+	    flightConditionBuilder.reset();
 	    
 	}
     /**
@@ -70,13 +70,13 @@ public class RuleConditionBuilder {
 		    conditionDescriptionBuilder.append(RuleHitDetail.HIT_REASON_SEPARATOR).append(RuleConditionBuilderHelper.createConditionDescription(cond));
 		}
 		switch (cond.getEntityName()) {
-		case Traveler:
+		case TRAVELER:
 			travelerConditionBuilder.addCondition(cond);
 			break;
-		case Document:
+		case DOCUMENT:
 			documentConditionBuilder.addCondition(cond);
 			break;
-		case Flight:
+		case FLIGHT:
 			flightConditionBuilder.addCondition(cond);
 			break;
 		default:

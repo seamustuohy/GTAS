@@ -100,7 +100,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
             }
         }
 
-        if ($scope.endDate !== null) {
+        if ($scope.endDate) {
             if (!endDate.isValid() ) {
                 $scope.alertError('End Date must be empty/open or in this format: ' + $scope.formats.toString());
                 $scope.saving = false;
