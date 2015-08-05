@@ -1,4 +1,4 @@
-package gov.gtas.parsers.paxlst.vo;
+package gov.gtas.parsers.vo.air;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class PaxVo {
+public class TravelerVo {
     private String title;    
     private String firstName;
     private String middleName;

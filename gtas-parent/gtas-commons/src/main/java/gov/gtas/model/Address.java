@@ -1,7 +1,5 @@
 package gov.gtas.model;
 
-import gov.gtas.model.lookup.Country;
-
 import java.util.Objects;
 
 import javax.persistence.CascadeType;

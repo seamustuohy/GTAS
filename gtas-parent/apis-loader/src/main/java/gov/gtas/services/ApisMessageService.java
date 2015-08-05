@@ -16,32 +16,30 @@ import org.springframework.stereotype.Service;
 
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Crew;
+import gov.gtas.model.Document;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FlightDirection;
-import gov.gtas.model.Gender;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.PaxInTransit;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.paxlst.PaxlstMessageVo;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
-import gov.gtas.parsers.paxlst.vo.PaxlstMessageVo;
-import gov.gtas.parsers.paxlst.vo.DocumentVo;
-import gov.gtas.parsers.paxlst.vo.FlightVo;
-import gov.gtas.parsers.paxlst.vo.PaxVo;
-import gov.gtas.parsers.paxlst.vo.ReportingPartyVo;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.vo.air.DocumentVo;
+import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.parsers.vo.air.ReportingPartyVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.repository.ApisMessageRepository;
 
 @Service
@@ -56,9 +54,6 @@ public class ApisMessageService {
     @Autowired
     private AirportService airportService;
 
-    @Autowired
-    private CarrierService carrierService;
-    
     @Autowired
     private ApisMessageRepository msgDao;
     
@@ -127,8 +122,8 @@ public class ApisMessageService {
             }
             
             Set<Traveler> pax = new HashSet<>();        
-            for (PaxVo pvo : m.getPassengers()) {
-                Traveler p = convertPaxVo(pvo);
+            for (TravelerVo pvo : m.getPassengers()) {
+                Traveler p = convertTravelerVo(pvo);
                 pax.add(p);
             }
     
@@ -150,7 +145,7 @@ public class ApisMessageService {
         }
     }
     
-    private Traveler convertPaxVo(PaxVo vo) throws ParseException {
+    private Traveler convertTravelerVo(TravelerVo vo) throws ParseException {
         Traveler p = null;
         switch (vo.getPaxType()) {
         case "P":
@@ -165,28 +160,29 @@ public class ApisMessageService {
         }
 
         BeanUtils.copyProperties(vo, p);
-        p.setGender(Gender.valueOf(vo.getGender()));
         
-        Airport debark = convertAirport(vo.getDebarkation());
+        String airportCode = vo.getDebarkation();
+        p.setDebarkation(airportCode);
+        Airport debark = getAirport(airportCode);
         if (debark != null) {
-            p.setDebarkation(debark);
             p.setDebarkCountry(debark.getCountry());
         }
 
-        Airport embark = convertAirport(vo.getEmbarkation());
+        airportCode = vo.getEmbarkation();
+        p.setEmbarkation(airportCode);
+        Airport embark = getAirport(airportCode);
         if (embark != null) {
-            p.setEmbarkation(embark);
             p.setEmbarkCountry(embark.getCountry());
         }
         
-        p.setCitizenshipCountry(convertCountry(vo.getCitizenshipCountry()));
-        p.setResidencyCountry(convertCountry(vo.getResidencyCountry()));
+        p.setCitizenshipCountry(vo.getCitizenshipCountry());
+        p.setResidencyCountry(vo.getResidencyCountry());
         
         for (DocumentVo dvo : vo.getDocuments()) {
-            Passport d = new Passport();
+            Document d = new Document();
             BeanUtils.copyProperties(dvo, d);
             d.setTraveler(p);
-            d.setIssuanceCountry(convertCountry(dvo.getIssuanceCountry()));
+            d.setIssuanceCountry(dvo.getIssuanceCountry());
             p.getDocuments().add(d);
         }
 
@@ -205,32 +201,30 @@ public class ApisMessageService {
                 
         Flight f = new Flight();
         BeanUtils.copyProperties(vo, f);
-        f.setCarrier(convertCarrier(vo.getCarrier()));
+        f.setCarrier(vo.getCarrier());
         
-        Airport dest = convertAirport(vo.getDestination());
-        Country destCountry = null;
+        f.setDestination(vo.getDestination());
+        Airport dest = getAirport(vo.getDestination());
+        String destCountry = null;
         if (dest != null) {
             destCountry = dest.getCountry();
+            f.setDestinationCountry(destCountry);
         }
-        f.setDestination(dest);
-        f.setDestinationCountry(destCountry);
         
-        Airport origin = convertAirport(vo.getOrigin());
-        Country originCountry = null;
+        f.setOrigin(vo.getOrigin());
+        Airport origin = getAirport(vo.getOrigin());
+        String originCountry = null;
         if (origin != null) {
             originCountry = origin.getCountry();
+            f.setOriginCountry(originCountry);
         }
-        f.setOrigin(origin);
-        f.setOriginCountry(originCountry);
         
-        if (destCountry != null && originCountry != null) {
-            if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
-                f.setDirection(FlightDirection.CONTINUANCE);
-            } else if (homeCountry.equals(originCountry)) {
-                f.setDirection(FlightDirection.OUTBOUND);            
-            } else if (homeCountry.equals(destCountry)) {
-                f.setDirection(FlightDirection.INBOUND);                        
-            }
+        if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
+            f.setDirection(FlightDirection.CONTINUANCE);
+        } else if (homeCountry.equals(originCountry)) {
+            f.setDirection(FlightDirection.OUTBOUND);            
+        } else if (homeCountry.equals(destCountry)) {
+            f.setDirection(FlightDirection.INBOUND);                        
         }
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #
@@ -243,24 +237,7 @@ public class ApisMessageService {
         return f;
     }
     
-    private Country convertCountry(String c) throws ParseException {
-        if (c == null) return null;
-        
-        Country rv = null;
-        if (c.length() == 2) {
-            rv = countryService.getCountryByTwoLetterCode(c);
-        } else if (c.length() == 3) {
-            rv = countryService.getCountryByThreeLetterCode(c);
-        }
-        
-        if (rv == null) {
-            throw new ParseException("Unknown country code: " + c);
-        }
-        
-        return rv;
-    }
-    
-    private Airport convertAirport(String a) throws ParseException {
+    private Airport getAirport(String a) throws ParseException {
         if (a == null) return null;
         
         Airport rv = null;
@@ -268,27 +245,6 @@ public class ApisMessageService {
             rv = airportService.getAirportByThreeLetterCode(a);
         } else if (a.length() == 4) {
             rv = airportService.getAirportByFourLetterCode(a);
-        }
-
-        if (rv == null) {
-            throw new ParseException("Unknown airport code: " + a);
-        }
-
-        return rv;
-    }
-    
-    private Carrier convertCarrier(String c) throws ParseException {
-        if (c == null) return null;
-        
-        Carrier rv = null;
-        if (c.length() == 3) {
-            rv = carrierService.getCarrierByThreeLetterCode(c);
-        } else if (c.length() == 2) {
-            rv = carrierService.getCarrierByTwoLetterCode(c);
-        }
-        
-        if (rv == null) {
-            throw new ParseException("Unknown carrier code: " + c);
         }
 
         return rv;

@@ -102,10 +102,10 @@ public class AbstractRestServiceControllerIT {
 		//
 		// List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
 		//
-		// QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name", "IN",
+		// QueryTerm trm2 = new QueryTerm("Pax", "embarkation", "IN",
 		// new ValueObject("String", new String[] { "DBY", "PKY", "FLT" }));
 		// rules2.add(trm2);
-		// rules2.add(new QueryTerm("Pax", "debarkation.name", "EQUAL",
+		// rules2.add(new QueryTerm("Pax", "debarkation", "EQUAL",
 		// new ValueObject("IAD")));
 		// queryObjectEmbedded.setRules(rules2);
 		//

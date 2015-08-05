@@ -1,30 +1,5 @@
 package gov.gtas.querybuilder.service;
 
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Passport;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.User;
-import gov.gtas.model.Visa;
-import gov.gtas.model.udr.EntityAttributeConstants;
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
-import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-import gov.gtas.model.udr.json.QueryConditionEnum;
-import gov.gtas.model.udr.json.QueryEntity;
-import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.model.udr.json.QueryTerm;
-import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
-import gov.gtas.querybuilder.config.QueryBuilderAppConfig;
-import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.OperatorEnum;
-import gov.gtas.querybuilder.exceptions.InvalidQueryException;
-import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
-import gov.gtas.querybuilder.model.QueryRequest;
-import gov.gtas.querybuilder.model.UserQuery;
-import gov.gtas.util.DateCalendarUtils;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +17,29 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.Document;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.User;
+import gov.gtas.model.udr.EntityAttributeConstants;
+import gov.gtas.model.udr.enumtype.EntityLookupEnum;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
+import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+import gov.gtas.model.udr.json.QueryConditionEnum;
+import gov.gtas.model.udr.json.QueryEntity;
+import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
+import gov.gtas.querybuilder.config.QueryBuilderAppConfig;
+import gov.gtas.querybuilder.constants.Constants;
+import gov.gtas.querybuilder.enums.OperatorEnum;
+import gov.gtas.querybuilder.exceptions.InvalidQueryException;
+import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.model.QueryRequest;
+import gov.gtas.querybuilder.model.UserQuery;
+import gov.gtas.util.DateCalendarUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {CommonServicesConfig.class, QueryBuilderAppConfig.class})
@@ -216,16 +214,9 @@ public class QueryBuilderServiceIT {
 				if(docs != null) {
 					if(docs.iterator().hasNext()) {
 						Document doc = docs.iterator().next();
-						
 						docNumber = doc.getDocumentNumber();
-						
-						if(doc instanceof Passport) {
-							docType = "P";
-						}
-						else if(doc instanceof Visa) {
-							docType = "V";
-						}
-						docIssuanceCountry = doc.getIssuanceCountry().getIso2();
+						docType = doc.getDocumentType();
+						docIssuanceCountry = doc.getIssuanceCountry();
 					}
 				}
 
@@ -238,10 +229,10 @@ public class QueryBuilderServiceIT {
 					if(flights.iterator().hasNext()) {
 						Flight flight = flights.iterator().next();
 						
-						carrierCode = flight.getCarrier() != null ? flight.getCarrier().getIata() : "";
+						carrierCode = flight.getCarrier() != null ? flight.getCarrier() : "";
 						flightNumber = flight.getFlightNumber();
-						origin = flight.getOrigin() != null ? flight.getOrigin().getIata() : "";
-						destination  = flight.getDestination() != null ? flight.getDestination().getIata() : "";
+						origin = flight.getOrigin() != null ? flight.getOrigin() : "";
+						destination  = flight.getDestination() != null ? flight.getDestination() : "";
 						departureDt = dtFormat.format(flight.getEtd());
 						arrivalDt = dtFormat.format(flight.getEta());
 					}
@@ -540,9 +531,9 @@ public class QueryBuilderServiceIT {
 		queryObjectEmbedded.setCondition("AND");
 		List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
 		
-		QueryTerm trm2 = new QueryTerm("Pax", "embarkation.name","String", "IN", new String[]{"DBY","PKY","FLT"});
+		QueryTerm trm2 = new QueryTerm("Pax", "embarkation","String", "IN", new String[]{"DBY","PKY","FLT"});
 		rules2.add(trm2);
-		rules2.add(new QueryTerm("Pax", "debarkation.name", "String", "EQUAL", new String[]{"IAD"}));
+		rules2.add(new QueryTerm("Pax", "debarkation", "String", "EQUAL", new String[]{"IAD"}));
 		queryObjectEmbedded.setRules(rules2);
 
 		queryObject.setRules(rules);
@@ -564,11 +555,11 @@ public class QueryBuilderServiceIT {
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
 		bldr.addTerm(EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 

@@ -1,23 +1,5 @@
 package gov.gtas.querybuilder.repository;
 
-import gov.gtas.model.Flight;
-import gov.gtas.model.FlightDirection;
-import gov.gtas.model.Gender;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.User;
-import gov.gtas.model.udr.json.QueryEntity;
-import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.model.udr.json.QueryTerm;
-import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
-import gov.gtas.querybuilder.enums.TypeEnum;
-import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
-import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
-import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
-import gov.gtas.querybuilder.model.UserQuery;
-import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +20,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.Errors;
+
+import gov.gtas.model.Flight;
+import gov.gtas.model.FlightDirection;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.User;
+import gov.gtas.model.udr.json.QueryEntity;
+import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.constants.Constants;
+import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.querybuilder.enums.OperatorEnum;
+import gov.gtas.querybuilder.enums.TypeEnum;
+import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
+import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
+import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
+import gov.gtas.querybuilder.model.UserQuery;
+import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 
 @Repository
 public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
@@ -520,16 +519,10 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					}
 					else {
 						if(field != null && field.equals(GENDER)) {
-							List<Gender> vals = new ArrayList<>();
+							List<String> vals = new ArrayList<>();
 							if(values != null) {
 								for(String val : values) {
-									if(val.equalsIgnoreCase(FEMALE)) {
-										vals.add(Gender.F);
-									} else if(val.equalsIgnoreCase(MALE)){
-										vals.add(Gender.M);
-									} else {
-										vals.add(Gender.U);
-									}
+								    vals.add(val);
 								}
 							}
 							query.setParameter(positionalParameter.intValue(), vals);
@@ -579,9 +572,9 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					else {
 						if(field != null && field.equals(GENDER)) {
 							if(value != null && value.equalsIgnoreCase(FEMALE)) {
-								query.setParameter(positionalParameter.intValue(), Gender.F);
+								query.setParameter(positionalParameter.intValue(), FEMALE);
 							} else {
-								query.setParameter(positionalParameter.intValue(), Gender.M);
+								query.setParameter(positionalParameter.intValue(), MALE);
 							}
 						}
 						else if(field != null && field.equals(DIRECTION)) { 

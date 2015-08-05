@@ -3,6 +3,9 @@ package gov.gtas.model.udr.json;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
@@ -112,5 +115,9 @@ public class QueryTerm implements QueryEntity {
 	public void setValue(String[] value) {
 		this.value = value;
 	}
-     
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    } 
 }

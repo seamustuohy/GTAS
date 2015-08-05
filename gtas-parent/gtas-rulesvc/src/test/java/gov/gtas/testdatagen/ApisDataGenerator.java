@@ -1,19 +1,5 @@
 package gov.gtas.testdatagen;
 
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.FlightDirection;
-import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Passport;
-import gov.gtas.model.Pax;
-import gov.gtas.model.Traveler;
-import gov.gtas.repository.AirportRepository;
-import gov.gtas.repository.ApisMessageRepository;
-import gov.gtas.repository.CarrierRepository;
-import gov.gtas.repository.CountryRepository;
-import gov.gtas.util.DateCalendarUtils;
-
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,6 +8,20 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
+
+import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Document;
+import gov.gtas.model.Flight;
+import gov.gtas.model.FlightDirection;
+import gov.gtas.model.MessageStatus;
+import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
+import gov.gtas.model.lookup.DocumentTypeCode;
+import gov.gtas.repository.AirportRepository;
+import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.CarrierRepository;
+import gov.gtas.repository.CountryRepository;
+import gov.gtas.util.DateCalendarUtils;
 
 @Component
 public class ApisDataGenerator {
@@ -70,8 +70,8 @@ public class ApisDataGenerator {
 	    	passenger.setDocuments(createDocuments(new String[]{args[0]}, new String[]{args[1]}));
 	    	passenger.setFirstName(args[2]);
 	    	passenger.setLastName(args[3]);
-	    	passenger.setCitizenshipCountry(countryRepository.getCountryByTwoLetterCode(args[4]).get(0));
-	    	passenger.setEmbarkation(airportRepository.getAirportByThreeLetterCode(args[5]).get(0));
+	    	passenger.setCitizenshipCountry(args[4]);
+	    	passenger.setEmbarkation(args[5]);
 	    	travelers.add(passenger);
     	}
    	    return travelers;
@@ -87,12 +87,12 @@ public class ApisDataGenerator {
     	       }
     			);
     	flight.setPassengers(travelers);
-    	flight.setCarrier( carrierRepository.getCarrierByTwoLetterCode("V7").get(0));//Continental
-    	flight.setDestination(airportRepository.getAirportByThreeLetterCode("BOB").get(0));
+    	flight.setCarrier("V7");//Continental
+    	flight.setDestination("BOB");
     	flight.setFlightDate(new Date());
     	flight.setFlightNumber("0012");
-    	flight.setOrigin(airportRepository.getAirportByThreeLetterCode("YHZ").get(0));
-    	flight.setOriginCountry(countryRepository.getCountryByTwoLetterCode("CA").get(0));
+    	flight.setOrigin("YHZ");
+    	flight.setOriginCountry("CA");
     	flight.setDirection(FlightDirection.INBOUND);
     	flights.add(flight);
     	
@@ -104,8 +104,8 @@ public class ApisDataGenerator {
     	       }
     			);
     	flight.setPassengers(travelers);
-    	flight.setCarrier( carrierRepository.getCarrierByTwoLetterCode("CO").get(0));//Continental
-    	flight.setDestination(airportRepository.getAirportByThreeLetterCode("HOD").get(0));
+    	flight.setCarrier("CO");//Continental
+    	flight.setDestination("HOD");
     	Date flDate = null;
     	try{
     	    flDate = DateCalendarUtils.parseJsonDate("2015-07-20");
@@ -115,8 +115,8 @@ public class ApisDataGenerator {
     		pe.printStackTrace();
     	}
     	flight.setFlightNumber("0017");
-    	flight.setOrigin(airportRepository.getAirportByThreeLetterCode("LHR").get(0));//Bora Bora
-    	flight.setOriginCountry(countryRepository.getCountryByTwoLetterCode("GB").get(0));
+    	flight.setOrigin("LHR");//Bora Bora
+    	flight.setOriginCountry("GB");
     	flight.setDirection(FlightDirection.INBOUND);
     	flights.add(flight);
 
@@ -126,10 +126,11 @@ public class ApisDataGenerator {
     	Set<Document> docs = new HashSet<Document>();
     	for(int i = 0; i < iso2Array.length; ++i){
     		String iso2 = iso2Array[i];
-    		Document doc = new Passport();
+    		Document doc = new Document();
+    		doc.setDocumentType(DocumentTypeCode.P.name());
     		doc.setId(7786L);
     		doc.setDocumentNumber(DOCUMENT_NUMBER);
-    		doc.setIssuanceCountry(countryRepository.getCountryByTwoLetterCode(iso2).get(0));
+    		doc.setIssuanceCountry(iso2);
     		try{
     		   doc.setIssuanceDate(DateCalendarUtils.parseJsonDate(issueDates[i]));
     		}catch(ParseException pe){

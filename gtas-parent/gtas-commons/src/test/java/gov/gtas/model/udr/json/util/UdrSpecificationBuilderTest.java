@@ -51,7 +51,7 @@ public class UdrSpecificationBuilderTest {
 				QueryConditionEnum.OR);
 		// add terms and then another query object
 		builder.addTerm(EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		builder.addNestedQueryObject(QueryConditionEnum.AND);
@@ -60,7 +60,7 @@ public class UdrSpecificationBuilderTest {
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		builder.addTerm(EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "DBY" });
 
@@ -76,7 +76,7 @@ public class UdrSpecificationBuilderTest {
 		List<QueryEntity> rules = topLevel.getRules();
 		assertEquals(2, rules.size());
 		verifyQueryTerm(rules.get(0), EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		assertTrue(rules.get(1) instanceof QueryObject);
@@ -89,7 +89,7 @@ public class UdrSpecificationBuilderTest {
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		verifyQueryTerm(rules.get(1), EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "DBY" });
 	}
@@ -127,11 +127,11 @@ public class UdrSpecificationBuilderTest {
 		rules = qobj2.getRules();
 		assertEquals(2, rules.size());
 		verifyQueryTerm(rules.get(0), EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN,
 				new String[] { "DBY", "PKY", "FLT"});
 		verifyQueryTerm(rules.get(1), EntityLookupEnum.Pax,
-				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT_NAME,
+				EntityAttributeConstants.PAX_ATTTR_DEBARKATION_AIRPORT,
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 	}

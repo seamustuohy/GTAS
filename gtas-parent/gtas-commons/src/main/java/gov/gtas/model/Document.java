@@ -1,28 +1,20 @@
 package gov.gtas.model;
 
-import gov.gtas.model.lookup.Country;
-
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "document")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="document_type",
-    discriminatorType=DiscriminatorType.STRING
-)
-public abstract class Document extends BaseEntity {
+public class Document extends BaseEntity {
     public Document() { }
 
+    @Column(name = "document_type", length = 2)
+    private String documentType;
+    
     @Column(name = "document_number")
     private String documentNumber;
     
@@ -32,13 +24,19 @@ public abstract class Document extends BaseEntity {
     @Column(name = "issuance_date")
     private Date issuanceDate;
     
-    @ManyToOne
-    @JoinColumn(name = "issuance_country_id")
-    private Country issuanceCountry;
+    @Column(name = "issuance_country")
+    private String issuanceCountry;
     
     @ManyToOne
-    @JoinColumn
     private Traveler traveler;
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
 
     public Date getExpirationDate() {
         return expirationDate;
@@ -64,11 +62,11 @@ public abstract class Document extends BaseEntity {
         this.issuanceDate = issuanceDate;
     }
 
-    public Country getIssuanceCountry() {
+    public String getIssuanceCountry() {
         return issuanceCountry;
     }
 
-    public void setIssuanceCountry(Country issuanceCountry) {
+    public void setIssuanceCountry(String issuanceCountry) {
         this.issuanceCountry = issuanceCountry;
     }
 

@@ -18,9 +18,6 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DocumentConditionBuilder.class);
 	
-	private static String[] CLASS_INDICATORS = new String[]{"P","V"};
-	private static String[] CLASS_NAMES = new String[]{EntityLookupEnum.Passport.name(), EntityLookupEnum.Visa.name()};
-	
 	//TODO NOT PASSPORT and NOT VISA conditions
     private boolean passport;
     private boolean visa;
@@ -56,48 +53,50 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 		this.travelerHasNoRuleCondition = false;
 	}
 
+	// TODO: Amit review
+
 	@Override
 	protected void addSpecialConditionsWithoutActualConditions(
 			StringBuilder bldr) {
-		if(travelerHasNoRuleCondition){
-			if(isPassport()){
-				bldr.append(getDrlVariableName()).append(":");
-				bldr.append(EntityLookupEnum.Passport).append("()\n")
-				.append(travelerVariableName).append(":").append(EntityEnum.TRAVELER.getEntityName()).append("(id == ")
-				.append(getDrlVariableName()).append(".")
-				.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(")\n");				
-			} else if (isVisa()){
-				bldr.append(getDrlVariableName()).append(":").append(EntityLookupEnum.Visa).append("()\n")
-				.append(travelerVariableName).append(":").append(EntityEnum.TRAVELER.getEntityName()).append("(id == ")
-				.append(getDrlVariableName()).append(".")
-				.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(")\n");
-			}
-		} else {
-			if(isPassport()){
-				bldr.append(getDrlVariableName()).append(":");
-				bldr.append(EntityLookupEnum.Passport)
-				.append("(").append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(" == ")
-				.append(travelerVariableName).append(".id)\n");
-			} else if (isVisa()){
-				bldr.append(getDrlVariableName()).append(":").append(EntityLookupEnum.Visa)
-				.append("(").append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(" == ")
-				.append(travelerVariableName).append(".id)\n");
-	
-			}			
-		}
+//		if(travelerHasNoRuleCondition){
+//			if(isPassport()){
+//				bldr.append(getDrlVariableName()).append(":");
+//				bldr.append(EntityLookupEnum.Passport).append("()\n")
+//				.append(travelerVariableName).append(":").append(EntityEnum.TRAVELER.getEntityName()).append("(id == ")
+//				.append(getDrlVariableName()).append(".")
+//				.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(")\n");				
+//			} else if (isVisa()){
+//				bldr.append(getDrlVariableName()).append(":").append(EntityLookupEnum.Visa).append("()\n")
+//				.append(travelerVariableName).append(":").append(EntityEnum.TRAVELER.getEntityName()).append("(id == ")
+//				.append(getDrlVariableName()).append(".")
+//				.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(")\n");
+//			}
+//		} else {
+//			if(isPassport()){
+//				bldr.append(getDrlVariableName()).append(":");
+//				bldr.append(EntityLookupEnum.Passport)
+//				.append("(").append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(" == ")
+//				.append(travelerVariableName).append(".id)\n");
+//			} else if (isVisa()){
+//				bldr.append(getDrlVariableName()).append(":").append(EntityLookupEnum.Visa)
+//				.append("(").append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(" == ")
+//				.append(travelerVariableName).append(".id)\n");
+//	
+//			}			
+//		}
 	}
 
 	@Override
 	protected void addSpecialConditions(StringBuilder bldr) {
 		if(travelerHasNoRuleCondition){
 			if(isPassport()){
-				bldr.append(EntityLookupEnum.Passport).append("(id == ").append(getDrlVariableName()).append(".id)\n")
+				bldr.append(EntityLookupEnum.Document).append("(documentType == \"P\")\n")
 				.append(travelerVariableName).append(":").append(EntityEnum.TRAVELER.getEntityName()).append("(id == ")
 				.append(getDrlVariableName()).append(".")
 				.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(")\n");
 
 			} else if (isVisa()){
-				bldr.append(EntityLookupEnum.Visa).append("(id == ").append(getDrlVariableName()).append(".id)\n")
+				bldr.append(EntityLookupEnum.Document).append("(documentType == \"V\")\n")
 				.append(travelerVariableName).append(":").append(EntityEnum.TRAVELER.getEntityName()).append("(id == ")
 				.append(getDrlVariableName()).append(".")
 				.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(")\n");
@@ -109,18 +108,17 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 			
 		} else {
 			if(isPassport()){
-				bldr.append(EntityLookupEnum.Passport).append("(id == ").append(getDrlVariableName()).append(".id, ")
+				bldr.append(EntityLookupEnum.Document).append("(documentType == \"P\")\n")
 				.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(" == ")
 				.append(travelerVariableName).append(".id)\n");			
 			} else if (isVisa()){
-				bldr.append(EntityLookupEnum.Visa).append("(id == ").append(getDrlVariableName()).append(".id, ")
+				bldr.append(EntityLookupEnum.Document).append("(documentType == \"V\")\n")
 				.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(" == ")
 				.append(travelerVariableName).append(".id)\n");
 			} else {
 				bldr.append(EntityLookupEnum.Document).append("(id == ").append(getDrlVariableName()).append(".id, ")
 				.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()).append(" == ")
-				.append(travelerVariableName).append(".id)\n");
-				
+				.append(travelerVariableName).append(".id)\n");				
 			}
 		}
 	}

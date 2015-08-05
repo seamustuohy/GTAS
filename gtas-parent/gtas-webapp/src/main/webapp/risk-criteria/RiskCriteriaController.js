@@ -1,14 +1,6 @@
-app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, riskCriteriaService) {
-    'use strict';
+app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, riskCriteriaService, $timeout) {
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [];
-
-    var datepickerOptions = {
-        format: 'yyyy-mm-dd',
-        autoClose: true
-    };
-
-    $('.datepicker').datepicker(datepickerOptions);
 
     $scope.loadRule = function () {
         //<i class="glyphicon glyphicon-pencil"></i>
@@ -56,7 +48,7 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
         }
     });
 
-    $scope.buildAfterEntitiesLoaded();
+    $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
 
     $scope.delete = function () {
         riskCriteriaService.ruleDelete($scope.ruleId, $scope.authorId).then(function (myData) {
@@ -65,15 +57,23 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
         });
     };
 
-    $scope.summaryDefaults = {title: null, description: null, startDate: $scope.today, endDate: null, enabled: true};
+    $scope.summaryDefaults = {title: '', description: null, startDate: $scope.today.toString(), endDate: null, enabled: true};
 
+    $($scope.startDate).datepicker({
+        minDate: "today",
+        startDate: "today",
+        format: 'yyyy-mm-dd',
+        autoClose: true
+    });
+
+//    $scope.newRule();
     $scope.saving = false;
     $scope.save = function() {
         if ($scope.saving) return;
-        $scope.saving = true;
+//        $scope.saving = true;
         var ruleObject;
         var startDate = moment($scope.startDate, $scope.formats, true);
-        var endDate = $scope.endDate || moment($scope.endDate, $scope.formats, true);
+        var endDate = moment($scope.endDate, $scope.formats, true);
 
         $scope.title = $scope.title.trim();
         if (!$scope.title.length ) {
@@ -129,13 +129,20 @@ app.controller('RiskCriteriaController', function($scope, $injector, QueryBuilde
         $scope.tableParams.reload();
 
         riskCriteriaService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
+            var $tableRows = $('table tbody').eq(0).find('tr');
             if (typeof myData.errorCode !== "undefined")
             {
                 alert(myData.errorMessage);
                 return;
             }
             $scope.tableParams.reload();
-            $scope.saving = false;
+            $timeout(function () {
+                if ($scope.ruleId === null) {
+                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click()
+                }
+                $scope.ruleId = $scope.ruleId = myData.responseDetails[0].attributeValue || null;
+                $scope.saving = false;
+            }, 500);
         });
     };
 });

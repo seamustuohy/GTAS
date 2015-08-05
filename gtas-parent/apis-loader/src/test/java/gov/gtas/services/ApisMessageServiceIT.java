@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.paxlst.vo.PaxlstMessageVo;
+import gov.gtas.parsers.paxlst.PaxlstMessageVo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)

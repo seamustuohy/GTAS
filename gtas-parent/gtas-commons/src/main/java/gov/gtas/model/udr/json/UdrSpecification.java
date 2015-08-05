@@ -3,6 +3,9 @@ package gov.gtas.model.udr.json;
 import gov.gtas.model.udr.json.QueryObject;
 
 import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * JSON object format for communicating with the UI.
  * @author GTAS3 (AB)
@@ -70,4 +73,8 @@ public class UdrSpecification implements Serializable {
 		this.summary = summary;
 	}
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    } 
 }

@@ -101,6 +101,8 @@ public class RuleConditionBuilderTest {
 		+"$t:Traveler(id == $d.traveler.id)", 
 		result.toString().trim());
 	}
+	
+	// TODO: Amit review
 	@Test
 	public void testMultipleConditionsDocument2() throws ParseException {
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
@@ -115,7 +117,7 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY.getFieldName()+" != \"US\")\n"
-		+"Passport(id == $d.id)\n"
+		+"Document(documentType == \"P\")\n"
 		+"$t:Traveler(id == $d.traveler.id)", 
 		result.toString().trim());
 	}

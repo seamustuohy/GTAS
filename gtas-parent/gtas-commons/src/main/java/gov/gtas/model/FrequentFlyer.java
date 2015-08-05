@@ -1,6 +1,7 @@
 package gov.gtas.model;
 
 import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +12,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "frequent_flyer")
 public class FrequentFlyer extends BaseEntityAudit {
-
-	
 	@Column(name = "airline_code", length = 4)
     private String airlineCode;
 	
@@ -22,7 +21,6 @@ public class FrequentFlyer extends BaseEntityAudit {
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="pnr_id",referencedColumnName="id")     
     private PnrData pnrData;
-
 
 	public String getAirlineCode() {
 		return airlineCode;

@@ -1,4 +1,4 @@
-package gov.gtas.parsers.paxlst.vo;
+package gov.gtas.parsers.vo.air;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

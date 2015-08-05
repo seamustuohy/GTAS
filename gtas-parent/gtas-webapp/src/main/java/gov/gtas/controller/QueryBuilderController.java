@@ -4,10 +4,8 @@ import gov.gtas.constants.Constants;
 import gov.gtas.model.Crew;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Passport;
 import gov.gtas.model.Pax;
 import gov.gtas.model.Traveler;
-import gov.gtas.model.Visa;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
 import gov.gtas.querybuilder.enums.EntityEnum;
@@ -63,8 +61,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class QueryBuilderController {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderController.class);
 	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-	private String PASSPORT = "P";
-	private String VISA = "V";
 	
 	@Autowired
 	QueryBuilderService queryService;
@@ -203,12 +199,12 @@ public class QueryBuilderController {
 					
 					qbFlight.setId(flight.getId());
 					qbFlight.setFlightNumber(flight.getFlightNumber());
-					qbFlight.setCarrierCode(flight.getCarrier() != null ? flight.getCarrier().getIata() : "");
-					qbFlight.setOrigin(flight.getOrigin() != null ? flight.getOrigin().getIata() : "");
-					qbFlight.setOriginCountry(flight.getOriginCountry() != null ? flight.getOriginCountry().getIso2() : "");
+					qbFlight.setCarrierCode(flight.getCarrier() != null ? flight.getCarrier() : "");
+					qbFlight.setOrigin(flight.getOrigin() != null ? flight.getOrigin() : "");
+					qbFlight.setOriginCountry(flight.getOriginCountry() != null ? flight.getOriginCountry() : "");
 					qbFlight.setDepartureDt(dtFormat.format(flight.getEtd()));
-					qbFlight.setDestination(flight.getDestination() != null ? flight.getDestination().getIata() : "");
-					qbFlight.setDestinationCountry(flight.getDestinationCountry() != null ? flight.getDestinationCountry().getIso2() : "");
+					qbFlight.setDestination(flight.getDestination() != null ? flight.getDestination() : "");
+					qbFlight.setDestinationCountry(flight.getDestinationCountry() != null ? flight.getDestinationCountry() : "");
 					qbFlight.setArrivalDt(dtFormat.format(flight.getEta()));
 					
 					qbFlights.add(qbFlight);
@@ -253,7 +249,7 @@ public class QueryBuilderController {
 					
 					qbPassenger.setGender(traveler.getGender() != null ? traveler.getGender().toString() : "");
 					qbPassenger.setDob(dobFormat.format(traveler.getDob()));
-					qbPassenger.setCitizenship(traveler.getCitizenshipCountry() != null ? traveler.getCitizenshipCountry().getIso2() : "");
+					qbPassenger.setCitizenship(traveler.getCitizenshipCountry() != null ? traveler.getCitizenshipCountry() : "");
 					
 					// Document information
 					Set<Document> docs = traveler.getDocuments();
@@ -262,14 +258,8 @@ public class QueryBuilderController {
 							Document doc = docs.iterator().next();
 							
 							docNumber = doc.getDocumentNumber();
-							
-							if(doc instanceof Passport) {
-								docType = PASSPORT;
-							}
-							else if(doc instanceof Visa) {
-								docType = VISA;
-							}
-							docIssuanceCountry = doc.getIssuanceCountry().getIso2();
+							docType = doc.getDocumentType();
+							docIssuanceCountry = doc.getIssuanceCountry();
 						}
 					}
 					qbPassenger.setDocumentNumber(docNumber);
@@ -282,10 +272,10 @@ public class QueryBuilderController {
 						if(flights.iterator().hasNext()) {
 							Flight flight = flights.iterator().next();
 							
-							carrierCode = flight.getCarrier() != null ? flight.getCarrier().getIata() : "";
+							carrierCode = flight.getCarrier() != null ? flight.getCarrier() : "";
 							flightNumber = flight.getFlightNumber();
-							origin = flight.getOrigin() != null ? flight.getOrigin().getIata() : "";
-							destination  = flight.getDestination() != null ? flight.getDestination().getIata() : "";
+							origin = flight.getOrigin() != null ? flight.getOrigin() : "";
+							destination  = flight.getDestination() != null ? flight.getDestination() : "";
 							departureDt = dtFormat.format(flight.getEtd());
 							arrivalDt = dtFormat.format(flight.getEta());
 						}

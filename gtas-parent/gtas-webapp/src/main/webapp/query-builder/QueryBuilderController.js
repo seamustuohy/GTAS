@@ -1,5 +1,4 @@
-app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService) {
-    'use strict';
+app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService, queryService, $timeout) {
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [];
 
@@ -34,12 +33,8 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
                     data.push(obj);
                 });
 
-                filteredData = params.filter() ?
-                    $filter('filter')(data, params.filter()) :
-                    data;
-                orderedData = params.sorting() ?
-                    $filter('orderBy')(filteredData, params.orderBy()) :
-                    data;
+                filteredData = params.filter() ? $filter('filter')(data, params.filter()) : data;
+                orderedData = params.sorting() ? $filter('orderBy')(filteredData, params.orderBy()) : data;
 
                 params.total(orderedData.length); // set total for recalc pagination
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
@@ -56,13 +51,19 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         });
     };
 
-    $scope.summaryDefaults = {description: null, title: null};
+    $scope.summaryDefaults = {description: null, title: ''};
+    $scope.ruleId = null;
+    $scope.saving = false;
 
     $scope.save = function () {
         var queryObject;
+        if ($scope.saving) {
+            return;
+        }
         $scope.title = $scope.title.trim();
-        if (!$scope.title.length ) {
+        if (!$scope.title.length) {
             alert('title can not be blank!');
+            $scope.saving = false;
             return;
         }
         queryObject = {
@@ -74,12 +75,38 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         };
 
         queryBuilderService.saveQuery(queryObject).then(function (myData) {
-            if (typeof myData.errorCode !== "undefined")
-            {
+            var $tableRows = $('table tbody').eq(0).find('tr');
+            if (myData.errorCode !== undefined) {
                 alert(myData.errorMessage);
+                $scope.saving = false;
                 return;
             }
             $scope.tableParams.reload();
+            $timeout(function () {
+                if ($scope.ruleId === null) {
+                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click();
+                }
+                $scope.ruleId = myData.result[0].id || null;
+                $scope.saving = false;
+            }, 500);
+        });
+    };
+
+    $scope.serviceURLs = {
+        FLIGHT: '/gtas/queryFlights/',
+        TRAVELER: '/gtas/queryPassengers/'
+    };
+
+    $scope.viewType = null;
+    $scope.viewTypeChange = function () {
+        var baseUrl = $scope.serviceURLs[$scope.viewType],
+            data = $scope.$builder.queryBuilder('saveRules');
+        console.log($scope.viewType);
+        console.log(baseUrl);
+        console.log(data);
+        queryService.executeQuery(baseUrl, data).then(function (myData) {
+            console.log(myData);
+            alert('queryService called');
         });
     };
 });

@@ -2,16 +2,6 @@ package gov.gtas.rule;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import gov.gtas.bo.RuleExecutionStatistics;
-import gov.gtas.config.RuleServiceConfig;
-import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.error.CommonServiceException;
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.svc.TargetingServiceUtils;
 
 import java.util.HashSet;
 
@@ -22,7 +12,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.util.ReflectionTestUtils;
+
+import gov.gtas.bo.RuleExecutionStatistics;
+import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.constant.RuleServiceConstants;
+import gov.gtas.error.CommonServiceException;
+import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Pax;
+import gov.gtas.model.Traveler;
+import gov.gtas.svc.TargetingServiceUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = RuleServiceConfig.class)
@@ -80,14 +79,8 @@ public class RuleRepositoryIT {
 		Pax p = new Pax();
 		p.setFirstName(fn);
 		p.setLastName(ln);
-		p.setEmbarkation(createAirport("Timbuktu"));
+		p.setEmbarkation("Timbuktu");
 		return p;
-	}
-
-	private Airport createAirport(final String airportName) {
-		Airport airport = new Airport();
-		ReflectionTestUtils.setField(airport, "name", airportName);
-		return airport;
 	}
 
 	/**
@@ -99,7 +92,7 @@ public class RuleRepositoryIT {
 		HashSet<Traveler> set = new HashSet<Traveler>();
 		set.add(passenger);
 		flight.setPassengers(set);
-		flight.setDestination(createAirport("foo"));
+		flight.setDestination("foo");
 		HashSet<Flight> flightSet = new HashSet<Flight>();
 		flightSet.add(flight);
 		msg.setFlights(flightSet);

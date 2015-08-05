@@ -1,17 +1,15 @@
 package gov.gtas.model.lookup;
 
-import gov.gtas.model.BaseEntity;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.cache.annotation.Cacheable;
+
+import gov.gtas.model.BaseEntity;
 
 @Cacheable
 @Entity
@@ -27,9 +25,7 @@ public class Airport extends BaseEntity {
     @Column(length=4)
     private String icao;
     
-    @ManyToOne
-    @JoinColumn(referencedColumnName="id")     
-    private Country country;
+    private String country;
     
     private String city;
     
@@ -51,7 +47,7 @@ public class Airport extends BaseEntity {
     public String getIcao() {
         return icao;
     }
-    public Country getCountry() {
+    public String getCountry() {
         return country;
     }
     public String getCity() {

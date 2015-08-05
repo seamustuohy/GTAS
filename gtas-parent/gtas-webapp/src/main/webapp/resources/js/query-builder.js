@@ -232,9 +232,8 @@
             {type: 'is_empty',         nb_inputs: 0, multiple: false, apply_to: ['string']},
             {type: 'is_not_empty',     nb_inputs: 0, multiple: false, apply_to: ['string']},
             {type: 'is_null',          nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean']},
-            {type: 'is_not_null',      nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean']}
+            {type: 'is_not_null',      nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean']},
             /* extending operators for DROOLS */
-            ,
             {type: 'EQUAL',            nb_inputs: 1, multiple: false, apply_to: ['string', 'number', 'datetime', 'date', 'boolean']},
             {type: 'NOT_EQUAL',        nb_inputs: 1, multiple: false, apply_to: ['string', 'number', 'datetime', 'date', 'boolean']},
             {type: 'IN',               nb_inputs: 1, multiple: true,  apply_to: ['string', 'number', 'datetime', 'date']},
@@ -760,7 +759,8 @@
 
         var that = this,
             $inputs = $(),
-            filter = rule.filter;
+            filter = rule.filter,
+            method, args;
 
         for (var i=0; i<rule.operator.nb_inputs; i++) {
             var $ruleInput = $(this.getRuleInput(rule, i));
@@ -777,8 +777,10 @@
             that.status.updating_value = false;
         });
 
-        if (filter.plugin) {
-            $inputs[filter.plugin](filter.plugin_config || {});
+        if (filter.plugin !== undefined) {
+            method = filter.plugin;
+            args = filter.plugin_config !== undefined ? filter.plugin_config : {};
+            $inputs[method](args);
         }
 
         this.trigger('afterCreateRuleInput', rule);
@@ -1066,8 +1068,6 @@
         if (!this.validate()) {
             return {};
         }
-
-        var that = this;
 
         var out = (function parse(group) {
             var data = {
@@ -1822,16 +1822,16 @@
 <dl id="'+ group_id +'" class="rules-group-container"> \
   <dt class="rules-group-header"> \
     <div class="btn-group pull-right group-actions"> \
-      <button type="button" class="btn btn-xs btn-success" data-add="rule"> \
+      <button type="button" class="btn btn-xs btn-primary" data-add="rule"> \
         <i class="' + this.icons.add_rule + '"></i> '+ this.lang.add_rule +' \
       </button> \
       '+ (this.settings.allow_groups===-1 || this.settings.allow_groups>=level ?
-            '<button type="button" class="btn btn-xs btn-success" data-add="group"> \
+            '<button type="button" class="btn btn-xs btn-primary" data-add="group"> \
           <i class="' + this.icons.add_group + '"></i> '+ this.lang.add_group +' \
         </button>'
                 :'') +' \
       '+ (level>1 ?
-            '<button type="button" class="btn btn-xs btn-danger" data-delete="group"> \
+            '<button type="button" class="btn btn-xs btn-primary" data-delete="group"> \
           <i class="' + this.icons.remove_group + '"></i> '+ this.lang.delete_group +' \
         </button>'
                 : '') +' \
@@ -1883,7 +1883,7 @@
 <li id="'+ rule_id +'" class="rule-container"> \
   <div class="rule-header"> \
   <div class="btn-group pull-right rule-actions"> \
-    <button type="button" class="btn btn-xs btn-danger" data-delete="rule"> \
+    <button type="button" class="btn btn-xs btn-primary" data-delete="rule"> \
       <i class="' + this.icons.remove_rule + '"></i> '+ this.lang.delete_rule +' \
     </button> \
   </div> \
@@ -2685,16 +2685,23 @@
         });
 
         this.on('afterCreateRuleOperators', function(e, rule) {
-            rule.$el.find('.rule-operator-container select').removeClass('form-control').selectpicker(options);
+            if (rule.filter.operators && rule.filter.operators === "EQUALS") {
+                rule.$el.find('.rule-operator-container').hide();
+                return;
+            }
+            rule.$el.find('.rule-operator-container').show().find('select').removeClass('form-control').selectpicker(options);
         });
 
         // update selectpicker on change
         this.on('afterUpdateRuleEntity', function(e, rule) {
+            var $filter = rule.$el.find('.rule-filter-container select');
             rule.$el.find('.rule-entity-container select').selectpicker('render');
-        });
-
-        this.on('afterUpdateRuleColumn', function(e, rule) {
-            rule.$el.find('.rule-field-container select').selectpicker('render');
+            // Auto select if only one option and trigger change / update
+            if ($filter.children().length === 2) {
+                $filter.children().last().prop('selected', true);
+                $filter.selectpicker('render');
+                $filter.trigger('change');
+            }
         });
 
         this.on('afterUpdateRuleFilter', function(e, rule) {
@@ -3064,176 +3071,6 @@
 
 // PUBLIC METHODS
 // ===============================
-    QueryBuilder.extend({
-        /**
-         * Get rules as MongoDB query
-         * @param data {object} (optional) rules
-         * @return {object}
-         */
-        getMongo: function(data) {
-            data = (data===undefined) ? this.getRules() : data;
-
-            var that = this;
-
-            return (function parse(data) {
-                if (!data.condition) {
-                    data.condition = that.settings.default_condition;
-                }
-                if (['AND', 'OR'].indexOf(data.condition.toUpperCase()) === -1) {
-                    error('Unable to build MongoDB query with condition "{0}"', data.condition);
-                }
-
-                if (!data.rules) {
-                    return {};
-                }
-
-                var parts = [];
-
-                data.rules.forEach(function(rule) {
-                    if (rule.rules && rule.rules.length>0) {
-                        parts.push(parse(rule));
-                    }
-                    else {
-                        var mdb = that.settings.mongoOperators[rule.operator],
-                            ope = that.getOperatorByType(rule.operator),
-                            values = [];
-
-                        if (mdb === undefined) {
-                            error('Unknown MongoDB operation for operator "{0}"', rule.operator);
-                        }
-
-                        if (ope.nb_inputs !== 0) {
-                            if (!(rule.value instanceof Array)) {
-                                rule.value = [rule.value];
-                            }
-
-                            rule.value.forEach(function(v) {
-                                values.push(changeType(v, rule.type, false));
-                            });
-                        }
-
-                        var part = {};
-                        part[rule.field] = mdb.call(that, values);
-                        parts.push(part);
-                    }
-                });
-
-                var res = {};
-                if (parts.length > 0) {
-                    res['$'+data.condition.toLowerCase()] = parts;
-                }
-                return res;
-            }(data));
-        },
-
-        /**
-         * Convert MongoDB object to rules
-         * @param data {object} query object
-         * @return {object}
-         */
-        getRulesFromMongo: function(data) {
-            if (data === undefined || data === null) {
-                return null;
-            }
-
-            var that = this,
-                conditions = ['$and','$or'];
-
-            return (function parse(data) {
-                var topKeys = Object.keys(data);
-
-                if (topKeys.length > 1) {
-                    error('Invalid MongoDB query format.');
-                }
-                if (conditions.indexOf(topKeys[0].toLowerCase()) === -1) {
-                    error('Unable to build Rule from MongoDB query with condition "{0}"', topKeys[0]);
-                }
-
-                var condition = topKeys[0].toLowerCase() === conditions[0] ? 'AND' : 'OR',
-                    rules = data[topKeys[0]],
-                    parts = [];
-
-                rules.forEach(function(rule) {
-                    var keys = Object.keys(rule);
-
-                    if (conditions.indexOf(keys[0].toLowerCase()) !== -1) {
-                        parts.push(parse(rule));
-                    }
-                    else {
-                        var field = keys[0],
-                            value = rule[field];
-
-                        var operator = that.determineMongoOperator(value, field);
-                        if (operator === undefined) {
-                            error('Invalid MongoDB query format.');
-                        }
-
-                        var mdbrl = that.settings.mongoRuleOperators[operator];
-                        if (mdbrl === undefined) {
-                            error('JSON Rule operation unknown for operator "{0}"', operator);
-                        }
-
-                        var opVal = mdbrl.call(that, value);
-                        parts.push({
-                            id: that.change('getMongoDBFieldID', field, value),
-                            field: field,
-                            operator: opVal.op,
-                            value: opVal.val
-                        });
-                    }
-                });
-
-                var res = {};
-                if (parts.length > 0) {
-                    res.condition = condition;
-                    res.rules = parts;
-                }
-                return res;
-            }(data));
-        },
-
-        /**
-         * Find which operator is used in a MongoDB sub-object
-         * @param {mixed} value
-         * @param {string} field
-         * @return {string|undefined}
-         */
-        determineMongoOperator: function(value, field) {
-            if (value !== null && typeof value === 'object') {
-                var subkeys = Object.keys(value);
-
-                if (subkeys.length === 1) {
-                    return subkeys[0];
-                }
-                else {
-                    if (value.$gte !==undefined && value.$lte !==undefined) {
-                        return 'between';
-                    }
-                    if (value.$lt !==undefined && value.$gt !==undefined) {
-                        return 'not_between';
-                    }
-                    else if (value.$regex !==undefined) { // optional $options
-                        return '$regex';
-                    }
-                    else {
-                        return;
-                    }
-                }
-            }
-            else {
-                return 'eq';
-            }
-        },
-
-        /**
-         * Set rules from MongoDB object
-         * @param data {object}
-         */
-        setRulesFromMongo: function(data) {
-            this.setRules(this.getRulesFromMongo(data));
-        }
-    });
-
     /*!
      * jQuery QueryBuilder Sortable
      * Enables drag & drop sort of rules.
@@ -3589,230 +3426,6 @@
 
 // PUBLIC METHODS
 // ===============================
-    QueryBuilder.extend({
-        /**
-         * Get rules as SQL query
-         * @param stmt {false|string} use prepared statements - false, 'question_mark' or 'numbered'
-         * @param nl {bool} output with new lines
-         * @param data {object} (optional) rules
-         * @return {object}
-         */
-        getSQL: function(stmt, nl, data) {
-            data = (data===undefined) ? this.getRules() : data;
-            nl = (nl===true) ? '\n' : ' ';
-
-            if (stmt===true || stmt===undefined) stmt = 'question_mark';
-            if (typeof stmt == 'string') stmt = this.settings.sqlStatements[stmt]();
-
-            var that = this,
-                bind_index = 1,
-                bind_params = [];
-
-            var sql = (function parse(data) {
-                if (!data.condition) {
-                    data.condition = that.settings.default_condition;
-                }
-                if (['AND', 'OR'].indexOf(data.condition.toUpperCase()) === -1) {
-                    error('Unable to build SQL query with condition "{0}"', data.condition);
-                }
-
-                if (!data.rules) {
-                    return '';
-                }
-
-                var parts = [];
-
-                data.rules.forEach(function(rule) {
-                    if (rule.rules && rule.rules.length>0) {
-                        parts.push('('+ nl + parse(rule) + nl +')'+ nl);
-                    }
-                    else {
-                        var sql = that.settings.sqlOperators[rule.operator],
-                            ope = that.getOperatorByType(rule.operator),
-                            value = '';
-
-                        if (sql === undefined) {
-                            error('Unknown SQL operation for operator "{0}"', rule.operator);
-                        }
-
-                        if (ope.nb_inputs !== 0) {
-                            if (!(rule.value instanceof Array)) {
-                                rule.value = [rule.value];
-                            }
-
-                            rule.value.forEach(function(v, i) {
-                                if (i>0) {
-                                    value+= sql.sep;
-                                }
-
-                                if (rule.type=='integer' || rule.type=='double' || rule.type=='boolean') {
-                                    v = changeType(v, rule.type, true);
-                                }
-                                else if (!stmt) {
-                                    v = escapeString(v);
-                                }
-
-                                if (sql.fn) {
-                                    v = sql.fn(v);
-                                }
-
-                                if (stmt) {
-                                    value+= stmt.add(rule, v);
-                                }
-                                else {
-                                    if (typeof v === 'string') {
-                                        v = '\''+ v +'\'';
-                                    }
-
-                                    value+= v;
-                                }
-                            });
-                        }
-
-                        parts.push(rule.field +' '+ sql.op.replace(/\?/, value));
-                    }
-                });
-
-                return parts.join(' '+ data.condition + nl);
-            }(data));
-
-            if (stmt) {
-                return {
-                    sql: sql,
-                    params: stmt.run()
-                };
-            }
-            else {
-                return {
-                    sql: sql
-                };
-            }
-        },
-
-        /**
-         * Convert SQL to rules
-         * @param data {object} query object
-         * @return {object}
-         */
-        getRulesFromSQL: function(data, stmt) {
-            if (!('SQLParser' in window)) {
-                error('SQLParser is required to parse SQL queries. Get it here https://github.com/forward/sql-parser');
-            }
-
-            var that = this;
-
-            if (typeof data == 'string') {
-                data = { sql: data };
-            }
-            if (typeof stmt == 'string') {
-                stmt = this.settings.sqlRuleStatement[stmt](data.params);
-                data.sql = stmt.esc(data.sql);
-            }
-
-            if (!data.sql.toUpperCase().startsWith('SELECT')) {
-                data.sql = 'SELECT * FROM table WHERE ' + data.sql;
-            }
-
-            var parsed = SQLParser.parse(data.sql);
-
-            if (!parsed.where) {
-                error('No WHERE clause found');
-            }
-
-            var out = {
-                condition: this.settings.default_condition,
-                rules: []
-            };
-            var curr = out;
-
-            (function flatten(data, i) {
-                // it's a node
-                if (['AND', 'OR'].indexOf(data.operation.toUpperCase()) !== -1) {
-                    // create a sub-group if the condition is not the same and it's not the first level
-                    if (i>0 && curr.condition != data.operation.toUpperCase()) {
-                        curr.rules.push({
-                            condition: that.settings.default_condition,
-                            rules: []
-                        });
-
-                        curr = curr.rules[curr.rules.length-1];
-                    }
-
-                    curr.condition = data.operation.toUpperCase();
-                    i++;
-
-                    // some magic !
-                    var next = curr;
-                    flatten(data.left, i);
-
-                    curr = next;
-                    flatten(data.right, i);
-                }
-                // it's a leaf
-                else {
-                    if (data.left.value === undefined || data.right.value === undefined) {
-                        error('Missing field and/or value');
-                    }
-
-                    if ($.isPlainObject(data.right.value)) {
-                        error('Value format not supported for {0}.', data.left.value);
-                    }
-
-                    // convert array
-                    var value;
-                    if ($.isArray(data.right.value)) {
-                        value = data.right.value.map(function(v) {
-                            return v.value;
-                        });
-                    }
-                    else {
-                        value = data.right.value;
-                    }
-
-                    // get actual values
-                    if (stmt) {
-                        value = stmt.get(value);
-                    }
-
-                    // convert operator
-                    var operator = data.operation.toUpperCase();
-                    if (operator == '<>') operator = '!=';
-
-                    var sqlrl;
-                    if (operator == 'NOT LIKE') {
-                        sqlrl = that.settings.sqlRuleOperator['LIKE'];
-                    }
-                    else {
-                        sqlrl = that.settings.sqlRuleOperator[operator];
-                    }
-
-                    if (sqlrl === undefined) {
-                        error('Invalid SQL operation {0}.', data.operation);
-                    }
-
-                    var opVal = sqlrl.call(this, value, data.operation);
-                    if (operator == 'NOT LIKE') opVal.op = 'not_' + opVal.op;
-
-                    curr.rules.push({
-                        id: that.change('getSQLFieldID', data.left.value, value),
-                        field: data.left.value,
-                        operator: opVal.op,
-                        value: opVal.val
-                    });
-                }
-            }(parsed.where.conditions, 0));
-
-            return out;
-        },
-
-        /**
-         * Set rules from SQL
-         * @param data {object}
-         */
-        setRulesFromSQL: function(data, stmt) {
-            this.setRules(this.getRulesFromSQL(data, stmt));
-        }
-    });
 
     /*!
      * jQuery QueryBuilder Unique Filter

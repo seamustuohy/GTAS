@@ -6,6 +6,9 @@ import gov.gtas.error.ErrorHandlerFactory;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
@@ -124,4 +127,8 @@ public class QueryObject implements QueryEntity {
 		return flatList;
 	}
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    } 	
 }

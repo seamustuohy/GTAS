@@ -192,7 +192,7 @@ public class RulePersistenceServiceIT {
 		Rule engineRule = testGenUtils.createRuleWithOneCondition(r, 1);
 		engineRule.addConditionToRule(testGenUtils.createCondition(2,
 				EntityLookupEnum.Flight,
-				EntityAttributeConstants.FLIGHT_ATTR_DESTINATION_NAME,
+				EntityAttributeConstants.FLIGHT_ATTR_DESTINATION,
 				OperatorCodeEnum.EQUAL, "DBY"));
 
 		r.addEngineRule(engineRule);

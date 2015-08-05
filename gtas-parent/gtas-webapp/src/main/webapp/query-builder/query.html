@@ -41,17 +41,24 @@
     .table tbody tr:nth-child(odd) {
         background: rgba(245,245,255,0.5);
     }
+         /* temporary highlighting the only 3 entities we support currently */
+     .entity-name ul li:nth-child(4),
+     .entity-name ul li:nth-child(6),
+     .entity-name ul li:nth-child(9) {
+         background: rgba(30,200,200, 0.2);
+     }
 </style>
+<section class="qb-interface">
 <h1>Query Builder:</h1>
-<button data-ng-click="newRule()" class="btn btn-success pull-right" data-add="rule">New Rule</button>
+<button data-ng-click="newRule()" class="btn btn-xs btn-primary pull-right" data-add="rule">New Rule</button>
 <!--
-<button data-ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
-<button data-ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
+<button data-ng-click="tableParams.sorting({})" class="btn btn-xs btn-default pull-right">Clear sorting</button>
+<button data-ng-click="tableParams.filter({})" class="btn btn-xs btn-default pull-right">Clear filter</button>
 //-->
 <table ng-table="tableParams" class="table">
     <tr ng-repeat="obj in $data" data-id="{{summary.id}}" data-ng-click="loadRule()">
         <td data-title="'Title'" sortable="'title'" filter="{ 'title': 'text' }">
-            <i ng-show="isBeingEdited(summary.id)" class="glyphicon glyphicon-pencil" title="Editing this rule"></i>
+            <i ng-show="isBeingEdited()" class="glyphicon glyphicon-pencil" title="Editing this rule"></i>
             {{obj.title}}
         </td>
         <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">
@@ -71,7 +78,12 @@
 
 <h2>Conditions:</h2>
 <div id="builder"></div>
-
-<button type="button" data-ng-click="resetQueryBuilder()" class="btn btn-warning reset pull-right" data->Clear Conditions</button>
-<button type="button" data-ng-click="delete()" type="button" class="btn btn-danger pull-right" title="delete">Delete</button>
-<button type="button" data-ng-click="save()" id="submit" class="btn btn-primary pull-right">Save</button>
+    <select ng-model="viewType">
+        <option value="FLIGHT"> Flight </option>
+        <option value="TRAVELER"> Passenger </option>
+    </select>
+    <button type="button" data-ng-click="viewTypeChange()"  class="btn btn-xs btn-primary" data->Execute Query</button>
+<button type="button" data-ng-click="resetQueryBuilder()" class="btn btn-xs btn-primary reset pull-right" data->Clear Conditions</button>
+<button type="button" data-ng-click="delete()" type="button" class="btn btn-xs btn-primary pull-right" title="delete">Delete</button>
+<button type="button" data-ng-click="save()" id="submit" class="btn btn-xs btn-primary pull-right">Save</button>
+</section>

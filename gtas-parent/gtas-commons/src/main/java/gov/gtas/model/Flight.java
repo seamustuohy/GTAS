@@ -13,15 +13,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
-
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
-import gov.gtas.model.lookup.Country;
 
 @Entity
 @Table(name = "flight")
@@ -37,32 +32,25 @@ public class Flight extends BaseEntityAudit {
         joinColumns=@JoinColumn(name="flight_id"),
         inverseJoinColumns=@JoinColumn(name="traveler_id")
     )    
-    private Set<Traveler> passengers = new HashSet<>();
+    private Set<Traveler> travelers = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName="id")     
-    private Carrier carrier;
+    private String carrier;
     
     @Size(min = 4, max = 4)
     @Column(name = "flight_number", length = 4)
     private String flightNumber;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName="id")     
-    private Airport origin;
+    private String origin;
     
-    @ManyToOne
-    @JoinColumn(name = "origin_country_id", referencedColumnName="id")     
-    private Country originCountry;
+    @Column(name = "origin_country")
+    private String originCountry;
     
-    @ManyToOne
-    @JoinColumn(referencedColumnName="id")     
-    private Airport destination;
+    private String destination;
     
-    @ManyToOne
-    @JoinColumn(name = "destination_country_id", referencedColumnName="id")     
-    private Country destinationCountry;
+    @Column(name = "destination_country")
+    private String destinationCountry;
 
+    /** calculated field */
     @Column(name = "flight_date")
     @Temporal(TemporalType.DATE)
     private Date flightDate;
@@ -76,24 +64,11 @@ public class Flight extends BaseEntityAudit {
     @Enumerated(EnumType.STRING)
     private FlightDirection direction;
     
-    @ManyToMany(
-        cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-        mappedBy = "flights",
-        targetEntity = ApisMessage.class
-    )    
-    private Set<ApisMessage> messages = new HashSet<>();
-    
     public Set<Traveler> getPassengers() {
-        return passengers;
+        return travelers;
     }
     public void setPassengers(Set<Traveler> passengers) {
-        this.passengers = passengers;
-    }
-    public Carrier getCarrier() {
-        return carrier;
-    }
-    public void setCarrier(Carrier carrier) {
-        this.carrier = carrier;
+        this.travelers = passengers;
     }
     public String getFlightNumber() {
         return flightNumber;
@@ -103,18 +78,6 @@ public class Flight extends BaseEntityAudit {
     }
     public Date getFlightDate() {
         return flightDate;
-    }
-    public Airport getOrigin() {
-        return origin;
-    }
-    public void setOrigin(Airport origin) {
-        this.origin = origin;
-    }
-    public Airport getDestination() {
-        return destination;
-    }
-    public void setDestination(Airport destination) {
-        this.destination = destination;
     }
     public void setFlightDate(Date flightDate) {
         this.flightDate = flightDate;
@@ -131,23 +94,47 @@ public class Flight extends BaseEntityAudit {
     public void setEta(Date eta) {
         this.eta = eta;
     }
-    public Country getOriginCountry() {
-        return originCountry;
-    }
-    public void setOriginCountry(Country originCountry) {
-        this.originCountry = originCountry;
-    }
-    public Country getDestinationCountry() {
-        return destinationCountry;
-    }
-    public void setDestinationCountry(Country destinationCountry) {
-        this.destinationCountry = destinationCountry;
-    }
     public FlightDirection getDirection() {
         return direction;
     }
     public void setDirection(FlightDirection direction) {
         this.direction = direction;
+    }
+    public Set<Traveler> getTravelers() {
+        return travelers;
+    }
+    public void setTravelers(Set<Traveler> travelers) {
+        this.travelers = travelers;
+    }
+    public String getCarrier() {
+        return carrier;
+    }
+    public void setCarrier(String carrier) {
+        this.carrier = carrier;
+    }
+    public String getOrigin() {
+        return origin;
+    }
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+    public String getOriginCountry() {
+        return originCountry;
+    }
+    public void setOriginCountry(String originCountry) {
+        this.originCountry = originCountry;
+    }
+    public String getDestination() {
+        return destination;
+    }
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+    public String getDestinationCountry() {
+        return destinationCountry;
+    }
+    public void setDestinationCountry(String destinationCountry) {
+        this.destinationCountry = destinationCountry;
     }
 
     @Override

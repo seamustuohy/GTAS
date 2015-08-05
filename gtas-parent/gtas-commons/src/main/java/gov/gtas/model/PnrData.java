@@ -5,10 +5,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
-import gov.gtas.model.lookup.Country;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,9 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "pnr")
@@ -33,17 +27,12 @@ public class PnrData extends BaseEntityAudit{
 	@Column(name = "record_locator", length = 20)
 	private String recordLocator;
 	
-	@ManyToOne
-    @JoinColumn(referencedColumnName="id")     
-    private Carrier carrier;
+    private String carrier;
 
-    @ManyToOne
-    @JoinColumn(referencedColumnName="id")     
-    private Airport origin;
+    private String origin;
     
-    @ManyToOne
-    @JoinColumn(name = "origin_country_id", referencedColumnName="id")     
-    private Country originCountry;
+    @Column(name = "origin_country")
+    private String originCountry;
     
     @Column(name = "booked", length = 20)
     private String booked;
@@ -71,25 +60,23 @@ public class PnrData extends BaseEntityAudit{
     
     @Column(name = "total_dwell_time")
     private Integer totalDwellTime;
-
     
     @Column(name = "email")
     private String email;
  
-  
     @ManyToMany(
         targetEntity = Traveler.class,
         cascade={CascadeType.ALL}
     ) 
     @JoinTable(
-            name="pnr_traveler",
-            joinColumns=@JoinColumn(name="pnr_id"),
-            inverseJoinColumns=@JoinColumn(name="traveler_id")
+        name="pnr_traveler",
+        joinColumns=@JoinColumn(name="pnr_id"),
+        inverseJoinColumns=@JoinColumn(name="traveler_id")
     )   
     private Set<Traveler> passengers = new HashSet<>();
  
 	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name="cc_id",referencedColumnName="id") 
+	@JoinColumn(name="cc_id", referencedColumnName="id") 
     private CreditCard creditCard;
  
 	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
@@ -167,31 +154,39 @@ public class PnrData extends BaseEntityAudit{
 		this.recordLocator = recordLocator;
 	}
 
-	public Carrier getCarrier() {
-		return carrier;
-	}
+	public PnrMessage getPnrMessage() {
+        return pnrMessage;
+    }
 
-	public void setCarrier(Carrier carrier) {
-		this.carrier = carrier;
-	}
+    public void setPnrMessage(PnrMessage pnrMessage) {
+        this.pnrMessage = pnrMessage;
+    }
 
-	public Airport getOrigin() {
-		return origin;
-	}
+    public String getCarrier() {
+        return carrier;
+    }
 
-	public void setOrigin(Airport origin) {
-		this.origin = origin;
-	}
+    public void setCarrier(String carrier) {
+        this.carrier = carrier;
+    }
 
-	public Country getOriginCountry() {
-		return originCountry;
-	}
+    public String getOrigin() {
+        return origin;
+    }
 
-	public void setOriginCountry(Country originCountry) {
-		this.originCountry = originCountry;
-	}
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
 
-	public String getBooked() {
+    public String getOriginCountry() {
+        return originCountry;
+    }
+
+    public void setOriginCountry(String originCountry) {
+        this.originCountry = originCountry;
+    }
+
+    public String getBooked() {
 		return booked;
 	}
 

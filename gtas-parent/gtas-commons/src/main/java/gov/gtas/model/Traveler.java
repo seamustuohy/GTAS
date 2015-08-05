@@ -1,8 +1,5 @@
 package gov.gtas.model;
 
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Country;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,17 +9,13 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Type;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "traveler")
@@ -31,11 +24,10 @@ import org.hibernate.annotations.Type;
     discriminatorType=DiscriminatorType.STRING
 )
 public abstract class Traveler extends BaseEntityAudit {
-	
     public Traveler() { }
     
     @ManyToMany(
-        mappedBy = "passengers",
+        mappedBy = "travelers",
         targetEntity = Flight.class
     )    
     private Set<Flight> flights = new HashSet<>();
@@ -43,49 +35,45 @@ public abstract class Traveler extends BaseEntityAudit {
     @ManyToMany(
         mappedBy = "passengers",
         targetEntity = PnrData.class
-    ) 
+    )
     private Set<PnrData> pnrs = new HashSet<>();
-
+    
 	private String title;
     
     @Column(name = "first_name")
     private String firstName;
+    
     @Column(name = "middle_name")
     private String middleName;
+    
     @Column(name = "last_name")
     private String lastName;
+    
     private String suffix;
     
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    @Column(length = 2)
+    private String gender;
     
-    @ManyToOne
-    @JoinColumn(name = "citizenship_country", referencedColumnName="id")     
-    private Country citizenshipCountry;
+    @Column(name = "citizenship_country")     
+    private String citizenshipCountry;
 
-    @ManyToOne
-    @JoinColumn(name = "residency_country", referencedColumnName="id")     
-    private Country residencyCountry;
+    @Column(name = "residency_country")     
+    private String residencyCountry;
 
-    @Type(type="date")
+    @Temporal(TemporalType.DATE)  
     private Date dob;
+    
     private Integer age;
     
-    @ManyToOne
-    @JoinColumn
-    private Airport embarkation;
+    private String embarkation;
 
-    @ManyToOne
-    @JoinColumn
-    private Airport debarkation;
+    private String debarkation;
     
-    @ManyToOne
-    @JoinColumn(name = "embark_country")     
-    private Country embarkCountry;
+    @Column(name = "embark_country")     
+    private String embarkCountry;
 
-    @ManyToOne
-    @JoinColumn(name = "debark_country")
-    private Country debarkCountry;
+    @Column(name = "debark_country")
+    private String debarkCountry;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "traveler")
     private Set<Document> documents = new HashSet<>();
@@ -126,10 +114,10 @@ public abstract class Traveler extends BaseEntityAudit {
     public void setSuffix(String suffix) {
         this.suffix = suffix;
     }
-    public Gender getGender() {
+    public String getGender() {
         return gender;
     }
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
     public Date getDob() {
@@ -144,40 +132,40 @@ public abstract class Traveler extends BaseEntityAudit {
     public void setAge(Integer age) {
         this.age = age;
     }
-    public Airport getEmbarkation() {
-        return embarkation;
-    }
-    public void setEmbarkation(Airport embarkation) {
-        this.embarkation = embarkation;
-    }
-    public Airport getDebarkation() {
-        return debarkation;
-    }
-    public void setDebarkation(Airport debarkation) {
-        this.debarkation = debarkation;
-    }
-    public Country getCitizenshipCountry() {
+    public String getCitizenshipCountry() {
         return citizenshipCountry;
     }
-    public void setCitizenshipCountry(Country citizenshipCountry) {
+    public void setCitizenshipCountry(String citizenshipCountry) {
         this.citizenshipCountry = citizenshipCountry;
     }
-    public Country getResidencyCountry() {
+    public String getResidencyCountry() {
         return residencyCountry;
     }
-    public void setResidencyCountry(Country residencyCountry) {
+    public void setResidencyCountry(String residencyCountry) {
         this.residencyCountry = residencyCountry;
     }
-    public Country getEmbarkCountry() {
+    public String getEmbarkation() {
+        return embarkation;
+    }
+    public void setEmbarkation(String embarkation) {
+        this.embarkation = embarkation;
+    }
+    public String getDebarkation() {
+        return debarkation;
+    }
+    public void setDebarkation(String debarkation) {
+        this.debarkation = debarkation;
+    }
+    public String getEmbarkCountry() {
         return embarkCountry;
     }
-    public void setEmbarkCountry(Country embarkCountry) {
+    public void setEmbarkCountry(String embarkCountry) {
         this.embarkCountry = embarkCountry;
     }
-    public Country getDebarkCountry() {
+    public String getDebarkCountry() {
         return debarkCountry;
     }
-    public void setDebarkCountry(Country debarkCountry) {
+    public void setDebarkCountry(String debarkCountry) {
         this.debarkCountry = debarkCountry;
     }
     public Set<Document> getDocuments() {
@@ -186,14 +174,13 @@ public abstract class Traveler extends BaseEntityAudit {
     public void setDocuments(Set<Document> documents) {
         this.documents = documents;
     }
-
     public Set<PnrData> getPnrs() {
-		return pnrs;
-	}
-	public void setPnrs(Set<PnrData> pnrs) {
-		this.pnrs = pnrs;
-	}
-	
+        return pnrs;
+    }
+    public void setPnrs(Set<PnrData> pnrs) {
+        this.pnrs = pnrs;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
