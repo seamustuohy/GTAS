@@ -22,7 +22,6 @@ import gov.gtas.model.MessageStatus;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Country;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
@@ -43,10 +42,7 @@ import gov.gtas.repository.ApisMessageRepository;
 public class ApisMessageService {
     private static final Logger logger = LoggerFactory.getLogger(ApisMessageService.class);
 
-    private Country homeCountry;
-    
-    @Autowired
-    private CountryService countryService;
+    private String homeCountry;
     
     @Autowired
     private AirportService airportService;
@@ -123,7 +119,7 @@ public class ApisMessageService {
                 Traveler p = convertTravelerVo(pvo);
                 pax.add(p);
             }
-    
+
             Flight f = null;
             for (FlightVo fvo : m.getFlights()) {
                 f = convertFlightVo(fvo);
@@ -182,8 +178,8 @@ public class ApisMessageService {
     
     private Flight convertFlightVo(FlightVo vo) throws ParseException {
         // TODO: hardcoded for now
-        homeCountry = countryService.getCountryByThreeLetterCode("USA");
-                
+        homeCountry = "USA";
+
         Flight f = new Flight();
         BeanUtils.copyProperties(vo, f);
         f.setCarrier(vo.getCarrier());
@@ -204,12 +200,16 @@ public class ApisMessageService {
             f.setOriginCountry(originCountry);
         }
         
-        if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
-            f.setDirection(FlightDirectionCode.C.name());
-        } else if (homeCountry.equals(originCountry)) {
-            f.setDirection(FlightDirectionCode.O.name());            
-        } else if (homeCountry.equals(destCountry)) {
-            f.setDirection(FlightDirectionCode.I.name());                        
+        if (vo.isOverFlight()) {
+            f.setDirection(FlightDirectionCode.OF.name());
+        } else {
+            if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
+                f.setDirection(FlightDirectionCode.C.name());
+            } else if (homeCountry.equals(originCountry)) {
+                f.setDirection(FlightDirectionCode.O.name());            
+            } else if (homeCountry.equals(destCountry)) {
+                f.setDirection(FlightDirectionCode.I.name());                        
+            }
         }
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #

@@ -23,7 +23,7 @@ import gov.gtas.parsers.util.ParseUtils;
  * </ul>
  */
 public class TDT extends Segment {
-    private enum TdtType {
+    public enum TdtType {
         ARRIVING_OR_DEPARTING_FLIGHT, OVER_FLIGHT
     }
 

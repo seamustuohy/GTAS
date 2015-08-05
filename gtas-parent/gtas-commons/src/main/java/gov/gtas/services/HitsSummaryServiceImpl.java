@@ -1,6 +1,7 @@
 package gov.gtas.services;
 
 import gov.gtas.model.HitDetail;
+import gov.gtas.model.HitsSummary;
 import gov.gtas.repository.HitsSummaryRepository;
 
 import java.util.List;
@@ -25,4 +26,13 @@ public class HitsSummaryServiceImpl implements HitsSummaryService {
 
 		return hitsSummaryRepository.findByTravelerId(id);
 	}
+
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.HitsSummaryService#findAll()
+	 */
+	@Override
+	public Iterable<HitsSummary> findAll() {
+		return hitsSummaryRepository.findAll();
+	}
+	
 }
