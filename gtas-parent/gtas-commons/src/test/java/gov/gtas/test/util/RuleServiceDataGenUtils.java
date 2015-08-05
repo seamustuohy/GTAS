@@ -8,10 +8,10 @@ import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.enumtype.YesNoEnum;
+import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.services.UserService;
 import gov.gtas.util.DateCalendarUtils;
 
@@ -78,13 +78,13 @@ public class RuleServiceDataGenUtils {
 
 	public Rule createRuleWithOneCondition(UdrRule parent, int index) {
 		Rule rule = new Rule(parent, index, null);
-		rule.addConditionToRule(createCondition(1, EntityLookupEnum.Pax,
+		rule.addConditionToRule(createCondition(1, EntityEnum.TRAVELER,
 				EntityAttributeConstants.PAX_ATTTR_EMBARKATION_AIRPORT,
 				OperatorCodeEnum.EQUAL, "IAD"));
 		return rule;
 	}
 
-	public RuleCond createCondition(int seq, EntityLookupEnum entity,
+	public RuleCond createCondition(int seq, EntityEnum entity,
 			String attr, OperatorCodeEnum opCode, Object value) {
 		RuleCondPk key = new RuleCondPk(0L, seq);
 		RuleCond cond = new RuleCond(key, entity, attr, opCode);

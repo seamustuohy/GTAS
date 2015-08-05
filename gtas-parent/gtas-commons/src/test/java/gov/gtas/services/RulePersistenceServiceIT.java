@@ -12,9 +12,9 @@ import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.YesNoEnum;
+import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.test.util.RuleServiceDataGenUtils;
 import gov.gtas.util.DateCalendarUtils;
@@ -191,7 +191,7 @@ public class RulePersistenceServiceIT {
 				YesNoEnum.Y);
 		Rule engineRule = testGenUtils.createRuleWithOneCondition(r, 1);
 		engineRule.addConditionToRule(testGenUtils.createCondition(2,
-				EntityLookupEnum.Flight,
+				EntityEnum.FLIGHT,
 				EntityAttributeConstants.FLIGHT_ATTR_DESTINATION,
 				OperatorCodeEnum.EQUAL, "DBY"));
 

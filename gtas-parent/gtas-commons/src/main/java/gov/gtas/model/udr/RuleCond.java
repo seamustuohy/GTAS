@@ -1,8 +1,8 @@
 package gov.gtas.model.udr;
 
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.util.DateCalendarUtils;
 import gov.gtas.util.ValidationUtils;
 
@@ -45,7 +45,7 @@ public class RuleCond implements Serializable {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "ENTITY_NAME", nullable = false, length = 64)
-	private EntityLookupEnum entityName;
+	private EntityEnum entityName;
 	
 	@Column(name = "ATTR_NAME", nullable = false, length = 256)
 	private String attrName;
@@ -64,7 +64,7 @@ public class RuleCond implements Serializable {
 	public RuleCond() {
 	}
 
-	public RuleCond(RuleCondPk id, EntityLookupEnum entityName, String attrName, OperatorCodeEnum opCode) {
+	public RuleCond(RuleCondPk id, EntityEnum entityName, String attrName, OperatorCodeEnum opCode) {
 		this.id = id;
 		this.entityName = entityName;
 		this.attrName = attrName;
@@ -146,14 +146,14 @@ public class RuleCond implements Serializable {
 	/**
 	 * @return the entityName
 	 */
-	public EntityLookupEnum getEntityName() {
+	public EntityEnum getEntityName() {
 		return entityName;
 	}
 
 	/**
 	 * @param entityName the entityName to set
 	 */
-	public void setEntityName(EntityLookupEnum entityName) {
+	public void setEntityName(EntityEnum entityName) {
 		this.entityName = entityName;
 	}
 

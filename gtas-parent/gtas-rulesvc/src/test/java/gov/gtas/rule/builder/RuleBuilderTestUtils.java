@@ -4,7 +4,6 @@ import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.enumtype.YesNoEnum;
@@ -44,20 +43,20 @@ public class RuleBuilderTestUtils {
 	 * @return
 	 * @throws ParseException
 	 */
-	public static RuleCond createRuleCond(EntityEnum ent,
+	public static RuleCond createRuleCond(EntityEnum entity,
 			IEntityMapping attr, OperatorCodeEnum op, String value,
 			ValueTypesEnum type) throws ParseException {
 		RuleCondPk pk = new RuleCondPk(1L, 1);
-		EntityLookupEnum entity = EntityLookupEnum.valueOf(ent.getEntityName());
+//		EntityEnum entity = EntityEnum.valueOf(ent.getEntityName());
 		RuleCond ret = new RuleCond(pk, entity, attr.getFieldName(), op);
 		ret.addValueToCondition(value, type);
 		return ret;
 	}
-	public static RuleCond createRuleCond(EntityEnum ent,
+	public static RuleCond createRuleCond(EntityEnum entity,
 			IEntityMapping attr, OperatorCodeEnum op, String[] values,
 			ValueTypesEnum type) throws ParseException {
 		RuleCondPk pk = new RuleCondPk(1L, 1);
-		EntityLookupEnum entity = EntityLookupEnum.valueOf(ent.getEntityName());
+//		EntityLookupEnum entity = EntityLookupEnum.valueOf(ent.getEntityName());
 		RuleCond ret = new RuleCond(pk, entity, attr.getFieldName(), op);
 		for(String value:values){
 		   ret.addValueToCondition(value, type);
@@ -73,7 +72,7 @@ public class RuleBuilderTestUtils {
 		switch(indx){
 			case 1:/* doc.iso2 != US && doc.issueDate > 2012-01-01 && flight# == 0012  */
 				RuleCond cond = createRuleCond(EntityEnum.DOCUMENT,
-						DocumentMapping.ISSUANCE_COUNTRY,
+						DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
 						OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
 				cond = createRuleCond(EntityEnum.DOCUMENT,
@@ -87,7 +86,7 @@ public class RuleBuilderTestUtils {
 				break;
 			case 2:/* doc.iso2 in (YE,GB) && flight.origin.iata == LHR && flight.carrier.iata==CO  */
 				cond = createRuleCond(EntityEnum.DOCUMENT,
-						DocumentMapping.ISSUANCE_COUNTRY,
+						DocumentMapping.ISSUANCE_OR_CITIZENSHIP_COUNTRY,
 						OperatorCodeEnum.IN, new String[]{"YE", "GB"}, ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
 				cond = createRuleCond(EntityEnum.FLIGHT,

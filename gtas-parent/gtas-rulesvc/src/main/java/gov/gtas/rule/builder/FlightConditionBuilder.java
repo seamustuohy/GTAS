@@ -1,6 +1,5 @@
 package gov.gtas.rule.builder;
 
-import gov.gtas.model.udr.enumtype.EntityLookupEnum;
 import gov.gtas.querybuilder.enums.EntityEnum;
 
 import java.util.LinkedList;
@@ -32,8 +31,9 @@ public class FlightConditionBuilder extends EntityConditionBuilder {
 	 * @see gov.gtas.rule.builder.EntityConditionBuilder#init()
 	 */
 	@Override
-	public void init() {
-		super.init();
+	public void reset() {
+		super.reset();
+		linkedTravelerList.clear();
 	}
 	@Override
 	protected void addSpecialConditionsWithoutActualConditions(
@@ -48,19 +48,19 @@ public class FlightConditionBuilder extends EntityConditionBuilder {
 	protected void addSpecialConditions(StringBuilder bldr) {
 		if(linkedTravelerList.isEmpty()){
 			bldr.append(defaultTravelerVariableName).append(":")
-			.append(EntityLookupEnum.Traveler).append("()")
+			.append(EntityEnum.TRAVELER.getEntityName()).append("()")
 		    .append(" from ")
 			.append(getDrlVariableName())
 			.append(".passengers\n");
 		} else {
 			if(linkedTravelerList.size() == 1){
 				String travelerVariable = linkedTravelerList.get(0);
-				bldr.append(EntityLookupEnum.Traveler).append("(id == ")
+				bldr.append(EntityEnum.TRAVELER.getEntityName()).append("(id == ")
 				    .append(travelerVariable).append(".id) from ")
 					.append(getDrlVariableName())
 					.append(".passengers\n");
 	        } else {
-				bldr.append(EntityLookupEnum.Traveler).append("(id in (");
+				bldr.append(EntityEnum.TRAVELER.getEntityName()).append("(id in (");
 				boolean firstTime = true;
 	        	for(String travelerVariable:linkedTravelerList){
 	        		if(firstTime){       			
