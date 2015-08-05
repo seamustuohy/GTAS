@@ -9,7 +9,7 @@ import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.air.DocumentVo;
-import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 
 public class PnrUtils {
     public static Date parseDateTime(String dt) throws ParseException {
@@ -25,7 +25,7 @@ public class PnrUtils {
         return null;
     }
     
-    public static void createDocument(SSR ssr, PaxVo pax) {
+    public static void createDocument(SSR ssr, TravelerVo pax) {
         // /P/GBR/123456789/GBR/12JUL64/M/23AUG19/SMITH JR/JONATHON/ROBERT
         String[] tmp = ssr.getFreeText().split("/");
         List<String> strs = new ArrayList<>(Arrays.asList(tmp)); 

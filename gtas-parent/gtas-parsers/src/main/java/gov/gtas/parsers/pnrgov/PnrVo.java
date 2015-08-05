@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.parsers.vo.air.AddressVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 
 public class PnrVo {
@@ -28,7 +28,7 @@ public class PnrVo {
     private String updateMode;
     
     private List<FlightVo> flights = new ArrayList<>();
-    private List<PaxVo> passengers = new ArrayList<>();
+    private List<TravelerVo> passengers = new ArrayList<>();
     private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
     private List<AddressVo> addresses = new ArrayList<>();
     
@@ -120,11 +120,11 @@ public class PnrVo {
         this.flights = flights;
     }
 
-    public List<PaxVo> getPassengers() {
+    public List<TravelerVo> getPassengers() {
         return passengers;
     }
 
-    public void setPassengers(List<PaxVo> passengers) {
+    public void setPassengers(List<TravelerVo> passengers) {
         this.passengers = passengers;
     }
 

@@ -39,7 +39,7 @@ import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.repository.ApisMessageRepository;
 
@@ -123,8 +123,8 @@ public class ApisMessageService {
             }
             
             Set<Traveler> pax = new HashSet<>();        
-            for (PaxVo pvo : m.getPassengers()) {
-                Traveler p = convertPaxVo(pvo);
+            for (TravelerVo pvo : m.getPassengers()) {
+                Traveler p = convertTravelerVo(pvo);
                 pax.add(p);
             }
     
@@ -146,7 +146,7 @@ public class ApisMessageService {
         }
     }
     
-    private Traveler convertPaxVo(PaxVo vo) throws ParseException {
+    private Traveler convertTravelerVo(TravelerVo vo) throws ParseException {
         Traveler p = null;
         switch (vo.getPaxType()) {
         case "P":

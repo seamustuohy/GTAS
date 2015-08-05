@@ -24,7 +24,7 @@ import gov.gtas.parsers.paxlst.segment.unedifact.LOC;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC.LocCode;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PaxVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.parsers.paxlst.segment.unedifact.MEA;
 import gov.gtas.parsers.paxlst.segment.unedifact.NAD;
@@ -208,7 +208,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> 
      * Segment group 4: passenger details
      */
     private void processPax(NAD nad) throws ParseException {
-        PaxVo p = new PaxVo();
+        TravelerVo p = new TravelerVo();
         parsedMessage.addPax(p);
 
         p.setFirstName(nad.getFirstName());
@@ -342,7 +342,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> 
     /**
      * Segment group 5: Passenger documents
      */
-    private void processDocument(PaxVo p, DOC doc) throws ParseException {
+    private void processDocument(TravelerVo p, DOC doc) throws ParseException {
         DocumentVo d = new DocumentVo();
         p.addDocument(d);
         d.setDocumentType(doc.getDocCode());
