@@ -33,6 +33,21 @@
         <link rel="stylesheet" href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css" />
 
         <style type="text/css">
+        
+		.full {
+			  background: url(http://placehold.it/1920x1080) no-repeat center center fixed; 
+			  -webkit-background-size: cover;
+			  -moz-background-size: cover;
+			  -o-background-size: cover;
+			  background-size: cover;
+			}
+        
+		/* temporary highlighting the only 3 entities we support currently */
+        .entity-name ul li:nth-child(5),
+        .entity-name ul li:nth-child(7),
+        .entity-name ul li:nth-child(11) {
+            background: rgba(30,200,200, 0.2);
+        }
         .header{
         background: rgb(247, 250, 250);
         }
@@ -46,6 +61,14 @@
         margin-left: 50px;
         } */
 
+		#flightTable thead th {
+        text-align:center;
+        }
+
+        #flightTable tbody td {
+        text-align:center;
+        }
+
         #paxTable thead th {
         text-align:center;
         }
@@ -54,6 +77,54 @@
         text-align:center;
         }
 
+					/* Exclusive for nested Rule List Display */
+					.collapse {
+						  display: none;
+						}
+						.collapse.in {
+						  display: block;
+						}
+						tr.collapse.in {
+						  display: table-row;
+						}
+						tbody.collapse.in {
+						  display: table-row-group;
+						}
+						.collapsing {
+						  position: relative;
+						  height: 0;
+						  overflow: hidden;
+						  -webkit-transition: height .35s ease;
+						       -o-transition: height .35s ease;
+						          transition: height .35s ease;
+						}
+								
+					.glyphicon {
+							margin: 1px 0px 5px 1px;
+							font-size: 26px;
+						  	color: #222;
+						  	/*background-color: #F0C425;*/
+						  	padding: 5px;}
+						
+						.glyphicon:hover, .glyphicon:focus {
+						  	color: #222;
+						   /* background-color: #FFFFFF;  #1F2E54 */
+						  	padding: 5px;}
+						
+						
+						.glyph {
+						    text-align: center;
+						}			
+								
+								
+					/* Bootstrap colors
+					
+					@brand-success: #5cb85c;
+					@brand-danger:  #d9534f; 
+					
+					*/			
+											
+					/* Exclusive for nested Rule List Display */
         </style>
 
         </head>
@@ -203,6 +274,7 @@
         <script src="flights/FlightsService.js"></script>
         <script src="pax/PaxController.js"></script>
         <script src="pax/PaxService.js"></script>
+	<script src="pax/PaxFactory.js"></script>
         <script src="factory/QueryBuilderFactory.js"></script>
         <script src="risk-criteria/RiskCriteriaController.js"></script>
         <script src="risk-criteria/RiskCriteriaService.js"></script>

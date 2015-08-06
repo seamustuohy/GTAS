@@ -2,7 +2,8 @@ app.service("paxService", function( $rootScope, $http, $q ) {
 	// Return public API.
 	return({
 	    getPax: getPax,
-        broadcast: broadcast
+        broadcast: broadcast,
+        getRuleHits: getRuleHits
 	});
 	
 	function getPax(flightId) {
@@ -30,4 +31,22 @@ app.service("paxService", function( $rootScope, $http, $q ) {
     function broadcast(flightId) {
         $rootScope.$broadcast('handleBroadcast', flightId); 
     }    
+    
+    
+    function getRuleHits(travelerId) {
+	    var request = $http({
+	        method: "get",
+	        url: "/gtas/hit/traveler" + (travelerId ? "?travelerId=" + travelerId : ""),
+	      //  url: "/hit/traveler/"+(),
+	        params: {
+	            action: "get"
+	        }
+	    });
+	    return( request.then( handleSuccess, handleError ) );
+    	
+    }
+    
+    
 });
+
+
