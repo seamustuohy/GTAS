@@ -30,9 +30,8 @@
   </properties>
 
   <modules>
-    <module>apis-loader</module>
-    <module>pnr-loader</module>
     <module>gtas-parsers</module>
+    <module>gtas-loaders</module>
     <module>gtas-commons</module>
     <module>gtas-rulesvc</module>
     <module>gtas-webapp</module>
