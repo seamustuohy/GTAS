@@ -41,13 +41,7 @@
 			  -o-background-size: cover;
 			  background-size: cover;
 			}
-        
-		/* temporary highlighting the only 3 entities we support currently */
-        .entity-name ul li:nth-child(5),
-        .entity-name ul li:nth-child(7),
-        .entity-name ul li:nth-child(11) {
-            background: rgba(30,200,200, 0.2);
-        }
+
         .header{
         background: rgb(247, 250, 250);
         }
@@ -99,18 +93,16 @@
 						          transition: height .35s ease;
 						}
 								
-					.glyphicon {
+/*					.glyphicon {
 							margin: 1px 0px 5px 1px;
 							font-size: 26px;
 						  	color: #222;
-						  	/*background-color: #F0C425;*/
 						  	padding: 5px;}
 						
 						.glyphicon:hover, .glyphicon:focus {
 						  	color: #222;
-						   /* background-color: #FFFFFF;  #1F2E54 */
 						  	padding: 5px;}
-						
+						*/
 						
 						.glyph {
 						    text-align: center;

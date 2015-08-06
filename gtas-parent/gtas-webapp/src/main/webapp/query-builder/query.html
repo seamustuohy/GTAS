@@ -107,7 +107,7 @@
 </section>
 <table ng-table="flightsResults" show-filter="true" class="table">
     <tr ng-repeat="flight in $data">
-        <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">{{flight.hits}}</td>
+<!--        <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">{{flight.hits}}</td> //-->
         <td data-title="'Carrier'" sortable="'carrier'" filter="{ 'carrier': 'select' }" filter-data="values($column, 'carrier')">{{flight.carrier}}</td>
         <td data-title="'Flight #'" sortable="'flightNumber'" filter="{ 'flightNumber': 'text' }">{{flight.flightNumber}}</td>
         <td data-title="'Origin'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">{{flight.origin}}</td>
