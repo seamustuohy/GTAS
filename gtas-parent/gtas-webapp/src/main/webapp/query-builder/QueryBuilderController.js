@@ -105,8 +105,8 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     };
 
     $scope.serviceURLs = {
-        FLIGHT: '/gtas/queryFlights/',
-        TRAVELER: '/gtas/queryPassengers/'
+        FLIGHT: '/gtas/query/queryFlights/',
+        TRAVELER: '/gtas/query/queryPassengers/'
     };
 
     $scope.viewType = null;
