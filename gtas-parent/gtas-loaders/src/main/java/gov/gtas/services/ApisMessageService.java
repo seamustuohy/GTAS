@@ -20,6 +20,7 @@ import gov.gtas.model.MessageStatus;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Traveler;
 import gov.gtas.parsers.edifact.EdifactParser;
+import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.PaxlstMessageVo;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
@@ -32,7 +33,7 @@ import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.repository.ApisMessageRepository;
 
 @Service
-public class ApisMessageService {
+public class ApisMessageService implements MessageService {
     private static final Logger logger = LoggerFactory.getLogger(ApisMessageService.class);
 
     @Autowired
@@ -43,13 +44,13 @@ public class ApisMessageService {
     
     private ApisMessage apisMessage;
     
-    public PaxlstMessageVo parseApisMessage(String filePath) {
+    public MessageVo parse(String filePath) {
         this.apisMessage = new ApisMessage();
         this.apisMessage.setCreateDate(new Date());
         this.apisMessage.setStatus(MessageStatus.RECEIVED);
         this.apisMessage.setFilePath(filePath);
         
-        PaxlstMessageVo vo = null;
+        MessageVo vo = null;
         try {            
             byte[] raw = FileUtils.readSmallFile(filePath);
             String message = new String(raw, StandardCharsets.US_ASCII);
@@ -88,7 +89,8 @@ public class ApisMessageService {
         return vo;
     }
 
-    public void loadApisMessage(PaxlstMessageVo m) {
+    public void load(MessageVo message) {
+        PaxlstMessageVo m = (PaxlstMessageVo)message;
         try {
             for (ReportingPartyVo rvo : m.getReportingParties()) {
                 ReportingParty rp = utils.convertReportingPartyVo(rvo);

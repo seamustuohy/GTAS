@@ -20,6 +20,7 @@ import gov.gtas.model.PnrData;
 import gov.gtas.model.PnrMessage;
 import gov.gtas.model.Traveler;
 import gov.gtas.parsers.edifact.EdifactParser;
+import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.PnrVo;
@@ -29,7 +30,7 @@ import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.repository.PnrMessageRepository;
 
 @Service
-public class PnrMessageService {
+public class PnrMessageService implements MessageService {
     private static final Logger logger = LoggerFactory.getLogger(PnrMessageService.class);
    
     @Autowired
@@ -40,13 +41,13 @@ public class PnrMessageService {
     
     private PnrMessage pnrMessage;
     
-    public PnrMessageVo parsePnrMessage(String filePath) {
+    public MessageVo parse(String filePath) {
         this.pnrMessage = new PnrMessage();
         this.pnrMessage.setCreateDate(new Date());
         this.pnrMessage.setStatus(MessageStatus.RECEIVED);
         this.pnrMessage.setFilePath(filePath);
         
-        PnrMessageVo vo = null;
+        MessageVo vo = null;
         try {
             byte[] raw = FileUtils.readSmallFile(filePath);
             String message = new String(raw, StandardCharsets.US_ASCII);
@@ -74,7 +75,8 @@ public class PnrMessageService {
         return vo;
     }
     
-    public void loadPnrMessage(PnrMessageVo m) {
+    public void load(MessageVo message) {
+        PnrMessageVo m = (PnrMessageVo)message;
         for (PnrVo vo : m.getPnrRecords()) {
             PnrData pnr = null;
             try {
