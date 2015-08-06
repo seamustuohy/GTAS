@@ -25,6 +25,7 @@ public class FlightVo {
     
     private int ruleHits;
     private int listHits;
+    private int totalPax;
     
     /**
 	 * @return the ruleHits
@@ -104,7 +105,13 @@ public class FlightVo {
     public void setEtd(Date etd) {
         this.etd = etd;
     }
-    public Date getEta() {
+    public int getTotalPax() {
+		return totalPax;
+	}
+	public void setTotalPax(int totalPax) {
+		this.totalPax = totalPax;
+	}
+	public Date getEta() {
         return eta;
     }
     public void setEta(Date eta) {

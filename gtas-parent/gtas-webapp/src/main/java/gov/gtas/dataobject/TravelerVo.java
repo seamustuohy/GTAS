@@ -25,6 +25,7 @@ public class TravelerVo {
     private String debarkation;
     private String embarkCountry;
     private String debarkCountry;
+    private String paxId;
 
     private int ruleHits;
     private int listHits;
@@ -127,7 +128,13 @@ public class TravelerVo {
     public void setResidencyCountry(String residencyCountry) {
         this.residencyCountry = residencyCountry;
     }
-    public String getTravelerType() {
+    public String getPaxId() {
+		return paxId;
+	}
+	public void setPaxId(String paxId) {
+		this.paxId = paxId;
+	}
+	public String getTravelerType() {
         return travelerType;
     }
     public void setTravelerType(String travelerType) {

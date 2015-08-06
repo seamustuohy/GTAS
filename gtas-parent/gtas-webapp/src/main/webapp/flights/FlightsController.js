@@ -3,17 +3,21 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
 	var paxData = [];
 	var data = [];
 	
+	 $scope.loading = true;
+	
     $scope.tableParams = new ngTableParams(
     {
-        page: 1,            // show first page
+    	noPager: true,
+    	page: 1,            // show first page
         count: 10,          // count per page
         filter: {},
         sorting: {
-            hits: 'desc',
-            destinationDateTimeSort: 'asc' //, 'number': 'asc'     // initial sorting
+            hits: 'desc'
+            //,
+            //destinationDateTimeSort: 'asc' //, 'number': 'asc'     // initial sorting
         }
     }, {
-        total: data.length, // length of data
+      //  total: data.length, // length of data
         getData: function($defer, params) {
             flightService.getFlights().then(function (myData) {
             	data = myData;
@@ -28,6 +32,10 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
 
                 params.total(orderedData.length); // set total for recalc pagination
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                
+                
+                $scope.loading = false;
+                
 		    });            
         }
 	});

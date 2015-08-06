@@ -1,87 +1,225 @@
-<h3>Flights</h3>
-<button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">Clear sorting</button>
-<button ng-click="tableParams.filter({})" class="btn btn-default pull-right">Clear filter</button>
-<table ng-table="tableParams" show-filter="true" class="table table-condensed">
-   
-   <tbody ng-repeat="flight in $data track by $index" style="border-collapse:collapse;"  data-toggle="collapse" data-target="#demo{{$index}}" class="accordion-toggle">
-   
-    <tr ng-click="getPaxInfo(flight.flightId);" ng-controller="PaxController">
-     
-        <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'select' }">{{flight.hits}}</td>
-        <td data-title="'Carrier'" sortable="'carrier'" filter="{ 'carrier': 'select' }" filter-data="values($column, 'carrier')">{{flight.carrier}}</td>
-        <td data-title="'Flight #'" sortable="'flightNumber'" filter="{ 'flightNumber': 'text' }">
-         {{flight.flightNumber}}
-        </td>
-        <td data-title="'Origin'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">{{flight.origin}}</td>
-        <td data-title="'Country'" sortable="'originCountry'" filter="{ 'originCountry': 'select' }" filter-data="values($column, 'originCountry')">{{flight.originCountry}}</td>
-        <td data-title="'ETD'" sortable="'etd'" filter="{ 'etd': 'text' }">{{flight.etd}}</td>
-        <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'select' }" filter-data="values($column, 'destination')">{{flight.destination}}</td>
-        <td data-title="'Country'" sortable="'destinationCountry'" filter="{ 'destinationCountry': 'select' }"
-        filter-data="values($column, 'destinationCountry')">{{flight.destinationCountry}}</td>
-        <td data-title="'ETA'" sortable="'eta'" filter="{ 'eta': 'text' }">{{flight.eta}}</td>
-    </tr>
 
-<tr>    	
-    	    <td colspan="12" class="hiddenRow" >
-  			  <!--  <h2>Passengers</h2> -->
-     	    <!--    <div class="accordian-body collapse"> -->
-            <!-- <table class="table table-condensed">
-            	<tr>
-             -->
-           <!--  		<td style="width:100%;"> -->
-            				<div class="accordian-body collapse" id="demo{{$index}}"  style="border-collapse:collapse; width: 100%;" > 
-            				
-									<table id="paxTable" ng-table="tableParams" show-filter="false" class="table table-condensed table-hover" >
-												<thead>
-													<tr>
-														<th>#</th>
-														<th>R</th>
-														<th>L</th>
-														<th>Last Name</th>
-														<th>First Name</th>
-														<th>Middle Name</th>
-														<th>Pax Type</th>
-														<th>Gender</th>
-														<th>DOB</th>
-														<th>Citizenship</th>
-														<th>Document #</th>
-														<th>T</th>
-														<th>Issuance Country</th>
-														<th>Seat</th>
-														
-													</tr>
-												</thead>
-												<tbody ng-repeat="pax in paxData"> <!--  style="border-collapse:collapse;"  data-toggle="collapse" -->
-													<tr>
-														<td>#</td>
-														<td>#</td>
-														<td>#</td>
-														<td>{{pax.lastName}}</td>
-														<td>{{pax.middleName}}</td>
-														<td>{{pax.firstName}}</td>
-														<td>PAX</td>
-														<td>M</td>
-														<td>4/21/1960</td>
-														<td>NZ</td>
-														<td>189232993</td>
-														<td>P</td>
-														<td>NZ</td>
-														<td>59B</td>
-													</tr>
+<div align="center" ng-show="loading" class="jumbotron" style="background-color: #FFFFFF">
+	 <img class="full" ng-show="loading" src="resources/img/loading_default_en.gif" />
+</div>
+
+
+<div ng-hide="loading">
+
+<h4>
+	<span class="glyphicon glyphicon-plane img-circle"></span> Flights
+</h4>
+
+<button ng-click="tableParams.sorting({})"
+	class="btn btn-default pull-right">Clear sorting</button>
+<button ng-click="tableParams.filter({})"
+	class="btn btn-default pull-right">Clear filter</button>
+<table id="flightTable" template-pagination="custom/pager"
+	ng-table="tableParams" show-filter="true" class="table table-condensed">
+
+	<!-- class="accordion-toggle" -->
+
+	<tbody ng-repeat="flight in $data track by $index"
+		style="border-collapse: collapse;" ng-controller="PaxController">
+
+		<tr ng-click="getPaxInfo(flight.flightId, $index);"
+			data-toggle="collapse" data-target="#demo{{$index}}"
+			style="cursor: pointer;" aria-expanded="false"
+			aria-controls="demo{{$index}}">
+
+			<td data-title="'P'" sortable="'P'" filter="{ 'P': 'select' }">{{flight.totalPax}}</td>
+			<td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'select' }">{{flight.ruleHits}}</td>
+			<td data-title="'Carrier'" sortable="'carrier'"
+				filter="{ 'carrier': 'select' }"
+				filter-data="values($column, 'carrier')">{{flight.carrier}}</td>
+			<td data-title="'Flight #'" sortable="'flightNumber'"
+				filter="{ 'flightNumber': 'text' }">{{flight.flightNumber}}</td>
+			<td data-title="'Origin'" sortable="'origin'"
+				filter="{ 'origin': 'select' }"
+				filter-data="values($column, 'origin')">{{flight.origin}}</td>
+			<td data-title="'Country'" sortable="'originCountry'"
+				filter="{ 'originCountry': 'select' }"
+				filter-data="values($column, 'originCountry')">{{flight.originCountry}}</td>
+			<td data-title="'ETD'" sortable="'etd'" filter="{ 'etd': 'text' }">{{flight.etd}}</td>
+			<td data-title="'Destination'" sortable="'destination'"
+				filter="{ 'destination': 'select' }"
+				filter-data="values($column, 'destination')">{{flight.destination}}</td>
+			<td data-title="'Country'" sortable="'destinationCountry'"
+				filter="{ 'destinationCountry': 'select' }"
+				filter-data="values($column, 'destinationCountry')">{{flight.destinationCountry}}</td>
+			<td data-title="'ETA'" sortable="'eta'" filter="{ 'eta': 'text' }">{{flight.eta}}</td>
+		</tr>
+
+		<tr>
+			<td colspan="12" class="hiddenRow">
+				<!--  class="accordian-body collapse"  -->
+				<div class="accordian-body collapse" id="demo{{$index}}"
+					style="border-collapse: collapse; width: 100%;">
+					<h4 style="font-size: 18px;" align="left">
+						<span class="glyphicon glyphicon-user img-circle"></span>
+						Passengers on Flight - {{flight.flightNumber}}
+					</h4>
+					<table id="paxTable" ng-table="tableParams" show-filter="false"
+						class="table table-condensed table-hover">
+						<thead>
+							<tr>
+								<th></th>
+								<th>R</th>
+								<th>L</th>
+								<th>Last Name</th>
+								<th>First Name</th>
+								<th>Middle Name</th>
+								<th>Pax Type</th>
+								<th>Gender</th>
+								<th>DOB</th>
+								<th>Citizenship</th>
+								<th>Document #</th>
+								<th>T</th>
+								<th>Issuance Country</th>
+								<th>Seat</th>
+
+							</tr>
+						</thead>
+						<tbody ng-repeat="pax in getPaxSpecificList($index)" style="font-size: 14px;">
+							<!--  style="border-collapse:collapse;"  data-toggle="collapse" -->
+							<tr>
+								<td></td>
+								<td ng-if="pax.ruleHits > 0" data-toggle="collapse"
+									data-target="#nestedRule{{pax.lastName+$index}}"
+									aria-expanded="false" aria-controls="nestedRule{{$index}}"
+									style="cursor: pointer;" ng-click="getRuleHits(pax.paxId);">
+
+									<span class="glyphicon glyphicon-flag"
+									style="padding: 1.5px; color: #d9534f;"></span>
+
+									<div class="accordian-body collapse md-6-col"
+										id="nestedRule1{{pax.lastName+$index}}">
+										<table id="paxRuleTable" show-filter="false"
+											class="table table-condensed table-hover">
+											<thead>
+												<tr>
+													<th></th>
+													<th>R</th>
+													<th>L</th>
+
+
+												</tr>
+											</thead>
+											<tbody>
+												<!--  style="border-collapse:collapse;"  data-toggle="collapse" -->
+												<tr>
+													<td></td>
+													<td>
+														<div class="glyph">
+															<span class="glyph glyphicon glyphicon-phone img-circle"></span>
+														</div> #
+													</td>
+													<td>#</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+
+								</td>
+								<td ng-if="pax.ruleHits === 0"><span
+									class="glyphicon glyphicon-flag"
+									style="padding: 1.5px; color: #007500;"></span></td>
+								<td>#</td>
+								<td>{{pax.lastName}}</td>
+								<td>{{pax.firstName}}</td>
+								<td>{{pax.middleName}}</td>
+								<td>{{pax.paxType}}</td>
+								<td>{{pax.gender}}</td>
+								<td>{{pax.dob}}</td>
+								<td>{{pax.citizenship}}</td>
+								<td>{{pax.documents[0].documentNumber}}</td>
+								<td>{{pax.documents[0].documentType}}</td>
+								<td>{{pax.documents[0].issuanceCountry}}</td>
+								<td>59B</td>
+							</tr>
+							<!-- Hidden Row -->
+						<tr class="accordian-body collapse md-12-col"
+										id="nestedRule{{pax.lastName+$index}}">
+										<td colspan="16">
+										<div class="md-12-col">
+								<table id="paxRuleTable" show-filter="false"
+											class="table table-condensed table-hover">
+											<thead>
+												<tr>
+													<th></th>
+													<th>Title</th>
+													<th>Description</th>
 													
-												</tbody>
-											</table>
-            				
-            				 </div>
-            <!-- 		</td> -->
-            <!-- 	</tr> 
-            	</table> -->
-            <!-- 	</div> -->
-            
-            </td>
-        
-     </tr>
-    
-    </tbody>
+												</tr>
+											</thead>
+											<tbody>
+												<!--  style="border-collapse:collapse;"  data-toggle="collapse" -->
+												<tr>
+													<td></td>
+													<td>
+														<ol>
+															<li>LOREM IPSUM</li>
+															<li>LOREM IPSUM</li>
+															<li>LOREM IPSUM</li>
+															<li>LOREM IPSUM</li>
+														</ol>
+													</td>
+													<td>#</td>
+												</tr>
+												
+												<tr>
+													<td></td>
+													<td>
+														<ol>
+															
+															<li>LOREM IPSUM</li>
+															<li>LOREM IPSUM</li>
+														</ol>
+													</td>
+													<td>#</td>
+												</tr>
+												
+											</tbody>
+										</table>
+						</div>
+										</td>
+										</tr>
+						
+
+						</tbody>
+
+					</table>
+
+				</div> <!-- 		</td> --> <!-- 	</tr> 
+            	</table> --> <!-- 	</div> -->
+
+			</td>
+
+		</tr>
+
+
+	</tbody>
 </table>
+
+</div> <!-- outer div -->
+
+<script type="text/ng-template" id="custom/pager">
+        <ul class="pager ng-cloak">
+            <li ng-repeat="page in pages"
+                ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+                <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo; Previous</a>
+                <a ng-switch-when="next" ng-click="params.page(page.number)" href="">Next &raquo;</a>
+            </li>
+            <li>
+                <div class="btn-group">
+                    <button type="button" ng-class="{'active':params.count() == 10}" ng-click="params.count(10)" class="btn btn-default">10</button>
+                    <button type="button" ng-class="{'active':params.count() == 25}" ng-click="params.count(25)" class="btn btn-default">25</button>
+                    <button type="button" ng-class="{'active':params.count() == 50}" ng-click="params.count(50)" class="btn btn-default">50</button>
+                    <button type="button" ng-class="{'active':params.count() == 100}" ng-click="params.count(100)" class="btn btn-default">100</button>
+                </div>
+            </li>
+        </ul>
+    </script>
 

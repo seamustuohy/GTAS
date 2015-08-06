@@ -1,7 +1,16 @@
-app.controller('PaxController', function($scope, $filter, $q, ngTableParams, paxService) {
+app.controller('PaxController', function($scope, $filter, $q, ngTableParams, paxService, sharedPaxData) {
 	var paxData = [];
     var flightId = 1;
     var self = this;
+    var paxArrayIndex = 0;
+    
+    $scope.list = sharedPaxData.list; 
+    $scope.add = sharedPaxData.add;
+    $scope.getAll = sharedPaxData.getAll;
+    
+    $scope.getPaxSpecificList = function(index){
+        return $scope.list(index);        
+    };
     
     var data = [];
     
@@ -16,7 +25,7 @@ app.controller('PaxController', function($scope, $filter, $q, ngTableParams, pax
     }, {
     	
     	
-    	 total: paxData.length, // length of data
+    	 total: (paxData).length, // length of data
          getData: function($defer, params) {
         	 
         	 /*paxService.getPax(flightId).then(function (myData) {
@@ -57,21 +66,39 @@ app.controller('PaxController', function($scope, $filter, $q, ngTableParams, pax
     });
     
     
-    $scope.getPaxInfo = function(flightId)
+    $scope.getPaxInfo = function(flightId, index)
     
     {    	
     	self.flightId = flightId;
     	
     	paxService.getPax(flightId).then(function (myData) {
-    	paxData = myData;
+    	//paxData = [];	
+    	self.paxArrayIndex = index;
+    	$scope.add(myData, index);
+    	paxData = $scope.getPaxSpecificList(index);
     	$scope.$emit('paxDataResponse', paxData);
        	$scope.tableParams.settings().$scope = $scope;
        	$scope.tableParams.reload();
      	 });
     	
-    	 
-    	
     }; 	
+    
+    
+    $scope.getRuleHits = function(travelerId){
+    	
+    	paxService.getRuleHits(travelerId).then(function (myData) {
+        	
+    		//paxData = [];	
+        	//self.paxArrayIndex = index;
+        //	$scope.add(myData);
+        	//paxData = $scope.getPaxSpecificList(index);
+        	//$scope.$emit('paxDataResponse', paxData);
+           	//$scope.tableParams.settings().$scope = $scope;
+           	//$scope.tableParams.reload();
+    		
+         	 });
+    };
+    
     
     //	 paxService.getPax(flightId).then(function (myData) { 
     //	 paxData = myData;
