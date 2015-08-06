@@ -21,7 +21,7 @@ import gov.gtas.parsers.exception.ParseException;
  * @param <T>
  *            the specific message class that will be returned after parsing.
  */
-public abstract class EdifactParser <T extends EdifactMessageVo> {
+public abstract class EdifactParser <T extends MessageVo> {
     /** factory for creating segment classes */
     protected SegmentFactory segmentFactory;
 
