@@ -3,6 +3,8 @@ package gov.gtas.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import gov.gtas.model.Document;
+import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Traveler;
-import gov.gtas.parsers.vo.air.DocumentVo;
-import gov.gtas.parsers.vo.air.TravelerVo;
+import gov.gtas.dataobject.DocumentVo;
+import gov.gtas.dataobject.TravelerVo;
 import gov.gtas.repository.DocumentRepository;
+import gov.gtas.services.HitsSummaryService;
 import gov.gtas.services.PassengerService;
 
 @Controller
@@ -31,6 +35,11 @@ public class TravelerController {
     @Autowired
     private DocumentRepository docDao;
     
+    @Autowired
+    private HitsSummaryService hitsSummaryService;
+    
+    private static List<HitsSummary> hitsList = new ArrayList<HitsSummary>();
+       
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/travelers", method = RequestMethod.GET)
@@ -49,6 +58,7 @@ public class TravelerController {
         for (Traveler t : travelers) {
             logger.debug(t.getLastName());
             TravelerVo vo = new TravelerVo();
+            vo.setPaxId(String.valueOf(t.getId()));
             vo.setTravelerType(t.getTravelerType());
             vo.setLastName(t.getLastName());
             vo.setFirstName(t.getFirstName());
@@ -74,9 +84,46 @@ public class TravelerController {
                 docVo.setIssuanceDate(d.getIssuanceDate());
                 vo.addDocument(docVo);
             }
+            
+            vo.setRuleHits(getTotalHitsByPaxID(t.getId()));
+
             rv.add(vo);
         }
         
         return rv;
     }
+    
+    
+    /**
+     * 
+     * @param travelers
+     * @return
+     */
+    @Transactional
+    public int getTotalHitsByPaxID(Long travelerID){
+
+    	int totalHits = 0;
+    	
+    	if(hitsList == null || hitsList.isEmpty()){
+    		
+    		Iterable<HitsSummary> summary = hitsSummaryService.findAll();
+            
+            for(HitsSummary s:summary){
+            	hitsList.add((HitsSummary)s);
+            }
+    	
+    	} // END IF
+    	
+    	    		
+    	for(HitsSummary s: hitsList){
+    			
+    		if(s.getTravelerId().equals(travelerID)){
+    			totalHits++;
+    			}
+    		}
+    	    	
+    	return totalHits;
+    }
+    
+    
 }
