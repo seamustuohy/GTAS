@@ -3515,28 +3515,6 @@
             "OR": "OR"
         },
         "operators": {
-            "equal": "equal",
-            "not_equal": "not equal",
-            "in": "in",
-            "not_in": "not in",
-            "less": "less",
-            "less_or_equal": "less or equal",
-            "greater": "greater",
-            "greater_or_equal": "greater or equal",
-            "between": "between",
-            "not_between": "not between",
-            "begins_with": "begins with",
-            "not_begins_with": "doesn't begin with",
-            "contains": "contains",
-            "not_contains": "doesn't contain",
-            "ends_with": "ends with",
-            "not_ends_with": "doesn't end with",
-            "is_empty": "is empty",
-            "is_not_empty": "is not empty",
-            "is_null": "is null",
-            "is_not_null": "is not null"
-            /* begin DROOLS extension */
-            ,
             "EQUAL": "equal",
             "NOT_EQUAL": "not equal",
             "IN": "in",
