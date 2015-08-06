@@ -1,15 +1,15 @@
 package gov.gtas.services;
 
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.parsers.paxlst.PaxlstMessageVo;
-
 import java.io.File;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class ApisMessageLoader {
-    public static void processSingleFile(ApisMessageService svc, File f) {
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.parsers.edifact.MessageVo;
+
+public class MessageLoader {
+    public static void processSingleFile(MessageService svc, File f) {
         String filePath = f.getAbsolutePath();
         if (exceedsMaxSize(f)) {
             System.err.println(filePath + " exceeds max file size");
@@ -17,18 +17,21 @@ public class ApisMessageLoader {
         }
         
         System.out.println("processing file " + filePath);
-        PaxlstMessageVo m = svc.parseApisMessage(filePath);
+        MessageVo m = svc.parse(filePath);
         if (m == null) {
             System.out.println("error parsing " + filePath);
             return;
         }
 
-        svc.loadApisMessage(m);
+        svc.load(m);
     }
     
     /**
-     * Type “B” messages are no longer limited to a length of 3840 bytes. SITA
-     * and ARInc now support Type “B” message lengths up to 64,000 bytes.
+     * For APIS messages, Type “B” messages are no longer limited to a length of
+     * 3840 bytes. SITA and ARInc now support Type “B” message lengths up to
+     * 64,000 bytes.
+     * 
+     * TODO: what about pnr?
      */
     public static boolean exceedsMaxSize(File f) {
         final int MAX_SIZE = 64000;
@@ -38,14 +41,27 @@ public class ApisMessageLoader {
 
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.out.println("Usage: ApisMessageLoader [apis files]");
-            System.out.println("Usage: ApisMessageLoader [incoming dir] [outgoing dir]");
+            System.out.println("Usage: MessageLoader [message type] [files]");
+            System.out.println("Usage: MessageLoader [message type] [incoming dir] [outgoing dir]");
             System.exit(0);
         }
 
         try (ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(CommonServicesConfig.class)) {
-            ApisMessageService svc = ctx.getBean(ApisMessageService.class);
-            File tmp = new File(args[0]);
+            MessageService svc = null;
+            String messageType = args[0];
+            switch (messageType.toLowerCase()) {
+            case "apis":
+                svc = ctx.getBean(ApisMessageService.class);
+                break;
+            case "pnr":
+                svc = ctx.getBean(PnrMessageService.class);
+                break;
+            default:
+                System.err.println("Unknown message type");
+                System.exit(-1);
+            }
+            
+            File tmp = new File(args[1]);
             if (tmp.isFile()) {
                 // assume list of files given; ignore any directories
                 for (int i = 0; i < args.length; i++) {
@@ -77,7 +93,7 @@ public class ApisMessageLoader {
             
             } else {
                 System.out.println("unrecognized file or directory: " + args[0]);
-                System.exit(0);                                    
+                System.exit(-1);                                    
             }
         }
     }

@@ -95,37 +95,18 @@
         <version>2.4.1</version>
         <executions>
           <execution>
-            <id>build-publisher</id>
+            <id>build-gtas-loader</id>
             <configuration>
               <appendAssemblyId>false</appendAssemblyId>
               <archive>
                 <manifest>
-                  <mainClass>gov.gtas.services.ApisMessageLoader</mainClass>
+                  <mainClass>gov.gtas.services.MessageLoader</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>
                 <descriptorRef>jar-with-dependencies</descriptorRef>
               </descriptorRefs>
-              <finalName>apis-loader</finalName>
-            </configuration>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>build-logReader</id>
-            <configuration>
-              <appendAssemblyId>false</appendAssemblyId>
-              <archive>
-                <manifest>
-                  <mainClass>gov.gtas.services.PnrMessageLoader</mainClass>
-                </manifest>
-              </archive>
-              <descriptorRefs>
-                <descriptorRef>jar-with-dependencies</descriptorRef>
-              </descriptorRefs>
-              <finalName>pnr-loader</finalName>
+              <finalName>gtas-loader</finalName>
             </configuration>
             <phase>package</phase>
             <goals>
