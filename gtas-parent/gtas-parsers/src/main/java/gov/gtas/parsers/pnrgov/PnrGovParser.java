@@ -48,7 +48,7 @@ import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 
-public final class PnrGovParser extends EdifactParser<PnrGovMessageVo> {
+public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private static final String[] SEGMENT_NAMES = new String[] { "ABI", "ADD", "APD", "DAT", "EBD", "EQN", "FAR", "FOP",
             "FTI", "IFT", "LTS", "MON", "MSG", "ORG", "PTK", "RCI", "REF", "RPI", "SAC", "SRC", "SSD", "SSR", "TBD",
             "TIF", "TKT", "TRA", "TRI", "TVL", "TXD" };
@@ -57,7 +57,7 @@ public final class PnrGovParser extends EdifactParser<PnrGovMessageVo> {
     private PnrVo currentPnr;
     
     public PnrGovParser() {
-        this.parsedMessage = new PnrGovMessageVo();
+        this.parsedMessage = new PnrMessageVo();
     }
 
     @Override
