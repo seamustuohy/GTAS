@@ -2,8 +2,10 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [],
-        flightsData = [],
-        travelersData = [];
+        dataSource = {
+            FLIGHT: [],
+            TRAVELER: []
+        };
 
     $scope.loadRule = function () {
         var obj = this.$data[this.$index];
@@ -120,7 +122,6 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             $scope.alertError('Can not execute / invalid query');
             return;
         }
-
         queryService.executeQuery(baseUrl, qbData).then(function (myData) {
             var results = $scope.viewType.toLowerCase() + 'Results';
 
@@ -129,7 +130,8 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
                 return;
             }
 
-            $scope[results] =  myData.result;
+            dataSource[$scope.viewType] =  myData.result;
+            $scope[results].settings().$scope = $scope;
             $scope[results].reload();
         });
     };
@@ -138,9 +140,9 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         page: 1,            // show first page
         count: 10           // count per page
     }, {
-        total: flightsData.length, // length of data
+        total: dataSource.FLIGHT.length, // length of data
         getData: function ($defer, params) {
-            var orderedFlightsData = params.sorting() ? $filter('orderBy')(flightsData, params.orderBy()) : flightsData;
+            var orderedFlightsData = params.sorting() ? $filter('orderBy')(dataSource.FLIGHT, params.orderBy()) : dataSource.FLIGHT;
             orderedFlightsData = params.filter() ? $filter('filter')(orderedFlightsData, params.filter()) : orderedFlightsData;
             params.total(orderedFlightsData.length);
             $defer.resolve(orderedFlightsData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
@@ -151,9 +153,9 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         page: 1,            // show first page
         count: 10           // count per page
     }, {
-        total: travelersData.length, // length of data
+        total: dataSource.TRAVELER.length, // length of data
         getData: function ($defer, params) {
-            var orderedTravelersData = params.sorting() ? $filter('orderBy')(travelersData, params.orderBy()) : travelersData;
+            var orderedTravelersData = params.sorting() ? $filter('orderBy')(dataSource.TRAVELER, params.orderBy()) : dataSource.TRAVELER;
             orderedTravelersData = params.filter() ? $filter('filter')(orderedTravelersData, params.filter()) : orderedTravelersData;
             params.total(orderedTravelersData.length);
             $defer.resolve(orderedTravelersData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
