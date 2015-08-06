@@ -2,7 +2,6 @@ package gov.gtas.parsers.pnrgov;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
@@ -43,10 +42,9 @@ import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.vo.air.AddressVo;
-import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 
 public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private static final String[] SEGMENT_NAMES = new String[] { "ABI", "ADD", "APD", "DAT", "EBD", "EQN", "FAR", "FOP",
@@ -179,6 +177,8 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
      */
     private void processGroup2(TIF tif) throws ParseException {
         TravelerVo p = new TravelerVo();
+        // TODO: default
+        p.setTravelerType("P");
         TravelerDetails td = tif.getTravelerDetails().get(0);
         p.setLastName(tif.getTravelerSurname());
         p.setFirstName(td.getTravelerGivenName());

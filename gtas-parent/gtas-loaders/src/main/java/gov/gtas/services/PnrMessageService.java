@@ -2,6 +2,8 @@ package gov.gtas.services;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -12,12 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.EdifactMessage;
+import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
+import gov.gtas.model.PnrData;
 import gov.gtas.model.PnrMessage;
+import gov.gtas.model.Traveler;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrMessageVo;
+import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
+import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.parsers.vo.air.TravelerVo;
 import gov.gtas.repository.PnrMessageRepository;
 
 @Service
@@ -25,8 +33,8 @@ public class PnrMessageService {
     private static final Logger logger = LoggerFactory.getLogger(PnrMessageService.class);
    
     @Autowired
-    private AirportService airportService;
-
+    private LoaderUtils utils;
+    
     @Autowired
     private PnrMessageRepository msgDao;
     
@@ -66,8 +74,40 @@ public class PnrMessageService {
         return vo;
     }
     
+    public void loadPnrMessage(PnrMessageVo m) {
+        for (PnrVo vo : m.getPnrRecords()) {
+            PnrData pnr = null;
+            try {
+                pnr = new PnrData();
+                this.pnrMessage.getPnrs().add(pnr);
+                
+                Set<Traveler> pax = new HashSet<>();        
+                for (TravelerVo pvo : vo.getPassengers()) {
+                    Traveler p = utils.convertTravelerVo(pvo);
+                    pax.add(p);
+                }
+
+                Flight f = null;
+                for (FlightVo fvo : vo.getFlights()) {
+                    f = utils.convertFlightVo(fvo);
+                    f.setPassengers(pax);
+                    pnr.getFlights().add(f);
+                }
+                this.pnrMessage.setStatus(MessageStatus.LOADED);
+    
+            } catch (Exception e) {
+                this.pnrMessage.setStatus(MessageStatus.FAILED_LOADING);
+                String stacktrace = ExceptionUtils.getStackTrace(e);
+                this.pnrMessage.setError(stacktrace);
+                logger.error(stacktrace);
+            } finally {
+                createMessage(pnrMessage);            
+            }
+        }
+    }
+
     @Transactional
-    public PnrMessage createMessage(PnrMessage m) {
+    private PnrMessage createMessage(PnrMessage m) {
         return msgDao.save(m);
     }
 
