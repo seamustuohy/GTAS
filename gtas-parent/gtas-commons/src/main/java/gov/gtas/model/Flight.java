@@ -65,7 +65,7 @@ public class Flight extends BaseEntityAudit {
     @Temporal(TemporalType.TIMESTAMP)
     private Date eta;
     
-    @Column(length = 3)
+    @Column(length = 3, nullable = false)
     private String direction;
     
     public Set<Traveler> getPassengers() {
