@@ -1,7 +1,9 @@
 app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService, queryService, $timeout) {
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
-    var data = [];
+    var data = [],
+        flightsData = [],
+        travelersData = [];
 
     $scope.loadRule = function () {
         var obj = this.$data[this.$index];
@@ -118,34 +120,43 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             $scope.alertError('Can not execute / invalid query');
             return;
         }
+
         queryService.executeQuery(baseUrl, qbData).then(function (myData) {
-            $scope.alertInfo('queryService called');
+            var results = $scope.viewType.toLowerCase() + 'Results';
+
+            if (myData.result === undefined) {
+                $scope.alertError('Error!');
+                return;
+            }
+
+            $scope[results] =  myData.result;
+            $scope[results].reload();
         });
     };
 
-    $scope.flightsResults = new ngTableParams({
+    $scope.flightResults = new ngTableParams({
         page: 1,            // show first page
         count: 10           // count per page
     }, {
-        total: data.length, // length of data
-        getData: function($defer, params) {
-            var orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
-            orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
-            params.total(orderedData.length);
-            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        total: flightsData.length, // length of data
+        getData: function ($defer, params) {
+            var orderedFlightsData = params.sorting() ? $filter('orderBy')(flightsData, params.orderBy()) : flightsData;
+            orderedFlightsData = params.filter() ? $filter('filter')(orderedFlightsData, params.filter()) : orderedFlightsData;
+            params.total(orderedFlightsData.length);
+            $defer.resolve(orderedFlightsData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
     });
 
-    $scope.travelersResults = new ngTableParams({
+    $scope.travelerResults = new ngTableParams({
         page: 1,            // show first page
         count: 10           // count per page
     }, {
-        total: data.length, // length of data
-        getData: function($defer, params) {
-            var orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
-            orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
-            params.total(orderedData.length);
-            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        total: travelersData.length, // length of data
+        getData: function ($defer, params) {
+            var orderedTravelersData = params.sorting() ? $filter('orderBy')(travelersData, params.orderBy()) : travelersData;
+            orderedTravelersData = params.filter() ? $filter('filter')(orderedTravelersData, params.filter()) : orderedTravelersData;
+            params.total(orderedTravelersData.length);
+            $defer.resolve(orderedTravelersData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
         }
     });
 });
