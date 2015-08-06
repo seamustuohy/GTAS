@@ -203,7 +203,7 @@
         "id": "FLIGHT.eta",
         "label": "ETA",
         "type": "date",
-        "plugin": "datetpicker"
+        "plugin": "datepicker"
       },
       {
         "id": "FLIGHT.etd",
@@ -418,7 +418,7 @@
         "type": "string"
       },
       {
-        "id": "TRAVELER.traveler_type",
+        "id": "TRAVELER.travelerType",
         "label": "Type",
         "type": "string"
       }
