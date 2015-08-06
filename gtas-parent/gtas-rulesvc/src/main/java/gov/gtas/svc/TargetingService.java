@@ -50,26 +50,18 @@ public interface TargetingService {
 	RuleServiceResult applyRules(RuleServiceRequest request, String drlRules);
 
 	/**
-	 * Retrieves the list of API messages with a given status.
-	 * 
-	 * @param messageStatus
-	 *            the status
-	 * @return the retrieved ApisMessage
+	 * Running Rule Engine through Scheduler
+	 */
+	public void runningRuleEngine();
+
+	/**
+	 * retrieve ApisMessage from db
 	 */
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus);
 
 	/**
-	 * Updates the API message with the processing status.
-	 * 
-	 * @param messageStatus
-	 *            the status
-	 * @return the retrieved ApisMessage
+	 * update ApisMessage with message status
 	 */
 	public void updateApisMessage(ApisMessage message,
 			MessageStatus messageStatus);
-
-	/**
-	 * Running Rule Engine through Scheduler
-	 */
-	public void runningRuleEngine();
 }

@@ -200,16 +200,14 @@ public class ApisMessageService {
             f.setOriginCountry(originCountry);
         }
         
-        if (vo.isOverFlight()) {
-            f.setDirection(FlightDirectionCode.OF.name());
+        if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
+            f.setDirection(FlightDirectionCode.C.name());
+        } else if (homeCountry.equals(originCountry)) {
+            f.setDirection(FlightDirectionCode.O.name());            
+        } else if (homeCountry.equals(destCountry)) {
+            f.setDirection(FlightDirectionCode.I.name());                        
         } else {
-            if (homeCountry.equals(originCountry) && homeCountry.equals(destCountry)) {
-                f.setDirection(FlightDirectionCode.C.name());
-            } else if (homeCountry.equals(originCountry)) {
-                f.setDirection(FlightDirectionCode.O.name());            
-            } else if (homeCountry.equals(destCountry)) {
-                f.setDirection(FlightDirectionCode.I.name());                        
-            }
+            f.setDirection(FlightDirectionCode.OTH.name());
         }
         
         // handle flight number specially: assume first 2 letters are carrier and rest is flight #

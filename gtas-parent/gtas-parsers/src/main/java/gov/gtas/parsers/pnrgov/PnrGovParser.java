@@ -257,6 +257,9 @@ public final class PnrGovParser extends EdifactParser<PnrGovMessageVo> {
         }
     }
 
+    /**
+     * Flight info
+     */
     private void processGroup5(TVL tvl) throws ParseException {
         FlightVo f = new FlightVo();
         f.setCarrier(tvl.getCarrier());
