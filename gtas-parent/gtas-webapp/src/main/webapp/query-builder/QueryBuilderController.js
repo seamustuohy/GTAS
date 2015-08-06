@@ -46,6 +46,15 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     $scope.buildAfterEntitiesLoaded();
 
     $scope.delete = function () {
+        if ($scope.ruleId) {
+            $scope.alertError('No rule loaded to delete');
+            return;
+        }
+
+        if ($scope.authorId) {
+            $scope.alertError('No user authenticated');
+            return;
+        }
         queryBuilderService.deleteQuery($scope.ruleId, $scope.authorId).then(function (myData) {
             $scope.newRule();
             $scope.tableParams.reload();
@@ -96,8 +105,8 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     };
 
     $scope.serviceURLs = {
-        FLIGHT: '/gtas/queryFlights/',
-        TRAVELER: '/gtas/queryPassengers/'
+        FLIGHT: '/gtas/query/queryFlights/',
+        TRAVELER: '/gtas/query/queryPassengers/'
     };
 
     $scope.viewType = null;
@@ -109,4 +118,30 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             $scope.alertInfo('queryService called');
         });
     };
+
+    $scope.flightsResults = new ngTableParams({
+        page: 1,            // show first page
+        count: 10           // count per page
+    }, {
+        total: data.length, // length of data
+        getData: function($defer, params) {
+            var orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+            orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
+            params.total(orderedData.length);
+            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
+    });
+
+    $scope.travelersResults = new ngTableParams({
+        page: 1,            // show first page
+        count: 10           // count per page
+    }, {
+        total: data.length, // length of data
+        getData: function($defer, params) {
+            var orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+            orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
+            params.total(orderedData.length);
+            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
+    });
 });

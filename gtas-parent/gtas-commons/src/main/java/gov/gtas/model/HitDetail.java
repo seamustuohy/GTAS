@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "hit_detail")
 public class HitDetail extends BaseEntity {
@@ -22,7 +24,7 @@ public class HitDetail extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = 5219262569468670275L;
-
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "hits_summary_id", nullable = false, referencedColumnName = "id")
 	private HitsSummary parent;

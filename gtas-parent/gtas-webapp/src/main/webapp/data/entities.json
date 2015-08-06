@@ -65,6 +65,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "countries"
       },
       {
@@ -91,6 +92,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "doc_types"
       }
     ]
@@ -126,6 +128,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "airports"
       },
       {
@@ -141,6 +144,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "airports"
       },
       {
@@ -156,6 +160,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "carriers"
       },
       {
@@ -171,6 +176,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "countries"
       },
       {
@@ -186,6 +192,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "countries"
       },
       {
@@ -299,11 +306,12 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "countries"
       },
       {
         "id": "TRAVELER.debarkation",
-        "label": "Debarkation",
+        "label": "Debarkation Airport",
         "type": "string",
         "operators": [
           "EQUAL",
@@ -314,6 +322,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "airports"
       },
       {
@@ -329,6 +338,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "countries"
       },
       {
@@ -339,7 +349,7 @@
       },
       {
         "id": "TRAVELER.embarkation",
-        "label": "Embarkation",
+        "label": "Embarkation Airport",
         "type": "string",
         "operators": [
           "EQUAL",
@@ -350,6 +360,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "airports"
       },
       {
@@ -365,6 +376,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "countries"
       },
       {
@@ -410,12 +422,8 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "countries"
-      },
-      {
-        "id": "TRAVELER.seat",
-        "label": "Seat",
-        "type": "string"
       },
       {
         "id": "TRAVELER.travelerType",
@@ -477,6 +485,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "airports"
       },
       {
@@ -492,6 +501,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "countries"
       },
       {
@@ -537,6 +547,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "airports"
       },
       {
@@ -552,6 +563,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "countries"
       },
       {

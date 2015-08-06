@@ -6,7 +6,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.repository.ApisMessageRepository;
@@ -18,12 +17,8 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 /**
@@ -45,7 +40,8 @@ public class TargetingServiceTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		targetingService = new TargetingServiceImpl(mockRuleService);
-		ReflectionTestUtils.setField(targetingService, "apisMsgRepository", mockApisMsgRepository);
+		ReflectionTestUtils.setField(targetingService, "apisMsgRepository",
+				mockApisMsgRepository);
 	}
 
 	@After

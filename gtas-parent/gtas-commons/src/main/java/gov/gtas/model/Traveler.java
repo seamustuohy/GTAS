@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 public class Traveler extends BaseEntityAudit {
     public Traveler() { }
     
-    @Column(name = "traveler_type", length = 3)
+    @Column(name = "traveler_type", length = 3, nullable = false)
     private String travelerType;
 
     @ManyToMany(

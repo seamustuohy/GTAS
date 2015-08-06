@@ -52,6 +52,15 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
 
     $scope.delete = function () {
+        if ($scope.ruleId) {
+            $scope.alertError('No rule loaded to delete');
+            return;
+        }
+
+        if ($scope.authorId) {
+            $scope.alertError('No user authenticated');
+            return;
+        }
         riskCriteriaService.ruleDelete($scope.ruleId, $scope.authorId).then(function (myData) {
             $scope.newRule();
             $scope.tableParams.reload();
@@ -60,12 +69,6 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
 
     $scope.summaryDefaults = {title: '', description: null, startDate: $scope.today.toString(), endDate: null, enabled: true};
 
-    $($scope.startDate).datepicker({
-        minDate: "today",
-        startDate: "today",
-        format: 'yyyy-mm-dd',
-        autoClose: true
-    });
 
 //    $scope.newRule();
     $scope.saving = false;
@@ -147,4 +150,18 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
             $scope.showPencil(myData.responseDetails[0].attributeValue);
         });
     };
+
+    $timeout(function() {
+        var $startDate = $('#start-date')
+        $startDate.datepicker({
+            minDate: "today",
+            startDate: "today",
+            format: 'yyyy-mm-dd',
+            autoClose: true
+        });
+
+        $startDate.datepicker('setDate', new Date($scope.today));
+        $startDate.datepicker('update');
+        $startDate.val($scope.today.toString());
+    }, 100)
 });
