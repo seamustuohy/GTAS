@@ -1,14 +1,22 @@
 [
   {
     "id": "F",
-    "name": "FEMALE"
+    "name": "Female"
   },
   {
     "id": "M",
-    "name": "MALE"
+    "name": "Male"
   },
   {
     "id": "U",
-    "name": "UNKNOWN"
+    "name": "Undisclosed"
+  },
+  {
+    "id": "FI",
+    "name": "Female Infant"
+  },
+  {
+    "id": "MI",
+    "name": "Male Infant"
   }
 ]
