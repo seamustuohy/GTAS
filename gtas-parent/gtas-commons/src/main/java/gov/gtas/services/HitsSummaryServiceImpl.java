@@ -27,12 +27,14 @@ public class HitsSummaryServiceImpl implements HitsSummaryService {
 		return hitsSummaryRepository.findByTravelerId(id);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gov.gtas.services.HitsSummaryService#findAll()
 	 */
 	@Override
 	public Iterable<HitsSummary> findAll() {
 		return hitsSummaryRepository.findAll();
 	}
-	
+
 }

@@ -5,10 +5,7 @@ package gov.gtas.svc;
 
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.model.ApisMessage;
-import gov.gtas.model.MessageStatus;
 import gov.gtas.rule.RuleServiceResult;
-
-import java.util.List;
 
 /**
  * The API for the Targeting Service.
@@ -48,25 +45,6 @@ public interface TargetingService {
 	 * @return the result of the invocation.
 	 */
 	RuleServiceResult applyRules(RuleServiceRequest request, String drlRules);
-
-	/**
-	 * Retrieves the list of API messages with a given status.
-	 * 
-	 * @param messageStatus
-	 *            the status
-	 * @return the retrieved ApisMessage
-	 */
-	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus);
-
-	/**
-	 * Updates the API message with the processing status.
-	 * 
-	 * @param messageStatus
-	 *            the status
-	 * @return the retrieved ApisMessage
-	 */
-	public void updateApisMessage(ApisMessage message,
-			MessageStatus messageStatus);
 
 	/**
 	 * Running Rule Engine through Scheduler
