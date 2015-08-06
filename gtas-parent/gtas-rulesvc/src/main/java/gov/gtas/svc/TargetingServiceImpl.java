@@ -115,14 +115,16 @@ public class TargetingServiceImpl implements TargetingService {
 		return res;
 	}
 
+	@Override
 	@Transactional
-	private List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus) {
+	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus) {
 		return apisMsgRepository.findByStatus(messageStatus);
 
 	}
 
+	@Override
 	@Transactional
-	private void updateApisMessage(ApisMessage message,
+	public void updateApisMessage(ApisMessage message,
 			MessageStatus messageStatus) {
 		ApisMessage apisMessage = apisMsgRepository.findOne(message.getId());
 		if (apisMessage != null) {
