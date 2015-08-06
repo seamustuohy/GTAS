@@ -116,7 +116,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
             }
         }
 
-        details = $scope.$builder.queryBuilder('saveRules');
+        details = $scope.$builder.queryBuilder('getDrools');
 
         if (details === false) {
             $scope.saving = false;
@@ -124,7 +124,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
         }
         ruleObject = {
             id: $scope.ruleId,
-            details: $scope.$builder.queryBuilder('saveRules'),
+            details: details,
             summary: {
                 title: $scope.title,
                 description: $scope.description || null,

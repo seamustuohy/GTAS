@@ -78,7 +78,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             $scope.saving = false;
             return;
         }
-        query = $scope.$builder.queryBuilder('saveRules');
+        query = $scope.$builder.queryBuilder('getDrools');
 
         if (query === false) {
             $scope.saving = false;
@@ -112,9 +112,13 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     $scope.viewType = null;
     $scope.viewTypeChange = function () {
         var baseUrl = $scope.serviceURLs[$scope.viewType],
-            data = $scope.$builder.queryBuilder('saveRules');
-        queryService.executeQuery(baseUrl, data).then(function (myData) {
-            console.log(myData);
+            qbData = $scope.$builder.queryBuilder('getDrools');
+
+        if (qbData === false) {
+            $scope.alertError('Can not execute / invalid query');
+            return;
+        }
+        queryService.executeQuery(baseUrl, qbData).then(function (myData) {
             $scope.alertInfo('queryService called');
         });
     };

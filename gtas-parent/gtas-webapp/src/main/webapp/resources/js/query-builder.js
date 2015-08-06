@@ -1269,7 +1269,7 @@
     /**
      * SAVE rules from object
      */
-    QueryBuilder.prototype.saveRules = function() {
+    QueryBuilder.prototype.getDrools = function() {
         var rules = JSON.stringify(this.getRules());
         if (rules === "{}") {
             console.log('rules can not be empty');
