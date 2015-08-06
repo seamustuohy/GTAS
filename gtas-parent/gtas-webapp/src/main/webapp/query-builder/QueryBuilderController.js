@@ -85,21 +85,13 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         };
 
         queryBuilderService.saveQuery(queryObject).then(function (myData) {
-            var $tableRows = $('table tbody').eq(0).find('tr');
-            if (myData.errorCode !== undefined) {
-                debugger;
-                $scope.alertError(myData.errorMessage);
+            if (myData.status === 'FAILURE') {
+                $scope.alertError(myData.message);
                 $scope.saving = false;
                 return;
             }
             $scope.tableParams.reload();
-            $timeout(function () {
-                if ($scope.ruleId === null) {
-                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click();
-                }
-                $scope.ruleId = myData.result[0].id || null;
-                $scope.saving = false;
-            }, 500);
+            $scope.showPencil(myData.result[0].id);
         });
     };
 

@@ -144,13 +144,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
                 return;
             }
             $scope.tableParams.reload();
-            $timeout(function () {
-                if ($scope.ruleId === null) {
-                    $('table tbody').eq(0).find('tr').eq($tableRows.length).click()
-                }
-                $scope.ruleId = myData.responseDetails[0].attributeValue || null;
-                $scope.saving = false;
-            }, 500);
+            $scope.showPencil(myData.responseDetails[0].attributeValue);
         });
     };
 });

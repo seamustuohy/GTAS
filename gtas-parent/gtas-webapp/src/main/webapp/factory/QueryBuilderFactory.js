@@ -83,6 +83,24 @@ app.factory('QueryBuilderCtrl', function () {
             },
             filters: []
         };
+
+        $scope.showPencil = function (id) {
+            $timeout(function () {
+                var $pageControls = $('.ng-table-pagination').children();
+                if ($scope.ruleId === null && $pageControls.length >= 4) {
+                    $pageControls.eq($pageControls.length - 2).find('a')[0].click();
+                }
+                $timeout(function () {
+                    var $tableRows = $('table tbody').eq(0).find('tr');
+                    if ($scope.ruleId === null) {
+                        $tableRows.last().click();
+                    }
+                    $scope.ruleId = id;
+                    $scope.saving = false;
+                }, 200);
+            }, 200);
+        };
+
         $scope.buildAfterEntitiesLoaded = function (options) {
             var property = 'entities',
                 $builder = $('#builder'),
@@ -131,12 +149,12 @@ app.factory('QueryBuilderCtrl', function () {
                     Object.keys($scope.options.entities).forEach(function (key){
                         $scope.options.entities[key].columns.forEach(function (column){
                             switch (column.plugin) {
-                                case 'selectize':
-                                case 'datepicker':
-                                    supplement[column.plugin](column);
-                                    break;
-                                default:
-                                    break;
+                            case 'selectize':
+                            case 'datepicker':
+                                supplement[column.plugin](column);
+                                break;
+                            default:
+                                break;
                             }
                             $scope.options.filters.push(column);
                         });
@@ -179,6 +197,7 @@ app.factory('QueryBuilderCtrl', function () {
             $scope.ruleId = null;
             $scope.$builder.queryBuilder('reset');
             $scope.loadSummary($scope.summaryDefaults);
+            document.getElementById('title').focus();
         };
 
         $scope.ruleId = null;
