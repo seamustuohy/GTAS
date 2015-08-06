@@ -7,6 +7,11 @@ public final class Constants {
 	public static final String FROM = "from";
 	public static final String WHERE = "where";
 	public static final String AND = "and";
+	public static final String JOIN = " join ";
+	public static final String JOIN_FETCH = " join fetch ";
+	public static final String FLIGHT_REF = ".flights ";
+	public static final String TRAVELER_REF = ".travelers ";
+	public static final String DOCUMENT_REF = ".documents ";
 	
 	// Entities
 	public static final String ADDRESS = "ADDRESS";

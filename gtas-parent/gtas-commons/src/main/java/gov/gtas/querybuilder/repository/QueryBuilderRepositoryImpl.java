@@ -6,6 +6,7 @@ import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.JPQLGenerator;
 import gov.gtas.querybuilder.constants.Constants;
 import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.enums.OperatorEnum;
@@ -42,11 +43,6 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderRepository.class);
 	private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-	private static final String JOIN = " join ";
-	private static final String JOIN_FETCH = " join fetch ";
-	private static final String FLIGHT_REF = ".flights ";
-	private static final String TRAVELER_REF = ".travelers ";
-	private static final String DOCUMENT_REF = ".documents ";
 	
 	@PersistenceContext 
  	private EntityManager entityManager;
@@ -183,7 +179,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			}
 			
 			try {
-				String jpqlQuery = generateQuery(queryObject, EntityEnum.FLIGHT);
+				String jpqlQuery = JPQLGenerator.generateQuery(queryObject, EntityEnum.FLIGHT);
 				logger.info("Getting Flights by this query: " + jpqlQuery);
 				TypedQuery<Flight> query = entityManager.createQuery(jpqlQuery, Flight.class);
 				MutableInt positionalParameter = new MutableInt();
@@ -212,7 +208,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			}
 			
 			try {
-				String jpqlQuery = generateQuery(queryObject, EntityEnum.TRAVELER);
+				String jpqlQuery = JPQLGenerator.generateQuery(queryObject, EntityEnum.TRAVELER);
 				logger.info("Getting Travelers by this query: " + jpqlQuery);
 				TypedQuery<Traveler> query = entityManager.createQuery(jpqlQuery, Traveler.class);
 				MutableInt positionalParameter = new MutableInt();
@@ -242,169 +238,6 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		}
 		
 		return unique;
-	}
-	
-	/**
-	 * 
-	 * @param queryObject
-	 * @param queryType
-	 * @return
-	 * @throws InvalidQueryRepositoryException 
-	 */
-	private String generateQuery(QueryObject queryObject, EntityEnum queryType) throws InvalidQueryRepositoryException {
-		String query = "";
-		
-		if(queryObject != null && queryType != null) {
-			String queryPrefix = "";
-			StringBuilder join = new StringBuilder();
-			StringBuilder where = new StringBuilder();
-			MutableInt positionalParameter = new MutableInt();
-			MutableInt level = new MutableInt();
-			
-			logger.debug("Parsing QueryObject...");
-			parseQueryObject(queryObject, queryType, join, where, positionalParameter, level);
-			logger.debug("Finished Parsing QueryObject");
-			
-			if(queryType == EntityEnum.FLIGHT) {
-				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.FLIGHT.getAlias() + 
-						" " + Constants.FROM + " " + EntityEnum.FLIGHT.getEntityName() + " " + EntityEnum.FLIGHT.getAlias();
-				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
-			}
-			else if(queryType == EntityEnum.TRAVELER) {
-				String flightsJoinStmt = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
-				String documentJoinStmt = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
-				
-				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.TRAVELER.getAlias() + 
-						" " + Constants.FROM + " " + EntityEnum.TRAVELER.getEntityName() + " " + EntityEnum.TRAVELER.getAlias();
-				
-				if(join.length() == 0) {
-					join.append(flightsJoinStmt);
-					join.append(documentJoinStmt);
-				}
-				else {
-					if(!join.toString().contains("flights")) {
-						join.append(flightsJoinStmt);
-					}
-					else {
-						String condition = JOIN + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF;
-						String joinFetchCondition = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF;
-						int startIndex = join.indexOf(condition);
-						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
-					}
-						
-					
-					if(!join.toString().contains("documents")) {
-						join.append(documentJoinStmt);
-					}
-					else {
-						String condition = JOIN + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF;
-						String joinFetchCondition = JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF;
-						int startIndex = join.indexOf(condition);
-						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
-						
-						// if this is a passenger query, you don't need the traveler join again because that is already part of the queryPrefix
-						// so remove it
-						condition = JOIN + EntityEnum.FLIGHT.getAlias() + TRAVELER_REF + EntityEnum.TRAVELER.getAlias();
-						startIndex = join.indexOf(condition);
-						join.replace(startIndex, (startIndex + condition.length()), "");
-					}
-				}
-				
-				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
-			}
-			
-			logger.info("Parsed Query: " + query);
-		}
-		
-		return query;
-	}
-	
-	private void parseQueryObject(QueryEntity queryEntity, EntityEnum queryType, StringBuilder join, StringBuilder where, MutableInt positionalParameter, MutableInt level) throws InvalidQueryRepositoryException {
-		QueryObject queryObject = null;
-		QueryTerm queryTerm = null;
-		String condition = null;
-		
-		if(queryEntity instanceof QueryObject) {
-			queryObject = (QueryObject) queryEntity;
-			condition = queryObject.getCondition();
-			level.increment();
-			
-			List<QueryEntity> rules = queryObject.getRules();
-			
-			if(level.intValue() > 1) {
-				where.append("(");
-			}
-			
-			int index = 0;
-			for(QueryEntity rule : rules) {
-				
-				if(index > 0) {
-					where.append(" " + condition + " ");
-				}
-				parseQueryObject(rule, queryType, join, where, positionalParameter, level);
-				index++;
-			}
-						
-			if(level.intValue() > 1) {
-				where.append(")");
-				level.setValue(1);
-			}
-		}
-		else if(queryEntity instanceof QueryTerm) {
-			queryTerm = (QueryTerm) queryEntity;
-			
-			String entity = queryTerm.getEntity();
-			String field = queryTerm.getField();
-			String operator = queryTerm.getOperator();
-			
-			positionalParameter.increment();
-			
-			// These four operators don't have any value ex. where firstname IS NULL
-			if(OperatorEnum.IS_EMPTY.toString().equalsIgnoreCase(operator) ||
-					OperatorEnum.IS_NOT_EMPTY.toString().equalsIgnoreCase(operator) ||
-					OperatorEnum.IS_NULL.toString().equalsIgnoreCase(operator) ||
-					OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator)) {
-				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator());
-			}
-			else if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator) ) {
-				List<String> values = null;
-				
-				if(queryTerm.getValue() != null && queryTerm.getValue().length > 0) {
-					values = Arrays.asList(queryTerm.getValue());
-				}
-				
-				if(values != null && values.size() == 2) {
-					
-					where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " ?" + positionalParameter);
-					positionalParameter.increment();
-					where.append(" " + Constants.AND + " ?" + positionalParameter);
-				}
-			}
-			else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator) || 
-					OperatorEnum.NOT_IN.toString().equalsIgnoreCase(operator)) {
-				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " (?" + positionalParameter + ")");
-			}
-			else {
-				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " ?" + positionalParameter);
-			}
-			
-			if(entity != null && !queryType.getEntityName().equalsIgnoreCase(entity)) { 
-				String joinCondition = "";
-				
-				if(entity.equalsIgnoreCase(EntityEnum.DOCUMENT.getEntityName())) {
-					joinCondition = getJoinCondition(EntityEnum.TRAVELER);
-					
-					if(join.indexOf(joinCondition) == -1) {
-						join.append(joinCondition);
-					}
-				}
-				
-				joinCondition = getJoinCondition(EntityEnum.valueOf(entity.toUpperCase()));
-				if(join.indexOf(joinCondition) == -1) {
-					join.append(getJoinCondition(EntityEnum.valueOf(entity.toUpperCase())));
-				}
-			}
-		}
 	}
 	
 	private void setJPQLParameters(Query query, QueryEntity queryEntity, MutableInt positionalParameter) throws ParseException {
@@ -551,24 +384,5 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			}
 		}
 	}
-	
-	private String getJoinCondition(EntityEnum entity) throws InvalidQueryRepositoryException {
-		String joinCondition = "";
-		
-		switch (entity.getEntityName().toUpperCase()) {
-			case Constants.FLIGHT:
-				joinCondition = JOIN + EntityEnum.TRAVELER.getAlias() + FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
-				break;
-	        case Constants.TRAVELER:
-	        	joinCondition = JOIN + EntityEnum.FLIGHT.getAlias() + TRAVELER_REF + EntityEnum.TRAVELER.getAlias();
-	        	break;
-	        case Constants.DOCUMENT:
-	        	joinCondition = JOIN + EntityEnum.TRAVELER.getAlias() + DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
-	            break;
-	        default:
-	            throw new InvalidQueryRepositoryException("Invalid Entity: " + entity.getEntityName(), null);
-		}
-		
-		return joinCondition;
-	}
+
 }
