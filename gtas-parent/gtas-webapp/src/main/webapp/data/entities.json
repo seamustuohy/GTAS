@@ -92,6 +92,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "doc_types"
       }
     ]
@@ -159,6 +160,7 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
+        "create": true,
         "dataSource": "carriers"
       },
       {
@@ -309,7 +311,7 @@
       },
       {
         "id": "TRAVELER.debarkation",
-        "label": "Debarkation",
+        "label": "Debarkation Airport",
         "type": "string",
         "operators": [
           "EQUAL",
@@ -347,7 +349,7 @@
       },
       {
         "id": "TRAVELER.embarkation",
-        "label": "Embarkation",
+        "label": "Embarkation Airport",
         "type": "string",
         "operators": [
           "EQUAL",
