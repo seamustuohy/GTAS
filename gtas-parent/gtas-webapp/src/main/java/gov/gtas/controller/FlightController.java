@@ -137,12 +137,7 @@ public class FlightController {
     }
     
     
-    /**
-     * 
-     * @param travelers
-     * @return
-     */
-    
+     
     @Transactional
     public int getTotalHitsByFlightId(List<Traveler> travelers){
 

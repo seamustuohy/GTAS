@@ -63,7 +63,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    logger.info("MAC: configuring spring security");
+    
         
         SavedRequestAwareAuthenticationSuccessHandler savedReqHandler = new SavedRequestAwareAuthenticationSuccessHandler();
         savedReqHandler.setAlwaysUseDefaultTargetUrl(true);
@@ -72,16 +72,16 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         
         http
         .authorizeRequests()
-        .antMatchers("/**/*").permitAll()
+        // .antMatchers("/**/*").permitAll()
+        //	.antMatchers("/index.html").denyAll()
         .antMatchers(HttpMethod.POST, "/user").permitAll()
         .antMatchers("/login.jsp").permitAll()
         .antMatchers("/home.action").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
-        .antMatchers("/travelers").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
-        
-        .antMatchers("/index.html**/query**").hasAnyAuthority("MANAGE_QUERIES","ADMIN")
-//		.antMatchers("/index.html").denyAll()
-        
-        .anyRequest().authenticated()
+		//.antMatchers("/index.html").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
+		.antMatchers("/travelers").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
+		.antMatchers("/query**").hasAnyAuthority("MANAGE_QUERIES","ADMIN")
+		.antMatchers("/index.html").denyAll()
+        //.anyRequest().authenticated()
         .and()
         .csrf().disable()
         .formLogin()
@@ -91,10 +91,13 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         .passwordParameter("j_password")
         .failureHandler(new SimpleUrlAuthenticationFailureHandler()).failureUrl("/login.jsp")
         //.successHandler(new AjaxAuthenticationSuccessHandler(new SavedRequestAwareAuthenticationSuccessHandler()))
-        .successHandler(new AjaxAuthenticationSuccessHandler(savedReqHandler))
+		.successHandler(new AjaxAuthenticationSuccessHandler(savedReqHandler))
         .defaultSuccessUrl("/home.action")
         .loginPage("/login.jsp")
         .and().logout().logoutUrl("/logout.action").logoutSuccessUrl("/login.jsp").permitAll().and();
+
+    
+    
     }
     
     

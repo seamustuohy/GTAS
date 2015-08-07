@@ -117,6 +117,26 @@
 					*/			
 											
 					/* Exclusive for nested Rule List Display */
+       
+       
+       			.glyphiconFlightPax {
+					margin: 1px 0px 5px 1px;
+					font-size: 26px;
+				  	color: #222;
+				  	/*background-color: #F0C425;*/
+				  	padding: 5px;}
+				
+				.glyphiconFlightPax:hover, .glyphiconFlightPax:focus {
+				  	color: #222;
+				   /* background-color: #FFFFFF;  #1F2E54 */
+				  	padding: 5px;}
+				
+				
+				.glyph {
+				    text-align: center;
+				}			
+
+       
         </style>
 
         </head>
