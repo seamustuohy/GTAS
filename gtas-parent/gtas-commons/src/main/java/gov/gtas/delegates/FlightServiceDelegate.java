@@ -2,14 +2,13 @@ package gov.gtas.delegates;
 
 import java.util.List;
 
-import gov.gtas.model.Flight;
-import gov.gtas.services.FlightService;
-import gov.gtas.util.ServiceUtils;
-import gov.gtas.parsers.vo.air.FlightVo;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
+
+import gov.gtas.model.Flight;
+import gov.gtas.services.FlightService;
+import gov.gtas.util.ServiceUtils;
 
 /**
  * 
