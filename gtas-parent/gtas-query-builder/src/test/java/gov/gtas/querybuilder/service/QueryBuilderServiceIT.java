@@ -1,5 +1,6 @@
 package gov.gtas.querybuilder.service;
 
+import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
@@ -34,6 +35,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 import org.junit.After;
 import org.junit.Before;
@@ -84,6 +86,7 @@ public class QueryBuilderServiceIT {
 	}
 
 	@Test
+	@Transactional
 	public void testSaveQuery() throws QueryAlreadyExistsException, InvalidQueryException, QueryDoesNotExistException {
 		QueryRequest request = new QueryRequest();
 		
@@ -93,21 +96,24 @@ public class QueryBuilderServiceIT {
 		request.setUserId(USER_ID);
 		
 		UserQuery result = queryService.saveQuery(request);
-		
-//		queryService.deleteQuery(USER_ID, result.getId());
+		assertNotNull(result.getId());
 	}
 	
-	@Test
-	public void testSaveDuplicateQuery() {
-//		QueryRequest request = new QueryRequest();
-//		
-//		request.setTitle(TITLE);
-//		request.setDescription(DESCRIPTION);
-//		request.setQuery(buildSimpleBetweenQuery());
-//		request.setUserId(USER_ID);
-//		
-//		UserQuery result = queryService.saveQuery(request);
-//		queryService.saveQuery(request);
+	@Test(expected = QueryAlreadyExistsException.class)
+	@Transactional
+	public void testSaveDuplicateQuery() throws QueryAlreadyExistsException, InvalidQueryException {
+		QueryRequest request = new QueryRequest();
+		
+		request.setTitle(TITLE);
+		request.setDescription(DESCRIPTION);
+		request.setQuery(buildSimpleBetweenQuery());
+		request.setUserId(USER_ID);
+		
+		UserQuery result = queryService.saveQuery(request);
+		queryService.saveQuery(request);
+		assertNotNull(result.getId());
+		
+		queryService.saveQuery(request);
 	}
 	
 	public void testSaveInvalidQuery() {

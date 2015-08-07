@@ -105,7 +105,7 @@ public class JPQLGenerator {
 			
 			List<QueryEntity> rules = queryObject.getRules();
 			
-			if(level.intValue() > 1) {
+			if(level.intValue() > 0) {
 				where.append("(");
 			}
 			
@@ -119,9 +119,8 @@ public class JPQLGenerator {
 				index++;
 			}
 						
-			if(level.intValue() > 1) {
+			if(level.intValue() > 0) {
 				where.append(")");
-				level.setValue(1);
 			}
 		}
 		else if(queryEntity instanceof QueryTerm) {
