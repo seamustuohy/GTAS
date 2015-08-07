@@ -71,9 +71,10 @@ public class RuleConditionBuilderHelper {
     		bldr.append(" [");
     		boolean firstTime = true;
     		for(CondValue val: valList){
-    			if(!firstTime){
-    				bldr.append(", ");
+    			if(firstTime){
     				firstTime = false;
+    			} else {
+    				bldr.append(", ");
     			}
     			bldr.append(convertCondValToString(val));
     		}

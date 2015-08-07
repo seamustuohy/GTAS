@@ -17,7 +17,7 @@ public class FlightVo {
     private String destination;
     private String destinationCountry;
     private boolean isOverFlight;
-    
+    private String direction;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date flightDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -25,7 +25,13 @@ public class FlightVo {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date eta;
     
-    public String getFlightId() {
+    public String getDirection() {
+		return direction;
+	}
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+	public String getFlightId() {
         return flightId;
     }
     public void setFlightId(String flightId) {
