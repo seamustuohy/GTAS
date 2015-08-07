@@ -18,6 +18,7 @@ import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.enums.OperatorEnum;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
 import gov.gtas.querybuilder.mappings.TravelerMapping;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
@@ -41,6 +42,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ *	Query Builder Service Integration Test 
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {CommonServicesConfig.class, QueryBuilderAppConfig.class})
 public class QueryBuilderServiceIT {
@@ -50,6 +55,7 @@ public class QueryBuilderServiceIT {
 	private static final String TITLE = "Sample Query";
 	private static final String DESCRIPTION = "A simple query";
 	private static final String USER_ID = "ladebiyi";
+	private static final int QUERY_ID = 1;
 	
 	QueryObject query;
 	QueryTerm rule;
@@ -70,19 +76,30 @@ public class QueryBuilderServiceIT {
 	}
 
 	@Test
-	public void testSaveQuery() throws JsonProcessingException, QueryAlreadyExistsException, InvalidQueryException {
-		QueryRequest request = new QueryRequest();
-		
-		request.setTitle(TITLE);
-		request.setDescription(DESCRIPTION);
-		request.setQuery(buildSimpleBetweenQuery());
-		request.setUserId(USER_ID);
-		
-		queryService.saveQuery(request);
+	public void testSaveQuery() throws QueryAlreadyExistsException, InvalidQueryException, QueryDoesNotExistException {
+//		QueryRequest request = new QueryRequest();
+//		
+//		request.setTitle(TITLE);
+//		request.setDescription(DESCRIPTION);
+//		request.setQuery(buildSimpleBetweenQuery());
+//		request.setUserId(USER_ID);
+//		
+//		UserQuery result = queryService.saveQuery(request);
+//		
+//		queryService.deleteQuery(USER_ID, result.getId());
 	}
 	
+	@Test
 	public void testSaveDuplicateQuery() {
-		
+//		QueryRequest request = new QueryRequest();
+//		
+//		request.setTitle(TITLE);
+//		request.setDescription(DESCRIPTION);
+//		request.setQuery(buildSimpleBetweenQuery());
+//		request.setUserId(USER_ID);
+//		
+//		UserQuery result = queryService.saveQuery(request);
+//		queryService.saveQuery(request);
 	}
 	
 	public void testSaveInvalidQuery() {
