@@ -9,7 +9,7 @@
     <version>0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>gtas-loaders</artifactId>
+  <artifactId>gtas-loader</artifactId>
   <packaging>jar</packaging>
   <name>GTAS Loaders</name>
 
