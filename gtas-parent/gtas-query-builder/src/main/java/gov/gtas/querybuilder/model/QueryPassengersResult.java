@@ -15,8 +15,8 @@ public class QueryPassengersResult extends BaseFlightPaxQueryResult {
 	private String citizenship;
 	private String documentNumber;
 	private String documentType;
-	private String documentIssuanceContry;
-	private String seatNumber;
+	private String documentIssuanceCountry;
+	private String seat;
 	private boolean isRuleHit;
 	private boolean isOnWatchList;
 	
@@ -84,22 +84,22 @@ public class QueryPassengersResult extends BaseFlightPaxQueryResult {
 		this.documentType = documentType;
 	}
 	
-	public String getDocumentIssuanceContry() {
-		return documentIssuanceContry;
+	public String getDocumentIssuanceCountry() {
+		return documentIssuanceCountry;
 	}
-	
-	public void setDocumentIssuanceContry(String documentIssuanceContry) {
-		this.documentIssuanceContry = documentIssuanceContry;
+
+	public void setDocumentIssuanceCountry(String documentIssuanceCountry) {
+		this.documentIssuanceCountry = documentIssuanceCountry;
 	}
-	
-	public String getSeatNumber() {
-		return seatNumber;
+
+	public String getSeat() {
+		return seat;
 	}
-	
-	public void setSeatNumber(String seatNumber) {
-		this.seatNumber = seatNumber;
+
+	public void setSeat(String seat) {
+		this.seat = seat;
 	}
-	
+
 	public boolean isRuleHit() {
 		return isRuleHit;
 	}
