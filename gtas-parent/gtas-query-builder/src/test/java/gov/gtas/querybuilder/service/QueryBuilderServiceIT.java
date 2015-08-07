@@ -79,8 +79,8 @@ public class QueryBuilderServiceIT {
 		query = null;
 		rule = null;
 		rules = null;
-//		Query deleteQuery = entityManager.createQuery("delete from UserQuery");
-//		deleteQuery.executeUpdate();
+		Query deleteQuery = entityManager.createQuery("delete from UserQuery");
+		deleteQuery.executeUpdate();
 	}
 
 	@Test
