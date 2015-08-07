@@ -45,8 +45,8 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
   //paxService.broadcast(flightId);
   };    
     
-  $scope.$on('paxDataResponse', function (evnt, data) {
-	    $scope.paxData = data;
-	  });
+//  $scope.$on('paxDataResponse', function (evnt, data) {
+//	    $scope.paxData = data;
+//	  });
   
 });

@@ -4,6 +4,7 @@ import gov.gtas.model.HitDetail;
 import gov.gtas.model.HitsSummary;
 import gov.gtas.repository.HitsSummaryRepository;
 
+
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -17,21 +18,12 @@ public class HitsSummaryServiceImpl implements HitsSummaryService {
 
 	@Autowired
 	HitsSummaryRepository hitsSummaryRepository;
-
-	/**
-	 * return list of rule ids that matched the traveler
-	 */
+	
 	@Override
 	public List<HitDetail> findByTravelerId(Long id) {
-
 		return hitsSummaryRepository.findByTravelerId(id);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see gov.gtas.services.HitsSummaryService#findAll()
-	 */
 	@Override
 	public Iterable<HitsSummary> findAll() {
 		return hitsSummaryRepository.findAll();

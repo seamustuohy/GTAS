@@ -229,7 +229,7 @@ public class QueryBuilderController {
 					String destination = "";
 					String departureDt = "";
 					String arrivalDt = "";
-					String seatNumber = "Not available";
+					String seat = "Not available";
 					
 					qbPassenger.setId(traveler.getId());
 					qbPassenger.setRuleHit(false);
@@ -255,7 +255,7 @@ public class QueryBuilderController {
 					}
 					qbPassenger.setDocumentNumber(docNumber);
 					qbPassenger.setDocumentType(docType);
-					qbPassenger.setDocumentIssuanceContry(docIssuanceCountry);
+					qbPassenger.setDocumentIssuanceCountry(docIssuanceCountry);
 					
 					// flight information
 					Set<Flight> flights = traveler.getFlights();
@@ -277,7 +277,7 @@ public class QueryBuilderController {
 					qbPassenger.setDestination(destination);
 					qbPassenger.setDepartureDt(departureDt);
 					qbPassenger.setArrivalDt(arrivalDt);
-					qbPassenger.setSeatNumber(seatNumber);
+					qbPassenger.setSeat(seat);
 					
 					qbPassengers.add(qbPassenger);
 				}

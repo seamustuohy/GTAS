@@ -7,7 +7,7 @@
 <div ng-hide="loading">
 
 <h4>
-	<span class="glyphicon glyphicon-plane img-circle"></span> Flights
+	<span class="glyphicon glyphicon-plane glyphiconFlightPax img-circle"></span> Flights
 </h4>
 
 <button ng-click="tableParams.sorting({})"
@@ -56,7 +56,7 @@
 				<div class="accordian-body collapse" id="demo{{$index}}"
 					style="border-collapse: collapse; width: 100%;">
 					<h4 style="font-size: 18px;" align="left">
-						<span class="glyphicon glyphicon-user img-circle"></span>
+						<span class="glyphicon glyphicon-user glyphiconFlightPax img-circle"></span>
 						Passengers on Flight - {{flight.flightNumber}}
 					</h4>
 					<table id="paxTable" ng-table="tableParams" show-filter="false"
@@ -89,43 +89,17 @@
 									aria-expanded="false" aria-controls="nestedRule{{$index}}"
 									style="cursor: pointer;" ng-click="getRuleHits(pax.paxId);">
 
-									<span class="glyphicon glyphicon-flag"
+									<span class="glyphicon glyphicon-flag glyphiconFlightPax"
 									style="padding: 1.5px; color: #d9534f;"></span>
 
-									<div class="accordian-body collapse md-6-col"
-										id="nestedRule1{{pax.lastName+$index}}">
-										<table id="paxRuleTable" show-filter="false"
-											class="table table-condensed table-hover">
-											<thead>
-												<tr>
-													<th></th>
-													<th>R</th>
-													<th>L</th>
-
-
-												</tr>
-											</thead>
-											<tbody>
-												<!--  style="border-collapse:collapse;"  data-toggle="collapse" -->
-												<tr>
-													<td></td>
-													<td>
-														<div class="glyph">
-															<span class="glyph glyphicon glyphicon-phone img-circle"></span>
-														</div> #
-													</td>
-													<td>#</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-
+									
 
 								</td>
 								<td ng-if="pax.ruleHits === 0"><span
-									class="glyphicon glyphicon-flag"
+									class="glyphicon glyphicon-flag glyphiconFlightPax"
 									style="padding: 1.5px; color: #007500;"></span></td>
-								<td>#</td>
+								<td><span class="glyphicon glyphicon-flag glyphiconFlightPax"
+									style="padding: 1.5px; color: #007500;"></span></td>
 								<td>{{pax.lastName}}</td>
 								<td>{{pax.firstName}}</td>
 								<td>{{pax.middleName}}</td>
@@ -147,38 +121,25 @@
 											class="table table-condensed table-hover">
 											<thead>
 												<tr>
-													<th></th>
+													<th>ID</th>
 													<th>Title</th>
 													<th>Description</th>
 													
 												</tr>
 											</thead>
 											<tbody>
-												<!--  style="border-collapse:collapse;"  data-toggle="collapse" -->
-												<tr>
-													<td></td>
+																								
+												<tr ng-repeat="hitDetail in paxHitList">
+													<td>{{hitDetail.ruleId}}</td>
 													<td>
-														<ol>
-															<li>LOREM IPSUM</li>
-															<li>LOREM IPSUM</li>
-															<li>LOREM IPSUM</li>
-															<li>LOREM IPSUM</li>
+														<ol style="list-style-type: none;">
+															<li>{{hitDetail.ruleConditions}}</li>
+															
 														</ol>
 													</td>
-													<td>#</td>
+													<td></td>
 												</tr>
 												
-												<tr>
-													<td></td>
-													<td>
-														<ol>
-															
-															<li>LOREM IPSUM</li>
-															<li>LOREM IPSUM</li>
-														</ol>
-													</td>
-													<td>#</td>
-												</tr>
 												
 											</tbody>
 										</table>

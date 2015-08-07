@@ -41,8 +41,8 @@ import org.springframework.validation.Errors;
 @Repository
 public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderRepository.class);
-	private SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd h:mm:ss a");
 	
 	@PersistenceContext 
  	private EntityManager entityManager;
