@@ -72,11 +72,11 @@ public class MessageLoader {
                 }
                 
             } else if (tmp.isDirectory()) {
-                if (args.length != 2) {
+                if (args.length != 3) {
                     System.out.println("error: expected outgoing dir");
                     System.exit(0);                    
                 }
-                File outgoingDir = new File(args[1]);
+                File outgoingDir = new File(args[2]);
                 if (!outgoingDir.isDirectory()) {
                     System.out.println(outgoingDir + " is not a directory");
                     System.exit(0);                                        
