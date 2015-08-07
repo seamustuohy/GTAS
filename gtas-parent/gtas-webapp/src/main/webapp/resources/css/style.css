@@ -6,9 +6,11 @@ h1{
  margin-top: 9px;   
  margin-bottom: 9px;
 }
+/* TOO GENERAL CLASS NAME NG-TABLE LOADS THIS ON ALL NG-TABLES
 .header{
     background: rgb(0, 128, 128); 
 }
+*/
 .footer{
     background: rgb(0, 128, 128);
     width: 100%!important;
