@@ -5,8 +5,8 @@ import gov.gtas.querybuilder.enums.TypeEnum;
 public enum DocumentMapping implements IEntityMapping {
 
 	ISSUANCE_COUNTRY ("issuanceCountry", "Issuance Country", TypeEnum.STRING.getType()),
-	EXPIRATION_DATE ("expirationDate", "Expiration Date", TypeEnum.DATETIME.getType()),
-	ISSUANCE_DATE ("issuanceDate", "Issuance Date", TypeEnum.DATETIME.getType()),
+	EXPIRATION_DATE ("expirationDate", "Expiration Date", TypeEnum.DATE.getType()),
+	ISSUANCE_DATE ("issuanceDate", "Issuance Date", TypeEnum.DATE.getType()),
 	DOCUMENT_NUMBER ("documentNumber", "Number", TypeEnum.STRING.getType()),
 	DOCUMENT_TYPE ("documentType", "Type", TypeEnum.STRING.getType()),
 	DOCUMENT_OWNER_ID ("traveler.id", "Owner Id", TypeEnum.STRING.getType(), false);
