@@ -40,7 +40,7 @@ public class MessageLoader {
     }
 
     public static void main(String[] args) {
-        if (args.length == 0) {
+        if (args.length <= 1) {
             System.out.println("Usage: MessageLoader [message type] [files]");
             System.out.println("Usage: MessageLoader [message type] [incoming dir] [outgoing dir]");
             System.exit(0);
