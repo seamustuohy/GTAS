@@ -105,7 +105,7 @@
     <button type="button" data-ng-click="delete()" type="button" class="btn btn-xs btn-primary pull-right" title="delete">Delete</button>
     <button type="button" data-ng-click="save()" id="submit" class="btn btn-xs btn-primary pull-right">Save</button>
 </section>
-<table ng-table="flightsResults" show-filter="true" class="table">
+<table ng-table="flightsResults" show-filter="true" class="table flights-table">
     <tr ng-repeat="flight in $data">
         <!--        <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">{{flight.hits}}</td> //-->
         <td data-title="'Carrier'" sortable="'carrierCode'" filter="{ 'carrierCode': 'select' }" filter-data="values($column, 'carrierCode')">{{flight.carrierCode}}</td>
@@ -119,7 +119,7 @@
         <td data-title="'ETA'" sortable="'arrivalDt'" filter="{ 'arrivalDt': 'text' }">{{flight.arrivalDt}}</td>
     </tr>
 </table>
-<table ng-table="travelersResults" show-filter="true" class="table">
+<table ng-table="travelersResults" show-filter="true" class="table travelers-table">
     <tr ng-repeat="passenger in $data">
         <td data-title="'H'" sortable="'ruleHit'" filter="{ 'ruleHit': 'text' }">{{passenger.ruleHit}}</td>
         <td data-title="'W'" sortable="'onWatchList'" filter="{ 'onWatchList': 'text' }">{{passenger.onWatchList}}</td>
@@ -131,7 +131,7 @@
         <td data-title="'Citizenship'" sortable="'citizenship'" filter="{ 'citizenship': 'select' }" filter-data="values($column, 'citizenship')">{{passenger.citizenship}}</td>
         <td data-title="'Document Number'" sortable="'documentNumber'" filter="{ 'documentNumber': 'text' }">{{passenger.documentNumber}}</td>
         <td data-title="'T'" sortable="'documentType'" filter="{ 'documentType': 'select' }" filter-data="values($column, 'documentType')">{{passenger.documentType}}</td>
-        <td data-title="'Issuance Country'" sortable="'documentIssuanceContry'" filter="{ 'documentIssuanceContry': 'select' }" filter-data="values($column, 'documentIssuanceContry')">{{passenger.documentIssuanceContry}}</td>
-        <td data-title="'Seat'" sortable="'seatNumber'" filter="{ 'seatNumber': 'text' }">{{passenger.seatNumber}}</td> //
+        <td data-title="'Issuance Country'" sortable="'documentIssuanceCountry'" filter="{ 'documentIssuanceCountry': 'select' }" filter-data="values($column, 'documentIssuanceCountry')">{{passenger.documentIssuanceCountry}}</td>
+        <td data-title="'Seat'" sortable="'seat'" filter="{ 'seat': 'text' }">{{passenger.seat}}</td>
     </tr>
 </table>

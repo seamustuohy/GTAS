@@ -44,6 +44,7 @@
 
 /*        THIS OVERRIDES ALL NG-TABLES table headers
         please add class to table and scope by additional parent class-name
+        you also have this same class name in the styles.css so should consolidate there
         .header{
         background: rgb(247, 250, 250);
         }

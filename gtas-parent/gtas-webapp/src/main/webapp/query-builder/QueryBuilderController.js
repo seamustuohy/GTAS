@@ -7,6 +7,19 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             TRAVELER: []
         };
 
+    $scope.domTables = {
+        FLIGHT: $('.flights-table'),
+        TRAVELER: $('.travelers-table')
+    };
+
+    $scope.clearTables = function () {
+        var $tables = $('');
+        $scope.domTables.forEach(function (table) {
+            $tables.add(table);
+        });
+        $tables.hide();
+    };
+
     $scope.loadRule = function () {
         var obj = this.$data[this.$index];
         $scope.ruleId = obj.id;
@@ -136,29 +149,23 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         });
     };
 
-    $scope.flightResults = new ngTableParams({
-        page: 1,            // show first page
-        count: 10           // count per page
-    }, {
-        total: dataSource.FLIGHT.length, // length of data
-        getData: function ($defer, params) {
-            var orderedFlightsData = params.sorting() ? $filter('orderBy')(dataSource.FLIGHT, params.orderBy()) : dataSource.FLIGHT;
-            orderedFlightsData = params.filter() ? $filter('filter')(orderedFlightsData, params.filter()) : orderedFlightsData;
-            params.total(orderedFlightsData.length);
-            $defer.resolve(orderedFlightsData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
-    });
+    $scope.returnTableParams = function (dataType) {
+        return new ngTableParams({
+            page: 1,            // show first page
+            count: 10           // count per page
+        }, {
+            total: dataSource[dataType].length, // length of data
+            getData: function ($defer, params) {
+                var orderedData = params.sorting() ? $filter('orderBy')(dataSource[dataType], params.orderBy()) : dataSource[dataType];
+                orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
+                params.total(orderedData.length);
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                $scope.clearTables();
+                $scope.domTables[dataType].show();
+            }
+        });
+    };
 
-    $scope.travelerResults = new ngTableParams({
-        page: 1,            // show first page
-        count: 10           // count per page
-    }, {
-        total: dataSource.TRAVELER.length, // length of data
-        getData: function ($defer, params) {
-            var orderedTravelersData = params.sorting() ? $filter('orderBy')(dataSource.TRAVELER, params.orderBy()) : dataSource.TRAVELER;
-            orderedTravelersData = params.filter() ? $filter('filter')(orderedTravelersData, params.filter()) : orderedTravelersData;
-            params.total(orderedTravelersData.length);
-            $defer.resolve(orderedTravelersData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-        }
-    });
+    $scope.flightResults = $scope.returnTableParams('FLIGHT');
+    $scope.travelerResults = $scope.returnTableParams('TRAVELER');
 });
