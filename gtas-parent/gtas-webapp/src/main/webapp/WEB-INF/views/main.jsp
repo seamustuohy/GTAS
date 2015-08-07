@@ -42,10 +42,12 @@
 			  background-size: cover;
 			}
 
+/*        THIS OVERRIDES ALL NG-TABLES table headers
+        please add class to table and scope by additional parent class-name
         .header{
         background: rgb(247, 250, 250);
         }
-
+*/
         .hiddenRow {
         padding: 0 !important;
 
