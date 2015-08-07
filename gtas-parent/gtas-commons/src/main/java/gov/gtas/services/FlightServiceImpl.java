@@ -44,20 +44,20 @@ public class FlightServiceImpl implements FlightService{
 	public Flight update(Flight flight) {
 		Flight flightToUpdate = this.findById(flight.getId());
 		if(flightToUpdate != null){
-			//flightToUpdate.setCarrier(flight.getCarrier());
-			//flightToUpdate.setChangeDate(new Date());
+			flightToUpdate.setCarrier(flight.getCarrier());
+			flightToUpdate.setChangeDate();
 			flightToUpdate.setDestination(flight.getDestination());
 			flightToUpdate.setDestinationCountry(flight.getDestinationCountry());
 			flightToUpdate.setEta(flight.getEta());
 			flightToUpdate.setEtd(flight.getEtd());
-			flight.setFlightDate(flight.getFlightDate());
+			flightToUpdate.setFlightDate(flight.getFlightDate());
 			flightToUpdate.setFlightNumber(flight.getFlightNumber());
 			flightToUpdate.setOrigin(flight.getOrigin());
 			flightToUpdate.setOriginCountry(flight.getOriginCountry());
 			flightToUpdate.setPassengers(flight.getPassengers());
 			flightToUpdate.setUpdatedAt(new Date());
 			//TODO replace with logged in user id
-			flightToUpdate.setUpdatedBy("Logged in userid");
+			flightToUpdate.setUpdatedBy(flight.getUpdatedBy());
 		}
 		return flightToUpdate;
 	}
@@ -67,6 +67,13 @@ public class FlightServiceImpl implements FlightService{
 	public Flight findById(Long id) {
 		Flight flight = flightRespository.findOne(id);
 		return flight;
+	}
+
+	@Override
+	public List<Flight> getUniqueFlightByCriteria(String carrier, String flightNumber,
+			String origin, String destination, Date flightDate) {
+		List<Flight> flights = flightRespository.getFlightByCriteria(carrier, flightNumber, origin, destination, flightDate);
+		return flights;
 	}
 
 }
