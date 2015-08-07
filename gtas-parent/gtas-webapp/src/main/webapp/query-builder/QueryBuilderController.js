@@ -13,11 +13,9 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     };
 
     $scope.clearTables = function () {
-        var $tables = $('');
-        $scope.domTables.forEach(function (table) {
-            $tables.add(table);
+        Object.keys($scope.domTables).forEach(function (table) {
+            $scope.domTables[table].hide();
         });
-        $tables.hide();
     };
 
     $scope.loadRule = function () {
