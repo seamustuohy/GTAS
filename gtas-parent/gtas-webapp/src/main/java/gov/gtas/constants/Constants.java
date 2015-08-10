@@ -38,5 +38,5 @@ public final class Constants {
 	
 	// Hits Summary
 	public static final String HITS_SUMMARY_SERVICE = "/hit";
-	public static final String HITS_SUMMARY_RULES_BY_TRAVELER_ID = "/traveler/{id}";
+	public static final String HITS_SUMMARY_RULES_BY_PASSENGER_ID = "/passenger/{id}";
 }

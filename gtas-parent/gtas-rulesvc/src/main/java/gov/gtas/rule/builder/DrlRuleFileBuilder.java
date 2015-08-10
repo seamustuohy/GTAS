@@ -15,7 +15,7 @@ import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.UdrRule;
@@ -35,8 +35,8 @@ public class DrlRuleFileBuilder {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DrlRuleFileBuilder.class);
 
-	private static final Class<?>[] IMPORT_LIST = { Flight.class, Traveler.class, Document.class };
-	private static final String TRAVELER_VARIABLE_NAME="$t";
+	private static final Class<?>[] IMPORT_LIST = { Flight.class, Passenger.class, Document.class };
+	private static final String PASSENGER_VARIABLE_NAME="$p";
 	private static final String DOCUMENT_VARIABLE_NAME="$d";
 	private static final String FLIGHT_VARIABLE_NAME="$f";
 
@@ -45,7 +45,7 @@ public class DrlRuleFileBuilder {
 
 	public DrlRuleFileBuilder() {
 		this.stringBuilder = new StringBuilder();
-		this.ruleConditionBuilder = new RuleConditionBuilder(TRAVELER_VARIABLE_NAME, FLIGHT_VARIABLE_NAME, DOCUMENT_VARIABLE_NAME);
+		this.ruleConditionBuilder = new RuleConditionBuilder(PASSENGER_VARIABLE_NAME, FLIGHT_VARIABLE_NAME, DOCUMENT_VARIABLE_NAME);
 		addPackageAndImport();
 		// add the global result declaration;
 		this.stringBuilder.append(GLOBAL_RESULT_DECLARATION);
@@ -68,7 +68,7 @@ public class DrlRuleFileBuilder {
 						this.stringBuilder, "DrlRuleFileBuilder.addRule");
 			}
 			this.ruleConditionBuilder.addRuleAction(this.stringBuilder,
-					udrRule, rule, TRAVELER_VARIABLE_NAME);
+					udrRule, rule, PASSENGER_VARIABLE_NAME);
 		}
 		return this;
 	}
@@ -86,15 +86,6 @@ public class DrlRuleFileBuilder {
 		        	this.stringBuilder.append(IMPORT_PREFIX)
 		        	.append(clazz.getName()).append(";").append(NEW_LINE);
 		        }
-//				.append(IMPORT_PREFIX)
-//				.append(Traveler.class.getName()).append(";").append(NEW_LINE)
-//				.append(IMPORT_PREFIX).append(Pax.class.getName()).append(";")
-//				.append(NEW_LINE).append(IMPORT_PREFIX)
-//				.append(Flight.class.getName()).append(";").append(NEW_LINE)
-//				.append(IMPORT_PREFIX).append(Passport.class.getName())
-//				.append(";").append(NEW_LINE).append(IMPORT_PREFIX)
-//				.append(Document.class.getName()).append(";").append(NEW_LINE)
-//				.append("\n");
 	}
 
 	private void addRuleHeader(UdrRule parent, Rule rule) {
@@ -102,11 +93,4 @@ public class DrlRuleFileBuilder {
 				.append(":").append(rule.getRuleIndex()).append("\"")
 				.append(NEW_LINE).append("when\n");
 	}
-
-	// private void addRuleAction(UdrRule parent, Rule rule) {
-	// this.stringBuilder
-	// .append("then\n")
-	// .append(String.format(ACTION_TRAVELER_HIT, parent.getId(),
-	// rule.getRuleIndex())).append("end\n");
-	// }
 }

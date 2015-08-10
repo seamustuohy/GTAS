@@ -148,7 +148,7 @@ public final class PaxlstParserUSedifact extends EdifactParser<PaxlstMessageVo> 
         p.setDob(pdt.getDob());
         p.setGender(pdt.getGender());
         PersonStatus status = pdt.getPersonStatus();
-        p.setTravelerType(status.toString());
+        p.setPassengerType(status.toString());
 //        if (status == PersonStatus.PAX) {
 //            p.setType(PaxType.PAX);
 //        } else if (status == PersonStatus.CREW) {

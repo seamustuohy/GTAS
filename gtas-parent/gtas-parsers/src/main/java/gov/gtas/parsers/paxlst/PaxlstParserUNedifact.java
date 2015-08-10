@@ -242,7 +242,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> 
                 break;
             }
         }
-        p.setTravelerType(paxType);
+        p.setPassengerType(paxType);
 
         for (;;) {
             ATT att = getConditionalSegment(ATT.class);

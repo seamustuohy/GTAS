@@ -6,7 +6,7 @@ import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.OperatorEnum;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
@@ -20,7 +20,7 @@ import gov.gtas.querybuilder.constants.Constants;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
-import gov.gtas.querybuilder.mappings.TravelerMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.util.DateCalendarUtils;
@@ -219,13 +219,13 @@ public class QueryBuilderServiceIT {
 	public void testRunQueryAgainstPassengers() throws InvalidQueryException {
 //		QueryObject query = buildSimpleQuery();
 //		
-//		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
 //		SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 //		
 //		if(passengers != null && passengers.size() > 0) {
 //			System.out.println("Number of Passengers: " + passengers.size());
 //			System.out.println("Passenger Information:");
-//			for(Traveler passenger : passengers) {
+//			for(Passenger passenger : passengers) {
 //				String docNumber = "";
 //				String docType = "";
 //				String docIssuanceCountry = "";
@@ -283,12 +283,12 @@ public class QueryBuilderServiceIT {
 //	@Test
 	public void testSimpleIsNullQueryAgainstPassengers() throws InvalidQueryException {
 //		QueryObject query = buildSimpleIsNullQuery();
-//		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
 //		
 //		if(passengers != null && passengers.size() > 0) {
 //			System.out.println("Number of Passengers: " + passengers.size());
 //			System.out.println("Passenger Information:");
-//			for(Traveler passenger : passengers) {
+//			for(Passenger passenger : passengers) {
 //				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
 //			}
 //		}
@@ -300,12 +300,12 @@ public class QueryBuilderServiceIT {
 //	@Test
 	public void testSimpleContainsQueryAgainstPassengers() throws InvalidQueryException {
 //		QueryObject query = buildSimpleContainsQuery();
-//		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
 //		
 //		if(passengers != null && passengers.size() > 0) {
 //			System.out.println("Number of Passengers: " + passengers.size());
 //			System.out.println("Passenger Information:");
-//			for(Traveler passenger : passengers) {
+//			for(Passenger passenger : passengers) {
 //				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
 //			}
 //		}
@@ -317,12 +317,12 @@ public class QueryBuilderServiceIT {
 //	@Test
 	public void testSimpleBetweenQueryAgainstPassengers() throws InvalidQueryException {
 //		QueryObject query = buildSimpleBetweenQuery();
-//		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
 //
 //		if(passengers != null && passengers.size() > 0) {
 //			System.out.println("Number of Passengers: " + passengers.size());
 //			System.out.println("Passenger Information:");
-//			for(Traveler passenger : passengers) {
+//			for(Passenger passenger : passengers) {
 //				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
 //			}
 //		}
@@ -465,7 +465,7 @@ public class QueryBuilderServiceIT {
 	
 	private QueryObject buildSimpleQuery() {
 		
-		rule.setEntity("TRAVELER");
+		rule.setEntity("Passenger");
 		rule.setField("gender");
 		rule.setOperator("equal");
 		rule.setType("string");
@@ -533,7 +533,7 @@ public class QueryBuilderServiceIT {
 		values.add("20");
 		values.add("40");
 		
-		rule.setEntity("Traveler");
+		rule.setEntity("Passenger");
 		rule.setField("age");
 		rule.setOperator("between");
 		rule.setType("integer");
@@ -574,21 +574,21 @@ public class QueryBuilderServiceIT {
 	private QueryObject buildComplexQueryObject() {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.DOB.getFieldName(), ValueTypesEnum.DATE,
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.DOB.getFieldName(), ValueTypesEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.LAST_NAME.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.LAST_NAME.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.EMBARKATION.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.EMBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.DEBARKATION.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.DEBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 

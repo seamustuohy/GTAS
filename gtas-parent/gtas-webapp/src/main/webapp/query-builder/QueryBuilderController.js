@@ -4,12 +4,12 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     var data = [],
         dataSource = {
             FLIGHT: [],
-            TRAVELER: []
+            PASSENGER: []
         };
 
     $scope.domTables = {
         FLIGHT: $('.flights-table'),
-        TRAVELER: $('.travelers-table')
+        PASSENGER: $('.passengers-table')
     };
 
     $scope.clearTables = function () {
@@ -121,7 +121,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
 
     $scope.serviceURLs = {
         FLIGHT: '/gtas/query/queryFlights/',
-        TRAVELER: '/gtas/query/queryPassengers/'
+        PASSENGER: '/gtas/query/queryPassengers/'
     };
 
     $scope.viewType = null;
@@ -165,5 +165,5 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     };
 
     $scope.flightResults = $scope.returnTableParams('FLIGHT');
-    $scope.travelerResults = $scope.returnTableParams('TRAVELER');
+    $scope.passengerResults = $scope.returnTableParams('PASSENGER');
 });

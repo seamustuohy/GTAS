@@ -18,7 +18,7 @@ import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.PnrData;
 import gov.gtas.model.PnrMessage;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
@@ -83,9 +83,9 @@ public class PnrMessageService implements MessageService {
                 pnr = new PnrData();
                 this.pnrMessage.getPnrs().add(pnr);
                 
-                Set<Traveler> pax = new HashSet<>();        
+                Set<Passenger> pax = new HashSet<>();        
                 for (PassengerVo pvo : vo.getPassengers()) {
-                    Traveler p = utils.convertTravelerVo(pvo);
+                    Passenger p = utils.convertPassengerVo(pvo);
                     pax.add(p);
                 }
 

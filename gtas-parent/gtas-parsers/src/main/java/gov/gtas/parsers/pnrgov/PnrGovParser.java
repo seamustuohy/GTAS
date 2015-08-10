@@ -178,7 +178,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private void processGroup2(TIF tif) throws ParseException {
         PassengerVo p = new PassengerVo();
         // TODO: default
-        p.setTravelerType("P");
+        p.setPassengerType("P");
         TravelerDetails td = tif.getTravelerDetails().get(0);
         p.setLastName(tif.getTravelerSurname());
         p.setFirstName(td.getTravelerGivenName());

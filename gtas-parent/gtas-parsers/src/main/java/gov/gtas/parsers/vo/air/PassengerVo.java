@@ -18,7 +18,7 @@ public class PassengerVo {
     private String gender;
     private String citizenshipCountry;
     private String residencyCountry;
-    private String travelerType;
+    private String passengerType;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)
     private Date dob;
     private String embarkation;
@@ -83,11 +83,11 @@ public class PassengerVo {
     public void setResidencyCountry(String residencyCountry) {
         this.residencyCountry = residencyCountry;
     }
-    public String getTravelerType() {
-        return travelerType;
+    public String getPassengerType() {
+        return passengerType;
     }
-    public void setTravelerType(String travelerType) {
-        this.travelerType = travelerType;
+    public void setPassengerType(String passengerType) {
+        this.passengerType = passengerType;
     }
     public Date getDob() {
         return dob;

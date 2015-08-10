@@ -285,16 +285,16 @@
       }
     ]
   },
-  "TRAVELER": {
+  "PASSENGER": {
     "label": "PASSENGER",
     "columns": [
       {
-        "id": "TRAVELER.age",
+        "id": "PASSENGER.age",
         "label": "Age",
         "type": "integer"
       },
       {
-        "id": "TRAVELER.citizenshipCountry",
+        "id": "PASSENGER.citizenshipCountry",
         "label": "Citizenship Country",
         "type": "string",
         "operators": [
@@ -310,7 +310,7 @@
         "dataSource": "countries"
       },
       {
-        "id": "TRAVELER.debarkation",
+        "id": "PASSENGER.debarkation",
         "label": "Debarkation Airport",
         "type": "string",
         "operators": [
@@ -326,7 +326,7 @@
         "dataSource": "airports"
       },
       {
-        "id": "TRAVELER.debarkCountry",
+        "id": "PASSENGER.debarkCountry",
         "label": "Debarkation Country",
         "type": "string",
         "operators": [
@@ -342,13 +342,13 @@
         "dataSource": "countries"
       },
       {
-        "id": "TRAVELER.dob",
+        "id": "PASSENGER.dob",
         "label": "DOB",
         "type": "date",
         "plugin": "datepicker"
       },
       {
-        "id": "TRAVELER.embarkation",
+        "id": "PASSENGER.embarkation",
         "label": "Embarkation Airport",
         "type": "string",
         "operators": [
@@ -364,7 +364,7 @@
         "dataSource": "airports"
       },
       {
-        "id": "TRAVELER.embarkCountry",
+        "id": "PASSENGER.embarkCountry",
         "label": "Embarkation Country",
         "type": "string",
         "operators": [
@@ -380,7 +380,7 @@
         "dataSource": "countries"
       },
       {
-        "id": "TRAVELER.gender",
+        "id": "PASSENGER.gender",
         "label": "Gender",
         "type": "string",
         "operators": [
@@ -395,22 +395,22 @@
         "dataSource": "genders"
       },
       {
-        "id": "TRAVELER.firstName",
+        "id": "PASSENGER.firstName",
         "label": "Name - First",
         "type": "string"
       },
       {
-        "id": "TRAVELER.lastName",
+        "id": "PASSENGER.lastName",
         "label": "Name - Last",
         "type": "string"
       },
       {
-        "id": "TRAVELER.middleName",
+        "id": "PASSENGER.middleName",
         "label": "Name - Middle",
         "type": "string"
       },
       {
-        "id": "TRAVELER.residencyCountry",
+        "id": "PASSENGER.residencyCountry",
         "label": "Residency Country",
         "type": "string",
         "operators": [
@@ -426,7 +426,7 @@
         "dataSource": "countries"
       },
       {
-        "id": "TRAVELER.travelerType",
+        "id": "PASSENGER.passengerType",
         "label": "Type",
         "type": "string"
       }

@@ -2,7 +2,7 @@ package gov.gtas.querybuilder.mappings;
 
 import gov.gtas.enumtype.TypeEnum;
 
-public enum TravelerMapping implements IEntityMapping {
+public enum PassengerMapping implements IEntityMapping {
 
 	AGE ("age", "Age", TypeEnum.INTEGER.getType()),
 	CITIZENSHIP_COUNTRY ("citizenshipCountry", "Citizenship Country", TypeEnum.STRING.getType()),
@@ -17,21 +17,21 @@ public enum TravelerMapping implements IEntityMapping {
 	MIDDLE_NAME ("middleName", "Name - Middle", TypeEnum.STRING.getType()),
 	RESIDENCY_COUNTRY ("residencyCountry", "Residency Country", TypeEnum.STRING.getType()), 
 	SEAT ("", "Seat", TypeEnum.STRING.getType()), // not in Entity
-	TRAVELER_TYPE ("travelerType", "Type", TypeEnum.STRING.getType()); 
+	PASSENGER_TYPE ("passengerType", "Type", TypeEnum.STRING.getType()); 
 	
 	private String fieldName;
 	private String friendlyName;
 	private String fieldType;
 	private boolean displayField;
 	
-	private TravelerMapping(String fieldName, String friendlyName,
+	private PassengerMapping(String fieldName, String friendlyName,
 			String fieldType, boolean displayField) {
 		this.fieldName = fieldName;
 		this.friendlyName = friendlyName;
 		this.fieldType = fieldType;
 		this.displayField = displayField;
 	}
-	private TravelerMapping(String fieldName, String friendlyName,
+	private PassengerMapping(String fieldName, String friendlyName,
 			String fieldType) {
 		this(fieldName, friendlyName, fieldType, true);
 	}

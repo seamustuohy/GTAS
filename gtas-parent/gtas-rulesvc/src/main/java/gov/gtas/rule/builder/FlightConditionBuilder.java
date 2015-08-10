@@ -15,15 +15,15 @@ public class FlightConditionBuilder extends EntityConditionBuilder {
 	private static final Logger logger = LoggerFactory
 			.getLogger(FlightConditionBuilder.class);
 	
-	private String defaultTravelerVariableName;
-    private List<String> linkedTravelerList;
-	public FlightConditionBuilder(final String drlVariableName, final String defaultTravelerVarName){
+	private String defaultPassengerVariableName;
+    private List<String> linkedPassengerList;
+	public FlightConditionBuilder(final String drlVariableName, final String defaultPassengerVarName){
 		super(drlVariableName, EntityEnum.FLIGHT.getEntityName());
-		this.linkedTravelerList = new LinkedList<String>();
-		this.defaultTravelerVariableName = defaultTravelerVarName;
+		this.linkedPassengerList = new LinkedList<String>();
+		this.defaultPassengerVariableName = defaultPassengerVarName;
 	}
-	public void addLinkedTraveler(final String travelerVariable){
-		this.linkedTravelerList.add(travelerVariable);
+	public void addLinkedPassenger(final String passengerVariable){
+		this.linkedPassengerList.add(passengerVariable);
 	}
 	
 	
@@ -33,7 +33,7 @@ public class FlightConditionBuilder extends EntityConditionBuilder {
 	@Override
 	public void reset() {
 		super.reset();
-		linkedTravelerList.clear();
+		linkedPassengerList.clear();
 	}
 	@Override
 	protected void addSpecialConditionsWithoutActualConditions(
@@ -46,29 +46,29 @@ public class FlightConditionBuilder extends EntityConditionBuilder {
 
 	@Override
 	protected void addSpecialConditions(StringBuilder bldr) {
-		if(linkedTravelerList.isEmpty()){
-			bldr.append(defaultTravelerVariableName).append(":")
-			.append(EntityEnum.TRAVELER.getEntityName()).append("()")
+		if(linkedPassengerList.isEmpty()){
+			bldr.append(defaultPassengerVariableName).append(":")
+			.append(EntityEnum.PASSENGER.getEntityName()).append("()")
 		    .append(" from ")
 			.append(getDrlVariableName())
 			.append(".passengers\n");
 		} else {
-			if(linkedTravelerList.size() == 1){
-				String travelerVariable = linkedTravelerList.get(0);
-				bldr.append(EntityEnum.TRAVELER.getEntityName()).append("(id == ")
-				    .append(travelerVariable).append(".id) from ")
+			if(linkedPassengerList.size() == 1){
+				String passengerVariable = linkedPassengerList.get(0);
+				bldr.append(EntityEnum.PASSENGER.getEntityName()).append("(id == ")
+				    .append(passengerVariable).append(".id) from ")
 					.append(getDrlVariableName())
 					.append(".passengers\n");
 	        } else {
-				bldr.append(EntityEnum.TRAVELER.getEntityName()).append("(id in (");
+				bldr.append(EntityEnum.PASSENGER.getEntityName()).append("(id in (");
 				boolean firstTime = true;
-	        	for(String travelerVariable:linkedTravelerList){
+	        	for(String passengerVariable:linkedPassengerList){
 	        		if(firstTime){       			
 	        			firstTime = false;
 	        		} else {
 	        			bldr.append(", ");
 	        		}
-	        		bldr.append(travelerVariable).append(".id");
+	        		bldr.append(passengerVariable).append(".id");
 	        	}
 				
 	        	bldr.append(")) from ")

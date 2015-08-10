@@ -25,8 +25,8 @@ import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.lookup.TravelerTypeCode;
+import gov.gtas.model.Passenger;
+import gov.gtas.model.lookup.PassengerTypeCode;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.PassengerRepository;
@@ -49,7 +49,7 @@ public class TargetingServiceIT {
 	// private static String DRL =
 	// "package gov.gtas.rule;\n"
 	// +"import gov.gtas.bo.RuleHitDetail;\n"
-	// +"import gov.gtas.model.Traveler;\n"
+	// +"import gov.gtas.model.Passenger;\n"
 	// +"import gov.gtas.model.Pax;\n"
 	// +"import gov.gtas.model.Flight;\n"
 	// +"import gov.gtas.model.Document;\n"
@@ -57,10 +57,10 @@ public class TargetingServiceIT {
 	// +"rule \"UDR_TEST_RULE:5\"\n"
 	// +"when\n"
 	// +"$d:Document(issuanceCountry.iso2 != \"US\", issuanceDate >= \"01-Jan-2012\")\n"
-	// +"$p:Pax(id == $d.traveler.id)\n"
+	// +"$p:Pax(id == $d.passenger.id)\n"
 	// +"$f:Flight(flightNumber == \"0012\")\n"
 	// +"Pax(id == $p.id) from $f.passengers\n"
-	// //+"$p:Pax(id == $d.traveler.id, this memberOf $f.passengers)\n"
+	// //+"$p:Pax(id == $d.passenger.id, this memberOf $f.passengers)\n"
 	// +"then\n"
 	// +"resultList.add(new RuleHitDetail(33L, 5, $p.getId()));\n"
 	// +"end\n";
@@ -94,14 +94,14 @@ public class TargetingServiceIT {
 		assertEquals(2, msg.getFlights().size());
 		Flight flight = msg.getFlights().iterator().next();
 		assertEquals(3, flight.getPassengers().size());
-		Traveler pax = flight.getPassengers().iterator().next();
-		assertTrue(pax.getTravelerType().equals(TravelerTypeCode.P.name()));
+		Passenger pax = flight.getPassengers().iterator().next();
+		assertTrue(pax.getPassengerType().equals(PassengerTypeCode.P.name()));
 		assertNotNull("Pax ID is null", pax.getId());
 		assertEquals(1, pax.getDocuments().size());
 		Document doc = pax.getDocuments().iterator().next();
 		assertNotNull(doc.getId());
-		assertNotNull("Traveller is null", doc.getTraveler());
-		assertNotNull("Traveler ID is null", doc.getTraveler().getId());
+		assertNotNull("Passenger is null", doc.getPassenger());
+		assertNotNull("Passenger ID is null", doc.getPassenger().getId());
 		assertEquals(ApisDataGenerator.DOCUMENT_NUMBER, doc.getDocumentNumber());
 	}
 
@@ -120,9 +120,9 @@ public class TargetingServiceIT {
 		assertNotNull(result);
 		assertEquals("Expected 1 hit", 1, result.getResultList().size());
 		RuleHitDetail res = (RuleHitDetail) (result.getResultList().get(0));
-		assertNotNull("passenger ID in result is null", res.getTravelerId());
+		assertNotNull("passenger ID in result is null", res.getPassengerId());
 		assertEquals("Expected passenger with id = 11", 11L,
-				res.getTravelerId());
+				res.getPassengerId());
 	}
 
 	@Test
@@ -140,11 +140,11 @@ public class TargetingServiceIT {
 		assertNotNull(result);
 		assertEquals("Expected 2 hits", 2, result.getResultList().size());
 		RuleHitDetail res = (RuleHitDetail) (result.getResultList().get(0));
-		assertNotNull("passenger ID in result is null", res.getTravelerId());
+		assertNotNull("passenger ID in result is null", res.getPassengerId());
 		assertTrue(
 				"Hit Passenger id mismatch",
-				new Long(44L).equals(res.getTravelerId())
-						|| new Long(66L).equals(res.getTravelerId()));
+				new Long(44L).equals(res.getPassengerId())
+						|| new Long(66L).equals(res.getPassengerId()));
 	}
 
 	@Test
@@ -163,12 +163,12 @@ public class TargetingServiceIT {
 		assertNotNull(result);
 		assertEquals("Expected 3 hits", 3, result.getResultList().size());
 		RuleHitDetail res = (RuleHitDetail) (result.getResultList().get(0));
-		assertNotNull("passenger ID in result is null", res.getTravelerId());
+		assertNotNull("passenger ID in result is null", res.getPassengerId());
 		assertTrue(
 				"Hit Passenger id mismatch",
-				new Long(44L).equals(res.getTravelerId())
-						|| new Long(55L).equals(res.getTravelerId())
-						|| new Long(66L).equals(res.getTravelerId()));
+				new Long(44L).equals(res.getPassengerId())
+						|| new Long(55L).equals(res.getPassengerId())
+						|| new Long(66L).equals(res.getPassengerId()));
 	}
 
 	// need to add test data
@@ -199,38 +199,38 @@ public class TargetingServiceIT {
 		System.out.println("APIs message count = " + count);
 	}
 
-	private int verifyPassengers(Flight flt, Set<Traveler> passengers) {
+	private int verifyPassengers(Flight flt, Set<Passenger> passengers) {
 		int travCount = 0;
 		int paxCount = 0;
 		int crewCount = 0;
 		int docCount = 0;
-		for (Traveler traveler : passengers) {
+		for (Passenger pax : passengers) {
 			++travCount;
-			String type = traveler.getTravelerType();
-			if (type.equals(TravelerTypeCode.P.name())) {
+			String type = pax.getPassengerType();
+			if (type.equals(PassengerTypeCode.P.name())) {
 				++paxCount;
-			} else if (type.equals(TravelerTypeCode.C.name())) {
+			} else if (type.equals(PassengerTypeCode.C.name())) {
 				++crewCount;
 			}
-			Set<Document> docs = traveler.getDocuments();
+			Set<Document> docs = pax.getDocuments();
 			assertNotNull(docs);
 			assertTrue(docs.size() > 0);
 			docCount += docs.size();
 			for (Document doc : docs) {
 				assertNotNull(doc.getId());
-				assertNotNull("Traveller reference is null in Document",
-						doc.getTraveler());
-				assertNotNull("Traveler ID is null in Document Traveler",
-						doc.getTraveler().getId());
+				assertNotNull("Passenger reference is null in Document",
+						doc.getPassenger());
+				assertNotNull("Passenger ID is null in Document Passenger",
+						doc.getPassenger().getId());
 			}
 		}
-		assertTrue("Flight has no travelers:" + flt.getFlightNumber(),
+		assertTrue("Flight has no passengers:" + flt.getFlightNumber(),
 				travCount > 0);
-		assertTrue("Flight passenger+crew <> traveler:" + flt.getFlightNumber(),
+		assertTrue("Flight passenger+crew <> passenger:" + flt.getFlightNumber(),
 				paxCount+crewCount == travCount);
 		System.out.println("Flight:" + flt.getFlightNumber()
-				+ " - Traveler count = " + travCount + ", Passenger count ="
+				+ " - passenger count = " + travCount + ", Passenger count ="
 				+ paxCount);
-		return travCount + docCount + 1;// travelers+documents_flight
+		return travCount + docCount + 1;// passengers+documents_flight
 	}
 }

@@ -200,7 +200,7 @@ public class TargetingServiceImpl implements TargetingService {
 		}
 
 		HitsSummary hitsSummary = new HitsSummary();
-		hitsSummary.setTravelerId(ruleHitDetail.getTravelerId());
+		hitsSummary.setPassengerId(ruleHitDetail.getPassengerId());
 		hitsSummary.setCreateDate(new Date());
 
 		HitDetail hitDetail = new HitDetail();

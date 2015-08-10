@@ -11,7 +11,7 @@ import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-import gov.gtas.querybuilder.mappings.TravelerMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.services.UserService;
 import gov.gtas.util.DateCalendarUtils;
 
@@ -78,8 +78,8 @@ public class RuleServiceDataGenUtils {
 
 	public Rule createRuleWithOneCondition(UdrRule parent, int index) {
 		Rule rule = new Rule(parent, index, null);
-		rule.addConditionToRule(createCondition(1, EntityEnum.TRAVELER,
-				TravelerMapping.EMBARKATION.getFieldName(),
+		rule.addConditionToRule(createCondition(1, EntityEnum.PASSENGER,
+				PassengerMapping.EMBARKATION.getFieldName(),
 				OperatorCodeEnum.EQUAL, "IAD"));
 		return rule;
 	}

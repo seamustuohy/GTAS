@@ -9,7 +9,7 @@ app.service("paxService", function( $rootScope, $http, $q ) {
 	function getPax(flightId) {
 	    var request = $http({
 	        method: "get",
-	        url: "/gtas/travelers" + (flightId ? "?flightId=" + flightId : ""),
+	        url: "/gtas/passengers" + (flightId ? "?flightId=" + flightId : ""),
 	        params: {
 	            action: "get"
 	        }
@@ -33,11 +33,10 @@ app.service("paxService", function( $rootScope, $http, $q ) {
     }    
     
     
-    function getRuleHits(travelerId) {
+    function getRuleHits(passengerId) {
 	    var request = $http({
 	        method: "get",
-	        url: "/gtas/hit/traveler" + (travelerId ? "?travelerId=" + travelerId : ""),
-	      //  url: "/hit/traveler/"+(),
+	        url: "/gtas/hit/passenger" + (passengerId ? "?passengerId=" + passengerId : ""),
 	        params: {
 	            action: "get"
 	        }

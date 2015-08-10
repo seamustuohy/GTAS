@@ -33,8 +33,8 @@ public class QueryBuilderMappingFactory {
 	      else if(modelType == EntityEnum.HITS) {
 	    	  return createQueryBuilderMapping(EntityEnum.HITS, HitsMapping.values());
 	      }
-	      else if(modelType == EntityEnum.TRAVELER) {
-	    	  return createQueryBuilderMapping(EntityEnum.TRAVELER, TravelerMapping.values());
+	      else if(modelType == EntityEnum.PASSENGER) {
+	    	  return createQueryBuilderMapping(EntityEnum.PASSENGER, PassengerMapping.values());
 	      }
 	      else if(modelType == EntityEnum.PHONE) {
 	    	  return createQueryBuilderMapping(EntityEnum.PHONE, PhoneMapping.values());

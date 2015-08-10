@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class TravelerVo {
+public class PassengerVo {
     private String title;    
     private String firstName;
     private String middleName;
@@ -18,7 +18,7 @@ public class TravelerVo {
     private String gender;
     private String citizenshipCountry;
     private String residencyCountry;
-    private String travelerType;
+    private String passengerType;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)
     private Date dob;
     private String embarkation;
@@ -30,7 +30,7 @@ public class TravelerVo {
     private int ruleHits;
     private int listHits;
     
-    private List<TravelerVo> travelers;
+    private List<PassengerVo> passengers;
     
     /**
 	 * @return the ruleHits
@@ -57,17 +57,11 @@ public class TravelerVo {
 		this.listHits = listHits;
 	}
     
-    /**
-	 * @return the travelers
-	 */
-	public List<TravelerVo> getTravelers() {
-		return travelers;
+	public List<PassengerVo> getPassengers() {
+		return passengers;
 	}
-	/**
-	 * @param travelers the travelers to set
-	 */
-	public void setTravelers(List<TravelerVo> travelers) {
-		this.travelers = travelers;
+	public void setPassengers(List<PassengerVo> passengers) {
+		this.passengers = passengers;
 	}
 
 	private List<DocumentVo> documents = new ArrayList<>();
@@ -134,11 +128,11 @@ public class TravelerVo {
 	public void setPaxId(String paxId) {
 		this.paxId = paxId;
 	}
-	public String getTravelerType() {
-        return travelerType;
+	public String getPassengerType() {
+        return passengerType;
     }
-    public void setTravelerType(String travelerType) {
-        this.travelerType = travelerType;
+    public void setPassengerType(String passengerType) {
+        this.passengerType = passengerType;
     }
     public Date getDob() {
         return dob;

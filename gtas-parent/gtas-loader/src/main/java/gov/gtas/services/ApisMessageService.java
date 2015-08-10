@@ -18,7 +18,7 @@ import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.ReportingParty;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.exception.ParseException;
@@ -98,9 +98,9 @@ public class ApisMessageService implements MessageService {
                 this.apisMessage.getReportingParties().add(rp);
             }
             
-            Set<Traveler> pax = new HashSet<>();        
+            Set<Passenger> pax = new HashSet<>();        
             for (PassengerVo pvo : m.getPassengers()) {
-                Traveler p = utils.convertTravelerVo(pvo);
+                Passenger p = utils.convertPassengerVo(pvo);
                 pax.add(p);
             }
 

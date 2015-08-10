@@ -19,8 +19,8 @@ import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.lookup.TravelerTypeCode;
+import gov.gtas.model.Passenger;
+import gov.gtas.model.lookup.PassengerTypeCode;
 import gov.gtas.svc.TargetingServiceUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -44,7 +44,7 @@ public class RuleRepositoryIT {
 
 	@Test
 	public void testBasicApisRequest() {
-		Traveler p1 = createPassenger("Medulla", "Oblongata", "Timbuktu");
+		Passenger p1 = createPassenger("Medulla", "Oblongata", "Timbuktu");
 		ApisMessage msg = createBasicApisMessage(p1);
 		RuleServiceResult res = testTarget.invokeAdhocRules(
 				RuleServiceConstants.DEFAULT_RULESET_NAME,
@@ -74,10 +74,10 @@ public class RuleRepositoryIT {
 	 * @param embarkation
 	 * @return
 	 */
-	private Traveler createPassenger(final String fn, final String ln,
+	private Passenger createPassenger(final String fn, final String ln,
 			final String embarkation) {
-	    Traveler p = new Traveler();
-	    p.setTravelerType(TravelerTypeCode.P.name());
+	    Passenger p = new Passenger();
+	    p.setPassengerType(PassengerTypeCode.P.name());
 		p.setFirstName(fn);
 		p.setLastName(ln);
 		p.setEmbarkation("Timbuktu");
@@ -87,10 +87,10 @@ public class RuleRepositoryIT {
 	/**
 	 * Creates a simple ApisMessage with a single passenger
 	 */
-	private ApisMessage createBasicApisMessage(final Traveler passenger) {
+	private ApisMessage createBasicApisMessage(final Passenger passenger) {
 		ApisMessage msg = new ApisMessage();
 		Flight flight = new Flight();
-		HashSet<Traveler> set = new HashSet<Traveler>();
+		HashSet<Passenger> set = new HashSet<Passenger>();
 		set.add(passenger);
 		flight.setPassengers(set);
 		flight.setDestination("foo");

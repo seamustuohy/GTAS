@@ -8,7 +8,7 @@ import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
-import gov.gtas.querybuilder.mappings.TravelerMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 
 import java.text.ParseException;
 
@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class RuleConditionBuilderTest {
-	private static final String TRAVELER_VARIABLE_NAME="$t";
+	private static final String PASSENGER_VARIABLE_NAME="$p";
 	private static final String DOCUMENT_VARIABLE_NAME="$d";
 	private static final String FLIGHT_VARIABLE_NAME="$f";
 	
@@ -25,7 +25,7 @@ public class RuleConditionBuilderTest {
 
 	@Before
 	public void setUp() throws Exception {
-		testTarget = new RuleConditionBuilder(TRAVELER_VARIABLE_NAME, FLIGHT_VARIABLE_NAME, DOCUMENT_VARIABLE_NAME);
+		testTarget = new RuleConditionBuilder(PASSENGER_VARIABLE_NAME, FLIGHT_VARIABLE_NAME, DOCUMENT_VARIABLE_NAME);
 	}
 
 	@After
@@ -33,20 +33,20 @@ public class RuleConditionBuilderTest {
 	}
 
 	@Test
-	public void testSingleConditionTraveler() throws ParseException {
+	public void testSingleConditionPassenger() throws ParseException {
 		/*
-		 * just one Traveler condition.
+		 * just one passenger condition.
 		 * also test BETWEEN operator.
 		 */
-		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.TRAVELER,
-				TravelerMapping.DOB,
+		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.PASSENGER,
+				PassengerMapping.DOB,
 				OperatorCodeEnum.BETWEEN, new String[]{"1990-01-01","1998-12-31"}, ValueTypesEnum.DATE);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$t:Traveler("+TravelerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
-		+TravelerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\")", result.toString().trim());
+		assertEquals("$p:Passenger("+PassengerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
+		+PassengerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\")", result.toString().trim());
 	}
 	@Test
 	public void testSingleConditionFlight() throws ParseException {
@@ -62,7 +62,7 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		assertEquals("$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" in (\"DBY\",\"XYZ\",\"PQR\"))\n"
-				+"$t:Traveler() from $f.passengers",
+				+"$p:Passenger() from $f.passengers",
 				result.toString().trim());
 	}
 
@@ -81,7 +81,7 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\")\n"
-				+"$t:Traveler(id == $d.traveler.id)", 
+				+"$p:Passenger(id == $d.passenger.id)", 
 				result.toString().trim());
 	}
 	
@@ -99,7 +99,7 @@ public class RuleConditionBuilderTest {
 		assertTrue(result.length() > 0);
 		System.out.println(result);
 		assertEquals("$f:Flight("+FlightMapping.FLIGHT_NUMBER.getFieldName()+" == \"12345\")\n"
-				+"$t:Traveler() from $f.passengers",
+				+"$p:Passenger() from $f.passengers",
 				result.toString().trim());
 	}
 	
@@ -123,7 +123,7 @@ public class RuleConditionBuilderTest {
 		assertTrue(result.length() > 0);
 		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 		+DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
-		+"$t:Traveler(id == $d.traveler.id)", 
+		+"$p:Passenger(id == $d.passenger.id)", 
 		result.toString().trim());
 	}
 	
@@ -146,7 +146,7 @@ public class RuleConditionBuilderTest {
 		assertTrue(result.length() > 0);
 		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 						+ DocumentMapping.DOCUMENT_TYPE.getFieldName()+" == \"P\")\n"
-						+"$t:"+ EntityEnum.TRAVELER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
+						+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
 		result.toString().trim());
 	}
 	@Test
@@ -162,7 +162,7 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		assertEquals("$d:Document("	+ DocumentMapping.DOCUMENT_TYPE.getFieldName()+" == \"P\")\n"
-				+"$t:"+ EntityEnum.TRAVELER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
+				+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
 		result.toString().trim());
 	}
 	@Test
@@ -184,7 +184,7 @@ public class RuleConditionBuilderTest {
 		assertTrue(result.length() > 0);
 		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 			+ DocumentMapping.DOCUMENT_TYPE.getFieldName()+" != \"P\")\n"
-			+"$t:"+ EntityEnum.TRAVELER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
+			+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
 		result.toString().trim());
 	}
 	@Test
@@ -200,13 +200,13 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		assertEquals("$d:Document("	+ DocumentMapping.DOCUMENT_TYPE.getFieldName()+" != \"P\")\n"
-				+"$t:"+ EntityEnum.TRAVELER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
+				+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
 		result.toString().trim());
 	}
 	@Test
 	public void testMultipleConditionsPersonFlightDocument() throws ParseException {
 		/*
-		 * conditions for Traveler, document and Flight.
+		 * conditions for passenger, document and Flight.
 		 */
 		RuleCond cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.DOCUMENT,
 				DocumentMapping.ISSUANCE_COUNTRY,
@@ -217,8 +217,8 @@ public class RuleConditionBuilderTest {
 				OperatorCodeEnum.GREATER_OR_EQUAL, "2010-01-01", ValueTypesEnum.DATE);
 		testTarget.addRuleCondition(cond);
 
-		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.TRAVELER,
-				TravelerMapping.DOB,
+		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.PASSENGER,
+				PassengerMapping.DOB,
 				OperatorCodeEnum.BETWEEN, new String[]{"1990-01-01","1998-12-31"}, ValueTypesEnum.DATE);
 		testTarget.addRuleCondition(cond);
 
@@ -231,8 +231,8 @@ public class RuleConditionBuilderTest {
 				OperatorCodeEnum.EQUAL, "2231", ValueTypesEnum.INTEGER);
 		testTarget.addRuleCondition(cond);
 
-		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.TRAVELER,
-				TravelerMapping.LAST_NAME,
+		cond = RuleBuilderTestUtils.createRuleCond(EntityEnum.PASSENGER,
+				PassengerMapping.LAST_NAME,
 				OperatorCodeEnum.EQUAL, "Jones", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 				
@@ -241,16 +241,16 @@ public class RuleConditionBuilderTest {
 		assertTrue(result.length() > 0);
 		System.out.println(result.toString());
 		assertEquals(
-   				"$t:Traveler("
-					+TravelerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
-					+TravelerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\", "
-					+TravelerMapping.LAST_NAME.getFieldName()+" == \"Jones\")\n"
+   				"$p:Passenger("
+					+PassengerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
+					+PassengerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\", "
+					+PassengerMapping.LAST_NAME.getFieldName()+" == \"Jones\")\n"
 				+"$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 		            +DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
-		        + "Document(id == $d.id, traveler.id == $t.id)\n"
+		        + "Document(id == $d.id, passenger.id == $p.id)\n"
 		        + "$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" == \"DBY\", "
 		           +FlightMapping.FLIGHT_NUMBER.getFieldName()+" == 2231)\n"
-		        +"Traveler(id == $t.id) from $f.passengers",
+		        +"Passenger(id == $p.id) from $f.passengers",
 		result.toString().trim());
 	}
 }

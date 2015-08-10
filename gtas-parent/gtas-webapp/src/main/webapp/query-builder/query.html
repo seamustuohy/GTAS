@@ -97,7 +97,7 @@
     <div id="builder"></div>
     <select ng-model="viewType">
         <option value="FLIGHT"> Flight </option>
-        <option value="TRAVELER"> Passenger </option>
+        <option value="PASSENGER"> Passenger </option>
     </select>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
     <button type="button" data-ng-click="viewTypeChange()"  class="btn btn-xs btn-primary" data->Execute Query</button>

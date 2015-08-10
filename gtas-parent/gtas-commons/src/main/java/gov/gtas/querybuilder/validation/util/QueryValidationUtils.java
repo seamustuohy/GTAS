@@ -19,7 +19,7 @@ import gov.gtas.querybuilder.mappings.IEntityMapping;
 import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
 import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
-import gov.gtas.querybuilder.mappings.TravelerMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.querybuilder.model.UserQuery;
 
 import java.io.IOException;
@@ -152,8 +152,8 @@ public class QueryValidationUtils {
 					case Constants.HITS:
 						validField = validateField(HitsMapping.values(), field);
 						break;
-					case Constants.TRAVELER:
-						validField = validateField(TravelerMapping.values(), field);
+					case Constants.PASSENGER:
+						validField = validateField(PassengerMapping.values(), field);
 						break;
 					case Constants.PHONE:
 						validField = validateField(PhoneMapping.values(), field);

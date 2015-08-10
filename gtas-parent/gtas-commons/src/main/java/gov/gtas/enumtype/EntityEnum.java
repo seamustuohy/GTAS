@@ -10,7 +10,7 @@ public enum EntityEnum {
 		FLIGHT ("FLIGHT", "Flight", "f"),
 		FREQUENT_FLYER ("FREQUENT FLYER", "FrequentFlyer", "ff"),
 		HITS ("HITS", "Hits", "h"),
-		TRAVELER("TRAVELER", "Traveler", "t"),
+		PASSENGER("PASSENGER", "Passenger", "p"),
 		PHONE ("PHONE", "Phone", "ph"),
 		PNR ("PNR", "PNR", "pnr"),
 		TRAVEL_AGENCY ("TRAVEL AGENCY", "TravelAgency", "ta");
@@ -18,7 +18,6 @@ public enum EntityEnum {
 		private String friendlyName;
 		private String entityName;
 		private String alias;
-		
 		
 		private EntityEnum(String friendlyName, String entityName, String alias) {
 			this.friendlyName = friendlyName;
