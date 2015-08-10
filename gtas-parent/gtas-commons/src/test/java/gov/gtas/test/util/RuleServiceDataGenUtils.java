@@ -1,6 +1,7 @@
 package gov.gtas.test.util;
 
 import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
@@ -10,7 +11,6 @@ import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.querybuilder.mappings.TravelerMapping;
 import gov.gtas.services.UserService;
 import gov.gtas.util.DateCalendarUtils;

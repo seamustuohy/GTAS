@@ -1,5 +1,6 @@
 package gov.gtas.services.udr;
 
+import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
@@ -10,7 +11,6 @@ import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.repository.udr.UdrRuleRepository;
 import gov.gtas.services.UserService;
 

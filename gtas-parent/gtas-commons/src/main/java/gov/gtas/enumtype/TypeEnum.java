@@ -3,6 +3,7 @@ package gov.gtas.enumtype;
 public enum TypeEnum {
 	STRING ("string"),
 	INTEGER ("integer"),
+	LONG("long"),
 	DOUBLE ("double"),
 	DATE ("date"), 
 	TIME ("time"),
@@ -18,5 +19,16 @@ public enum TypeEnum {
 	public String getType() {
 		return type;
 	}
+	
+	public static TypeEnum getEnum(String value) {
+		
+		for (TypeEnum typeEnum : TypeEnum.values()) {
+		     if(typeEnum.name().equalsIgnoreCase(value)) {
+		    	 return typeEnum;
+		     }
+		 }
+		
+        throw new IllegalArgumentException();
+    }
 	
 }

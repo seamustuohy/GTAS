@@ -1,4 +1,4 @@
-package gov.gtas.model.udr.enumtype;
+package gov.gtas.enumtype;
 
 public enum YesNoEnum {
    Y,
