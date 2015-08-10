@@ -12,9 +12,10 @@ public final class Constants {
 	public static final String EDIT_QUERY_URI = "/editQuery";
 	public static final String DELETE_QUERY_URI = "/deleteQuery";
 	
+	
 	//UDR URI
 	public static final String UDR_ROOT = "/udr";
-	public static final String UDR_GET = "/{userId}/{title}";
+	public static final String UDR_GET_BY_AUTHOR_TITLE = "/{authorId}/{title}";
 	public static final String UDR_GET_BY_ID = "/get/{id}";
 	public static final String UDR_GETALL = "/list/{userId}";
 	public static final String UDR_GETDRL = "/drl";
@@ -24,7 +25,7 @@ public final class Constants {
 	public static final String UDR_DELETE = "/{userId}/{id}";
 	public static final String UDR_TEST = "/testUdr";
 	public static final String UDR_TARGET = "/apis/{id}";
-	//public static final String UDR_RULE = "/rules";
+	public static final String UDR_TARGET_ALL_APIS = "/apis";
 	
 	// Query Messages
 	public static final String QUERY_SAVED_SUCCESS_MSG = "Query saved successfully";
@@ -37,5 +38,5 @@ public final class Constants {
 	
 	// Hits Summary
 	public static final String HITS_SUMMARY_SERVICE = "/hit";
-	public static final String HITS_SUMMARY_RULES_BY_TRAVELER_ID = "/traveler/{id}";
+	public static final String HITS_SUMMARY_RULES_BY_PASSENGER_ID = "/passenger/{id}";
 }

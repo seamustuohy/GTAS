@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 
 public class RuleHitDetail implements Serializable {
     public static final String HIT_REASON_SEPARATOR = "///";
@@ -20,18 +20,18 @@ public class RuleHitDetail implements Serializable {
 	private int engineRuleIndex;
 	
 	private String hitRule;
-	private long travelerId;
-	private String travelerType;
-	private String travelerName;
+	private long passengerId;
+	private String passengerType;
+	private String passengerName;
 	private String[] hitReasons;
 	
-	public RuleHitDetail(final long udrRuleId, final int engineRuleIndex, final String ruleTitle, final Traveler traveler, final String cause){
+	public RuleHitDetail(final long udrRuleId, final int engineRuleIndex, final String ruleTitle, final Passenger passenger, final String cause){
 		this.udrRuleId = udrRuleId;
 		this.engineRuleIndex = engineRuleIndex;
 		this.hitRule = ruleTitle+"("+udrRuleId+"/"+engineRuleIndex+")";
-		this.travelerId = traveler.getId();
-		this.travelerType = traveler.getTravelerType();
-		this.travelerName = traveler.getFirstName()+" "+traveler.getLastName();
+		this.passengerId = passenger.getId();
+		this.passengerType = passenger.getPassengerType();
+		this.passengerName = passenger.getFirstName()+" "+passenger.getLastName();
 		this.hitReasons = cause.split(HIT_REASON_SEPARATOR);
 	}
 
@@ -59,24 +59,24 @@ public class RuleHitDetail implements Serializable {
 
 
 	/**
-	 * @return the travelerId
+	 * @return the passengerId
 	 */
-	public long getTravelerId() {
-		return travelerId;
+	public long getPassengerId() {
+		return passengerId;
 	}
 
 	/**
-	 * @return the travelerType
+	 * @return the passengerType
 	 */
-	public String getTravelerType() {
-		return travelerType;
+	public String getPassengerType() {
+		return passengerType;
 	}
 
 	/**
-	 * @return the travelerName
+	 * @return the passengerName
 	 */
-	public String getTravelerName() {
-		return travelerName;
+	public String getPassengerName() {
+		return passengerName;
 	}
 
 	/**
@@ -90,11 +90,11 @@ public class RuleHitDetail implements Serializable {
 	 * Factory method that creates a RuleHitDetailObject.
 	 * @param udr the 
 	 * @param rule
-	 * @param traveler
+	 * @param passenger
 	 * @return
 	 */
-	public static RuleHitDetail createRuleHitDetail(Long udrRuleId, int engineRuleIndex, String title, Traveler traveler, String cause){
-		RuleHitDetail ret = new RuleHitDetail(udrRuleId, engineRuleIndex, title, traveler, cause);
+	public static RuleHitDetail createRuleHitDetail(Long udrRuleId, int engineRuleIndex, String title, Passenger passenger, String cause){
+		RuleHitDetail ret = new RuleHitDetail(udrRuleId, engineRuleIndex, title, passenger, cause);
 		return ret;
 	}
 }

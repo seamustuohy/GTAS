@@ -1,7 +1,7 @@
 package gov.gtas.querybuilder.repository;
 
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public interface QueryBuilderRepository {
 	
 	public List<Flight> getFlightsByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException;
-	public List<Traveler> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException;
+	public List<Passenger> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException;
 	public UserQuery saveQuery(UserQuery query) throws QueryAlreadyExistsRepositoryException, InvalidQueryRepositoryException;
 	public UserQuery editQuery(UserQuery query) throws QueryAlreadyExistsRepositoryException, QueryDoesNotExistRepositoryException, 
 		InvalidQueryRepositoryException;

@@ -39,11 +39,11 @@ public class HitsSummaryController {
 	private UdrService udrService;
 
 	
-	@RequestMapping(value = "/hit/traveler", method = RequestMethod.GET)
+	@RequestMapping(value = "/hit/passenger", method = RequestMethod.GET)
     @Transactional
-	public @ResponseBody List<HitDetailVo> getRules(@RequestParam(value = "travelerId", required = false) String id) {
+	public @ResponseBody List<HitDetailVo> getRules(@RequestParam(value = "passengerId", required = false) String id) {
 
-		return getHitDetailsMapped(hitsSummaryService.findByTravelerId(Long.parseLong(id)));
+		return getHitDetailsMapped(hitsSummaryService.findByPassengerId(Long.parseLong(id)));
 	}
 
 	

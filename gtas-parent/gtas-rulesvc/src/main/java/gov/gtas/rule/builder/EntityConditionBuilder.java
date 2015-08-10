@@ -1,13 +1,14 @@
 package gov.gtas.rule.builder;
 
 import gov.gtas.model.udr.RuleCond;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Common functionality for building Rule criteria for entities such as
- * Traveler, Fligh and Document.
+ * Passenger, Flight and Document.
  * 
  * @author GTAS3 (AB)
  *
@@ -92,12 +93,6 @@ public abstract class EntityConditionBuilder {
 		case GREATER_OR_EQUAL:
 		case LESS:
 		case LESS_OR_EQUAL:
-		case BEGINS_WITH:
-		case NOT_BEGINS_WITH:
-		case ENDS_WITH:
-		case NOT_ENDS_WITH:
-		case CONTAINS:
-		case NOT_CONTAINS:
 			bldr.append(cond.getAttrName()).append(" ")
 					.append(cond.getOpCode().getOperatorString()).append(" ");
 			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
@@ -113,9 +108,32 @@ public abstract class EntityConditionBuilder {
 		case IS_NOT_EMPTY:
 		case IS_NULL:
 		case IS_NOT_NULL:
+			//no values!
 			bldr.append(cond.getAttrName()).append(" ")
 					.append(cond.getOpCode().getOperatorString()).append(" ");
 			break;
+		case BEGINS_WITH:
+		case ENDS_WITH:
+		case CONTAINS:
+			bldr.append(cond.getAttrName()).append(" ")
+			.append(OperatorCodeEnum.IS_NOT_EMPTY.getOperatorString());
+			bldr.append(", ").append(cond.getAttrName()).append(" ")
+			.append(cond.getOpCode().getOperatorString()).append(" ");
+			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
+					.get(0), bldr);
+            break;			
+		case NOT_BEGINS_WITH:
+		case NOT_ENDS_WITH:
+		case NOT_CONTAINS:
+			bldr.append("!(")
+			.append(cond.getAttrName()).append(" ")
+			.append(OperatorCodeEnum.IS_NOT_EMPTY.getOperatorString());
+			bldr.append(", ").append(cond.getAttrName()).append(" ")
+			.append(cond.getOpCode().getOperatorString()).append(" ");
+			RuleConditionBuilderHelper.addConditionValue(cond.getValues()
+					.get(0), bldr);
+			bldr.append(")");
+            break;			
 		case BETWEEN:
 			bldr.append(cond.getAttrName()).append(" >= ");
 			RuleConditionBuilderHelper.addConditionValue(cond.getValues()

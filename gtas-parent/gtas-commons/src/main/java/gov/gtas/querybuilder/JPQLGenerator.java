@@ -1,11 +1,11 @@
 package gov.gtas.querybuilder;
 
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.OperatorEnum;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
 import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
 
 import java.util.Arrays;
@@ -44,12 +44,12 @@ public class JPQLGenerator {
 						" " + Constants.FROM + " " + EntityEnum.FLIGHT.getEntityName() + " " + EntityEnum.FLIGHT.getAlias();
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
-			else if(queryType == EntityEnum.TRAVELER) {
-				String flightsJoinStmt = Constants.JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + Constants.FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
-				String documentJoinStmt = Constants.JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + Constants.DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
+			else if(queryType == EntityEnum.PASSENGER) {
+				String flightsJoinStmt = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + Constants.FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
+				String documentJoinStmt = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + Constants.DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
 				
-				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.TRAVELER.getAlias() + 
-						" " + Constants.FROM + " " + EntityEnum.TRAVELER.getEntityName() + " " + EntityEnum.TRAVELER.getAlias();
+				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.PASSENGER.getAlias() + 
+						" " + Constants.FROM + " " + EntityEnum.PASSENGER.getEntityName() + " " + EntityEnum.PASSENGER.getAlias();
 				
 				if(join.length() == 0) {
 					join.append(flightsJoinStmt);
@@ -60,8 +60,8 @@ public class JPQLGenerator {
 						join.append(flightsJoinStmt);
 					}
 					else {
-						String condition = Constants.JOIN + EntityEnum.TRAVELER.getAlias() + Constants.FLIGHT_REF;
-						String joinFetchCondition = Constants.JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + Constants.FLIGHT_REF;
+						String condition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + Constants.FLIGHT_REF;
+						String joinFetchCondition = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + Constants.FLIGHT_REF;
 						int startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
 					}
@@ -71,14 +71,14 @@ public class JPQLGenerator {
 						join.append(documentJoinStmt);
 					}
 					else {
-						String condition = Constants.JOIN + EntityEnum.TRAVELER.getAlias() + Constants.DOCUMENT_REF;
-						String joinFetchCondition = Constants.JOIN_FETCH + EntityEnum.TRAVELER.getAlias() + Constants.DOCUMENT_REF;
+						String condition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + Constants.DOCUMENT_REF;
+						String joinFetchCondition = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + Constants.DOCUMENT_REF;
 						int startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
 						
-						// if this is a passenger query, you don't need the traveler join again because that is already part of the queryPrefix
+						// if this is a passenger query, you don't need the passenger join again because that is already part of the queryPrefix
 						// so remove it
-						condition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + Constants.TRAVELER_REF + EntityEnum.TRAVELER.getAlias();
+						condition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + Constants.PASSENGER_REF + EntityEnum.PASSENGER.getAlias();
 						startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), "");
 					}
@@ -105,7 +105,7 @@ public class JPQLGenerator {
 			
 			List<QueryEntity> rules = queryObject.getRules();
 			
-			if(level.intValue() > 1) {
+			if(level.intValue() > 0) {
 				where.append("(");
 			}
 			
@@ -119,9 +119,8 @@ public class JPQLGenerator {
 				index++;
 			}
 						
-			if(level.intValue() > 1) {
+			if(level.intValue() > 0) {
 				where.append(")");
-				level.setValue(1);
 			}
 		}
 		else if(queryEntity instanceof QueryTerm) {
@@ -166,7 +165,7 @@ public class JPQLGenerator {
 				String joinCondition = "";
 				
 				if(entity.equalsIgnoreCase(EntityEnum.DOCUMENT.getEntityName())) {
-					joinCondition = getJoinCondition(EntityEnum.TRAVELER);
+					joinCondition = getJoinCondition(EntityEnum.PASSENGER);
 					
 					if(join.indexOf(joinCondition) == -1) {
 						join.append(joinCondition);
@@ -186,13 +185,13 @@ public class JPQLGenerator {
 		
 		switch (entity.getEntityName().toUpperCase()) {
 			case Constants.FLIGHT:
-				joinCondition = Constants.JOIN + EntityEnum.TRAVELER.getAlias() + Constants.FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
+				joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + Constants.FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
 				break;
-	        case Constants.TRAVELER:
-	        	joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + Constants.TRAVELER_REF + EntityEnum.TRAVELER.getAlias();
+	        case Constants.PASSENGER:
+	        	joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + Constants.PASSENGER_REF + EntityEnum.PASSENGER.getAlias();
 	        	break;
 	        case Constants.DOCUMENT:
-	        	joinCondition = Constants.JOIN + EntityEnum.TRAVELER.getAlias() + Constants.DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
+	        	joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + Constants.DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
 	            break;
 	        default:
 	            throw new InvalidQueryRepositoryException("Invalid Entity: " + entity.getEntityName(), null);

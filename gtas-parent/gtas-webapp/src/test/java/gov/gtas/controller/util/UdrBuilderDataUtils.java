@@ -1,10 +1,14 @@
 package gov.gtas.controller.util;
 
+import gov.gtas.enumtype.ConditionEnum;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -14,22 +18,23 @@ public class UdrBuilderDataUtils {
 
 	public UdrSpecification createSpec() {
 		QueryObject queryObject = new QueryObject();
-		queryObject.setCondition("OR");
+		queryObject.setCondition(ConditionEnum.OR.toString());
 		List<QueryEntity> rules = new LinkedList<QueryEntity>();
-		QueryTerm trm = new QueryTerm("Pax", "embarkationDate", "String",
-				"EQUAL", new String[] { new Date().toString() });
+		QueryTerm trm = new QueryTerm(EntityEnum.PASSENGER.getEntityName(),  "embarkationDate", "String",
+				OperatorCodeEnum.EQUAL.toString(), new String[] { new Date().toString() });
 		rules.add(trm);
-		rules.add(new QueryTerm("Pax", "lastName", "String", "EQUAL",
+		rules.add(new QueryTerm(EntityEnum.PASSENGER.getEntityName(), PassengerMapping.LAST_NAME.getFieldName(), 
+				"String", OperatorCodeEnum.EQUAL.toString(),
 				new String[] { "Jones" }));
 
 		QueryObject queryObjectEmbedded = new QueryObject();
-		queryObjectEmbedded.setCondition("AND");
+		queryObjectEmbedded.setCondition(ConditionEnum.AND.toString());
 		List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
 
-		QueryTerm trm2 = new QueryTerm("Pax", "embarkation", "String",
-				"IN", new String[] { "DBY", "PKY", "FLT" });
+		QueryTerm trm2 = new QueryTerm(EntityEnum.PASSENGER.getEntityName(), PassengerMapping.EMBARKATION.getFieldName(), "String",
+				OperatorCodeEnum.IN.toString(), new String[] { "DBY", "PKY", "FLT" });
 		rules2.add(trm2);
-		rules2.add(new QueryTerm("Pax", "debarkation", "String", "EQUAL",
+		rules2.add(new QueryTerm(EntityEnum.PASSENGER.getEntityName(), PassengerMapping.DEBARKATION.getFieldName(), "String", OperatorCodeEnum.EQUAL.toString(),
 				new String[] { "IAD" }));
 		queryObjectEmbedded.setRules(rules2);
 
@@ -42,12 +47,12 @@ public class UdrBuilderDataUtils {
 
 	public UdrSpecification createSimpleSpec() {
 		QueryObject queryObject = new QueryObject();
-		queryObject.setCondition("OR");
+		queryObject.setCondition(ConditionEnum.OR.toString());
 		List<QueryEntity> rules = new LinkedList<QueryEntity>();
-		QueryTerm trm = new QueryTerm("Pax", "embarkationDate", "String",
+		QueryTerm trm = new QueryTerm(EntityEnum.PASSENGER.getEntityName(), "embarkationDate", "String",
 				"EQUAL", new String[] { new Date().toString() });
 		rules.add(trm);
-		rules.add(new QueryTerm("Pax", "lastName", "String", "EQUAL",
+		rules.add(new QueryTerm(EntityEnum.PASSENGER.getEntityName(), "lastName", "String", "EQUAL",
 				new String[] { "Jones" }));
 
 		queryObject.setRules(rules);

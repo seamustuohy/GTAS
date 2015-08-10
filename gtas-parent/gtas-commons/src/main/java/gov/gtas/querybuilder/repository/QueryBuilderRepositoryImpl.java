@@ -1,16 +1,16 @@
 package gov.gtas.querybuilder.repository;
 
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.OperatorEnum;
+import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.JPQLGenerator;
 import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
-import gov.gtas.querybuilder.enums.TypeEnum;
 import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
@@ -197,8 +197,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	}
 
 	@Override
-	public List<Traveler> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException {
-		List<Traveler> travelers = new ArrayList<>();
+	public List<Passenger> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException {
+		List<Passenger> passengers = new ArrayList<>();
 		
 		if(queryObject != null) {
 			Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
@@ -208,21 +208,21 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			}
 			
 			try {
-				String jpqlQuery = JPQLGenerator.generateQuery(queryObject, EntityEnum.TRAVELER);
-				logger.info("Getting Travelers by this query: " + jpqlQuery);
-				TypedQuery<Traveler> query = entityManager.createQuery(jpqlQuery, Traveler.class);
+				String jpqlQuery = JPQLGenerator.generateQuery(queryObject, EntityEnum.PASSENGER);
+				logger.info("Getting Passengers by this query: " + jpqlQuery);
+				TypedQuery<Passenger> query = entityManager.createQuery(jpqlQuery, Passenger.class);
 				MutableInt positionalParameter = new MutableInt();
 				setJPQLParameters(query, queryObject, positionalParameter);
 				
-				travelers = query.getResultList();
+				passengers = query.getResultList();
 				
-				logger.info("Number of Travelers returned: " + (travelers != null ? travelers.size() : "Traveler result is null"));
+				logger.info("Number of Passengers returned: " + (passengers != null ? passengers.size() : "Passenger result is null"));
 			} catch (InvalidQueryRepositoryException | ParseException e) {
 				throw new InvalidQueryRepositoryException(e.getMessage(), queryObject);
 			}
 		}
 		
-		return travelers;
+		return passengers;
 	}
 	
 	private boolean isUniqueTitle(UserQuery query) {

@@ -1,6 +1,6 @@
 package gov.gtas.querybuilder.mappings;
 
-import gov.gtas.querybuilder.enums.TypeEnum;
+import gov.gtas.enumtype.TypeEnum;
 
 public enum EmailMapping implements IEntityMapping {
 	EMAIL_ADDRESS ("email_address", "Address", TypeEnum.STRING.getType()),

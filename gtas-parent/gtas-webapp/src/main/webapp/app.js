@@ -13,8 +13,8 @@ app.config(function ($stateProvider){
             templateUrl: 'flights/flights.html',
             controller: 'FlightsController'
         })
-        .state('travelers', {
-            url: '/travelers',
+        .state('passengers', {
+            url: '/passengers',
             templateUrl: 'pax/pax.html',
             controller: 'PaxController'
         })

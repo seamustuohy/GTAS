@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import gov.gtas.dataobject.TravelerVo;
+import gov.gtas.dataobject.PassengerVo;
 import gov.gtas.model.Flight;
 import gov.gtas.model.HitsSummary;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.dataobject.FlightVo;
 import gov.gtas.services.FlightService;
 import gov.gtas.services.HitsSummaryService;
@@ -54,7 +54,7 @@ public class FlightController {
         try{
         	
         List<Flight> flights = flightService.findAll();
-        List<Traveler> travelers = null;
+        List<Passenger> passengers = null;
         
         for (Flight f : flights) {
      
@@ -75,9 +75,9 @@ public class FlightController {
             vo.setDestinationCountry(destCountry);
             vo.setEta(f.getEta());
 
-            travelers = pService.getPassengersByFlightId(f.getId());
-            vo.setRuleHits(getTotalHitsByFlightId(travelers));
-            vo.setTotalPax(travelers.size());
+            passengers = pService.getPassengersByFlightId(f.getId());
+            vo.setRuleHits(getTotalHitsByFlightId(passengers));
+            vo.setTotalPax(passengers.size());
             rv.add(vo);
         }
     
@@ -120,7 +120,7 @@ public class FlightController {
             vo.setEta(f.getEta());
             rv.add(vo);
             
-            Map<Long, TravelerVo> travMap = new HashMap<Long, TravelerVo>();
+            Map<Long, PassengerVo> travMap = new HashMap<Long, PassengerVo>();
             
             Iterable<HitsSummary> summary = hitsSummaryService.findAll();
             
@@ -139,7 +139,7 @@ public class FlightController {
     
      
     @Transactional
-    public int getTotalHitsByFlightId(List<Traveler> travelers){
+    public int getTotalHitsByFlightId(List<Passenger> passengers){
 
     	int totalHits = 0;
     	
@@ -154,11 +154,11 @@ public class FlightController {
     	} // END IF
     	
     	//Iterate over PAX to get total hit count
-    	for(Traveler t: travelers){
+    	for(Passenger t: passengers){
     		
     		for(HitsSummary s: hitsList){
     			
-    		if(s.getTravelerId().equals(t.getId())){
+    		if(s.getPassengerId().equals(t.getId())){
     			totalHits++;
     			}
     		}

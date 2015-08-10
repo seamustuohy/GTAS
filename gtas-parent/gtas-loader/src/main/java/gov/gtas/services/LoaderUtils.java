@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.ReportingParty;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.edifact.EdifactLexer;
@@ -16,15 +16,15 @@ import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
-import gov.gtas.parsers.vo.air.TravelerVo;
+import gov.gtas.parsers.vo.air.PassengerVo;
 
 @Service
 public class LoaderUtils {
     @Autowired
     private AirportService airportService;
 
-    public Traveler convertTravelerVo(TravelerVo vo) throws ParseException {
-        Traveler p = new Traveler();
+    public Passenger convertPassengerVo(PassengerVo vo) throws ParseException {
+        Passenger p = new Passenger();
         BeanUtils.copyProperties(vo, p);
         
         String airportCode = vo.getDebarkation();
@@ -47,7 +47,7 @@ public class LoaderUtils {
         for (DocumentVo dvo : vo.getDocuments()) {
             Document d = new Document();
             BeanUtils.copyProperties(dvo, d);
-            d.setTraveler(p);
+            d.setPassenger(p);
             d.setIssuanceCountry(dvo.getIssuanceCountry());
             p.getDocuments().add(d);
         }

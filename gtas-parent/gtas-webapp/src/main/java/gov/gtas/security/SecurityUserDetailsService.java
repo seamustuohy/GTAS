@@ -6,6 +6,7 @@ import gov.gtas.model.User;
 import gov.gtas.services.UserService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,15 +41,14 @@ public class SecurityUserDetailsService implements UserDetailsService {
             logger.info(message);
             throw new UsernameNotFoundException(message);
         }
+        
         List<GrantedAuthority> authorities = new ArrayList<>();
-        
-        Iterator<Authorities> tempIter = user.getAuthorities().iterator();
-        
-        while(tempIter.hasNext()){
-        authorities.add(new SimpleGrantedAuthority(((Authorities)tempIter.next()).getUserRole().getRoleDescription()));
+        if (user.getAuthorities() != null) {
+            Iterator<Authorities> tempIter = user.getAuthorities().iterator();
+            while(tempIter.hasNext()){
+                authorities.add(new SimpleGrantedAuthority(((Authorities)tempIter.next()).getUserRole().getRoleDescription()));
+            }
         }
-        
-
         logger.info("Found user in database: " + user);
 
         return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);

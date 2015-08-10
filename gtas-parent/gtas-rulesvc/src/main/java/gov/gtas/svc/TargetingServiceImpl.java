@@ -18,6 +18,7 @@ import gov.gtas.rule.RuleServiceResult;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -115,6 +116,29 @@ public class TargetingServiceImpl implements TargetingService {
 		return res;
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.TargetingService#analyzeLoadedApisMessage()
+	 */
+	@Override
+	@Transactional
+	public List<RuleHitDetail> analyzeLoadedApisMessage() {
+		List<RuleHitDetail> ret = null;
+		List<ApisMessage> msgs = this.retrieveApisMessage(MessageStatus.LOADED);
+		if(msgs != null){
+			RuleServiceRequest req =  TargetingServiceUtils.createApisRequest(msgs);
+			RuleServiceResult res = ruleService.invokeRuleEngine(req);
+			ret = res.getResultList();
+//			ret = new LinkedList<RuleHitDetail>();
+//			for(ApisMessage msg:msgs){
+//				RuleServiceResult resp = this.analyzeApisMessage(msg);
+//				for(RuleHitDetail det:resp.getResultList()){
+//					ret.add(det);
+//				}
+//			}
+		}
+		return ret;
+	}
+
 	@Override
 	@Transactional
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus) {
@@ -176,7 +200,7 @@ public class TargetingServiceImpl implements TargetingService {
 		}
 
 		HitsSummary hitsSummary = new HitsSummary();
-		hitsSummary.setTravelerId(ruleHitDetail.getTravelerId());
+		hitsSummary.setPassengerId(ruleHitDetail.getPassengerId());
 		hitsSummary.setCreateDate(new Date());
 
 		HitDetail hitDetail = new HitDetail();

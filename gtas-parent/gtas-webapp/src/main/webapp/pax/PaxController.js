@@ -60,10 +60,10 @@ app.controller('PaxController', function($scope, $filter, $q, ngTableParams, pax
     }; 	
     
     
-    $scope.getRuleHits = function(travelerId){
+    $scope.getRuleHits = function(passengerId){
     	
     	$scope.paxHitList = [];
-    	paxService.getRuleHits(travelerId).then(function (myData) {
+    	paxService.getRuleHits(passengerId).then(function (myData) {
     		$scope.paxHitList = myData[0].hitsDetailsList;
           	 });
     };

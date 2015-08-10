@@ -1,5 +1,7 @@
 package gov.gtas.model.udr.json.util;
 
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonValidationException;
 import gov.gtas.error.ErrorHandlerFactory;
@@ -11,12 +13,10 @@ import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
-import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 import gov.gtas.util.ValidationUtils;
 

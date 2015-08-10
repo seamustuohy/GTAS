@@ -1,9 +1,12 @@
 package gov.gtas.querybuilder.service;
 
+import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.OperatorEnum;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
@@ -14,11 +17,10 @@ import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.querybuilder.config.QueryBuilderAppConfig;
 import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
-import gov.gtas.querybuilder.mappings.TravelerMapping;
+import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.util.DateCalendarUtils;
@@ -29,6 +31,11 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 import org.junit.After;
 import org.junit.Before;
@@ -41,15 +48,22 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ *	Query Builder Service Integration Test 
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {CommonServicesConfig.class, QueryBuilderAppConfig.class})
 public class QueryBuilderServiceIT {
 
+	@PersistenceContext 
+ 	private EntityManager entityManager;
 	@Autowired
 	private QueryBuilderService queryService;
 	private static final String TITLE = "Sample Query";
 	private static final String DESCRIPTION = "A simple query";
 	private static final String USER_ID = "ladebiyi";
+	private static final int QUERY_ID = 1;
 	
 	QueryObject query;
 	QueryTerm rule;
@@ -67,10 +81,13 @@ public class QueryBuilderServiceIT {
 		query = null;
 		rule = null;
 		rules = null;
+		Query deleteQuery = entityManager.createQuery("delete from UserQuery");
+		deleteQuery.executeUpdate();
 	}
 
 	@Test
-	public void testSaveQuery() throws JsonProcessingException, QueryAlreadyExistsException, InvalidQueryException {
+	@Transactional
+	public void testSaveQuery() throws QueryAlreadyExistsException, InvalidQueryException, QueryDoesNotExistException {
 		QueryRequest request = new QueryRequest();
 		
 		request.setTitle(TITLE);
@@ -78,11 +95,25 @@ public class QueryBuilderServiceIT {
 		request.setQuery(buildSimpleBetweenQuery());
 		request.setUserId(USER_ID);
 		
-		queryService.saveQuery(request);
+		UserQuery result = queryService.saveQuery(request);
+		assertNotNull(result.getId());
 	}
 	
-	public void testSaveDuplicateQuery() {
+	@Test(expected = QueryAlreadyExistsException.class)
+	@Transactional
+	public void testSaveDuplicateQuery() throws QueryAlreadyExistsException, InvalidQueryException {
+		QueryRequest request = new QueryRequest();
 		
+		request.setTitle(TITLE);
+		request.setDescription(DESCRIPTION);
+		request.setQuery(buildSimpleBetweenQuery());
+		request.setUserId(USER_ID);
+		
+		UserQuery result = queryService.saveQuery(request);
+		queryService.saveQuery(request);
+		assertNotNull(result.getId());
+		
+		queryService.saveQuery(request);
 	}
 	
 	public void testSaveInvalidQuery() {
@@ -94,232 +125,230 @@ public class QueryBuilderServiceIT {
 	//----------------------------------------
 //	@Test
 	public void testRunQueryAgainstFlights() throws InvalidQueryException  {
-		QueryObject query = buildSimpleQuery();
-		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
-		
-		if(flights != null && flights.size() > 0) {
-			System.out.println("Number of flights: " + flights.size());
-			System.out.println("Flight Information:");
-			
-			for(Flight flight : flights) {
-				System.out.println("\tfight number: " + flight.getFlightNumber());
-			}
-		}
-		else {
-			System.out.println("No flights");
-		}
+//		QueryObject query = buildSimpleQuery();
+//		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
+//		
+//		if(flights != null && flights.size() > 0) {
+//			System.out.println("Number of flights: " + flights.size());
+//			System.out.println("Flight Information:");
+//			
+//			for(Flight flight : flights) {
+//				System.out.println("\tfight number: " + flight.getFlightNumber());
+//			}
+//		}
+//		else {
+//			System.out.println("No flights");
+//		}
 	}
 
 //	@Test
 	public void testSimpleDateQueryAgainstFlights() throws InvalidQueryException {
-		QueryObject query = buildSimpleDateQuery();
-		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
-		
-		if(flights != null && flights.size() > 0) {
-			System.out.println("Number of flights: " + flights.size());
-			System.out.println("Flight Information:");
-			for(Flight flight : flights) {
-				System.out.println("\tfight number: " + flight.getFlightNumber());
-			}
-		}
-		else {
-			System.out.println("No flights");
-		}
+//		QueryObject query = buildSimpleDateQuery();
+//		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
+//		
+//		if(flights != null && flights.size() > 0) {
+//			System.out.println("Number of flights: " + flights.size());
+//			System.out.println("Flight Information:");
+//			for(Flight flight : flights) {
+//				System.out.println("\tfight number: " + flight.getFlightNumber());
+//			}
+//		}
+//		else {
+//			System.out.println("No flights");
+//		}
 	}
 	
 //	@Test
 	public void testSimpleIsNullQueryAgainstFlights() throws InvalidQueryException {
-		QueryObject query = buildSimpleIsNullQuery();
-		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
-		
-		if(flights != null && flights.size() > 0) {
-			System.out.println("Number of flights: " + flights.size());
-			System.out.println("Flight Information:");
-			for(Flight flight : flights) {
-				System.out.println("\tfight number: " + flight.getFlightNumber());
-			}
-		}
-		else {
-			System.out.println("No flights");
-		}
+//		QueryObject query = buildSimpleIsNullQuery();
+//		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
+//		
+//		if(flights != null && flights.size() > 0) {
+//			System.out.println("Number of flights: " + flights.size());
+//			System.out.println("Flight Information:");
+//			for(Flight flight : flights) {
+//				System.out.println("\tfight number: " + flight.getFlightNumber());
+//			}
+//		}
+//		else {
+//			System.out.println("No flights");
+//		}
 	}
 	
 //	@Test
 	public void testSimpleContainsQueryAgainstFlights() throws InvalidQueryException {
-		QueryObject query = buildSimpleContainsQuery();
-		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
-		
-		if(flights != null && flights.size() > 0) {
-			System.out.println("Number of flights: " + flights.size());
-			System.out.println("Flight Information:");
-			for(Flight flight : flights) {
-				System.out.println("\tfight number: " + flight.getFlightNumber());
-			}
-		}
-		else {
-			System.out.println("No flights");
-		}
+//		QueryObject query = buildSimpleContainsQuery();
+//		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
+//		
+//		if(flights != null && flights.size() > 0) {
+//			System.out.println("Number of flights: " + flights.size());
+//			System.out.println("Flight Information:");
+//			for(Flight flight : flights) {
+//				System.out.println("\tfight number: " + flight.getFlightNumber());
+//			}
+//		}
+//		else {
+//			System.out.println("No flights");
+//		}
 	}
 	
 //	@Test
 	public void testSimpleBetweenQuery() throws InvalidQueryException {
-		QueryObject query = buildSimpleBetweenQuery();
-		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
-		
-		if(flights != null && flights.size() > 0) {
-			System.out.println("Number of flights: " + flights.size());
-			System.out.println("Flight Information:");
-			for(Flight flight : flights) {
-				System.out.println("\tfight number: " + flight.getFlightNumber());
-			}
-		}
-		else {
-			System.out.println("No flights");
-		}
+//		QueryObject query = buildSimpleBetweenQuery();
+//		List<Flight> flights = (List<Flight>) queryService.runFlightQuery(query);
+//		
+//		if(flights != null && flights.size() > 0) {
+//			System.out.println("Number of flights: " + flights.size());
+//			System.out.println("Flight Information:");
+//			for(Flight flight : flights) {
+//				System.out.println("\tfight number: " + flight.getFlightNumber());
+//			}
+//		}
+//		else {
+//			System.out.println("No flights");
+//		}
 	}
 	
 //	@Test
 	public void testComplexQueryAgainstFlights() throws JsonProcessingException {
-//		buildComplexQuery();
-		testing();
 	}
 	//-------------------------------
 	// Passenger Queries
 	//-------------------------------
 //	@Test
 	public void testRunQueryAgainstPassengers() throws InvalidQueryException {
-		QueryObject query = buildSimpleQuery();
-		
-		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
-		SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-		
-		if(passengers != null && passengers.size() > 0) {
-			System.out.println("Number of Passengers: " + passengers.size());
-			System.out.println("Passenger Information:");
-			for(Traveler passenger : passengers) {
-				String docNumber = "";
-				String docType = "";
-				String docIssuanceCountry = "";
-				String carrierCode = "";
-				String flightNumber = "";
-				String origin = "";
-				String destination = "";
-				String departureDt = "";
-				String arrivalDt = "";
-				
-				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
-				
-				Set<Document> docs = passenger.getDocuments();
-				System.out.println("number of docs: " + docs.size());
-				if(docs != null) {
-					if(docs.iterator().hasNext()) {
-						Document doc = docs.iterator().next();
-						docNumber = doc.getDocumentNumber();
-						docType = doc.getDocumentType();
-						docIssuanceCountry = doc.getIssuanceCountry();
-					}
-				}
-
-				System.out.println("doc number: " + docNumber);
-				System.out.println("doc type: " + docType);
-				System.out.println("issuance country: " + docIssuanceCountry);
-				
-				Set<Flight> flights = passenger.getFlights();
-				if(flights != null) {
-					if(flights.iterator().hasNext()) {
-						Flight flight = flights.iterator().next();
-						
-						carrierCode = flight.getCarrier() != null ? flight.getCarrier() : "";
-						flightNumber = flight.getFlightNumber();
-						origin = flight.getOrigin() != null ? flight.getOrigin() : "";
-						destination  = flight.getDestination() != null ? flight.getDestination() : "";
-						departureDt = dtFormat.format(flight.getEtd());
-						arrivalDt = dtFormat.format(flight.getEta());
-					}
-				}
-				
-				System.out.println("carrierCode: " + carrierCode);
-				System.out.println("flightNumber: " + flightNumber);
-				System.out.println("origin: " + origin);
-				System.out.println("destination: " + destination);
-				System.out.println("departureDt: " + departureDt);
-				System.out.println("arrivalDt: " + arrivalDt);
-			}
-		}
-		else {
-			System.out.println("No passengers");
-		}
+//		QueryObject query = buildSimpleQuery();
+//		
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
+//		SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
+//		
+//		if(passengers != null && passengers.size() > 0) {
+//			System.out.println("Number of Passengers: " + passengers.size());
+//			System.out.println("Passenger Information:");
+//			for(Passenger passenger : passengers) {
+//				String docNumber = "";
+//				String docType = "";
+//				String docIssuanceCountry = "";
+//				String carrierCode = "";
+//				String flightNumber = "";
+//				String origin = "";
+//				String destination = "";
+//				String departureDt = "";
+//				String arrivalDt = "";
+//				
+//				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
+//				
+//				Set<Document> docs = passenger.getDocuments();
+//				System.out.println("number of docs: " + docs.size());
+//				if(docs != null) {
+//					if(docs.iterator().hasNext()) {
+//						Document doc = docs.iterator().next();
+//						docNumber = doc.getDocumentNumber();
+//						docType = doc.getDocumentType();
+//						docIssuanceCountry = doc.getIssuanceCountry();
+//					}
+//				}
+//
+//				System.out.println("doc number: " + docNumber);
+//				System.out.println("doc type: " + docType);
+//				System.out.println("issuance country: " + docIssuanceCountry);
+//				
+//				Set<Flight> flights = passenger.getFlights();
+//				if(flights != null) {
+//					if(flights.iterator().hasNext()) {
+//						Flight flight = flights.iterator().next();
+//						
+//						carrierCode = flight.getCarrier() != null ? flight.getCarrier() : "";
+//						flightNumber = flight.getFlightNumber();
+//						origin = flight.getOrigin() != null ? flight.getOrigin() : "";
+//						destination  = flight.getDestination() != null ? flight.getDestination() : "";
+//						departureDt = dtFormat.format(flight.getEtd());
+//						arrivalDt = dtFormat.format(flight.getEta());
+//					}
+//				}
+//				
+//				System.out.println("carrierCode: " + carrierCode);
+//				System.out.println("flightNumber: " + flightNumber);
+//				System.out.println("origin: " + origin);
+//				System.out.println("destination: " + destination);
+//				System.out.println("departureDt: " + departureDt);
+//				System.out.println("arrivalDt: " + arrivalDt);
+//			}
+//		}
+//		else {
+//			System.out.println("No passengers");
+//		}
 	}
 	
 //	@Test
 	public void testSimpleIsNullQueryAgainstPassengers() throws InvalidQueryException {
-		QueryObject query = buildSimpleIsNullQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
-		
-		if(passengers != null && passengers.size() > 0) {
-			System.out.println("Number of Passengers: " + passengers.size());
-			System.out.println("Passenger Information:");
-			for(Traveler passenger : passengers) {
-				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
-			}
-		}
-		else {
-			System.out.println("No passengers");
-		}
+//		QueryObject query = buildSimpleIsNullQuery();
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
+//		
+//		if(passengers != null && passengers.size() > 0) {
+//			System.out.println("Number of Passengers: " + passengers.size());
+//			System.out.println("Passenger Information:");
+//			for(Passenger passenger : passengers) {
+//				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
+//			}
+//		}
+//		else {
+//			System.out.println("No passengers");
+//		}
 	}
 	
 //	@Test
 	public void testSimpleContainsQueryAgainstPassengers() throws InvalidQueryException {
-		QueryObject query = buildSimpleContainsQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
-		
-		if(passengers != null && passengers.size() > 0) {
-			System.out.println("Number of Passengers: " + passengers.size());
-			System.out.println("Passenger Information:");
-			for(Traveler passenger : passengers) {
-				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
-			}
-		}
-		else {
-			System.out.println("No passengers");
-		}
+//		QueryObject query = buildSimpleContainsQuery();
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
+//		
+//		if(passengers != null && passengers.size() > 0) {
+//			System.out.println("Number of Passengers: " + passengers.size());
+//			System.out.println("Passenger Information:");
+//			for(Passenger passenger : passengers) {
+//				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
+//			}
+//		}
+//		else {
+//			System.out.println("No passengers");
+//		}
 	}
 	
 //	@Test
 	public void testSimpleBetweenQueryAgainstPassengers() throws InvalidQueryException {
-		QueryObject query = buildSimpleBetweenQuery();
-		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
-
-		if(passengers != null && passengers.size() > 0) {
-			System.out.println("Number of Passengers: " + passengers.size());
-			System.out.println("Passenger Information:");
-			for(Traveler passenger : passengers) {
-				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
-			}
-		}
-		else {
-			System.out.println("No passengers");
-		}
+//		QueryObject query = buildSimpleBetweenQuery();
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
+//
+//		if(passengers != null && passengers.size() > 0) {
+//			System.out.println("Number of Passengers: " + passengers.size());
+//			System.out.println("Passenger Information:");
+//			for(Passenger passenger : passengers) {
+//				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
+//			}
+//		}
+//		else {
+//			System.out.println("No passengers");
+//		}
 	}
 	
 	
 //	@Test
 	public void display() throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		UserQuery queryToSave = new UserQuery();
-		User user = new User();
-		
-		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
-		
-		user.setUserId("ladebiyi");
-		queryToSave = new UserQuery();
-		queryToSave.setCreatedBy(user);
-		queryToSave.setCreatedDt(new Date());
-		queryToSave.setTitle("Test Query 1");
-		queryToSave.setDescription("Test description ");
-		queryToSave.setQueryText(queryText);
-		
-		System.out.println("query: " + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(queryToSave));
+//		ObjectMapper mapper = new ObjectMapper();
+//		UserQuery queryToSave = new UserQuery();
+//		User user = new User();
+//		
+//		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
+//		
+//		user.setUserId("ladebiyi");
+//		queryToSave = new UserQuery();
+//		queryToSave.setCreatedBy(user);
+//		queryToSave.setCreatedDt(new Date());
+//		queryToSave.setTitle("Test Query 1");
+//		queryToSave.setDescription("Test description ");
+//		queryToSave.setQueryText(queryText);
+//		
+//		System.out.println("query: " + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(queryToSave));
 	}
 	/**
 	 * 
@@ -329,55 +358,55 @@ public class QueryBuilderServiceIT {
 	 */
 //	@Test
 	public void testSaveQuery2() throws JsonProcessingException, QueryAlreadyExistsException, InterruptedException {
-		ObjectMapper mapper = new ObjectMapper();
-		UserQuery queryToSave = new UserQuery();
-		User user = new User();
-		
-		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
-		
-		user.setUserId("ladebiyi");
-		for(int i = 1; i <= 3; i++) {
-			queryToSave = new UserQuery();
-			queryToSave.setCreatedBy(user);
-			queryToSave.setCreatedDt(new Date());
-			queryToSave.setTitle("Test Query " + i);
-			queryToSave.setDescription("Test description " + i);
-			queryToSave.setQueryText(queryText);
-			
-//			queryService.saveQuery(queryToSave);
-			Thread.sleep(5000); // wait for 5 seconds
-		}
-		
-		user.setUserId("bstygar");
-		for(int i = 1; i <= 4; i++) {
-			queryToSave = new UserQuery();
-			queryToSave.setCreatedBy(user);
-			queryToSave.setCreatedDt(new Date());
-			queryToSave.setTitle("Test Query " + i);
-			queryToSave.setDescription("Test description " + i);
-			queryToSave.setQueryText(queryText);
-			
-//			queryService.saveQuery(queryToSave);
-			Thread.sleep(5000); // wait for 5 seconds
-		}
+//		ObjectMapper mapper = new ObjectMapper();
+//		UserQuery queryToSave = new UserQuery();
+//		User user = new User();
+//		
+//		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
+//		
+//		user.setUserId("ladebiyi");
+//		for(int i = 1; i <= 3; i++) {
+//			queryToSave = new UserQuery();
+//			queryToSave.setCreatedBy(user);
+//			queryToSave.setCreatedDt(new Date());
+//			queryToSave.setTitle("Test Query " + i);
+//			queryToSave.setDescription("Test description " + i);
+//			queryToSave.setQueryText(queryText);
+//			
+////			queryService.saveQuery(queryToSave);
+//			Thread.sleep(5000); // wait for 5 seconds
+//		}
+//		
+//		user.setUserId("bstygar");
+//		for(int i = 1; i <= 4; i++) {
+//			queryToSave = new UserQuery();
+//			queryToSave.setCreatedBy(user);
+//			queryToSave.setCreatedDt(new Date());
+//			queryToSave.setTitle("Test Query " + i);
+//			queryToSave.setDescription("Test description " + i);
+//			queryToSave.setQueryText(queryText);
+//			
+////			queryService.saveQuery(queryToSave);
+//			Thread.sleep(5000); // wait for 5 seconds
+//		}
 		
 	}
 	
 //	@Test
 	public void addDuplicateQuery() throws JsonProcessingException, QueryAlreadyExistsException, InterruptedException {
-		ObjectMapper mapper = new ObjectMapper();
-		UserQuery queryToSave = new UserQuery();
-		User user = new User();
-		
-		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
-		
-		user.setUserId("ladebiyi");
-		queryToSave = new UserQuery();
-		queryToSave.setCreatedBy(user);
-		queryToSave.setCreatedDt(new Date());
-		queryToSave.setTitle("Test Query 1");
-		queryToSave.setDescription("Test description ");
-		queryToSave.setQueryText(queryText);
+//		ObjectMapper mapper = new ObjectMapper();
+//		UserQuery queryToSave = new UserQuery();
+//		User user = new User();
+//		
+//		String queryText = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(buildSimpleBetweenQuery());
+//		
+//		user.setUserId("ladebiyi");
+//		queryToSave = new UserQuery();
+//		queryToSave.setCreatedBy(user);
+//		queryToSave.setCreatedDt(new Date());
+//		queryToSave.setTitle("Test Query 1");
+//		queryToSave.setDescription("Test description ");
+//		queryToSave.setQueryText(queryText);
 			
 //		queryService.saveQuery(queryToSave);
 	}
@@ -406,23 +435,23 @@ public class QueryBuilderServiceIT {
 	
 //	@Test
 	public void testListQueryByUser() {
-		List<UserQuery> queryList = queryService.listQueryByUser("bstygar");
-		
-		if(queryList != null && queryList.size() > 0) {
-			System.out.println("\nnumber of queries: " + queryList.size());
-			
-			for(UserQuery query : queryList) {
-				System.out.println("-----------------------------------");
-				System.out.println("id: " + query.getId());
-				System.out.println("query title: " + query.getTitle());
-				System.out.println("query description: " + query.getDescription());
-				System.out.println("query text: " + query.getQueryText());
-				System.out.println("-----------------------------------\n");
-			}
-		}
-		else {
-			System.out.println("query list size: " + queryList.size());
-		}
+//		List<UserQuery> queryList = queryService.listQueryByUser("bstygar");
+//		
+//		if(queryList != null && queryList.size() > 0) {
+//			System.out.println("\nnumber of queries: " + queryList.size());
+//			
+//			for(UserQuery query : queryList) {
+//				System.out.println("-----------------------------------");
+//				System.out.println("id: " + query.getId());
+//				System.out.println("query title: " + query.getTitle());
+//				System.out.println("query description: " + query.getDescription());
+//				System.out.println("query text: " + query.getQueryText());
+//				System.out.println("-----------------------------------\n");
+//			}
+//		}
+//		else {
+//			System.out.println("query list size: " + queryList.size());
+//		}
 	}
 
 //	@Test
@@ -436,7 +465,7 @@ public class QueryBuilderServiceIT {
 	
 	private QueryObject buildSimpleQuery() {
 		
-		rule.setEntity("TRAVELER");
+		rule.setEntity("Passenger");
 		rule.setField("gender");
 		rule.setOperator("equal");
 		rule.setType("string");
@@ -504,7 +533,7 @@ public class QueryBuilderServiceIT {
 		values.add("20");
 		values.add("40");
 		
-		rule.setEntity("Pax");
+		rule.setEntity("Passenger");
 		rule.setField("age");
 		rule.setOperator("between");
 		rule.setType("integer");
@@ -545,21 +574,21 @@ public class QueryBuilderServiceIT {
 	private QueryObject buildComplexQueryObject() {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.DOB.getFieldName(), ValueTypesEnum.DATE,
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.DOB.getFieldName(), ValueTypesEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.LAST_NAME.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.LAST_NAME.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.EMBARKATION.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.EMBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.DEBARKATION.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.DEBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 

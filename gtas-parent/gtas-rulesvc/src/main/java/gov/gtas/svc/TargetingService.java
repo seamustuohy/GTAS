@@ -3,6 +3,7 @@
  */
 package gov.gtas.svc;
 
+import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.MessageStatus;
@@ -35,6 +36,7 @@ public interface TargetingService {
 	 * @return the result of the invocation.
 	 */
 	RuleServiceResult analyzeApisMessage(long messageId);
+	List<RuleHitDetail> analyzeLoadedApisMessage();
 
 	/**
 	 * Invokes the Rule Engine on an arbitrary list of objects using the

@@ -1,8 +1,8 @@
 package gov.gtas.repository.udr;
 
+import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.YesNoEnum;
 
 import java.util.List;
 

@@ -14,15 +14,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "traveler")
-public class Traveler extends BaseEntityAudit {
-    public Traveler() { }
+@Table(name = "passenger")
+public class Passenger extends BaseEntityAudit {
+    public Passenger() { }
     
-    @Column(name = "traveler_type", length = 3, nullable = false)
-    private String travelerType;
+    @Column(name = "passenger_type", length = 3, nullable = false)
+    private String passengerType;
 
     @ManyToMany(
-        mappedBy = "travelers",
+        mappedBy = "passengers",
         targetEntity = Flight.class
     )    
     private Set<Flight> flights = new HashSet<>();
@@ -70,14 +70,14 @@ public class Traveler extends BaseEntityAudit {
     @Column(name = "debark_country")
     private String debarkCountry;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "traveler")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger")
     private Set<Document> documents = new HashSet<>();
     
-    public String getTravelerType() {
-        return travelerType;
+    public String getPassengerType() {
+        return passengerType;
     }
-    public void setTravelerType(String travelerType) {
-        this.travelerType = travelerType;
+    public void setPassengerType(String passengerType) {
+        this.passengerType = passengerType;
     }
     public Set<Flight> getFlights() {
         return flights;
@@ -207,7 +207,7 @@ public class Traveler extends BaseEntityAudit {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Traveler other = (Traveler) obj;
+        Passenger other = (Passenger) obj;
         if (age == null) {
             if (other.age != null)
                 return false;

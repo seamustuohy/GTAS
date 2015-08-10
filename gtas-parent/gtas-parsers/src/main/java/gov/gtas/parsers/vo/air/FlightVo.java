@@ -5,10 +5,7 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public class FlightVo {
-    public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm aaa";
     private String flightId;
     private String carrier;
     private String flightNumber;
@@ -17,15 +14,18 @@ public class FlightVo {
     private String destination;
     private String destinationCountry;
     private boolean isOverFlight;
-    
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+    private String direction;
     private Date flightDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date etd;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date eta;
     
-    public String getFlightId() {
+    public String getDirection() {
+		return direction;
+	}
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+	public String getFlightId() {
         return flightId;
     }
     public void setFlightId(String flightId) {

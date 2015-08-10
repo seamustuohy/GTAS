@@ -26,12 +26,12 @@ import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
 import gov.gtas.model.lookup.DocumentTypeCode;
-import gov.gtas.model.lookup.TravelerTypeCode;
+import gov.gtas.model.lookup.PassengerTypeCode;
 import gov.gtas.services.FlightService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -83,8 +83,8 @@ public class ServiceRepositoryIT {
 		f.setUpdatedAt(new Date());
 		f.setUpdatedBy("TEST");
 
-		Traveler passengerToUpdate = new Traveler();
-		passengerToUpdate.setTravelerType(TravelerTypeCode.P.name());
+		Passenger passengerToUpdate = new Passenger();
+		passengerToUpdate.setPassengerType(PassengerTypeCode.P.name());
 		passengerToUpdate.setAge(30);
 		passengerToUpdate.setCitizenshipCountry(c);
 		passengerToUpdate.setDebarkation(b);
@@ -112,12 +112,12 @@ public class ServiceRepositoryIT {
 		d.setExpirationDate(new Date("6/6/2020"));
 		d.setIssuanceDate(new Date("6/6/1999"));
 		d.setIssuanceCountry(c);
-		d.setTraveler(passengerToUpdate);
+		d.setPassenger(passengerToUpdate);
 		Set<Document> docs = new HashSet<>();
 		docs.add(d);
 		passengerToUpdate.setDocuments(docs);
 
-		Set<Traveler> passengers = new HashSet<Traveler>();
+		Set<Passenger> passengers = new HashSet<Passenger>();
 		passengers.add(passengerToUpdate);
 		f.setPassengers(passengers);
 
@@ -265,14 +265,14 @@ public class ServiceRepositoryIT {
 						System.out.println("Flights are not null \n");
 						Flight aFlight = (Flight) itr.next();
 						assertNotNull(aFlight);
-						Set<Traveler> travelers = aFlight.getPassengers();
-						if (travelers.size() > 0) {
-							assertNotNull(travelers);
-							Iterator<Traveler> itr2 = travelers.iterator();
+						Set<Passenger> passengers = aFlight.getPassengers();
+						if (passengers.size() > 0) {
+							assertNotNull(passengers);
+							Iterator<Passenger> itr2 = passengers.iterator();
 							while (itr2.hasNext()) {
-								Traveler traveler = itr2.next();
-								assertNotNull(traveler);
-								// System.out.println("Travelers are not null \n");
+								Passenger passenger = itr2.next();
+								assertNotNull(passenger);
+								// System.out.println("Passengers are not null \n");
 							}
 						}
 					}

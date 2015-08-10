@@ -1,11 +1,14 @@
 package gov.gtas.controller;
 
+import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.constants.Constants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.ErrorDetails;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.model.ApisMessage;
+import gov.gtas.model.MessageStatus;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.MetaData;
@@ -18,8 +21,12 @@ import gov.gtas.svc.TargetingService;
 import gov.gtas.svc.UdrService;
 import gov.gtas.util.DateCalendarUtils;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,29 +67,34 @@ public class UdrManagementController {
 	@Autowired
 	private RuleManagementService ruleManagementService;
 
-	@RequestMapping(value = Constants.UDR_GET, method = RequestMethod.GET)
-	public @ResponseBody UdrSpecification getUDR(@PathVariable String userId,
+	@RequestMapping(value = Constants.UDR_GET_BY_AUTHOR_TITLE, method = RequestMethod.GET)
+	public UdrSpecification getUDR(@PathVariable String authorId,
 			@PathVariable String title) {
-		System.out.println("******** user =" + userId + ", title=" + title);
-		UdrSpecification resp = udrService.fetchUdr(userId, title);
+		System.out.println("******** user =" + authorId + ", title=" + title);
+		UdrSpecification resp = udrService.fetchUdr(authorId, title);
 		return resp;
 	}
 
 	@RequestMapping(value = Constants.UDR_TARGET, method = RequestMethod.GET)
-	public @ResponseBody List<?> getTargetingResult(@PathVariable Long id) {
-		RuleServiceResult resp = targetingService.analyzeApisMessage(id);
-		return resp.getResultList();
+	public List<?> getTargetingResult(@PathVariable Long id) {
+			RuleServiceResult resp = targetingService.analyzeApisMessage(id);
+			return resp.getResultList();
+	}
+	@RequestMapping(value = Constants.UDR_TARGET_ALL_APIS, method = RequestMethod.GET)
+	public List<?> getTargetingApisResult() {
+		List<RuleHitDetail> ret = targetingService.analyzeLoadedApisMessage();
+		return ret;
 	}
 
 	@RequestMapping(value = Constants.UDR_GET_BY_ID, method = RequestMethod.GET)
-	public @ResponseBody UdrSpecification getUDRById(@PathVariable Long id) {
+	public UdrSpecification getUDRById(@PathVariable Long id) {
 		System.out.println("******** Received GET UDR request for id=" + id);
 		UdrSpecification resp = udrService.fetchUdr(id);
 		return resp;
 	}
 
 	@RequestMapping(value = Constants.UDR_GETALL, method = RequestMethod.GET)
-	public @ResponseBody List<JsonUdrListElement> getUDRList(
+	public List<JsonUdrListElement> getUDRList(
 			@PathVariable String userId) {
 		System.out.println("******** user =" + userId);
 		List<JsonUdrListElement> resp = udrService.fetchUdrSummaryList(userId);
@@ -90,12 +102,12 @@ public class UdrManagementController {
 	}
 
 	@RequestMapping(value = Constants.UDR_GETDRL, method = RequestMethod.GET)
-	public @ResponseBody JsonServiceResponse getDrl() {
+	public JsonServiceResponse getDrl() {
 		String rules = ruleManagementService.fetchDefaultDrlRulesFromKnowledgeBase();
 		return createDrlRulesResponse(rules);
 	}
 	@RequestMapping(value = Constants.UDR_GETDRL_BY_NAME, method = RequestMethod.GET)
-	public @ResponseBody JsonServiceResponse getDrlByName(@PathVariable String kbName) {
+	public JsonServiceResponse getDrlByName(@PathVariable String kbName) {
 		String rules = ruleManagementService.fetchDrlRulesFromKnowledgeBase(kbName);
 		return createDrlRulesResponse(rules);
 	}
@@ -113,7 +125,7 @@ public class UdrManagementController {
 		return resp;
 	}
 	@RequestMapping(value = Constants.UDR_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonServiceResponse createUDR(
+	public JsonServiceResponse createUDR(
 			@PathVariable String userId, @RequestBody UdrSpecification inputSpec) {
 
 		logger.info("******** Received UDR Create request by user =" + userId);
@@ -158,7 +170,7 @@ public class UdrManagementController {
 	}
 
 	@RequestMapping(value = Constants.UDR_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonServiceResponse updateUDR(
+	public JsonServiceResponse updateUDR(
 			@PathVariable String userId, @RequestBody UdrSpecification inputSpec) {
 		logger.info("******** Received UDR Update request by user =" + userId);
 		
@@ -180,7 +192,7 @@ public class UdrManagementController {
 	}
 
 	@RequestMapping(value = Constants.UDR_DELETE, method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JsonServiceResponse deleteUDR(
+	public JsonServiceResponse deleteUDR(
 			@PathVariable String userId, @PathVariable Long id) {
 		logger.info("******** Received UDR Delete request by user =" + userId
 				+ " for " + id);
@@ -188,45 +200,14 @@ public class UdrManagementController {
 
 		return resp;
 	}
-
+    /**
+     * 
+     * @return
+     */
 	@RequestMapping(value = Constants.UDR_TEST, method = RequestMethod.GET)
-	public @ResponseBody UdrSpecification getUDR() {
+	public UdrSpecification getUDR() {
 		UdrSpecification resp = UdrSpecificationBuilder.createSampleSpec();
 		return resp;
 	}
 
-	/////////////////////////////////////////////////////////////////////////////
-//	@ExceptionHandler(CommonServiceException.class)
-//	public @ResponseBody GtasJsonError handleError(CommonServiceException ex) {
-//		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-//		ErrorDetails err = errorHandler.processError(ex);
-//		return new GtasJsonError(err.getFatalErrorCode(),
-//				err.getFatalErrorMessage());
-//	}
-//
-//	@ExceptionHandler(Exception.class)
-//	public @ResponseBody GtasJsonError handleError(Exception ex) {
-//		ex.printStackTrace();
-//		GtasJsonError ret = handleSpecialError(ex);
-//		if (ret == null) {
-//			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-//			ErrorDetails err = errorHandler.processError(ex);
-//			ret = new GtasJsonError(err.getFatalErrorCode(),
-//					err.getFatalErrorMessage());
-//		}
-//		return ret;
-//	}
-//
-//	private GtasJsonError handleSpecialError(Exception ex) {
-//		GtasJsonError ret = null;
-//		if (ex instanceof HttpMessageNotReadableException) {
-//			ret = new GtasJsonError("MALFORMED_JSON_INPUT",
-//					"Input JSON is malformed:" + ex.getMessage());
-//		} else if (ex instanceof JpaSystemException) {//TODO need to check the constraint
-//			ret = new GtasJsonError("DUPLICATE_UDR_TITLE",
-//					"This author has already created a UDR with this title:"
-//							+ ex.getMessage());
-//		}
-//		return ret;
-//	}
 }

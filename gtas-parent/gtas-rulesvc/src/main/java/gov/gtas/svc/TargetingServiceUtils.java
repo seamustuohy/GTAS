@@ -4,9 +4,10 @@ import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +31,10 @@ public class TargetingServiceUtils {
 			ret = createRequest(requestMessage);
 		}
 		return ret;
+	}
+	public static RuleServiceRequest createRuleServiceRequest(
+			final List<ApisMessage> requestMessages) {
+				return createApisRequest(requestMessages);
 	}
 
 	/**
@@ -67,29 +72,51 @@ public class TargetingServiceUtils {
 		final List<Object> requestList = new ArrayList<Object>(req.getFlights());
 		//add Passengers and documents
 		addPassengersAndDocuments(req.getFlights(), requestList);
-		
+		return createRuleServiceRequest(RuleServiceRequestType.APIS_MESSAGE, requestList);
+//		return new RuleServiceRequest() {
+//			public List<?> getRequestObjects() {
+//				return requestList;
+//			}
+//
+//			public RuleServiceRequestType getRequestType() {
+//				return RuleServiceRequestType.APIS_MESSAGE;
+//			}
+//
+//		};
+	}
+	public static RuleServiceRequest createApisRequest(final List<ApisMessage> reqList) {
+		List<Object> reqObjects = new LinkedList<Object>();
+		for(ApisMessage msg:reqList){
+			Set<Flight> flights = msg.getFlights();
+			reqObjects.addAll(flights);
+			addPassengersAndDocuments(flights, reqObjects);
+		}
+		return createRuleServiceRequest(RuleServiceRequestType.APIS_MESSAGE, reqObjects);
+	}
+	private static RuleServiceRequest createRuleServiceRequest(final RuleServiceRequestType requestType, final List<?> reqObjects){
 		return new RuleServiceRequest() {
 			public List<?> getRequestObjects() {
-				return requestList;
+				return reqObjects;
 			}
 
 			public RuleServiceRequestType getRequestType() {
-				return RuleServiceRequestType.APIS_MESSAGE;
+				return requestType;
 			}
 
 		};
+		
 	}
     private static void addPassengersAndDocuments(Set<Flight> flights, List<Object> requestList){
     	for(Flight flight:flights){
-    		Set<Traveler> travelers = flight.getPassengers();
-    		requestList.addAll(travelers);
-    		addDocuments(travelers, requestList);
+    		Set<Passenger> passengers = flight.getPassengers();
+    		requestList.addAll(passengers);
+    		addDocuments(passengers, requestList);
     	}
     }
 
-    private static void addDocuments(Set<Traveler> travelers, List<Object> requestList){
-    	for(Traveler traveler:travelers){
-    		requestList.addAll(traveler.getDocuments());
+    private static void addDocuments(Set<Passenger> passengers, List<Object> requestList){
+    	for(Passenger p:passengers){
+    		requestList.addAll(p.getDocuments());
     	}
     }
 }

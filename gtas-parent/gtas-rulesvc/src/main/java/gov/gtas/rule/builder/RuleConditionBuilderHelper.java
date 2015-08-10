@@ -1,11 +1,11 @@
 package gov.gtas.rule.builder;
 
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.udr.CondValue;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.text.ParseException;
@@ -21,9 +21,6 @@ public class RuleConditionBuilderHelper {
 	private static String convertCondValToString(final CondValue val){
 		String ret = null;
      	switch(val.getValType()){
-     	case OBJECT_REF:
-     		ret = val.getCharVal();
-     		break;
     	case BOOLEAN:
     		ret = val.getCharVal().charAt(0)=='Y'?"true":"false";
     		break;
@@ -71,9 +68,10 @@ public class RuleConditionBuilderHelper {
     		bldr.append(" [");
     		boolean firstTime = true;
     		for(CondValue val: valList){
-    			if(!firstTime){
-    				bldr.append(", ");
+    			if(firstTime){
     				firstTime = false;
+    			} else {
+    				bldr.append(", ");
     			}
     			bldr.append(convertCondValToString(val));
     		}

@@ -1,5 +1,6 @@
 package gov.gtas.model.udr.json.util;
 
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.MetaData;
@@ -8,8 +9,7 @@ import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.mappings.TravelerMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
@@ -137,21 +137,21 @@ public class UdrSpecificationBuilder {
 			String title, String description) {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
-		bldr.addTerm(EntityEnum.TRAVELER, TravelerMapping.DOB.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(),
 				ValueTypesEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.LAST_NAME.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.LAST_NAME.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.EMBARKATION.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.EMBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.DEBARKATION.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.DEBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		bldr.addMeta(title, description, new Date(), null, true, userId);
@@ -162,13 +162,13 @@ public class UdrSpecificationBuilder {
 			String title, String description) {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.AND);
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.DOB.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.DOB.getFieldName(),
 				ValueTypesEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.LAST_NAME.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.LAST_NAME.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addMeta(title, description, new Date(), null, true, userId);
@@ -179,22 +179,22 @@ public class UdrSpecificationBuilder {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.DOB.getFieldName(), ValueTypesEnum.DATE,
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.DOB.getFieldName(), ValueTypesEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.LAST_NAME.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.LAST_NAME.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.endCurrentQueryObject();
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.EMBARKATION.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.EMBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.DEBARKATION.getFieldName(),
+		bldr.addTerm(EntityEnum.PASSENGER,
+				PassengerMapping.DEBARKATION.getFieldName(),
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		bldr.addMeta(title, description, new Date(), null, true, userId);

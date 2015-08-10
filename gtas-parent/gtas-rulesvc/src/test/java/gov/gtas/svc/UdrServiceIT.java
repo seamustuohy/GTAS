@@ -3,6 +3,7 @@ package gov.gtas.svc;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.enumtype.ConditionEnum;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
@@ -76,7 +77,7 @@ public class UdrServiceIT {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		QueryObject details = spec.getDetails();
-		details.setCondition("AND");
+		details.setCondition(ConditionEnum.AND.toString());
 		List<QueryEntity> terms =  details.getRules();
 		List<QueryEntity> newterms = new LinkedList<QueryEntity>();
 		newterms.add(terms.get(0));
@@ -100,7 +101,7 @@ public class UdrServiceIT {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		QueryObject details = spec.getDetails();
-		details.setCondition("OR");
+		details.setCondition(ConditionEnum.OR.toString());
 		List<QueryEntity> terms =  details.getRules();
 		List<QueryEntity> newterms = new LinkedList<QueryEntity>();
 		newterms.add(terms.get(0));

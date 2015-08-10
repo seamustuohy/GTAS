@@ -22,15 +22,15 @@ public class Flight extends BaseEntityAudit {
     public Flight() { }
     
     @ManyToMany(
-        targetEntity=Traveler.class,
+        targetEntity=Passenger.class,
         cascade={CascadeType.ALL}
     )
     @JoinTable(
-        name="flight_traveler",
+        name="flight_passenger",
         joinColumns=@JoinColumn(name="flight_id"),
-        inverseJoinColumns=@JoinColumn(name="traveler_id")
+        inverseJoinColumns=@JoinColumn(name="passenger_id")
     )    
-    private Set<Traveler> travelers = new HashSet<>();
+    private Set<Passenger> passengers = new HashSet<>();
 
     @ManyToMany(
         mappedBy = "flights",
@@ -68,11 +68,11 @@ public class Flight extends BaseEntityAudit {
     @Column(length = 3, nullable = false)
     private String direction;
     
-    public Set<Traveler> getPassengers() {
-        return travelers;
+    public Set<Passenger> getPassengers() {
+        return passengers;
     }
-    public void setPassengers(Set<Traveler> passengers) {
-        this.travelers = passengers;
+    public void setPassengers(Set<Passenger> passengers) {
+        this.passengers = passengers;
     }
     public String getFlightNumber() {
         return flightNumber;
@@ -103,12 +103,6 @@ public class Flight extends BaseEntityAudit {
     }
     public void setDirection(String direction) {
         this.direction = direction;
-    }
-    public Set<Traveler> getTravelers() {
-        return travelers;
-    }
-    public void setTravelers(Set<Traveler> travelers) {
-        this.travelers = travelers;
     }
     public String getCarrier() {
         return carrier;

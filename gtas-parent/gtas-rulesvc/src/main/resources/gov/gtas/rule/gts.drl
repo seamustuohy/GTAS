@@ -5,7 +5,7 @@
 package gov.gtas.rule;
  
 import gov.gtas.model.Flight;
-import gov.gtas.model.Pax;
+import gov.gtas.model.Passenger;
 
 global java.util.List resultList
  
@@ -22,7 +22,7 @@ end
 rule "R2 - List Passengers"
     dialect "java"
     when
-        p:Pax( embarkation.equals("Timbuktu"), fn:firstName, ln:lastName )
+        p:Passenger( embarkation.equals("Timbuktu"), fn:firstName, ln:lastName )
     then
         resultList.add(p);
 end

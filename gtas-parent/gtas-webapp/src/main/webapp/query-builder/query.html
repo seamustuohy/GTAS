@@ -97,7 +97,7 @@
     <div id="builder"></div>
     <select ng-model="viewType">
         <option value="FLIGHT"> Flight </option>
-        <option value="TRAVELER"> Passenger </option>
+        <option value="PASSENGER"> Passenger </option>
     </select>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
     <button type="button" data-ng-click="viewTypeChange()"  class="btn btn-xs btn-primary" data->Execute Query</button>
@@ -106,8 +106,6 @@
     <button type="button" data-ng-click="save()" id="submit" class="btn btn-xs btn-primary pull-right">Save</button>
 </section>
 <section class="flights-table">
-    <p><strong>Page:</strong> {{flightsResults.page()}}
-    <p><strong>Count per page:</strong> {{flightsResults.count()}}
     <table ng-table="flightsResults" show-filter="true" class="table">
         <tr ng-repeat="flight in dataSource.FLIGHT">
             <!--        <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">{{flight.hits}}</td> //-->
@@ -124,8 +122,6 @@
     </table>
 </section>
 <section class="travelers-table">
-    <p><strong>Page:</strong> {{travelersResults.page()}}
-    <p><strong>Count per page:</strong> {{travelersResults.count()}}
     <table ng-table="travelersResults" show-filter="true" class="table">
         <tr ng-repeat="passenger in dataSource.TRAVELER">
             <td data-title="'H'" sortable="'ruleHit'" filter="{ 'ruleHit': 'text' }">{{passenger.ruleHit}}</td>

@@ -1,6 +1,6 @@
 package gov.gtas.model.udr;
 
-import gov.gtas.model.udr.enumtype.YesNoEnum;
+import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.io.Serializable;

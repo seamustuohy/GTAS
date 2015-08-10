@@ -1,6 +1,6 @@
 package gov.gtas.services;
 
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.repository.PassengerRepository;
 
 import java.util.List;
@@ -18,14 +18,14 @@ public class PassengerServiceImpl implements PassengerService {
 	
 	@Override
 	@Transactional
-	public Traveler create(Traveler passenger) {
+	public Passenger create(Passenger passenger) {
 		return passengerRespository.save(passenger);
 	}
 
 	@Override
 	@Transactional
-	public Traveler delete(Long id) {
-		Traveler passenger = this.findById(id);
+	public Passenger delete(Long id) {
+		Passenger passenger = this.findById(id);
 		if(passenger != null)
 			passengerRespository.delete(passenger);
 		return passenger;
@@ -33,14 +33,14 @@ public class PassengerServiceImpl implements PassengerService {
 
 	@Override
 	@Transactional
-	public List<Traveler> findAll() {
-		return (List<Traveler>)passengerRespository.findAll();
+	public List<Passenger> findAll() {
+		return (List<Passenger>)passengerRespository.findAll();
 	}
 
 	@Override
 	@Transactional
-	public Traveler update(Traveler passenger) {
-		Traveler passengerToUpdate = this.findById(passenger.getId());
+	public Passenger update(Passenger passenger) {
+		Passenger passengerToUpdate = this.findById(passenger.getId());
 		if(passengerToUpdate != null){
 			passengerToUpdate.setAge(passenger.getAge());
 			passengerToUpdate.setCitizenshipCountry(passenger.getCitizenshipCountry());
@@ -65,15 +65,15 @@ public class PassengerServiceImpl implements PassengerService {
 
 	@Override
 	@Transactional
-	public Traveler findById(Long id) {
+	public Passenger findById(Long id) {
 		return passengerRespository.findOne(id);
 	}
 
 	@Override
 	@Transactional
-	public Traveler getPassengerByName(String firstName, String lastName) {
-		Traveler passenger = null;
-		List<Traveler> passengerList = passengerRespository.getPassengerByName(firstName, lastName);
+	public Passenger getPassengerByName(String firstName, String lastName) {
+		Passenger passenger = null;
+		List<Passenger> passengerList = passengerRespository.getPassengerByName(firstName, lastName);
 		if(passengerList != null && passengerList.size() > 0)
 			passenger = passengerList.get(0);
 		return passenger;
@@ -81,15 +81,15 @@ public class PassengerServiceImpl implements PassengerService {
 
 	@Override
 	@Transactional
-	public List<Traveler> getPassengersByLastName(String lastName) {
-		List<Traveler> passengerList = passengerRespository.getPassengersByLastName(lastName);
+	public List<Passenger> getPassengersByLastName(String lastName) {
+		List<Passenger> passengerList = passengerRespository.getPassengersByLastName(lastName);
 		return passengerList;
 	}
 
     @Override
     @Transactional
-    public List<Traveler> getPassengersByFlightId(Long flightId) {
-        List<Traveler> passengerList = passengerRespository.getPassengersByFlightId(flightId);
+    public List<Passenger> getPassengersByFlightId(Long flightId) {
+        List<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId);
         return passengerList;
     }
 }

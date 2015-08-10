@@ -40,11 +40,6 @@
       <artifactId>gtas-udr-builder</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
-    <dependency>
-      <groupId>gov.gtas</groupId>
-      <artifactId>gtas-parsers</artifactId>
-      <version>0.1-SNAPSHOT</version>
-    </dependency>
 
     <dependency>
       <groupId>junit</groupId>
@@ -89,7 +84,6 @@
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
     </dependency>
-
 
     <dependency>
       <groupId>javax.servlet</groupId>

@@ -18,16 +18,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import gov.gtas.model.Document;
 import gov.gtas.model.HitsSummary;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.dataobject.DocumentVo;
-import gov.gtas.dataobject.TravelerVo;
+import gov.gtas.dataobject.PassengerVo;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.services.HitsSummaryService;
 import gov.gtas.services.PassengerService;
 
 @Controller
-public class TravelerController {
-    private static final Logger logger = LoggerFactory.getLogger(TravelerController.class);
+public class PassengerController {
+    private static final Logger logger = LoggerFactory.getLogger(PassengerController.class);
     
     @Autowired
     private PassengerService pService;
@@ -42,24 +42,24 @@ public class TravelerController {
        
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/travelers", method = RequestMethod.GET)
-    public List<TravelerVo> getAllTravelers(@RequestParam(value = "flightId", required = false) String flightId) {
-        List<TravelerVo> rv = new ArrayList<>();
-        List<Traveler> travelers = null;
+    @RequestMapping(value = "/passengers", method = RequestMethod.GET)
+    public List<PassengerVo> getAllPassengers(@RequestParam(value = "flightId", required = false) String flightId) {
+        List<PassengerVo> rv = new ArrayList<>();
+        List<Passenger> passengers = null;
         if (flightId != null) {
             Long id = Long.valueOf(flightId);
-            travelers = pService.getPassengersByFlightId(id);
+            passengers = pService.getPassengersByFlightId(id);
         } else {
-            travelers = pService.findAll();
+            passengers = pService.findAll();
         }
         
-        if (travelers == null) return rv;
+        if (passengers == null) return rv;
         
-        for (Traveler t : travelers) {
+        for (Passenger t : passengers) {
             logger.debug(t.getLastName());
-            TravelerVo vo = new TravelerVo();
+            PassengerVo vo = new PassengerVo();
             vo.setPaxId(String.valueOf(t.getId()));
-            vo.setTravelerType(t.getTravelerType());
+            vo.setPassengerType(t.getPassengerType());
             vo.setLastName(t.getLastName());
             vo.setFirstName(t.getFirstName());
             vo.setMiddleName(t.getMiddleName());
@@ -73,7 +73,7 @@ public class TravelerController {
             vo.setResidencyCountry(t.getResidencyCountry());
             vo.setSuffix(t.getSuffix());
             vo.setTitle(t.getTitle());
-            List<Document> docs = docDao.getTravelerDocuments(t.getId());
+            List<Document> docs = docDao.getPassengerDocuments(t.getId());
             
             for (Document d : docs) {
                 DocumentVo docVo = new DocumentVo();
@@ -94,13 +94,8 @@ public class TravelerController {
     }
     
     
-    /**
-     * 
-     * @param travelers
-     * @return
-     */
     @Transactional
-    public int getTotalHitsByPaxID(Long travelerID){
+    public int getTotalHitsByPaxID(Long passengerID){
 
     	int totalHits = 0;
     	
@@ -117,7 +112,7 @@ public class TravelerController {
     	    		
     	for(HitsSummary s: hitsList){
     			
-    		if(s.getTravelerId().equals(travelerID)){
+    		if(s.getPassengerId().equals(passengerID)){
     			totalHits++;
     			}
     		}
