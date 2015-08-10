@@ -105,33 +105,41 @@
     <button type="button" data-ng-click="delete()" type="button" class="btn btn-xs btn-primary pull-right" title="delete">Delete</button>
     <button type="button" data-ng-click="save()" id="submit" class="btn btn-xs btn-primary pull-right">Save</button>
 </section>
-<table ng-table="flightsResults" show-filter="true" class="table flights-table">
-    <tr ng-repeat="flight in $data">
-        <!--        <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">{{flight.hits}}</td> //-->
-        <td data-title="'Carrier'" sortable="'carrierCode'" filter="{ 'carrierCode': 'select' }" filter-data="values($column, 'carrierCode')">{{flight.carrierCode}}</td>
-        <td data-title="'Flight #'" sortable="'flightNumber'" filter="{ 'flightNumber': 'text' }">{{flight.flightNumber}}</td>
-        <td data-title="'Origin Airport'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">{{flight.origin}}</td>
-        <td data-title="'Country'" sortable="'originCountry'" filter="{ 'originCountry': 'select' }" filter-data="values($column, 'originCountry')">{{flight.originCountry}}</td>
-        <td data-title="'ETD'" sortable="'departureDt'" filter="{ 'departureDt': 'text' }">{{flight.departureDt}}</td>
-        <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'select' }" filter-data="values($column, 'destination')">{{flight.destination}}</td>
-        <td data-title="'Country'" sortable="'destinationCountry'" filter="{ 'destinationCountry': 'select' }"
-            filter-data="values($column, 'destinationCountry')">{{flight.destinationCountry}}</td>
-        <td data-title="'ETA'" sortable="'arrivalDt'" filter="{ 'arrivalDt': 'text' }">{{flight.arrivalDt}}</td>
-    </tr>
-</table>
-<table ng-table="travelersResults" show-filter="true" class="table travelers-table">
-    <tr ng-repeat="passenger in $data">
-        <td data-title="'H'" sortable="'ruleHit'" filter="{ 'ruleHit': 'text' }">{{passenger.ruleHit}}</td>
-        <td data-title="'W'" sortable="'onWatchList'" filter="{ 'onWatchList': 'text' }">{{passenger.onWatchList}}</td>
-        <td data-title="'Last Name'" sortable="'lastName'" filter="{ 'lastName': 'text' }">{{passenger.lastName}}</td>
-        <td data-title="'First Name'" sortable="'firstName'" filter="{ 'firstName': 'text' }">{{passenger.firstName}}</td>
-        <td data-title="'Type'" sortable="'passengerType'" filter="{ 'passengerType': 'select' }" filter-data="values($column, 'Type')">{{passenger.passengerType}}</td>
-        <td data-title="'Gender'" sortable="'gender'" filter="{ 'gender': 'select' }" filter-data="values($column, 'gender')">{{passenger.gender}}</td>
-        <td data-title="'DOB'" sortable="'dob'" filter="{ 'dob': 'text' }">{{passenger.dob}}</td>
-        <td data-title="'Citizenship'" sortable="'citizenship'" filter="{ 'citizenship': 'select' }" filter-data="values($column, 'citizenship')">{{passenger.citizenship}}</td>
-        <td data-title="'Document Number'" sortable="'documentNumber'" filter="{ 'documentNumber': 'text' }">{{passenger.documentNumber}}</td>
-        <td data-title="'T'" sortable="'documentType'" filter="{ 'documentType': 'select' }" filter-data="values($column, 'documentType')">{{passenger.documentType}}</td>
-        <td data-title="'Issuance Country'" sortable="'documentIssuanceCountry'" filter="{ 'documentIssuanceCountry': 'select' }" filter-data="values($column, 'documentIssuanceCountry')">{{passenger.documentIssuanceCountry}}</td>
-        <td data-title="'Seat'" sortable="'seat'" filter="{ 'seat': 'text' }">{{passenger.seat}}</td>
-    </tr>
-</table>
+<section class="flights-table">
+    <p><strong>Page:</strong> {{flightsResults.page()}}
+    <p><strong>Count per page:</strong> {{flightsResults.count()}}
+    <table ng-table="flightsResults" show-filter="true" class="table">
+        <tr ng-repeat="flight in dataSource.FLIGHT">
+            <!--        <td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'number' }">{{flight.hits}}</td> //-->
+            <td data-title="'Carrier'" sortable="'carrierCode'" filter="{ 'carrierCode': 'select' }" filter-data="values($column, 'carrierCode')">{{flight.carrierCode}}</td>
+            <td data-title="'Flight #'" sortable="'flightNumber'" filter="{ 'flightNumber': 'text' }">{{flight.flightNumber}}</td>
+            <td data-title="'Origin Airport'" sortable="'origin'" filter="{ 'origin': 'select' }" filter-data="values($column, 'origin')">{{flight.origin}}</td>
+            <td data-title="'Country'" sortable="'originCountry'" filter="{ 'originCountry': 'select' }" filter-data="values($column, 'originCountry')">{{flight.originCountry}}</td>
+            <td data-title="'ETD'" sortable="'departureDt'" filter="{ 'departureDt': 'text' }">{{flight.departureDt}}</td>
+            <td data-title="'Destination'" sortable="'destination'" filter="{ 'destination': 'select' }" filter-data="values($column, 'destination')">{{flight.destination}}</td>
+            <td data-title="'Country'" sortable="'destinationCountry'" filter="{ 'destinationCountry': 'select' }"
+                filter-data="values($column, 'destinationCountry')">{{flight.destinationCountry}}</td>
+            <td data-title="'ETA'" sortable="'arrivalDt'" filter="{ 'arrivalDt': 'text' }">{{flight.arrivalDt}}</td>
+        </tr>
+    </table>
+</section>
+<section class="travelers-table">
+    <p><strong>Page:</strong> {{travelersResults.page()}}
+    <p><strong>Count per page:</strong> {{travelersResults.count()}}
+    <table ng-table="travelersResults" show-filter="true" class="table">
+        <tr ng-repeat="passenger in dataSource.TRAVELER">
+            <td data-title="'H'" sortable="'ruleHit'" filter="{ 'ruleHit': 'text' }">{{passenger.ruleHit}}</td>
+            <td data-title="'W'" sortable="'onWatchList'" filter="{ 'onWatchList': 'text' }">{{passenger.onWatchList}}</td>
+            <td data-title="'Last Name'" sortable="'lastName'" filter="{ 'lastName': 'text' }">{{passenger.lastName}}</td>
+            <td data-title="'First Name'" sortable="'firstName'" filter="{ 'firstName': 'text' }">{{passenger.firstName}}</td>
+            <td data-title="'Type'" sortable="'passengerType'" filter="{ 'passengerType': 'select' }" filter-data="values($column, 'Type')">{{passenger.passengerType}}</td>
+            <td data-title="'Gender'" sortable="'gender'" filter="{ 'gender': 'select' }" filter-data="values($column, 'gender')">{{passenger.gender}}</td>
+            <td data-title="'DOB'" sortable="'dob'" filter="{ 'dob': 'text' }">{{passenger.dob}}</td>
+            <td data-title="'Citizenship'" sortable="'citizenship'" filter="{ 'citizenship': 'select' }" filter-data="values($column, 'citizenship')">{{passenger.citizenship}}</td>
+            <td data-title="'Document Number'" sortable="'documentNumber'" filter="{ 'documentNumber': 'text' }">{{passenger.documentNumber}}</td>
+            <td data-title="'T'" sortable="'documentType'" filter="{ 'documentType': 'select' }" filter-data="values($column, 'documentType')">{{passenger.documentType}}</td>
+            <td data-title="'Issuance Country'" sortable="'documentIssuanceCountry'" filter="{ 'documentIssuanceCountry': 'select' }" filter-data="values($column, 'documentIssuanceCountry')">{{passenger.documentIssuanceCountry}}</td>
+            <td data-title="'Seat'" sortable="'seat'" filter="{ 'seat': 'text' }">{{passenger.seat}}</td>
+        </tr>
+    </table>
+</section>

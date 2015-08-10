@@ -24,9 +24,7 @@
         <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
         <link rel="stylesheet"
         href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
-        <link rel="stylesheet"
-        href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"
-        />
+        <link rel="stylesheet" href="resources/bower_components/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.js" />
 
         <link rel="stylesheet" href="resources/css/query-builder.default.css" id="qb-theme" />
 
@@ -279,20 +277,21 @@
         <script src="resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
         <script src="resources/bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
         <script src="resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-        <script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
         <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
+        <script src="resources/bower_components/angular-datatables/dist/angular-datatables.min.js"></script>
+        <script src="resources/bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
 
         <script src="resources/js/query-builder.js"></script>
-
         <script src="app.js"></script>
         <script src="flights/FlightsController.js"></script>
         <script src="flights/FlightsService.js"></script>
         <script src="pax/PaxController.js"></script>
         <script src="pax/PaxService.js"></script>
-	<script src="pax/PaxFactory.js"></script>
+        <script src="pax/PaxFactory.js"></script>
         <script src="factory/QueryBuilderFactory.js"></script>
         <script src="risk-criteria/RiskCriteriaController.js"></script>
         <script src="risk-criteria/RiskCriteriaService.js"></script>
+        <script src="query-builder/ExecutedQueryResultsController.js"></script>
         <script src="query-builder/QueryBuilderController.js"></script>
         <script src="query-builder/QueryBuilderService.js"></script>
         <script src="query-builder/QueryService.js"></script>
