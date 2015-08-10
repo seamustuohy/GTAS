@@ -119,7 +119,7 @@
         <td data-title="'ETA'" sortable="'arrivalDt'" filter="{ 'arrivalDt': 'text' }">{{flight.arrivalDt}}</td>
     </tr>
 </table>
-<table ng-table="travelersResults" show-filter="true" class="table travelers-table">
+<table ng-table="passengersResults" show-filter="true" class="table passengers-table">
     <tr ng-repeat="passenger in $data">
         <td data-title="'H'" sortable="'ruleHit'" filter="{ 'ruleHit': 'text' }">{{passenger.ruleHit}}</td>
         <td data-title="'W'" sortable="'onWatchList'" filter="{ 'onWatchList': 'text' }">{{passenger.onWatchList}}</td>
