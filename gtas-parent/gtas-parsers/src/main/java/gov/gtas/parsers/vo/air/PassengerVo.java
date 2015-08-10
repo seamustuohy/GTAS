@@ -7,8 +7,6 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public class PassengerVo {
     private String title;    
     private String firstName;
@@ -19,7 +17,6 @@ public class PassengerVo {
     private String citizenshipCountry;
     private String residencyCountry;
     private String passengerType;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)
     private Date dob;
     private String embarkation;
     private String debarkation;
