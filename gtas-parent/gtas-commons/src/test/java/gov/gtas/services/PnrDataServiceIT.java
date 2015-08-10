@@ -150,6 +150,7 @@ public class PnrDataServiceIT {
 	}
 	
 	private void prepareFlightData(Flight f){
+	    f.setDirection("I");
 		f.setCreatedAt(new Date());
 		f.setCreatedBy("JUNIT");
 		// Airport a = new Airport(3616l,"Washington","IAD","KAID");
