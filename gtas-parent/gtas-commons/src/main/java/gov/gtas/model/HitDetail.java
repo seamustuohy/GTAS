@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "hit_detail")
-public class HitDetail extends BaseEntity {
+public class HitDetail extends BaseEntityAudit {
 
 	/**
 	 * 
