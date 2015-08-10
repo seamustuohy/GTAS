@@ -59,13 +59,9 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 	}
 
 
-	/**
-	 * @param travelerHasNoRuleCondition
-	 *            the travelerHasNoRuleCondition to set
-	 */
 	protected void setPassengerHasNoRuleCondition(
-			boolean travelerHasNoRuleCondition) {
-		this.passengerHasNoRuleCondition = travelerHasNoRuleCondition;
+			boolean passengerHasNoRuleCondition) {
+		this.passengerHasNoRuleCondition = passengerHasNoRuleCondition;
 	}
 
 }
