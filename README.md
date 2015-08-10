@@ -59,8 +59,8 @@ sudo -u tomcat sh bin/catalina.sh start
 
 1. To load sample APIS data (flights, passengers), download keith_msgs.zip from the google drive folder/APIS.
 2. unzip the folder into a temp directory
-3. Use the generated jar under the apis-loader module to load one or more files.
+3. Use the generated jar under the gtas-loader module to load one or more files.
 4. For example, to load one file:
-> java -jar apis-loader/target/apis-loader-0.1-SNAPSHOT-jar-with-dependencies.jar 101.txt
+> java -jar gtas-loader/target/gtas-loader.jar 101.txt
 5. To load all of the sample files, you need to provide two directories -- one for the source files and one where the loader will place the processed files.  Note that some of the files are invalid and will not import.  e.g.,
-> java -jar apis-loader/target/apis-loader-0.1-SNAPSHOT-jar-with-dependencies.jar /tmp/keith_msgs/ /tmp/out/
+> java -jar gtas-loader/target/gtas-loader.jar /tmp/keith_msgs/ /tmp/out/
