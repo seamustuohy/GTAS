@@ -26,7 +26,7 @@ import gov.gtas.parsers.pnrgov.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.TravelerVo;
+import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.repository.PnrMessageRepository;
 
 @Service
@@ -84,7 +84,7 @@ public class PnrMessageService implements MessageService {
                 this.pnrMessage.getPnrs().add(pnr);
                 
                 Set<Traveler> pax = new HashSet<>();        
-                for (TravelerVo pvo : vo.getPassengers()) {
+                for (PassengerVo pvo : vo.getPassengers()) {
                     Traveler p = utils.convertTravelerVo(pvo);
                     pax.add(p);
                 }

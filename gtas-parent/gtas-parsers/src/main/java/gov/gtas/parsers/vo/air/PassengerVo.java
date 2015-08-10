@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class TravelerVo {
+public class PassengerVo {
     private String title;    
     private String firstName;
     private String middleName;

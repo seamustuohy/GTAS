@@ -16,14 +16,14 @@ import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
-import gov.gtas.parsers.vo.air.TravelerVo;
+import gov.gtas.parsers.vo.air.PassengerVo;
 
 @Service
 public class LoaderUtils {
     @Autowired
     private AirportService airportService;
 
-    public Traveler convertTravelerVo(TravelerVo vo) throws ParseException {
+    public Traveler convertTravelerVo(PassengerVo vo) throws ParseException {
         Traveler p = new Traveler();
         BeanUtils.copyProperties(vo, p);
         

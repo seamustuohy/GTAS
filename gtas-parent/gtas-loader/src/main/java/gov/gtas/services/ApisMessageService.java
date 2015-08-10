@@ -29,7 +29,7 @@ import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
-import gov.gtas.parsers.vo.air.TravelerVo;
+import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.repository.ApisMessageRepository;
 
 @Service
@@ -99,7 +99,7 @@ public class ApisMessageService implements MessageService {
             }
             
             Set<Traveler> pax = new HashSet<>();        
-            for (TravelerVo pvo : m.getPassengers()) {
+            for (PassengerVo pvo : m.getPassengers()) {
                 Traveler p = utils.convertTravelerVo(pvo);
                 pax.add(p);
             }
