@@ -1,5 +1,6 @@
 package gov.gtas.model.udr.json.util;
 
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.MetaData;
@@ -8,7 +9,6 @@ import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
-import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.mappings.TravelerMapping;
 import gov.gtas.util.DateCalendarUtils;
 

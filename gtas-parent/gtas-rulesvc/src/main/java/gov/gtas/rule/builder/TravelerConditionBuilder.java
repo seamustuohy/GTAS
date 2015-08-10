@@ -1,6 +1,6 @@
 package gov.gtas.rule.builder;
 
-import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.enumtype.EntityEnum;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

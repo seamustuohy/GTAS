@@ -2,11 +2,11 @@ package gov.gtas.model.udr.json;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
-import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.querybuilder.mappings.TravelerMapping;
 
 import java.util.List;

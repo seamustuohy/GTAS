@@ -1,12 +1,12 @@
 package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.Status;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.Status;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;

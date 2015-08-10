@@ -1,13 +1,13 @@
 package gov.gtas.querybuilder.validation.util;
 
+import gov.gtas.enumtype.ConditionEnum;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.OperatorEnum;
+import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.ConditionEnum;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
-import gov.gtas.querybuilder.enums.TypeEnum;
 import gov.gtas.querybuilder.mappings.AddressMapping;
 import gov.gtas.querybuilder.mappings.CreditCardMapping;
 import gov.gtas.querybuilder.mappings.DocumentMapping;

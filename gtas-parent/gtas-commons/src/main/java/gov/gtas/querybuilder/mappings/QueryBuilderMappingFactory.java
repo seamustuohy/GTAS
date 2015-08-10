@@ -1,6 +1,6 @@
 package gov.gtas.querybuilder.mappings;
 
-import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.enumtype.EntityEnum;
 
 import java.util.ArrayList;
 import java.util.List;

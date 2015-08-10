@@ -1,5 +1,8 @@
 package gov.gtas.querybuilder.repository;
 
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.OperatorEnum;
+import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Traveler;
 import gov.gtas.model.User;
@@ -8,9 +11,6 @@ import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.JPQLGenerator;
 import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
-import gov.gtas.querybuilder.enums.TypeEnum;
 import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;

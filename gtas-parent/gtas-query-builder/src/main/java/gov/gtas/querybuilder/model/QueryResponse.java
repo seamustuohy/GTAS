@@ -1,6 +1,6 @@
 package gov.gtas.querybuilder.model;
 
-import gov.gtas.querybuilder.enums.Status;
+import gov.gtas.enumtype.Status;
 
 import java.util.ArrayList;
 import java.util.List;

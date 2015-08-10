@@ -11,8 +11,7 @@ public enum ValueTypesEnum {
   STRING("string"),
   DATE("date"),
   DATETIME("datetime"),
-  BOOLEAN("boolean"),
-  OBJECT_REF("OBJECT_REF");
+  BOOLEAN("boolean");
   
   private String value;
   /**

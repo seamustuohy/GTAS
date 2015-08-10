@@ -2,6 +2,8 @@ package gov.gtas.querybuilder.service;
 
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.OperatorEnum;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Traveler;
@@ -15,8 +17,6 @@ import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.querybuilder.config.QueryBuilderAppConfig;
 import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;

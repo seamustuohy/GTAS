@@ -1,6 +1,6 @@
 package gov.gtas.querybuilder.mappings;
 
-import gov.gtas.querybuilder.enums.TypeEnum;
+import gov.gtas.enumtype.TypeEnum;
 
 public enum DocumentMapping implements IEntityMapping {
 

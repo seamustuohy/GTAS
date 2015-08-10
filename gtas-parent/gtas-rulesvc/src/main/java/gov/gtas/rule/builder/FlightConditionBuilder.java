@@ -1,6 +1,6 @@
 package gov.gtas.rule.builder;
 
-import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.enumtype.EntityEnum;
 
 import java.util.LinkedList;
 import java.util.List;
