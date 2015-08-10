@@ -121,9 +121,9 @@
         </tr>
     </table>
 </section>
-<section class="travelers-table">
-    <table ng-table="travelersResults" show-filter="true" class="table">
-        <tr ng-repeat="passenger in dataSource.TRAVELER">
+<section class="passengers-table">
+    <table ng-table="passengersResults" show-filter="true" class="table">
+        <tr ng-repeat="passenger in dataSource.PASSENGER">
             <td data-title="'H'" sortable="'ruleHit'" filter="{ 'ruleHit': 'text' }">{{passenger.ruleHit}}</td>
             <td data-title="'W'" sortable="'onWatchList'" filter="{ 'onWatchList': 'text' }">{{passenger.onWatchList}}</td>
             <td data-title="'Last Name'" sortable="'lastName'" filter="{ 'lastName': 'text' }">{{passenger.lastName}}</td>
