@@ -10,7 +10,7 @@ public final class Constants {
 	public static final String JOIN = " join ";
 	public static final String JOIN_FETCH = " join fetch ";
 	public static final String FLIGHT_REF = ".flights ";
-	public static final String TRAVELER_REF = ".travelers ";
+	public static final String PASSENGER_REF = ".passengers ";
 	public static final String DOCUMENT_REF = ".documents ";
 	
 	// Entities
@@ -21,7 +21,7 @@ public final class Constants {
 	public static final String FLIGHT = "FLIGHT";
 	public static final String FREQUENTFLYER = "FREQUENTFLYER";
 	public static final String HITS = "HITS";
-	public static final String TRAVELER = "TRAVELER";
+	public static final String PASSENGER = "PASSENGER";
 	public static final String PHONE = "PHONE";
 	public static final String PNR = "PNR";
 	public static final String TRAVELAGENCY = "TRAVELAGENCY";

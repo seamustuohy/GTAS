@@ -4,7 +4,7 @@ import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -108,15 +108,15 @@ public class TargetingServiceUtils {
 	}
     private static void addPassengersAndDocuments(Set<Flight> flights, List<Object> requestList){
     	for(Flight flight:flights){
-    		Set<Traveler> travelers = flight.getPassengers();
-    		requestList.addAll(travelers);
-    		addDocuments(travelers, requestList);
+    		Set<Passenger> passengers = flight.getPassengers();
+    		requestList.addAll(passengers);
+    		addDocuments(passengers, requestList);
     	}
     }
 
-    private static void addDocuments(Set<Traveler> travelers, List<Object> requestList){
-    	for(Traveler traveler:travelers){
-    		requestList.addAll(traveler.getDocuments());
+    private static void addDocuments(Set<Passenger> passengers, List<Object> requestList){
+    	for(Passenger p:passengers){
+    		requestList.addAll(p.getDocuments());
     	}
     }
 }

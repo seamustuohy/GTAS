@@ -1,4 +1,4 @@
-package gov.gtas.querybuilder.enums;
+package gov.gtas.enumtype;
 
 public enum OperatorEnum {
 	

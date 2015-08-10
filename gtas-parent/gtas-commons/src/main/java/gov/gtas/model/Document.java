@@ -28,7 +28,7 @@ public class Document extends BaseEntity {
     private String issuanceCountry;
     
     @ManyToOne
-    private Traveler traveler;
+    private Passenger passenger;
 
     public String getDocumentType() {
         return documentType;
@@ -70,11 +70,11 @@ public class Document extends BaseEntity {
         this.issuanceCountry = issuanceCountry;
     }
 
-    public Traveler getTraveler() {
-        return traveler;
+    public Passenger getPassenger() {
+        return passenger;
     }
 
-    public void setTraveler(Traveler traveler) {
-        this.traveler = traveler;
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
     }
 }

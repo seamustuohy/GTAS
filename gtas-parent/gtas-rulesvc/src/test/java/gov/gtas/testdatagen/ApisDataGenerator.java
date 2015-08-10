@@ -13,10 +13,10 @@ import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.DocumentTypeCode;
 import gov.gtas.model.lookup.FlightDirectionCode;
-import gov.gtas.model.lookup.TravelerTypeCode;
+import gov.gtas.model.lookup.PassengerTypeCode;
 import gov.gtas.repository.AirportRepository;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.CarrierRepository;
@@ -53,41 +53,41 @@ public class ApisDataGenerator {
     }
     private void fixReferences(ApisMessage msg){
     	for(Flight fl:msg.getFlights()){
-    		for(Traveler tr:fl.getPassengers()){
+    		for(Passenger tr:fl.getPassengers()){
     			for(Document doc:tr.getDocuments()){
-    				if(doc.getTraveler() == null){
-    					doc.setTraveler(tr);
+    				if(doc.getPassenger() == null){
+    					doc.setPassenger(tr);
     				}
     			}
     		}
     	}
     }
-    private Set<Traveler> createPassengerAndDocument(String[][]param){
-    	Set<Traveler> travelers = new HashSet<Traveler>();
+    private Set<Passenger> createPassengerAndDocument(String[][]param){
+    	Set<Passenger> passengers = new HashSet<Passenger>();
     	for(String[] args:param){
-	    	Traveler passenger = new Traveler();
-	    	passenger.setTravelerType(TravelerTypeCode.P.name());
+	    	Passenger passenger = new Passenger();
+	    	passenger.setPassengerType(PassengerTypeCode.P.name());
 	    	passenger.setId(new Long(args[6]));
 	    	passenger.setDocuments(createDocuments(new String[]{args[0]}, new String[]{args[1]}));
 	    	passenger.setFirstName(args[2]);
 	    	passenger.setLastName(args[3]);
 	    	passenger.setCitizenshipCountry(args[4]);
 	    	passenger.setEmbarkation(args[5]);
-	    	travelers.add(passenger);
+	    	passengers.add(passenger);
     	}
-   	    return travelers;
+   	    return passengers;
     }
     private Set<Flight> createFlights(){
     	Set<Flight> flights = new HashSet<Flight>();
     	
     	Flight flight = new Flight();
-    	Set<Traveler> travelers = createPassengerAndDocument(new String[][]{
+    	Set<Passenger> passengers = createPassengerAndDocument(new String[][]{
     			{/*document*/"GB","2012-01-15", /*passenger(name, citzenship, embarkation*/"Ragner", "Yilmaz", "GB", "YHZ","11"},
     			{"US", "2010-01-15", "Gitstash", "Garbled", "US", "BOB","22"},
     			{"CA", "2011-12-31", "Kalimar", "Rultan", "CA", "YHZ","33"}
     	       }
     			);
-    	flight.setPassengers(travelers);
+    	flight.setPassengers(passengers);
     	flight.setCarrier("V7");//Continental
     	flight.setDestination("BOB");
     	flight.setFlightDate(new Date());
@@ -98,13 +98,13 @@ public class ApisDataGenerator {
     	flights.add(flight);
     	
     	flight = new Flight();
-    	travelers = createPassengerAndDocument(new String[][]{
+    	passengers = createPassengerAndDocument(new String[][]{
     			{"YE","2012-01-15", "Iphsatz", "Zaglib", "PF", "YHZ","44"},
     			{"US", "2010-01-15", "Loopy", "Lair", "US", "BOB","55"},
     			{"GB", "2010-01-15", "Ikstar", "Crondite", "GB", "LHR","66"}
     	       }
     			);
-    	flight.setPassengers(travelers);
+    	flight.setPassengers(passengers);
     	flight.setCarrier("CO");//Continental
     	flight.setDestination("HOD");
     	Date flDate = null;

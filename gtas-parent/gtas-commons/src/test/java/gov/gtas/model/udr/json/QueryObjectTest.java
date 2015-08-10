@@ -2,12 +2,12 @@ package gov.gtas.model.udr.json;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.mappings.TravelerMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 
 import java.util.List;
 
@@ -38,9 +38,9 @@ public class QueryObjectTest {
 	public void testOneTerm() {
 		UdrSpecificationBuilder builder = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.AND);
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.CITIZENSHIP_COUNTRY.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.CITIZENSHIP_COUNTRY.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Jones"});
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.DOB.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
 		QueryObject qobj = builder.build().getDetails();
 		List<List<QueryTerm>> flatList = qobj.createFlattenedList();
@@ -53,14 +53,14 @@ public class QueryObjectTest {
 	public void testAndOr() {
 		UdrSpecificationBuilder builder = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.AND);
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.LAST_NAME.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.LAST_NAME.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Jones"});
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.DOB.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
 		builder.addNestedQueryObject(QueryConditionEnum.OR);
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.EMBARKATION.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.EMBARKATION.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"DBY"});
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.CITIZENSHIP_COUNTRY.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.CITIZENSHIP_COUNTRY.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"});
 		
 		QueryObject qobj = builder.build().getDetails();
@@ -69,15 +69,15 @@ public class QueryObjectTest {
 		assertEquals(2,flatList.size());
 		List<QueryTerm> mintermList = flatList.get(0);
 		assertEquals(3,mintermList.size());
-		verifyTerm(mintermList.get(0), EntityEnum.TRAVELER, TravelerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
-		verifyTerm(mintermList.get(1), EntityEnum.TRAVELER, TravelerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
-		verifyTerm(mintermList.get(2), EntityEnum.TRAVELER, TravelerMapping.EMBARKATION.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"DBY"} );
+		verifyTerm(mintermList.get(0), EntityEnum.PASSENGER, PassengerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
+		verifyTerm(mintermList.get(1), EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
+		verifyTerm(mintermList.get(2), EntityEnum.PASSENGER, PassengerMapping.EMBARKATION.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"DBY"} );
 		
 		mintermList = flatList.get(1);
 		assertEquals(3,mintermList.size());
-		verifyTerm(mintermList.get(0), EntityEnum.TRAVELER, TravelerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
-		verifyTerm(mintermList.get(1), EntityEnum.TRAVELER, TravelerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
-		verifyTerm(mintermList.get(2), EntityEnum.TRAVELER, TravelerMapping.CITIZENSHIP_COUNTRY.getFieldName(), OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"} );
+		verifyTerm(mintermList.get(0), EntityEnum.PASSENGER, PassengerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
+		verifyTerm(mintermList.get(1), EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
+		verifyTerm(mintermList.get(2), EntityEnum.PASSENGER, PassengerMapping.CITIZENSHIP_COUNTRY.getFieldName(), OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"} );
     }
 	private void verifyTerm(QueryTerm trm, EntityEnum entity, String attr, OperatorCodeEnum op, String[] val){
 		assertEquals(entity.getEntityName(), trm.getEntity());
@@ -91,24 +91,24 @@ public class QueryObjectTest {
 	public void testFourLevel() {
 		UdrSpecificationBuilder builder = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.AND);
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.LAST_NAME.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.LAST_NAME.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Jones"});
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.DOB.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
 		builder.addNestedQueryObject(QueryConditionEnum.OR);
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.EMBARKATION.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.EMBARKATION.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"DBY"});
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.CITIZENSHIP_COUNTRY.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.CITIZENSHIP_COUNTRY.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"});
 		builder.addNestedQueryObject(QueryConditionEnum.AND);
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.MIDDLE_NAME.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.MIDDLE_NAME.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Paul"});
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.FIRST_NAME.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.FIRST_NAME.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"John"});
 		builder.addNestedQueryObject(QueryConditionEnum.OR);
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.SEAT.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.SEAT.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"12345"});
-		builder.addTerm(EntityEnum.TRAVELER, TravelerMapping.DEBARKATION.getFieldName(), 
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.DEBARKATION.getFieldName(), 
 				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"Timbuktu"});
 
 		QueryObject qobj = builder.build().getDetails();
@@ -117,31 +117,31 @@ public class QueryObjectTest {
 		assertEquals(4,flatList.size());
 		List<QueryTerm> mintermList = flatList.get(0);
 		assertEquals(3,mintermList.size());
-		verifyTerm(mintermList.get(0), EntityEnum.TRAVELER, TravelerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
-		verifyTerm(mintermList.get(1), EntityEnum.TRAVELER, TravelerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
-		verifyTerm(mintermList.get(2), EntityEnum.TRAVELER, TravelerMapping.EMBARKATION.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"DBY"} );
+		verifyTerm(mintermList.get(0), EntityEnum.PASSENGER, PassengerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
+		verifyTerm(mintermList.get(1), EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
+		verifyTerm(mintermList.get(2), EntityEnum.PASSENGER, PassengerMapping.EMBARKATION.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"DBY"} );
 		
 		mintermList = flatList.get(1);
 		assertEquals(3,mintermList.size());
-		verifyTerm(mintermList.get(0), EntityEnum.TRAVELER, TravelerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
-		verifyTerm(mintermList.get(1), EntityEnum.TRAVELER, TravelerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
-		verifyTerm(mintermList.get(2), EntityEnum.TRAVELER, TravelerMapping.CITIZENSHIP_COUNTRY.getFieldName(), OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"} );
+		verifyTerm(mintermList.get(0), EntityEnum.PASSENGER, PassengerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
+		verifyTerm(mintermList.get(1), EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
+		verifyTerm(mintermList.get(2), EntityEnum.PASSENGER, PassengerMapping.CITIZENSHIP_COUNTRY.getFieldName(), OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"} );
 
 		mintermList = flatList.get(2);
 		assertEquals(5,mintermList.size());
-		verifyTerm(mintermList.get(0), EntityEnum.TRAVELER, TravelerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
-		verifyTerm(mintermList.get(1), EntityEnum.TRAVELER, TravelerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
-		verifyTerm(mintermList.get(2), EntityEnum.TRAVELER, TravelerMapping.MIDDLE_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Paul"} );
-		verifyTerm(mintermList.get(3), EntityEnum.TRAVELER, TravelerMapping.FIRST_NAME.getFieldName(), OperatorCodeEnum.NOT_EQUAL, new String[]{"John"} );
-		verifyTerm(mintermList.get(4), EntityEnum.TRAVELER, TravelerMapping.SEAT.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"12345"} );
+		verifyTerm(mintermList.get(0), EntityEnum.PASSENGER, PassengerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
+		verifyTerm(mintermList.get(1), EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
+		verifyTerm(mintermList.get(2), EntityEnum.PASSENGER, PassengerMapping.MIDDLE_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Paul"} );
+		verifyTerm(mintermList.get(3), EntityEnum.PASSENGER, PassengerMapping.FIRST_NAME.getFieldName(), OperatorCodeEnum.NOT_EQUAL, new String[]{"John"} );
+		verifyTerm(mintermList.get(4), EntityEnum.PASSENGER, PassengerMapping.SEAT.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"12345"} );
 
 		mintermList = flatList.get(3);
 		assertEquals(5,mintermList.size());
-		verifyTerm(mintermList.get(0), EntityEnum.TRAVELER, TravelerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
-		verifyTerm(mintermList.get(1), EntityEnum.TRAVELER, TravelerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
-		verifyTerm(mintermList.get(2), EntityEnum.TRAVELER, TravelerMapping.MIDDLE_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Paul"} );
-		verifyTerm(mintermList.get(3), EntityEnum.TRAVELER, TravelerMapping.FIRST_NAME.getFieldName(), OperatorCodeEnum.NOT_EQUAL, new String[]{"John"} );
-		verifyTerm(mintermList.get(4), EntityEnum.TRAVELER, TravelerMapping.DEBARKATION.getFieldName(), OperatorCodeEnum.NOT_EQUAL, new String[]{"Timbuktu"} );
+		verifyTerm(mintermList.get(0), EntityEnum.PASSENGER, PassengerMapping.LAST_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Jones"} );
+		verifyTerm(mintermList.get(1), EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), OperatorCodeEnum.LESS, new String[]{"1978-12-24"} );
+		verifyTerm(mintermList.get(2), EntityEnum.PASSENGER, PassengerMapping.MIDDLE_NAME.getFieldName(), OperatorCodeEnum.EQUAL, new String[]{"Paul"} );
+		verifyTerm(mintermList.get(3), EntityEnum.PASSENGER, PassengerMapping.FIRST_NAME.getFieldName(), OperatorCodeEnum.NOT_EQUAL, new String[]{"John"} );
+		verifyTerm(mintermList.get(4), EntityEnum.PASSENGER, PassengerMapping.DEBARKATION.getFieldName(), OperatorCodeEnum.NOT_EQUAL, new String[]{"Timbuktu"} );
 				
 	}
 }

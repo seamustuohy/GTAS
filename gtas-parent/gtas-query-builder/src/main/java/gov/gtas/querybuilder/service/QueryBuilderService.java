@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
@@ -96,16 +96,16 @@ public class QueryBuilderService {
 		return flights;
 	}
 	
-	public List<Traveler> runPassengerQuery(QueryObject queryObject) throws InvalidQueryException {
-		List<Traveler> travelers = new ArrayList<>();
+	public List<Passenger> runPassengerQuery(QueryObject queryObject) throws InvalidQueryException {
+		List<Passenger> passengers = new ArrayList<>();
 		
 		try {
-			travelers = queryRepository.getPassengersByDynamicQuery(queryObject);
+			passengers = queryRepository.getPassengersByDynamicQuery(queryObject);
 		} catch (InvalidQueryRepositoryException | IllegalArgumentException e) {
 			throw new InvalidQueryException(e.getMessage(), queryObject);
 		}
 		
-		return travelers;
+		return passengers;
 	}
 	
 	private UserQuery createUserQuery(QueryRequest req) throws JsonProcessingException {

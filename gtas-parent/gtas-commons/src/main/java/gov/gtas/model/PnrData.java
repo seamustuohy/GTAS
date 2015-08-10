@@ -76,15 +76,15 @@ public class PnrData extends BaseEntityAudit{
     private Set<Flight> flights = new HashSet<>();
     
 	@ManyToMany(
-        targetEntity = Traveler.class,
+        targetEntity = Passenger.class,
         cascade={CascadeType.ALL}
     ) 
     @JoinTable(
-        name="pnr_traveler",
+        name="pnr_passenger",
         joinColumns=@JoinColumn(name="pnr_id"),
-        inverseJoinColumns=@JoinColumn(name="traveler_id")
+        inverseJoinColumns=@JoinColumn(name="passenger_id")
     )   
-    private Set<Traveler> passengers = new HashSet<>();
+    private Set<Passenger> passengers = new HashSet<>();
  
 	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name="cc_id", referencedColumnName="id") 
@@ -120,11 +120,11 @@ public class PnrData extends BaseEntityAudit{
 		this.creditCard = creditCard;
 	}
 
-	public Set<Traveler> getPassengers() {
+	public Set<Passenger> getPassengers() {
 		return passengers;
 	}
 
-	public void setPassengers(Set<Traveler> passengers) {
+	public void setPassengers(Set<Passenger> passengers) {
 		this.passengers = passengers;
 	}
 

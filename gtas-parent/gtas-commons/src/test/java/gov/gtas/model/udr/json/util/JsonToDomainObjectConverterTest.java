@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
+import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.model.udr.json.UdrSpecification;
 
 import java.io.IOException;

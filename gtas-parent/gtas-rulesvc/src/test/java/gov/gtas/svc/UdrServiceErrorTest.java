@@ -7,6 +7,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.CommonValidationException;
@@ -16,8 +17,7 @@ import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.mappings.TravelerMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.services.UserService;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.util.DateCalendarUtils;
@@ -49,7 +49,7 @@ public class UdrServiceErrorTest {
                    +" },"
                    + " {"
                         + " \"@class\": \"QueryTerm\","
-                        + " \"entity\": \"Traveler\","
+                        + " \"entity\": \"Passenger\","
                         + " \"field\": \"lastName\","
                         + " \"operator\": \"EQUAL\","
                         + " \"type\": \"string\","
@@ -291,7 +291,7 @@ public class UdrServiceErrorTest {
 				String startDate = DateCalendarUtils.formatJsonDate(new Date(System.currentTimeMillis()+864000000L));
 
 				UdrSpecification testObj = mapper.readValue(
-						String.format(TEST_JSON, EntityEnum.TRAVELER.getEntityName(), TravelerMapping.DEBARKATION.getFieldName(), "equal", startDate), 
+						String.format(TEST_JSON, EntityEnum.PASSENGER.getEntityName(), PassengerMapping.DEBARKATION.getFieldName(), "equal", startDate), 
 						UdrSpecification.class);	
 				assertNotNull(testObj);
 				 authorId = testObj.getSummary().getAuthor();

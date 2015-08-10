@@ -97,7 +97,7 @@
     <div id="builder"></div>
     <select ng-model="viewType">
         <option value="FLIGHT"> Flight </option>
-        <option value="TRAVELER"> Passenger </option>
+        <option value="PASSENGER"> Passenger </option>
     </select>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
     <button type="button" data-ng-click="viewTypeChange()"  class="btn btn-xs btn-primary" data->Execute Query</button>
@@ -119,7 +119,7 @@
         <td data-title="'ETA'" sortable="'arrivalDt'" filter="{ 'arrivalDt': 'text' }">{{flight.arrivalDt}}</td>
     </tr>
 </table>
-<table ng-table="travelersResults" show-filter="true" class="table travelers-table">
+<table ng-table="passengersResults" show-filter="true" class="table passengers-table">
     <tr ng-repeat="passenger in $data">
         <td data-title="'H'" sortable="'ruleHit'" filter="{ 'ruleHit': 'text' }">{{passenger.ruleHit}}</td>
         <td data-title="'W'" sortable="'onWatchList'" filter="{ 'onWatchList': 'text' }">{{passenger.onWatchList}}</td>

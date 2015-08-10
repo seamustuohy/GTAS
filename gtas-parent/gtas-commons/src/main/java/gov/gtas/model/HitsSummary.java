@@ -22,8 +22,8 @@ public class HitsSummary extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 3436310987156511552L;
 
-	@Column(name = "traveler_id", nullable = false)
-	private Long travelerId;
+	@Column(name = "passenger_id", nullable = false)
+	private Long passengerId;
 
 	@Column(name = "create_date", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -40,12 +40,12 @@ public class HitsSummary extends BaseEntity {
 		this.createDate = createDate;
 	}
 
-	public Long getTravelerId() {
-		return travelerId;
+	public Long getPassengerId() {
+		return passengerId;
 	}
 
-	public void setTravelerId(Long travelerId) {
-		this.travelerId = travelerId;
+	public void setPassengerId(Long passengerId) {
+		this.passengerId = passengerId;
 	}
 
 	public List<HitDetail> getHitdetails() {

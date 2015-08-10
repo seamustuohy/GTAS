@@ -1,6 +1,6 @@
 package gov.gtas.rule.builder;
 
-import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
 
 import org.slf4j.Logger;
@@ -13,14 +13,14 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DocumentConditionBuilder.class);
 
-	private String travelerVariableName;
-	private boolean travelerHasNoRuleCondition;
+	private String passengerVariableName;
+	private boolean passengerHasNoRuleCondition;
 
 	public DocumentConditionBuilder(final String drlVariableName,
-			final String travelerVariableName) {
+			final String passengerVariableName) {
 		super(drlVariableName, EntityEnum.DOCUMENT.getEntityName());
-		this.travelerVariableName = travelerVariableName;
-		travelerHasNoRuleCondition = false;
+		this.passengerVariableName = passengerVariableName;
+		passengerHasNoRuleCondition = false;
 	}
 
 	/*
@@ -31,7 +31,7 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 	@Override
 	public void reset() {
 		super.reset();
-		this.travelerHasNoRuleCondition = false;
+		this.passengerHasNoRuleCondition = false;
 	}
 
 	@Override
@@ -43,9 +43,9 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 
 	@Override
 	protected void addSpecialConditions(StringBuilder bldr) {
-		if (travelerHasNoRuleCondition) {
-			bldr.append(travelerVariableName).append(":")
-					.append(EntityEnum.TRAVELER.getEntityName())
+		if (passengerHasNoRuleCondition) {
+			bldr.append(passengerVariableName).append(":")
+					.append(EntityEnum.PASSENGER.getEntityName())
 					.append("(id == ").append(getDrlVariableName()).append(".")
 					.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName())
 					.append(")\n");
@@ -53,19 +53,15 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 			bldr.append(EntityEnum.DOCUMENT.getEntityName()).append("(id == ")
 					.append(getDrlVariableName()).append(".id, ")
 					.append(DocumentMapping.DOCUMENT_OWNER_ID.getFieldName())
-					.append(" == ").append(travelerVariableName)
+					.append(" == ").append(passengerVariableName)
 					.append(".id)\n");
 		}
 	}
 
 
-	/**
-	 * @param travelerHasNoRuleCondition
-	 *            the travelerHasNoRuleCondition to set
-	 */
-	protected void setTravelerHasNoRuleCondition(
-			boolean travelerHasNoRuleCondition) {
-		this.travelerHasNoRuleCondition = travelerHasNoRuleCondition;
+	protected void setPassengerHasNoRuleCondition(
+			boolean passengerHasNoRuleCondition) {
+		this.passengerHasNoRuleCondition = passengerHasNoRuleCondition;
 	}
 
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface HitsSummaryService {
 
-	public List<HitDetail> findByTravelerId(Long id);
+	public List<HitDetail> findByPassengerId(Long id);
 	public Iterable<HitsSummary> findAll();
 
 }

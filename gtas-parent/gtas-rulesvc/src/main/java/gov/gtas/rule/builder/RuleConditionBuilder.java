@@ -11,32 +11,31 @@ import java.text.ParseException;
  * Generates the "when" part of a DRL rule.
  * 
  * @author GTAS3 (AB)
- *
  */
 public class RuleConditionBuilder {
 
-	private TravelerConditionBuilder travelerConditionBuilder;
+	private PassengerConditionBuilder passengerConditionBuilder;
 	private DocumentConditionBuilder documentConditionBuilder;
 	private FlightConditionBuilder flightConditionBuilder;
 
-	private String travelerVariableName;
+	private String passengerVariableName;
 
 	private StringBuilder conditionDescriptionBuilder;
 
 	/**
 	 * Constructor for the Simple Rules:<br>
-	 * (i.e., One Traveler, one document, one flight.)
+	 * (i.e., One Passenger, one document, one flight.)
 	 * 
 	 */
-	public RuleConditionBuilder(final String travelerVariableName,
+	public RuleConditionBuilder(final String passengerVariableName,
 			final String flightVariableName, final String documentVariableName) {
-		this.travelerVariableName = travelerVariableName;
-		this.travelerConditionBuilder = new TravelerConditionBuilder(
-				travelerVariableName);
+		this.passengerVariableName = passengerVariableName;
+		this.passengerConditionBuilder = new PassengerConditionBuilder(
+				passengerVariableName);
 		this.documentConditionBuilder = new DocumentConditionBuilder(
-				documentVariableName, travelerVariableName);
+				documentVariableName, passengerVariableName);
 		this.flightConditionBuilder = new FlightConditionBuilder(
-				flightVariableName, travelerVariableName);
+				flightVariableName, passengerVariableName);
 	}
 
 	/**
@@ -50,19 +49,19 @@ public class RuleConditionBuilder {
 	public void buildConditionsAndApppend(
 			final StringBuilder parentStringBuilder) throws ParseException {
 
-		if (travelerConditionBuilder.isEmpty()) {
+		if (passengerConditionBuilder.isEmpty()) {
 			if (!documentConditionBuilder.isEmpty()) {
 				flightConditionBuilder
-						.addLinkedTraveler(this.travelerVariableName);
+						.addLinkedPassenger(this.passengerVariableName);
 			}
-			documentConditionBuilder.setTravelerHasNoRuleCondition(true);
+			documentConditionBuilder.setPassengerHasNoRuleCondition(true);
 		} else {
-			flightConditionBuilder.addLinkedTraveler(this.travelerVariableName);
+			flightConditionBuilder.addLinkedPassenger(this.passengerVariableName);
 		}
-		parentStringBuilder.append(travelerConditionBuilder.build());
+		parentStringBuilder.append(passengerConditionBuilder.build());
 		parentStringBuilder.append(documentConditionBuilder.build());
 		parentStringBuilder.append(flightConditionBuilder.build());
-		travelerConditionBuilder.reset();
+		passengerConditionBuilder.reset();
 		documentConditionBuilder.reset();
 		flightConditionBuilder.reset();
 
@@ -86,8 +85,8 @@ public class RuleConditionBuilder {
 							.createConditionDescription(cond));
 		}
 		switch (cond.getEntityName()) {
-		case TRAVELER:
-			travelerConditionBuilder.addCondition(cond);
+		case PASSENGER:
+			passengerConditionBuilder.addCondition(cond);
 			break;
 		case DOCUMENT:
 			documentConditionBuilder.addCondition(cond);
@@ -101,19 +100,17 @@ public class RuleConditionBuilder {
 
 	}
 
-	// private static final String ACTION_TRAVELER_HIT =
-	// "resultList.add(new RuleHitDetail(%dL, %d, $t.getId()));\n";
-	private static final String ACTION_TRAVELER_HIT = "resultList.add(RuleHitDetail.createRuleHitDetail(%dL, %d, \"%s\", %s, \"%s\"));\n";
+	private static final String ACTION_PASSENGER_HIT = "resultList.add(RuleHitDetail.createRuleHitDetail(%dL, %d, \"%s\", %s, \"%s\"));\n";
 
 	public void addRuleAction(StringBuilder ruleStringBuilder, UdrRule parent,
-			Rule rule, String travelerVariableName) {
+			Rule rule, String passengerVariableName) {
 		String cause = conditionDescriptionBuilder.toString()
 				.replace("\"", "'");
 		ruleStringBuilder
 				.append("then\n")
-				.append(String.format(ACTION_TRAVELER_HIT, parent.getId(),
+				.append(String.format(ACTION_PASSENGER_HIT, parent.getId(),
 						rule.getRuleIndex(), parent.getTitle(),
-						travelerVariableName, cause)).append("end\n");
+						passengerVariableName, cause)).append("end\n");
 		conditionDescriptionBuilder = null;
 	}
 }

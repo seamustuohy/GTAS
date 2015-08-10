@@ -5,7 +5,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.querybuilder.constants.Constants;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
@@ -159,10 +159,10 @@ public class QueryBuilderServiceTest {
 	
 	@Test
 	public void testRunPassengerQuery() throws InvalidQueryRepositoryException, InvalidQueryException {
-		List<Traveler> expected = new ArrayList<>();
+		List<Passenger> expected = new ArrayList<>();
 		
 		when(queryRepository.getPassengersByDynamicQuery(queryObject)).thenReturn(expected);
-		List<Traveler> actual = queryService.runPassengerQuery(queryObject);
+		List<Passenger> actual = queryService.runPassengerQuery(queryObject);
 		
 		assertEquals(expected, actual);
 	}

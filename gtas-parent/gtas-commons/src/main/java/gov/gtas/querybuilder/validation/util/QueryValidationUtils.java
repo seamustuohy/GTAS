@@ -1,13 +1,13 @@
 package gov.gtas.querybuilder.validation.util;
 
+import gov.gtas.enumtype.ConditionEnum;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.OperatorEnum;
+import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.ConditionEnum;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
-import gov.gtas.querybuilder.enums.TypeEnum;
 import gov.gtas.querybuilder.mappings.AddressMapping;
 import gov.gtas.querybuilder.mappings.CreditCardMapping;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
@@ -19,7 +19,7 @@ import gov.gtas.querybuilder.mappings.IEntityMapping;
 import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
 import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
-import gov.gtas.querybuilder.mappings.TravelerMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.querybuilder.model.UserQuery;
 
 import java.io.IOException;
@@ -152,8 +152,8 @@ public class QueryValidationUtils {
 					case Constants.HITS:
 						validField = validateField(HitsMapping.values(), field);
 						break;
-					case Constants.TRAVELER:
-						validField = validateField(TravelerMapping.values(), field);
+					case Constants.PASSENGER:
+						validField = validateField(PassengerMapping.values(), field);
 						break;
 					case Constants.PHONE:
 						validField = validateField(PhoneMapping.values(), field);

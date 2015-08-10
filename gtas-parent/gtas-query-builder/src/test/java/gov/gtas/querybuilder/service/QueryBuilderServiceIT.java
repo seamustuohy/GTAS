@@ -2,37 +2,18 @@ package gov.gtas.querybuilder.service;
 
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
-import gov.gtas.model.User;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
-import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-import gov.gtas.model.udr.json.QueryConditionEnum;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
-import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.querybuilder.config.QueryBuilderAppConfig;
-import gov.gtas.querybuilder.constants.Constants;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.OperatorEnum;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
-import gov.gtas.querybuilder.mappings.TravelerMapping;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
-import gov.gtas.querybuilder.repository.QueryBuilderRepositoryImpl;
-import gov.gtas.util.DateCalendarUtils;
 
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -48,7 +29,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  *	Query Builder Service Integration Test 
@@ -88,8 +68,6 @@ public class QueryBuilderServiceIT {
 		// delete all records from the user_query table
 		Query deleteQuery = entityManager.createQuery("delete from UserQuery");
 		deleteQuery.executeUpdate();
-		
-		System.out.println("deleted records");
 	}
 
 	@Test
@@ -227,13 +205,13 @@ public class QueryBuilderServiceIT {
 	public void testRunQueryAgainstPassengers() throws InvalidQueryException {
 //		QueryObject query = buildSimpleQuery();
 //		
-//		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
 //		SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 //		
 //		if(passengers != null && passengers.size() > 0) {
 //			System.out.println("Number of Passengers: " + passengers.size());
 //			System.out.println("Passenger Information:");
-//			for(Traveler passenger : passengers) {
+//			for(Passenger passenger : passengers) {
 //				String docNumber = "";
 //				String docType = "";
 //				String docIssuanceCountry = "";
@@ -291,12 +269,12 @@ public class QueryBuilderServiceIT {
 //	@Test
 	public void testSimpleIsNullQueryAgainstPassengers() throws InvalidQueryException {
 //		QueryObject query = buildSimpleIsNullQuery();
-//		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
 //		
 //		if(passengers != null && passengers.size() > 0) {
 //			System.out.println("Number of Passengers: " + passengers.size());
 //			System.out.println("Passenger Information:");
-//			for(Traveler passenger : passengers) {
+//			for(Passenger passenger : passengers) {
 //				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
 //			}
 //		}
@@ -308,12 +286,12 @@ public class QueryBuilderServiceIT {
 //	@Test
 	public void testSimpleContainsQueryAgainstPassengers() throws InvalidQueryException {
 //		QueryObject query = buildSimpleContainsQuery();
-//		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
 //		
 //		if(passengers != null && passengers.size() > 0) {
 //			System.out.println("Number of Passengers: " + passengers.size());
 //			System.out.println("Passenger Information:");
-//			for(Traveler passenger : passengers) {
+//			for(Passenger passenger : passengers) {
 //				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
 //			}
 //		}
@@ -325,12 +303,12 @@ public class QueryBuilderServiceIT {
 //	@Test
 	public void testSimpleBetweenQueryAgainstPassengers() throws InvalidQueryException {
 //		QueryObject query = buildSimpleBetweenQuery();
-//		List<Traveler> passengers = (List<Traveler>) queryService.runPassengerQuery(query);
+//		List<Passenger> passengers = (List<Passenger>) queryService.runPassengerQuery(query);
 //
 //		if(passengers != null && passengers.size() > 0) {
 //			System.out.println("Number of Passengers: " + passengers.size());
 //			System.out.println("Passenger Information:");
-//			for(Traveler passenger : passengers) {
+//			for(Passenger passenger : passengers) {
 //				System.out.println("\tFirst name: " + passenger.getFirstName() + " Last name: " + passenger.getLastName() + " DOB: " + passenger.getDob());
 //			}
 //		}
@@ -421,7 +399,7 @@ public class QueryBuilderServiceIT {
 	
 //	@Test 
 	public void testEditQuery() throws JsonProcessingException, QueryAlreadyExistsException {
-		ObjectMapper mapper = new ObjectMapper();
+//		ObjectMapper mapper = new ObjectMapper();
 		
 //		Query query = queryService.listQueryByUser("ladebiyi").get(0);
 //		Query query = queryService.getQuery(1);
@@ -479,7 +457,7 @@ public class QueryBuilderServiceIT {
 		values.add("20");
 		values.add("40");
 		
-		rule.setEntity("Traveler");
+		rule.setEntity("Passenger");
 		rule.setField("age");
 		rule.setOperator("between");
 		rule.setType("integer");

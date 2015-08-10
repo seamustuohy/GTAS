@@ -1,8 +1,8 @@
 package gov.gtas.model.udr;
 
+import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.BaseEntity;
 import gov.gtas.model.User;
-import gov.gtas.model.udr.enumtype.YesNoEnum;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;

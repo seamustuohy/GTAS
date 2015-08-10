@@ -1,6 +1,6 @@
 package gov.gtas.querybuilder.mappings;
 
-import gov.gtas.querybuilder.enums.TypeEnum;
+import gov.gtas.enumtype.TypeEnum;
 
 public enum DocumentMapping implements IEntityMapping {
 
@@ -9,7 +9,7 @@ public enum DocumentMapping implements IEntityMapping {
 	ISSUANCE_DATE ("issuanceDate", "Issuance Date", TypeEnum.DATE.getType()),
 	DOCUMENT_NUMBER ("documentNumber", "Number", TypeEnum.STRING.getType()),
 	DOCUMENT_TYPE ("documentType", "Type", TypeEnum.STRING.getType()),
-	DOCUMENT_OWNER_ID ("traveler.id", "Owner Id", TypeEnum.STRING.getType(), false);
+	DOCUMENT_OWNER_ID ("passenger.id", "Owner Id", TypeEnum.STRING.getType(), false);
 	
 	private String fieldName;
 	private String friendlyName;

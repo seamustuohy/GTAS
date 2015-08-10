@@ -1,12 +1,12 @@
 package gov.gtas.controller;
 
 import gov.gtas.constants.Constants;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.Status;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Traveler;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.querybuilder.enums.EntityEnum;
-import gov.gtas.querybuilder.enums.Status;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
@@ -83,8 +83,8 @@ public class QueryBuilderController {
 	public IQueryResponse runPassengerQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
 		IQueryResponse response = new QueryResponse();
 		
-		List<Traveler> travelers = queryService.runPassengerQuery(queryObject);
-		response = createQueryResponse(Status.SUCCESS, travelers != null ? travelers.size() + " record(s)" : "traveler is null", mapToQueryPassengerResult(travelers));
+		List<Passenger> passengers = queryService.runPassengerQuery(queryObject);
+		response = createQueryResponse(Status.SUCCESS, passengers != null ? passengers.size() + " record(s)" : "passenger is null", mapToQueryPassengerResult(passengers));
 		
 		return response;
 	}
@@ -170,7 +170,7 @@ public class QueryBuilderController {
 		qbMap.put(EntityEnum.FLIGHT.toString(), getMapping(EntityEnum.FLIGHT));
 		qbMap.put(EntityEnum.FREQUENT_FLYER.toString(), getMapping(EntityEnum.FREQUENT_FLYER));
 		qbMap.put(EntityEnum.HITS.toString(), getMapping(EntityEnum.HITS));
-		qbMap.put(EntityEnum.TRAVELER.toString(), getMapping(EntityEnum.TRAVELER));
+		qbMap.put(EntityEnum.PASSENGER.toString(), getMapping(EntityEnum.PASSENGER));
 		qbMap.put(EntityEnum.PHONE.toString(), getMapping(EntityEnum.PHONE));
 		qbMap.put(EntityEnum.PNR.toString(), getMapping(EntityEnum.PNR));
 		qbMap.put(EntityEnum.TRAVEL_AGENCY.toString(), getMapping(EntityEnum.TRAVEL_AGENCY));
@@ -212,13 +212,13 @@ public class QueryBuilderController {
 		return qbFlights;
 	}
 	
-	private List<IQueryResult> mapToQueryPassengerResult(List<Traveler> travelers) {
+	private List<IQueryResult> mapToQueryPassengerResult(List<Passenger> passengers) {
 		List<IQueryResult> qbPassengers = new ArrayList<>();
 		SimpleDateFormat dobFormat = new SimpleDateFormat("MM/dd/yyyy");
 		
-		if(travelers != null && travelers.size() > 0) {
-			for(Traveler traveler : travelers) {
-				if(traveler != null) {
+		if(passengers != null && passengers.size() > 0) {
+			for(Passenger p : passengers) {
+				if(p != null) {
 					QueryPassengersResult qbPassenger = new QueryPassengersResult();
 					String docNumber = "";
 					String docType = "";
@@ -231,19 +231,19 @@ public class QueryBuilderController {
 					String arrivalDt = "";
 					String seat = "Not available";
 					
-					qbPassenger.setId(traveler.getId());
+					qbPassenger.setId(p.getId());
 					qbPassenger.setRuleHit(false);
 					qbPassenger.setOnWatchList(false);
-					qbPassenger.setFirstName(traveler.getFirstName());
-					qbPassenger.setLastName(traveler.getLastName());
+					qbPassenger.setFirstName(p.getFirstName());
+					qbPassenger.setLastName(p.getLastName());
 					// Passenger type
-                    qbPassenger.setPassengerType(traveler.getTravelerType());				
-					qbPassenger.setGender(traveler.getGender() != null ? traveler.getGender() : "");
-					qbPassenger.setDob(dobFormat.format(traveler.getDob()));
-					qbPassenger.setCitizenship(traveler.getCitizenshipCountry() != null ? traveler.getCitizenshipCountry() : "");
+                    qbPassenger.setPassengerType(p.getPassengerType());				
+					qbPassenger.setGender(p.getGender() != null ? p.getGender() : "");
+					qbPassenger.setDob(dobFormat.format(p.getDob()));
+					qbPassenger.setCitizenship(p.getCitizenshipCountry() != null ? p.getCitizenshipCountry() : "");
 					
 					// Document information
-					Set<Document> docs = traveler.getDocuments();
+					Set<Document> docs = p.getDocuments();
 					if(docs != null) {
 						if(docs.iterator().hasNext()) {
 							Document doc = docs.iterator().next();
@@ -258,7 +258,7 @@ public class QueryBuilderController {
 					qbPassenger.setDocumentIssuanceCountry(docIssuanceCountry);
 					
 					// flight information
-					Set<Flight> flights = traveler.getFlights();
+					Set<Flight> flights = p.getFlights();
 					if(flights != null) {
 						if(flights.iterator().hasNext()) {
 							Flight flight = flights.iterator().next();

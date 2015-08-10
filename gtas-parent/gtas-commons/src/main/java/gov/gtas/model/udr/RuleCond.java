@@ -1,8 +1,8 @@
 package gov.gtas.model.udr;
 
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-import gov.gtas.querybuilder.enums.EntityEnum;
 import gov.gtas.util.DateCalendarUtils;
 import gov.gtas.util.ValidationUtils;
 
@@ -136,8 +136,6 @@ public class RuleCond implements Serializable {
 	 		  return new CondValue(pk, DateCalendarUtils.parseJsonDateTime(val),true);
 	 	   case BOOLEAN:
 	 		  return new CondValue(pk, ValidationUtils.isStringTruthy(val)?"Y":"N");
-	 	   case OBJECT_REF:
-	 		  return new CondValue(pk, val, true);
 	 	   default:
 	 		  return new CondValue(pk, val);  
  	   }

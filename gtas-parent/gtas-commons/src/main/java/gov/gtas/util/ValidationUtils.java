@@ -1,6 +1,6 @@
 package gov.gtas.util;
 
-import gov.gtas.querybuilder.enums.EntityEnum;
+import gov.gtas.enumtype.EntityEnum;
 
 import org.apache.commons.lang3.StringUtils;
 

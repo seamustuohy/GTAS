@@ -78,7 +78,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/login.jsp").permitAll()
         .antMatchers("/home.action").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
 		//.antMatchers("/index.html").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
-		.antMatchers("/travelers").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
+		.antMatchers("/passengers").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
 		.antMatchers("/query**").hasAnyAuthority("MANAGE_QUERIES","ADMIN")
 		.antMatchers("/index.html").denyAll()
         //.anyRequest().authenticated()
