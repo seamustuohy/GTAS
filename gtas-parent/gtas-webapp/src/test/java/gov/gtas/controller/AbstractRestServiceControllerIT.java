@@ -1,7 +1,6 @@
 package gov.gtas.controller;
 
 import gov.gtas.controller.config.TestMvcRestServiceWebConfig;
-import gov.gtas.controller.config.TestRestServiceConfig;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.json.MetaData;
@@ -19,8 +18,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -29,8 +31,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestMvcRestServiceWebConfig.class,
-		TestRestServiceConfig.class })
+@ContextConfiguration(classes = { TestMvcRestServiceWebConfig.class })
 @WebAppConfiguration
 public class AbstractRestServiceControllerIT {
 
@@ -39,17 +40,16 @@ public class AbstractRestServiceControllerIT {
 	@Inject
 	protected WebApplicationContext webApplicationContext;
 
-	@Inject
+	@Mock
 	protected UserService userServiceMock;
 
-	@Inject
+	@Mock
 	protected RulePersistenceService rulePersistenceServiceMock;
 
 	@Before
 	public void setup() {
-		Mockito.reset(userServiceMock);
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-				.build();
+	    MockitoAnnotations.initMocks(this);
+		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
 
 	public RulePersistenceService getRulePersistenceServiceMock() {
@@ -117,5 +117,8 @@ public class AbstractRestServiceControllerIT {
 				"Hello Rule 1", "This is a test", new Date(), "jpjones"));
 		return resp;
 	}
+	
+	@Test
+	public void nullTest() { }
 
 }

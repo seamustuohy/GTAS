@@ -13,7 +13,9 @@ import gov.gtas.services.udr.RulePersistenceService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -29,21 +31,19 @@ public class UdrBuilderControllerIT extends AbstractRestServiceControllerIT {
 
 	private MockMvc mockMvc;
 
-	@Autowired
+	@Mock
 	private RulePersistenceService rulePersistenceServiceMock;
+
+    @Mock
+    private UdrRuleRepository udrRuleRepositoryMock;
 
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 
-	@Autowired
-	private UdrRuleRepository udrRuleRepositoryMock;
-
 	@Before
 	public void setUp() {
-		Mockito.reset(rulePersistenceServiceMock);
-		Mockito.reset(udrRuleRepositoryMock);
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-				.build();
+	    MockitoAnnotations.initMocks(this);
+		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
 
 	@Test
