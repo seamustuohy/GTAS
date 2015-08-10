@@ -13,24 +13,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-
 @Entity
 @Table(name = "hits_summary")
-public class HitsSummary extends BaseEntityAudit {
+public class HitsSummary extends BaseEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3436310987156511552L;
 
-	@Column(name = "passenger_id")
-	@NonNull
+	@Column(name = "passenger_id", nullable = false)
 	private Long passengerId;
 
-	@Column(name = "create_date")
+	@Column(name = "create_date", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	@NonNull
 	private Date createDate;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -39,8 +35,7 @@ public class HitsSummary extends BaseEntityAudit {
 	@Column(name = "flight_id")
 	private Long flightId;
 
-	@Column(name = "title")
-	@NonNull
+	@Column(name = "title", nullable = false)
 	private String Title;
 
 	@Column(name = "description")
@@ -76,5 +71,21 @@ public class HitsSummary extends BaseEntityAudit {
 
 	public void setFlightId(Long flightId) {
 		this.flightId = flightId;
+	}
+
+	public String getTitle() {
+		return Title;
+	}
+
+	public void setTitle(String title) {
+		Title = title;
+	}
+
+	public String getDescription() {
+		return Description;
+	}
+
+	public void setDescription(String description) {
+		Description = description;
 	}
 }
