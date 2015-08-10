@@ -23,8 +23,10 @@ import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
 import gov.gtas.querybuilder.mappings.TravelerMapping;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
+import gov.gtas.querybuilder.repository.QueryBuilderRepositoryImpl;
 import gov.gtas.util.DateCalendarUtils;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,26 +65,31 @@ public class QueryBuilderServiceIT {
 	private static final String TITLE = "Sample Query";
 	private static final String DESCRIPTION = "A simple query";
 	private static final String USER_ID = "ladebiyi";
-	private static final int QUERY_ID = 1;
 	
-	QueryObject query;
-	QueryTerm rule;
-	List<QueryEntity> rules;
+	private QueryObject query;
 	
 	@Before
 	public void setUp() throws Exception {
-		query = new QueryObject();
-		rule = new QueryTerm();
-		rules = new ArrayList<>();
+		query = buildSimpleBetweenQuery();
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		query = null;
-		rule = null;
-		rules = null;
+		
+		// delete all records from the user_query table
+		// thereby creating isolated integration test
+		deleteAllRecords();
+	}
+	
+
+	@Transactional
+	private void deleteAllRecords() {
+		// delete all records from the user_query table
 		Query deleteQuery = entityManager.createQuery("delete from UserQuery");
 		deleteQuery.executeUpdate();
+		
+		System.out.println("deleted records");
 	}
 
 	@Test
@@ -92,7 +99,7 @@ public class QueryBuilderServiceIT {
 		
 		request.setTitle(TITLE);
 		request.setDescription(DESCRIPTION);
-		request.setQuery(buildSimpleBetweenQuery());
+		request.setQuery(query);
 		request.setUserId(USER_ID);
 		
 		UserQuery result = queryService.saveQuery(request);
@@ -116,6 +123,7 @@ public class QueryBuilderServiceIT {
 		queryService.saveQuery(request);
 	}
 	
+//	@Test
 	public void testSaveInvalidQuery() {
 		
 	}
@@ -462,72 +470,10 @@ public class QueryBuilderServiceIT {
 	//---------------------------------------
 	// Build Query Objects
 	//---------------------------------------
-	
-	private QueryObject buildSimpleQuery() {
-		
-		rule.setEntity("TRAVELER");
-		rule.setField("gender");
-		rule.setOperator("equal");
-		rule.setType("string");
-		rule.setValue(new String[]{"male"});
-		
-		rules.add(rule);
-		
-		query.setCondition("AND");
-		query.setRules(rules);
-		
-		return query;
-	}
-	
-	private QueryObject buildSimpleDateQuery() {
-		
-		rule.setEntity("Flight");
-		rule.setField("eta");
-		rule.setOperator("equal");
-		rule.setType("date");
-		rule.setValue(new String[]{"05/11/2014 5:00:00 PM"});
-		
-		rules.add(rule);
-		
-		query.setCondition("AND");
-		query.setRules(rules);
-		
-		return query;
-	}
-	
-	private QueryObject buildSimpleIsNullQuery() {
-		
-		rule.setEntity("Pax");
-		rule.setField("middleName");
-		rule.setOperator("is_null");
-		rule.setType("boolean");
-		rule.setValue(new String[]{""});
-		
-		rules.add(rule);
-		
-		query.setCondition("AND");
-		query.setRules(rules);
-		
-		return query;
-	}
-		
-	private QueryObject buildSimpleContainsQuery() {
-		
-		rule.setEntity("Pax");
-		rule.setField("firstName");
-		rule.setOperator("contains");
-		rule.setType("string");
-		rule.setValue(new String[]{"avi"});
-		
-		rules.add(rule);
-		
-		query.setCondition("AND");
-		query.setRules(rules);
-		
-		return query;
-	}
-	
 	private QueryObject buildSimpleBetweenQuery() {
+		QueryTerm rule = new QueryTerm();
+		List<QueryEntity> rules = new ArrayList<>();
+		QueryObject query = new QueryObject();
 		List<String> values = new ArrayList<>();
 		
 		values.add("20");
@@ -537,7 +483,6 @@ public class QueryBuilderServiceIT {
 		rule.setField("age");
 		rule.setOperator("between");
 		rule.setType("integer");
-		///rule.setValue(new String[]{""});
 		rule.setValue(values.toArray(new String[values.size()]));
 		
 		rules.add(rule);
@@ -548,96 +493,4 @@ public class QueryBuilderServiceIT {
 		return query;
 	}
 	
-	private void testing() throws JsonProcessingException {
-		QueryObject queryObject = new QueryObject();
-		queryObject.setCondition("OR");
-		List<QueryEntity> rules = new LinkedList<QueryEntity>();
-		QueryTerm trm = new QueryTerm("Pax", "embarkationDate","Date","EQUAL", new String[]{new Date().toString()});
-		rules.add(trm);
-		rules.add(new QueryTerm("Pax", "lastName", "String", "EQUAL", new String[]{"Jones"}));
-
-		QueryObject queryObjectEmbedded = new QueryObject();
-		queryObjectEmbedded.setCondition("AND");
-		List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
-		
-		QueryTerm trm2 = new QueryTerm("Pax", "embarkation","String", "IN", new String[]{"DBY","PKY","FLT"});
-		rules2.add(trm2);
-		rules2.add(new QueryTerm("Pax", "debarkation", "String", "EQUAL", new String[]{"IAD"}));
-		queryObjectEmbedded.setRules(rules2);
-
-		queryObject.setRules(rules);
-		
-		ObjectMapper mapper = new ObjectMapper();
-		System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(queryObject));
-	}
-	
-	private QueryObject buildComplexQueryObject() {
-		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
-				QueryConditionEnum.OR);
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.DOB.getFieldName(), ValueTypesEnum.DATE,
-				OperatorCodeEnum.EQUAL,
-				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.LAST_NAME.getFieldName(),
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
-				new String[] { "Jones" });
-		bldr.addNestedQueryObject(QueryConditionEnum.AND);
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.EMBARKATION.getFieldName(),
-				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
-						"DBY", "PKY", "FLT" });
-		bldr.addTerm(EntityEnum.TRAVELER,
-				TravelerMapping.DEBARKATION.getFieldName(),
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
-				new String[] { "IAD" });
-
-		return bldr.build().getDetails();
-	}
-	private QueryObject buildComplexQuery() throws JsonProcessingException {
-		rule.setEntity("Passenger");
-		rule.setField("firstName");
-		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
-		rule.setType("string");
-		rule.setValue(new String[]{"da"});
-		
-		rules.add(rule);
-		
-		rule = new QueryTerm();
-		rule.setEntity("Passenger");
-		rule.setField("lastName");
-		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
-		rule.setType("string");
-		rule.setValue(new String[]{"c"});
-		
-		rules.add(rule);
-		
-		query.setCondition("OR");
-		query.setRules(rules);
-		
-		QueryObject query2 = new QueryObject();
-		List<QueryTerm> rules2 = new ArrayList<>();
-		
-		query2.setCondition(Constants.AND);
-		rule = new QueryTerm();
-		rule.setEntity("Passenger");
-		rule.setField("lastName");
-		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
-		rule.setType("string");
-		rule.setValue(new String[]{"c"});
-		rules2.add(rule);
-		
-		rule = new QueryTerm();
-		rule.setEntity("Passenger");
-		rule.setField("lastName");
-		rule.setOperator(OperatorEnum.BEGINS_WITH.toString());
-		rule.setType("string");
-		rule.setValue(new String[]{"c"});
-		rules2.add(rule);
-		
-		ObjectMapper mapper = new ObjectMapper();
-		System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(query));
-		  
-		return query;
-	}
 }
