@@ -6,7 +6,7 @@ public enum PNRMapping implements IEntityMapping {
 
 	BAG_COUNT ("bagCount", "Bag - Count", TypeEnum.INTEGER.getType()),
 	BOOKING_DATE ("", "Booking Date", TypeEnum.DATE.getType()), // missing field
-	CARRIER_CODE ("carrier.iata", "Carrier Code", TypeEnum.STRING.getType()),
+	CARRIER_CODE ("carrier", "Carrier Code", TypeEnum.STRING.getType()),
 	DAYS_BOOKED_BEFORE_TRAVEL ("daysBookedBeforeTravel", "Days Booked Before Travel", TypeEnum.INTEGER.getType()),
 	DWELL_AIRPORT ("", "Dwell - Airport", TypeEnum.STRING.getType()), // missing field
 	DWELL_COUNTRY ("", "Dwell - Country", TypeEnum.STRING.getType()), // missing field
@@ -16,8 +16,8 @@ public enum PNRMapping implements IEntityMapping {
 	FIRST_NAME ("passengers.firstName", "Name - First", TypeEnum.STRING.getType()),
 	LAST_NAME ("passengers.lastName", "Name - Last", TypeEnum.STRING.getType()),
 	MIDDLE_NAME ("passengers.middleName", "Name - Middle", TypeEnum.STRING.getType()),
-	ORIGIN_AIRPORT ("origin.iata", "Origin - Airport", TypeEnum.STRING.getType()),
-	ORIGIN_COUNTRY ("originCountry.iso3", "Origin - Country", TypeEnum.STRING.getType()),
+	ORIGIN_AIRPORT ("origin", "Origin - Airport", TypeEnum.STRING.getType()),
+	ORIGIN_COUNTRY ("originCountry", "Origin - Country", TypeEnum.STRING.getType()),
 	PASSENGER_COUNT ("passengerCount", "Passenger Count", TypeEnum.INTEGER.getType()),
 	RECORD_LOCATOR ("recordLocator", "Record Locator", TypeEnum.STRING.getType()),
 	ROUTE ("", "Route", TypeEnum.STRING.getType()); // missing field

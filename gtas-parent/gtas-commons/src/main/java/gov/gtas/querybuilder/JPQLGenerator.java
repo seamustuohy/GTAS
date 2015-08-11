@@ -45,8 +45,8 @@ public class JPQLGenerator {
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			else if(queryType == EntityEnum.PASSENGER) {
-				String flightsJoinStmt = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + Constants.FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
-				String documentJoinStmt = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + Constants.DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
+				String flightsJoinStmt = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " " + EntityEnum.FLIGHT.getAlias();
+				String documentJoinStmt = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
 				
 				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.PASSENGER.getAlias() + 
 						" " + Constants.FROM + " " + EntityEnum.PASSENGER.getEntityName() + " " + EntityEnum.PASSENGER.getAlias();
@@ -60,8 +60,8 @@ public class JPQLGenerator {
 						join.append(flightsJoinStmt);
 					}
 					else {
-						String condition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + Constants.FLIGHT_REF;
-						String joinFetchCondition = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + Constants.FLIGHT_REF;
+						String condition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " ";
+						String joinFetchCondition = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " ";
 						int startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
 					}
@@ -71,14 +71,14 @@ public class JPQLGenerator {
 						join.append(documentJoinStmt);
 					}
 					else {
-						String condition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + Constants.DOCUMENT_REF;
-						String joinFetchCondition = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + Constants.DOCUMENT_REF;
+						String condition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " ";
+						String joinFetchCondition = Constants.JOIN_FETCH + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " ";
 						int startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), joinFetchCondition);
 						
 						// if this is a passenger query, you don't need the passenger join again because that is already part of the queryPrefix
 						// so remove it
-						condition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + Constants.PASSENGER_REF + EntityEnum.PASSENGER.getAlias();
+						condition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PASSENGER.getEntityReference() + " " + EntityEnum.PASSENGER.getAlias();
 						startIndex = join.indexOf(condition);
 						join.replace(startIndex, (startIndex + condition.length()), "");
 					}
@@ -105,7 +105,7 @@ public class JPQLGenerator {
 			
 			List<QueryEntity> rules = queryObject.getRules();
 			
-			if(level.intValue() > 0) {
+			if(level.intValue() > 1) {
 				where.append("(");
 			}
 			
@@ -119,7 +119,7 @@ public class JPQLGenerator {
 				index++;
 			}
 						
-			if(level.intValue() > 0) {
+			if(level.intValue() > 1) {
 				where.append(")");
 			}
 		}
@@ -165,34 +165,62 @@ public class JPQLGenerator {
 				String joinCondition = "";
 				
 				if(entity.equalsIgnoreCase(EntityEnum.DOCUMENT.getEntityName())) {
-					joinCondition = getJoinCondition(EntityEnum.PASSENGER);
+					joinCondition = getJoinCondition(EntityEnum.PASSENGER, queryType);
+					
+					if(join.indexOf(joinCondition) == -1) {
+						join.append(joinCondition);
+					}
+				}
+				else if(entity.equalsIgnoreCase(EntityEnum.ADDRESS.getEntityName()) ||
+						entity.equalsIgnoreCase(EntityEnum.FREQUENT_FLYER.getEntityName()) ||
+						entity.equalsIgnoreCase(EntityEnum.PHONE.getEntityName())) {
+					joinCondition = getJoinCondition(EntityEnum.PNR, queryType);
 					
 					if(join.indexOf(joinCondition) == -1) {
 						join.append(joinCondition);
 					}
 				}
 				
-				joinCondition = getJoinCondition(EntityEnum.valueOf(entity.toUpperCase()));
+				joinCondition = getJoinCondition(EntityEnum.valueOf(entity.toUpperCase()), queryType);
 				if(join.indexOf(joinCondition) == -1) {
-					join.append(getJoinCondition(EntityEnum.valueOf(entity.toUpperCase())));
+					join.append(getJoinCondition(EntityEnum.valueOf(entity.toUpperCase()), queryType));
 				}
 			}
 		}
 	}
 	
-	private static String getJoinCondition(EntityEnum entity) throws InvalidQueryRepositoryException {
+	private static String getJoinCondition(EntityEnum entity, EntityEnum queryType) throws InvalidQueryRepositoryException {
 		String joinCondition = "";
 		
 		switch (entity.getEntityName().toUpperCase()) {
+			case Constants.ADDRESS:
+				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.ADDRESS.getEntityReference() + " " + EntityEnum.ADDRESS.getAlias();
+				break;
+			case Constants.DOCUMENT:
+	        	joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
+	            break;
 			case Constants.FLIGHT:
-				joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + Constants.FLIGHT_REF + EntityEnum.FLIGHT.getAlias();
+				joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " " + EntityEnum.FLIGHT.getAlias();
+				break;
+			case Constants.FREQUENTFLYER:
+				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.FREQUENT_FLYER.getEntityReference() + " " + EntityEnum.FREQUENT_FLYER.getAlias();
+				break;
+			case Constants.HITS:
+//				joinCondition = Constants.JOIN + EntityEnum.HITS.getAlias() + Constants.h;
 				break;
 	        case Constants.PASSENGER:
-	        	joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + Constants.PASSENGER_REF + EntityEnum.PASSENGER.getAlias();
+	        	joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PASSENGER.getEntityReference() + " " + EntityEnum.PASSENGER.getAlias();
 	        	break;
-	        case Constants.DOCUMENT:
-	        	joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + Constants.DOCUMENT_REF + EntityEnum.DOCUMENT.getAlias();
-	            break;
+	        case Constants.PHONE:
+	        	joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.PHONE.getEntityReference() + " " + EntityEnum.PHONE.getAlias();
+	        	break;
+	        case Constants.PNR:
+	        	if(queryType == EntityEnum.FLIGHT) {
+	        		joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PNR.getEntityReference() + " " + EntityEnum.PNR.getAlias();
+	        	} else if(queryType == EntityEnum.PASSENGER) {
+	        		joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.PNR.getEntityReference() + " " + EntityEnum.PNR.getAlias();
+	        	}
+	        	break;
 	        default:
 	            throw new InvalidQueryRepositoryException("Invalid Entity: " + entity.getEntityName(), null);
 		}

@@ -4,8 +4,8 @@ import gov.gtas.enumtype.TypeEnum;
 
 public enum FrequentFlyerMapping implements IEntityMapping {
 
-	AIRLINE ("ff_airline", "Airline", TypeEnum.STRING.getType()),
-	FREQUENT_FLYER_NUMBER ("ff_number", "Number", TypeEnum.STRING.getType());
+	AIRLINE ("airlineCode", "Airline", TypeEnum.STRING.getType()),
+	FREQUENT_FLYER_NUMBER ("frequentFlyerNumber", "Number", TypeEnum.STRING.getType());
 	
 	private String fieldName;
 	private String friendlyName;
