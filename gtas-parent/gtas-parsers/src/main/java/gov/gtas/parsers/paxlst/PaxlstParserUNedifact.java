@@ -197,14 +197,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> 
                 f.setDestination(dest);
                 f.setEta(eta);
                 f.setEtd(etd);
-                if (etd != null) {
-                    f.setFlightDate(etd);
-                } else if (eta != null) {
-                    f.setFlightDate(eta);
-                } else {
-                    // TODO: verify this case
-                    f.setFlightDate(parsedMessage.getTransmissionDate());
-                }
+                f.setFlightDate(etd, eta, parsedMessage.getTransmissionDate());
 
                 dest = null;
                 origin = null;

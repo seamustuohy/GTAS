@@ -276,6 +276,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         f.setEta(tvl.getEta());
         f.setEtd(tvl.getEtd());
         f.setFlightNumber(tvl.getFlightNumber());
+        f.setFlightDate(tvl.getEtd(), tvl.getEta(), parsedMessage.getTransmissionDate());
         currentPnr.getFlights().add(f);
         
         TRA tra = getConditionalSegment(TRA.class);

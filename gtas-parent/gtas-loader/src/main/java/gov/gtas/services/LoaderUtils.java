@@ -28,7 +28,7 @@ import gov.gtas.parsers.vo.air.ReportingPartyVo;
 
 @Service
 public class LoaderUtils {
-    private static final String LOADER_USER = "LOADER";
+    private static final String LOADER_USER = "SYSTEM";
     
     @Autowired
     private AirportService airportService;
@@ -142,12 +142,14 @@ public class LoaderUtils {
     
     public Address convertAddressVo(AddressVo vo) throws ParseException {
         Address addr = new Address();
+        addr.setCreatedBy(LOADER_USER);
         BeanUtils.copyProperties(vo, addr);
         return addr;
     }
     
     public Phone convertPhoneVo(PhoneVo vo) {
         Phone p = new Phone();
+        p.setCreatedBy(LOADER_USER);
         BeanUtils.copyProperties(vo, p);
         return p;
     }
