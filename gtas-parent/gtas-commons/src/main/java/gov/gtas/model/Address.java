@@ -9,21 +9,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name = "address")
 public class Address extends BaseEntityAudit {
-
-	@Column(name = "address_type")
-	private String addressType;
-	
-	@Column(name = "line1", length = 64)
+	@Column(name = "line1")
 	private String line1;
 	
-	@Column(name = "line2", length = 64)
+	@Column(name = "line2")
 	private String line2;
 	
-	@Column(name = "line3", length = 64)
+	@Column(name = "line3")
 	private String line3;
 	
 	@Column(name = "city")
@@ -41,14 +36,6 @@ public class Address extends BaseEntityAudit {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="pnr_id",referencedColumnName="id")     
     private PnrData pnrData;
-
-	public String getAddressType() {
-		return addressType;
-	}
-
-	public void setAddressType(String addressType) {
-		this.addressType = addressType;
-	}
 
 	public String getLine1() {
 		return line1;
@@ -116,18 +103,23 @@ public class Address extends BaseEntityAudit {
 	
     @Override
     public int hashCode() {
-        return Objects.hash(this.id,this.pnrData);
+       return Objects.hash(this.line1, this.line2, this.line3, this.city, this.postalCode, this.country);
     }
     
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
-        final Address other = (Address) obj;
-        return Objects.equals(this.id, other.id) ;
-    }    
+        final Address other = (Address)obj;
+        return Objects.equals(this.line1, other.line1)
+                && Objects.equals(this.line2, other.line2)
+                && Objects.equals(this.line3, other.line3)
+                && Objects.equals(this.city, other.city)
+                && Objects.equals(this.postalCode, other.postalCode)
+                && Objects.equals(this.country, other.country);
+    }
 }
