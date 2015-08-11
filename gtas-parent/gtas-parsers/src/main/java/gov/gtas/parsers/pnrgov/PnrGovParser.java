@@ -45,6 +45,7 @@ import gov.gtas.parsers.vo.air.AddressVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.PhoneVo;
 
 public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private static final String[] SEGMENT_NAMES = new String[] { "ABI", "ADD", "APD", "DAT", "EBD", "EQN", "FAR", "FOP",
@@ -145,7 +146,12 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (add == null) {
                 break;
             }
-            currentPnr.getAddresses().add(createAddress(add));
+            AddressVo address = createAddress(add);
+            currentPnr.getAddresses().add(address);
+            if (address.getPhoneNumber() != null) {
+                PhoneVo p = createPhone(address.getPhoneNumber());
+                currentPnr.getPhoneNumbers().add(p);
+            }
         }
 
         for (;;) {
@@ -414,6 +420,13 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         rv.setCountry(add.getCountryCode());
         rv.setPostalCode(add.getPostalCode());
         rv.setPhoneNumber(add.getTelephone());
+        return rv;
+    }
+    
+    private PhoneVo createPhone(String number) {
+        String n = number.replaceAll("[^0-9]", "");
+        PhoneVo rv = new PhoneVo();
+        rv.setNumber(n);
         return rv;
     }
 }

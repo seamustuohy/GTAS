@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import gov.gtas.parsers.vo.air.AddressVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.PhoneVo;
 import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 
 public class PnrVo {
@@ -31,6 +32,7 @@ public class PnrVo {
     private List<PassengerVo> passengers = new ArrayList<>();
     private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
     private List<AddressVo> addresses = new ArrayList<>();
+    private List<PhoneVo> phoneNumbers = new ArrayList<>();
     
     public String getRecordLocator() {
         return recordLocator;
@@ -142,6 +144,14 @@ public class PnrVo {
 
     public void setAddresses(List<AddressVo> addresses) {
         this.addresses = addresses;
+    }
+
+    public List<PhoneVo> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    public void setPhoneNumbers(List<PhoneVo> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
     }
 
     @Override

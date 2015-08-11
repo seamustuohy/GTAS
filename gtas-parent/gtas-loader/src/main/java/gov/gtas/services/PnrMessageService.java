@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import gov.gtas.model.Address;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
@@ -29,6 +28,7 @@ import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.vo.air.AddressVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.PhoneVo;
 import gov.gtas.repository.PnrMessageRepository;
 
 @Service
@@ -87,6 +87,10 @@ public class PnrMessageService implements MessageService {
                 
                 for (AddressVo avo : vo.getAddresses()) {
                     pnr.addAddress(utils.convertAddressVo(avo));
+                }
+                
+                for (PhoneVo pvo : vo.getPhoneNumbers()) {
+                    pnr.addPhone(utils.convertPhoneVo(pvo));
                 }
                                
                 Set<Passenger> pax = new HashSet<>();        

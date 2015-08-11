@@ -10,6 +10,7 @@ import gov.gtas.model.Address;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.Phone;
 import gov.gtas.model.PnrData;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.lookup.Airport;
@@ -22,6 +23,7 @@ import gov.gtas.parsers.vo.air.AddressVo;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.PhoneVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
 
 @Service
@@ -142,6 +144,12 @@ public class LoaderUtils {
         Address addr = new Address();
         BeanUtils.copyProperties(vo, addr);
         return addr;
+    }
+    
+    public Phone convertPhoneVo(PhoneVo vo) {
+        Phone p = new Phone();
+        BeanUtils.copyProperties(vo, p);
+        return p;
     }
     
     private Airport getAirport(String a) throws ParseException {

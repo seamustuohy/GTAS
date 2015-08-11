@@ -103,7 +103,7 @@ public class Address extends BaseEntityAudit {
 	
     @Override
     public int hashCode() {
-       return Objects.hash(this.line1, this.line2, this.line3, this.city, this.postalCode, this.country);
+       return Objects.hash(this.line1, this.line2, this.line3, this.city, this.state, this.country, this.postalCode);
     }
     
     @Override
@@ -119,7 +119,8 @@ public class Address extends BaseEntityAudit {
                 && Objects.equals(this.line2, other.line2)
                 && Objects.equals(this.line3, other.line3)
                 && Objects.equals(this.city, other.city)
-                && Objects.equals(this.postalCode, other.postalCode)
-                && Objects.equals(this.country, other.country);
+                && Objects.equals(this.state, other.state)
+                && Objects.equals(this.country, other.country)
+                && Objects.equals(this.postalCode, other.postalCode);
     }
 }

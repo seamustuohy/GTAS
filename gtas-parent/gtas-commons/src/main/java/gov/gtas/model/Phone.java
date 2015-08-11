@@ -3,7 +3,6 @@ package gov.gtas.model;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,31 +11,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "phone")
 public class Phone extends BaseEntityAudit {
-
-	@Column(name = "phone_type")
-	private String phoneType;
-	
-	@Column(name = "phone_number")
-	private String phoneNumber;
+	private String number;
 	
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="pnr_id",referencedColumnName="id")    
 	private PnrData pnrData;
 
-	public String getPhoneType() {
-		return phoneType;
+	public String getNumber() {
+		return number;
 	}
 
-	public void setPhoneType(String phoneType) {
-		this.phoneType = phoneType;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setNumber(String number) {
+		this.number = number;
 	}
 
 	public PnrData getPnrData() {
@@ -49,7 +35,7 @@ public class Phone extends BaseEntityAudit {
 	
     @Override
     public int hashCode() {
-        return Objects.hash(this.phoneNumber,this.phoneType);
+        return Objects.hash(this.number);
     }
     
     @Override
@@ -61,6 +47,6 @@ public class Phone extends BaseEntityAudit {
         if (getClass() != obj.getClass())
             return false;
         final Phone other = (Phone) obj;
-        return Objects.equals(this.phoneNumber, other.phoneNumber);
+        return Objects.equals(this.number, other.number);
     }       
 }

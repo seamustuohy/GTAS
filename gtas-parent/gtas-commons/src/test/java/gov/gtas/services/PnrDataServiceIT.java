@@ -1,19 +1,6 @@
 package gov.gtas.services;
 
 import static org.junit.Assert.assertNotNull;
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.Address;
-import gov.gtas.model.Agency;
-import gov.gtas.model.CreditCard;
-import gov.gtas.model.Flight;
-import gov.gtas.model.FrequentFlyer;
-//import gov.gtas.model.Pax;
-import gov.gtas.model.Phone;
-import gov.gtas.model.PnrData;
-import gov.gtas.model.Passenger;
-import gov.gtas.model.lookup.PassengerTypeCode;
-import gov.gtas.repository.ApisMessageRepository;
-import gov.gtas.repository.LookUpRepository;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -29,12 +16,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.Address;
+import gov.gtas.model.Agency;
+import gov.gtas.model.CreditCard;
+import gov.gtas.model.Flight;
+import gov.gtas.model.FrequentFlyer;
+import gov.gtas.model.Passenger;
+//import gov.gtas.model.Pax;
+import gov.gtas.model.Phone;
+import gov.gtas.model.PnrData;
+import gov.gtas.model.lookup.PassengerTypeCode;
+import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.LookUpRepository;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PnrDataServiceIT {
-
-	
 	@Autowired
 	private PnrDataService pnrService;
 
@@ -124,8 +123,7 @@ public class PnrDataServiceIT {
 		adds.add(add);
 		pnr.setAddresses(adds);
 		Phone p = new Phone();
-		p.setPhoneNumber("24243534455");
-		p.setPhoneType("H");
+		p.setNumber("24243534455");
 		p.setPnrData(pnr);
 		p.setCreationDate();
 		p.setCreatedBy("JUNIT");
