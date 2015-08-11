@@ -74,8 +74,8 @@ public class TargetingServiceIT {
 	@Resource
 	private ApisMessageRepository apisMessageRepository;
 
-	@Resource
-	private PassengerRepository passengerRepository;
+//	@Resource
+//	private PassengerRepository passengerRepository;
 
 	@Before
 	public void setUp() throws Exception {

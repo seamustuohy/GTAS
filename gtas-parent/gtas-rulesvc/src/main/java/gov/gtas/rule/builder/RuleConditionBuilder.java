@@ -100,7 +100,8 @@ public class RuleConditionBuilder {
 
 	}
 
-	private static final String ACTION_PASSENGER_HIT = "resultList.add(RuleHitDetail.createRuleHitDetail(%dL, %d, \"%s\", %s, \"%s\"));\n";
+	//private static final String ACTION_PASSENGER_HIT = "resultList.add(RuleHitDetail.createRuleHitDetail(%dL, %d, \"%s\", %s, \"%s\"));\n";
+	private static final String ACTION_PASSENGER_HIT = "resultList.add(new RuleHitDetail(%dL, %dL, \"%s\", %s, null, \"%s\"));\n";
 
 	public void addRuleAction(StringBuilder ruleStringBuilder, UdrRule parent,
 			Rule rule, String passengerVariableName) {

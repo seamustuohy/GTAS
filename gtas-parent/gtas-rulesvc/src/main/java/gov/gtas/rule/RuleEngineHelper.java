@@ -21,7 +21,8 @@ public class RuleEngineHelper {
 	 */
 	public static void addEventListenersToKieSEssion(final KieSession ksession,
 			final List<EventListener> eventListenerList) {
-		// The application can also setup listeners
+		
+		// iterate thru the list and add the listeners
 		if (eventListenerList != null) {
 			for (EventListener el : eventListenerList) {
 				if (el instanceof AgendaEventListener) {
@@ -33,6 +34,24 @@ public class RuleEngineHelper {
 		}
 	}
 
+	/**
+	 * Adds default events listeners to the Kie Session.
+	 * 
+	 * @param ksession
+	 *            the session to add listeners to.
+	 * @param stats
+	 *            the object to collect statistics.
+	 */
+	public static void addEventListenersToKieSEssion(final KieSession ksession,
+			final RuleExecutionStatistics stats) {
+		
+		if (ksession != null && stats != null) {
+			ksession.addEventListener(new GtasAgendaEventListener(stats));
+			ksession.addEventListener(new GtasRuleRuntimeEventListener(stats));
+		}
+	}
+
+	
 	/**
 	 * Creates a list of KieSession event listeners.
 	 * 
