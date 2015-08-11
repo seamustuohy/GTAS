@@ -1,10 +1,13 @@
 package gov.gtas.model;
 
+import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "credit_card")
@@ -12,14 +15,14 @@ public class CreditCard extends BaseEntityAudit {
 	@Column(name = "card_type")
     private String cardType;
 	
-	@Column(name = "card_number")
-    private String cardNumber;
+    private String number;
 	
-	@Column(name = "card_expiration")
-    private String cardExpiration;
+    @Temporal(TemporalType.DATE)
+    private Date expiration;
 	
-	@Column(name = "card_holder_Name")
-    private String cardHolderName;
+	@Column(name = "account_holder")
+    private String accountHolder;
+	
 	/*
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="pnr_id",referencedColumnName="id")     
@@ -34,41 +37,33 @@ public class CreditCard extends BaseEntityAudit {
 		this.cardType = cardType;
 	}
 
-	public String getCardNumber() {
-		return cardNumber;
-	}
+    public String getNumber() {
+        return number;
+    }
 
-	public void setCardNumber(String cardNumber) {
-		this.cardNumber = cardNumber;
-	}
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
-	public String getCardExpiration() {
-		return cardExpiration;
-	}
+    public Date getExpiration() {
+        return expiration;
+    }
 
-	public void setCardExpiration(String cardExpiration) {
-		this.cardExpiration = cardExpiration;
-	}
+    public void setExpiration(Date expiration) {
+        this.expiration = expiration;
+    }
 
-	public String getCardHolderName() {
-		return cardHolderName;
-	}
+    public String getAccountHolder() {
+        return accountHolder;
+    }
 
-	public void setCardHolderName(String cardHolderName) {
-		this.cardHolderName = cardHolderName;
-	}
+    public void setAccountHolder(String accountHolder) {
+        this.accountHolder = accountHolder;
+    }
 
-/*	public PnrData getPnrData() {
-		return pnrData;
-	}
-
-	public void setPnrData(PnrData pnrData) {
-		this.pnrData = pnrData;
-	}*/
-	
     @Override
     public int hashCode() {
-        return Objects.hash(this.cardNumber,this.cardHolderName);
+        return Objects.hash(this.number, this.accountHolder);
     }
     
     @Override
@@ -80,6 +75,7 @@ public class CreditCard extends BaseEntityAudit {
         if (getClass() != obj.getClass())
             return false;
         final CreditCard other = (CreditCard) obj;
-        return Objects.equals(this.cardNumber, other.cardNumber);
+        return Objects.equals(this.number, other.number) 
+                && Objects.equals(this.accountHolder, other.accountHolder);
     }    		
 }

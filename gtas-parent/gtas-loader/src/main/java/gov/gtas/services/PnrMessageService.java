@@ -26,6 +26,7 @@ import gov.gtas.parsers.pnrgov.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.vo.air.AddressVo;
+import gov.gtas.parsers.vo.air.CreditCardVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.parsers.vo.air.PhoneVo;
@@ -85,14 +86,18 @@ public class PnrMessageService implements MessageService {
                 pnr = utils.convertPnrVo(vo);
                 this.pnrMessage.addPnr(pnr);
                 
-                for (AddressVo avo : vo.getAddresses()) {
-                    pnr.addAddress(utils.convertAddressVo(avo));
+                for (AddressVo addressVo : vo.getAddresses()) {
+                    pnr.addAddress(utils.convertAddressVo(addressVo));
                 }
                 
-                for (PhoneVo pvo : vo.getPhoneNumbers()) {
-                    pnr.addPhone(utils.convertPhoneVo(pvo));
+                for (PhoneVo phoneVo : vo.getPhoneNumbers()) {
+                    pnr.addPhone(utils.convertPhoneVo(phoneVo));
                 }
-                               
+
+                for (CreditCardVo creditVo : vo.getCreditCards()) {
+                    pnr.setCreditCard(utils.convertCreditVo(creditVo));
+                }
+                
                 Set<Passenger> pax = new HashSet<>();        
                 for (PassengerVo pvo : vo.getPassengers()) {
                     pax.add(utils.convertPassengerVo(pvo));

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Address;
+import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
@@ -18,6 +19,7 @@ import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.vo.air.AddressVo;
+import gov.gtas.parsers.vo.air.CreditCardVo;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
@@ -152,6 +154,14 @@ public class LoaderUtils {
         return p;
     }
     
+
+    public CreditCard convertCreditVo(CreditCardVo vo) {
+        CreditCard cc = new CreditCard();
+        cc.setCreatedBy(LOADER_USER);
+        BeanUtils.copyProperties(vo, cc);
+        return cc;
+    }
+
     private Airport getAirport(String a) throws ParseException {
         if (a == null) return null;
         

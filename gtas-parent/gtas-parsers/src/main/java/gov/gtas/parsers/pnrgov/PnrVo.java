@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.parsers.vo.air.AddressVo;
+import gov.gtas.parsers.vo.air.CreditCardVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.parsers.vo.air.PhoneVo;
@@ -33,6 +34,7 @@ public class PnrVo {
     private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
     private List<AddressVo> addresses = new ArrayList<>();
     private List<PhoneVo> phoneNumbers = new ArrayList<>();
+    private List<CreditCardVo> creditCards = new ArrayList<>();
     
     public String getRecordLocator() {
         return recordLocator;
@@ -152,6 +154,14 @@ public class PnrVo {
 
     public void setPhoneNumbers(List<PhoneVo> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
+    }
+
+    public List<CreditCardVo> getCreditCards() {
+        return creditCards;
+    }
+
+    public void setCreditCards(List<CreditCardVo> creditCards) {
+        this.creditCards = creditCards;
     }
 
     @Override

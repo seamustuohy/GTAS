@@ -104,9 +104,9 @@ public class PnrDataServiceIT {
 		pnr.setPassengerCount(1);
 		pnr.setTotalDwellTime(120);
 		CreditCard cc = new CreditCard();
-		cc.setCardExpiration("0417");
-		cc.setCardHolderName("Srinivasarao Vempati");
-		cc.setCardNumber("2222-3333-4444-5555");
+		cc.setExpiration(new Date("0417"));
+		cc.setAccountHolder("Srinivasarao Vempati");
+		cc.setNumber("2222-3333-4444-5555");
 		cc.setCardType("VISA");
 		//cc.setPnrData(pnr);
 		pnr.setCreditCard(cc);

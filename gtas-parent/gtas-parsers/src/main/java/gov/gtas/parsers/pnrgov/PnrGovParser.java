@@ -6,7 +6,6 @@ import java.util.Set;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
-import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.segment.ABI;
 import gov.gtas.parsers.pnrgov.segment.ADD;
@@ -43,10 +42,11 @@ import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.vo.air.AddressVo;
+import gov.gtas.parsers.vo.air.CreditCardVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.parsers.vo.air.PhoneVo;
+import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 
 public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private static final String[] SEGMENT_NAMES = new String[] { "ABI", "ADD", "APD", "DAT", "EBD", "EQN", "FAR", "FOP",
@@ -262,7 +262,20 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         processGroup4(fop);
     }
 
+    /**
+     * Form of payment info
+     */
     private void processGroup4(FOP fop) throws ParseException {
+        if (fop.isCreditCard()) {
+            CreditCardVo cc = new CreditCardVo();
+            cc.setCardType(fop.getVendorCode());
+            cc.setExpiration(fop.getExpirationDate());
+            // TODO: how to figure this out?
+//            cc.setAccountHolder();
+            cc.setNumber(fop.getAccountNumber());
+            currentPnr.getCreditCards().add(cc);
+        }
+
         IFT ift = getConditionalSegment(IFT.class);
         ADD add = getConditionalSegment(ADD.class);
         if (add != null) {
