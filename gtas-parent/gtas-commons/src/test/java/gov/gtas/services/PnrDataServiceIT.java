@@ -112,7 +112,6 @@ public class PnrDataServiceIT {
 		//cc.setPnrData(pnr);
 		pnr.setCreditCard(cc);
 		Address add = new Address();
-		add.setAddressType("H");
 		add.setCity("ALDIE");
 		add.setCountry("USA");
 		add.setLine1("41000 Zirocn dr");

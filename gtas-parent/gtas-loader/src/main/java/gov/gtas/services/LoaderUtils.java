@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import gov.gtas.model.Address;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
@@ -17,6 +18,7 @@ import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrVo;
+import gov.gtas.parsers.vo.air.AddressVo;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
@@ -134,6 +136,12 @@ public class LoaderUtils {
         }
 
         return pnr;
+    }
+    
+    public Address convertAddressVo(AddressVo vo) throws ParseException {
+        Address addr = new Address();
+        BeanUtils.copyProperties(vo, addr);
+        return addr;
     }
     
     private Airport getAirport(String a) throws ParseException {

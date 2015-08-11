@@ -83,14 +83,12 @@ public class PnrMessageService implements MessageService {
             PnrData pnr = null;
             try {
                 pnr = utils.convertPnrVo(vo);
-                this.pnrMessage.getPnrs().add(pnr);
+                this.pnrMessage.addPnr(pnr);
                 
-                Set<Address> addresses = new HashSet<>();
                 for (AddressVo avo : vo.getAddresses()) {
-                    
+                    pnr.addAddress(utils.convertAddressVo(avo));
                 }
-                
-                
+                               
                 Set<Passenger> pax = new HashSet<>();        
                 for (PassengerVo pvo : vo.getPassengers()) {
                     pax.add(utils.convertPassengerVo(pvo));

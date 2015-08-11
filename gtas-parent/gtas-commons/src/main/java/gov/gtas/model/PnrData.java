@@ -101,10 +101,26 @@ public class PnrData extends BaseEntityAudit{
     private FrequentFlyer frequentFlyer;	
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
-    private Set<Address> addresses = new HashSet<>();
+    private Set<Address> addresses;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
     private Set<Phone> phones = new HashSet<>();   
+    
+    public void addAddress(Address address) {
+        if (this.addresses == null) {
+            this.addresses = new HashSet<>();
+        }
+        this.addresses.add(address);
+        address.setPnrData(this);
+    }
+    
+    public void addPhone(Phone phone) {
+        if (this.phones == null) {
+            this.phones = new HashSet<>();
+        }
+        this.phones.add(phone);
+        phone.setPnrData(this);
+    }
     
 	public Agency getAgency() {
 		return agency;
