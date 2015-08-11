@@ -115,7 +115,9 @@ public class TargetingServiceImpl implements TargetingService {
 		return res;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gov.gtas.svc.TargetingService#analyzeLoadedApisMessage()
 	 */
 	@Override
@@ -123,8 +125,9 @@ public class TargetingServiceImpl implements TargetingService {
 	public List<RuleHitDetail> analyzeLoadedApisMessage() {
 		List<RuleHitDetail> ret = null;
 		List<ApisMessage> msgs = this.retrieveApisMessage(MessageStatus.LOADED);
-		if(msgs != null){
-			RuleServiceRequest req =  TargetingServiceUtils.createApisRequest(msgs);
+		if (msgs != null) {
+			RuleServiceRequest req = TargetingServiceUtils
+					.createApisRequest(msgs);
 			RuleServiceResult res = ruleService.invokeRuleEngine(req);
 			ret = res.getResultList();
 		}
@@ -172,7 +175,7 @@ public class TargetingServiceImpl implements TargetingService {
 					HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
 					hitsSummaryList.add(hitsSummary);
 				}
-				//updateApisMessage(apisMessage, MessageStatus.ANALYZED);
+				// updateApisMessage(apisMessage, MessageStatus.ANALYZED);
 			}
 			hitsSummaryRepository.save(hitsSummaryList);
 		}
@@ -193,6 +196,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 		HitsSummary hitsSummary = new HitsSummary();
 		hitsSummary.setPassengerId(ruleHitDetail.getPassengerId());
+		hitsSummary.setDescription(ruleHitDetail.getDescription());
+		hitsSummary.setTitle(ruleHitDetail.getTitle());
+		hitsSummary.setFlightId(ruleHitDetail.getFlightId());
 		hitsSummary.setCreateDate(new Date());
 
 		HitDetail hitDetail = new HitDetail();

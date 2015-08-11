@@ -155,7 +155,7 @@ public class RuleHitDetail implements Serializable {
 	/**
 	 * @return the flightId
 	 */
-	public long getFlightId() {
+	public Long getFlightId() {
 		return flightId;
 	}
 
