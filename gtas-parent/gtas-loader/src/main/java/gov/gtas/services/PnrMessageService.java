@@ -53,11 +53,11 @@ public class PnrMessageService implements MessageService {
         try {
             byte[] raw = FileUtils.readSmallFile(filePath);
             String message = new String(raw, StandardCharsets.US_ASCII);
-            // TODO: get hash of entire message?
             
             EdifactParser<PnrMessageVo> parser = new PnrGovParser();
             vo = parser.parse(message);
             this.pnrMessage.setStatus(MessageStatus.PARSED);
+            this.pnrMessage.setHashCode(vo.getHashCode());            
             EdifactMessage em = new EdifactMessage();
             em.setTransmissionDate(vo.getTransmissionDate());
             em.setTransmissionSource(vo.getTransmissionSource());

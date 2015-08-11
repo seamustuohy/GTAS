@@ -43,6 +43,25 @@ public class EdifactLexer {
         return ParseUtils.indexOfRegex(regex, txt);
     }
     
+    /**
+     * Return everything from the start of the 'startSegment' to the
+     * start of the 'endSegment' trailing header segment.
+     */
+    public static String getMessagePayload(String message, String startSegment, String endSegment) {
+        UNA una = EdifactLexer.getUnaSegment(message);
+        int bgmIndex = EdifactLexer.getStartOfSegment(startSegment, message, una);
+        if (bgmIndex == -1) {
+            return null;
+        }
+
+        int untIndex = EdifactLexer.getStartOfSegment(endSegment, message, una);
+        if (untIndex == -1) {
+            return null;
+        }
+        
+        return message.substring(bgmIndex, untIndex);
+    }
+    
     public LinkedList<Segment> tokenize(String txt) throws ParseException {
         if (StringUtils.isEmpty(txt)) return null;
         txt = preprocessMessage(txt);

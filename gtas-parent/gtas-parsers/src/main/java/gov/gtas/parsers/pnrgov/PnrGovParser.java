@@ -6,6 +6,7 @@ import java.util.Set;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
+import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.segment.ABI;
 import gov.gtas.parsers.pnrgov.segment.ADD;
@@ -68,6 +69,10 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
     }
 
+    protected String getPayloadText(String message) throws ParseException {
+        return EdifactLexer.getMessagePayload(message, "MSG", "UNT");
+    }
+    
     @Override
     public void parsePayload() throws ParseException {
         MSG msg = getMandatorySegment(MSG.class);

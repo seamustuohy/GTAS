@@ -15,8 +15,6 @@ import gov.gtas.model.PnrData;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.FlightDirectionCode;
-import gov.gtas.parsers.edifact.EdifactLexer;
-import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.vo.air.AddressVo;
@@ -166,25 +164,4 @@ public class LoaderUtils {
 
         return rv;
     }
-    
-    /**
-     * Return everything from the start of the first BGM segment to the
-     * start of the UNT trailing header segment.
-     */
-    public String getApisMessagePayload(String text) {
-        if (text == null) return null;
-        
-        UNA una = EdifactLexer.getUnaSegment(text);
-        int bgmIndex = EdifactLexer.getStartOfSegment("BGM", text, una);
-        if (bgmIndex == -1) {
-            return null;
-        }
-
-        int untIndex = EdifactLexer.getStartOfSegment("UNT", text, una);
-        if (untIndex == -1) {
-            return null;
-        }
-        
-        return text.substring(bgmIndex, untIndex);
-    }   
 }

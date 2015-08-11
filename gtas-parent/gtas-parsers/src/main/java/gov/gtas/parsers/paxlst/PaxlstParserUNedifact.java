@@ -7,6 +7,7 @@ import java.util.Set;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
+import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.BGM;
@@ -41,6 +42,10 @@ public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> 
 
     public PaxlstParserUNedifact() {
         this.parsedMessage = new PaxlstMessageVo();
+    }
+    
+    protected String getPayloadText(String message) throws ParseException {
+        return EdifactLexer.getMessagePayload(message, "BGM", "UNT");
     }
 
     @Override
