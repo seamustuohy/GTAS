@@ -20,7 +20,7 @@ public class PnrVo {
     
     private Date dateBooked;
     private Date dateReceived;
-    private Date dateOfDeparture;
+    private Date departureDate;
 
     private Integer numPassengers;
     private Integer numBags;
@@ -80,12 +80,12 @@ public class PnrVo {
         this.dateReceived = dateReceived;
     }
 
-    public Date getDateOfDeparture() {
-        return dateOfDeparture;
+    public Date getDepartureDate() {
+        return departureDate;
     }
 
-    public void setDateOfDeparture(Date dateOfDeparture) {
-        this.dateOfDeparture = dateOfDeparture;
+    public void setDepartureDate(Date departureDate) {
+        this.departureDate = departureDate;
     }
 
     public Integer getNumPassengers() {

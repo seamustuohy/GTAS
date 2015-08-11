@@ -46,12 +46,12 @@ public class Flight extends BaseEntityAudit {
 
     private String origin;
     
-    @Column(name = "origin_country")
+    @Column(name = "origin_country", length = 3)
     private String originCountry;
     
     private String destination;
     
-    @Column(name = "destination_country")
+    @Column(name = "destination_country", length = 3)
     private String destinationCountry;
 
     /** calculated field */

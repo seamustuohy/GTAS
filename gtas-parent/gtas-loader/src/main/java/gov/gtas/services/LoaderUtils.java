@@ -1,25 +1,31 @@
 package gov.gtas.services;
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.PnrData;
+import gov.gtas.model.ReportingParty;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.ReportingPartyVo;
 
 @Service
 public class LoaderUtils {
+    private static final String LOADER_USER = "LOADER";
+    
     @Autowired
     private AirportService airportService;
 
@@ -66,6 +72,7 @@ public class LoaderUtils {
         String homeCountry = "USA";
 
         Flight f = new Flight();
+        f.setCreatedBy(LOADER_USER);
         BeanUtils.copyProperties(vo, f);
         f.setCarrier(vo.getCarrier());
         
@@ -105,6 +112,30 @@ public class LoaderUtils {
         return f;
     }
 
+    public PnrData convertPnrVo(PnrVo vo) throws ParseException {
+        PnrData pnr = new PnrData();
+        pnr.setCreatedBy(LOADER_USER);
+        BeanUtils.copyProperties(vo, pnr);
+        
+        Airport origin = getAirport(vo.getOrigin());
+        String originCountry = null;
+        if (origin != null) {
+            originCountry = origin.getCountry();
+            pnr.setOriginCountry(originCountry);
+        }
+        
+        pnr.setPassengerCount(vo.getPassengers().size());
+        if (vo.getDateBooked() != null && vo.getDepartureDate() != null) {
+//            LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            // TODO: won't work for leap years
+            long diff = vo.getDepartureDate().getTime() - vo.getDateBooked().getTime(); 
+            int days = (int)TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            pnr.setDaysBookedBeforeTravel(days);
+        }
+
+        return pnr;
+    }
+    
     private Airport getAirport(String a) throws ParseException {
         if (a == null) return null;
         

@@ -52,9 +52,9 @@ public class PnrDataServiceImpl implements PnrDataService {
 		return (List<PnrData>) pnrRespository.findAll();
 	}
 	
-	private void mapPnrData(PnrData source,PnrData target){
+	private void mapPnrData(PnrData source, PnrData target){
 		target.setBagCount(source.getBagCount());
-		target.setBooked(source.getBooked());
+		target.setDateBooked(source.getDateBooked());
 		target.setCarrier(source.getCarrier());
 		target.setChangeDate();
 		target.setDaysBookedBeforeTravel(source.getDaysBookedBeforeTravel());
@@ -66,7 +66,7 @@ public class PnrDataServiceImpl implements PnrDataService {
 		//target.setPassenger(source.getPassenger());
 		
 		target.setPassengerCount(source.getPassengerCount());
-		target.setReceived(source.getReceived());
+		target.setDateReceived(source.getDateReceived());
 		target.setTotalDwellTime(source.getTotalDwellTime());
 		target.setUpdatedAt(new Date());
 		target.setUpdatedBy(source.getUpdatedBy());

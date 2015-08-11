@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "pnr")
@@ -31,16 +33,19 @@ public class PnrData extends BaseEntityAudit{
 
     private String origin;
     
-    @Column(name = "origin_country")
+    @Column(name = "origin_country", length = 3)
     private String originCountry;
     
-    @Column(name = "booked", length = 20)
-    private String booked;
+    @Column(name = "date_booked")
+    @Temporal(TemporalType.DATE)
+    private Date dateBooked;
     
-    @Column(name = "received", length = 20)
-    private String received;
+    @Column(name = "date_received")
+    @Temporal(TemporalType.DATE)
+    private Date dateReceived;
     
     @Column(name = "departure_date")
+    @Temporal(TemporalType.DATE)
     private Date departureDate;
     
     @Column(name = "days_booked_before_travel")
@@ -51,9 +56,6 @@ public class PnrData extends BaseEntityAudit{
     
     @Column(name = "bag_count")
     private Integer bagCount;
-    
-    @Column(name = "raw")
-    private String raw;
     
     @Column(name = "payment_form")
     private String formOfPayment;
@@ -99,7 +101,7 @@ public class PnrData extends BaseEntityAudit{
     private FrequentFlyer frequentFlyer;	
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
-    private Set<Address> adresses = new HashSet<>();
+    private Set<Address> addresses = new HashSet<>();
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
     private Set<Phone> phones = new HashSet<>();   
@@ -127,14 +129,13 @@ public class PnrData extends BaseEntityAudit{
 	public void setPassengers(Set<Passenger> passengers) {
 		this.passengers = passengers;
 	}
-
-  
-	public Set<Address> getAdresses() {
-		return adresses;
+ 
+	public Set<Address> getAddresses() {
+		return addresses;
 	}
 
-	public void setAdresses(Set<Address> adresses) {
-		this.adresses = adresses;
+	public void setAddresses(Set<Address> addresses) {
+		this.addresses = addresses;
 	}
 
 	public Set<Phone> getPhones() {
@@ -193,23 +194,23 @@ public class PnrData extends BaseEntityAudit{
         this.originCountry = originCountry;
     }
 
-    public String getBooked() {
-		return booked;
-	}
+	public Date getDateBooked() {
+        return dateBooked;
+    }
 
-	public void setBooked(String booked) {
-		this.booked = booked;
-	}
+    public void setDateBooked(Date dateBooked) {
+        this.dateBooked = dateBooked;
+    }
 
-	public String getReceived() {
-		return received;
-	}
+    public Date getDateReceived() {
+        return dateReceived;
+    }
 
-	public void setReceived(String received) {
-		this.received = received;
-	}
+    public void setDateReceived(Date dateReceived) {
+        this.dateReceived = dateReceived;
+    }
 
-	public Date getDepartureDate() {
+    public Date getDepartureDate() {
 		return departureDate;
 	}
 
@@ -239,14 +240,6 @@ public class PnrData extends BaseEntityAudit{
 
 	public void setBagCount(Integer bagCount) {
 		this.bagCount = bagCount;
-	}
-
-	public String getRaw() {
-		return raw;
-	}
-
-	public void setRaw(String raw) {
-		this.raw = raw;
 	}
 
 	public String getFormOfPayment() {

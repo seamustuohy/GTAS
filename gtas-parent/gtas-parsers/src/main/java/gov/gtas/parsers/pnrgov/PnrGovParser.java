@@ -71,6 +71,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     public void parsePayload() throws ParseException {
         MSG msg = getMandatorySegment(MSG.class);
 
+        // the travel agent or airline that originated this reservation
         ORG org = getMandatorySegment(ORG.class);
 
         TVL_L0 tvl = getMandatorySegment(TVL_L0.class);
@@ -78,21 +79,22 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         EQN eqn = getMandatorySegment(EQN.class);
         int expectedNumberOfPnrs = eqn.getValue();
 
-        int pnrIndex = 0;
+        int numPnrs = 0;
         for (;;) {
             SRC src = getConditionalSegment(SRC.class);
             if (src == null) {
                 break;
             }
+            
             PnrVo pnr = new PnrVo();
-            parsedMessage.getPnrRecords().add(pnr);
+            parsedMessage.addPnr(pnr);
             this.currentPnr = pnr;
-            pnrIndex++;
+            numPnrs++;
             processGroup1(tvl);
         }
         
-        if (expectedNumberOfPnrs != pnrIndex) {
-            throw new ParseException(String.format("Parsed %d PNR records but expected %d", pnrIndex, expectedNumberOfPnrs));
+        if (expectedNumberOfPnrs != numPnrs) {
+            throw new ParseException(String.format("Parsed %d PNR records but expected %d", numPnrs, expectedNumberOfPnrs));
         }
         
         for (PnrVo vo : this.parsedMessage.getPnrRecords()) {
@@ -106,7 +108,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private void processGroup1(TVL_L0 tvl_l0) throws ParseException {
         currentPnr.setCarrier(tvl_l0.getCarrier());
         currentPnr.setOrigin(tvl_l0.getOrigin());
-        currentPnr.setDateOfDeparture(tvl_l0.getEtd());
+        currentPnr.setDepartureDate(tvl_l0.getEtd());
         
         RCI rci = getMandatorySegment(RCI.class);
         ReservationControlInfo controlInfo = rci.getReservations().get(0);
@@ -344,6 +346,9 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }        
     }
     
+    /**
+     * boarding, seat number and checked bag info
+     */
     private void processGroup7(TRI tri) throws ParseException {
         TIF tif = getConditionalSegment(TIF.class);
         SSD ssd = getConditionalSegment(SSD.class);
@@ -355,7 +360,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     }
 
     /**
-     * hotel
+     * non-air segments: car, hotel, rail
      */
     private void processGroup9(MSG msg) throws ParseException {
         for (;;) {

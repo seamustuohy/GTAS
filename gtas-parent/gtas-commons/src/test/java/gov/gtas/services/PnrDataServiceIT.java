@@ -88,8 +88,8 @@ public class PnrDataServiceIT {
 
 	private void preparePnrData(PnrData pnr){
 		pnr.setBagCount(2);
-		pnr.setBooked("7/7/2015");
-		pnr.setReceived("7/7/2015");
+		pnr.setDateBooked(new Date("7/7/2015"));
+		pnr.setDateReceived(new Date("7/7/2015"));
 		String cr = "AA";
 		pnr.setCarrier(cr);
 		pnr.setCreatedAt(new Date());
@@ -123,7 +123,7 @@ public class PnrDataServiceIT {
 		add.setPnrData(pnr);
 		Set adds = new HashSet<Address>();
 		adds.add(add);
-		pnr.setAdresses(adds);
+		pnr.setAddresses(adds);
 		Phone p = new Phone();
 		p.setPhoneNumber("24243534455");
 		p.setPhoneType("H");
