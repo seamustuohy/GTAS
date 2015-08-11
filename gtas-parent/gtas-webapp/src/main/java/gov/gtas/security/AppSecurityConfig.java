@@ -110,6 +110,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 		
       http
         .authorizeRequests()
+        //.antMatchers("/**/*").permitAll()
         .antMatchers(Constants.LOGIN_PAGE).permitAll()
         .antMatchers(Constants.HOME_PAGE).hasAnyAuthority(Constants.MANAGE_RULES_ROLE,Constants.MANAGE_QUERIES_ROLE,Constants.VIEW_FLIGHT_PASSENGERS_ROLE,Constants.MANAGE_WATCHLIST_ROLE,Constants.ADMIN_ROLE)
 		.antMatchers("/travelers").hasAnyAuthority(Constants.MANAGE_RULES_ROLE,Constants.MANAGE_QUERIES_ROLE,Constants.VIEW_FLIGHT_PASSENGERS_ROLE,Constants.MANAGE_WATCHLIST_ROLE,Constants.ADMIN_ROLE)

@@ -5,7 +5,9 @@ import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
+import gov.gtas.model.BaseEntity;
 import gov.gtas.model.udr.KnowledgeBase;
+import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.rule.RuleUtils;
@@ -16,8 +18,11 @@ import gov.gtas.services.udr.RulePersistenceService;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
 
 import org.kie.api.KieBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,20 +130,34 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 	 * .lang.String, java.util.Collection)
 	 */
 	@Override
+	@Transactional(value=TxType.MANDATORY)
 	public KnowledgeBase createKnowledgeBaseFromUdrRules(String kbName,
-			Collection<UdrRule> rules) {
+			Collection<UdrRule> rules, String userId) {
 		if (!CollectionUtils.isEmpty(rules)) {
 			DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
 			for (UdrRule rule : rules) {
 				ruleFileBuilder.addRule(rule);
 			}
 			String drlRules = ruleFileBuilder.build();
-			return createKnowledgeBaseFromDRLString(kbName, drlRules);
+			KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName, drlRules);
+			linkRulesToKnowledgeBase(kb, rules);
+			return kb;
 		} else {
 			return null;
 		}
 	}
 
+	private void linkRulesToKnowledgeBase(KnowledgeBase kb, Collection<UdrRule> rules){
+		if(kb != null && kb.getId() != null){
+			for (UdrRule rule : rules) {
+				for(Rule  engineRule:rule.getEngineRules()){
+					engineRule.setKnowledgeBase(kb);
+				}
+				rulePersistenceService.batchUpdate(rule.getEngineRules());
+			}
+			
+		}
+	}
 	/*
 	 * (non-Javadoc)
 	 * 

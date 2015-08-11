@@ -282,13 +282,14 @@ public class RulePersistenceServiceIT {
 		long preVersion = readKb.getVersion();
 		//update
         readKb.setKbBlob(UPDATED_KB_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
-        testTarget.saveKnowledgeBase(kb);
+        testTarget.saveKnowledgeBase(readKb);
         
         readKb = testTarget.findUdrKnowledgeBase();
 		assertNotNull(readKb);
 		long id = readKb.getId();
 		assertTrue(id > 0);
 		String kbString = new String(readKb.getKbBlob(), UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
+		System.out.println(kbString);
 		assertEquals(UPDATED_KB_TEXT, kbString);
 		String rlString = new String(readKb.getRulesBlob(), UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
         assertEquals(RULE_TEXT, rlString);
