@@ -1,14 +1,5 @@
 package gov.gtas.testdatagen;
 
-import java.text.ParseException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Component;
-
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
@@ -17,26 +8,19 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.DocumentTypeCode;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.model.lookup.PassengerTypeCode;
-import gov.gtas.repository.AirportRepository;
-import gov.gtas.repository.ApisMessageRepository;
-import gov.gtas.repository.CarrierRepository;
-import gov.gtas.repository.CountryRepository;
 import gov.gtas.util.DateCalendarUtils;
+
+import java.text.ParseException;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class ApisDataGenerator {
 	public static final String DOCUMENT_NUMBER="12345";
-	
-	@Resource
-	private ApisMessageRepository apisRepository;
-	
-	@Resource
-	CarrierRepository carrierRepository;
-	@Resource
-	AirportRepository airportRepository;
-	@Resource
-	CountryRepository countryRepository;
-	
+		
 	/**
 	 * Creates a ApisMessage with 3 flight with 3 passengers
 	 * @return
@@ -47,7 +31,6 @@ public class ApisDataGenerator {
     	msg.setFlights(createFlights());
     	msg.setCreateDate(new Date());
     	msg.setStatus(MessageStatus.LOADED);
-    	//apisRepository.save(msg);
     	fixReferences(msg);
     	return msg;
     }

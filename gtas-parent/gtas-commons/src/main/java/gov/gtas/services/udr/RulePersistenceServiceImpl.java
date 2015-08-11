@@ -28,6 +28,7 @@ import javax.transaction.Transactional.TxType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 
@@ -211,6 +212,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 * @see gov.gtas.services.udr.RulePersistenceService#findDefaultKnowledgeBase()
 	 */
 	@Override
+	@Cacheable("knowledgebase")
 	public KnowledgeBase findUdrKnowledgeBase() {
 		return udrRuleRepository.getKnowledgeBaseByName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
 	}

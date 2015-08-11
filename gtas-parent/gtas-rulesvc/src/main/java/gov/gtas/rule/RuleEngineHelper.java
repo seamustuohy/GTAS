@@ -6,13 +6,7 @@ import java.util.EventListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.kie.api.event.rule.AgendaEventListener;
-import org.kie.api.event.rule.DebugAgendaEventListener;
-import org.kie.api.event.rule.DebugRuleRuntimeEventListener;
-import org.kie.api.event.rule.ObjectDeletedEvent;
-import org.kie.api.event.rule.ObjectInsertedEvent;
-import org.kie.api.event.rule.ObjectUpdatedEvent;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieSession;
 
@@ -27,7 +21,8 @@ public class RuleEngineHelper {
 	 */
 	public static void addEventListenersToKieSEssion(final KieSession ksession,
 			final List<EventListener> eventListenerList) {
-		// The application can also setup listeners
+		
+		// iterate thru the list and add the listeners
 		if (eventListenerList != null) {
 			for (EventListener el : eventListenerList) {
 				if (el instanceof AgendaEventListener) {
@@ -40,6 +35,24 @@ public class RuleEngineHelper {
 	}
 
 	/**
+	 * Adds default events listeners to the Kie Session.
+	 * 
+	 * @param ksession
+	 *            the session to add listeners to.
+	 * @param stats
+	 *            the object to collect statistics.
+	 */
+	public static void addEventListenersToKieSEssion(final KieSession ksession,
+			final RuleExecutionStatistics stats) {
+		
+		if (ksession != null && stats != null) {
+			ksession.addEventListener(new GtasAgendaEventListener(stats));
+			ksession.addEventListener(new GtasRuleRuntimeEventListener(stats));
+		}
+	}
+
+	
+	/**
 	 * Creates a list of KieSession event listeners.
 	 * 
 	 * @param stats
@@ -48,58 +61,13 @@ public class RuleEngineHelper {
 	 */
 	public static List<EventListener> createEventListeners(
 			final RuleExecutionStatistics stats) {
+		
 		List<EventListener> eventListenerList = new LinkedList<EventListener>();
-
-		eventListenerList.add(new DebugAgendaEventListener() {
-
-			@Override
-			public void afterMatchFired(AfterMatchFiredEvent event) {
-				stats.incrementTotalRulesFired();
-				stats.addRuleFired(event.getMatch().getRule().getName());
-				super.afterMatchFired(event);
-			}
-
-		});
-		eventListenerList.add(new DebugRuleRuntimeEventListener() {
-
-			@Override
-			public void objectUpdated(ObjectUpdatedEvent event) {
-				stats.incrementTotalObjectsModified();
-				stats.addModifiedObject(event.getObject());
-				super.objectUpdated(event);
-			}
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.kie.api.event.rule.DebugRuleRuntimeEventListener#objectDeleted
-			 * (org.kie.api.event.rule.ObjectDeletedEvent)
-			 */
-			@Override
-			public void objectDeleted(ObjectDeletedEvent event) {
-				stats.incrementTotalObjectsModified();
-				stats.addDeletedObject(event.getOldObject());
-				super.objectDeleted(event);
-			}
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.kie.api.event.rule.DebugRuleRuntimeEventListener#objectInserted
-			 * (org.kie.api.event.rule.ObjectInsertedEvent)
-			 */
-			@Override
-			public void objectInserted(ObjectInsertedEvent event) {
-				stats.incrementTotalObjectsModified();
-				stats.addInsertedObject(event.getObject());
-				super.objectInserted(event);
-			}
-
-		});
-
+		
+		eventListenerList.add(new GtasAgendaEventListener(stats));
+		eventListenerList.add(new GtasRuleRuntimeEventListener(stats));
 		return eventListenerList;
+
 	}
 
 }

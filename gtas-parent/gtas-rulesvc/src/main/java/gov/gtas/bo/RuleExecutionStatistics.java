@@ -47,6 +47,17 @@ public class RuleExecutionStatistics implements Serializable {
 	}
 
 	/**
+	 * Resets the lists and counts in this statistics object.
+	 */
+	public void resetStatistics(){
+		this.ruleFiringSequence.clear();
+		this.modifiedObjectClassNameList.clear();
+		this.insertedObjectClassNameList.clear();
+		this.deletedObjectClassNameList.clear();
+		this.totalRulesFired = 0;
+		this.totalObjectsModified = 0;
+	}
+	/**
 	 * @return add one to the totalRulesFired and return the result.
 	 */
 	public int incrementTotalRulesFired() {

@@ -9,7 +9,7 @@
 <body>
 
 <div class="jumbotron">
-  <img alt="" src="resources/img/404.png" style="width: 1500px; padding-left: 75px;" align="center">
+  <img alt="" src="/gtas/resources/img/404.png" style="width: 1500px; padding-left: 75px;" align="center">
 </div>
 	
 
