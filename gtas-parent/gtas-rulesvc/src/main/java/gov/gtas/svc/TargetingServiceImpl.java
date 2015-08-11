@@ -198,7 +198,8 @@ public class TargetingServiceImpl implements TargetingService {
 		hitsSummary.setPassengerId(ruleHitDetail.getPassengerId());
 		hitsSummary.setDescription(ruleHitDetail.getDescription());
 		hitsSummary.setTitle(ruleHitDetail.getTitle());
-		hitsSummary.setFlightId(ruleHitDetail.getFlightId());
+		if (ruleHitDetail.getFlightId() != null)
+			hitsSummary.setFlightId(ruleHitDetail.getFlightId());
 		hitsSummary.setCreateDate(new Date());
 
 		HitDetail hitDetail = new HitDetail();
