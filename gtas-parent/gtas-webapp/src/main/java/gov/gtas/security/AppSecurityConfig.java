@@ -1,9 +1,15 @@
 package gov.gtas.security;
 
 
+import java.io.IOException;
+
+import gov.gtas.constants.Constants;
 import gov.gtas.security.filters.UserAuthenticationFilter;
 import gov.gtas.security.service.AuthUserDetailsService;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -19,16 +25,23 @@ import org.springframework.security.authentication.RememberMeAuthenticationToken
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 /**
  *
@@ -54,6 +67,12 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
     }
+    
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/resources/**");
+    }
+
        
     @Bean(name="authenticationManager")
     @Override
@@ -64,40 +83,57 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
     
-        
+        // Custom Success and Failure Authentication Handler
+    	//
         SavedRequestAwareAuthenticationSuccessHandler savedReqHandler = new SavedRequestAwareAuthenticationSuccessHandler();
         savedReqHandler.setAlwaysUseDefaultTargetUrl(true);
-        savedReqHandler.setDefaultTargetUrl("/home.action");
-        savedReqHandler.setTargetUrlParameter("/home.action");
+        savedReqHandler.setDefaultTargetUrl(Constants.HOME_PAGE);
+        savedReqHandler.setTargetUrlParameter(Constants.HOME_PAGE);
         
-        http
+        // Custom Redirect Strategy to cope with merged URLs, as well as dictate custom forwarding behavior
+        //
+        
+        AuthenticationEntryPoint indexEntryPoint = new AuthenticationEntryPoint() {
+			@Override
+			public void commence(HttpServletRequest request,
+					HttpServletResponse response, AuthenticationException authException)
+					throws IOException, ServletException {
+				
+				RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+				redirectStrategy.sendRedirect(request, response, Constants.HOME_PAGE);
+				return;
+			}
+		};
+        
+	  // Application specific Security mappings go here. Even though we can create multiple HTTP Security Authorization instances,  
+	  // for better maintainability, we will add/edit all the settings in one HTTP Security instance.
+		
+      http
         .authorizeRequests()
-        // .antMatchers("/**/*").permitAll()
-        //	.antMatchers("/index.html").denyAll()
-        .antMatchers(HttpMethod.POST, "/user").permitAll()
-        .antMatchers("/login.jsp").permitAll()
-        .antMatchers("/home.action").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
-		//.antMatchers("/index.html").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
-		.antMatchers("/passengers").hasAnyAuthority("MANAGE_RULES","MANAGE_QUERIES","VIEW_FLIGHT_PASSENGERS","MANAGE_WATCHLIST","ADMIN")
-		.antMatchers("/query**").hasAnyAuthority("MANAGE_QUERIES","ADMIN")
-		.antMatchers("/index.html").denyAll()
-        //.anyRequest().authenticated()
+        .antMatchers(Constants.LOGIN_PAGE).permitAll()
+        .antMatchers(Constants.HOME_PAGE).hasAnyAuthority(Constants.MANAGE_RULES_ROLE,Constants.MANAGE_QUERIES_ROLE,Constants.VIEW_FLIGHT_PASSENGERS_ROLE,Constants.MANAGE_WATCHLIST_ROLE,Constants.ADMIN_ROLE)
+		.antMatchers("/travelers").hasAnyAuthority(Constants.MANAGE_RULES_ROLE,Constants.MANAGE_QUERIES_ROLE,Constants.VIEW_FLIGHT_PASSENGERS_ROLE,Constants.MANAGE_WATCHLIST_ROLE,Constants.ADMIN_ROLE)
+		.antMatchers("/query**").hasAnyAuthority(Constants.MANAGE_QUERIES_ROLE, Constants.ADMIN_ROLE)
+		.antMatchers("/index.html").denyAll()//.access("/home.action")//
+		.anyRequest().authenticated()
         .and()
         .csrf().disable()
         .formLogin()
-        .defaultSuccessUrl("/home.action")
+        .defaultSuccessUrl(Constants.HOME_PAGE)
         .loginProcessingUrl("/j_spring_security_check")
         .usernameParameter("j_username")
         .passwordParameter("j_password")
-        .failureHandler(new SimpleUrlAuthenticationFailureHandler()).failureUrl("/login.jsp")
-        //.successHandler(new AjaxAuthenticationSuccessHandler(new SavedRequestAwareAuthenticationSuccessHandler()))
+        .failureHandler(new SimpleUrlAuthenticationFailureHandler()).failureUrl(Constants.LOGIN_PAGE)
 		.successHandler(new AjaxAuthenticationSuccessHandler(savedReqHandler))
-        .defaultSuccessUrl("/home.action")
-        .loginPage("/login.jsp")
-        .and().logout().logoutUrl("/logout.action").logoutSuccessUrl("/login.jsp").permitAll().and();
-
-    
-    
+        .defaultSuccessUrl(Constants.HOME_PAGE)
+        .loginPage(Constants.LOGIN_PAGE)
+        .and().logout().logoutUrl(Constants.LOGOUT_MAPPING).logoutSuccessUrl(Constants.LOGIN_PAGE).permitAll()
+       	;
+      
+      	// Map any specific URL pattern Exception Handling here 
+      	//
+        http.exceptionHandling().defaultAuthenticationEntryPointFor(indexEntryPoint, new AntPathRequestMatcher("/index.html")).and();
+        
     }
     
     
