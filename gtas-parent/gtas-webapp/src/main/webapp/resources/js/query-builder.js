@@ -1214,6 +1214,14 @@
         this.setRules(rules);
     };
 
+    QueryBuilder.prototype.readOnlyRules = function (rules) {
+        this.loadRules(rules);
+        //may need to wrap the modifications below in a timeout
+        this.$el.find('.rule-header, .group-actions, .item a.remove').remove();
+        this.$el.find('select.bs-select-hidden').prop('disabled', true);
+        this.$el.find('input').prop('disabled', true);
+    };
+
     var combinedOperator = {
         'equal': 'in',
         'not equal': 'not in'
