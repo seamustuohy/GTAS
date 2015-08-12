@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -17,7 +18,12 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "flight")
+@Table(name = "flight",
+indexes = {
+    @Index(name = "idx_unique_flight", unique = true,
+        columnList = "flight_number, carrier, origin, destination, flight_date"
+    )
+})
 public class Flight extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;  
     public Flight() { }
