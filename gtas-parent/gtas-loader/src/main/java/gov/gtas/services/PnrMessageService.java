@@ -16,17 +16,20 @@ import org.springframework.stereotype.Service;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.PnrData;
-import gov.gtas.model.PnrMessage;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.Pnr;
+import gov.gtas.model.PnrMessage;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
+import gov.gtas.parsers.vo.air.AddressVo;
+import gov.gtas.parsers.vo.air.CreditCardVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.PhoneVo;
 import gov.gtas.repository.PnrMessageRepository;
 
 @Service
@@ -51,11 +54,11 @@ public class PnrMessageService implements MessageService {
         try {
             byte[] raw = FileUtils.readSmallFile(filePath);
             String message = new String(raw, StandardCharsets.US_ASCII);
-            // TODO: get hash of entire message?
             
             EdifactParser<PnrMessageVo> parser = new PnrGovParser();
             vo = parser.parse(message);
             this.pnrMessage.setStatus(MessageStatus.PARSED);
+            this.pnrMessage.setHashCode(vo.getHashCode());            
             EdifactMessage em = new EdifactMessage();
             em.setTransmissionDate(vo.getTransmissionDate());
             em.setTransmissionSource(vo.getTransmissionSource());
@@ -78,15 +81,26 @@ public class PnrMessageService implements MessageService {
     public void load(MessageVo message) {
         PnrMessageVo m = (PnrMessageVo)message;
         for (PnrVo vo : m.getPnrRecords()) {
-            PnrData pnr = null;
+            Pnr pnr = null;
             try {
-                pnr = new PnrData();
-                this.pnrMessage.getPnrs().add(pnr);
+                pnr = utils.convertPnrVo(vo);
+                this.pnrMessage.addPnr(pnr);
+                
+                for (AddressVo addressVo : vo.getAddresses()) {
+                    pnr.addAddress(utils.convertAddressVo(addressVo));
+                }
+                
+                for (PhoneVo phoneVo : vo.getPhoneNumbers()) {
+                    pnr.addPhone(utils.convertPhoneVo(phoneVo));
+                }
+
+                for (CreditCardVo creditVo : vo.getCreditCards()) {
+                    pnr.setCreditCard(utils.convertCreditVo(creditVo));
+                }
                 
                 Set<Passenger> pax = new HashSet<>();        
                 for (PassengerVo pvo : vo.getPassengers()) {
-                    Passenger p = utils.convertPassengerVo(pvo);
-                    pax.add(p);
+                    pax.add(utils.convertPassengerVo(pvo));
                 }
 
                 Flight f = null;

@@ -19,6 +19,20 @@ public class FlightVo {
     private Date etd;
     private Date eta;
     
+    /**
+     * rules for setting calculated field 'flightDate'
+     */
+    public void setFlightDate(Date etd, Date eta, Date transmissionDate) {
+        if (etd != null) {
+            setFlightDate(etd);
+        } else if (eta != null) {
+            setFlightDate(eta);
+        } else {
+            // TODO: verify this case
+            setFlightDate(transmissionDate);
+        }        
+    }
+    
     public String getDirection() {
 		return direction;
 	}
@@ -91,6 +105,7 @@ public class FlightVo {
     public void setOverFlight(boolean isOverFlight) {
         this.isOverFlight = isOverFlight;
     }
+    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 

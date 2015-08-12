@@ -38,5 +38,19 @@ public final class Constants {
 	
 	// Hits Summary
 	public static final String HITS_SUMMARY_SERVICE = "/hit";
-	public static final String HITS_SUMMARY_RULES_BY_PASSENGER_ID = "/passenger/{id}";
+	public static final String HITS_SUMMARY_RULES_BY_TRAVELER_ID = "/traveler/{id}";
+	
+	//Security Roles
+	public static final String MANAGE_RULES_ROLE = "MANAGE_RULES";
+	public static final String MANAGE_QUERIES_ROLE = "MANAGE_QUERIES";
+	public static final String VIEW_FLIGHT_PASSENGERS_ROLE = "VIEW_FLIGHT_PASSENGERS";
+	public static final String MANAGE_WATCHLIST_ROLE = "MANAGE_WATCHLIST";
+	public static final String ADMIN_ROLE = "ADMIN";
+	
+	//Security URL Paths
+	public static final String LOGIN_PAGE = "/login.jsp";
+	public static final String HOME_PAGE = "/home.action";
+	public static final String LOGOUT_MAPPING = "/logout.action";
+	
+
 }

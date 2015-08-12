@@ -8,8 +8,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.parsers.vo.air.AddressVo;
+import gov.gtas.parsers.vo.air.CreditCardVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.PhoneVo;
 import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 
 public class PnrVo {
@@ -20,7 +22,7 @@ public class PnrVo {
     
     private Date dateBooked;
     private Date dateReceived;
-    private Date dateOfDeparture;
+    private Date departureDate;
 
     private Integer numPassengers;
     private Integer numBags;
@@ -31,6 +33,8 @@ public class PnrVo {
     private List<PassengerVo> passengers = new ArrayList<>();
     private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
     private List<AddressVo> addresses = new ArrayList<>();
+    private List<PhoneVo> phoneNumbers = new ArrayList<>();
+    private List<CreditCardVo> creditCards = new ArrayList<>();
     
     public String getRecordLocator() {
         return recordLocator;
@@ -80,12 +84,12 @@ public class PnrVo {
         this.dateReceived = dateReceived;
     }
 
-    public Date getDateOfDeparture() {
-        return dateOfDeparture;
+    public Date getDepartureDate() {
+        return departureDate;
     }
 
-    public void setDateOfDeparture(Date dateOfDeparture) {
-        this.dateOfDeparture = dateOfDeparture;
+    public void setDepartureDate(Date departureDate) {
+        this.departureDate = departureDate;
     }
 
     public Integer getNumPassengers() {
@@ -142,6 +146,22 @@ public class PnrVo {
 
     public void setAddresses(List<AddressVo> addresses) {
         this.addresses = addresses;
+    }
+
+    public List<PhoneVo> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    public void setPhoneNumbers(List<PhoneVo> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
+    }
+
+    public List<CreditCardVo> getCreditCards() {
+        return creditCards;
+    }
+
+    public void setCreditCards(List<CreditCardVo> creditCards) {
+        this.creditCards = creditCards;
     }
 
     @Override

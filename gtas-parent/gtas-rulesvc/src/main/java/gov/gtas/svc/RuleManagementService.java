@@ -35,7 +35,7 @@ public interface RuleManagementService {
      * @param rules the list of UDR rules.
      * @return the created Knowledge Base.
      */
-    KnowledgeBase createKnowledgeBaseFromUdrRules(String kbName, Collection<UdrRule> rules);
+    KnowledgeBase createKnowledgeBaseFromUdrRules(String kbName, Collection<UdrRule> rules, String userId);
     /**
      * Deletes the named Knowledge Base.
      * @param kbName the knowledge base name.

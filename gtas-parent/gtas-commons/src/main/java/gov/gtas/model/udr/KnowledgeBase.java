@@ -3,7 +3,7 @@ package gov.gtas.model.udr;
 import gov.gtas.model.BaseEntity;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -52,8 +52,8 @@ public class KnowledgeBase extends BaseEntity {
 	@Column(name = "CREATION_DT", nullable = false, length = 19)
 	private Date creationDt;
 
-	@OneToMany(mappedBy="knowledgeBase", fetch=FetchType.LAZY)
-	private List<Rule> rulesInKB;
+	@OneToMany(mappedBy="knowledgeBase", fetch=FetchType.EAGER)
+	private Set<Rule> rulesInKB;
 	
 	public KnowledgeBase(){
 		
@@ -122,6 +122,13 @@ public class KnowledgeBase extends BaseEntity {
 	 */
 	public void setKbName(String kbName) {
 		this.kbName = kbName;
+	}
+	
+	/**
+	 * @return the rulesInKB
+	 */
+	public Set<Rule> getRulesInKB() {
+		return rulesInKB;
 	}
 	@Override
 	public int hashCode() {

@@ -2,10 +2,7 @@ package gov.gtas.controller;
 
 import gov.gtas.dataobject.HitDetailVo;
 import gov.gtas.model.HitDetail;
-import gov.gtas.model.udr.UdrRule;
 import gov.gtas.services.HitsSummaryService;
-import gov.gtas.services.udr.RulePersistenceService;
-import gov.gtas.svc.UdrService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,65 +27,56 @@ public class HitsSummaryController {
 			.getLogger(HitsSummaryController.class);
 
 	@Autowired
-    private HitsSummaryService hitsSummaryService;
+	private HitsSummaryService hitsSummaryService;
 
-	@Autowired
-	private RulePersistenceService rulePersistenceService;
-	
-	@Autowired
-	private UdrService udrService;
-
-	
 	@RequestMapping(value = "/hit/passenger", method = RequestMethod.GET)
-    @Transactional
-	public @ResponseBody List<HitDetailVo> getRules(@RequestParam(value = "passengerId", required = false) String id) {
-
-		return getHitDetailsMapped(hitsSummaryService.findByPassengerId(Long.parseLong(id)));
-	}
-
-	
 	@Transactional
-	public List<HitDetailVo> getHitDetailsMapped(List<HitDetail> tempHitDetailList){
-	
-	int i = 0;
-	List<HitDetailVo> tempList = new ArrayList<HitDetailVo>();
-	HitDetailVo hdetailVo = new HitDetailVo();
-	UdrRule tempRule = new UdrRule();
-	HashMap<Integer,HitDetailVo> _tempMap = new HashMap<Integer, HitDetailVo>();
-	HashSet<HitDetailVo> tempSet = new HashSet<HitDetailVo>();
-	
-	for(HitDetail htd: tempHitDetailList){
-		
-				
-		if((i != htd.getRuleId().intValue()) && (!_tempMap.containsKey(Integer.valueOf(htd.getRuleId().intValue())))){
-			//get Rule Desc
-			i = htd.getRuleId().intValue();
-			hdetailVo = new HitDetailVo();
-			//tempRule = rulePersistenceService.findById(htd.getRuleId());
-			//	tempRule = udrService.getUDRByID(htd.getRuleId());
-			hdetailVo.setRuleId(htd.getRuleId());
-			hdetailVo.setRuleTitle("");
-			hdetailVo.setRuleDesc("");
-			hdetailVo.getHitsDetailsList().add(htd);
-			_tempMap.put(Integer.valueOf(i), hdetailVo);
-		}else{
-			hdetailVo = _tempMap.get(Integer.valueOf(i));
-			hdetailVo.getHitsDetailsList().add(htd);
-		}
-		
-		tempSet.add(hdetailVo);
-		
+	public @ResponseBody List<HitDetailVo> getRules(
+			@RequestParam(value = "passengerId", required = false) String id) {
+
+		return getHitDetailsMapped(hitsSummaryService.findByPassengerId(Long
+				.parseLong(id)));
 	}
-	
-	if(!tempSet.isEmpty()){
-		Iterator iter = tempSet.iterator();
-		while(iter.hasNext()){
-			tempList.add((HitDetailVo)iter.next());
+
+	@Transactional
+	public List<HitDetailVo> getHitDetailsMapped(
+			List<HitDetail> tempHitDetailList) {
+
+		int i = 0;
+		List<HitDetailVo> tempList = new ArrayList<HitDetailVo>();
+		HitDetailVo hdetailVo = new HitDetailVo();
+
+		HashMap<Integer, HitDetailVo> _tempMap = new HashMap<Integer, HitDetailVo>();
+		HashSet<HitDetailVo> tempSet = new HashSet<HitDetailVo>();
+
+		for (HitDetail htd : tempHitDetailList) {
+
+			if ((i != htd.getRuleId().intValue())
+					&& (!_tempMap.containsKey(Integer.valueOf(htd.getRuleId()
+							.intValue())))) {
+				// get Rule Desc
+				i = htd.getRuleId().intValue();
+				hdetailVo = new HitDetailVo();
+				hdetailVo.setRuleId(htd.getRuleId());
+				hdetailVo.setRuleTitle("");
+				hdetailVo.setRuleDesc("");
+				hdetailVo.getHitsDetailsList().add(htd);
+				_tempMap.put(Integer.valueOf(i), hdetailVo);
+			} else {
+				hdetailVo = _tempMap.get(Integer.valueOf(i));
+				hdetailVo.getHitsDetailsList().add(htd);
+			}
+			tempSet.add(hdetailVo);
 		}
+
+		if (!tempSet.isEmpty()) {
+			Iterator iter = tempSet.iterator();
+			while (iter.hasNext()) {
+				tempList.add((HitDetailVo) iter.next());
+			}
+		}
+
+		return tempList;
 	}
-	
-	return tempList;
-}
-	
-	
+
 }

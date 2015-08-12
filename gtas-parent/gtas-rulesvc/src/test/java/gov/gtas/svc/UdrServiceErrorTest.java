@@ -192,7 +192,8 @@ public class UdrServiceErrorTest {
 		verify(mockUserService, times(1)).findById(authorId);
 		verify(mockRulePersistenceSvc).create(any(), any());
 		verify(mockRulePersistenceSvc).findAll();
-		verify(mockRuleManagementService).createKnowledgeBaseFromUdrRules(any(), any());
+		verify(mockRuleManagementService).createKnowledgeBaseFromUdrRules(any(), any(), any());
+		
 	}
 	@Test
 	public void testCreateYesterdayDateError() {
@@ -310,6 +311,6 @@ public class UdrServiceErrorTest {
 		  verify(mockUserService, times(1)).findById(authorId);
 		  verify(mockRulePersistenceSvc, times(1)).create(any(UdrRule.class), any());
 		  verify(mockRulePersistenceSvc).findAll();
-		  verify(mockRuleManagementService).createKnowledgeBaseFromUdrRules(any(), any());
+		  verify(mockRuleManagementService).createKnowledgeBaseFromUdrRules(any(), any(), any());
 	}
 }

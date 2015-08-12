@@ -2,10 +2,12 @@ package gov.gtas.svc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.enumtype.ConditionEnum;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
+import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.UdrConstants;
@@ -24,6 +26,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.drools.core.command.runtime.GetKnowledgeBaseCommand;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -118,6 +121,7 @@ public class UdrServiceIT {
 		List<RuleCond> conds =  engineRules.get(0).getRuleConds();
 		assertNotNull(conds);
 		assertEquals(1, conds.size());
+		assertNotNull("Engine Rule has a null Knowledge Base reference", engineRules.get(0).getKnowledgeBase());
 	}
 	@Test
 	@Transactional
@@ -205,6 +209,29 @@ public class UdrServiceIT {
 		listResp = udrService.fetchUdrSummaryList(user.getUserId());
 		assertNotNull(listResp);
 		assertEquals(1, listResp.size());
+	}
+	@Test
+	@Transactional
+	public void testKnowledgeBaseReferences() {
+		User user = createUser();
+		UdrSpecification spec1 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
+		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec1);
+		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		Long id = Long.valueOf((String)(resp.getResponseDetails().get(0).getAttributeValue()));       
+        UdrRule rule = ruleService.findById(id);
+        assertNotNull("Could not fetch saved UDR",rule);
+        assertEquals(3, rule.getEngineRules().size());
+        assertNotNull(rule.getEngineRules().get(0).getKnowledgeBase());
+        assertNotNull(rule.getEngineRules().get(1).getKnowledgeBase());
+        assertNotNull(rule.getEngineRules().get(2).getKnowledgeBase());
+        
+        //now delete the UDR
+        ruleService.delete(id, user.getUserId());
+        rule = ruleService.findById(id);
+        assertEquals(3, rule.getEngineRules().size());
+        assertNull(rule.getEngineRules().get(0).getKnowledgeBase());
+        assertNull(rule.getEngineRules().get(1).getKnowledgeBase());
+        assertNull(rule.getEngineRules().get(2).getKnowledgeBase());
 	}
    private User createUser(){
 		String ROLE_NAME = "user";

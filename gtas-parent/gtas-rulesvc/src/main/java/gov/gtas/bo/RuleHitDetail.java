@@ -4,35 +4,96 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.lookup.PassengerTypeCode;
 
 public class RuleHitDetail implements Serializable {
-    public static final String HIT_REASON_SEPARATOR = "///";
+	public static final String HIT_REASON_SEPARATOR = "///";
 	/**
 	 * serial version UID.
 	 */
 	private static final long serialVersionUID = 2946626283174855377L;
-    
+
 	@JsonIgnore
-	private long udrRuleId;
-	
+	private Long udrRuleId;
+
 	@JsonIgnore
-	private int engineRuleIndex;
-	
+	private Long ruleId;
+
+	@JsonIgnore
+	private String title;
+
+	@JsonIgnore
+	private String description;
+
+	@JsonIgnore
+	private Long flightId;
+
 	private String hitRule;
-	private long passengerId;
+	private Long passengerId;
 	private String passengerType;
 	private String passengerName;
 	private String[] hitReasons;
-	
-	public RuleHitDetail(final long udrRuleId, final int engineRuleIndex, final String ruleTitle, final Passenger passenger, final String cause){
-		this.udrRuleId = udrRuleId;
-		this.engineRuleIndex = engineRuleIndex;
-		this.hitRule = ruleTitle+"("+udrRuleId+"/"+engineRuleIndex+")";
+
+	/**
+	 * This constructor is used when the knowledge base is Ad Hoc, i.e., built
+	 * from DRL rules in a file or a string.
+	 * 
+	 * @param ruleId a numeric rule Id (can be null)
+	 * @param ruleTitle the name of the DRL rule(Rule.getName()).
+	 * @param passenger the Passenger object that matched.
+	 * @param flight the flight object that matched.
+	 * @param cause the reason for the match.
+	 */
+	public RuleHitDetail(final Long udrId, final Long ruleId, final String ruleTitle,
+			final Passenger passenger, final Flight flight, final String cause) {
+		this.udrRuleId = udrId;
+		this.ruleId = ruleId;
+		this.title = ruleTitle;
+		this.description = ruleTitle;
+		this.hitRule = ruleTitle + "(" + udrId + ")";
 		this.passengerId = passenger.getId();
-		this.passengerType = passenger.getPassengerType();
-		this.passengerName = passenger.getFirstName()+" "+passenger.getLastName();
+		this.passengerType = decodePassengerTypeName(passenger
+				.getPassengerType());
+		this.passengerName = passenger.getFirstName() + " "
+				+ passenger.getLastName();
 		this.hitReasons = cause.split(HIT_REASON_SEPARATOR);
+		if (flight != null) {
+			this.flightId = flight.getId();
+		}
+	}
+
+	/**
+	 * This constructor is used when the knowledge base is built
+	 * from UDR.
+	 * 
+	 * @param ruleId the id of the GTAS RULE DB object. An UDR can generate multiple RULE objects.
+	 * @param passenger the Passenger object that matched.
+	 * @param flight the flight object that matched.
+	 * 
+	 */
+	public RuleHitDetail(final Long ruleId, final Passenger passenger,
+			final Flight flight) {
+		this.ruleId = ruleId;
+		this.passengerId = passenger.getId();
+		this.passengerType = decodePassengerTypeName(passenger
+				.getPassengerType());
+		this.passengerName = passenger.getFirstName() + " "
+				+ passenger.getLastName();
+		if (flight != null) {
+			this.flightId = flight.getId();
+		}
+	}
+
+	private String decodePassengerTypeName(String typ) {
+		String ret = typ;
+		for (PassengerTypeCode typeEnum : PassengerTypeCode.values()) {
+			if (typ.equalsIgnoreCase(typeEnum.name())) {
+				ret = typeEnum.getPassengerTypeName();
+			}
+		}
+		return ret;
 	}
 
 	/**
@@ -48,15 +109,6 @@ public class RuleHitDetail implements Serializable {
 	public long getUdrRuleId() {
 		return udrRuleId;
 	}
-
-
-	/**
-	 * @return the engineRuleIndex
-	 */
-	public int getEngineRuleIndex() {
-		return engineRuleIndex;
-	}
-
 
 	/**
 	 * @return the passengerId
@@ -87,14 +139,39 @@ public class RuleHitDetail implements Serializable {
 	}
 
 	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @return the flightId
+	 */
+	public Long getFlightId() {
+		return flightId;
+	}
+
+	/**
 	 * Factory method that creates a RuleHitDetailObject.
-	 * @param udr the 
+	 * 
+	 * @param udr
+	 *            the
 	 * @param rule
 	 * @param passenger
 	 * @return
 	 */
-	public static RuleHitDetail createRuleHitDetail(Long udrRuleId, int engineRuleIndex, String title, Passenger passenger, String cause){
-		RuleHitDetail ret = new RuleHitDetail(udrRuleId, engineRuleIndex, title, passenger, cause);
-		return ret;
-	}
+//	public static RuleHitDetail createRuleHitDetail(Long ruleId,
+//			Passenger passenger, Flight flight) {
+//		RuleHitDetail ret = new RuleHitDetail(udrRuleId, title, passenger,
+//				null, cause);
+//		return ret;
+//	}
 }

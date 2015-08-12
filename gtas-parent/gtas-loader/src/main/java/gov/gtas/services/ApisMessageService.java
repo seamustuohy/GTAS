@@ -54,13 +54,7 @@ public class ApisMessageService implements MessageService {
         try {            
             byte[] raw = FileUtils.readSmallFile(filePath);
             String message = new String(raw, StandardCharsets.US_ASCII);
-            String payload = utils.getApisMessagePayload(message);
-            if (payload == null) {
-                throw new ParseException("Could not extract message payload. Missing BGM and/or UNT segments");
-            }
-            String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
-            this.apisMessage.setHashCode(md5);
-            
+
             EdifactParser<PaxlstMessageVo> parser = null;
             if (isUSEdifactFile(message)) {
                 parser = new PaxlstParserUSedifact();
@@ -70,6 +64,7 @@ public class ApisMessageService implements MessageService {
     
             vo = parser.parse(message);
             this.apisMessage.setStatus(MessageStatus.PARSED);
+            this.apisMessage.setHashCode(vo.getHashCode());
             EdifactMessage em = new EdifactMessage();
             em.setTransmissionDate(vo.getTransmissionDate());
             em.setTransmissionSource(vo.getTransmissionSource());

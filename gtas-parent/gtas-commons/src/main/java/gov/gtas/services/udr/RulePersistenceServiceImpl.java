@@ -4,6 +4,7 @@ import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.model.BaseEntity;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
@@ -14,8 +15,10 @@ import gov.gtas.model.udr.UdrRule;
 import gov.gtas.repository.udr.UdrRuleRepository;
 import gov.gtas.services.UserService;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +31,8 @@ import javax.transaction.Transactional.TxType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 
@@ -43,6 +48,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 */
 	private static final Logger logger = LoggerFactory
 			.getLogger(RulePersistenceServiceImpl.class);
+	
+	private static final int UPDATE_BATCH_SIZE = 100;
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -130,6 +137,10 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 			meta.setEnabled(YesNoEnum.N);
 			ruleToDelete.setEditedBy(user);
 			ruleToDelete.setEditDt(new Date());
+			//remove references to the Knowledge Base
+			for(Rule rl:ruleToDelete.getEngineRules()){
+				rl.setKnowledgeBase(null);
+			}
 			udrRuleRepository.save(ruleToDelete);
 		}else{
 			logger.warn("RulePersistenceServiceImpl.delete() - object does not exist:"+id);
@@ -142,6 +153,26 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	public List<UdrRule> findAll() {
 		return (List<UdrRule>)udrRuleRepository.findByDeleted(YesNoEnum.N);				
 	}
+	
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.udr.RulePersistenceService#batchUpdate(java.util.List)
+	 */
+	@Override
+	public Collection<? extends BaseEntity> batchUpdate(Collection<? extends BaseEntity> entities) {
+		List<BaseEntity> ret = new LinkedList<BaseEntity>();
+		int count = 0;
+		for(BaseEntity ent:entities){
+			BaseEntity upd = entityManager.merge(ent);
+			ret.add(upd);
+			++count;
+			if(count > UPDATE_BATCH_SIZE){
+				entityManager.flush();
+				entityManager.clear();
+			}
+		}
+		return ret;
+	}
+	
 	@Override
 	@Transactional
 	public UdrRule update(UdrRule rule, List<Rule> newEngineRules, String userId) {
@@ -211,6 +242,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 * @see gov.gtas.services.udr.RulePersistenceService#findDefaultKnowledgeBase()
 	 */
 	@Override
+	//@Cacheable(value="knowledgebase")
 	public KnowledgeBase findUdrKnowledgeBase() {
 		return udrRuleRepository.getKnowledgeBaseByName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
 	}
@@ -226,6 +258,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 * @see gov.gtas.services.udr.RulePersistenceService#saveKnowledgeBase(gov.gtas.model.udr.KnowledgeBase)
 	 */
 	@Override
+	//@CacheEvict(value="knowledgebase", beforeInvocation=true)
 	public KnowledgeBase saveKnowledgeBase(KnowledgeBase kb) {
 		kb.setCreationDt(new Date());
 		if(kb.getId() == null){

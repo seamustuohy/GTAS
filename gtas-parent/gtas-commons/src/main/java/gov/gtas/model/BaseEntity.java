@@ -57,11 +57,6 @@ public abstract class BaseEntity implements Serializable {
         }  
         return true;  
     }  
-  
-//    @Override  
-//    public String toString() {  
-//        return this.getClass().getName() + " [ID=" + id + "]";  
-//    }  
 
     @Override
     public String toString() {

@@ -47,7 +47,6 @@ public class RuleBuilderTestUtils {
 			IEntityMapping attr, OperatorCodeEnum op, String value,
 			ValueTypesEnum type) throws ParseException {
 		RuleCondPk pk = new RuleCondPk(1L, 1);
-//		EntityEnum entity = EntityEnum.valueOf(ent.getEntityName());
 		RuleCond ret = new RuleCond(pk, entity, attr.getFieldName(), op);
 		ret.addValueToCondition(value, type);
 		return ret;
@@ -56,7 +55,6 @@ public class RuleBuilderTestUtils {
 			IEntityMapping attr, OperatorCodeEnum op, String[] values,
 			ValueTypesEnum type) throws ParseException {
 		RuleCondPk pk = new RuleCondPk(1L, 1);
-//		EntityLookupEnum entity = EntityLookupEnum.valueOf(ent.getEntityName());
 		RuleCond ret = new RuleCond(pk, entity, attr.getFieldName(), op);
 		for(String value:values){
 		   ret.addValueToCondition(value, type);
@@ -70,7 +68,7 @@ public class RuleBuilderTestUtils {
 	private static Rule createRule(UdrRule parent, int indx) throws ParseException{
 		Rule engineRule = new Rule(parent,indx,null);
 		switch(indx){
-			case 1:/* doc.iso2 != US && doc.issueDate > 2012-01-01 && flight# == 0012  */
+			case ENGINE_RULE_INDX1:/* doc.iso2 != US && doc.issueDate > 2012-01-01 && flight# == 0012  */
 				RuleCond cond = createRuleCond(EntityEnum.DOCUMENT,
 						DocumentMapping.ISSUANCE_COUNTRY,
 						OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
@@ -84,7 +82,7 @@ public class RuleBuilderTestUtils {
 						OperatorCodeEnum.EQUAL, "0012", ValueTypesEnum.STRING);
 				engineRule.addConditionToRule(cond);
 				break;
-			case 2:/* doc.iso2 in (YE,GB) && flight.origin.iata == LHR && flight.carrier.iata==CO  */
+			case ENGINE_RULE_INDX2:/* doc.iso2 in (YE,GB) && flight.origin.iata == LHR && flight.carrier.iata==CO  */
 				cond = createRuleCond(EntityEnum.DOCUMENT,
 						DocumentMapping.ISSUANCE_COUNTRY,
 						OperatorCodeEnum.IN, new String[]{"YE", "GB"}, ValueTypesEnum.STRING);
@@ -97,7 +95,7 @@ public class RuleBuilderTestUtils {
 						FlightMapping.CARRIER,
 						OperatorCodeEnum.EQUAL, "CO", ValueTypesEnum.STRING);
 				break;
-			case 3:/* flight.origin.iata == LHR && flight.carrier.iata==CO  */
+			case ENGINE_RULE_INDX3:/* flight.origin.iata == LHR && flight.carrier.iata==CO  */
 				cond = createRuleCond(EntityEnum.FLIGHT,
 						FlightMapping.AIRPORT_ORIGIN,
 						OperatorCodeEnum.EQUAL, "LHR", ValueTypesEnum.STRING);
@@ -111,8 +109,9 @@ public class RuleBuilderTestUtils {
 						OperatorCodeEnum.GREATER, "2015-07-20 14:00:00", ValueTypesEnum.DATETIME);
 				engineRule.addConditionToRule(cond);
 				break;
-			case 4:
-			case 5:
+			case ENGINE_RULE_INDX4:
+			case ENGINE_RULE_INDX5:
+				break;
 		}
 		return engineRule;
 	}

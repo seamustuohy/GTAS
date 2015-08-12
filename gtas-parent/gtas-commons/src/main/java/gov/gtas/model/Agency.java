@@ -28,18 +28,6 @@ public class Agency extends BaseEntityAudit {
 	@Column(name = "agency_country")
 	private String agencyCountry;
 
-/*	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="pnr_id",referencedColumnName="id")     
-    private PnrData pnrData;
-	
-	public PnrData getPnrData() {
-		return pnrData;
-	}
-
-	public void setPnrData(PnrData pnrData) {
-		this.pnrData = pnrData;
-	}*/
-
 	public String getAgencyName() {
 		return agencyName;
 	}

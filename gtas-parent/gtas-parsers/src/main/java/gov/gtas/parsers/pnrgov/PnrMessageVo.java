@@ -6,12 +6,17 @@ import java.util.List;
 import gov.gtas.parsers.edifact.MessageVo;
 
 public class PnrMessageVo extends MessageVo {
-    private List<PnrVo> pnrRecords = new ArrayList<>();
+    private List<PnrVo> pnrRecords;
+    
+    public PnrMessageVo() {
+        pnrRecords = new ArrayList<>();
+    }
+    
+    public void addPnr(PnrVo pnr) {
+        pnrRecords.add(pnr);
+    }
+    
     public List<PnrVo> getPnrRecords() {
         return pnrRecords;
-    }
-
-    public void setPnrRecords(List<PnrVo> pnrRecords) {
-        this.pnrRecords = pnrRecords;
     }
 }

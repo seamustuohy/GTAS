@@ -11,18 +11,28 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "pnr_message")
-public class PnrMessage extends Message {
+public class PnrMessage extends Message {   
     @Embedded
     private EdifactMessage edifactMessage;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrMessage")
-    private Set<PnrData> pnrs = new HashSet<>();
+    private Set<Pnr> pnrs;
     
-    public Set<PnrData> getPnrs() {
-        return pnrs;
+    public PnrMessage() { }
+
+    public void addPnr(Pnr pnr) {
+        if (this.pnrs == null) {
+            this.pnrs = new HashSet<>();
+        }
+        this.pnrs.add(pnr);
+        pnr.setPnrMessage(this);
     }
 
-    public void setPnrs(Set<PnrData> pnrs) {
+    public Set<Pnr> getPnrs() {
+        return pnrs;
+    }
+    
+    public void setPnrs(Set<Pnr> pnrs) {
         this.pnrs = pnrs;
     }
 
