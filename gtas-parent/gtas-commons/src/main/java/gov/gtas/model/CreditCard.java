@@ -22,13 +22,7 @@ public class CreditCard extends BaseEntityAudit {
 	
 	@Column(name = "account_holder")
     private String accountHolder;
-	
-	/*
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="pnr_id",referencedColumnName="id")     
-    private PnrData pnrData;
 
-*/
 	public String getCardType() {
 		return cardType;
 	}

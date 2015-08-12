@@ -12,7 +12,7 @@ public class Itinerary extends BaseEntity {
     private Flight flight;
     
     @ManyToOne
-    private PnrData pnr;
+    private Pnr pnr;
 
     @Column(name = "leg_number")
     private Integer legNumber;
@@ -25,11 +25,11 @@ public class Itinerary extends BaseEntity {
         this.flight = flight;
     }
 
-    public PnrData getPnr() {
+    public Pnr getPnr() {
         return pnr;
     }
 
-    public void setPnr(PnrData pnr) {
+    public void setPnr(Pnr pnr) {
         this.pnr = pnr;
     }
 

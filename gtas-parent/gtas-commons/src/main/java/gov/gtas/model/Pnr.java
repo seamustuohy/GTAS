@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "pnr")
-public class PnrData extends BaseEntityAudit{
+public class Pnr extends BaseEntityAudit{
     @ManyToOne
     @JoinColumn(name = "pnr_message_id")
     private PnrMessage pnrMessage;
@@ -100,10 +100,10 @@ public class PnrData extends BaseEntityAudit{
 	@JoinColumn(name="ff_id",referencedColumnName="id") 
     private FrequentFlyer frequentFlyer;	
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
     private Set<Address> addresses;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
     private Set<Phone> phones = new HashSet<>();   
     
     public void addAddress(Address address) {
@@ -111,7 +111,7 @@ public class PnrData extends BaseEntityAudit{
             this.addresses = new HashSet<>();
         }
         this.addresses.add(address);
-        address.setPnrData(this);
+        address.setPnr(this);
     }
     
     public void addPhone(Phone phone) {
@@ -119,7 +119,7 @@ public class PnrData extends BaseEntityAudit{
             this.phones = new HashSet<>();
         }
         this.phones.add(phone);
-        phone.setPnrData(this);
+        phone.setPnr(this);
     }
     
 	public Agency getAgency() {
@@ -303,7 +303,7 @@ public class PnrData extends BaseEntityAudit{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        final PnrData other = (PnrData)obj;
+        final Pnr other = (Pnr)obj;
         return Objects.equals(this.carrier, other.carrier)
                 && Objects.equals(this.departureDate, other.departureDate)
                  && Objects.equals(this.origin, other.origin);

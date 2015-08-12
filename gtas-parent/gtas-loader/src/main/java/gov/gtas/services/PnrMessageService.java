@@ -17,7 +17,7 @@ import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passenger;
-import gov.gtas.model.PnrData;
+import gov.gtas.model.Pnr;
 import gov.gtas.model.PnrMessage;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
@@ -81,7 +81,7 @@ public class PnrMessageService implements MessageService {
     public void load(MessageVo message) {
         PnrMessageVo m = (PnrMessageVo)message;
         for (PnrVo vo : m.getPnrRecords()) {
-            PnrData pnr = null;
+            Pnr pnr = null;
             try {
                 pnr = utils.convertPnrVo(vo);
                 this.pnrMessage.addPnr(pnr);

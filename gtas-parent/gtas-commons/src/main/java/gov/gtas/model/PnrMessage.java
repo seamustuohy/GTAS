@@ -16,11 +16,11 @@ public class PnrMessage extends Message {
     private EdifactMessage edifactMessage;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrMessage")
-    private Set<PnrData> pnrs;
+    private Set<Pnr> pnrs;
     
     public PnrMessage() { }
 
-    public void addPnr(PnrData pnr) {
+    public void addPnr(Pnr pnr) {
         if (this.pnrs == null) {
             this.pnrs = new HashSet<>();
         }
@@ -28,11 +28,11 @@ public class PnrMessage extends Message {
         pnr.setPnrMessage(this);
     }
 
-    public Set<PnrData> getPnrs() {
+    public Set<Pnr> getPnrs() {
         return pnrs;
     }
     
-    public void setPnrs(Set<PnrData> pnrs) {
+    public void setPnrs(Set<Pnr> pnrs) {
         this.pnrs = pnrs;
     }
 

@@ -48,7 +48,7 @@ public class EdifactLexer {
      * start of the 'endSegment' trailing header segment.
      */
     public static String getMessagePayload(String message, String startSegment, String endSegment) {
-        UNA una = EdifactLexer.getUnaSegment(message);
+        UNA una = getUnaSegment(message);
         int bgmIndex = EdifactLexer.getStartOfSegment(startSegment, message, una);
         if (bgmIndex == -1) {
             return null;

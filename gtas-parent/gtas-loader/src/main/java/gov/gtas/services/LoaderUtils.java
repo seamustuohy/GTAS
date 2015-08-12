@@ -12,7 +12,7 @@ import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
-import gov.gtas.model.PnrData;
+import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.FlightDirectionCode;
@@ -116,8 +116,8 @@ public class LoaderUtils {
         return f;
     }
 
-    public PnrData convertPnrVo(PnrVo vo) throws ParseException {
-        PnrData pnr = new PnrData();
+    public Pnr convertPnrVo(PnrVo vo) throws ParseException {
+        Pnr pnr = new Pnr();
         pnr.setCreatedBy(LOADER_USER);
         BeanUtils.copyProperties(vo, pnr);
         
@@ -153,7 +153,6 @@ public class LoaderUtils {
         BeanUtils.copyProperties(vo, p);
         return p;
     }
-    
 
     public CreditCard convertCreditVo(CreditCardVo vo) {
         CreditCard cc = new CreditCard();

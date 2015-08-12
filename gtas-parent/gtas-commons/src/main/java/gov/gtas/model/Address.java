@@ -35,7 +35,7 @@ public class Address extends BaseEntityAudit {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="pnr_id",referencedColumnName="id")     
-    private PnrData pnrData;
+    private Pnr pnr;
 
 	public String getLine1() {
 		return line1;
@@ -93,12 +93,12 @@ public class Address extends BaseEntityAudit {
 		this.postalCode = postalCode;
 	}
 
-	public PnrData getPnrData() {
-		return pnrData;
+	public Pnr getPnr() {
+		return pnr;
 	}
 
-	public void setPnrData(PnrData pnrData) {
-		this.pnrData = pnrData;
+	public void setPnr(Pnr pnr) {
+		this.pnr = pnr;
 	}
 	
     @Override

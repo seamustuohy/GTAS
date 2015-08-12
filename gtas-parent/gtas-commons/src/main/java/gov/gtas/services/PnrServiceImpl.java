@@ -1,7 +1,7 @@
 package gov.gtas.services;
 
-import gov.gtas.model.PnrData;
-import gov.gtas.repository.PnrDataRepository;
+import gov.gtas.model.Pnr;
+import gov.gtas.repository.PnrRepository;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
@@ -9,21 +9,21 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PnrDataServiceImpl implements PnrDataService {
+public class PnrServiceImpl implements PnrService {
 
 	@Resource
-	private PnrDataRepository pnrRespository;
+	private PnrRepository pnrRespository;
 	
 	@Override
 	@Transactional
-	public PnrData create(PnrData pnrData) {
-		return pnrRespository.save(pnrData);
+	public Pnr create(Pnr pnr) {
+		return pnrRespository.save(pnr);
 	}
 
 	@Override
 	@Transactional
-	public PnrData delete(Long id) {
-		PnrData pnr = this.findById(id);
+	public Pnr delete(Long id) {
+		Pnr pnr = this.findById(id);
 		if(pnr != null){
 			pnrRespository.delete(pnr);
 		}
@@ -32,27 +32,27 @@ public class PnrDataServiceImpl implements PnrDataService {
 
 	@Override
 	@Transactional
-	public PnrData update(PnrData pnrData) {
-		PnrData pnr = this.findById(pnrData.getId());
-		if(pnr != null){
-			mapPnrData(pnrData,pnr);
+	public Pnr update(Pnr pnr) {
+		Pnr rv = this.findById(pnr.getId());
+		if(rv != null){
+			mapPnr(pnr,rv);
 		}
-		return pnr;
+		return rv;
 	}
 
 	@Override
 	@Transactional
-	public PnrData findById(Long id) {
+	public Pnr findById(Long id) {
 		return pnrRespository.findOne(id);
 	}
 
 	@Override
 	@Transactional
-	public List<PnrData> findAll() {
-		return (List<PnrData>) pnrRespository.findAll();
+	public List<Pnr> findAll() {
+		return (List<Pnr>) pnrRespository.findAll();
 	}
 	
-	private void mapPnrData(PnrData source, PnrData target){
+	private void mapPnr(Pnr source, Pnr target){
 		target.setBagCount(source.getBagCount());
 		target.setDateBooked(source.getDateBooked());
 		target.setCarrier(source.getCarrier());

@@ -9,33 +9,34 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "phone")
-public class Phone extends BaseEntityAudit {
-	private String number;
+@Table(name = "email")
+public class Email extends BaseEntityAudit {
+	private String address;
+	private String domain;
 	
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="pnr_id",referencedColumnName="id")    
+    @JoinColumn(name="pnr_id")    
 	private Pnr pnr;
 
-	public String getNumber() {
-		return number;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public void setNumber(String number) {
-		this.number = number;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public Pnr getPnr() {
-		return pnr;
-	}
+    public String getDomain() {
+        return domain;
+    }
 
-	public void setPnr(Pnr pnr) {
-		this.pnr = pnr;
-	}
-	
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(this.number);
+        return Objects.hash(this.address);
     }
     
     @Override
@@ -46,7 +47,7 @@ public class Phone extends BaseEntityAudit {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        final Phone other = (Phone) obj;
-        return Objects.equals(this.number, other.number);
+        final Email other = (Email) obj;
+        return Objects.equals(this.address, other.address);
     }       
 }
