@@ -5,6 +5,7 @@ import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ public interface RulePersistenceService {
 	 *            the list of entities to update.
 	 * @return the updated list of entities.
 	 */
-	public List<? extends BaseEntity> batchUpdate(final List<? extends BaseEntity> entities);
+	public Collection<? extends BaseEntity> batchUpdate(final Collection<? extends BaseEntity> entities);
 	
 	/**
 	 * Updates a UDR rule or its children engine rules.

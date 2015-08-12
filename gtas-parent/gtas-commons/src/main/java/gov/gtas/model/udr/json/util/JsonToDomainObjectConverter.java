@@ -183,11 +183,12 @@ public class JsonToDomainObjectConverter {
 	 * @param parent
 	 *            the parent UDR
 	 * @param inputJson
+	 * 
 	 *            the JSON UDR object
 	 * @throws ParseException
 	 *             on error
 	 */
-	public static void createEngineRules(UdrRule parent,
+	private static void createEngineRules(UdrRule parent,
 			UdrSpecification inputJson) {
 		QueryObject qobj = inputJson.getDetails();
 		if (qobj == null) {

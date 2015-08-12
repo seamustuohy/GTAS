@@ -18,6 +18,7 @@ import gov.gtas.services.udr.RulePersistenceService;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -149,14 +150,21 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 
 	private void linkRulesToKnowledgeBase(KnowledgeBase kb, Collection<UdrRule> rules){
 		if(kb != null && kb.getId() != null){
+			List<Rule> ruleList = new LinkedList<Rule>();
 			for (UdrRule rule : rules) {
 				for(Rule  engineRule:rule.getEngineRules()){
 					engineRule.setKnowledgeBase(kb);
 				}
-				rulePersistenceService.batchUpdate(rule.getEngineRules());
+				ruleList.addAll(rule.getEngineRules());
 			}
-			
+			rulePersistenceService.batchUpdate(ruleList);			
 		}
+	}
+	private void unlinkRulesFromKnowledgeBase(Collection<Rule> ruleList){
+		for (Rule rule : ruleList) {
+			rule.setKnowledgeBase(null);
+		}
+		rulePersistenceService.batchUpdate(ruleList);			
 	}
 	/*
 	 * (non-Javadoc)
@@ -165,8 +173,11 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 	 * gov.gtas.svc.RuleManagementService#deleteKnowledgeBase(java.lang.String)
 	 */
 	@Override
+	@Transactional
 	public KnowledgeBase deleteKnowledgeBase(String kbName) {
-		KnowledgeBase kb = rulePersistenceService.deleteKnowledgeBase(kbName);
+		KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
+		unlinkRulesFromKnowledgeBase(kb.getRulesInKB());
+		kb = rulePersistenceService.deleteKnowledgeBase(kbName);
 		return kb;
 	}
 

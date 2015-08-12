@@ -15,6 +15,7 @@ import gov.gtas.model.udr.UdrRule;
 import gov.gtas.repository.udr.UdrRuleRepository;
 import gov.gtas.services.UserService;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -136,6 +137,10 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 			meta.setEnabled(YesNoEnum.N);
 			ruleToDelete.setEditedBy(user);
 			ruleToDelete.setEditDt(new Date());
+			//remove references to the Knowledge Base
+			for(Rule rl:ruleToDelete.getEngineRules()){
+				rl.setKnowledgeBase(null);
+			}
 			udrRuleRepository.save(ruleToDelete);
 		}else{
 			logger.warn("RulePersistenceServiceImpl.delete() - object does not exist:"+id);
@@ -153,7 +158,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 * @see gov.gtas.services.udr.RulePersistenceService#batchUpdate(java.util.List)
 	 */
 	@Override
-	public List<? extends BaseEntity> batchUpdate(List<? extends BaseEntity> entities) {
+	public Collection<? extends BaseEntity> batchUpdate(Collection<? extends BaseEntity> entities) {
 		List<BaseEntity> ret = new LinkedList<BaseEntity>();
 		int count = 0;
 		for(BaseEntity ent:entities){

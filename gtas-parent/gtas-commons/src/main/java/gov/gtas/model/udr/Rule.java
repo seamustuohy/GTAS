@@ -53,6 +53,9 @@ public class Rule extends BaseEntity {
 	@Column(name="RULE_CRITERIA", nullable=true, length = 1024)
 	private String combinedRuleCriteria;
 
+	@Column(name="RULE_DRL", nullable=true, length = 4000)
+	private String ruleDrl;
+
 	/**
      * Constructor to be used by JPA EntityManager.
      */
@@ -103,6 +106,20 @@ public class Rule extends BaseEntity {
 	 */
 	public List<RuleCond> getRuleConds() {
 		return ruleConds;
+	}
+
+	/**
+	 * @return the ruleDrl
+	 */
+	public String getRuleDrl() {
+		return ruleDrl;
+	}
+
+	/**
+	 * @param ruleDrl the ruleDrl to set
+	 */
+	public void setRuleDrl(String ruleDrl) {
+		this.ruleDrl = ruleDrl;
 	}
 
 	/**

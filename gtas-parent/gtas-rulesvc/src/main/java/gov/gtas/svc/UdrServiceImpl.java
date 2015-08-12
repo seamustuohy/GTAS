@@ -174,7 +174,7 @@ public class UdrServiceImpl implements UdrService {
 		List<UdrRule> ruleList = rulePersistenceService.findAll();
 		ruleManagementService.createKnowledgeBaseFromUdrRules(UdrConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList, userId);
 
-		return UdrServiceHelper.createResponse(true, UdrConstants.UDR_CREATE_OP_NAME, savedRule);
+		return UdrServiceJsonResponseHelper.createResponse(true, UdrConstants.UDR_CREATE_OP_NAME, savedRule);
 	}
 
 	private User fetchRuleAuthor(final String userId, final String authorUserId) {
@@ -265,11 +265,12 @@ public class UdrServiceImpl implements UdrService {
 
 		} else {
 			// simple update - meta data only
+			//no need to re-generate the Knowledge Base.
 			updatedRule = rulePersistenceService.update(ruleToUpdate, null,
 					userId);
 		}
 
-		return UdrServiceHelper.createResponse(true, UdrConstants.UDR_UPDATE_OP_NAME,
+		return UdrServiceJsonResponseHelper.createResponse(true, UdrConstants.UDR_UPDATE_OP_NAME,
 				updatedRule);
 	}
 
@@ -289,10 +290,10 @@ public class UdrServiceImpl implements UdrService {
 			} else {
 				ruleManagementService.deleteKnowledgeBase(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
 			}
-			return UdrServiceHelper.createResponse(true, UdrConstants.UDR_DELETE_OP_NAME,
+			return UdrServiceJsonResponseHelper.createResponse(true, UdrConstants.UDR_DELETE_OP_NAME,
 					deletedRule);
 		} else {
-			return UdrServiceHelper.createResponse(false, UdrConstants.UDR_DELETE_OP_NAME,
+			return UdrServiceJsonResponseHelper.createResponse(false, UdrConstants.UDR_DELETE_OP_NAME,
 					deletedRule);
 		}
 	}
