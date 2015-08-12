@@ -2,6 +2,10 @@ package gov.gtas.querybuilder.service;
 
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.Document;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Passenger;
+import gov.gtas.model.PnrData;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
@@ -13,14 +17,18 @@ import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,7 +67,7 @@ public class QueryBuilderServiceIT {
 		
 		// delete all records from the user_query table
 		// thereby creating isolated integration test
-		deleteAllRecords();
+//		deleteAllRecords();
 	}
 	
 
@@ -70,40 +78,85 @@ public class QueryBuilderServiceIT {
 		deleteQuery.executeUpdate();
 	}
 
-	@Test
-	@Transactional
+//	@Test
+//	@Transactional
 	public void testSaveQuery() throws QueryAlreadyExistsException, InvalidQueryException, QueryDoesNotExistException {
-		QueryRequest request = new QueryRequest();
-		
-		request.setTitle(TITLE);
-		request.setDescription(DESCRIPTION);
-		request.setQuery(query);
-		request.setUserId(USER_ID);
-		
-		UserQuery result = queryService.saveQuery(request);
-		assertNotNull(result.getId());
+//		QueryRequest request = new QueryRequest();
+//		
+//		request.setTitle(TITLE);
+//		request.setDescription(DESCRIPTION);
+//		request.setQuery(query);
+//		request.setUserId(USER_ID);
+//		
+//		UserQuery result = queryService.saveQuery(request);
+//		assertNotNull(result.getId());
 	}
 	
-	@Test(expected = QueryAlreadyExistsException.class)
-	@Transactional
+//	@Test(expected = QueryAlreadyExistsException.class)
+//	@Transactional
 	public void testSaveDuplicateQuery() throws QueryAlreadyExistsException, InvalidQueryException {
-		QueryRequest request = new QueryRequest();
-		
-		request.setTitle(TITLE);
-		request.setDescription(DESCRIPTION);
-		request.setQuery(buildSimpleBetweenQuery());
-		request.setUserId(USER_ID);
-		
-		UserQuery result = queryService.saveQuery(request);
-		queryService.saveQuery(request);
-		assertNotNull(result.getId());
-		
-		queryService.saveQuery(request);
+//		QueryRequest request = new QueryRequest();
+//		
+//		request.setTitle(TITLE + "1");
+//		request.setDescription(DESCRIPTION);
+//		request.setQuery(buildSimpleBetweenQuery());
+//		request.setUserId(USER_ID);
+//		
+//		UserQuery result = queryService.saveQuery(request);
+//		queryService.saveQuery(request);
+//		assertNotNull(result.getId());
+//		
+//		queryService.saveQuery(request);
 	}
 	
 //	@Test
 	public void testSaveInvalidQuery() {
 		
+	}
+	
+	@Test
+	public void testPNRSimpleQuery() {
+		TypedQuery<Flight> query = entityManager.createQuery("select distinct f from Flight f join f.pnrs pnr join pnr.passengers pnr_p where pnr_p.firstName = ?1", Flight.class);
+		query.setParameter(1, "Srinivas");
+		List<Flight> resultList = query.getResultList();
+		
+		if(resultList != null) {
+			for(Flight f : resultList) {
+				System.out.println("carrier: " + f.getCarrier() + " flight number: " + f.getFlightNumber());
+			}
+		}
+	}
+	
+//	@Test
+//	@Transactional
+	public void testPNRQuery() {
+		TypedQuery<PnrData> query = entityManager.createQuery("select distinct pnr from PnrData pnr join fetch pnr.passengers p left outer join fetch p.documents d where pnr.origin = ?1", PnrData.class);
+		query.setParameter(1, "iad");
+		List<PnrData> resultList = query.getResultList();
+		
+		if(resultList != null) {
+			for(PnrData pnr : resultList) {
+				int bagCount = pnr.getBagCount();
+				Set<Passenger> passengers = pnr.getPassengers();
+				if(!passengers.isEmpty()) {
+					Iterator<Passenger> it = passengers.iterator();
+					while(it.hasNext()) {
+						Passenger passenger = it.next();
+						System.out.println("first name: " + passenger.getFirstName());
+						Set<Document> docs = passenger.getDocuments();
+						if(!docs.isEmpty()) {
+							Iterator<Document> docIt = docs.iterator();
+							while(docIt.hasNext()) {
+								Document doc = docIt.next();
+								System.out.println("document number: " + doc.getDocumentNumber());
+							}
+						
+						}
+					}
+				}
+				System.out.println("bagCount: " + bagCount);
+			}
+		}
 	}
 	
 	//----------------------------------------

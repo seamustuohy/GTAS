@@ -85,6 +85,7 @@ public class JPQLGenerator {
 				}
 				
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
+			
 			}
 			
 			logger.info("Parsed Query: " + query);
