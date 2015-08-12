@@ -7,8 +7,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,18 +16,30 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "gtas_users")
 public class User implements Serializable {
+    private static final long serialVersionUID = 1L;  
+    public User() { }
 
-
-	private static final long serialVersionUID = 1L;
+    @Id
+    @Column(name="user_id")
 	private String userId;
-	private String password;
+
+    @Column(name="password", nullable = false)
+    private String password;
+    
+    @Column(name="first_name")
 	private String firstName;
+
+    @Column(name="last_name")
 	private String lastName;
+    
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name ="role_id")
 	private Role userRole;
+    
+    @OneToMany(fetch=FetchType.EAGER)
+    @JoinColumn(name ="userId")    
 	private List<Authorities> authoritiesList;
 
-	@Id
-	@Column(name="user_id")
 	public String getUserId() {
 		return userId;
 	}
@@ -37,7 +47,6 @@ public class User implements Serializable {
 		this.userId = userId;
 	}
 	
-	@Column(name="password")
 	public String getPassword() {
 		return password;
 	}
@@ -45,7 +54,6 @@ public class User implements Serializable {
 		this.password = password;
 	}
 	
-	@Column(name="first_name")
 	public String getFirstName() {
 		return firstName;
 	}
@@ -53,7 +61,6 @@ public class User implements Serializable {
 		this.firstName = firstName;
 	}
 	
-	@Column(name="last_name")
 	public String getLastName() {
 		return lastName;
 	}
@@ -61,8 +68,6 @@ public class User implements Serializable {
 		this.lastName = lastName;
 	}
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name ="role_id")
 	public Role getUserRole() {
 		return userRole;
 	}
@@ -70,8 +75,6 @@ public class User implements Serializable {
 		this.userRole = userRole;
 	}
 	
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinColumn(name ="userId")
 	public Collection<Authorities> getAuthorities(){
 		return authoritiesList;
 	}
@@ -79,5 +82,4 @@ public class User implements Serializable {
 	public void setAuthorities(List<Authorities> authList){
 		this.authoritiesList = authList;
 	}
-
 }

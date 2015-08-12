@@ -11,15 +11,16 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "pnr_message")
-public class PnrMessage extends Message {   
+public class PnrMessage extends Message {
+    private static final long serialVersionUID = 1L;  
+    public PnrMessage() { }
+    
     @Embedded
     private EdifactMessage edifactMessage;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrMessage")
     private Set<Pnr> pnrs;
     
-    public PnrMessage() { }
-
     public void addPnr(Pnr pnr) {
         if (this.pnrs == null) {
             this.pnrs = new HashSet<>();

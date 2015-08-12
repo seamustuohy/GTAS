@@ -12,6 +12,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "address")
 public class Address extends BaseEntityAudit {
+    private static final long serialVersionUID = 1L;
+    public Address() { }
+    
 	@Column(name = "line1")
 	private String line1;
 	
@@ -34,7 +37,7 @@ public class Address extends BaseEntityAudit {
 	private String postalCode;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="pnr_id",referencedColumnName="id")     
+    @JoinColumn(name="pnr_id", nullable = false)     
     private Pnr pnr;
 
 	public String getLine1() {

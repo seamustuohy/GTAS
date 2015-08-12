@@ -19,7 +19,41 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "flight")
 public class Flight extends BaseEntityAudit {
+    private static final long serialVersionUID = 1L;  
     public Flight() { }
+    
+    @Column(nullable = false)
+    private String carrier;
+    
+    @Size(min = 4, max = 4)
+    @Column(name = "flight_number", length = 4, nullable = false)
+    private String flightNumber;
+
+    @Column(nullable = false)
+    private String origin;
+    
+    @Column(name = "origin_country", length = 3)
+    private String originCountry;
+    
+    @Column(nullable = false)
+    private String destination;
+    
+    @Column(name = "destination_country", length = 3)
+    private String destinationCountry;
+
+    /** calculated field */
+    @Column(name = "flight_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date flightDate;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date etd;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date eta;
+    
+    @Column(length = 3, nullable = false)
+    private String direction;
     
     @ManyToMany(
         targetEntity=Passenger.class,
@@ -37,37 +71,7 @@ public class Flight extends BaseEntityAudit {
         targetEntity = Pnr.class
     ) 
     private Set<Pnr> pnrs = new HashSet<>();
-    
-    private String carrier;
-    
-    @Size(min = 4, max = 4)
-    @Column(name = "flight_number", length = 4)
-    private String flightNumber;
 
-    private String origin;
-    
-    @Column(name = "origin_country", length = 3)
-    private String originCountry;
-    
-    private String destination;
-    
-    @Column(name = "destination_country", length = 3)
-    private String destinationCountry;
-
-    /** calculated field */
-    @Column(name = "flight_date")
-    @Temporal(TemporalType.DATE)
-    private Date flightDate;
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date etd;
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date eta;
-    
-    @Column(length = 3, nullable = false)
-    private String direction;
-    
     public Set<Passenger> getPassengers() {
         return passengers;
     }

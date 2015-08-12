@@ -16,6 +16,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "passenger")
 public class Passenger extends BaseEntityAudit {
+    private static final long serialVersionUID = 1L;  
     public Passenger() { }
     
     @Column(name = "passenger_type", length = 3, nullable = false)
@@ -35,13 +36,13 @@ public class Passenger extends BaseEntityAudit {
     
 	private String title;
     
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
     
     @Column(name = "middle_name")
     private String middleName;
     
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
     
     private String suffix;
@@ -58,6 +59,7 @@ public class Passenger extends BaseEntityAudit {
     @Temporal(TemporalType.DATE)  
     private Date dob;
     
+    /** calculated field */
     private Integer age;
     
     private String embarkation;

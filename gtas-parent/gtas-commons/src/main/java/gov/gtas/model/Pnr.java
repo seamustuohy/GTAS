@@ -22,6 +22,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "pnr")
 public class Pnr extends BaseEntityAudit{
+    private static final long serialVersionUID = 1L;  
+    public Pnr() { }
+    
     @ManyToOne
     @JoinColumn(name = "pnr_message_id")
     private PnrMessage pnrMessage;

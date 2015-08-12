@@ -15,6 +15,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "apis_message")
 public class ApisMessage extends Message {
+    private static final long serialVersionUID = 1L;
+    public ApisMessage() { }
+    
     @Embedded
     private EdifactMessage edifactMessage;
 
