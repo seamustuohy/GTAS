@@ -11,6 +11,7 @@ import javax.persistence.TemporalType;
 
 @MappedSuperclass  
 public abstract class BaseEntityAudit extends BaseEntity {  
+    private static final long serialVersionUID = 1L;  
   
     @Column(name = "created_at")  
     @Temporal(TemporalType.TIMESTAMP)  

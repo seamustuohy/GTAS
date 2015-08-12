@@ -12,9 +12,13 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "credit_card")
 public class CreditCard extends BaseEntityAudit {
+    private static final long serialVersionUID = 1L;  
+    public CreditCard() { }
+    
 	@Column(name = "card_type")
     private String cardType;
 	
+	@Column(nullable = false)
     private String number;
 	
     @Temporal(TemporalType.DATE)

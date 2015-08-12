@@ -16,11 +16,8 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "hits_summary")
 public class HitsSummary extends BaseEntity {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3436310987156511552L;
+    private static final long serialVersionUID = 3436310987156511552L;
+    public HitsSummary() { }
 
 	@Column(name = "passenger_id", nullable = false)
 	private Long passengerId;

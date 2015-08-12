@@ -2,17 +2,16 @@ package gov.gtas.model;
 
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "agency")
 public class Agency extends BaseEntityAudit {
-
+    private static final long serialVersionUID = 1L;
+    public Agency() { }
+    
 	@Column(name = "agency_name")
 	private String agencyName;
 	

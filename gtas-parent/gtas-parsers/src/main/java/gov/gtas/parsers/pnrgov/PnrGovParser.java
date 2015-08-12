@@ -77,7 +77,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     public void parsePayload() throws ParseException {
         MSG msg = getMandatorySegment(MSG.class);
 
-        // the travel agent or airline that originated this reservation
+        // specifies the sender/reporting party of the message
         ORG org = getMandatorySegment(ORG.class);
 
         TVL_L0 tvl = getMandatorySegment(TVL_L0.class);
@@ -357,6 +357,9 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }        
     }
     
+    /**
+     * the agent info that checked-in the passenger
+     */
     private void processGroup6(DAT_G6 dat) throws ParseException {
         ORG org = getConditionalSegment(ORG.class, "ORG");
 

@@ -3,6 +3,7 @@ package gov.gtas.model;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,11 +12,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "email")
 public class Email extends BaseEntityAudit {
+    private static final long serialVersionUID = 1L;  
+    public Email() { }
+    
+    @Column(nullable = false)
 	private String address;
+    
 	private String domain;
 	
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="pnr_id")    
+    @JoinColumn(name="pnr_id", nullable = false)    
 	private Pnr pnr;
 
     public String getAddress() {

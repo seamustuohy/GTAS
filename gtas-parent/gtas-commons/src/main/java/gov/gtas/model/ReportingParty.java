@@ -9,6 +9,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "reporting_party")
 public class ReportingParty extends BaseEntity {
+    private static final long serialVersionUID = 1L;  
+    public ReportingParty() { }
+    
     @Column(name = "party_name")
     private String partyName;
     private String telephone;

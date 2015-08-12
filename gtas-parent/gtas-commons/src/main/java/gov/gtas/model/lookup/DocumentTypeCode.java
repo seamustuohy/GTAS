@@ -1,7 +1,6 @@
 package gov.gtas.model.lookup;
 
 public enum DocumentTypeCode {
-    P,
-    V,
-    I
+    P,  // Passport
+    V   // Visa
 }

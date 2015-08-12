@@ -14,17 +14,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "gtas_roles")
 public class Role implements Serializable{
-	
+    private static final long serialVersionUID = 1L;  
+	public Role() { }
 
-	private static final long serialVersionUID = 1L;
-	
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name="role_id")
 	private Integer roleId;
+	
+    @Column(name="role_description")
 	private String roleDescription;
+    
+    @OneToMany(mappedBy = "userRole")   
 	private List<User> userList;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="role_id")
 	public Integer getRoleId() {
 		return roleId;
 	}
@@ -33,7 +36,6 @@ public class Role implements Serializable{
 		this.roleId = roleId;
 	}
 
-	@Column(name="role_description")
 	public String getRoleDescription() {
 		return roleDescription;
 	}
@@ -42,8 +44,6 @@ public class Role implements Serializable{
 		this.roleDescription = roleDescription;
 	}
 
-	
-    @OneToMany(mappedBy = "userRole")
     public List<User> getUserList() {
         return userList;
     }
@@ -51,5 +51,4 @@ public class Role implements Serializable{
 	public void setUserList(List<User> userList) {
 		this.userList = userList;
 	}
-
 }

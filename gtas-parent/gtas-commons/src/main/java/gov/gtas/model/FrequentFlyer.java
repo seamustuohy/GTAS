@@ -2,20 +2,20 @@ package gov.gtas.model;
 
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "frequent_flyer")
 public class FrequentFlyer extends BaseEntityAudit {
+    private static final long serialVersionUID = 1L;  
+    public FrequentFlyer() { }
+    
 	@Column(name = "airline_code", length = 4)
     private String airlineCode;
 	
-	@Column(name = "frequent_flyer_number")
+	@Column(name = "frequent_flyer_number", nullable = false)
     private String frequentFlyerNumber;
 	
 	public String getAirlineCode() {
