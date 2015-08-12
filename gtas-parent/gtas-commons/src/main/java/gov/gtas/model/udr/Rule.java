@@ -14,7 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -30,11 +32,13 @@ public class Rule extends BaseEntity {
 	 * serial version UID
 	 */
 	private static final long serialVersionUID = 6208917106485574650L;
+	
+	private static final  String RULE_CRITERIA_SEPARATOR = "\n";
 		
 	@Column(name="RULE_INDX")
 	private int ruleIndex;
 	
-    @ManyToOne(cascade = CascadeType.MERGE, fetch=FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch=FetchType.EAGER)
     @JoinColumn(name="UDR_RULE_REF", nullable=false, referencedColumnName="id")     
     private UdrRule parent;
 
@@ -45,6 +49,12 @@ public class Rule extends BaseEntity {
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER, mappedBy="parent")
 	@OrderColumn(name="COND_SEQ")
 	private List<RuleCond> ruleConds;
+	
+	@Column(name="RULE_CRITERIA", nullable=true, length = 1024)
+	private String combinedRuleCriteria;
+
+	@Column(name="RULE_DRL", nullable=true, length = 4000)
+	private String ruleDrl;
 
 	/**
      * Constructor to be used by JPA EntityManager.
@@ -96,6 +106,54 @@ public class Rule extends BaseEntity {
 	 */
 	public List<RuleCond> getRuleConds() {
 		return ruleConds;
+	}
+
+	/**
+	 * @return the ruleDrl
+	 */
+	public String getRuleDrl() {
+		return ruleDrl;
+	}
+
+	/**
+	 * @param ruleDrl the ruleDrl to set
+	 */
+	public void setRuleDrl(String ruleDrl) {
+		this.ruleDrl = ruleDrl;
+	}
+
+	/**
+	 * @return the ruleCriteria
+	 */
+	@Transient
+	public String[] getRuleCriteria() {
+		return combinedRuleCriteria == null? new String[0]
+				:combinedRuleCriteria.split(RULE_CRITERIA_SEPARATOR);
+	}
+
+	/**
+	 * @param ruleCriteria the ruleCriteria to set
+	 */
+	public void addRuleCriteria(String ruleCriteria) {
+		if(StringUtils.isEmpty(this.combinedRuleCriteria)){
+			this.combinedRuleCriteria = ruleCriteria;
+		}else {
+			this.combinedRuleCriteria += RULE_CRITERIA_SEPARATOR + ruleCriteria;
+		}
+	}
+
+	/**
+	 * @return the knowledgeBase
+	 */
+	public KnowledgeBase getKnowledgeBase() {
+		return knowledgeBase;
+	}
+
+	/**
+	 * @param knowledgeBase the knowledgeBase to set
+	 */
+	public void setKnowledgeBase(KnowledgeBase knowledgeBase) {
+		this.knowledgeBase = knowledgeBase;
 	}
 
 	@Override

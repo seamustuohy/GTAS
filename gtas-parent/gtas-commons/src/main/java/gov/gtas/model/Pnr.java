@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "pnr")
-public class PnrData extends BaseEntityAudit{
+public class Pnr extends BaseEntityAudit{
     @ManyToOne
     @JoinColumn(name = "pnr_message_id")
     private PnrMessage pnrMessage;
@@ -63,9 +63,6 @@ public class PnrData extends BaseEntityAudit{
     @Column(name = "total_dwell_time")
     private Integer totalDwellTime;
     
-    @Column(name = "email")
-    private String email;
- 
     @ManyToMany(
         targetEntity=Flight.class,
         cascade={CascadeType.ALL}
@@ -100,18 +97,21 @@ public class PnrData extends BaseEntityAudit{
 	@JoinColumn(name="ff_id",referencedColumnName="id") 
     private FrequentFlyer frequentFlyer;	
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
     private Set<Address> addresses;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrData")
-    private Set<Phone> phones = new HashSet<>();   
-    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
+    private Set<Phone> phones;   
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
+    private Set<Email> emails;   
+
     public void addAddress(Address address) {
         if (this.addresses == null) {
             this.addresses = new HashSet<>();
         }
         this.addresses.add(address);
-        address.setPnrData(this);
+        address.setPnr(this);
     }
     
     public void addPhone(Phone phone) {
@@ -119,9 +119,17 @@ public class PnrData extends BaseEntityAudit{
             this.phones = new HashSet<>();
         }
         this.phones.add(phone);
-        phone.setPnrData(this);
+        phone.setPnr(this);
     }
-    
+
+    public void addEmail(Email email) {
+        if (this.emails == null) {
+            this.emails = new HashSet<>();
+        }
+        this.emails.add(email);
+        email.setPnr(this);
+    }
+
 	public Agency getAgency() {
 		return agency;
 	}
@@ -162,15 +170,15 @@ public class PnrData extends BaseEntityAudit{
 		this.phones = phones;
 	}
 
-	public String getEmail() {
-		return email;
-	}
+	public Set<Email> getEmails() {
+        return emails;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmails(Set<Email> emails) {
+        this.emails = emails;
+    }
 
-	public String getRecordLocator() {
+    public String getRecordLocator() {
 		return recordLocator;
 	}
 
@@ -303,7 +311,7 @@ public class PnrData extends BaseEntityAudit{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        final PnrData other = (PnrData)obj;
+        final Pnr other = (Pnr)obj;
         return Objects.equals(this.carrier, other.carrier)
                 && Objects.equals(this.departureDate, other.departureDate)
                  && Objects.equals(this.origin, other.origin);

@@ -28,16 +28,20 @@ import gov.gtas.parsers.util.ParseUtils;
  * </ul>
  */
 public class FOP extends Segment {
+    private static final String CREDIT_CARD_TYPE = "CC";
+    
     private String paymentType;
     private String paymentAmount;
     private String vendorCode;
     private String accountNumber;
     private Date expirationDate;
+    private boolean isCreditCard;
 
     public FOP(List<Composite> composites) throws ParseException {
         super(FOP.class.getSimpleName(), composites);
         Composite c = getComposite(0);
         this.paymentType = c.getElement(0);
+        this.isCreditCard = CREDIT_CARD_TYPE.equals(this.paymentType);
         this.paymentAmount = c.getElement(2);
         this.vendorCode = c.getElement(3);
         this.accountNumber = c.getElement(4);
@@ -65,5 +69,9 @@ public class FOP extends Segment {
 
     public Date getExpirationDate() {
         return expirationDate;
+    }
+
+    public boolean isCreditCard() {
+        return isCreditCard;
     }
 }

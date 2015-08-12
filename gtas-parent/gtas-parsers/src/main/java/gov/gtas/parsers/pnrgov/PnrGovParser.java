@@ -42,9 +42,11 @@ import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.vo.air.AddressVo;
+import gov.gtas.parsers.vo.air.CreditCardVo;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.PhoneVo;
+import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
 
 public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private static final String[] SEGMENT_NAMES = new String[] { "ABI", "ADD", "APD", "DAT", "EBD", "EQN", "FAR", "FOP",
@@ -67,6 +69,10 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
     }
 
+    protected String getPayloadText(String message) throws ParseException {
+        return EdifactLexer.getMessagePayload(message, "MSG", "UNT");
+    }
+    
     @Override
     public void parsePayload() throws ParseException {
         MSG msg = getMandatorySegment(MSG.class);
@@ -145,7 +151,12 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (add == null) {
                 break;
             }
-            currentPnr.getAddresses().add(createAddress(add));
+            AddressVo address = createAddress(add);
+            currentPnr.getAddresses().add(address);
+            if (address.getPhoneNumber() != null) {
+                PhoneVo p = createPhone(address.getPhoneNumber());
+                currentPnr.getPhoneNumbers().add(p);
+            }
         }
 
         for (;;) {
@@ -251,7 +262,20 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         processGroup4(fop);
     }
 
+    /**
+     * Form of payment info
+     */
     private void processGroup4(FOP fop) throws ParseException {
+        if (fop.isCreditCard()) {
+            CreditCardVo cc = new CreditCardVo();
+            cc.setCardType(fop.getVendorCode());
+            cc.setExpiration(fop.getExpirationDate());
+            // TODO: how to figure this out?
+//            cc.setAccountHolder();
+            cc.setNumber(fop.getAccountNumber());
+            currentPnr.getCreditCards().add(cc);
+        }
+
         IFT ift = getConditionalSegment(IFT.class);
         ADD add = getConditionalSegment(ADD.class);
         if (add != null) {
@@ -270,6 +294,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         f.setEta(tvl.getEta());
         f.setEtd(tvl.getEtd());
         f.setFlightNumber(tvl.getFlightNumber());
+        f.setFlightDate(tvl.getEtd(), tvl.getEta(), parsedMessage.getTransmissionDate());
         currentPnr.getFlights().add(f);
         
         TRA tra = getConditionalSegment(TRA.class);
@@ -414,6 +439,13 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         rv.setCountry(add.getCountryCode());
         rv.setPostalCode(add.getPostalCode());
         rv.setPhoneNumber(add.getTelephone());
+        return rv;
+    }
+    
+    private PhoneVo createPhone(String number) {
+        String n = number.replaceAll("[^0-9]", "");
+        PhoneVo rv = new PhoneVo();
+        rv.setNumber(n);
         return rv;
     }
 }

@@ -5,8 +5,10 @@ import java.util.ListIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.segment.usedifact.CTA;
 import gov.gtas.parsers.paxlst.segment.usedifact.DTM;
@@ -35,7 +37,13 @@ public final class PaxlstParserUSedifact extends EdifactParser<PaxlstMessageVo> 
     
     protected GROUP currentGroup;
     
+    // TODO
     protected void validateSegmentName(String segmentName) throws ParseException {
+    }
+    
+    // TODO
+    protected String getPayloadText(String message) throws ParseException {
+        return EdifactLexer.getMessagePayload(message, "BGM", "UNT");
     }
     
     public PaxlstParserUSedifact() { 

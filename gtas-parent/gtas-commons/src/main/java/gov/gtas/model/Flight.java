@@ -34,9 +34,9 @@ public class Flight extends BaseEntityAudit {
 
     @ManyToMany(
         mappedBy = "flights",
-        targetEntity = PnrData.class
+        targetEntity = Pnr.class
     ) 
-    private Set<PnrData> pnrs = new HashSet<>();
+    private Set<Pnr> pnrs = new HashSet<>();
     
     private String carrier;
     
@@ -135,10 +135,10 @@ public class Flight extends BaseEntityAudit {
         this.destinationCountry = destinationCountry;
     }
 
-    public Set<PnrData> getPnrs() {
+    public Set<Pnr> getPnrs() {
 		return pnrs;
 	}
-	public void setPnrs(Set<PnrData> pnrs) {
+	public void setPnrs(Set<Pnr> pnrs) {
 		this.pnrs = pnrs;
 	}
 	

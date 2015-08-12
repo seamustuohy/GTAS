@@ -35,7 +35,7 @@ public class Address extends BaseEntityAudit {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="pnr_id",referencedColumnName="id")     
-    private PnrData pnrData;
+    private Pnr pnr;
 
 	public String getLine1() {
 		return line1;
@@ -93,17 +93,17 @@ public class Address extends BaseEntityAudit {
 		this.postalCode = postalCode;
 	}
 
-	public PnrData getPnrData() {
-		return pnrData;
+	public Pnr getPnr() {
+		return pnr;
 	}
 
-	public void setPnrData(PnrData pnrData) {
-		this.pnrData = pnrData;
+	public void setPnr(Pnr pnr) {
+		this.pnr = pnr;
 	}
 	
     @Override
     public int hashCode() {
-       return Objects.hash(this.line1, this.line2, this.line3, this.city, this.postalCode, this.country);
+       return Objects.hash(this.line1, this.line2, this.line3, this.city, this.state, this.country, this.postalCode);
     }
     
     @Override
@@ -119,7 +119,8 @@ public class Address extends BaseEntityAudit {
                 && Objects.equals(this.line2, other.line2)
                 && Objects.equals(this.line3, other.line3)
                 && Objects.equals(this.city, other.city)
-                && Objects.equals(this.postalCode, other.postalCode)
-                && Objects.equals(this.country, other.country);
+                && Objects.equals(this.state, other.state)
+                && Objects.equals(this.country, other.country)
+                && Objects.equals(this.postalCode, other.postalCode);
     }
 }

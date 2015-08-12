@@ -1,19 +1,6 @@
 package gov.gtas.services;
 
 import static org.junit.Assert.assertNotNull;
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.Address;
-import gov.gtas.model.Agency;
-import gov.gtas.model.CreditCard;
-import gov.gtas.model.Flight;
-import gov.gtas.model.FrequentFlyer;
-//import gov.gtas.model.Pax;
-import gov.gtas.model.Phone;
-import gov.gtas.model.PnrData;
-import gov.gtas.model.Passenger;
-import gov.gtas.model.lookup.PassengerTypeCode;
-import gov.gtas.repository.ApisMessageRepository;
-import gov.gtas.repository.LookUpRepository;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -29,14 +16,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.Address;
+import gov.gtas.model.Agency;
+import gov.gtas.model.CreditCard;
+import gov.gtas.model.Flight;
+import gov.gtas.model.FrequentFlyer;
+import gov.gtas.model.Passenger;
+//import gov.gtas.model.Pax;
+import gov.gtas.model.Phone;
+import gov.gtas.model.Pnr;
+import gov.gtas.model.lookup.PassengerTypeCode;
+import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.LookUpRepository;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class PnrDataServiceIT {
-
-	
+public class PnrServiceIT {
 	@Autowired
-	private PnrDataService pnrService;
+	private PnrService pnrService;
 
 	@Autowired
 	private FlightService testTarget;
@@ -64,14 +63,14 @@ public class PnrDataServiceIT {
 	public void tearDown() throws Exception {
 	}
 	@Test
-	public void testPnrDataSave() {
+	public void testPnrSave() {
 		System.out.println("##################################################");
 		Flight f = new Flight();
 		prepareFlightData( f);
 		Passenger passengerToUpdate = new Passenger();
 		preparePassengerData(passengerToUpdate);
-		PnrData pnr = new PnrData();
-		preparePnrData(pnr);
+		Pnr pnr = new Pnr();
+		preparePnr(pnr);
 		passengerToUpdate.getPnrs().add(pnr);
 		passengerToUpdate.getFlights().add(f);
 		pnr.getPassengers().add(passengerToUpdate);
@@ -86,7 +85,7 @@ public class PnrDataServiceIT {
 
 	}
 
-	private void preparePnrData(PnrData pnr){
+	private void preparePnr(Pnr pnr){
 		pnr.setBagCount(2);
 		pnr.setDateBooked(new Date("7/7/2015"));
 		pnr.setDateReceived(new Date("7/7/2015"));
@@ -105,11 +104,11 @@ public class PnrDataServiceIT {
 		pnr.setPassengerCount(1);
 		pnr.setTotalDwellTime(120);
 		CreditCard cc = new CreditCard();
-		cc.setCardExpiration("0417");
-		cc.setCardHolderName("Srinivasarao Vempati");
-		cc.setCardNumber("2222-3333-4444-5555");
+		cc.setExpiration(new Date("4/17/2015"));
+		cc.setAccountHolder("Srinivasarao Vempati");
+		cc.setNumber("2222-3333-4444-5555");
 		cc.setCardType("VISA");
-		//cc.setPnrData(pnr);
+		//cc.setPnr(pnr);
 		pnr.setCreditCard(cc);
 		Address add = new Address();
 		add.setCity("ALDIE");
@@ -119,14 +118,13 @@ public class PnrDataServiceIT {
 		add.setState("VA");
 		add.setCreationDate();
 		add.setCreatedBy("JUNIT");
-		add.setPnrData(pnr);
+		add.setPnr(pnr);
 		Set adds = new HashSet<Address>();
 		adds.add(add);
 		pnr.setAddresses(adds);
 		Phone p = new Phone();
-		p.setPhoneNumber("24243534455");
-		p.setPhoneType("H");
-		p.setPnrData(pnr);
+		p.setNumber("24243534455");
+		p.setPnr(pnr);
 		p.setCreationDate();
 		p.setCreatedBy("JUNIT");
 		Set phones = new HashSet();

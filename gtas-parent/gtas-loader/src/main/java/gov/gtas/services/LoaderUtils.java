@@ -7,26 +7,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Address;
+import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
-import gov.gtas.model.PnrData;
+import gov.gtas.model.Phone;
+import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.FlightDirectionCode;
-import gov.gtas.parsers.edifact.EdifactLexer;
-import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.vo.air.AddressVo;
+import gov.gtas.parsers.vo.air.CreditCardVo;
 import gov.gtas.parsers.vo.air.DocumentVo;
 import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.PhoneVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
 
 @Service
 public class LoaderUtils {
-    private static final String LOADER_USER = "LOADER";
+    private static final String LOADER_USER = "SYSTEM";
     
     @Autowired
     private AirportService airportService;
@@ -114,8 +116,8 @@ public class LoaderUtils {
         return f;
     }
 
-    public PnrData convertPnrVo(PnrVo vo) throws ParseException {
-        PnrData pnr = new PnrData();
+    public Pnr convertPnrVo(PnrVo vo) throws ParseException {
+        Pnr pnr = new Pnr();
         pnr.setCreatedBy(LOADER_USER);
         BeanUtils.copyProperties(vo, pnr);
         
@@ -140,10 +142,25 @@ public class LoaderUtils {
     
     public Address convertAddressVo(AddressVo vo) throws ParseException {
         Address addr = new Address();
+        addr.setCreatedBy(LOADER_USER);
         BeanUtils.copyProperties(vo, addr);
         return addr;
     }
     
+    public Phone convertPhoneVo(PhoneVo vo) {
+        Phone p = new Phone();
+        p.setCreatedBy(LOADER_USER);
+        BeanUtils.copyProperties(vo, p);
+        return p;
+    }
+
+    public CreditCard convertCreditVo(CreditCardVo vo) {
+        CreditCard cc = new CreditCard();
+        cc.setCreatedBy(LOADER_USER);
+        BeanUtils.copyProperties(vo, cc);
+        return cc;
+    }
+
     private Airport getAirport(String a) throws ParseException {
         if (a == null) return null;
         
@@ -156,25 +173,4 @@ public class LoaderUtils {
 
         return rv;
     }
-    
-    /**
-     * Return everything from the start of the first BGM segment to the
-     * start of the UNT trailing header segment.
-     */
-    public String getApisMessagePayload(String text) {
-        if (text == null) return null;
-        
-        UNA una = EdifactLexer.getUnaSegment(text);
-        int bgmIndex = EdifactLexer.getStartOfSegment("BGM", text, una);
-        if (bgmIndex == -1) {
-            return null;
-        }
-
-        int untIndex = EdifactLexer.getStartOfSegment("UNT", text, una);
-        if (untIndex == -1) {
-            return null;
-        }
-        
-        return text.substring(bgmIndex, untIndex);
-    }   
 }
