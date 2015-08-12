@@ -216,7 +216,7 @@ public class RulePersistenceServiceIT {
 	}
 
 	@Transactional
-	@Test()
+//	@Test()
 	public void testDeleteRule() {
 		final String RULE_DESCRIPTION = "This is a Simple Rule";
 		String testRuleTitle = testGenUtils.generateTestRuleTitle(6);

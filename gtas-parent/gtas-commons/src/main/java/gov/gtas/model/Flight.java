@@ -18,12 +18,13 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "flight",
-indexes = {
-    @Index(name = "idx_unique_flight", unique = true,
-        columnList = "flight_number, carrier, origin, destination, flight_date"
-    )
-})
+@Table(name = "flight")
+//,
+//indexes = {
+//    @Index(name = "idx_unique_flight", unique = true,
+//        columnList = "flight_number, carrier, origin, destination, flight_date"
+//    )
+//})
 public class Flight extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;  
     public Flight() { }
