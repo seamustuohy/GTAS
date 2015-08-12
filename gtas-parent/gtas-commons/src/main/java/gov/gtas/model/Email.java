@@ -34,6 +34,14 @@ public class Email extends BaseEntityAudit {
         this.domain = domain;
     }
 
+    public Pnr getPnr() {
+        return pnr;
+    }
+
+    public void setPnr(Pnr pnr) {
+        this.pnr = pnr;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(this.address);

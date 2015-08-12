@@ -59,12 +59,9 @@ public class PnrServiceImpl implements PnrService {
 		target.setChangeDate();
 		target.setDaysBookedBeforeTravel(source.getDaysBookedBeforeTravel());
 		target.setDepartureDate(source.getDepartureDate());
-		target.setEmail(source.getEmail());
 		target.setFormOfPayment(source.getFormOfPayment());
 		target.setOrigin(source.getOrigin());
-		target.setOriginCountry(source.getOriginCountry());
-		//target.setPassenger(source.getPassenger());
-		
+		target.setOriginCountry(source.getOriginCountry());	
 		target.setPassengerCount(source.getPassengerCount());
 		target.setDateReceived(source.getDateReceived());
 		target.setTotalDwellTime(source.getTotalDwellTime());

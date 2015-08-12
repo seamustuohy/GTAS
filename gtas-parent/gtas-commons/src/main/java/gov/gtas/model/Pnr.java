@@ -63,9 +63,6 @@ public class Pnr extends BaseEntityAudit{
     @Column(name = "total_dwell_time")
     private Integer totalDwellTime;
     
-    @Column(name = "email")
-    private String email;
- 
     @ManyToMany(
         targetEntity=Flight.class,
         cascade={CascadeType.ALL}
@@ -104,8 +101,11 @@ public class Pnr extends BaseEntityAudit{
     private Set<Address> addresses;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
-    private Set<Phone> phones = new HashSet<>();   
-    
+    private Set<Phone> phones;   
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
+    private Set<Email> emails;   
+
     public void addAddress(Address address) {
         if (this.addresses == null) {
             this.addresses = new HashSet<>();
@@ -121,7 +121,15 @@ public class Pnr extends BaseEntityAudit{
         this.phones.add(phone);
         phone.setPnr(this);
     }
-    
+
+    public void addEmail(Email email) {
+        if (this.emails == null) {
+            this.emails = new HashSet<>();
+        }
+        this.emails.add(email);
+        email.setPnr(this);
+    }
+
 	public Agency getAgency() {
 		return agency;
 	}
@@ -162,15 +170,15 @@ public class Pnr extends BaseEntityAudit{
 		this.phones = phones;
 	}
 
-	public String getEmail() {
-		return email;
-	}
+	public Set<Email> getEmails() {
+        return emails;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmails(Set<Email> emails) {
+        this.emails = emails;
+    }
 
-	public String getRecordLocator() {
+    public String getRecordLocator() {
 		return recordLocator;
 	}
 
