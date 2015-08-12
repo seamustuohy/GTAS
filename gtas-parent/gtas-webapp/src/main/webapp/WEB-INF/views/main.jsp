@@ -24,7 +24,7 @@
         <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
         <link rel="stylesheet"
         href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
-        <link rel="stylesheet" href="resources/bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js" />
+        <link rel="stylesheet" href="resources/bower_components/angular-ui-grid/ui-grid.css" />
 
         <link rel="stylesheet" href="resources/css/query-builder.default.css" id="qb-theme" />
 
@@ -279,8 +279,7 @@
         <script src="resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
         <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
         <script src="resources/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
-        <script src="resources/bower_components/angular-datatables/dist/angular-datatables.min.js"></script>
-        <script src="resources/bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+        <script src="resources/bower_components/angular-ui-grid/ui-grid.js"></script>
 
         <script src="resources/js/query-builder.js"></script>
         <script src="app.js"></script>

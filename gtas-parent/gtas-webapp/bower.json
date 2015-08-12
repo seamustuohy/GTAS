@@ -16,7 +16,6 @@
     "moment": "^2.6.0",
     "jquery-extendext": "^0.1.1",
     "bootstrap-datepicker": "latest",
-    "eonasdan-bootstrap-datetimepicker": "~4.14.30",
     "angular-ui-grid": "~3.0.3"
   },
   "devDependencies": {
