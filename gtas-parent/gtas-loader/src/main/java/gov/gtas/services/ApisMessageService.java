@@ -63,6 +63,8 @@ public class ApisMessageService implements MessageService {
             }
     
             vo = parser.parse(message);
+            utils.checkHashCode(vo.getHashCode());
+
             this.apisMessage.setStatus(MessageStatus.PARSED);
             this.apisMessage.setHashCode(vo.getHashCode());
             EdifactMessage em = new EdifactMessage();
@@ -77,6 +79,7 @@ public class ApisMessageService implements MessageService {
             String stacktrace = ExceptionUtils.getStackTrace(e);
             this.apisMessage.setError(stacktrace);
             logger.error(stacktrace);
+            return null;
         } finally {
             createMessage(apisMessage);
         }
