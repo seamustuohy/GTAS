@@ -42,6 +42,13 @@ public class ApisMessage extends Message {
     )        
     private Set<Flight> flights = new HashSet<>();
 
+    public void addReportingParty(ReportingParty rp) {
+        if (this.reportingParties == null) {
+            this.reportingParties = new HashSet<>();
+        }
+        this.reportingParties.add(rp);
+    }
+    
     public Set<ReportingParty> getReportingParties() {
         return reportingParties;
     }

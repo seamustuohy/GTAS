@@ -3,6 +3,7 @@ package gov.gtas.services;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -17,20 +18,19 @@ import gov.gtas.model.ApisMessage;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.ReportingParty;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
-import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.ApisMessageVo;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
 import gov.gtas.parsers.util.FileUtils;
-import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.ReportingPartyRepository;
 
 @Service
 public class ApisMessageService implements MessageService {
@@ -38,6 +38,9 @@ public class ApisMessageService implements MessageService {
 
     @Autowired
     private LoaderUtils utils;
+    
+    @Autowired
+    private ReportingPartyRepository rpDao;
     
     @Autowired
     private ApisMessageRepository msgDao;
@@ -90,11 +93,7 @@ public class ApisMessageService implements MessageService {
     public void load(MessageVo message) {
         ApisMessageVo m = (ApisMessageVo)message;
         try {
-            for (ReportingPartyVo rvo : m.getReportingParties()) {
-                ReportingParty rp = utils.convertReportingPartyVo(rvo);
-//                rp.setApisMessage(this.apisMessage);
-                this.apisMessage.getReportingParties().add(rp);
-            }
+            processReportingParties(m.getReportingParties());
             
             Set<Passenger> pax = new HashSet<>();        
             for (PassengerVo pvo : m.getPassengers()) {
@@ -120,6 +119,18 @@ public class ApisMessageService implements MessageService {
         }
     }  
 
+    private void processReportingParties(List<ReportingPartyVo> parties) {
+        for (ReportingPartyVo rvo : parties) {
+            ReportingParty existingRp = rpDao.getReportingParty(rvo.getPartyName(), rvo.getTelephone());
+            if (existingRp == null) {
+                ReportingParty newRp = utils.convertReportingPartyVo(rvo);
+                apisMessage.getReportingParties().add(newRp);
+            } else {
+                apisMessage.addReportingParty(existingRp);
+            }
+        }
+    }
+    
     @Transactional
     private ApisMessage createMessage(ApisMessage m) {
         return msgDao.save(m);

@@ -117,7 +117,7 @@ public abstract class EdifactParser <T extends MessageVo> {
             Segment s = iter.next();
             validateSegmentName(s.getName());
             S rv = segmentFactory.build(s, clazz);
-            System.out.println(rv);
+//            System.out.println(rv);
             return rv;
         }
 
@@ -131,7 +131,7 @@ public abstract class EdifactParser <T extends MessageVo> {
             String myName = (segmentName != null) ? segmentName : clazz.getSimpleName();
             if (s.getName().equals(myName)) {
                 S rv = segmentFactory.build(s, clazz);
-                System.out.println(rv);
+//                System.out.println(rv);
                 return rv;
             } else {
                 iter.previous();
