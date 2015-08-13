@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Address;
+import gov.gtas.model.ApisMessage;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.Message;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
@@ -25,6 +27,7 @@ import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.parsers.vo.air.PhoneVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
+import gov.gtas.repository.MessageRepository;
 
 @Service
 public class LoaderUtils {
@@ -32,6 +35,10 @@ public class LoaderUtils {
     
     @Autowired
     private AirportService airportService;
+    
+    // TODO: can't instantiate generic message repo?
+    @Autowired
+    private MessageRepository<ApisMessage> messageDao;
 
     public Passenger convertPassengerVo(PassengerVo vo) throws ParseException {
         Passenger p = new Passenger();
@@ -159,6 +166,13 @@ public class LoaderUtils {
         cc.setCreatedBy(LOADER_USER);
         BeanUtils.copyProperties(vo, cc);
         return cc;
+    }
+    
+    public void checkHashCode(String hash) throws ParseException {
+        Message m = messageDao.findByHashCode(hash);
+        if (m != null) {
+            throw new ParseException("duplicate message hashcode: " + hash);
+        }
     }
 
     private Airport getAirport(String a) throws ParseException {

@@ -13,10 +13,10 @@ public class PassengerConditionBuilder extends EntityConditionBuilder {
 		super(drlVariableName, EntityEnum.PASSENGER.getEntityName());
 	}
 
-	@Override
-	protected void addSpecialConditionsWithoutActualConditions(
-			StringBuilder bldr) {
-	}
+//	@Override
+//	protected void addSpecialConditionsWithoutActualConditions(
+//			StringBuilder bldr) {
+//	}
 
 	@Override
 	protected void addSpecialConditions(StringBuilder bldr) {

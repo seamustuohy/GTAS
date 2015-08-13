@@ -35,14 +35,14 @@ public class FlightConditionBuilder extends EntityConditionBuilder {
 		super.reset();
 		linkedPassengerList.clear();
 	}
-	@Override
-	protected void addSpecialConditionsWithoutActualConditions(
-			StringBuilder bldr) {
-		//NO OP
-		if(logger.isDebugEnabled()){
-		    logger.debug("FlightConditionBuilder - no flight condition specified.");
-		}
-	}
+//	@Override
+//	protected void addSpecialConditionsWithoutActualConditions(
+//			StringBuilder bldr) {
+//		//NO OP
+//		if(logger.isDebugEnabled()){
+//		    logger.debug("FlightConditionBuilder - no flight condition specified.");
+//		}
+//	}
 
 	@Override
 	protected void addSpecialConditions(StringBuilder bldr) {

@@ -2,7 +2,6 @@ package gov.gtas.model.udr;
 
 import gov.gtas.model.BaseEntity;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -46,10 +43,6 @@ public class Rule extends BaseEntity {
     @JoinColumn(name="KB_REF", nullable=true, referencedColumnName="id")     
     private KnowledgeBase knowledgeBase;
     
-	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER, mappedBy="parent")
-	@OrderColumn(name="COND_SEQ")
-	private List<RuleCond> ruleConds;
-	
 	@Column(name="RULE_CRITERIA", nullable=true, length = 1024)
 	private String combinedRuleCriteria;
 
@@ -83,32 +76,6 @@ public class Rule extends BaseEntity {
 	}
 
 	/**
-     * adds a condition to this rule.
-     * @param cond the condition to add.
-     */
-	public void addConditionToRule(RuleCond cond){
-    	if(ruleConds == null){
-    		ruleConds = new LinkedList<RuleCond>();
-    	}
-    	//set up the child keys
-    	cond.refreshParentRuleId(this.getId());
-    	this.ruleConds.add(cond);
-    }
-    /**
-     * Removes all conditions from this rule.
-     */
-    public void removeAllConditions(){
-    	this.ruleConds = null;
-    }
-
-	/**
-	 * @return the ruleConds
-	 */
-	public List<RuleCond> getRuleConds() {
-		return ruleConds;
-	}
-
-	/**
 	 * @return the ruleDrl
 	 */
 	public String getRuleDrl() {
@@ -134,11 +101,16 @@ public class Rule extends BaseEntity {
 	/**
 	 * @param ruleCriteria the ruleCriteria to set
 	 */
-	public void addRuleCriteria(String ruleCriteria) {
-		if(StringUtils.isEmpty(this.combinedRuleCriteria)){
-			this.combinedRuleCriteria = ruleCriteria;
-		}else {
-			this.combinedRuleCriteria += RULE_CRITERIA_SEPARATOR + ruleCriteria;
+	public void addRuleCriteria(List<String> ruleCriteria) {
+		if(ruleCriteria != null && ruleCriteria.size() > 0){
+		    final StringBuilder buf = new StringBuilder(ruleCriteria.get(0));
+		    for(int i = 1; i < ruleCriteria.size(); ++i){
+		    	buf.append(RULE_CRITERIA_SEPARATOR)
+		    	.append(ruleCriteria.get(i));		    	
+		    }
+		    this.combinedRuleCriteria = buf.toString();
+		} else {
+			this.combinedRuleCriteria = StringUtils.EMPTY;
 		}
 	}
 

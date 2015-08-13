@@ -1,5 +1,6 @@
 package gov.gtas.repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
@@ -281,5 +282,20 @@ public class ServiceRepositoryIT {
 			}
 		}
 		//System.out.println("happy faces again!\n");
+	}
+	
+	@Test
+	@Transactional
+	public void testGetApisMessageByHashcode() {
+	    final String hash = "1122233";
+	    ApisMessage m = new ApisMessage();
+	    m.setHashCode(hash);
+	    m.setCreateDate(new Date());
+	    m.setFilePath("/tmp/nothing.txt");
+	    m.setStatus(MessageStatus.ANALYZED);
+	    apisMessageRepository.save(m);
+	    
+	    ApisMessage m2 = apisMessageRepository.findByHashCode(hash);
+	    assertEquals(m, m2);
 	}
 }

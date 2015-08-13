@@ -158,6 +158,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
                 orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
                 params.total(orderedData.length);
                 $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                params.total(orderedData.length); // set total for recalc pagination
                 $scope.clearTables();
                 $scope.domTables[dataType].show();
             }

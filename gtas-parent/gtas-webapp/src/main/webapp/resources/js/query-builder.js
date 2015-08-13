@@ -1214,6 +1214,18 @@
         this.setRules(rules);
     };
 
+    QueryBuilder.prototype.readOnlyRules = function (rules) {
+        var qb = this,
+            makeReadOnly = function () {
+                qb.$el.find('a.remove, .selectize-dropdown-content').remove();
+                qb.$el.find('select.bs-select-hidden').prop('disabled', true);
+                qb.$el.find('input').prop('disabled', true);
+            };
+        qb.loadRules(rules);
+        qb.$el.find('.rule-header, .group-actions').remove();
+        setTimeout(makeReadOnly, 1000);
+    };
+
     var combinedOperator = {
         'equal': 'in',
         'not equal': 'not in'

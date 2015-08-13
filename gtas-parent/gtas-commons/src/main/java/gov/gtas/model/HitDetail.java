@@ -19,11 +19,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "hit_detail")
 public class HitDetail extends BaseEntity {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5219262569468670275L;
+    private static final long serialVersionUID = 5219262569468670275L;
+    public HitDetail() { }
+    
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "hits_summary_id", nullable = false, referencedColumnName = "id")

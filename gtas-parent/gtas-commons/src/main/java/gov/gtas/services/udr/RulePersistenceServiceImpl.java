@@ -8,7 +8,6 @@ import gov.gtas.model.BaseEntity;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
@@ -17,10 +16,8 @@ import gov.gtas.services.UserService;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -31,8 +28,6 @@ import javax.transaction.Transactional.TxType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 
@@ -71,57 +66,28 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		// save meta and rule conditions for now
 		//we will add them after saving the UDR rule and its child Drools rules first.
 		RuleMeta savedMeta = r.getMetaData();
-		Map<Integer, List<RuleCond>> ruleConditionMap = null;
-		if(r.getEngineRules() != null){
-			ruleConditionMap = saveEngineRuleConditions(r);
+		if(savedMeta == null){
+			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
+			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "UDR metatdata", "RulePersistenceServiceImpl.create()");
 		}
-		
 		r.setEditDt(new Date());
 		r.setAuthor(user);
 		r.setEditedBy(user);
 		r.setMetaData(null);
 		
-		//save the rule with the meta data and conditions stripped.
-		//Once the rule id is generated we will add back the meta and conditions
-		//and set their composite keys with the rule ID.
+		//save the rule with the meta data stripped.
+		//Once the rule id is generated we will add back the meta data
+		//and set its key to the rule ID.
 		UdrRule rule = udrRuleRepository.save(r);
 		
 		//now add back the meta and conditions and update the rule.
-		if(savedMeta != null || ruleConditionMap != null){
-			long ruleid = rule.getId();
-			if(savedMeta != null){
-				savedMeta.setId(ruleid);
-				rule.setMetaData(savedMeta);
-				savedMeta.setParent(rule);
-			}
-			if(ruleConditionMap != null){
-				for(Rule engineRule: rule.getEngineRules()){
-					for(RuleCond rc : ruleConditionMap.get(engineRule.getRuleIndex())) {
-						rc.refreshParentRuleId(engineRule.getId());
-						engineRule.addConditionToRule(rc);
-					}	
-				}
-			}
-			rule = udrRuleRepository.save(rule);
-		}
+		long ruleid = rule.getId();
+		savedMeta.setId(ruleid);
+		rule.setMetaData(savedMeta);
+		savedMeta.setParent(rule);
+		rule = udrRuleRepository.save(rule);
 		return rule;
 	}
-    private Map<Integer, List<RuleCond>> saveEngineRuleConditions(UdrRule udrRule){
-    	Map<Integer, List<RuleCond>> ruleConditionMap = new HashMap<Integer, List<RuleCond>>();
-    	for(Rule r: udrRule.getEngineRules()){
-    		ruleConditionMap.put(r.getRuleIndex() ,r.getRuleConds());
-		    r.removeAllConditions();
-    	}
-    	return ruleConditionMap;
-    }
-    private Map<Integer, List<RuleCond>> saveEngineRuleConditions(List<Rule> engineRules){
-    	Map<Integer, List<RuleCond>> ruleConditionMap = new HashMap<Integer, List<RuleCond>>();
-    	for(Rule r: engineRules){
-    		ruleConditionMap.put(r.getRuleIndex() ,r.getRuleConds());
-		    r.removeAllConditions();
-    	}
-    	return ruleConditionMap;
-    }
 	@Override
 	@Transactional
 	public UdrRule delete(Long id, String userId) {
@@ -138,9 +104,11 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 			ruleToDelete.setEditedBy(user);
 			ruleToDelete.setEditDt(new Date());
 			//remove references to the Knowledge Base
-			for(Rule rl:ruleToDelete.getEngineRules()){
-				rl.setKnowledgeBase(null);
-			}
+			if(ruleToDelete.getEngineRules() != null){
+				for(Rule rl:ruleToDelete.getEngineRules()){
+					rl.setKnowledgeBase(null);
+				}
+		    }
 			udrRuleRepository.save(ruleToDelete);
 		}else{
 			logger.warn("RulePersistenceServiceImpl.delete() - object does not exist:"+id);
@@ -175,7 +143,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	
 	@Override
 	@Transactional
-	public UdrRule update(UdrRule rule, List<Rule> newEngineRules, String userId) {
+	public UdrRule update(UdrRule rule, String userId) {
 		final User user = userService.findById(userId);
 		if(user == null){
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
@@ -188,35 +156,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		
 		rule.setEditDt(new Date()); 
 		rule.setEditedBy(user);
-		if(newEngineRules != null){
-			rule.clearEngineRules();
-		}
-		udrRuleRepository.save(rule);
-        UdrRule updatedRule = udrRuleRepository.findOne(rule.getId());
-        
-		if(newEngineRules != null){
-			batchInsertEngineRules(updatedRule, newEngineRules);
-		}
+		UdrRule updatedRule = udrRuleRepository.save(rule);
 		return updatedRule;
-	}
-	private void batchInsertEngineRules(UdrRule parent, List<Rule> newEngineRules){
-		Map<Integer, List<RuleCond>> ruleConditionMap = saveEngineRuleConditions(newEngineRules);
-		for(Rule r:newEngineRules){
-			r.setParent(parent);
-			entityManager.persist(r);
-		}
-		entityManager.flush();
-		entityManager.clear();
-		for(Rule engineRule: newEngineRules){
-			for(RuleCond rc : ruleConditionMap.get(engineRule.getRuleIndex())) {
-				rc.refreshParentRuleId(engineRule.getId());
-				engineRule.addConditionToRule(rc);
-			}
-			entityManager.merge(engineRule);
-		}
-		entityManager.flush();
-		entityManager.clear();
-		
 	}
 	@Override
 	@Transactional(TxType.SUPPORTS)

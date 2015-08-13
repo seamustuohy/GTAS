@@ -17,17 +17,21 @@ import javax.persistence.TemporalType;
 @Table(name = "message")
 @Inheritance(strategy = InheritanceType.JOINED)  
 public class Message extends BaseEntity {
-    @Column(name = "create_date")
+    private static final long serialVersionUID = 1L;  
+    public Message() { }
+    
+    @Column(name = "create_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)  
     private Date createDate;
 
-    @Column(name = "hash_code")
+    @Column(name = "hash_code", unique = true)
     private String hashCode;
 
-    @Column(name = "file_path")
+    @Column(name = "file_path", nullable = false)
     private String filePath;
 
     @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
     private MessageStatus status;
 
     @Column(length = 4000)
@@ -66,7 +70,7 @@ public class Message extends BaseEntity {
     
     @Override
     public int hashCode() {
-       return Objects.hash(this.createDate, this.hashCode);
+       return Objects.hash(this.hashCode);
     }
     
     @Override
@@ -78,7 +82,6 @@ public class Message extends BaseEntity {
         if (getClass() != obj.getClass())
             return false;
         final Message other = (Message)obj;
-        return Objects.equals(this.createDate, other.createDate)
-                && Objects.equals(this.hashCode, other.hashCode);
+        return Objects.equals(this.hashCode, other.hashCode);
     }
 }

@@ -7,6 +7,7 @@ app.service("queryService", function ($rootScope, $http, $q) {
             return ($q.reject(response.data.message));
         },
         handleSuccess = function (response) {
+            $rootScope.$broadcast('aFactory:keyChanged', response.data);
             return (response.data);
         },
         executeQuery = function (baseUrl, data) {

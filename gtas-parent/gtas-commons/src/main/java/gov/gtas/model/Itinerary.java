@@ -8,13 +8,16 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "itinerary")
 public class Itinerary extends BaseEntity {
+    private static final long serialVersionUID = 1L;  
+    public Itinerary() { }
+    
     @ManyToOne
     private Flight flight;
     
     @ManyToOne
     private Pnr pnr;
 
-    @Column(name = "leg_number")
+    @Column(name = "leg_number", nullable = false)
     private Integer legNumber;
 
     public Flight getFlight() {

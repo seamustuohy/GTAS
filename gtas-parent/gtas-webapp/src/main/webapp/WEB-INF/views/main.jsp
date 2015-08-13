@@ -24,31 +24,29 @@
         <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
         <link rel="stylesheet"
         href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
-        <link rel="stylesheet"
-        href="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"
-        />
+        <link rel="stylesheet" href="resources/bower_components/angular-ui-grid/ui-grid.css" />
 
         <link rel="stylesheet" href="resources/css/query-builder.default.css" id="qb-theme" />
 
         <link rel="stylesheet" href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css" />
 
         <style type="text/css">
-        
-		.full {
-			  background: url(http://placehold.it/1920x1080) no-repeat center center fixed; 
-			  -webkit-background-size: cover;
-			  -moz-background-size: cover;
-			  -o-background-size: cover;
-			  background-size: cover;
-			}
 
-/*        THIS OVERRIDES ALL NG-TABLES table headers
+        .full {
+        background: url(http://placehold.it/1920x1080) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        }
+
+        /*        THIS OVERRIDES ALL NG-TABLES table headers
         please add class to table and scope by additional parent class-name
         you also have this same class name in the styles.css so should consolidate there
         .header{
         background: rgb(247, 250, 250);
         }
-*/
+        */
         .hiddenRow {
         padding: 0 !important;
 
@@ -58,7 +56,7 @@
         margin-left: 50px;
         } */
 
-		#flightTable thead th {
+        #flightTable thead th {
         text-align:center;
         }
 
@@ -74,72 +72,72 @@
         text-align:center;
         }
 
-					/* Exclusive for nested Rule List Display */
-					.collapse {
-						  display: none;
-						}
-						.collapse.in {
-						  display: block;
-						}
-						tr.collapse.in {
-						  display: table-row;
-						}
-						tbody.collapse.in {
-						  display: table-row-group;
-						}
-						.collapsing {
-						  position: relative;
-						  height: 0;
-						  overflow: hidden;
-						  -webkit-transition: height .35s ease;
-						       -o-transition: height .35s ease;
-						          transition: height .35s ease;
-						}
-								
-/*					.glyphicon {
-							margin: 1px 0px 5px 1px;
-							font-size: 26px;
-						  	color: #222;
-						  	padding: 5px;}
-						
-						.glyphicon:hover, .glyphicon:focus {
-						  	color: #222;
-						  	padding: 5px;}
-						*/
-						
-						.glyph {
-						    text-align: center;
-						}			
-								
-								
-					/* Bootstrap colors
-					
-					@brand-success: #5cb85c;
-					@brand-danger:  #d9534f; 
-					
-					*/			
-											
-					/* Exclusive for nested Rule List Display */
-       
-       
-       			.glyphiconFlightPax {
-					margin: 1px 0px 5px 1px;
-					font-size: 26px;
-				  	color: #222;
-				  	/*background-color: #F0C425;*/
-				  	padding: 5px;}
-				
-				.glyphiconFlightPax:hover, .glyphiconFlightPax:focus {
-				  	color: #222;
-				   /* background-color: #FFFFFF;  #1F2E54 */
-				  	padding: 5px;}
-				
-				
-				.glyph {
-				    text-align: center;
-				}			
+        /* Exclusive for nested Rule List Display */
+        .collapse {
+        display: none;
+        }
+        .collapse.in {
+        display: block;
+        }
+        tr.collapse.in {
+        display: table-row;
+        }
+        tbody.collapse.in {
+        display: table-row-group;
+        }
+        .collapsing {
+        position: relative;
+        height: 0;
+        overflow: hidden;
+        -webkit-transition: height .35s ease;
+        -o-transition: height .35s ease;
+        transition: height .35s ease;
+        }
 
-       
+        /*					.glyphicon {
+        margin: 1px 0px 5px 1px;
+        font-size: 26px;
+        color: #222;
+        padding: 5px;}
+
+        .glyphicon:hover, .glyphicon:focus {
+        color: #222;
+        padding: 5px;}
+        */
+
+        .glyph {
+        text-align: center;
+        }
+
+
+        /* Bootstrap colors
+
+        @brand-success: #5cb85c;
+        @brand-danger:  #d9534f;
+
+        */
+
+        /* Exclusive for nested Rule List Display */
+
+
+        .glyphiconFlightPax {
+        margin: 1px 0px 5px 1px;
+        font-size: 26px;
+        color: #222;
+        /*background-color: #F0C425;*/
+        padding: 5px;}
+
+        .glyphiconFlightPax:hover, .glyphiconFlightPax:focus {
+        color: #222;
+        /* background-color: #FFFFFF;  #1F2E54 */
+        padding: 5px;}
+
+
+        .glyph {
+        text-align: center;
+        }
+
+
         </style>
 
         </head>
@@ -279,20 +277,21 @@
         <script src="resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
         <script src="resources/bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
         <script src="resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-        <script src="resources/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
         <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
+        <script src="resources/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+        <script src="resources/bower_components/angular-ui-grid/ui-grid.js"></script>
 
         <script src="resources/js/query-builder.js"></script>
-
         <script src="app.js"></script>
         <script src="flights/FlightsController.js"></script>
         <script src="flights/FlightsService.js"></script>
         <script src="pax/PaxController.js"></script>
         <script src="pax/PaxService.js"></script>
-	<script src="pax/PaxFactory.js"></script>
+        <script src="pax/PaxFactory.js"></script>
         <script src="factory/QueryBuilderFactory.js"></script>
         <script src="risk-criteria/RiskCriteriaController.js"></script>
         <script src="risk-criteria/RiskCriteriaService.js"></script>
+        <script src="query-builder/ExecutedQueryResultsController.js"></script>
         <script src="query-builder/QueryBuilderController.js"></script>
         <script src="query-builder/QueryBuilderService.js"></script>
         <script src="query-builder/QueryService.js"></script>

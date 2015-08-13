@@ -1,21 +1,12 @@
 package gov.gtas.test.util;
 
-import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
-import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.RuleCond;
-import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
-import gov.gtas.model.udr.enumtype.ValueTypesEnum;
-import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.services.UserService;
-import gov.gtas.util.DateCalendarUtils;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -76,40 +67,40 @@ public class RuleServiceDataGenUtils {
 		return rule;
 	}
 
-	public Rule createRuleWithOneCondition(UdrRule parent, int index) {
-		Rule rule = new Rule(parent, index, null);
-		rule.addConditionToRule(createCondition(1, EntityEnum.PASSENGER,
-				PassengerMapping.EMBARKATION.getFieldName(),
-				OperatorCodeEnum.EQUAL, "IAD"));
-		return rule;
-	}
+//	public Rule createRuleWithOneCondition(UdrRule parent, int index) {
+//		Rule rule = new Rule(parent, index, null);
+//		rule.addConditionToRule(createCondition(1, EntityEnum.PASSENGER,
+//				PassengerMapping.EMBARKATION.getFieldName(),
+//				OperatorCodeEnum.EQUAL, "IAD"));
+//		return rule;
+//	}
 
-	public RuleCond createCondition(int seq, EntityEnum entity,
-			String attr, OperatorCodeEnum opCode, Object value) {
-		RuleCondPk key = new RuleCondPk(0L, seq);
-		RuleCond cond = new RuleCond(key, entity, attr, opCode);
-		try{
-		    addCondValue(cond, value);
-		} catch(ParseException pe){
-			throw new RuntimeException("Parse error", pe);
-		}
-		return cond;
-	}
-  private void addCondValue(RuleCond cond, Object val) throws ParseException{
-	   if(val instanceof Date){
-		   cond.addValuesToCondition(new String[]{DateCalendarUtils.formatJsonDate((Date)val)}, ValueTypesEnum.DATE);
-	   } else if(val instanceof String){
-		   cond.addValuesToCondition(new String[]{(String)val}, ValueTypesEnum.STRING);
-	   } else if(val instanceof Double){
-		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.DOUBLE);
-	   } else if(val instanceof Long){
-		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.LONG);
-	   } else if(val instanceof Integer){
-		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.INTEGER);
-	   } else {
-		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.STRING);
-	   }
- }
+//	public RuleCond createCondition(int seq, EntityEnum entity,
+//			String attr, OperatorCodeEnum opCode, Object value) {
+//		RuleCondPk key = new RuleCondPk(0L, seq);
+//		RuleCond cond = new RuleCond(key, entity, attr, opCode);
+//		try{
+//		    addCondValue(cond, value);
+//		} catch(ParseException pe){
+//			throw new RuntimeException("Parse error", pe);
+//		}
+//		return cond;
+//	}
+//  private void addCondValue(RuleCond cond, Object val) throws ParseException{
+//	   if(val instanceof Date){
+//		   cond.addValuesToCondition(new String[]{DateCalendarUtils.formatJsonDate((Date)val)}, ValueTypesEnum.DATE);
+//	   } else if(val instanceof String){
+//		   cond.addValuesToCondition(new String[]{(String)val}, ValueTypesEnum.STRING);
+//	   } else if(val instanceof Double){
+//		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.DOUBLE);
+//	   } else if(val instanceof Long){
+//		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.LONG);
+//	   } else if(val instanceof Integer){
+//		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.INTEGER);
+//	   } else {
+//		   cond.addValuesToCondition(new String[]{val.toString()}, ValueTypesEnum.STRING);
+//	   }
+// }
 	
 	public String generateTestRuleTitle(int ruleIndx){
 		StringBuilder bldr = new StringBuilder(TEST_RULE_TITLE_PREFIX);

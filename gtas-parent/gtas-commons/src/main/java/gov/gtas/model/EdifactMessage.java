@@ -9,6 +9,8 @@ import javax.persistence.TemporalType;
 
 @Embeddable
 public class EdifactMessage {
+    public EdifactMessage() { }
+    
     /** PAXLST, PNRGOV, etc. derived from UNH */
     @Column(name = "message_type", length = 10)
     private String messageType;

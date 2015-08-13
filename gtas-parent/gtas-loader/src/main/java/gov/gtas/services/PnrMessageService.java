@@ -21,6 +21,7 @@ import gov.gtas.model.Pnr;
 import gov.gtas.model.PnrMessage;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
+import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.PnrVo;
@@ -57,6 +58,8 @@ public class PnrMessageService implements MessageService {
             
             EdifactParser<PnrMessageVo> parser = new PnrGovParser();
             vo = parser.parse(message);
+            utils.checkHashCode(vo.getHashCode());
+            
             this.pnrMessage.setStatus(MessageStatus.PARSED);
             this.pnrMessage.setHashCode(vo.getHashCode());            
             EdifactMessage em = new EdifactMessage();
@@ -71,6 +74,7 @@ public class PnrMessageService implements MessageService {
             String stacktrace = ExceptionUtils.getStackTrace(e);
             this.pnrMessage.setError(stacktrace);
             logger.error(stacktrace);
+            return null;
         } finally {
             createMessage(pnrMessage);
         }

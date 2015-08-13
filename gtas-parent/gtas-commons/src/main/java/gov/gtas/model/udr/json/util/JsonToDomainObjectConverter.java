@@ -1,38 +1,23 @@
 package gov.gtas.model.udr.json.util;
 
-import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.error.CommonErrorConstants;
-import gov.gtas.error.CommonValidationException;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.User;
-import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.RuleCond;
-import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
-import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
-import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
-import gov.gtas.util.ValidationUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.text.ParseException;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-import org.springframework.validation.Errors;
 
 /**
  * Utility functions to convert JSON objects to JPA domain objects.
@@ -170,7 +155,7 @@ public class JsonToDomainObjectConverter {
 
 		final UdrRule rule = createUdrRule(inputJson.getId(), metaData,
 				createQueryObjectBlob(inputJson), author);
-		createEngineRules(rule, inputJson);
+		//createEngineRules(rule, inputJson);
 
 		return rule;
 
@@ -188,28 +173,28 @@ public class JsonToDomainObjectConverter {
 	 * @throws ParseException
 	 *             on error
 	 */
-	private static void createEngineRules(UdrRule parent,
-			UdrSpecification inputJson) {
-		QueryObject qobj = inputJson.getDetails();
-		if (qobj == null) {
-			throw ErrorHandlerFactory.getErrorHandler().createException(
-					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "details",
-					"Create UDR");
-		}
-		// validate the input JSON object
-		Errors errors = QueryValidationUtils.validateQueryObject(qobj);
-		if (errors.hasErrors()) {
-			throw new CommonValidationException(
-					"JsonToDomainObjectConverter.createEngineRules() - validation errors:",
-					errors);
-		}
-		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
-		int indx = 0;
-		for (List<QueryTerm> ruleData : ruleDataList) {
-			parent.addEngineRule(createEngineRule(ruleData, parent, indx));
-			++indx;
-		}
-	}
+//	private static void createEngineRules(UdrRule parent,
+//			UdrSpecification inputJson) {
+//		QueryObject qobj = inputJson.getDetails();
+//		if (qobj == null) {
+//			throw ErrorHandlerFactory.getErrorHandler().createException(
+//					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "details",
+//					"Create UDR");
+//		}
+//		// validate the input JSON object
+//		Errors errors = QueryValidationUtils.validateQueryObject(qobj);
+//		if (errors.hasErrors()) {
+//			throw new CommonValidationException(
+//					"JsonToDomainObjectConverter.createEngineRules() - validation errors:",
+//					errors);
+//		}
+//		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
+//		int indx = 0;
+//		for (List<QueryTerm> ruleData : ruleDataList) {
+//			parent.addEngineRule(createEngineRule(ruleData, parent, indx));
+//			++indx;
+//		}
+//	}
 
 	/**
 	 * Creates a new list of engine rules when a UDR is being updated.
@@ -220,20 +205,20 @@ public class JsonToDomainObjectConverter {
 	 *            the update JSON object.
 	 * @return list of engine rules to replace the existing rules.
 	 */
-	public static List<Rule> listEngineRules(UdrRule parent,
-			UdrSpecification inputJson) {
-		List<Rule> ret = new LinkedList<Rule>();
-		QueryObject qobj = inputJson.getDetails();
-		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
-		int indx = 0;
-		for (List<QueryTerm> ruleData : ruleDataList) {
-			Rule r = createEngineRule(ruleData, parent, indx);
-			r.setParent(parent);
-			ret.add(r);
-			++indx;
-		}
-		return ret;
-	}
+//	public static List<Rule> listEngineRules(UdrRule parent,
+//			UdrSpecification inputJson) {
+//		List<Rule> ret = new LinkedList<Rule>();
+//		QueryObject qobj = inputJson.getDetails();
+//		List<List<QueryTerm>> ruleDataList = qobj.createFlattenedList();
+//		int indx = 0;
+//		for (List<QueryTerm> ruleData : ruleDataList) {
+//			Rule r = createEngineRule(ruleData, parent, indx);
+//			r.setParent(parent);
+//			ret.add(r);
+//			++indx;
+//		}
+//		return ret;
+//	}
 
 	/**
 	 * Creates a single engine rule from a minterm.
@@ -248,51 +233,51 @@ public class JsonToDomainObjectConverter {
 	 * @throws ParseException
 	 *             parse exception.
 	 */
-	private static Rule createEngineRule(List<QueryTerm> ruleData,
-			UdrRule parent, int indx) {
-		Rule ret = new Rule(parent, indx, null);
-		int seq = 0;
-		for (QueryTerm trm : ruleData) {
-			RuleCond cond = null;
-			try {
-				OperatorCodeEnum op = OperatorCodeEnum.valueOf(trm
-						.getOperator().toUpperCase());
-				ValueTypesEnum type = ValueTypesEnum.valueOf(trm.getType()
-						.toUpperCase());
-				RuleCondPk pk = new RuleCondPk(indx, seq++);
-				EntityEnum entity = ValidationUtils
-						.convertStringToEnum(trm.getEntity());
-				if (entity == null) {
-					throw ErrorHandlerFactory
-							.getErrorHandler()
-							.createException(
-									CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-									"entity:" + trm.getEntity(),
-									"createEngineRule()");
-				}
-				cond = new RuleCond(pk, entity, trm.getField(), op);
-				addValuesToCond(cond, op, type, trm.getValue());
-			} catch (ParseException pe) {
-				StringBuilder bldr = new StringBuilder("[");
-				for (String val : trm.getValue()) {
-					bldr.append(val).append(",");
-				}
-				bldr.append("]");
-				throw ErrorHandlerFactory.getErrorHandler().createException(
-						CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE,
-						bldr.toString(), trm.getType(), "Engine Rule Creation");
-			} catch (NullPointerException | IllegalArgumentException ex) {
-				throw ErrorHandlerFactory.getErrorHandler().createException(
-						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-						String.format("QueryTerm (operator=%s, type=%s)",
-								trm.getOperator(), trm.getType()),
-						"Engine Rule Creation");
-
-			}
-			ret.addConditionToRule(cond);
-		}
-		return ret;
-	}
+//	private static Rule createEngineRule(List<QueryTerm> ruleData,
+//			UdrRule parent, int indx) {
+//		Rule ret = new Rule(parent, indx, null);
+//		int seq = 0;
+//		for (QueryTerm trm : ruleData) {
+//			RuleCond cond = null;
+//			try {
+//				OperatorCodeEnum op = OperatorCodeEnum.valueOf(trm
+//						.getOperator().toUpperCase());
+//				ValueTypesEnum type = ValueTypesEnum.valueOf(trm.getType()
+//						.toUpperCase());
+//				RuleCondPk pk = new RuleCondPk(indx, seq++);
+//				EntityEnum entity = ValidationUtils
+//						.convertStringToEnum(trm.getEntity());
+//				if (entity == null) {
+//					throw ErrorHandlerFactory
+//							.getErrorHandler()
+//							.createException(
+//									CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+//									"entity:" + trm.getEntity(),
+//									"createEngineRule()");
+//				}
+//				cond = new RuleCond(pk, entity, trm.getField(), op);
+//				addValuesToCond(cond, op, type, trm.getValue());
+//			} catch (ParseException pe) {
+//				StringBuilder bldr = new StringBuilder("[");
+//				for (String val : trm.getValue()) {
+//					bldr.append(val).append(",");
+//				}
+//				bldr.append("]");
+//				throw ErrorHandlerFactory.getErrorHandler().createException(
+//						CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE,
+//						bldr.toString(), trm.getType(), "Engine Rule Creation");
+//			} catch (NullPointerException | IllegalArgumentException ex) {
+//				throw ErrorHandlerFactory.getErrorHandler().createException(
+//						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+//						String.format("QueryTerm (operator=%s, type=%s)",
+//								trm.getOperator(), trm.getType()),
+//						"Engine Rule Creation");
+//
+//			}
+//			ret.addConditionToRule(cond);
+//		}
+//		return ret;
+//	}
 
 	/**
 	 * Does validation check and adds condition value(s) to the Rule condition
@@ -311,37 +296,37 @@ public class JsonToDomainObjectConverter {
 	 * @throws ParseException
 	 *             on format exception.
 	 */
-	private static void addValuesToCond(RuleCond cond, OperatorCodeEnum op,
-			ValueTypesEnum type, String[] values) throws ParseException {
-		if (op == OperatorCodeEnum.IN || op == OperatorCodeEnum.NOT_IN) {
-			if (values != null && values.length > 0) {
-				cond.addValuesToCondition(values, type);
-			} else {
-				throw ErrorHandlerFactory.getErrorHandler().createException(
-						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-						"value", "createEngineRule");
-			}
-		} else if (op == OperatorCodeEnum.BETWEEN) {
-			if (values != null && values.length == 2) {
-				cond.addValuesToCondition(values, type);
-			} else {
-				throw ErrorHandlerFactory.getErrorHandler().createException(
-						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-						"value (requires an array of 2 strings)", "createEngineRule");
-			}
-		} else {
-			String valueToAdd = null;
-			if (values != null && values.length == 1) {
-				valueToAdd = values[0];
-			} else {
-				throw ErrorHandlerFactory.getErrorHandler().createException(
-						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-						"value (requires exactly 1 value)", "createEngineRule");
-			}
-			cond.addValueToCondition(valueToAdd, type);
-		}
-
-	}
+//	private static void addValuesToCond(RuleCond cond, OperatorCodeEnum op,
+//			ValueTypesEnum type, String[] values) throws ParseException {
+//		if (op == OperatorCodeEnum.IN || op == OperatorCodeEnum.NOT_IN) {
+//			if (values != null && values.length > 0) {
+//				cond.addValuesToCondition(values, type);
+//			} else {
+//				throw ErrorHandlerFactory.getErrorHandler().createException(
+//						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+//						"value", "createEngineRule");
+//			}
+//		} else if (op == OperatorCodeEnum.BETWEEN) {
+//			if (values != null && values.length == 2) {
+//				cond.addValuesToCondition(values, type);
+//			} else {
+//				throw ErrorHandlerFactory.getErrorHandler().createException(
+//						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+//						"value (requires an array of 2 strings)", "createEngineRule");
+//			}
+//		} else {
+//			String valueToAdd = null;
+//			if (values != null && values.length == 1) {
+//				valueToAdd = values[0];
+//			} else {
+//				throw ErrorHandlerFactory.getErrorHandler().createException(
+//						CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+//						"value (requires exactly 1 value)", "createEngineRule");
+//			}
+//			cond.addValueToCondition(valueToAdd, type);
+//		}
+//
+//	}
 
 	/**
 	 * Converts a "detail" portion of the UDR JSON object to compressed binary

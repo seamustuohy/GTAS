@@ -1,6 +1,7 @@
 package gov.gtas.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,12 +11,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "document")
 public class Document extends BaseEntity {
+    private static final long serialVersionUID = 1L;  
     public Document() { }
 
-    @Column(name = "document_type", length = 3)
+    @Column(name = "document_type", length = 3, nullable = false)
     private String documentType;
     
-    @Column(name = "document_number")
+    @Column(name = "document_number", nullable = false)
     private String documentNumber;
     
     @Column(name = "expiration_date")
@@ -77,4 +79,23 @@ public class Document extends BaseEntity {
     public void setPassenger(Passenger passenger) {
         this.passenger = passenger;
     }
+    
+    @Override
+    public int hashCode() {
+       return Objects.hash(this.documentType, this.documentNumber, this.issuanceCountry);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Document other = (Document)obj;
+        return Objects.equals(this.documentType, other.documentType)
+                && Objects.equals(this.documentNumber, other.documentNumber)
+                && Objects.equals(this.issuanceCountry, other.issuanceCountry);
+    }    
 }

@@ -22,7 +22,7 @@ import gov.gtas.model.Passenger;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.paxlst.PaxlstMessageVo;
+import gov.gtas.parsers.paxlst.ApisMessageVo;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
 import gov.gtas.parsers.util.FileUtils;
@@ -55,7 +55,7 @@ public class ApisMessageService implements MessageService {
             byte[] raw = FileUtils.readSmallFile(filePath);
             String message = new String(raw, StandardCharsets.US_ASCII);
 
-            EdifactParser<PaxlstMessageVo> parser = null;
+            EdifactParser<ApisMessageVo> parser = null;
             if (isUSEdifactFile(message)) {
                 parser = new PaxlstParserUSedifact();
             } else {
@@ -63,6 +63,8 @@ public class ApisMessageService implements MessageService {
             }
     
             vo = parser.parse(message);
+            utils.checkHashCode(vo.getHashCode());
+
             this.apisMessage.setStatus(MessageStatus.PARSED);
             this.apisMessage.setHashCode(vo.getHashCode());
             EdifactMessage em = new EdifactMessage();
@@ -77,6 +79,7 @@ public class ApisMessageService implements MessageService {
             String stacktrace = ExceptionUtils.getStackTrace(e);
             this.apisMessage.setError(stacktrace);
             logger.error(stacktrace);
+            return null;
         } finally {
             createMessage(apisMessage);
         }
@@ -85,7 +88,7 @@ public class ApisMessageService implements MessageService {
     }
 
     public void load(MessageVo message) {
-        PaxlstMessageVo m = (PaxlstMessageVo)message;
+        ApisMessageVo m = (ApisMessageVo)message;
         try {
             for (ReportingPartyVo rvo : m.getReportingParties()) {
                 ReportingParty rp = utils.convertReportingPartyVo(rvo);
