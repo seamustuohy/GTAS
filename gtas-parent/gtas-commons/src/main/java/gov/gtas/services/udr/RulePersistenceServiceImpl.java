@@ -58,22 +58,21 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	@Override
 	@Transactional
 	public UdrRule create(UdrRule r, String userId) {
-		final User user = userService.findById(userId);
-		if(user == null){
-			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
-		}
-		// save meta and rule conditions for now
-		//we will add them after saving the UDR rule and its child Drools rules first.
+		final User user = fetchUser(userId);
+		// remove meta for now, since its ID is the same as the parent UdrRule ID.
+		//we will add it after saving the UDR rule and the ID has been generated.
 		RuleMeta savedMeta = r.getMetaData();
+		r.setMetaData(null);
+
 		if(savedMeta == null){
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
 			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "UDR metatdata", "RulePersistenceServiceImpl.create()");
 		}
+		
+		//set the audit fields
 		r.setEditDt(new Date());
 		r.setAuthor(user);
 		r.setEditedBy(user);
-		r.setMetaData(null);
 		
 		//save the rule with the meta data stripped.
 		//Once the rule id is generated we will add back the meta data
@@ -86,16 +85,14 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		rule.setMetaData(savedMeta);
 		savedMeta.setParent(rule);
 		rule = udrRuleRepository.save(rule);
+		
 		return rule;
 	}
 	@Override
 	@Transactional
 	public UdrRule delete(Long id, String userId) {
-		final User user = userService.findById(userId);
-		if(user == null){
-			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
-		}
+		final User user = fetchUser(userId);
+		
 		UdrRule ruleToDelete = udrRuleRepository.findOne(id);
 		if(ruleToDelete != null){
 			ruleToDelete.setDeleted(YesNoEnum.Y);
@@ -103,6 +100,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 			meta.setEnabled(YesNoEnum.N);
 			ruleToDelete.setEditedBy(user);
 			ruleToDelete.setEditDt(new Date());
+			
 			//remove references to the Knowledge Base
 			if(ruleToDelete.getEngineRules() != null){
 				for(Rule rl:ruleToDelete.getEngineRules()){
@@ -144,11 +142,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	@Override
 	@Transactional
 	public UdrRule update(UdrRule rule, String userId) {
-		final User user = userService.findById(userId);
-		if(user == null){
-			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
-		}
+		final User user = fetchUser(userId);
+		
 		if(rule.getId() == null){
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
 			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "id", "Update UDR");
@@ -221,4 +216,17 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		return kb;
 	}
 	
+	/**
+	 * Fetches the user object and throws an unchecked exception if the user cannot be found.
+	 * @param userId the ID of the user to fetch.
+	 * @return the user fetched from the DB.
+	 */
+	private User fetchUser(final String userId){
+		final User user = userService.findById(userId);
+		if(user == null){
+			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
+			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
+		}
+		return user;
+	}
 }

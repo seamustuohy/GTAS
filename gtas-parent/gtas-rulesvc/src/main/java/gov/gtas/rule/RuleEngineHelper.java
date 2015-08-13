@@ -9,7 +9,11 @@ import java.util.List;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieSession;
-
+/**
+ * Rule Engine Event Listener utility functions.
+ * @author GTAS3 (AB)
+ *
+ */
 public class RuleEngineHelper {
 	/**
 	 * Adds events listeners to the Kie Session.
