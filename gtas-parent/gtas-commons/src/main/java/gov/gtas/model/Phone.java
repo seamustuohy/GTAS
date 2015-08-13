@@ -1,12 +1,12 @@
 package gov.gtas.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,9 +18,11 @@ public class Phone extends BaseEntityAudit {
     @Column(nullable = false)
 	private String number;
 	
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="pnr_id", nullable = false)    
-	private Pnr pnr;
+    @ManyToMany(
+        mappedBy = "phones",
+        targetEntity = Pnr.class
+    )
+    private Set<Pnr> pnrs = new HashSet<>();
 
 	public String getNumber() {
 		return number;
@@ -29,15 +31,15 @@ public class Phone extends BaseEntityAudit {
 	public void setNumber(String number) {
 		this.number = number;
 	}
-
-	public Pnr getPnr() {
-		return pnr;
-	}
-
-	public void setPnr(Pnr pnr) {
-		this.pnr = pnr;
-	}
 	
+    public Set<Pnr> getPnrs() {
+        return pnrs;
+    }
+
+    public void setPnrs(Set<Pnr> pnrs) {
+        this.pnrs = pnrs;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(this.number);

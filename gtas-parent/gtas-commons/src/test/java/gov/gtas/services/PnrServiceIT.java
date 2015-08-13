@@ -118,13 +118,13 @@ public class PnrServiceIT {
 		add.setState("VA");
 		add.setCreationDate();
 		add.setCreatedBy("JUNIT");
-		add.setPnr(pnr);
+		pnr.addAddress(add);
 		Set adds = new HashSet<Address>();
 		adds.add(add);
 		pnr.setAddresses(adds);
 		Phone p = new Phone();
 		p.setNumber("24243534455");
-		p.setPnr(pnr);
+		pnr.addPhone(p);
 		p.setCreationDate();
 		p.setCreatedBy("JUNIT");
 		Set phones = new HashSet();

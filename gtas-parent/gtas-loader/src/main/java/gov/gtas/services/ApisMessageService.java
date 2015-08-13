@@ -92,7 +92,7 @@ public class ApisMessageService implements MessageService {
         try {
             for (ReportingPartyVo rvo : m.getReportingParties()) {
                 ReportingParty rp = utils.convertReportingPartyVo(rvo);
-                rp.setApisMessage(this.apisMessage);
+//                rp.setApisMessage(this.apisMessage);
                 this.apisMessage.getReportingParties().add(rp);
             }
             

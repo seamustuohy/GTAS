@@ -1,11 +1,12 @@
 package gov.gtas.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,15 +22,17 @@ public class ReportingParty extends BaseEntity {
     
     private String fax;
 
-    @ManyToOne
-    @JoinColumn(name = "apis_message_id")
-    private ApisMessage apisMessage;
+    @ManyToMany(
+        mappedBy = "reportingParties",
+        targetEntity = ApisMessage.class
+    )
+    private Set<ApisMessage> apisMessages = new HashSet<>();
     
-    public ApisMessage getApisMessage() {
-        return apisMessage;
+    public Set<ApisMessage> getApisMessages() {
+        return apisMessages;
     }
-    public void setApisMessage(ApisMessage apisMessage) {
-        this.apisMessage = apisMessage;
+    public void setApisMessages(Set<ApisMessage> apisMessages) {
+        this.apisMessages = apisMessages;
     }
     public String getPartyName() {
         return partyName;
