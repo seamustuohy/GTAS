@@ -2,7 +2,6 @@ package gov.gtas.services.udr;
 
 import gov.gtas.model.BaseEntity;
 import gov.gtas.model.udr.KnowledgeBase;
-import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 
 import java.util.Collection;
@@ -68,7 +67,7 @@ public interface RulePersistenceService {
 	 *            author).
 	 * @return the updated rule.
 	 */
-	public UdrRule update(UdrRule rule, List<Rule> newEngineRules, String userId);
+	public UdrRule update(UdrRule rule, String userId);
 
 	/**
 	 * Fetches a UDR rule by its Id. Note: deleted rules can also be fetched by

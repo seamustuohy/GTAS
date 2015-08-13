@@ -34,12 +34,12 @@ public class DocumentConditionBuilder extends EntityConditionBuilder {
 		this.passengerHasNoRuleCondition = false;
 	}
 
-	@Override
-	protected void addSpecialConditionsWithoutActualConditions(
-			StringBuilder bldr) {
-		//NO OP.
-		logger.debug("DocumentConditionBuilder.addSpecialConditionsWithoutActualConditions(); - NOOP");
-	}
+//	@Override
+//	protected void addSpecialConditionsWithoutActualConditions(
+//			StringBuilder bldr) {
+//		//NO OP.
+//		logger.debug("DocumentConditionBuilder.addSpecialConditionsWithoutActualConditions(); - NOOP");
+//	}
 
 	@Override
 	protected void addSpecialConditions(StringBuilder bldr) {

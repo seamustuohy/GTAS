@@ -237,6 +237,7 @@ public class UdrServiceErrorTest {
 				 author.setUserId(authorId);
 			     UdrRule rule = JsonToDomainObjectConverter.createUdrRuleFromJson(
 						testObj, author);
+			     UdrServiceHelper.addEngineRulesToUdrRule(rule, testObj);
 			     rule.setId(1L);
 	             when(mockRulePersistenceSvc.create(any(UdrRule.class), any())).thenReturn(rule);
 			     when(mockUserService.findById(authorId)).thenReturn(author);
@@ -269,6 +270,7 @@ public class UdrServiceErrorTest {
 				 author.setUserId(authorId);
 			     UdrRule rule = JsonToDomainObjectConverter.createUdrRuleFromJson(
 						testObj, author);
+			     UdrServiceHelper.addEngineRulesToUdrRule(rule, testObj);
 			     rule.setId(1L);
 	             when(mockRulePersistenceSvc.create(any(UdrRule.class), any())).thenReturn(rule);
 			     when(mockUserService.findById(authorId)).thenReturn(author);

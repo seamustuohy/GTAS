@@ -1,15 +1,14 @@
 package gov.gtas.svc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.enumtype.ConditionEnum;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
-import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.JsonServiceResponse;
@@ -17,6 +16,7 @@ import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.services.UserService;
 import gov.gtas.services.udr.RulePersistenceService;
@@ -26,7 +26,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.drools.core.command.runtime.GetKnowledgeBaseCommand;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -94,9 +94,11 @@ public class UdrServiceIT {
 		List<Rule> engineRules = rule.getEngineRules();
 		assertNotNull(engineRules);
 		assertEquals(1, engineRules.size());
-		List<RuleCond> conds =  engineRules.get(0).getRuleConds();
-		assertNotNull(conds);
-		assertEquals(1, conds.size());
+		String drl =  engineRules.get(0).getRuleDrl();
+		assertFalse(StringUtils.isEmpty(drl));
+		String[] criteria = engineRules.get(0).getRuleCriteria();
+		assertNotNull(criteria);
+		assertEquals(1, criteria.length);
 	}
 	@Test
 	@Transactional
@@ -118,9 +120,11 @@ public class UdrServiceIT {
 		List<Rule> engineRules = rule.getEngineRules();
 		assertNotNull(engineRules);
 		assertEquals(1, engineRules.size());
-		List<RuleCond> conds =  engineRules.get(0).getRuleConds();
-		assertNotNull(conds);
-		assertEquals(1, conds.size());
+		String drl =  engineRules.get(0).getRuleDrl();
+		assertFalse(StringUtils.isEmpty(drl));
+		String[] criteria = engineRules.get(0).getRuleCriteria();
+		assertNotNull(criteria);
+		assertEquals(1, criteria.length);
 		assertNotNull("Engine Rule has a null Knowledge Base reference", engineRules.get(0).getKnowledgeBase());
 	}
 	@Test
@@ -171,7 +175,42 @@ public class UdrServiceIT {
 	}
 	@Test
 	@Transactional
-	public void testUpdate() {
+	public void testCreateAndUpdateMetaOnly() throws Exception{
+		User user = createUser();
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
+		
+		//create Udr Rule
+		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
+		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertNotNull(resp.getResponseDetails());
+		String title = (String)resp.getResponseDetails().get(1).getAttributeValue();       
+		assertEquals(RULE_TITLE1, title);
+		Long id = Long.valueOf(resp.findResponseDetailValue(UdrConstants.UDR_ID_ATTRIBUTE_NAME));
+		assertNotNull("The saved ID is null",id);
+		UdrRule rule = ruleService.findById(id);
+		List<Rule> engineRules = rule.getEngineRules();
+		assertNotNull(engineRules);
+		assertEquals(3, engineRules.size());
+		String drl =  engineRules.get(0).getRuleDrl();
+		assertFalse(StringUtils.isEmpty(drl));
+		String[] criteria = engineRules.get(0).getRuleCriteria();
+		assertNotNull(criteria);
+		assertEquals(1, criteria.length);
+		assertNotNull("Engine Rule has a null Knowledge Base reference", engineRules.get(0).getKnowledgeBase());
+		
+		//Extract the UDR
+		UdrSpecification specFetched = JsonToDomainObjectConverter.getJsonFromUdrRule(rule);
+		assertNotNull(specFetched);
+		specFetched.getSummary().setDescription(RULE_DESCRIPTION2);
+		specFetched.setDetails(null);
+		udrService.updateUdr(user.getUserId(), specFetched);
+		specFetched = udrService.fetchUdr(user.getUserId(), title);		
+		assertNotNull(specFetched);
+		assertEquals(RULE_DESCRIPTION2, specFetched.getSummary().getDescription());
+	}
+	@Test
+	@Transactional
+	public void testUpdateAll() {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
@@ -180,7 +219,6 @@ public class UdrServiceIT {
 		String title = (String)resp.getResponseDetails().get(1).getAttributeValue();       
 		assertEquals(RULE_TITLE1, title);
 		UdrSpecification specFetched = udrService.fetchUdr(user.getUserId(), title);
-		//specFetched.getSummary().setDescription(RULE_DESCRIPTION2);
 		UdrSpecification updatedSpec = UdrSpecificationBuilder.createSampleSpec2(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION2);
 		updatedSpec.setId(specFetched.getId());
 		udrService.updateUdr(user.getUserId(), updatedSpec);
