@@ -5,7 +5,7 @@ import gov.gtas.enumtype.TypeEnum;
 public enum PNRMapping implements IEntityMapping {
 
 	BAG_COUNT ("bagCount", "Bag - Count", TypeEnum.INTEGER.getType()),
-	BOOKING_DATE ("", "Booking Date", TypeEnum.DATE.getType()), // missing field
+	BOOKING_DATE ("dateBooked", "Booking Date", TypeEnum.DATE.getType()), // missing field
 	CARRIER_CODE ("carrier", "Carrier Code", TypeEnum.STRING.getType()),
 	DAYS_BOOKED_BEFORE_TRAVEL ("daysBookedBeforeTravel", "Days Booked Before Travel", TypeEnum.INTEGER.getType()),
 	DWELL_AIRPORT ("", "Dwell - Airport", TypeEnum.STRING.getType()), // missing field
@@ -13,9 +13,9 @@ public enum PNRMapping implements IEntityMapping {
 	DWELL_DURATION ("", "Dwell - Duration", TypeEnum.INTEGER.getType()), // missing field
 	DWELL_TOTAL_DURATION ("totalDwellTime", "Dwell - Total Duration", TypeEnum.INTEGER.getType()),
 	FORM_OF_PAYMENT ("formOfPayment", "Form of Payment", TypeEnum.STRING.getType()),
-	FIRST_NAME ("passengers.firstName", "Name - First", TypeEnum.STRING.getType()),
-	LAST_NAME ("passengers.lastName", "Name - Last", TypeEnum.STRING.getType()),
-	MIDDLE_NAME ("passengers.middleName", "Name - Middle", TypeEnum.STRING.getType()),
+	FIRST_NAME ("firstName", "First Name", TypeEnum.STRING.getType()),
+	LAST_NAME ("lastName", "Last Name", TypeEnum.STRING.getType()),
+	MIDDLE_NAME ("middleName", "Middle Name", TypeEnum.STRING.getType()),
 	ORIGIN_AIRPORT ("origin", "Origin - Airport", TypeEnum.STRING.getType()),
 	ORIGIN_COUNTRY ("originCountry", "Origin - Country", TypeEnum.STRING.getType()),
 	PASSENGER_COUNT ("passengerCount", "Passenger Count", TypeEnum.INTEGER.getType()),

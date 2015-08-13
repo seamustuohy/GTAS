@@ -15,6 +15,10 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class parses the QueryObject and generates a JPQL Statement
+ *
+ */
 public class JPQLGenerator {
 	private static final Logger logger = LoggerFactory.getLogger(JPQLGenerator.class);
 	
@@ -23,7 +27,7 @@ public class JPQLGenerator {
 	 * @param queryObject
 	 * @param queryType
 	 * @return
-	 * @throws InvalidQueryRepositoryException 
+	 * @throws InvalidQueryRepositoryException
 	 */
 	public static String generateQuery(QueryObject queryObject, EntityEnum queryType) throws InvalidQueryRepositoryException {
 		String query = "";
@@ -173,7 +177,7 @@ public class JPQLGenerator {
 					}
 				}
 				else if(entity.equalsIgnoreCase(EntityEnum.ADDRESS.getEntityName()) ||
-						entity.equalsIgnoreCase(EntityEnum.FREQUENT_FLYER.getEntityName()) ||
+						entity.equalsIgnoreCase(EntityEnum.EMAIL.getEntityName()) ||
 						entity.equalsIgnoreCase(EntityEnum.PHONE.getEntityName())) {
 					joinCondition = getJoinCondition(EntityEnum.PNR, queryType);
 					
@@ -182,9 +186,9 @@ public class JPQLGenerator {
 					}
 				}
 				
-				joinCondition = getJoinCondition(EntityEnum.valueOf(entity.toUpperCase()), queryType);
+				joinCondition = getJoinCondition(EntityEnum.getEnum(entity), queryType);
 				if(join.indexOf(joinCondition) == -1) {
-					join.append(getJoinCondition(EntityEnum.valueOf(entity.toUpperCase()), queryType));
+					join.append(joinCondition);
 				}
 			}
 		}
@@ -197,9 +201,15 @@ public class JPQLGenerator {
 			case Constants.ADDRESS:
 				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.ADDRESS.getEntityReference() + " " + EntityEnum.ADDRESS.getAlias();
 				break;
+			case Constants.CREDITCARD:
+				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.CREDIT_CARD.getEntityReference() + " " + EntityEnum.CREDIT_CARD.getAlias();
+				break;
 			case Constants.DOCUMENT:
 	        	joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
 	            break;
+			case Constants.EMAIL:
+				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.EMAIL.getEntityReference() + " " + EntityEnum.EMAIL.getAlias();
+				break;
 			case Constants.FLIGHT:
 				joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " " + EntityEnum.FLIGHT.getAlias();
 				break;
@@ -207,7 +217,7 @@ public class JPQLGenerator {
 				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.FREQUENT_FLYER.getEntityReference() + " " + EntityEnum.FREQUENT_FLYER.getAlias();
 				break;
 			case Constants.HITS:
-//				joinCondition = Constants.JOIN + EntityEnum.HITS.getAlias() + Constants.h;
+				joinCondition = "";
 				break;
 	        case Constants.PASSENGER:
 	        	joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PASSENGER.getEntityReference() + " " + EntityEnum.PASSENGER.getAlias();
@@ -221,6 +231,9 @@ public class JPQLGenerator {
 	        	} else if(queryType == EntityEnum.PASSENGER) {
 	        		joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.PNR.getEntityReference() + " " + EntityEnum.PNR.getAlias();
 	        	}
+	        	break;
+	        case Constants.TRAVELAGENCY:
+	        	joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.TRAVEL_AGENCY.getEntityReference() + " " + EntityEnum.TRAVEL_AGENCY.getAlias();
 	        	break;
 	        default:
 	            throw new InvalidQueryRepositoryException("Invalid Entity: " + entity.getEntityName(), null);

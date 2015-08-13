@@ -1,11 +1,10 @@
 package gov.gtas.querybuilder.service;
 
-import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
-import gov.gtas.model.PnrData;
+import gov.gtas.model.Pnr;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
@@ -13,8 +12,6 @@ import gov.gtas.querybuilder.config.QueryBuilderAppConfig;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
-import gov.gtas.querybuilder.model.QueryRequest;
-import gov.gtas.querybuilder.model.UserQuery;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,7 +25,6 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -114,10 +110,12 @@ public class QueryBuilderServiceIT {
 		
 	}
 	
-	@Test
-	public void testPNRSimpleQuery() {
-		TypedQuery<Flight> query = entityManager.createQuery("select distinct f from Flight f join f.pnrs pnr join pnr.passengers pnr_p where pnr_p.firstName = ?1", Flight.class);
-		query.setParameter(1, "Srinivas");
+//	@Test
+	public void testPNRSimpleFlightQuery() {
+		// select distinct f from Flight f join f.pnrs pnr where pnr.bagCount = ?1
+		// select distinct f from Flight f join f.pnrs pnr join pnr.passengers pnr_p where pnr_p.firstName = ?1
+		TypedQuery<Flight> query = entityManager.createQuery("select distinct f from Flight f join fetch f.passengers p join fetch p.documents d where d.documentType = ?1", Flight.class);
+		query.setParameter(1, "P");
 		List<Flight> resultList = query.getResultList();
 		
 		if(resultList != null) {
@@ -127,15 +125,32 @@ public class QueryBuilderServiceIT {
 		}
 	}
 	
+	@Test
+	public void testPNRSimplePassengerQuery() {
+		//select distinct pnr from PnrData pnr join fetch pnr.passengers p left outer join fetch p.documents d where pnr.origin = ?1
+		// select distinct p from Passenger p join p.pnrs pnr join fetch pnr.flights f join fetch p.documents d where pnr.bagCount = ?1
+		// select distinct p from Passenger p join p.pnrs pnr where pnr.bagCount = ?1
+		// select distinct p from Passenger p join p.pnrs pnr join fetch p.flights f left join fetch p.documents d where pnr.bagCount = ?1
+		TypedQuery<Passenger> query = entityManager.createQuery("select distinct p from Passenger p join p.pnrs pnr where pnr.creditCard.number = ?1", Passenger.class);
+		query.setParameter(1, "2222-3333-4444-5555");
+		List<Passenger> resultList = query.getResultList();
+		
+		if(resultList != null) {
+			for(Passenger p : resultList) {
+				System.out.println("first name: " + p.getFirstName() + " last name: " + p.getLastName());
+			}
+		}
+	}
+	
 //	@Test
 //	@Transactional
 	public void testPNRQuery() {
-		TypedQuery<PnrData> query = entityManager.createQuery("select distinct pnr from PnrData pnr join fetch pnr.passengers p left outer join fetch p.documents d where pnr.origin = ?1", PnrData.class);
+		TypedQuery<Pnr> query = entityManager.createQuery("select distinct pnr from PnrData pnr join fetch pnr.passengers p left join fetch p.documents d where pnr.origin = ?1", Pnr.class);
 		query.setParameter(1, "iad");
-		List<PnrData> resultList = query.getResultList();
+		List<Pnr> resultList = query.getResultList();
 		
 		if(resultList != null) {
-			for(PnrData pnr : resultList) {
+			for(Pnr pnr : resultList) {
 				int bagCount = pnr.getBagCount();
 				Set<Passenger> passengers = pnr.getPassengers();
 				if(!passengers.isEmpty()) {

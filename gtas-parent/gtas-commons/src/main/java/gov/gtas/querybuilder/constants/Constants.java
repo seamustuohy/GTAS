@@ -8,7 +8,7 @@ public final class Constants {
 	public static final String WHERE = "where";
 	public static final String AND = "and";
 	public static final String JOIN = " join ";
-	public static final String LEFT_JOIN = " left join ";
+	public static final String LEFT_JOIN_FETCH = " left join fetch ";
 	public static final String JOIN_FETCH = " join fetch ";
 	
 	// Entities

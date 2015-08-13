@@ -6,14 +6,14 @@ public enum EntityEnum {
 		ADDRESS ("ADDRESS", "Address", "a", ".addresses"),
 		CREDIT_CARD ("CREDIT CARD", "CreditCard", "cc", ".creditCard"),
 		DOCUMENT ("DOCUMENT", "Document", "d", ".documents"),
-		EMAIL ("EMAIL", "Email", "e", ""),
+		EMAIL ("EMAIL", "Email", "e", ".emails"),
 		FLIGHT ("FLIGHT", "Flight", "f", ".flights"),
 		FREQUENT_FLYER ("FREQUENT FLYER", "FrequentFlyer", "ff", ".frequentFlyer"),
 		HITS ("HITS", "Hits", "h", ""),
 		PASSENGER("PASSENGER", "Passenger", "p", ".passengers"),
 		PHONE ("PHONE", "Phone", "ph", ".phones"),
 		PNR ("PNR", "PNR", "pnr", ".pnrs"),
-		TRAVEL_AGENCY ("TRAVEL AGENCY", "TravelAgency", "ta", "");
+		TRAVEL_AGENCY ("TRAVEL AGENCY", "TravelAgency", "ta", ".agency");
 		
 		private String friendlyName;
 		private String entityName;
@@ -46,7 +46,7 @@ public enum EntityEnum {
 		public static EntityEnum getEnum(String value) {
 			
 			for (EntityEnum entityEnum : EntityEnum.values()) {
-			     if(entityEnum.name().equalsIgnoreCase(value)) {
+			     if(entityEnum.getEntityName().equalsIgnoreCase(value)) {
 			    	 return entityEnum;
 			     }
 			 }

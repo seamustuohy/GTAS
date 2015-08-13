@@ -26,10 +26,12 @@ import gov.gtas.querybuilder.service.QueryBuilderService;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.ConstraintViolationException;
 
@@ -85,7 +87,7 @@ public class QueryBuilderController {
 		
 		List<Passenger> passengers = queryService.runPassengerQuery(queryObject);
 		response = createQueryResponse(Status.SUCCESS, passengers != null ? passengers.size() + " record(s)" : "passenger is null", mapToQueryPassengerResult(passengers));
-		
+		logger.info("returning response");
 		return response;
 	}
 	
@@ -217,6 +219,8 @@ public class QueryBuilderController {
 		SimpleDateFormat dobFormat = new SimpleDateFormat("MM/dd/yyyy");
 		
 		if(passengers != null && passengers.size() > 0) {
+			logger.info("mapping passenger to query response object...");
+			long startTime =System.nanoTime();
 			for(Passenger p : passengers) {
 				if(p != null) {
 					QueryPassengersResult qbPassenger = new QueryPassengersResult();
@@ -282,6 +286,8 @@ public class QueryBuilderController {
 					qbPassengers.add(qbPassenger);
 				}
 			}
+			//TimeUnit.SECONDS.convert(System.nanoTime() - startTime, TimeUnit.NANOSECONDS)
+			logger.info("done. Time elapsed: " + (System.nanoTime() - startTime));
 		}
 		
 		return qbPassengers;
