@@ -15,7 +15,8 @@ import gov.gtas.parsers.util.ParseUtils;
  * Parses a segment text into composites and elements.
  */
 public class SegmentTokenizer {
-    public static final int MAX_SEGMENT_NAME_LENG = 3;
+    /** number of characters in a segment name */
+    public static final int SEGMENT_NAME_LENG = 3;
 
     private UNA una;
     
@@ -41,7 +42,7 @@ public class SegmentTokenizer {
         }
 
         String segmentName = tokens[0];
-        if (StringUtils.isBlank(segmentName) || segmentName.length() > MAX_SEGMENT_NAME_LENG) {
+        if (StringUtils.isBlank(segmentName) || segmentName.length() != SEGMENT_NAME_LENG) {
             throw new ParseException("Illegal segment name " + segmentName);                
         }
 
