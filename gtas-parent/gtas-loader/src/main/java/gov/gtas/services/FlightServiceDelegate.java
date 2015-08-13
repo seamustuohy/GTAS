@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import gov.gtas.model.Flight;
-import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
 
 /**
  * 

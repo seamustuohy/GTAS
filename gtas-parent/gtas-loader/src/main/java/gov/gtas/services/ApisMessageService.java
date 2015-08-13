@@ -26,9 +26,9 @@ import gov.gtas.parsers.paxlst.ApisMessageVo;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
 import gov.gtas.parsers.util.FileUtils;
-import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
-import gov.gtas.parsers.vo.air.ReportingPartyVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.ReportingPartyRepository;
 

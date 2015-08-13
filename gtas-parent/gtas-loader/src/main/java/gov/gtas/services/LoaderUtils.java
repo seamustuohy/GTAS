@@ -20,13 +20,13 @@ import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrVo;
-import gov.gtas.parsers.vo.air.AddressVo;
-import gov.gtas.parsers.vo.air.CreditCardVo;
-import gov.gtas.parsers.vo.air.DocumentVo;
-import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
-import gov.gtas.parsers.vo.air.PhoneVo;
-import gov.gtas.parsers.vo.air.ReportingPartyVo;
+import gov.gtas.parsers.vo.passenger.AddressVo;
+import gov.gtas.parsers.vo.passenger.CreditCardVo;
+import gov.gtas.parsers.vo.passenger.DocumentVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.PhoneVo;
+import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
 import gov.gtas.repository.MessageRepository;
 
 @Service

@@ -26,11 +26,11 @@ import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
-import gov.gtas.parsers.vo.air.AddressVo;
-import gov.gtas.parsers.vo.air.CreditCardVo;
-import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
-import gov.gtas.parsers.vo.air.PhoneVo;
+import gov.gtas.parsers.vo.passenger.AddressVo;
+import gov.gtas.parsers.vo.passenger.CreditCardVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.repository.PnrMessageRepository;
 
 @Service
