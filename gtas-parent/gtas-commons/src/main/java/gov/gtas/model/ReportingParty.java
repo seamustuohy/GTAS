@@ -1,5 +1,7 @@
 package gov.gtas.model;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -14,7 +16,9 @@ public class ReportingParty extends BaseEntity {
     
     @Column(name = "party_name")
     private String partyName;
+    
     private String telephone;
+    
     private String fax;
 
     @ManyToOne
@@ -44,5 +48,23 @@ public class ReportingParty extends BaseEntity {
     }
     public void setFax(String fax) {
         this.fax = fax;
+    }
+    
+    @Override
+    public int hashCode() {
+       return Objects.hash(this.partyName, this.telephone);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ReportingParty other = (ReportingParty)obj;
+        return Objects.equals(this.partyName, other.partyName)
+                && Objects.equals(this.telephone, other.telephone);
     }
 }

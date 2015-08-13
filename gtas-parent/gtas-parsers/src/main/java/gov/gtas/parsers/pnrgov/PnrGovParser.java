@@ -41,6 +41,7 @@ import gov.gtas.parsers.pnrgov.segment.TRI;
 import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
+import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.air.AddressVo;
 import gov.gtas.parsers.vo.air.CreditCardVo;
 import gov.gtas.parsers.vo.air.FlightVo;
@@ -430,7 +431,6 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
 
     private void processGroup12(TVL tvl) throws ParseException {
         RPI rpi = getConditionalSegment(RPI.class);
-   
     }
     
     private AddressVo createAddress(ADD add) {
@@ -441,14 +441,13 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         rv.setState(add.getStateOrProvinceCode());
         rv.setCountry(add.getCountryCode());
         rv.setPostalCode(add.getPostalCode());
-        rv.setPhoneNumber(add.getTelephone());
+        rv.setPhoneNumber(ParseUtils.prepTelephoneNumber(add.getTelephone()));
         return rv;
     }
     
     private PhoneVo createPhone(String number) {
-        String n = number.replaceAll("[^0-9]", "");
         PhoneVo rv = new PhoneVo();
-        rv.setNumber(n);
+        rv.setNumber(ParseUtils.prepTelephoneNumber(number));
         return rv;
     }
 }

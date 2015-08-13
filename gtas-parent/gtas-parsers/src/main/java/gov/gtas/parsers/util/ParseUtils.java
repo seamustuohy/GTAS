@@ -61,7 +61,9 @@ public class ParseUtils {
      * characters are removed from the final output.
      */
     public static String[] splitWithEscapeChar(String s, char delimiter, char escape) {
-        if (s == null) return null;
+        if (s == null) {
+            return null;
+        }
         
         String escapedDelimiter = String.format("\\%c\\%c", escape, delimiter);
         final String sentinel = "~XYZ~";
@@ -83,7 +85,9 @@ public class ParseUtils {
      * leading and trailing whitespace.  Empty lines get clobbered.
      */
     public static String convertToSingleLine(String str) {
-        if (str == null) return null;
+        if (str == null) {
+            return null;
+        }
         String[] lines = str.split("[\r\n]+");
         StringBuilder sb = new StringBuilder();
         for (String s : lines) {
@@ -136,7 +140,9 @@ public class ParseUtils {
      * @return
      */
     public static String[] separateCarrierAndFlightNumber(String s) {
-        if (StringUtils.isBlank(s)) return null;
+        if (StringUtils.isBlank(s)) {
+            return null;
+        }
         final int MAX_FLIGHT_NUM_LENG = 4;
         final int MIN_CARRIER_LENG = 2;
         
@@ -158,5 +164,12 @@ public class ParseUtils {
         
         String carrier = s.substring(0, s.length() - fn.length());
         return new String[] { carrier, fn.reverse().toString() };
+    }
+    
+    public static String prepTelephoneNumber(String number) {
+        if (StringUtils.isBlank(number)) {
+            return null;
+        }
+        return number.replaceAll("[^0-9]", "");
     }
 }
