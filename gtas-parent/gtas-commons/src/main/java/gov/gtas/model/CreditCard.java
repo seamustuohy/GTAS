@@ -1,10 +1,13 @@
 package gov.gtas.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,6 +29,12 @@ public class CreditCard extends BaseEntityAudit {
 	
 	@Column(name = "account_holder")
     private String accountHolder;
+
+    @ManyToMany(
+        mappedBy = "creditCards",
+        targetEntity = Pnr.class
+    )
+    private Set<Pnr> pnrs = new HashSet<>();
 
 	public String getCardType() {
 		return cardType;
@@ -57,6 +66,14 @@ public class CreditCard extends BaseEntityAudit {
 
     public void setAccountHolder(String accountHolder) {
         this.accountHolder = accountHolder;
+    }
+
+    public Set<Pnr> getPnrs() {
+        return pnrs;
+    }
+
+    public void setPnrs(Set<Pnr> pnrs) {
+        this.pnrs = pnrs;
     }
 
     @Override

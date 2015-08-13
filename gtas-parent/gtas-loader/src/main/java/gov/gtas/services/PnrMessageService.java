@@ -99,7 +99,7 @@ public class PnrMessageService implements MessageService {
                 }
 
                 for (CreditCardVo creditVo : vo.getCreditCards()) {
-                    pnr.setCreditCard(utils.convertCreditVo(creditVo));
+                    pnr.addCreditCard(utils.convertCreditVo(creditVo));
                 }
                 
                 Set<Passenger> pax = new HashSet<>();        

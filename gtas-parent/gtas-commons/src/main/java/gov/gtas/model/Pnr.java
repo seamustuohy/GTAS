@@ -85,18 +85,32 @@ public class Pnr extends BaseEntityAudit{
         inverseJoinColumns=@JoinColumn(name="passenger_id")
     )   
     private Set<Passenger> passengers = new HashSet<>();
- 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "cc_id")
-    private CreditCard creditCard;
- 
+
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "agency_id")
     private Agency agency;
-	
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "ff_id")
-    private FrequentFlyer frequentFlyer;	
+    
+    @ManyToMany(
+        targetEntity=CreditCard.class,
+        cascade={CascadeType.ALL}
+    )
+    @JoinTable(
+        name="pnr_credit_card",
+        joinColumns=@JoinColumn(name="pnr_id"),
+        inverseJoinColumns=@JoinColumn(name="credit_card_id")
+    )    
+    private Set<CreditCard> creditCards = new HashSet<>();
+ 
+    @ManyToMany(
+        targetEntity=FrequentFlyer.class,
+        cascade={CascadeType.ALL}
+    )
+    @JoinTable(
+        name="pnr_frequent_flyer",
+        joinColumns=@JoinColumn(name="pnr_id"),
+        inverseJoinColumns=@JoinColumn(name="ff_id")
+    )    
+    private Set<FrequentFlyer> frequentFlyers = new HashSet<>();
 
     @ManyToMany(
         targetEntity=Address.class,
@@ -131,6 +145,20 @@ public class Pnr extends BaseEntityAudit{
     )    
     private Set<Email> emails = new HashSet<>();
 
+    public void addCreditCard(CreditCard cc) {
+        if (this.creditCards == null) {
+            this.creditCards = new HashSet<>();
+        }
+        this.creditCards.add(cc);
+    }
+
+    public void addFrequentFlyer(FrequentFlyer ff) {
+        if (this.frequentFlyers == null) {
+            this.frequentFlyers = new HashSet<>();
+        }
+        this.frequentFlyers.add(ff);
+    }
+
     public void addAddress(Address address) {
         if (this.addresses == null) {
             this.addresses = new HashSet<>();
@@ -160,14 +188,6 @@ public class Pnr extends BaseEntityAudit{
 		this.agency = agency;
 	}
 
-	public CreditCard getCreditCard() {
-		return creditCard;
-	}
-
-	public void setCreditCard(CreditCard creditCard) {
-		this.creditCard = creditCard;
-	}
-
 	public Set<Passenger> getPassengers() {
 		return passengers;
 	}
@@ -176,7 +196,23 @@ public class Pnr extends BaseEntityAudit{
 		this.passengers = passengers;
 	}
  
-	public Set<Address> getAddresses() {
+	public Set<CreditCard> getCreditCards() {
+        return creditCards;
+    }
+
+    public void setCreditCards(Set<CreditCard> creditCards) {
+        this.creditCards = creditCards;
+    }
+
+    public Set<FrequentFlyer> getFrequentFlyers() {
+        return frequentFlyers;
+    }
+
+    public void setFrequentFlyers(Set<FrequentFlyer> frequentFlyers) {
+        this.frequentFlyers = frequentFlyers;
+    }
+
+    public Set<Address> getAddresses() {
 		return addresses;
 	}
 
@@ -312,14 +348,6 @@ public class Pnr extends BaseEntityAudit{
 		this.flights = flights;
 	}
 
-	public FrequentFlyer getFrequentFlyer() {
-		return frequentFlyer;
-	}
-
-	public void setFrequentFlyer(FrequentFlyer frequentFlyer) {
-		this.frequentFlyer = frequentFlyer;
-	}
-	
     @Override
     public int hashCode() {
        return Objects.hash(this.carrier, this.departureDate, this.origin);
