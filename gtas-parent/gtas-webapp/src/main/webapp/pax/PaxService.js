@@ -3,7 +3,8 @@ app.service("paxService", function( $rootScope, $http, $q ) {
 	return({
 	    getPax: getPax,
         broadcast: broadcast,
-        getRuleHits: getRuleHits
+        getRuleHits: getRuleHits,
+        broadcastRuleID: broadcastRuleID
 	});
 	
 	function getPax(flightId) {
@@ -45,6 +46,9 @@ app.service("paxService", function( $rootScope, $http, $q ) {
     	
     }
     
+    function broadcastRuleID(ruleID) {
+        $rootScope.$broadcast('ruleIDBroadcast', ruleID); 
+    }
     
 });
 

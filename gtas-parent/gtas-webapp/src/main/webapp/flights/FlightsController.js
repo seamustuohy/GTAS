@@ -1,5 +1,13 @@
 
-app.controller('FlightsController', function($scope, $filter, $q, ngTableParams, flightService, paxService) {
+app.controller('FlightsController', function($scope, $filter, $q, ngTableParams, flightService,
+					paxService, $rootScope, $injector, jQueryBuilderFactory, riskCriteriaService, $timeout) {
+	
+	var self = this;
+	$scope.hitDetailDisplay = '';
+	$scope.ruleHitsRendered = false; // flag to render rule hits only once
+	
+	$injector.invoke(jQueryBuilderFactory, self, {$scope: $scope });
+	
 	var paxData = [];
 	var data = [];
 	
@@ -42,11 +50,42 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
     
   $scope.updatePax = function(flightId) {  
   	paxService.getPax(flightId);			
-  //paxService.broadcast(flightId);
   };    
+
+  // Rule UI Modal Section
+  
+$scope.viewRuleByID = function(ruleID){    
+	
+
+		paxService.broadcastRuleID(ruleID);
+
+    }; // END OF viewRuleByID Function
     
-//  $scope.$on('paxDataResponse', function (evnt, data) {
-//	    $scope.paxData = data;
-//	  });
+    
+
+    $rootScope.$on('ruleIDBroadcast',function(event, data){
+  	  
+    	$scope.getRuleObject(data);
+
+    });
+    
+   
+    $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
+    
+    // GET RULE OBJECT FUNCTION    
+    $scope.getRuleObject = function(ruleID){
+          riskCriteriaService.loadRuleById(ruleID).then(function (myData) {
+              $scope.$builder.queryBuilder('readOnlyRules', myData.details);
+        	  //console.log(myData);
+              
+              	$scope.hitDetailDisplay = myData.summary.title;
+        	  	document.getElementById("QBModal").style.display="block";
+        	  
+        	  $scope.closeDialog = function() {	    
+        		  document.getElementById("QBModal").style.display = "none";
+        		  };
+        	  
+          });
+    };
   
 });
