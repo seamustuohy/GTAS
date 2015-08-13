@@ -13,8 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.delegates.FlightServiceDelegate;
-import gov.gtas.delegates.FlightVo;
+import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.services.FlightServiceDelegate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
