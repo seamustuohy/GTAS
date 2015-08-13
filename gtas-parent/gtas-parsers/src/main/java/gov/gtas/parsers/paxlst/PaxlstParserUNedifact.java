@@ -35,13 +35,13 @@ import gov.gtas.parsers.vo.air.FlightVo;
 import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.parsers.vo.air.ReportingPartyVo;
 
-public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> {   
+public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {   
     private static final String[] SEGMENT_NAMES = new String[] { "ATT", "AUT", "BGM", "CNT", "COM", "CPI", "CTA", "DOC",
             "DTM", "EMP", "FTX", "GEI", "GID", "LOC", "MEA", "NAD", "NAT", "QTY", "RFF", "TDT", "UNH", "UNT" };
     public static final Set<String> UN_EDIFACT_PAXLST_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
 
     public PaxlstParserUNedifact() {
-        this.parsedMessage = new PaxlstMessageVo();
+        this.parsedMessage = new ApisMessageVo();
     }
     
     protected String getPayloadText(String message) throws ParseException {
