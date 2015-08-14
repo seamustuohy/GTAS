@@ -25,21 +25,20 @@ public class FlightServiceDelegate {
 	private FlightService flightService;
 	
 	public FlightVo saveOrUpdate(FlightVo vo) {
-		List<Flight> flights=flightService.getUniqueFlightByCriteria(vo.getCarrier(), vo.getFlightNumber(), vo.getOrigin(), vo.getDestination(), vo.getFlightDate());
-		System.out.println("flights.size()-"+flights.size());
-		Flight f=new Flight();
-		if(flights != null && flights.size() >0){
-			f = ServiceUtils.mapFlightFromVo(vo,flights.get(0));
+		Flight flight = flightService.getUniqueFlightByCriteria(vo.getCarrier(), vo.getFlightNumber(), vo.getOrigin(), vo.getDestination(), vo.getFlightDate());
+
+		Flight f = new Flight();
+		if (flight != null) {
+			f = ServiceUtils.mapFlightFromVo(vo, flight);
 			f.setUpdatedBy("JUNIT");
 			flightService.update(f);
-		}
-		else{
-			ServiceUtils.mapFlightFromVo(vo,f);
-			f=flightService.create(f);
-			System.out.println("ID-"+f.getId());
-		}
+        } else {
+            ServiceUtils.mapFlightFromVo(vo, f);
+            f = flightService.create(f);
+            System.out.println("ID-" + f.getId());
+        }
+
 		return ServiceUtils.mapVoFromFlight(f);
-		
-	}
+    }
 
 }
