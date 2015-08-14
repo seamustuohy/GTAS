@@ -13,7 +13,7 @@ public enum EntityEnum {
 		PASSENGER("PASSENGER", "Passenger", "p", ".passengers"),
 		PHONE ("PHONE", "Phone", "ph", ".phones"),
 		PNR ("PNR", "PNR", "pnr", ".pnrs"),
-		TRAVEL_AGENCY ("TRAVEL AGENCY", "TravelAgency", "ta", ".agency");
+		TRAVEL_AGENCY ("TRAVEL AGENCY", "TravelAgency", "pnr.agency", "");
 		
 		private String friendlyName;
 		private String entityName;
@@ -25,6 +25,7 @@ public enum EntityEnum {
 			this.entityName = entityName;
 			this.alias = alias;
 			this.entityReference = entityReference;
+			
 		}
 
 		public String getFriendlyName() {
