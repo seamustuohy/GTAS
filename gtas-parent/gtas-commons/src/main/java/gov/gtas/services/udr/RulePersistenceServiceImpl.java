@@ -28,11 +28,13 @@ import javax.transaction.Transactional.TxType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
 
 /**
  * The back-end service for persisting rules.
+ * 
  * @author GTAS3 (AB)
  *
  */
@@ -43,189 +45,237 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 */
 	private static final Logger logger = LoggerFactory
 			.getLogger(RulePersistenceServiceImpl.class);
-	
+
 	private static final int UPDATE_BATCH_SIZE = 100;
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@Resource
-    private UdrRuleRepository udrRuleRepository;
-    
-    @Autowired
-    private UserService userService;
-    
+	private UdrRuleRepository udrRuleRepository;
+
+	@Autowired
+	private UserService userService;
+
 	@Override
 	@Transactional
 	public UdrRule create(UdrRule r, String userId) {
 		final User user = fetchUser(userId);
-		// remove meta for now, since its ID is the same as the parent UdrRule ID.
-		//we will add it after saving the UDR rule and the ID has been generated.
+		// remove meta for now, since its ID is the same as the parent UdrRule
+		// ID.
+		// we will add it after saving the UDR rule and the ID has been
+		// generated.
 		RuleMeta savedMeta = r.getMetaData();
 		r.setMetaData(null);
 
-		if(savedMeta == null){
+		if (savedMeta == null) {
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "UDR metatdata", "RulePersistenceServiceImpl.create()");
+			throw errorHandler.createException(
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
+					"UDR metatdata", "RulePersistenceServiceImpl.create()");
 		}
-		
-		//set the audit fields
+
+		// set the audit fields
 		r.setEditDt(new Date());
 		r.setAuthor(user);
 		r.setEditedBy(user);
-		
-		//save the rule with the meta data stripped.
-		//Once the rule id is generated we will add back the meta data
-		//and set its key to the rule ID.
+
+		// save the rule with the meta data stripped.
+		// Once the rule id is generated we will add back the meta data
+		// and set its key to the rule ID.
 		UdrRule rule = udrRuleRepository.save(r);
-		
-		//now add back the meta and conditions and update the rule.
+
+		// now add back the meta and conditions and update the rule.
 		long ruleid = rule.getId();
 		savedMeta.setId(ruleid);
 		rule.setMetaData(savedMeta);
 		savedMeta.setParent(rule);
 		rule = udrRuleRepository.save(rule);
-		
+
 		return rule;
 	}
+
 	@Override
 	@Transactional
 	public UdrRule delete(Long id, String userId) {
 		final User user = fetchUser(userId);
-		
+
 		UdrRule ruleToDelete = udrRuleRepository.findOne(id);
-		if(ruleToDelete != null){
+		if (ruleToDelete != null) {
 			ruleToDelete.setDeleted(YesNoEnum.Y);
 			RuleMeta meta = ruleToDelete.getMetaData();
 			meta.setEnabled(YesNoEnum.N);
 			ruleToDelete.setEditedBy(user);
 			ruleToDelete.setEditDt(new Date());
-			
-			//remove references to the Knowledge Base
-			if(ruleToDelete.getEngineRules() != null){
-				for(Rule rl:ruleToDelete.getEngineRules()){
+
+			// remove references to the Knowledge Base
+			if (ruleToDelete.getEngineRules() != null) {
+				for (Rule rl : ruleToDelete.getEngineRules()) {
 					rl.setKnowledgeBase(null);
 				}
-		    }
+			}
 			udrRuleRepository.save(ruleToDelete);
-		}else{
-			logger.warn("RulePersistenceServiceImpl.delete() - object does not exist:"+id);
+		} else {
+			logger.warn("RulePersistenceServiceImpl.delete() - object does not exist:"
+					+ id);
 		}
 		return ruleToDelete;
 	}
-	
+
 	@Override
-	@Transactional(value=TxType.SUPPORTS)
+	@Transactional(value = TxType.SUPPORTS)
 	public List<UdrRule> findAll() {
-		return (List<UdrRule>)udrRuleRepository.findByDeleted(YesNoEnum.N);				
+		return (List<UdrRule>) udrRuleRepository.findByDeleted(YesNoEnum.N);
 	}
-	
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.udr.RulePersistenceService#batchUpdate(java.util.List)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.udr.RulePersistenceService#batchUpdate(java.util.List)
 	 */
 	@Override
-	public Collection<? extends BaseEntity> batchUpdate(Collection<? extends BaseEntity> entities) {
+	public Collection<? extends BaseEntity> batchUpdate(
+			Collection<? extends BaseEntity> entities) {
 		List<BaseEntity> ret = new LinkedList<BaseEntity>();
 		int count = 0;
-		for(BaseEntity ent:entities){
+		for (BaseEntity ent : entities) {
 			BaseEntity upd = entityManager.merge(ent);
 			ret.add(upd);
 			++count;
-			if(count > UPDATE_BATCH_SIZE){
+			if (count > UPDATE_BATCH_SIZE) {
 				entityManager.flush();
 				entityManager.clear();
 			}
 		}
 		return ret;
 	}
-	
+
 	@Override
 	@Transactional
 	public UdrRule update(UdrRule rule, String userId) {
 		final User user = fetchUser(userId);
-		
-		if(rule.getId() == null){
+
+		if (rule.getId() == null) {
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "id", "Update UDR");
+			throw errorHandler.createException(
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "id",
+					"Update UDR");
 		}
-		
-		rule.setEditDt(new Date()); 
+
+		rule.setEditDt(new Date());
 		rule.setEditedBy(user);
 		UdrRule updatedRule = udrRuleRepository.save(rule);
 		return updatedRule;
 	}
+
 	@Override
 	@Transactional(TxType.SUPPORTS)
 	public UdrRule findById(Long id) {
 		return udrRuleRepository.findOne(id);
 	}
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.udr.RulePersistenceService#findByTitleAndAuthor(java.lang.String, java.lang.String)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.udr.RulePersistenceService#findByTitleAndAuthor(java
+	 * .lang.String, java.lang.String)
 	 */
 	@Override
 	@Transactional(TxType.SUPPORTS)
 	public UdrRule findByTitleAndAuthor(String title, String authorUserId) {
-		return udrRuleRepository.getUdrRuleByTitleAndAuthor(title, authorUserId);
+		return udrRuleRepository
+				.getUdrRuleByTitleAndAuthor(title, authorUserId);
 	}
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.udr.RulePersistenceService#findByAuthor(java.lang.String)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.udr.RulePersistenceService#findByAuthor(java.lang.String
+	 * )
 	 */
 	@Override
 	public List<UdrRule> findByAuthor(String authorUserId) {
 		return udrRuleRepository.getUdrRuleByAuthor(authorUserId);
 	}
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.udr.RulePersistenceService#findDefaultKnowledgeBase()
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.udr.RulePersistenceService#findDefaultKnowledgeBase()
 	 */
 	@Override
-	//@Cacheable(value="knowledgebase")
+	@Cacheable(value = "knowledgebase")
 	public KnowledgeBase findUdrKnowledgeBase() {
-		return udrRuleRepository.getKnowledgeBaseByName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+		return this.findUdrKnowledgeBase(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
 	}
-	
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.udr.RulePersistenceService#findUdrKnowledgeBase(java.lang.String)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.udr.RulePersistenceService#findUdrKnowledgeBase(java
+	 * .lang.String)
 	 */
 	@Override
+	@Cacheable(value = "knowledgebase")
 	public KnowledgeBase findUdrKnowledgeBase(String kbName) {
 		return udrRuleRepository.getKnowledgeBaseByName(kbName);
 	}
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.udr.RulePersistenceService#saveKnowledgeBase(gov.gtas.model.udr.KnowledgeBase)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.udr.RulePersistenceService#saveKnowledgeBase(gov.gtas
+	 * .model.udr.KnowledgeBase)
 	 */
 	@Override
-	//@CacheEvict(value="knowledgebase", beforeInvocation=true)
+	@CacheEvict(value = "knowledgebase", allEntries=true)
 	public KnowledgeBase saveKnowledgeBase(KnowledgeBase kb) {
 		kb.setCreationDt(new Date());
-		if(kb.getId() == null){
-		  entityManager.persist(kb);
+		if (kb.getId() == null) {
+			entityManager.persist(kb);
 		} else {
 			entityManager.merge(kb);
 		}
 		return kb;
 	}
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.udr.RulePersistenceService#deleteKnowledgeBase(java.lang.String)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.udr.RulePersistenceService#deleteKnowledgeBase(java
+	 * .lang.String)
 	 */
 	@Override
+	@CacheEvict(value = "knowledgebase", allEntries=true)
 	public KnowledgeBase deleteKnowledgeBase(String kbName) {
 		KnowledgeBase kb = findUdrKnowledgeBase(kbName);
-		if(kb != null){
+		if (kb != null) {
 			entityManager.remove(kb);
 		}
 		return kb;
 	}
-	
+
 	/**
-	 * Fetches the user object and throws an unchecked exception if the user cannot be found.
-	 * @param userId the ID of the user to fetch.
+	 * Fetches the user object and throws an unchecked exception if the user
+	 * cannot be found.
+	 * 
+	 * @param userId
+	 *            the ID of the user to fetch.
 	 * @return the user fetched from the DB.
 	 */
-	private User fetchUser(final String userId){
+	private User fetchUser(final String userId) {
 		final User user = userService.findById(userId);
-		if(user == null){
+		if (user == null) {
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
+			throw errorHandler.createException(
+					CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
 		return user;
 	}
