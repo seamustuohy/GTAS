@@ -165,8 +165,8 @@ public class RuleConditionBuilder {
 		} catch (NullPointerException | IllegalArgumentException ex) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
 					CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-					String.format("QueryTerm (operator=%s, type=%s)",
-							trm.getOperator(), trm.getType()),
+					String.format("QueryTerm (entity=%s, field=%s, operator=%s, type=%s)",
+							trm.getEntity(), trm.getField(), trm.getOperator(), trm.getType()),
 					"Engine Rule Creation");
 
 		}

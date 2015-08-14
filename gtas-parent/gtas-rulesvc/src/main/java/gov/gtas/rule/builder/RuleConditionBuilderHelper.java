@@ -7,9 +7,20 @@ import static gov.gtas.rule.builder.RuleTemplateConstants.LEFT_PAREN_CHAR;
 import static gov.gtas.rule.builder.RuleTemplateConstants.RIGHT_PAREN_CHAR;
 import static gov.gtas.rule.builder.RuleTemplateConstants.SPACE_CHAR;
 import static gov.gtas.rule.builder.RuleTemplateConstants.TRUE_STRING;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.mappings.AddressMapping;
+import gov.gtas.querybuilder.mappings.CreditCardMapping;
+import gov.gtas.querybuilder.mappings.DocumentMapping;
+import gov.gtas.querybuilder.mappings.FlightMapping;
+import gov.gtas.querybuilder.mappings.FrequentFlyerMapping;
+import gov.gtas.querybuilder.mappings.IEntityMapping;
+import gov.gtas.querybuilder.mappings.PNRMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
+import gov.gtas.querybuilder.mappings.PhoneMapping;
+import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.text.ParseException;
@@ -72,13 +83,19 @@ public class RuleConditionBuilderHelper {
     	}
     	bldr.append(RIGHT_PAREN_CHAR);
     }
-    
+    /**
+     * Creates a friendly description for the criterion.
+     * @param cond
+     * @param bldr
+     * @throws ParseException
+     */
     public static void addConditionDescription(final QueryTerm cond, StringBuilder bldr) throws ParseException{    	
     	OperatorCodeEnum opCode = OperatorCodeEnum.getEnum(cond.getOperator());
     	TypeEnum attributeType = TypeEnum.getEnum(cond.getType());
     	
-    	bldr.append(cond.getEntity()).append(SPACE_CHAR)
-    	     .append(cond.getField()).append(SPACE_CHAR)
+    	EntityEnum entity = EntityEnum.getEnum(cond.getEntity());
+    	bldr.append(entity.getFriendlyName()).append(SPACE_CHAR)
+    	     .append(getFieldName(entity,cond.getField())).append(SPACE_CHAR)
     	     .append(opCode.getDisplayName()).append(SPACE_CHAR);
     	
 		String[] values = cond.getValue();
@@ -98,4 +115,49 @@ public class RuleConditionBuilderHelper {
         }
     }
 
+    private static String getFieldName(EntityEnum entity, String field){
+    	String ret = field;
+    	switch(entity){
+	    	case PASSENGER:
+	    		ret = extractFriendlyName(PassengerMapping.values(), field);
+	    		break;
+	    	case FLIGHT:
+	    		ret = extractFriendlyName(FlightMapping.values(), field);
+	    		break;
+	    	case DOCUMENT:
+	    		ret = extractFriendlyName(DocumentMapping.values(), field);
+	    		break;
+	    	case PNR:
+	    		ret = extractFriendlyName(PNRMapping.values(), field);
+	    		break;
+	    	case PHONE:
+	    		ret = extractFriendlyName(PhoneMapping.values(), field);
+	    		break;
+	    	case ADDRESS:
+	    		ret = extractFriendlyName(AddressMapping.values(), field);
+	    		break;
+	    	case FREQUENT_FLYER:
+	    		ret = extractFriendlyName(FrequentFlyerMapping.values(), field);
+	    		break;
+	    	case TRAVEL_AGENCY:
+	    		ret = extractFriendlyName(TravelAgencyMapping.values(), field);
+	    		break;
+	    	case CREDIT_CARD:
+	    		ret = extractFriendlyName(CreditCardMapping.values(), field);
+	    		break;
+    		default:
+    			break;
+    	}
+    	return ret;
+    }
+    
+    private static String extractFriendlyName(final IEntityMapping[] mappingValues, String field){
+    	String ret = field;
+    	for(IEntityMapping fldEnum:mappingValues){
+    		if(field.equalsIgnoreCase(fldEnum.getFieldName())){
+    			ret = fldEnum.getFriendlyName();
+    		}
+    	}
+    	return ret;
+    }
 }
