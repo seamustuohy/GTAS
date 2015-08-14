@@ -3,8 +3,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Date;
 
 import org.junit.Test;
+
+import gov.gtas.parsers.exception.ParseException;
 
 public class ParseUtilsTest {
     @Test
@@ -81,5 +84,12 @@ public class ParseUtilsTest {
             String[] r = ParseUtils.separateCarrierAndFlightNumber(s);
             System.out.println(Arrays.toString(r));            
         }
+    }
+    
+    @Test
+    public void testCalculateAge() throws ParseException {
+        Date d = ParseUtils.parseDateTime("03051980", "MMddyyyy");
+        int age = ParseUtils.calculateAge(d);
+        System.out.println(d + " " + age);
     }
 }
