@@ -102,15 +102,11 @@ public class LoaderRepository {
 
                 for (DocumentVo dvo : pvo.getDocuments()) {
                     if (isNewPax) {
-                        Document newDoc = utils.createNewDocument(dvo);
-                        newDoc.setPassenger(currentPassenger);
-                        currentPassenger.getDocuments().add(newDoc);                                                
+                        currentPassenger.addDocument(utils.createNewDocument(dvo));
                     } else {
                         Document existingDoc = docDao.findByDocumentNumberAndPassenger(dvo.getDocumentNumber(), currentPassenger);
                         if (existingDoc == null) {
-                            Document newDoc = utils.createNewDocument(dvo);
-                            newDoc.setPassenger(currentPassenger);
-                            currentPassenger.getDocuments().add(newDoc);                                                
+                            currentPassenger.addDocument(utils.createNewDocument(dvo));
                         } else {
                             utils.updateDocument(dvo, existingDoc);
                         }                        
@@ -128,5 +124,4 @@ public class LoaderRepository {
             return null;
         }
     }
-
 }

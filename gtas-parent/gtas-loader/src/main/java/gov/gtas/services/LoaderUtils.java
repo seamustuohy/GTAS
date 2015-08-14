@@ -1,9 +1,6 @@
 package gov.gtas.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -77,7 +74,6 @@ public class LoaderUtils {
 
     public void updateDocument(DocumentVo vo, Document d) throws ParseException {
         BeanUtils.copyProperties(vo, d, getNullPropertyNames(vo));
-//        d.setIssuanceCountry(vo.getIssuanceCountry());        
     }
         
     public ReportingParty createNewReportingParty(ReportingPartyVo vo) {
