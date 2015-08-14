@@ -7,12 +7,12 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gov.gtas.parsers.vo.air.AddressVo;
-import gov.gtas.parsers.vo.air.CreditCardVo;
-import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
-import gov.gtas.parsers.vo.air.PhoneVo;
-import gov.gtas.parsers.vo.air.PnrReportingAgentVo;
+import gov.gtas.parsers.vo.passenger.AddressVo;
+import gov.gtas.parsers.vo.passenger.CreditCardVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.PhoneVo;
+import gov.gtas.parsers.vo.passenger.PnrReportingAgentVo;
 
 public class PnrVo {
     private String recordLocator;

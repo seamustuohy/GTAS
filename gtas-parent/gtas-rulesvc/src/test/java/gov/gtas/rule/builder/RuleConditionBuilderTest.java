@@ -240,13 +240,14 @@ public class RuleConditionBuilderTest {
 		assertTrue(result.length() > 0);
 		System.out.println(result.toString());
 		assertEquals(
-   				"$p:Passenger("
+				"$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
+		            +DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
+   				+"$p:Passenger("
 					+PassengerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
 					+PassengerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\", "
-					+PassengerMapping.LAST_NAME.getFieldName()+" == \"Jones\")\n"
-				+"$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
-		            +DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
-		        + "Document(id == $d.id, passenger.id == $p.id)\n"
+					+PassengerMapping.LAST_NAME.getFieldName()+" == \"Jones\", "
+					+"id == $d.passenger.id)\n"
+
 		        + "$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" == \"DBY\", "
 		           +FlightMapping.FLIGHT_NUMBER.getFieldName()+" == 2231)\n"
 		        +"Passenger(id == $p.id) from $f.passengers",

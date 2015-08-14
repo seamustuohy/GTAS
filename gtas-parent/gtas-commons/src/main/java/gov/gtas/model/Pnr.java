@@ -13,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -72,8 +70,8 @@ public class Pnr extends BaseEntityAudit{
     )
     @JoinTable(
         name="pnr_flight",
-        joinColumns=@JoinColumn(name="flight_id"),
-        inverseJoinColumns=@JoinColumn(name="pnr_id")
+        joinColumns=@JoinColumn(name="pnr_id"),
+        inverseJoinColumns=@JoinColumn(name="flight_id")
     )    
     private Set<Flight> flights = new HashSet<>();
     
@@ -87,34 +85,85 @@ public class Pnr extends BaseEntityAudit{
         inverseJoinColumns=@JoinColumn(name="passenger_id")
     )   
     private Set<Passenger> passengers = new HashSet<>();
- 
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name="cc_id", referencedColumnName="id") 
-    private CreditCard creditCard;
- 
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name="agency_id",referencedColumnName="id") 
+
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "agency_id")
     private Agency agency;
-	
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name="ff_id",referencedColumnName="id") 
-    private FrequentFlyer frequentFlyer;	
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
-    private Set<Address> addresses;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
-    private Set<Phone> phones;   
+    @ManyToMany(
+        targetEntity=CreditCard.class,
+        cascade={CascadeType.ALL}
+    )
+    @JoinTable(
+        name="pnr_credit_card",
+        joinColumns=@JoinColumn(name="pnr_id"),
+        inverseJoinColumns=@JoinColumn(name="credit_card_id")
+    )    
+    private Set<CreditCard> creditCards = new HashSet<>();
+ 
+    @ManyToMany(
+        targetEntity=FrequentFlyer.class,
+        cascade={CascadeType.ALL}
+    )
+    @JoinTable(
+        name="pnr_frequent_flyer",
+        joinColumns=@JoinColumn(name="pnr_id"),
+        inverseJoinColumns=@JoinColumn(name="ff_id")
+    )    
+    private Set<FrequentFlyer> frequentFlyers = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
-    private Set<Email> emails;   
+    @ManyToMany(
+        targetEntity=Address.class,
+        cascade={CascadeType.ALL}
+    )
+    @JoinTable(
+        name="pnr_address",
+        joinColumns=@JoinColumn(name="pnr_id"),
+        inverseJoinColumns=@JoinColumn(name="address_id")
+    )    
+    private Set<Address> addresses = new HashSet<>();
+    
+    @ManyToMany(
+        targetEntity=Phone.class,
+        cascade={CascadeType.ALL}
+    )
+    @JoinTable(
+        name="pnr_phone",
+        joinColumns=@JoinColumn(name="pnr_id"),
+        inverseJoinColumns=@JoinColumn(name="phone_id")
+    )    
+    private Set<Phone> phones = new HashSet<>();
+
+    @ManyToMany(
+        targetEntity=Email.class,
+        cascade={CascadeType.ALL}
+    )
+    @JoinTable(
+        name="pnr_email",
+        joinColumns=@JoinColumn(name="pnr_id"),
+        inverseJoinColumns=@JoinColumn(name="email_id")
+    )    
+    private Set<Email> emails = new HashSet<>();
+
+    public void addCreditCard(CreditCard cc) {
+        if (this.creditCards == null) {
+            this.creditCards = new HashSet<>();
+        }
+        this.creditCards.add(cc);
+    }
+
+    public void addFrequentFlyer(FrequentFlyer ff) {
+        if (this.frequentFlyers == null) {
+            this.frequentFlyers = new HashSet<>();
+        }
+        this.frequentFlyers.add(ff);
+    }
 
     public void addAddress(Address address) {
         if (this.addresses == null) {
             this.addresses = new HashSet<>();
         }
         this.addresses.add(address);
-        address.setPnr(this);
     }
     
     public void addPhone(Phone phone) {
@@ -122,7 +171,6 @@ public class Pnr extends BaseEntityAudit{
             this.phones = new HashSet<>();
         }
         this.phones.add(phone);
-        phone.setPnr(this);
     }
 
     public void addEmail(Email email) {
@@ -130,7 +178,6 @@ public class Pnr extends BaseEntityAudit{
             this.emails = new HashSet<>();
         }
         this.emails.add(email);
-        email.setPnr(this);
     }
 
 	public Agency getAgency() {
@@ -141,14 +188,6 @@ public class Pnr extends BaseEntityAudit{
 		this.agency = agency;
 	}
 
-	public CreditCard getCreditCard() {
-		return creditCard;
-	}
-
-	public void setCreditCard(CreditCard creditCard) {
-		this.creditCard = creditCard;
-	}
-
 	public Set<Passenger> getPassengers() {
 		return passengers;
 	}
@@ -157,7 +196,23 @@ public class Pnr extends BaseEntityAudit{
 		this.passengers = passengers;
 	}
  
-	public Set<Address> getAddresses() {
+	public Set<CreditCard> getCreditCards() {
+        return creditCards;
+    }
+
+    public void setCreditCards(Set<CreditCard> creditCards) {
+        this.creditCards = creditCards;
+    }
+
+    public Set<FrequentFlyer> getFrequentFlyers() {
+        return frequentFlyers;
+    }
+
+    public void setFrequentFlyers(Set<FrequentFlyer> frequentFlyers) {
+        this.frequentFlyers = frequentFlyers;
+    }
+
+    public Set<Address> getAddresses() {
 		return addresses;
 	}
 
@@ -293,14 +348,6 @@ public class Pnr extends BaseEntityAudit{
 		this.flights = flights;
 	}
 
-	public FrequentFlyer getFrequentFlyer() {
-		return frequentFlyer;
-	}
-
-	public void setFrequentFlyer(FrequentFlyer frequentFlyer) {
-		this.frequentFlyer = frequentFlyer;
-	}
-	
     @Override
     public int hashCode() {
        return Objects.hash(this.carrier, this.departureDate, this.origin);

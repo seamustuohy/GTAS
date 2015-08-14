@@ -30,10 +30,10 @@ import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT.TdtType;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.parsers.vo.air.DocumentVo;
-import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
-import gov.gtas.parsers.vo.air.ReportingPartyVo;
+import gov.gtas.parsers.vo.passenger.DocumentVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
 
 public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {   
     private static final String[] SEGMENT_NAMES = new String[] { "ATT", "AUT", "BGM", "CNT", "COM", "CPI", "CTA", "DOC",

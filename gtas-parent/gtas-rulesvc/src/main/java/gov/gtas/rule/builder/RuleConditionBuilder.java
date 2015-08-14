@@ -26,9 +26,13 @@ public class RuleConditionBuilder {
 	private FlightConditionBuilder flightConditionBuilder;
 
 	private String passengerVariableName;
+	private String flightVariableName;
 
 	private StringBuilder conditionDescriptionBuilder;
-//	private List<String> causeList;
+	
+	private boolean flightCriteriaPresent;
+
+	// private List<String> causeList;
 
 	/**
 	 * Constructor for the Simple Rules:<br>
@@ -37,19 +41,30 @@ public class RuleConditionBuilder {
 	 */
 	public RuleConditionBuilder(final String passengerVariableName,
 			final String flightVariableName, final String documentVariableName) {
+		
 		this.passengerVariableName = passengerVariableName;
+		this.flightVariableName = flightVariableName;
+		
 		this.passengerConditionBuilder = new PassengerConditionBuilder(
 				passengerVariableName);
 		this.documentConditionBuilder = new DocumentConditionBuilder(
 				documentVariableName, passengerVariableName);
 		this.flightConditionBuilder = new FlightConditionBuilder(
 				flightVariableName, passengerVariableName);
-		
-//		this.causeList = new LinkedList<String>();
+
+		// this.causeList = new LinkedList<String>();
 	}
 
 	/**
-	 * Appends the generated "when" part (i.e., the LHS) of the rule to the rule document.
+	 * @return the flightCriteriaPresent
+	 */
+	public boolean isFlightCriteriaPresent() {
+		return flightCriteriaPresent;
+	}
+
+	/**
+	 * Appends the generated "when" part (i.e., the LHS) of the rule to the rule
+	 * document.
 	 * 
 	 * @param parentStringBuilder
 	 *            the rule document builder.
@@ -57,19 +72,12 @@ public class RuleConditionBuilder {
 	 *             if the UDR has invalid formatting.
 	 */
 	public void buildConditionsAndApppend(
-			final StringBuilder parentStringBuilder){
+			final StringBuilder parentStringBuilder) {
 
-		if (passengerConditionBuilder.isEmpty()) {
-			if (!documentConditionBuilder.isEmpty()) {
-				flightConditionBuilder
-						.addLinkedPassenger(this.passengerVariableName);
-			}
-			documentConditionBuilder.setPassengerHasNoRuleCondition(true);
-		} else {
-			flightConditionBuilder.addLinkedPassenger(this.passengerVariableName);
-		}
-		parentStringBuilder.append(passengerConditionBuilder.build());
+		generatePassengerLink();
+
 		parentStringBuilder.append(documentConditionBuilder.build());
+		parentStringBuilder.append(passengerConditionBuilder.build());
 		parentStringBuilder.append(flightConditionBuilder.build());
 		passengerConditionBuilder.reset();
 		documentConditionBuilder.reset();
@@ -78,39 +86,72 @@ public class RuleConditionBuilder {
 	}
 
 	/**
+	 * Creates linking passenger criteria for documents and flights.
+	 * 
+	 */
+	private void generatePassengerLink() {
+		if (!documentConditionBuilder.isEmpty()) {
+			// add a link condition to the passenger builder.
+			passengerConditionBuilder
+					.addLinkByIdCondition(documentConditionBuilder
+							.getPassengerIdLinkExpression());
+		}
+
+		// if there are passenger conditions then add a link to
+		// the Flight builder
+		if (!passengerConditionBuilder.isEmpty()) {
+			flightConditionBuilder
+					.addLinkedPassenger(this.passengerVariableName);
+		}
+	}
+
+	/**
+	 * Creates linking passenger criteria for PNR related objects.
+	 */
+	private void generatePnrPassengerLink() {
+		// TODO for address, phone, credit card, frequent flier, email, travel
+		// agency
+	}
+
+	/**
 	 * Adds a rule condition to the builder.
 	 * 
 	 * @param trm
 	 *            the condition to add.
 	 */
-	public void addRuleCondition(final QueryTerm trm){
+	public void addRuleCondition(final QueryTerm trm) {
 		// add the hit reason description
 		if (conditionDescriptionBuilder == null) {
 			conditionDescriptionBuilder = new StringBuilder();
 		} else {
-			conditionDescriptionBuilder.append(
-					RuleHitDetail.HIT_REASON_SEPARATOR);
+			conditionDescriptionBuilder
+					.append(RuleHitDetail.HIT_REASON_SEPARATOR);
 		}
-		
-		try{
-			RuleConditionBuilderHelper
-			.addConditionDescription(trm, conditionDescriptionBuilder);
-	
+
+		try {
+			RuleConditionBuilderHelper.addConditionDescription(trm,
+					conditionDescriptionBuilder);
+
 			EntityEnum entity = EntityEnum.getEnum(trm.getEntity());
 			TypeEnum attributeType = TypeEnum.getEnum(trm.getType());
-			OperatorCodeEnum opCode = OperatorCodeEnum.getEnum(trm.getOperator());
+			OperatorCodeEnum opCode = OperatorCodeEnum.getEnum(trm
+					.getOperator());
 			switch (entity) {
-				case PASSENGER:
-					passengerConditionBuilder.addCondition(opCode,trm.getField(), attributeType, trm.getValue());
-					break;
-				case DOCUMENT:
-					documentConditionBuilder.addCondition(opCode,trm.getField(), attributeType, trm.getValue());
-					break;
-				case FLIGHT:
-					flightConditionBuilder.addCondition(opCode,trm.getField(), attributeType, trm.getValue());
-					break;
-				default:
-					break;
+			case PASSENGER:
+				passengerConditionBuilder.addCondition(opCode, trm.getField(),
+						attributeType, trm.getValue());
+				break;
+			case DOCUMENT:
+				documentConditionBuilder.addCondition(opCode, trm.getField(),
+						attributeType, trm.getValue());
+				break;
+			case FLIGHT:
+				flightConditionBuilder.addCondition(opCode, trm.getField(),
+						attributeType, trm.getValue());
+				this.flightCriteriaPresent = true;
+				break;
+			default:
+				break;
 			}
 		} catch (ParseException pe) {
 			StringBuilder bldr = new StringBuilder("[");
@@ -132,20 +173,30 @@ public class RuleConditionBuilder {
 
 	}
 
-	//private static final String ACTION_PASSENGER_HIT = "resultList.add(RuleHitDetail.createRuleHitDetail(%dL, %d, \"%s\", %s, \"%s\"));\n";
 	private static final String ACTION_PASSENGER_HIT = "resultList.add(new RuleHitDetail(%s, %s, \"%s\", %s, null, \"%s\"));\n";
+	private static final String ACTION_PASSENGER_HIT_WITH_FLIGHT = "resultList.add(new RuleHitDetail(%s, %s, \"%s\", %s, %s, \"%s\"));\n";
 
-	public List<String> addRuleAction(StringBuilder ruleStringBuilder, UdrRule parent,
-			Rule rule, String passengerVariableName) {
+	public List<String> addRuleAction(StringBuilder ruleStringBuilder,
+			UdrRule parent, Rule rule, String passengerVariableName) {
 		String cause = conditionDescriptionBuilder.toString()
 				.replace("\"", "'");
-		ruleStringBuilder
-				.append("then\n")
-				.append(String.format(ACTION_PASSENGER_HIT, 
-						"%dL", //the UDR ID may not be generated for create operation
-						"%dL", //the rule ID may not be available
-						parent.getTitle(),
-						passengerVariableName, cause)).append("end\n");
+		ruleStringBuilder.append("then\n");
+		if(isFlightCriteriaPresent()){
+			ruleStringBuilder.append(String.format(ACTION_PASSENGER_HIT_WITH_FLIGHT, 
+					"%dL", // the UDR ID may not be available
+					"%dL", // the rule ID may not be available
+					parent.getTitle(), 
+					this.passengerVariableName,
+					this.flightVariableName,
+					cause));
+		}else {
+			ruleStringBuilder.append(String.format(ACTION_PASSENGER_HIT, 
+					"%dL", // the UDR ID may not be available
+					"%dL", // the rule ID may not be available
+					parent.getTitle(), passengerVariableName, cause));
+			
+		}
+		ruleStringBuilder.append("end\n");
 		conditionDescriptionBuilder = null;
 		return Arrays.asList(cause.split(RuleHitDetail.HIT_REASON_SEPARATOR));
 	}

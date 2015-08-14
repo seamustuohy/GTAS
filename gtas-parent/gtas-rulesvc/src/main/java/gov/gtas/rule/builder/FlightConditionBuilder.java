@@ -35,18 +35,12 @@ public class FlightConditionBuilder extends EntityConditionBuilder {
 		super.reset();
 		linkedPassengerList.clear();
 	}
-//	@Override
-//	protected void addSpecialConditionsWithoutActualConditions(
-//			StringBuilder bldr) {
-//		//NO OP
-//		if(logger.isDebugEnabled()){
-//		    logger.debug("FlightConditionBuilder - no flight condition specified.");
-//		}
-//	}
 
 	@Override
 	protected void addSpecialConditions(StringBuilder bldr) {
 		if(linkedPassengerList.isEmpty()){
+			//this means that all passengers will match
+			logger.debug("FlightConditionBuilder - no linked passenger!");
 			bldr.append(defaultPassengerVariableName).append(":")
 			.append(EntityEnum.PASSENGER.getEntityName()).append("()")
 		    .append(" from ")

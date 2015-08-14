@@ -1,12 +1,12 @@
 package gov.gtas.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -36,9 +36,11 @@ public class Address extends BaseEntityAudit {
 	@Column(name = "postal_code")
 	private String postalCode;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="pnr_id", nullable = false)     
-    private Pnr pnr;
+    @ManyToMany(
+        mappedBy = "addresses",
+        targetEntity = Pnr.class
+    )
+    private Set<Pnr> pnrs = new HashSet<>();
 
 	public String getLine1() {
 		return line1;
@@ -96,14 +98,14 @@ public class Address extends BaseEntityAudit {
 		this.postalCode = postalCode;
 	}
 
-	public Pnr getPnr() {
-		return pnr;
-	}
+    public Set<Pnr> getPnrs() {
+        return pnrs;
+    }
 
-	public void setPnr(Pnr pnr) {
-		this.pnr = pnr;
-	}
-	
+    public void setPnrs(Set<Pnr> pnrs) {
+        this.pnrs = pnrs;
+    }
+
     @Override
     public int hashCode() {
        return Objects.hash(this.line1, this.line2, this.line3, this.city, this.state, this.country, this.postalCode);

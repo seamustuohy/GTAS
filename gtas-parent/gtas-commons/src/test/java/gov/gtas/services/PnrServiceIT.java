@@ -109,7 +109,7 @@ public class PnrServiceIT {
 		cc.setNumber("2222-3333-4444-5555");
 		cc.setCardType("VISA");
 		//cc.setPnr(pnr);
-		pnr.setCreditCard(cc);
+		pnr.addCreditCard(cc);
 		Address add = new Address();
 		add.setCity("ALDIE");
 		add.setCountry("USA");
@@ -118,13 +118,13 @@ public class PnrServiceIT {
 		add.setState("VA");
 		add.setCreationDate();
 		add.setCreatedBy("JUNIT");
-		add.setPnr(pnr);
+		pnr.addAddress(add);
 		Set adds = new HashSet<Address>();
 		adds.add(add);
 		pnr.setAddresses(adds);
 		Phone p = new Phone();
 		p.setNumber("24243534455");
-		p.setPnr(pnr);
+		pnr.addPhone(p);
 		p.setCreationDate();
 		p.setCreatedBy("JUNIT");
 		Set phones = new HashSet();
@@ -143,7 +143,7 @@ public class PnrServiceIT {
 		ff.setAirlineCode("DL");
 		ff.setCreatedAt(new Date());
 		ff.setCreatedBy("JUNIT");
-		pnr.setFrequentFlyer(ff);
+		pnr.addFrequentFlyer(ff);
 	}
 	
 	private void prepareFlightData(Flight f){

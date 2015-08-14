@@ -65,8 +65,6 @@ public abstract class EntityConditionBuilder {
 	public String build() {
 		final StringBuilder bldr = new StringBuilder();
 		if (!conditionList.isEmpty()) {
-//			addSpecialConditionsWithoutActualConditions(bldr);
-//		} else {
 			bldr.append(drlVariableName).append(":").append(entityClassName)
 					.append("(");
 			if (andConnectorIsComma) {
@@ -79,9 +77,6 @@ public abstract class EntityConditionBuilder {
 		}
 		return bldr.toString();
 	}
-
-//	protected abstract void addSpecialConditionsWithoutActualConditions(
-//			final StringBuilder bldr);
 
 	protected abstract void addSpecialConditions(final StringBuilder bldr);
 

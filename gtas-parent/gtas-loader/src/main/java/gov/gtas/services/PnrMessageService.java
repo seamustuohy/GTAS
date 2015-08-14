@@ -26,11 +26,11 @@ import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
-import gov.gtas.parsers.vo.air.AddressVo;
-import gov.gtas.parsers.vo.air.CreditCardVo;
-import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
-import gov.gtas.parsers.vo.air.PhoneVo;
+import gov.gtas.parsers.vo.passenger.AddressVo;
+import gov.gtas.parsers.vo.passenger.CreditCardVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.repository.PnrMessageRepository;
 
 @Service
@@ -39,7 +39,10 @@ public class PnrMessageService implements MessageService {
    
     @Autowired
     private LoaderUtils utils;
-    
+
+    @Autowired
+    private LoaderRepository loaderRepo;
+
     @Autowired
     private PnrMessageRepository msgDao;
     
@@ -58,7 +61,7 @@ public class PnrMessageService implements MessageService {
             
             EdifactParser<PnrMessageVo> parser = new PnrGovParser();
             vo = parser.parse(message);
-            utils.checkHashCode(vo.getHashCode());
+            loaderRepo.checkHashCode(vo.getHashCode());
             
             this.pnrMessage.setStatus(MessageStatus.PARSED);
             this.pnrMessage.setHashCode(vo.getHashCode());            
@@ -99,17 +102,17 @@ public class PnrMessageService implements MessageService {
                 }
 
                 for (CreditCardVo creditVo : vo.getCreditCards()) {
-                    pnr.setCreditCard(utils.convertCreditVo(creditVo));
+                    pnr.addCreditCard(utils.convertCreditVo(creditVo));
                 }
                 
                 Set<Passenger> pax = new HashSet<>();        
                 for (PassengerVo pvo : vo.getPassengers()) {
-                    pax.add(utils.convertPassengerVo(pvo));
+                    pax.add(utils.createNewPassenger(pvo));
                 }
 
                 Flight f = null;
                 for (FlightVo fvo : vo.getFlights()) {
-                    f = utils.convertFlightVo(fvo);
+                    f = utils.createNewFlight(fvo);
                     f.setPassengers(pax);
                     pnr.getFlights().add(f);
                 }

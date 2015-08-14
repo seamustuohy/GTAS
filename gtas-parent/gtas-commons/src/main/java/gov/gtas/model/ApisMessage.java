@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,7 +20,15 @@ public class ApisMessage extends Message {
     @Embedded
     private EdifactMessage edifactMessage;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "apisMessage")
+    @ManyToMany(
+        targetEntity=ReportingParty.class,
+        cascade={CascadeType.ALL}
+    )
+    @JoinTable(
+        name="apis_message_reporting_party",
+        joinColumns=@JoinColumn(name="apis_message_id"),
+        inverseJoinColumns=@JoinColumn(name="reporting_party_id")
+    )    
     Set<ReportingParty> reportingParties = new HashSet<>();
     
     @ManyToMany(
@@ -35,6 +42,13 @@ public class ApisMessage extends Message {
     )        
     private Set<Flight> flights = new HashSet<>();
 
+    public void addReportingParty(ReportingParty rp) {
+        if (this.reportingParties == null) {
+            this.reportingParties = new HashSet<>();
+        }
+        this.reportingParties.add(rp);
+    }
+    
     public Set<ReportingParty> getReportingParties() {
         return reportingParties;
     }

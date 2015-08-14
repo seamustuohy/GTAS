@@ -1,4 +1,4 @@
-package gov.gtas.parsers.vo.air;
+package gov.gtas.parsers.vo.passenger;
 
 import java.util.Date;
 

@@ -1,8 +1,5 @@
 package gov.gtas.services;
 
-import gov.gtas.model.Flight;
-import gov.gtas.repository.FlightRepository;
-
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +7,9 @@ import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
+
+import gov.gtas.model.Flight;
+import gov.gtas.repository.FlightRepository;
 
 @Service
 public class FlightServiceImpl implements FlightService{
@@ -70,10 +70,10 @@ public class FlightServiceImpl implements FlightService{
 	}
 
 	@Override
-	public List<Flight> getUniqueFlightByCriteria(String carrier, String flightNumber,
+	public Flight getUniqueFlightByCriteria(String carrier, String flightNumber,
 			String origin, String destination, Date flightDate) {
-		List<Flight> flights = flightRespository.getFlightByCriteria(carrier, flightNumber, origin, destination, flightDate);
-		return flights;
+	    Flight flight = flightRespository.getFlightByCriteria(carrier, flightNumber, origin, destination, flightDate);
+		return flight;
 	}
 
 }

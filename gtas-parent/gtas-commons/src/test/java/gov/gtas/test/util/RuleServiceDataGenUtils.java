@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 /**
  * Generates test data for rules domain objects.
  * @author GTAS3 (AB)
@@ -28,12 +29,9 @@ public class RuleServiceDataGenUtils {
 	public static final String TEST_USER2_ID = "pawnX";
 
 	private UserService userService;
-
-	private final Random randomGenerator;
 	
 	public RuleServiceDataGenUtils(UserService usrSvc) {
 		this.userService = usrSvc;
-		randomGenerator = new Random(System.currentTimeMillis());
 	}
 
 	public void initUserData() {
@@ -105,7 +103,7 @@ public class RuleServiceDataGenUtils {
 	public String generateTestRuleTitle(int ruleIndx){
 		StringBuilder bldr = new StringBuilder(TEST_RULE_TITLE_PREFIX);
 		bldr.append(ruleIndx).append('.');
-		bldr.append(this.randomGenerator.nextInt());
+		bldr.append(ThreadLocalRandom.current().nextInt(1,10));
 		
 		return bldr.toString();		
 	}
