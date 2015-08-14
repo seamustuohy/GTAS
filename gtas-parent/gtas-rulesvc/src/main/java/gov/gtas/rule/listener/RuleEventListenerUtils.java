@@ -1,4 +1,4 @@
-package gov.gtas.rule;
+package gov.gtas.rule.listener;
 
 import gov.gtas.bo.RuleExecutionStatistics;
 
@@ -14,7 +14,7 @@ import org.kie.api.runtime.KieSession;
  * @author GTAS3 (AB)
  *
  */
-public class RuleEngineHelper {
+public class RuleEventListenerUtils {
 	/**
 	 * Adds events listeners to the Kie Session.
 	 * 

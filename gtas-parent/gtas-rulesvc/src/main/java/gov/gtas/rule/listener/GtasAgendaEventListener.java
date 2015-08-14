@@ -1,4 +1,4 @@
-package gov.gtas.rule;
+package gov.gtas.rule.listener;
 
 import gov.gtas.bo.RuleExecutionStatistics;
 
