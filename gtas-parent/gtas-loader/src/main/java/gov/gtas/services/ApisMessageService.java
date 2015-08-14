@@ -65,10 +65,7 @@ public class ApisMessageService implements MessageService {
             this.apisMessage.setEdifactMessage(em);
 
         } catch (Exception e) {
-            this.apisMessage.setStatus(MessageStatus.FAILED_PARSING);
-            String stacktrace = ExceptionUtils.getStackTrace(e);
-            this.apisMessage.setError(stacktrace);
-            logger.error(stacktrace);
+            handleException(e, MessageStatus.FAILED_PARSING);
             return null;
         } finally {
             createMessage(apisMessage);
@@ -85,15 +82,22 @@ public class ApisMessageService implements MessageService {
             this.apisMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
-            this.apisMessage.setStatus(MessageStatus.FAILED_LOADING);
-            String stacktrace = ExceptionUtils.getStackTrace(e);
-            this.apisMessage.setError(stacktrace);
-            logger.error(stacktrace);
+            handleException(e, MessageStatus.FAILED_LOADING);
         } finally {
             createMessage(apisMessage);            
         }
     }  
 
+    private void handleException(Exception e, MessageStatus status) {
+        this.apisMessage.setStatus(status);
+        String stacktrace = ExceptionUtils.getStackTrace(e);
+        if (stacktrace.length() > 4000) {
+            stacktrace = stacktrace.substring(0, 4000);
+        }
+        this.apisMessage.setError(stacktrace);
+        logger.error(stacktrace);
+    }
+    
     @Transactional
     private ApisMessage createMessage(ApisMessage m) {
         return msgDao.save(m);

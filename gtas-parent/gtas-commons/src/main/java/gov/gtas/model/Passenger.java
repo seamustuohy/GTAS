@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -72,7 +73,7 @@ public class Passenger extends BaseEntityAudit {
     @Column(name = "debark_country")
     private String debarkCountry;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger", fetch = FetchType.EAGER)
     private Set<Document> documents = new HashSet<>();
     
     public String getPassengerType() {
