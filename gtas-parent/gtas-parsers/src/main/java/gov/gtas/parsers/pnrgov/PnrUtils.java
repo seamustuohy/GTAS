@@ -8,7 +8,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.pnrgov.segment.REF;
 import gov.gtas.parsers.pnrgov.segment.SSR;
+import gov.gtas.parsers.pnrgov.segment.TIF;
+import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.passenger.DocumentVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
@@ -35,7 +38,7 @@ public class PnrUtils {
      * /P/GBR/123456789/GBR/12JUL64/M/23AUG19/SMITH JR/JONATHON/ROBERT
      * / /   /         /   /GBR/12JUL64/M//JONES/WILLIAMNEVELL
      */
-    public static PassengerVo createPassenger(SSR ssr) throws ParseException {
+    public static PassengerVo createPassenger(SSR ssr, TIF tif) throws ParseException {
         final String dateFormat = "ddMMMyy";
         String[] tmp = ssr.getFreeText().split("/");
         List<String> strs = new ArrayList<>(Arrays.asList(tmp));
@@ -63,6 +66,19 @@ public class PnrUtils {
         p.setFirstName(safeGet(strs, 9));
         p.setMiddleName(safeGet(strs, 10));
         p.setPassengerType("P");
+        
+        TravelerDetails td = tif.getTravelerDetails().get(0);
+        p.setReferenceId(td.getTravelerReferenceNumber());
+        
+        return p;
+    }
+    
+    public static PassengerVo createPassenger(TIF tif) throws ParseException {
+        PassengerVo p = new PassengerVo();
+        TravelerDetails td = tif.getTravelerDetails().get(0);
+        p.setLastName(tif.getTravelerSurname());
+        p.setFirstName(td.getTravelerGivenName());
+        p.setReferenceId(td.getTravelerReferenceNumber());
         
         return p;
     }

@@ -8,6 +8,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class PassengerVo {
+    /**
+     * a unique passenger reference identifier (from PNR) used to cross
+     * reference passenger information in a PNR
+     */
+    private String referenceId;
+    
     private String title;    
     private String firstName;
     private String middleName;
@@ -33,6 +39,12 @@ public class PassengerVo {
         return documents;
     }
 
+    public String getReferenceId() {
+        return referenceId;
+    }
+    public void setReferenceId(String referenceId) {
+        this.referenceId = referenceId;
+    }
     public String getTitle() {
         return title;
     }

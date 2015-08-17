@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import gov.gtas.parsers.vo.passenger.AddressVo;
 import gov.gtas.parsers.vo.passenger.CreditCardVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.FrequentFlierVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.parsers.vo.passenger.PnrReportingAgentVo;
@@ -31,10 +32,12 @@ public class PnrVo {
     
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
+    
     private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
     private List<AddressVo> addresses = new ArrayList<>();
     private List<PhoneVo> phoneNumbers = new ArrayList<>();
     private List<CreditCardVo> creditCards = new ArrayList<>();
+    private List<FrequentFlierVo> frequentFlierDetails = new ArrayList<>();
     
     public String getRecordLocator() {
         return recordLocator;
@@ -162,6 +165,14 @@ public class PnrVo {
 
     public void setCreditCards(List<CreditCardVo> creditCards) {
         this.creditCards = creditCards;
+    }
+
+    public List<FrequentFlierVo> getFrequentFlierDetails() {
+        return frequentFlierDetails;
+    }
+
+    public void setFrequentFlierDetails(List<FrequentFlierVo> frequentFlierDetails) {
+        this.frequentFlierDetails = frequentFlierDetails;
     }
 
     @Override

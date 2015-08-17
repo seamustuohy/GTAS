@@ -18,6 +18,7 @@ import gov.gtas.parsers.pnrgov.segment.EQN;
 import gov.gtas.parsers.pnrgov.segment.FAR;
 import gov.gtas.parsers.pnrgov.segment.FOP;
 import gov.gtas.parsers.pnrgov.segment.FTI;
+import gov.gtas.parsers.pnrgov.segment.FTI.FrequentFlierDetails;
 import gov.gtas.parsers.pnrgov.segment.IFT;
 import gov.gtas.parsers.pnrgov.segment.LTS;
 import gov.gtas.parsers.pnrgov.segment.MON;
@@ -44,6 +45,7 @@ import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.passenger.AddressVo;
 import gov.gtas.parsers.vo.passenger.CreditCardVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.FrequentFlierVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.parsers.vo.passenger.PnrReportingAgentVo;
@@ -190,6 +192,11 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
      */
     private void processGroup2(TIF tif) throws ParseException {
         FTI fti = getConditionalSegment(FTI.class);
+        FrequentFlierVo ffvo = new FrequentFlierVo();
+        FrequentFlierDetails ffdetails = fti.getFrequentFlierInfo().get(0);
+        ffvo.setAirline(ffdetails.getAirlineCode());
+        ffvo.setNumber(ffdetails.getFreqTravelerNumber());
+        currentPnr.getFrequentFlierDetails().add(ffvo);
 
         for (;;) {
             IFT ift = getConditionalSegment(IFT.class);
@@ -208,6 +215,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
 
         // SSR’s in GR.2 apply to the specific passenger.
+        boolean paxCreated = false;
         for (;;) {
             SSR ssr = getConditionalSegment(SSR.class);
             if (ssr == null) {
@@ -215,11 +223,18 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
             SSR.SsrCode code = SSR.SsrCode.valueOf(ssr.getTypeOfRequest());
             if (code == SSR.SsrCode.DOCS) {
-                PassengerVo p = PnrUtils.createPassenger(ssr);
+                PassengerVo p = PnrUtils.createPassenger(ssr, tif);
                 currentPnr.getPassengers().add(p);
+                paxCreated = true;
             }
         }
 
+        if (!paxCreated) {
+            // all we can do is create the passenger from the TIF+REF
+            PassengerVo p = PnrUtils.createPassenger(tif);
+            currentPnr.getPassengers().add(p);
+        }
+        
         for (;;) {
             ADD add = getConditionalSegment(ADD.class);
             if (add == null) {
