@@ -5,20 +5,39 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         dataSource = {
             FLIGHT: [],
             PASSENGER: []
+        },
+        columns = {
+            PASSENGER: [
+                { "name": "ruleHit", "displayName": "H" },
+                { "name": "onWatchList", "displayName": "W" },
+                { "name": "lastName", "displayName": "Last Name" },
+                { "name": "firstName", "displayName": "First Name" },
+                { "name": "passengerType", "displayName": "Type" },
+                { "name": "gender", "displayName": "Gender" },
+                { "name": "dob", "displayName": "DOB" },
+                { "name": "citizenship", "displayName": "Citizenship" },
+                { "name": "documentNumber", "displayName": "Document #" },
+                { "name": "documentType", "displayName": "T" },
+                { "name": "documentIssuanceCountry", "displayName": "Issuance Country" },
+                { "name": "seat", "displayName": "Seat" }
+            ],
+            FLIGHT: [
+                { "name": "carrierCode", "displayName": "Carrier" },
+                { "name": "flightNumber", "displayName": "Flight #" },
+                { "name": "origin", "displayName": "Origin Airport" },
+                { "name": "originCountry", "displayName": "Country" },
+                { "name": "departureDt", "displayName": "ETD" },
+                { "name": "destination", "displayName": "Destination" },
+                { "name": "destinationCountry", "displayName": "Country" },
+                { "name": "arrivalDt", "displayName": "ETA" }
+            ]
         };
 
-    $scope.domTables = {
-        FLIGHT: $('.flights-table'),
-        PASSENGER: $('.passengers-table')
-    };
-
-    $scope.clearTables = function () {
-        Object.keys($scope.domTables).forEach(function (table) {
-            $scope.domTables[table].hide();
-        });
-    };
+    $scope.domTables =  $('.results-table');
+    $scope.domTables.hide();
 
     $scope.loadRule = function () {
+        $scope.domTables.hide();
         var obj = this.$data[this.$index];
         $scope.ruleId = obj.id;
         $scope.loadSummary({title: obj.title, description: obj.description });
@@ -124,8 +143,8 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         PASSENGER: '/gtas/query/queryPassengers/'
     };
 
-    $scope.viewType = null;
-    $scope.viewTypeChange = function () {
+    $scope.viewType = 'FLIGHT';
+    $scope.executeQuery = function () {
         var baseUrl = $scope.serviceURLs[$scope.viewType],
             qbData = $scope.$builder.queryBuilder('getDrools');
 
@@ -134,37 +153,19 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             return;
         }
         queryService.executeQuery(baseUrl, qbData).then(function (myData) {
-            var results = $scope.viewType.toLowerCase() + 'Results';
-
             if (myData.result === undefined) {
                 $scope.alertError('Error!');
                 return;
             }
 
-            dataSource[$scope.viewType] =  myData.result;
-            $scope[results].settings().$scope = $scope;
-            $scope[results].reload();
+            $scope.gridOpts.data = myData.result;
+            $scope.gridOpts.columnDefs = columns[$scope.viewType];
+            $scope.domTables.show();
         });
     };
 
-    $scope.returnTableParams = function (dataType) {
-        return new ngTableParams({
-            page: 1,            // show first page
-            count: 10           // count per page
-        }, {
-            total: dataSource[dataType].length, // length of data
-            getData: function ($defer, params) {
-                var orderedData = params.sorting() ? $filter('orderBy')(dataSource[dataType], params.orderBy()) : dataSource[dataType];
-                orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
-                params.total(orderedData.length);
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-                params.total(orderedData.length); // set total for recalc pagination
-                $scope.clearTables();
-                $scope.domTables[dataType].show();
-            }
-        });
+    $scope.gridOpts = {
+        paginationPageSize: 5,
+        paginationPageSizes: []
     };
-
-    $scope.flightResults = $scope.returnTableParams('FLIGHT');
-    $scope.passengerResults = $scope.returnTableParams('PASSENGER');
 });

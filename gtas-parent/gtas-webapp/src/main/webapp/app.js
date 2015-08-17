@@ -3,7 +3,8 @@ var app = angular.module('myApp', [
     'ui.bootstrap',
     'ngTable',
     'spring-security-csrf-token-interceptor',
-    'datatables'
+    'ui.grid',
+    'ui.grid.pagination'
 ]);
 
 app.config(function ($stateProvider){
