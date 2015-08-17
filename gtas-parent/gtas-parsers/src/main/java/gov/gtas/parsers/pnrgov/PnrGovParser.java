@@ -104,9 +104,9 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             throw new ParseException(String.format("Parsed %d PNR records but expected %d", numPnrs, expectedNumberOfPnrs));
         }
         
-        for (PnrVo vo : this.parsedMessage.getPnrRecords()) {
-            System.out.println(vo + "\n\n");            
-        }
+//        for (PnrVo vo : this.parsedMessage.getPnrRecords()) {
+//            System.out.println(vo + "\n\n");            
+//        }
     }
 
     /**

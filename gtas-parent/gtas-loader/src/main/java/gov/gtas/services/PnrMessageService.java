@@ -87,9 +87,10 @@ public class PnrMessageService implements MessageService {
     
     public void load(MessageVo message) {
         PnrMessageVo m = (PnrMessageVo)message;
-        for (PnrVo vo : m.getPnrRecords()) {
-            Pnr pnr = null;
-            try {
+        try {
+            for (PnrVo vo : m.getPnrRecords()) {
+                Pnr pnr = null;
+
                 pnr = utils.convertPnrVo(vo);
                 this.pnrMessage.addPnr(pnr);
                 
@@ -100,7 +101,7 @@ public class PnrMessageService implements MessageService {
                 for (PhoneVo phoneVo : vo.getPhoneNumbers()) {
                     pnr.addPhone(utils.convertPhoneVo(phoneVo));
                 }
-
+        
                 for (CreditCardVo creditVo : vo.getCreditCards()) {
                     pnr.addCreditCard(utils.convertCreditVo(creditVo));
                 }
@@ -109,7 +110,7 @@ public class PnrMessageService implements MessageService {
                 for (PassengerVo pvo : vo.getPassengers()) {
                     pax.add(utils.createNewPassenger(pvo));
                 }
-
+        
                 Flight f = null;
                 for (FlightVo fvo : vo.getFlights()) {
                     f = utils.createNewFlight(fvo);
@@ -117,15 +118,15 @@ public class PnrMessageService implements MessageService {
                     pnr.getFlights().add(f);
                 }
                 this.pnrMessage.setStatus(MessageStatus.LOADED);
-    
-            } catch (Exception e) {
-                this.pnrMessage.setStatus(MessageStatus.FAILED_LOADING);
-                String stacktrace = ExceptionUtils.getStackTrace(e);
-                this.pnrMessage.setError(stacktrace);
-                logger.error(stacktrace);
-            } finally {
-                createMessage(pnrMessage);            
             }
+
+        } catch (Exception e) {
+            this.pnrMessage.setStatus(MessageStatus.FAILED_LOADING);
+            String stacktrace = ExceptionUtils.getStackTrace(e);
+            this.pnrMessage.setError(stacktrace);
+            logger.error(stacktrace);
+        } finally {
+            createMessage(pnrMessage);            
         }
     }
 
