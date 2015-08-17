@@ -428,7 +428,11 @@
       {
         "id": "PASSENGER.passengerType",
         "label": "Type",
-        "type": "string"
+        "type": "string",
+        "input": "select",
+        "multiple": true,
+        "plugin": "selectize",
+        "dataSource": "passenger_types"
       }
     ]
   },

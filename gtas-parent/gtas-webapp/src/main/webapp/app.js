@@ -7,7 +7,7 @@ var app = angular.module('myApp', [
     'ui.grid.pagination'
 ]);
 
-app.config(function ($stateProvider){
+app.config(function ($stateProvider) {
     $stateProvider
         .state('flights', {
             url: '',

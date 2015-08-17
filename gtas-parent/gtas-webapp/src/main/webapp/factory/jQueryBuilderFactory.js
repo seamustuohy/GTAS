@@ -1,13 +1,17 @@
 app.factory('jQueryBuilderFactory', function () {
     'use strict';
     return function ($scope, $timeout) {
-        var selectizeValueSetter = function (rule, value) {
+        var setSelectizeValue = function ($selectize, value) {
+                $selectize[0].selectize.setValue(value);
+                $timeout(function () {
+                    if ($selectize[0].selectize.getValue().length === 0) setSelectizeValue($selectize, value);
+                },50)
+            },
+            selectizeValueSetter = function (rule, value) {
+                rule.$el.find(".rule-value-container select").val(value);
                 var $selectize = rule.$el.find(".rule-value-container .selectized");
-                if ($selectize.length) {
-                    $timeout(function () {
-                        $selectize[0].selectize.setValue(value);
-                    }, 400);
-                }
+
+                if ($selectize.length) setSelectizeValue($selectize, value);
             },
             getOptionsFromJSONArray = function (that, property) {
                 //if (localStorage[property] === undefined) {

@@ -2,10 +2,6 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [],
-        dataSource = {
-            FLIGHT: [],
-            PASSENGER: []
-        },
         columns = {
             PASSENGER: [
                 { "name": "ruleHit", "displayName": "H" },
@@ -165,7 +161,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     };
 
     $scope.gridOpts = {
-        paginationPageSize: 5,
+        paginationPageSize: 10,
         paginationPageSizes: []
     };
 });
