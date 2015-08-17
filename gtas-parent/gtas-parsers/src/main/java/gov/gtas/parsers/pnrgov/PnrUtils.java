@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.util.ParseUtils;
@@ -25,20 +27,44 @@ public class PnrUtils {
         return null;
     }
     
-    public static void createDocument(SSR ssr, PassengerVo pax) {
-        // /P/GBR/123456789/GBR/12JUL64/M/23AUG19/SMITH JR/JONATHON/ROBERT
+    /**
+     * TODO: was not handling the 2nd example below b/c of extra field.
+     * check whether it's an error in the message or not.
+     * 
+     * example:
+     * /P/GBR/123456789/GBR/12JUL64/M/23AUG19/SMITH JR/JONATHON/ROBERT
+     * / /   /         /   /GBR/12JUL64/M//JONES/WILLIAMNEVELL
+     */
+    public static PassengerVo createPassenger(SSR ssr) throws ParseException {
+        final String dateFormat = "ddMMMyy";
         String[] tmp = ssr.getFreeText().split("/");
-        List<String> strs = new ArrayList<>(Arrays.asList(tmp)); 
+        List<String> strs = new ArrayList<>(Arrays.asList(tmp));
+        
+        PassengerVo p = new PassengerVo();
         DocumentVo doc = new DocumentVo();
+        p.addDocument(doc);
+   
         doc.setDocumentType(safeGet(strs, 1));
         doc.setIssuanceCountry(safeGet(strs, 2));
         doc.setDocumentNumber(safeGet(strs, 3));
-        pax.getDocuments().add(doc);
-
-        pax.setGender(safeGet(strs, 6));
-        pax.setLastName(safeGet(strs, 8));
-        pax.setFirstName(safeGet(strs, 9));
-        pax.setMiddleName(safeGet(strs, 10));
+        p.setCitizenshipCountry(safeGet(strs, 4));
+        String d = safeGet(strs, 5);
+        if (StringUtils.isNotBlank(d)) {
+            Date dob = ParseUtils.parseDateTime(d, dateFormat);
+            p.setDob(dob);
+            p.setAge(ParseUtils.calculateAge(dob));
+        }
+        p.setGender(safeGet(strs, 6));
+        d = safeGet(strs, 7);
+        if (StringUtils.isNotBlank(d)) {
+            doc.setExpirationDate(ParseUtils.parseDateTime(d, dateFormat));
+        }
+        p.setLastName(safeGet(strs, 8));
+        p.setFirstName(safeGet(strs, 9));
+        p.setMiddleName(safeGet(strs, 10));
+        p.setPassengerType("P");
+        
+        return p;
     }
     
     public static <T> T safeGet(List<T> list, int i) {

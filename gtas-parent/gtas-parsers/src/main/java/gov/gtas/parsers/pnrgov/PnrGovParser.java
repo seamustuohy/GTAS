@@ -34,7 +34,6 @@ import gov.gtas.parsers.pnrgov.segment.SSD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TBD;
 import gov.gtas.parsers.pnrgov.segment.TIF;
-import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
 import gov.gtas.parsers.pnrgov.segment.TKT;
 import gov.gtas.parsers.pnrgov.segment.TRA;
 import gov.gtas.parsers.pnrgov.segment.TRI;
@@ -104,9 +103,9 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             throw new ParseException(String.format("Parsed %d PNR records but expected %d", numPnrs, expectedNumberOfPnrs));
         }
         
-//        for (PnrVo vo : this.parsedMessage.getPnrRecords()) {
-//            System.out.println(vo + "\n\n");            
-//        }
+        for (PnrVo vo : this.parsedMessage.getPnrRecords()) {
+            System.out.println(vo + "\n\n");            
+        }
     }
 
     /**
@@ -190,14 +189,6 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
      * Passenger
      */
     private void processGroup2(TIF tif) throws ParseException {
-        PassengerVo p = new PassengerVo();
-        // TODO: default
-        p.setPassengerType("P");
-        TravelerDetails td = tif.getTravelerDetails().get(0);
-        p.setLastName(tif.getTravelerSurname());
-        p.setFirstName(td.getTravelerGivenName());
-        currentPnr.getPassengers().add(p);
-
         FTI fti = getConditionalSegment(FTI.class);
 
         for (;;) {
@@ -224,7 +215,8 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
             SSR.SsrCode code = SSR.SsrCode.valueOf(ssr.getTypeOfRequest());
             if (code == SSR.SsrCode.DOCS) {
-                PnrUtils.createDocument(ssr, p);
+                PassengerVo p = PnrUtils.createPassenger(ssr);
+                currentPnr.getPassengers().add(p);
             }
         }
 
