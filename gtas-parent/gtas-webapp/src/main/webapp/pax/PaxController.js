@@ -1,8 +1,9 @@
-app.controller('PaxController', function($scope, $filter, $q, ngTableParams, paxService, sharedPaxData) {
+app.controller('PaxController', function($scope, $filter, $q, ngTableParams, paxService, sharedPaxData, riskCriteriaService) {
 	var paxData = [];
     var flightId = 1;
     var self = this;
     var paxArrayIndex = 0;
+    $scope.isExpanded = true;
     
     $scope.paxHitList = [];
     $scope.list = sharedPaxData.list; 
@@ -62,10 +63,43 @@ app.controller('PaxController', function($scope, $filter, $q, ngTableParams, pax
     
     $scope.getRuleHits = function(passengerId){
     	
-    	$scope.paxHitList = [];
-    	paxService.getRuleHits(passengerId).then(function (myData) {
-    		$scope.paxHitList = myData[0].hitsDetailsList;
-          	 });
+    	$scope.isExpanded = !$scope.isExpanded;
+    	
+    	if(!$scope.isExpanded){
+    	
+    	paxService.getRuleHits(passengerId).then(function (myData) { // Begin
+    		
+    		$scope.paxHitList = [];
+        	$scope.tempPaxHitList = [];
+        	var tempObj = [];
+    		
+    		for (j = 0; j < myData.length; j++){
+    		$scope.tempPaxHitList[j] = myData[j].hitsDetailsList;
+    		
+    		
+    	//	for (i = 0; i < $scope.tempPaxHitList.length; i++){
+    		var tempRuleID = $scope.tempPaxHitList[j][0].ruleId;
+    		tempObj = $scope.tempPaxHitList[j][0];
+    		
+    	    riskCriteriaService.loadRuleById(tempRuleID).then(function (myData) {
+                //$scope.$builder.queryBuilder('readOnlyRules', myData.details);
+    	    	if(myData.summary != undefined){
+    	    	tempObj.ruleTitle = myData.summary.title;
+    	    	tempObj.ruleDesc = myData.summary.description;
+    	    	}
+          	  	console.log(myData);
+          	  
+          	  
+            });
+    	    
+    	    $scope.paxHitList[j] = tempObj;
+    	    
+    	//	} // END of paxHitList object loop
+    		}
+    		}); // END of paxService getRuleHits
+
+    }
+    	
     };
     
 });

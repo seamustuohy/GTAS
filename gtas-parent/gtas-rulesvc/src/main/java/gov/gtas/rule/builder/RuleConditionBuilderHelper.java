@@ -1,110 +1,163 @@
 package gov.gtas.rule.builder;
 
+import static gov.gtas.rule.builder.RuleTemplateConstants.COMMA_CHAR;
+import static gov.gtas.rule.builder.RuleTemplateConstants.DOUBLE_QUOTE_CHAR;
+import static gov.gtas.rule.builder.RuleTemplateConstants.FALSE_STRING;
+import static gov.gtas.rule.builder.RuleTemplateConstants.LEFT_PAREN_CHAR;
+import static gov.gtas.rule.builder.RuleTemplateConstants.RIGHT_PAREN_CHAR;
+import static gov.gtas.rule.builder.RuleTemplateConstants.SPACE_CHAR;
+import static gov.gtas.rule.builder.RuleTemplateConstants.TRUE_STRING;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.model.udr.CondValue;
-import gov.gtas.model.udr.RuleCond;
-import gov.gtas.model.udr.RuleCondPk;
+import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
-import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.mappings.AddressMapping;
+import gov.gtas.querybuilder.mappings.CreditCardMapping;
+import gov.gtas.querybuilder.mappings.DocumentMapping;
+import gov.gtas.querybuilder.mappings.FlightMapping;
+import gov.gtas.querybuilder.mappings.FrequentFlyerMapping;
+import gov.gtas.querybuilder.mappings.IEntityMapping;
+import gov.gtas.querybuilder.mappings.PNRMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
+import gov.gtas.querybuilder.mappings.PhoneMapping;
+import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.text.ParseException;
-import java.util.List;
+import java.util.Date;
 /**
  * Utility class to construct
  * @author GTAS3 (AB)
  *
  */
 public class RuleConditionBuilderHelper {
-	private static final char SPACE_CHAR = ' ';
-	
-	private static String convertCondValToString(final CondValue val){
+
+	private static String convertJsonStringVal(final TypeEnum type, final String value) throws ParseException{
 		String ret = null;
-     	switch(val.getValType()){
+     	switch(type){
     	case BOOLEAN:
-    		ret = val.getCharVal().charAt(0)=='Y'?"true":"false";
+    		if(value.charAt(0)=='Y'){
+    		   ret = TRUE_STRING;
+    		} else if (value.charAt(0)=='N'){
+    			ret = FALSE_STRING;   		
+    		} else if(TRUE_STRING.equalsIgnoreCase(value)){
+    			ret = TRUE_STRING;
+    		} else {
+    			ret = FALSE_STRING;
+    		}
     		break;
     	case STRING:
-    		ret = "\"" + val.getCharVal() + "\"";
+    		ret = DOUBLE_QUOTE_CHAR + value + DOUBLE_QUOTE_CHAR;
     		break;
    	    case DATE:
-   	    	ret = "\"" + DateCalendarUtils.formatRuleEngineDate(val.getDtVal()) + "\"";
+   	    	Date date = DateCalendarUtils.parseJsonDate(value);
+   	    	ret = DOUBLE_QUOTE_CHAR + DateCalendarUtils.formatRuleEngineDate(date) + DOUBLE_QUOTE_CHAR;
+   	    	break;
+   	    case TIME:
+   	    	date = DateCalendarUtils.parseJsonDate(value);
+   	    	ret = DOUBLE_QUOTE_CHAR + DateCalendarUtils.formatRuleEngineDateTime(date) + DOUBLE_QUOTE_CHAR;
    	    	break;
    	    case DATETIME:
-   	    	ret = "\"" + DateCalendarUtils.formatRuleEngineDateTime(val.getDtVal()) + "\"";
+   	    	date = DateCalendarUtils.parseJsonDate(value);
+   	    	ret = DOUBLE_QUOTE_CHAR + DateCalendarUtils.formatRuleEngineDateTime(date) + DOUBLE_QUOTE_CHAR;
    	    	break;
     	case INTEGER:
     	case LONG:
     	case DOUBLE:
-    		ret = val.getNumVal().toString();
+    		ret = value;
     		break;
     	}
 		return ret;
 	}
-    public static void addConditionValue(final CondValue val, StringBuilder bldr){
-    	bldr.append(convertCondValToString(val));
+    public static void addConditionValue(final TypeEnum type, final String val, final StringBuilder bldr) throws ParseException{
+    	bldr.append(convertJsonStringVal(type, val));
     }
-    public static void addConditionValues(final RuleCond cond, StringBuilder bldr){
-    	List<CondValue> values = cond.getValues();
-    	bldr.append('(');
-    	boolean firstTime = true;
-    	for(CondValue val:values){
-    		if(firstTime){
-    			firstTime = false;
-    		}else{
-    			bldr.append(',');
-    		}
-    		addConditionValue(val,bldr);
+    public static void addConditionValues(final TypeEnum type, final String[] values, StringBuilder bldr) throws ParseException{
+    	bldr.append(LEFT_PAREN_CHAR);
+    	if(values != null && values.length > 0){
+    		bldr.append(convertJsonStringVal(type, values[0]));
+	    	for(int i = 1; i  < values.length; ++i){
+	    		bldr.append(COMMA_CHAR).append(SPACE_CHAR)
+	    		.append(convertJsonStringVal(type, values[i]));
+	    	}
     	}
-    	bldr.append(')');
+    	bldr.append(RIGHT_PAREN_CHAR);
     }
-    public static String createConditionDescription(final RuleCond cond){
-    	StringBuilder bldr = new StringBuilder();
-    	bldr.append(cond.getEntityName()).append(SPACE_CHAR)
-    	     .append(cond.getAttrName()).append(SPACE_CHAR)
-    	     .append(cond.getOpCode().getDisplayName()).append(SPACE_CHAR);
-    	List<CondValue> valList = cond.getValues();
-    	if( valList != null && valList.size() > 1){
-    		bldr.append(" [");
-    		boolean firstTime = true;
-    		for(CondValue val: valList){
-    			if(firstTime){
-    				firstTime = false;
-    			} else {
-    				bldr.append(", ");
-    			}
-    			bldr.append(convertCondValToString(val));
-    		}
-    		bldr.append(']');
-    	} else if(valList != null && valList.size() == 1){
-    	     bldr.append(convertCondValToString(valList.get(0)));
-    	}
-    	return bldr.toString();
+    /**
+     * Creates a friendly description for the criterion.
+     * @param cond
+     * @param bldr
+     * @throws ParseException
+     */
+    public static void addConditionDescription(final QueryTerm cond, StringBuilder bldr) throws ParseException{    	
+    	OperatorCodeEnum opCode = OperatorCodeEnum.getEnum(cond.getOperator());
+    	TypeEnum attributeType = TypeEnum.getEnum(cond.getType());
+    	
+    	EntityEnum entity = EntityEnum.getEnum(cond.getEntity());
+    	bldr.append(entity.getFriendlyName()).append(SPACE_CHAR)
+    	     .append(getFieldName(entity,cond.getField())).append(SPACE_CHAR)
+    	     .append(opCode.getDisplayName()).append(SPACE_CHAR);
+    	
+		String[] values = cond.getValue();
+        if(values != null && values.length > 0){
+			switch (opCode) {
+			case IN:
+			case NOT_IN:
+			case BETWEEN:
+			case NOT_BETWEEN:
+		    	addConditionValues(attributeType, values, bldr);
+		    	break;
+			default:
+				//single value
+				addConditionValue(attributeType, values[0], bldr);
+				break;
+			}
+        }
     }
-	public static RuleCond createRuleCondition(EntityEnum entity,
-			String attribute, OperatorCodeEnum op, String value,
-			ValueTypesEnum type) throws ParseException {
-		RuleCondPk pk = new RuleCondPk(1L, 1);
-		RuleCond ret = new RuleCond(pk, entity, attribute, op);
-		ret.addValueToCondition(value, type);
-		return ret;
-	}
-	public static RuleCond createRuleCondition(EntityEnum entity,
-			String attribute, OperatorCodeEnum op, String[] values,
-			ValueTypesEnum type) throws ParseException {
-		RuleCondPk pk = new RuleCondPk(1L, 1);
-		RuleCond ret = new RuleCond(pk, entity, attribute, op);
-		for(String value:values){
-		   ret.addValueToCondition(value, type);
-		}
-		return ret;
-	}
 
-	public static String getSingleStringValue(final RuleCond cond){
-		if(cond != null && cond.getValues() != null && cond.getValues().size() == 1){
-			return cond.getValues().get(0).getCharVal();
-		} else {
-			return null;
-		}
-	}
+    private static String getFieldName(EntityEnum entity, String field){
+    	String ret = field;
+    	switch(entity){
+	    	case PASSENGER:
+	    		ret = extractFriendlyName(PassengerMapping.values(), field);
+	    		break;
+	    	case FLIGHT:
+	    		ret = extractFriendlyName(FlightMapping.values(), field);
+	    		break;
+	    	case DOCUMENT:
+	    		ret = extractFriendlyName(DocumentMapping.values(), field);
+	    		break;
+	    	case PNR:
+	    		ret = extractFriendlyName(PNRMapping.values(), field);
+	    		break;
+	    	case PHONE:
+	    		ret = extractFriendlyName(PhoneMapping.values(), field);
+	    		break;
+	    	case ADDRESS:
+	    		ret = extractFriendlyName(AddressMapping.values(), field);
+	    		break;
+	    	case FREQUENT_FLYER:
+	    		ret = extractFriendlyName(FrequentFlyerMapping.values(), field);
+	    		break;
+	    	case TRAVEL_AGENCY:
+	    		ret = extractFriendlyName(TravelAgencyMapping.values(), field);
+	    		break;
+	    	case CREDIT_CARD:
+	    		ret = extractFriendlyName(CreditCardMapping.values(), field);
+	    		break;
+    		default:
+    			break;
+    	}
+    	return ret;
+    }
+    
+    private static String extractFriendlyName(final IEntityMapping[] mappingValues, String field){
+    	String ret = field;
+    	for(IEntityMapping fldEnum:mappingValues){
+    		if(field.equalsIgnoreCase(fldEnum.getFieldName())){
+    			ret = fldEnum.getFriendlyName();
+    		}
+    	}
+    	return ret;
+    }
 }

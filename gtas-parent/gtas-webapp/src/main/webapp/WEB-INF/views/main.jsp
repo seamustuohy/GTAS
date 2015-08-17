@@ -137,7 +137,12 @@
         text-align: center;
         }
 
-
+				@media (min-width: 768px) {
+					.modal-dialog {
+					    width: 1000px;
+					}
+					}
+       
         </style>
 
         </head>
@@ -278,7 +283,7 @@
         <script src="resources/bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
         <script src="resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
         <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
-        <script src="resources/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+        <!-- <script src="resources/bower_components/datatables/media/js/jquery.dataTables.min.js"></script> -->
         <script src="resources/bower_components/angular-ui-grid/ui-grid.js"></script>
 
         <script src="resources/js/query-builder.js"></script>
@@ -289,6 +294,7 @@
         <script src="pax/PaxService.js"></script>
         <script src="pax/PaxFactory.js"></script>
         <script src="factory/QueryBuilderFactory.js"></script>
+	<script src="factory/jQueryBuilderFactory.js"></script>
         <script src="risk-criteria/RiskCriteriaController.js"></script>
         <script src="risk-criteria/RiskCriteriaService.js"></script>
         <script src="query-builder/ExecutedQueryResultsController.js"></script>

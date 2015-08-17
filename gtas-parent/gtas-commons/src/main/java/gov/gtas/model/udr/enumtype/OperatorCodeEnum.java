@@ -1,5 +1,6 @@
 package gov.gtas.model.udr.enumtype;
 
+
 public enum OperatorCodeEnum {
   EQUAL("==", "is", false),
   NOT_EQUAL("!=", "is not", false),
@@ -54,5 +55,14 @@ private OperatorCodeEnum(final String opString, final String displayName, final 
 	  this.displayName = displayName;
 	  this.takesMultipleArguements = isMultivalued;
   }
-  
+
+public static OperatorCodeEnum getEnum(String value) {	
+	for (OperatorCodeEnum opEnum : OperatorCodeEnum.values()) {
+	     if(opEnum.name().equalsIgnoreCase(value)) {
+	    	 return opEnum;
+	     }
+	 }	
+    throw new IllegalArgumentException();
+}
+
 }

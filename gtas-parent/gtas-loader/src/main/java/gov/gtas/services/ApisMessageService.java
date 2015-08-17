@@ -2,8 +2,6 @@ package gov.gtas.services;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -15,21 +13,13 @@ import org.springframework.stereotype.Service;
 
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.EdifactMessage;
-import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.ReportingParty;
-import gov.gtas.model.Passenger;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
-import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.paxlst.PaxlstMessageVo;
+import gov.gtas.parsers.paxlst.ApisMessageVo;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
 import gov.gtas.parsers.util.FileUtils;
-import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.ReportingPartyVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
 import gov.gtas.repository.ApisMessageRepository;
 
 @Service
@@ -37,11 +27,11 @@ public class ApisMessageService implements MessageService {
     private static final Logger logger = LoggerFactory.getLogger(ApisMessageService.class);
 
     @Autowired
-    private LoaderUtils utils;
-    
-    @Autowired
     private ApisMessageRepository msgDao;
-    
+
+    @Autowired
+    private LoaderRepository loaderRepo;
+
     private ApisMessage apisMessage;
     
     public MessageVo parse(String filePath) {
@@ -55,7 +45,7 @@ public class ApisMessageService implements MessageService {
             byte[] raw = FileUtils.readSmallFile(filePath);
             String message = new String(raw, StandardCharsets.US_ASCII);
 
-            EdifactParser<PaxlstMessageVo> parser = null;
+            EdifactParser<ApisMessageVo> parser = null;
             if (isUSEdifactFile(message)) {
                 parser = new PaxlstParserUSedifact();
             } else {
@@ -63,6 +53,8 @@ public class ApisMessageService implements MessageService {
             }
     
             vo = parser.parse(message);
+            loaderRepo.checkHashCode(vo.getHashCode());
+
             this.apisMessage.setStatus(MessageStatus.PARSED);
             this.apisMessage.setHashCode(vo.getHashCode());
             EdifactMessage em = new EdifactMessage();
@@ -73,10 +65,8 @@ public class ApisMessageService implements MessageService {
             this.apisMessage.setEdifactMessage(em);
 
         } catch (Exception e) {
-            this.apisMessage.setStatus(MessageStatus.FAILED_PARSING);
-            String stacktrace = ExceptionUtils.getStackTrace(e);
-            this.apisMessage.setError(stacktrace);
-            logger.error(stacktrace);
+            handleException(e, MessageStatus.FAILED_PARSING);
+            return null;
         } finally {
             createMessage(apisMessage);
         }
@@ -85,38 +75,29 @@ public class ApisMessageService implements MessageService {
     }
 
     public void load(MessageVo message) {
-        PaxlstMessageVo m = (PaxlstMessageVo)message;
+        ApisMessageVo m = (ApisMessageVo)message;
         try {
-            for (ReportingPartyVo rvo : m.getReportingParties()) {
-                ReportingParty rp = utils.convertReportingPartyVo(rvo);
-                rp.setApisMessage(this.apisMessage);
-                this.apisMessage.getReportingParties().add(rp);
-            }
-            
-            Set<Passenger> pax = new HashSet<>();        
-            for (PassengerVo pvo : m.getPassengers()) {
-                Passenger p = utils.convertPassengerVo(pvo);
-                pax.add(p);
-            }
-
-            Flight f = null;
-            for (FlightVo fvo : m.getFlights()) {
-                f = utils.convertFlightVo(fvo);
-                f.setPassengers(pax);
-                this.apisMessage.getFlights().add(f);
-            }
+            loaderRepo.processReportingParties(this.apisMessage, m.getReportingParties());
+            loaderRepo.processFlightsAndPassengers(this.apisMessage, m.getFlights(), m.getPassengers());
             this.apisMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
-            this.apisMessage.setStatus(MessageStatus.FAILED_LOADING);
-            String stacktrace = ExceptionUtils.getStackTrace(e);
-            this.apisMessage.setError(stacktrace);
-            logger.error(stacktrace);
+            handleException(e, MessageStatus.FAILED_LOADING);
         } finally {
             createMessage(apisMessage);            
         }
     }  
 
+    private void handleException(Exception e, MessageStatus status) {
+        this.apisMessage.setStatus(status);
+        String stacktrace = ExceptionUtils.getStackTrace(e);
+        if (stacktrace.length() > 4000) {
+            stacktrace = stacktrace.substring(0, 4000);
+        }
+        this.apisMessage.setError(stacktrace);
+        logger.error(stacktrace);
+    }
+    
     @Transactional
     private ApisMessage createMessage(ApisMessage m) {
         return msgDao.save(m);

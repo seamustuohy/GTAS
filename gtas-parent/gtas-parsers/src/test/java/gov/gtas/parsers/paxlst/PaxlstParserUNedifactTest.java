@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.vo.air.FlightVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
 
 public final class PaxlstParserUNedifactTest {
-    EdifactParser<PaxlstMessageVo> parser; 
+    EdifactParser<ApisMessageVo> parser; 
     
     String header = 
             "UNA:+.? '" + 
@@ -40,7 +40,7 @@ public final class PaxlstParserUNedifactTest {
                 "DTM+232:0704291600:201'" +
                 trailer;
 
-        PaxlstMessageVo vo = parser.parse(apis);
+        ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
         assertEquals(1, flights.size());
         FlightVo f = flights.get(0);
@@ -64,7 +64,7 @@ public final class PaxlstParserUNedifactTest {
                 "DTM+232:0704291945:201'" +
                 trailer;
 
-        PaxlstMessageVo vo = parser.parse(apis);
+        ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
         assertEquals(2, flights.size());
         FlightVo f1 = flights.get(0);
@@ -92,7 +92,7 @@ public final class PaxlstParserUNedifactTest {
                 "DTM+232:1402020840:201'" +
                 trailer;
         
-        PaxlstMessageVo vo = parser.parse(apis);
+        ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
         assertEquals(2, flights.size());
         
@@ -124,7 +124,7 @@ public final class PaxlstParserUNedifactTest {
                 "DTM+232:1402020840:201'" +
                 trailer;
         
-        PaxlstMessageVo vo = parser.parse(apis);
+        ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
         assertEquals(2, flights.size());
         
@@ -185,7 +185,7 @@ public final class PaxlstParserUNedifactTest {
                 "UNE+1+1' " + 
                 "UNZ+1+000006640'";
         
-        PaxlstMessageVo vo = parser.parse(apis);
+        ApisMessageVo vo = parser.parse(apis);
         List<FlightVo> flights = vo.getFlights();
         assertEquals(2, flights.size());
         System.out.println(vo);

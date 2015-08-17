@@ -14,11 +14,15 @@ public class PassengerConditionBuilder extends EntityConditionBuilder {
 	}
 
 	@Override
-	protected void addSpecialConditionsWithoutActualConditions(
-			StringBuilder bldr) {
-	}
-
-	@Override
 	protected void addSpecialConditions(StringBuilder bldr) {
+		logger.trace("No linked conditions");
+	}
+	
+	/**
+	 * Adds a condition to link the passenger to another entity, such as document.
+	 * @param matchExpression
+	 */
+	public void addLinkByIdCondition(final String matchExpression){
+		super.addConditionAsString("id == "+matchExpression);
 	}
 }

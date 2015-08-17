@@ -164,6 +164,7 @@ public class UdrServiceImpl implements UdrService {
 		try {
 			ruleToSave = JsonToDomainObjectConverter.createUdrRuleFromJson(
 					udrToCreate, author);
+			UdrServiceHelper.addEngineRulesToUdrRule(ruleToSave, udrToCreate);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			throw new RuntimeException(ioe.getMessage());
@@ -227,6 +228,9 @@ public class UdrServiceImpl implements UdrService {
 					CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE,
 					udrToUpdate.getSummary().getTitle(), userId, id);
 		}
+		/*
+		 * check if the user has permission to update the UDR
+		 */
 		if (!ruleToUpdate.getAuthor().getUserId().equals(authorUserId)) {
 			// TODO throw exception here
 			logger.error(String
@@ -253,21 +257,23 @@ public class UdrServiceImpl implements UdrService {
 			}
 
 			// update the engine rules
-			List<Rule> newEngineRules = JsonToDomainObjectConverter
+			List<Rule> newEngineRules = UdrServiceHelper
 					.listEngineRules(ruleToUpdate, udrToUpdate);
 
-			updatedRule = rulePersistenceService.update(ruleToUpdate,
-					newEngineRules, userId);
+			ruleToUpdate.clearEngineRules();
+			for(Rule r:newEngineRules){
+				ruleToUpdate.addEngineRule(r);
+			}
 
-			//UdrServiceHelper.processRuleGeneration(rulePersistenceService);
+			updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
+
 			List<UdrRule> ruleList = rulePersistenceService.findAll();
 			ruleManagementService.createKnowledgeBaseFromUdrRules(UdrConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList, userId);
 
 		} else {
 			// simple update - meta data only
 			//no need to re-generate the Knowledge Base.
-			updatedRule = rulePersistenceService.update(ruleToUpdate, null,
-					userId);
+			updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
 		}
 
 		return UdrServiceJsonResponseHelper.createResponse(true, UdrConstants.UDR_UPDATE_OP_NAME,

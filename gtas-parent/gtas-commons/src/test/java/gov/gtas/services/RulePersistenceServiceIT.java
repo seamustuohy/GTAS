@@ -5,20 +5,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.RuleCond;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
-import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.test.util.RuleServiceDataGenUtils;
 import gov.gtas.util.DateCalendarUtils;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +40,8 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 @ContextConfiguration(classes = CommonServicesConfig.class)
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback = true)
 public class RulePersistenceServiceIT {
-
+    private static final String TEST_KB_NAME = "Foo Knowledge Base";
+ 
 	@Autowired
 	private RulePersistenceService testTarget;
 	@Autowired
@@ -63,7 +61,7 @@ public class RulePersistenceServiceIT {
 
 	@Transactional
 	@Test()
-	public void testAddUdrRuleNoChild() {
+	public void testCreateUdrRuleNoChild() {
 		final String RULE_DESCRIPTION = "This is a Simple Rule";
 		String testRuleTitle = testGenUtils.generateTestRuleTitle(1);
 		UdrRule r = testGenUtils.createUdrRule(testRuleTitle,RULE_DESCRIPTION,
@@ -124,20 +122,14 @@ public class RulePersistenceServiceIT {
 		RuleMeta meta = rsav.getMetaData();
 		assertNotNull(meta);
 
-		//save the version
-//		long savedVersion = rsav.getVersion();
-		
 		// modify meta and update
 		meta.setDescription("This is a Simple Rule - Updated");
 		meta.setEndDt(DateCalendarUtils.parseJsonDate("2015-12-31"));
-		testTarget.update(rsav, null, RuleServiceDataGenUtils.TEST_USER1_ID);
+		testTarget.update(rsav, RuleServiceDataGenUtils.TEST_USER1_ID);
 
 		// read the rule back
 		UdrRule readRule = testTarget.findById(rsav.getId());
 		assertNotNull(readRule);
-
-		// check that the version has been updated by 1
-		//assertEquals(new Long(savedVersion+1), readRule.getVersion());
 
 		assertNotNull(readRule.getMetaData());
 		assertEquals(meta, readRule.getMetaData());
@@ -146,54 +138,18 @@ public class RulePersistenceServiceIT {
 
 	@Transactional
 	@Test()
-	public void testAddUdrRuleWithChildRule() {
-		final String RULE_DESCRIPTION = "This is a UDR Rule with children";
-		String testRuleTitle = testGenUtils.generateTestRuleTitle(4);
-		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
-				YesNoEnum.Y);
-		Rule engineRule = testGenUtils.createRuleWithOneCondition(r, 1);
-		r.addEngineRule(engineRule);
-		UdrRule rsav = testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
-		assertNotNull(rsav);
-		long id = rsav.getId();
-		assertTrue(id > 0);
-		RuleMeta meta = rsav.getMetaData();
-		assertNotNull(meta);
-		List<Rule> engineRules = rsav.getEngineRules();
-		assertNotNull(engineRules);
-		assertEquals(1, engineRules.size());
-		Rule er = engineRules.get(0);
-		List<RuleCond> conditions = er.getRuleConds();
-		assertNotNull(conditions);
-		assertEquals("Expected one condition", 1, conditions.size());
-
-		// read the rule back
-		UdrRule readRule = testTarget.findById(rsav.getId());
-		assertNotNull(readRule);
-		assertNotNull(readRule.getMetaData());
-		assertEquals(meta, readRule.getMetaData());
-		engineRules = rsav.getEngineRules();
-		assertNotNull(engineRules);
-		assertEquals(1, engineRules.size());
-		er = engineRules.get(0);
-		conditions = er.getRuleConds();
-		assertNotNull(conditions);
-		assertEquals("Expected one condition", 1, conditions.size());
-	}
-
-	@Transactional
-	@Test()
-	public void testRuleWithMultipleConditions() {
+	public void testCreateRuleWithOneEngineRule() {
+		final String CRITERION1 = "1 criterion";
+		final String CRITERION2 = "2 criterion";
+		final String TEST_DRL = "JUST TEST DRL";
+		
 		final String RULE_DESCRIPTION = "This is a Rule with conditions";
 		String testRuleTitle = testGenUtils.generateTestRuleTitle(5);
 		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
 				YesNoEnum.Y);
-		Rule engineRule = testGenUtils.createRuleWithOneCondition(r, 1);
-		engineRule.addConditionToRule(testGenUtils.createCondition(2,
-				EntityEnum.FLIGHT,
-				FlightMapping.AIRPORT_DESTINATION.getFieldName(),
-				OperatorCodeEnum.EQUAL, "DBY"));
-
+		Rule engineRule = new Rule(r, 1, null);
+        engineRule.setRuleDrl(TEST_DRL);
+        engineRule.addRuleCriteria(Arrays.asList(new String[]{CRITERION1, CRITERION2}));
 		r.addEngineRule(engineRule);
 		UdrRule rsav = testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
 		assertNotNull(rsav);
@@ -201,22 +157,36 @@ public class RulePersistenceServiceIT {
 		assertTrue(id > 0);
 		RuleMeta meta = rsav.getMetaData();
 		assertNotNull(meta);
-		List<RuleCond> conditions = rsav.getEngineRules().get(0).getRuleConds();
-		assertNotNull(conditions);
-		assertEquals("Expected two condition", 2, conditions.size());
+		List<Rule> rules = rsav.getEngineRules();
+		assertNotNull(rules);
+		assertEquals(1, rules.size());
+		Rule rule = rules.get(0);
+		assertTrue(rule.getId() > 0);
+		String[] criteriaDescriptions = rule.getRuleCriteria();
+		assertNotNull(criteriaDescriptions);
+		assertEquals("Expected two criteria", 2, criteriaDescriptions.length);
+		assertEquals("Expected criteria match", CRITERION1, criteriaDescriptions[0]);
+		assertEquals("Expected criteria match", CRITERION2, criteriaDescriptions[1]);
+		assertEquals("Expected DRL Match", TEST_DRL, rule.getRuleDrl());
+		
 
 		// read the rule back
 		UdrRule readRule = testTarget.findById(rsav.getId());
 		assertNotNull(readRule);
 		assertNotNull(readRule.getMetaData());
 		assertEquals(meta, readRule.getMetaData());
-		conditions = readRule.getEngineRules().get(0).getRuleConds();
-		assertNotNull(conditions);
-		assertEquals("Expected two conditions", 2, conditions.size());
+		rules = readRule.getEngineRules();
+		rule = rules.get(0);
+		criteriaDescriptions = rule.getRuleCriteria();
+		assertNotNull(criteriaDescriptions);
+		assertEquals("Expected two criteria", 2, criteriaDescriptions.length);
+		assertEquals("Expected criteria match", CRITERION1, criteriaDescriptions[0]);
+		assertEquals("Expected criteria match", CRITERION2, criteriaDescriptions[1]);
+		assertEquals("Expected DRL Match", TEST_DRL, rule.getRuleDrl());
 	}
 
 	@Transactional
-//	@Test()
+	@Test()
 	public void testDeleteRule() {
 		final String RULE_DESCRIPTION = "This is a Simple Rule";
 		String testRuleTitle = testGenUtils.generateTestRuleTitle(6);
@@ -249,12 +219,12 @@ public class RulePersistenceServiceIT {
 	public void testCreateRetrieveKnowledgeBase() throws Exception{
 		final String RULE_TEXT = "rule \"foo\"\nwhen then end";
 		final String KB_TEXT = "jkhlkj$$ && *(&)(*&)";
-		KnowledgeBase kb = new KnowledgeBase(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+		KnowledgeBase kb = new KnowledgeBase(TEST_KB_NAME);
 		kb.setCreationDt(new Date());
 		kb.setKbBlob(KB_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
 		kb.setRulesBlob(RULE_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
 		testTarget.saveKnowledgeBase(kb);
-		KnowledgeBase readKb = testTarget.findUdrKnowledgeBase();
+		KnowledgeBase readKb = testTarget.findUdrKnowledgeBase(TEST_KB_NAME);
 
 		assertNotNull(readKb);
 		long id = readKb.getId();
@@ -272,18 +242,18 @@ public class RulePersistenceServiceIT {
 		final String RULE_TEXT = "rule \"foo\"\nwhen then end";
 		final String KB_TEXT = "jkhlkj$$ && *(&)(*&)";
 		final String UPDATED_KB_TEXT = "jkh666633339999lkj$$ && *(&)(*&)";
-		KnowledgeBase kb = new KnowledgeBase(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+		KnowledgeBase kb = new KnowledgeBase(TEST_KB_NAME);
 		kb.setCreationDt(new Date());
 		kb.setKbBlob(KB_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
 		kb.setRulesBlob(RULE_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
 		testTarget.saveKnowledgeBase(kb);
-		KnowledgeBase readKb = testTarget.findUdrKnowledgeBase();
+		KnowledgeBase readKb = testTarget.findUdrKnowledgeBase(TEST_KB_NAME);
 		long preVersion = readKb.getVersion();
 		//update
         readKb.setKbBlob(UPDATED_KB_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
         testTarget.saveKnowledgeBase(readKb);
         
-        readKb = testTarget.findUdrKnowledgeBase();
+        readKb = testTarget.findUdrKnowledgeBase(TEST_KB_NAME);
 		assertNotNull(readKb);
 		long id = readKb.getId();
 		assertTrue(id > 0);

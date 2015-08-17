@@ -1,12 +1,12 @@
 package gov.gtas.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,9 +20,11 @@ public class Email extends BaseEntityAudit {
     
 	private String domain;
 	
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="pnr_id", nullable = false)    
-	private Pnr pnr;
+    @ManyToMany(
+        mappedBy = "emails",
+        targetEntity = Pnr.class
+    )
+    private Set<Pnr> pnrs = new HashSet<>();
 
     public String getAddress() {
         return address;
@@ -39,13 +41,13 @@ public class Email extends BaseEntityAudit {
     public void setDomain(String domain) {
         this.domain = domain;
     }
-
-    public Pnr getPnr() {
-        return pnr;
+    
+    public Set<Pnr> getPnrs() {
+        return pnrs;
     }
 
-    public void setPnr(Pnr pnr) {
-        this.pnr = pnr;
+    public void setPnrs(Set<Pnr> pnrs) {
+        this.pnrs = pnrs;
     }
 
     @Override

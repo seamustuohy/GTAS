@@ -8,8 +8,8 @@ import java.util.List;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.parsers.vo.air.DocumentVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
+import gov.gtas.parsers.vo.passenger.DocumentVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
 
 public class PnrUtils {
     public static Date parseDateTime(String dt) throws ParseException {

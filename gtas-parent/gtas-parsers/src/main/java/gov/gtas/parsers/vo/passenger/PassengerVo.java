@@ -1,4 +1,4 @@
-package gov.gtas.parsers.vo.air;
+package gov.gtas.parsers.vo.passenger;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +17,7 @@ public class PassengerVo {
     private String citizenshipCountry;
     private String residencyCountry;
     private String passengerType;
+    private Integer age;
     private Date dob;
     private String embarkation;
     private String debarkation;
@@ -85,6 +86,12 @@ public class PassengerVo {
     }
     public void setPassengerType(String passengerType) {
         this.passengerType = passengerType;
+    }
+    public Integer getAge() {
+        return age;
+    }
+    public void setAge(Integer age) {
+        this.age = age;
     }
     public Date getDob() {
         return dob;

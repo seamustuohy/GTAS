@@ -1,8 +1,12 @@
 package gov.gtas.services;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +22,13 @@ import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrVo;
-import gov.gtas.parsers.vo.air.AddressVo;
-import gov.gtas.parsers.vo.air.CreditCardVo;
-import gov.gtas.parsers.vo.air.DocumentVo;
-import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
-import gov.gtas.parsers.vo.air.PhoneVo;
-import gov.gtas.parsers.vo.air.ReportingPartyVo;
+import gov.gtas.parsers.vo.passenger.AddressVo;
+import gov.gtas.parsers.vo.passenger.CreditCardVo;
+import gov.gtas.parsers.vo.passenger.DocumentVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.PhoneVo;
+import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
 
 @Service
 public class LoaderUtils {
@@ -32,10 +36,17 @@ public class LoaderUtils {
     
     @Autowired
     private AirportService airportService;
-
-    public Passenger convertPassengerVo(PassengerVo vo) throws ParseException {
+    
+    public Passenger createNewPassenger(PassengerVo vo) throws ParseException {
         Passenger p = new Passenger();
-        BeanUtils.copyProperties(vo, p);
+        p.setCreatedBy(LOADER_USER);
+        updatePassenger(vo, p);
+        return p;
+    }
+    
+    public void updatePassenger(PassengerVo vo, Passenger p) throws ParseException {
+        BeanUtils.copyProperties(vo, p, getNullPropertyNames(vo));
+        p.setUpdatedBy(LOADER_USER);
         
         String airportCode = vo.getDebarkation();
         p.setDebarkation(airportCode);
@@ -53,31 +64,54 @@ public class LoaderUtils {
         
         p.setCitizenshipCountry(vo.getCitizenshipCountry());
         p.setResidencyCountry(vo.getResidencyCountry());
-        
-        for (DocumentVo dvo : vo.getDocuments()) {
-            Document d = new Document();
-            BeanUtils.copyProperties(dvo, d);
-            d.setPassenger(p);
-            d.setIssuanceCountry(dvo.getIssuanceCountry());
-            p.getDocuments().add(d);
-        }
-
-        return p;
     }
-    
-    public ReportingParty convertReportingPartyVo(ReportingPartyVo vo) {
+
+    public Document createNewDocument(DocumentVo vo) throws ParseException {
+        Document d = new Document();
+        updateDocument(vo, d);
+        return d;
+    }
+
+    public void updateDocument(DocumentVo vo, Document d) throws ParseException {
+        BeanUtils.copyProperties(vo, d, getNullPropertyNames(vo));
+    }
+        
+    public ReportingParty createNewReportingParty(ReportingPartyVo vo) {
         ReportingParty rp = new ReportingParty();
-        BeanUtils.copyProperties(vo, rp);
+        updateReportingParty(vo, rp);
         return rp;
     }
     
-    public Flight convertFlightVo(FlightVo vo) throws ParseException {
-        // TODO: hardcoded for now
-        String homeCountry = "USA";
-
+    public void updateReportingParty(ReportingPartyVo vo, ReportingParty rp) {
+        BeanUtils.copyProperties(vo, rp);
+    }
+    
+    public Flight createNewFlight(FlightVo vo) throws ParseException {
         Flight f = new Flight();
         f.setCreatedBy(LOADER_USER);
-        BeanUtils.copyProperties(vo, f);
+        updateFlight(vo, f);
+        return f;
+    }
+    
+    public static String[] getNullPropertyNames (Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new HashSet<String>();
+        for(java.beans.PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) emptyNames.add(pd.getName());
+        }
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
+    }
+    
+    public void updateFlight(FlightVo vo, Flight f) throws ParseException {
+        // TODO: hardcoded for now
+        String homeCountry = "USA";
+        f.setUpdatedBy(LOADER_USER);
+
+        BeanUtils.copyProperties(vo, f, getNullPropertyNames(vo));
         f.setCarrier(vo.getCarrier());
         
         f.setDestination(vo.getDestination());
@@ -113,7 +147,6 @@ public class LoaderUtils {
         }
         buff.append(vo.getFlightNumber());
         f.setFlightNumber(buff.toString());
-        return f;
     }
 
     public Pnr convertPnrVo(PnrVo vo) throws ParseException {
@@ -160,7 +193,7 @@ public class LoaderUtils {
         BeanUtils.copyProperties(vo, cc);
         return cc;
     }
-
+    
     private Airport getAirport(String a) throws ParseException {
         if (a == null) return null;
         

@@ -1,4 +1,4 @@
-package gov.gtas.rule;
+package gov.gtas.rule.listener;
 
 import gov.gtas.bo.RuleExecutionStatistics;
 
@@ -9,8 +9,12 @@ import java.util.List;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieSession;
-
-public class RuleEngineHelper {
+/**
+ * Rule Engine Event Listener utility functions.
+ * @author GTAS3 (AB)
+ *
+ */
+public class RuleEventListenerUtils {
 	/**
 	 * Adds events listeners to the Kie Session.
 	 * 

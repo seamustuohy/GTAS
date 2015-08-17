@@ -1,9 +1,12 @@
 package gov.gtas.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +21,12 @@ public class FrequentFlyer extends BaseEntityAudit {
 	@Column(name = "frequent_flyer_number", nullable = false)
     private String frequentFlyerNumber;
 	
+    @ManyToMany(
+        mappedBy = "frequentFlyers",
+        targetEntity = Pnr.class
+    )
+    private Set<Pnr> pnrs = new HashSet<>();
+    
 	public String getAirlineCode() {
 		return airlineCode;
 	}
@@ -34,6 +43,14 @@ public class FrequentFlyer extends BaseEntityAudit {
 		this.frequentFlyerNumber = frequentFlyerNumber;
 	}
 	
+    public Set<Pnr> getPnrs() {
+        return pnrs;
+    }
+
+    public void setPnrs(Set<Pnr> pnrs) {
+        this.pnrs = pnrs;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(this.frequentFlyerNumber,this.airlineCode);

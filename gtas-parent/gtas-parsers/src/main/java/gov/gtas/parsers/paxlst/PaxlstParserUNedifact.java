@@ -7,7 +7,6 @@ import java.util.Set;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
-import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
 import gov.gtas.parsers.paxlst.segment.unedifact.BGM;
@@ -23,10 +22,6 @@ import gov.gtas.parsers.paxlst.segment.unedifact.FTX;
 import gov.gtas.parsers.paxlst.segment.unedifact.GEI;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC;
 import gov.gtas.parsers.paxlst.segment.unedifact.LOC.LocCode;
-import gov.gtas.parsers.vo.air.DocumentVo;
-import gov.gtas.parsers.vo.air.FlightVo;
-import gov.gtas.parsers.vo.air.PassengerVo;
-import gov.gtas.parsers.vo.air.ReportingPartyVo;
 import gov.gtas.parsers.paxlst.segment.unedifact.MEA;
 import gov.gtas.parsers.paxlst.segment.unedifact.NAD;
 import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
@@ -34,14 +29,19 @@ import gov.gtas.parsers.paxlst.segment.unedifact.QTY;
 import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT.TdtType;
+import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.vo.passenger.DocumentVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
 
-public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> {   
+public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {   
     private static final String[] SEGMENT_NAMES = new String[] { "ATT", "AUT", "BGM", "CNT", "COM", "CPI", "CTA", "DOC",
             "DTM", "EMP", "FTX", "GEI", "GID", "LOC", "MEA", "NAD", "NAT", "QTY", "RFF", "TDT", "UNH", "UNT" };
     public static final Set<String> UN_EDIFACT_PAXLST_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
 
     public PaxlstParserUNedifact() {
-        this.parsedMessage = new PaxlstMessageVo();
+        this.parsedMessage = new ApisMessageVo();
     }
     
     protected String getPayloadText(String message) throws ParseException {
@@ -120,8 +120,8 @@ public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> 
             if (com == null) {
                 break;
             }
-            rp.setTelephone(com.getPhoneNumber());
-            rp.setFax(com.getFaxNumber());
+            rp.setTelephone(ParseUtils.prepTelephoneNumber(com.getPhoneNumber()));
+            rp.setFax(ParseUtils.prepTelephoneNumber(com.getFaxNumber()));
         }
     }
 
@@ -261,7 +261,11 @@ public final class PaxlstParserUNedifact extends EdifactParser<PaxlstMessageVo> 
             }
             DtmCode dtmCode = dtm.getDtmCode();
             if (dtmCode == DtmCode.DATE_OF_BIRTH) {
-                p.setDob(dtm.getDtmValue());
+                Date dob = dtm.getDtmValue();
+                if (dob != null) {
+                    p.setDob(dob);
+                    p.setAge(ParseUtils.calculateAge(dob));
+                }
             }
         }
 

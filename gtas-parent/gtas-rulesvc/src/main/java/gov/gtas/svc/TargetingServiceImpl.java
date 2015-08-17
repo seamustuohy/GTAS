@@ -175,7 +175,7 @@ public class TargetingServiceImpl implements TargetingService {
 					HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
 					hitsSummaryList.add(hitsSummary);
 				}
-				// updateApisMessage(apisMessage, MessageStatus.ANALYZED);
+				updateApisMessage(apisMessage, MessageStatus.ANALYZED);
 			}
 			hitsSummaryRepository.save(hitsSummaryList);
 		}

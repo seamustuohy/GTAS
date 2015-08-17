@@ -1,11 +1,11 @@
-package gov.gtas.util;
+package gov.gtas.services;
 
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-import gov.gtas.delegates.FlightVo;
 import gov.gtas.model.Flight;
+import gov.gtas.parsers.vo.passenger.FlightVo;
 
 public class ServiceUtils {
 	

@@ -1,4 +1,4 @@
-app.factory('QueryBuilderCtrl', function () {
+app.factory('jQueryBuilderFactory', function () {
     'use strict';
     return function ($scope, $timeout) {
         var selectizeValueSetter = function (rule, value) {
@@ -109,14 +109,6 @@ app.factory('QueryBuilderCtrl', function () {
                     $builder.queryBuilder($scope.options);
 
                     $scope.$builder = $builder;
-                    $scope.newRule();
-
-                    $('.datepicker').datepicker({
-                        startDate: $scope.today.toString(),
-                        minDate: $scope.today.toString(),
-                        format: 'yyyy-mm-dd',
-                        autoClose: true
-                    });
                 });
                 //} else {
                 //    $scope.options.entities = JSON.parse(localStorage[property]);

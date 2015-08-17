@@ -22,13 +22,13 @@ public class EdifactLexer {
     private static final String[] SEGMENT_NAMES = { "UNA", "UNB", "UNG", "UNH", "UNT", "UNE", "UNZ" };
     public static final Set<String> EDIFACT_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
     
-    public static UNA getUnaSegment(String txt) {
+    public static UNA getUnaSegment(String msg) {
         String regex = String.format("UNA.{%d}\\s*UNB", UNA.NUM_UNA_CHARS);
-        int unaIndex = ParseUtils.indexOfRegex(regex, txt);
+        int unaIndex = ParseUtils.indexOfRegex(regex, msg);
 
         if (unaIndex != -1) {
             int endIndex = unaIndex + "UNA".length() + UNA.NUM_UNA_CHARS;
-            String delims = txt.substring(unaIndex, endIndex);
+            String delims = msg.substring(unaIndex, endIndex);
             return new UNA(delims);
         }   
         
@@ -36,49 +36,51 @@ public class EdifactLexer {
     }
     
     /**
-     * @return the starting index of the 'segmentName' in 'txt'.
+     * @return the starting index of the 'segmentName' in 'msg'.
      */
-    public static int getStartOfSegment(String segmentName, String txt, UNA una) {
+    public static int getStartOfSegment(String segmentName, String msg, UNA una) {
         String regex = String.format("%s\\s*\\%c", segmentName, una.getDataElementSeparator());
-        return ParseUtils.indexOfRegex(regex, txt);
+        return ParseUtils.indexOfRegex(regex, msg);
     }
     
     /**
      * Return everything from the start of the 'startSegment' to the
      * start of the 'endSegment' trailing header segment.
      */
-    public static String getMessagePayload(String message, String startSegment, String endSegment) {
-        UNA una = getUnaSegment(message);
-        int bgmIndex = EdifactLexer.getStartOfSegment(startSegment, message, una);
+    public static String getMessagePayload(String msg, String startSegment, String endSegment) {
+        UNA una = getUnaSegment(msg);
+        int bgmIndex = getStartOfSegment(startSegment, msg, una);
         if (bgmIndex == -1) {
             return null;
         }
 
-        int untIndex = EdifactLexer.getStartOfSegment(endSegment, message, una);
+        int untIndex = getStartOfSegment(endSegment, msg, una);
         if (untIndex == -1) {
             return null;
         }
         
-        return message.substring(bgmIndex, untIndex);
+        return msg.substring(bgmIndex, untIndex);
     }
     
-    public LinkedList<Segment> tokenize(String txt) throws ParseException {
-        if (StringUtils.isEmpty(txt)) return null;
-        txt = preprocessMessage(txt);
+    public LinkedList<Segment> tokenize(String msg) throws ParseException {
+        if (StringUtils.isEmpty(msg)) {
+            return null;
+        }
+        msg = preprocessMessage(msg);
         
-        UNA una = getUnaSegment(txt);
+        UNA una = getUnaSegment(msg);
         SegmentTokenizer segmentTokenizer = new SegmentTokenizer(una);
 
         // start parsing with the UNB segment
-        int unbIndex = getStartOfSegment("UNB", txt, una);
+        int unbIndex = getStartOfSegment("UNB", msg, una);
         if (unbIndex == -1) {
             throw new ParseException("No UNB segment found");
         }
-        txt = txt.substring(unbIndex);
+        msg = msg.substring(unbIndex);
         
         LinkedList<Segment> segments = new LinkedList<>();
         
-        String[] stringSegments = ParseUtils.splitWithEscapeChar(txt, 
+        String[] stringSegments = ParseUtils.splitWithEscapeChar(msg, 
                 una.getSegmentTerminator(), 
                 una.getReleaseCharacter());
 
@@ -98,8 +100,8 @@ public class EdifactLexer {
      * meaning; there is no such thing as a "maximum" or "minimum" segment
      * length, other than that specified in the segment definitions.
      */
-    private String preprocessMessage(String message) {
-        String txt = ParseUtils.stripStxEtxHeaderAndFooter(message);
+    private String preprocessMessage(String msg) {
+        String txt = ParseUtils.stripStxEtxHeaderAndFooter(msg);
         return ParseUtils.convertToSingleLine(txt).toUpperCase();
     }
 }
