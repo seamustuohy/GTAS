@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.pnrgov.segment.IFT;
 import gov.gtas.parsers.pnrgov.segment.REF;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TIF;

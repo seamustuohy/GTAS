@@ -2,6 +2,7 @@ package gov.gtas.parsers.pnrgov;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
@@ -252,10 +253,13 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
     }
 
+    /**
+     * Repeats for each ticket associated with a passenger.
+     * Not currently using this info.
+     */
     private void processGroup3(TKT tkt) throws ParseException {
-        MON mon = getConditionalSegment(MON.class);
-
-        PTK ptk = getConditionalSegment(PTK.class);
+        getConditionalSegment(MON.class);
+        getConditionalSegment(PTK.class);
 
         for (;;) {
             TXD txd = getConditionalSegment(TXD.class);
@@ -264,7 +268,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
         }
 
-        DAT_G1 dat = getConditionalSegment(DAT_G1.class, "DAT");
+        getConditionalSegment(DAT_G1.class, "DAT");
 
         FOP fop = getConditionalSegment(FOP.class);
         processGroup4(fop);
@@ -274,17 +278,26 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
      * Form of payment info
      */
     private void processGroup4(FOP fop) throws ParseException {
+        boolean ccCreated = false;
+        CreditCardVo cc = new CreditCardVo();
         if (fop.isCreditCard()) {
-            CreditCardVo cc = new CreditCardVo();
             cc.setCardType(fop.getVendorCode());
             cc.setExpiration(fop.getExpirationDate());
-            // TODO: how to figure this out?
-//            cc.setAccountHolder();
             cc.setNumber(fop.getAccountNumber());
             currentPnr.getCreditCards().add(cc);
+            ccCreated = true;
         }
 
         IFT ift = getConditionalSegment(IFT.class);
+        if (ift != null) {
+            if (ccCreated && ift.isSponsorInfo()) {
+                List<String> msgs = ift.getMessages();
+                if (msgs.size() >= 1) {
+                    cc.setAccountHolder(msgs.get(0));                
+                }
+            }
+        }
+        
         ADD add = getConditionalSegment(ADD.class);
         if (add != null) {
             currentPnr.getAddresses().add(createAddress(add));
