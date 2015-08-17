@@ -261,7 +261,11 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
             }
             DtmCode dtmCode = dtm.getDtmCode();
             if (dtmCode == DtmCode.DATE_OF_BIRTH) {
-                p.setDob(dtm.getDtmValue());
+                Date dob = dtm.getDtmValue();
+                if (dob != null) {
+                    p.setDob(dob);
+                    p.setAge(ParseUtils.calculateAge(dob));
+                }
             }
         }
 

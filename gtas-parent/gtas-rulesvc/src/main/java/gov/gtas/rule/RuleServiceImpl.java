@@ -10,6 +10,7 @@ import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.UdrConstants;
+import gov.gtas.rule.listener.RuleEventListenerUtils;
 import gov.gtas.services.udr.RulePersistenceService;
 
 import java.io.IOException;
@@ -91,9 +92,9 @@ public class RuleServiceImpl implements RuleService {
 		 */
 		final RuleExecutionStatistics stats = new RuleExecutionStatistics();
 
-		List<EventListener> listeners = RuleEngineHelper
+		List<EventListener> listeners = RuleEventListenerUtils
 				.createEventListeners(stats);
-		RuleEngineHelper.addEventListenersToKieSEssion(ksession, listeners);
+		RuleEventListenerUtils.addEventListenersToKieSEssion(ksession, listeners);
 
 		Collection<?> requestObjects = req.getRequestObjects();
 		for (Object x : requestObjects) {

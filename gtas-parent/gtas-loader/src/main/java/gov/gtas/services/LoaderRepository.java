@@ -1,6 +1,7 @@
 package gov.gtas.services;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Message;
 import gov.gtas.model.Passenger;
@@ -19,6 +21,7 @@ import gov.gtas.parsers.vo.passenger.DocumentVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
+import gov.gtas.repository.DocumentRepository;
 import gov.gtas.repository.FlightRepository;
 import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
@@ -37,6 +40,9 @@ public class LoaderRepository {
 
     @Autowired
     private PassengerRepository passengerDao;
+
+    @Autowired
+    private DocumentRepository docDao;
 
     // TODO: can't instantiate generic message repo?
     @Autowired
@@ -66,7 +72,6 @@ public class LoaderRepository {
         }
     }
     
-
     @Transactional
     public void processFlightsAndPassengers(ApisMessage apisMessage, List<FlightVo> flights, List<PassengerVo> passengers) throws ParseException {
         for (FlightVo fvo : flights) {
@@ -84,9 +89,11 @@ public class LoaderRepository {
             for (PassengerVo pvo : passengers) {
                 Passenger currentPassenger = null;
                 Passenger existingPassenger = findPassengerOnFlight(currentFlight, pvo);
+                boolean isNewPax = false;
                 if (existingPassenger == null) {
                     Passenger p = utils.createNewPassenger(pvo);
                     currentPassenger = p;
+                    isNewPax = true;
                 } else {
                     utils.updatePassenger(pvo, existingPassenger);
                     currentPassenger = existingPassenger;
@@ -94,7 +101,16 @@ public class LoaderRepository {
                 currentFlight.getPassengers().add(currentPassenger);
 
                 for (DocumentVo dvo : pvo.getDocuments()) {
-                    
+                    if (isNewPax) {
+                        currentPassenger.addDocument(utils.createNewDocument(dvo));
+                    } else {
+                        Document existingDoc = docDao.findByDocumentNumberAndPassenger(dvo.getDocumentNumber(), currentPassenger);
+                        if (existingDoc == null) {
+                            currentPassenger.addDocument(utils.createNewDocument(dvo));
+                        } else {
+                            utils.updateDocument(dvo, existingDoc);
+                        }                        
+                    }
                 }
             }
         }
@@ -108,5 +124,4 @@ public class LoaderRepository {
             return null;
         }
     }
-
 }
