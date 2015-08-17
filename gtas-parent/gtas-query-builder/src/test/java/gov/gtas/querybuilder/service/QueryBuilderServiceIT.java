@@ -114,7 +114,7 @@ public class QueryBuilderServiceIT {
 	public void testPNRSimpleFlightQuery() {
 		// select distinct f from Flight f join f.pnrs pnr where pnr.bagCount = ?1
 		// select distinct f from Flight f join f.pnrs pnr join pnr.passengers pnr_p where pnr_p.firstName = ?1
-		TypedQuery<Flight> query = entityManager.createQuery("select distinct f from Flight f join fetch f.passengers p join fetch p.documents d where d.documentType = ?1", Flight.class);
+		TypedQuery<Flight> query = entityManager.createQuery("select distinct f from Flight f join f.passengers p left join p.documents d where d.documentType = ?1", Flight.class);
 		query.setParameter(1, "P");
 		List<Flight> resultList = query.getResultList();
 		
@@ -126,20 +126,23 @@ public class QueryBuilderServiceIT {
 	}
 	
 	@Test
+	@Transactional
 	public void testPNRSimplePassengerQuery() {
 		//select distinct pnr from PnrData pnr join fetch pnr.passengers p left outer join fetch p.documents d where pnr.origin = ?1
 		// select distinct p from Passenger p join p.pnrs pnr join fetch pnr.flights f join fetch p.documents d where pnr.bagCount = ?1
 		// select distinct p from Passenger p join p.pnrs pnr where pnr.bagCount = ?1
 		// select distinct p from Passenger p join p.pnrs pnr join fetch p.flights f left join fetch p.documents d where pnr.bagCount = ?1
-		TypedQuery<Passenger> query = entityManager.createQuery("select distinct p from Passenger p join p.pnrs pnr where pnr.creditCard.number = ?1", Passenger.class);
-		query.setParameter(1, "2222-3333-4444-5555");
+		// select distinct p from Passenger p join p.pnrs pnr where pnr.creditCard.number = ?1
+		TypedQuery<Passenger> query = entityManager.createQuery("select p from Passenger p where p.documents is empty or p.documents is not empty", Passenger.class);
+//		query.setParameter(1, "2222-3333-4444-5555");
 		List<Passenger> resultList = query.getResultList();
 		
-		if(resultList != null) {
-			for(Passenger p : resultList) {
-				System.out.println("first name: " + p.getFirstName() + " last name: " + p.getLastName());
-			}
-		}
+//		resultList.get(0);
+//		if(resultList != null) {
+//			for(Passenger p : resultList) {
+//				System.out.println(" id: " + p.getId() + " first name: " + p.getFirstName() + " last name: " + p.getLastName());
+//			}
+//		}
 	}
 	
 //	@Test
