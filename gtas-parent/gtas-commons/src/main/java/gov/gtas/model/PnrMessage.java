@@ -19,7 +19,7 @@ public class PnrMessage extends Message {
     private EdifactMessage edifactMessage;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrMessage")
-    private Set<Pnr> pnrs;
+    private Set<Pnr> pnrs = new HashSet<>();
     
     public void addPnr(Pnr pnr) {
         if (this.pnrs == null) {
