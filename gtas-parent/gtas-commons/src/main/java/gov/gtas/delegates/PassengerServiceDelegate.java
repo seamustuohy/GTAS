@@ -49,7 +49,7 @@ public class PassengerServiceDelegate {
 				
 			}
 			else{
-				ServiceUtils.mapFlightFromVo(vo, f);
+				f=ServiceUtils.mapFlightFromVo(vo, new Flight());
 				Passenger p =ServiceUtils.mapPassengerFromVo(passengerVo,new Passenger());
 				f.getPassengers().add(p);
 				p.getFlights().add(f);
