@@ -230,12 +230,14 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (ssr == null) {
                 break;
             }
-            SSR.SsrCode code = SSR.SsrCode.valueOf(ssr.getTypeOfRequest());
-            if (code == SSR.SsrCode.DOCS) {
+            String code = ssr.getTypeOfRequest();
+            if (SSR.DOCS.equals(code)) {
                 PassengerVo p = PnrUtils.createPassenger(ssr, tif);
                 currentPnr.getPassengers().add(p);
                 paxCreated = true;
                 currentPnr.setPassengerCount(currentPnr.getPassengerCount() + 1);
+            } else if (SSR.DOCA.equals(code)) {
+                // create address
             }
         }
 
