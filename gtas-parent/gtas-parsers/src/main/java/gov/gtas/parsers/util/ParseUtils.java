@@ -191,10 +191,13 @@ public class ParseUtils {
     }
     
     public static Integer returnNumberOrNull(String s) {
+        if (StringUtils.isBlank(s)) {
+            return null;
+        }
+        
         try {
             return Integer.valueOf(s);
         } catch (NumberFormatException e) {
-            // do nothing
             e.printStackTrace();
             return null;
         }

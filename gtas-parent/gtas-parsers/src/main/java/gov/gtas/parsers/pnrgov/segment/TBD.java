@@ -61,18 +61,20 @@ public class TBD extends Segment {
         super(TBD.class.getSimpleName(), composites);
         Composite c = getComposite(1);
         if (c != null) {
-            this.numBags = ParseUtils.returnNumberOrNull(c.getElement(1));
+            this.numBags = ParseUtils.returnNumberOrNull(c.getElement(0));
         }
         
         this.bagDetails = new ArrayList<>();
-        for (int i=2; i<numComposites(); i++) {
+        for (int i=3; i<numComposites(); i++) {
             c = getComposite(i);
-            BagDetails bag = new BagDetails();
-            bag.setAirline(c.getElement(0));
-            bag.setTagNumber(c.getElement(1));
-            bag.setNumConsecutiveTags(ParseUtils.returnNumberOrNull(c.getElement(2)));
-            bag.setDestAirport(c.getElement(3));
-            this.bagDetails.add(bag);
+            if (c.numElements() > 0) {
+                BagDetails bag = new BagDetails();
+                bag.setAirline(c.getElement(0));
+                bag.setTagNumber(c.getElement(1));
+                bag.setNumConsecutiveTags(ParseUtils.returnNumberOrNull(c.getElement(2)));
+                bag.setDestAirport(c.getElement(3));
+                this.bagDetails.add(bag);
+            }
         }
     }
 

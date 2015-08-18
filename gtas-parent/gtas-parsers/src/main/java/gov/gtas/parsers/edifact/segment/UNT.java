@@ -4,7 +4,6 @@ import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.util.ParseUtils;
 
 /**
  * <p>
@@ -25,7 +24,7 @@ public class UNT extends Segment {
             Composite c = getComposite(i);
             switch (i) {
             case 0:
-                this.numberOfSegments = ParseUtils.returnNumberOrNull(c.getElement(0));
+                this.numberOfSegments = Integer.valueOf(c.getElement(0));
                 break;
             case 1:
                 this.messageRefNumber = c.getElement(0);
