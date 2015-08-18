@@ -8,12 +8,15 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.pnrgov.segment.ADD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TIF;
 import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
 import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.vo.passenger.AddressVo;
 import gov.gtas.parsers.vo.passenger.DocumentVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.PhoneVo;
 
 public class PnrUtils {
     public static Date parseDateTime(String dt) throws ParseException {
@@ -39,10 +42,13 @@ public class PnrUtils {
      */
     public static PassengerVo createPassenger(SSR ssr, TIF tif) throws ParseException {
         final String dateFormat = "ddMMMyy";
-        String[] tmp = ssr.getFreeText().split("/");
-        List<String> strs = new ArrayList<>(Arrays.asList(tmp));
+        List<String> strs = splitSsrFreeText(ssr);
+        if (strs == null) {
+            return null;
+        }
         
         PassengerVo p = new PassengerVo();
+        p.setPassengerType("P");
         DocumentVo doc = new DocumentVo();
         p.addDocument(doc);
    
@@ -64,7 +70,6 @@ public class PnrUtils {
         p.setLastName(safeGet(strs, 8));
         p.setFirstName(safeGet(strs, 9));
         p.setMiddleName(safeGet(strs, 10));
-        p.setPassengerType("P");
         
         if (tif.getTravelerDetails().size() > 0) {
             TravelerDetails td = tif.getTravelerDetails().get(0);
@@ -88,10 +93,55 @@ public class PnrUtils {
         return null;
     }
     
+    public static AddressVo createAddress(ADD add) {
+        AddressVo rv = new AddressVo();
+        rv.setType(add.getAddressType());
+        rv.setLine1(add.getStreetNumberAndName());
+        rv.setCity(add.getCity());
+        rv.setState(add.getStateOrProvinceCode());
+        rv.setCountry(add.getCountryCode());
+        rv.setPostalCode(add.getPostalCode());
+        rv.setPhoneNumber(ParseUtils.prepTelephoneNumber(add.getTelephone()));
+        return rv;
+    }
+
+    /**
+     * SSR+DOCA:HK:1:TZ:::::/D/AUS/13 SHORE AVENUE/BROADBEACH/QLD/4215+::43577'
+     */
+    public static AddressVo createAddress(SSR ssr) {
+        List<String> strs = splitSsrFreeText(ssr);
+        if (strs == null) {
+            return null;
+        }
+
+        AddressVo rv = new AddressVo();
+        rv.setCountry(safeGet(strs, 2));
+        rv.setLine1(safeGet(strs, 3));
+        rv.setLine2(safeGet(strs, 4));
+        rv.setCity(safeGet(strs, 5));
+        rv.setPostalCode(safeGet(strs, 6));
+        return rv;
+    }
+    
+    public static PhoneVo createPhone(String number) {
+        PhoneVo rv = new PhoneVo();
+        rv.setNumber(ParseUtils.prepTelephoneNumber(number));
+        return rv;
+    }
+    
     public static <T> T safeGet(List<T> list, int i) {
         if (i < 0 || i >= list.size()) {
             return null;
         }
         return list.get(i);
+    }
+    
+    private static List<String> splitSsrFreeText(SSR ssr) {
+        if (ssr.getFreeText() != null) {
+            String[] tmp = ssr.getFreeText().split("/");
+            List<String> strs = new ArrayList<>(Arrays.asList(tmp));
+            return strs;
+        }
+        return null;
     }
 }

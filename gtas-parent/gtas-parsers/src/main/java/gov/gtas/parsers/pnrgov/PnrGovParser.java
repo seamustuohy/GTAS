@@ -157,10 +157,10 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (add == null) {
                 break;
             }
-            AddressVo address = createAddress(add);
+            AddressVo address = PnrUtils.createAddress(add);
             currentPnr.getAddresses().add(address);
             if (address.getPhoneNumber() != null) {
-                PhoneVo p = createPhone(address.getPhoneNumber());
+                PhoneVo p = PnrUtils.createPhone(address.getPhoneNumber());
                 currentPnr.getPhoneNumbers().add(p);
             }
         }
@@ -233,19 +233,23 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             String code = ssr.getTypeOfRequest();
             if (SSR.DOCS.equals(code)) {
                 PassengerVo p = PnrUtils.createPassenger(ssr, tif);
-                currentPnr.getPassengers().add(p);
-                paxCreated = true;
-                currentPnr.setPassengerCount(currentPnr.getPassengerCount() + 1);
+                if (p != null) {
+                    currentPnr.getPassengers().add(p);
+                    paxCreated = true;
+                    currentPnr.setPassengerCount(currentPnr.getPassengerCount() + 1);
+                }
             } else if (SSR.DOCA.equals(code)) {
-                // create address
+                currentPnr.getAddresses().add(PnrUtils.createAddress(ssr));
             }
         }
 
         if (!paxCreated) {
             // all we can do is create the passenger from the TIF segment
             PassengerVo p = PnrUtils.createPassenger(tif);
-            currentPnr.getPassengers().add(p);
-            currentPnr.setPassengerCount(currentPnr.getPassengerCount() + 1);
+            if (p != null) {
+                currentPnr.getPassengers().add(p);
+                currentPnr.setPassengerCount(currentPnr.getPassengerCount() + 1);
+            }
         }
         
         for (;;) {
@@ -253,7 +257,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (add == null) {
                 break;
             }
-            currentPnr.getAddresses().add(createAddress(add));
+            currentPnr.getAddresses().add(PnrUtils.createAddress(add));
         }
 
         for (;;) {
@@ -316,7 +320,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         
         ADD add = getConditionalSegment(ADD.class);
         if (add != null) {
-            currentPnr.getAddresses().add(createAddress(add));
+            currentPnr.getAddresses().add(PnrUtils.createAddress(add));
         }
     }
 
@@ -511,24 +515,6 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
 
     private void processGroup12(TVL tvl) throws ParseException {
         RPI rpi = getConditionalSegment(RPI.class);
-    }
-    
-    private AddressVo createAddress(ADD add) {
-        AddressVo rv = new AddressVo();
-        rv.setType(add.getAddressType());
-        rv.setLine1(add.getStreetNumberAndName());
-        rv.setCity(add.getCity());
-        rv.setState(add.getStateOrProvinceCode());
-        rv.setCountry(add.getCountryCode());
-        rv.setPostalCode(add.getPostalCode());
-        rv.setPhoneNumber(ParseUtils.prepTelephoneNumber(add.getTelephone()));
-        return rv;
-    }
-    
-    private PhoneVo createPhone(String number) {
-        PhoneVo rv = new PhoneVo();
-        rv.setNumber(ParseUtils.prepTelephoneNumber(number));
-        return rv;
     }
     
     private void processExcessBaggage(EBD ebd) {
