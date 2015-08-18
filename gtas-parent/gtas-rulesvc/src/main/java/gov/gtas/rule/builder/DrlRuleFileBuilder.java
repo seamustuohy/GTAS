@@ -5,6 +5,13 @@ import static gov.gtas.rule.builder.RuleTemplateConstants.IMPORT_PREFIX;
 import static gov.gtas.rule.builder.RuleTemplateConstants.NEW_LINE;
 import static gov.gtas.rule.builder.RuleTemplateConstants.RULE_PACKAGE_NAME;
 import gov.gtas.bo.RuleHitDetail;
+import gov.gtas.bo.match.PnrAddressLink;
+import gov.gtas.bo.match.PnrCreditCardLink;
+import gov.gtas.bo.match.PnrEmailLink;
+import gov.gtas.bo.match.PnrFrequentFlyerLink;
+import gov.gtas.bo.match.PnrPassengerLink;
+import gov.gtas.bo.match.PnrPhoneLink;
+import gov.gtas.bo.match.PnrTravelAgencyLink;
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
@@ -39,7 +46,11 @@ public class DrlRuleFileBuilder {
 
 	private static final Class<?>[] IMPORT_LIST = { Flight.class,
 			Passenger.class, Document.class, Pnr.class, Address.class,
-			Phone.class, Email.class, FrequentFlyer.class, CreditCard.class, Agency.class };
+			Phone.class, Email.class, FrequentFlyer.class, CreditCard.class,
+			Agency.class, PnrAddressLink.class, PnrCreditCardLink.class,
+			PnrEmailLink.class, PnrFrequentFlyerLink.class,
+			PnrPassengerLink.class, PnrPhoneLink.class,
+			PnrTravelAgencyLink.class};
 
 	private StringBuilder stringBuilder;
 

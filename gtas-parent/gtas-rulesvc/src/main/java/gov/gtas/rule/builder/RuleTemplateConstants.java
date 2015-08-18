@@ -17,6 +17,10 @@ public class RuleTemplateConstants {
 	public static final String FREQUENT_FLYER_VARIABLE_NAME = "$ff";
 	public static final String PNR_VARIABLE_NAME = "$pnr";
 
+	public static final String LINK_VARIABLE_SUFFIX = "link";
+	public static final String LINK_PNR_ID = "pnrId";
+	public static final String LINK_ATTRIBUTE_ID = "linkAttributeId";
+
 	private RuleTemplateConstants() {
 		// to prevent instantiation.
 	}
@@ -36,11 +40,12 @@ public class RuleTemplateConstants {
 	public static final char SPACE_CHAR = ' ';
 	public static final char COMMA_CHAR = ',';
 
+	public static final String REGEX_WILDCARD = ".*";
+
 	public static final String NEW_LINE = "\n";
 	public static final String TRUE_STRING = "true";
 	public static final String FALSE_STRING = "false";
 		
-	public static final String LINK_VARIABLE_SUFFIX = "link";
 	public static final String RULE_PACKAGE_NAME = "package gov.gtas.rule;\n";
 	public static final String IMPORT_PREFIX = "import ";
 	public static final String GLOBAL_RESULT_DECLARATION = "global java.util.List "+RuleServiceConstants.RULE_RESULT_LIST_NAME+";\n\n";

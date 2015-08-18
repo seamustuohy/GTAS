@@ -1,15 +1,30 @@
 package gov.gtas.rule.builder;
 
+import static gov.gtas.rule.builder.RuleTemplateConstants.ADDRESS_VARIABLE_NAME;
+import static gov.gtas.rule.builder.RuleTemplateConstants.DOCUMENT_VARIABLE_NAME;
+import static gov.gtas.rule.builder.RuleTemplateConstants.EMAIL_VARIABLE_NAME;
+import static gov.gtas.rule.builder.RuleTemplateConstants.FLIGHT_VARIABLE_NAME;
+import static gov.gtas.rule.builder.RuleTemplateConstants.FREQUENT_FLYER_VARIABLE_NAME;
+import static gov.gtas.rule.builder.RuleTemplateConstants.LINK_ATTRIBUTE_ID;
+import static gov.gtas.rule.builder.RuleTemplateConstants.LINK_PNR_ID;
+import static gov.gtas.rule.builder.RuleTemplateConstants.LINK_VARIABLE_SUFFIX;
+import static gov.gtas.rule.builder.RuleTemplateConstants.PASSENGER_VARIABLE_NAME;
+import static gov.gtas.rule.builder.RuleTemplateConstants.PHONE_VARIABLE_NAME;
+import static gov.gtas.rule.builder.RuleTemplateConstants.PNR_VARIABLE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.mappings.AddressMapping;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
+import gov.gtas.querybuilder.mappings.EmailMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
+import gov.gtas.querybuilder.mappings.FrequentFlyerMapping;
 import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
+import gov.gtas.querybuilder.mappings.PhoneMapping;
 import gov.gtas.svc.UdrServiceHelper;
 
 import java.text.ParseException;
@@ -34,8 +49,7 @@ public class PnrRuleConditionBuilderTest {
 	@Test
 	public void testSingleConditionPNR() throws ParseException {
 		/*
-		 * just one passenger condition.
-		 * also test BETWEEN operator.
+		 * just one PNR condition.
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PNR,
 				PNRMapping.BAG_COUNT,
@@ -43,217 +57,104 @@ public class PnrRuleConditionBuilderTest {
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
-		System.out.println(result.toString());
 		assertTrue(result.length() > 0);
-		assertEquals("$pnr:PNR("+PNRMapping.BAG_COUNT.getFieldName()+" == 0)\n"
-				+ "$p:Passenger()\n"
-				+ "$plink:PnrPassengerLink(pnrId == $pnr.id, childAttributeId == $p.id)", 
+		assertEquals(
+				PNR_VARIABLE_NAME+":"+EntityEnum.PNR.getEntityName()+"("
+				   +PNRMapping.BAG_COUNT.getFieldName()+" == 0)\n"
+				+ PASSENGER_VARIABLE_NAME+":"+EntityEnum.PASSENGER.getEntityName()+"()\n"
+				+ PASSENGER_VARIABLE_NAME+LINK_VARIABLE_SUFFIX+":PnrPassengerLink("+LINK_PNR_ID+" == "
+			       +PNR_VARIABLE_NAME+".id, "+LINK_ATTRIBUTE_ID+" == "+PASSENGER_VARIABLE_NAME+".id)",
 				result.toString().trim());
 	}
 
-	//@Test
-	public void testSingleConditionFlight() throws ParseException {
+	@Test
+	public void testSingleConditionPnrFlight() throws ParseException {
 		/*
-		 * just one flight.
-		 * also test IN operator.
+		 * no direct PNR criterion, only ADDRESS criteria
+		 * no passenger criteria
+		 * single flight criterion with IN operator
 		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
+		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.ADDRESS,
+				AddressMapping.COUNTRY,
+				OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"}, ValueTypesEnum.STRING);
+		testTarget.addRuleCondition(cond);
+		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.ADDRESS,
+				AddressMapping.CITY,
+				OperatorCodeEnum.IN, new String[]{"FOO", "BAR"}, ValueTypesEnum.STRING);
+		testTarget.addRuleCondition(cond);
+		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
 				FlightMapping.AIRPORT_DESTINATION,
 				OperatorCodeEnum.IN, new String[]{"DBY","XYZ","PQR"}, ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" in (\"DBY\", \"XYZ\", \"PQR\"))\n"
-				+"$p:Passenger() from $f.passengers",
+		assertEquals(
+				FLIGHT_VARIABLE_NAME+":"+EntityEnum.FLIGHT.getEntityName()+"("
+				+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" in (\"DBY\", \"XYZ\", \"PQR\"))\n"
+				+ PASSENGER_VARIABLE_NAME+":"+EntityEnum.PASSENGER.getEntityName()+"() from "+ FLIGHT_VARIABLE_NAME+".passengers\n"
+				+ ADDRESS_VARIABLE_NAME+":"+EntityEnum.ADDRESS.getEntityName()+"(country != \"USA\", city in (\"FOO\", \"BAR\"))\n"
+				+ PNR_VARIABLE_NAME+":"+EntityEnum.PNR.getEntityName()+"()\n"
+				+ ADDRESS_VARIABLE_NAME+LINK_VARIABLE_SUFFIX+":PnrAddressLink("+LINK_PNR_ID+" == "
+				       +PNR_VARIABLE_NAME+".id, "+LINK_ATTRIBUTE_ID+" == "+ADDRESS_VARIABLE_NAME+".id)\n"
+				+ PASSENGER_VARIABLE_NAME+LINK_VARIABLE_SUFFIX+":PnrPassengerLink("+LINK_PNR_ID+" == "
+			       +PNR_VARIABLE_NAME+".id, "+LINK_ATTRIBUTE_ID+" == "+PASSENGER_VARIABLE_NAME+".id)",
 				result.toString().trim());
 	}
 
-
-	//@Test
-	public void testSingleConditionDocument() throws ParseException {
+	@Test
+	public void testSingleConditionPnrDocument() throws ParseException {
 		/*
 		 * test just one document condition.
-		 * also test NOT_EQUAL operator.
+		 * also test multiple PNR related entities.
 		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
+		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PHONE,
+				PhoneMapping.PHONE_NUMBER,
+				OperatorCodeEnum.NOT_CONTAINS, new String[]{"456"}, ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
-		StringBuilder result = new StringBuilder();
-		testTarget.buildConditionsAndApppend(result);
-		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\")\n"
-				+"$p:Passenger(id == $d.passenger.id)", 
-				result.toString().trim());
-	}
-	
-	//@Test
-	public void testConditionEqual() throws ParseException {
-		/*
-		 * test EQUAL operator
-		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
-				FlightMapping.FLIGHT_NUMBER,
-				OperatorCodeEnum.EQUAL, "12345", ValueTypesEnum.STRING);
+		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.EMAIL,
+				EmailMapping.DOMAIN,
+				OperatorCodeEnum.NOT_ENDS_WITH, new String[]{".com"}, ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
-		StringBuilder result = new StringBuilder();
-		testTarget.buildConditionsAndApppend(result);
-		assertTrue(result.length() > 0);
-		assertEquals("$f:Flight("+FlightMapping.FLIGHT_NUMBER.getFieldName()+" == \"12345\")\n"
-				+"$p:Passenger() from $f.passengers",
-				result.toString().trim());
-	}
-	
-	//@Test
-	public void testMultipleConditionsDocument() throws ParseException {
-		/*
-		 * test multiple document conditions.
-		 * also test GREATER_EQUAL and NOT_EQUAL.
-		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
+		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FREQUENT_FLYER,
+				FrequentFlyerMapping.AIRLINE,
+				OperatorCodeEnum.NOT_EQUAL, new String[]{"NZ"}, ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_DATE,
-				OperatorCodeEnum.GREATER_OR_EQUAL, "2010-01-01", ValueTypesEnum.DATE);
+				DocumentMapping.ISSUANCE_COUNTRY,
+				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		System.out.println(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
-		+DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
-		+"$p:Passenger(id == $d.passenger.id)", 
-		result.toString().trim());
-	}
-	
-	// TODO: Amit review
-	//@Test
-	public void testDocumentWithTypeEquality() throws ParseException {
 		/*
-		 * one document condition and one type equality
+			$d:Document(issuanceCountry != "US")
+			$p:Passenger(id == $d.passenger.id)
+			$ph:Phone(phone_number != null, phone_number not matches ".*456.*")
+			$e:Email(domain != null, domain not matches ".*.com.*")
+			$ff:FrequentFlyer(ff_airline != "NZ")
+			$pnr:Pnr()
+			$phlink:PnrPhoneLink(pnrId == $pnr.id, linkAttributeId == $ph.id)
+			$elink:PnrEmailLink(pnrId == $pnr.id, linkAttributeId == $e.id)
+			$fflink:PnrFrequentFlyerLink(pnrId == $pnr.id, linkAttributeId == $ff.id)
+			$plink:PnrPassengerLink(pnrId == $pnr.id, linkAttributeId == $p.id)
 		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
-		testTarget.addRuleCondition(cond);
-		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.DOCUMENT_TYPE,
-				OperatorCodeEnum.EQUAL, "P", ValueTypesEnum.STRING);
-		testTarget.addRuleCondition(cond);
-		StringBuilder result = new StringBuilder();
-		testTarget.buildConditionsAndApppend(result);
-		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
-						+ DocumentMapping.DOCUMENT_TYPE.getFieldName()+" == \"P\")\n"
-						+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
-		result.toString().trim());
-	}
-	//@Test
-	public void testDocumentTypeEqualityOnly() throws ParseException {
-		/*
-		 * one document condition and one type equality
-		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.DOCUMENT_TYPE,
-				OperatorCodeEnum.EQUAL, "P", ValueTypesEnum.STRING);
-		testTarget.addRuleCondition(cond);
-		StringBuilder result = new StringBuilder();
-		testTarget.buildConditionsAndApppend(result);
-		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("	+ DocumentMapping.DOCUMENT_TYPE.getFieldName()+" == \"P\")\n"
-				+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
-		result.toString().trim());
-	}
-	//@Test
-	public void testDocumentWithTypeInEquality() throws ParseException {
-		/*
-		 * one document condition and one type equality
-		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
-		testTarget.addRuleCondition(cond);
-		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.DOCUMENT_TYPE,
-				OperatorCodeEnum.NOT_EQUAL, "P", ValueTypesEnum.STRING);
-		testTarget.addRuleCondition(cond);
-		StringBuilder result = new StringBuilder();
-		testTarget.buildConditionsAndApppend(result);
-		System.out.println(result);
-		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
-			+ DocumentMapping.DOCUMENT_TYPE.getFieldName()+" != \"P\")\n"
-			+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
-		result.toString().trim());
-	}
-	//@Test
-	public void testDocumentTypeInEqualityOnly() throws ParseException {
-		/*
-		 * one document condition and one type inequality
-		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.DOCUMENT_TYPE,
-				OperatorCodeEnum.NOT_EQUAL, "P", ValueTypesEnum.STRING);
-		testTarget.addRuleCondition(cond);
-		StringBuilder result = new StringBuilder();
-		testTarget.buildConditionsAndApppend(result);
-		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("	+ DocumentMapping.DOCUMENT_TYPE.getFieldName()+" != \"P\")\n"
-				+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
-		result.toString().trim());
-	}
-	//@Test
-	public void testMultipleConditionsPersonFlightDocument() throws ParseException {
-		/*
-		 * conditions for passenger, document and Flight.
-		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
-		testTarget.addRuleCondition(cond);
-		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
-				DocumentMapping.ISSUANCE_DATE,
-				OperatorCodeEnum.GREATER_OR_EQUAL, "2010-01-01", ValueTypesEnum.DATE);
-		testTarget.addRuleCondition(cond);
-
-		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
-				PassengerMapping.DOB,
-				OperatorCodeEnum.BETWEEN, new String[]{"1990-01-01","1998-12-31"}, ValueTypesEnum.DATE);
-		testTarget.addRuleCondition(cond);
-
-		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
-				FlightMapping.AIRPORT_DESTINATION,
-				OperatorCodeEnum.EQUAL, "DBY", ValueTypesEnum.STRING);
-		testTarget.addRuleCondition(cond);
-		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
-				FlightMapping.FLIGHT_NUMBER,
-				OperatorCodeEnum.EQUAL, "2231", ValueTypesEnum.INTEGER);
-		testTarget.addRuleCondition(cond);
-
-		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
-				PassengerMapping.LAST_NAME,
-				OperatorCodeEnum.EQUAL, "Jones", ValueTypesEnum.STRING);
-		testTarget.addRuleCondition(cond);
-				
-		StringBuilder result = new StringBuilder();
-		testTarget.buildConditionsAndApppend(result);
-		assertTrue(result.length() > 0);
-		System.out.println(result.toString());
 		assertEquals(
-				"$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
-		            +DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
-   				+"$p:Passenger("
-					+PassengerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
-					+PassengerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\", "
-					+PassengerMapping.LAST_NAME.getFieldName()+" == \"Jones\", "
-					+"id == $d.passenger.id)\n"
-
-		        + "$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" == \"DBY\", "
-		           +FlightMapping.FLIGHT_NUMBER.getFieldName()+" == 2231)\n"
-		        +"Passenger(id == $p.id) from $f.passengers",
-		result.toString().trim());
+				DOCUMENT_VARIABLE_NAME+":"+EntityEnum.DOCUMENT.getEntityName()+"("    +DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\")\n"
+				+ PASSENGER_VARIABLE_NAME+":"+EntityEnum.PASSENGER.getEntityName()+"(id == "+DOCUMENT_VARIABLE_NAME+".passenger.id)\n"
+				+ PHONE_VARIABLE_NAME+":"+EntityEnum.PHONE.getEntityName()+"(phone_number != null, phone_number not matches \".*456.*\")\n"
+				+ EMAIL_VARIABLE_NAME+":"+EntityEnum.EMAIL.getEntityName()+"(domain != null, domain not matches \".*.com.*\")\n"
+				+ FREQUENT_FLYER_VARIABLE_NAME+":"+EntityEnum.FREQUENT_FLYER.getEntityName()+"(ff_airline != \"NZ\")\n"
+				+ PNR_VARIABLE_NAME+":"+EntityEnum.PNR.getEntityName()+"()\n"
+				+ PHONE_VARIABLE_NAME+LINK_VARIABLE_SUFFIX+":PnrPhoneLink("+LINK_PNR_ID+" == "
+					       +PNR_VARIABLE_NAME+".id, "+LINK_ATTRIBUTE_ID+" == "+PHONE_VARIABLE_NAME+".id)\n"
+				+ EMAIL_VARIABLE_NAME+LINK_VARIABLE_SUFFIX+":PnrEmailLink("+LINK_PNR_ID+" == "
+					       +PNR_VARIABLE_NAME+".id, "+LINK_ATTRIBUTE_ID+" == "+EMAIL_VARIABLE_NAME+".id)\n"
+				+ FREQUENT_FLYER_VARIABLE_NAME+LINK_VARIABLE_SUFFIX+":PnrFrequentFlyerLink("+LINK_PNR_ID+" == "
+					       +PNR_VARIABLE_NAME+".id, "+LINK_ATTRIBUTE_ID+" == "+FREQUENT_FLYER_VARIABLE_NAME+".id)\n"
+				+ PASSENGER_VARIABLE_NAME+LINK_VARIABLE_SUFFIX+":PnrPassengerLink("+LINK_PNR_ID+" == "
+					       +PNR_VARIABLE_NAME+".id, "+LINK_ATTRIBUTE_ID+" == "+PASSENGER_VARIABLE_NAME+".id)",
+				result.toString().trim());
 	}
 }

@@ -109,23 +109,27 @@ public abstract class EntityConditionBuilder {
 			break;
 		case BEGINS_WITH:
 		case ENDS_WITH:
-		case CONTAINS:
 			bldr.append(attributeName).append(" ")
 			.append(OperatorCodeEnum.IS_NOT_EMPTY.getOperatorString());
 			bldr.append(", ").append(attributeName).append(" ")
 			.append(opCode.getOperatorString()).append(" ");
 			RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr);
             break;			
-		case NOT_BEGINS_WITH:
-		case NOT_ENDS_WITH:
-		case NOT_CONTAINS:
-			bldr.append("!(")
-			.append(attributeName).append(" ")
+		case CONTAINS:
+			bldr.append(attributeName).append(" ")
 			.append(OperatorCodeEnum.IS_NOT_EMPTY.getOperatorString());
 			bldr.append(", ").append(attributeName).append(" ")
 			.append(opCode.getOperatorString()).append(" ");
-		    RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr);
-				bldr.append(")");
+			RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr, true, true);//begins and ends with wildcard
+            break;			
+		case NOT_BEGINS_WITH:
+		case NOT_ENDS_WITH:
+		case NOT_CONTAINS:
+			bldr.append(attributeName).append(" ")
+			.append(OperatorCodeEnum.IS_NOT_EMPTY.getOperatorString());
+			bldr.append(", ").append(attributeName).append(" ")
+			.append(opCode.getOperatorString()).append(" ");
+		    RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr, true, true);//begins and ends with wildcard
             break;			
 		case BETWEEN:
 			bldr.append(attributeName).append(" >= ");

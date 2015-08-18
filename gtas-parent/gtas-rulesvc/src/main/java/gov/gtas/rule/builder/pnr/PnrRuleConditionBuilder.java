@@ -1,5 +1,7 @@
 package gov.gtas.rule.builder.pnr;
 
+import static gov.gtas.rule.builder.RuleTemplateConstants.LINK_ATTRIBUTE_ID;
+import static gov.gtas.rule.builder.RuleTemplateConstants.LINK_PNR_ID;
 import gov.gtas.bo.match.PnrAddressLink;
 import gov.gtas.bo.match.PnrCreditCardLink;
 import gov.gtas.bo.match.PnrEmailLink;
@@ -126,8 +128,8 @@ public class PnrRuleConditionBuilder {
 		parentStringBuilder.append(linkVarName)
 				.append(RuleTemplateConstants.COLON_CHAR).append(linkClassName)
 				.append(RuleTemplateConstants.LEFT_PAREN_CHAR)
-				.append("pnrId == ").append(pnrVarName).append(".id, ")
-				.append("childAttributeId == ")
+				.append(LINK_PNR_ID).append(" == ").append(pnrVarName).append(".id, ")
+				.append(LINK_ATTRIBUTE_ID).append(" == ")
 				.append(entBuilder.getDrlVariableName()).append(".id)\n");
 
 	}
