@@ -66,20 +66,26 @@ public class PnrUtils {
         p.setMiddleName(safeGet(strs, 10));
         p.setPassengerType("P");
         
-        TravelerDetails td = tif.getTravelerDetails().get(0);
-        p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());
+        if (tif.getTravelerDetails().size() > 0) {
+            TravelerDetails td = tif.getTravelerDetails().get(0);
+            p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());            
+        }
         
         return p;
     }
     
     public static PassengerVo createPassenger(TIF tif) throws ParseException {
-        PassengerVo p = new PassengerVo();
-        TravelerDetails td = tif.getTravelerDetails().get(0);
-        p.setLastName(tif.getTravelerSurname());
-        p.setFirstName(td.getTravelerGivenName());
-        p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());
+        if (tif.getTravelerDetails().size() > 0) {
+            PassengerVo p = new PassengerVo();
+            p.setPassengerType("P");
+            TravelerDetails td = tif.getTravelerDetails().get(0);
+            p.setLastName(tif.getTravelerSurname());
+            p.setFirstName(td.getTravelerGivenName());
+            p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());
+            return p;
+        }
         
-        return p;
+        return null;
     }
     
     public static <T> T safeGet(List<T> list, int i) {

@@ -198,12 +198,14 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
      */
     private void processGroup2(TIF tif) throws ParseException {
         FTI fti = getConditionalSegment(FTI.class);
-        FrequentFlierVo ffvo = new FrequentFlierVo();
-        FrequentFlierDetails ffdetails = fti.getFrequentFlierInfo().get(0);
-        ffvo.setAirline(ffdetails.getAirlineCode());
-        ffvo.setNumber(ffdetails.getFreqTravelerNumber());
-        currentPnr.getFrequentFlierDetails().add(ffvo);
-
+        if (fti != null) {
+            FrequentFlierVo ffvo = new FrequentFlierVo();
+            FrequentFlierDetails ffdetails = fti.getFrequentFlierInfo().get(0);
+            ffvo.setAirline(ffdetails.getAirlineCode());
+            ffvo.setNumber(ffdetails.getFreqTravelerNumber());
+            currentPnr.getFrequentFlierDetails().add(ffvo);
+        }
+        
         for (;;) {
             IFT ift = getConditionalSegment(IFT.class);
             if (ift == null) {
@@ -457,11 +459,11 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     }
     
     private void processGroup8(EQN eqn) throws ParseException {
-        RCI rci = getMandatorySegment(RCI.class);
+        getMandatorySegment(RCI.class);
     }
 
     /**
-     * non-air segments: car, hotel, rail
+     * non-air segments: car, hotel, rail.  Not used.
      */
     private void processGroup9(MSG msg) throws ParseException {
         for (;;) {
