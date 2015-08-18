@@ -79,6 +79,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     @Override
     public void parsePayload() throws ParseException {
         MSG msg = getMandatorySegment(MSG.class);
+        parsedMessage.setMessageCode(msg.getMessageTypeCode());
 
         // specifies the sender/reporting party of the message
         ORG org = getMandatorySegment(ORG.class);
@@ -167,6 +168,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (ebd == null) {
                 break;
             }
+            processExcessBaggage(ebd);
         }
         
         TIF tif = getMandatorySegment(TIF.class);
@@ -206,8 +208,10 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
         }
 
-        REF ref = getConditionalSegment(REF.class);
+        getConditionalSegment(REF.class);
         EBD ebd = getConditionalSegment(EBD.class);
+        processExcessBaggage(ebd);
+
         for (;;) {
             FAR far = getConditionalSegment(FAR.class);
             if (far == null) {
@@ -231,7 +235,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
 
         if (!paxCreated) {
-            // all we can do is create the passenger from the TIF+REF
+            // all we can do is create the passenger from the TIF segment
             PassengerVo p = PnrUtils.createPassenger(tif);
             currentPnr.getPassengers().add(p);
         }
@@ -275,7 +279,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     }
 
     /**
-     * Form of payment info
+     * Form of payment info: get credit card if exists
      */
     private void processGroup4(FOP fop) throws ParseException {
         boolean ccCreated = false;
@@ -469,5 +473,17 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         PhoneVo rv = new PhoneVo();
         rv.setNumber(ParseUtils.prepTelephoneNumber(number));
         return rv;
+    }
+    
+    private void processExcessBaggage(EBD ebd) {
+        if (ebd != null) {
+            try {
+                int n = Integer.valueOf(ebd.getNumberInExcess());
+                currentPnr.setNumBags(currentPnr.getNumBags() + n);
+            } catch (NumberFormatException e) {
+                // do nothing
+                e.printStackTrace();
+            }
+        }
     }
 }

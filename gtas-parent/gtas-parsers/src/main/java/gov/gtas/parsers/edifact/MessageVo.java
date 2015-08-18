@@ -12,7 +12,6 @@ public class MessageVo {
     private Date transmissionDate;
     private String messageType;
     private String version;
-    private String messageCode;
     
     public byte[] getRaw() {
         return raw;
@@ -49,12 +48,6 @@ public class MessageVo {
     }
     public void setVersion(String version) {
         this.version = version;
-    }
-    public String getMessageCode() {
-        return messageCode;
-    }
-    public void setMessageCode(String messageCode) {
-        this.messageCode = messageCode;
     }
 
     @Override

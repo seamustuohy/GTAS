@@ -39,6 +39,11 @@ public class PnrVo {
     private List<CreditCardVo> creditCards = new ArrayList<>();
     private List<FrequentFlierVo> frequentFlierDetails = new ArrayList<>();
     
+    public PnrVo() {
+        this.numBags = 0;
+        this.numPassengers = 0;
+    }
+    
     public String getRecordLocator() {
         return recordLocator;
     }
