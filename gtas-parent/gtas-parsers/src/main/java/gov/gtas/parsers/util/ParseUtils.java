@@ -189,4 +189,14 @@ public class ParseUtils {
         Period p = Period.between(birthday, today);
         return p.getYears();
     }
+    
+    public static Integer returnNumberOrNull(String s) {
+        try {
+            return Integer.valueOf(s);
+        } catch (NumberFormatException e) {
+            // do nothing
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

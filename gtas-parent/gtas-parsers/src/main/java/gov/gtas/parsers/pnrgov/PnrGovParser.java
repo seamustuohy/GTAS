@@ -35,7 +35,9 @@ import gov.gtas.parsers.pnrgov.segment.SRC;
 import gov.gtas.parsers.pnrgov.segment.SSD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TBD;
+import gov.gtas.parsers.pnrgov.segment.TBD.BagDetails;
 import gov.gtas.parsers.pnrgov.segment.TIF;
+import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
 import gov.gtas.parsers.pnrgov.segment.TKT;
 import gov.gtas.parsers.pnrgov.segment.TRA;
 import gov.gtas.parsers.pnrgov.segment.TRI;
@@ -164,6 +166,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
 
         for (;;) {
+            // excess baggage information for all passengers
             EBD ebd = getConditionalSegment(EBD.class);
             if (ebd == null) {
                 break;
@@ -209,8 +212,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
 
         getConditionalSegment(REF.class);
-        EBD ebd = getConditionalSegment(EBD.class);
-        processExcessBaggage(ebd);
+        getConditionalSegment(EBD.class);
 
         for (;;) {
             FAR far = getConditionalSegment(FAR.class);
@@ -231,6 +233,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
                 PassengerVo p = PnrUtils.createPassenger(ssr, tif);
                 currentPnr.getPassengers().add(p);
                 paxCreated = true;
+                currentPnr.setNumPassengers(currentPnr.getNumPassengers() + 1);
             }
         }
 
@@ -238,6 +241,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             // all we can do is create the passenger from the TIF segment
             PassengerVo p = PnrUtils.createPassenger(tif);
             currentPnr.getPassengers().add(p);
+            currentPnr.setNumPassengers(currentPnr.getNumPassengers() + 1);
         }
         
         for (;;) {
@@ -309,7 +313,8 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     }
 
     /**
-     * Flight info
+     * Flight info: repeats for each flight segment in the passenger record’s
+     * itinerary.
      */
     private void processGroup5(TVL tvl) throws ParseException {
         FlightVo f = new FlightVo();
@@ -403,9 +408,52 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
      * boarding, seat number and checked bag info
      */
     private void processGroup7(TRI tri) throws ParseException {
+        PassengerVo thePax = null;
+        String refNumber = tri.getTravelerReferenceNumber();
+        if (refNumber != null) {
+            for (PassengerVo pax : currentPnr.getPassengers()) {
+                if (refNumber.equals(pax.getTravelerReferenceNumber())) {
+                    thePax = pax;
+                    break;
+                }
+            }
+        }
+        
         TIF tif = getConditionalSegment(TIF.class);
+        if (thePax == null && tif != null) {
+            // try finding pax based on tif info
+            String surname = tif.getTravelerSurname();
+            List<TravelerDetails> td = tif.getTravelerDetails();
+            if (td != null && td.size() > 0) {
+                String firstName = td.get(0).getTravelerGivenName();
+                for (PassengerVo pax : currentPnr.getPassengers()) {
+                    if (surname.equals(pax.getLastName()) && firstName.equals(pax.getFirstName())) {
+                        thePax = pax;
+                        break;
+                    }
+                }
+            }
+        }
+        
         SSD ssd = getConditionalSegment(SSD.class);
+        if (thePax != null && ssd != null) {
+            thePax.setSeat(ssd.getSeatNumber());
+        }
+        
         TBD tbd = getConditionalSegment(TBD.class);
+        if (tbd == null) {
+            return;
+        }
+        
+        Integer n = tbd.getNumBags();
+        if (n != null) {
+            currentPnr.setNumBags(currentPnr.getNumBags() + n);
+        } else {
+            for (BagDetails bd : tbd.getBagDetails()) {
+                int tmp = bd.getNumConsecutiveTags();
+                currentPnr.setNumBags(currentPnr.getNumBags() + tmp);                
+            }
+        }
     }
     
     private void processGroup8(EQN eqn) throws ParseException {
@@ -477,12 +525,9 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     
     private void processExcessBaggage(EBD ebd) {
         if (ebd != null) {
-            try {
-                int n = Integer.valueOf(ebd.getNumberInExcess());
+            Integer n = ParseUtils.returnNumberOrNull(ebd.getNumberInExcess());
+            if (n != null) {
                 currentPnr.setNumBags(currentPnr.getNumBags() + n);
-            } catch (NumberFormatException e) {
-                // do nothing
-                e.printStackTrace();
             }
         }
     }

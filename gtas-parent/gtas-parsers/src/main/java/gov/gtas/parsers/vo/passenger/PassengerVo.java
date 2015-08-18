@@ -12,7 +12,7 @@ public class PassengerVo {
      * a unique passenger reference identifier (from PNR) used to cross
      * reference passenger information in a PNR
      */
-    private String referenceId;
+    private String travelerReferenceNumber;
     
     private String title;    
     private String firstName;
@@ -29,6 +29,9 @@ public class PassengerVo {
     private String debarkation;
     private String embarkCountry;
     private String debarkCountry;
+    private Boolean deleted;
+    private String seat;
+    
     private List<DocumentVo> documents = new ArrayList<>();
     
     public void addDocument(DocumentVo d) {
@@ -39,11 +42,11 @@ public class PassengerVo {
         return documents;
     }
 
-    public String getReferenceId() {
-        return referenceId;
+    public String getTravelerReferenceNumber() {
+        return travelerReferenceNumber;
     }
-    public void setReferenceId(String referenceId) {
-        this.referenceId = referenceId;
+    public void setTravelerReferenceNumber(String travelerReferenceNumber) {
+        this.travelerReferenceNumber = travelerReferenceNumber;
     }
     public String getTitle() {
         return title;
@@ -134,6 +137,15 @@ public class PassengerVo {
     }
     public void setDebarkCountry(String debarkCountry) {
         this.debarkCountry = debarkCountry;
+    }
+    public String getSeat() {
+        return seat;
+    }
+    public void setSeat(String seat) {
+        this.seat = seat;
+    }
+    public void setDocuments(List<DocumentVo> documents) {
+        this.documents = documents;
     }
 
     @Override

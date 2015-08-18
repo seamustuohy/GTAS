@@ -73,6 +73,10 @@ public class Passenger extends BaseEntityAudit {
     @Column(name = "debark_country")
     private String debarkCountry;
     
+    private Boolean deleted;
+    
+    private String seat;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger", fetch = FetchType.EAGER)
     private Set<Document> documents = new HashSet<>();
     
@@ -188,6 +192,18 @@ public class Passenger extends BaseEntityAudit {
     }
     public void setPnrs(Set<Pnr> pnrs) {
         this.pnrs = pnrs;
+    }
+    public Boolean getDeleted() {
+        return deleted;
+    }
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+    public String getSeat() {
+        return seat;
+    }
+    public void setSeat(String seat) {
+        this.seat = seat;
     }
 
     @Override

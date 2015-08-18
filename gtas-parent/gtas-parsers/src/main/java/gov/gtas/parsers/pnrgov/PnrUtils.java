@@ -8,8 +8,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.pnrgov.segment.IFT;
-import gov.gtas.parsers.pnrgov.segment.REF;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TIF;
 import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
@@ -69,7 +67,7 @@ public class PnrUtils {
         p.setPassengerType("P");
         
         TravelerDetails td = tif.getTravelerDetails().get(0);
-        p.setReferenceId(td.getTravelerReferenceNumber());
+        p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());
         
         return p;
     }
@@ -79,7 +77,7 @@ public class PnrUtils {
         TravelerDetails td = tif.getTravelerDetails().get(0);
         p.setLastName(tif.getTravelerSurname());
         p.setFirstName(td.getTravelerGivenName());
-        p.setReferenceId(td.getTravelerReferenceNumber());
+        p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());
         
         return p;
     }
