@@ -8,6 +8,7 @@ import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
+import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.svc.UdrServiceHelper;
 
@@ -17,7 +18,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RuleConditionBuilderTest {
+public class PnrRuleConditionBuilderTest {
 	
 	private RuleConditionBuilder testTarget;
 
@@ -31,22 +32,26 @@ public class RuleConditionBuilderTest {
 	}
 
 	@Test
-	public void testSingleConditionPassenger() throws ParseException {
+	public void testSingleConditionPNR() throws ParseException {
 		/*
 		 * just one passenger condition.
 		 * also test BETWEEN operator.
 		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
-				PassengerMapping.DOB,
-				OperatorCodeEnum.BETWEEN, new String[]{"1990-01-01","1998-12-31"}, ValueTypesEnum.DATE);
+		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PNR,
+				PNRMapping.BAG_COUNT,
+				OperatorCodeEnum.EQUAL, new String[]{"0"}, ValueTypesEnum.INTEGER);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
+		System.out.println(result.toString());
 		assertTrue(result.length() > 0);
-		assertEquals("$p:Passenger("+PassengerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
-		+PassengerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\")", result.toString().trim());
+		assertEquals("$pnr:PNR("+PNRMapping.BAG_COUNT.getFieldName()+" == 0)\n"
+				+ "$p:Passenger()\n"
+				+ "$plink:PnrPassengerLink(pnrId == $pnr.id, childAttributeId == $p.id)", 
+				result.toString().trim());
 	}
-	@Test
+
+	//@Test
 	public void testSingleConditionFlight() throws ParseException {
 		/*
 		 * just one flight.
@@ -65,7 +70,7 @@ public class RuleConditionBuilderTest {
 	}
 
 
-	@Test
+	//@Test
 	public void testSingleConditionDocument() throws ParseException {
 		/*
 		 * test just one document condition.
@@ -83,7 +88,7 @@ public class RuleConditionBuilderTest {
 				result.toString().trim());
 	}
 	
-	@Test
+	//@Test
 	public void testConditionEqual() throws ParseException {
 		/*
 		 * test EQUAL operator
@@ -100,7 +105,7 @@ public class RuleConditionBuilderTest {
 				result.toString().trim());
 	}
 	
-	@Test
+	//@Test
 	public void testMultipleConditionsDocument() throws ParseException {
 		/*
 		 * test multiple document conditions.
@@ -125,7 +130,7 @@ public class RuleConditionBuilderTest {
 	}
 	
 	// TODO: Amit review
-	@Test
+	//@Test
 	public void testDocumentWithTypeEquality() throws ParseException {
 		/*
 		 * one document condition and one type equality
@@ -146,7 +151,7 @@ public class RuleConditionBuilderTest {
 						+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
 		result.toString().trim());
 	}
-	@Test
+	//@Test
 	public void testDocumentTypeEqualityOnly() throws ParseException {
 		/*
 		 * one document condition and one type equality
@@ -162,7 +167,7 @@ public class RuleConditionBuilderTest {
 				+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
 		result.toString().trim());
 	}
-	@Test
+	//@Test
 	public void testDocumentWithTypeInEquality() throws ParseException {
 		/*
 		 * one document condition and one type equality
@@ -184,7 +189,7 @@ public class RuleConditionBuilderTest {
 			+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
 		result.toString().trim());
 	}
-	@Test
+	//@Test
 	public void testDocumentTypeInEqualityOnly() throws ParseException {
 		/*
 		 * one document condition and one type inequality
@@ -200,7 +205,7 @@ public class RuleConditionBuilderTest {
 				+"$p:"+ EntityEnum.PASSENGER.getEntityName()+"(id == $d."+DocumentMapping.DOCUMENT_OWNER_ID.getFieldName()+")",
 		result.toString().trim());
 	}
-	@Test
+	//@Test
 	public void testMultipleConditionsPersonFlightDocument() throws ParseException {
 		/*
 		 * conditions for passenger, document and Flight.

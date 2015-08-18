@@ -5,9 +5,16 @@ import static gov.gtas.rule.builder.RuleTemplateConstants.IMPORT_PREFIX;
 import static gov.gtas.rule.builder.RuleTemplateConstants.NEW_LINE;
 import static gov.gtas.rule.builder.RuleTemplateConstants.RULE_PACKAGE_NAME;
 import gov.gtas.bo.RuleHitDetail;
+import gov.gtas.model.Address;
+import gov.gtas.model.Agency;
+import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
+import gov.gtas.model.Email;
 import gov.gtas.model.Flight;
+import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.Phone;
+import gov.gtas.model.Pnr;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 
@@ -30,7 +37,9 @@ public class DrlRuleFileBuilder {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DrlRuleFileBuilder.class);
 
-	private static final Class<?>[] IMPORT_LIST = { Flight.class, Passenger.class, Document.class };
+	private static final Class<?>[] IMPORT_LIST = { Flight.class,
+			Passenger.class, Document.class, Pnr.class, Address.class,
+			Phone.class, Email.class, FrequentFlyer.class, CreditCard.class, Agency.class };
 
 	private StringBuilder stringBuilder;
 
@@ -45,7 +54,8 @@ public class DrlRuleFileBuilder {
 		logger.info("DrlRuleFileBuilder - generating DRL code for UDR with title:"
 				+ udrRule.getTitle());
 		for (Rule rule : udrRule.getEngineRules()) {
-			String drl = String.format(rule.getRuleDrl(), udrRule.getId(), rule.getId());
+			String drl = String.format(rule.getRuleDrl(), udrRule.getId(),
+					rule.getId());
 			this.stringBuilder.append(drl).append(StringUtils.LF);
 		}
 		return this;
@@ -59,15 +69,15 @@ public class DrlRuleFileBuilder {
 		this.stringBuilder.append(RULE_PACKAGE_NAME).append(IMPORT_PREFIX)
 				.append(RuleHitDetail.class.getName()).append(";")
 				.append(NEW_LINE);
-		        for(Class<?> clazz: IMPORT_LIST){
-		        	this.stringBuilder.append(IMPORT_PREFIX)
-		        	.append(clazz.getName()).append(";").append(NEW_LINE);
-		        }
+		for (Class<?> clazz : IMPORT_LIST) {
+			this.stringBuilder.append(IMPORT_PREFIX).append(clazz.getName())
+					.append(";").append(NEW_LINE);
+		}
 	}
 
-//	private void addRuleHeader(UdrRule parent, Rule rule) {
-//		this.stringBuilder.append("rule \"").append(parent.getTitle())
-//				.append(":").append(rule.getRuleIndex()).append("\"")
-//				.append(NEW_LINE).append("when\n");
-//	}
+	// private void addRuleHeader(UdrRule parent, Rule rule) {
+	// this.stringBuilder.append("rule \"").append(parent.getTitle())
+	// .append(":").append(rule.getRuleIndex()).append("\"")
+	// .append(NEW_LINE).append("when\n");
+	// }
 }

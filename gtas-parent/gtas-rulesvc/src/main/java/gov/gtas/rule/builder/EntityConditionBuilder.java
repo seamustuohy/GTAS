@@ -50,7 +50,7 @@ public abstract class EntityConditionBuilder {
     /**
      * This builder can be reused after calling reset.
      */
-	protected void reset() {
+	public void reset() {
 		this.andConnectorIsComma = true;
 		this.conditionList.clear();
 	}

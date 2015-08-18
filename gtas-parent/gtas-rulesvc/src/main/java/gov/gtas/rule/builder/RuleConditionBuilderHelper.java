@@ -14,6 +14,7 @@ import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.AddressMapping;
 import gov.gtas.querybuilder.mappings.CreditCardMapping;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
+import gov.gtas.querybuilder.mappings.EmailMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.querybuilder.mappings.FrequentFlyerMapping;
 import gov.gtas.querybuilder.mappings.IEntityMapping;
@@ -145,7 +146,11 @@ public class RuleConditionBuilderHelper {
 	    	case CREDIT_CARD:
 	    		ret = extractFriendlyName(CreditCardMapping.values(), field);
 	    		break;
-    		default:
+	    	case EMAIL:
+	    		ret = extractFriendlyName(EmailMapping.values(), field);
+	    		break;
+	    	case HITS:
+	    		//NA
     			break;
     	}
     	return ret;

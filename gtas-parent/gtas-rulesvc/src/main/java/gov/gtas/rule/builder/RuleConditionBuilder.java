@@ -9,10 +9,12 @@ import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.rule.builder.pnr.PnrRuleConditionBuilder;
 
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Generates the "when" part of a DRL rule.
@@ -24,6 +26,8 @@ public class RuleConditionBuilder {
 	private PassengerConditionBuilder passengerConditionBuilder;
 	private DocumentConditionBuilder documentConditionBuilder;
 	private FlightConditionBuilder flightConditionBuilder;
+
+	private PnrRuleConditionBuilder pnrRuleConditionBuilder;
 
 	private String passengerVariableName;
 	private String flightVariableName;
@@ -39,11 +43,27 @@ public class RuleConditionBuilder {
 	 * (i.e., One Passenger, one document, one flight.)
 	 * 
 	 */
-	public RuleConditionBuilder(final String passengerVariableName,
-			final String flightVariableName, final String documentVariableName) {
+//	public RuleConditionBuilder(final String passengerVariableName,
+//			final String flightVariableName, final String documentVariableName) {
+//		
+//		this.passengerVariableName = passengerVariableName;
+//		this.flightVariableName = flightVariableName;
+//		
+//		this.passengerConditionBuilder = new PassengerConditionBuilder(
+//				passengerVariableName);
+//		this.documentConditionBuilder = new DocumentConditionBuilder(
+//				documentVariableName, passengerVariableName);
+//		this.flightConditionBuilder = new FlightConditionBuilder(
+//				flightVariableName, passengerVariableName);
+//
+//		// this.causeList = new LinkedList<String>();
+//	}
+	
+	public RuleConditionBuilder(final Map<EntityEnum, String> entityVariableNameMap) {
 		
-		this.passengerVariableName = passengerVariableName;
-		this.flightVariableName = flightVariableName;
+		this.passengerVariableName = entityVariableNameMap.get(EntityEnum.PASSENGER);
+		this.flightVariableName = entityVariableNameMap.get(EntityEnum.FLIGHT);
+		final String documentVariableName = entityVariableNameMap.get(EntityEnum.DOCUMENT);
 		
 		this.passengerConditionBuilder = new PassengerConditionBuilder(
 				passengerVariableName);
@@ -51,6 +71,8 @@ public class RuleConditionBuilder {
 				documentVariableName, passengerVariableName);
 		this.flightConditionBuilder = new FlightConditionBuilder(
 				flightVariableName, passengerVariableName);
+		
+		this.pnrRuleConditionBuilder = new PnrRuleConditionBuilder(entityVariableNameMap);		
 
 		// this.causeList = new LinkedList<String>();
 	}
@@ -79,9 +101,14 @@ public class RuleConditionBuilder {
 		parentStringBuilder.append(documentConditionBuilder.build());
 		parentStringBuilder.append(passengerConditionBuilder.build());
 		parentStringBuilder.append(flightConditionBuilder.build());
+		
+		boolean isPassengerConditionCreated = !passengerConditionBuilder.isEmpty() | !flightConditionBuilder.isEmpty();
+		pnrRuleConditionBuilder.buildConditionsAndApppend(parentStringBuilder, isPassengerConditionCreated, passengerConditionBuilder);
+		
 		passengerConditionBuilder.reset();
 		documentConditionBuilder.reset();
 		flightConditionBuilder.reset();
+		this.flightCriteriaPresent = false;
 
 	}
 
@@ -105,13 +132,6 @@ public class RuleConditionBuilder {
 		}
 	}
 
-	/**
-	 * Creates linking passenger criteria for PNR related objects.
-	 */
-	private void generatePnrPassengerLink() {
-		// TODO for address, phone, credit card, frequent flier, email, travel
-		// agency
-	}
 
 	/**
 	 * Adds a rule condition to the builder.
@@ -151,6 +171,8 @@ public class RuleConditionBuilder {
 				this.flightCriteriaPresent = true;
 				break;
 			default:
+				//try and add PNR related conditions if they exist.
+				pnrRuleConditionBuilder.addRuleCondition(entity, attributeType, opCode, trm);
 				break;
 			}
 		} catch (ParseException pe) {
@@ -193,7 +215,9 @@ public class RuleConditionBuilder {
 			ruleStringBuilder.append(String.format(ACTION_PASSENGER_HIT, 
 					"%dL", // the UDR ID may not be available
 					"%dL", // the rule ID may not be available
-					parent.getTitle(), passengerVariableName, cause));
+					parent.getTitle(), 
+					this.passengerVariableName, 
+					cause));
 			
 		}
 		ruleStringBuilder.append("end\n");
