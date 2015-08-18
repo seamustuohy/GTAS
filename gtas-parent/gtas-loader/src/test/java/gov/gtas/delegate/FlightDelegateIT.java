@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.parsers.vo.passenger.FlightVo;
-import gov.gtas.services.FlightServiceDelegate;
+import gov.gtas.services.FlightServiceDelegate2;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
@@ -22,7 +22,7 @@ import gov.gtas.services.FlightServiceDelegate;
 public class FlightDelegateIT {
 
 	@Autowired
-	private FlightServiceDelegate flightDelegate;
+	private FlightServiceDelegate2 flightDelegate;
 	
 	@Test
 	public void testFlightDelegate() {

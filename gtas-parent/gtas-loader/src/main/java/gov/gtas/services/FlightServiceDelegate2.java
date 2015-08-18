@@ -19,7 +19,7 @@ import gov.gtas.parsers.vo.passenger.FlightVo;
  */
 
 @Component
-public class FlightServiceDelegate {
+public class FlightServiceDelegate2 {
 	
 	@Resource
 	private FlightService flightService;

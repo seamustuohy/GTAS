@@ -290,15 +290,18 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private void processGroup4(FOP fop) throws ParseException {
         boolean ccCreated = false;
         CreditCardVo cc = new CreditCardVo();
-        currentPnr.setFormOfPayment(fop.getPaymentType());
-        if (fop.isCreditCard()) {
-            cc.setCardType(fop.getVendorCode());
-            cc.setExpiration(fop.getExpirationDate());
-            cc.setNumber(fop.getAccountNumber());
-            currentPnr.getCreditCards().add(cc);
-            ccCreated = true;
-        }
 
+        if (fop != null) {
+            currentPnr.setFormOfPayment(fop.getPaymentType());
+            if (fop.isCreditCard()) {
+                cc.setCardType(fop.getVendorCode());
+                cc.setExpiration(fop.getExpirationDate());
+                cc.setNumber(fop.getAccountNumber());
+                currentPnr.getCreditCards().add(cc);
+                ccCreated = true;
+            }
+        }
+        
         IFT ift = getConditionalSegment(IFT.class);
         if (ift != null) {
             if (ccCreated && ift.isSponsorInfo()) {
