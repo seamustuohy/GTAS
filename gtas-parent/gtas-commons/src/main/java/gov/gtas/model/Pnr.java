@@ -58,7 +58,7 @@ public class Pnr extends BaseEntityAudit{
     @Column(name = "bag_count")
     private Integer bagCount;
     
-    @Column(name = "payment_form")
+    @Column(name = "form_of_payment")
     private String formOfPayment;
     
     @Column(name = "total_dwell_time")

@@ -235,7 +235,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
                 PassengerVo p = PnrUtils.createPassenger(ssr, tif);
                 currentPnr.getPassengers().add(p);
                 paxCreated = true;
-                currentPnr.setNumPassengers(currentPnr.getNumPassengers() + 1);
+                currentPnr.setPassengerCount(currentPnr.getPassengerCount() + 1);
             }
         }
 
@@ -243,7 +243,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             // all we can do is create the passenger from the TIF segment
             PassengerVo p = PnrUtils.createPassenger(tif);
             currentPnr.getPassengers().add(p);
-            currentPnr.setNumPassengers(currentPnr.getNumPassengers() + 1);
+            currentPnr.setPassengerCount(currentPnr.getPassengerCount() + 1);
         }
         
         for (;;) {
@@ -264,8 +264,8 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     }
 
     /**
-     * Repeats for each ticket associated with a passenger.
-     * Not currently using this info.
+     * Ticket cost info. Repeats for each ticket associated with a passenger.
+     * Not currently using this.
      */
     private void processGroup3(TKT tkt) throws ParseException {
         getConditionalSegment(MON.class);
@@ -290,6 +290,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private void processGroup4(FOP fop) throws ParseException {
         boolean ccCreated = false;
         CreditCardVo cc = new CreditCardVo();
+        currentPnr.setFormOfPayment(fop.getPaymentType());
         if (fop.isCreditCard()) {
             cc.setCardType(fop.getVendorCode());
             cc.setExpiration(fop.getExpirationDate());
@@ -449,11 +450,11 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         
         Integer n = tbd.getNumBags();
         if (n != null) {
-            currentPnr.setNumBags(currentPnr.getNumBags() + n);
+            currentPnr.setBagCount(currentPnr.getBagCount() + n);
         } else {
             for (BagDetails bd : tbd.getBagDetails()) {
                 int tmp = bd.getNumConsecutiveTags();
-                currentPnr.setNumBags(currentPnr.getNumBags() + tmp);                
+                currentPnr.setBagCount(currentPnr.getBagCount() + tmp);                
             }
         }
     }
@@ -529,7 +530,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         if (ebd != null) {
             Integer n = ParseUtils.returnNumberOrNull(ebd.getNumberInExcess());
             if (n != null) {
-                currentPnr.setNumBags(currentPnr.getNumBags() + n);
+                currentPnr.setBagCount(currentPnr.getBagCount() + n);
             }
         }
     }

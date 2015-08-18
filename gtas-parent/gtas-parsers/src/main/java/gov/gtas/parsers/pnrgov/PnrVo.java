@@ -25,8 +25,9 @@ public class PnrVo {
     private Date dateReceived;
     private Date departureDate;
 
-    private Integer numPassengers;
-    private Integer numBags;
+    private Integer passengerCount;
+    private Integer bagCount;
+    private String formOfPayment;
 
     private String updateMode;
     
@@ -40,8 +41,8 @@ public class PnrVo {
     private List<FrequentFlierVo> frequentFlierDetails = new ArrayList<>();
     
     public PnrVo() {
-        this.numBags = 0;
-        this.numPassengers = 0;
+        this.bagCount = 0;
+        this.passengerCount = 0;
     }
     
     public String getRecordLocator() {
@@ -100,20 +101,28 @@ public class PnrVo {
         this.departureDate = departureDate;
     }
 
-    public Integer getNumPassengers() {
-        return numPassengers;
+    public Integer getPassengerCount() {
+        return passengerCount;
     }
 
-    public void setNumPassengers(Integer numPassengers) {
-        this.numPassengers = numPassengers;
+    public void setPassengerCount(Integer passengerCount) {
+        this.passengerCount = passengerCount;
     }
 
-    public Integer getNumBags() {
-        return numBags;
+    public Integer getBagCount() {
+        return bagCount;
     }
 
-    public void setNumBags(Integer numBags) {
-        this.numBags = numBags;
+    public void setBagCount(Integer bagCount) {
+        this.bagCount = bagCount;
+    }
+
+    public String getFormOfPayment() {
+        return formOfPayment;
+    }
+
+    public void setFormOfPayment(String formOfPayment) {
+        this.formOfPayment = formOfPayment;
     }
 
     public String getUpdateMode() {
