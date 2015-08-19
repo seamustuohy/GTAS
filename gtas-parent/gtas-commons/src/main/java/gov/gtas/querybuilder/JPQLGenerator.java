@@ -44,8 +44,8 @@ public class JPQLGenerator {
 			MutableInt level = new MutableInt();
 			
 			logger.debug("Parsing QueryObject...");
+			
 			generateWhereCondition(queryEntity, queryType, joinEntities, where, positionalParameter, level);
-			logger.debug("Finished Parsing QueryObject");
 			
 			if(queryType == EntityEnum.FLIGHT) {
 				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.FLIGHT.getAlias() + 
@@ -100,7 +100,7 @@ public class JPQLGenerator {
 						joinEntities.remove(EntityEnum.PNR);
 						joinEntities.add(0, EntityEnum.PNR);
 						
-						// remove join to Agency entity because it is
+						// remove join to Agency entity because it has
 						// a ManyToOne relationship with PNR
 						joinEntities.remove(EntityEnum.TRAVEL_AGENCY);
 					}

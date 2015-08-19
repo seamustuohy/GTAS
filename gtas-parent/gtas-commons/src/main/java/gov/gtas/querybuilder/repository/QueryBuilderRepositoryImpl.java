@@ -183,7 +183,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			
 			try {
 				String jpqlQuery = JPQLGenerator.generateQuery(queryObject, EntityEnum.FLIGHT);
-				logger.info("Getting Flights by this query: " + jpqlQuery);
+				logger.info("Getting Flights with this query: " + jpqlQuery);
 				TypedQuery<Flight> query = entityManager.createQuery(jpqlQuery, Flight.class);
 				MutableInt positionalParameter = new MutableInt();
 				setJPQLParameters(query, queryObject, positionalParameter);
@@ -213,7 +213,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			
 			try {
 				String jpqlQuery = JPQLGenerator.generateQuery(queryObject, EntityEnum.PASSENGER);
-				logger.info("Getting Passengers by this query: " + jpqlQuery);
+				logger.info("Getting Passengers with this query: " + jpqlQuery);
 				TypedQuery<Object[]> query = entityManager.createQuery(jpqlQuery, Object[].class);
 				MutableInt positionalParameter = new MutableInt();
 				setJPQLParameters(query, queryObject, positionalParameter);
@@ -383,7 +383,6 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					}
 					else {
 					    query.setParameter(positionalParameter.intValue(), value);
-					    System.out.println("set parameter " + positionalParameter.intValue() + ": " + value);
 					}
 				}
 			}
