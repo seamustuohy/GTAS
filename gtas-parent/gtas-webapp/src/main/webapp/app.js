@@ -9,6 +9,10 @@ var app = angular.module('myApp', [
 
 app.config(function ($stateProvider) {
     $stateProvider
+        .state('admin', {
+            url: '/admin',
+            templateUrl: 'admin/admin.html'
+        })
         .state('flights', {
             url: '',
             templateUrl: 'flights/flights.html',
@@ -24,18 +28,19 @@ app.config(function ($stateProvider) {
             templateUrl: 'pax/pax.html',
             controller: 'PaxController'
         })
-        .state('risk-criteria', {
-            url: '/risk-criteria',
-            templateUrl: 'risk-criteria/risk-criteria.html',
-            controller: 'RiskCriteriaController'
-        })
         .state('query-builder', {
             url: '/query-builder',
             templateUrl: 'query-builder/query.html',
             controller: 'QueryBuilderController'
         })
-        .state('admin', {
-            url: '/admin',
-            templateUrl: 'admin/admin.html'
+        .state('risk-criteria', {
+            url: '/risk-criteria',
+            templateUrl: 'risk-criteria/risk-criteria.html',
+            controller: 'RiskCriteriaController'
+        })
+        .state('watchlists', {
+            url: '/watchlists',
+            templateUrl: 'watchlists/watchlists.html',
+            controller: 'WatchListController'
         });
 });
