@@ -12,6 +12,7 @@ import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.querybuilder.mappings.IEntityMapping;
+import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.svc.UdrServiceHelper;
 
 import java.text.ParseException;
@@ -57,7 +58,7 @@ public class RuleBuilderTestUtils {
 	public static QueryTerm createQueryTerm(EntityEnum entity,
 			IEntityMapping attr, OperatorCodeEnum op, String[] values,
 			ValueTypesEnum type) throws ParseException {
-		QueryTerm ret = new QueryTerm(entity.getEntityName(), attr.getFieldName(), type.getValue(), op.toString(), values);
+		QueryTerm ret = new QueryTerm(entity.toString(), attr.getFieldName(), type.getValue(), op.toString(), values);
 		return ret;
 	}
 
@@ -117,6 +118,20 @@ public class RuleBuilderTestUtils {
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
 			case ENGINE_RULE_INDX4:
+				cond = createQueryTerm(EntityEnum.PNR,
+						PNRMapping.RECORD_LOCATOR,
+						OperatorCodeEnum.NOT_CONTAINS, "FOO", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.PNR,
+						PNRMapping.RECORD_LOCATOR,
+						OperatorCodeEnum.CONTAINS, "CO", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.PNR,
+						PNRMapping.RECORD_LOCATOR,
+						OperatorCodeEnum.BEGINS_WITH, "DU", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule.setId(ENGINE_RULE_ID);
 			case ENGINE_RULE_INDX5:
 				break;
 		}

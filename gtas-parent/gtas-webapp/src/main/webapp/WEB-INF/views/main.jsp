@@ -297,7 +297,6 @@
 	<script src="factory/jQueryBuilderFactory.js"></script>
         <script src="risk-criteria/RiskCriteriaController.js"></script>
         <script src="risk-criteria/RiskCriteriaService.js"></script>
-        <script src="query-builder/ExecutedQueryResultsController.js"></script>
         <script src="query-builder/QueryBuilderController.js"></script>
         <script src="query-builder/QueryBuilderService.js"></script>
         <script src="query-builder/QueryService.js"></script>

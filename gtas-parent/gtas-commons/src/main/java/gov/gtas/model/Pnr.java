@@ -58,7 +58,7 @@ public class Pnr extends BaseEntityAudit{
     @Column(name = "bag_count")
     private Integer bagCount;
     
-    @Column(name = "payment_form")
+    @Column(name = "form_of_payment")
     private String formOfPayment;
     
     @Column(name = "total_dwell_time")
@@ -350,7 +350,7 @@ public class Pnr extends BaseEntityAudit{
 
     @Override
     public int hashCode() {
-       return Objects.hash(this.carrier, this.departureDate, this.origin);
+       return Objects.hash(this.recordLocator);
     }
     
     @Override
@@ -362,8 +362,6 @@ public class Pnr extends BaseEntityAudit{
         if (getClass() != obj.getClass())
             return false;
         final Pnr other = (Pnr)obj;
-        return Objects.equals(this.carrier, other.carrier)
-                && Objects.equals(this.departureDate, other.departureDate)
-                 && Objects.equals(this.origin, other.origin);
+        return Objects.equals(this.recordLocator, other.recordLocator);
     }    
 }

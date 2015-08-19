@@ -2,6 +2,7 @@ package gov.gtas.parsers.pnrgov;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
@@ -18,6 +19,7 @@ import gov.gtas.parsers.pnrgov.segment.EQN;
 import gov.gtas.parsers.pnrgov.segment.FAR;
 import gov.gtas.parsers.pnrgov.segment.FOP;
 import gov.gtas.parsers.pnrgov.segment.FTI;
+import gov.gtas.parsers.pnrgov.segment.FTI.FrequentFlierDetails;
 import gov.gtas.parsers.pnrgov.segment.IFT;
 import gov.gtas.parsers.pnrgov.segment.LTS;
 import gov.gtas.parsers.pnrgov.segment.MON;
@@ -33,6 +35,7 @@ import gov.gtas.parsers.pnrgov.segment.SRC;
 import gov.gtas.parsers.pnrgov.segment.SSD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TBD;
+import gov.gtas.parsers.pnrgov.segment.TBD.BagDetails;
 import gov.gtas.parsers.pnrgov.segment.TIF;
 import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
 import gov.gtas.parsers.pnrgov.segment.TKT;
@@ -45,6 +48,7 @@ import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.passenger.AddressVo;
 import gov.gtas.parsers.vo.passenger.CreditCardVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.FrequentFlierVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.parsers.vo.passenger.PnrReportingAgentVo;
@@ -77,6 +81,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     @Override
     public void parsePayload() throws ParseException {
         MSG msg = getMandatorySegment(MSG.class);
+        parsedMessage.setMessageCode(msg.getMessageTypeCode());
 
         // specifies the sender/reporting party of the message
         ORG org = getMandatorySegment(ORG.class);
@@ -152,19 +157,21 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (add == null) {
                 break;
             }
-            AddressVo address = createAddress(add);
+            AddressVo address = PnrUtils.createAddress(add);
             currentPnr.getAddresses().add(address);
             if (address.getPhoneNumber() != null) {
-                PhoneVo p = createPhone(address.getPhoneNumber());
+                PhoneVo p = PnrUtils.createPhone(address.getPhoneNumber());
                 currentPnr.getPhoneNumbers().add(p);
             }
         }
 
         for (;;) {
+            // excess baggage information for all passengers
             EBD ebd = getConditionalSegment(EBD.class);
             if (ebd == null) {
                 break;
             }
+            processExcessBaggage(ebd);
         }
         
         TIF tif = getMandatorySegment(TIF.class);
@@ -190,16 +197,15 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
      * Passenger
      */
     private void processGroup2(TIF tif) throws ParseException {
-        PassengerVo p = new PassengerVo();
-        // TODO: default
-        p.setPassengerType("P");
-        TravelerDetails td = tif.getTravelerDetails().get(0);
-        p.setLastName(tif.getTravelerSurname());
-        p.setFirstName(td.getTravelerGivenName());
-        currentPnr.getPassengers().add(p);
-
         FTI fti = getConditionalSegment(FTI.class);
-
+        if (fti != null) {
+            FrequentFlierVo ffvo = new FrequentFlierVo();
+            FrequentFlierDetails ffdetails = fti.getFrequentFlierInfo().get(0);
+            ffvo.setAirline(ffdetails.getAirlineCode());
+            ffvo.setNumber(ffdetails.getFreqTravelerNumber());
+            currentPnr.getFrequentFlierDetails().add(ffvo);
+        }
+        
         for (;;) {
             IFT ift = getConditionalSegment(IFT.class);
             if (ift == null) {
@@ -207,8 +213,9 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
         }
 
-        REF ref = getConditionalSegment(REF.class);
-        EBD ebd = getConditionalSegment(EBD.class);
+        getConditionalSegment(REF.class);
+        getConditionalSegment(EBD.class);
+
         for (;;) {
             FAR far = getConditionalSegment(FAR.class);
             if (far == null) {
@@ -217,23 +224,40 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
 
         // SSR’s in GR.2 apply to the specific passenger.
+        boolean paxCreated = false;
         for (;;) {
             SSR ssr = getConditionalSegment(SSR.class);
             if (ssr == null) {
                 break;
             }
-            SSR.SsrCode code = SSR.SsrCode.valueOf(ssr.getTypeOfRequest());
-            if (code == SSR.SsrCode.DOCS) {
-                PnrUtils.createDocument(ssr, p);
+            String code = ssr.getTypeOfRequest();
+            if (SSR.DOCS.equals(code)) {
+                PassengerVo p = PnrUtils.createPassenger(ssr, tif);
+                if (p != null) {
+                    currentPnr.getPassengers().add(p);
+                    paxCreated = true;
+                    currentPnr.setPassengerCount(currentPnr.getPassengerCount() + 1);
+                }
+            } else if (SSR.DOCA.equals(code)) {
+                currentPnr.getAddresses().add(PnrUtils.createAddress(ssr));
             }
         }
 
+        if (!paxCreated) {
+            // all we can do is create the passenger from the TIF segment
+            PassengerVo p = PnrUtils.createPassenger(tif);
+            if (p != null) {
+                currentPnr.getPassengers().add(p);
+                currentPnr.setPassengerCount(currentPnr.getPassengerCount() + 1);
+            }
+        }
+        
         for (;;) {
             ADD add = getConditionalSegment(ADD.class);
             if (add == null) {
                 break;
             }
-            currentPnr.getAddresses().add(createAddress(add));
+            currentPnr.getAddresses().add(PnrUtils.createAddress(add));
         }
 
         for (;;) {
@@ -245,10 +269,13 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         }
     }
 
+    /**
+     * Ticket cost info. Repeats for each ticket associated with a passenger.
+     * Not currently using this.
+     */
     private void processGroup3(TKT tkt) throws ParseException {
-        MON mon = getConditionalSegment(MON.class);
-
-        PTK ptk = getConditionalSegment(PTK.class);
+        getConditionalSegment(MON.class);
+        getConditionalSegment(PTK.class);
 
         for (;;) {
             TXD txd = getConditionalSegment(TXD.class);
@@ -257,35 +284,49 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             }
         }
 
-        DAT_G1 dat = getConditionalSegment(DAT_G1.class, "DAT");
+        getConditionalSegment(DAT_G1.class, "DAT");
 
         FOP fop = getConditionalSegment(FOP.class);
         processGroup4(fop);
     }
 
     /**
-     * Form of payment info
+     * Form of payment info: get credit card if exists
      */
     private void processGroup4(FOP fop) throws ParseException {
-        if (fop.isCreditCard()) {
-            CreditCardVo cc = new CreditCardVo();
-            cc.setCardType(fop.getVendorCode());
-            cc.setExpiration(fop.getExpirationDate());
-            // TODO: how to figure this out?
-//            cc.setAccountHolder();
-            cc.setNumber(fop.getAccountNumber());
-            currentPnr.getCreditCards().add(cc);
-        }
+        boolean ccCreated = false;
+        CreditCardVo cc = new CreditCardVo();
 
+        if (fop != null) {
+            currentPnr.setFormOfPayment(fop.getPaymentType());
+            if (fop.isCreditCard()) {
+                cc.setCardType(fop.getVendorCode());
+                cc.setExpiration(fop.getExpirationDate());
+                cc.setNumber(fop.getAccountNumber());
+                currentPnr.getCreditCards().add(cc);
+                ccCreated = true;
+            }
+        }
+        
         IFT ift = getConditionalSegment(IFT.class);
+        if (ift != null) {
+            if (ccCreated && ift.isSponsorInfo()) {
+                List<String> msgs = ift.getMessages();
+                if (msgs.size() >= 1) {
+                    cc.setAccountHolder(msgs.get(0));                
+                }
+            }
+        }
+        
         ADD add = getConditionalSegment(ADD.class);
         if (add != null) {
-            currentPnr.getAddresses().add(createAddress(add));
+            currentPnr.getAddresses().add(PnrUtils.createAddress(add));
         }
     }
 
     /**
-     * Flight info
+     * Flight info: repeats for each flight segment in the passenger record’s
+     * itinerary.
      */
     private void processGroup5(TVL tvl) throws ParseException {
         FlightVo f = new FlightVo();
@@ -379,17 +420,60 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
      * boarding, seat number and checked bag info
      */
     private void processGroup7(TRI tri) throws ParseException {
+        PassengerVo thePax = null;
+        String refNumber = tri.getTravelerReferenceNumber();
+        if (refNumber != null) {
+            for (PassengerVo pax : currentPnr.getPassengers()) {
+                if (refNumber.equals(pax.getTravelerReferenceNumber())) {
+                    thePax = pax;
+                    break;
+                }
+            }
+        }
+        
         TIF tif = getConditionalSegment(TIF.class);
+        if (thePax == null && tif != null) {
+            // try finding pax based on tif info
+            String surname = tif.getTravelerSurname();
+            List<TravelerDetails> td = tif.getTravelerDetails();
+            if (td != null && td.size() > 0) {
+                String firstName = td.get(0).getTravelerGivenName();
+                for (PassengerVo pax : currentPnr.getPassengers()) {
+                    if (surname.equals(pax.getLastName()) && firstName.equals(pax.getFirstName())) {
+                        thePax = pax;
+                        break;
+                    }
+                }
+            }
+        }
+        
         SSD ssd = getConditionalSegment(SSD.class);
+        if (thePax != null && ssd != null) {
+            thePax.setSeat(ssd.getSeatNumber());
+        }
+        
         TBD tbd = getConditionalSegment(TBD.class);
+        if (tbd == null) {
+            return;
+        }
+        
+        Integer n = tbd.getNumBags();
+        if (n != null) {
+            currentPnr.setBagCount(currentPnr.getBagCount() + n);
+        } else {
+            for (BagDetails bd : tbd.getBagDetails()) {
+                int tmp = bd.getNumConsecutiveTags();
+                currentPnr.setBagCount(currentPnr.getBagCount() + tmp);                
+            }
+        }
     }
     
     private void processGroup8(EQN eqn) throws ParseException {
-        RCI rci = getMandatorySegment(RCI.class);
+        getMandatorySegment(RCI.class);
     }
 
     /**
-     * non-air segments: car, hotel, rail
+     * non-air segments: car, hotel, rail.  Not used.
      */
     private void processGroup9(MSG msg) throws ParseException {
         for (;;) {
@@ -433,21 +517,12 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         RPI rpi = getConditionalSegment(RPI.class);
     }
     
-    private AddressVo createAddress(ADD add) {
-        AddressVo rv = new AddressVo();
-        rv.setType(add.getAddressType());
-        rv.setLine1(add.getStreetNumberAndName());
-        rv.setCity(add.getCity());
-        rv.setState(add.getStateOrProvinceCode());
-        rv.setCountry(add.getCountryCode());
-        rv.setPostalCode(add.getPostalCode());
-        rv.setPhoneNumber(ParseUtils.prepTelephoneNumber(add.getTelephone()));
-        return rv;
-    }
-    
-    private PhoneVo createPhone(String number) {
-        PhoneVo rv = new PhoneVo();
-        rv.setNumber(ParseUtils.prepTelephoneNumber(number));
-        return rv;
+    private void processExcessBaggage(EBD ebd) {
+        if (ebd != null) {
+            Integer n = ParseUtils.returnNumberOrNull(ebd.getNumberInExcess());
+            if (n != null) {
+                currentPnr.setBagCount(currentPnr.getBagCount() + n);
+            }
+        }
     }
 }

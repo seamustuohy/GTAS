@@ -12,7 +12,7 @@ public enum EntityEnum {
 		HITS ("HITS", "Hits", "h", ""),
 		PASSENGER("PASSENGER", "Passenger", "p", ".passengers"),
 		PHONE ("PHONE", "Phone", "ph", ".phones"),
-		PNR ("PNR", "PNR", "pnr", ".pnrs"),
+		PNR ("PNR", "Pnr", "pnr", ".pnrs"),
 		TRAVEL_AGENCY ("TRAVEL AGENCY", "TravelAgency", "pnr.agency", "");
 		
 		private String friendlyName;

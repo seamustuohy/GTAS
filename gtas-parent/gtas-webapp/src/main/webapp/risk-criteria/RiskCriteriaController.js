@@ -52,12 +52,12 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
 
     $scope.delete = function () {
-        if ($scope.ruleId) {
+        if (!$scope.ruleId) {
             $scope.alertError('No rule loaded to delete');
             return;
         }
 
-        if ($scope.authorId) {
+        if (!$scope.authorId) {
             $scope.alertError('No user authenticated');
             return;
         }

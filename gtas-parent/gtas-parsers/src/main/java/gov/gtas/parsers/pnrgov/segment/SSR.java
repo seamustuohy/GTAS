@@ -24,10 +24,8 @@ import gov.gtas.parsers.edifact.Segment;
  * reference number in SSR/9944 and TIF/9944.
  */
 public class SSR extends Segment {
-    public enum SsrCode {
-        SEAT,
-        DOCS
-    }
+    public static final String DOCS = "DOCS";
+    public static final String DOCA = "DOCA";
     
 	private String typeOfRequest;
 	private String action;

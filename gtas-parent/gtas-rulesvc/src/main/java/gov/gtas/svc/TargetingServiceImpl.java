@@ -10,8 +10,10 @@ import gov.gtas.model.ApisMessage;
 import gov.gtas.model.HitDetail;
 import gov.gtas.model.HitsSummary;
 import gov.gtas.model.MessageStatus;
+import gov.gtas.model.PnrMessage;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.HitsSummaryRepository;
+import gov.gtas.repository.PnrMessageRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.rule.RuleServiceResult;
 
@@ -47,6 +49,9 @@ public class TargetingServiceImpl implements TargetingService {
 	@Autowired
 	private ApisMessageRepository apisMsgRepository;
 
+	@Autowired
+	private PnrMessageRepository PnrMsgRepository;
+	
 	@Autowired
 	private HitsSummaryRepository hitsSummaryRepository;
 
@@ -140,6 +145,13 @@ public class TargetingServiceImpl implements TargetingService {
 		return apisMsgRepository.findByStatus(messageStatus);
 
 	}
+	
+	@Override
+	@Transactional
+	public List<PnrMessage> retrievePnrMessage(MessageStatus messageStatus) {
+		return PnrMsgRepository.findByStatus(messageStatus);
+
+	}
 
 	@Override
 	@Transactional
@@ -148,6 +160,16 @@ public class TargetingServiceImpl implements TargetingService {
 		ApisMessage apisMessage = apisMsgRepository.findOne(message.getId());
 		if (apisMessage != null) {
 			apisMessage.setStatus(messageStatus);
+		}
+	}
+	
+	@Override
+	@Transactional
+	public void updatePnrMessage(PnrMessage message,
+			MessageStatus messageStatus) {
+		PnrMessage pnrMessage = PnrMsgRepository.findOne(message.getId());
+		if (pnrMessage != null) {
+			pnrMessage.setStatus(messageStatus);
 		}
 	}
 

@@ -2,11 +2,12 @@ var app = angular.module('myApp', [
     'ui.router',
     'ui.bootstrap',
     'ngTable',
-    'spring-security-csrf-token-interceptor'
-
+    'spring-security-csrf-token-interceptor',
+    'ui.grid',
+    'ui.grid.pagination'
 ]);
 
-app.config(function ($stateProvider){
+app.config(function ($stateProvider) {
     $stateProvider
         .state('flights', {
             url: '',

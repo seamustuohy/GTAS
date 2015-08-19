@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
+import gov.gtas.parsers.util.ParseUtils;
 
 /**
  * <p>
@@ -17,11 +18,12 @@ import gov.gtas.parsers.edifact.Segment;
  * This segment is for the checked in baggage and not for excess bag details
  */
 public class TBD extends Segment {
-    private String numBags;
+    private Integer numBags;
     
     public class BagDetails {
         private String airline;
         private String tagNumber;
+        private Integer numConsecutiveTags;
         private String destAirport;
         public String getAirline() {
             return airline;
@@ -34,6 +36,12 @@ public class TBD extends Segment {
         }
         public void setTagNumber(String tagNumber) {
             this.tagNumber = tagNumber;
+        }
+        public Integer getNumConsecutiveTags() {
+            return numConsecutiveTags;
+        }
+        public void setNumConsecutiveTags(Integer numConsecutiveTags) {
+            this.numConsecutiveTags = numConsecutiveTags;
         }
         public String getDestAirport() {
             return destAirport;
@@ -53,21 +61,24 @@ public class TBD extends Segment {
         super(TBD.class.getSimpleName(), composites);
         Composite c = getComposite(1);
         if (c != null) {
-            this.numBags = c.getElement(1);
+            this.numBags = ParseUtils.returnNumberOrNull(c.getElement(0));
         }
         
         this.bagDetails = new ArrayList<>();
-        for (int i=2; i<numComposites(); i++) {
+        for (int i=3; i<numComposites(); i++) {
             c = getComposite(i);
-            BagDetails bag = new BagDetails();
-            bag.setAirline(c.getElement(0));
-            bag.setTagNumber(c.getElement(1));
-            bag.setDestAirport(c.getElement(2));
-            this.bagDetails.add(bag);
+            if (c.numElements() > 0) {
+                BagDetails bag = new BagDetails();
+                bag.setAirline(c.getElement(0));
+                bag.setTagNumber(c.getElement(1));
+                bag.setNumConsecutiveTags(ParseUtils.returnNumberOrNull(c.getElement(2)));
+                bag.setDestAirport(c.getElement(3));
+                this.bagDetails.add(bag);
+            }
         }
     }
 
-    public String getNumBags() {
+    public Integer getNumBags() {
         return numBags;
     }
 
