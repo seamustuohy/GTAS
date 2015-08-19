@@ -4,7 +4,7 @@ import gov.gtas.enumtype.TypeEnum;
 
 public enum PhoneMapping implements IEntityMapping {
 
-	PHONE_NUMBER ("phoneNumber", "Number", TypeEnum.STRING.getType());
+	PHONE_NUMBER ("number", "Number", TypeEnum.STRING.getType());
 	
 	private String fieldName;
 	private String friendlyName;

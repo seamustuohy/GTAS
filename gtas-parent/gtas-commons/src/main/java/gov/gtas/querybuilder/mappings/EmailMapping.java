@@ -3,7 +3,7 @@ package gov.gtas.querybuilder.mappings;
 import gov.gtas.enumtype.TypeEnum;
 
 public enum EmailMapping implements IEntityMapping {
-	EMAIL_ADDRESS ("email_address", "Address", TypeEnum.STRING.getType()),
+	EMAIL_ADDRESS ("address", "Address", TypeEnum.STRING.getType()),
 	DOMAIN ("domain", "Domain", TypeEnum.STRING.getType());
 	
 	private String fieldName;
