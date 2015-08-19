@@ -7,6 +7,7 @@ import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.MessageStatus;
+import gov.gtas.model.PnrMessage;
 import gov.gtas.rule.RuleServiceResult;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public interface TargetingService {
 	 * @return the result of the invocation.
 	 */
 	RuleServiceResult analyzeApisMessage(long messageId);
+
 	List<RuleHitDetail> analyzeLoadedApisMessage();
 
 	/**
@@ -66,4 +68,14 @@ public interface TargetingService {
 	 */
 	public void updateApisMessage(ApisMessage message,
 			MessageStatus messageStatus);
+
+	/**
+	 * retrieve ApisMessage from db
+	 */
+	public List<PnrMessage> retrievePnrMessage(MessageStatus messageStatus);
+
+	/**
+	 * update PnrMessage with message status
+	 */
+	public void updatePnrMessage(PnrMessage message, MessageStatus messageStatus);
 }
