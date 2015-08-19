@@ -29,7 +29,7 @@ public class PassengerVo {
     private String debarkation;
     private String embarkCountry;
     private String debarkCountry;
-    private Boolean deleted;
+    private Boolean deleted = Boolean.FALSE;
     private String seat;
     
     private List<DocumentVo> documents = new ArrayList<>();

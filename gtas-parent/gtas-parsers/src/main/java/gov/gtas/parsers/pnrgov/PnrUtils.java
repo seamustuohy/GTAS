@@ -1,7 +1,6 @@
 package gov.gtas.parsers.pnrgov;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class PnrUtils {
      * check whether it's an error in the message or not.
      * 
      * example:
-     * /P/GBR/123456789/GBR/12JUL64/M/23AUG19/SMITH JR/JONATHON/ROBERT
+     * /P/GBR/123456789/GBR/12JUL64/M/23AUG19/SMITHJR/JONATHON/ROBERT
      * / /   /         /   /GBR/12JUL64/M//JONES/WILLIAMNEVELL
      */
     public static PassengerVo createPassenger(SSR ssr, TIF tif) throws ParseException {
@@ -67,9 +66,8 @@ public class PnrUtils {
         if (StringUtils.isNotBlank(d)) {
             doc.setExpirationDate(ParseUtils.parseDateTime(d, dateFormat));
         }
-        p.setLastName(safeGet(strs, 8));
-        p.setFirstName(safeGet(strs, 9));
-        p.setMiddleName(safeGet(strs, 10));
+        
+        processNames(p, safeGet(strs, 8), safeGet(strs, 9), safeGet(strs, 10));
         
         if (tif.getTravelerDetails().size() > 0) {
             TravelerDetails td = tif.getTravelerDetails().get(0);
@@ -136,10 +134,46 @@ public class PnrUtils {
         return list.get(i);
     }
     
+    private static final String[] SUFFIXES = { "JR", "SR", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV" };
+    private static final String[] PREFIXES = { "MR", "MRS", "MS", "DR", "MISS", "SIR", "MADAM", "MAYOR", "PRESIDENT" };
+    
+    private static void processNames(PassengerVo p, String last, String first, String middle) {
+        p.setFirstName(first);
+        p.setMiddleName(middle);
+        p.setLastName(last);
+        
+        if (first != null) {
+            for (String prefix : PREFIXES) {
+                if (first.startsWith(prefix)) {
+                    p.setTitle(prefix);
+                    p.setFirstName(first.substring(prefix.length()).trim());
+                    break;
+                } else if (first.endsWith(prefix)) {
+                    p.setTitle(prefix);
+                    String firstName = first.substring(0, first.length() - prefix.length()).trim();
+                    p.setFirstName(firstName);
+                }
+            }
+        }
+        
+        if (last != null) {
+            for (String suffix : SUFFIXES) {
+                if (last.endsWith(suffix)) {
+                    p.setSuffix(suffix);
+                    String lastName = last.substring(0, last.length() - suffix.length()).trim();
+                    p.setLastName(lastName);
+                    break;
+                }
+            }
+        }
+    }
+    
     private static List<String> splitSsrFreeText(SSR ssr) {
         if (ssr.getFreeText() != null) {
-            String[] tmp = ssr.getFreeText().split("/");
-            List<String> strs = new ArrayList<>(Arrays.asList(tmp));
+            List<String> strs = new ArrayList<>();
+            for (String s : ssr.getFreeText().split("/")) {
+                strs.add(s.trim());
+            }
             return strs;
         }
         return null;
