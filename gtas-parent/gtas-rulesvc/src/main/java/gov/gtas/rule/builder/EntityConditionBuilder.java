@@ -4,8 +4,10 @@ import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Common functionality for building Rule criteria for entities such as
@@ -16,14 +18,16 @@ import java.util.List;
  */
 public abstract class EntityConditionBuilder {
 	/*
-	 * list of criteria for the entity that will be combined to create an LHS term for the rule.
-	 * Normally the criteria will be separated by ',' signifying an AND connector.
+	 * list of criteria for the entity that will be combined to create an LHS
+	 * term for the rule. Normally the criteria will be separated by ','
+	 * signifying an AND connector.
 	 */
 	private List<String> conditionList;
 	/*
-	 * when one or more criteria contain a connector such as '||' then the comma connector cannot be used.
-	 * In that case andConnectorIsComma is false, and '&&' is used as connector.
-	 * (an example is the NOT_BETWEEN operator, which contains a '||' connector.)
+	 * when one or more criteria contain a connector such as '||' then the comma
+	 * connector cannot be used. In that case andConnectorIsComma is false, and
+	 * '&&' is used as connector. (an example is the NOT_BETWEEN operator, which
+	 * contains a '||' connector.)
 	 */
 	private boolean andConnectorIsComma;
 	/*
@@ -35,10 +39,15 @@ public abstract class EntityConditionBuilder {
 	 */
 	private String drlVariableName;
 
+	private Set<String> attributesWithNotEmptyCondition;
+
 	/**
 	 * The protected constructor to be invoked by derived classes.
-	 * @param varName the binding variable name.
-	 * @param entityClassName the entity class name without the package part of the name.
+	 * 
+	 * @param varName
+	 *            the binding variable name.
+	 * @param entityClassName
+	 *            the entity class name without the package part of the name.
 	 */
 	protected EntityConditionBuilder(final String varName,
 			final String entityClassName) {
@@ -46,18 +55,23 @@ public abstract class EntityConditionBuilder {
 		this.drlVariableName = varName;
 		this.andConnectorIsComma = true;
 		this.conditionList = new LinkedList<String>();
+		attributesWithNotEmptyCondition = new HashSet<String>();
 	}
-    /**
-     * This builder can be reused after calling reset.
-     */
+
+	/**
+	 * This builder can be reused after calling reset.
+	 */
 	public void reset() {
 		this.andConnectorIsComma = true;
 		this.conditionList.clear();
+		attributesWithNotEmptyCondition.clear();
 	}
-    /**
-     * Checks whether criteria have been added.
-     * @return true if no criteria have been added.
-     */
+
+	/**
+	 * Checks whether criteria have been added.
+	 * 
+	 * @return true if no criteria have been added.
+	 */
 	public boolean isEmpty() {
 		return conditionList.isEmpty();
 	}
@@ -80,7 +94,9 @@ public abstract class EntityConditionBuilder {
 
 	protected abstract void addSpecialConditions(final StringBuilder bldr);
 
-	public void addCondition(final OperatorCodeEnum opCode, final String attributeName, final TypeEnum attributeType, String[] values) throws ParseException{
+	public void addCondition(final OperatorCodeEnum opCode,
+			final String attributeName, final TypeEnum attributeType,
+			String[] values) throws ParseException {
 		final StringBuilder bldr = new StringBuilder();
 		switch (opCode) {
 		case EQUAL:
@@ -90,73 +106,105 @@ public abstract class EntityConditionBuilder {
 		case LESS:
 		case LESS_OR_EQUAL:
 			bldr.append(attributeName).append(" ")
-				  .append(opCode.getOperatorString()).append(" ");
-			RuleConditionBuilderHelper.addConditionValue(attributeType,values[0], bldr);
+					.append(opCode.getOperatorString()).append(" ");
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[0], bldr);
 			break;
 		case IN:
 		case NOT_IN:
 			bldr.append(attributeName).append(" ")
 					.append(opCode.getOperatorString()).append(" ");
-			RuleConditionBuilderHelper.addConditionValues(attributeType, values, bldr);
+			RuleConditionBuilderHelper.addConditionValues(attributeType,
+					values, bldr);
 			break;
 		case IS_EMPTY:
-		case IS_NOT_EMPTY:
 		case IS_NULL:
 		case IS_NOT_NULL:
-			//no values!
+			// no values!
 			bldr.append(attributeName).append(" ")
 					.append(opCode.getOperatorString()).append(" ");
 			break;
+		case IS_NOT_EMPTY:
+			addNotEmptyCondition(bldr, attributeName, " ");
+			break;
 		case BEGINS_WITH:
 		case ENDS_WITH:
+			addNotEmptyCondition(bldr, attributeName, ", ");
 			bldr.append(attributeName).append(" ")
-			.append(OperatorCodeEnum.IS_NOT_EMPTY.getOperatorString());
-			bldr.append(", ").append(attributeName).append(" ")
-			.append(opCode.getOperatorString()).append(" ");
-			RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr);
-            break;			
+					.append(opCode.getOperatorString()).append(" ");
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[0], bldr);
+			break;
 		case CONTAINS:
+			addNotEmptyCondition(bldr, attributeName, ", ");
 			bldr.append(attributeName).append(" ")
-			.append(OperatorCodeEnum.IS_NOT_EMPTY.getOperatorString());
-			bldr.append(", ").append(attributeName).append(" ")
-			.append(opCode.getOperatorString()).append(" ");
-			RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr, true, true);//begins and ends with wildcard
-            break;			
+					.append(opCode.getOperatorString()).append(" ");
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[0], bldr, true, true);// begins and ends with
+													// wildcard
+			break;
 		case NOT_BEGINS_WITH:
 		case NOT_ENDS_WITH:
 		case NOT_CONTAINS:
+			addNotEmptyCondition(bldr, attributeName, ", ");
 			bldr.append(attributeName).append(" ")
-			.append(OperatorCodeEnum.IS_NOT_EMPTY.getOperatorString());
-			bldr.append(", ").append(attributeName).append(" ")
-			.append(opCode.getOperatorString()).append(" ");
-		    RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr, true, true);//begins and ends with wildcard
-            break;			
+					.append(opCode.getOperatorString()).append(" ");
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[0], bldr, true, true);// begins and ends with
+													// wildcard
+			break;
 		case BETWEEN:
 			bldr.append(attributeName).append(" >= ");
-		    RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr);
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[0], bldr);
 			bldr.append(", ").append(attributeName).append(" <= ");
-		    RuleConditionBuilderHelper.addConditionValue(attributeType, values[1], bldr);
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[1], bldr);
 			break;
 		case NOT_BETWEEN:
 			bldr.append("(").append(attributeName).append(" < ");
-		    RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr);
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[0], bldr);
 			bldr.append(" || ").append(attributeName).append(" > ");
-		    RuleConditionBuilderHelper.addConditionValue(attributeType, values[1], bldr);
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[1], bldr);
 			bldr.append(")");
 			// convert all commas to &&
 			andConnectorIsComma = false;
 			break;
 		case MEMBER_OF:
 			bldr.append(attributeName).append(" memberOf ");
-		    RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr);
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[0], bldr);
 			break;
 		case NOT_MEMBER_OF:
 			bldr.append(attributeName).append(" not memberOf ");
-		    RuleConditionBuilderHelper.addConditionValue(attributeType, values[0], bldr);
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[0], bldr);
 			break;
 		}
 		this.conditionList.add(bldr.toString());
 	}
+
+	/**
+	 * Creates the NOT_EMPTY condition if required. Since some criteria like
+	 * CONTAINS require automatic insertion of the NOT_EMPTY condition, this
+	 * method checks that such a condition has not been already added for this
+	 * attribute.
+	 * 
+	 * @param bldr
+	 * @param attributeName
+	 */
+	private void addNotEmptyCondition(StringBuilder bldr, String attributeName, String separatorString) {
+		if (!this.attributesWithNotEmptyCondition.contains(attributeName)) {
+			this.attributesWithNotEmptyCondition.add(attributeName);
+			bldr.append(attributeName).append(" ")
+					.append(OperatorCodeEnum.IS_NOT_EMPTY.getOperatorString());
+			bldr.append(", ");
+		}
+
+	}
+
 	public void addConditionAsString(final String condStr) {
 		this.conditionList.add(condStr);
 	}

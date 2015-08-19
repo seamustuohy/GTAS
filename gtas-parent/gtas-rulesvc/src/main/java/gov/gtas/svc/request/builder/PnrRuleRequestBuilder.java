@@ -48,6 +48,9 @@ public class PnrRuleRequestBuilder {
 			// add all the PNR related objects
 			for (Pnr pnr : pnrSet) {
 				requestObjectList.add(pnr);
+				if(pnr.getFlights() != null){
+					requestObjectList.addAll(pnr.getFlights());
+				}
 				addAddressObjects(pnr, pnr.getAddresses());
 				addPhoneObjects(pnr, pnr.getPhones());
 				addEmailObjects(pnr, pnr.getEmails());
