@@ -147,6 +147,12 @@ public class PassengerVo {
     public void setDocuments(List<DocumentVo> documents) {
         this.documents = documents;
     }
+    public Boolean getDeleted() {
+        return deleted;
+    }
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
 
     @Override
     public String toString() {

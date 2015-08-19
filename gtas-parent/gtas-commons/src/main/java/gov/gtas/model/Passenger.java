@@ -73,7 +73,8 @@ public class Passenger extends BaseEntityAudit {
     @Column(name = "debark_country")
     private String debarkCountry;
     
-    private Boolean deleted;
+    @Column(nullable = false)
+    private Boolean deleted = Boolean.FALSE;
     
     private String seat;
     
