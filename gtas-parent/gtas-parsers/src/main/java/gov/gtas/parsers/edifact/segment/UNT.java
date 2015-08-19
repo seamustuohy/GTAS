@@ -15,7 +15,7 @@ import gov.gtas.parsers.edifact.Segment;
  * ex:UNT+2578+MSG001'UNT+2578+1'
  */
 public class UNT extends Segment {
-    private int numberOfSegments;
+    private Integer numberOfSegments;
     private String messageRefNumber;
 
     public UNT(List<Composite> composites) {

@@ -9,6 +9,7 @@ import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
+import gov.gtas.svc.UdrServiceHelper;
 
 import java.text.ParseException;
 
@@ -17,15 +18,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class RuleConditionBuilderTest {
-	private static final String PASSENGER_VARIABLE_NAME="$p";
-	private static final String DOCUMENT_VARIABLE_NAME="$d";
-	private static final String FLIGHT_VARIABLE_NAME="$f";
 	
 	private RuleConditionBuilder testTarget;
 
 	@Before
 	public void setUp() throws Exception {
-		testTarget = new RuleConditionBuilder(PASSENGER_VARIABLE_NAME, FLIGHT_VARIABLE_NAME, DOCUMENT_VARIABLE_NAME);
+		testTarget = new RuleConditionBuilder(UdrServiceHelper.createEngineRuleVariableMap());
 	}
 
 	@After

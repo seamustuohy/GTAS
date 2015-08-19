@@ -12,6 +12,9 @@ import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
 
 public class ApisMessageVo extends MessageVo {
+    /** type of message: new pax, update, delete, etc */
+    private String messageCode;
+
     private List<ReportingPartyVo> reportingParties = new ArrayList<>();
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
@@ -36,6 +39,13 @@ public class ApisMessageVo extends MessageVo {
     public List<ReportingPartyVo> getReportingParties() {
         return reportingParties;
     }
+    public String getMessageCode() {
+        return messageCode;
+    }
+    public void setMessageCode(String messageCode) {
+        this.messageCode = messageCode;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 

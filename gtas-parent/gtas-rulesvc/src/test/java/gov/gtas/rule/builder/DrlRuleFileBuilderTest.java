@@ -55,6 +55,20 @@ public class DrlRuleFileBuilderTest {
 			fail("Not expecting exception.");
 		}
 	}
+	@Test
+	public void testSimpleRuleGenerationAndCompilation4() {
+		try{
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(4);
+		testTarget.addRule(udrRule);
+		String result = testTarget.build();
+		System.out.println(result);
+		verifyDrl(result, 4);
+		testKnowledgeBaseTest(result);
+		}catch (Exception ex){
+			ex.printStackTrace();
+			fail("Not expecting exception.");
+		}
+	}
 	public static void verifyDrl(String drl, int indx){
 		String target = "rule \""+UDR_RULE_TITLE+":"+indx+"\"";
 		assertTrue(drl.indexOf(target) > 0);

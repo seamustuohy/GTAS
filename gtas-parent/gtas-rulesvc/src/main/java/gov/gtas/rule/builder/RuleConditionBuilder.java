@@ -9,10 +9,12 @@ import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.rule.builder.pnr.PnrRuleConditionBuilder;
 
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Generates the "when" part of a DRL rule.
@@ -25,11 +27,13 @@ public class RuleConditionBuilder {
 	private DocumentConditionBuilder documentConditionBuilder;
 	private FlightConditionBuilder flightConditionBuilder;
 
+	private PnrRuleConditionBuilder pnrRuleConditionBuilder;
+
 	private String passengerVariableName;
 	private String flightVariableName;
 
 	private StringBuilder conditionDescriptionBuilder;
-	
+
 	private boolean flightCriteriaPresent;
 
 	// private List<String> causeList;
@@ -38,19 +42,30 @@ public class RuleConditionBuilder {
 	 * Constructor for the Simple Rules:<br>
 	 * (i.e., One Passenger, one document, one flight.)
 	 * 
+	 * @param entityVariableNameMap
+	 *            a lookup for variable name to use when generating rules<br>
+	 *            For example, to get the variable for passenger lookup using
+	 *            the key EntityEnum.PASSENGER.
+	 * 
 	 */
-	public RuleConditionBuilder(final String passengerVariableName,
-			final String flightVariableName, final String documentVariableName) {
-		
-		this.passengerVariableName = passengerVariableName;
-		this.flightVariableName = flightVariableName;
-		
+	public RuleConditionBuilder(
+			final Map<EntityEnum, String> entityVariableNameMap) {
+
+		this.passengerVariableName = entityVariableNameMap
+				.get(EntityEnum.PASSENGER);
+		this.flightVariableName = entityVariableNameMap.get(EntityEnum.FLIGHT);
+		final String documentVariableName = entityVariableNameMap
+				.get(EntityEnum.DOCUMENT);
+
 		this.passengerConditionBuilder = new PassengerConditionBuilder(
 				passengerVariableName);
 		this.documentConditionBuilder = new DocumentConditionBuilder(
 				documentVariableName, passengerVariableName);
 		this.flightConditionBuilder = new FlightConditionBuilder(
 				flightVariableName, passengerVariableName);
+
+		this.pnrRuleConditionBuilder = new PnrRuleConditionBuilder(
+				entityVariableNameMap);
 
 		// this.causeList = new LinkedList<String>();
 	}
@@ -79,9 +94,16 @@ public class RuleConditionBuilder {
 		parentStringBuilder.append(documentConditionBuilder.build());
 		parentStringBuilder.append(passengerConditionBuilder.build());
 		parentStringBuilder.append(flightConditionBuilder.build());
+
+		boolean isPassengerConditionCreated = !passengerConditionBuilder
+				.isEmpty() | !flightConditionBuilder.isEmpty();
+		pnrRuleConditionBuilder.buildConditionsAndApppend(parentStringBuilder,
+				isPassengerConditionCreated, passengerConditionBuilder);
+
 		passengerConditionBuilder.reset();
 		documentConditionBuilder.reset();
 		flightConditionBuilder.reset();
+		this.flightCriteriaPresent = false;
 
 	}
 
@@ -103,14 +125,6 @@ public class RuleConditionBuilder {
 			flightConditionBuilder
 					.addLinkedPassenger(this.passengerVariableName);
 		}
-	}
-
-	/**
-	 * Creates linking passenger criteria for PNR related objects.
-	 */
-	private void generatePnrPassengerLink() {
-		// TODO for address, phone, credit card, frequent flier, email, travel
-		// agency
 	}
 
 	/**
@@ -151,6 +165,9 @@ public class RuleConditionBuilder {
 				this.flightCriteriaPresent = true;
 				break;
 			default:
+				// try and add PNR related conditions if they exist.
+				pnrRuleConditionBuilder.addRuleCondition(entity, attributeType,
+						opCode, trm);
 				break;
 			}
 		} catch (ParseException pe) {
@@ -163,11 +180,15 @@ public class RuleConditionBuilder {
 					CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE,
 					bldr.toString(), trm.getType(), "Engine Rule Creation");
 		} catch (NullPointerException | IllegalArgumentException ex) {
-			throw ErrorHandlerFactory.getErrorHandler().createException(
-					CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
-					String.format("QueryTerm (entity=%s, field=%s, operator=%s, type=%s)",
-							trm.getEntity(), trm.getField(), trm.getOperator(), trm.getType()),
-					"Engine Rule Creation");
+			throw ErrorHandlerFactory
+					.getErrorHandler()
+					.createException(
+							CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+							String.format(
+									"QueryTerm (entity=%s, field=%s, operator=%s, type=%s)",
+									trm.getEntity(), trm.getField(),
+									trm.getOperator(), trm.getType()),
+							"Engine Rule Creation");
 
 		}
 
@@ -181,20 +202,24 @@ public class RuleConditionBuilder {
 		String cause = conditionDescriptionBuilder.toString()
 				.replace("\"", "'");
 		ruleStringBuilder.append("then\n");
-		if(isFlightCriteriaPresent()){
-			ruleStringBuilder.append(String.format(ACTION_PASSENGER_HIT_WITH_FLIGHT, 
+		if (isFlightCriteriaPresent()) {
+			ruleStringBuilder.append(String.format(
+					ACTION_PASSENGER_HIT_WITH_FLIGHT,
 					"%dL", // the UDR ID may not be available
 					"%dL", // the rule ID may not be available
-					parent.getTitle(), 
-					this.passengerVariableName,
-					this.flightVariableName,
-					cause));
-		}else {
-			ruleStringBuilder.append(String.format(ACTION_PASSENGER_HIT, 
-					"%dL", // the UDR ID may not be available
+					parent.getTitle(), this.passengerVariableName,
+					this.flightVariableName, cause));
+		} else {
+			ruleStringBuilder.append(String.format(ACTION_PASSENGER_HIT, "%dL", // the
+																				// UDR
+																				// ID
+																				// may
+																				// not
+																				// be
+																				// available
 					"%dL", // the rule ID may not be available
-					parent.getTitle(), passengerVariableName, cause));
-			
+					parent.getTitle(), this.passengerVariableName, cause));
+
 		}
 		ruleStringBuilder.append("end\n");
 		conditionDescriptionBuilder = null;

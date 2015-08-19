@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import gov.gtas.parsers.vo.passenger.AddressVo;
 import gov.gtas.parsers.vo.passenger.CreditCardVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.FrequentFlierVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.parsers.vo.passenger.PnrReportingAgentVo;
@@ -24,17 +25,25 @@ public class PnrVo {
     private Date dateReceived;
     private Date departureDate;
 
-    private Integer numPassengers;
-    private Integer numBags;
+    private Integer passengerCount;
+    private Integer bagCount;
+    private String formOfPayment;
 
     private String updateMode;
     
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
+    
     private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
     private List<AddressVo> addresses = new ArrayList<>();
     private List<PhoneVo> phoneNumbers = new ArrayList<>();
     private List<CreditCardVo> creditCards = new ArrayList<>();
+    private List<FrequentFlierVo> frequentFlierDetails = new ArrayList<>();
+    
+    public PnrVo() {
+        this.bagCount = 0;
+        this.passengerCount = 0;
+    }
     
     public String getRecordLocator() {
         return recordLocator;
@@ -92,20 +101,28 @@ public class PnrVo {
         this.departureDate = departureDate;
     }
 
-    public Integer getNumPassengers() {
-        return numPassengers;
+    public Integer getPassengerCount() {
+        return passengerCount;
     }
 
-    public void setNumPassengers(Integer numPassengers) {
-        this.numPassengers = numPassengers;
+    public void setPassengerCount(Integer passengerCount) {
+        this.passengerCount = passengerCount;
     }
 
-    public Integer getNumBags() {
-        return numBags;
+    public Integer getBagCount() {
+        return bagCount;
     }
 
-    public void setNumBags(Integer numBags) {
-        this.numBags = numBags;
+    public void setBagCount(Integer bagCount) {
+        this.bagCount = bagCount;
+    }
+
+    public String getFormOfPayment() {
+        return formOfPayment;
+    }
+
+    public void setFormOfPayment(String formOfPayment) {
+        this.formOfPayment = formOfPayment;
     }
 
     public String getUpdateMode() {
@@ -162,6 +179,14 @@ public class PnrVo {
 
     public void setCreditCards(List<CreditCardVo> creditCards) {
         this.creditCards = creditCards;
+    }
+
+    public List<FrequentFlierVo> getFrequentFlierDetails() {
+        return frequentFlierDetails;
+    }
+
+    public void setFrequentFlierDetails(List<FrequentFlierVo> frequentFlierDetails) {
+        this.frequentFlierDetails = frequentFlierDetails;
     }
 
     @Override

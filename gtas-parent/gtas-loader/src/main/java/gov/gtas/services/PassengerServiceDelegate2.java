@@ -16,7 +16,7 @@ import gov.gtas.parsers.vo.passenger.FlightVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
 
 @Component
-public class PassengerServiceDelegate {
+public class PassengerServiceDelegate2 {
 
 	@Resource
 	PassengerService passengerService;

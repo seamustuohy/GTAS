@@ -80,4 +80,8 @@ public class IFT extends Segment {
     public List<String> getMessages() {
         return messages;
     }
+    
+    public boolean isSponsorInfo() {
+        return ("4".equals(this.iftCode) && "43".equals(this.freetextType));
+    }
 }
