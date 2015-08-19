@@ -13,6 +13,7 @@ import gov.gtas.querybuilder.mappings.DocumentMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.querybuilder.mappings.IEntityMapping;
 import gov.gtas.querybuilder.mappings.PNRMapping;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.svc.UdrServiceHelper;
 
 import java.text.ParseException;
@@ -58,7 +59,7 @@ public class RuleBuilderTestUtils {
 	public static QueryTerm createQueryTerm(EntityEnum entity,
 			IEntityMapping attr, OperatorCodeEnum op, String[] values,
 			ValueTypesEnum type) throws ParseException {
-		QueryTerm ret = new QueryTerm(entity.toString(), attr.getFieldName(), type.getValue(), op.toString(), values);
+		QueryTerm ret = new QueryTerm(entity.getEntityName(), attr.getFieldName(), type.getValue(), op.toString(), values);
 		return ret;
 	}
 
@@ -132,7 +133,30 @@ public class RuleBuilderTestUtils {
 				ruleMinTerm.add(cond);
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
+				break;
 			case ENGINE_RULE_INDX5:
+//				cond = createQueryTerm(EntityEnum.PNR,
+//						PNRMapping.RECORD_LOCATOR,
+//						OperatorCodeEnum.NOT_CONTAINS, "3255", ValueTypesEnum.STRING);
+//				ruleMinTerm.add(cond);
+//				cond = createQueryTerm(EntityEnum.PNR,
+//						PNRMapping.RECORD_LOCATOR,
+//						OperatorCodeEnum.CONTAINS, "191", ValueTypesEnum.STRING);
+//				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.PNR,
+						PNRMapping.RECORD_LOCATOR,
+						OperatorCodeEnum.BEGINS_WITH, "VYZ", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.PASSENGER,
+						PassengerMapping.PASSENGER_TYPE,
+						OperatorCodeEnum.EQUAL, "P", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.PASSENGER,
+						PassengerMapping.LAST_NAME,
+						OperatorCodeEnum.EQUAL, "Baggins", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule.setId(ENGINE_RULE_ID);
 				break;
 		}
 		return engineRule;
