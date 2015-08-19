@@ -110,6 +110,8 @@ public class PnrMessageService implements MessageService {
                 for (PassengerVo pvo : vo.getPassengers()) {
                     pax.add(utils.createNewPassenger(pvo));
                 }
+              
+                pnr.setPassengers(pax);
         
                 Flight f = null;
                 for (FlightVo fvo : vo.getFlights()) {
