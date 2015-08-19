@@ -203,7 +203,7 @@
                 <li><a href="home.action?#/risk-criteria">Risk Criteria</a></li>
             </sec:authorize>
             <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
-                <li><a href="">Watchlists</a></li>
+                <li><a href="home.action?#/watchlists">Watchlists</a></li>
             </sec:authorize>
             </ul>
             </li>
@@ -294,8 +294,10 @@
         <script src="pax/PaxService.js"></script>
         <script src="pax/PaxFactory.js"></script>
         <script src="factory/QueryBuilderFactory.js"></script>
-	<script src="factory/jQueryBuilderFactory.js"></script>
+        <script src="factory/jQueryBuilderFactory.js"></script>
         <script src="risk-criteria/RiskCriteriaController.js"></script>
+        <script src="watchlists/WatchListService.js"></script>
+        <script src="watchlists/WatchListController.js"></script>
         <script src="risk-criteria/RiskCriteriaService.js"></script>
         <script src="query-builder/QueryBuilderController.js"></script>
         <script src="query-builder/QueryBuilderService.js"></script>
