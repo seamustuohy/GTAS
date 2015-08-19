@@ -12,9 +12,9 @@ public enum PassengerMapping implements IEntityMapping {
 	EMBARKATION ("embarkation", "Embarkation", TypeEnum.STRING.getType()),
 	EMBARKATION_COUNTRY ("embarkCountry", "Embarkation Country", TypeEnum.STRING.getType()),
 	GENDER ("gender", "Gender", TypeEnum.STRING.getType()),
-	FIRST_NAME ("firstName", "Name - First", TypeEnum.STRING.getType()),
-	LAST_NAME ("lastName", "Name - Last", TypeEnum.STRING.getType()),
-	MIDDLE_NAME ("middleName", "Name - Middle", TypeEnum.STRING.getType()),
+	FIRST_NAME ("firstName", "First Name", TypeEnum.STRING.getType()),
+	LAST_NAME ("lastName", "Last Name", TypeEnum.STRING.getType()),
+	MIDDLE_NAME ("middleName", "Middle Name", TypeEnum.STRING.getType()),
 	RESIDENCY_COUNTRY ("residencyCountry", "Residency Country", TypeEnum.STRING.getType()), 
 	SEAT ("", "Seat", TypeEnum.STRING.getType()), // not in Entity
 	PASSENGER_TYPE ("passengerType", "Type", TypeEnum.STRING.getType()); 

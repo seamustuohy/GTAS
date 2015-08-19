@@ -23,7 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -197,8 +200,9 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	}
 
 	@Override
-	public List<Passenger> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException {
-		List<Passenger> passengers = new ArrayList<>();
+	@Transactional
+	public List<Object[]> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException {
+		List<Object[]> result = new ArrayList<>();
 		
 		if(queryObject != null) {
 			Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
@@ -210,19 +214,19 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			try {
 				String jpqlQuery = JPQLGenerator.generateQuery(queryObject, EntityEnum.PASSENGER);
 				logger.info("Getting Passengers by this query: " + jpqlQuery);
-				TypedQuery<Passenger> query = entityManager.createQuery(jpqlQuery, Passenger.class);
+				TypedQuery<Object[]> query = entityManager.createQuery(jpqlQuery, Object[].class);
 				MutableInt positionalParameter = new MutableInt();
 				setJPQLParameters(query, queryObject, positionalParameter);
 				
-				passengers = query.getResultList();
+				result = query.getResultList();
 				
-				logger.info("Number of Passengers returned: " + (passengers != null ? passengers.size() : "Passenger result is null"));
+				logger.info("Number of Passengers returned: " + (result != null ? result.size() : "Passenger result is null"));
 			} catch (InvalidQueryRepositoryException | ParseException e) {
 				throw new InvalidQueryRepositoryException(e.getMessage(), queryObject);
 			}
 		}
 		
-		return passengers;
+		return result;
 	}
 	
 	private boolean isUniqueTitle(UserQuery query) {
@@ -379,6 +383,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					}
 					else {
 					    query.setParameter(positionalParameter.intValue(), value);
+					    System.out.println("set parameter " + positionalParameter.intValue() + ": " + value);
 					}
 				}
 			}

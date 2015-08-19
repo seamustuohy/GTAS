@@ -3,15 +3,15 @@ package gov.gtas.querybuilder.constants;
 
 public final class Constants {
 
+	public static final String SELECT = "select";
 	public static final String SELECT_DISTINCT = "select distinct";
 	public static final String FROM = "from";
 	public static final String WHERE = "where";
 	public static final String AND = "and";
 	public static final String JOIN = " join ";
 	public static final String JOIN_FETCH = " join fetch ";
-	public static final String FLIGHT_REF = ".flights ";
-	public static final String PASSENGER_REF = ".passengers ";
-	public static final String DOCUMENT_REF = ".documents ";
+	public static final String LEFT_JOIN = " left join ";
+	public static final String LEFT_JOIN_FETCH = " left join fetch ";
 	
 	// Entities
 	public static final String ADDRESS = "ADDRESS";

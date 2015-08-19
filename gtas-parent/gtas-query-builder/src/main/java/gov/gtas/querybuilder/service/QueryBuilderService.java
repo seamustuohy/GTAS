@@ -1,8 +1,11 @@
 package gov.gtas.querybuilder.service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.User;
@@ -22,7 +26,11 @@ import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
+import gov.gtas.querybuilder.model.IQueryResult;
+import gov.gtas.querybuilder.model.QueryFlightResult;
+import gov.gtas.querybuilder.model.QueryPassengerResult;
 import gov.gtas.querybuilder.model.QueryRequest;
+import gov.gtas.querybuilder.model.QueryResult;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.repository.QueryBuilderRepository;
 
@@ -34,45 +42,52 @@ import gov.gtas.querybuilder.repository.QueryBuilderRepository;
 @Service
 public class QueryBuilderService {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderService.class);
+	private SimpleDateFormat dobFormat = new SimpleDateFormat("MM/dd/yyyy");
+	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 	
 	@Autowired
 	QueryBuilderRepository queryRepository;
 	
-	public UserQuery saveQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, InvalidQueryException {
-		UserQuery result = null;
+	public IQueryResult saveQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, InvalidQueryException {
+		IQueryResult result = new QueryResult();
 		
 		try {
-			
-			result = queryRepository.saveQuery(createUserQuery(queryRequest));
+			result = mapToQueryResult(queryRepository.saveQuery(createUserQuery(queryRequest)));
 		} catch(QueryAlreadyExistsRepositoryException e) {
 			throw new QueryAlreadyExistsException(e.getMessage(), queryRequest);
-		} catch (InvalidQueryRepositoryException | IOException | IllegalArgumentException e) {
+		} catch (InvalidQueryException | InvalidQueryRepositoryException | IOException | IllegalArgumentException e) {
 			throw new InvalidQueryException(e.getMessage(), queryRequest);
 		}
 		
 		return result;
 	}
 
-	public UserQuery editQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
-		UserQuery result = null;
+	public IQueryResult editQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
+		IQueryResult result = new QueryResult();
 		
 		try {
-			
-			result = queryRepository.editQuery(createUserQuery(queryRequest));
+			result = mapToQueryResult(queryRepository.editQuery(createUserQuery(queryRequest)));
 		} catch(QueryAlreadyExistsRepositoryException e) {
 			throw new QueryAlreadyExistsException(e.getMessage(), queryRequest);
 		} catch (QueryDoesNotExistRepositoryException e) {
 			throw new QueryDoesNotExistException(e.getMessage(), queryRequest);
-		} catch (InvalidQueryRepositoryException | IOException | IllegalArgumentException e) {
+		} catch (InvalidQueryException | InvalidQueryRepositoryException | IOException | IllegalArgumentException e) {
 			throw new InvalidQueryException(e.getMessage(), queryRequest);
 		} 
 		
 		return result;
 	}
 	
-	public List<UserQuery> listQueryByUser(String userId) {
+	public List<IQueryResult> listQueryByUser(String userId) throws InvalidQueryException {
+		List<IQueryResult> result = new ArrayList<>();
 		
-		return queryRepository.listQueryByUser(userId);
+		try {
+			result = mapToResultList(queryRepository.listQueryByUser(userId));
+		} catch (InvalidQueryException e) {
+			throw new InvalidQueryException(e.getMessage(), null);
+		}
+		
+		return result;
 	}
 	
 	public void deleteQuery(String userId, int id) throws QueryDoesNotExistException {
@@ -84,28 +99,28 @@ public class QueryBuilderService {
 		}
 	}
 		
-	public List<Flight> runFlightQuery(QueryObject queryObject) throws InvalidQueryException {
-		List<Flight> flights = new ArrayList<>();
+	public List<IQueryResult> runFlightQuery(QueryObject queryObject) throws InvalidQueryException {
+		List<IQueryResult> result = new ArrayList<>();
 		
 		try {
-			flights = queryRepository.getFlightsByDynamicQuery(queryObject);
+			result = mapToQueryFlightResult(queryRepository.getFlightsByDynamicQuery(queryObject));
 		} catch (InvalidQueryRepositoryException | IllegalArgumentException e) {
 			throw new InvalidQueryException(e.getMessage(), queryObject);
 		} 
 		
-		return flights;
+		return result;
 	}
 	
-	public List<Passenger> runPassengerQuery(QueryObject queryObject) throws InvalidQueryException {
-		List<Passenger> passengers = new ArrayList<>();
+	public List<IQueryResult> runPassengerQuery(QueryObject queryObject) throws InvalidQueryException {
+		List<IQueryResult> result = new ArrayList<>();
 		
 		try {
-			passengers = queryRepository.getPassengersByDynamicQuery(queryObject);
+			result = mapToQueryPassengerResult(queryRepository.getPassengersByDynamicQuery(queryObject));
 		} catch (InvalidQueryRepositoryException | IllegalArgumentException e) {
 			throw new InvalidQueryException(e.getMessage(), queryObject);
 		}
 		
-		return passengers;
+		return result;
 	}
 	
 	private UserQuery createUserQuery(QueryRequest req) throws JsonProcessingException {
@@ -126,5 +141,139 @@ public class QueryBuilderService {
 		return query;
 	}
 	
+	private List<IQueryResult> mapToQueryFlightResult(List<Flight> flights) {
+		List<IQueryResult> qbFlights = new ArrayList<>();
+		
+		if(flights == null || flights.size() == 0) {
+			return qbFlights;
+		}
+		
+		for(Flight flight : flights) {
+			if(flight != null) {
+				QueryFlightResult qbFlight = new QueryFlightResult();
+				
+				qbFlight.setId(flight.getId());
+				qbFlight.setFlightNumber(flight.getFlightNumber());
+				qbFlight.setCarrierCode(flight.getCarrier() != null ? flight.getCarrier() : "");
+				qbFlight.setOrigin(flight.getOrigin() != null ? flight.getOrigin() : "");
+				qbFlight.setOriginCountry(flight.getOriginCountry() != null ? flight.getOriginCountry() : "");
+				qbFlight.setDepartureDt(dtFormat.format(flight.getEtd()));
+				qbFlight.setDestination(flight.getDestination() != null ? flight.getDestination() : "");
+				qbFlight.setDestinationCountry(flight.getDestinationCountry() != null ? flight.getDestinationCountry() : "");
+				qbFlight.setArrivalDt(dtFormat.format(flight.getEta()));
+				
+				qbFlights.add(qbFlight);
+			}
+		}
+		
+		return qbFlights;
+	}
+	
+	private List<IQueryResult> mapToQueryPassengerResult(List<Object[]> resultList) {
+		List<IQueryResult> qbPassengers = new ArrayList<>();
+		
+		if(resultList == null || resultList.size() == 0) {
+			return qbPassengers;
+		}
+		
+		for (Object[] result : resultList) {
+			Passenger passenger = (Passenger) result[0];
+			Flight flight = (Flight) result[1];
+			Document document = (Document) result[2];
+							
+			// passenger information
+			if(passenger != null) {
+				QueryPassengerResult qbPassenger = new QueryPassengerResult();
+				String carrier = "";
+				String flightNumber = "";
+				String origin = "";
+				String destination = "";
+				String departureDt = "";
+				String arrivalDt = "";
+				String seat = "Not part of entity";
+				String documentNumber = "";
+				String documentType = "";
+				String documentIssuanceCountry = "";
+				
+				qbPassenger.setId(passenger.getId());
+				qbPassenger.setFirstName(passenger.getFirstName() != null ? passenger.getFirstName() : "");
+				qbPassenger.setLastName(passenger.getLastName() != null ? passenger.getLastName() : "");
+	            qbPassenger.setPassengerType(passenger.getPassengerType() != null ? passenger.getPassengerType() : "");				
+				qbPassenger.setGender(passenger.getGender() != null ? passenger.getGender() : "");
+				qbPassenger.setDob(passenger.getDob() != null ? dobFormat.format(passenger.getDob()) : "");
+				qbPassenger.setCitizenship(passenger.getCitizenshipCountry() != null ? passenger.getCitizenshipCountry() : "");
+
+				// document information
+				if(document != null) {
+					documentNumber = document.getDocumentNumber() != null ? document.getDocumentNumber() : "";
+					documentType  = document.getDocumentType() != null ? document.getDocumentType() : "";
+					documentIssuanceCountry = document.getIssuanceCountry() != null ? document.getIssuanceCountry() : "";
+				}
+				
+				qbPassenger.setDocumentNumber(documentNumber);
+				qbPassenger.setDocumentType(documentType);
+				qbPassenger.setDocumentIssuanceCountry(documentIssuanceCountry);
+				
+				
+				// flight information
+				if(flight != null) {
+					carrier = flight.getCarrier() != null ? flight.getCarrier() : "";
+					flightNumber = flight.getFlightNumber() != null ? flight.getFlightNumber() : "";
+					origin = flight.getOrigin() != null ? flight.getOrigin() : "";
+					destination = flight.getDestination() != null ? flight.getDestination() : "";
+					departureDt = flight.getEtd() != null ? dtFormat.format(flight.getEtd()) : "";
+					arrivalDt = flight.getEta() != null ? dtFormat.format(flight.getEta()) : "";
+					seat = "Not part of entity";
+				}
+				
+				qbPassenger.setCarrierCode(carrier);
+				qbPassenger.setFlightNumber(flightNumber);
+				qbPassenger.setOrigin(origin);
+				qbPassenger.setDestination(destination);
+				qbPassenger.setDepartureDt(departureDt);
+				qbPassenger.setArrivalDt(arrivalDt);
+				qbPassenger.setSeat(seat);
+				
+				qbPassenger.setRuleHit(false);
+				qbPassenger.setOnWatchList(false);
+				
+				qbPassengers.add(qbPassenger);
+			}
+		}
+		
+		return qbPassengers;
+	}
+	
+	private QueryResult mapToQueryResult(UserQuery query) throws InvalidQueryException {
+		QueryResult result = new QueryResult();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		result.setId(query.getId());
+		result.setTitle(query.getTitle());
+		result.setDescription(query.getDescription());
+		try {
+			result.setQuery(mapper.readValue(query.getQueryText(), QueryObject.class));
+		} catch (IOException e) {
+			throw new InvalidQueryException(e.getMessage(), query);
+		}
+		
+		return result;
+	}
+	
+	private List<IQueryResult> mapToResultList(List<UserQuery> queryList) throws InvalidQueryException {
+		List<IQueryResult> resultList = new ArrayList<>();
+		
+		if(queryList != null && queryList.size() > 0) {
+			for(UserQuery query : queryList) {
+				try {
+					resultList.add(mapToQueryResult(query));
+				} catch (InvalidQueryException e) {
+					throw new InvalidQueryException(e.getMessage(), queryList);
+				}
+			}
+		}
+		
+		return resultList;
+	}
 }
 

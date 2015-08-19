@@ -82,8 +82,7 @@ public class PnrUtils {
             PassengerVo p = new PassengerVo();
             p.setPassengerType("P");
             TravelerDetails td = tif.getTravelerDetails().get(0);
-            p.setLastName(tif.getTravelerSurname());
-            p.setFirstName(td.getTravelerGivenName());
+            processNames(p, tif.getTravelerSurname(), td.getTravelerGivenName(), null);
             p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());
             return p;
         }
@@ -144,14 +143,17 @@ public class PnrUtils {
         
         if (first != null) {
             for (String prefix : PREFIXES) {
+                String firstName = null;
                 if (first.startsWith(prefix)) {
-                    p.setTitle(prefix);
-                    p.setFirstName(first.substring(prefix.length()).trim());
-                    break;
+                    firstName = first.substring(prefix.length()).trim();
                 } else if (first.endsWith(prefix)) {
+                    firstName = first.substring(0, first.length() - prefix.length()).trim();
+                }
+                
+                if (firstName != null) {
                     p.setTitle(prefix);
-                    String firstName = first.substring(0, first.length() - prefix.length()).trim();
                     p.setFirstName(firstName);
+                    break;
                 }
             }
         }

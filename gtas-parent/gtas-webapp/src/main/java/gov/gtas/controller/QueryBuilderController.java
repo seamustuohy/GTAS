@@ -15,8 +15,8 @@ import gov.gtas.querybuilder.mappings.QueryBuilderMappingFactory;
 import gov.gtas.querybuilder.model.IQueryResponse;
 import gov.gtas.querybuilder.model.IQueryResult;
 import gov.gtas.querybuilder.model.QueryErrorResponse;
-import gov.gtas.querybuilder.model.QueryFlightsResult;
-import gov.gtas.querybuilder.model.QueryPassengersResult;
+import gov.gtas.querybuilder.model.QueryFlightResult;
+import gov.gtas.querybuilder.model.QueryPassengerResult;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.QueryResponse;
 import gov.gtas.querybuilder.model.QueryResult;
@@ -26,7 +26,9 @@ import gov.gtas.querybuilder.service.QueryBuilderService;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,7 +59,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping(Constants.QUERY_SERVICE)
 public class QueryBuilderController {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderController.class);
-	private SimpleDateFormat dtFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
 	
 	@Autowired
 	QueryBuilderService queryService;
@@ -73,8 +74,8 @@ public class QueryBuilderController {
 	public IQueryResponse runFlightQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
 		IQueryResponse response = new QueryResponse();
 		
-		List<Flight> flights = queryService.runFlightQuery(queryObject);
-		response = createQueryResponse(Status.SUCCESS, flights != null ? flights.size() + " record(s)" : "flight is null" , mapToQueryFlightResult(flights));
+		List<IQueryResult> flights = queryService.runFlightQuery(queryObject);
+		response = createQueryResponse(Status.SUCCESS, flights != null ? flights.size() + " record(s)" : "flight is null" , flights);
 		
 		return response;
 	}
@@ -83,9 +84,9 @@ public class QueryBuilderController {
 	public IQueryResponse runPassengerQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
 		IQueryResponse response = new QueryResponse();
 		
-		List<Passenger> passengers = queryService.runPassengerQuery(queryObject);
-		response = createQueryResponse(Status.SUCCESS, passengers != null ? passengers.size() + " record(s)" : "passenger is null", mapToQueryPassengerResult(passengers));
-		
+		List<IQueryResult> passengers = queryService.runPassengerQuery(queryObject);
+		response = createQueryResponse(Status.SUCCESS, passengers != null ? passengers.size() + " record(s)" : "query result is null", passengers);
+
 		return response;
 	}
 	
@@ -94,7 +95,7 @@ public class QueryBuilderController {
 		IQueryResponse response = new QueryResponse();
 		List<IQueryResult> resultList = new ArrayList<>();
 
-		resultList.add(mapQueryToQueryResult(queryService.saveQuery(queryRequest)));
+		resultList.add(queryService.saveQuery(queryRequest));
 		
 		response = createQueryResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, resultList);
 		
@@ -106,7 +107,7 @@ public class QueryBuilderController {
 		IQueryResponse response = new QueryResponse();
 		List<IQueryResult> resultList = new ArrayList<>();
 			
-		resultList.add(mapQueryToQueryResult(queryService.editQuery(queryRequest)));
+		resultList.add(queryService.editQuery(queryRequest));
 		
 		response = createQueryResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, resultList);
 		
@@ -120,7 +121,7 @@ public class QueryBuilderController {
 		if(userId != null) {
 			List<IQueryResult> resultList = new ArrayList<>();
 			
-			resultList = mapQueryListToResultList(queryService.listQueryByUser(userId));
+			resultList = queryService.listQueryByUser(userId);
 			
 			response = createQueryResponse(Status.SUCCESS, resultList != null ? resultList.size() + " record(s)" : "resultList is null", resultList);
 		}
@@ -186,139 +187,6 @@ public class QueryBuilderController {
 		return model;
 	}
 	
-	private List<IQueryResult> mapToQueryFlightResult(List<Flight> flights) {
-		List<IQueryResult> qbFlights = new ArrayList<>();
-		
-		if(flights != null && flights.size() > 0) {
-			for(Flight flight : flights) {
-				if(flight != null) {
-					QueryFlightsResult qbFlight = new QueryFlightsResult();
-					
-					qbFlight.setId(flight.getId());
-					qbFlight.setFlightNumber(flight.getFlightNumber());
-					qbFlight.setCarrierCode(flight.getCarrier() != null ? flight.getCarrier() : "");
-					qbFlight.setOrigin(flight.getOrigin() != null ? flight.getOrigin() : "");
-					qbFlight.setOriginCountry(flight.getOriginCountry() != null ? flight.getOriginCountry() : "");
-					qbFlight.setDepartureDt(dtFormat.format(flight.getEtd()));
-					qbFlight.setDestination(flight.getDestination() != null ? flight.getDestination() : "");
-					qbFlight.setDestinationCountry(flight.getDestinationCountry() != null ? flight.getDestinationCountry() : "");
-					qbFlight.setArrivalDt(dtFormat.format(flight.getEta()));
-					
-					qbFlights.add(qbFlight);
-				}
-			}
-		}
-		
-		return qbFlights;
-	}
-	
-	private List<IQueryResult> mapToQueryPassengerResult(List<Passenger> passengers) {
-		List<IQueryResult> qbPassengers = new ArrayList<>();
-		SimpleDateFormat dobFormat = new SimpleDateFormat("MM/dd/yyyy");
-		
-		if(passengers != null && passengers.size() > 0) {
-			for(Passenger p : passengers) {
-				if(p != null) {
-					QueryPassengersResult qbPassenger = new QueryPassengersResult();
-					String docNumber = "";
-					String docType = "";
-					String docIssuanceCountry = "";
-					String carrierCode = "";
-					String flightNumber = "";
-					String origin = "";
-					String destination = "";
-					String departureDt = "";
-					String arrivalDt = "";
-					String seat = "Not available";
-					
-					qbPassenger.setId(p.getId());
-					qbPassenger.setRuleHit(false);
-					qbPassenger.setOnWatchList(false);
-					qbPassenger.setFirstName(p.getFirstName());
-					qbPassenger.setLastName(p.getLastName());
-					// Passenger type
-                    qbPassenger.setPassengerType(p.getPassengerType());				
-					qbPassenger.setGender(p.getGender() != null ? p.getGender() : "");
-					qbPassenger.setDob(dobFormat.format(p.getDob()));
-					qbPassenger.setCitizenship(p.getCitizenshipCountry() != null ? p.getCitizenshipCountry() : "");
-					
-					// Document information
-					Set<Document> docs = p.getDocuments();
-					if(docs != null) {
-						if(docs.iterator().hasNext()) {
-							Document doc = docs.iterator().next();
-							
-							docNumber = doc.getDocumentNumber();
-							docType = doc.getDocumentType();
-							docIssuanceCountry = doc.getIssuanceCountry();
-						}
-					}
-					qbPassenger.setDocumentNumber(docNumber);
-					qbPassenger.setDocumentType(docType);
-					qbPassenger.setDocumentIssuanceCountry(docIssuanceCountry);
-					
-					// flight information
-					Set<Flight> flights = p.getFlights();
-					if(flights != null) {
-						if(flights.iterator().hasNext()) {
-							Flight flight = flights.iterator().next();
-							
-							carrierCode = flight.getCarrier() != null ? flight.getCarrier() : "";
-							flightNumber = flight.getFlightNumber();
-							origin = flight.getOrigin() != null ? flight.getOrigin() : "";
-							destination  = flight.getDestination() != null ? flight.getDestination() : "";
-							departureDt = dtFormat.format(flight.getEtd());
-							arrivalDt = dtFormat.format(flight.getEta());
-						}
-					}
-					qbPassenger.setCarrierCode(carrierCode);
-					qbPassenger.setFlightNumber(flightNumber);
-					qbPassenger.setOrigin(origin);
-					qbPassenger.setDestination(destination);
-					qbPassenger.setDepartureDt(departureDt);
-					qbPassenger.setArrivalDt(arrivalDt);
-					qbPassenger.setSeat(seat);
-					
-					qbPassengers.add(qbPassenger);
-				}
-			}
-		}
-		
-		return qbPassengers;
-	}
-	
-	private QueryResult mapQueryToQueryResult(UserQuery query) throws InvalidQueryException {
-		QueryResult result = new QueryResult();
-		ObjectMapper mapper = new ObjectMapper();
-		
-		result.setId(query.getId());
-		result.setTitle(query.getTitle());
-		result.setDescription(query.getDescription());
-		try {
-			result.setQuery(mapper.readValue(query.getQueryText(), QueryObject.class));
-		} catch (IOException e) {
-			throw new InvalidQueryException(e.getMessage(), query);
-		}
-		
-		return result;
-	}
-	
-	private List<IQueryResult> mapQueryListToResultList(List<UserQuery> queryList) throws InvalidQueryException {
-		List<IQueryResult> resultList = new ArrayList<>();
-		
-		if(queryList != null && queryList.size() > 0) {
-			for(UserQuery query : queryList) {
-				try {
-					resultList.add(mapQueryToQueryResult(query));
-				} catch (InvalidQueryException e) {
-					throw new InvalidQueryException(e.getMessage(), queryList);
-				}
-			}
-		}
-		
-		return resultList;
-	}
-		
 	@ExceptionHandler({QueryAlreadyExistsException.class, QueryDoesNotExistException.class, InvalidQueryException.class,
 		ConstraintViolationException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
