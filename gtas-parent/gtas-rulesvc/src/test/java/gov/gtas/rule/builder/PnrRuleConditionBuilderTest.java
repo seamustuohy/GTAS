@@ -23,7 +23,6 @@ import gov.gtas.querybuilder.mappings.EmailMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.querybuilder.mappings.FrequentFlyerMapping;
 import gov.gtas.querybuilder.mappings.PNRMapping;
-import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
 import gov.gtas.svc.UdrServiceHelper;
 

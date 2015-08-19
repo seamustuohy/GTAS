@@ -46,25 +46,6 @@ import gov.gtas.testdatagen.ApisDataGenerator;
 @TransactionConfiguration(defaultRollback = true)
 public class TargetingServiceIT {
 
-	// private static String DRL =
-	// "package gov.gtas.rule;\n"
-	// +"import gov.gtas.bo.RuleHitDetail;\n"
-	// +"import gov.gtas.model.Passenger;\n"
-	// +"import gov.gtas.model.Pax;\n"
-	// +"import gov.gtas.model.Flight;\n"
-	// +"import gov.gtas.model.Document;\n"
-	// +"global java.util.List resultList;\n"
-	// +"rule \"UDR_TEST_RULE:5\"\n"
-	// +"when\n"
-	// +"$d:Document(issuanceCountry.iso2 != \"US\", issuanceDate >= \"01-Jan-2012\")\n"
-	// +"$p:Pax(id == $d.passenger.id)\n"
-	// +"$f:Flight(flightNumber == \"0012\")\n"
-	// +"Pax(id == $p.id) from $f.passengers\n"
-	// //+"$p:Pax(id == $d.passenger.id, this memberOf $f.passengers)\n"
-	// +"then\n"
-	// +"resultList.add(new RuleHitDetail(33L, 5, $p.getId()));\n"
-	// +"end\n";
-
 	@Autowired
 	TargetingService targetingService;
 
@@ -73,9 +54,6 @@ public class TargetingServiceIT {
 
 	@Resource
 	private ApisMessageRepository apisMessageRepository;
-
-//	@Resource
-//	private PassengerRepository passengerRepository;
 
 	@Before
 	public void setUp() throws Exception {

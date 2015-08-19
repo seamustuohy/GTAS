@@ -5,6 +5,8 @@ import gov.gtas.bo.RuleServiceRequestType;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.PnrMessage;
+import gov.gtas.svc.request.builder.PnrRuleRequestBuilder;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -26,6 +28,8 @@ public class TargetingServiceUtils {
 		RuleServiceRequest ret = null;
 		if (requestMessage instanceof ApisMessage) {
 			ret = createApisRequest((ApisMessage) requestMessage);
+		} else if(requestMessage instanceof PnrMessage){
+			ret = createRequest(requestMessage);
 		} else {
 			// arbitrary Message object
 			ret = createRequest(requestMessage);
@@ -73,16 +77,11 @@ public class TargetingServiceUtils {
 		//add Passengers and documents
 		addPassengersAndDocuments(req.getFlights(), requestList);
 		return createRuleServiceRequest(RuleServiceRequestType.APIS_MESSAGE, requestList);
-//		return new RuleServiceRequest() {
-//			public List<?> getRequestObjects() {
-//				return requestList;
-//			}
-//
-//			public RuleServiceRequestType getRequestType() {
-//				return RuleServiceRequestType.APIS_MESSAGE;
-//			}
-//
-//		};
+	}
+	public static RuleServiceRequest createPnrRequest(final PnrMessage req) {
+		PnrRuleRequestBuilder bldr = new PnrRuleRequestBuilder();
+		bldr.addPnrMessage(req);
+		return bldr.build();
 	}
 	public static RuleServiceRequest createApisRequest(final List<ApisMessage> reqList) {
 		List<Object> reqObjects = new LinkedList<Object>();
@@ -93,7 +92,16 @@ public class TargetingServiceUtils {
 		}
 		return createRuleServiceRequest(RuleServiceRequestType.APIS_MESSAGE, reqObjects);
 	}
-	private static RuleServiceRequest createRuleServiceRequest(final RuleServiceRequestType requestType, final List<?> reqObjects){
+	public static RuleServiceRequest createPnrRequest(final List<PnrMessage> reqList) {
+		PnrRuleRequestBuilder bldr = new PnrRuleRequestBuilder();
+		if(reqList != null){
+			for(PnrMessage msg:reqList){
+		        bldr.addPnrMessage(msg);
+			}
+		}
+		return bldr.build();
+	}
+	public static RuleServiceRequest createRuleServiceRequest(final RuleServiceRequestType requestType, final List<?> reqObjects){
 		return new RuleServiceRequest() {
 			public List<?> getRequestObjects() {
 				return reqObjects;

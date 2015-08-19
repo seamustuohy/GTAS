@@ -53,10 +53,10 @@ public class RuleConditionBuilderHelper {
 			}
 			break;
 		case STRING:
-			if(beginsWithWildcard || endsWithWildcard){
+			if (beginsWithWildcard || endsWithWildcard) {
 				ret = createRegex(value, beginsWithWildcard, endsWithWildcard);
 			} else {
-			    ret = DOUBLE_QUOTE_CHAR + value + DOUBLE_QUOTE_CHAR;
+				ret = DOUBLE_QUOTE_CHAR + value + DOUBLE_QUOTE_CHAR;
 			}
 			break;
 		case DATE:
@@ -85,24 +85,37 @@ public class RuleConditionBuilderHelper {
 		}
 		return ret;
 	}
-	private static String createRegex(String value, final boolean beginsWithWildcard,
-				final boolean endsWithWildcard){
+
+	/**
+	 * Creates a regular expression that begins/ends or both begins and ends
+	 * with wild cards.
+	 * 
+	 * @param value the string to put in the regex.
+	 * @param beginsWithWildcard if true a wildcard is inserted at the start of the regex.
+	 * @param endsWithWildcard if true a wildcard is appended to the regex.
+	 * @return
+	 */
+	private static String createRegex(String value,
+			final boolean beginsWithWildcard, final boolean endsWithWildcard) {
 		StringBuilder bldr = new StringBuilder();
 		bldr.append(DOUBLE_QUOTE_CHAR);
-		if(beginsWithWildcard){
+		if (beginsWithWildcard) {
 			bldr.append(REGEX_WILDCARD);
 		}
+		//TODO escape the regex characters in the value string (e.g., '.')
 		bldr.append(value);
-		if(endsWithWildcard){
+		if (endsWithWildcard) {
 			bldr.append(REGEX_WILDCARD);
 		}
 		bldr.append(DOUBLE_QUOTE_CHAR);
 		return bldr.toString();
 	}
+
 	public static void addConditionValue(final TypeEnum type, final String val,
 			final StringBuilder bldr, final boolean beginsWithWildcard,
 			final boolean endsWithWildcard) throws ParseException {
-		bldr.append(convertJsonStringVal(type, val, beginsWithWildcard, endsWithWildcard));
+		bldr.append(convertJsonStringVal(type, val, beginsWithWildcard,
+				endsWithWildcard));
 	}
 
 	public static void addConditionValue(final TypeEnum type, final String val,
@@ -129,8 +142,11 @@ public class RuleConditionBuilderHelper {
 	 * Creates a friendly description for the criterion.
 	 * 
 	 * @param cond
+	 *            the JSON query term
 	 * @param bldr
+	 *            the string builder to use for constructing the description.
 	 * @throws ParseException
+	 *             on error.
 	 */
 	public static void addConditionDescription(final QueryTerm cond,
 			StringBuilder bldr) throws ParseException {
@@ -160,6 +176,15 @@ public class RuleConditionBuilderHelper {
 		}
 	}
 
+	/**
+	 * Gets the friendly English like name for the field of the entity.
+	 * 
+	 * @param entity
+	 *            the entity containing the field
+	 * @param field
+	 *            the field whose name is to be fetched
+	 * @return the friendly name of the field.
+	 */
 	private static String getFieldName(EntityEnum entity, String field) {
 		String ret = field;
 		switch (entity) {

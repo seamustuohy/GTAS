@@ -130,9 +130,6 @@ public class UdrServiceHelper {
 			UdrRule parent, int indx) {
 
 		StringBuilder stringBuilder = new StringBuilder();
-		// RuleConditionBuilder ruleConditionBuilder = new RuleConditionBuilder(
-		// PASSENGER_VARIABLE_NAME, FLIGHT_VARIABLE_NAME,
-		// DOCUMENT_VARIABLE_NAME);
 		RuleConditionBuilder ruleConditionBuilder = new RuleConditionBuilder(
 				createEngineRuleVariableMap());
 
