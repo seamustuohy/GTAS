@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -14,6 +15,8 @@ import gov.gtas.model.Address;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.Message;
+import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
