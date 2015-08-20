@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -15,13 +16,12 @@ import gov.gtas.model.Address;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Message;
-import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.lookup.Airport;
+import gov.gtas.model.lookup.Country;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrVo;
@@ -35,11 +35,16 @@ import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
 
 @Service
 public class LoaderUtils {
+    private static final Logger logger = LoggerFactory.getLogger(LoaderUtils.class);
+
     private static final String LOADER_USER = "SYSTEM";
     
     @Autowired
     private AirportService airportService;
-    
+
+    @Autowired
+    private CountryService countryService;
+
     public Passenger createNewPassenger(PassengerVo vo) throws ParseException {
         Passenger p = new Passenger();
         p.setCreatedBy(LOADER_USER);
@@ -65,8 +70,8 @@ public class LoaderUtils {
             p.setEmbarkCountry(embark.getCountry());
         }
         
-        p.setCitizenshipCountry(vo.getCitizenshipCountry());
-        p.setResidencyCountry(vo.getResidencyCountry());
+        p.setCitizenshipCountry(normalizeCountryCode(vo.getCitizenshipCountry()));
+        p.setResidencyCountry(normalizeCountryCode(vo.getResidencyCountry()));
     }
 
     public Document createNewDocument(DocumentVo vo) throws ParseException {
@@ -94,19 +99,6 @@ public class LoaderUtils {
         f.setCreatedBy(LOADER_USER);
         updateFlight(vo, f);
         return f;
-    }
-    
-    public static String[] getNullPropertyNames (Object source) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-        Set<String> emptyNames = new HashSet<String>();
-        for(java.beans.PropertyDescriptor pd : pds) {
-            Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
-        }
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
     }
     
     public void updateFlight(FlightVo vo, Flight f) throws ParseException {
@@ -180,6 +172,7 @@ public class LoaderUtils {
         Address addr = new Address();
         addr.setCreatedBy(LOADER_USER);
         BeanUtils.copyProperties(vo, addr);
+        addr.setCountry(normalizeCountryCode(vo.getCountry()));
         return addr;
     }
     
@@ -197,16 +190,55 @@ public class LoaderUtils {
         return cc;
     }
     
-    private Airport getAirport(String a) throws ParseException {
-        if (a == null) return null;
+    /**
+     * try returning ISO_3 code
+     */
+    private String normalizeCountryCode(String code) {
+        if (code == null) {
+            return null;
+        }
         
-        Airport rv = null;
-        if (a.length() == 3) {
-            rv = airportService.getAirportByThreeLetterCode(a);
-        } else if (a.length() == 4) {
-            rv = airportService.getAirportByFourLetterCode(a);
+        if (code.length() == 2) {
+            Country c = countryService.getCountryByTwoLetterCode(code);
+            if (c != null) {
+                return c.getIso3();
+            }
+        } else if (code.length() == 3) {
+            Country c = countryService.getCountryByThreeLetterCode(code);
+            if (c != null) {
+                return code;
+            }
+        }
+        
+        logger.warn("Unknown country code: " + code);
+        return code;
+    }
+    
+    private Airport getAirport(String code) throws ParseException {
+        if (code == null) {
+            return null;
+        }
+        
+        if (code.length() == 3) {
+            return airportService.getAirportByThreeLetterCode(code);
+        } else if (code.length() == 4) {
+            return airportService.getAirportByFourLetterCode(code);
         }
 
-        return rv;
+        logger.warn("Unknown airport code: " + code);
+        return null;
+    }
+
+    private static String[] getNullPropertyNames (Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new HashSet<String>();
+        for(java.beans.PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) emptyNames.add(pd.getName());
+        }
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
     }
 }
