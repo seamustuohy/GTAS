@@ -164,17 +164,17 @@ public class QueryBuilderController {
 	private Map<String, QueryBuilderMapping> getQueryBuilderMapping() {
 		Map<String, QueryBuilderMapping> qbMap = new LinkedHashMap<>();
 		
-		qbMap.put(EntityEnum.ADDRESS.toString(), getMapping(EntityEnum.ADDRESS));
-		qbMap.put(EntityEnum.CREDIT_CARD.toString(), getMapping(EntityEnum.CREDIT_CARD));
-		qbMap.put(EntityEnum.DOCUMENT.toString(), getMapping(EntityEnum.DOCUMENT));
-		qbMap.put(EntityEnum.EMAIL.toString(), getMapping(EntityEnum.EMAIL));
-		qbMap.put(EntityEnum.FLIGHT.toString(), getMapping(EntityEnum.FLIGHT));
-		qbMap.put(EntityEnum.FREQUENT_FLYER.toString(), getMapping(EntityEnum.FREQUENT_FLYER));
-		qbMap.put(EntityEnum.HITS.toString(), getMapping(EntityEnum.HITS));
-		qbMap.put(EntityEnum.PASSENGER.toString(), getMapping(EntityEnum.PASSENGER));
-		qbMap.put(EntityEnum.PHONE.toString(), getMapping(EntityEnum.PHONE));
-		qbMap.put(EntityEnum.PNR.toString(), getMapping(EntityEnum.PNR));
-		qbMap.put(EntityEnum.TRAVEL_AGENCY.toString(), getMapping(EntityEnum.TRAVEL_AGENCY));
+		qbMap.put(EntityEnum.ADDRESS.getEntityName(), getMapping(EntityEnum.ADDRESS));
+		qbMap.put(EntityEnum.CREDIT_CARD.getEntityName(), getMapping(EntityEnum.CREDIT_CARD));
+		qbMap.put(EntityEnum.DOCUMENT.getEntityName(), getMapping(EntityEnum.DOCUMENT));
+		qbMap.put(EntityEnum.EMAIL.getEntityName(), getMapping(EntityEnum.EMAIL));
+		qbMap.put(EntityEnum.FLIGHT.getEntityName(), getMapping(EntityEnum.FLIGHT));
+		qbMap.put(EntityEnum.FREQUENT_FLYER.getEntityName(), getMapping(EntityEnum.FREQUENT_FLYER));
+		qbMap.put(EntityEnum.HITS.getEntityName(), getMapping(EntityEnum.HITS));
+		qbMap.put(EntityEnum.PASSENGER.getEntityName(), getMapping(EntityEnum.PASSENGER));
+		qbMap.put(EntityEnum.PHONE.getEntityName(), getMapping(EntityEnum.PHONE));
+		qbMap.put(EntityEnum.PNR.getEntityName(), getMapping(EntityEnum.PNR));
+		qbMap.put(EntityEnum.TRAVEL_AGENCY.getEntityName(), getMapping(EntityEnum.TRAVEL_AGENCY));
 		
 		return qbMap;
 	}
