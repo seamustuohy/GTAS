@@ -108,18 +108,15 @@ public class LoaderUtils {
         f.setUpdatedBy(LOADER_USER);
 
         BeanUtils.copyProperties(vo, f, getNullPropertyNames(vo));
-        f.setCarrier(vo.getCarrier());
         
-        f.setDestination(vo.getDestination());
-        Airport dest = getAirport(vo.getDestination());
+        Airport dest = getAirport(f.getDestination());
         String destCountry = null;
         if (dest != null) {
             destCountry = dest.getCountry();
             f.setDestinationCountry(destCountry);
         }
         
-        f.setOrigin(vo.getOrigin());
-        Airport origin = getAirport(vo.getOrigin());
+        Airport origin = getAirport(f.getOrigin());
         String originCountry = null;
         if (origin != null) {
             originCountry = origin.getCountry();
@@ -135,14 +132,6 @@ public class LoaderUtils {
         } else {
             f.setDirection(FlightDirectionCode.OTH.name());
         }
-        
-        // handle flight number specially: assume first 2 letters are carrier and rest is flight #
-        StringBuffer buff = new StringBuffer();
-        for (int j=0; j<4 - vo.getFlightNumber().length(); j++) {
-            buff.append("0");
-        }
-        buff.append(vo.getFlightNumber());
-        f.setFlightNumber(buff.toString());
     }
 
     public Pnr convertPnrVo(PnrVo vo) throws ParseException {

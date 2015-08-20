@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 import gov.gtas.model.Document;
 import gov.gtas.model.HitsSummary;
@@ -52,6 +54,58 @@ public class PassengerController {
         } else {
             passengers = pService.findAll();
         }
+        
+        if (passengers == null) return rv;
+        
+        for (Passenger t : passengers) {
+            logger.debug(t.getLastName());
+            PassengerVo vo = new PassengerVo();
+            vo.setPaxId(String.valueOf(t.getId()));
+            vo.setPassengerType(t.getPassengerType());
+            vo.setLastName(t.getLastName());
+            vo.setFirstName(t.getFirstName());
+            vo.setMiddleName(t.getMiddleName());
+            vo.setCitizenshipCountry(t.getCitizenshipCountry());
+            vo.setDebarkation(t.getDebarkation());
+            vo.setDebarkCountry(t.getDebarkCountry());
+            vo.setDob(t.getDob());
+            vo.setEmbarkation(t.getEmbarkation());
+            vo.setEmbarkCountry(t.getEmbarkCountry());
+            vo.setGender(t.getGender().toString());
+            vo.setResidencyCountry(t.getResidencyCountry());
+            vo.setSuffix(t.getSuffix());
+            vo.setTitle(t.getTitle());
+            List<Document> docs = docDao.getPassengerDocuments(t.getId());
+            
+            for (Document d : docs) {
+                DocumentVo docVo = new DocumentVo();
+                docVo.setDocumentNumber(d.getDocumentNumber());
+                docVo.setDocumentType(d.getDocumentType());
+                docVo.setIssuanceCountry(d.getIssuanceCountry());
+                docVo.setExpirationDate(d.getExpirationDate());
+                docVo.setIssuanceDate(d.getIssuanceDate());
+                vo.addDocument(docVo);
+            }
+            
+            vo.setRuleHits(getTotalHitsByPaxID(t.getId()));
+
+            rv.add(vo);
+        }
+
+        return rv;
+    }
+    
+    
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/passengers/all", method = RequestMethod.GET)
+    public List<PassengerVo> getPassengersForUpcomingFlights(@PageableDefault(page= 1 , size=250) Pageable pageable) {
+        List<PassengerVo> rv = new ArrayList<>();
+        List<Passenger> passengers = null;
+        
+        passengers = pService.getPassengersFromUpcomingFlights(pageable);
+        
+        //passengers = pService.findAll();
         
         if (passengers == null) return rv;
         

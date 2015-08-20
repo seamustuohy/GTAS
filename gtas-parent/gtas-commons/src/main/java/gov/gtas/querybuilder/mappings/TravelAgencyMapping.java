@@ -6,7 +6,7 @@ public enum TravelAgencyMapping implements IEntityMapping {
 
 	CITY ("agencyCity", "City", TypeEnum.STRING.getType()),
 	NAME ("agencyName", "Name", TypeEnum.STRING.getType()),
-	PHONE ("", "Phone", TypeEnum.STRING.getType()); // missing field
+	PHONE ("phoneNumber", "Phone", TypeEnum.STRING.getType()); 
 	
 	private String fieldName;
 	private String friendlyName;

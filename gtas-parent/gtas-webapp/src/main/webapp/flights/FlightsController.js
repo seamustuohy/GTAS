@@ -20,7 +20,7 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
         count: 10,          // count per page
         filter: {},
         sorting: {
-            hits: 'desc'
+        	ruleHits: 'desc'
             //,
             //destinationDateTimeSort: 'asc' //, 'number': 'asc'     // initial sorting
         }
@@ -54,19 +54,12 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
 
   // Rule UI Modal Section
   
-$scope.viewRuleByID = function(ruleID){    
+	$scope.viewRuleByID = function(ruleID){    
+			paxService.broadcastRuleID(ruleID);
+	    }; // END OF viewRuleByID Function
 	
-
-		paxService.broadcastRuleID(ruleID);
-
-    }; // END OF viewRuleByID Function
-    
-    
-
     $rootScope.$on('ruleIDBroadcast',function(event, data){
-  	  
     	$scope.getRuleObject(data);
-
     });
     
    
