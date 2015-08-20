@@ -1,4 +1,4 @@
-app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService, queryService, $timeout) {
+app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService, queryService, $timeout, $window) {
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [],
@@ -11,7 +11,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
                 { "name": "passengerType", "displayName": "Type" },
                 { "name": "gender", "displayName": "Gender" },
                 { "name": "dob", "displayName": "DOB" },
-                { "name": "citizenship", "displayName": "COB" },
+                { "name": "citizenship", "displayName": "CIT" },
                 { "name": "documentNumber", "displayName": "Document #" },
                 { "name": "documentType", "displayName": "T" },
                 { "name": "documentIssuanceCountry", "displayName": "Issuance Country" },
@@ -35,11 +35,10 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             ]
         };
 
-    $scope.domTables =  $('.results-table');
-    $scope.domTables.hide();
+    $scope.hideGrid = true;
 
     $scope.loadRule = function () {
-        $scope.domTables.hide();
+        $scope.hideGrid = true;
         var obj = this.$data[this.$index];
         $scope.ruleId = obj.id;
         $scope.loadSummary({title: obj.title, description: obj.description });
@@ -146,6 +145,14 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     };
 
     $scope.viewType = 'FLIGHT';
+
+    $scope.resultsGrid = {
+        paginationPageSize: 10,
+        paginationPageSizes: [],
+        enableFiltering: true,
+        showGridFooter: true
+    };
+
     $scope.executeQuery = function () {
         var baseUrl = $scope.serviceURLs[$scope.viewType],
             qbData = $scope.$builder.queryBuilder('getDrools');
@@ -154,20 +161,19 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             $scope.alertError('Can not execute / invalid query');
             return;
         }
+
+        $scope.hideGrid = true;
         queryService.executeQuery(baseUrl, qbData).then(function (myData) {
             if (myData.result === undefined) {
                 $scope.alertError('Error!');
                 return;
             }
-
-            $scope.gridOpts.data = myData.result;
-            $scope.gridOpts.columnDefs = columns[$scope.viewType];
-            $scope.domTables.show();
+            $scope.resultsGrid.columnDefs = columns[$scope.viewType];
+            $scope.resultsGrid.data = myData.result;
         });
-    };
 
-    $scope.gridOpts = {
-        paginationPageSize: 10,
-        paginationPageSizes: []
+        $timeout(function () {
+            $scope.hideGrid = false;
+        }, 1000);
     };
 });

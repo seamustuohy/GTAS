@@ -5,6 +5,8 @@ import gov.gtas.model.Passenger;
 import java.util.List;
 
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface PassengerService {
@@ -17,6 +19,6 @@ public interface PassengerService {
     public Passenger getPassengerByName(String firstName,String lastName);
     public List<Passenger> getPassengersByLastName(String lastName);
     public List<Passenger> getPassengersByFlightId(Long flightId);
-
+    public List<Passenger> getPassengersFromUpcomingFlights(Pageable pageable) ;
 
 }

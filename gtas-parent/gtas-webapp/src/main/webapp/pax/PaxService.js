@@ -4,7 +4,8 @@ app.service("paxService", function( $rootScope, $http, $q ) {
 	    getPax: getPax,
         broadcast: broadcast,
         getRuleHits: getRuleHits,
-        broadcastRuleID: broadcastRuleID
+        broadcastRuleID: broadcastRuleID,
+        getAllPax: getAllPax
 	});
 	
 	function getPax(flightId) {
@@ -49,6 +50,18 @@ app.service("paxService", function( $rootScope, $http, $q ) {
     function broadcastRuleID(ruleID) {
         $rootScope.$broadcast('ruleIDBroadcast', ruleID); 
     }
+    
+    
+	function getAllPax() {
+	    var request = $http({
+	        method: "get",
+	        url: "/gtas/passengers/all",
+	        params: {
+	            action: "get"
+	        }
+	    });
+	    return( request.then( handleSuccess, handleError ) );
+	}
     
 });
 

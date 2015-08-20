@@ -43,7 +43,7 @@
     "label": "CREDIT CARD",
     "columns": [
       {
-        "id": "CREDIT_CARD.ccNumber",
+        "id": "CREDIT_CARD.number",
         "label": "Number",
         "type": "string"
       }
@@ -101,7 +101,7 @@
     "label": "EMAIL",
     "columns": [
       {
-        "id": "EMAIL.email_address",
+        "id": "EMAIL.address",
         "label": "Address",
         "type": "string"
       },
@@ -234,12 +234,12 @@
     "label": "FREQUENT FLYER",
     "columns": [
       {
-        "id": "FREQUENT_FLYER.ff_airline",
+        "id": "FREQUENT_FLYER.airlineCode",
         "label": "Airline",
         "type": "string"
       },
       {
-        "id": "FREQUENT_FLYER.ff_number",
+        "id": "FREQUENT_FLYER.frequentFlyerNumber",
         "label": "Number",
         "type": "string"
       }
@@ -426,6 +426,17 @@
         "dataSource": "countries"
       },
       {
+        "id": "PASSENGER.seat",
+        "label": "Seat",
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
+        ]
+      },
+      {
         "id": "PASSENGER.passengerType",
         "label": "Type",
         "type": "string",
@@ -440,7 +451,7 @@
     "label": "PHONE",
     "columns": [
       {
-        "id": "PHONE.phone_number",
+        "id": "PHONE.number",
         "label": "Number",
         "type": "string",
         "operators": [
@@ -457,27 +468,27 @@
     "label": "PNR",
     "columns": [
       {
-        "id": "PNR.bag_count",
+        "id": "PNR.bagCount",
         "label": "Bag - Count",
         "type": "integer"
       },
       {
-        "id": "PNR.booking_date",
+        "id": "PNR.dateBooked",
         "label": "Booking Date",
         "type": "date"
       },
       {
-        "id": "PNR.carrier_code",
+        "id": "PNR.carrier",
         "label": "Carrier Code",
         "type": "string"
       },
       {
-        "id": "PNR.days_booked_before_trvl",
+        "id": "PNR.daysBookedBeforeTravel",
         "label": "Days Booked Before Travel",
         "type": "integer"
       },
       {
-        "id": "PNR.dwell_airport",
+        "id": "PNR.dwellAirport",
         "label": "Dwell - Airport",
         "type": "string",
         "operators": [
@@ -493,7 +504,7 @@
         "dataSource": "airports"
       },
       {
-        "id": "PNR.dwell_country",
+        "id": "PNR.dwellCountry",
         "label": "Dwell - Country",
         "type": "string",
         "operators": [
@@ -509,37 +520,37 @@
         "dataSource": "countries"
       },
       {
-        "id": "PNR.dwell_duration",
+        "id": "PNR.dwellDuration",
         "label": "Dwell - Duration",
         "type": "integer"
       },
       {
-        "id": "PNR.dwell_total_duration",
+        "id": "PNR.totalDwellTime",
         "label": "Dwell - Total Duration",
         "type": "integer"
       },
       {
-        "id": "PNR.form_of_payment",
+        "id": "PNR.formOfPayment",
         "label": "Form of Payment",
         "type": "string"
       },
       {
-        "id": "PNR.first_name",
+        "id": "PNR.firstName",
         "label": "Name - First",
         "type": "string"
       },
       {
-        "id": "PNR.last_name",
+        "id": "PNR.lastName",
         "label": "Name - Last",
         "type": "string"
       },
       {
-        "id": "PNR.middle_name",
+        "id": "PNR.middleName",
         "label": "Name - Middle",
         "type": "string"
       },
       {
-        "id": "PNR.origin_airport",
+        "id": "PNR.origin",
         "label": "Origin - Airport",
         "type": "string",
         "operators": [
@@ -555,7 +566,7 @@
         "dataSource": "airports"
       },
       {
-        "id": "PNR.origin_country",
+        "id": "PNR.originCountry",
         "label": "Origin - Country",
         "type": "string",
         "operators": [
@@ -571,12 +582,12 @@
         "dataSource": "countries"
       },
       {
-        "id": "PNR.passenger_count",
+        "id": "PNR.passengerCount",
         "label": "Passenger Count",
         "type": "integer"
       },
       {
-        "id": "PNR.record_locator",
+        "id": "PNR.recordLocator",
         "label": "Record Locator",
         "type": "string"
       },

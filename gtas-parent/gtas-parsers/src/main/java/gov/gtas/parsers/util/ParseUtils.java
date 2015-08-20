@@ -202,4 +202,23 @@ public class ParseUtils {
             return null;
         }
     }
+    
+    public static Date stripTime(Date d) {
+        Calendar cal = Calendar.getInstance(); // locale-specific
+        cal.setTime(d);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+    
+    public static String padFlightNumberWithZeroes(String fn) {
+        StringBuffer buff = new StringBuffer();
+        for (int j=0; j<4 - fn.length(); j++) {
+            buff.append("0");
+        }
+        buff.append(fn);
+        return buff.toString();
+    }
 }
