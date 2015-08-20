@@ -185,7 +185,7 @@
             <ul class="dropdown-menu">
 
             <li><a href="home.action">Flights</a></li>
-            <li><a href="home.action">Passengers</a></li>
+            <li><a href="home.action?#/passengers">Passengers</a></li>
 
             </ul>
             </li>

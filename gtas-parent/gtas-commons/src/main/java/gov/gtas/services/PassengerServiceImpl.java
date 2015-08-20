@@ -2,7 +2,9 @@ package gov.gtas.services;
 
 import gov.gtas.model.Passenger;
 import gov.gtas.repository.PassengerRepository;
-
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -92,4 +94,14 @@ public class PassengerServiceImpl implements PassengerService {
         List<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId);
         return passengerList;
     }
+    
+    @Override
+    @Transactional
+    public List<Passenger> getPassengersFromUpcomingFlights(Pageable pageable) {
+        List<Passenger> passengerList = passengerRespository.getPassengersFromUpcomingFlights(pageable).getContent();
+        return passengerList;
+    }
+    
+    
+    
 }

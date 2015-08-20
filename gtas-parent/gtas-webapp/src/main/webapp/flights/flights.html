@@ -58,8 +58,8 @@
 			style="cursor: pointer;" aria-expanded="false"
 			aria-controls="demo{{$index}}">
 
-			<td data-title="'P'" sortable="'P'" filter="{ 'P': 'select' }">{{flight.totalPax}}</td>
-			<td data-title="'Hits'" sortable="'hits'" filter="{ 'hits': 'select' }">{{flight.ruleHits}}</td>
+			<td data-title="'P'" sortable="'totalPax'" filter="{ 'totalPax': 'select' }">{{flight.totalPax}}</td>
+			<td data-title="'Hits'" sortable="'ruleHits'" filter="{ 'ruleHits': 'select' }">{{flight.ruleHits}}</td>
 			<td data-title="'Carrier'" sortable="'carrier'"
 				filter="{ 'carrier': 'select' }"
 				filter-data="values($column, 'carrier')">{{flight.carrier}}</td>
@@ -110,12 +110,14 @@
 								<th>Seat</th>
 
 							</tr>
-						</thead>
-						<tbody ng-repeat="pax in getPaxSpecificList($index)" style="font-size: 14px;">
+						</thead> <!-- pax in getPaxSpecificList($index) -->
+						<tbody ng-repeat="pax in getPaxSpecificList($index) | orderObjectBy:'ruleHits':true" style="font-size: 14px;">
 							<!--  style="border-collapse:collapse;"  data-toggle="collapse" -->
 							<tr>
 								<td></td>
-								<td ng-if="pax.ruleHits > 0" data-toggle="collapse"
+								<td ng-if="pax.ruleHits > 0" data-toggle="collapse" 
+									sortable="'ruleHits'"
+									
 									data-target="#nestedRule{{pax.lastName+$index}}"
 									aria-expanded="false" aria-controls="nestedRule{{$index}}"
 									style="cursor: pointer;" ng-click="getRuleHits(pax.paxId);">
@@ -165,14 +167,14 @@
 												<tr ng-repeat="hitDetail in paxHitList">
 												
 												
-													<td ng-show="hitDetail.ruleTitle!==undefined">
+													<td>
 														{{hitDetail.ruleId}}
 													</td>	
-													<td ng-show="hitDetail.ruleTitle!==undefined">
+													<td>
 														{{hitDetail.ruleTitle}}
 													</td>
-													<td ng-show="hitDetail.ruleTitle!==undefined">
-														{{hitDetail.ruleDesc}}
+													<td>
+														{{hitDetail.ruleConditions}}
 														</td>
 														
 														<td ng-show="hitDetail.ruleTitle!==undefined" 
@@ -209,7 +211,23 @@
 
 </div> <!-- outer div -->
 
+
 <script type="text/ng-template" id="custom/pager">
+
+<ul class="pagination ng-table-pagination" id="flightPaginationList" style="display: inline-block; margin-left: 350px; float: none;">
+<li ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-switch="page.type" >
+    <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a>
+    <a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+    <a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+    <a ng-switch-when="more" ng-click="params.page(page.number)" href="">&#8230;</a>
+    <a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+    <a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a>
+</li>
+</ul>
+
+</script>
+
+<script type="text/ng-template" id="custom/pager1">
         <ul class="pager ng-cloak">
             <li ng-repeat="page in pages"
                 ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
