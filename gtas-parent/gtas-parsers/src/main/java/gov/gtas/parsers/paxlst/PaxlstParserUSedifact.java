@@ -18,6 +18,7 @@ import gov.gtas.parsers.paxlst.segment.usedifact.LOC.LocCode;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.DocType;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
+import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.passenger.DocumentVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
@@ -107,7 +108,7 @@ public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
         FlightVo f = new FlightVo();
         parsedMessage.addFlight(f);
 
-        f.setFlightNumber(tdt.getC_flightNumber());
+        f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tdt.getC_flightNumber()));
         f.setCarrier(tdt.getC_airlineCode());
 
         while (i.hasNext()) {
