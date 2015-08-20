@@ -161,7 +161,7 @@ public class QueryValidationUtils {
 					case Constants.PNR:
 						validField = validateField(PNRMapping.values(), field);
 						break;
-					case Constants.TRAVELAGENCY:
+					case Constants.AGENCY:
 						validField = validateField(TravelAgencyMapping.values(), field);
 						break;
 					
