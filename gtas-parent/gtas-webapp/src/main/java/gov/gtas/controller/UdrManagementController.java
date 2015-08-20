@@ -4,16 +4,10 @@ import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.constants.Constants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
-import gov.gtas.error.ErrorDetails;
-import gov.gtas.error.ErrorHandler;
-import gov.gtas.error.ErrorHandlerFactory;
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.MessageStatus;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.UdrSpecification;
-import gov.gtas.model.udr.json.error.GtasJsonError;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.rule.RuleServiceResult;
 import gov.gtas.svc.RuleManagementService;
@@ -21,25 +15,17 @@ import gov.gtas.svc.TargetingService;
 import gov.gtas.svc.UdrService;
 import gov.gtas.util.DateCalendarUtils;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-
-import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.orm.jpa.JpaSystemException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -83,6 +69,12 @@ public class UdrManagementController {
 	@RequestMapping(value = Constants.UDR_TARGET_ALL_APIS, method = RequestMethod.GET)
 	public List<?> getTargetingApisResult() {
 		List<RuleHitDetail> ret = targetingService.analyzeLoadedApisMessage();
+		return ret;
+	}
+
+	@RequestMapping(value = Constants.UDR_TARGET_ALL_PNR, method = RequestMethod.GET)
+	public List<?> getTargetingPnrResult() {
+		List<RuleHitDetail> ret = targetingService.analyzeLoadedPnrMessage();
 		return ret;
 	}
 

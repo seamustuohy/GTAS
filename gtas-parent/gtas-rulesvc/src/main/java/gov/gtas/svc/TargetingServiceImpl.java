@@ -139,6 +139,23 @@ public class TargetingServiceImpl implements TargetingService {
 		return ret;
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.TargetingService#analyzeLoadedPnrMessage()
+	 */
+	@Override
+	@Transactional
+	public List<RuleHitDetail> analyzeLoadedPnrMessage() {
+		List<RuleHitDetail> ret = null;
+		List<PnrMessage> msgs = this.retrievePnrMessage(MessageStatus.LOADED);
+		if (msgs != null) {
+			RuleServiceRequest req = TargetingServiceUtils
+					.createPnrRequest(msgs);
+			RuleServiceResult res = ruleService.invokeRuleEngine(req);
+			ret = res.getResultList();
+		}
+		return ret;
+	}
+
 	@Override
 	@Transactional
 	public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus) {

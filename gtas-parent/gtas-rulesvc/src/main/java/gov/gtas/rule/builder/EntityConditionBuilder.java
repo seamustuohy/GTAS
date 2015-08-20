@@ -2,6 +2,7 @@ package gov.gtas.rule.builder;
 
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
+import gov.gtas.util.DateCalendarUtils;
 
 import java.text.ParseException;
 import java.util.HashSet;
@@ -100,7 +101,32 @@ public abstract class EntityConditionBuilder {
 		final StringBuilder bldr = new StringBuilder();
 		switch (opCode) {
 		case EQUAL:
+			if(attributeType == TypeEnum.DATETIME){
+				//special 'between like' treatment for date-time equality check
+				//since Drools only supports date comparisons only
+				bldr.append(attributeName).append(" >= ");
+				RuleConditionBuilderHelper.addConditionValue(TypeEnum.DATE,
+						values[0], bldr);
+				bldr.append(", ").append(attributeName).append(" < ");
+				RuleConditionBuilderHelper.addConditionValue(TypeEnum.DATE,
+						DateCalendarUtils.addOneDayToJsondateString(values[0]), bldr);
+				break;				
+			}
 		case NOT_EQUAL:
+			if(attributeType == TypeEnum.DATETIME){
+				//special 'between like' treatment for date-time inequality check
+				//since Drools only supports date comparisons only
+				bldr.append("(").append(attributeName).append(" < ");
+				RuleConditionBuilderHelper.addConditionValue(attributeType,
+						values[0], bldr);
+				bldr.append(" || ").append(attributeName).append(" >= ");
+				RuleConditionBuilderHelper.addConditionValue(attributeType,
+						DateCalendarUtils.addOneDayToJsondateString(values[0]), bldr);
+				bldr.append(")");
+				// convert all commas to &&
+				andConnectorIsComma = false;
+				break;				
+			}
 		case GREATER:
 		case GREATER_OR_EQUAL:
 		case LESS:
