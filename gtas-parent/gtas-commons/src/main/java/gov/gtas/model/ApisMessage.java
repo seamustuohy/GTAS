@@ -36,8 +36,8 @@ public class ApisMessage extends Message {
         cascade={CascadeType.PERSIST, CascadeType.MERGE}
     )
     @JoinTable(
-        name="message_flight",
-        joinColumns=@JoinColumn(name="message_id"),
+        name="apis_message_flight",
+        joinColumns=@JoinColumn(name="apis_message_id"),
         inverseJoinColumns=@JoinColumn(name="flight_id")
     )        
     private Set<Flight> flights = new HashSet<>();
