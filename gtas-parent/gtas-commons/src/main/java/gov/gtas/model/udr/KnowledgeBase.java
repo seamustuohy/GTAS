@@ -52,7 +52,7 @@ public class KnowledgeBase extends BaseEntity {
 	@Column(name = "CREATION_DT", nullable = false, length = 19)
 	private Date creationDt;
 
-	@OneToMany(mappedBy="knowledgeBase", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="knowledgeBase", fetch=FetchType.LAZY)
 	private Set<Rule> rulesInKB;
 	
 	public KnowledgeBase(){
