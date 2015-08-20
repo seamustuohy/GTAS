@@ -173,7 +173,7 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 	 * gov.gtas.svc.RuleManagementService#deleteKnowledgeBase(java.lang.String)
 	 */
 	@Override
-	@Transactional
+	@Transactional(value=TxType.MANDATORY)
 	public KnowledgeBase deleteKnowledgeBase(String kbName) {
 		KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
 		unlinkRulesFromKnowledgeBase(kb.getRulesInKB());
