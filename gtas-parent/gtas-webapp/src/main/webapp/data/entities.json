@@ -1,5 +1,5 @@
 {
-  "ADDRESS": {
+  "Address": {
     "label": "ADDRESS",
     "columns": [
       {
@@ -39,7 +39,7 @@
       }
     ]
   },
-  "CREDIT_CARD": {
+  "CreditCard": {
     "label": "CREDIT CARD",
     "columns": [
       {
@@ -49,7 +49,7 @@
       }
     ]
   },
-  "DOCUMENT": {
+  "Document": {
     "label": "DOCUMENT",
     "columns": [
       {
@@ -97,7 +97,7 @@
       }
     ]
   },
-  "EMAIL": {
+  "Email": {
     "label": "EMAIL",
     "columns": [
       {
@@ -112,7 +112,7 @@
       }
     ]
   },
-  "FLIGHT": {
+  "Flight": {
     "label": "FLIGHT",
     "columns": [
       {
@@ -230,7 +230,7 @@
       }
     ]
   },
-  "FREQUENT_FLYER": {
+  "FrequentFlyer": {
     "label": "FREQUENT FLYER",
     "columns": [
       {
@@ -245,7 +245,7 @@
       }
     ]
   },
-  "HITS": {
+  "Hits": {
     "label": "HITS",
     "columns": [
       {
@@ -285,7 +285,7 @@
       }
     ]
   },
-  "PASSENGER": {
+  "Passenger": {
     "label": "PASSENGER",
     "columns": [
       {
@@ -447,7 +447,7 @@
       }
     ]
   },
-  "PHONE": {
+  "Phone": {
     "label": "PHONE",
     "columns": [
       {
@@ -464,7 +464,7 @@
       }
     ]
   },
-  "PNR": {
+  "Pnr": {
     "label": "PNR",
     "columns": [
       {
@@ -598,7 +598,7 @@
       }
     ]
   },
-  "TRAVEL_AGENCY": {
+  "Agency": {
     "label": "TRAVEL AGENCY",
     "columns": [
       {
