@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -194,7 +195,7 @@ public class LoaderUtils {
      * try returning ISO_3 code
      */
     private String normalizeCountryCode(String code) {
-        if (code == null) {
+        if (StringUtils.isBlank(code)) {
             return null;
         }
         
@@ -215,7 +216,7 @@ public class LoaderUtils {
     }
     
     private Airport getAirport(String code) throws ParseException {
-        if (code == null) {
+        if (StringUtils.isBlank(code)) {
             return null;
         }
         
