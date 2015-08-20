@@ -3,37 +3,37 @@
     "label": "ADDRESS",
     "columns": [
       {
-        "id": "ADDRESS.city",
+        "id": "Address.city",
         "label": "City",
         "type": "string"
       },
       {
-        "id": "ADDRESS.country",
+        "id": "Address.country",
         "label": "Country",
         "type": "string"
       },
       {
-        "id": "ADDRESS.line1",
+        "id": "Address.line1",
         "label": "Line 1",
         "type": "string"
       },
       {
-        "id": "ADDRESS.line2",
+        "id": "Address.line2",
         "label": "Line 2",
         "type": "string"
       },
       {
-        "id": "ADDRESS.line3",
+        "id": "Address.line3",
         "label": "Line 3",
         "type": "string"
       },
       {
-        "id": "ADDRESS.postalCode",
+        "id": "Address.postalCode",
         "label": "Postal Code",
         "type": "string"
       },
       {
-        "id": "ADDRESS.state",
+        "id": "Address.state",
         "label": "State/Province",
         "type": "string"
       }
@@ -43,7 +43,7 @@
     "label": "CREDIT CARD",
     "columns": [
       {
-        "id": "CREDIT_CARD.number",
+        "id": "CreditCard.number",
         "label": "Number",
         "type": "string"
       }
@@ -53,7 +53,7 @@
     "label": "DOCUMENT",
     "columns": [
       {
-        "id": "DOCUMENT.issuanceCountry",
+        "id": "Document.issuanceCountry",
         "label": "Citizenship OR Issuance Country",
         "type": "string",
         "operators": [
@@ -69,18 +69,18 @@
         "dataSource": "countries"
       },
       {
-        "id": "DOCUMENT.expirationDate",
+        "id": "Document.expirationDate",
         "label": "Expiration Date",
         "type": "date",
         "plugin": "datepicker"
       },
       {
-        "id": "DOCUMENT.documentNumber",
+        "id": "Document.documentNumber",
         "label": "Number",
         "type": "string"
       },
       {
-        "id": "DOCUMENT.documentType",
+        "id": "Document.documentType",
         "label": "Type",
         "type": "string",
         "operators": [
@@ -101,12 +101,12 @@
     "label": "EMAIL",
     "columns": [
       {
-        "id": "EMAIL.address",
+        "id": "Email.address",
         "label": "Address",
         "type": "string"
       },
       {
-        "id": "EMAIL.domain",
+        "id": "Email.domain",
         "label": "Domain",
         "type": "string"
       }
@@ -116,7 +116,7 @@
     "label": "FLIGHT",
     "columns": [
       {
-        "id": "FLIGHT.destination",
+        "id": "Flight.destination",
         "label": "Airport Destination",
         "type": "string",
         "operators": [
@@ -132,7 +132,7 @@
         "dataSource": "airports"
       },
       {
-        "id": "FLIGHT.origin",
+        "id": "Flight.origin",
         "label": "Airport Origin",
         "type": "string",
         "operators": [
@@ -148,7 +148,7 @@
         "dataSource": "airports"
       },
       {
-        "id": "FLIGHT.carrier",
+        "id": "Flight.carrier",
         "label": "Carrier",
         "type": "string",
         "operators": [
@@ -164,7 +164,7 @@
         "dataSource": "carriers"
       },
       {
-        "id": "FLIGHT.destinationCountry",
+        "id": "Flight.destinationCountry",
         "label": "Destination Country",
         "type": "string",
         "operators": [
@@ -180,7 +180,7 @@
         "dataSource": "countries"
       },
       {
-        "id": "FLIGHT.originCountry",
+        "id": "Flight.originCountry",
         "label": "Origin Country",
         "type": "string",
         "operators": [
@@ -196,7 +196,7 @@
         "dataSource": "countries"
       },
       {
-        "id": "FLIGHT.direction",
+        "id": "Flight.direction",
         "label": "Direction",
         "type": "string",
         "operators": "EQUALS",
@@ -207,24 +207,24 @@
         }
       },
       {
-        "id": "FLIGHT.eta",
+        "id": "Flight.eta",
         "label": "ETA",
         "type": "date",
         "plugin": "datepicker"
       },
       {
-        "id": "FLIGHT.etd",
+        "id": "Flight.etd",
         "label": "ETD",
         "type": "date",
         "plugin": "datepicker"
       },
       {
-        "id": "FLIGHT.flightNumber",
+        "id": "Flight.flightNumber",
         "label": "Number",
         "type": "string"
       },
       {
-        "id": "FLIGHT.thru",
+        "id": "Flight.thru",
         "label": "Thru",
         "type": "string"
       }
@@ -234,12 +234,12 @@
     "label": "FREQUENT FLYER",
     "columns": [
       {
-        "id": "FREQUENT_FLYER.airlineCode",
+        "id": "FrequentFlyer.airlineCode",
         "label": "Airline",
         "type": "string"
       },
       {
-        "id": "FREQUENT_FLYER.frequentFlyerNumber",
+        "id": "FrequentFlyer.frequentFlyerNumber",
         "label": "Number",
         "type": "string"
       }
@@ -249,7 +249,7 @@
     "label": "HITS",
     "columns": [
       {
-        "id": "HITS.has_rule_hit",
+        "id": "Hits.has_rule_hit",
         "label": "Has Rule Hit",
         "type": "integer",
         "operators": "EQUALS",
@@ -264,7 +264,7 @@
         }
       },
       {
-        "id": "HITS.has_list_rule_hit",
+        "id": "Hits.has_list_rule_hit",
         "label": "Has Watch List Hit",
         "type": "integer",
         "operators": "EQUALS",
@@ -279,7 +279,7 @@
         }
       },
       {
-        "id": "HITS.master_list_id",
+        "id": "Hits.master_list_id",
         "label": "Rules Hit Id",
         "type": "string"
       }
@@ -289,12 +289,12 @@
     "label": "PASSENGER",
     "columns": [
       {
-        "id": "PASSENGER.age",
+        "id": "Passenger.age",
         "label": "Age",
         "type": "integer"
       },
       {
-        "id": "PASSENGER.citizenshipCountry",
+        "id": "Passenger.citizenshipCountry",
         "label": "Citizenship Country",
         "type": "string",
         "operators": [
@@ -310,7 +310,7 @@
         "dataSource": "countries"
       },
       {
-        "id": "PASSENGER.debarkation",
+        "id": "Passenger.debarkation",
         "label": "Debarkation Airport",
         "type": "string",
         "operators": [
@@ -326,7 +326,7 @@
         "dataSource": "airports"
       },
       {
-        "id": "PASSENGER.debarkCountry",
+        "id": "Passenger.debarkCountry",
         "label": "Debarkation Country",
         "type": "string",
         "operators": [
@@ -342,13 +342,13 @@
         "dataSource": "countries"
       },
       {
-        "id": "PASSENGER.dob",
+        "id": "Passenger.dob",
         "label": "DOB",
         "type": "date",
         "plugin": "datepicker"
       },
       {
-        "id": "PASSENGER.embarkation",
+        "id": "Passenger.embarkation",
         "label": "Embarkation Airport",
         "type": "string",
         "operators": [
@@ -364,7 +364,7 @@
         "dataSource": "airports"
       },
       {
-        "id": "PASSENGER.embarkCountry",
+        "id": "Passenger.embarkCountry",
         "label": "Embarkation Country",
         "type": "string",
         "operators": [
@@ -380,7 +380,7 @@
         "dataSource": "countries"
       },
       {
-        "id": "PASSENGER.gender",
+        "id": "Passenger.gender",
         "label": "Gender",
         "type": "string",
         "operators": [
@@ -395,22 +395,22 @@
         "dataSource": "genders"
       },
       {
-        "id": "PASSENGER.firstName",
+        "id": "Passenger.firstName",
         "label": "Name - First",
         "type": "string"
       },
       {
-        "id": "PASSENGER.lastName",
+        "id": "Passenger.lastName",
         "label": "Name - Last",
         "type": "string"
       },
       {
-        "id": "PASSENGER.middleName",
+        "id": "Passenger.middleName",
         "label": "Name - Middle",
         "type": "string"
       },
       {
-        "id": "PASSENGER.residencyCountry",
+        "id": "Passenger.residencyCountry",
         "label": "Residency Country",
         "type": "string",
         "operators": [
@@ -426,7 +426,7 @@
         "dataSource": "countries"
       },
       {
-        "id": "PASSENGER.seat",
+        "id": "Passenger.seat",
         "label": "Seat",
         "type": "string",
         "operators": [
@@ -437,7 +437,7 @@
         ]
       },
       {
-        "id": "PASSENGER.passengerType",
+        "id": "Passenger.passengerType",
         "label": "Type",
         "type": "string",
         "input": "select",
@@ -451,7 +451,7 @@
     "label": "PHONE",
     "columns": [
       {
-        "id": "PHONE.number",
+        "id": "Phone.number",
         "label": "Number",
         "type": "string",
         "operators": [
@@ -468,27 +468,27 @@
     "label": "PNR",
     "columns": [
       {
-        "id": "PNR.bagCount",
+        "id": "Pnr.bagCount",
         "label": "Bag - Count",
         "type": "integer"
       },
       {
-        "id": "PNR.dateBooked",
+        "id": "Pnr.dateBooked",
         "label": "Booking Date",
         "type": "date"
       },
       {
-        "id": "PNR.carrier",
+        "id": "Pnr.carrier",
         "label": "Carrier Code",
         "type": "string"
       },
       {
-        "id": "PNR.daysBookedBeforeTravel",
+        "id": "Pnr.daysBookedBeforeTravel",
         "label": "Days Booked Before Travel",
         "type": "integer"
       },
       {
-        "id": "PNR.dwellAirport",
+        "id": "Pnr.dwellAirport",
         "label": "Dwell - Airport",
         "type": "string",
         "operators": [
@@ -504,7 +504,7 @@
         "dataSource": "airports"
       },
       {
-        "id": "PNR.dwellCountry",
+        "id": "Pnr.dwellCountry",
         "label": "Dwell - Country",
         "type": "string",
         "operators": [
@@ -520,37 +520,37 @@
         "dataSource": "countries"
       },
       {
-        "id": "PNR.dwellDuration",
+        "id": "Pnr.dwellDuration",
         "label": "Dwell - Duration",
         "type": "integer"
       },
       {
-        "id": "PNR.totalDwellTime",
+        "id": "Pnr.totalDwellTime",
         "label": "Dwell - Total Duration",
         "type": "integer"
       },
       {
-        "id": "PNR.formOfPayment",
+        "id": "Pnr.formOfPayment",
         "label": "Form of Payment",
         "type": "string"
       },
       {
-        "id": "PNR.firstName",
+        "id": "Pnr.firstName",
         "label": "Name - First",
         "type": "string"
       },
       {
-        "id": "PNR.lastName",
+        "id": "Pnr.lastName",
         "label": "Name - Last",
         "type": "string"
       },
       {
-        "id": "PNR.middleName",
+        "id": "Pnr.middleName",
         "label": "Name - Middle",
         "type": "string"
       },
       {
-        "id": "PNR.origin",
+        "id": "Pnr.origin",
         "label": "Origin - Airport",
         "type": "string",
         "operators": [
@@ -566,7 +566,7 @@
         "dataSource": "airports"
       },
       {
-        "id": "PNR.originCountry",
+        "id": "Pnr.originCountry",
         "label": "Origin - Country",
         "type": "string",
         "operators": [
@@ -582,17 +582,17 @@
         "dataSource": "countries"
       },
       {
-        "id": "PNR.passengerCount",
+        "id": "Pnr.passengerCount",
         "label": "Passenger Count",
         "type": "integer"
       },
       {
-        "id": "PNR.recordLocator",
+        "id": "Pnr.recordLocator",
         "label": "Record Locator",
         "type": "string"
       },
       {
-        "id": "PNR.route",
+        "id": "Pnr.route",
         "label": "Route",
         "type": "string"
       }
@@ -602,17 +602,17 @@
     "label": "TRAVEL AGENCY",
     "columns": [
       {
-        "id": "TRAVEL_AGENCY.city",
+        "id": "Agency.city",
         "label": "City",
         "type": "string"
       },
       {
-        "id": "TRAVEL_AGENCY.name",
+        "id": "Agency.name",
         "label": "Name",
         "type": "string"
       },
       {
-        "id": "TRAVEL_AGENCY.phone",
+        "id": "Agency.phone",
         "label": "Phone",
         "type": "string",
         "operators": [
