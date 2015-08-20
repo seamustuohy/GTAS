@@ -5,6 +5,8 @@ import java.util.Date;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import gov.gtas.parsers.util.ParseUtils;
+
 public class FlightVo {
     private String flightId;
     private String carrier;
@@ -23,14 +25,19 @@ public class FlightVo {
      * rules for setting calculated field 'flightDate'
      */
     public void setFlightDate(Date etd, Date eta, Date transmissionDate) {
+        Date d = null;
         if (etd != null) {
-            setFlightDate(etd);
+            d = etd;
         } else if (eta != null) {
-            setFlightDate(eta);
+            d = eta;
         } else {
             // TODO: verify this case
-            setFlightDate(transmissionDate);
-        }        
+            d = transmissionDate;
+        }
+
+        if (d != null) {
+            this.flightDate = ParseUtils.stripTime(d);
+        }
     }
     
     public String getDirection() {
