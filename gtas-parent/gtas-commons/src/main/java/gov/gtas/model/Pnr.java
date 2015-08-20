@@ -64,6 +64,11 @@ public class Pnr extends BaseEntityAudit{
     @Column(name = "total_dwell_time")
     private Integer totalDwellTime;
     
+    private String dwellAirport;
+    private String dwellCountry;
+    private Integer dwellDuration;
+    private String route;
+    
     @ManyToMany(
         targetEntity=Flight.class,
         cascade={CascadeType.ALL}

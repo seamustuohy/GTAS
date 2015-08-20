@@ -27,6 +27,8 @@ public class Agency extends BaseEntityAudit {
 	@Column(name = "agency_country")
 	private String agencyCountry;
 
+	private String phoneNumber;
+	
 	public String getAgencyName() {
 		return agencyName;
 	}

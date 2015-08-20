@@ -62,6 +62,8 @@ public class Flight extends BaseEntityAudit {
     @Column(length = 3, nullable = false)
     private String direction;
     
+    private Boolean thru;
+    
     @ManyToMany(
         targetEntity=Passenger.class,
         cascade={CascadeType.ALL}
