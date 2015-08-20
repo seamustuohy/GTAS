@@ -335,7 +335,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         f.setOrigin(tvl.getOrigin());
         f.setEta(tvl.getEta());
         f.setEtd(tvl.getEtd());
-        f.setFlightNumber(tvl.getFlightNumber());
+        f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tvl.getFlightNumber()));
         f.setFlightDate(tvl.getEtd(), tvl.getEta(), parsedMessage.getTransmissionDate());
         currentPnr.getFlights().add(f);
         

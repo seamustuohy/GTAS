@@ -64,7 +64,7 @@ public class TDT extends Segment {
         } else {
             String[] tmp = ParseUtils.separateCarrierAndFlightNumber(this.c_journeyIdentifier);
             this.c_carrierIdentifier = tmp[0];
-            this.flightNumber = ParseUtils.padFlightNumberWithZeroes(tmp[1]);
+            this.flightNumber = tmp[1];
         }
     }
 

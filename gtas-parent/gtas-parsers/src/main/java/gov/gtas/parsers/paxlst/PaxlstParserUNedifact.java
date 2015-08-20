@@ -196,7 +196,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
                 parsedMessage.addFlight(f);
                 TdtType flightType = tdt.getTransportStageQualifier();
                 f.setOverFlight(flightType.equals(TdtType.OVER_FLIGHT));
-                f.setFlightNumber(tdt.getFlightNumber());
+                f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tdt.getFlightNumber()));
                 f.setCarrier(tdt.getC_carrierIdentifier());
                 f.setOrigin(origin);
                 f.setDestination(dest);

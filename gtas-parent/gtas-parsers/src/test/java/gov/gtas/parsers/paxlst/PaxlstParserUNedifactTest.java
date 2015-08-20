@@ -44,7 +44,7 @@ public final class PaxlstParserUNedifactTest {
         List<FlightVo> flights = vo.getFlights();
         assertEquals(1, flights.size());
         FlightVo f = flights.get(0);
-        assertEquals("123", f.getFlightNumber());
+        assertEquals("0123", f.getFlightNumber());
         assertEquals("YVR", f.getOrigin());
         assertEquals("JFK", f.getDestination());
     }
@@ -68,11 +68,11 @@ public final class PaxlstParserUNedifactTest {
         List<FlightVo> flights = vo.getFlights();
         assertEquals(2, flights.size());
         FlightVo f1 = flights.get(0);
-        assertEquals("123", f1.getFlightNumber());
+        assertEquals("0123", f1.getFlightNumber());
         assertEquals("YVR", f1.getOrigin());
         assertEquals("JFK", f1.getDestination());
         FlightVo f2 = flights.get(1);
-        assertEquals("124", f2.getFlightNumber());
+        assertEquals("0124", f2.getFlightNumber());
         assertEquals("JFK", f2.getOrigin());
         assertEquals("ATL", f2.getDestination());
     }
@@ -97,12 +97,12 @@ public final class PaxlstParserUNedifactTest {
         assertEquals(2, flights.size());
         
         FlightVo f1 = flights.get(0);
-        assertEquals("250", f1.getFlightNumber());
+        assertEquals("0250", f1.getFlightNumber());
         assertEquals("JFK", f1.getOrigin());
         assertEquals("ANC", f1.getDestination());
         
         FlightVo f2 = flights.get(1);
-        assertEquals("250", f2.getFlightNumber());
+        assertEquals("0250", f2.getFlightNumber());
         assertEquals("ANC", f2.getOrigin());
         assertEquals("ICN", f2.getDestination());
     } 
@@ -129,12 +129,12 @@ public final class PaxlstParserUNedifactTest {
         assertEquals(2, flights.size());
         
         FlightVo f1 = flights.get(0);
-        assertEquals("250", f1.getFlightNumber());
+        assertEquals("0250", f1.getFlightNumber());
         assertEquals("JFK", f1.getOrigin());
         assertEquals("ANC", f1.getDestination());
         
         FlightVo f2 = flights.get(1);
-        assertEquals("250", f2.getFlightNumber());
+        assertEquals("0250", f2.getFlightNumber());
         assertEquals("ANC", f2.getOrigin());
         assertEquals("ICN", f2.getDestination());        
     } 
