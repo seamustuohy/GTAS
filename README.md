@@ -64,3 +64,6 @@ sudo -u tomcat sh bin/catalina.sh start
 > java -jar gtas-loader/target/gtas-loader.jar APIS 101.txt
 5. To load all of the sample files, you need to provide two directories -- one for the source files and one where the loader will place the processed files.  Note that some of the files are invalid and will not import.  e.g.,
 > java -jar gtas-loader/target/gtas-loader.jar APIS /tmp/keith_msgs/ /tmp/out/
+6. To upload PNR data, download sample PNR files from google drive/PNR.
+7. Run the loader as follows:
+> java -jar gtas-loader/target/gtas-loader.jar PNR 2_pnrs_basic.edi
