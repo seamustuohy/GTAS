@@ -17,9 +17,13 @@ import org.apache.commons.lang3.time.DateUtils;
  */
 public class DateCalendarUtils {
 	// TODO create utility methods using Java 8 java.time
-	// private static DateTimeFormatter jsonDateFormatter =
-	// DateTimeFormatter.ofPattern(UdrConstants.UDR_DATE_FORMAT);
 
+	private static final long MILLIS_IN_ONE_DAY = 86400000L;
+	public static final String addOneDayToJsondateString(String jsonDateString) throws ParseException{
+		Date dt = parseJsonDate(jsonDateString);
+		dt = new Date(dt.getTime()+MILLIS_IN_ONE_DAY);
+		return formatJsonDate(dt);
+	}
 	/**
 	 * Calculates the offset a date time offset from GMT.
 	 * 

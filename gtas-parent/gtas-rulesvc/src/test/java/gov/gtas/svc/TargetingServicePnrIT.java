@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.text.ParseException;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -65,7 +67,7 @@ public class TargetingServicePnrIT {
 	@After
 	public void tearDown() throws Exception {
 	}
-
+	
 	@Test
 	@Transactional
 	public void testDataGeneration() {
@@ -82,7 +84,16 @@ public class TargetingServicePnrIT {
 		assertEquals(2, pnr.getPassengers().size());
 		pax = pnr.getPassengers().iterator().next();
 		assertNotNull("Pax ID is null", pax.getId());
-}
+    }
+    @Test
+    public void testPnrRuleRequestCreation(){
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
+		RuleServiceRequest request = TargetingServiceUtils
+				.createPnrRequest(msg);
+		Collection<?> reqObjects = request.getRequestObjects();
+		assertNotNull(reqObjects);		
+		assertEquals(42, reqObjects.size());//2pnr+2flt+6pass+3addr+2email+2phone+2ff+2cc+2agency + (6+3+ 2*5)links = 42		
+    }
 
 	@Test
 	@Transactional

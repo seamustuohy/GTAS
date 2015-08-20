@@ -39,6 +39,7 @@ public interface TargetingService {
 	RuleServiceResult analyzeApisMessage(long messageId);
 
 	List<RuleHitDetail> analyzeLoadedApisMessage();
+	List<RuleHitDetail> analyzeLoadedPnrMessage();
 
 	/**
 	 * Invokes the Rule Engine on an arbitrary list of objects using the

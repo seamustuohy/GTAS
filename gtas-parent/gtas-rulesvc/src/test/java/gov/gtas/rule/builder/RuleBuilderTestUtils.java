@@ -135,14 +135,14 @@ public class RuleBuilderTestUtils {
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
 			case ENGINE_RULE_INDX5:
-//				cond = createQueryTerm(EntityEnum.PNR,
-//						PNRMapping.RECORD_LOCATOR,
-//						OperatorCodeEnum.NOT_CONTAINS, "3255", ValueTypesEnum.STRING);
-//				ruleMinTerm.add(cond);
-//				cond = createQueryTerm(EntityEnum.PNR,
-//						PNRMapping.RECORD_LOCATOR,
-//						OperatorCodeEnum.CONTAINS, "191", ValueTypesEnum.STRING);
-//				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.PNR,
+						PNRMapping.RECORD_LOCATOR,
+						OperatorCodeEnum.NOT_CONTAINS, "3255", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.PNR,
+						PNRMapping.RECORD_LOCATOR,
+						OperatorCodeEnum.CONTAINS, "901", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.PNR,
 						PNRMapping.RECORD_LOCATOR,
 						OperatorCodeEnum.BEGINS_WITH, "VYZ", ValueTypesEnum.STRING);
