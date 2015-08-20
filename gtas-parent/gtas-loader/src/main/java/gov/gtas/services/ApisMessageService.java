@@ -5,12 +5,12 @@ import java.util.Date;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import gov.gtas.error.ErrorUtils;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.MessageStatus;
@@ -89,18 +89,21 @@ public class ApisMessageService implements MessageService {
     }  
 
     private void handleException(Exception e, MessageStatus status) {
+        this.apisMessage.setFlights(null);
         this.apisMessage.setStatus(status);
-        String stacktrace = ExceptionUtils.getStackTrace(e);
-        if (stacktrace.length() > 4000) {
-            stacktrace = stacktrace.substring(0, 4000);
-        }
+        String stacktrace = ErrorUtils.getStacktrace(e);
         this.apisMessage.setError(stacktrace);
         logger.error(stacktrace);
     }
-    
+
     @Transactional
-    private ApisMessage createMessage(ApisMessage m) {
-        return msgDao.save(m);
+    private void createMessage(ApisMessage m) {
+        try {
+            msgDao.save(m);
+        } catch (Exception e) {
+            handleException(e, MessageStatus.FAILED_LOADING);
+            msgDao.save(m);
+        }
     }
 
     private boolean isUSEdifactFile(String msg) {

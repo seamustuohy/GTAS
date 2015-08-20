@@ -7,12 +7,12 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import gov.gtas.error.ErrorUtils;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
@@ -21,7 +21,6 @@ import gov.gtas.model.Pnr;
 import gov.gtas.model.PnrMessage;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
-import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.PnrVo;
@@ -73,10 +72,7 @@ public class PnrMessageService implements MessageService {
             this.pnrMessage.setEdifactMessage(em);
             
         } catch (Exception e) {
-            this.pnrMessage.setStatus(MessageStatus.FAILED_PARSING);
-            String stacktrace = ExceptionUtils.getStackTrace(e);
-            this.pnrMessage.setError(stacktrace);
-            logger.error(stacktrace);
+            handleException(e, MessageStatus.FAILED_PARSING);
             return null;
         } finally {
             createMessage(pnrMessage);
@@ -110,6 +106,8 @@ public class PnrMessageService implements MessageService {
                 for (PassengerVo pvo : vo.getPassengers()) {
                     pax.add(utils.createNewPassenger(pvo));
                 }
+              
+                pnr.setPassengers(pax);
         
                 Flight f = null;
                 for (FlightVo fvo : vo.getFlights()) {
@@ -121,18 +119,27 @@ public class PnrMessageService implements MessageService {
             }
 
         } catch (Exception e) {
-            this.pnrMessage.setStatus(MessageStatus.FAILED_LOADING);
-            String stacktrace = ExceptionUtils.getStackTrace(e);
-            this.pnrMessage.setError(stacktrace);
-            logger.error(stacktrace);
+            handleException(e, MessageStatus.FAILED_LOADING);
         } finally {
             createMessage(pnrMessage);            
         }
     }
 
-    @Transactional
-    private PnrMessage createMessage(PnrMessage m) {
-        return msgDao.save(m);
+    private void handleException(Exception e, MessageStatus status) {
+        this.pnrMessage.setPnrs(null);        
+        this.pnrMessage.setStatus(status);
+        String stacktrace = ErrorUtils.getStacktrace(e);
+        this.pnrMessage.setError(stacktrace);
+        logger.error(stacktrace);
     }
 
+    @Transactional
+    private void createMessage(PnrMessage m) {
+        try {
+            msgDao.save(m);
+        } catch (Exception e) {
+            handleException(e, MessageStatus.FAILED_LOADING);
+            msgDao.save(m);
+        }
+    }
 }

@@ -1,4 +1,7 @@
 package gov.gtas.error;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 /**
  * Error processing utility functions.
  * 
@@ -26,4 +29,13 @@ public class ErrorUtils {
     	} 
     	return ret;
     }
+    
+    private static final int MAX_ERROR_LENG = 4000;
+    public static String getStacktrace(Exception e) {
+        String stacktrace = ExceptionUtils.getStackTrace(e);
+        if (stacktrace.length() > MAX_ERROR_LENG) {
+            stacktrace = stacktrace.substring(0, MAX_ERROR_LENG);
+        }
+        return stacktrace;
+    }   
 }

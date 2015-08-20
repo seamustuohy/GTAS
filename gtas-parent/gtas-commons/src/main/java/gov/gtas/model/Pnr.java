@@ -145,6 +145,13 @@ public class Pnr extends BaseEntityAudit{
     )    
     private Set<Email> emails = new HashSet<>();
 
+    public void addPassenger(Passenger p) {
+        if (this.passengers == null) {
+            this.passengers = new HashSet<>();
+        }
+        this.passengers.add(p);
+    }
+    
     public void addCreditCard(CreditCard cc) {
         if (this.creditCards == null) {
             this.creditCards = new HashSet<>();

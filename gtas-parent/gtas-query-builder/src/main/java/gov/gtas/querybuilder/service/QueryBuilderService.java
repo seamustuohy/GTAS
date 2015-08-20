@@ -149,18 +149,18 @@ public class QueryBuilderService {
 		}
 		
 		for(Flight flight : flights) {
-			if(flight != null) {
+			if(flight != null && flight.getId() > 0) {
 				QueryFlightResult qbFlight = new QueryFlightResult();
 				
 				qbFlight.setId(flight.getId());
-				qbFlight.setFlightNumber(flight.getFlightNumber());
+				qbFlight.setFlightNumber(flight.getFlightNumber() != null ? flight.getFlightNumber() : "");
 				qbFlight.setCarrierCode(flight.getCarrier() != null ? flight.getCarrier() : "");
 				qbFlight.setOrigin(flight.getOrigin() != null ? flight.getOrigin() : "");
 				qbFlight.setOriginCountry(flight.getOriginCountry() != null ? flight.getOriginCountry() : "");
-				qbFlight.setDepartureDt(dtFormat.format(flight.getEtd()));
+				qbFlight.setDepartureDt(flight.getEtd() != null ? dtFormat.format(flight.getEtd()) : "");
 				qbFlight.setDestination(flight.getDestination() != null ? flight.getDestination() : "");
 				qbFlight.setDestinationCountry(flight.getDestinationCountry() != null ? flight.getDestinationCountry() : "");
-				qbFlight.setArrivalDt(dtFormat.format(flight.getEta()));
+				qbFlight.setArrivalDt(flight.getEta() != null ? dtFormat.format(flight.getEta()) : "");
 				
 				qbFlights.add(qbFlight);
 			}
@@ -182,7 +182,7 @@ public class QueryBuilderService {
 			Document document = (Document) result[2];
 							
 			// passenger information
-			if(passenger != null) {
+			if(passenger != null && passenger.getId() > 0) {
 				QueryPassengerResult qbPassenger = new QueryPassengerResult();
 				String carrier = "";
 				String flightNumber = "";

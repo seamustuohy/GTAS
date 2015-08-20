@@ -26,6 +26,7 @@ public final class Constants {
 	public static final String UDR_TEST = "/testUdr";
 	public static final String UDR_TARGET = "/apis/{id}";
 	public static final String UDR_TARGET_ALL_APIS = "/apis";
+	public static final String UDR_TARGET_ALL_PNR = "/pnr";
 	
 	// Query Messages
 	public static final String QUERY_SAVED_SUCCESS_MSG = "Query saved successfully";
