@@ -178,7 +178,9 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
 			
 			if(errors != null && errors.hasErrors()) {
-				throw new InvalidQueryRepositoryException(QueryValidationUtils.getErrorString(errors), queryObject);
+				String errorMsg = QueryValidationUtils.getErrorString(errors);
+				logger.info(errorMsg, new InvalidQueryRepositoryException(errorMsg, queryObject));
+				throw new InvalidQueryRepositoryException(errorMsg, queryObject);
 			}
 			
 			try {
@@ -208,7 +210,9 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
 			
 			if(errors != null && errors.hasErrors()) {
-				throw new InvalidQueryRepositoryException(QueryValidationUtils.getErrorString(errors), queryObject);
+				String errorMsg = QueryValidationUtils.getErrorString(errors);
+				logger.info(errorMsg, new InvalidQueryRepositoryException(errorMsg, queryObject));
+				throw new InvalidQueryRepositoryException(errorMsg, queryObject);
 			}
 			
 			try {

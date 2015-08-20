@@ -4,11 +4,11 @@ package gov.gtas.enumtype;
 public enum EntityEnum {
 	
 		ADDRESS ("ADDRESS", "Address", "a", ".addresses"),
-		CREDIT_CARD ("CREDIT CARD", "CreditCard", "cc", ".creditCard"),
+		CREDIT_CARD ("CREDIT CARD", "CreditCard", "cc", ".creditCards"),
 		DOCUMENT ("DOCUMENT", "Document", "d", ".documents"),
 		EMAIL ("EMAIL", "Email", "e", ".emails"),
 		FLIGHT ("FLIGHT", "Flight", "f", ".flights"),
-		FREQUENT_FLYER ("FREQUENT FLYER", "FrequentFlyer", "ff", ".frequentFlyer"),
+		FREQUENT_FLYER ("FREQUENT FLYER", "FrequentFlyer", "ff", ".frequentFlyers"),
 		HITS ("HITS", "Hits", "h", ""),
 		PASSENGER("PASSENGER", "Passenger", "p", ".passengers"),
 		PHONE ("PHONE", "Phone", "ph", ".phones"),
