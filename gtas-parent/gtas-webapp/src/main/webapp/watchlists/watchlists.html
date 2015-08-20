@@ -1,4 +1,10 @@
-
 <section>
     <h1>Watchlists:</h1>
+    <tabset>
+        <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disable="tab.disabled" select="alertMe()"></tab>
+        <tab heading="+ create new" select="createNew()">
+            insert organic list of field names..
+        </tab>
+    </tabset>
+    <div id="grid1" ui-grid="gridOpts" ui-grid-pagination class="grid"></div>
 </section>

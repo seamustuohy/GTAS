@@ -10,12 +10,11 @@ app.service("watchListService", function ($http, $q) {
         handleSuccess = function (response) {
             return (response.data);
         },
-        /* utility functions */
+    /* utility functions */
         getNewId = function (items) {
-            var highest = Number.NEGATIVE_INFINITY;
-            var tmp, i;
+            var highest = Number.NEGATIVE_INFINITY, tmp, i;
             for (i = items.length - 1; i >= 0; i--) {
-                tmp = items[i].Cost;
+                tmp = items[i].id;
                 if (tmp > highest) { highest = tmp; }
             }
             return highest + 1;
@@ -23,29 +22,21 @@ app.service("watchListService", function ($http, $q) {
         updatedItems = function (items, valuesObj) {
             var i = items.length - 1;
             for (i; i >= 0; i--) {
-                if (items[i].id === itemId) {
+                if (items[i].id === valuesObj.id) {
                     items[i] = valuesObj;
                     return items;
                 }
             }
         },
-        // returns list items for given listType
+    // returns list items for given listType
         getItemList = function (listTypeId) {
             //var request;
-            var property = "watchlist", watchlist;
+            var watchlist = JSON.parse(localStorage['watchlist']);
 
-            if (listTypeId === undefined || listTypeId === null) {
+            if (!listTypeId || listTypeId === null) {
                 console.log('no listTypeId');
                 return "failure";
             }
-
-            watchlist = localStorage[property] || {};
-
-            if (watchlist[listTypeId] === undefined) {
-                watchlist[listTypeId] = [];
-            }
-
-            localStorage[property] = JSON.stringify(watchlist);
 
             return watchlist[listTypeId];
             //request = $http({
@@ -96,26 +87,37 @@ app.service("watchListService", function ($http, $q) {
             localStorage["watchlist"] = JSON.stringify(watchlist);
             return watchlist[listTypeId];
         },
-        // creates id and adds name and jsonObj of fieldNames/types to listTypeTable
-        createListType = function (listName, fieldsObj) {
-            var watchlist = localStorage["watchlist"];
+    // creates id and adds name and jsonObj of fieldNames/types to listTypeTable
+        createListType = function (listName, columns) {
+            var watchlist = JSON.parse(localStorage["watchlist"]),
+                newId = getNewId(watchlist.types);
 
-            if (watchlist.types === undefined) {
-                watchlist.types = [{ id: 1, name: "document", columns: {"type": "string", "number": "string"}}, { id: 2, name: "passenger", columns: {"first name": "string", "last name": "string", "DOB": "date"}}];
-                localStorage["watchlist"] = JSON.stringify(watchlist);
-            }
+            watchlist.types.push({id: newId, name: listName, columns: columns});
+            watchlist[newId] = [];
+
+            localStorage["watchlist"] = JSON.stringify(watchlist);
 
             return watchlist.types;
         },
+        getListTypes = function () {
+            var watchlist = JSON.parse(localStorage["watchlist"]),
+                types = [];
+
+            watchlist.types.forEach(function (obj) {
+                types.push({title: obj.title });
+            });
+            return types;
+        },
         getItemFieldTypes = function (listTypeId) {
-            var watchlist = JSON.parse(localStorage["watchlist"]), columnNames = [], i = 0;
+            var watchlist = JSON.parse(localStorage["watchlist"]),
+                columnNames = [];
             if (!listTypeId || !watchlist.types) {
                 return false;
             }
             watchlist.types.forEach(function (obj) {
                 if (obj.id === listTypeId) {
                     Object.keys(obj.columns).forEach(function (column) {
-                        columnNames.push(column.name);
+                        columnNames.push(column);
                     });
                     return columnNames;
                 }
@@ -130,6 +132,7 @@ app.service("watchListService", function ($http, $q) {
         removeItem: removeItem,
         updateItem: updateItem,
         createListType: createListType,
+        getListTypes: getListTypes,
         getItemFieldTypes: getItemFieldTypes
     });
 });
