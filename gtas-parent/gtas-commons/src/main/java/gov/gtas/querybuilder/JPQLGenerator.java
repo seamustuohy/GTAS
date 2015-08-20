@@ -57,19 +57,21 @@ public class JPQLGenerator {
 					// part of the queryPrefix statement
 					joinEntities.remove(EntityEnum.FLIGHT);
 					
-					// join with Passenger because all remaining entities
-					// require a join with Passenger
 					if(!joinEntities.isEmpty()) {
-						joinEntities.remove(EntityEnum.PASSENGER);
-						joinEntities.add(0, EntityEnum.PASSENGER);
+						
+						// remove Passenger if there is a Document entity
+						// because that has a join with Passenger already
+						if(joinEntities.contains(EntityEnum.DOCUMENT)) {
+							joinEntities.remove(EntityEnum.PASSENGER);
+						}
 						
 						// add join to PNR if there is a PNR
 						// entity in the query
 						if(hasPNREntity(joinEntities)) {
 							joinEntities.remove(EntityEnum.PNR);
-							joinEntities.add(1, EntityEnum.PNR);
+							joinEntities.add(0, EntityEnum.PNR);
 							
-							// remove join to Agency entity because it is
+							// remove join to Agency entity because it has
 							// a ManyToOne relationship with PNR
 							joinEntities.remove(EntityEnum.TRAVEL_AGENCY);
 						}
@@ -83,7 +85,7 @@ public class JPQLGenerator {
 			else if(queryType == EntityEnum.PASSENGER) {
 				queryPrefix = Constants.SELECT + " " + EntityEnum.PASSENGER.getAlias() + ", " + EntityEnum.FLIGHT.getAlias() + ", " + EntityEnum.DOCUMENT.getAlias() + " " + 
 						Constants.FROM + " " + EntityEnum.PASSENGER.getEntityName() + " " + EntityEnum.PASSENGER.getAlias() +
-						Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " " + EntityEnum.FLIGHT.getAlias() + 
+						Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " " + EntityEnum.FLIGHT.getAlias() + 
 						Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
 						
 				if(joinEntities != null && !joinEntities.isEmpty()) {
@@ -101,7 +103,7 @@ public class JPQLGenerator {
 						joinEntities.add(0, EntityEnum.PNR);
 						
 						// remove join to Agency entity because it has
-						// a ManyToOne relationship with PNR
+						// a OneToMany relationship with PNR
 						joinEntities.remove(EntityEnum.TRAVEL_AGENCY);
 					}
 					
@@ -234,7 +236,8 @@ public class JPQLGenerator {
 				joinCondition = Constants.LEFT_JOIN + EntityEnum.PNR.getAlias() + EntityEnum.CREDIT_CARD.getEntityReference() + " " + EntityEnum.CREDIT_CARD.getAlias();
 				break;
 			case Constants.DOCUMENT:
-				joinCondition = Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
+				joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PASSENGER.getEntityReference() + " " + EntityEnum.PASSENGER.getAlias() +
+								" " + Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
 	            break;
 			case Constants.EMAIL:
 				joinCondition = Constants.LEFT_JOIN + EntityEnum.PNR.getAlias() + EntityEnum.EMAIL.getEntityReference() + " " + EntityEnum.EMAIL.getAlias();
