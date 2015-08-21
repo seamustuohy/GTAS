@@ -5,37 +5,86 @@
       {
         "id": "Address.city",
         "label": "City",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Address.country",
         "label": "Country",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Address.line1",
         "label": "Line 1",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Address.line2",
         "label": "Line 2",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Address.line3",
         "label": "Line 3",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Address.postalCode",
         "label": "Postal Code",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Address.state",
         "label": "State/Province",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       }
     ]
   },
@@ -45,7 +94,14 @@
       {
         "id": "CreditCard.number",
         "label": "Number",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       }
     ]
   },
@@ -83,7 +139,14 @@
       {
         "id": "Document.documentNumber",
         "label": "Number",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Document.documentType",
@@ -109,12 +172,26 @@
       {
         "id": "Email.address",
         "label": "Address",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Email.domain",
         "label": "Domain",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       }
     ]
   },
@@ -227,12 +304,26 @@
       {
         "id": "Flight.flightNumber",
         "label": "Number",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Flight.thru",
         "label": "Thru",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       }
     ]
   },
@@ -242,12 +333,26 @@
       {
         "id": "FrequentFlyer.airlineCode",
         "label": "Airline",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "FrequentFlyer.frequentFlyerNumber",
         "label": "Number",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       }
     ]
   },
@@ -287,7 +392,14 @@
       {
         "id": "Hits.master_list_id",
         "label": "Rules Hit Id",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       }
     ]
   },
@@ -403,17 +515,38 @@
       {
         "id": "Passenger.firstName",
         "label": "Name - First",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Passenger.lastName",
         "label": "Name - Last",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Passenger.middleName",
         "label": "Name - Middle",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Passenger.residencyCountry",
@@ -446,6 +579,13 @@
         "id": "Passenger.passengerType",
         "label": "Type",
         "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ],
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
@@ -486,7 +626,14 @@
       {
         "id": "Pnr.carrier",
         "label": "Carrier Code",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Pnr.daysBookedBeforeTravel",
@@ -538,22 +685,50 @@
       {
         "id": "Pnr.formOfPayment",
         "label": "Form of Payment",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Pnr.firstName",
         "label": "Name - First",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Pnr.lastName",
         "label": "Name - Last",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Pnr.middleName",
         "label": "Name - Middle",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Pnr.origin",
@@ -595,12 +770,26 @@
       {
         "id": "Pnr.recordLocator",
         "label": "Record Locator",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Pnr.route",
         "label": "Route",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       }
     ]
   },
@@ -610,12 +799,26 @@
       {
         "id": "Agency.agencyCity",
         "label": "City",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Agency.agencyName",
         "label": "Name",
-        "type": "string"
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "BEGINS_WITH",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH",
+          "NOT_BEGINS_WITH"
+        ]
       },
       {
         "id": "Agency.phoneNumber",
