@@ -602,17 +602,17 @@
     "label": "TRAVEL AGENCY",
     "columns": [
       {
-        "id": "Agency.city",
+        "id": "Agency.agencyCity",
         "label": "City",
         "type": "string"
       },
       {
-        "id": "Agency.name",
+        "id": "Agency.agencyName",
         "label": "Name",
         "type": "string"
       },
       {
-        "id": "Agency.phone",
+        "id": "Agency.phoneNumber",
         "label": "Phone",
         "type": "string",
         "operators": [
