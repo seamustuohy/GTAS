@@ -15,9 +15,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.stereotype.Component;
 
-@Component
 public class ApisDataGenerator {
 	public static final String DOCUMENT_NUMBER="12345";
 		
@@ -25,7 +23,7 @@ public class ApisDataGenerator {
 	 * Creates a ApisMessage with 3 flight with 3 passengers
 	 * @return
 	 */
-    public ApisMessage createSimpleTestApisMesssage(){
+    public static ApisMessage createSimpleTestApisMesssage(){
     	ApisMessage msg = new ApisMessage();
     	msg.setId(123L);
     	msg.setFlights(createFlights());
@@ -34,7 +32,7 @@ public class ApisDataGenerator {
     	fixReferences(msg);
     	return msg;
     }
-    private void fixReferences(ApisMessage msg){
+    private static void fixReferences(ApisMessage msg){
     	for(Flight fl:msg.getFlights()){
     		for(Passenger tr:fl.getPassengers()){
     			for(Document doc:tr.getDocuments()){
@@ -45,7 +43,7 @@ public class ApisDataGenerator {
     		}
     	}
     }
-    private Set<Passenger> createPassengerAndDocument(String[][]param){
+    private static Set<Passenger> createPassengerAndDocument(String[][]param){
     	Set<Passenger> passengers = new HashSet<Passenger>();
     	for(String[] args:param){
 	    	Passenger passenger = new Passenger();
@@ -60,7 +58,7 @@ public class ApisDataGenerator {
     	}
    	    return passengers;
     }
-    private Set<Flight> createFlights(){
+    private static Set<Flight> createFlights(){
     	Set<Flight> flights = new HashSet<Flight>();
     	
     	Flight flight = new Flight();
@@ -99,14 +97,14 @@ public class ApisDataGenerator {
     		pe.printStackTrace();
     	}
     	flight.setFlightNumber("0017");
-    	flight.setOrigin("LHR");//Bora Bora
+    	flight.setOrigin("LHR");
     	flight.setOriginCountry("GB");
     	flight.setDirection(FlightDirectionCode.I.name());
     	flights.add(flight);
 
     	return flights;
     }
-    private Set<Document> createDocuments(String[] iso2Array, String[]issueDates){
+    private static Set<Document> createDocuments(String[] iso2Array, String[]issueDates){
     	Set<Document> docs = new HashSet<Document>();
     	for(int i = 0; i < iso2Array.length; ++i){
     		String iso2 = iso2Array[i];

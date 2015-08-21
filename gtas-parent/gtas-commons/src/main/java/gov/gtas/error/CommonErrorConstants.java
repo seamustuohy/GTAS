@@ -65,7 +65,7 @@ public class CommonErrorConstants {
 	 * program logic causing a service API method being called with a null
 	 * argument.
 	 */
-	public static final String NULL_ARGUMENT_ERROR_MESSAGE = "The parameter '%s' passed to the method '%s' should not be null.";
+	public static final String NULL_ARGUMENT_ERROR_MESSAGE = "The parameter '%s' provided for the operation/function '%s' should not be null.";
 	/*
 	 * This is the error message for an internal system error indicating invalid
 	 * program logic causing a service API method being called with an invalid

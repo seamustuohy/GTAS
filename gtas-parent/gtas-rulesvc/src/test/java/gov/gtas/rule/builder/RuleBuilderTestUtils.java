@@ -25,16 +25,16 @@ public class RuleBuilderTestUtils {
 	public static final String UDR_RULE_TITLE="UDR_TEST_RULE";
 	public static final long UDR_RULE_ID=33L;
 	public static final long ENGINE_RULE_ID=21L;
-	public static final int ENGINE_RULE_INDX1=1;
+	public static final int DOC_FLIGHT_CRITERIA_RULE_INDX=1;
 	public static final int ENGINE_RULE_INDX2=2;
 	public static final int ENGINE_RULE_INDX3=3;
-	public static final int ENGINE_RULE_INDX4=4;
+	public static final int PNR_CRITERIA_RULE_INDX=4;
 	public static final int ENGINE_RULE_INDX5=5;
 	
 	public static UdrRule createSimpleUdrRule(int indx) throws ParseException{
 		UdrRule ret = new UdrRule(UDR_RULE_ID, YesNoEnum.N, null, new Date());
 		ret.setTitle(UDR_RULE_TITLE);
-		Rule engineRule = createRule(ENGINE_RULE_ID, ret, indx);		
+		Rule engineRule = createEngineRule(ENGINE_RULE_ID, ret, indx);		
 		ret.addEngineRule(engineRule);
 		
 		return ret;
@@ -66,11 +66,11 @@ public class RuleBuilderTestUtils {
 	//////////////////////////////////////////////////////
 	//RULES
 	/////////////////////////////////////////////////////
-	private static Rule createRule(Long id, UdrRule parent, int indx) throws ParseException{
+	private static Rule createEngineRule(Long id, UdrRule parent, int indx) throws ParseException{
 		Rule engineRule = null;
 		List<QueryTerm> ruleMinTerm = new LinkedList<QueryTerm>();
 		switch(indx){
-			case ENGINE_RULE_INDX1:/* doc.iso2 != US && doc.issueDate > 2012-01-01 && flight# == 0012  */
+			case DOC_FLIGHT_CRITERIA_RULE_INDX:/* doc.iso2 != US && doc.issueDate > 2012-01-01 && flight# == 0012  */
 				QueryTerm cond = createQueryTerm(EntityEnum.DOCUMENT,
 						DocumentMapping.ISSUANCE_COUNTRY,
 						OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
@@ -118,7 +118,7 @@ public class RuleBuilderTestUtils {
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
-			case ENGINE_RULE_INDX4:
+			case PNR_CRITERIA_RULE_INDX:
 				cond = createQueryTerm(EntityEnum.PNR,
 						PNRMapping.RECORD_LOCATOR,
 						OperatorCodeEnum.NOT_CONTAINS, "FOO", ValueTypesEnum.STRING);

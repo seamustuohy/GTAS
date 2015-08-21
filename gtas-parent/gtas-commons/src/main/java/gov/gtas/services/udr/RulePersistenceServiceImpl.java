@@ -101,7 +101,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		final User user = fetchUser(userId);
 
 		UdrRule ruleToDelete = udrRuleRepository.findOne(id);
-		if (ruleToDelete != null) {
+		if (ruleToDelete != null && ruleToDelete.getDeleted() == YesNoEnum.N) {
 			ruleToDelete.setDeleted(YesNoEnum.Y);
 			RuleMeta meta = ruleToDelete.getMetaData();
 			meta.setEnabled(YesNoEnum.N);
@@ -116,7 +116,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 			}
 			udrRuleRepository.save(ruleToDelete);
 		} else {
-			logger.warn("RulePersistenceServiceImpl.delete() - object does not exist:"
+			ruleToDelete = null; //in case delete flag was Y
+			logger.warn("RulePersistenceServiceImpl.delete() - object does not exist or has already been deleted:"
 					+ id);
 		}
 		return ruleToDelete;

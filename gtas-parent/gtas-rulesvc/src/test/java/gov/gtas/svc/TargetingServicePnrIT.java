@@ -92,7 +92,7 @@ public class TargetingServicePnrIT {
 				.createPnrRequest(msg);
 		Collection<?> reqObjects = request.getRequestObjects();
 		assertNotNull(reqObjects);		
-		assertEquals(42, reqObjects.size());//2pnr+2flt+6pass+3addr+2email+2phone+2ff+2cc+2agency + (6+3+ 2*5)links = 42		
+		assertEquals(48, reqObjects.size());//2pnr+2flt+6pass+6doc+3addr+2email+2phone+2ff+2cc+2agency + (6+3+ 2*5)links = 48		
     }
 
 	@Test
