@@ -2,6 +2,7 @@ package gov.gtas.services.udr;
 
 import gov.gtas.model.BaseEntity;
 import gov.gtas.model.udr.KnowledgeBase;
+import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 
 import java.util.Collection;
@@ -130,4 +131,10 @@ public interface RulePersistenceService {
 	 * @return the deleted knowledge base or null if it does not exist.
 	 */
 	public KnowledgeBase deleteKnowledgeBase(String kbName);
+	/**
+	 * Fetches the latest version of the default knowledge base.
+	 * 
+	 * @return the knowledge base.
+	 */
+	public List<Rule> findRulesByKnowledgeBaseId(Long id);
 }

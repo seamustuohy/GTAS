@@ -263,6 +263,14 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		return kb;
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.udr.RulePersistenceService#findRulesByKnowledgeBaseId(java.lang.Long)
+	 */
+	@Override
+	public List<Rule> findRulesByKnowledgeBaseId(Long id) {
+		return udrRuleRepository.getRuleByKbId(id);
+	}
+
 	/**
 	 * Fetches the user object and throws an unchecked exception if the user
 	 * cannot be found.
@@ -280,4 +288,5 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		}
 		return user;
 	}
+	
 }

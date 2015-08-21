@@ -2,6 +2,7 @@ package gov.gtas.repository.udr;
 
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.udr.KnowledgeBase;
+import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 
 import java.util.List;
@@ -26,4 +27,7 @@ public interface UdrRuleRepository extends CrudRepository<UdrRule, Long>, JpaSpe
 
 	@Query("SELECT kb FROM KnowledgeBase kb WHERE kb.kbName = :name")
 	public KnowledgeBase getKnowledgeBaseByName(@Param("name") String name);
+
+	@Query("SELECT rl FROM Rule rl WHERE rl.knowledgeBase.id = :kbId")
+	public List<Rule> getRuleByKbId(@Param("kbId") Long kbId);
 }

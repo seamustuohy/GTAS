@@ -5,7 +5,6 @@ import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
-import gov.gtas.model.BaseEntity;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrConstants;
@@ -160,12 +159,6 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 			rulePersistenceService.batchUpdate(ruleList);			
 		}
 	}
-	private void unlinkRulesFromKnowledgeBase(Collection<Rule> ruleList){
-		for (Rule rule : ruleList) {
-			rule.setKnowledgeBase(null);
-		}
-		rulePersistenceService.batchUpdate(ruleList);			
-	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -176,8 +169,15 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 	@Transactional(value=TxType.MANDATORY)
 	public KnowledgeBase deleteKnowledgeBase(String kbName) {
 		KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
-		unlinkRulesFromKnowledgeBase(kb.getRulesInKB());
-		kb = rulePersistenceService.deleteKnowledgeBase(kbName);
+		if(kb!= null){
+			List<Rule> ruleList = rulePersistenceService.findRulesByKnowledgeBaseId(kb.getId());
+			for (Rule rule : ruleList) {
+				rule.setKnowledgeBase(null);
+				ruleList.add(rule);
+			}
+			rulePersistenceService.batchUpdate(ruleList);			
+			kb = rulePersistenceService.deleteKnowledgeBase(kbName);
+		}
 		return kb;
 	}
 
