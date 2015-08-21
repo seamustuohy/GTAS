@@ -54,7 +54,7 @@
     "columns": [
       {
         "id": "Document.issuanceCountry",
-        "label": "Citizenship OR Issuance Country",
+        "label": "Issuance Country",
         "type": "string",
         "operators": [
           "EQUAL",
@@ -71,6 +71,12 @@
       {
         "id": "Document.expirationDate",
         "label": "Expiration Date",
+        "type": "date",
+        "plugin": "datepicker"
+      },
+      {
+        "id": "Document.issuanceDate",
+        "label": "Issuance Date",
         "type": "date",
         "plugin": "datepicker"
       },

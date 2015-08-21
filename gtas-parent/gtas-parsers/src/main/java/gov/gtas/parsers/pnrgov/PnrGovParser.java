@@ -97,6 +97,10 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
             if (src == null) {
                 break;
             }
+
+            // TODO: here we can compute the md5 hash of the single pnr
+            // and compare it.
+//            System.out.println("MAC: " + PnrUtils.getSinglePnr(this.message, numPnrs));
             
             PnrVo pnr = new PnrVo();
             parsedMessage.addPnr(pnr);

@@ -3,9 +3,13 @@ package gov.gtas.parsers.pnrgov;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import gov.gtas.parsers.edifact.EdifactLexer;
+import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.segment.ADD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
@@ -126,7 +130,48 @@ public class PnrUtils {
         return rv;
     }
     
-    public static <T> T safeGet(List<T> list, int i) {
+    /**
+     * Extract the nth PNR from the msg text.
+     * @param msg the entire msg text, including UNA, if it exists
+     * @param index 0-based index of the PNR
+     * @return text of the nth PNR; null if does not exist.
+     */
+    public static String getSinglePnr(String msg, int index) {
+        if (StringUtils.isBlank(msg) || index < 0) {
+            return null;
+        }
+        
+        UNA una = EdifactLexer.getUnaSegment(msg);
+        
+        String regex = String.format("SRC\\s*\\%c", una.getSegmentTerminator());
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(msg);
+        boolean found = false;
+        for (int i=0; i<=index; i++) {
+            found = matcher.find();
+        }
+
+        if (!found) {
+            return null;
+        }    
+        int start = matcher.start();
+        
+        int end = -1;
+        if (matcher.find()) {
+            end = matcher.start();
+        } else {
+            end = EdifactLexer.getStartOfSegment("UNT", msg, una);
+        }
+        
+        if (end != -1) {
+            return msg.substring(start, end);
+        } else {
+            return msg.substring(start);
+        }
+    }
+    
+    
+    private static <T> T safeGet(List<T> list, int i) {
         if (i < 0 || i >= list.size()) {
             return null;
         }

@@ -1,4 +1,5 @@
 package gov.gtas.parsers.util;
+
 import static org.junit.Assert.assertEquals;
 
 import java.nio.charset.StandardCharsets;

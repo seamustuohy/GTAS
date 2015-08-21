@@ -122,7 +122,10 @@ public class ParseUtils {
     }
     
     /**
-     * Just like String.indexOf but allows use of a regex
+     * Just like String.indexOf but allows use of a regex.
+     * 
+     * Returns the index within this string of the first occurrence of the
+     * specified character or -1 if the character does not occur.
      */
     public static int indexOfRegex(String regex, CharSequence input) {
         Pattern pattern = Pattern.compile(regex);
