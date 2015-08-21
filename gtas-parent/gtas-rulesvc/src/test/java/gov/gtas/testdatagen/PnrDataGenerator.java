@@ -3,6 +3,7 @@ package gov.gtas.testdatagen;
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
+import gov.gtas.model.Document;
 import gov.gtas.model.Email;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FrequentFlyer;
@@ -226,6 +227,7 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(1L);
+			   addDocumentToPassenger(p);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
@@ -237,6 +239,7 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(2L);
+			   addDocumentToPassenger(p);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
@@ -248,6 +251,7 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(3L);
+			   addDocumentToPassenger(p);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
@@ -259,6 +263,7 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(4L);
+			   addDocumentToPassenger(p);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
@@ -270,6 +275,7 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(5L);
+			   addDocumentToPassenger(p);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
@@ -281,10 +287,16 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(6L);
+			   addDocumentToPassenger(p);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
 	   }
+   }
+   private static void addDocumentToPassenger(Passenger pass){
+	   Document doc = new Document();
+	   doc.setId(pass.getId());
+	   pass.addDocument(doc);
    }
    private static Flight addFlight(Pnr pnr, int indx){
 	   Flight flight = null;

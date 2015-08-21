@@ -300,7 +300,7 @@ public class UdrServiceImpl implements UdrService {
 					deletedRule);
 		} else {
 			return UdrServiceJsonResponseHelper.createResponse(false, UdrConstants.UDR_DELETE_OP_NAME,
-					deletedRule);
+					deletedRule, "since it does not exist or has been deleted previously");
 		}
 	}
 

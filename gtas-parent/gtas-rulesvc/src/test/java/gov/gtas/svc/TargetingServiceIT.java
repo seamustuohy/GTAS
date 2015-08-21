@@ -1,8 +1,23 @@
 package gov.gtas.svc;
 
+import static gov.gtas.rule.builder.RuleBuilderTestUtils.DOC_FLIGHT_CRITERIA_RULE_INDX;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import gov.gtas.bo.RuleHitDetail;
+import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Document;
+import gov.gtas.model.Flight;
+import gov.gtas.model.Passenger;
+import gov.gtas.model.lookup.PassengerTypeCode;
+import gov.gtas.model.udr.UdrRule;
+import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.rule.RuleServiceResult;
+import gov.gtas.rule.builder.DrlRuleFileBuilder;
+import gov.gtas.rule.builder.RuleBuilderTestUtils;
+import gov.gtas.testdatagen.ApisDataGenerator;
 
 import java.text.ParseException;
 import java.util.Set;
@@ -19,22 +34,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import gov.gtas.bo.RuleHitDetail;
-import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.config.RuleServiceConfig;
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Passenger;
-import gov.gtas.model.lookup.PassengerTypeCode;
-import gov.gtas.model.udr.UdrRule;
-import gov.gtas.repository.ApisMessageRepository;
-import gov.gtas.repository.PassengerRepository;
-import gov.gtas.rule.RuleServiceResult;
-import gov.gtas.rule.builder.DrlRuleFileBuilder;
-import gov.gtas.rule.builder.RuleBuilderTestUtils;
-import gov.gtas.testdatagen.ApisDataGenerator;
-
 /**
  * Unit tests for the TargetingService using spring support and Mockito.
  * 
@@ -49,8 +48,8 @@ public class TargetingServiceIT {
 	@Autowired
 	TargetingService targetingService;
 
-	@Autowired
-	ApisDataGenerator apisDataGenerator;
+//	@Autowired
+//	ApisDataGenerator apisDataGenerator;
 
 	@Resource
 	private ApisMessageRepository apisMessageRepository;
@@ -66,7 +65,7 @@ public class TargetingServiceIT {
 	@Test
 	@Transactional
 	public void testDataGeneration() {
-		ApisMessage msg = apisDataGenerator.createSimpleTestApisMesssage();
+		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
 		assertNotNull(msg);
 		assertNotNull(msg.getId());
 		assertEquals(2, msg.getFlights().size());
@@ -86,9 +85,9 @@ public class TargetingServiceIT {
 	@Test
 	@Transactional
 	public void testApisRuleExecution1() throws ParseException {
-		ApisMessage msg = apisDataGenerator.createSimpleTestApisMesssage();
+		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(1);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(DOC_FLIGHT_CRITERIA_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		System.out.println(drlRules);
 		RuleServiceRequest request = TargetingServiceUtils
@@ -106,7 +105,7 @@ public class TargetingServiceIT {
 	@Test
 	@Transactional
 	public void testApisRuleExecution2() throws ParseException {
-		ApisMessage msg = apisDataGenerator.createSimpleTestApisMesssage();
+		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(2);
 		String drlRules = drlBuilder.addRule(udrRule).build();
@@ -129,7 +128,7 @@ public class TargetingServiceIT {
 	@Transactional
 	public void testApisRuleExecution3() throws ParseException {
 		// select all passengers in a flight
-		ApisMessage msg = apisDataGenerator.createSimpleTestApisMesssage();
+		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(3);
 		String drlRules = drlBuilder.addRule(udrRule).build();

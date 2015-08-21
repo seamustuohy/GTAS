@@ -1,5 +1,7 @@
 package gov.gtas.svc;
 
+import org.apache.commons.lang3.StringUtils;
+
 import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.JsonServiceResponse;
@@ -13,6 +15,10 @@ import gov.gtas.model.udr.json.JsonServiceResponse;
 public class UdrServiceJsonResponseHelper {
 	public static JsonServiceResponse createResponse(boolean success,
 			String op, UdrRule rule) {
+		return createResponse(success, op, rule, null);
+	}
+	public static JsonServiceResponse createResponse(boolean success,
+			String op, UdrRule rule, String failureReason) {
 		JsonServiceResponse resp = null;
 		if (success) {
 			resp = new JsonServiceResponse(
@@ -40,10 +46,15 @@ public class UdrServiceJsonResponseHelper {
 										+ " on UDR Rule with title='%s' and ID='%s' failed.",
 								rule.getTitle(), rule.getId()));
 			} else {
+				String msg =null;
+				if(StringUtils.isEmpty(failureReason)){
+					msg = op + " failed.";
+				} else {
+					msg = op + " failed " + failureReason + ".";
+				}
 				resp = new JsonServiceResponse(
 						JsonServiceResponse.FAILURE_RESPONSE, "UDR Service",
-						op, op + " failed.");
-
+						op, msg);
 			}
 
 		}
