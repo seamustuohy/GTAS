@@ -131,10 +131,10 @@ public class PnrUtils {
     }
     
     /**
-     * Extract 
-     * @param msg
-     * @param index
-     * @return
+     * Extract the nth PNR from the msg text.
+     * @param msg the entire msg text, including UNA, if it exists
+     * @param index 0-based index of the PNR
+     * @return text of the nth PNR; null if does not exist.
      */
     public static String getSinglePnr(String msg, int index) {
         if (StringUtils.isBlank(msg) || index < 0) {
