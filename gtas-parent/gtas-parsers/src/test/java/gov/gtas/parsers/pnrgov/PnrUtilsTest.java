@@ -1,6 +1,7 @@
 package gov.gtas.parsers.pnrgov;
 
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class PnrUtilsTest {
 
@@ -13,18 +14,22 @@ public class PnrUtilsTest {
                 "ORG+DL:ATL+52519950'\n" + 
                 "TVL+121210:0915+LHR+JFK+DL+324'\n" + 
                 "EQN+2'" + 
-                "SRC'\n" + 
+                "SRC'" + 
                 "RCI+DL:MFN4TI1'" +
-                "SRC'\n" + 
+                "SRC'" + 
                 "RCI+DL:MFN4TI2'" +
-                "SRC'\n" + 
+                "SRC'" + 
                 "RCI+DL:MFN4TI3'" +
                 "UNT+135+1'\n" + 
                 "UNZ+1+020A07'";
-                
-        System.out.println(PnrUtils.getSinglePnr(msg, 0) + "\n");
-        System.out.println(PnrUtils.getSinglePnr(msg, 1) + "\n");
-        System.out.println(PnrUtils.getSinglePnr(msg, 2) + "\n");
-        System.out.println(PnrUtils.getSinglePnr(msg, 3) + "\n");
+
+        assertEquals(null, PnrUtils.getSinglePnr(null, -1));
+        assertEquals(null, PnrUtils.getSinglePnr("", -1));
+        assertEquals(null, PnrUtils.getSinglePnr("\n", -1));                
+        assertEquals(null, PnrUtils.getSinglePnr(msg, -1));
+        assertEquals("SRC'RCI+DL:MFN4TI1'", PnrUtils.getSinglePnr(msg, 0));
+        assertEquals("SRC'RCI+DL:MFN4TI2'", PnrUtils.getSinglePnr(msg, 1));
+        assertEquals("SRC'RCI+DL:MFN4TI3'", PnrUtils.getSinglePnr(msg, 2));
+        assertEquals(null, PnrUtils.getSinglePnr(msg, 3));
     }
 }

@@ -130,7 +130,17 @@ public class PnrUtils {
         return rv;
     }
     
+    /**
+     * Extract 
+     * @param msg
+     * @param index
+     * @return
+     */
     public static String getSinglePnr(String msg, int index) {
+        if (StringUtils.isBlank(msg) || index < 0) {
+            return null;
+        }
+        
         UNA una = EdifactLexer.getUnaSegment(msg);
         
         String regex = String.format("SRC\\s*\\%c", una.getSegmentTerminator());
