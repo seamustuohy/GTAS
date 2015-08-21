@@ -48,14 +48,14 @@ app.service("watchListService", function ($http, $q) {
         },
         addItem = function (listTypeId, valuesObj) {
             //var request;
-            var watchlist = JSON.parse(localStorage["watchlist"]);
-            var items = watchlist[listTypeId];
-
-            if (listTypeId === undefined || listTypeId === null) {
+            var items,
+                watchlist = JSON.parse(localStorage["watchlist"]);
+            if (!listTypeId) {
                 console.log('no listTypeId');
                 return "failure";
             }
 
+            items = watchlist.types[listTypeId];
             //add id
             valuesObj.id = getNewId(items);
             items.push(valuesObj);
@@ -64,7 +64,7 @@ app.service("watchListService", function ($http, $q) {
         },
         removeItem = function (itemId, listTypeId) {
             var watchlist = JSON.parse(localStorage["watchlist"]),
-                items = watchlist[listTypeId];
+                items = watchlist.types[listTypeId];
 
             if (itemId === undefined || itemId === null) {
                 return false;
@@ -89,11 +89,9 @@ app.service("watchListService", function ($http, $q) {
         },
     // creates id and adds name and jsonObj of fieldNames/types to listTypeTable
         createListType = function (listName, columns) {
-            var watchlist = JSON.parse(localStorage["watchlist"]),
-                newId = getNewId(watchlist.types);
+            var watchlist = JSON.parse(localStorage["watchlist"]);
 
-            watchlist.types.push({id: newId, name: listName, columns: columns});
-            watchlist[newId] = [];
+            watchlist.types[listName] = {columns: columns, data: []};
 
             localStorage["watchlist"] = JSON.stringify(watchlist);
 
@@ -103,8 +101,8 @@ app.service("watchListService", function ($http, $q) {
             var watchlist = JSON.parse(localStorage["watchlist"]),
                 types = [];
 
-            watchlist.types.forEach(function (obj) {
-                types.push({title: obj.title });
+            Object.keys(watchlist.types).forEach(function (key) {
+                types.push({title: key});
             });
             return types;
         },
@@ -114,7 +112,7 @@ app.service("watchListService", function ($http, $q) {
             if (!listTypeId || !watchlist.types) {
                 return false;
             }
-            watchlist.types.forEach(function (obj) {
+            return watchlist.types[listTypeId](function (obj) {
                 if (obj.id === listTypeId) {
                     Object.keys(obj.columns).forEach(function (column) {
                         columnNames.push(column);
