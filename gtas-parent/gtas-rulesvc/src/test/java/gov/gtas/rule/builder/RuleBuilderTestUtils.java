@@ -9,11 +9,17 @@ import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.querybuilder.mappings.AddressMapping;
+import gov.gtas.querybuilder.mappings.CreditCardMapping;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
+import gov.gtas.querybuilder.mappings.EmailMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
+import gov.gtas.querybuilder.mappings.FrequentFlyerMapping;
 import gov.gtas.querybuilder.mappings.IEntityMapping;
 import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
+import gov.gtas.querybuilder.mappings.PhoneMapping;
+import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
 import gov.gtas.svc.UdrServiceHelper;
 
 import java.text.ParseException;
@@ -29,7 +35,9 @@ public class RuleBuilderTestUtils {
 	public static final int ENGINE_RULE_INDX2=2;
 	public static final int ENGINE_RULE_INDX3=3;
 	public static final int PNR_CRITERIA_RULE_INDX=4;
-	public static final int ENGINE_RULE_INDX5=5;
+	public static final int PNR_PASSENGER_RULE_INDX=5;
+	public static final int ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX=6;
+	public static final int AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX=7;
 	
 	public static UdrRule createSimpleUdrRule(int indx) throws ParseException{
 		UdrRule ret = new UdrRule(UDR_RULE_ID, YesNoEnum.N, null, new Date());
@@ -134,7 +142,7 @@ public class RuleBuilderTestUtils {
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
-			case ENGINE_RULE_INDX5:
+			case PNR_PASSENGER_RULE_INDX:
 				cond = createQueryTerm(EntityEnum.PNR,
 						PNRMapping.RECORD_LOCATOR,
 						OperatorCodeEnum.NOT_CONTAINS, "3255", ValueTypesEnum.STRING);
@@ -154,6 +162,62 @@ public class RuleBuilderTestUtils {
 				cond = createQueryTerm(EntityEnum.PASSENGER,
 						PassengerMapping.LAST_NAME,
 						OperatorCodeEnum.EQUAL, "Baggins", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule.setId(ENGINE_RULE_ID);
+				break;
+			case ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX:
+				cond = createQueryTerm(EntityEnum.ADDRESS,
+						AddressMapping.COUNTRY,
+						OperatorCodeEnum.NOT_EQUAL, "USA", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.ADDRESS,
+						AddressMapping.ADDRESS_LINE_1,
+						OperatorCodeEnum.CONTAINS, "Nowhere", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.PHONE,
+						PhoneMapping.PHONE_NUMBER,
+						OperatorCodeEnum.ENDS_WITH, "9087", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.EMAIL,
+						EmailMapping.DOMAIN,
+						OperatorCodeEnum.NOT_ENDS_WITH, "om", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.EMAIL,
+						EmailMapping.DOMAIN,
+						OperatorCodeEnum.NOT_BEGINS_WITH, "all", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.DOCUMENT,
+						DocumentMapping.ISSUANCE_COUNTRY,
+						OperatorCodeEnum.NOT_IN, new String[]{"GBR", "USA"}, ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.DOCUMENT,
+						DocumentMapping.ISSUANCE_DATE,
+						OperatorCodeEnum.BETWEEN, new String[]{"2012-05-01", "2013-06-30"}, ValueTypesEnum.DATE);
+				ruleMinTerm.add(cond);
+				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule.setId(ENGINE_RULE_ID);
+				break;
+			case AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX:
+				cond = createQueryTerm(EntityEnum.TRAVEL_AGENCY,
+						TravelAgencyMapping.NAME,
+						OperatorCodeEnum.ENDS_WITH, "Tours", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.CREDIT_CARD,
+						CreditCardMapping.CREDIT_CARD_NUMBER,
+						OperatorCodeEnum.BEGINS_WITH, "123", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.FREQUENT_FLYER,
+						FrequentFlyerMapping.AIRLINE,
+						OperatorCodeEnum.EQUAL, "AA", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.FLIGHT,
+						FlightMapping.AIRPORT_DESTINATION,
+						OperatorCodeEnum.EQUAL, "JFK", ValueTypesEnum.STRING);
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.DOCUMENT,
+						DocumentMapping.ISSUANCE_DATE,
+						OperatorCodeEnum.LESS, "2014-01-30", ValueTypesEnum.DATE);
 				ruleMinTerm.add(cond);
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);

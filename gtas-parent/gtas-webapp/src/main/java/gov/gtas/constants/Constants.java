@@ -24,9 +24,13 @@ public final class Constants {
 	public static final String UDR_PUT = "/{userId}";
 	public static final String UDR_DELETE = "/{userId}/{id}";
 	public static final String UDR_TEST = "/testUdr";
-	public static final String UDR_TARGET = "/apis/{id}";
-	public static final String UDR_TARGET_ALL_APIS = "/apis";
-	public static final String UDR_TARGET_ALL_PNR = "/pnr";
+
+	//Targeting URI
+	public static final String TARGET_ONE_APIS_MSG = "/apis/{id}";
+	public static final String TARGET_ALL_APIS = "/apis";
+	public static final String TARGET_ALL_PNR = "/pnr";
+	public static final String TARGET_ALL_MSG = "/target";
+	
 	
 	// Query Messages
 	public static final String QUERY_SAVED_SUCCESS_MSG = "Query saved successfully";

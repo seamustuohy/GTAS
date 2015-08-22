@@ -147,7 +147,7 @@ public class PnrRuleConditionBuilderTest {
 				+ PHONE_VARIABLE_NAME+":"+EntityEnum.PHONE.getEntityName()+"("
 				    +PhoneMapping.PHONE_NUMBER.getFieldName()+" != null, "
 				    +PhoneMapping.PHONE_NUMBER.getFieldName()+" not matches \".*456.*\")\n"
-				+ EMAIL_VARIABLE_NAME+":"+EntityEnum.EMAIL.getEntityName()+"(domain != null, domain not matches \".*.com.*\")\n"
+				+ EMAIL_VARIABLE_NAME+":"+EntityEnum.EMAIL.getEntityName()+"(domain != null, domain not matches \".*.com\")\n"
 				+ FREQUENT_FLYER_VARIABLE_NAME+":"+EntityEnum.FREQUENT_FLYER.getEntityName()+"("
 				     +FrequentFlyerMapping.AIRLINE.getFieldName()+" != \"NZ\")\n"
 				+ PNR_VARIABLE_NAME+":"+EntityEnum.PNR.getEntityName()+"()\n"

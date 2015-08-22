@@ -1,5 +1,7 @@
 package gov.gtas.testdatagen;
 
+import java.text.ParseException;
+
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
@@ -11,6 +13,7 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.PnrMessage;
+import gov.gtas.util.DateCalendarUtils;
 
 public class PnrDataGenerator {
 	public static final long PNR_ID1 = 221L;
@@ -20,24 +23,24 @@ public class PnrDataGenerator {
 	public static final String PNR_ATTR_CARRIER2 = "AA";
 	public static final String PNR_ATTR_RECORD_LOCATOR2 = "MNP32556191";
 	
-	public static final String PNR_PASSENGER1 = "C,Actius,Ghoulish,Boozer";
-	public static final String PNR_PASSENGER2 = "P,Bilbo,,Baggins";
-	public static final String PNR_PASSENGER3 = "P,Kilmer,Gaunt,Baggins";
-	public static final String PNR_PASSENGER4 = "P,Crisco,Slick,Masterson";
-	public static final String PNR_PASSENGER5 = "P,Donald,Hair,Trump";
-	public static final String PNR_PASSENGER6 = "C,Kadmil,K,Zamboni";
+	public static final String PNR_PASSENGER1 = "C,Actius,Ghoulish,Boozer,CAN,2012-05-01";//pnr1
+	public static final String PNR_PASSENGER2 = "P,Bilbo,,Baggins,CAN,2013-06-30";//pnr1
+	public static final String PNR_PASSENGER3 = "P,Kilmer,Gaunt,Baggins,CAN,2014-01-30";//pnr1
+	public static final String PNR_PASSENGER4 = "P,Crisco,Slick,Masterson,USA,2013-06-30";//pnr1
+	public static final String PNR_PASSENGER5 = "P,Donald,Hair,Trump,GBR,2014-06-30";
+	public static final String PNR_PASSENGER6 = "C,Kadmil,K,Zamboni,GBR,2013-06-30";
 	
-	public static final String PNR_FLIGHT1 = "IAD, CCU";
-	public static final String PNR_FLIGHT2 = "LHR, JFK";
+	public static final String PNR_FLIGHT1 = "IAD,CCU";
+	public static final String PNR_FLIGHT2 = "LHR,JFK";
 	
 	public static final String PNR_PHONE1 = "+1 555-765-9087";
 	public static final String PNR_PHONE2 = "+1 456-231-8944";
 
-	public static final String PNR_ADDRESS1 = "USA,Atlanta,12345,1 Nowhere Street";
+	public static final String PNR_ADDRESS1 = "CAN,Toronto,12345,1 Nowhere Street";
 	public static final String PNR_ADDRESS2 = "CAN,Montreal,98765,21 Rue Blanc";
 	public static final String PNR_ADDRESS3 = "GBR,London,NKZ215,33 Ilkeston Blvd";
 
-	public static final String PNR_EMAIL1 = "bilbo.baggins@shire.home";
+	public static final String PNR_EMAIL1 = "bilbo.baggins@fall.home";
 	public static final String PNR_EMAIL2 = "the.donald@allmine.com";
 
 	public static final String PNR_FREQUENT_FLYER1 = "CO,16675981";
@@ -51,36 +54,39 @@ public class PnrDataGenerator {
 
 	public static PnrMessage createTestPnrmessage(){
 	   PnrMessage msg = new PnrMessage();
-	   msg.setId(1L);
-	   Pnr pnr = createPnr(PNR_ID1, PNR_ATTR_CARRIER1, PNR_ATTR_RECORD_LOCATOR1);
-	   addAddress(pnr, 1);
-	   addAddress(pnr, 2);
-	   addEmail(pnr, 1);
-	   addPhone(pnr, 1);
-	   addAgency(pnr, 1);
-	   addCreditCard(pnr, 1);
-	   addFrequentFlyer(pnr, 1);
-	   
-	   Flight flight = addFlight(pnr, 1);
-	   addPassenger(pnr, 1, flight);
-	   addPassenger(pnr, 2, flight);
-	   addPassenger(pnr, 3, flight);
-	   addPassenger(pnr, 4, flight);
-	   msg.addPnr(pnr);
-	   
-	   pnr = createPnr(PNR_ID2, PNR_ATTR_CARRIER2, PNR_ATTR_RECORD_LOCATOR2);
-	   msg.addPnr(pnr);
-	   addAddress(pnr, 3);
-	   addEmail(pnr, 2);
-	   addPhone(pnr, 2);
-	   addAgency(pnr, 2);
-	   addCreditCard(pnr, 2);
-	   addFrequentFlyer(pnr, 2);
-	   
-	   flight = addFlight(pnr, 2);
-	   addPassenger(pnr, 5, flight);
-	   addPassenger(pnr, 6, flight);
-
+	   try{
+		   msg.setId(1L);
+		   Pnr pnr = createPnr(PNR_ID1, PNR_ATTR_CARRIER1, PNR_ATTR_RECORD_LOCATOR1);
+		   addAddress(pnr, 1);
+		   addAddress(pnr, 2);
+		   addEmail(pnr, 1);
+		   addPhone(pnr, 1);
+		   addAgency(pnr, 1);
+		   addCreditCard(pnr, 1);
+		   addFrequentFlyer(pnr, 1);
+		   
+		   Flight flight = addFlight(pnr, 1);
+		   addPassenger(pnr, 1, flight);
+		   addPassenger(pnr, 2, flight);
+		   addPassenger(pnr, 3, flight);
+		   addPassenger(pnr, 4, flight);
+		   msg.addPnr(pnr);
+		   
+		   pnr = createPnr(PNR_ID2, PNR_ATTR_CARRIER2, PNR_ATTR_RECORD_LOCATOR2);
+		   msg.addPnr(pnr);
+		   addAddress(pnr, 3);
+		   addEmail(pnr, 2);
+		   addPhone(pnr, 2);
+		   addAgency(pnr, 2);
+		   addCreditCard(pnr, 2);
+		   addFrequentFlyer(pnr, 2);
+		   
+		   flight = addFlight(pnr, 2);
+		   addPassenger(pnr, 5, flight);
+		   addPassenger(pnr, 6, flight);
+	   } catch (Exception ex){
+		   ex.printStackTrace();
+	   }
 	   return msg;
    }
    private static Pnr createPnr(long id, String carrier, String recLocator){
@@ -93,33 +99,25 @@ public class PnrDataGenerator {
    private static void addAddress(Pnr pnr, int indx){
 	   switch(indx){
 		   case 1:
-			   Address addr = new Address();
-			   String[] params = PNR_ADDRESS1.split(",");
-			   addr.setCountry(params[0]);
-			   addr.setCity(params[1]);
-			   addr.setLine1(params[2]);
-			   addr.setId(1L);
-			   pnr.addAddress(addr);
+			   pnr.addAddress(createAdddress(1L,PNR_ADDRESS1));
 			   break;
 		   case 2:
-			   addr = new Address();
-			   params = PNR_ADDRESS2.split(",");
-			   addr.setCountry(params[0]);
-			   addr.setCity(params[1]);
-			   addr.setLine1(params[2]);
-			   addr.setId(2L);
-			   pnr.addAddress(addr);
+			   pnr.addAddress(createAdddress(2L,PNR_ADDRESS2));
 			   break;
 		   case 3:
-			   addr = new Address();
-			   params = PNR_ADDRESS3.split(",");
-			   addr.setCountry(params[0]);
-			   addr.setCity(params[1]);
-			   addr.setLine1(params[2]);
-			   addr.setId(3L);
-			   pnr.addAddress(addr);
+			   pnr.addAddress(createAdddress(3L,PNR_ADDRESS3));
 			   break;
 	   }
+   }
+   private static Address createAdddress(long id, String address){
+	   Address addr = new Address();
+	   String[] params = address.split(",");
+	   addr.setCountry(params[0]);
+	   addr.setCity(params[1]);
+	   addr.setPostalCode(params[2]);
+	   addr.setLine1(params[3]);
+	   addr.setId(id);
+	   return addr;
    }
    private static void addEmail(Pnr pnr, int indx){
 	   switch(indx){
@@ -217,7 +215,7 @@ public class PnrDataGenerator {
 			   break;
 	   }
    }
-   private static void addPassenger(Pnr pnr, int indx, Flight flight){
+   private static void addPassenger(Pnr pnr, int indx, Flight flight) throws ParseException{
 	   switch(indx){
 		   case 1:
 			   Passenger p = new Passenger();
@@ -227,7 +225,7 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(1L);
-			   addDocumentToPassenger(p);
+			   addDocumentToPassenger(p, params[4], params[5]);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
@@ -239,7 +237,7 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(2L);
-			   addDocumentToPassenger(p);
+			   addDocumentToPassenger(p, params[4], params[5]);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
@@ -251,7 +249,7 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(3L);
-			   addDocumentToPassenger(p);
+			   addDocumentToPassenger(p, params[4], params[5]);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
@@ -263,7 +261,7 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(4L);
-			   addDocumentToPassenger(p);
+			   addDocumentToPassenger(p, params[4], params[5]);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
@@ -275,7 +273,7 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(5L);
-			   addDocumentToPassenger(p);
+			   addDocumentToPassenger(p, params[4], params[5]);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
@@ -287,15 +285,17 @@ public class PnrDataGenerator {
 			   p.setMiddleName(params[2]);
 			   p.setLastName(params[3]);
 			   p.setId(6L);
-			   addDocumentToPassenger(p);
+			   addDocumentToPassenger(p, params[4], params[5]);
 			   pnr.getPassengers().add(p);
 			   flight.getPassengers().add(p);
 			   break;
 	   }
    }
-   private static void addDocumentToPassenger(Passenger pass){
+   private static void addDocumentToPassenger(Passenger pass, String country, String date) throws ParseException{
 	   Document doc = new Document();
 	   doc.setId(pass.getId());
+	   doc.setIssuanceCountry(country);
+	   doc.setIssuanceDate(DateCalendarUtils.parseJsonDate(date));
 	   pass.addDocument(doc);
    }
    private static Flight addFlight(Pnr pnr, int indx){
