@@ -1,7 +1,10 @@
 package gov.gtas.rule.builder;
 
+import static gov.gtas.util.DateCalendarUtils.formatRuleEngineDate;
+import static gov.gtas.util.DateCalendarUtils.parseJsonDate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.enumtype.ValueTypesEnum;
@@ -12,6 +15,8 @@ import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.svc.UdrServiceHelper;
 
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -84,22 +89,165 @@ public class RuleConditionBuilderTest {
 	}
 	
 	@Test
-	public void testConditionEqual() throws ParseException {
-		/*
-		 * test EQUAL operator
-		 */
-		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
-				FlightMapping.FLIGHT_NUMBER,
-				OperatorCodeEnum.EQUAL, "12345", ValueTypesEnum.STRING);
-		testTarget.addRuleCondition(cond);
-		StringBuilder result = new StringBuilder();
-		testTarget.buildConditionsAndApppend(result);
-		assertTrue(result.length() > 0);
-		assertEquals("$f:Flight("+FlightMapping.FLIGHT_NUMBER.getFieldName()+" == \"12345\")\n"
-				+"$p:Passenger() from $f.passengers",
-				result.toString().trim());
+	public void testStringConditionsOnPassenger() throws ParseException {
+		for(OperatorCodeEnum op:
+			new OperatorCodeEnum[]{
+				OperatorCodeEnum.EQUAL, 
+				OperatorCodeEnum.NOT_EQUAL,
+				OperatorCodeEnum.BEGINS_WITH,
+				OperatorCodeEnum.ENDS_WITH,
+				OperatorCodeEnum.CONTAINS,
+				OperatorCodeEnum.NOT_BEGINS_WITH,
+				OperatorCodeEnum.NOT_ENDS_WITH,
+				OperatorCodeEnum.NOT_CONTAINS,
+				OperatorCodeEnum.NOT_IN,
+				OperatorCodeEnum.IN
+				}){
+			verifyStringConditionOnPassenger(op);
+		}
 	}
-	
+	private void verifyStringConditionOnPassenger(OperatorCodeEnum op) throws ParseException{
+		String[] val = new String[]{"Foo", "Bar"};
+		String attr = PassengerMapping.LAST_NAME.getFieldName();
+		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
+				PassengerMapping.LAST_NAME,
+				op, val, ValueTypesEnum.STRING);
+		testTarget.addRuleCondition(cond);
+		StringBuilder res = new StringBuilder();
+		testTarget.buildConditionsAndApppend(res);
+		assertTrue(res.length() > 0);
+		
+		String result = res.toString().trim();
+		String prefix = "$p:Passenger(";
+		switch(op){
+		case EQUAL:
+			assertEquals(prefix+attr+" == \"" + val[0] + "\")", result);
+			break;
+		case NOT_EQUAL:
+			assertEquals(prefix+attr+" != \"" + val[0] + "\")", result);
+			break;
+		case IN:
+			assertEquals(prefix+attr+" in " + createStringValueList(val)+")", result);
+			break;
+		case NOT_IN:
+			assertEquals(prefix+attr+" not in " + createStringValueList(val)+")", result);
+			break;
+		case BEGINS_WITH:
+			assertEquals(prefix + attr + " != null, "
+					+attr+" str[startsWith] \"" + val[0] + "\")", result);
+			break;
+		case NOT_BEGINS_WITH:
+			assertEquals(prefix + attr + " != null, "
+					+attr+" not matches \"" + val[0] + ".*\")", result);
+			break;
+		case ENDS_WITH:
+			assertEquals(prefix + attr + " != null, "
+					+attr+" str[endsWith] \"" + val[0] + "\")", result);
+			break;
+		case NOT_ENDS_WITH:
+			assertEquals(prefix + attr + " != null, "+
+					attr+" not matches \".*" + val[0] + "\")", result);
+			break;
+		case CONTAINS:
+			assertEquals(prefix + attr + " != null, "
+					+attr+" matches \".*" + val[0] + ".*\")", result);
+			break;
+		case NOT_CONTAINS:
+			assertEquals(prefix + attr + " != null, "
+					+attr+" not matches \".*" + val[0] + ".*\")", result);
+			break;
+			default:
+				fail("Unknown String operator");
+		}
+	}
+	private String createStringValueList(String[] values){
+		List<String> strList = Arrays.asList(values);
+		String res = String.join("\", \"", strList);
+		return "(\""+res+"\")";
+	}
+	@Test
+	public void testDateConditionsOnPassenger() throws ParseException {
+		for(OperatorCodeEnum op:
+			new OperatorCodeEnum[]{
+				OperatorCodeEnum.EQUAL, 
+				OperatorCodeEnum.NOT_EQUAL,
+				OperatorCodeEnum.BETWEEN,
+				OperatorCodeEnum.NOT_BETWEEN,
+				OperatorCodeEnum.GREATER,
+				OperatorCodeEnum.GREATER_OR_EQUAL,
+				OperatorCodeEnum.LESS,
+				OperatorCodeEnum.LESS_OR_EQUAL,
+				OperatorCodeEnum.NOT_IN,
+				OperatorCodeEnum.IN
+				}){
+			verifyDateConditionOnPassenger(op);
+		}
+	}
+	private void verifyDateConditionOnPassenger(OperatorCodeEnum op) throws ParseException{
+		String[] val = new String[]{"2011-05-24", "2015-01-25"};
+		String attr = PassengerMapping.DOB.getFieldName();
+		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
+				PassengerMapping.DOB,
+				op, val, ValueTypesEnum.DATE);
+		testTarget.addRuleCondition(cond);
+		StringBuilder res = new StringBuilder();
+		testTarget.buildConditionsAndApppend(res);
+		assertTrue(res.length() > 0);
+		
+		String result = res.toString().trim();
+		String prefix = "$p:Passenger(";
+		switch(op){
+		case EQUAL:
+			assertEquals(prefix+attr+" == \"" + formatRuleEngineDate(parseJsonDate(val[0])) + "\")", result);
+			break;
+		case NOT_EQUAL:
+			assertEquals(prefix+attr+" != \"" + formatRuleEngineDate(parseJsonDate(val[0])) + "\")", result);
+			break;
+		case IN:
+			assertEquals(prefix+attr+" in " + createDateValueList(val)+")", result);
+			break;
+		case NOT_IN:
+			assertEquals(prefix+attr+" not in " + createDateValueList(val)+")", result);
+			break;
+		case GREATER:
+			assertEquals(prefix 
+					+attr+" > \"" + formatRuleEngineDate(parseJsonDate(val[0])) + "\")", result);
+			break;
+		case GREATER_OR_EQUAL:
+			assertEquals(prefix
+					+attr+" >= \"" + formatRuleEngineDate(parseJsonDate(val[0])) + "\")", result);
+			break;
+		case LESS:
+			assertEquals(prefix
+					+attr+" < \"" + formatRuleEngineDate(parseJsonDate(val[0])) + "\")", result);
+			break;
+		case LESS_OR_EQUAL:
+			assertEquals(prefix
+					+attr+" <= \"" + formatRuleEngineDate(parseJsonDate(val[0])) + "\")", result);
+			break;
+		case BETWEEN:
+			assertEquals(prefix
+					+attr+" >= \"" + formatRuleEngineDate(parseJsonDate(val[0])) + "\", "
+					+attr+ " <= \""+ formatRuleEngineDate(parseJsonDate(val[1])) +"\")", result);
+			break;
+		case NOT_BETWEEN:
+			assertEquals(prefix + "("
+					+attr+" < \"" + formatRuleEngineDate(parseJsonDate(val[0])) + "\" || "
+					+attr+ " > \""+ formatRuleEngineDate(parseJsonDate(val[1])) +"\"))", result);
+			break;
+			default:
+				fail("Unknown String operator");
+		}
+	}
+	private String createDateValueList(String[] values) throws ParseException{
+		for(int i = 0; i < values.length; ++i){
+			values[i] = formatRuleEngineDate(parseJsonDate(values[i]));
+		}
+		List<String> strList = Arrays.asList(values);
+		String res = String.join("\", \"", strList);
+		return "(\""+res+"\")";
+	}
+
 	@Test
 	public void testMultipleConditionsDocument() throws ParseException {
 		/*
@@ -124,7 +272,6 @@ public class RuleConditionBuilderTest {
 		result.toString().trim());
 	}
 	
-	// TODO: Amit review
 	@Test
 	public void testDocumentWithTypeEquality() throws ParseException {
 		/*

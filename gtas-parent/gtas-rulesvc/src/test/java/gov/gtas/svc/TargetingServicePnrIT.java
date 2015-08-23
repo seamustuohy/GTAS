@@ -93,7 +93,7 @@ public class TargetingServicePnrIT {
 	public void testPnrRuleExecution1() throws ParseException {
 		/*
 		 * one rule with multiple conditions involving PNR record locator
-		 * and passenger type aand last name.
+		 * and passenger type and last name.
 		 */
 		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
@@ -157,7 +157,7 @@ public class TargetingServicePnrIT {
 		RuleServiceResult result = targetingService.applyRules(request,
 				drlRules);
 		assertNotNull(result);
-		assertEquals("Expected 1 hits", 1, result.getResultList().size());
+		assertEquals("Expected 1 hit", 1, result.getResultList().size());
 		RuleHitDetail res = (RuleHitDetail) (result.getResultList().get(0));
 		assertNotNull("passenger ID in result is null", res.getPassengerId());
 		assertEquals("Hit Passenger id mismatch",
