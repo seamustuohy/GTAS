@@ -61,18 +61,18 @@ public class UdrManagementController {
 		return resp;
 	}
 
-	@RequestMapping(value = Constants.UDR_TARGET, method = RequestMethod.GET)
+	@RequestMapping(value = Constants.TARGET_ONE_APIS_MSG, method = RequestMethod.GET)
 	public List<?> getTargetingResult(@PathVariable Long id) {
 			RuleServiceResult resp = targetingService.analyzeApisMessage(id);
 			return resp.getResultList();
 	}
-	@RequestMapping(value = Constants.UDR_TARGET_ALL_APIS, method = RequestMethod.GET)
+	@RequestMapping(value = Constants.TARGET_ALL_APIS, method = RequestMethod.GET)
 	public List<?> getTargetingApisResult() {
 		List<RuleHitDetail> ret = targetingService.analyzeLoadedApisMessage();
 		return ret;
 	}
 
-	@RequestMapping(value = Constants.UDR_TARGET_ALL_PNR, method = RequestMethod.GET)
+	@RequestMapping(value = Constants.TARGET_ALL_PNR, method = RequestMethod.GET)
 	public List<?> getTargetingPnrResult() {
 		List<RuleHitDetail> ret = targetingService.analyzeLoadedPnrMessage();
 		return ret;

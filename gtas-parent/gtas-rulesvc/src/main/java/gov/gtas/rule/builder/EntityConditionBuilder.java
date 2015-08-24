@@ -170,7 +170,21 @@ public abstract class EntityConditionBuilder {
 													// wildcard
 			break;
 		case NOT_BEGINS_WITH:
+			addNotEmptyCondition(bldr, attributeName, ", ");
+			bldr.append(attributeName).append(" ")
+					.append(opCode.getOperatorString()).append(" ");
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[0], bldr, false, true);// begins and ends with
+													// wildcard
+			break;
 		case NOT_ENDS_WITH:
+			addNotEmptyCondition(bldr, attributeName, ", ");
+			bldr.append(attributeName).append(" ")
+					.append(opCode.getOperatorString()).append(" ");
+			RuleConditionBuilderHelper.addConditionValue(attributeType,
+					values[0], bldr, true, false);// begins and ends with
+													// wildcard
+			break;
 		case NOT_CONTAINS:
 			addNotEmptyCondition(bldr, attributeName, ", ");
 			bldr.append(attributeName).append(" ")
