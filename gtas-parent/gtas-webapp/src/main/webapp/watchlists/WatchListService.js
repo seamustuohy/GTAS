@@ -54,11 +54,12 @@ app.service("watchListService", function ($http, $q) {
                 console.log('no listTypeId');
                 return "failure";
             }
-
-            items = watchlist.types[listTypeId];
+            delete valuesObj.$$hashKey;
+            console.log(valuesObj);
+            items = watchlist.types[listTypeId].data;
             //add id
             valuesObj.id = getNewId(items);
-            items.data.unshift(valuesObj);
+            items.unshift(valuesObj);
             localStorage["watchlist"] = JSON.stringify(watchlist);
             return items;
         },
@@ -78,12 +79,12 @@ app.service("watchListService", function ($http, $q) {
             localStorage["watchlist"] = JSON.stringify(watchlist);
             return items;
         },
-        updateItem = function (itemId, listTypeId, valuesObj) {
+        updateItem = function (listTypeId, valuesObj) {
             var watchlist = JSON.parse(localStorage["watchlist"]);
-            if (itemId === undefined || listTypeId === undefined || itemId === null || listTypeId === null) {
+            if (listTypeId === undefined ||listTypeId === null) {
                 return false;
             }
-            watchlist[listTypeId] = updatedItems(watchlist[listTypeId], valuesObj);
+            watchlist.types[listTypeId].data = updatedItems(watchlist.types[listTypeId].data, valuesObj);
             localStorage["watchlist"] = JSON.stringify(watchlist);
             return watchlist[listTypeId];
         },

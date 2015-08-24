@@ -9,6 +9,6 @@
     </tabset>
     <div ng-if="activeTab !== 'create-new'">
         <button data-ng-click="Add()">Add</button>
-        <div ui-grid="gridOpts" ui-grid-edit ui-grid-row-edit ui-grid-cellNav class="grid"></div>
+        <div ui-grid="gridOpts" ui-grid-edit ui-grid-row-edit ui-grid-cellNav class="grid" external-scopes="gridScope"></div>
     </div>
 </section>

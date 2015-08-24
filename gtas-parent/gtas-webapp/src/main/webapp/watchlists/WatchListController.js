@@ -1,11 +1,18 @@
-app.controller('WatchListController', function ($scope, $filter, $q, watchListService, $window) {
+app.controller('WatchListController', function ($scope, $filter, $q, watchListService, $interval) {
     'use strict';
     var watchlist = localStorage["watchlist"] === undefined ? {} : JSON.parse(localStorage["watchlist"]);
+    var removeTemplate = '<input type="button" value="remove" ng-click="getExternalScopes().removeRow(row)" />';
 
     if (watchlist.types === undefined) {
         watchlist.types = {
             "document": {
                 columns: [{
+                    name: "id",
+                    enableCellEdit: false,
+                    enableFiltering: false,
+                    enableSorting: false,
+                    "type": "number"
+                }, {
                     name: "type",
                     enableCellEdit: true,
                     "type": "string"
@@ -15,12 +22,18 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
                     "type": "string"
                 }],
                 data: [
-                    {"type": "P", "number": "76283AJLG"},
-                    {"type": "V", "number": "111123AJLV"}
+                    {id: 1, "type": "P", "number": "76283AJLG"},
+                    {id: 2, "type": "V", "number": "111123AJLV"}
                 ]
             },
             "passenger": {
                 columns: [{
+                    name: "id",
+                    enableFiltering: false,
+                    enableSorting: false,
+                    enableCellEdit: false,
+                    "type": "number"
+                }, {
                     name: "first name",
                     enableCellEdit: true,
                     "type": "string"
@@ -34,8 +47,8 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
                     "type": "date"
                 }],
                 data: [
-                    {"first name": "John", "last name": "Johnnson", "DOB": "1977-01-01"},
-                    {"first name": "Jack", "last name": "Johnson", "DOB": "1978-01-01"}
+                    {id: 1, "first name": "John", "last name": "Johnnson", "DOB": "1977-01-01"},
+                    {id: 2, "first name": "Jack", "last name": "Johnson", "DOB": "1978-01-01"}
                 ]
             }
         };
@@ -51,19 +64,24 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
     $scope.tabfields = watchlist.types;
 
     $scope.alertMe = function (listName) {
+        var columnDefClone = watchlist.types[listName].columns.slice(0);
+        columnDefClone.push({
+            field: 'remove',
+            displayName: '',
+            enableFiltering: false,
+            enableSorting: false,
+            cellTemplate: removeTemplate
+        });
         $scope.activeTab = listName;
-        $scope.gridOpts.columnDefs = watchlist.types[listName].columns;
+        $scope.gridOpts.columnDefs = columnDefClone;
         $scope.gridOpts.data = watchlist.types[listName].data;
     };
-
     $scope.gridOpts = {
         paginationPageSize: 10,
         paginationPageSizes: [],
         enableFiltering: true,
         enableCellEditOnFocus: true,
-        showGridFooter: true,
-        columnDefs: watchlist.types.document.columns,
-        data: watchlist.types.document.data
+        showGridFooter: true
     };
 
     $scope.Add = function () {
@@ -80,17 +98,27 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
         console.log(rowEntity);
 
 //        $scope.gridApi.rowEdit.setSavePromise(rowEntity, promise.promise);
-
-        watchListService.addItem($scope.activeTab, rowEntity).then(function (response) {
-            console.log(response);
+        if (rowEntity.id === undefined) {
+            watchListService.addItem($scope.activeTab, rowEntity);
+        } else {
+            watchListService.updateItem($scope.activeTab, rowEntity);
+        }
+        $scope.gridApi.rowEdit.setSavePromise(rowEntity, promise.promise);
+        $interval(function () {
             promise.resolve();
-            return promise;
-        });
+        }, 300, 1);
     };
 
     $scope.gridOpts.onRegisterApi = function (gridApi) {
         //set gridApi on scope
         $scope.gridApi = gridApi;
         gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
+    };
+
+    $scope.gridScope = {
+        removeRow: function (row) {
+            var index = $scope.gridOpts.data.indexOf(row.entity);
+            $scope.gridOpts.data.splice(index, 1);
+        }
     };
 });
