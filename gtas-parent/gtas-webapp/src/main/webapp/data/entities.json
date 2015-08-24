@@ -128,12 +128,40 @@
         "id": "Document.expirationDate",
         "label": "Expiration Date",
         "type": "date",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ],
         "plugin": "datepicker"
       },
       {
         "id": "Document.issuanceDate",
         "label": "Issuance Date",
         "type": "date",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ],
         "plugin": "datepicker"
       },
       {
@@ -293,12 +321,40 @@
         "id": "Flight.eta",
         "label": "ETA",
         "type": "date",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ],
         "plugin": "datepicker"
       },
       {
         "id": "Flight.etd",
         "label": "ETD",
         "type": "date",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ],
         "plugin": "datepicker"
       },
       {
@@ -409,7 +465,21 @@
       {
         "id": "Passenger.age",
         "label": "Age",
-        "type": "integer"
+        "type": "integer",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ]
       },
       {
         "id": "Passenger.citizenshipCountry",
@@ -463,6 +533,20 @@
         "id": "Passenger.dob",
         "label": "DOB",
         "type": "date",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ],
         "plugin": "datepicker"
       },
       {
@@ -616,12 +700,41 @@
       {
         "id": "Pnr.bagCount",
         "label": "Bag - Count",
-        "type": "integer"
+        "type": "integer",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ]
       },
       {
         "id": "Pnr.dateBooked",
         "label": "Booking Date",
-        "type": "date"
+        "type": "date",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ],
+        "plugin": "datepicker"
       },
       {
         "id": "Pnr.carrier",
@@ -638,7 +751,21 @@
       {
         "id": "Pnr.daysBookedBeforeTravel",
         "label": "Days Booked Before Travel",
-        "type": "integer"
+        "type": "integer",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ]
       },
       {
         "id": "Pnr.dwellAirport",
@@ -675,12 +802,40 @@
       {
         "id": "Pnr.dwellDuration",
         "label": "Dwell - Duration",
-        "type": "integer"
+        "type": "integer",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ]
       },
       {
         "id": "Pnr.totalDwellTime",
         "label": "Dwell - Total Duration",
-        "type": "integer"
+        "type": "integer",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ]
       },
       {
         "id": "Pnr.formOfPayment",
@@ -765,7 +920,21 @@
       {
         "id": "Pnr.passengerCount",
         "label": "Passenger Count",
-        "type": "integer"
+        "type": "integer",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN",
+          "IS_NULL",
+          "IS_NOT_NULL"
+        ]
       },
       {
         "id": "Pnr.recordLocator",
