@@ -58,7 +58,7 @@ app.service("watchListService", function ($http, $q) {
             items = watchlist.types[listTypeId];
             //add id
             valuesObj.id = getNewId(items);
-            items.push(valuesObj);
+            items.data.unshift(valuesObj);
             localStorage["watchlist"] = JSON.stringify(watchlist);
             return items;
         },

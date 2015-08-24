@@ -48,6 +48,8 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
 
     $scope.tabs = watchListService.getListTypes();
 
+    $scope.tabfields = watchlist.types;
+
     $scope.alertMe = function (listName) {
         $scope.activeTab = listName;
         $scope.gridOpts.columnDefs = watchlist.types[listName].columns;
@@ -63,19 +65,27 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
         columnDefs: watchlist.types.document.columns,
         data: watchlist.types.document.data
     };
+
+    $scope.Add = function () {
+        var starterData = {};
+        $scope.gridOpts.columnDefs.forEach(function(field){
+            starterData[field.name] = null;
+        });
+        $scope.gridOpts.data.unshift(starterData);
+    };
+
     $scope.saveRow = function (rowEntity) {
         // create a fake promise - normally you'd use the promise returned by $http or $resource
         var promise = $q.defer();
-        $scope.gridApi.rowEdit.setSavePromise(rowEntity, promise.promise);
+        console.log(rowEntity);
 
-        // fake a delay of 3 seconds whilst the save occurs, return error if gender is "male"
-        $interval(function () {
-            if (rowEntity.gender === 'male' ){
-                promise.reject();
-            } else {
-                promise.resolve();
-            }
-        }, 3000, 1);
+//        $scope.gridApi.rowEdit.setSavePromise(rowEntity, promise.promise);
+
+        watchListService.addItem($scope.activeTab, rowEntity).then(function (response) {
+            console.log(response);
+            promise.resolve();
+            return promise;
+        });
     };
 
     $scope.gridOpts.onRegisterApi = function (gridApi) {
