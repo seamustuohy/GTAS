@@ -83,10 +83,11 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
         enableCellEditOnFocus: true,
         showGridFooter: true
     };
+    $scope.alertMe('document');
 
     $scope.Add = function () {
         var starterData = {};
-        $scope.gridOpts.columnDefs.forEach(function(field){
+        $scope.gridOpts.columnDefs.forEach(function (field) {
             starterData[field.name] = null;
         });
         $scope.gridOpts.data.unshift(starterData);
@@ -98,7 +99,7 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
         console.log(rowEntity);
 
 //        $scope.gridApi.rowEdit.setSavePromise(rowEntity, promise.promise);
-        if (rowEntity.id === undefined) {
+        if (!rowEntity.id) {
             watchListService.addItem($scope.activeTab, rowEntity);
         } else {
             watchListService.updateItem($scope.activeTab, rowEntity);

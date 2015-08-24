@@ -47,21 +47,19 @@ app.service("watchListService", function ($http, $q) {
             //return (request.then(handleSuccess, handleError));
         },
         addItem = function (listTypeId, valuesObj) {
-            //var request;
-            var items,
-                watchlist = JSON.parse(localStorage["watchlist"]);
+            var watchlist = JSON.parse(localStorage["watchlist"]);
             if (!listTypeId) {
                 console.log('no listTypeId');
                 return "failure";
             }
             delete valuesObj.$$hashKey;
             console.log(valuesObj);
-            items = watchlist.types[listTypeId].data;
-            //add id
-            valuesObj.id = getNewId(items);
-            items.unshift(valuesObj);
+            valuesObj.id = getNewId(watchlist.types[listTypeId].data);
+            console.log(valuesObj.id);
+            console.log(valuesObj);
+            watchlist.types[listTypeId].data.unshift(valuesObj);
             localStorage["watchlist"] = JSON.stringify(watchlist);
-            return items;
+            return true;
         },
         removeItem = function (itemId, listTypeId) {
             var watchlist = JSON.parse(localStorage["watchlist"]),
