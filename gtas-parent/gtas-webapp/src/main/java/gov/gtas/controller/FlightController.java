@@ -85,6 +85,7 @@ public class FlightController {
     		ex.printStackTrace();
     	}
         
+        hitsList.clear();
         return rv;
     }
     
@@ -124,9 +125,7 @@ public class FlightController {
             
             Iterable<HitsSummary> summary = hitsSummaryService.findAll();
             
-            for(HitsSummary s:summary){
-            	
-            }
+            for(HitsSummary s:summary){}
     
     	}catch(Exception ex){
     		ex.printStackTrace();

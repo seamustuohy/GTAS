@@ -23,7 +23,8 @@ public interface PassengerRepository extends PagingAndSortingRepository<Passenge
     @Query("SELECT p FROM Flight f join f.passengers p where f.id = (:flightId)")
     public List<Passenger> getPassengersByFlightId(@Param("flightId") Long flightId);
     
-    @Query("SELECT p FROM Flight f join f.passengers p WHERE f.eta >= CURDATE() ORDER BY f.eta asc")
+    //@Query("SELECT p FROM Flight f join f.passengers p WHERE f.eta >= CURDATE() ORDER BY f.eta asc")
+    @Query("SELECT p FROM Flight f join f.passengers p ORDER BY f.eta asc")
     public Page<Passenger> getPassengersFromUpcomingFlights(Pageable pageable);
 
 }

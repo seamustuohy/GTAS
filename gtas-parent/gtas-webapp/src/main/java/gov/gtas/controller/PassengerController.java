@@ -92,6 +92,7 @@ public class PassengerController {
             rv.add(vo);
         }
 
+        hitsList.clear();
         return rv;
     }
     
