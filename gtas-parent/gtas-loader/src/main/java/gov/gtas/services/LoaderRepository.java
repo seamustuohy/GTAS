@@ -117,8 +117,15 @@ public class LoaderRepository {
         }
     }
 
+    /**
+     * TODO: update how we find passengers here, use document ,etc
+     */
     private Passenger findPassengerOnFlight(Flight f, PassengerVo pvo) {
-        List<Passenger> pax = passengerDao.getPassengerByName(pvo.getFirstName(), pvo.getLastName());
+        if (f.getId() == null) {
+            return null;
+        }
+        
+        List<Passenger> pax = passengerDao.getPassengersByFlightIdAndName(f.getId(), pvo.getFirstName(), pvo.getLastName());
         if (pax != null && pax.size() >= 1) {
             return pax.get(0);
         } else {
