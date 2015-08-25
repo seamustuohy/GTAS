@@ -137,12 +137,14 @@
         text-align: center;
         }
 
-				@media (min-width: 768px) {
-					.modal-dialog {
-					    width: 1000px;
-					}
-					}
-       
+        @media (min-width: 768px) {
+        .modal-dialog {
+        width: 1000px;
+        }
+        }
+        .ui-grid-pager-control input {
+        width: 100px;
+        }
         </style>
 
         </head>
@@ -176,7 +178,7 @@
 
         <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-left">
-        <li class="active"><a href="home.action">Home</a></li>
+        <li ng-class="{active: $route.current.activeTab == 'dashboard'}"><a href="home.action">Home</a></li>
 
         <sec:authorize access="hasAnyAuthority('VIEW_FLIGHT_PASSENGERS','ADMIN')">
 
@@ -277,13 +279,28 @@
 
         <script src="resources/bower_components/jquery/dist/jquery.js"></script>
         <script>
-            var $navbar = $('#navbar');
-            var markDropDownActive = function (e) {
-            var $this = $(e.currentTarget);
+        //TO SWAP OUT FOR ANGULAR WAY LATER
+        var $navbar = $('#navbar');
+        var markDropDownActive = function (e) {
+        var $this = $(e.currentTarget);
+        $navbar.find('.active').removeClass('active');
+        $this.parents('.dropdown').addClass('active');
+        };
+        $navbar.on('click', 'a:not(".dropdown-toggle")', markDropDownActive);
+        var activateTab = function (route) {
             $navbar.find('.active').removeClass('active');
-            $this.parents('.dropdown').addClass('active');
-            };
-            $navbar.on('click', 'a', markDropDownActive);
+            switch (route) {
+                case '#/query-builder':
+                case '#/risk-criteria':
+                case '#/watchlists':
+                    $navbar.children().eq(0).children().eq(2).addClass('active');
+                    return;
+                case '#/passengers':
+                default:
+                    $navbar.children().eq(0).children().eq(1).addClass('active');
+            }
+        };
+        activateTab(window.location.hash);
         </script>
         <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
