@@ -1,9 +1,13 @@
 package gov.gtas.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -27,8 +31,38 @@ public class Agency extends BaseEntityAudit {
 	@Column(name = "agency_country")
 	private String agencyCountry;
 
+
 	private String phoneNumber;
 	
+
+   @OneToMany(cascade = CascadeType.ALL, mappedBy = "agency")
+    private Set<Pnr> pnrs = new HashSet<>();
+    
+    public void addPnr(Pnr pnr) {
+        if (this.pnrs == null) {
+            this.pnrs = new HashSet<>();
+        }
+        this.pnrs.add(pnr);
+        pnr.setAgency(this);
+    }
+   
+	public Set<Pnr> getPnrs() {
+		return pnrs;
+	}
+
+	public void setPnrs(Set<Pnr> pnrs) {
+		this.pnrs = pnrs;
+	}
+
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	public String getAgencyName() {
 		return agencyName;
 	}
@@ -71,7 +105,7 @@ public class Agency extends BaseEntityAudit {
 	
     @Override
     public int hashCode() {
-        return Objects.hash(this.id);
+        return Objects.hash(this.agencyName,this.agencyIdentifier);
     }
     
     @Override
@@ -83,6 +117,7 @@ public class Agency extends BaseEntityAudit {
         if (getClass() != obj.getClass())
             return false;
         final Agency other = (Agency) obj;
-        return Objects.equals(this.id, other.id);
+        return Objects.equals(this.agencyName, other.agencyName)
+        		&& Objects.equals(this.agencyIdentifier, other.agencyIdentifier);
     }    	
 }

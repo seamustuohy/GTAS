@@ -29,8 +29,14 @@ public class PassengerVo extends BaseVo implements Serializable {
     private String debarkation;
     private String embarkCountry;
     private String debarkCountry;
+    private String seat;
     
-    
+	public String getSeat() {
+		return seat;
+	}
+	public void setSeat(String seat) {
+		this.seat = seat;
+	}
 	public Set<PnrDataVo> getPnrs() {
 		return pnrs;
 	}

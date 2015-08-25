@@ -25,6 +25,8 @@ public class FlightVo extends BaseVo implements Serializable {
     private String destinationCountry;
     private boolean isOverFlight;
     private String direction;
+    
+    
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date flightDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)

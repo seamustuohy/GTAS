@@ -17,11 +17,13 @@ import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PassengerServiceDelegate {
 
+	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 	@Resource
 	PassengerService passengerService;
 	
@@ -45,6 +47,8 @@ public class PassengerServiceDelegate {
 				if(existingPassenger != null){
 					updateExistingPassenger(p,existingPassenger);
 				}
+				f.setUpdatedAt(new Date());
+				f.setUpdatedBy("SYSTEM");
 				passengerService.update(existingPassenger);
 				
 			}
@@ -74,7 +78,7 @@ public class PassengerServiceDelegate {
 		target.setSuffix(source.getSuffix());
 		target.setTitle(source.getTitle());
 		target.setUpdatedAt(new Date());
-		target.setUpdatedBy("JUNIT");
+		target.setUpdatedBy("SYSTEM");
 		Iterator it = source.getDocuments().iterator();
 		while(it.hasNext()){
 			Document d= (Document) it.next();

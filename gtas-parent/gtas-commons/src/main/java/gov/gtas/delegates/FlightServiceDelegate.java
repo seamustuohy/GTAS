@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import gov.gtas.delegates.vo.FlightVo;
@@ -25,6 +26,7 @@ public class FlightServiceDelegate {
 	
 	@Resource
 	private FlightService flightService;
+	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 	
 	public FlightVo saveOrUpdate(FlightVo vo) {
 		Flight f=flightService.getUniqueFlightByCriteria(vo.getCarrier(), vo.getFlightNumber(), vo.getOrigin(), vo.getDestination(), vo.getFlightDate());
@@ -32,11 +34,12 @@ public class FlightServiceDelegate {
 			f = ServiceUtils.mapFlightFromVo(vo,f);
 			f.setUpdatedBy("JUNIT");
 			flightService.update(f);
+			logger.debug("Flight with id "+f.getId()+"  number "+f.getFlightNumber()+" got updated to database");
 		}
 		else{
 			ServiceUtils.mapFlightFromVo(vo,f);
 			f=flightService.create(f);
-			System.out.println("ID-"+f.getId());
+			logger.debug("Flight with id "+f.getId()+"  number "+f.getFlightNumber()+" got saved to database");
 		}
 		return ServiceUtils.mapVoFromFlight(f);
 		

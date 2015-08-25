@@ -11,6 +11,18 @@ public class AgencyVo extends BaseVo implements Serializable  {
 	private String agencyCity;
 	private String agencyState;
 	private String agencyCountry;
+	
+	public AgencyVo(){
+		
+	}
+	public AgencyVo(String aName,String identifier,String city,String state,String country){
+		this.agencyName=aName;
+		this.agencyIdentifier=identifier;
+		this.agencyCity=city;
+		this.agencyState=state;
+		this.agencyCountry=country;
+		
+	}
 	public String getAgencyName() {
 		return agencyName;
 	}

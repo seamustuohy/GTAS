@@ -220,8 +220,8 @@ public class Passenger extends BaseEntityAudit {
                 + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result
                 + ((middleName == null) ? 0 : middleName.hashCode());
-        result = prime * result + ((suffix == null) ? 0 : suffix.hashCode());
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        //result = prime * result + ((suffix == null) ? 0 : suffix.hashCode());
+        //result = prime * result + ((title == null) ? 0 : title.hashCode());
         return result;
     }
     @Override
@@ -260,6 +260,7 @@ public class Passenger extends BaseEntityAudit {
                 return false;
         } else if (!middleName.equals(other.middleName))
             return false;
+        /**
         if (suffix == null) {
             if (other.suffix != null)
                 return false;
@@ -270,6 +271,7 @@ public class Passenger extends BaseEntityAudit {
                 return false;
         } else if (!title.equals(other.title))
             return false;
+            */
         return true;
     }
 }
