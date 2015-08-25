@@ -20,7 +20,6 @@ import gov.gtas.rule.builder.RuleBuilderTestUtils;
 import gov.gtas.testdatagen.PnrDataGenerator;
 
 import java.text.ParseException;
-import java.util.Collection;
 import java.util.Iterator;
 
 import javax.annotation.Resource;
@@ -77,15 +76,6 @@ public class TargetingServicePnrIT {
 		assertEquals(2, pnr.getPassengers().size());
 		pax = pnr.getPassengers().iterator().next();
 		assertNotNull("Pax ID is null", pax.getId());
-    }
-    @Test
-    public void testPnrRuleRequestCreation(){
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
-		RuleServiceRequest request = TargetingServiceUtils
-				.createPnrRequest(msg);
-		Collection<?> reqObjects = request.getRequestObjects();
-		assertNotNull(reqObjects);		
-		assertEquals(48, reqObjects.size());//2pnr+2flt+6pass+6doc+3addr+2email+2phone+2ff+2cc+2agency + (6+3+ 2*5)links = 48		
     }
 
 	@Test

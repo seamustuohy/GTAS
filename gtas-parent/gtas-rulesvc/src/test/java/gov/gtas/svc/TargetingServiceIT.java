@@ -20,7 +20,6 @@ import gov.gtas.rule.builder.RuleBuilderTestUtils;
 import gov.gtas.testdatagen.ApisDataGenerator;
 
 import java.text.ParseException;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
@@ -47,9 +46,6 @@ public class TargetingServiceIT {
 
 	@Autowired
 	TargetingService targetingService;
-
-//	@Autowired
-//	ApisDataGenerator apisDataGenerator;
 
 	@Resource
 	private ApisMessageRepository apisMessageRepository;
@@ -146,68 +142,5 @@ public class TargetingServiceIT {
 				new Long(44L).equals(res.getPassengerId())
 						|| new Long(55L).equals(res.getPassengerId())
 						|| new Long(66L).equals(res.getPassengerId()));
-	}
-
-	// need to add test data
-//	@Test
-//	@Transactional
-	public void testApisMessage() {
-		Iterable<ApisMessage> messages = apisMessageRepository.findAll();
-		assertNotNull(messages);
-		int count = 0;
-		for (ApisMessage msg : messages) {
-			int reqObjCount = 0;
-			++count;
-			System.out.println("Processsing APIs message:" + msg.getId());
-			Set<Flight> flights = msg.getFlights();
-			if(flights.size() > 0){
-				for (Flight flt : flights) {
-					reqObjCount += verifyPassengers(flt, flt.getPassengers());
-				}
-				RuleServiceRequest req = TargetingServiceUtils
-						.createApisRequest(msg);
-				assertEquals(reqObjCount, req.getRequestObjects().size());
-			} else {
-				System.out.println("********???Message has no flights:"+ msg.getId());
-			}
-		}
-		assertTrue("There are no API messsages", count > 0);
-
-		System.out.println("APIs message count = " + count);
-	}
-
-	private int verifyPassengers(Flight flt, Set<Passenger> passengers) {
-		int travCount = 0;
-		int paxCount = 0;
-		int crewCount = 0;
-		int docCount = 0;
-		for (Passenger pax : passengers) {
-			++travCount;
-			String type = pax.getPassengerType();
-			if (type.equals(PassengerTypeCode.P.name())) {
-				++paxCount;
-			} else if (type.equals(PassengerTypeCode.C.name())) {
-				++crewCount;
-			}
-			Set<Document> docs = pax.getDocuments();
-			assertNotNull(docs);
-			assertTrue(docs.size() > 0);
-			docCount += docs.size();
-			for (Document doc : docs) {
-				assertNotNull(doc.getId());
-				assertNotNull("Passenger reference is null in Document",
-						doc.getPassenger());
-				assertNotNull("Passenger ID is null in Document Passenger",
-						doc.getPassenger().getId());
-			}
-		}
-		assertTrue("Flight has no passengers:" + flt.getFlightNumber(),
-				travCount > 0);
-		assertTrue("Flight passenger+crew <> passenger:" + flt.getFlightNumber(),
-				paxCount+crewCount == travCount);
-		System.out.println("Flight:" + flt.getFlightNumber()
-				+ " - passenger count = " + travCount + ", Passenger count ="
-				+ paxCount);
-		return travCount + docCount + 1;// passengers+documents_flight
 	}
 }
