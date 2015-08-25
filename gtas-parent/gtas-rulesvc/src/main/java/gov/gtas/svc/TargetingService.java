@@ -38,8 +38,25 @@ public interface TargetingService {
 	 */
 	RuleServiceResult analyzeApisMessage(long messageId);
 
+	/**
+	 * Invokes the Targeting service for all unprocessed API messages.
+	 * 
+	 * @return the result of the invocation.
+	 */
 	List<RuleHitDetail> analyzeLoadedApisMessage();
+	/**
+	 * Invokes the Targeting service for all unprocessed PNR messages.
+	 * 
+	 * @return the result of the invocation.
+	 */
 	List<RuleHitDetail> analyzeLoadedPnrMessage();
+	
+	/**
+	 * Invokes the Targeting service for all unprocessed PNR and APIS messages.
+	 * 
+	 * @return the result of the invocation.
+	 */
+	List<RuleHitDetail> analyzeLoadedMessages();
 
 	/**
 	 * Invokes the Rule Engine on an arbitrary list of objects using the

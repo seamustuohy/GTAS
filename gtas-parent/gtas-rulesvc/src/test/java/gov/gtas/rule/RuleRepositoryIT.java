@@ -48,7 +48,7 @@ public class RuleRepositoryIT {
 		ApisMessage msg = createBasicApisMessage(p1);
 		RuleServiceResult res = testTarget.invokeAdhocRules(
 				RuleServiceConstants.DEFAULT_RULESET_NAME,
-				TargetingServiceUtils.createRuleServiceRequest(msg));
+				TargetingServiceUtils.createApisRequest(msg));
 		assertNotNull(res);
 		assertNotNull(res.getResultList());
 		assertEquals("Result list is empty", 1, res.getResultList().size());

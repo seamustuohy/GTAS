@@ -31,4 +31,30 @@ public abstract class PnrAttributeLink implements Serializable {
 		return linkAttributeId;
 	}
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + new Long(pnrId).hashCode();
+        result = prime * result + new Long(linkAttributeId).hashCode();
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PnrAttributeLink other = (PnrAttributeLink) obj;
+        if (pnrId != other.pnrId) {
+            return false;
+        } 
+        if (linkAttributeId != other.linkAttributeId) {
+            return false;
+        }
+        return true;
+    }
+
 }
