@@ -276,6 +276,15 @@
         <script src="resources/bower_components/moment/min/moment.min.js"></script>
 
         <script src="resources/bower_components/jquery/dist/jquery.js"></script>
+        <script>
+            var $navbar = $('#navbar');
+            var markDropDownActive = function (e) {
+            var $this = $(e.currentTarget);
+            $navbar.find('.active').removeClass('active');
+            $this.parents('.dropdown').addClass('active');
+            };
+            $navbar.on('click', 'a', markDropDownActive);
+        </script>
         <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
         <script src="resources/bower_components/bootbox/bootbox.js"></script>
