@@ -35,7 +35,7 @@ import java.util.Set;
  * @author GTAS3 (AB)
  *
  */
-public class PnrRuleRequestBuilder {
+public class RuleEngineRequestBuilder {
 	private final List<Object> requestObjectList;
 	private final Set<Long> passengerIdSet;
 	private final Set<PnrPassengerLink> passengerLinkSet;
@@ -47,7 +47,7 @@ public class PnrRuleRequestBuilder {
 	private final Set<Long> frequentFlyerIdSet;
 	private final Set<Long> travelAgencyIdSet;
 
-	public PnrRuleRequestBuilder() {
+	public RuleEngineRequestBuilder() {
 		this.requestObjectList = new LinkedList<Object>();
 		this.addressIdSet = new HashSet<Long>();
 		this.creditCardIdSet = new HashSet<Long>();

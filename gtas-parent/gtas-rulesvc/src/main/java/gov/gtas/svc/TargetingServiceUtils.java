@@ -4,7 +4,7 @@ import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.PnrMessage;
-import gov.gtas.svc.request.builder.PnrRuleRequestBuilder;
+import gov.gtas.svc.request.builder.RuleEngineRequestBuilder;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -76,7 +76,7 @@ public class TargetingServiceUtils {
 	public static RuleServiceRequest createPnrApisRequest(
 			final Collection<ApisMessage> apisMessages,
 			final Collection<PnrMessage> pnrMessages) {
-		PnrRuleRequestBuilder bldr = new PnrRuleRequestBuilder();
+		RuleEngineRequestBuilder bldr = new RuleEngineRequestBuilder();
 		if (pnrMessages != null) {
 			for (PnrMessage msg : pnrMessages) {
 				bldr.addPnrMessage(msg);
