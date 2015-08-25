@@ -44,19 +44,29 @@ public interface TargetingService {
 	 * @return the result of the invocation.
 	 */
 	List<RuleHitDetail> analyzeLoadedApisMessage();
+
 	/**
 	 * Invokes the Targeting service for all unprocessed PNR messages.
 	 * 
 	 * @return the result of the invocation.
 	 */
 	List<RuleHitDetail> analyzeLoadedPnrMessage();
-	
+
 	/**
 	 * Invokes the Targeting service for all unprocessed PNR and APIS messages.
 	 * 
+	 * @param updateProcesssedMessageStatus
+	 *            it true, then the Targeting Service will update the status of
+	 *            each processed message.
+	 * @param statusToLoad
+	 *            status of the APIS/PNR messages to load.
+	 * @param statusAfterProcesssing
+	 *            status to update after processing.
 	 * @return the result of the invocation.
 	 */
-	List<RuleHitDetail> analyzeLoadedMessages();
+	RuleServiceResult analyzeLoadedMessages(MessageStatus statusToLoad,
+			MessageStatus statusAfterProcesssing,
+			boolean updateProcesssedMessageStatus);
 
 	/**
 	 * Invokes the Rule Engine on an arbitrary list of objects using the

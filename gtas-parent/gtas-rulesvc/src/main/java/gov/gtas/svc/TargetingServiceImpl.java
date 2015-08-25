@@ -51,7 +51,7 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private PnrMessageRepository PnrMsgRepository;
-	
+
 	@Autowired
 	private HitsSummaryRepository hitsSummaryRepository;
 
@@ -139,7 +139,9 @@ public class TargetingServiceImpl implements TargetingService {
 		return ret;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gov.gtas.svc.TargetingService#analyzeLoadedPnrMessage()
 	 */
 	@Override
@@ -156,19 +158,34 @@ public class TargetingServiceImpl implements TargetingService {
 		return ret;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gov.gtas.svc.TargetingService#analyzeLoadedMessages()
 	 */
 	@Override
 	@Transactional
-	public List<RuleHitDetail> analyzeLoadedMessages() {
-		List<RuleHitDetail> ret = null;
-		List<PnrMessage> pnrMsgs = this.retrievePnrMessage(MessageStatus.LOADED);
-		List<ApisMessage> apisMsgs = this.retrieveApisMessage(MessageStatus.LOADED);
-		RuleServiceRequest req = TargetingServiceUtils.createPnrApisRequest(apisMsgs, pnrMsgs);
-		RuleServiceResult res = ruleService.invokeRuleEngine(req);
-		ret = res.getResultList();
-		return ret;
+	public RuleServiceResult analyzeLoadedMessages(MessageStatus statusToLoad,
+			MessageStatus statusAfterProcesssing,
+			final boolean updateProcesssedMessageStat) {
+		List<PnrMessage> pnrMsgs = this.retrievePnrMessage(statusToLoad);
+		List<ApisMessage> apisMsgs = this.retrieveApisMessage(statusToLoad);
+		if (logger.isInfoEnabled()) {
+			logger.info("TargetingServiceImpl.analyzeLoadedMessages() - retrieved PNR message list size-> " + pnrMsgs.size());
+			logger.info("TargetingServiceImpl.analyzeLoadedMessages() - retrieved APIS message list size-> " + apisMsgs.size());
+		}
+		RuleServiceRequest req = TargetingServiceUtils.createPnrApisRequest(
+				apisMsgs, pnrMsgs);
+		RuleServiceResult result = ruleService.invokeRuleEngine(req);
+		if (updateProcesssedMessageStat) {
+			for (ApisMessage apisMessage : apisMsgs) {
+				apisMessage.setStatus(statusAfterProcesssing);
+			}
+			for (PnrMessage pnrMessage : pnrMsgs) {
+				pnrMessage.setStatus(statusAfterProcesssing);
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -177,7 +194,7 @@ public class TargetingServiceImpl implements TargetingService {
 		return apisMsgRepository.findByStatus(messageStatus);
 
 	}
-	
+
 	@Override
 	@Transactional
 	public List<PnrMessage> retrievePnrMessage(MessageStatus messageStatus) {
@@ -194,11 +211,10 @@ public class TargetingServiceImpl implements TargetingService {
 			apisMessage.setStatus(messageStatus);
 		}
 	}
-	
+
 	@Override
 	@Transactional
-	public void updatePnrMessage(PnrMessage message,
-			MessageStatus messageStatus) {
+	public void updatePnrMessage(PnrMessage message, MessageStatus messageStatus) {
 		PnrMessage pnrMessage = PnrMsgRepository.findOne(message.getId());
 		if (pnrMessage != null) {
 			pnrMessage.setStatus(messageStatus);
@@ -208,31 +224,27 @@ public class TargetingServiceImpl implements TargetingService {
 	// @Scheduled(fixedDelay = 4000)
 	@Transactional
 	public void runningRuleEngine() {
-		logger.info(new Date() + " a fixed delay running");
-		List<ApisMessage> apisMessageList = retrieveApisMessage(MessageStatus.LOADED);
-		System.out
-				.println("retrieved message size-> " + apisMessageList.size());
-
+		// logger.info(new Date() + " a fixed delay running");
 		List<HitsSummary> hitsSummaryList = new ArrayList<HitsSummary>();
-		if (apisMessageList.size() > 0) {
-			for (ApisMessage apisMessage : apisMessageList) {
-				RuleServiceResult ruleRunningResult = analyzeApisMessage(apisMessage);
-				RuleExecutionStatistics ruleExeStatus = ruleRunningResult
-						.getExecutionStatistics();
-				logger.info(("\nTotal Rules fired. --> " + ruleExeStatus
-						.getTotalRulesFired()));
-				List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
-						.getResultList();
-				Iterator<RuleHitDetail> iter = results.iterator();
-				while (iter.hasNext()) {
-					RuleHitDetail ruleDetail = iter.next();
-					HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
-					hitsSummaryList.add(hitsSummary);
-				}
-				updateApisMessage(apisMessage, MessageStatus.ANALYZED);
-			}
-			hitsSummaryRepository.save(hitsSummaryList);
+
+		RuleServiceResult ruleRunningResult = analyzeLoadedMessages(
+				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
+
+		RuleExecutionStatistics ruleExeStatus = ruleRunningResult
+				.getExecutionStatistics();
+		if (logger.isInfoEnabled()) {
+			logger.info(("\nTargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> " + ruleExeStatus
+					.getTotalRulesFired()));
 		}
+		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
+				.getResultList();
+		Iterator<RuleHitDetail> iter = results.iterator();
+		while (iter.hasNext()) {
+			RuleHitDetail ruleDetail = iter.next();
+			HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
+			hitsSummaryList.add(hitsSummary);
+		}
+		hitsSummaryRepository.save(hitsSummaryList);
 	}
 
 	/**

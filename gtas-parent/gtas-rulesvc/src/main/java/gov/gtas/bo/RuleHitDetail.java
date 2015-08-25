@@ -159,19 +159,4 @@ public class RuleHitDetail implements Serializable {
 		return flightId;
 	}
 
-	/**
-	 * Factory method that creates a RuleHitDetailObject.
-	 * 
-	 * @param udr
-	 *            the
-	 * @param rule
-	 * @param passenger
-	 * @return
-	 */
-//	public static RuleHitDetail createRuleHitDetail(Long ruleId,
-//			Passenger passenger, Flight flight) {
-//		RuleHitDetail ret = new RuleHitDetail(udrRuleId, title, passenger,
-//				null, cause);
-//		return ret;
-//	}
 }

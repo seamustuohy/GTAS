@@ -1,6 +1,5 @@
 package gov.gtas.controller;
 
-import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.constants.Constants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
@@ -9,9 +8,7 @@ import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
-import gov.gtas.rule.RuleServiceResult;
 import gov.gtas.svc.RuleManagementService;
-import gov.gtas.svc.TargetingService;
 import gov.gtas.svc.UdrService;
 import gov.gtas.util.DateCalendarUtils;
 
@@ -48,9 +45,6 @@ public class UdrManagementController {
 	private UdrService udrService;
 	
 	@Autowired
-	private TargetingService targetingService;
-
-	@Autowired
 	private RuleManagementService ruleManagementService;
 
 	@RequestMapping(value = Constants.UDR_GET_BY_AUTHOR_TITLE, method = RequestMethod.GET)
@@ -59,23 +53,6 @@ public class UdrManagementController {
 		System.out.println("******** user =" + authorId + ", title=" + title);
 		UdrSpecification resp = udrService.fetchUdr(authorId, title);
 		return resp;
-	}
-
-	@RequestMapping(value = Constants.TARGET_ONE_APIS_MSG, method = RequestMethod.GET)
-	public List<?> getTargetingResult(@PathVariable Long id) {
-			RuleServiceResult resp = targetingService.analyzeApisMessage(id);
-			return resp.getResultList();
-	}
-	@RequestMapping(value = Constants.TARGET_ALL_APIS, method = RequestMethod.GET)
-	public List<?> getTargetingApisResult() {
-		List<RuleHitDetail> ret = targetingService.analyzeLoadedApisMessage();
-		return ret;
-	}
-
-	@RequestMapping(value = Constants.TARGET_ALL_PNR, method = RequestMethod.GET)
-	public List<?> getTargetingPnrResult() {
-		List<RuleHitDetail> ret = targetingService.analyzeLoadedPnrMessage();
-		return ret;
 	}
 
 	@RequestMapping(value = Constants.UDR_GET_BY_ID, method = RequestMethod.GET)

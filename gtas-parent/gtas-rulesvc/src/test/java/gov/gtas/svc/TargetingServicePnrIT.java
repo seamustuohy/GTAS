@@ -63,7 +63,7 @@ public class TargetingServicePnrIT {
 	@Test
 	@Transactional
 	public void testDataGeneration() {
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
 		assertNotNull(msg);
 		assertNotNull(msg.getId());
 		assertEquals(2, msg.getPnrs().size());
@@ -85,7 +85,7 @@ public class TargetingServicePnrIT {
 		 * one rule with multiple conditions involving PNR record locator
 		 * and passenger type and last name.
 		 */
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(PNR_PASSENGER_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
@@ -107,7 +107,7 @@ public class TargetingServicePnrIT {
 	@Test
 	@Transactional
 	public void testPnrRuleExecution2() throws ParseException {
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
@@ -137,7 +137,7 @@ public class TargetingServicePnrIT {
 	@Transactional
 	public void testPnrRuleExecution3() throws ParseException {
 		// select all passengers in a flight
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();

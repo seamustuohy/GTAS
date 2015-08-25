@@ -30,7 +30,7 @@ public class TargetingServiceUtilsTest {
 
     @Test
     public void testPnrRuleRequestCreation(){
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
 		RuleServiceRequest request = TargetingServiceUtils
 				.createPnrRequest(msg);
 		Collection<?> reqObjects = request.getRequestObjects();
@@ -52,7 +52,7 @@ public class TargetingServiceUtilsTest {
 	@Test
 	public void testApisPnrRuleRequestCreation() {
 		ApisMessage apis = ApisDataGenerator.createSimpleTestApisMesssage();
-		PnrMessage pnr = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage pnr = PnrDataGenerator.createTestPnrmessage(1L);
 		RuleServiceRequest request = TargetingServiceUtils
 						.createPnrApisRequest(Arrays.asList(apis), Arrays.asList(pnr));
 		Collection<?> reqObjects = request.getRequestObjects();
@@ -65,7 +65,7 @@ public class TargetingServiceUtilsTest {
 		 * PNR and APIS has 2 common flights and 3 passengers
 		 */
 		ApisMessage apisMsg = ApisDataGenerator.createSimpleTestApisMesssage();
-		PnrMessage pnrMsg = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage pnrMsg = PnrDataGenerator.createTestPnrmessage(1L);
 		
 		//BEGIN:create common flights aand passengers
 		Collection<Flight> apisFlights = apisMsg.getFlights();
