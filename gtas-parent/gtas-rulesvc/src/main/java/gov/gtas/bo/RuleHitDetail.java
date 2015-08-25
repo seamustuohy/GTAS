@@ -1,12 +1,13 @@
 package gov.gtas.bo;
 
-import java.io.Serializable;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.PassengerTypeCode;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RuleHitDetail implements Serializable {
 	public static final String HIT_REASON_SEPARATOR = "///";
@@ -15,11 +16,21 @@ public class RuleHitDetail implements Serializable {
 	 */
 	private static final long serialVersionUID = 2946626283174855377L;
 
-	@JsonIgnore
+	private String hitRule;
+	
 	private Long udrRuleId;
 
-	@JsonIgnore
 	private Long ruleId;
+
+	private Long flightId;
+
+	private Long passengerId;
+	
+	private String passengerType;
+	
+	private String passengerName;
+	
+	private String[] hitReasons;
 
 	@JsonIgnore
 	private String title;
@@ -28,14 +39,9 @@ public class RuleHitDetail implements Serializable {
 	private String description;
 
 	@JsonIgnore
-	private Long flightId;
+	private Passenger passenger;
 
-	private String hitRule;
-	private Long passengerId;
-	private String passengerType;
-	private String passengerName;
-	private String[] hitReasons;
-
+	
 	/**
 	 * This constructor is used when the knowledge base is Ad Hoc, i.e., built
 	 * from DRL rules in a file or a string.
@@ -62,6 +68,7 @@ public class RuleHitDetail implements Serializable {
 		if (flight != null) {
 			this.flightId = flight.getId();
 		}
+		this.passenger = passenger;
 	}
 
 	/**
@@ -86,6 +93,11 @@ public class RuleHitDetail implements Serializable {
 		}
 	}
 
+	/**
+	 * Converts the passenger type code to a friendly name.
+	 * @param typ the type code.
+	 * @return the decoded type name.
+	 */
 	private String decodePassengerTypeName(String typ) {
 		String ret = typ;
 		for (PassengerTypeCode typeEnum : PassengerTypeCode.values()) {
@@ -158,5 +170,23 @@ public class RuleHitDetail implements Serializable {
 	public Long getFlightId() {
 		return flightId;
 	}
-
+    @Override
+    public int hashCode() {
+       return Objects.hash(this.udrRuleId, this.ruleId, this.passengerId, this.flightId);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final RuleHitDetail other = (RuleHitDetail)obj;
+        return Objects.equals(this.udrRuleId, other.udrRuleId)
+                && Objects.equals(this.ruleId, other.ruleId)
+                && Objects.equals(this.passengerId, other.passengerId)
+                && Objects.equals(this.flightId, other.flightId);
+    }
 }

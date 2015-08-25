@@ -1,7 +1,6 @@
 package gov.gtas.svc;
 
 import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.bo.RuleServiceRequestType;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.PnrMessage;
 import gov.gtas.svc.request.builder.RuleEngineRequestBuilder;
@@ -89,20 +88,26 @@ public class TargetingServiceUtils {
 		}
 		return bldr.build();
 	}
+    /**
+     * Creates an anonymous RuleServiceRequest object.
+     * @param requestType
+     * @param reqObjects
+     * @return
+     */
+//	public static RuleServiceRequest createRuleServiceRequest(
+//			final RuleServiceRequestType requestType, final List<?> reqObjects) {
+//		return new RuleServiceRequest() {
+//			public List<?> getRequestObjects() {
+//				return reqObjects;
+//			}
+//
+//			public RuleServiceRequestType getRequestType() {
+//				return requestType;
+//			}
+//
+//		};
+//
+//	}
 
-	public static RuleServiceRequest createRuleServiceRequest(
-			final RuleServiceRequestType requestType, final List<?> reqObjects) {
-		return new RuleServiceRequest() {
-			public List<?> getRequestObjects() {
-				return reqObjects;
-			}
-
-			public RuleServiceRequestType getRequestType() {
-				return requestType;
-			}
-
-		};
-
-	}
-
+	
 }

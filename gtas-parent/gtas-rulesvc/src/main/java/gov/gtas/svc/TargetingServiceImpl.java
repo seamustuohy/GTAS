@@ -3,6 +3,7 @@ package gov.gtas.svc;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
@@ -15,7 +16,6 @@ import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PnrMessageRepository;
 import gov.gtas.rule.RuleService;
-import gov.gtas.rule.RuleServiceResult;
 
 import java.util.ArrayList;
 import java.util.Date;

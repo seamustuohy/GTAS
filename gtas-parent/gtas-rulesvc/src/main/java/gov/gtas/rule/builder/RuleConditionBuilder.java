@@ -210,13 +210,9 @@ public class RuleConditionBuilder {
 					parent.getTitle(), this.passengerVariableName,
 					this.flightVariableName, cause));
 		} else {
-			ruleStringBuilder.append(String.format(ACTION_PASSENGER_HIT, "%dL", // the
-																				// UDR
-																				// ID
-																				// may
-																				// not
-																				// be
-																				// available
+			// the UDR ID and/or the rule id may not be available at
+			// this stage so we add defer adding these
+			ruleStringBuilder.append(String.format(ACTION_PASSENGER_HIT, "%dL", 
 					"%dL", // the rule ID may not be available
 					parent.getTitle(), this.passengerVariableName, cause));
 

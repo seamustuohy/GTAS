@@ -1,7 +1,4 @@
-package gov.gtas.rule;
-
-import gov.gtas.bo.RuleExecutionStatistics;
-import gov.gtas.bo.RuleHitDetail;
+package gov.gtas.bo;
 
 import java.util.List;
 /**
