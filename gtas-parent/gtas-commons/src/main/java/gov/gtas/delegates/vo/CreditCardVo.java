@@ -1,39 +1,55 @@
 package gov.gtas.delegates.vo;
 
+import gov.gtas.model.Pnr;
+
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.ManyToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 public class CreditCardVo extends BaseVo implements Serializable  {
 	
     private String cardType;
-    private String cardNumber;
-    private String cardExpiration;
-    private String cardHolderName;
+    private String number;
+	private Date expiration;
+    private String accountHolder;
+    private Set<Pnr> pnrs = new HashSet<>();
+    
 	public String getCardType() {
 		return cardType;
 	}
 	public void setCardType(String cardType) {
 		this.cardType = cardType;
 	}
-	public String getCardNumber() {
-		return cardNumber;
+	public String getNumber() {
+		return number;
 	}
-	public void setCardNumber(String cardNumber) {
-		this.cardNumber = cardNumber;
+	public void setNumber(String number) {
+		this.number = number;
 	}
-	public String getCardExpiration() {
-		return cardExpiration;
+	public Date getExpiration() {
+		return expiration;
 	}
-	public void setCardExpiration(String cardExpiration) {
-		this.cardExpiration = cardExpiration;
+	public void setExpiration(Date expiration) {
+		this.expiration = expiration;
 	}
-	public String getCardHolderName() {
-		return cardHolderName;
+	public String getAccountHolder() {
+		return accountHolder;
 	}
-	public void setCardHolderName(String cardHolderName) {
-		this.cardHolderName = cardHolderName;
+	public void setAccountHolder(String accountHolder) {
+		this.accountHolder = accountHolder;
+	}
+	public Set<Pnr> getPnrs() {
+		return pnrs;
+	}
+	public void setPnrs(Set<Pnr> pnrs) {
+		this.pnrs = pnrs;
 	}
     
-    
+
 }

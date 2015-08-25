@@ -7,34 +7,44 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Class PnrDataVo holds the reservation information for passengers.
+ * it contain all the reservation details from pnrgov message and 
+ * can have one or more flidht details with one or more passengers.
+ * All top level properties need to be set and need to add the passengers 
+ * and flights for this reservation.
+ * @author GTAS4
+ *
+ */
 public class PnrDataVo extends BaseVo implements Serializable {
 
-    private PnrMessage pnrMessage;
-	private String recordLocator;
+    private PnrMessageVo pnrMessage;
+ 	private String recordLocator;
     private String carrier;
     private String origin;
     private String originCountry;
-    private String booked;
-    private String received;
+    private Date dateBooked;
+    private Date dateReceived;
     private Date departureDate;
     private Integer daysBookedBeforeTravel;
     private Integer passengerCount;
     private Integer bagCount;
-    private String raw;
     private String formOfPayment;
     private Integer totalDwellTime;
-    private String email;
     private Set<FlightVo> flights = new HashSet<>();
     private Set<PassengerVo> passengers = new HashSet<>();
-    private CreditCardVo creditCard;
     private AgencyVo agency;
-    private FrequentFlyerVo frequentFlyer;	
+    private Set<CreditCardVo> creditCards = new HashSet<>();
+    private Set<FrequentFlyerVo> frequentFlyers = new HashSet<>();
     private Set<AddressVo> addresses = new HashSet<>();
     private Set<PhoneVo> phones = new HashSet<>();
-	public PnrMessage getPnrMessage() {
+    private Set<EmailVo> emails = new HashSet<>();
+    
+
+	public PnrMessageVo getPnrMessage() {
 		return pnrMessage;
 	}
-	public void setPnrMessage(PnrMessage pnrMessage) {
+	public void setPnrMessage(PnrMessageVo pnrMessage) {
 		this.pnrMessage = pnrMessage;
 	}
 	public String getRecordLocator() {
@@ -61,17 +71,17 @@ public class PnrDataVo extends BaseVo implements Serializable {
 	public void setOriginCountry(String originCountry) {
 		this.originCountry = originCountry;
 	}
-	public String getBooked() {
-		return booked;
+	public Date getDateBooked() {
+		return dateBooked;
 	}
-	public void setBooked(String booked) {
-		this.booked = booked;
+	public void setDateBooked(Date dateBooked) {
+		this.dateBooked = dateBooked;
 	}
-	public String getReceived() {
-		return received;
+	public Date getDateReceived() {
+		return dateReceived;
 	}
-	public void setReceived(String received) {
-		this.received = received;
+	public void setDateReceived(Date dateReceived) {
+		this.dateReceived = dateReceived;
 	}
 	public Date getDepartureDate() {
 		return departureDate;
@@ -97,12 +107,6 @@ public class PnrDataVo extends BaseVo implements Serializable {
 	public void setBagCount(Integer bagCount) {
 		this.bagCount = bagCount;
 	}
-	public String getRaw() {
-		return raw;
-	}
-	public void setRaw(String raw) {
-		this.raw = raw;
-	}
 	public String getFormOfPayment() {
 		return formOfPayment;
 	}
@@ -114,12 +118,6 @@ public class PnrDataVo extends BaseVo implements Serializable {
 	}
 	public void setTotalDwellTime(Integer totalDwellTime) {
 		this.totalDwellTime = totalDwellTime;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
 	}
 	public Set<FlightVo> getFlights() {
 		return flights;
@@ -133,36 +131,43 @@ public class PnrDataVo extends BaseVo implements Serializable {
 	public void setPassengers(Set<PassengerVo> passengers) {
 		this.passengers = passengers;
 	}
-	public CreditCardVo getCreditCard() {
-		return creditCard;
-	}
-	public void setCreditCard(CreditCardVo creditCard) {
-		this.creditCard = creditCard;
-	}
 	public AgencyVo getAgency() {
 		return agency;
 	}
 	public void setAgency(AgencyVo agency) {
 		this.agency = agency;
 	}
-	public FrequentFlyerVo getFrequentFlyer() {
-		return frequentFlyer;
+	public Set<CreditCardVo> getCreditCards() {
+		return creditCards;
 	}
-	public void setFrequentFlyer(FrequentFlyerVo frequentFlyer) {
-		this.frequentFlyer = frequentFlyer;
+	public void setCreditCards(Set<CreditCardVo> creditCards) {
+		this.creditCards = creditCards;
+	}
+	public Set<FrequentFlyerVo> getFrequentFlyers() {
+		return frequentFlyers;
+	}
+	public void setFrequentFlyers(Set<FrequentFlyerVo> frequentFlyers) {
+		this.frequentFlyers = frequentFlyers;
 	}
 	public Set<AddressVo> getAddresses() {
 		return addresses;
 	}
-	public void setAddresses(Set<AddressVo> adresses) {
-		this.addresses = adresses;
+	public void setAddresses(Set<AddressVo> addresses) {
+		this.addresses = addresses;
 	}
 	public Set<PhoneVo> getPhones() {
 		return phones;
 	}
 	public void setPhones(Set<PhoneVo> phones) {
 		this.phones = phones;
-	} 
+	}
+	public Set<EmailVo> getEmails() {
+		return emails;
+	}
+	public void setEmails(Set<EmailVo> emails) {
+		this.emails = emails;
+	}
     
     
+
 }
