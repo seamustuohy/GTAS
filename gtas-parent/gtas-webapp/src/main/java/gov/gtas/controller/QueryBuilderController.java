@@ -11,6 +11,7 @@ import gov.gtas.querybuilder.mappings.QueryBuilderMapping;
 import gov.gtas.querybuilder.mappings.QueryBuilderMappingFactory;
 import gov.gtas.querybuilder.model.IQueryResponse;
 import gov.gtas.querybuilder.model.IQueryResult;
+import gov.gtas.querybuilder.model.IUserQueryResult;
 import gov.gtas.querybuilder.model.QueryErrorResponse;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.QueryResponse;
@@ -103,7 +104,7 @@ public class QueryBuilderController {
 	@RequestMapping(value = Constants.SAVE_QUERY_URI, method = RequestMethod.POST)
 	public IQueryResponse saveQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
 		IQueryResponse response = new QueryResponse();
-		List<IQueryResult> resultList = new ArrayList<>();
+		List<IUserQueryResult> resultList = new ArrayList<>();
 
 		resultList.add(queryService.saveQuery(queryRequest));
 		
@@ -123,7 +124,7 @@ public class QueryBuilderController {
 	@RequestMapping(value = Constants.EDIT_QUERY_URI, method = RequestMethod.PUT)
 	public IQueryResponse editQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
 		IQueryResponse response = new QueryResponse();
-		List<IQueryResult> resultList = new ArrayList<>();
+		List<IUserQueryResult> resultList = new ArrayList<>();
 			
 		resultList.add(queryService.editQuery(queryRequest));
 		
@@ -144,7 +145,7 @@ public class QueryBuilderController {
 		IQueryResponse response = new QueryResponse();
 		
 		if(userId != null) {
-			List<IQueryResult> resultList = new ArrayList<>();
+			List<IUserQueryResult> resultList = new ArrayList<>();
 			
 			resultList = queryService.listQueryByUser(userId);
 			
@@ -173,7 +174,7 @@ public class QueryBuilderController {
 		return response;
 	}
 	
-	private IQueryResponse createQueryResponse(Status status, String message, List<IQueryResult> resultList) {
+	private IQueryResponse createQueryResponse(Status status, String message, Object resultList) {
 		QueryResponse response = new QueryResponse();
 		
 		response.setStatus(status);
