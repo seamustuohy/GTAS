@@ -84,6 +84,7 @@ public class TargetingServiceImpl implements TargetingService {
 		RuleServiceRequest req = TargetingServiceUtils
 				.createApisRequest(message);
 		RuleServiceResult res = ruleService.invokeRuleEngine(req);
+		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 		return res;
 	}
 
@@ -99,6 +100,7 @@ public class TargetingServiceImpl implements TargetingService {
 			String drlRules) {
 		RuleServiceResult res = ruleService.invokeAdhocRulesFromString(
 				drlRules, request);
+		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 		return res;
 	}
 
@@ -117,6 +119,7 @@ public class TargetingServiceImpl implements TargetingService {
 					messageId);
 		}
 		RuleServiceResult res = this.analyzeApisMessage(msg);
+		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 		return res;
 	}
 
@@ -134,6 +137,7 @@ public class TargetingServiceImpl implements TargetingService {
 			RuleServiceRequest req = TargetingServiceUtils
 					.createApisRequest(msgs);
 			RuleServiceResult res = ruleService.invokeRuleEngine(req);
+			res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 			ret = res.getResultList();
 		}
 		return ret;
@@ -153,6 +157,7 @@ public class TargetingServiceImpl implements TargetingService {
 			RuleServiceRequest req = TargetingServiceUtils
 					.createPnrRequest(msgs);
 			RuleServiceResult res = ruleService.invokeRuleEngine(req);
+			res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 			ret = res.getResultList();
 		}
 		return ret;
@@ -185,6 +190,7 @@ public class TargetingServiceImpl implements TargetingService {
 				pnrMessage.setStatus(statusAfterProcesssing);
 			}
 		}
+		result = TargetingServiceUtils.ruleResultPostProcesssing(result);
 		return result;
 	}
 

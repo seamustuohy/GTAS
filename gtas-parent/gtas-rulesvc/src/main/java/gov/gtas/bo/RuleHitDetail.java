@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class RuleHitDetail implements Serializable {
+public class RuleHitDetail implements Serializable, Cloneable {
 	public static final String HIT_REASON_SEPARATOR = "///";
 	/**
 	 * serial version UID.
@@ -170,7 +170,37 @@ public class RuleHitDetail implements Serializable {
 	public Long getFlightId() {
 		return flightId;
 	}
-    @Override
+	
+    /**
+	 * @param flightId the flightId to set
+	 */
+	public void setFlightId(Long flightId) {
+		this.flightId = flightId;
+	}
+
+	/**
+	 * @return the passenger
+	 */
+	public Passenger getPassenger() {
+		return passenger;
+	}
+
+	/**
+	 * @param passenger the passenger to set
+	 */
+	public void setPassenger(Passenger passenger) {
+		this.passenger = passenger;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	public RuleHitDetail clone() throws CloneNotSupportedException {
+		return (RuleHitDetail)super.clone();
+	}
+
+	@Override
     public int hashCode() {
        return Objects.hash(this.udrRuleId, this.ruleId, this.passengerId, this.flightId);
     }
