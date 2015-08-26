@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import gov.gtas.bo.RuleExecutionStatistics;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.CommonServiceException;

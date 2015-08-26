@@ -8,13 +8,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.PnrMessage;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.repository.PnrMessageRepository;
-import gov.gtas.rule.RuleServiceResult;
 import gov.gtas.rule.builder.DrlRuleFileBuilder;
 import gov.gtas.rule.builder.RuleBuilderTestUtils;
 import gov.gtas.testdatagen.PnrDataGenerator;
@@ -68,13 +68,16 @@ public class TargetingServicePnrIT {
 		assertNotNull(msg.getId());
 		assertEquals(2, msg.getPnrs().size());
         Iterator<Pnr> itr = msg.getPnrs().iterator();
-		Pnr pnr = itr.next();
-		assertEquals(4, pnr.getPassengers().size());
-		Passenger pax = pnr.getPassengers().iterator().next();
+		Pnr pnr1 = itr.next();
+		int size1 = pnr1.getPassengers().size();
+		assertTrue(size1 == 4 || size1 == 2 );
+		Passenger pax = pnr1.getPassengers().iterator().next();
 		assertNotNull("Pax ID is null", pax.getId());
-		pnr = itr.next();
-		assertEquals(2, pnr.getPassengers().size());
-		pax = pnr.getPassengers().iterator().next();
+		Pnr pnr2 = itr.next();
+		int size2 = pnr2.getPassengers().size();
+		assertTrue(size2 == 4 || size2 == 2 );
+		assertTrue(size1 != size2);
+		pax = pnr2.getPassengers().iterator().next();
 		assertNotNull("Pax ID is null", pax.getId());
     }
 

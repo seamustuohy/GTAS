@@ -1,5 +1,6 @@
 package gov.gtas.svc.request.builder;
 
+import gov.gtas.bo.BasicRuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
 import gov.gtas.bo.match.PnrAddressLink;
@@ -21,7 +22,6 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.PnrMessage;
-import gov.gtas.svc.TargetingServiceUtils;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -46,6 +46,8 @@ public class RuleEngineRequestBuilder {
 	private final Set<Long> creditCardIdSet;
 	private final Set<Long> frequentFlyerIdSet;
 	private final Set<Long> travelAgencyIdSet;
+	
+	private RuleServiceRequestType requestType;
 
 	public RuleEngineRequestBuilder() {
 		this.requestObjectList = new LinkedList<Object>();
@@ -58,11 +60,14 @@ public class RuleEngineRequestBuilder {
 		this.passengerLinkSet = new HashSet<PnrPassengerLink>();
 		this.phoneIdSet = new HashSet<Long>();
 		this.travelAgencyIdSet = new HashSet<Long>();
+		
+		this.requestType = null;
 	}
 
 	public RuleServiceRequest build() {
-		return TargetingServiceUtils.createRuleServiceRequest(
-				RuleServiceRequestType.PNR_MESSAGE, requestObjectList);
+		return new BasicRuleServiceRequest(requestObjectList, this.requestType);
+//		return TargetingServiceUtils.createRuleServiceRequest(
+//				this.requestType, requestObjectList);
 	}
 
 	/**
@@ -75,6 +80,11 @@ public class RuleEngineRequestBuilder {
 		// add flights, passengers and documents.
 		// true for the second parameter means add passengers and documents
 		addFlights(apisMessage.getFlights(), true);
+		if(this.requestType == null || this.requestType == RuleServiceRequestType.APIS_MESSAGE){
+			this.requestType = RuleServiceRequestType.APIS_MESSAGE;
+		} else {
+			this.requestType = RuleServiceRequestType.ANY_MESSAGE;
+		}
 	}
 
 	/**
@@ -101,6 +111,11 @@ public class RuleEngineRequestBuilder {
 
 				addTravelAgencyObject(pnr, pnr.getAgency());
 			}
+		}
+		if(this.requestType == null || this.requestType == RuleServiceRequestType.PNR_MESSAGE){
+			this.requestType = RuleServiceRequestType.PNR_MESSAGE;
+		} else {
+			this.requestType = RuleServiceRequestType.ANY_MESSAGE;
 		}
 	}
 

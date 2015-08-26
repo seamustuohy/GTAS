@@ -5,10 +5,10 @@ package gov.gtas.svc;
 
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.PnrMessage;
-import gov.gtas.rule.RuleServiceResult;
 
 import java.util.List;
 

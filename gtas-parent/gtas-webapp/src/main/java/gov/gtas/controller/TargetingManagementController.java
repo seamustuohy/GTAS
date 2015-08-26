@@ -1,9 +1,9 @@
 package gov.gtas.controller;
 
 import gov.gtas.bo.RuleHitDetail;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.constants.Constants;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.rule.RuleServiceResult;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.TargetingService;
 

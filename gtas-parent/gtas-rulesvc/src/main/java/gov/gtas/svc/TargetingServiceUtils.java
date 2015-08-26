@@ -1,14 +1,19 @@
 package gov.gtas.svc;
 
+import gov.gtas.bo.BasicRuleServiceResult;
+import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.bo.RuleServiceRequestType;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Flight;
 import gov.gtas.model.PnrMessage;
 import gov.gtas.svc.request.builder.RuleEngineRequestBuilder;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class TargetingServiceUtils {
 	/**
@@ -89,20 +94,38 @@ public class TargetingServiceUtils {
 		}
 		return bldr.build();
 	}
-
-	public static RuleServiceRequest createRuleServiceRequest(
-			final RuleServiceRequestType requestType, final List<?> reqObjects) {
-		return new RuleServiceRequest() {
-			public List<?> getRequestObjects() {
-				return reqObjects;
-			}
-
-			public RuleServiceRequestType getRequestType() {
-				return requestType;
-			}
-
-		};
-
-	}
-
+	/**
+	 * Eliminates duplicates and adds flight id, if missing.
+	 * @param result
+	 * @return
+	 */
+   public static RuleServiceResult ruleResultPostProcesssing(RuleServiceResult result)	{
+	   List<RuleHitDetail> resultList = result.getResultList();
+	   Set<RuleHitDetail> resultSet = new HashSet<RuleHitDetail>();
+	   for(RuleHitDetail rhd: resultList){
+		   RuleHitDetail hitDetail = rhd;
+		   if(rhd.getFlightId() == null){
+			   Collection<Flight> flights = rhd.getPassenger().getFlights();
+			   if(flights != null && flights.size() > 0){
+				   try{
+					   for(Flight flight: flights){
+						   RuleHitDetail newrhd = rhd.clone();
+						   newrhd.setFlightId(flight.getId());
+						   newrhd.setPassenger(null);
+						   resultSet.add(newrhd);
+						   hitDetail = null;
+					   }
+				   } catch (CloneNotSupportedException cnse){
+					   cnse.printStackTrace();
+				   }
+			   }
+		   }
+		   if(hitDetail != null){
+			   hitDetail.setPassenger(null);
+			   resultSet.add(hitDetail);
+		   }
+	   }
+	   RuleServiceResult ret = new BasicRuleServiceResult(new LinkedList<RuleHitDetail>(resultSet), result.getExecutionStatistics());
+	   return ret;
+   }
 }

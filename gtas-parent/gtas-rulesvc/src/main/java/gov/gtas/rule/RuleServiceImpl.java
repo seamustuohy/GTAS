@@ -1,8 +1,10 @@
 package gov.gtas.rule;
 
+import gov.gtas.bo.BasicRuleServiceResult;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
@@ -109,15 +111,16 @@ public class RuleServiceImpl implements RuleService {
 		final List<RuleHitDetail> resList = (List<RuleHitDetail>) ksession
 				.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
 
-		RuleServiceResult res = new RuleServiceResult() {
-			public List<RuleHitDetail> getResultList() {
-				return resList;
-			}
-
-			public RuleExecutionStatistics getExecutionStatistics() {
-				return stats;
-			}
-		};
+		RuleServiceResult res = new BasicRuleServiceResult(resList, stats);
+//		RuleServiceResult res = new RuleServiceResult() {
+//			public List<RuleHitDetail> getResultList() {
+//				return resList;
+//			}
+//
+//			public RuleExecutionStatistics getExecutionStatistics() {
+//				return stats;
+//			}
+//		};
 
 		// Remove comment if using logging
 		// logger.close();
