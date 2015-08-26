@@ -208,6 +208,10 @@ app.factory('QueryBuilderCtrl', function () {
             $scope.$builder.queryBuilder('reset');
             $scope.loadSummary($scope.summaryDefaults);
             document.getElementById('title').focus();
+            if ($scope.gridApi !== undefined) {
+                $scope.gridApi.selection.clearSelectedRows();
+                $scope.selectedIndex = null;
+            }
         };
 
         $scope.ruleId = null;
