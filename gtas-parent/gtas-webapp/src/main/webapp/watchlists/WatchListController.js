@@ -8,7 +8,7 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
             "document": {
                 columns: [{
                     name: "id",
-                    width: 50,
+                    width: "50",
                     enableCellEdit: false,
                     enableColumnMenu: false,
                     enableFiltering: false,
@@ -30,7 +30,7 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
             "passenger": {
                 columns: [{
                     name: "id",
-                    width: 50,
+                    width: "50",
                     enableColumnMenu: false,
                     enableFiltering: false,
                     enableSorting: false,
@@ -142,9 +142,7 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
     $scope.removeRow = function () {
         var selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
 
-        angular.forEach(selectedRowEntities, function(rowEntity, key) {
-            console.log('rowEntity: ' + angular.toJson(rowEntity));
-            console.log('selected row: ' + rowEntity.id);
+        angular.forEach(selectedRowEntities, function (rowEntity) {
             var rowIndexToDelete = $scope.gridOpts.data.indexOf(rowEntity);
 
             // create a promise to reject errors from server side.
@@ -154,11 +152,10 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
             //$scope.gridApi.rowEdit.setSavePromise( $scope.gridApi.grid, rowEntity, rowDeferred.promise );
 
             console.log('Selected row: ' + rowIndexToDelete + ' to delete.');
-            var deferred = watchListService.removeItem({id: rowEntity.id});
+            var deferred = watchListService.removeItem($scope.activeTab, rowEntity.id);
             deferred.$promise.then(function (response) {
                     // success callback
                     var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
-                    console.log('success!! resolving the promise with the new array length.');
                     rowDeferred.resolve(newLength);
                 },
                 function (error) {
