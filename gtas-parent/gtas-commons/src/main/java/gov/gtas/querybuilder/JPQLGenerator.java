@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.slf4j.Logger;
@@ -85,16 +84,14 @@ public class JPQLGenerator {
 			else if(queryType == EntityEnum.PASSENGER) {
 				queryPrefix = Constants.SELECT + " " + EntityEnum.PASSENGER.getAlias() + ", " + EntityEnum.FLIGHT.getAlias() + ", " + EntityEnum.DOCUMENT.getAlias() + " " + 
 						Constants.FROM + " " + EntityEnum.PASSENGER.getEntityName() + " " + EntityEnum.PASSENGER.getAlias() +
-						Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " " + EntityEnum.FLIGHT.getAlias() + 
-						Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
+						Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " " + EntityEnum.FLIGHT.getAlias();
 						
 				if(joinEntities != null && !joinEntities.isEmpty()) {
 					
-					// remove Flight, Passenger, and Document from the List because it is already
+					// remove Flight and Passenger from the List because it is already
 					// part of the queryPrefix statement
 					joinEntities.remove(EntityEnum.FLIGHT);
 					joinEntities.remove(EntityEnum.PASSENGER);
-					joinEntities.remove(EntityEnum.DOCUMENT);
 					
 					// add join to PNR if there is a PNR
 					// entity in the query
@@ -108,6 +105,11 @@ public class JPQLGenerator {
 					}
 					
 					join = generateJoinCondition(joinEntities, queryType);
+					
+					// include a left join on Document if there is no Document condition
+					if(!joinEntities.contains(EntityEnum.DOCUMENT)) {
+						queryPrefix = queryPrefix + Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
+					}
 				}
 				
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
@@ -230,23 +232,27 @@ public class JPQLGenerator {
 		
 		switch (entity.getEntityName().toUpperCase()) {
 			case Constants.ADDRESS:
-				joinCondition = Constants.LEFT_JOIN + EntityEnum.PNR.getAlias() + EntityEnum.ADDRESS.getEntityReference() + " " + EntityEnum.ADDRESS.getAlias();
+				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.ADDRESS.getEntityReference() + " " + EntityEnum.ADDRESS.getAlias();
 				break;
 			case Constants.CREDITCARD:
-				joinCondition = Constants.LEFT_JOIN + EntityEnum.PNR.getAlias() + EntityEnum.CREDIT_CARD.getEntityReference() + " " + EntityEnum.CREDIT_CARD.getAlias();
+				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.CREDIT_CARD.getEntityReference() + " " + EntityEnum.CREDIT_CARD.getAlias();
 				break;
 			case Constants.DOCUMENT:
-				joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PASSENGER.getEntityReference() + " " + EntityEnum.PASSENGER.getAlias() +
-								Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
+				if(queryType == EntityEnum.FLIGHT) {
+					joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PASSENGER.getEntityReference() + " " + EntityEnum.PASSENGER.getAlias() +
+						Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
+				} else if(queryType == EntityEnum.PASSENGER) {
+					joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
+				}
 	            break;
 			case Constants.EMAIL:
-				joinCondition = Constants.LEFT_JOIN + EntityEnum.PNR.getAlias() + EntityEnum.EMAIL.getEntityReference() + " " + EntityEnum.EMAIL.getAlias();
+				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.EMAIL.getEntityReference() + " " + EntityEnum.EMAIL.getAlias();
 				break;
 			case Constants.FLIGHT:
 				joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " " + EntityEnum.FLIGHT.getAlias();
 				break;
 			case Constants.FREQUENTFLYER:
-				joinCondition = Constants.LEFT_JOIN + EntityEnum.PNR.getAlias() + EntityEnum.FREQUENT_FLYER.getEntityReference() + " " + EntityEnum.FREQUENT_FLYER.getAlias();
+				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.FREQUENT_FLYER.getEntityReference() + " " + EntityEnum.FREQUENT_FLYER.getAlias();
 				break;
 			case Constants.HITS:
 				joinCondition = "";
@@ -255,13 +261,13 @@ public class JPQLGenerator {
 	        	joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PASSENGER.getEntityReference() + " " + EntityEnum.PASSENGER.getAlias();
 	        	break;
 	        case Constants.PHONE:
-	        	joinCondition = Constants.LEFT_JOIN + EntityEnum.PNR.getAlias() + EntityEnum.PHONE.getEntityReference() + " " + EntityEnum.PHONE.getAlias();
+	        	joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.PHONE.getEntityReference() + " " + EntityEnum.PHONE.getAlias();
 	        	break;
 	        case Constants.PNR:
 	        	if(queryType == EntityEnum.FLIGHT) {
-	        		joinCondition = Constants.LEFT_JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PNR.getEntityReference() + " " + EntityEnum.PNR.getAlias();
+	        		joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PNR.getEntityReference() + " " + EntityEnum.PNR.getAlias();
 	        	} else if(queryType == EntityEnum.PASSENGER) {
-	        		joinCondition = Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.PNR.getEntityReference() + " " + EntityEnum.PNR.getAlias();
+	        		joinCondition = Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.PNR.getEntityReference() + " " + EntityEnum.PNR.getAlias();
 	        	}
 	        	break;
 	        default:
