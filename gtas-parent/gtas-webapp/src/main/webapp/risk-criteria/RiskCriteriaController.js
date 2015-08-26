@@ -220,6 +220,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
                         $scope.selectedIndex = $scope.gridOpts.data.length - 1;
                         $scope.gridApi.pagination.seek(page);
                     }
+                    $scope.gridApi.selection.clearSelectedRows();
                     $scope.gridApi.selection.selectRow($scope.gridOpts.data[$scope.selectedIndex]);
                     $scope.saving = false;
                 }, 0, 1);
