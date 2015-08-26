@@ -1,20 +1,5 @@
 package gov.gtas.querybuilder.service;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
@@ -27,12 +12,26 @@ import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
 import gov.gtas.querybuilder.model.IQueryResult;
+import gov.gtas.querybuilder.model.IUserQueryResult;
 import gov.gtas.querybuilder.model.QueryFlightResult;
 import gov.gtas.querybuilder.model.QueryPassengerResult;
 import gov.gtas.querybuilder.model.QueryRequest;
-import gov.gtas.querybuilder.model.QueryResult;
 import gov.gtas.querybuilder.model.UserQuery;
+import gov.gtas.querybuilder.model.UserQueryResult;
 import gov.gtas.querybuilder.repository.QueryBuilderRepository;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 
@@ -48,8 +47,8 @@ public class QueryBuilderService {
 	@Autowired
 	QueryBuilderRepository queryRepository;
 	
-	public IQueryResult saveQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, InvalidQueryException {
-		IQueryResult result = new QueryResult();
+	public IUserQueryResult saveQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, InvalidQueryException {
+		IUserQueryResult result = new UserQueryResult();
 		
 		try {
 			result = mapToQueryResult(queryRepository.saveQuery(createUserQuery(queryRequest)));
@@ -62,8 +61,8 @@ public class QueryBuilderService {
 		return result;
 	}
 
-	public IQueryResult editQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
-		IQueryResult result = new QueryResult();
+	public IUserQueryResult editQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
+		IUserQueryResult result = new UserQueryResult();
 		
 		try {
 			result = mapToQueryResult(queryRepository.editQuery(createUserQuery(queryRequest)));
@@ -78,8 +77,8 @@ public class QueryBuilderService {
 		return result;
 	}
 	
-	public List<IQueryResult> listQueryByUser(String userId) throws InvalidQueryException {
-		List<IQueryResult> result = new ArrayList<>();
+	public List<IUserQueryResult> listQueryByUser(String userId) throws InvalidQueryException {
+		List<IUserQueryResult> result = new ArrayList<>();
 		
 		try {
 			result = mapToResultList(queryRepository.listQueryByUser(userId));
@@ -190,7 +189,6 @@ public class QueryBuilderService {
 				String destination = "";
 				String departureDt = "";
 				String arrivalDt = "";
-				String seat = "Not part of entity";
 				String documentNumber = "";
 				String documentType = "";
 				String documentIssuanceCountry = "";
@@ -202,6 +200,7 @@ public class QueryBuilderService {
 				qbPassenger.setGender(passenger.getGender() != null ? passenger.getGender() : "");
 				qbPassenger.setDob(passenger.getDob() != null ? dobFormat.format(passenger.getDob()) : "");
 				qbPassenger.setCitizenship(passenger.getCitizenshipCountry() != null ? passenger.getCitizenshipCountry() : "");
+				qbPassenger.setSeat(passenger.getSeat() != null ? passenger.getSeat() : "");
 
 				// document information
 				if(document != null) {
@@ -223,7 +222,6 @@ public class QueryBuilderService {
 					destination = flight.getDestination() != null ? flight.getDestination() : "";
 					departureDt = flight.getEtd() != null ? dtFormat.format(flight.getEtd()) : "";
 					arrivalDt = flight.getEta() != null ? dtFormat.format(flight.getEta()) : "";
-					seat = "Not part of entity";
 				}
 				
 				qbPassenger.setCarrierCode(carrier);
@@ -232,7 +230,6 @@ public class QueryBuilderService {
 				qbPassenger.setDestination(destination);
 				qbPassenger.setDepartureDt(departureDt);
 				qbPassenger.setArrivalDt(arrivalDt);
-				qbPassenger.setSeat(seat);
 				
 				qbPassenger.setRuleHit(false);
 				qbPassenger.setOnWatchList(false);
@@ -244,8 +241,8 @@ public class QueryBuilderService {
 		return qbPassengers;
 	}
 	
-	private QueryResult mapToQueryResult(UserQuery query) throws InvalidQueryException {
-		QueryResult result = new QueryResult();
+	private IUserQueryResult mapToQueryResult(UserQuery query) throws InvalidQueryException {
+		IUserQueryResult result = new UserQueryResult();
 		ObjectMapper mapper = new ObjectMapper();
 		
 		result.setId(query.getId());
@@ -260,8 +257,8 @@ public class QueryBuilderService {
 		return result;
 	}
 	
-	private List<IQueryResult> mapToResultList(List<UserQuery> queryList) throws InvalidQueryException {
-		List<IQueryResult> resultList = new ArrayList<>();
+	private List<IUserQueryResult> mapToResultList(List<UserQuery> queryList) throws InvalidQueryException {
+		List<IUserQueryResult> resultList = new ArrayList<>();
 		
 		if(queryList != null && queryList.size() > 0) {
 			for(UserQuery query : queryList) {
