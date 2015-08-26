@@ -1,9 +1,12 @@
 package gov.gtas.parsers.vo.passenger;
 
+import gov.gtas.parsers.validators.Validatable;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class AddressVo {
+public class AddressVo implements Validatable{
 	private String type;
 	private String line1;
 	private String line2;
@@ -72,4 +75,13 @@ public class AddressVo {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.postalCode) || StringUtils.isBlank(this.state) 
+				|| StringUtils.isBlank(this.city) || StringUtils.isBlank(this.country)
+				|| StringUtils.isBlank(this.line1)){
+			return false;
+		}
+		return true;
+	}
 }
