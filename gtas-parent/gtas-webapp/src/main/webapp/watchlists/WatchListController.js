@@ -92,7 +92,7 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
             docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
             return docDefinition;
         },
-        exporterPdfOrientation: 'portrait',
+        exporterPdfOrientation: 'landscape',
         exporterPdfPageSize: 'LETTER',
         exporterPdfMaxGridWidth: 500,
         exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))

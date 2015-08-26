@@ -27,7 +27,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
             docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
             return docDefinition;
         },
-        exporterPdfOrientation: 'portrait',
+        exporterPdfOrientation: 'landscape',
         exporterPdfPageSize: 'LETTER',
         exporterPdfMaxGridWidth: 500,
         exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
