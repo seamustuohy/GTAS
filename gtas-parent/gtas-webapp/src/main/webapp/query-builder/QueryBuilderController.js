@@ -2,6 +2,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var data = [],
+        paginationPageSize = 10,
         columns = {
             PASSENGER: [
                 { "name": "ruleHit", "displayName": "H" },
@@ -147,10 +148,31 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     $scope.viewType = 'FLIGHT';
 
     $scope.resultsGrid = {
-        paginationPageSize: 10,
+        paginationPageSize: paginationPageSize,
         paginationPageSizes: [],
         enableFiltering: true,
-        showGridFooter: true
+        enableCellEditOnFocus: false,
+        showGridFooter: true,
+        multiSelect: false,
+        enableGridMenu: true,
+        enableSelectAll: false,
+        exporterCsvFilename: 'myFile.csv',
+        exporterPdfDefaultStyle: {fontSize: 9},
+        exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
+        exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
+        exporterPdfHeader: { text: "My Header", style: 'headerStyle' },
+        exporterPdfFooter: function (currentPage, pageCount) {
+            return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
+        },
+        exporterPdfCustomFormatter: function (docDefinition) {
+            docDefinition.styles.headerStyle = { fontSize: 22, bold: true };
+            docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
+            return docDefinition;
+        },
+        exporterPdfOrientation: 'portrait',
+        exporterPdfPageSize: 'LETTER',
+        exporterPdfMaxGridWidth: 500,
+        exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
     };
 
     $scope.executeQuery = function () {
