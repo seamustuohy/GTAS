@@ -5,6 +5,10 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
     var paginationPageSize = 10;
     $scope.$scope = $scope;
 
+    var pageOfPages = function (currentPage, pageCount) {
+        return moment().format('YYYY-MM-DD') + (pageCount === 1 ? '' : '\t' + currentPage.toString() + ' of ' + pageCount.toString());
+    };
+
     $scope.gridOpts = {
         paginationPageSize: paginationPageSize,
         paginationPageSizes: [],
@@ -14,22 +18,35 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
         multiSelect: false,
         enableGridMenu: true,
         enableSelectAll: false,
-        exporterCsvFilename: 'myFile.csv',
+        exporterCsvFilename: 'riskCriteria.csv',
         exporterPdfDefaultStyle: {fontSize: 9},
-        exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
-        exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
-        exporterPdfHeader: { text: "My Header", style: 'headerStyle' },
+        exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
+        exporterPdfTableHeaderStyle: {
+            fontSize: 10,
+            bold: true,
+            italics: true
+        },
+        exporterPdfHeader: { text: "Risk Criteria", style: 'headerStyle' },
         exporterPdfFooter: function (currentPage, pageCount) {
-            return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
+            return { text: pageOfPages(currentPage, pageCount), style: 'footerStyle' };
         },
         exporterPdfCustomFormatter: function (docDefinition) {
-            docDefinition.styles.headerStyle = { fontSize: 22, bold: true };
-            docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
+            docDefinition.styles.headerStyle = {
+                fontSize: 22,
+                bold: true,
+                alignment: 'center',
+                lineHeight: 1.5
+            };
+            docDefinition.styles.footerStyle = {
+                fontSize: 10,
+                italic: true,
+                alignment: 'center'
+            };
             return docDefinition;
         },
         exporterPdfOrientation: 'landscape',
         exporterPdfPageSize: 'LETTER',
-        exporterPdfMaxGridWidth: 500,
+        exporterPdfMaxGridWidth: 650,
         exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
     };
 
