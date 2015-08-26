@@ -4,7 +4,6 @@ import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.OperatorEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Passenger;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
@@ -23,10 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

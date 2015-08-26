@@ -3,7 +3,7 @@ package gov.gtas.querybuilder.model;
 import gov.gtas.model.udr.json.QueryObject;
 
 
-public class QueryResult implements IQueryResult {
+public class UserQueryResult implements IUserQueryResult {
 
 	private int id;
 	private String title;
