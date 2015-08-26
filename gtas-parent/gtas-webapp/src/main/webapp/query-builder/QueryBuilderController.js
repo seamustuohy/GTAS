@@ -2,6 +2,21 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     var paginationPageSize = 10,
+        pdfFormatter = function (docDefinition) {
+            docDefinition.pageMargins = [0, 40, 0, 40];
+            docDefinition.styles.headerStyle = {
+                fontSize: 22,
+                bold: true,
+                alignment: 'center',
+                lineHeight: 1.5
+            };
+            docDefinition.styles.footerStyle = {
+                fontSize: 10,
+                italic: true,
+                alignment: 'center'
+            };
+            return docDefinition;
+        },
         columns = {
             PASSENGER: [
                 { "name": "ruleHit", "displayName": "H", width: 50 },
@@ -10,18 +25,18 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
                 { "name": "firstName", "displayName": "FirstName", width: "*" },
                 { "name": "passengerType", "displayName": "Type", width: 25 },
                 { "name": "gender", "displayName": "GEN", width: 25 },
-                { "name": "dob", "displayName": "DOB", width: 150 },
-                { "name": "citizenship", "displayName": "CIT", width: 75 },
-                { "name": "documentNumber", "displayName": "Doc #", width: "*" },
+                { "name": "dob", "displayName": "DOB", width: 125 },
+                { "name": "citizenship", "displayName": "CIT", width: 50 },
+                { "name": "documentNumber", "displayName": "Doc #", width: 125 },
                 { "name": "documentType", "displayName": "T", width: 25 },
                 { "name": "documentIssuanceCountry", "displayName": "Issuer", width: 75 },
-                { "name": "carrierCode", "displayName": "Carrier", width: "*" },
-                { "name": "flightNumber", "displayName": "Flight #", width: "*" },
-                { "name": "origin", "displayName": "Origin", width: "*" },
-                { "name": "destination", "displayName": "Dest", width: "*" },
-                { "name": "departureDt", "displayName": "ETD", width: 150 },
-                { "name": "arrivalDt", "displayName": "ETA", width: 150 },
-                { "name": "seat", "displayName": "Seat", width: 75 }
+                { "name": "carrierCode", "displayName": "Carrier", width: "40" },
+                { "name": "flightNumber", "displayName": "Flight #", width: 80 },
+                { "name": "origin", "displayName": "Origin", width: "50" },
+                { "name": "destination", "displayName": "Dest", width: "50" },
+                { "name": "departureDt", "displayName": "ETD", width: 170 },
+                { "name": "arrivalDt", "displayName": "ETA", width: 170 },
+                { "name": "seat", "displayName": "Seat", width: 50 }
             ],
             FLIGHT: [
                 { "name": "carrierCode", "displayName": "Carrier" },
@@ -47,8 +62,6 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             return moment().format('YYYY-MM-DD') + (pageCount === 1 ? '' : '\t' + currentPage.toString() + ' of ' + pageCount.toString());
         };
 
-    $scope.gridOpts.columnDefs = riskCriteriaColumns;
-
     $scope.gridOpts = {
         columnDefs: columns.QUERIES,
         paginationPageSize: paginationPageSize,
@@ -71,25 +84,26 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         exporterPdfFooter: function (currentPage, pageCount) {
             return { text: pageOfPages(currentPage, pageCount), style: 'footerStyle' };
         },
-        exporterPdfCustomFormatter: function (docDefinition) {
-            docDefinition.styles.headerStyle = {
-                fontSize: 22,
-                bold: true,
-                alignment: 'center',
-                lineHeight: 1.5
-            };
-            docDefinition.styles.footerStyle = {
-                fontSize: 10,
-                italic: true,
-                alignment: 'center'
-            };
-            return docDefinition;
-        },
+        exporterPdfCustomFormatter: pdfFormatter,
         exporterPdfOrientation: 'landscape',
         exporterPdfPageSize: 'LETTER',
-        exporterPdfMaxGridWidth: 650,
+        exporterPdfMaxGridWidth: 600,
         exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
     };
+
+    queryBuilderService.getList($scope.authorId).then(function (myData) {
+        var data = [];
+        if (myData.result === undefined || !Array.isArray(myData.result)) {
+            $scope.saving = false;
+            return;
+        }
+
+        myData.result.forEach(function (obj) {
+            data.push(obj);
+        });
+        $scope.gridOpts.data = data;
+    });
+
     $scope.hideGrid = true;
 
     $scope.loadRule = function () {
@@ -234,10 +248,10 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         enableGridMenu: true,
         enableSelectAll: false,
         exporterCsvFilename: 'queryResults.csv',
-        exporterPdfDefaultStyle: {fontSize: 9},
+        exporterPdfDefaultStyle: {fontSize: 8},
         exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
         exporterPdfTableHeaderStyle: {
-            fontSize: 10,
+            fontSize: 8,
             bold: true,
             italics: true
         },
@@ -245,20 +259,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
         exporterPdfFooter: function (currentPage, pageCount) {
             return { text: pageOfPages(currentPage, pageCount), style: 'footerStyle' };
         },
-        exporterPdfCustomFormatter: function (docDefinition) {
-            docDefinition.styles.headerStyle = {
-                fontSize: 22,
-                bold: true,
-                alignment: 'center',
-                lineHeight: 1.5
-            };
-            docDefinition.styles.footerStyle = {
-                fontSize: 10,
-                italic: true,
-                alignment: 'center'
-            };
-            return docDefinition;
-        },
+        exporterPdfCustomFormatter: pdfFormatter,
         exporterPdfOrientation: 'landscape',
         exporterPdfPageSize: 'LETTER',
         exporterPdfMaxGridWidth: 650,
