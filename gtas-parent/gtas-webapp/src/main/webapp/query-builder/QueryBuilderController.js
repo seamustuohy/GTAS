@@ -1,28 +1,27 @@
-app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, queryBuilderService, queryService, $timeout, $window) {
+app.controller('QueryBuilderController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, queryBuilderService, queryService, $timeout, $interval) {
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
-    var data = [],
-        paginationPageSize = 10,
+    var paginationPageSize = 10,
         columns = {
             PASSENGER: [
-                { "name": "ruleHit", "displayName": "H" },
-                { "name": "onWatchList", "displayName": "W" },
-                { "name": "lastName", "displayName": "LastName" },
-                { "name": "firstName", "displayName": "FirstName" },
-                { "name": "passengerType", "displayName": "Type" },
-                { "name": "gender", "displayName": "Gender" },
-                { "name": "dob", "displayName": "DOB" },
-                { "name": "citizenship", "displayName": "CIT" },
-                { "name": "documentNumber", "displayName": "Document #" },
-                { "name": "documentType", "displayName": "T" },
-                { "name": "documentIssuanceCountry", "displayName": "Issuance Country" },
-                { "name": "carrierCode", "displayName": "Carrier" },
-                { "name": "flightNumber", "displayName": "Flight #" },
-                { "name": "origin", "displayName": "Origin" },
-                { "name": "destination", "displayName": "Destination" },
-                { "name": "departureDt", "displayName": "ETD" },
-                { "name": "arrivalDt", "displayName": "ETA" },
-                { "name": "seat", "displayName": "Seat" }
+                { "name": "ruleHit", "displayName": "H", width: 50 },
+                { "name": "onWatchList", "displayName": "W", width: 50 },
+                { "name": "lastName", "displayName": "LastName", width: "*" },
+                { "name": "firstName", "displayName": "FirstName", width: "*" },
+                { "name": "passengerType", "displayName": "Type", width: 25 },
+                { "name": "gender", "displayName": "GEN", width: 25 },
+                { "name": "dob", "displayName": "DOB", width: 150 },
+                { "name": "citizenship", "displayName": "CIT", width: 75 },
+                { "name": "documentNumber", "displayName": "Doc #", width: "*" },
+                { "name": "documentType", "displayName": "T", width: 25 },
+                { "name": "documentIssuanceCountry", "displayName": "Issuer", width: 75 },
+                { "name": "carrierCode", "displayName": "Carrier", width: "*" },
+                { "name": "flightNumber", "displayName": "Flight #", width: "*" },
+                { "name": "origin", "displayName": "Origin", width: "*" },
+                { "name": "destination", "displayName": "Dest", width: "*" },
+                { "name": "departureDt", "displayName": "ETD", width: 150 },
+                { "name": "arrivalDt", "displayName": "ETA", width: 150 },
+                { "name": "seat", "displayName": "Seat", width: 75 }
             ],
             FLIGHT: [
                 { "name": "carrierCode", "displayName": "Carrier" },
@@ -33,56 +32,88 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
                 { "name": "destination", "displayName": "Destination" },
                 { "name": "destinationCountry", "displayName": "Country" },
                 { "name": "arrivalDt", "displayName": "ETA" }
-            ]
+            ],
+            QUERIES: [{
+                name: "title",
+                enableCellEdit: false,
+                enableColumnMenu: false
+            }, {
+                name: "description",
+                enableCellEdit: false,
+                enableColumnMenu: false
+            }]
+        },
+        pageOfPages = function (currentPage, pageCount) {
+            return moment().format('YYYY-MM-DD') + (pageCount === 1 ? '' : '\t' + currentPage.toString() + ' of ' + pageCount.toString());
         };
 
-    var pageOfPages = function (currentPage, pageCount) {
-        return moment().format('YYYY-MM-DD') + (pageCount === 1 ? '' : '\t' + currentPage.toString() + ' of ' + pageCount.toString());
+    $scope.gridOpts.columnDefs = riskCriteriaColumns;
+
+    $scope.gridOpts = {
+        columnDefs: columns.QUERIES,
+        paginationPageSize: paginationPageSize,
+        paginationPageSizes: [],
+        enableFiltering: true,
+        enableCellEditOnFocus: false,
+        showGridFooter: true,
+        multiSelect: false,
+        enableGridMenu: true,
+        enableSelectAll: false,
+        exporterCsvFilename: 'MySavedQueries.csv',
+        exporterPdfDefaultStyle: {fontSize: 9},
+        exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
+        exporterPdfTableHeaderStyle: {
+            fontSize: 10,
+            bold: true,
+            italics: true
+        },
+        exporterPdfHeader: { text: "My Saved Queries", style: 'headerStyle' },
+        exporterPdfFooter: function (currentPage, pageCount) {
+            return { text: pageOfPages(currentPage, pageCount), style: 'footerStyle' };
+        },
+        exporterPdfCustomFormatter: function (docDefinition) {
+            docDefinition.styles.headerStyle = {
+                fontSize: 22,
+                bold: true,
+                alignment: 'center',
+                lineHeight: 1.5
+            };
+            docDefinition.styles.footerStyle = {
+                fontSize: 10,
+                italic: true,
+                alignment: 'center'
+            };
+            return docDefinition;
+        },
+        exporterPdfOrientation: 'landscape',
+        exporterPdfPageSize: 'LETTER',
+        exporterPdfMaxGridWidth: 650,
+        exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
     };
     $scope.hideGrid = true;
 
     $scope.loadRule = function () {
+        var obj = $scope.gridOpts.data[$scope.selectedIndex];
         $scope.hideGrid = true;
-        var obj = this.$data[this.$index];
         $scope.ruleId = obj.id;
         $scope.loadSummary({title: obj.title, description: obj.description });
         $scope.$builder.queryBuilder('loadRules', obj.query);
     };
 
-    $scope.tableParams = new ngTableParams({
-        page: 1,            // show first page
-        count: 10,          // count per page
-        filter: {},
-        sorting: {
-            hits: 'desc',
-            destinationDateTimeSort: 'asc' //, 'number': 'asc'     // initial sorting
-        }
-    }, {
-        counts: [],         // disable / hide page row count toggle
-        total: data.length, // length of data
-        getData: function ($defer, params) {
-            queryBuilderService.getList($scope.authorId).then(function (myData) {
-                var filteredData, orderedData;
-                data = [];
-
-                if (myData.result === undefined || !Array.isArray(myData.result)) {
-                    return;
-                }
-
-                myData.result.forEach(function (obj) {
-                    data.push(obj);
-                });
-
-                filteredData = params.filter() ? $filter('filter')(data, params.filter()) : data;
-                orderedData = params.sorting() ? $filter('orderBy')(filteredData, params.orderBy()) : data;
-
-                params.total(orderedData.length); // set total for recalc pagination
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            });
-        }
-    });
-
     $scope.buildAfterEntitiesLoaded();
+
+    $scope.gridOpts.onRegisterApi = function (gridApi) {
+        $scope.gridApi = gridApi;
+        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+            if (row.isSelected) {
+                $scope.selectedIndex = $scope.gridOpts.data.indexOf(row.entity);
+                $scope.loadRule();
+            } else {
+                $scope.newRule();
+                $scope.gridApi.selection.clearSelectedRows();
+            }
+        });
+    };
 
     $scope.delete = function () {
         if (!$scope.ruleId) {
@@ -94,9 +125,31 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
             $scope.alertError('No user authenticated');
             return;
         }
-        queryBuilderService.deleteQuery($scope.ruleId, $scope.authorId).then(function (myData) {
-            $scope.newRule();
-            $scope.tableParams.reload();
+
+        var selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
+
+        angular.forEach(selectedRowEntities, function (rowEntity) {
+            var rowIndexToDelete = $scope.gridOpts.data.indexOf(rowEntity);
+
+            // create a promise to reject errors from server side.
+            var rowDeferred = $q.defer();
+
+            console.log('Selected row: ' + rowIndexToDelete + ' to delete.');
+            var deferred = queryBuilderService.deleteQuery($scope.ruleId, $scope.authorId);
+
+            deferred.$promise.then(function (response) {
+                    // success callback
+                    var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
+                    rowDeferred.resolve(newLength);
+                },
+                function (error) {
+                    // will fail because URL is not real, but will resolve anyway for purposes of this test.
+
+                    // this is what I expect will remove the row from the ui-grid in the UI.
+                    var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
+                    rowDeferred.resolve(newLength);
+                    //rowDeferred.reject(error);
+                });
         });
     };
 
@@ -138,8 +191,29 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
                 $scope.saving = false;
                 return;
             }
-            $scope.tableParams.reload();
-            $scope.showPencil(myData.result[0].id);
+            queryBuilderService.getList($scope.authorId).then(function (myData) {
+                var data = [];
+                if (myData.result === undefined || !Array.isArray(myData.result)) {
+                    $scope.saving = false;
+                    return;
+                }
+
+                myData.result.forEach(function (obj) {
+                    data.push(obj);
+                });
+                $scope.gridOpts.data = data;
+                $interval(function () {
+                    var page;
+                    if (!$scope.selectedIndex) {
+                        page = $scope.gridApi.pagination.getTotalPages();
+                        $scope.selectedIndex = $scope.gridOpts.data.length - 1;
+                        $scope.gridApi.pagination.seek(page);
+                    }
+                    $scope.gridApi.selection.clearSelectedRows();
+                    $scope.gridApi.selection.selectRow($scope.gridOpts.data[$scope.selectedIndex]);
+                    $scope.saving = false;
+                }, 0, 1);
+            });
         });
     };
 

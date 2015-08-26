@@ -101,7 +101,6 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
         //gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
     };
 
-
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
 
     $scope.delete = function () {

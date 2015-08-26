@@ -28,6 +28,11 @@ app.config(function ($stateProvider) {
             templateUrl: 'pax/pax.html',
             controller: 'PaxController'
         })
+        .state('flights2', {
+            url: '/flights2',
+            templateUrl: 'flights/flights2.html',
+            controller: 'Flights2Controller'
+        })
         .state('pax', {
             url: '/pax',
             templateUrl: 'pax/pax.html',
