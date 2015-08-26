@@ -1,53 +1,89 @@
-app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, riskCriteriaService, $timeout) {
+app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, riskCriteriaService, $timeout, $interval) {
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
-    var data = [];
+//    var data = [];
+    var paginationPageSize = 10;
+    $scope.$scope = $scope;
 
-    $scope.loadRule = function () {
-        riskCriteriaService.loadRuleById(this.summary.id).then(function (myData) {
-            $scope.ruleId = myData.id;
-            $scope.loadSummary(myData.summary);
-            $scope.$builder.queryBuilder('loadRules', myData.details);
-        });
+    $scope.gridOpts = {
+        paginationPageSize: paginationPageSize,
+        paginationPageSizes: [],
+        enableFiltering: true,
+        enableCellEditOnFocus: false,
+        showGridFooter: true,
+        multiSelect: false,
+        enableGridMenu: true,
+        enableSelectAll: false,
+        exporterCsvFilename: 'myFile.csv',
+        exporterPdfDefaultStyle: {fontSize: 9},
+        exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
+        exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
+        exporterPdfHeader: { text: "My Header", style: 'headerStyle' },
+        exporterPdfFooter: function (currentPage, pageCount) {
+            return { text: currentPage.toString() + ' of ' + pageCount.toString(), style: 'footerStyle' };
+        },
+        exporterPdfCustomFormatter: function (docDefinition) {
+            docDefinition.styles.headerStyle = { fontSize: 22, bold: true };
+            docDefinition.styles.footerStyle = { fontSize: 10, bold: true };
+            return docDefinition;
+        },
+        exporterPdfOrientation: 'landscape',
+        exporterPdfPageSize: 'LETTER',
+        exporterPdfMaxGridWidth: 500,
+        exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
     };
 
-    $scope.tableParams = new ngTableParams({
-        page: 1,            // show first page
-        count: 10,          // count per page
-        filter: {},
-        sorting: {
-            hits: 'desc',
-            destinationDateTimeSort: 'asc' //, 'number': 'asc'     // initial sorting
-        }
+    var riskCriteriaColumns = [{
+        name: "title",
+        enableCellEdit: false,
+        enableColumnMenu: false
     }, {
-        counts: [],         // disable / hide page row count toggle
-        total: data.length, // length of data
-        getData: function ($defer, params) {
-            riskCriteriaService.getList($scope.authorId).then(function (myData) {
-                var filteredData, orderedData;
-                data = [];
+        name: "description",
+        enableCellEdit: false,
+        enableColumnMenu: false
+    }, {
+        name: "startDate",
+        enableCellEdit: false,
+        enableColumnMenu: false
+    }, {
+        name: "endDate",
+        enableCellEdit: false,
+        enableColumnMenu: false
+    }, {
+        name: "enabled",
+        enableCellEdit: false,
+        enableColumnMenu: false
+    }];
+    $scope.gridOpts.columnDefs = riskCriteriaColumns;
 
-                if (!Array.isArray(myData)) return;
-
-                myData.forEach(function (obj) {
-                    // add id to summary obj
-                    obj.summary.id = obj.id;
-                    // add summary obj to data array
-                    data.push(obj.summary);
-                });
-
-                filteredData = params.filter() ?
-                    $filter('filter')(data, params.filter()) :
-                    data;
-                orderedData = params.sorting() ?
-                    $filter('orderBy')(filteredData, params.orderBy()) :
-                    data;
-
-                params.total(orderedData.length); // set total for recalc pagination
-                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-            });
-        }
+    riskCriteriaService.getList($scope.authorId).then(function (myData) {
+        var temp, data = [];
+        myData.forEach(function (obj) {
+            temp = $.extend({}, obj.summary, {id: obj.id});
+            data.push(temp);
+        });
+        $scope.gridOpts.data = data;
     });
+
+    $scope.gridOpts.onRegisterApi = function (gridApi) {
+        //set gridApi on scope
+        $scope.gridApi = gridApi;
+        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+            if (row.isSelected) {
+                $scope.selectedIndex = $scope.gridOpts.data.indexOf(row.entity);
+                riskCriteriaService.loadRuleById(row.entity.id).then(function (myData) {
+                    $scope.ruleId = myData.id;
+                    $scope.loadSummary(myData.summary);
+                    $scope.$builder.queryBuilder('loadRules', myData.details);
+                });
+            } else {
+                $scope.newRule();
+                $scope.gridApi.selection.clearSelectedRows();
+            }
+        });
+        //gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
+    };
+
 
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
 
@@ -61,9 +97,31 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
             $scope.alertError('No user authenticated');
             return;
         }
-        riskCriteriaService.ruleDelete($scope.ruleId, $scope.authorId).then(function (myData) {
-            $scope.newRule();
-            $scope.tableParams.reload();
+
+        var selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
+
+        angular.forEach(selectedRowEntities, function (rowEntity) {
+            var rowIndexToDelete = $scope.gridOpts.data.indexOf(rowEntity);
+
+            // create a promise to reject errors from server side.
+            var rowDeferred = $q.defer();
+
+            console.log('Selected row: ' + rowIndexToDelete + ' to delete.');
+            var deferred = riskCriteriaService.ruleDelete($scope.ruleId, $scope.authorId);
+
+            deferred.$promise.then(function (response) {
+                    // success callback
+                    var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
+                    rowDeferred.resolve(newLength);
+                },
+                function (error) {
+                    // will fail because URL is not real, but will resolve anyway for purposes of this test.
+
+                    // this is what I expect will remove the row from the ui-grid in the UI.
+                    var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
+                    rowDeferred.resolve(newLength);
+                    //rowDeferred.reject(error);
+                });
         });
     };
 
@@ -72,7 +130,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
 
 //    $scope.newRule();
     $scope.saving = false;
-    $scope.save = function() {
+    $scope.save = function () {
         var ruleObject, startDate, endDate, details;
 
         if ($scope.saving) return;
@@ -134,20 +192,39 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
             }
         };
 
-        data.push(ruleObject.summary);
-        $scope.tableData = data;
+//        data.push(ruleObject.summary);
+//        $scope.tableData = data;
 
-        $scope.tableParams.total($scope.tableData.length);
-        $scope.tableParams.reload();
+//        $scope.tableParams.total($scope.tableData.length);
+//        $scope.tableParams.reload();
 
         riskCriteriaService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
-            var $tableRows = $('table tbody').eq(0).find('tr');
+            var temp, data = [];
             if (typeof myData.errorCode !== "undefined") {
                 $scope.alertError(myData.errorMessage);
                 return;
             }
-            $scope.tableParams.reload();
-            $scope.showPencil(myData.responseDetails[0].attributeValue);
+
+            riskCriteriaService.getList($scope.authorId).then(function (myData) {
+                var temp, data = [];
+                myData.forEach(function (obj) {
+                    temp = $.extend({}, obj.summary, {id: obj.id});
+                    data.push(temp);
+                });
+
+                $scope.gridOpts.data = data;
+                $interval( function() {
+                    var page;
+                    if (!$scope.selectedIndex) {
+                        page = $scope.gridApi.pagination.getTotalPages();
+                        $scope.selectedIndex = $scope.gridOpts.data.length - 1;
+                        $scope.gridApi.pagination.seek(page);
+                    }
+                    $scope.gridApi.selection.clearSelectedRows();
+                    $scope.gridApi.selection.selectRow($scope.gridOpts.data[$scope.selectedIndex]);
+                    $scope.saving = false;
+                }, 0, 1);
+            });
         });
     };
 

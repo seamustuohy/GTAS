@@ -5,10 +5,10 @@ package gov.gtas.svc;
 
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.PnrMessage;
-import gov.gtas.rule.RuleServiceResult;
 
 import java.util.List;
 
@@ -38,8 +38,35 @@ public interface TargetingService {
 	 */
 	RuleServiceResult analyzeApisMessage(long messageId);
 
+	/**
+	 * Invokes the Targeting service for all unprocessed API messages.
+	 * 
+	 * @return the result of the invocation.
+	 */
 	List<RuleHitDetail> analyzeLoadedApisMessage();
+
+	/**
+	 * Invokes the Targeting service for all unprocessed PNR messages.
+	 * 
+	 * @return the result of the invocation.
+	 */
 	List<RuleHitDetail> analyzeLoadedPnrMessage();
+
+	/**
+	 * Invokes the Targeting service for all unprocessed PNR and APIS messages.
+	 * 
+	 * @param updateProcesssedMessageStatus
+	 *            it true, then the Targeting Service will update the status of
+	 *            each processed message.
+	 * @param statusToLoad
+	 *            status of the APIS/PNR messages to load.
+	 * @param statusAfterProcesssing
+	 *            status to update after processing.
+	 * @return the result of the invocation.
+	 */
+	RuleServiceResult analyzeLoadedMessages(MessageStatus statusToLoad,
+			MessageStatus statusAfterProcesssing,
+			boolean updateProcesssedMessageStatus);
 
 	/**
 	 * Invokes the Rule Engine on an arbitrary list of objects using the

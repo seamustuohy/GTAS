@@ -77,18 +77,13 @@ public class DrlRuleFileBuilder {
 	}
 
 	private void addPackageAndImport() {
-		this.stringBuilder.append(RULE_PACKAGE_NAME).append(IMPORT_PREFIX)
-				.append(RuleHitDetail.class.getName()).append(";")
-				.append(NEW_LINE);
+		this.stringBuilder.append(RULE_PACKAGE_NAME)
+		        .append(IMPORT_PREFIX)
+				.append(RuleHitDetail.class.getName())
+				.append(";").append(NEW_LINE);
 		for (Class<?> clazz : IMPORT_LIST) {
 			this.stringBuilder.append(IMPORT_PREFIX).append(clazz.getName())
 					.append(";").append(NEW_LINE);
 		}
 	}
-
-	// private void addRuleHeader(UdrRule parent, Rule rule) {
-	// this.stringBuilder.append("rule \"").append(parent.getTitle())
-	// .append(":").append(rule.getRuleIndex()).append("\"")
-	// .append(NEW_LINE).append("when\n");
-	// }
 }

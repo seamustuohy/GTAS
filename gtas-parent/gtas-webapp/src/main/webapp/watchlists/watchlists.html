@@ -1,13 +1,23 @@
+<style>
+    .ui-grid-row-dirty {
+        font-weight: bold;
+        background-color: rgba(200, 40, 100, .2);
+    }
+    .ui-grid-viewport {
+        min-height: 330px !important;
+    }
+    .ui-grid-pager-panel {
+        background: rgb(238, 238, 238) none repeat scroll 0% 0%;
+    }
+</style>
 <section>
     <h1>Watchlists:</h1>
     <tabset>
-        <tab heading="+ create new" select="createNew()">
-            insert organic list of field names..
-        </tab>
-        <tab ng-repeat="tab in tabs" heading="{{tab.title}}" select="alertMe(tab.title)">
-        </tab>
+        <tab ng-repeat="tab in tabs" heading="{{tab.title}}" select="updateGrid(tab.title)"></tab>
     </tabset>
     <div ng-if="activeTab !== 'create-new'">
-        <div ui-grid="gridOpts" ui-grid-edit ui-grid-row-edit ui-grid-cellNav class="grid"></div>
+        <button type="button" data-ng-click="Add()">Add Row</button>
+        <div ui-grid="gridOpts" ui-grid-edit ui-grid-row-edit ui-grid-cellNav ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
+        <button type="button" ng-click="removeRow()">Remove Row</button>
     </div>
 </section>

@@ -3,6 +3,7 @@ package gov.gtas.svc;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
@@ -15,7 +16,6 @@ import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PnrMessageRepository;
 import gov.gtas.rule.RuleService;
-import gov.gtas.rule.RuleServiceResult;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,7 +51,7 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private PnrMessageRepository PnrMsgRepository;
-	
+
 	@Autowired
 	private HitsSummaryRepository hitsSummaryRepository;
 
@@ -84,6 +84,7 @@ public class TargetingServiceImpl implements TargetingService {
 		RuleServiceRequest req = TargetingServiceUtils
 				.createApisRequest(message);
 		RuleServiceResult res = ruleService.invokeRuleEngine(req);
+		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 		return res;
 	}
 
@@ -99,6 +100,7 @@ public class TargetingServiceImpl implements TargetingService {
 			String drlRules) {
 		RuleServiceResult res = ruleService.invokeAdhocRulesFromString(
 				drlRules, request);
+		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 		return res;
 	}
 
@@ -117,6 +119,7 @@ public class TargetingServiceImpl implements TargetingService {
 					messageId);
 		}
 		RuleServiceResult res = this.analyzeApisMessage(msg);
+		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 		return res;
 	}
 
@@ -134,12 +137,15 @@ public class TargetingServiceImpl implements TargetingService {
 			RuleServiceRequest req = TargetingServiceUtils
 					.createApisRequest(msgs);
 			RuleServiceResult res = ruleService.invokeRuleEngine(req);
+			res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 			ret = res.getResultList();
 		}
 		return ret;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gov.gtas.svc.TargetingService#analyzeLoadedPnrMessage()
 	 */
 	@Override
@@ -151,9 +157,41 @@ public class TargetingServiceImpl implements TargetingService {
 			RuleServiceRequest req = TargetingServiceUtils
 					.createPnrRequest(msgs);
 			RuleServiceResult res = ruleService.invokeRuleEngine(req);
+			res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 			ret = res.getResultList();
 		}
 		return ret;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.gtas.svc.TargetingService#analyzeLoadedMessages()
+	 */
+	@Override
+	@Transactional
+	public RuleServiceResult analyzeLoadedMessages(MessageStatus statusToLoad,
+			MessageStatus statusAfterProcesssing,
+			final boolean updateProcesssedMessageStat) {
+		List<PnrMessage> pnrMsgs = this.retrievePnrMessage(statusToLoad);
+		List<ApisMessage> apisMsgs = this.retrieveApisMessage(statusToLoad);
+		if (logger.isInfoEnabled()) {
+			logger.info("TargetingServiceImpl.analyzeLoadedMessages() - retrieved PNR message list size-> " + pnrMsgs.size());
+			logger.info("TargetingServiceImpl.analyzeLoadedMessages() - retrieved APIS message list size-> " + apisMsgs.size());
+		}
+		RuleServiceRequest req = TargetingServiceUtils.createPnrApisRequest(
+				apisMsgs, pnrMsgs);
+		RuleServiceResult result = ruleService.invokeRuleEngine(req);
+		if (updateProcesssedMessageStat) {
+			for (ApisMessage apisMessage : apisMsgs) {
+				apisMessage.setStatus(statusAfterProcesssing);
+			}
+			for (PnrMessage pnrMessage : pnrMsgs) {
+				pnrMessage.setStatus(statusAfterProcesssing);
+			}
+		}
+		result = TargetingServiceUtils.ruleResultPostProcesssing(result);
+		return result;
 	}
 
 	@Override
@@ -162,7 +200,7 @@ public class TargetingServiceImpl implements TargetingService {
 		return apisMsgRepository.findByStatus(messageStatus);
 
 	}
-	
+
 	@Override
 	@Transactional
 	public List<PnrMessage> retrievePnrMessage(MessageStatus messageStatus) {
@@ -179,11 +217,10 @@ public class TargetingServiceImpl implements TargetingService {
 			apisMessage.setStatus(messageStatus);
 		}
 	}
-	
+
 	@Override
 	@Transactional
-	public void updatePnrMessage(PnrMessage message,
-			MessageStatus messageStatus) {
+	public void updatePnrMessage(PnrMessage message, MessageStatus messageStatus) {
 		PnrMessage pnrMessage = PnrMsgRepository.findOne(message.getId());
 		if (pnrMessage != null) {
 			pnrMessage.setStatus(messageStatus);
@@ -193,31 +230,27 @@ public class TargetingServiceImpl implements TargetingService {
 	// @Scheduled(fixedDelay = 4000)
 	@Transactional
 	public void runningRuleEngine() {
-		logger.info(new Date() + " a fixed delay running");
-		List<ApisMessage> apisMessageList = retrieveApisMessage(MessageStatus.LOADED);
-		System.out
-				.println("retrieved message size-> " + apisMessageList.size());
-
+		// logger.info(new Date() + " a fixed delay running");
 		List<HitsSummary> hitsSummaryList = new ArrayList<HitsSummary>();
-		if (apisMessageList.size() > 0) {
-			for (ApisMessage apisMessage : apisMessageList) {
-				RuleServiceResult ruleRunningResult = analyzeApisMessage(apisMessage);
-				RuleExecutionStatistics ruleExeStatus = ruleRunningResult
-						.getExecutionStatistics();
-				logger.info(("\nTotal Rules fired. --> " + ruleExeStatus
-						.getTotalRulesFired()));
-				List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
-						.getResultList();
-				Iterator<RuleHitDetail> iter = results.iterator();
-				while (iter.hasNext()) {
-					RuleHitDetail ruleDetail = iter.next();
-					HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
-					hitsSummaryList.add(hitsSummary);
-				}
-				updateApisMessage(apisMessage, MessageStatus.ANALYZED);
-			}
-			hitsSummaryRepository.save(hitsSummaryList);
+
+		RuleServiceResult ruleRunningResult = analyzeLoadedMessages(
+				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
+
+		RuleExecutionStatistics ruleExeStatus = ruleRunningResult
+				.getExecutionStatistics();
+		if (logger.isInfoEnabled()) {
+			logger.info(("\nTargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> " + ruleExeStatus
+					.getTotalRulesFired()));
 		}
+		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
+				.getResultList();
+		Iterator<RuleHitDetail> iter = results.iterator();
+		while (iter.hasNext()) {
+			RuleHitDetail ruleDetail = iter.next();
+			HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
+			hitsSummaryList.add(hitsSummary);
+		}
+		hitsSummaryRepository.save(hitsSummaryList);
 	}
 
 	/**

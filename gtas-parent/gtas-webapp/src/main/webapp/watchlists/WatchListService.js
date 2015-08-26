@@ -47,20 +47,19 @@ app.service("watchListService", function ($http, $q) {
             //return (request.then(handleSuccess, handleError));
         },
         addItem = function (listTypeId, valuesObj) {
-            //var request;
-            var items,
-                watchlist = JSON.parse(localStorage["watchlist"]);
+            var watchlist = JSON.parse(localStorage["watchlist"]);
             if (!listTypeId) {
                 console.log('no listTypeId');
                 return "failure";
             }
-
-            items = watchlist.types[listTypeId];
-            //add id
-            valuesObj.id = getNewId(items);
-            items.push(valuesObj);
+            delete valuesObj.$$hashKey;
+            console.log(valuesObj);
+            valuesObj.id = getNewId(watchlist.types[listTypeId].data);
+            console.log(valuesObj.id);
+            console.log(valuesObj);
+            watchlist.types[listTypeId].data.unshift(valuesObj);
             localStorage["watchlist"] = JSON.stringify(watchlist);
-            return items;
+            return true;
         },
         removeItem = function (itemId, listTypeId) {
             var watchlist = JSON.parse(localStorage["watchlist"]),
@@ -78,12 +77,12 @@ app.service("watchListService", function ($http, $q) {
             localStorage["watchlist"] = JSON.stringify(watchlist);
             return items;
         },
-        updateItem = function (itemId, listTypeId, valuesObj) {
+        updateItem = function (listTypeId, valuesObj) {
             var watchlist = JSON.parse(localStorage["watchlist"]);
-            if (itemId === undefined || listTypeId === undefined || itemId === null || listTypeId === null) {
+            if (listTypeId === undefined ||listTypeId === null) {
                 return false;
             }
-            watchlist[listTypeId] = updatedItems(watchlist[listTypeId], valuesObj);
+            watchlist.types[listTypeId].data = updatedItems(watchlist.types[listTypeId].data, valuesObj);
             localStorage["watchlist"] = JSON.stringify(watchlist);
             return watchlist[listTypeId];
         },

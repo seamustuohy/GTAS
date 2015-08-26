@@ -1,69 +1,21 @@
 package gov.gtas.svc;
 
+import gov.gtas.bo.BasicRuleServiceResult;
+import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.bo.RuleServiceRequestType;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
-import gov.gtas.model.Passenger;
 import gov.gtas.model.PnrMessage;
-import gov.gtas.svc.request.builder.PnrRuleRequestBuilder;
+import gov.gtas.svc.request.builder.RuleEngineRequestBuilder;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 public class TargetingServiceUtils {
-	/**
-	 * Create a rule engine request message from a message object from the
-	 * domain model.
-	 * 
-	 * @param requestMessage
-	 *            the message object.
-	 * @return the constructed rule engine request suitable for Rule Engine
-	 *         invocation.
-	 */
-	public static RuleServiceRequest createRuleServiceRequest(
-			final gov.gtas.model.Message requestMessage) {
-		RuleServiceRequest ret = null;
-		if (requestMessage instanceof ApisMessage) {
-			ret = createApisRequest((ApisMessage) requestMessage);
-		} else if(requestMessage instanceof PnrMessage){
-			ret = createRequest(requestMessage);
-		} else {
-			// arbitrary Message object
-			ret = createRequest(requestMessage);
-		}
-		return ret;
-	}
-	public static RuleServiceRequest createRuleServiceRequest(
-			final List<ApisMessage> requestMessages) {
-				return createApisRequest(requestMessages);
-	}
-
-	/**
-	 * Creates a request from an arbitrary object.
-	 * 
-	 * @param req
-	 *            the input object.
-	 * @return RuleServiceRequest object.
-	 */
-	public static RuleServiceRequest createRequest(
-			final gov.gtas.model.Message req) {
-		final List<gov.gtas.model.Message> requestList = new ArrayList<gov.gtas.model.Message>();
-		requestList.add(req);
-		return new RuleServiceRequest() {
-			public List<?> getRequestObjects() {
-				return requestList;
-			}
-
-			public RuleServiceRequestType getRequestType() {
-				return RuleServiceRequestType.ANY_MESSAGE;
-			}
-
-		};
-	}
-
 	/**
 	 * Creates a request from a API message.
 	 * 
@@ -72,59 +24,108 @@ public class TargetingServiceUtils {
 	 * @return RuleServiceRequest object.
 	 */
 	public static RuleServiceRequest createApisRequest(final ApisMessage req) {
-		//add flights
-		final List<Object> requestList = new ArrayList<Object>(req.getFlights());
-		//add Passengers and documents
-		addPassengersAndDocuments(req.getFlights(), requestList);
-		return createRuleServiceRequest(RuleServiceRequestType.APIS_MESSAGE, requestList);
+		Collection<ApisMessage> apisMessages = new LinkedList<ApisMessage>();
+		apisMessages.add(req);
+		return createPnrApisRequest(apisMessages, null);
 	}
+
+	/**
+	 * Creates a request from a PNR message.
+	 * 
+	 * @param req
+	 *            the PNR message.
+	 * @return RuleServiceRequest object.
+	 */
 	public static RuleServiceRequest createPnrRequest(final PnrMessage req) {
-		PnrRuleRequestBuilder bldr = new PnrRuleRequestBuilder();
-		bldr.addPnrMessage(req);
-		return bldr.build();
+		Collection<PnrMessage> pnrMessages = new LinkedList<PnrMessage>();
+		pnrMessages.add(req);
+		return createPnrApisRequest(null, pnrMessages);
 	}
-	public static RuleServiceRequest createApisRequest(final List<ApisMessage> reqList) {
-		List<Object> reqObjects = new LinkedList<Object>();
-		for(ApisMessage msg:reqList){
-			Set<Flight> flights = msg.getFlights();
-			reqObjects.addAll(flights);
-			addPassengersAndDocuments(flights, reqObjects);
-		}
-		return createRuleServiceRequest(RuleServiceRequestType.APIS_MESSAGE, reqObjects);
+
+	/**
+	 * Create a rule engine request message from a list of message objects from the
+	 * domain model.
+	 * 
+	 * @param reqList
+	 *            the message objects.
+	 * @return the constructed rule engine request suitable for Rule Engine
+	 *         invocation.
+	 */
+	public static RuleServiceRequest createApisRequest(
+			final List<ApisMessage> reqList) {
+		return createPnrApisRequest(reqList, null);
 	}
-	public static RuleServiceRequest createPnrRequest(final List<PnrMessage> reqList) {
-		PnrRuleRequestBuilder bldr = new PnrRuleRequestBuilder();
-		if(reqList != null){
-			for(PnrMessage msg:reqList){
-		        bldr.addPnrMessage(msg);
+
+	/**
+	 * Create a rule engine request message from a list of message objects from the
+	 * domain model.
+	 * 
+	 * @param reqList
+	 *            the message objects.
+	 * @return the constructed rule engine request suitable for Rule Engine
+	 *         invocation.
+	 */
+	public static RuleServiceRequest createPnrRequest(
+			final List<PnrMessage> reqList) {
+		return createPnrApisRequest(null, reqList);
+	}
+
+	/**
+	 * Creates a Rule Engine request containing data from a collection of APIS
+	 * and PNR messages.
+	 * 
+	 * @param apisMessages
+	 * @param pnrMessages
+	 * @return the rule engine request object.
+	 */
+	public static RuleServiceRequest createPnrApisRequest(
+			final Collection<ApisMessage> apisMessages,
+			final Collection<PnrMessage> pnrMessages) {
+		RuleEngineRequestBuilder bldr = new RuleEngineRequestBuilder();
+		if (pnrMessages != null) {
+			for (PnrMessage msg : pnrMessages) {
+				bldr.addPnrMessage(msg);
 			}
 		}
+		if (apisMessages != null) {
+			for (ApisMessage msg : apisMessages) {
+				bldr.addApisMessage(msg);
+			}
+		}
 		return bldr.build();
 	}
-	public static RuleServiceRequest createRuleServiceRequest(final RuleServiceRequestType requestType, final List<?> reqObjects){
-		return new RuleServiceRequest() {
-			public List<?> getRequestObjects() {
-				return reqObjects;
-			}
-
-			public RuleServiceRequestType getRequestType() {
-				return requestType;
-			}
-
-		};
-		
-	}
-    private static void addPassengersAndDocuments(Set<Flight> flights, List<Object> requestList){
-    	for(Flight flight:flights){
-    		Set<Passenger> passengers = flight.getPassengers();
-    		requestList.addAll(passengers);
-    		addDocuments(passengers, requestList);
-    	}
-    }
-
-    private static void addDocuments(Set<Passenger> passengers, List<Object> requestList){
-    	for(Passenger p:passengers){
-    		requestList.addAll(p.getDocuments());
-    	}
-    }
+	/**
+	 * Eliminates duplicates and adds flight id, if missing.
+	 * @param result
+	 * @return
+	 */
+   public static RuleServiceResult ruleResultPostProcesssing(RuleServiceResult result)	{
+	   List<RuleHitDetail> resultList = result.getResultList();
+	   Set<RuleHitDetail> resultSet = new HashSet<RuleHitDetail>();
+	   for(RuleHitDetail rhd: resultList){
+		   RuleHitDetail hitDetail = rhd;
+		   if(rhd.getFlightId() == null){
+			   Collection<Flight> flights = rhd.getPassenger().getFlights();
+			   if(flights != null && flights.size() > 0){
+				   try{
+					   for(Flight flight: flights){
+						   RuleHitDetail newrhd = rhd.clone();
+						   newrhd.setFlightId(flight.getId());
+						   newrhd.setPassenger(null);
+						   resultSet.add(newrhd);
+						   hitDetail = null;
+					   }
+				   } catch (CloneNotSupportedException cnse){
+					   cnse.printStackTrace();
+				   }
+			   }
+		   }
+		   if(hitDetail != null){
+			   hitDetail.setPassenger(null);
+			   resultSet.add(hitDetail);
+		   }
+	   }
+	   RuleServiceResult ret = new BasicRuleServiceResult(new LinkedList<RuleHitDetail>(resultSet), result.getExecutionStatistics());
+	   return ret;
+   }
 }

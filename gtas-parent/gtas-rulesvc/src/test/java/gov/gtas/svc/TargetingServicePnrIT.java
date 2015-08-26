@@ -8,19 +8,18 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.PnrMessage;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.repository.PnrMessageRepository;
-import gov.gtas.rule.RuleServiceResult;
 import gov.gtas.rule.builder.DrlRuleFileBuilder;
 import gov.gtas.rule.builder.RuleBuilderTestUtils;
 import gov.gtas.testdatagen.PnrDataGenerator;
 
 import java.text.ParseException;
-import java.util.Collection;
 import java.util.Iterator;
 
 import javax.annotation.Resource;
@@ -64,28 +63,22 @@ public class TargetingServicePnrIT {
 	@Test
 	@Transactional
 	public void testDataGeneration() {
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
 		assertNotNull(msg);
 		assertNotNull(msg.getId());
 		assertEquals(2, msg.getPnrs().size());
         Iterator<Pnr> itr = msg.getPnrs().iterator();
-		Pnr pnr = itr.next();
-		assertEquals(4, pnr.getPassengers().size());
-		Passenger pax = pnr.getPassengers().iterator().next();
+		Pnr pnr1 = itr.next();
+		int size1 = pnr1.getPassengers().size();
+		assertTrue(size1 == 4 || size1 == 2 );
+		Passenger pax = pnr1.getPassengers().iterator().next();
 		assertNotNull("Pax ID is null", pax.getId());
-		pnr = itr.next();
-		assertEquals(2, pnr.getPassengers().size());
-		pax = pnr.getPassengers().iterator().next();
+		Pnr pnr2 = itr.next();
+		int size2 = pnr2.getPassengers().size();
+		assertTrue(size2 == 4 || size2 == 2 );
+		assertTrue(size1 != size2);
+		pax = pnr2.getPassengers().iterator().next();
 		assertNotNull("Pax ID is null", pax.getId());
-    }
-    @Test
-    public void testPnrRuleRequestCreation(){
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
-		RuleServiceRequest request = TargetingServiceUtils
-				.createPnrRequest(msg);
-		Collection<?> reqObjects = request.getRequestObjects();
-		assertNotNull(reqObjects);		
-		assertEquals(48, reqObjects.size());//2pnr+2flt+6pass+6doc+3addr+2email+2phone+2ff+2cc+2agency + (6+3+ 2*5)links = 48		
     }
 
 	@Test
@@ -95,7 +88,7 @@ public class TargetingServicePnrIT {
 		 * one rule with multiple conditions involving PNR record locator
 		 * and passenger type and last name.
 		 */
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(PNR_PASSENGER_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
@@ -117,7 +110,7 @@ public class TargetingServicePnrIT {
 	@Test
 	@Transactional
 	public void testPnrRuleExecution2() throws ParseException {
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
@@ -147,7 +140,7 @@ public class TargetingServicePnrIT {
 	@Transactional
 	public void testPnrRuleExecution3() throws ParseException {
 		// select all passengers in a flight
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage();
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();

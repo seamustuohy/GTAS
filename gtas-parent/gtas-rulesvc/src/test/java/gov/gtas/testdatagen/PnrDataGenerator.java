@@ -27,8 +27,8 @@ public class PnrDataGenerator {
 	public static final String PNR_PASSENGER2 = "P,Bilbo,,Baggins,CAN,2013-06-30";//pnr1
 	public static final String PNR_PASSENGER3 = "P,Kilmer,Gaunt,Baggins,CAN,2014-01-30";//pnr1
 	public static final String PNR_PASSENGER4 = "P,Crisco,Slick,Masterson,USA,2013-06-30";//pnr1
-	public static final String PNR_PASSENGER5 = "P,Donald,Hair,Trump,GBR,2014-06-30";
-	public static final String PNR_PASSENGER6 = "C,Kadmil,K,Zamboni,GBR,2013-06-30";
+	public static final String PNR_PASSENGER5 = "P,Donald,Hair,Trump,GBR,2014-06-30";//pnr2
+	public static final String PNR_PASSENGER6 = "C,Kadmil,K,Zamboni,GBR,2013-06-30";//pnr2
 	
 	public static final String PNR_FLIGHT1 = "IAD,CCU";
 	public static final String PNR_FLIGHT2 = "LHR,JFK";
@@ -52,10 +52,10 @@ public class PnrDataGenerator {
 	public static final String PNR_AGENCY1 = "USA,Alexandria,Amnesia Travels,1234567890123456";
 	public static final String PNR_AGENCY2 = "GBR,Leeds,Island Tours,1231456823941111";
 
-	public static PnrMessage createTestPnrmessage(){
+	public static PnrMessage createTestPnrmessage(long id){
 	   PnrMessage msg = new PnrMessage();
 	   try{
-		   msg.setId(1L);
+		   msg.setId(id);
 		   Pnr pnr = createPnr(PNR_ID1, PNR_ATTR_CARRIER1, PNR_ATTR_RECORD_LOCATOR1);
 		   addAddress(pnr, 1);
 		   addAddress(pnr, 2);

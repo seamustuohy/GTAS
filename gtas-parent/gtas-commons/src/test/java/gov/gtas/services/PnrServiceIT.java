@@ -106,7 +106,7 @@ public class PnrServiceIT {
 		CreditCard cc = new CreditCard();
 		cc.setExpiration(new Date("4/17/2015"));
 		cc.setAccountHolder("Srinivasarao Vempati");
-		cc.setNumber("2222-3333-4444-5555");
+		cc.setNumber("6666-3333-9999-5555");
 		cc.setCardType("VISA");
 		//cc.setPnr(pnr);
 		pnr.addCreditCard(cc);
@@ -123,7 +123,7 @@ public class PnrServiceIT {
 		adds.add(add);
 		pnr.setAddresses(adds);
 		Phone p = new Phone();
-		p.setNumber("24243534455");
+		p.setNumber("555555555");
 		pnr.addPhone(p);
 		p.setCreationDate();
 		p.setCreatedBy("JUNIT");
@@ -131,7 +131,7 @@ public class PnrServiceIT {
 		phones.add(p);
 		pnr.setPhones(phones);
 		Agency ag = new Agency();
-		ag.setAgencyCity("Aldie");
+		ag.setAgencyCity("STERLING");
 		ag.setAgencyCountry("USA");
 		ag.setAgencyIdentifier("123456C");
 		ag.setAgencyName("Some Test Agency");
@@ -139,8 +139,8 @@ public class PnrServiceIT {
 		ag.setAgencyState("VA");
 		pnr.setAgency(ag);
 		FrequentFlyer ff = new FrequentFlyer();
-		ff.setFrequentFlyerNumber("1234");
-		ff.setAirlineCode("DL");
+		ff.setFrequentFlyerNumber("7777");
+		ff.setAirlineCode("AA");
 		ff.setCreatedAt(new Date());
 		ff.setCreatedBy("JUNIT");
 		pnr.addFrequentFlyer(ff);

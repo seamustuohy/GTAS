@@ -7,7 +7,9 @@ var app = angular.module('myApp', [
     'ui.grid.pagination',
     'ui.grid.edit',
     'ui.grid.rowEdit',
-    'ui.grid.cellNav'
+    'ui.grid.cellNav',
+    'ui.grid.selection',
+    'ui.grid.exporter'
 ]);
 
 app.config(function ($stateProvider) {

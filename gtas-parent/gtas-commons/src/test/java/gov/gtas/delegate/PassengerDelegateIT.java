@@ -70,8 +70,8 @@ public class PassengerDelegateIT {
 		vo.setLastName("DEVELOPER");
 		vo.setPassengerType("P");
 		vo.setResidencyCountry("USA");
-		vo.setTitle("Mr");
-		vo.setSuffix("Jr");
+		vo.setTitle("");
+		vo.setSuffix("");
 		HashSet<DocumentVo> h = new HashSet<>();
 		h.add(prepareDocumentVo());
 		h.add(prepareDocumentVo1());
@@ -110,7 +110,7 @@ public class PassengerDelegateIT {
 		dvo.setDocumentNumber("DL5555");
 		dvo.setDocumentType("DL");
 		dvo.setIssuanceCountry("USA");
-		dvo.setExpirationDate(new Date("9/18/2016"));
+		dvo.setExpirationDate(new Date("8/20/2015"));
 		return dvo;
 	}
 

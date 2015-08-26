@@ -18,9 +18,11 @@ import java.util.Set;
 
 public class ApisDataGenerator {
 	public static final String DOCUMENT_NUMBER="12345";
+	public static final long FLIGHT_ID1=12345L;
+	public static final long FLIGHT_ID2=2931L;
 		
 	/**
-	 * Creates a ApisMessage with 3 flight with 3 passengers
+	 * Creates a ApisMessage with 2flights with 3 passengers each.
 	 * @return
 	 */
     public static ApisMessage createSimpleTestApisMesssage(){
@@ -29,10 +31,10 @@ public class ApisDataGenerator {
     	msg.setFlights(createFlights());
     	msg.setCreateDate(new Date());
     	msg.setStatus(MessageStatus.LOADED);
-    	fixReferences(msg);
+    	fixDocReferences(msg);
     	return msg;
     }
-    private static void fixReferences(ApisMessage msg){
+    private static void fixDocReferences(ApisMessage msg){
     	for(Flight fl:msg.getFlights()){
     		for(Passenger tr:fl.getPassengers()){
     			for(Document doc:tr.getDocuments()){
@@ -43,18 +45,22 @@ public class ApisDataGenerator {
     		}
     	}
     }
-    private static Set<Passenger> createPassengerAndDocument(String[][]param){
+    private static Set<Passenger> createPassengerAndDocument(long[] ids, String[][]param){
     	Set<Passenger> passengers = new HashSet<Passenger>();
+    	int passengerCount = 0;
     	for(String[] args:param){
 	    	Passenger passenger = new Passenger();
+	    	passenger.setId(ids[passengerCount]);
 	    	passenger.setPassengerType(PassengerTypeCode.P.name());
 	    	passenger.setId(new Long(args[6]));
-	    	passenger.setDocuments(createDocuments(new String[]{args[0]}, new String[]{args[1]}));
+	    	passenger.setDocuments(createDocuments(new long[]{ids[passengerCount]},
+	    			new String[]{args[0]}, new String[]{args[1]}));
 	    	passenger.setFirstName(args[2]);
 	    	passenger.setLastName(args[3]);
 	    	passenger.setCitizenshipCountry(args[4]);
 	    	passenger.setEmbarkation(args[5]);
 	    	passengers.add(passenger);
+	    	passengerCount++;
     	}
    	    return passengers;
     }
@@ -62,7 +68,9 @@ public class ApisDataGenerator {
     	Set<Flight> flights = new HashSet<Flight>();
     	
     	Flight flight = new Flight();
-    	Set<Passenger> passengers = createPassengerAndDocument(new String[][]{
+    	flight.setId(FLIGHT_ID1);
+    	Set<Passenger> passengers = createPassengerAndDocument(new long[]{29391L,29392L,29393L},
+    			new String[][]{
     			{/*document*/"GB","2012-01-15", /*passenger(name, citzenship, embarkation*/"Ragner", "Yilmaz", "GB", "YHZ","11"},
     			{"US", "2010-01-15", "Gitstash", "Garbled", "US", "BOB","22"},
     			{"CA", "2011-12-31", "Kalimar", "Rultan", "CA", "YHZ","33"}
@@ -79,7 +87,9 @@ public class ApisDataGenerator {
     	flights.add(flight);
     	
     	flight = new Flight();
-    	passengers = createPassengerAndDocument(new String[][]{
+    	flight.setId(FLIGHT_ID2);
+    	passengers = createPassengerAndDocument(new long[]{29394L,29395L,29396L},
+    			new String[][]{
     			{"YE","2012-01-15", "Iphsatz", "Zaglib", "PF", "YHZ","44"},
     			{"US", "2010-01-15", "Loopy", "Lair", "US", "BOB","55"},
     			{"GB", "2010-01-15", "Ikstar", "Crondite", "GB", "LHR","66"}
@@ -104,11 +114,13 @@ public class ApisDataGenerator {
 
     	return flights;
     }
-    private static Set<Document> createDocuments(String[] iso2Array, String[]issueDates){
+    private static Set<Document> createDocuments(long[] ids, String[] iso2Array, String[]issueDates){
     	Set<Document> docs = new HashSet<Document>();
+    	int docCount = 0;
     	for(int i = 0; i < iso2Array.length; ++i){
     		String iso2 = iso2Array[i];
     		Document doc = new Document();
+    		doc.setId(ids[docCount]);
     		doc.setDocumentType(DocumentTypeCode.P.name());
     		doc.setId(7786L);
     		doc.setDocumentNumber(DOCUMENT_NUMBER);
@@ -119,6 +131,7 @@ public class ApisDataGenerator {
     			pe.printStackTrace();
     		}
     		docs.add(doc);
+    		docCount++;
     	}
     	return docs;
     }

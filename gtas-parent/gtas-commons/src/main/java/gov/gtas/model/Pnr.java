@@ -23,7 +23,7 @@ public class Pnr extends BaseEntityAudit{
     private static final long serialVersionUID = 1L;  
     public Pnr() { }
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "pnr_message_id")
     private PnrMessage pnrMessage;
     
@@ -155,6 +155,15 @@ public class Pnr extends BaseEntityAudit{
             this.passengers = new HashSet<>();
         }
         this.passengers.add(p);
+        
+    }
+    
+    public void addFlight(Flight f) {
+        if (this.flights == null) {
+            this.flights = new HashSet<>();
+        }
+        this.flights.add(f);
+        
     }
     
     public void addCreditCard(CreditCard cc) {
@@ -362,7 +371,7 @@ public class Pnr extends BaseEntityAudit{
 
     @Override
     public int hashCode() {
-       return Objects.hash(this.recordLocator);
+       return Objects.hash(this.recordLocator,this.carrier);
     }
     
     @Override
@@ -374,6 +383,7 @@ public class Pnr extends BaseEntityAudit{
         if (getClass() != obj.getClass())
             return false;
         final Pnr other = (Pnr)obj;
-        return Objects.equals(this.recordLocator, other.recordLocator);
+        return Objects.equals(this.recordLocator, other.recordLocator)
+        		&& Objects.equals(this.carrier, other.carrier);
     }    
 }

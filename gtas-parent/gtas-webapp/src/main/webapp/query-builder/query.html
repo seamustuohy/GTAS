@@ -2,6 +2,8 @@
     @media (min-width: 1200px) {
         .container {
             width: 100%;
+            padding: 0;
+            margin: 0;
         }
     }
     .table .glyphicon-pencil{
@@ -66,6 +68,10 @@
     {
         animation: fadeOut 2s infinite;
         -webkit-animation: fadeOut 2s infinite;
+    }
+
+    .ui-grid-pager-control input {
+        width: 80px;
     }
 </style>
 <section ng-controller="QueryBuilderController">
@@ -139,6 +145,6 @@
         </svg>
     </div>
     <!--<section ng-hide="hideGrid || !FLIGHT.data.length || viewType !== 'FLIGHT'">-->
-    <div id="resultsGrid1" ui-grid="resultsGrid" ui-grid-pagination class="grid"></div>
+    <div id="resultsGrid1" ui-grid="resultsGrid" ui-grid-pagination ui-grid-exporter class="grid"></div>
     <!--</section>-->
 </section>

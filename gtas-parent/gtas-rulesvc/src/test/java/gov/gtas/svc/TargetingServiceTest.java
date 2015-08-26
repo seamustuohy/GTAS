@@ -5,13 +5,18 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import gov.gtas.bo.BasicRuleServiceResult;
+import gov.gtas.bo.RuleExecutionStatistics;
+import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.rule.RuleService;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.After;
@@ -60,6 +65,10 @@ public class TargetingServiceTest {
 		ReflectionTestUtils.setField(targetingService, "ruleService",
 				mockRuleService);
 		ApisMessage message = new ApisMessage();
+		RuleServiceResult result = new BasicRuleServiceResult(
+				new LinkedList<RuleHitDetail>(), new RuleExecutionStatistics());
+		when(mockRuleService.invokeRuleEngine(any(RuleServiceRequest.class)))
+				.thenReturn(result);
 		targetingService.analyzeApisMessage(message);
 		verify(mockRuleService).invokeRuleEngine(any(RuleServiceRequest.class));
 	}
