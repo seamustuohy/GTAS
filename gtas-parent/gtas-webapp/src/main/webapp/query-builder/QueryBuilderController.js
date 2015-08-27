@@ -17,10 +17,12 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
     $injector.invoke(GridControl, this, {$scope: $scope });
 
     $scope.resultsGrid = $.extend({}, $scope.gridOpts);
+    $scope.resultsGrid.enableColumnResizing = true;
 
     $scope.gridOpts.columnDefs = $rootScope.columns.QUERIES;
     $scope.gridOpts.exporterCsvFilename = 'MySavedQueries.csv';
     $scope.gridOpts.exporterPdfHeader = { text: "My Saved Queries", style: 'headerStyle' };
+
 
     queryBuilderService.getList($scope.authorId).then(function (myData) {
         setData(myData);
