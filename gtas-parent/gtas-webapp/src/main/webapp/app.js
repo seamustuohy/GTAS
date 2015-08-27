@@ -25,8 +25,13 @@ app.config(function ($stateProvider) {
             url: '/admin',
             templateUrl: 'admin/admin.html'
         })
-        .state('flights', {
+        .state('dashboard', {
             url: '',
+            templateUrl: 'dashboard/dashboard.html',
+            controller: 'DashboardController'
+        })
+        .state('flights', {
+            url: '/flights',
             templateUrl: 'flights/flights.html',
             controller: 'FlightsController'
         })

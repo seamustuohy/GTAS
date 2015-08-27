@@ -165,19 +165,21 @@
 
         <div class="container container-main">
         <nav class="navbar navbar-default">
-        <div class="container-fluid">
-
-        <div id="navbar" class="collapse navbar-collapse">
+        <div id="navbar">
         <ul class="nav navbar-nav navbar-left" ng-controller="NavCtrl">
-        <li ng-class="{active: isActive('')}"><a href="home.action">Flights</a></li>
-
+        <li ng-class="{active: isActive('')}"><a href="home.action">Dashboard</a></li>
         <sec:authorize access="hasAnyAuthority('VIEW_FLIGHT_PASSENGERS','ADMIN')">
-            <li ng-class="{active: isActive('/passengers')}"><a href="home.action?#/passengers">Passengers</a></li>
+            <li ng-class="{active: isActive('/flights')}"><a href="home.action#/flights">Flights</a></li>
+            <li ng-class="{active: isActive('/passengers')}"><a href="home.action#/passengers">Passengers</a></li>
         </sec:authorize>
-        <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
-            <li ng-class="{active: isActive('/query-builder')}"><a href="home.action?#/query-builder">Queries</a></li>
-            <li ng-class="{active: isActive('/risk-criteria')}"><a href="home.action?#/risk-criteria">Risk Criteria</a></li>
-            <li ng-class="{active: isActive('/watchlists')}"><a href="home.action?#/watchlists">Watchlists</a></li>
+        <sec:authorize access="hasAnyAuthority('MANAGE_QUERIES', 'ADMIN')">
+            <li ng-class="{active: isActive('/query-builder')}"><a href="home.action#/query-builder">Queries</a></li>
+        </sec:authorize>
+        <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'ADMIN')">
+            <li ng-class="{active: isActive('/risk-criteria')}"><a href="home.action#/risk-criteria">Risk Criteria</a></li>
+        </sec:authorize>
+        <sec:authorize access="hasAnyAuthority('MANAGE_WATCHLIST','ADMIN')">
+            <li ng-class="{active: isActive('/watchlists')}"><a href="home.action#/watchlists">Watchlists</a></li>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('MANAGE_USERS','ADMIN')">
             <li class="dropdown">
@@ -185,7 +187,7 @@
             class="caret"></span></a>
             <ul class="dropdown-menu">
 
-            <sec:authorize access="hasAnyAuthority('MANAGE_RULES','ADMIN')">
+            <sec:authorize access="hasAnyAuthority('MANAGE_USERS','ADMIN')">
                 <li><a href="">Users</a></li>
             </sec:authorize>
 
@@ -211,9 +213,6 @@
         <a href="logout.action">Logout</a>
         </li>
         </ul>
-
-        </div><!--/.nav-collapse -->
-
         </div>
 
         <div>
@@ -260,19 +259,20 @@
 
         <script src="resources/js/query-builder.js"></script>
         <script src="app.js"></script>
+        <script src="dashboard/DashboardController.js"></script>
+        <script src="factory/QueryBuilderFactory.js"></script>
+        <script src="factory/jQueryBuilderFactory.js"></script>
         <script src="flights/FlightsIIController.js"></script>
         <script src="flights/FlightsService.js"></script>
         <script src="pax/PaxController.js"></script>
         <script src="pax/PaxService.js"></script>
         <script src="pax/PaxFactory.js"></script>
-        <script src="factory/QueryBuilderFactory.js"></script>
-        <script src="factory/jQueryBuilderFactory.js"></script>
-        <script src="risk-criteria/RiskCriteriaController.js"></script>
-        <script src="watchlists/WatchListService.js"></script>
-        <script src="watchlists/WatchListController.js"></script>
-        <script src="risk-criteria/RiskCriteriaService.js"></script>
         <script src="query-builder/QueryBuilderController.js"></script>
         <script src="query-builder/QueryBuilderService.js"></script>
         <script src="query-builder/QueryService.js"></script>
+        <script src="risk-criteria/RiskCriteriaController.js"></script>
+        <script src="risk-criteria/RiskCriteriaService.js"></script>
+        <script src="watchlists/WatchListService.js"></script>
+        <script src="watchlists/WatchListController.js"></script>
         </body>
         </html>
