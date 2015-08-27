@@ -22,15 +22,31 @@ public class Watchlist implements Serializable {
 	 */
 	private static final long serialVersionUID = -182544361080662L;
 
+	private String name;
 	private String entity;
 	private List<WatchlistItem> watchlistItems;
 
 	public Watchlist() {
 	}
 
-	public Watchlist(String entity) {
+	public Watchlist(String name, String entity) {
+		this.name = name;
 		this.entity = entity;
 		watchlistItems = new LinkedList<WatchlistItem>();
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -38,6 +54,13 @@ public class Watchlist implements Serializable {
 	 */
 	public String getEntity() {
 		return entity;
+	}
+
+	/**
+	 * @param entity the entity to set
+	 */
+	public void setEntity(String entity) {
+		this.entity = entity;
 	}
 
 	/**

@@ -18,16 +18,30 @@ public class WatchlistItem implements Serializable{
 	 */
 	private static final long serialVersionUID = -10797308502449251L;
 
+	 private Long id;
      private String action;
      private WatchlistTerm[] terms;
      
      public WatchlistItem(){   	 
      }
-     public WatchlistItem(String action, WatchlistTerm[] terms){
+     public WatchlistItem(Long id, String action, WatchlistTerm[] terms){
+    	 this.id = id;
     	 this.action = action;
     	 this.terms = terms;
      }
       	
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
 	/**
 	 * @return the action
 	 */

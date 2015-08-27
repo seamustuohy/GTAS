@@ -40,11 +40,10 @@ public class WatchlistManagementController {
 	@Autowired
 	private RuleManagementService ruleManagementService;
 
-	@RequestMapping(value = Constants.WL_GET_BY_AUTHOR_ENTITY, method = RequestMethod.GET)
-	public Watchlist getWatchlist(@PathVariable String authorId,
-			@PathVariable String entity) {
-		System.out.println("******** user =" + authorId + ", entity=" + entity);
-		Watchlist resp = watchlistService.fetchWatchlist(authorId, entity);
+	@RequestMapping(value = Constants.WL_GET_BY_NAME, method = RequestMethod.GET)
+	public Watchlist getWatchlist(@PathVariable String name) {
+		System.out.println("******** name =" + name);
+		Watchlist resp = watchlistService.fetchWatchlist(name);
 		return resp;
 	}
 
@@ -81,7 +80,7 @@ public class WatchlistManagementController {
 							"Create Query For Rule", "inputSpec"));
 		}
 		
-		JsonServiceResponse resp = watchlistService.createWatchlist(userId, inputSpec);
+		JsonServiceResponse resp = watchlistService.createOrUpdateWatchlist(userId, inputSpec);
 
 		return resp;
 	}
@@ -91,7 +90,7 @@ public class WatchlistManagementController {
 			@PathVariable String userId, @RequestBody Watchlist inputSpec) {
 		logger.info("******** Received UDR Update request by user =" + userId);
 						
-		JsonServiceResponse resp = watchlistService.updateWatchlist(userId, inputSpec);
+		JsonServiceResponse resp = watchlistService.createOrUpdateWatchlist(userId, inputSpec);
 
 		return resp;
 	}

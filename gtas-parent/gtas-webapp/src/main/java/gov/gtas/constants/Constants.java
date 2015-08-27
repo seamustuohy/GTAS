@@ -33,7 +33,7 @@ public final class Constants {
 	
 	//WATCH LIST URI
 	public static final String WL_ROOT = "/wl";
-	public static final String WL_GET_BY_AUTHOR_ENTITY = "/{authorId}/{entity}";
+	public static final String WL_GET_BY_NAME = "/{name}";
 	public static final String WL_GETALL = "/list";
 	public static final String WL_GETDRL = "/drl";
 	public static final String WL_POST = "/{authorId}";

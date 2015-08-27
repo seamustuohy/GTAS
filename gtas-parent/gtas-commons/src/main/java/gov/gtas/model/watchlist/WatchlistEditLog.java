@@ -25,8 +25,8 @@ public class WatchlistEditLog extends BaseEntity {
     public WatchlistEditLog() { }
 
     @ManyToOne
-    @JoinColumn(name="EDT_AUTHOR", referencedColumnName="user_id", nullable = false)     
-    private User editAuthor;
+    @JoinColumn(name="WL_EDITOR", referencedColumnName="user_id", nullable = false)     
+    private User watchListEditor;
     
     @ManyToOne
     @JoinColumn(name="EDT_WL_REF", referencedColumnName="ID", nullable = false)     
@@ -40,25 +40,21 @@ public class WatchlistEditLog extends BaseEntity {
 	@Column(name = "EDT_TYPE", nullable=false, length = 1)
 	private WatchlistEditEnum editType;
 	
-	@Column(name = "EDT_DATA_BEFORE", nullable=true, length = 1024)
-	private String editDataBefore;
-
-	@Column(name = "EDT_DATA_AFTER", nullable=true, length = 1024)
-	private String editDataAfter;	
+	@Column(name = "EDT_DATA", nullable=false, length = 1024)
+	private String editData;
 	
-
 	/**
-	 * @return the editAuthor
+	 * @return the watchListEditor
 	 */
-	public User getEditAuthor() {
-		return editAuthor;
+	public User getWatchListEditor() {
+		return watchListEditor;
 	}
 
 	/**
-	 * @param editAuthor the editAuthor to set
+	 * @param watchListEditor the watchListEditor to set
 	 */
-	public void setEditAuthor(User editAuthor) {
-		this.editAuthor = editAuthor;
+	public void setWatchListEditor(User watchListEditor) {
+		this.watchListEditor = watchListEditor;
 	}
 
 	/**
@@ -104,36 +100,22 @@ public class WatchlistEditLog extends BaseEntity {
 	}
 
 	/**
-	 * @return the editDataBefore
+	 * @return the editData
 	 */
-	public String getEditDataBefore() {
-		return editDataBefore;
+	public String getEditData() {
+		return editData;
 	}
 
 	/**
-	 * @param editDataBefore the editDataBefore to set
+	 * @param editData the editData to set
 	 */
-	public void setEditDataBefore(String editDataBefore) {
-		this.editDataBefore = editDataBefore;
-	}
-
-	/**
-	 * @return the editDataAfter
-	 */
-	public String getEditDataAfter() {
-		return editDataAfter;
-	}
-
-	/**
-	 * @param editDataAfter the editDataAfter to set
-	 */
-	public void setEditDataAfter(String editDataAfter) {
-		this.editDataAfter = editDataAfter;
+	public void setEditData(String editData) {
+		this.editData = editData;
 	}
 
 	@Override
     public int hashCode() {
-       return Objects.hash(this.editedWatchlist, this.editDataBefore, this.editDataAfter);
+       return Objects.hash(this.editedWatchlist, this.editType, this.editData);
     }
     
     @Override
@@ -146,7 +128,7 @@ public class WatchlistEditLog extends BaseEntity {
             return false;
         final WatchlistEditLog other = (WatchlistEditLog)obj;
         return Objects.equals(this.editedWatchlist, other.editedWatchlist)
-                && Objects.equals(this.editDataBefore, other.editDataBefore)
-                && Objects.equals(this.editDataAfter, other.editDataAfter);
+                && Objects.equals(this.editType, other.editType)
+                && Objects.equals(this.editData, other.editData);
     }    
 }

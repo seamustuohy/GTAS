@@ -2,16 +2,14 @@ package gov.gtas.model.watchlist;
 
 import gov.gtas.model.BaseEntity;
 
-import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "WL_ITEM")
@@ -20,24 +18,19 @@ public class WatchlistItem extends BaseEntity {
     
     public WatchlistItem() { }
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="ITM_WL_REF", referencedColumnName="ID", nullable = false)     
     private Watchlist watchlist;
-    
-	@Column(name = "ITM_EDIT_DTTM", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date editTimestamp;
-
 	
 	@Column(name = "ITM_DATA", nullable=false, length = 1024)
 	private String itemData;
 	
-    @Column(name = "ITM_RL_DATA", length = 1024)
+    @Column(name = "ITM_RL_DATA", nullable=true, length = 1024)
     private String itemRuleData;
     
     
     /**
-	 * @return the watchlist
+	 * @return the watch list
 	 */
 	public Watchlist getWatchlist() {
 		return watchlist;
@@ -48,20 +41,6 @@ public class WatchlistItem extends BaseEntity {
 	 */
 	public void setWatchlist(Watchlist watchlist) {
 		this.watchlist = watchlist;
-	}
-
-	/**
-	 * @return the editTimestamp
-	 */
-	public Date getEditTimestamp() {
-		return editTimestamp;
-	}
-
-	/**
-	 * @param editTimestamp the editTimestamp to set
-	 */
-	public void setEditTimestamp(Date editTimestamp) {
-		this.editTimestamp = editTimestamp;
 	}
 
 	/**
