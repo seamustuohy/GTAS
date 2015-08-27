@@ -1,7 +1,11 @@
 package gov.gtas.services;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -33,8 +37,22 @@ public class ApisMessageService implements MessageService {
     private LoaderRepository loaderRepo;
 
     private ApisMessage apisMessage;
+    private String filePath;
+
+    public List<String> preprocess(String filePath) {
+        this.filePath = filePath;
+        byte[] raw = null;
+        try {
+            raw = FileUtils.readSmallFile(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        String message = new String(raw, StandardCharsets.US_ASCII);
+        return Arrays.asList(message);
+    }
     
-    public MessageVo parse(String filePath) {
+    public MessageVo parse(String message) {
         this.apisMessage = new ApisMessage();
         this.apisMessage.setCreateDate(new Date());
         this.apisMessage.setStatus(MessageStatus.RECEIVED);
@@ -42,9 +60,6 @@ public class ApisMessageService implements MessageService {
         
         MessageVo vo = null;
         try {            
-            byte[] raw = FileUtils.readSmallFile(filePath);
-            String message = new String(raw, StandardCharsets.US_ASCII);
-
             EdifactParser<ApisMessageVo> parser = null;
             if (isUSEdifactFile(message)) {
                 parser = new PaxlstParserUSedifact();
@@ -74,8 +89,8 @@ public class ApisMessageService implements MessageService {
         return vo;
     }
 
-    public void load(MessageVo message) {
-        ApisMessageVo m = (ApisMessageVo)message;
+    public void load(MessageVo messageVo) {
+        ApisMessageVo m = (ApisMessageVo)messageVo;
         try {
             loaderRepo.processReportingParties(this.apisMessage, m.getReportingParties());
             loaderRepo.processFlightsAndPassengers(this.apisMessage, m.getFlights(), m.getPassengers());

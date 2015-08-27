@@ -70,7 +70,7 @@ public class Flight extends BaseEntityAudit {
     )    
     private Set<Passenger> passengers = new HashSet<>();
 
-   @ManyToMany(
+    @ManyToMany(
         mappedBy = "flights",
         targetEntity = Pnr.class
     ) 

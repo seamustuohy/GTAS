@@ -95,22 +95,20 @@ public class RuleEngineRequestBuilder {
 	 */
 	public void addPnrMessage(PnrMessage pnrMessage) {
 		// add PNR objects
-		Set<Pnr> pnrSet = pnrMessage.getPnrs();
-		if (pnrSet != null && !pnrSet.isEmpty()) {
+		Pnr pnr = pnrMessage.getPnr();
+		if (pnr != null) {
 			// add all the PNR related objects
-			for (Pnr pnr : pnrSet) {
-				requestObjectList.add(pnr);
-				addFlights(pnr.getFlights(), false);// false means do not add
-													// passengers and documents.
-				addAddressObjects(pnr, pnr.getAddresses());
-				addPhoneObjects(pnr, pnr.getPhones());
-				addEmailObjects(pnr, pnr.getEmails());
-				addCreditCardObjects(pnr, pnr.getCreditCards());
-				addFrequentFlyerObjects(pnr, pnr.getFrequentFlyers());
-				addPassengerObjects(pnr, pnr.getPassengers());
+			requestObjectList.add(pnr);
+			addFlights(pnr.getFlights(), false);// false means do not add
+												// passengers and documents.
+			addAddressObjects(pnr, pnr.getAddresses());
+			addPhoneObjects(pnr, pnr.getPhones());
+			addEmailObjects(pnr, pnr.getEmails());
+			addCreditCardObjects(pnr, pnr.getCreditCards());
+			addFrequentFlyerObjects(pnr, pnr.getFrequentFlyers());
+			addPassengerObjects(pnr, pnr.getPassengers());
 
-				addTravelAgencyObject(pnr, pnr.getAgency());
-			}
+			addTravelAgencyObject(pnr, pnr.getAgency());
 		}
 		if(this.requestType == null || this.requestType == RuleServiceRequestType.PNR_MESSAGE){
 			this.requestType = RuleServiceRequestType.PNR_MESSAGE;

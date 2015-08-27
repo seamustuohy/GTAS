@@ -1,8 +1,11 @@
 package gov.gtas.services;
 
+import java.util.List;
+
 import gov.gtas.parsers.edifact.MessageVo;
 
 public interface MessageService {
-    public MessageVo parse(String filePath);
-    public void load(MessageVo message);
+    public List<String> preprocess(String filePath);
+    public MessageVo parse(String message);
+    public void load(MessageVo messageVo);
 }
