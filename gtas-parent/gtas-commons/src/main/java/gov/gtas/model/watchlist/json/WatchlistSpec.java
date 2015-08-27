@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  *
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-public class Watchlist implements Serializable {
+public class WatchlistSpec implements Serializable {
 	/**
 	 * serial version UID.
 	 */
@@ -24,15 +24,15 @@ public class Watchlist implements Serializable {
 
 	private String name;
 	private String entity;
-	private List<WatchlistItem> watchlistItems;
+	private List<WatchlistItemSpec> watchlistItems;
 
-	public Watchlist() {
+	public WatchlistSpec() {
 	}
 
-	public Watchlist(String name, String entity) {
+	public WatchlistSpec(String name, String entity) {
 		this.name = name;
 		this.entity = entity;
-		watchlistItems = new LinkedList<WatchlistItem>();
+		watchlistItems = new LinkedList<WatchlistItemSpec>();
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class Watchlist implements Serializable {
 	/**
 	 * @return the watchlistItems
 	 */
-	public List<WatchlistItem> getWatchlistItems() {
+	public List<WatchlistItemSpec> getWatchlistItems() {
 		return watchlistItems;
 	}
 
@@ -74,7 +74,7 @@ public class Watchlist implements Serializable {
 	 * @param watchlistItems
 	 *            the watchlistItems to set
 	 */
-	public void addWatchlistItem(WatchlistItem watchlistItem) {
+	public void addWatchlistItem(WatchlistItemSpec watchlistItem) {
 		this.watchlistItems.add(watchlistItem);
 	}
 

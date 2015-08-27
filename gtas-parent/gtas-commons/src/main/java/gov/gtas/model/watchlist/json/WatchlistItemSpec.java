@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  */
 //@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
-public class WatchlistItem implements Serializable{
+public class WatchlistItemSpec implements Serializable{
 	
 	/**
 	 * serial version UID.
@@ -22,9 +22,9 @@ public class WatchlistItem implements Serializable{
      private String action;
      private WatchlistTerm[] terms;
      
-     public WatchlistItem(){   	 
+     public WatchlistItemSpec(){   	 
      }
-     public WatchlistItem(Long id, String action, WatchlistTerm[] terms){
+     public WatchlistItemSpec(Long id, String action, WatchlistTerm[] terms){
     	 this.id = id;
     	 this.action = action;
     	 this.terms = terms;

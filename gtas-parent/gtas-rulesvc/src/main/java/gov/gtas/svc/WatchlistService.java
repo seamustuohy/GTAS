@@ -1,7 +1,7 @@
 package gov.gtas.svc;
 
 import gov.gtas.model.udr.json.JsonServiceResponse;
-import gov.gtas.model.watchlist.json.Watchlist;
+import gov.gtas.model.watchlist.json.WatchlistSpec;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public interface WatchlistService {
 	 *            the name of the watch list.
 	 * @return the Watch list object.
 	 */
-	Watchlist fetchWatchlist(String wlName);
+	WatchlistSpec fetchWatchlist(String wlName);
 
 	/**
 	 * Creates a new UDR object in the database and returns it in JSON object
@@ -35,12 +35,12 @@ public interface WatchlistService {
 	 * @return the service response JSON format.
 	 */
 	JsonServiceResponse createOrUpdateWatchlist(String userId,
-			Watchlist wlToCreateUpdate);
+			WatchlistSpec wlToCreateUpdate);
 
 	/**
 	 * Fetches all watch lists
 	 * 
 	 * @return the list of all available watch list objects.
 	 */
-	List<Watchlist> fetchAllWatchlists();
+	List<WatchlistSpec> fetchAllWatchlists();
 }

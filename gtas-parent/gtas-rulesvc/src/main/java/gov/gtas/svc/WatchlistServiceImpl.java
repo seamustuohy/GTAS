@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.udr.json.JsonServiceResponse;
-import gov.gtas.model.watchlist.json.Watchlist;
+import gov.gtas.model.watchlist.json.WatchlistSpec;
+import gov.gtas.model.watchlist.json.WatchlistItemSpec;
 import gov.gtas.services.watchlist.WatchlistPersistenceService;
 /**
  * The Watch list service implementation.
@@ -23,7 +25,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 	 * @see gov.gtas.svc.WatchlistService#fetchWatchlist(java.lang.String)
 	 */
 	@Override
-	public Watchlist fetchWatchlist(String wlName) {
+	public WatchlistSpec fetchWatchlist(String wlName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -33,8 +35,10 @@ public class WatchlistServiceImpl implements WatchlistService {
 	 */
 	@Override
 	public JsonServiceResponse createOrUpdateWatchlist(String userId,
-			Watchlist wlToCreateUpdate) {
-		// TODO Auto-generated method stub
+			WatchlistSpec wlToCreateUpdate) {
+		final String wlName = wlToCreateUpdate.getName();
+		final EntityEnum entity = EntityEnum.getEnum(wlToCreateUpdate.getEntity());
+		final List<WatchlistItemSpec> items = wlToCreateUpdate.getWatchlistItems();
 		return null;
 	}
 
@@ -42,7 +46,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 	 * @see gov.gtas.svc.WatchlistService#fetchAllWatchlists()
 	 */
 	@Override
-	public List<Watchlist> fetchAllWatchlists() {
+	public List<WatchlistSpec> fetchAllWatchlists() {
 		// TODO Auto-generated method stub
 		return null;
 	}
