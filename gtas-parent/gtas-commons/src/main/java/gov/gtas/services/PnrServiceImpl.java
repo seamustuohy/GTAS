@@ -94,9 +94,11 @@ public class PnrServiceImpl implements PnrService {
 		if(source.getAgency() != null && target.getAgency() == null){
 			target.setAgency(source.getAgency());
 		}
-		if(source.getPnrMessage() != null && target.getPnrMessage() == null){
-			target.setPnrMessage(source.getPnrMessage());
-		}
+		
+		// TODO
+//		if(source.getPnrMessage() != null && target.getPnrMessage() == null){
+//			target.setPnrMessage(source.getPnrMessage());
+//		}
 		if(source.getCreditCards()!= null && source.getCreditCards().size() >0){
 			Iterator it1 = source.getCreditCards().iterator();
 			while(it1.hasNext()){

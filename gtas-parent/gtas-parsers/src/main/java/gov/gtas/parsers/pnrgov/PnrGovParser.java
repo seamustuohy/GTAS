@@ -75,47 +75,22 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     }
 
     protected String getPayloadText(String message) throws ParseException {
-        return EdifactLexer.getMessagePayload(message, "MSG", "UNT");
+        return EdifactLexer.getMessagePayload(message, "SRC", "UNT");
     }
     
     @Override
     public void parsePayload() throws ParseException {
         MSG msg = getMandatorySegment(MSG.class);
         parsedMessage.setMessageCode(msg.getMessageTypeCode());
-
-        // specifies the sender/reporting party of the message
-        ORG org = getMandatorySegment(ORG.class);
-
+        getMandatorySegment(ORG.class);
         TVL_L0 tvl = getMandatorySegment(TVL_L0.class);
-
-        EQN eqn = getMandatorySegment(EQN.class);
-        int expectedNumberOfPnrs = eqn.getValue();
-
-        int numPnrs = 0;
-        for (;;) {
-            SRC src = getConditionalSegment(SRC.class);
-            if (src == null) {
-                break;
-            }
-
-            // TODO: here we can compute the md5 hash of the single pnr
-            // and compare it.
-//            System.out.println("MAC: " + PnrUtils.getSinglePnr(this.message, numPnrs));
-            
-            PnrVo pnr = new PnrVo();
-            parsedMessage.addPnr(pnr);
-            this.currentPnr = pnr;
-            numPnrs++;
-            processGroup1(tvl);
-        }
+        getMandatorySegment(EQN.class);
+        getMandatorySegment(SRC.class);
         
-        if (expectedNumberOfPnrs != numPnrs) {
-            throw new ParseException(String.format("Parsed %d PNR records but expected %d", numPnrs, expectedNumberOfPnrs));
-        }
-        
-        for (PnrVo vo : this.parsedMessage.getPnrRecords()) {
-            System.out.println(vo + "\n\n");            
-        }
+        PnrVo pnr = new PnrVo();
+        parsedMessage.setPnr(pnr);
+        this.currentPnr = pnr;
+        processGroup1(tvl);
     }
 
     /**

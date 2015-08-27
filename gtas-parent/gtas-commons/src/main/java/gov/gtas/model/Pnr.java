@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,9 +24,8 @@ public class Pnr extends BaseEntityAudit{
     private static final long serialVersionUID = 1L;  
     public Pnr() { }
     
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "pnr_message_id")
-    private PnrMessage pnrMessage;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
+    private Set<PnrMessage> pnrMessages;
     
 	@Column(name = "record_locator", length = 20)
 	private String recordLocator;
@@ -265,12 +265,12 @@ public class Pnr extends BaseEntityAudit{
 		this.recordLocator = recordLocator;
 	}
 
-	public PnrMessage getPnrMessage() {
-        return pnrMessage;
+    public Set<PnrMessage> getPnrMessages() {
+        return pnrMessages;
     }
 
-    public void setPnrMessage(PnrMessage pnrMessage) {
-        this.pnrMessage = pnrMessage;
+    public void setPnrMessages(Set<PnrMessage> pnrMessages) {
+        this.pnrMessages = pnrMessages;
     }
 
     public String getCarrier() {

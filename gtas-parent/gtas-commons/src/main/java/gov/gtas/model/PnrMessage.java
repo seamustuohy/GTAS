@@ -1,12 +1,9 @@
 package gov.gtas.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,23 +15,15 @@ public class PnrMessage extends Message {
     @Embedded
     private EdifactMessage edifactMessage;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnrMessage")
-    private Set<Pnr> pnrs = new HashSet<>();
-    
-    public void addPnr(Pnr pnr) {
-        if (this.pnrs == null) {
-            this.pnrs = new HashSet<>();
-        }
-        this.pnrs.add(pnr);
-        pnr.setPnrMessage(this);
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Pnr pnr;
+
+    public Pnr getPnr() {
+        return pnr;
     }
 
-    public Set<Pnr> getPnrs() {
-        return pnrs;
-    }
-    
-    public void setPnrs(Set<Pnr> pnrs) {
-        this.pnrs = pnrs;
+    public void setPnr(Pnr pnr) {
+        this.pnr = pnr;
     }
 
     public EdifactMessage getEdifactMessage() {

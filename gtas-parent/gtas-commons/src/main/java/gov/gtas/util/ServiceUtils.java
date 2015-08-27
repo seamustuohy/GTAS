@@ -157,8 +157,8 @@ public class ServiceUtils {
 		}
 		if(vo.getPnrMessage() != null && vo.getPnrMessage().getEdifactMessage() != null){
 			PnrMessage p = mapPnrMessageFromPnrVo(vo.getPnrMessage(),new PnrMessage());
-			p.addPnr(pnr);
-			pnr.setPnrMessage(p);
+			p.setPnr(pnr);
+			pnr.getPnrMessages().add(p);
 		}
 		if(vo.getAddresses().size() >0){
 			Iterator adresses = vo.getAddresses().iterator();

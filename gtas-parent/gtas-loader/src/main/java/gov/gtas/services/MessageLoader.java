@@ -1,6 +1,7 @@
 package gov.gtas.services;
 
 import java.io.File;
+import java.util.List;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -17,13 +18,16 @@ public class MessageLoader {
         }
         
         System.out.println("processing file " + filePath);
-        MessageVo m = svc.parse(filePath);
-        if (m == null) {
-            System.out.println("error parsing " + filePath);
-            return;
-        }
+        List<String> messages = svc.preprocess(filePath);
+        for (String msg : messages) {
+            MessageVo m = svc.parse(msg);
+            if (m == null) {
+                System.out.println("error parsing " + filePath);
+                return;
+            }
 
-        svc.load(m);
+            svc.load(m);            
+        }
     }
     
     /**
