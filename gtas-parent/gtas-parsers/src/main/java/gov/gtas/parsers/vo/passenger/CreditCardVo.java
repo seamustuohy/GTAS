@@ -1,8 +1,12 @@
 package gov.gtas.parsers.vo.passenger;
 
+import gov.gtas.parsers.validators.Validatable;
+
 import java.util.Date;
 
-public class CreditCardVo {
+import org.apache.commons.lang3.StringUtils;
+
+public class CreditCardVo implements Validatable{
     private String cardType;
     private String number;
     private Date expiration;
@@ -32,4 +36,12 @@ public class CreditCardVo {
     public void setAccountHolder(String accountHolder) {
         this.accountHolder = accountHolder;
     }
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.number) || StringUtils.isBlank(this.accountHolder) 
+				|| StringUtils.isBlank(this.cardType) || this.expiration == null){
+			return false;
+		}
+		return true;
+	}
 }

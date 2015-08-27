@@ -13,14 +13,26 @@ var app = angular.module('myApp', [
     'ui.grid.exporter'
 ]);
 
+app.controller('NavCtrl', function ($scope, $location) {
+    $scope.isActive = function (route) {
+        $scope.path = $location.path();
+        return $location.path() === route;
+    };
+});
+
 app.config(function ($stateProvider) {
     $stateProvider
         .state('admin', {
             url: '/admin',
             templateUrl: 'admin/admin.html'
         })
-        .state('flights', {
+        .state('dashboard', {
             url: '',
+            templateUrl: 'dashboard/dashboard.html',
+            controller: 'DashboardController'
+        })
+        .state('flights', {
+            url: '/flights',
             templateUrl: 'flights/flights.html',
             controller: 'FlightsController'
         })

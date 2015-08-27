@@ -66,19 +66,17 @@ public class TargetingServicePnrIT {
 		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
 		assertNotNull(msg);
 		assertNotNull(msg.getId());
-		assertEquals(2, msg.getPnrs().size());
-        Iterator<Pnr> itr = msg.getPnrs().iterator();
-		Pnr pnr1 = itr.next();
+		Pnr pnr1 = msg.getPnr();
 		int size1 = pnr1.getPassengers().size();
 		assertTrue(size1 == 4 || size1 == 2 );
 		Passenger pax = pnr1.getPassengers().iterator().next();
 		assertNotNull("Pax ID is null", pax.getId());
-		Pnr pnr2 = itr.next();
-		int size2 = pnr2.getPassengers().size();
-		assertTrue(size2 == 4 || size2 == 2 );
-		assertTrue(size1 != size2);
-		pax = pnr2.getPassengers().iterator().next();
-		assertNotNull("Pax ID is null", pax.getId());
+//		Pnr pnr2 = itr.next();
+//		int size2 = pnr2.getPassengers().size();
+//		assertTrue(size2 == 4 || size2 == 2 );
+//		assertTrue(size1 != size2);
+//		pax = pnr2.getPassengers().iterator().next();
+//		assertNotNull("Pax ID is null", pax.getId());
     }
 
 	@Test

@@ -1,8 +1,11 @@
 package gov.gtas.services;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -23,6 +26,7 @@ import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrMessageVo;
+import gov.gtas.parsers.pnrgov.PnrUtils;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.vo.passenger.AddressVo;
@@ -46,19 +50,30 @@ public class PnrMessageService implements MessageService {
     private PnrMessageRepository msgDao;
     
     private PnrMessage pnrMessage;
+    private EdifactParser<PnrMessageVo> parser = new PnrGovParser();
+    private String filePath;
+
+    public List<String> preprocess(String filePath) {
+        this.filePath = filePath;
+        byte[] raw = null;
+        try {
+            raw = FileUtils.readSmallFile(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        String message = new String(raw, StandardCharsets.US_ASCII);
+        return PnrUtils.getPnrs(message);
+    }
     
-    public MessageVo parse(String filePath) {
+    public MessageVo parse(String message) {
         this.pnrMessage = new PnrMessage();
         this.pnrMessage.setCreateDate(new Date());
         this.pnrMessage.setStatus(MessageStatus.RECEIVED);
-        this.pnrMessage.setFilePath(filePath);
+        this.pnrMessage.setFilePath(this.filePath);
         
         MessageVo vo = null;
         try {
-            byte[] raw = FileUtils.readSmallFile(filePath);
-            String message = new String(raw, StandardCharsets.US_ASCII);
-            
-            EdifactParser<PnrMessageVo> parser = new PnrGovParser();
             vo = parser.parse(message);
             loaderRepo.checkHashCode(vo.getHashCode());
             
@@ -81,42 +96,43 @@ public class PnrMessageService implements MessageService {
         return vo;
     }
     
-    public void load(MessageVo message) {
-        PnrMessageVo m = (PnrMessageVo)message;
+    public void load(MessageVo messageVo) {
+        PnrMessageVo m = (PnrMessageVo)messageVo;
+        PnrVo vo = m.getPnr();
         try {
-            for (PnrVo vo : m.getPnrRecords()) {
-                Pnr pnr = null;
+            Pnr pnr = null;
 
-                pnr = utils.convertPnrVo(vo);
-                this.pnrMessage.addPnr(pnr);
-                
-                for (AddressVo addressVo : vo.getAddresses()) {
-                    pnr.addAddress(utils.convertAddressVo(addressVo));
-                }
-                
-                for (PhoneVo phoneVo : vo.getPhoneNumbers()) {
-                    pnr.addPhone(utils.convertPhoneVo(phoneVo));
-                }
-        
-                for (CreditCardVo creditVo : vo.getCreditCards()) {
-                    pnr.addCreditCard(utils.convertCreditVo(creditVo));
-                }
-                
-                Set<Passenger> pax = new HashSet<>();        
-                for (PassengerVo pvo : vo.getPassengers()) {
-                    pax.add(utils.createNewPassenger(pvo));
-                }
-              
-                pnr.setPassengers(pax);
-        
-                Flight f = null;
-                for (FlightVo fvo : vo.getFlights()) {
-                    f = utils.createNewFlight(fvo);
-                    f.setPassengers(pax);
-                    pnr.getFlights().add(f);
-                }
-                this.pnrMessage.setStatus(MessageStatus.LOADED);
+            pnr = utils.convertPnrVo(vo);
+            this.pnrMessage.setPnr(pnr);
+            
+            for (AddressVo addressVo : vo.getAddresses()) {
+                pnr.addAddress(utils.convertAddressVo(addressVo));
             }
+            
+            for (PhoneVo phoneVo : vo.getPhoneNumbers()) {
+                pnr.addPhone(utils.convertPhoneVo(phoneVo));
+            }
+    
+            for (CreditCardVo creditVo : vo.getCreditCards()) {
+                pnr.addCreditCard(utils.convertCreditVo(creditVo));
+            }
+            
+//            loaderRepo.processFlightsAndPassengers(this.apisMessage, m.getFlights(), m.getPassengers());
+
+            Set<Passenger> pax = new HashSet<>();        
+            for (PassengerVo pvo : vo.getPassengers()) {
+                pax.add(utils.createNewPassenger(pvo));
+            }
+          
+            pnr.setPassengers(pax);
+    
+            Flight f = null;
+            for (FlightVo fvo : vo.getFlights()) {
+                f = utils.createNewFlight(fvo);
+                f.setPassengers(pax);
+                pnr.getFlights().add(f);
+            }
+            this.pnrMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
             handleException(e, MessageStatus.FAILED_LOADING);
@@ -126,7 +142,7 @@ public class PnrMessageService implements MessageService {
     }
 
     private void handleException(Exception e, MessageStatus status) {
-        this.pnrMessage.setPnrs(null);        
+        this.pnrMessage.setPnr(null);        
         this.pnrMessage.setStatus(status);
         String stacktrace = ErrorUtils.getStacktrace(e);
         this.pnrMessage.setError(stacktrace);

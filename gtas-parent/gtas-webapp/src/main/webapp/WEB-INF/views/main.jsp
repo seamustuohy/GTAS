@@ -127,6 +127,31 @@
         /*background-color: #F0C425;*/
         padding: 5px;}
 
+        header {
+        height: 84px;
+        position: relative;
+        }
+        header::before {
+        content: "";
+        display: block;
+        height: 84px;
+        background-color: rgb(43,127,184);
+        background-image: url(resources/img/gtas_logo.png);
+        background-repeat: no-repeat;
+        background-position: top left;
+        position: relative;
+        top: 0;
+        }
+        header::after {
+        content: "";
+        display: block;
+        background-color: rgba(167,169,172, 1);
+        height: 10px;
+        position: relative;
+        bottom: 10px;
+        margin-left: 1170px;
+        }
+
         .glyphiconFlightPax:hover, .glyphiconFlightPax:focus {
         color: #222;
         /* background-color: #FFFFFF;  #1F2E54 */
@@ -150,75 +175,33 @@
         </head>
 
         <body>
-        <header>
-        <div class="container">
-        <div class="row">
-        <div class="col-md-6">
-        <img class="logo" src="resources/img/gtas_logo.png" width="1140px">
-        </div>
-        <div class="col-md-6">
+        <header></header>
 
-        </div>
-        </div>
-        </div>
-        </header>
-
-        <div class="container container-main">
+        <div>
         <nav class="navbar navbar-default">
-        <div class="container-fluid">
-        <!-- <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-        aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        </button>
-        </div> -->
-
-        <div id="navbar" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-left">
-        <li ng-class="{active: $route.current.activeTab == 'dashboard'}"><a href="home.action">Home</a></li>
-
+        <div id="navbar">
+        <ul class="nav navbar-nav navbar-left" ng-controller="NavCtrl">
+        <li ng-class="{active: isActive('')}"><a href="home.action">Dashboard</a></li>
         <sec:authorize access="hasAnyAuthority('VIEW_FLIGHT_PASSENGERS','ADMIN')">
-
-            <li class="dropdown">
-            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">View <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-
-            <li><a href="home.action">Flights</a></li>
-            <li><a href="home.action?#/passengers">Passengers</a></li>
-
-            </ul>
-            </li>
+            <li ng-class="{active: isActive('/flights')}"><a href="home.action#/flights">Flights</a></li>
+            <li ng-class="{active: isActive('/passengers')}"><a href="home.action#/passengers">Passengers</a></li>
         </sec:authorize>
-
-        <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
-            <li class="dropdown">
-            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">Manage <span
-            class="caret"></span></a>
-            <ul class="dropdown-menu">
-            <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
-                <li><a href="home.action?#/query-builder">Queries</a></li>
-            </sec:authorize>
-            <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
-                <li><a href="home.action?#/risk-criteria">Risk Criteria</a></li>
-            </sec:authorize>
-            <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
-                <li><a href="home.action?#/watchlists">Watchlists</a></li>
-            </sec:authorize>
-            </ul>
-            </li>
+        <sec:authorize access="hasAnyAuthority('MANAGE_QUERIES', 'ADMIN')">
+            <li ng-class="{active: isActive('/query-builder')}"><a href="home.action#/query-builder">Queries</a></li>
         </sec:authorize>
-
-
+        <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'ADMIN')">
+            <li ng-class="{active: isActive('/risk-criteria')}"><a href="home.action#/risk-criteria">Risk Criteria</a></li>
+        </sec:authorize>
+        <sec:authorize access="hasAnyAuthority('MANAGE_WATCHLIST','ADMIN')">
+            <li ng-class="{active: isActive('/watchlists')}"><a href="home.action#/watchlists">Watchlists</a></li>
+        </sec:authorize>
         <sec:authorize access="hasAnyAuthority('MANAGE_USERS','ADMIN')">
             <li class="dropdown">
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">Admin <span
             class="caret"></span></a>
             <ul class="dropdown-menu">
 
-            <sec:authorize access="hasAnyAuthority('MANAGE_RULES','ADMIN')">
+            <sec:authorize access="hasAnyAuthority('MANAGE_USERS','ADMIN')">
                 <li><a href="">Users</a></li>
             </sec:authorize>
 
@@ -239,14 +222,9 @@
 
         </ul>
 
-        <ul class="nav navbar-nav navbar-right">
-        <li style="position: right;">
-        <a href="logout.action">Logout</a>
-        </li>
+        <ul class="nav navbar-nav navbar-right" style="margin:0;">
+        <li><a href="logout.action">Logout</a></li>
         </ul>
-
-        </div><!--/.nav-collapse -->
-
         </div>
 
         <div>
@@ -278,30 +256,6 @@
         <script src="resources/bower_components/moment/min/moment.min.js"></script>
 
         <script src="resources/bower_components/jquery/dist/jquery.js"></script>
-        <script>
-        //TO SWAP OUT FOR ANGULAR WAY LATER
-        var $navbar = $('#navbar');
-        var markDropDownActive = function (e) {
-        var $this = $(e.currentTarget);
-        $navbar.find('.active').removeClass('active');
-        $this.parents('.dropdown').addClass('active');
-        };
-        $navbar.on('click', 'a:not(".dropdown-toggle")', markDropDownActive);
-        var activateTab = function (route) {
-            $navbar.find('.active').removeClass('active');
-            switch (route) {
-                case '#/query-builder':
-                case '#/risk-criteria':
-                case '#/watchlists':
-                    $navbar.children().eq(0).children().eq(2).addClass('active');
-                    return;
-                case '#/passengers':
-                default:
-                    $navbar.children().eq(0).children().eq(1).addClass('active');
-            }
-        };
-        activateTab(window.location.hash);
-        </script>
         <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
         <script src="resources/bower_components/bootbox/bootbox.js"></script>
@@ -311,24 +265,26 @@
         <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
         <script src='resources/bower_components/pdfmake/build/pdfmake.min.js'></script>
         <script src='resources/bower_components/pdfmake/build/vfs_fonts.js'></script>
+
         <!-- <script src="resources/bower_components/datatables/media/js/jquery.dataTables.min.js"></script> -->
         <script src="resources/bower_components/angular-ui-grid/ui-grid.js"></script>
 
         <script src="resources/js/query-builder.js"></script>
         <script src="app.js"></script>
-        <script src="flights/FlightsController.js"></script>
+        <script src="dashboard/DashboardController.js"></script>
+        <script src="factory/QueryBuilderFactory.js"></script>
+        <script src="factory/jQueryBuilderFactory.js"></script>
+        <script src="flights/FlightsIIController.js"></script>
         <script src="flights/FlightsService.js"></script>
         <script src="pax/PaxController.js"></script>
         <script src="pax/PaxService.js"></script>
         <script src="pax/PaxFactory.js"></script>
-        <script src="factory/QueryBuilderFactory.js"></script>
-        <script src="factory/jQueryBuilderFactory.js"></script>
-        <script src="risk-criteria/RiskCriteriaController.js"></script>
-        <script src="watchlists/WatchListService.js"></script>
-        <script src="watchlists/WatchListController.js"></script>
-        <script src="risk-criteria/RiskCriteriaService.js"></script>
         <script src="query-builder/QueryBuilderController.js"></script>
         <script src="query-builder/QueryBuilderService.js"></script>
         <script src="query-builder/QueryService.js"></script>
+        <script src="risk-criteria/RiskCriteriaController.js"></script>
+        <script src="risk-criteria/RiskCriteriaService.js"></script>
+        <script src="watchlists/WatchListService.js"></script>
+        <script src="watchlists/WatchListController.js"></script>
         </body>
         </html>

@@ -12,7 +12,8 @@ app.service("watchListService", function ($http, $q) {
         },
     /* utility functions */
         getNewId = function (items) {
-            var highest = Number.NEGATIVE_INFINITY, tmp, i;
+            var highest = 0, tmp, i;
+            if (!items.length) { return 1; }
             for (i = items.length - 1; i >= 0; i--) {
                 tmp = items[i].id;
                 if (tmp > highest) { highest = tmp; }

@@ -209,8 +209,6 @@ public class RuleHitDetail implements Serializable, Cloneable {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!super.equals(obj))
-            return false;
         if (getClass() != obj.getClass())
             return false;
         final RuleHitDetail other = (RuleHitDetail)obj;

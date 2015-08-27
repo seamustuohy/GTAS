@@ -1,11 +1,14 @@
 package gov.gtas.parsers.vo.passenger;
 
+import gov.gtas.parsers.validators.Validatable;
+
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class DocumentVo {
+public class DocumentVo implements Validatable{
     private String documentType;
     private String documentNumber;
     private Date expirationDate;
@@ -46,5 +49,14 @@ public class DocumentVo {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
-    }    
+    }
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.documentNumber) || StringUtils.isBlank(this.documentType) 
+				|| StringUtils.isBlank(this.issuanceCountry) || this.expirationDate == null
+				|| this.issuanceDate == null){
+			return false;
+		}
+		return true;
+	}    
 }
