@@ -1,10 +1,8 @@
-app.controller('WatchListController', function ($scope, $filter, $q, watchListService, $interval) {
+app.controller('WatchListController', function ($scope, $rootScope, $injector, GridControl, $filter, $q, watchListService, $interval) {
     'use strict';
     var watchlist = localStorage["watchlist"] === undefined ? {} : JSON.parse(localStorage["watchlist"]);
-    var pageOfPages = function (currentPage, pageCount) {
-        return moment().format('YYYY-MM-DD') + (pageCount === 1 ? '' : '\t' + currentPage.toString() + ' of ' + pageCount.toString());
-    };
-    $scope.$scope = $scope;
+    $injector.invoke(GridControl, this, {$scope: $scope });
+
     if (watchlist.types === undefined) {
         watchlist.types = {
             "document": {
@@ -75,45 +73,10 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
         $scope.gridOpts.exporterPdfHeader.text = 'Watchlist: ' + listName;
         $scope.gridOpts.data = $scope.tabfields[listName].data;
     };
-    $scope.gridOpts = {
-        paginationPageSize: 10,
-        paginationPageSizes: [],
-        enableFiltering: true,
-        enableCellEditOnFocus: true,
-        showGridFooter: true,
-        enableGridMenu: true,
-        enableSelectAll: true,
-        exporterCsvFilename: 'watchlist.csv',
-        exporterPdfDefaultStyle: {fontSize: 9},
-        exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
-        exporterPdfTableHeaderStyle: {
-            fontSize: 10,
-            bold: true,
-            italics: true
-        },
-        exporterPdfHeader: { text: "Query [NAME]", style: 'headerStyle' },
-        exporterPdfFooter: function (currentPage, pageCount) {
-            return { text: pageOfPages(currentPage, pageCount), style: 'footerStyle' };
-        },
-        exporterPdfCustomFormatter: function (docDefinition) {
-            docDefinition.styles.headerStyle = {
-                fontSize: 22,
-                bold: true,
-                alignment: 'center',
-                lineHeight: 1.5
-            };
-            docDefinition.styles.footerStyle = {
-                fontSize: 10,
-                italic: true,
-                alignment: 'center'
-            };
-            return docDefinition;
-        },
-        exporterPdfOrientation: 'landscape',
-        exporterPdfPageSize: 'LETTER',
-        exporterPdfMaxGridWidth: 650,
-        exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
-    };
+    $scope.gridOpts.enableCellEditOnFocus = true;
+    $scope.gridOpts.exporterCsvFilename = 'watchlist.csv';
+    $scope.gridOpts.exporterPdfHeader = { text: "Query [NAME]", style: 'headerStyle' };
+
     $scope.updateGrid('document');
 
     $scope.Add = function () {
@@ -185,4 +148,6 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
                 });
         });
     };
+
+    $scope.$scope = $scope;
 });

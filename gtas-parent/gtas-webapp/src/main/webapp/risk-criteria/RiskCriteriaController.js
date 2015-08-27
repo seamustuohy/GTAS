@@ -1,85 +1,23 @@
-app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuilderCtrl, $filter, $q, ngTableParams, riskCriteriaService, $timeout, $interval) {
+app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector, QueryBuilderCtrl, GridControl, $filter, $q, riskCriteriaService, $timeout, $interval) {
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
-//    var data = [];
-    var paginationPageSize = 10;
-    $scope.$scope = $scope;
+    $injector.invoke(GridControl, this, {$scope: $scope });
 
-    var pageOfPages = function (currentPage, pageCount) {
-        return moment().format('YYYY-MM-DD') + (pageCount === 1 ? '' : '\t' + currentPage.toString() + ' of ' + pageCount.toString());
-    };
-
-    $scope.gridOpts = {
-        paginationPageSize: paginationPageSize,
-        paginationPageSizes: [],
-        enableFiltering: true,
-        enableCellEditOnFocus: false,
-        showGridFooter: true,
-        multiSelect: false,
-        enableGridMenu: true,
-        enableSelectAll: false,
-        exporterCsvFilename: 'riskCriteria.csv',
-        exporterPdfDefaultStyle: {fontSize: 9},
-        exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
-        exporterPdfTableHeaderStyle: {
-            fontSize: 10,
-            bold: true,
-            italics: true
-        },
-        exporterPdfHeader: { text: "Risk Criteria", style: 'headerStyle' },
-        exporterPdfFooter: function (currentPage, pageCount) {
-            return { text: pageOfPages(currentPage, pageCount), style: 'footerStyle' };
-        },
-        exporterPdfCustomFormatter: function (docDefinition) {
-            docDefinition.styles.headerStyle = {
-                fontSize: 22,
-                bold: true,
-                alignment: 'center',
-                lineHeight: 1.5
-            };
-            docDefinition.styles.footerStyle = {
-                fontSize: 10,
-                italic: true,
-                alignment: 'center'
-            };
-            return docDefinition;
-        },
-        exporterPdfOrientation: 'landscape',
-        exporterPdfPageSize: 'LETTER',
-        exporterPdfMaxGridWidth: 650,
-        exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
-    };
-
-    var riskCriteriaColumns = [{
-        name: "title",
-        enableCellEdit: false,
-        enableColumnMenu: false
-    }, {
-        name: "description",
-        enableCellEdit: false,
-        enableColumnMenu: false
-    }, {
-        name: "startDate",
-        enableCellEdit: false,
-        enableColumnMenu: false
-    }, {
-        name: "endDate",
-        enableCellEdit: false,
-        enableColumnMenu: false
-    }, {
-        name: "enabled",
-        enableCellEdit: false,
-        enableColumnMenu: false
-    }];
-    $scope.gridOpts.columnDefs = riskCriteriaColumns;
-
-    riskCriteriaService.getList($scope.authorId).then(function (myData) {
+    var setData = function (myData) {
         var temp, data = [];
         myData.forEach(function (obj) {
             temp = $.extend({}, obj.summary, {id: obj.id});
             data.push(temp);
         });
         $scope.gridOpts.data = data;
+    };
+
+    $scope.gridOpts.columnDefs = $rootScope.columns.RISK_CRITERIA;
+    $scope.gridOpts.exporterCsvFilename = 'riskCriteria.csv';
+    $scope.gridOpts.exporterPdfHeader = { text: "Risk Criteria", style: 'headerStyle' };
+
+    riskCriteriaService.getList($scope.authorId).then(function (myData) {
+        setData(myData);
     });
 
     $scope.gridOpts.onRegisterApi = function (gridApi) {
@@ -208,12 +146,6 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
             }
         };
 
-//        data.push(ruleObject.summary);
-//        $scope.tableData = data;
-
-//        $scope.tableParams.total($scope.tableData.length);
-//        $scope.tableParams.reload();
-
         riskCriteriaService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
             var temp, data = [];
             if (typeof myData.errorCode !== "undefined") {
@@ -222,13 +154,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
             }
 
             riskCriteriaService.getList($scope.authorId).then(function (myData) {
-                var temp, data = [];
-                myData.forEach(function (obj) {
-                    temp = $.extend({}, obj.summary, {id: obj.id});
-                    data.push(temp);
-                });
-
-                $scope.gridOpts.data = data;
+                setData(myData);
                 $interval( function() {
                     var page;
                     if (!$scope.selectedIndex) {
@@ -256,5 +182,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, QueryBuild
         $startDate.datepicker('setDate', new Date($scope.today));
         $startDate.datepicker('update');
         $startDate.val($scope.today.toString());
-    }, 100)
+    }, 100);
+
+    $scope.$scope = $scope;
 });

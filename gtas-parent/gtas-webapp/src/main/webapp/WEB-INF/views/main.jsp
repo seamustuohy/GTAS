@@ -271,9 +271,12 @@
 
         <script src="resources/js/query-builder.js"></script>
         <script src="app.js"></script>
-        <script src="dashboard/DashboardController.js"></script>
+        <!-- Possible Dependency Injections //-->
+        <script src="factory/GridFactory.js"></script>
         <script src="factory/QueryBuilderFactory.js"></script>
         <script src="factory/jQueryBuilderFactory.js"></script>
+        <!-- Controllers & Services //-->
+        <script src="dashboard/DashboardController.js"></script>
         <script src="flights/FlightsIIController.js"></script>
         <script src="flights/FlightsService.js"></script>
         <script src="pax/PaxController.js"></script>
