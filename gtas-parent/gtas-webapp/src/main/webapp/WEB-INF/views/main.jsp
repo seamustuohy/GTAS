@@ -166,52 +166,19 @@
         <div class="container container-main">
         <nav class="navbar navbar-default">
         <div class="container-fluid">
-        <!-- <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-        aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        </button>
-        </div> -->
 
         <div id="navbar" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-left">
-        <li ng-class="{active: $route.current.activeTab == 'dashboard'}"><a href="home.action">Home</a></li>
+        <ul class="nav navbar-nav navbar-left" ng-controller="NavCtrl">
+        <li ng-class="{active: isActive('')}"><a href="home.action">Flights</a></li>
 
         <sec:authorize access="hasAnyAuthority('VIEW_FLIGHT_PASSENGERS','ADMIN')">
-
-            <li class="dropdown">
-            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">View <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-
-            <li><a href="home.action">Flights</a></li>
-            <li><a href="home.action?#/passengers">Passengers</a></li>
-
-            </ul>
-            </li>
+            <li ng-class="{active: isActive('/passengers')}"><a href="home.action?#/passengers">Passengers</a></li>
         </sec:authorize>
-
         <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
-            <li class="dropdown">
-            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">Manage <span
-            class="caret"></span></a>
-            <ul class="dropdown-menu">
-            <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
-                <li><a href="home.action?#/query-builder">Queries</a></li>
-            </sec:authorize>
-            <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
-                <li><a href="home.action?#/risk-criteria">Risk Criteria</a></li>
-            </sec:authorize>
-            <sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'MANAGE_QUERIES', 'MANAGE_WATCHLIST','ADMIN')">
-                <li><a href="home.action?#/watchlists">Watchlists</a></li>
-            </sec:authorize>
-            </ul>
-            </li>
+            <li ng-class="{active: isActive('/query-builder')}"><a href="home.action?#/query-builder">Queries</a></li>
+            <li ng-class="{active: isActive('/risk-criteria')}"><a href="home.action?#/risk-criteria">Risk Criteria</a></li>
+            <li ng-class="{active: isActive('/watchlists')}"><a href="home.action?#/watchlists">Watchlists</a></li>
         </sec:authorize>
-
-
         <sec:authorize access="hasAnyAuthority('MANAGE_USERS','ADMIN')">
             <li class="dropdown">
             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">Admin <span
@@ -278,30 +245,6 @@
         <script src="resources/bower_components/moment/min/moment.min.js"></script>
 
         <script src="resources/bower_components/jquery/dist/jquery.js"></script>
-        <script>
-        //TO SWAP OUT FOR ANGULAR WAY LATER
-        var $navbar = $('#navbar');
-        var markDropDownActive = function (e) {
-        var $this = $(e.currentTarget);
-        $navbar.find('.active').removeClass('active');
-        $this.parents('.dropdown').addClass('active');
-        };
-        $navbar.on('click', 'a:not(".dropdown-toggle")', markDropDownActive);
-        var activateTab = function (route) {
-            $navbar.find('.active').removeClass('active');
-            switch (route) {
-                case '#/query-builder':
-                case '#/risk-criteria':
-                case '#/watchlists':
-                    $navbar.children().eq(0).children().eq(2).addClass('active');
-                    return;
-                case '#/passengers':
-                default:
-                    $navbar.children().eq(0).children().eq(1).addClass('active');
-            }
-        };
-        activateTab(window.location.hash);
-        </script>
         <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
         <script src="resources/bower_components/bootbox/bootbox.js"></script>
@@ -311,12 +254,13 @@
         <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
         <script src='resources/bower_components/pdfmake/build/pdfmake.min.js'></script>
         <script src='resources/bower_components/pdfmake/build/vfs_fonts.js'></script>
+
         <!-- <script src="resources/bower_components/datatables/media/js/jquery.dataTables.min.js"></script> -->
         <script src="resources/bower_components/angular-ui-grid/ui-grid.js"></script>
 
         <script src="resources/js/query-builder.js"></script>
         <script src="app.js"></script>
-        <script src="flights/FlightsController.js"></script>
+        <script src="flights/FlightsIIController.js"></script>
         <script src="flights/FlightsService.js"></script>
         <script src="pax/PaxController.js"></script>
         <script src="pax/PaxService.js"></script>

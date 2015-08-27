@@ -1,48 +1,78 @@
-app.controller('FlightsController', function ($scope, $filter, $q, ngTableParams, flightService, paxService, $rootScope, $injector, jQueryBuilderFactory, riskCriteriaService, $timeout) {
+app.controller('FlightsIIController', function ($scope, $filter, $q, flightService, paxService, $rootScope, $injector, jQueryBuilderFactory, riskCriteriaService, $interval, $timeout) {
     'use strict';
     var self = this,
-        data = [];
+        data = [],
+        paginationPageSize = 10,
+        pdfFormatter = function (docDefinition) {
+            docDefinition.pageMargins = [0, 40, 0, 40];
+            docDefinition.styles.headerStyle = {
+                fontSize: 22,
+                bold: true,
+                alignment: 'center',
+                lineHeight: 1.5
+            };
+            docDefinition.styles.footerStyle = {
+                fontSize: 10,
+                italic: true,
+                alignment: 'center'
+            };
+            return docDefinition;
+        },
+        columns = {
+            FLIGHTS: [
+                {"name": "totalPax", "displayName": "P"},
+                {"name": "ruleHits", "displayName": "H"},
+                {"name": "watchlistHits", "displayName": "L"},
+                {"name": "carrier", "displayName": "Carrier"}, //carrier or carrierCode...?
+                {"name": "flightNumber", "displayName": "Flight #"},
+                {"name": "origin", "displayName": "Origin"},
+                {"name": "originCountry", "displayName": "Country"},
+                {"name": "departureDt", "displayName": "ETD"},
+                {"name": "destination", "displayName": "Destination"},
+                {"name": "destinationCountry", "displayName": "Country"},
+                {"name": "arrivalDt", "displayName": "ETA"}
+            ]
+        };
 
     $scope.hitDetailDisplay = '';
     $scope.ruleHitsRendered = false; // flag to render rule hits only once
 
     $injector.invoke(jQueryBuilderFactory, self, {$scope: $scope});
-
     $scope.loading = true;
-    $scope.tableParams = new ngTableParams(
-        {
-            noPager: true,
-            page: 1,            // show first page
-            count: 10,          // count per page
-            filter: {},
-            sorting: {
-                ruleHits: 'desc'
-                //,
-                //destinationDateTimeSort: 'asc' //, 'number': 'asc'     // initial sorting
-            }
-        }, {
-            //  total: data.length, // length of data
-            getData: function ($defer, params) {
-                flightService.getFlights().then(function (myData) {
-                    data = myData;
-                    //vm.tableParams.total(result.total);
-                    // use build-in angular filter
-                    var filteredData = params.filter() ?
-                        $filter('filter')(data, params.filter()) :
-                        data;
-                    var orderedData = params.sorting() ?
-                        $filter('orderBy')(filteredData, params.orderBy()) :
-                        data;
 
-                    params.total(orderedData.length); // set total for recalc pagination
-                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+    $scope.gridOpts = {
+        columnDefs: columns.FLIGHTS,
+        paginationPageSize: paginationPageSize,
+        paginationPageSizes: [],
+        enableFiltering: true,
+        enableCellEditOnFocus: false,
+        showGridFooter: true,
+        multiSelect: false,
+        enableGridMenu: true,
+        enableSelectAll: false,
+        exporterCsvFilename: 'MySavedQueries.csv',
+        exporterPdfDefaultStyle: {fontSize: 9},
+        exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
+        exporterPdfTableHeaderStyle: {
+            fontSize: 10,
+            bold: true,
+            italics: true
+        },
+        exporterPdfHeader: { text: "My Saved Queries", style: 'headerStyle' },
+        exporterPdfFooter: function (currentPage, pageCount) {
+            return { text: pageOfPages(currentPage, pageCount), style: 'footerStyle' };
+        },
+        exporterPdfCustomFormatter: pdfFormatter,
+        exporterPdfOrientation: 'landscape',
+        exporterPdfPageSize: 'LETTER',
+        exporterPdfMaxGridWidth: 600,
+        exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
+    };
 
-
-                    $scope.loading = false;
-
-                });
-            }
-        });
+    flightService.getFlights().then(function (myData) {
+        $scope.gridOpts.data = myData;
+        $scope.loading = false;
+    });
 
     $scope.updatePax = function (flightId) {
         paxService.getPax(flightId);
