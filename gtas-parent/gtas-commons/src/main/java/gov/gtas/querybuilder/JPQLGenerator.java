@@ -105,11 +105,11 @@ public class JPQLGenerator {
 					}
 					
 					join = generateJoinCondition(joinEntities, queryType);
-					
-					// include a left join on Document if there is no Document condition
-					if(!joinEntities.contains(EntityEnum.DOCUMENT)) {
-						queryPrefix = queryPrefix + Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
-					}
+				}
+				
+				// include a left join on Document if there is no Document condition
+				if(joinEntities != null && !joinEntities.contains(EntityEnum.DOCUMENT)) {
+					queryPrefix = queryPrefix + Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
 				}
 				
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
@@ -165,45 +165,87 @@ public class JPQLGenerator {
 		else if(queryEntity instanceof QueryTerm) {
 			queryTerm = (QueryTerm) queryEntity;
 			
-			String entity = queryTerm.getEntity();
 			String field = queryTerm.getField();
 			String operator = queryTerm.getOperator();
+			EntityEnum entityEnum = EntityEnum.getEnum(queryTerm.getEntity());
+			OperatorEnum opEnum = OperatorEnum.getEnum(operator);
 			
 			// add entity to data structure if not already present
-			// will later be used for generating the join condition
-			if(!joinEntities.contains(EntityEnum.getEnum(entity))) {
-				joinEntities.add(EntityEnum.getEnum(entity));
+			// will be used later for generating the join condition
+			if(!joinEntities.contains(entityEnum)) {
+				joinEntities.add(entityEnum);
 			}
 			
-			positionalParameter.increment(); // parameter position in the query
-			
-			// These four operators don't have any value ex. where firstname IS NULL
-			if(OperatorEnum.IS_EMPTY.toString().equalsIgnoreCase(operator) ||
-					OperatorEnum.IS_NOT_EMPTY.toString().equalsIgnoreCase(operator) ||
-					OperatorEnum.IS_NULL.toString().equalsIgnoreCase(operator) ||
-					OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator)) {
-				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator());
-			}
-			else if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator) ) {
-				List<String> values = null;
-				
-				if(queryTerm.getValue() != null && queryTerm.getValue().length > 0) {
-					values = Arrays.asList(queryTerm.getValue());
-				}
-				
-				if(values != null && values.size() == 2) {
+			if(entityEnum == EntityEnum.HITS) {
+				if(field.equalsIgnoreCase("isRuleHit")) {
 					
-					where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " ?" + positionalParameter);
-					positionalParameter.increment();
-					where.append(" " + Constants.AND + " ?" + positionalParameter);
+					joinEntities.remove(entityEnum);
+					String value = (queryTerm.getValue() != null && queryTerm.getValue().length == 1) ? queryTerm.getValue()[0] : null;
+					
+					if(queryType == EntityEnum.FLIGHT) {
+						if(value.equals("1")) {
+							where.append(EntityEnum.FLIGHT.getAlias() + ".id in (select " + EntityEnum.HITS.getAlias()
+									+ ".flightId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + ")");
+						} else {
+							where.append(EntityEnum.FLIGHT.getAlias() + ".id not in (select " + EntityEnum.HITS.getAlias()
+									+ ".flightId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + ")");
+						}
+					}
+					else if(queryType == EntityEnum.PASSENGER) {
+						if(value.equals("1")) {
+							where.append(EntityEnum.PASSENGER.getAlias() + ".id in (select " + EntityEnum.HITS.getAlias()
+									+ ".passengerId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + ")");
+						} else {
+							where.append(EntityEnum.PASSENGER.getAlias() + ".id not in (select " + EntityEnum.HITS.getAlias()
+									+ ".passengerId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + ")");
+						}
+					}
 				}
-			}
-			else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator) || 
-					OperatorEnum.NOT_IN.toString().equalsIgnoreCase(operator)) {
-				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " (?" + positionalParameter + ")");
-			}
+				else if(field.equalsIgnoreCase("id")) {
+					positionalParameter.increment(); // parameter position in the query
+					
+					if(queryType == EntityEnum.FLIGHT) {
+						where.append("(" + EntityEnum.FLIGHT.getAlias() + ".id = " + EntityEnum.HITS.getAlias() + ".flightId and " 
+								+ EntityEnum.HITS.getAlias() + ".id = ?" + positionalParameter + ")");
+					}
+					else if(queryType == EntityEnum.PASSENGER) {
+						where.append("(" + EntityEnum.PASSENGER.getAlias() + ".id = " + EntityEnum.HITS.getAlias() + ".passengerId and " 
+								+ EntityEnum.HITS.getAlias() + ".id = ?" + positionalParameter + ")");
+					}
+				}
+			} 
 			else {
-				where.append(EntityEnum.getEnum(entity).getAlias() + "." + field + " " + OperatorEnum.getEnum(operator).getOperator() + " ?" + positionalParameter);
+				// These four operators don't have any value ex. where firstname IS NULL
+				if(OperatorEnum.IS_EMPTY.toString().equalsIgnoreCase(operator) ||
+						OperatorEnum.IS_NOT_EMPTY.toString().equalsIgnoreCase(operator) ||
+						OperatorEnum.IS_NULL.toString().equalsIgnoreCase(operator) ||
+						OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator)) {
+					where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator());
+				}
+				else if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator) ) {
+					List<String> values = null;
+					
+					if(queryTerm.getValue() != null && queryTerm.getValue().length > 0) {
+						values = Arrays.asList(queryTerm.getValue());
+					}
+					
+					if(values != null && values.size() == 2) {
+						positionalParameter.increment(); // parameter position in the query
+						
+						where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator() + " ?" + positionalParameter);
+						positionalParameter.increment();
+						where.append(" " + Constants.AND + " ?" + positionalParameter);
+					}
+				}
+				else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator) || 
+						OperatorEnum.NOT_IN.toString().equalsIgnoreCase(operator)) {
+					positionalParameter.increment(); // parameter position in the query
+					where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator() + " (?" + positionalParameter + ")");
+				}
+				else {
+					positionalParameter.increment(); // parameter position in the query
+					where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator() + " ?" + positionalParameter);
+				}
 			}
 		}
 		
@@ -255,7 +297,7 @@ public class JPQLGenerator {
 				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.FREQUENT_FLYER.getEntityReference() + " " + EntityEnum.FREQUENT_FLYER.getAlias();
 				break;
 			case Constants.HITS:
-				joinCondition = "";
+				joinCondition = ", " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias();
 				break;
 	        case Constants.PASSENGER:
 	        	joinCondition = Constants.JOIN + EntityEnum.FLIGHT.getAlias() + EntityEnum.PASSENGER.getEntityReference() + " " + EntityEnum.PASSENGER.getAlias();

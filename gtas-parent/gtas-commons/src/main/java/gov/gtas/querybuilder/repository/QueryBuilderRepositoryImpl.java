@@ -260,17 +260,21 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		else if(queryEntity instanceof QueryTerm) {
 			queryTerm = (QueryTerm) queryEntity;
 			
+			String field = queryTerm.getField();
 			String type = queryTerm.getType();
 			String operator = queryTerm.getOperator();
 			String value = (queryTerm.getValue() != null && queryTerm.getValue().length == 1) ? queryTerm.getValue()[0]:null;
-			
-			positionalParameter.increment();
+			EntityEnum entityEnum = EntityEnum.getEnum(queryTerm.getEntity());
 			
 			// These four operators don't have any value ex. where firstname IS NULL
+			// field isRuleHit doesn't have any value either
 			if(!OperatorEnum.IS_EMPTY.toString().equalsIgnoreCase(operator) &&
 				!OperatorEnum.IS_NOT_EMPTY.toString().equalsIgnoreCase(operator) &&
 				!OperatorEnum.IS_NULL.toString().equalsIgnoreCase(operator) &&
-				!OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator)) {
+				!OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator) &&
+				!(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase("isRuleHit"))) {
+				
+				positionalParameter.increment();
 				
 				if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator) ) {
 					List<String> values = null;
@@ -282,9 +286,15 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					if(values != null && values.size() == 2) {
 						
 						if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
-							query.setParameter(positionalParameter.intValue(), Integer.parseInt(values.get(0)));
-							positionalParameter.increment();
-							query.setParameter(positionalParameter.intValue(), Integer.parseInt(values.get(1)));
+							if(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase("id")) {
+								query.setParameter(positionalParameter.intValue(), Long.parseLong(values.get(0)));
+								positionalParameter.increment();
+								query.setParameter(positionalParameter.intValue(), Long.parseLong(values.get(1)));
+							} else {
+								query.setParameter(positionalParameter.intValue(), Integer.parseInt(values.get(0)));
+								positionalParameter.increment();
+								query.setParameter(positionalParameter.intValue(), Integer.parseInt(values.get(1)));
+							}
 						}
 						else if(TypeEnum.DOUBLE.toString().equalsIgnoreCase(type)) {
 							query.setParameter(positionalParameter.intValue(), Double.parseDouble(values.get(0)));
@@ -317,13 +327,24 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					}
 					
 					if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
-						List<Integer> vals = new ArrayList<>();
-						if(values != null) {
-							for(String val : values) {
-								vals.add(Integer.parseInt(val));
+						if(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase("id")) {
+							
+							List<Long> vals = new ArrayList<>();
+							if(values != null) {
+								for(String val : values) {
+									vals.add(Long.parseLong(val));
+								}
 							}
+							query.setParameter(positionalParameter.intValue(), vals);
+						} else {
+							List<Integer> vals = new ArrayList<>();
+							if(values != null) {
+								for(String val : values) {
+									vals.add(Integer.parseInt(val));
+								}
+							}
+							query.setParameter(positionalParameter.intValue(), vals);
 						}
-						query.setParameter(positionalParameter.intValue(), vals);
 					}
 					else if(TypeEnum.DOUBLE.toString().equalsIgnoreCase(type)) {
 						List<Double> vals = new ArrayList<>();
@@ -370,7 +391,11 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				}
 				else {
 					if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
-						query.setParameter(positionalParameter.intValue(), Integer.parseInt(value));
+						if(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase("id")) {
+							query.setParameter(positionalParameter.intValue(), Long.parseLong(value));
+						} else {
+							query.setParameter(positionalParameter.intValue(), Integer.parseInt(value));
+						}
 					}
 					else if(TypeEnum.DOUBLE.toString().equalsIgnoreCase(type)) {
 						query.setParameter(positionalParameter.intValue(), Double.parseDouble(value));

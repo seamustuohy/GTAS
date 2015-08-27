@@ -412,13 +412,13 @@
       }
     ]
   },
-  "Hits": {
+  "HitsSummary": {
     "label": "HITS",
     "columns": [
       {
-        "id": "Hits.has_rule_hit",
+        "id": "HitsSummary.isRuleHit",
         "label": "Has Rule Hit",
-        "type": "integer",
+        "type": "boolean",
         "operators": "EQUALS",
         "input": "radio",
         "values": {
@@ -431,7 +431,7 @@
         }
       },
       {
-        "id": "Hits.has_list_rule_hit",
+        "id": "HitsSummary.has_list_rule_hit",
         "label": "Has Watch List Hit",
         "type": "integer",
         "operators": "EQUALS",
@@ -446,9 +446,9 @@
         }
       },
       {
-        "id": "Hits.master_list_id",
+        "id": "HitsSummary.id",
         "label": "Rules Hit Id",
-        "type": "string",
+        "type": "integer",
         "operators": [
           "EQUAL",
           "BEGINS_WITH",

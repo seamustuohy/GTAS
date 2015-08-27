@@ -4,9 +4,9 @@ import gov.gtas.enumtype.TypeEnum;
 
 public enum HitsMapping implements IEntityMapping {
 
-	HAS_RULE_HIT ("has_rule_hit", "Has Rule Hit", TypeEnum.BOOLEAN.getType()),
+	HAS_RULE_HIT ("isRuleHit", "Has Rule Hit", TypeEnum.BOOLEAN.getType()),
 	HAS_WATCHLIST_HIT ("", "Has Watch List Hit", TypeEnum.BOOLEAN.getType()), // not yet available
-	RULE_ID ("ruleId", "Rules Hit Id", TypeEnum.STRING.getType());
+	RULE_ID ("id", "Rules Hit Id", TypeEnum.INTEGER.getType());
 	
 	private String fieldName;
 	private String friendlyName;
@@ -19,9 +19,11 @@ public enum HitsMapping implements IEntityMapping {
 		this.fieldType = fieldType;
 		this.displayField = displayField;
 	}
+	
 	private HitsMapping(String fieldName, String friendlyName, String fieldType) {
 		this(fieldName, friendlyName, fieldType, true);
 	}
+	
 	public String getFieldName() {
 		return fieldName;
 	}
@@ -34,9 +36,6 @@ public enum HitsMapping implements IEntityMapping {
 		return fieldType;
 	}
 	
-	/**
-	 * @return the displayField
-	 */
 	public boolean isDisplayField() {
 		return displayField;
 	}
