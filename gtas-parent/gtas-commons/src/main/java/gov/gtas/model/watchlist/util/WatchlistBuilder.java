@@ -1,10 +1,20 @@
 package gov.gtas.model.watchlist.util;
 
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.WatchlistEditEnum;
+import gov.gtas.model.watchlist.Watchlist;
+import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
 import gov.gtas.model.watchlist.json.WatchlistItemSpec;
 import gov.gtas.model.watchlist.json.WatchlistTerm;
+import gov.gtas.querybuilder.mappings.IEntityMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 
 /**
@@ -14,6 +24,97 @@ import gov.gtas.querybuilder.mappings.PassengerMapping;
  *
  */
 public class WatchlistBuilder {
+	private String name;
+	private EntityEnum entity;
+	private List<WatchlistItemSpec> items;
+	private List<WatchlistItem> deleteList;
+	private List<WatchlistItem> createUpdateList;
+	private ObjectMapper mapper;
+	
+	public WatchlistBuilder(final WatchlistSpec spec){
+		this.mapper = new ObjectMapper();
+		if(spec != null){
+			this.name = spec.getName();
+			this.entity = EntityEnum.getEnum(spec.getEntity());
+			this.items = spec.getWatchlistItems();
+		}
+	}
+	
+	public WatchlistBuilder(final Watchlist watchlist, List<WatchlistItem> wlitems){
+		this.mapper = new ObjectMapper();
+		if(watchlist != null){
+			this.name = watchlist.getWatchlistName();
+			this.entity = watchlist.getWatchlistEntity();
+			this.createUpdateList = wlitems;
+		}
+	}
+	public WatchlistSpec buildWatchlistSpec()  throws IOException{
+		WatchlistSpec ret = new WatchlistSpec(this.name, this.entity.getEntityName());
+		for(WatchlistItem item:createUpdateList){
+			WatchlistItemSpec itemSpec = mapper.readValue(item.getItemData(), WatchlistItemSpec.class);
+			itemSpec.setId(item.getId());
+			ret.addWatchlistItem(itemSpec);
+		}
+		return ret;
+	}
+
+	public void buildPersistenceLists()  throws JsonProcessingException{
+		if(items != null && items.size() > 0){
+			deleteList = new LinkedList<WatchlistItem>();
+			createUpdateList = new LinkedList<WatchlistItem>();
+			for(WatchlistItemSpec itemSpec:items){
+				WatchlistEditEnum op = WatchlistEditEnum.getEditEnumForOperationName(itemSpec.getAction());
+				WatchlistItem item = new WatchlistItem();
+				switch(op){
+					case U:
+						item.setId(itemSpec.getId());
+					case C:
+						String json = mapper.writeValueAsString(itemSpec);
+						item.setItemData(json);
+						this.createUpdateList.add(item);
+						break;
+					case D:
+						item.setId(itemSpec.getId());
+						this.deleteList.add(item);
+						break;
+				}
+			}
+			if(deleteList.size() == 0){
+				this.deleteList = null;
+			}
+			if(createUpdateList.size() == 0){
+				this.createUpdateList = null;
+			}
+		}		
+	}
+	
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @return the entity
+	 */
+	public EntityEnum getEntity() {
+		return entity;
+	}
+
+	/**
+	 * @return the deleteList
+	 */
+	public List<WatchlistItem> getDeleteList() {
+		return deleteList;
+	}
+
+	/**
+	 * @return the createUpdateList
+	 */
+	public List<WatchlistItem> getCreateUpdateList() {
+		return createUpdateList;
+	}
 
 	/**
 	 * Creates a sample UDR specification JSON object. (This is used for
