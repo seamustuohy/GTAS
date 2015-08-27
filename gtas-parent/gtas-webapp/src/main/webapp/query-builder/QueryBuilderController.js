@@ -148,6 +148,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, QueryBuild
     $scope.viewType = 'FLIGHT';
 
     $scope.resultsGrid = {
+    	enableColumnResizing: true,
         paginationPageSize: paginationPageSize,
         paginationPageSizes: [],
         enableFiltering: true,
