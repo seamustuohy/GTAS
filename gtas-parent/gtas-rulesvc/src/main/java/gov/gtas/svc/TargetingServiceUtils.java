@@ -100,19 +100,33 @@ public class TargetingServiceUtils {
 	 * @return
 	 */
    public static RuleServiceResult ruleResultPostProcesssing(RuleServiceResult result)	{
+	   //get the list of RuleHitDetail objects returned by the Rule Engine
 	   List<RuleHitDetail> resultList = result.getResultList();
+	   
+	   //create a set to eliminate duplicates
 	   Set<RuleHitDetail> resultSet = new HashSet<RuleHitDetail>();
+	   
 	   for(RuleHitDetail rhd: resultList){
 		   RuleHitDetail hitDetail = rhd;
 		   if(rhd.getFlightId() == null){
+			   //get all the flights for the passenger
+			   // and replicate the RuleHitDetail object, for each flight id
+			   // Note that the RuleHitDetail key is (UdrId, EngineRuleId, PassengerId, FlightId)
 			   Collection<Flight> flights = rhd.getPassenger().getFlights();
 			   if(flights != null && flights.size() > 0){
 				   try{
 					   for(Flight flight: flights){
 						   RuleHitDetail newrhd = rhd.clone();
 						   newrhd.setFlightId(flight.getId());
+						   
+						   //set the passenger object to null
+						   //since its only purpose was to provide flight details.
 						   newrhd.setPassenger(null);
+						   
 						   resultSet.add(newrhd);
+						   
+						   //set the original RuleHitDetail reference to null
+						   // so that it it will not get inserted into the resultset.
 						   hitDetail = null;
 					   }
 				   } catch (CloneNotSupportedException cnse){
@@ -120,11 +134,17 @@ public class TargetingServiceUtils {
 				   }
 			   }
 		   }
+		   //Check that the RuleHitDetail was not already cloned and inserted
+		   // (see line 126 above)
 		   if(hitDetail != null){
+			   //set the passenger object to null
+			   //since its only purpose was to provide flight details.
 			   hitDetail.setPassenger(null);
+			   
 			   resultSet.add(hitDetail);
 		   }
 	   }
+	   //Now create the return list from the set, thus eliminating duplicates.
 	   RuleServiceResult ret = new BasicRuleServiceResult(new LinkedList<RuleHitDetail>(resultSet), result.getExecutionStatistics());
 	   return ret;
    }

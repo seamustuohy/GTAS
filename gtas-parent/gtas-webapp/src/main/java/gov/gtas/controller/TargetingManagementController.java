@@ -18,14 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The REST service end-point controller for creating and managing user Defined
- * Rules (UDR) for targeting.
+ * The REST service end-point controller Targeting Services.
  * 
  * @author GTAS3 (AB)
  *
  */
 @RestController
-//@RequestMapping(Constants.UDR_ROOT)
 public class TargetingManagementController {
 	/*
 	 * The logger for the TargetingManagementController
