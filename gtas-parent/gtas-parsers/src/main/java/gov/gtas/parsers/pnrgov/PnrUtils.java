@@ -136,12 +136,10 @@ public class PnrUtils {
      * @param index 0-based index of the PNR
      * @return text of the nth PNR; null if does not exist.
      */
-    public static String getSinglePnr(String msg, int index) {
+    public static String getSinglePnr(String msg, UNA una, int index) {
         if (StringUtils.isBlank(msg) || index < 0) {
             return null;
         }
-        
-        UNA una = EdifactLexer.getUnaSegment(msg);
         
         String regex = String.format("SRC\\s*\\%c", una.getSegmentTerminator());
         Pattern pattern = Pattern.compile(regex);
@@ -170,7 +168,35 @@ public class PnrUtils {
         }
     }
     
-    
+    public static List<String> getPnrs(String msg) {
+        if (StringUtils.isBlank(msg)) {
+            return null;
+        }
+        
+        UNA una = EdifactLexer.getUnaSegment(msg);
+        int start = EdifactLexer.getStartOfSegment("UNB", msg, una);
+        int end = EdifactLexer.getStartOfSegment("SRC", msg, una);
+        String header = msg.substring(start, end);
+        
+        start = EdifactLexer.getStartOfSegment("UNT", msg, una);
+        String footer = msg.substring(start);
+        
+        List<String> rv = new ArrayList<>();
+        int i = 0;
+        for (;;) {
+            String pnr = getSinglePnr(msg, una, i++);
+            if (pnr == null) {
+                break;
+            } else {
+                StringBuffer buff = new StringBuffer(header);
+                buff.append(pnr).append(footer);
+                rv.add(buff.toString());
+            }
+        }
+        
+        return rv;
+    }
+       
     private static <T> T safeGet(List<T> list, int i) {
         if (i < 0 || i >= list.size()) {
             return null;
