@@ -127,6 +127,31 @@
         /*background-color: #F0C425;*/
         padding: 5px;}
 
+        header {
+        height: 84px;
+        position: relative;
+        }
+        header::before {
+        content: "";
+        display: block;
+        height: 84px;
+        background-color: rgb(43,127,184);
+        background-image: url(resources/img/gtas_logo.png);
+        background-repeat: no-repeat;
+        background-position: top left;
+        position: relative;
+        top: 0;
+        }
+        header::after {
+        content: "";
+        display: block;
+        background-color: rgba(167,169,172, 1);
+        height: 10px;
+        position: relative;
+        bottom: 10px;
+        margin-left: 1170px;
+        }
+
         .glyphiconFlightPax:hover, .glyphiconFlightPax:focus {
         color: #222;
         /* background-color: #FFFFFF;  #1F2E54 */
@@ -150,20 +175,9 @@
         </head>
 
         <body>
-        <header>
-        <div class="container">
-        <div class="row">
-        <div class="col-md-6">
-        <img class="logo" src="resources/img/gtas_logo.png" width="1140px">
-        </div>
-        <div class="col-md-6">
+        <header></header>
 
-        </div>
-        </div>
-        </div>
-        </header>
-
-        <div class="container container-main">
+        <div>
         <nav class="navbar navbar-default">
         <div id="navbar">
         <ul class="nav navbar-nav navbar-left" ng-controller="NavCtrl">
@@ -208,10 +222,8 @@
 
         </ul>
 
-        <ul class="nav navbar-nav navbar-right">
-        <li style="position: right;">
-        <a href="logout.action">Logout</a>
-        </li>
+        <ul class="nav navbar-nav navbar-right" style="margin:0;">
+        <li><a href="logout.action">Logout</a></li>
         </ul>
         </div>
 
