@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class WatchlistMappingTest {
     private static final String TEST_JSON =
-    	"{\"@class\": \"gov.gtas.model.watchlist.json.Watchlist\","
+    	"{\"@class\": \"gov.gtas.model.watchlist.json.WatchlistSpec\","
        +" \"name\": \"PASSENGER_WL\","
        +" \"entity\": \"PASSENGER\","
        +"\"watchlistItems\": ["
@@ -73,12 +73,12 @@ public class WatchlistMappingTest {
 	public void testUdrSpecToJson() {
 		try{
 		ObjectMapper mapper = new ObjectMapper();
-		Watchlist testObj = WatchlistBuilder.createSampleWatchlist();
+		WatchlistSpec testObj = WatchlistBuilder.createSampleWatchlist();
 		
 		//serialize
 		String json=mapper.writeValueAsString(testObj);
 	    //de-serialize
-		mapper.readValue(json, Watchlist.class);
+		mapper.readValue(json, WatchlistSpec.class);
 		
 		} catch(Exception ex){
 			ex.printStackTrace();
@@ -90,14 +90,14 @@ public class WatchlistMappingTest {
 		try{
 			ObjectMapper mapper = new ObjectMapper();
 		    //de-serialize
-			Watchlist testObj = mapper.readValue(TEST_JSON, Watchlist.class);	
+			WatchlistSpec testObj = mapper.readValue(TEST_JSON, WatchlistSpec.class);	
 			assertNotNull(testObj);
 			assertEquals("PASSENGER_WL", testObj.getName());
 			assertEquals("PASSENGER", testObj.getEntity());
-			List<WatchlistItem> items = testObj.getWatchlistItems();
+			List<WatchlistItemSpec> items = testObj.getWatchlistItems();
 			assertNotNull(items);
 			assertEquals(3, items.size());
-			for(WatchlistItem item:items){
+			for(WatchlistItemSpec item:items){
 				if(item.getAction().equalsIgnoreCase(WatchlistEditEnum.C.getOperationName())){
 					assertNull(item.getId());
 					WatchlistTerm[] terms = item.getTerms();

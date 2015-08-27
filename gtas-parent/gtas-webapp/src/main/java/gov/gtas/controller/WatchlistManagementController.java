@@ -4,7 +4,7 @@ import gov.gtas.constants.Constants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.json.JsonServiceResponse;
-import gov.gtas.model.watchlist.json.Watchlist;
+import gov.gtas.model.watchlist.json.WatchlistSpec;
 import gov.gtas.model.watchlist.util.WatchlistBuilder;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.WatchlistService;
@@ -41,9 +41,9 @@ public class WatchlistManagementController {
 	private RuleManagementService ruleManagementService;
 
 	@RequestMapping(value = Constants.WL_GET_BY_NAME, method = RequestMethod.GET)
-	public Watchlist getWatchlist(@PathVariable String name) {
+	public WatchlistSpec getWatchlist(@PathVariable String name) {
 		System.out.println("******** name =" + name);
-		Watchlist resp = watchlistService.fetchWatchlist(name);
+		WatchlistSpec resp = watchlistService.fetchWatchlist(name);
 		return resp;
 	}
 
@@ -69,7 +69,7 @@ public class WatchlistManagementController {
 //	}
 	@RequestMapping(value = Constants.WL_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse createWatchlist(
-			@PathVariable String userId, @RequestBody Watchlist inputSpec) {
+			@PathVariable String userId, @RequestBody WatchlistSpec inputSpec) {
 
 		logger.info("******** Received UDR Create request by user =" + userId);
 		if (inputSpec == null) {
@@ -87,7 +87,7 @@ public class WatchlistManagementController {
 
 	@RequestMapping(value = Constants.WL_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse updateUDR(
-			@PathVariable String userId, @RequestBody Watchlist inputSpec) {
+			@PathVariable String userId, @RequestBody WatchlistSpec inputSpec) {
 		logger.info("******** Received UDR Update request by user =" + userId);
 						
 		JsonServiceResponse resp = watchlistService.createOrUpdateWatchlist(userId, inputSpec);
@@ -100,8 +100,8 @@ public class WatchlistManagementController {
      * @return
      */
 	@RequestMapping(value = Constants.WL_TEST, method = RequestMethod.GET)
-	public Watchlist getTestWatchlist() {
-		Watchlist resp = WatchlistBuilder.createSampleWatchlist();
+	public WatchlistSpec getTestWatchlist() {
+		WatchlistSpec resp = WatchlistBuilder.createSampleWatchlist();
 		return resp;
 	}
 

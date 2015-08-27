@@ -2,8 +2,8 @@ package gov.gtas.model.watchlist.util;
 
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.WatchlistEditEnum;
-import gov.gtas.model.watchlist.json.Watchlist;
-import gov.gtas.model.watchlist.json.WatchlistItem;
+import gov.gtas.model.watchlist.json.WatchlistSpec;
+import gov.gtas.model.watchlist.json.WatchlistItemSpec;
 import gov.gtas.model.watchlist.json.WatchlistTerm;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 
@@ -24,10 +24,10 @@ public class WatchlistBuilder {
 	 * @param description
 	 * @return
 	 */
-	public static Watchlist createSampleWatchlist() {
-		Watchlist ret = new Watchlist("Passenger Watch List 1", EntityEnum.PASSENGER.getEntityName().toUpperCase());
+	public static WatchlistSpec createSampleWatchlist() {
+		WatchlistSpec ret = new WatchlistSpec("Passenger Watch List 1", EntityEnum.PASSENGER.getEntityName().toUpperCase());
 		ret.addWatchlistItem(
-				new WatchlistItem(null, WatchlistEditEnum.C.getOperationName(),
+				new WatchlistItemSpec(null, WatchlistEditEnum.C.getOperationName(),
 				new WatchlistTerm[]{
 				    new WatchlistTerm( 
 				      EntityEnum.PASSENGER.getEntityName().toUpperCase(),
@@ -43,7 +43,7 @@ public class WatchlistBuilder {
 				      PassengerMapping.DOB.getFieldType(), "1747-07-06")
 				}));
 		ret.addWatchlistItem(
-				new WatchlistItem(32L, WatchlistEditEnum.U.getOperationName(),
+				new WatchlistItemSpec(32L, WatchlistEditEnum.U.getOperationName(),
 				new WatchlistTerm[]{
 				    new WatchlistTerm( 
 				      EntityEnum.PASSENGER.getEntityName().toUpperCase(),
@@ -59,7 +59,7 @@ public class WatchlistBuilder {
 				      PassengerMapping.DOB.getFieldType(), "1966-09-13")
 				}));
 		ret.addWatchlistItem(
-				new WatchlistItem(25L, WatchlistEditEnum.D.getOperationName(), null));
+				new WatchlistItemSpec(25L, WatchlistEditEnum.D.getOperationName(), null));
 		return ret;
 	}
 
