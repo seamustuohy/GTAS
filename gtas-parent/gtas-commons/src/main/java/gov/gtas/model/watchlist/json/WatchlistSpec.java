@@ -16,21 +16,37 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  *
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-public class Watchlist implements Serializable {
+public class WatchlistSpec implements Serializable {
 	/**
 	 * serial version UID.
 	 */
 	private static final long serialVersionUID = -182544361080662L;
 
+	private String name;
 	private String entity;
-	private List<WatchlistItem> watchlistItems;
+	private List<WatchlistItemSpec> watchlistItems;
 
-	public Watchlist() {
+	public WatchlistSpec() {
 	}
 
-	public Watchlist(String entity) {
+	public WatchlistSpec(String name, String entity) {
+		this.name = name;
 		this.entity = entity;
-		watchlistItems = new LinkedList<WatchlistItem>();
+		watchlistItems = new LinkedList<WatchlistItemSpec>();
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -41,9 +57,16 @@ public class Watchlist implements Serializable {
 	}
 
 	/**
+	 * @param entity the entity to set
+	 */
+	public void setEntity(String entity) {
+		this.entity = entity;
+	}
+
+	/**
 	 * @return the watchlistItems
 	 */
-	public List<WatchlistItem> getWatchlistItems() {
+	public List<WatchlistItemSpec> getWatchlistItems() {
 		return watchlistItems;
 	}
 
@@ -51,7 +74,7 @@ public class Watchlist implements Serializable {
 	 * @param watchlistItems
 	 *            the watchlistItems to set
 	 */
-	public void addWatchlistItem(WatchlistItem watchlistItem) {
+	public void addWatchlistItem(WatchlistItemSpec watchlistItem) {
 		this.watchlistItems.add(watchlistItem);
 	}
 

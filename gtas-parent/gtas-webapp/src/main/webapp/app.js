@@ -4,6 +4,7 @@ var app = angular.module('myApp', [
     'ngTable',
     'spring-security-csrf-token-interceptor',
     'ui.grid',
+    'ui.grid.resizeColumns',
     'ui.grid.pagination',
     'ui.grid.edit',
     'ui.grid.rowEdit',

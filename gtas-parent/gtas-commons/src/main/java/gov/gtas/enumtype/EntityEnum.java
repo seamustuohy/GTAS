@@ -9,7 +9,7 @@ public enum EntityEnum {
 		EMAIL ("EMAIL", "Email", "e", ".emails"),
 		FLIGHT ("FLIGHT", "Flight", "f", ".flights"),
 		FREQUENT_FLYER ("FREQUENT FLYER", "FrequentFlyer", "ff", ".frequentFlyers"),
-		HITS ("HITS", "Hits", "h", ""),
+		HITS ("HITS", "HitsSummary", "h", ""),
 		PASSENGER("PASSENGER", "Passenger", "p", ".passengers"),
 		PHONE ("PHONE", "Phone", "ph", ".phones"),
 		PNR ("PNR", "Pnr", "pnr", ".pnrs"),

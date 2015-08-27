@@ -3,9 +3,6 @@ package gov.gtas.controller;
 import gov.gtas.constants.Constants;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.Status;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Passenger;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
@@ -14,24 +11,16 @@ import gov.gtas.querybuilder.mappings.QueryBuilderMapping;
 import gov.gtas.querybuilder.mappings.QueryBuilderMappingFactory;
 import gov.gtas.querybuilder.model.IQueryResponse;
 import gov.gtas.querybuilder.model.IQueryResult;
+import gov.gtas.querybuilder.model.IUserQueryResult;
 import gov.gtas.querybuilder.model.QueryErrorResponse;
-import gov.gtas.querybuilder.model.QueryFlightResult;
-import gov.gtas.querybuilder.model.QueryPassengerResult;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.QueryResponse;
-import gov.gtas.querybuilder.model.QueryResult;
-import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.service.QueryBuilderService;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.validation.ConstraintViolationException;
 
@@ -47,12 +36,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 /**
- * 
- * @author GTAS5
- *
+ * Controller for Query Builder
  */
 
 @RestController
@@ -63,13 +48,25 @@ public class QueryBuilderController {
 	@Autowired
 	QueryBuilderService queryService;
 
+	/**
+	 * This method generates the Entity and Field mappings for the 
+	 * Rule and Query UI
+	 * @return
+	 */
 	@RequestMapping(value = Constants.INIT, method = RequestMethod.GET)
 	public Map<String, QueryBuilderMapping> initQueryBuilder() {
 		
-		logger.debug("Getting query builder model");
+		logger.debug("Getting query builder UI mappings");
 		return getQueryBuilderMapping();
 	}
 	
+	/**
+	 * This method makes a call to the method in the service layer to execute the 
+	 * user defined query against Flight data
+	 * @param queryObject
+	 * @return 
+	 * @throws InvalidQueryException
+	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.POST)
 	public IQueryResponse runFlightQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
 		IQueryResponse response = new QueryResponse();
@@ -80,6 +77,13 @@ public class QueryBuilderController {
 		return response;
 	}
 	
+	/**
+	 * This method makes a call to the method in the service layer to execute the 
+	 * user defined query against Passenger data
+	 * @param queryObject
+	 * @return
+	 * @throws InvalidQueryException
+	 */
 	@RequestMapping(value = Constants.RUN_QUERY_PASSENGER_URI, method = RequestMethod.POST)
 	public IQueryResponse runPassengerQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
 		IQueryResponse response = new QueryResponse();
@@ -90,10 +94,17 @@ public class QueryBuilderController {
 		return response;
 	}
 	
+	/**
+	 * This method makes a call to the method in the service layer to save the user defined query
+	 * @param queryRequest
+	 * @return
+	 * @throws InvalidQueryException
+	 * @throws QueryAlreadyExistsException
+	 */
 	@RequestMapping(value = Constants.SAVE_QUERY_URI, method = RequestMethod.POST)
 	public IQueryResponse saveQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
 		IQueryResponse response = new QueryResponse();
-		List<IQueryResult> resultList = new ArrayList<>();
+		List<IUserQueryResult> resultList = new ArrayList<>();
 
 		resultList.add(queryService.saveQuery(queryRequest));
 		
@@ -102,10 +113,18 @@ public class QueryBuilderController {
 		return response;
 	}
 
+	/**
+	 * This method makes a call to the method in the service layer to update a user defined query
+	 * @param queryRequest
+	 * @return
+	 * @throws InvalidQueryException
+	 * @throws QueryAlreadyExistsException
+	 * @throws QueryDoesNotExistException
+	 */
 	@RequestMapping(value = Constants.EDIT_QUERY_URI, method = RequestMethod.PUT)
 	public IQueryResponse editQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
 		IQueryResponse response = new QueryResponse();
-		List<IQueryResult> resultList = new ArrayList<>();
+		List<IUserQueryResult> resultList = new ArrayList<>();
 			
 		resultList.add(queryService.editQuery(queryRequest));
 		
@@ -114,12 +133,19 @@ public class QueryBuilderController {
 		return response;
 	}
 	
+	/**
+	 * This method makes a call to the method in the service layer to list a user's 
+	 * query
+	 * @param userId
+	 * @return
+	 * @throws InvalidQueryException
+	 */
 	@RequestMapping(value = Constants.LIST_QUERY_URI, method = RequestMethod.GET)
 	public IQueryResponse listQueryByUser(@RequestParam("userId") String userId) throws InvalidQueryException {
 		IQueryResponse response = new QueryResponse();
 		
 		if(userId != null) {
-			List<IQueryResult> resultList = new ArrayList<>();
+			List<IUserQueryResult> resultList = new ArrayList<>();
 			
 			resultList = queryService.listQueryByUser(userId);
 			
@@ -129,6 +155,13 @@ public class QueryBuilderController {
 		return response;
 	}
 	
+	/**
+	 * This method makes a call to the method in the service layer to delete a user's query
+	 * @param userId the id of the user whose query will be deleted
+	 * @param id the id of the query to be deleted
+	 * @return
+	 * @throws QueryDoesNotExistException
+	 */
 	@RequestMapping(value = Constants.DELETE_QUERY_URI, method = RequestMethod.DELETE)
 	public IQueryResponse deleteQuery(@RequestParam("userId") String userId, @RequestParam("id") int id) throws QueryDoesNotExistException {
 		IQueryResponse response = new QueryResponse();
@@ -141,7 +174,7 @@ public class QueryBuilderController {
 		return response;
 	}
 	
-	private IQueryResponse createQueryResponse(Status status, String message, List<IQueryResult> resultList) {
+	private IQueryResponse createQueryResponse(Status status, String message, Object resultList) {
 		QueryResponse response = new QueryResponse();
 		
 		response.setStatus(status);

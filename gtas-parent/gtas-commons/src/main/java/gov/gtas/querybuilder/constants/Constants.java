@@ -20,7 +20,7 @@ public final class Constants {
 	public static final String EMAIL = "EMAIL";
 	public static final String FLIGHT = "FLIGHT";
 	public static final String FREQUENTFLYER = "FREQUENTFLYER";
-	public static final String HITS = "HITS";
+	public static final String HITS = "HITSSUMMARY";
 	public static final String PASSENGER = "PASSENGER";
 	public static final String PHONE = "PHONE";
 	public static final String PNR = "PNR";

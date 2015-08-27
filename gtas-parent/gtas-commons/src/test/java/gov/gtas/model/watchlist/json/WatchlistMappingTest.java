@@ -2,7 +2,12 @@ package gov.gtas.model.watchlist.json;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
+
+import java.util.List;
+
+import gov.gtas.enumtype.WatchlistEditEnum;
 import gov.gtas.model.watchlist.util.WatchlistBuilder;
 
 import org.junit.After;
@@ -13,11 +18,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class WatchlistMappingTest {
     private static final String TEST_JSON =
-    	"{\"@class\": \"gov.gtas.model.watchlist.json.Watchlist\","
+    	"{\"@class\": \"gov.gtas.model.watchlist.json.WatchlistSpec\","
+       +" \"name\": \"PASSENGER_WL\","
        +" \"entity\": \"PASSENGER\","
        +"\"watchlistItems\": ["
         +"    {"
-        //+ "\"@class\": \"gov.gtas.model.watchlist.json.WatchlistItem\","
+        +"        \"id\": null,"
         +"        \"action\": \"Create\","
         +"        \"terms\": ["
         +"            {  \"type\": \"string\","
@@ -32,10 +38,15 @@ public class WatchlistMappingTest {
          +"              \"entity\": \"PASSENGER\","
           +"              \"field\": \"dob\","
           +"              \"value\": \"1747-07-06\"  } ]},"
- 
+
+        +"    {"
+        +"        \"id\": 29,"
+        +"        \"action\": \"Delete\","
+        +"        \"terms\": null},"
+
         +"  { "
-        //+ "\"@class\": \"gov.gtas.model.watchlist.json.WatchlistItem\","
-        +"        \"action\": \"Create\","
+        +"        \"id\": 32,"
+        +"        \"action\": \"Update\","
         +"        \"terms\": [ {  \"type\": \"string\","
          +"               \"entity\": \"PASSENGER\","
                         +"               \"field\": \"firstName\","
@@ -62,12 +73,12 @@ public class WatchlistMappingTest {
 	public void testUdrSpecToJson() {
 		try{
 		ObjectMapper mapper = new ObjectMapper();
-		Watchlist testObj = WatchlistBuilder.createSampleWatchlist();
+		WatchlistSpec testObj = WatchlistBuilder.createSampleWatchlist();
 		
 		//serialize
 		String json=mapper.writeValueAsString(testObj);
 	    //de-serialize
-		mapper.readValue(json, Watchlist.class);
+		mapper.readValue(json, WatchlistSpec.class);
 		
 		} catch(Exception ex){
 			ex.printStackTrace();
@@ -79,9 +90,32 @@ public class WatchlistMappingTest {
 		try{
 			ObjectMapper mapper = new ObjectMapper();
 		    //de-serialize
-			Watchlist testObj = mapper.readValue(TEST_JSON, Watchlist.class);	
+			WatchlistSpec testObj = mapper.readValue(TEST_JSON, WatchlistSpec.class);	
 			assertNotNull(testObj);
+			assertEquals("PASSENGER_WL", testObj.getName());
 			assertEquals("PASSENGER", testObj.getEntity());
+			List<WatchlistItemSpec> items = testObj.getWatchlistItems();
+			assertNotNull(items);
+			assertEquals(3, items.size());
+			for(WatchlistItemSpec item:items){
+				if(item.getAction().equalsIgnoreCase(WatchlistEditEnum.C.getOperationName())){
+					assertNull(item.getId());
+					WatchlistTerm[] terms = item.getTerms();
+					assertNotNull(terms);
+					assertEquals(3, terms.length);
+				} else if(item.getAction().equalsIgnoreCase(WatchlistEditEnum.U.getOperationName())){
+					assertNotNull(item.getId());
+					WatchlistTerm[] terms = item.getTerms();
+					assertNotNull(terms);
+					assertEquals(3, terms.length);
+				} else if(item.getAction().equalsIgnoreCase(WatchlistEditEnum.D.getOperationName())){
+					assertNotNull(item.getId());
+					WatchlistTerm[] terms = item.getTerms();
+					assertNull(terms);
+				} else {
+						fail("Unexpected operation");
+				}
+			}
 		} catch(Exception ex){
 			ex.printStackTrace();
 			fail("Got exception");
