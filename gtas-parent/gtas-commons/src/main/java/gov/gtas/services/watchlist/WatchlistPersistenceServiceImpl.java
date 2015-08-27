@@ -12,6 +12,7 @@ import gov.gtas.repository.watchlist.WatchlistRepository;
 import gov.gtas.services.UserService;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -92,8 +93,13 @@ public class WatchlistPersistenceServiceImpl implements
 	 * @see gov.gtas.services.watchlist.WatchlistPersistenceService#findAll()
 	 */
 	@Override
-	public Iterable<Watchlist> findAll() {
-		return watchlistRepository.findAll();
+	public List<Watchlist> findAllSummary() {
+		List<Object[]> summaryList = watchlistRepository.fetchWatchlistSummary();
+		List<Watchlist> ret = new LinkedList<Watchlist>();
+		for(Object[] line:summaryList){
+			ret.add(new Watchlist(line[0].toString(), (EntityEnum)line[1]));
+		}
+		return ret;
 	}
 
 

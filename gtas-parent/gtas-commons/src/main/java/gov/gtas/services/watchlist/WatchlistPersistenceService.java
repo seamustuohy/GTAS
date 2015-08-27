@@ -39,7 +39,7 @@ public interface WatchlistPersistenceService {
 	 * 
 	 * @return list of all watch lists.
 	 */
-	public Iterable<Watchlist> findAll();
+	public List<Watchlist> findAllSummary();
 
 	/**
 	 * Find and return the list of all watch list items.

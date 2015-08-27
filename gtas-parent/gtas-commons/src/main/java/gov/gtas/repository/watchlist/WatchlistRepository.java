@@ -25,4 +25,7 @@ public interface WatchlistRepository extends CrudRepository<Watchlist, Long>, Jp
 
 	@Query("SELECT wl FROM Watchlist wl WHERE wl.compileTimestamp is null or wl.editTimestamp > wl.compileTimestamp")
 	public List<Watchlist> fetchUncompiledWatchlists();
+	
+	@Query("SELECT watchlistName, watchlistEntity FROM Watchlist")
+	public List<Object[]> fetchWatchlistSummary();
 }
