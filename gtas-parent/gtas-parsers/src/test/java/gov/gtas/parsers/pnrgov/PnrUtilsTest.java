@@ -1,7 +1,11 @@
 package gov.gtas.parsers.pnrgov;
 
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
+import gov.gtas.parsers.edifact.EdifactLexer;
+import gov.gtas.parsers.edifact.segment.UNA;
 
 public class PnrUtilsTest {
 
@@ -23,13 +27,14 @@ public class PnrUtilsTest {
                 "UNT+135+1'\n" + 
                 "UNZ+1+020A07'";
 
-        assertEquals(null, PnrUtils.getSinglePnr(null, -1));
-        assertEquals(null, PnrUtils.getSinglePnr("", -1));
-        assertEquals(null, PnrUtils.getSinglePnr("\n", -1));                
-        assertEquals(null, PnrUtils.getSinglePnr(msg, -1));
-        assertEquals("SRC'RCI+DL:MFN4TI1'", PnrUtils.getSinglePnr(msg, 0));
-        assertEquals("SRC'RCI+DL:MFN4TI2'", PnrUtils.getSinglePnr(msg, 1));
-        assertEquals("SRC'RCI+DL:MFN4TI3'", PnrUtils.getSinglePnr(msg, 2));
-        assertEquals(null, PnrUtils.getSinglePnr(msg, 3));
+        UNA una = EdifactLexer.getUnaSegment(msg);
+        assertEquals(null, PnrUtils.getSinglePnr(null, una, -1));
+        assertEquals(null, PnrUtils.getSinglePnr("", una, -1));
+        assertEquals(null, PnrUtils.getSinglePnr("\n", una, -1));                
+        assertEquals(null, PnrUtils.getSinglePnr(msg, una, -1));
+        assertEquals("SRC'RCI+DL:MFN4TI1'", PnrUtils.getSinglePnr(msg, una, 0));
+        assertEquals("SRC'RCI+DL:MFN4TI2'", PnrUtils.getSinglePnr(msg, una, 1));
+        assertEquals("SRC'RCI+DL:MFN4TI3'", PnrUtils.getSinglePnr(msg, una, 2));
+        assertEquals(null, PnrUtils.getSinglePnr(msg, una, 3));
     }
 }

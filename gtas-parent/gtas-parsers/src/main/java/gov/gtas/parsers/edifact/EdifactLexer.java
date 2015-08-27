@@ -39,7 +39,14 @@ public class EdifactLexer {
      * @return the starting index of the 'segmentName' in 'msg'.
      */
     public static int getStartOfSegment(String segmentName, String msg, UNA una) {
-        String regex = String.format("%s\\s*\\%c", segmentName, una.getDataElementSeparator());
+        String format = "%s\\s*\\%c";
+        String regex = String.format(format, segmentName, una.getDataElementSeparator());
+        int i = ParseUtils.indexOfRegex(regex, msg);
+        if (i != -1) {
+            return i;
+        }
+
+        regex = String.format(format, segmentName, una.getSegmentTerminator());
         return ParseUtils.indexOfRegex(regex, msg);
     }
     
@@ -49,17 +56,17 @@ public class EdifactLexer {
      */
     public static String getMessagePayload(String msg, String startSegment, String endSegment) {
         UNA una = getUnaSegment(msg);
-        int bgmIndex = getStartOfSegment(startSegment, msg, una);
-        if (bgmIndex == -1) {
+        int start = getStartOfSegment(startSegment, msg, una);
+        if (start == -1) {
             return null;
         }
 
-        int untIndex = getStartOfSegment(endSegment, msg, una);
-        if (untIndex == -1) {
+        int end = getStartOfSegment(endSegment, msg, una);
+        if (end == -1) {
             return null;
         }
         
-        return msg.substring(bgmIndex, untIndex);
+        return msg.substring(start, end);
     }
     
     public LinkedList<Segment> tokenize(String msg) throws ParseException {
