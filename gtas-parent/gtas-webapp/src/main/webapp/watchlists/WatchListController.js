@@ -71,8 +71,8 @@ app.controller('WatchListController', function ($scope, $filter, $q, watchListSe
     $scope.updateGrid = function (listName) {
         $scope.activeTab = listName;
         $scope.gridOpts.columnDefs = $scope.tabfields[listName].columns;
-        $scope.resultsGrid.exporterCsvFilename = 'watchlist-' + listName + '.csv';
-        $scope.resultsGrid.exporterPdfHeader.text = 'Watchlist: ' + listName;
+        $scope.gridOpts.exporterCsvFilename = 'watchlist-' + listName + '.csv';
+        $scope.gridOpts.exporterPdfHeader.text = 'Watchlist: ' + listName;
         $scope.gridOpts.data = $scope.tabfields[listName].data;
     };
     $scope.gridOpts = {
