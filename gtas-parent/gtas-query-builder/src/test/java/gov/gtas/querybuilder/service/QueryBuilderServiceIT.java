@@ -3,6 +3,7 @@ package gov.gtas.querybuilder.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.Flight;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
@@ -19,6 +20,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.junit.After;
@@ -65,14 +67,6 @@ public class QueryBuilderServiceIT {
 		deleteAllRecords();
 	}
 	
-
-	@Transactional
-	private void deleteAllRecords() {
-		// delete all records from the user_query table
-		Query deleteQuery = entityManager.createQuery("delete from UserQuery");
-		deleteQuery.executeUpdate();
-	}
-
 	@Test
 	@Transactional
 	public void testSaveQuery() throws QueryAlreadyExistsException, InvalidQueryException, QueryDoesNotExistException {
@@ -249,6 +243,7 @@ public class QueryBuilderServiceIT {
 	//----------------------------------------
 //	@Test
 	public void testRunQueryAgainstFlights() throws InvalidQueryException  {
+		
 	}
 
 //	@Test
@@ -291,6 +286,13 @@ public class QueryBuilderServiceIT {
 	public void testSimpleBetweenQueryAgainstPassengers() throws InvalidQueryException {
 	}
 		
+	@Transactional
+	private void deleteAllRecords() {
+		// delete all records from the user_query table
+		Query deleteQuery = entityManager.createQuery("delete from UserQuery");
+		deleteQuery.executeUpdate();
+	}
+
 	private QueryObject buildSimpleBetweenQuery() {
 		QueryTerm rule = new QueryTerm();
 		List<QueryEntity> rules = new ArrayList<>();
