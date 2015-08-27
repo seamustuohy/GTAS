@@ -31,6 +31,15 @@ public final class Constants {
 	public static final String TARGET_ALL_PNR = "/pnr";
 	public static final String TARGET_ALL_MSG = "/target";
 	
+	//WATCH LIST URI
+	public static final String WL_ROOT = "/wl";
+	public static final String WL_GET_BY_AUTHOR_ENTITY = "/{authorId}/{entity}";
+	public static final String WL_GETALL = "/list";
+	public static final String WL_GETDRL = "/drl";
+	public static final String WL_POST = "/{authorId}";
+	public static final String WL_PUT = "/{authorId}";
+	public static final String WL_TEST = "/testwl";
+
 	
 	// Query Messages
 	public static final String QUERY_SAVED_SUCCESS_MSG = "Query saved successfully";
