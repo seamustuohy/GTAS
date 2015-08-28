@@ -91,10 +91,6 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, m
         $scope.loading = false;
     });
 
-    $scope.updatePax = function (flightId) {
-        paxService.getPax(flightId);
-    };
-
     // Rule UI Modal Section
 
     $scope.viewRuleByID = function (ruleID) {
@@ -105,15 +101,11 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, m
         $scope.getRuleObject(data);
     });
 
-
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
 
-    // GET RULE OBJECT FUNCTION    
     $scope.getRuleObject = function (ruleID) {
         riskCriteriaService.loadRuleById(ruleID).then(function (myData) {
             $scope.$builder.queryBuilder('readOnlyRules', myData.details);
-            //console.log(myData);
-
             $scope.hitDetailDisplay = myData.summary.title;
             document.getElementById("QBModal").style.display = "block";
 
