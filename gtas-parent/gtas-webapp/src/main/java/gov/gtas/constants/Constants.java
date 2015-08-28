@@ -36,8 +36,8 @@ public final class Constants {
 	public static final String WL_GET_BY_NAME = "/{name}";
 	public static final String WL_GETALL = "/list";
 	public static final String WL_GETDRL = "/drl";
-	public static final String WL_POST = "/{authorId}";
-	public static final String WL_PUT = "/{authorId}";
+	public static final String WL_POST = "/{userId}";
+	public static final String WL_PUT = "/{userId}";
 	public static final String WL_TEST = "/testwl";
 
 	

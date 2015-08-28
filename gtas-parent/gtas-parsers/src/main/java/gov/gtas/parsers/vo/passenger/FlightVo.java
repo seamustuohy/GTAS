@@ -2,12 +2,14 @@ package gov.gtas.parsers.vo.passenger;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.validators.Validatable;
 
-public class FlightVo {
+public class FlightVo implements Validatable{
     private String flightId;
     private String carrier;
     private String flightNumber;
@@ -116,5 +118,15 @@ public class FlightVo {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
-    }    
+    }
+
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.destination) || StringUtils.isBlank(this.origin) 
+				|| StringUtils.isBlank(this.flightNumber) || this.flightDate == null 
+				|| StringUtils.isBlank(this.carrier)){
+			return false;
+		}
+		return true;
+	}  
 }

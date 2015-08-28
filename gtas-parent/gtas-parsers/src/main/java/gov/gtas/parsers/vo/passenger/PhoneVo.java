@@ -1,9 +1,12 @@
 package gov.gtas.parsers.vo.passenger;
 
+import gov.gtas.parsers.validators.Validatable;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class PhoneVo {
+public class PhoneVo implements Validatable{
     private String number;
     private String city;
     
@@ -24,4 +27,11 @@ public class PhoneVo {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.number) ){
+			return false;
+		}
+		return true;
+	}
 }

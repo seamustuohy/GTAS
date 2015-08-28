@@ -1,16 +1,19 @@
 package gov.gtas.delegates.vo;
 
 import gov.gtas.model.Pnr;
+import gov.gtas.validators.Validatable;
 
-import java.io.Serializable;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+public class AddressVo extends BaseVo implements Validatable {
 
-public class AddressVo extends BaseVo implements Serializable {
-
+	//TODO taken for compatability with parser code-remove after refacroring
+	private String type;
+	//TODO taken for compatability with parser code-remove after refacroring
+	private String phoneNumber;
+	
 	private String addressType;
 	private String line1;
 	private String line2;
@@ -20,6 +23,20 @@ public class AddressVo extends BaseVo implements Serializable {
 	private String country;
 	private String postalCode;
     private Pnr pnrData;
+    
+    
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 	public String getAddressType() {
 		return addressType;
 	}
@@ -73,6 +90,20 @@ public class AddressVo extends BaseVo implements Serializable {
 	}
 	public void setPnrData(Pnr pnrData) {
 		this.pnrData = pnrData;
+	}
+	
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.postalCode) || StringUtils.isBlank(this.state) 
+				|| StringUtils.isBlank(this.city) || StringUtils.isBlank(this.country)
+				|| StringUtils.isBlank(this.line1)){
+			return false;
+		}
+		return true;
 	}
     
     

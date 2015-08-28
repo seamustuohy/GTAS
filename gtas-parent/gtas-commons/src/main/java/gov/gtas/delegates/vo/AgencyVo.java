@@ -1,10 +1,16 @@
 package gov.gtas.delegates.vo;
 
+import gov.gtas.validators.Validatable;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
 
-public class AgencyVo extends BaseVo implements Serializable  {
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+public class AgencyVo extends BaseVo implements Validatable  {
 	
 	private String agencyName;
 	private String agencyIdentifier;
@@ -54,5 +60,16 @@ public class AgencyVo extends BaseVo implements Serializable  {
 		this.agencyCountry = agencyCountry;
 	}
 	
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.agencyIdentifier) ){
+			return false;
+		}
+		return true;
+	}
 	
 }
