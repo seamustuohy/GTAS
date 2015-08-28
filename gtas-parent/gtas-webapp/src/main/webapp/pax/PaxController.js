@@ -14,7 +14,7 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     };
 
     $scope.passengerGrid = $.extend({
-        columnDefs: $rootScope.columns.PASSENGER,
+        columnDefs: $rootScope.columns.PASSENGER_UI,
         exporterCsvFilename: 'Passengers.csv',
         exporterPdfHeader: {text: "Passengers", style: 'headerStyle'}
     }, $scope.gridOpts);
