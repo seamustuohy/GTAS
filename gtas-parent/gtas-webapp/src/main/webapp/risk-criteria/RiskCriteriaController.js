@@ -154,6 +154,7 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
             }
 
             riskCriteriaService.getList($scope.authorId).then(function (myData) {
+
                 setData(myData);
                 $interval( function() {
                     var page;

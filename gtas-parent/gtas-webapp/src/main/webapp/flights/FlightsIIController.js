@@ -1,23 +1,7 @@
-app.controller('FlightsIIController', function ($scope, $filter, $q, flightService, paxService, $rootScope, $injector, jQueryBuilderFactory, riskCriteriaService, $interval, $timeout) {
+app.controller('FlightsIIController', function ($scope, $rootScope, $injector, GridControl, $filter, $q, flightService, paxService, jQueryBuilderFactory, riskCriteriaService, $interval, $timeout) {
     'use strict';
     var self = this,
         data = [],
-        paginationPageSize = 10,
-        pdfFormatter = function (docDefinition) {
-            docDefinition.pageMargins = [0, 40, 0, 40];
-            docDefinition.styles.headerStyle = {
-                fontSize: 22,
-                bold: true,
-                alignment: 'center',
-                lineHeight: 1.5
-            };
-            docDefinition.styles.footerStyle = {
-                fontSize: 10,
-                italic: true,
-                alignment: 'center'
-            };
-            return docDefinition;
-        },
         columns = {
             FLIGHTS: [
                 {"name": "totalPax", "displayName": "P"},
@@ -34,40 +18,17 @@ app.controller('FlightsIIController', function ($scope, $filter, $q, flightServi
             ]
         };
 
+    $injector.invoke(GridControl, this, {$scope: $scope });
+
     $scope.hitDetailDisplay = '';
     $scope.ruleHitsRendered = false; // flag to render rule hits only once
 
     $injector.invoke(jQueryBuilderFactory, self, {$scope: $scope});
     $scope.loading = true;
 
-    $scope.gridOpts = {
-        columnDefs: columns.FLIGHTS,
-        paginationPageSize: paginationPageSize,
-        paginationPageSizes: [],
-        enableFiltering: true,
-        enableCellEditOnFocus: false,
-        showGridFooter: true,
-        multiSelect: false,
-        enableGridMenu: true,
-        enableSelectAll: false,
-        exporterCsvFilename: 'MySavedQueries.csv',
-        exporterPdfDefaultStyle: {fontSize: 9},
-        exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
-        exporterPdfTableHeaderStyle: {
-            fontSize: 10,
-            bold: true,
-            italics: true
-        },
-        exporterPdfHeader: { text: "My Saved Queries", style: 'headerStyle' },
-        exporterPdfFooter: function (currentPage, pageCount) {
-            return { text: pageOfPages(currentPage, pageCount), style: 'footerStyle' };
-        },
-        exporterPdfCustomFormatter: pdfFormatter,
-        exporterPdfOrientation: 'landscape',
-        exporterPdfPageSize: 'LETTER',
-        exporterPdfMaxGridWidth: 600,
-        exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
-    };
+    $scope.gridOpts.columnDefs = columns.FLIGHTS;
+    $scope.gridOpts.exporterCsvFilename = 'MySavedQueries.csv';
+    $scope.gridOpts.exporterPdfHeader = { text: "Saved Queries", style: 'headerStyle' };
 
     flightService.getFlights().then(function (myData) {
         $scope.gridOpts.data = myData;

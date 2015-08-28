@@ -32,6 +32,21 @@
 
         <style type="text/css">
 
+        .modal-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: rgba(0,0,0, .8);
+            z-index: 101;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
         .full {
         background: url(http://placehold.it/1920x1080) no-repeat center center fixed;
         -webkit-background-size: cover;
