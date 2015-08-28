@@ -1,13 +1,16 @@
 package gov.gtas.parsers.vo.passenger;
 
+import gov.gtas.parsers.validators.Validatable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class PassengerVo {
+public class PassengerVo implements Validatable{
     /**
      * a unique passenger reference identifier (from PNR) used to cross
      * reference passenger information in a PNR
@@ -158,4 +161,14 @@ public class PassengerVo {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }
+
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.firstName) || StringUtils.isBlank(this.lastName) 
+				|| StringUtils.isBlank(this.gender) || this.age == null || this.dob == null 
+				|| StringUtils.isBlank(this.citizenshipCountry)){
+			return false;
+		}
+		return true;
+	}
 }

@@ -1,23 +1,24 @@
 package gov.gtas.delegates.vo;
 
 import gov.gtas.model.Pnr;
+import gov.gtas.validators.Validatable;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class CreditCardVo extends BaseVo implements Serializable  {
+public class CreditCardVo extends BaseVo implements Validatable  {
 	
     private String cardType;
     private String number;
-	private Date expiration;
+    private Date expiration;
     private String accountHolder;
+    
+    
     private Set<Pnr> pnrs = new HashSet<>();
     
 	public String getCardType() {
@@ -50,6 +51,19 @@ public class CreditCardVo extends BaseVo implements Serializable  {
 	public void setPnrs(Set<Pnr> pnrs) {
 		this.pnrs = pnrs;
 	}
-    
+	
+	@Override
+	public String toString() {
+	        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+	
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.number) || StringUtils.isBlank(this.accountHolder) 
+				|| StringUtils.isBlank(this.cardType) || this.expiration == null){
+			return false;
+		}
+		return true;
+	}    
 
 }

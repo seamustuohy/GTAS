@@ -2,15 +2,23 @@ package gov.gtas.delegates.vo;
 
 import gov.gtas.model.Document;
 import gov.gtas.model.Pnr;
+import gov.gtas.validators.Validatable;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PassengerVo extends BaseVo implements Serializable {
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+public class PassengerVo extends BaseVo implements Validatable {
 
     public PassengerVo() { }
+    
+    private String travelerReferenceNumber;
+    private Boolean deleted = Boolean.FALSE;
     private String passengerType;
     private Set<FlightVo> flights = new HashSet<FlightVo>();
     private Set<PnrDataVo> pnrs = new HashSet<>();
@@ -31,6 +39,19 @@ public class PassengerVo extends BaseVo implements Serializable {
     private String debarkCountry;
     private String seat;
     
+    
+	public String getTravelerReferenceNumber() {
+		return travelerReferenceNumber;
+	}
+	public void setTravelerReferenceNumber(String travelerReferenceNumber) {
+		this.travelerReferenceNumber = travelerReferenceNumber;
+	}
+	public Boolean getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
 	public String getSeat() {
 		return seat;
 	}
@@ -146,7 +167,18 @@ public class PassengerVo extends BaseVo implements Serializable {
 		this.debarkCountry = debarkCountry;
 	}
     
-    
-    //private Set<Document> documents = new HashSet<>();
-    
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    }
+
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.firstName) || StringUtils.isBlank(this.lastName) 
+				|| StringUtils.isBlank(this.gender) || this.age == null || this.dob == null 
+				|| StringUtils.isBlank(this.citizenshipCountry)){
+			return false;
+		}
+		return true;
+	}
 }
