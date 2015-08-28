@@ -288,6 +288,7 @@
         <script src="app.js"></script>
         <!-- Possible Dependency Injections //-->
         <script src="factory/GridFactory.js"></script>
+        <script src="factory/ModalGridFactory.js"></script>
         <script src="factory/QueryBuilderFactory.js"></script>
         <script src="factory/jQueryBuilderFactory.js"></script>
         <!-- Controllers & Services //-->

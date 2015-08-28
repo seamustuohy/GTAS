@@ -1,6 +1,10 @@
 app.factory('GridControl', function () {
     'use strict';
     return function ($scope) {
+        var today = moment().format('YYYY-MM-DD'),
+            pageOfPages = function (currentPage, pageCount) {
+                return today + (pageCount === 1 ? '' : '\t' + currentPage.toString() + ' of ' + pageCount.toString());
+            };
         $scope.gridOpts = {
             paginationPageSize: 10,
             paginationPageSizes: [],
@@ -19,9 +23,7 @@ app.factory('GridControl', function () {
             },
             exporterPdfFooter: function (currentPage, pageCount) {
                 return {
-                    text: function (currentPage, pageCount) {
-                        return moment().format('YYYY-MM-DD') + (pageCount === 1 ? '' : '\t' + currentPage.toString() + ' of ' + pageCount.toString());
-                    },
+                    text: pageOfPages(currentPage, pageCount),
                     style: 'footerStyle'
                 };
             },
