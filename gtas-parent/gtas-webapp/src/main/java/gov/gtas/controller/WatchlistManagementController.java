@@ -1,5 +1,7 @@
 package gov.gtas.controller;
 
+import java.util.List;
+
 import gov.gtas.constants.Constants;
 import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
@@ -47,6 +49,10 @@ public class WatchlistManagementController {
 		return resp;
 	}
 
+	@RequestMapping(value = Constants.WL_GETALL, method = RequestMethod.GET)
+	public List<WatchlistSpec> getWatchlist() {
+		return watchlistService.fetchAllWatchlists();
+	}
 
 //	@RequestMapping(value = Constants.UDR_GETDRL, method = RequestMethod.GET)
 //	public JsonServiceResponse getDrl() {
