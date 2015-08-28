@@ -73,7 +73,7 @@ public class WatchlistMappingTest {
 	public void testUdrSpecToJson() {
 		try{
 		ObjectMapper mapper = new ObjectMapper();
-		WatchlistSpec testObj = WatchlistBuilder.createSampleWatchlist();
+		WatchlistSpec testObj = WatchlistBuilder.createSampleWatchlist("Passenger Watch List 1");
 		
 		//serialize
 		String json=mapper.writeValueAsString(testObj);
