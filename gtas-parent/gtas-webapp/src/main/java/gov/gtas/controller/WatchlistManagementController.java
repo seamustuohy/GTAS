@@ -101,7 +101,7 @@ public class WatchlistManagementController {
      */
 	@RequestMapping(value = Constants.WL_TEST, method = RequestMethod.GET)
 	public WatchlistSpec getTestWatchlist() {
-		WatchlistSpec resp = WatchlistBuilder.createSampleWatchlist();
+		WatchlistSpec resp = WatchlistBuilder.createSampleWatchlist("TestWatchlist");
 		return resp;
 	}
 
