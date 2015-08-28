@@ -1,6 +1,6 @@
 package gov.gtas.svc;
 
-import gov.gtas.model.udr.UdrConstants;
+import gov.gtas.constant.UdrConstants;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.Watchlist;
 

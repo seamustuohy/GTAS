@@ -1,7 +1,7 @@
 package gov.gtas.services.watchlist;
 
+import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.User;

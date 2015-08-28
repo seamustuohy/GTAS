@@ -1,7 +1,7 @@
 package gov.gtas.model.udr.json.util;
 
+import gov.gtas.constant.UdrErrorConstants;
 import gov.gtas.error.CommonServiceException;
-import gov.gtas.error.udr.UdrErrorConstants;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.util.DateCalendarUtils;
 

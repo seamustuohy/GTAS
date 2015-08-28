@@ -1,6 +1,6 @@
 package gov.gtas.model.udr.json;
 
-import gov.gtas.error.CommonErrorConstants;
+import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 
 import java.util.LinkedList;

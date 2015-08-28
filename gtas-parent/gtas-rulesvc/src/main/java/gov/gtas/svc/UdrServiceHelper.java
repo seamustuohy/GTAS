@@ -11,8 +11,8 @@ import static gov.gtas.rule.builder.RuleTemplateConstants.PASSENGER_VARIABLE_NAM
 import static gov.gtas.rule.builder.RuleTemplateConstants.PHONE_VARIABLE_NAME;
 import static gov.gtas.rule.builder.RuleTemplateConstants.PNR_VARIABLE_NAME;
 import static gov.gtas.rule.builder.RuleTemplateConstants.TRAVEL_AGENCY_VARIABLE_NAME;
+import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonValidationException;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.udr.Rule;

@@ -1,4 +1,4 @@
-package gov.gtas.model.udr;
+package gov.gtas.constant;
 
 /**
  * UDR and JSON related constants.

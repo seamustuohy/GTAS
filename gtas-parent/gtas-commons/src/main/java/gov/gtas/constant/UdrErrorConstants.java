@@ -1,4 +1,4 @@
-package gov.gtas.error.udr;
+package gov.gtas.constant;
 
 /**
  * Constants used in the Rule Service module.

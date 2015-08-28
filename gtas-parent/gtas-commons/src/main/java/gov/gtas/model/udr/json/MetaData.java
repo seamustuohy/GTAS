@@ -1,6 +1,6 @@
 package gov.gtas.model.udr.json;
 
-import gov.gtas.model.udr.UdrConstants;
+import gov.gtas.constant.UdrConstants;
 
 import java.io.Serializable;
 import java.util.Date;

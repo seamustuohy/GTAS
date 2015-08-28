@@ -1,7 +1,8 @@
 package gov.gtas.services.udr;
 
+import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.UdrConstants;
 import gov.gtas.enumtype.YesNoEnum;
-import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.BaseEntity;
@@ -9,7 +10,6 @@ import gov.gtas.model.User;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleMeta;
-import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.repository.udr.UdrRuleRepository;
 import gov.gtas.services.UserService;

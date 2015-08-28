@@ -2,7 +2,7 @@ package gov.gtas.svc;
 
 import org.apache.commons.lang3.StringUtils;
 
-import gov.gtas.model.udr.UdrConstants;
+import gov.gtas.constant.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 

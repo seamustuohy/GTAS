@@ -1,6 +1,6 @@
 package gov.gtas.util;
 
-import gov.gtas.model.udr.UdrConstants;
+import gov.gtas.constant.UdrConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -5,13 +5,13 @@ import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceResult;
+import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.error.CommonErrorConstants;
+import gov.gtas.constant.UdrConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
 import gov.gtas.model.udr.KnowledgeBase;
-import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.rule.listener.RuleEventListenerUtils;
 import gov.gtas.services.udr.RulePersistenceService;
 

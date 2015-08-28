@@ -1,13 +1,13 @@
 package gov.gtas.svc;
 
-import gov.gtas.error.CommonErrorConstants;
+import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.UdrConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.UdrServiceErrorHandler;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleMeta;
-import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;

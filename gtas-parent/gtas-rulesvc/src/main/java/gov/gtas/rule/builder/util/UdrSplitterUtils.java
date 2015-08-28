@@ -1,6 +1,6 @@
 package gov.gtas.rule.builder.util;
 
-import gov.gtas.error.CommonErrorConstants;
+import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.udr.json.QueryConditionEnum;
 import gov.gtas.model.udr.json.QueryEntity;
