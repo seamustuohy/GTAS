@@ -1,8 +1,8 @@
 package gov.gtas.model.watchlist.util;
 
+import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.WatchlistEditEnum;
-import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.watchlist.Watchlist;
 import gov.gtas.model.watchlist.WatchlistItem;

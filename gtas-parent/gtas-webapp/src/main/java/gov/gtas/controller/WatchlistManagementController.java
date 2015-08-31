@@ -2,8 +2,8 @@ package gov.gtas.controller;
 
 import java.util.List;
 
+import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constants.Constants;
-import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
@@ -54,25 +54,24 @@ public class WatchlistManagementController {
 		return watchlistService.fetchAllWatchlists();
 	}
 
-//	@RequestMapping(value = Constants.UDR_GETDRL, method = RequestMethod.GET)
-//	public JsonServiceResponse getDrl() {
-//		String rules = ruleManagementService.fetchDefaultDrlRulesFromKnowledgeBase();
-//		return createDrlRulesResponse(rules);
-//	}
+	@RequestMapping(value = Constants.WL_GETDRL, method = RequestMethod.GET)
+	public JsonServiceResponse getDrl() {
+		String rules = ruleManagementService.fetchDefaultDrlRulesFromKnowledgeBase();
+		return createDrlRulesResponse(rules);
+	}
 	
 	/**
 	 * Creates the DRL rule response JSON object.
 	 * @param rules the DRL rules.
 	 * @return the JSON response object containing the rules.
 	 */
-//	private JsonServiceResponse createDrlRulesResponse(String rules){
-//		System.out.println("******* The rules:\n"+rules+"\n***************\n");
-//		JsonServiceResponse resp = new JsonServiceResponse(JsonServiceResponse.SUCCESS_RESPONSE, 
-//				"Rule Management Service", "fetchDefaultDrlRulesFromKnowledgeBase", "Drools rules fetched successsfully");
-//		String[] lines = rules.split("\n");
-//		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute("DRL Rules", lines));
-//		return resp;
-//	}
+	private JsonServiceResponse createDrlRulesResponse(String rules){
+		JsonServiceResponse resp = new JsonServiceResponse(JsonServiceResponse.SUCCESS_RESPONSE, 
+				"Watchlist Service", "fetchDefaultDrlRulesFromKnowledgeBase", "Drools rules fetched successfully");
+		String[] lines = rules.split("\n");
+		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute("DRL Rules", lines));
+		return resp;
+	}
 	@RequestMapping(value = Constants.WL_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse createWatchlist(
 			@PathVariable String userId, @RequestBody WatchlistSpec inputSpec) {

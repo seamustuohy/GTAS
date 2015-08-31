@@ -12,7 +12,7 @@ import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
-import gov.gtas.svc.UdrServiceHelper;
+import gov.gtas.rule.builder.util.RuleVariablesUtil;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public class RuleConditionBuilderTest {
 
 	@Before
 	public void setUp() throws Exception {
-		testTarget = new RuleConditionBuilder(UdrServiceHelper.createEngineRuleVariableMap());
+		testTarget = new RuleConditionBuilder(RuleVariablesUtil.createEngineRuleVariableMap());
 	}
 
 	@After

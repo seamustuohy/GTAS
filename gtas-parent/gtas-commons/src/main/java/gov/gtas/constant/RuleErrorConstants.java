@@ -1,4 +1,4 @@
-package gov.gtas.error.udr;
+package gov.gtas.constant;
 
 /**
  * Constants used in the Rule Service module.
@@ -6,7 +6,7 @@ package gov.gtas.error.udr;
  * @author GTAS3 (AB)
  *
  */
-public class UdrErrorConstants {
+public class RuleErrorConstants {
 	// //////////////////////////////////////////////////////////////////////////////////////
 	// ERROR CODES
 	// //////////////////////////////////////////////////////////////////////////////////////

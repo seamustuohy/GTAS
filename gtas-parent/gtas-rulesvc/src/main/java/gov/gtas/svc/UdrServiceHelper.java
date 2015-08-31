@@ -1,18 +1,7 @@
 package gov.gtas.svc;
 
-import static gov.gtas.rule.builder.RuleTemplateConstants.ADDRESS_VARIABLE_NAME;
-import static gov.gtas.rule.builder.RuleTemplateConstants.CREDIT_CARD_VARIABLE_NAME;
-import static gov.gtas.rule.builder.RuleTemplateConstants.DOCUMENT_VARIABLE_NAME;
-import static gov.gtas.rule.builder.RuleTemplateConstants.EMAIL_VARIABLE_NAME;
-import static gov.gtas.rule.builder.RuleTemplateConstants.FLIGHT_VARIABLE_NAME;
-import static gov.gtas.rule.builder.RuleTemplateConstants.FREQUENT_FLYER_VARIABLE_NAME;
 import static gov.gtas.rule.builder.RuleTemplateConstants.NEW_LINE;
-import static gov.gtas.rule.builder.RuleTemplateConstants.PASSENGER_VARIABLE_NAME;
-import static gov.gtas.rule.builder.RuleTemplateConstants.PHONE_VARIABLE_NAME;
-import static gov.gtas.rule.builder.RuleTemplateConstants.PNR_VARIABLE_NAME;
-import static gov.gtas.rule.builder.RuleTemplateConstants.TRAVEL_AGENCY_VARIABLE_NAME;
-import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.error.CommonErrorConstants;
+import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.error.CommonValidationException;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.udr.Rule;
@@ -23,13 +12,12 @@ import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 import gov.gtas.rule.builder.RuleConditionBuilder;
 import gov.gtas.rule.builder.RuleTemplateConstants;
+import gov.gtas.rule.builder.util.RuleVariablesUtil;
 import gov.gtas.rule.builder.util.UdrSplitterUtils;
 
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.validation.Errors;
 
@@ -131,7 +119,7 @@ public class UdrServiceHelper {
 
 		StringBuilder stringBuilder = new StringBuilder();
 		RuleConditionBuilder ruleConditionBuilder = new RuleConditionBuilder(
-				createEngineRuleVariableMap());
+				RuleVariablesUtil.createEngineRuleVariableMap());
 
 		Rule ret = new Rule(parent, indx, null);
 		addRuleHeader(parent, ret, stringBuilder);
@@ -147,25 +135,4 @@ public class UdrServiceHelper {
 
 		return ret;
 	}
-
-	/**
-	 * Creates a map of rule variables to use when generating engine rules.
-	 * @return the rule variable map.
-	 */
-	public static Map<EntityEnum, String> createEngineRuleVariableMap() {
-		Map<EntityEnum, String> ret = new HashMap<EntityEnum, String>();
-		ret.put(EntityEnum.PASSENGER, PASSENGER_VARIABLE_NAME);
-		ret.put(EntityEnum.DOCUMENT, DOCUMENT_VARIABLE_NAME);
-		ret.put(EntityEnum.FLIGHT, FLIGHT_VARIABLE_NAME);
-		ret.put(EntityEnum.PNR, PNR_VARIABLE_NAME);
-		ret.put(EntityEnum.ADDRESS, ADDRESS_VARIABLE_NAME);
-		ret.put(EntityEnum.PHONE, PHONE_VARIABLE_NAME);
-		ret.put(EntityEnum.EMAIL, EMAIL_VARIABLE_NAME);
-		ret.put(EntityEnum.FREQUENT_FLYER, FREQUENT_FLYER_VARIABLE_NAME);
-		ret.put(EntityEnum.TRAVEL_AGENCY, TRAVEL_AGENCY_VARIABLE_NAME);
-		ret.put(EntityEnum.CREDIT_CARD, CREDIT_CARD_VARIABLE_NAME);
-
-		return ret;
-	}
-
 }

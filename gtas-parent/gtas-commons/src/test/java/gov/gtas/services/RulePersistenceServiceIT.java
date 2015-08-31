@@ -5,11 +5,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.constant.RuleConstants;
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleMeta;
-import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.test.util.RuleServiceDataGenUtils;
@@ -221,17 +221,17 @@ public class RulePersistenceServiceIT {
 		final String KB_TEXT = "jkhlkj$$ && *(&)(*&)";
 		KnowledgeBase kb = new KnowledgeBase(TEST_KB_NAME);
 		kb.setCreationDt(new Date());
-		kb.setKbBlob(KB_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
-		kb.setRulesBlob(RULE_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
+		kb.setKbBlob(KB_TEXT.getBytes(RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
+		kb.setRulesBlob(RULE_TEXT.getBytes(RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
 		testTarget.saveKnowledgeBase(kb);
 		KnowledgeBase readKb = testTarget.findUdrKnowledgeBase(TEST_KB_NAME);
 
 		assertNotNull(readKb);
 		long id = readKb.getId();
 		assertTrue(id > 0);
-		String kbString = new String(readKb.getKbBlob(), UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
+		String kbString = new String(readKb.getKbBlob(), RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
 		assertEquals(KB_TEXT, kbString);
-		String rlString = new String(readKb.getRulesBlob(), UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
+		String rlString = new String(readKb.getRulesBlob(), RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
         assertEquals(RULE_TEXT, rlString);
         
         assertNotNull(readKb.getVersion());       
@@ -244,23 +244,23 @@ public class RulePersistenceServiceIT {
 		final String UPDATED_KB_TEXT = "jkh666633339999lkj$$ && *(&)(*&)";
 		KnowledgeBase kb = new KnowledgeBase(TEST_KB_NAME);
 		kb.setCreationDt(new Date());
-		kb.setKbBlob(KB_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
-		kb.setRulesBlob(RULE_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
+		kb.setKbBlob(KB_TEXT.getBytes(RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
+		kb.setRulesBlob(RULE_TEXT.getBytes(RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
 		testTarget.saveKnowledgeBase(kb);
 		KnowledgeBase readKb = testTarget.findUdrKnowledgeBase(TEST_KB_NAME);
 		long preVersion = readKb.getVersion();
 		//update
-        readKb.setKbBlob(UPDATED_KB_TEXT.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
+        readKb.setKbBlob(UPDATED_KB_TEXT.getBytes(RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
         testTarget.saveKnowledgeBase(readKb);
         
         readKb = testTarget.findUdrKnowledgeBase(TEST_KB_NAME);
 		assertNotNull(readKb);
 		long id = readKb.getId();
 		assertTrue(id > 0);
-		String kbString = new String(readKb.getKbBlob(), UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
+		String kbString = new String(readKb.getKbBlob(), RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
 		System.out.println(kbString);
 		assertEquals(UPDATED_KB_TEXT, kbString);
-		String rlString = new String(readKb.getRulesBlob(), UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
+		String rlString = new String(readKb.getRulesBlob(), RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
         assertEquals(RULE_TEXT, rlString);
         
         assertNotNull(readKb.getVersion());       

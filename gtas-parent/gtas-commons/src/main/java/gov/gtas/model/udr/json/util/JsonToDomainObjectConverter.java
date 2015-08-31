@@ -1,7 +1,7 @@
 package gov.gtas.model.udr.json.util;
 
+import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.YesNoEnum;
-import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.RuleMeta;

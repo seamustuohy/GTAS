@@ -1,12 +1,13 @@
-package gov.gtas.model.udr;
+package gov.gtas.constant;
 
 /**
  * UDR and JSON related constants.
  * @author GTAS3 (AB)
  *
  */
-public class UdrConstants {
+public class RuleConstants {
 	public static final String UDR_KNOWLEDGE_BASE_NAME = "UDR Knowledge Base";
+	public static final String WL_KNOWLEDGE_BASE_NAME = "WL Knowledge Base";
 	
 	public static final String UDR_EXTERNAL_CHARACTER_ENCODING = "UTF-8";//StandardCharsets.UTF_8.name()
 	

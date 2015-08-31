@@ -1,5 +1,7 @@
 package gov.gtas.error;
 
+import gov.gtas.constant.CommonErrorConstants;
+
 import java.util.List;
 
 public class BasicErrorDetails implements ErrorDetails {

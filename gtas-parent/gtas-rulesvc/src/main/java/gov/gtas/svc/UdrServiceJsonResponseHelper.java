@@ -2,7 +2,7 @@ package gov.gtas.svc;
 
 import org.apache.commons.lang3.StringUtils;
 
-import gov.gtas.model.udr.UdrConstants;
+import gov.gtas.constant.RuleConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 
@@ -30,10 +30,10 @@ public class UdrServiceJsonResponseHelper {
 									+ " on UDR Rule with title='%s' and ID='%s' was successful.",
 							rule.getTitle(), rule.getId()));
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					UdrConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(rule
+					RuleConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(rule
 							.getId())));
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					UdrConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(rule
+					RuleConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(rule
 							.getTitle())));
 		} else {
 			if (rule != null) {

@@ -43,4 +43,11 @@ public interface WatchlistService {
 	 * @return the list of all available watch list objects.
 	 */
 	List<WatchlistSpec> fetchAllWatchlists();
+
+	/**
+	 * Compiles all watch lists into a names knowledge base
+	 * 
+	 * @return the list of all available watch list objects.
+	 */
+	JsonServiceResponse activateAllWatchlists(String knowledgeBaseName);
 }

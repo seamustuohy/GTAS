@@ -1,9 +1,6 @@
 package gov.gtas.repository.watchlist;
 
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.model.udr.KnowledgeBase;
-import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.watchlist.Watchlist;
 
 import java.util.List;

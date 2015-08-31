@@ -24,6 +24,7 @@ import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
+import gov.gtas.model.watchlist.WatchlistItem;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -69,6 +70,16 @@ public class DrlRuleFileBuilder {
 					rule.getId());
 			this.stringBuilder.append(drl).append(StringUtils.LF);
 		}
+		return this;
+	}
+    /**
+     * Adds the DRL rule for the watch list item.
+     * @param wlItem the watch list item.
+     * @return this builder object.
+     */
+	public DrlRuleFileBuilder addWatchlistItemRule(final WatchlistItem wlItem) {
+		String drl = String.format(wlItem.getItemRuleData(), wlItem.getId());
+		this.stringBuilder.append(drl).append(StringUtils.LF);
 		return this;
 	}
 

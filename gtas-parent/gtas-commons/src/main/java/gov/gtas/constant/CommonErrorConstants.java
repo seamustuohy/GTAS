@@ -1,4 +1,4 @@
-package gov.gtas.error;
+package gov.gtas.constant;
 
 /**
  * Common Error Constants for GTAS.

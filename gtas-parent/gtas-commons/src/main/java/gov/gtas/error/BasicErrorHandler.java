@@ -1,19 +1,20 @@
 package gov.gtas.error;
 
-import static gov.gtas.error.CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE;
-import static gov.gtas.error.CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_MESSAGE;
-import static gov.gtas.error.CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE;
-import static gov.gtas.error.CommonErrorConstants.INVALID_ARGUMENT_ERROR_MESSAGE;
-import static gov.gtas.error.CommonErrorConstants.INVALID_USER_ID_ERROR_CODE;
-import static gov.gtas.error.CommonErrorConstants.INVALID_USER_ID_ERROR_MESSAGE;
-import static gov.gtas.error.CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE;
-import static gov.gtas.error.CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE;
-import static gov.gtas.error.CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE;
-import static gov.gtas.error.CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_MESSAGE;
-import static gov.gtas.error.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE;
-import static gov.gtas.error.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_MESSAGE;
-import static gov.gtas.error.CommonErrorConstants.JSON_INPUT_VALIDATION_ERROR_CODE;
-import static gov.gtas.error.CommonErrorConstants.JSON_INPUT_VALIDATION_ERROR_MESSAGE;
+import static gov.gtas.constant.CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_CODE;
+import static gov.gtas.constant.CommonErrorConstants.INPUT_JSON_FORMAT_ERROR_MESSAGE;
+import static gov.gtas.constant.CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE;
+import static gov.gtas.constant.CommonErrorConstants.INVALID_ARGUMENT_ERROR_MESSAGE;
+import static gov.gtas.constant.CommonErrorConstants.INVALID_USER_ID_ERROR_CODE;
+import static gov.gtas.constant.CommonErrorConstants.INVALID_USER_ID_ERROR_MESSAGE;
+import static gov.gtas.constant.CommonErrorConstants.JSON_INPUT_VALIDATION_ERROR_CODE;
+import static gov.gtas.constant.CommonErrorConstants.JSON_INPUT_VALIDATION_ERROR_MESSAGE;
+import static gov.gtas.constant.CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE;
+import static gov.gtas.constant.CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE;
+import static gov.gtas.constant.CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE;
+import static gov.gtas.constant.CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_MESSAGE;
+import static gov.gtas.constant.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE;
+import static gov.gtas.constant.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_MESSAGE;
+import gov.gtas.constant.CommonErrorConstants;
 
 import java.util.HashMap;
 import java.util.Map;

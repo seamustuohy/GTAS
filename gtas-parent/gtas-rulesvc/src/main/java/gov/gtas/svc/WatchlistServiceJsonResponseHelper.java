@@ -1,6 +1,7 @@
 package gov.gtas.svc;
 
-import gov.gtas.model.udr.UdrConstants;
+import gov.gtas.constant.RuleConstants;
+import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.Watchlist;
 
@@ -30,10 +31,10 @@ public class WatchlistServiceJsonResponseHelper {
 									+ " on Watch list with name='%s' and ID='%s' was successful.",
 							wl.getWatchlistName(), wl.getId()));
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					UdrConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(wl
+					RuleConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(wl
 							.getId())));
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					UdrConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(wl
+					RuleConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(wl
 							.getWatchlistName())));
 		} else {
 			if (wl != null) {
@@ -57,6 +58,34 @@ public class WatchlistServiceJsonResponseHelper {
 						op, msg);
 			}
 
+		}
+		return resp;
+	}
+
+
+	public static JsonServiceResponse createKnowledBaseResponse(KnowledgeBase kb,
+			String failureReason) {
+		JsonServiceResponse resp = null;
+		boolean success = kb == null ? false:true;
+		if (success) {
+			resp = new JsonServiceResponse(
+					JsonServiceResponse.SUCCESS_RESPONSE,
+					"Watch List Service",
+					"Create KB",
+					"Knowledge Base creation for all watch lists was successful.");
+			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
+					"id", String.valueOf(kb
+							.getId())));
+		} else {
+			String msg =null;
+			if(StringUtils.isEmpty(failureReason)){
+				msg = "Create KB failed.";
+			} else {
+				msg = "Create KB failed " + failureReason + ".";
+			}
+			resp = new JsonServiceResponse(
+					JsonServiceResponse.FAILURE_RESPONSE, "Watch List Service",
+					"Create KB", msg);
 		}
 		return resp;
 	}

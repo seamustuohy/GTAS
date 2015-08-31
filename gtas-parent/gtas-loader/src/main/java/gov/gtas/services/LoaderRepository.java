@@ -2,6 +2,7 @@ package gov.gtas.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -74,7 +75,7 @@ public class LoaderRepository {
     }
     
     @Transactional
-    public void processFlightsAndPassengers(ApisMessage apisMessage, List<FlightVo> flights, List<PassengerVo> passengers) throws ParseException {
+    public void processFlightsAndPassengers(List<FlightVo> flights, List<PassengerVo> passengers, Set<Flight> flightsToUpdate) throws ParseException {
         for (FlightVo fvo : flights) {
             Flight currentFlight = null;
             Flight existingFlight = flightDao.getFlightByCriteria(fvo.getCarrier(), fvo.getFlightNumber(), fvo.getOrigin(), fvo.getDestination(), fvo.getFlightDate());
@@ -85,7 +86,7 @@ public class LoaderRepository {
                 utils.updateFlight(fvo, existingFlight);
                 currentFlight = existingFlight;
             }
-            apisMessage.getFlights().add(currentFlight);
+            flightsToUpdate.add(currentFlight);
             
             for (PassengerVo pvo : passengers) {
                 Passenger currentPassenger = null;

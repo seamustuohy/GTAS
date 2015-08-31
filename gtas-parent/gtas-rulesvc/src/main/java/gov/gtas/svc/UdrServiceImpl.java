@@ -1,13 +1,13 @@
 package gov.gtas.svc;
 
-import gov.gtas.error.CommonErrorConstants;
+import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.RuleConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.UdrServiceErrorHandler;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleMeta;
-import gov.gtas.model.udr.UdrConstants;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
@@ -173,9 +173,9 @@ public class UdrServiceImpl implements UdrService {
 		UdrRule savedRule = rulePersistenceService.create(ruleToSave, userId);
 
 		List<UdrRule> ruleList = rulePersistenceService.findAll();
-		ruleManagementService.createKnowledgeBaseFromUdrRules(UdrConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList, userId);
+		ruleManagementService.createKnowledgeBaseFromUdrRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList, userId);
 
-		return UdrServiceJsonResponseHelper.createResponse(true, UdrConstants.UDR_CREATE_OP_NAME, savedRule);
+		return UdrServiceJsonResponseHelper.createResponse(true, RuleConstants.UDR_CREATE_OP_NAME, savedRule);
 	}
 
 	private User fetchRuleAuthor(final String userId, final String authorUserId) {
@@ -268,7 +268,7 @@ public class UdrServiceImpl implements UdrService {
 			updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
 
 			List<UdrRule> ruleList = rulePersistenceService.findAll();
-			ruleManagementService.createKnowledgeBaseFromUdrRules(UdrConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList, userId);
+			ruleManagementService.createKnowledgeBaseFromUdrRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList, userId);
 
 		} else {
 			// simple update - meta data only
@@ -276,7 +276,7 @@ public class UdrServiceImpl implements UdrService {
 			updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
 		}
 
-		return UdrServiceJsonResponseHelper.createResponse(true, UdrConstants.UDR_UPDATE_OP_NAME,
+		return UdrServiceJsonResponseHelper.createResponse(true, RuleConstants.UDR_UPDATE_OP_NAME,
 				updatedRule);
 	}
 
@@ -292,14 +292,14 @@ public class UdrServiceImpl implements UdrService {
 		if (deletedRule != null) {
 			List<UdrRule> ruleList = rulePersistenceService.findAll();
 			if(!CollectionUtils.isEmpty(ruleList)){
-			    ruleManagementService.createKnowledgeBaseFromUdrRules(UdrConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList, userId);
+			    ruleManagementService.createKnowledgeBaseFromUdrRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList, userId);
 			} else {
-				ruleManagementService.deleteKnowledgeBase(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+				ruleManagementService.deleteKnowledgeBase(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
 			}
-			return UdrServiceJsonResponseHelper.createResponse(true, UdrConstants.UDR_DELETE_OP_NAME,
+			return UdrServiceJsonResponseHelper.createResponse(true, RuleConstants.UDR_DELETE_OP_NAME,
 					deletedRule);
 		} else {
-			return UdrServiceJsonResponseHelper.createResponse(false, UdrConstants.UDR_DELETE_OP_NAME,
+			return UdrServiceJsonResponseHelper.createResponse(false, RuleConstants.UDR_DELETE_OP_NAME,
 					deletedRule, "since it does not exist or has been deleted previously");
 		}
 	}
