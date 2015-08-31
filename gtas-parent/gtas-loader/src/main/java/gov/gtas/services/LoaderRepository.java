@@ -86,8 +86,8 @@ public class LoaderRepository {
                     for (DocumentVo dvo : pvo.getDocuments()) {
                         p.addDocument(utils.createNewDocument(dvo));
                     }
-                    newFlight.getPassengers().add(p);
                     messagePassengers.add(p);
+                    newFlight.addPassenger(p);
                 }
                                 
             } else {
@@ -103,8 +103,7 @@ public class LoaderRepository {
                         }
                         passengerDao.save(p);
                         messagePassengers.add(p);
-                        p.getFlights().add(existingFlight);
-                        existingFlight.getPassengers().add(p);
+                        existingFlight.addPassenger(p);
                         
                     } else {
                         utils.updatePassenger(pvo, existingPassenger);

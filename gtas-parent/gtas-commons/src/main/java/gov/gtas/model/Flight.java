@@ -75,6 +75,11 @@ public class Flight extends BaseEntityAudit {
         targetEntity = Pnr.class
     ) 
     private Set<Pnr> pnrs = new HashSet<>();
+    
+    public void addPassenger(Passenger passenger) {
+        this.passengers.add(passenger);
+        passenger.getFlights().add(this);
+    }
 
     public Set<Passenger> getPassengers() {
         return passengers;
