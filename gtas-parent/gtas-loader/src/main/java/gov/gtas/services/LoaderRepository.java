@@ -73,7 +73,7 @@ public class LoaderRepository {
     }
 
     @Transactional
-    public void processFlightsAndPassengers(List<FlightVo> flights, List<PassengerVo> passengers, Set<Flight> messageFlights) throws ParseException {
+    public void processFlightsAndPassengers(List<FlightVo> flights, List<PassengerVo> passengers, Set<Flight> messageFlights, Set<Passenger> messagePassengers) throws ParseException {
         for (FlightVo fvo : flights) {
             Flight existingFlight = flightDao.getFlightByCriteria(fvo.getCarrier(), fvo.getFlightNumber(), fvo.getOrigin(), fvo.getDestination(), fvo.getFlightDate());
 
@@ -87,6 +87,7 @@ public class LoaderRepository {
                         p.addDocument(utils.createNewDocument(dvo));
                     }
                     newFlight.getPassengers().add(p);
+                    messagePassengers.add(p);
                 }
                                 
             } else {
@@ -101,11 +102,13 @@ public class LoaderRepository {
                             p.addDocument(utils.createNewDocument(dvo));
                         }
                         passengerDao.save(p);
+                        messagePassengers.add(p);
                         p.getFlights().add(existingFlight);
                         existingFlight.getPassengers().add(p);
                         
                     } else {
                         utils.updatePassenger(pvo, existingPassenger);
+                        messagePassengers.add(existingPassenger);
                         for (DocumentVo dvo : pvo.getDocuments()) {
                             Document existingDoc = docDao.findByDocumentNumberAndPassenger(dvo.getDocumentNumber(), existingPassenger);
                             if (existingDoc == null) {

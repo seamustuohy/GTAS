@@ -104,7 +104,8 @@ public class PnrMessageServiceIT extends AbstractTransactionalJUnit4SpringContex
         passengers.add(pvo2);
         
         Set<Flight> dummy = new HashSet<>();
-        loaderRepo.processFlightsAndPassengers(flights, passengers, dummy);
+        Set<Passenger> paxDummy = new HashSet<>();
+        loaderRepo.processFlightsAndPassengers(flights, passengers, dummy, paxDummy);
         List<Passenger> pax = paxDao.getPassengersByLastName("doe");
         assertEquals(2, pax.size());        
     }

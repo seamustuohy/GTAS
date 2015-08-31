@@ -109,7 +109,7 @@ public class PnrMessageService implements MessageService {
                 pnr.addCreditCard(utils.convertCreditVo(creditVo));
             }
             
-            loaderRepo.processFlightsAndPassengers(vo.getFlights(), vo.getPassengers(), pnr.getFlights());
+            loaderRepo.processFlightsAndPassengers(vo.getFlights(), vo.getPassengers(), pnr.getFlights(), pnr.getPassengers());
             this.pnrMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
