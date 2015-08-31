@@ -1,14 +1,14 @@
-package gov.gtas.model.watchlist.util;
+package gov.gtas.svc.util;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.watchlist.Watchlist;
 import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
-import gov.gtas.model.watchlist.util.WatchlistBuilder;
+import gov.gtas.util.SampleDataGenerator;
+
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,7 +25,7 @@ public class WatchlistBuilderTest {
 
 	@Test
 	public void testBuildwatchlistFromSpec() {
-		WatchlistBuilder bldr = new WatchlistBuilder(WatchlistBuilder.createSampleWatchlist("WLTest1"));
+		WatchlistBuilder bldr = new WatchlistBuilder(SampleDataGenerator.createSampleWatchlist("WLTest1"));
 		bldr.buildPersistenceLists();
 		assertEquals("WLTest1", bldr.getName());
 		List<WatchlistItem> items = bldr.getCreateUpdateList();
@@ -44,7 +44,7 @@ public class WatchlistBuilderTest {
 	@Test
 	public void testBuildWatchlistSpecFromWl() {
 		final String wlname = "WLTest1";
-		WatchlistBuilder bldr = new WatchlistBuilder(WatchlistBuilder.createSampleWatchlist(wlname));
+		WatchlistBuilder bldr = new WatchlistBuilder(SampleDataGenerator.createSampleWatchlist(wlname));
 		bldr.buildPersistenceLists();
 		assertEquals(wlname, bldr.getName());
 		List<WatchlistItem> items = bldr.getCreateUpdateList();

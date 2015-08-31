@@ -8,7 +8,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import gov.gtas.enumtype.WatchlistEditEnum;
-import gov.gtas.model.watchlist.util.WatchlistBuilder;
+import gov.gtas.util.SampleDataGenerator;
 
 import org.junit.After;
 import org.junit.Before;
@@ -73,7 +73,7 @@ public class WatchlistMappingTest {
 	public void testUdrSpecToJson() {
 		try{
 		ObjectMapper mapper = new ObjectMapper();
-		WatchlistSpec testObj = WatchlistBuilder.createSampleWatchlist("Passenger Watch List 1");
+		WatchlistSpec testObj = SampleDataGenerator.createSampleWatchlist("Passenger Watch List 1");
 		
 		//serialize
 		String json=mapper.writeValueAsString(testObj);
