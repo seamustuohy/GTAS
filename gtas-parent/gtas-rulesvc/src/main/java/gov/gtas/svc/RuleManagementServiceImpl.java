@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.kie.api.KieBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,14 +65,16 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 		try {
 			KieBase kieBase = RuleUtils.createKieBaseFromDrlString(drlString);
 			byte[] kbBlob = RuleUtils.convertKieBaseToBytes(kieBase);
-			KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase();
+			KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
 			if (kb == null) {
-				kb = new KnowledgeBase();
+				kb = new KnowledgeBase(kbName);
 			}
 			kb.setRulesBlob(drlString
 					.getBytes(RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
 			kb.setKbBlob(kbBlob);
-			kb.setKbName(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
+			if(StringUtils.isEmpty(kbName)){
+			    kb.setKbName(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
+			}
 			kb = rulePersistenceService.saveKnowledgeBase(kb);
 			return kb;
 		} catch (IOException ioe) {
@@ -152,6 +155,7 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 	 * @see gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromWatchlistItems(java.lang.String, java.lang.Iterable)
 	 */
 	@Override
+	@Transactional(value=TxType.MANDATORY)
 	public KnowledgeBase createKnowledgeBaseFromWatchlistItems(String kbName,
 			Iterable<WatchlistItem> rules) {
 		if (rules != null) {

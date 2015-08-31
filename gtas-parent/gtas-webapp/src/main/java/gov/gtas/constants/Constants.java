@@ -38,6 +38,8 @@ public final class Constants {
 	public static final String WL_GETDRL = "/drl";
 	public static final String WL_POST = "/{userId}";
 	public static final String WL_PUT = "/{userId}";
+	public static final String WL_DELETE = "/{name}";
+	public static final String WL_COMPILE = "/compile";
 	public static final String WL_TEST = "/testwl";
 
 	

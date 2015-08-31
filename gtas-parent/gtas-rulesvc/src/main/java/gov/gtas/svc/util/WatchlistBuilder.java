@@ -107,6 +107,10 @@ public class WatchlistBuilder {
 					}
 					
 					item.setItemData(json);
+					StringBuilder ruleBldr = new StringBuilder();
+					List<String> ruleCriteria = WatchlistRuleCreationUtil
+							.createWatchlistRule(itemSpec.getTerms(), this.getName(), ruleBldr);
+					item.setItemRuleData(ruleBldr.toString());
 					this.createUpdateList.add(item);
 					break;
 				case D:

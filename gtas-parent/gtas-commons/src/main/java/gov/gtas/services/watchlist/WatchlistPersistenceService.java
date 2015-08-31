@@ -74,4 +74,13 @@ public interface WatchlistPersistenceService {
 	 */
 	public Watchlist findByName(String name);
 
+	/**
+	 * Deletes a Watch list by its name. 
+	 * (Note: this operation will throw an exception if the watch list contains items.)
+	 * @param name
+	 *            the name of the watch list to delete.
+	 * @return the deleted watch list or null, if the watchlist could not be found.
+	 */
+	public Watchlist deleteWatchlist(String name);
+
 }

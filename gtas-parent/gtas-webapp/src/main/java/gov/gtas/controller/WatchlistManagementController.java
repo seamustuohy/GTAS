@@ -1,6 +1,7 @@
 package gov.gtas.controller;
 
 import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.constants.Constants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.json.JsonServiceResponse;
@@ -56,7 +57,7 @@ public class WatchlistManagementController {
 
 	@RequestMapping(value = Constants.WL_GETDRL, method = RequestMethod.GET)
 	public JsonServiceResponse getDrl() {
-		String rules = ruleManagementService.fetchDefaultDrlRulesFromKnowledgeBase();
+		String rules = ruleManagementService.fetchDrlRulesFromKnowledgeBase(WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
 		return createDrlRulesResponse(rules);
 	}
 	
@@ -98,6 +99,18 @@ public class WatchlistManagementController {
 		JsonServiceResponse resp = watchlistService.createOrUpdateWatchlist(userId, inputSpec);
 
 		return resp;
+	}
+
+	@RequestMapping(value = Constants.WL_DELETE, method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public JsonServiceResponse deleteUDR(@PathVariable String name) {
+		logger.info("******** Received UDR Delete requestfor watch list =" + name);
+		JsonServiceResponse resp = watchlistService.deleteWatchlist(name);
+		return resp;
+	}
+
+	@RequestMapping(value = Constants.WL_COMPILE, method = {RequestMethod.POST, RequestMethod.PUT}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public JsonServiceResponse compileWatchlists(){
+		return watchlistService.activateAllWatchlists();
 	}
 
     /**
