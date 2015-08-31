@@ -1,6 +1,6 @@
 package gov.gtas.util;
 
-import gov.gtas.constant.UdrConstants;
+import gov.gtas.constant.RuleConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -95,36 +95,36 @@ public class DateCalendarUtils {
 	public static Date parseJsonDate(final String dateString)
 			throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat(
-				UdrConstants.UDR_DATE_FORMAT);
+				RuleConstants.UDR_DATE_FORMAT);
 		return format.parse(dateString);
 	}
 	public static Date parseJsonDateTime(final String dateString)
 			throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat(
-				UdrConstants.UDR_DATETIME_FORMAT);
+				RuleConstants.UDR_DATETIME_FORMAT);
 		return format.parse(dateString);
 	}
 
 	public static String formatJsonDate(final Date date) {
 		SimpleDateFormat format = new SimpleDateFormat(
-				UdrConstants.UDR_DATE_FORMAT);
+				RuleConstants.UDR_DATE_FORMAT);
 		return format.format(date);
 	}
 	public static Date parseRuleEngineDate(final String dateString)
 			throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat(
-				UdrConstants.RULE_ENGINE_DATE_FORMAT);
+				RuleConstants.RULE_ENGINE_DATE_FORMAT);
 		return format.parse(dateString);
 	}
 
 	public static String formatRuleEngineDate(final Date date) {
 		SimpleDateFormat format = new SimpleDateFormat(
-				UdrConstants.RULE_ENGINE_DATE_FORMAT);
+				RuleConstants.RULE_ENGINE_DATE_FORMAT);
 		return format.format(date);
 	}
 	public static String formatRuleEngineDateTime(final Date date) {
 		SimpleDateFormat format = new SimpleDateFormat(
-				UdrConstants.RULE_ENGINE_DATETIME_FORMAT);
+				RuleConstants.RULE_ENGINE_DATETIME_FORMAT);
 		return format.format(date);
 	}
 }

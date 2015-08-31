@@ -7,7 +7,7 @@ import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.constant.UdrConstants;
+import gov.gtas.constant.RuleConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
@@ -150,7 +150,7 @@ public class RuleServiceImpl implements RuleService {
 		if (kbRecord == null) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
 					RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
-					kbName == null ? UdrConstants.UDR_KNOWLEDGE_BASE_NAME
+					kbName == null ? RuleConstants.UDR_KNOWLEDGE_BASE_NAME
 							: kbName);
 		}
 		try {

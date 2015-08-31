@@ -5,7 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import gov.gtas.config.RuleServiceConfig;
-import gov.gtas.constant.UdrConstants;
+import gov.gtas.constant.RuleConstants;
 import gov.gtas.enumtype.ConditionEnum;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
@@ -87,7 +87,7 @@ public class UdrServiceIT {
 		details.setRules(newterms);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
 		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
-		Long id = Long.valueOf(resp.findResponseDetailValue(UdrConstants.UDR_ID_ATTRIBUTE_NAME));
+		Long id = Long.valueOf(resp.findResponseDetailValue(RuleConstants.UDR_ID_ATTRIBUTE_NAME));
 		assertNotNull("The saved ID is null",id);
 		UdrRule rule = ruleService.findById(id);
 		assertNotNull(rule);
@@ -113,7 +113,7 @@ public class UdrServiceIT {
 		details.setRules(newterms);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
 		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
-		Long id = Long.valueOf(resp.findResponseDetailValue(UdrConstants.UDR_ID_ATTRIBUTE_NAME));
+		Long id = Long.valueOf(resp.findResponseDetailValue(RuleConstants.UDR_ID_ATTRIBUTE_NAME));
 		assertNotNull("The saved ID is null",id);
 		UdrRule rule = ruleService.findById(id);
 		assertNotNull(rule);
@@ -185,7 +185,7 @@ public class UdrServiceIT {
 		assertNotNull(resp.getResponseDetails());
 		String title = (String)resp.getResponseDetails().get(1).getAttributeValue();       
 		assertEquals(RULE_TITLE1, title);
-		Long id = Long.valueOf(resp.findResponseDetailValue(UdrConstants.UDR_ID_ATTRIBUTE_NAME));
+		Long id = Long.valueOf(resp.findResponseDetailValue(RuleConstants.UDR_ID_ATTRIBUTE_NAME));
 		assertNotNull("The saved ID is null",id);
 		UdrRule rule = ruleService.findById(id);
 		List<Rule> engineRules = rule.getEngineRules();

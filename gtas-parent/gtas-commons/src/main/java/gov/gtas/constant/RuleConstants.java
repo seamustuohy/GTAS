@@ -5,7 +5,7 @@ package gov.gtas.constant;
  * @author GTAS3 (AB)
  *
  */
-public class UdrConstants {
+public class RuleConstants {
 	public static final String UDR_KNOWLEDGE_BASE_NAME = "UDR Knowledge Base";
 	public static final String WL_KNOWLEDGE_BASE_NAME = "WL Knowledge Base";
 	

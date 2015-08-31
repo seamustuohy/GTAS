@@ -2,7 +2,7 @@ package gov.gtas.svc;
 
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.constant.UdrConstants;
+import gov.gtas.constant.RuleConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
@@ -69,9 +69,9 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 				kb = new KnowledgeBase();
 			}
 			kb.setRulesBlob(drlString
-					.getBytes(UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
+					.getBytes(RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
 			kb.setKbBlob(kbBlob);
-			kb.setKbName(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+			kb.setKbName(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
 			kb = rulePersistenceService.saveKnowledgeBase(kb);
 			return kb;
 		} catch (IOException ioe) {
@@ -95,16 +95,16 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 		if (kb == null) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
 					RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
-					UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+					RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
 		}
 		String drlRules = null;
 		try {
 			drlRules = new String(kb.getRulesBlob(),
-					UdrConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
+					RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
 		} catch (UnsupportedEncodingException uee) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
 					RuleServiceConstants.KB_INVALID_ERROR_CODE,
-					UdrConstants.UDR_KNOWLEDGE_BASE_NAME, uee);
+					RuleConstants.UDR_KNOWLEDGE_BASE_NAME, uee);
 		}
 		return drlRules;
 	}
@@ -119,7 +119,7 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 	@Override
 	public String fetchDefaultDrlRulesFromKnowledgeBase() {
 		String drlRules = this
-				.fetchDrlRulesFromKnowledgeBase(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+				.fetchDrlRulesFromKnowledgeBase(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
 		return drlRules;
 	}
 

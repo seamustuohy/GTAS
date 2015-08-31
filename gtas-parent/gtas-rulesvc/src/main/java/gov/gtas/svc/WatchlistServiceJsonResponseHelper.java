@@ -1,6 +1,6 @@
 package gov.gtas.svc;
 
-import gov.gtas.constant.UdrConstants;
+import gov.gtas.constant.RuleConstants;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.Watchlist;
@@ -31,10 +31,10 @@ public class WatchlistServiceJsonResponseHelper {
 									+ " on Watch list with name='%s' and ID='%s' was successful.",
 							wl.getWatchlistName(), wl.getId()));
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					UdrConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(wl
+					RuleConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(wl
 							.getId())));
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					UdrConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(wl
+					RuleConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(wl
 							.getWatchlistName())));
 		} else {
 			if (wl != null) {

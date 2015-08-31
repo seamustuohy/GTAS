@@ -1,7 +1,7 @@
 package gov.gtas.services.udr;
 
 import gov.gtas.constant.CommonErrorConstants;
-import gov.gtas.constant.UdrConstants;
+import gov.gtas.constant.RuleConstants;
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
@@ -211,7 +211,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	@Override
 	@Cacheable(value = "knowledgebase")
 	public KnowledgeBase findUdrKnowledgeBase() {
-		return this.findUdrKnowledgeBase(UdrConstants.UDR_KNOWLEDGE_BASE_NAME);
+		return this.findUdrKnowledgeBase(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
 	}
 
 	/*

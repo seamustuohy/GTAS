@@ -1,6 +1,6 @@
 package gov.gtas.model.udr.json.util;
 
-import gov.gtas.constant.UdrErrorConstants;
+import gov.gtas.constant.RuleErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.util.DateCalendarUtils;
@@ -20,14 +20,14 @@ public class JsonValidationUtils {
 	public static void validateMetaData(final MetaData metaData, final boolean checkStartDate){
 		if (metaData == null) {
 			throw new CommonServiceException(
-					UdrErrorConstants.NO_META_ERROR_CODE,
-					UdrErrorConstants.NO_META_ERROR_MESSAGE);
+					RuleErrorConstants.NO_META_ERROR_CODE,
+					RuleErrorConstants.NO_META_ERROR_MESSAGE);
 		}
 		final String title = metaData.getTitle();
 		if (StringUtils.isEmpty(title)) {
 			throw new CommonServiceException(
-					UdrErrorConstants.NO_TITLE_ERROR_CODE,
-					UdrErrorConstants.NO_TITLE_ERROR_MESSAGE);
+					RuleErrorConstants.NO_TITLE_ERROR_CODE,
+					RuleErrorConstants.NO_TITLE_ERROR_MESSAGE);
 		}
 
 		final Date startDate = metaData.getStartDate();
@@ -45,19 +45,19 @@ public class JsonValidationUtils {
     	Date now = new Date();
 		if (startDate == null) {
 			throw new CommonServiceException(
-					UdrErrorConstants.INVALID_START_DATE_ERROR_CODE,
-					UdrErrorConstants.INVALID_START_DATE_ERROR_MESSAGE);
+					RuleErrorConstants.INVALID_START_DATE_ERROR_CODE,
+					RuleErrorConstants.INVALID_START_DATE_ERROR_MESSAGE);
 		}
         if(checkStartDate && DateCalendarUtils.dateRoundedGreater(now, startDate, Calendar.DATE)){
 			throw new CommonServiceException(
-					UdrErrorConstants.PAST_START_DATE_ERROR_CODE,
-					UdrErrorConstants.PAST_START_DATE_ERROR_MESSAGE);
+					RuleErrorConstants.PAST_START_DATE_ERROR_CODE,
+					RuleErrorConstants.PAST_START_DATE_ERROR_MESSAGE);
         	
         }
     	if(DateCalendarUtils.dateRoundedLess(endDate, startDate, Calendar.DATE)){
     			throw new CommonServiceException(
-    					UdrErrorConstants.END_LESS_START_DATE_ERROR_CODE,
-    					UdrErrorConstants.END_LESS_START_DATE_ERROR_MESSAGE);
+    					RuleErrorConstants.END_LESS_START_DATE_ERROR_CODE,
+    					RuleErrorConstants.END_LESS_START_DATE_ERROR_MESSAGE);
             	    		
     	}
     }
