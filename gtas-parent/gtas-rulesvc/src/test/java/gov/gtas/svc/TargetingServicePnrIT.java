@@ -17,6 +17,7 @@ import gov.gtas.model.udr.UdrRule;
 import gov.gtas.repository.PnrMessageRepository;
 import gov.gtas.rule.builder.DrlRuleFileBuilder;
 import gov.gtas.rule.builder.RuleBuilderTestUtils;
+import gov.gtas.svc.util.TargetingServiceUtils;
 import gov.gtas.testdatagen.PnrDataGenerator;
 
 import java.text.ParseException;

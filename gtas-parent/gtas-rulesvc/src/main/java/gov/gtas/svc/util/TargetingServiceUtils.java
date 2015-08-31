@@ -1,4 +1,4 @@
-package gov.gtas.svc;
+package gov.gtas.svc.util;
 
 import gov.gtas.bo.BasicRuleServiceResult;
 import gov.gtas.bo.RuleHitDetail;

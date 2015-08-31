@@ -8,6 +8,7 @@ import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
 import gov.gtas.model.watchlist.util.WatchlistBuilder;
 import gov.gtas.services.watchlist.WatchlistPersistenceService;
+import gov.gtas.svc.util.WatchlistServiceJsonResponseHelper;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -22,7 +22,7 @@ import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.PassengerTypeCode;
-import gov.gtas.svc.TargetingServiceUtils;
+import gov.gtas.svc.util.TargetingServiceUtils;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = RuleServiceConfig.class)

@@ -20,7 +20,7 @@ import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
 import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
-import gov.gtas.svc.UdrServiceHelper;
+import gov.gtas.svc.util.UdrServiceHelper;
 
 import java.text.ParseException;
 import java.util.Date;

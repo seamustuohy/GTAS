@@ -1,4 +1,4 @@
-package gov.gtas.svc;
+package gov.gtas.svc.util;
 
 import static gov.gtas.rule.builder.RuleTemplateConstants.NEW_LINE;
 import gov.gtas.constant.CommonErrorConstants;

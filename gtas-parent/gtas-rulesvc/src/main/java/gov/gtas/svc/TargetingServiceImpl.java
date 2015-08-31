@@ -16,6 +16,7 @@ import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PnrMessageRepository;
 import gov.gtas.rule.RuleService;
+import gov.gtas.svc.util.TargetingServiceUtils;
 
 import java.util.ArrayList;
 import java.util.Date;

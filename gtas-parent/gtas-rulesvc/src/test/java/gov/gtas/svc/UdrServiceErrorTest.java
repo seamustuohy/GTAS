@@ -20,6 +20,7 @@ import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.services.UserService;
 import gov.gtas.services.udr.RulePersistenceService;
+import gov.gtas.svc.util.UdrServiceHelper;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
