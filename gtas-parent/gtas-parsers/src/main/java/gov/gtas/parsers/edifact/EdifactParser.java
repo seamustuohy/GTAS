@@ -110,18 +110,7 @@ public abstract class EdifactParser <T extends MessageVo> {
     protected abstract String getPayloadText(String message) throws ParseException;
     
     protected <S extends Segment> S getMandatorySegment(Class<?> clazz, String segmentName) throws ParseException {
-        if (iter.hasNext()) {
-            Segment s = iter.next();
-            String expectedName = (segmentName != null) ? segmentName : clazz.getSimpleName();
-            if (expectedName.equals(s.getName())) {
-                S rv = segmentFactory.build(s, clazz);
-                return rv;                
-            } else {
-                throw new ParseException("Unexpected segment " + s.getName() + ". Expected " + expectedName);
-            }
-        }
-
-        throw new ParseException("No segments left! ");
+        return getNextSegment(clazz, segmentName, true);
     }
     
     protected <S extends Segment> S getMandatorySegment(Class<?> clazz) throws ParseException {
@@ -129,22 +118,38 @@ public abstract class EdifactParser <T extends MessageVo> {
     }
     
     protected <S extends Segment> S getConditionalSegment(Class<?> clazz, String segmentName) throws ParseException {
-        if (iter.hasNext()) {
-            Segment s = iter.next();
-            String expectedName = (segmentName != null) ? segmentName : clazz.getSimpleName();
-            if (expectedName.equals(s.getName())) {
-                S rv = segmentFactory.build(s, clazz);
-                return rv;
-            } else {
-                iter.previous();
-                return null;
-            }
+        S segment = getNextSegment(clazz, segmentName, false);
+        if (segment != null) {
+            return segment;
         }
-
+        
+        iter.previous();
         return null;
     }
 
     protected <S extends Segment> S getConditionalSegment(Class<?> clazz) throws ParseException {
         return getConditionalSegment(clazz, null);
+    }
+    
+    private <S extends Segment> S getNextSegment(Class<?> clazz, String segmentName, boolean mandatory) throws ParseException {
+        String expectedName = (segmentName != null) ? segmentName : clazz.getSimpleName();
+
+        if (iter.hasNext()) {
+            Segment s = iter.next();
+            if (expectedName.equals(s.getName())) {
+                S rv = segmentFactory.build(s, clazz);
+                return rv;                
+            } else {
+                if (mandatory) {
+                    throw new ParseException("Expected segment " + expectedName + " but got " + s.getName());
+                }
+            }
+        }
+        
+        if (mandatory) {
+            throw new ParseException("Expected segment " + expectedName + " but no more segments to process");
+        }
+        
+        return null;
     }
 }
