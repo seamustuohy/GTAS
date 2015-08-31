@@ -1,6 +1,5 @@
 package gov.gtas.services;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +26,6 @@ import gov.gtas.repository.FlightRepository;
 import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.repository.ReportingPartyRepository;
-import gov.gtas.util.DateCalendarUtils;
 
 @Repository
 public class LoaderRepository {
@@ -73,45 +71,49 @@ public class LoaderRepository {
             }
         }
     }
-    
-    @Transactional
-    public void processFlightsAndPassengers(List<FlightVo> flights, List<PassengerVo> passengers, Set<Flight> flightsToUpdate) throws ParseException {
-        for (FlightVo fvo : flights) {
-            Flight currentFlight = null;
-            Flight existingFlight = flightDao.getFlightByCriteria(fvo.getCarrier(), fvo.getFlightNumber(), fvo.getOrigin(), fvo.getDestination(), fvo.getFlightDate());
-            if (existingFlight == null) {
-                Flight newFlight = utils.createNewFlight(fvo);
-                currentFlight = newFlight;
-            } else {
-                utils.updateFlight(fvo, existingFlight);
-                currentFlight = existingFlight;
-            }
-            flightsToUpdate.add(currentFlight);
-            
-            for (PassengerVo pvo : passengers) {
-                Passenger currentPassenger = null;
-                Passenger existingPassenger = findPassengerOnFlight(currentFlight, pvo);
-                boolean isNewPax = false;
-                if (existingPassenger == null) {
-                    Passenger p = utils.createNewPassenger(pvo);
-                    currentPassenger = p;
-                    isNewPax = true;
-                } else {
-                    utils.updatePassenger(pvo, existingPassenger);
-                    currentPassenger = existingPassenger;
-                }
-                currentFlight.getPassengers().add(currentPassenger);
 
-                for (DocumentVo dvo : pvo.getDocuments()) {
-                    if (isNewPax) {
-                        currentPassenger.addDocument(utils.createNewDocument(dvo));
+    @Transactional
+    public void processFlightsAndPassengers(List<FlightVo> flights, List<PassengerVo> passengers, Set<Flight> messageFlights) throws ParseException {
+        for (FlightVo fvo : flights) {
+            Flight existingFlight = flightDao.getFlightByCriteria(fvo.getCarrier(), fvo.getFlightNumber(), fvo.getOrigin(), fvo.getDestination(), fvo.getFlightDate());
+
+            if (existingFlight == null) {
+                // new flight: just add new pax + docs
+                Flight newFlight = utils.createNewFlight(fvo);
+                messageFlights.add(newFlight);
+                for (PassengerVo pvo : passengers) {
+                    Passenger p = utils.createNewPassenger(pvo);
+                    for (DocumentVo dvo : pvo.getDocuments()) {
+                        p.addDocument(utils.createNewDocument(dvo));
+                    }
+                    newFlight.getPassengers().add(p);
+                }
+                                
+            } else {
+                // existing flight: lookup pax and update
+                utils.updateFlight(fvo, existingFlight);
+                messageFlights.add(existingFlight);
+                for (PassengerVo pvo : passengers) {
+                    Passenger existingPassenger = findPassengerOnFlight(existingFlight, pvo);
+                    if (existingPassenger == null) {
+                        Passenger p = utils.createNewPassenger(pvo);
+                        for (DocumentVo dvo : pvo.getDocuments()) {
+                            p.addDocument(utils.createNewDocument(dvo));
+                        }
+                        passengerDao.save(p);
+                        p.getFlights().add(existingFlight);
+                        existingFlight.getPassengers().add(p);
+                        
                     } else {
-                        Document existingDoc = docDao.findByDocumentNumberAndPassenger(dvo.getDocumentNumber(), currentPassenger);
-                        if (existingDoc == null) {
-                            currentPassenger.addDocument(utils.createNewDocument(dvo));
-                        } else {
-                            utils.updateDocument(dvo, existingDoc);
-                        }                        
+                        utils.updatePassenger(pvo, existingPassenger);
+                        for (DocumentVo dvo : pvo.getDocuments()) {
+                            Document existingDoc = docDao.findByDocumentNumberAndPassenger(dvo.getDocumentNumber(), existingPassenger);
+                            if (existingDoc == null) {
+                                existingPassenger.addDocument(utils.createNewDocument(dvo));
+                            } else {
+                                utils.updateDocument(dvo, existingDoc);
+                            }                        
+                        }
                     }
                 }
             }

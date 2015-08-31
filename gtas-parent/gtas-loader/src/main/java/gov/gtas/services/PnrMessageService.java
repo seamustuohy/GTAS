@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -17,9 +15,7 @@ import org.springframework.stereotype.Service;
 
 import gov.gtas.error.ErrorUtils;
 import gov.gtas.model.EdifactMessage;
-import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Passenger;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.PnrMessage;
 import gov.gtas.parsers.edifact.EdifactParser;
@@ -31,8 +27,6 @@ import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.vo.passenger.AddressVo;
 import gov.gtas.parsers.vo.passenger.CreditCardVo;
-import gov.gtas.parsers.vo.passenger.FlightVo;
-import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.repository.PnrMessageRepository;
 
@@ -100,9 +94,7 @@ public class PnrMessageService implements MessageService {
         PnrMessageVo m = (PnrMessageVo)messageVo;
         PnrVo vo = m.getPnr();
         try {
-            Pnr pnr = null;
-
-            pnr = utils.convertPnrVo(vo);
+            Pnr pnr = utils.convertPnrVo(vo);
             this.pnrMessage.setPnr(pnr);
             
             for (AddressVo addressVo : vo.getAddresses()) {
@@ -117,21 +109,7 @@ public class PnrMessageService implements MessageService {
                 pnr.addCreditCard(utils.convertCreditVo(creditVo));
             }
             
-//            loaderRepo.processFlightsAndPassengers(this.apisMessage, m.getFlights(), m.getPassengers());
-
-            Set<Passenger> pax = new HashSet<>();        
-            for (PassengerVo pvo : vo.getPassengers()) {
-                pax.add(utils.createNewPassenger(pvo));
-            }
-          
-            pnr.setPassengers(pax);
-    
-            Flight f = null;
-            for (FlightVo fvo : vo.getFlights()) {
-                f = utils.createNewFlight(fvo);
-                f.setPassengers(pax);
-                pnr.getFlights().add(f);
-            }
+            loaderRepo.processFlightsAndPassengers(vo.getFlights(), vo.getPassengers(), pnr.getFlights());
             this.pnrMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
