@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.UdrRule;
+import gov.gtas.model.watchlist.WatchlistItem;
 /**
  * Interface specification for the rule management service.
  * @author GTAS3 (AB)
@@ -36,6 +37,13 @@ public interface RuleManagementService {
      * @return the created Knowledge Base.
      */
     KnowledgeBase createKnowledgeBaseFromUdrRules(String kbName, Collection<UdrRule> rules, String userId);
+    /**
+     * Creates a Knowledge Base from a list of watch list item objects and saves it to the DB.
+     * @param kbName the name of the Knowledge Base.
+     * @param rules the collection of watch list items.
+     * @return the created Knowledge Base.
+     */
+    KnowledgeBase createKnowledgeBaseFromWatchlistItems(String kbName, Iterable<WatchlistItem> rules);
     /**
      * Deletes the named Knowledge Base.
      * @param kbName the knowledge base name.

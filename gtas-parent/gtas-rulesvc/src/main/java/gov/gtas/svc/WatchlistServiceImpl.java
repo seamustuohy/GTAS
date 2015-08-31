@@ -1,6 +1,7 @@
 package gov.gtas.svc;
 
 import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.Watchlist;
 import gov.gtas.model.watchlist.WatchlistItem;
@@ -23,6 +24,8 @@ public class WatchlistServiceImpl implements WatchlistService {
 	
 	@Autowired
 	private WatchlistPersistenceService watchlistPersistenceService;
+	@Autowired
+	private RuleManagementService ruleManagementService;
 
 	/* (non-Javadoc)
 	 * @see gov.gtas.svc.WatchlistService#fetchWatchlist(java.lang.String)
@@ -68,6 +71,16 @@ public class WatchlistServiceImpl implements WatchlistService {
 			ret.add(new WatchlistSpec(wl.getWatchlistName(), wl.getWatchlistEntity().getEntityName()));
 		}
 		return ret;
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.WatchlistService#activateAllWatchlists(java.lang.String)
+	 */
+	@Override
+	public JsonServiceResponse activateAllWatchlists(String knowledgeBaseName) {
+		Iterable<WatchlistItem> items = watchlistPersistenceService.findAllWatchlistItems();
+		KnowledgeBase kb = ruleManagementService.createKnowledgeBaseFromWatchlistItems(knowledgeBaseName, items);
+		return WatchlistServiceJsonResponseHelper.createKnowledBaseResponse(kb, null);
 	}
 
 

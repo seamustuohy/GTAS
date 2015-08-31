@@ -9,6 +9,7 @@ import gov.gtas.error.RuleServiceErrorHandler;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
+import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.rule.RuleUtils;
 import gov.gtas.rule.builder.DrlRuleFileBuilder;
 import gov.gtas.services.UserService;
@@ -141,6 +142,25 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 			String drlRules = ruleFileBuilder.build();
 			KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName, drlRules);
 			linkRulesToKnowledgeBase(kb, rules);
+			return kb;
+		} else {
+			return null;
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromWatchlistItems(java.lang.String, java.lang.Iterable)
+	 */
+	@Override
+	public KnowledgeBase createKnowledgeBaseFromWatchlistItems(String kbName,
+			Iterable<WatchlistItem> rules) {
+		if (rules != null) {
+			DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
+			for (WatchlistItem rule : rules) {
+				ruleFileBuilder.addWatchlistItemRule(rule);
+			}
+			String drlRules = ruleFileBuilder.build();
+			KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName, drlRules);
 			return kb;
 		} else {
 			return null;

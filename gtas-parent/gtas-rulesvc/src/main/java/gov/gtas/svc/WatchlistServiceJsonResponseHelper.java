@@ -1,6 +1,7 @@
 package gov.gtas.svc;
 
 import gov.gtas.constant.UdrConstants;
+import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.Watchlist;
 
@@ -57,6 +58,34 @@ public class WatchlistServiceJsonResponseHelper {
 						op, msg);
 			}
 
+		}
+		return resp;
+	}
+
+
+	public static JsonServiceResponse createKnowledBaseResponse(KnowledgeBase kb,
+			String failureReason) {
+		JsonServiceResponse resp = null;
+		boolean success = kb == null ? false:true;
+		if (success) {
+			resp = new JsonServiceResponse(
+					JsonServiceResponse.SUCCESS_RESPONSE,
+					"Watch List Service",
+					"Create KB",
+					"Knowledge Base creation for all watch lists was successful.");
+			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
+					"id", String.valueOf(kb
+							.getId())));
+		} else {
+			String msg =null;
+			if(StringUtils.isEmpty(failureReason)){
+				msg = "Create KB failed.";
+			} else {
+				msg = "Create KB failed " + failureReason + ".";
+			}
+			resp = new JsonServiceResponse(
+					JsonServiceResponse.FAILURE_RESPONSE, "Watch List Service",
+					"Create KB", msg);
 		}
 		return resp;
 	}

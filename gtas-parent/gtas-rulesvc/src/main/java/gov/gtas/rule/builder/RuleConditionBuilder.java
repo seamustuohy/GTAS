@@ -9,6 +9,7 @@ import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
+import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.rule.builder.pnr.PnrRuleConditionBuilder;
 
 import java.text.ParseException;
@@ -18,6 +19,8 @@ import java.util.Map;
 
 /**
  * Generates the "when" part of a DRL rule.
+ * procedure:
+ * new RuleConditionBuilder( 
  * 
  * @author GTAS3 (AB)
  */
@@ -217,6 +220,23 @@ public class RuleConditionBuilder {
 					parent.getTitle(), this.passengerVariableName, cause));
 
 		}
+		ruleStringBuilder.append("end\n");
+		conditionDescriptionBuilder = null;
+		return Arrays.asList(cause.split(RuleHitDetail.HIT_REASON_SEPARATOR));
+	}
+
+	private static final String ACTION_WATCHLIST_HIT = "resultList.add(new RuleHitDetail(%s, \"%s\", %s, \"%s\"));\n";
+	public List<String> addWatchlistRuleAction(StringBuilder ruleStringBuilder, String title,
+			WatchlistItem wl, String passengerVariableName) {
+		String cause = conditionDescriptionBuilder.toString()
+				.replace("\"", "'");
+		ruleStringBuilder.append("then\n");
+			// the UDR ID and/or the rule id may not be available at
+			// this stage so we add defer adding these
+			ruleStringBuilder.append(String.format(ACTION_WATCHLIST_HIT,
+					"%dL", // the watch list item ID may not be available
+					title, this.passengerVariableName, cause));
+
 		ruleStringBuilder.append("end\n");
 		conditionDescriptionBuilder = null;
 		return Arrays.asList(cause.split(RuleHitDetail.HIT_REASON_SEPARATOR));

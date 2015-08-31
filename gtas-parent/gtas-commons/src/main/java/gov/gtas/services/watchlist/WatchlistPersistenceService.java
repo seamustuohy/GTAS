@@ -49,7 +49,14 @@ public interface WatchlistPersistenceService {
 	 * @return list of all watch list items.
 	 */
 	public List<WatchlistItem> findWatchlistItems(String watchlistName);
-	
+
+	/**
+	 * Find and return the list of all watch list items for all watch lists.
+	 * 
+	 * @return list of all watch list items.
+	 */
+	public Iterable<WatchlistItem> findAllWatchlistItems();
+
 	/**
 	 * Find and return the list of all non-compiled watch lists.
 	 * (Either the compile time stamp is null, or it is before the edit time stamp.)

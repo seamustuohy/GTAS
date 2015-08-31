@@ -24,7 +24,7 @@ import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.querybuilder.mappings.FrequentFlyerMapping;
 import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
-import gov.gtas.svc.UdrServiceHelper;
+import gov.gtas.rule.builder.util.RuleVariablesUtil;
 
 import java.text.ParseException;
 
@@ -38,7 +38,7 @@ public class PnrRuleConditionBuilderTest {
 
 	@Before
 	public void setUp() throws Exception {
-		testTarget = new RuleConditionBuilder(UdrServiceHelper.createEngineRuleVariableMap());
+		testTarget = new RuleConditionBuilder(RuleVariablesUtil.createEngineRuleVariableMap());
 	}
 
 	@After

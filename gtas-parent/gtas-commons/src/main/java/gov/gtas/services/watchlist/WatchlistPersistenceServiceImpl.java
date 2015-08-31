@@ -90,6 +90,15 @@ public class WatchlistPersistenceServiceImpl implements
 
 
 	/* (non-Javadoc)
+	 * @see gov.gtas.services.watchlist.WatchlistPersistenceService#findAllWatchlistItems()
+	 */
+	@Override
+	public Iterable<WatchlistItem> findAllWatchlistItems() {
+		return watchlistItemRepository.findAll();
+	}
+
+
+	/* (non-Javadoc)
 	 * @see gov.gtas.services.watchlist.WatchlistPersistenceService#findAll()
 	 */
 	@Override
