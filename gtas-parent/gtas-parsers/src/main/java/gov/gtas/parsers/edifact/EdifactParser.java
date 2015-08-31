@@ -109,33 +109,31 @@ public abstract class EdifactParser <T extends MessageVo> {
     
     protected abstract String getPayloadText(String message) throws ParseException;
     
-    /**
-     * Throws an exception if the given segmentName is not valid.
-     * @param segmentName
-     * @throws ParseException
-     */
-    protected abstract void validateSegmentName(String segmentName) throws ParseException;
-    
-    protected <S extends Segment> S getMandatorySegment(Class<?> clazz) throws ParseException {
+    protected <S extends Segment> S getMandatorySegment(Class<?> clazz, String segmentName) throws ParseException {
         if (iter.hasNext()) {
             Segment s = iter.next();
-            validateSegmentName(s.getName());
-            S rv = segmentFactory.build(s, clazz);
-            System.out.println(rv);
-            return rv;
+            String expectedName = (segmentName != null) ? segmentName : clazz.getSimpleName();
+            if (expectedName.equals(s.getName())) {
+                S rv = segmentFactory.build(s, clazz);
+                return rv;                
+            } else {
+                throw new ParseException("Unexpected segment " + s.getName() + ". Expected " + expectedName);
+            }
         }
 
         throw new ParseException("No segments left! ");
     }
     
+    protected <S extends Segment> S getMandatorySegment(Class<?> clazz) throws ParseException {
+        return getMandatorySegment(clazz, null);
+    }
+    
     protected <S extends Segment> S getConditionalSegment(Class<?> clazz, String segmentName) throws ParseException {
         if (iter.hasNext()) {
             Segment s = iter.next();
-            validateSegmentName(s.getName());
-            String myName = (segmentName != null) ? segmentName : clazz.getSimpleName();
-            if (s.getName().equals(myName)) {
+            String expectedName = (segmentName != null) ? segmentName : clazz.getSimpleName();
+            if (expectedName.equals(s.getName())) {
                 S rv = segmentFactory.build(s, clazz);
-                System.out.println(rv);
                 return rv;
             } else {
                 iter.previous();
