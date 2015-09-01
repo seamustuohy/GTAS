@@ -78,7 +78,7 @@ public class CreditCard extends BaseEntityAudit {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.number, this.accountHolder);
+        return Objects.hash(this.cardType, this.number, this.expiration);
     }
     
     @Override
@@ -90,7 +90,8 @@ public class CreditCard extends BaseEntityAudit {
         if (getClass() != obj.getClass())
             return false;
         final CreditCard other = (CreditCard) obj;
-        return Objects.equals(this.number, other.number) 
-                && Objects.equals(this.accountHolder, other.accountHolder);
+        return Objects.equals(this.cardType, other.cardType)
+                && Objects.equals(this.number, other.number) 
+                && Objects.equals(this.expiration, other.expiration);
     }    		
 }
