@@ -46,7 +46,7 @@ public class LoaderRepository {
 
     // TODO: can't instantiate generic message repo?
     @Autowired
-    private MessageRepository<ApisMessage> messageDao;
+    private MessageRepository<Message> messageDao;
 
     @Autowired
     private LoaderUtils utils;
