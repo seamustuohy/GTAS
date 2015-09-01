@@ -1,9 +1,12 @@
 package gov.gtas.delegates.vo;
 
+import gov.gtas.validators.Validatable;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class ReportingPartyVo {
+public class ReportingPartyVo implements Validatable{
+	
     private String partyName;
     private String telephone;
     private String fax;
@@ -30,5 +33,10 @@ public class ReportingPartyVo {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
-    }    
+    }
+	@Override
+	public boolean validate() {
+		
+		return true;
+	}    
 }

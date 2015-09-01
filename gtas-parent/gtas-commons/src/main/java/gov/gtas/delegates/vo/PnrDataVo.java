@@ -180,7 +180,7 @@ public class PnrDataVo extends BaseVo implements Validatable {
 
 	@Override
 	public boolean validate() {
-		if(StringUtils.isBlank(this.recordLocator) ){
+		if(StringUtils.isBlank(this.recordLocator) || StringUtils.isBlank(this.carrier)){
 			return false;
 		}
 		return true;
