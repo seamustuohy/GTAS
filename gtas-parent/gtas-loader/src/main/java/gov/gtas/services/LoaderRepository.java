@@ -132,6 +132,12 @@ public class LoaderRepository {
         
         for (FrequentFlyerVo ffvo : vo.getFrequentFlyerDetails()) {
             FrequentFlyer existingFf = ffdao.findByCarrierAndNumber(ffvo.getCarrier(), ffvo.getNumber());
+            if (existingFf == null) {
+                FrequentFlyer newFf = utils.convertFrequentFlyerVo(ffvo);
+                pnr.addFrequentFlyer(newFf);
+            } else {
+                pnr.addFrequentFlyer(existingFf);
+            }
         }
     }
     
