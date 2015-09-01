@@ -171,6 +171,39 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromUdrAndWatchlist(java.lang.String, java.util.Collection, java.lang.Iterable)
+	 */
+//	@Override
+//	public KnowledgeBase createKnowledgeBaseFromUdrAndWatchlist(String kbName,
+//			Collection<UdrRule> rules, Iterable<WatchlistItem> wlItems) {
+//		DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
+//		boolean udrNotEmpty = false;
+//		if (!CollectionUtils.isEmpty(rules)) {
+//			udrNotEmpty = true;
+//			for (UdrRule rule : rules) {
+//				ruleFileBuilder.addRule(rule);
+//			}
+//		} 
+//		boolean wlNotEmpty = false;
+//		if (wlItems != null) {
+//			for (WatchlistItem item : wlItems) {
+//				wlNotEmpty = true;
+//				ruleFileBuilder.addWatchlistItemRule(item);
+//			}
+//		}
+//		if(udrNotEmpty || wlNotEmpty){
+//			String drlRules = ruleFileBuilder.build();
+//			KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName, drlRules);
+//			if(udrNotEmpty){
+//			    linkRulesToKnowledgeBase(kb, rules);
+//			}
+//			return kb;
+//		} else {
+//		    return null;
+//		}
+//	}
+
 	private void linkRulesToKnowledgeBase(KnowledgeBase kb, Collection<UdrRule> rules){
 		if(kb != null && kb.getId() != null){
 			List<Rule> ruleList = new LinkedList<Rule>();

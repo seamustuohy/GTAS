@@ -7,7 +7,6 @@ import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.constant.RuleConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
@@ -112,15 +111,6 @@ public class RuleServiceImpl implements RuleService {
 				.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
 
 		RuleServiceResult res = new BasicRuleServiceResult(resList, stats);
-//		RuleServiceResult res = new RuleServiceResult() {
-//			public List<RuleHitDetail> getResultList() {
-//				return resList;
-//			}
-//
-//			public RuleExecutionStatistics getExecutionStatistics() {
-//				return stats;
-//			}
-//		};
 
 		// Remove comment if using logging
 		// logger.close();
@@ -148,10 +138,11 @@ public class RuleServiceImpl implements RuleService {
 			kbRecord = rulePersistenceService.findUdrKnowledgeBase(kbName);
 		}
 		if (kbRecord == null) {
-			throw ErrorHandlerFactory.getErrorHandler().createException(
-					RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
-					kbName == null ? RuleConstants.UDR_KNOWLEDGE_BASE_NAME
-							: kbName);
+			return null;
+//			throw ErrorHandlerFactory.getErrorHandler().createException(
+//					RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
+//					kbName == null ? RuleConstants.UDR_KNOWLEDGE_BASE_NAME
+//							: kbName);
 		}
 		try {
 			KieBase kb = RuleUtils

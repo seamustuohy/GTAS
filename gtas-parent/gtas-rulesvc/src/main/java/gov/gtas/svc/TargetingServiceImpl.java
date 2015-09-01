@@ -1,11 +1,14 @@
 package gov.gtas.svc;
 
+import gov.gtas.bo.CompositeRuleServiceResult;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.RuleConstants;
 import gov.gtas.constant.RuleServiceConstants;
+import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.HitDetail;
@@ -182,7 +185,13 @@ public class TargetingServiceImpl implements TargetingService {
 		}
 		RuleServiceRequest req = TargetingServiceUtils.createPnrApisRequest(
 				apisMsgs, pnrMsgs);
-		RuleServiceResult result = ruleService.invokeRuleEngine(req);
+		RuleServiceResult udrResult = ruleService.invokeRuleEngine(req);//default Knowledge Base is the UDR KB
+		RuleServiceResult wlResult = ruleService.invokeRuleEngine(req, WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
+		if(udrResult == null && wlResult == null){
+			throw ErrorHandlerFactory.getErrorHandler().createException(
+			RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
+			(RuleConstants.UDR_KNOWLEDGE_BASE_NAME+"/"+WatchlistConstants.WL_KNOWLEDGE_BASE_NAME));			
+		}
 		if (updateProcesssedMessageStat) {
 			for (ApisMessage apisMessage : apisMsgs) {
 				apisMessage.setStatus(statusAfterProcesssing);
@@ -191,8 +200,11 @@ public class TargetingServiceImpl implements TargetingService {
 				pnrMessage.setStatus(statusAfterProcesssing);
 			}
 		}
-		result = TargetingServiceUtils.ruleResultPostProcesssing(result);
-		return result;
+		//eliminate duplicates
+		if(udrResult != null){
+		    udrResult = TargetingServiceUtils.ruleResultPostProcesssing(udrResult);
+		}
+		return new CompositeRuleServiceResult(udrResult, wlResult);
 	}
 
 	@Override
