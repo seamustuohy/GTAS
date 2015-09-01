@@ -96,19 +96,7 @@ public class PnrMessageService implements MessageService {
         try {
             Pnr pnr = utils.convertPnrVo(vo);
             this.pnrMessage.setPnr(pnr);
-            
-            for (AddressVo addressVo : vo.getAddresses()) {
-                pnr.addAddress(utils.convertAddressVo(addressVo));
-            }
-            
-            for (PhoneVo phoneVo : vo.getPhoneNumbers()) {
-                pnr.addPhone(utils.convertPhoneVo(phoneVo));
-            }
-    
-            for (CreditCardVo creditVo : vo.getCreditCards()) {
-                pnr.addCreditCard(utils.convertCreditVo(creditVo));
-            }
-            
+            loaderRepo.processPnr(pnr, vo);
             loaderRepo.processFlightsAndPassengers(vo.getFlights(), vo.getPassengers(), pnr.getFlights(), pnr.getPassengers());
             this.pnrMessage.setStatus(MessageStatus.LOADED);
 

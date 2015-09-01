@@ -1,6 +1,6 @@
 package gov.gtas.parsers.vo.passenger;
 
-public class FrequentFlierVo {
+public class FrequentFlyerVo {
     private String airline;
     private String number;
 

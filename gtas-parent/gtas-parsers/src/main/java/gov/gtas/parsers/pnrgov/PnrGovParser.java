@@ -45,7 +45,7 @@ import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.passenger.AddressVo;
 import gov.gtas.parsers.vo.passenger.CreditCardVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
-import gov.gtas.parsers.vo.passenger.FrequentFlierVo;
+import gov.gtas.parsers.vo.passenger.FrequentFlyerVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.parsers.vo.passenger.PnrReportingAgentVo;
@@ -161,11 +161,11 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
     private void processGroup2(TIF tif) throws ParseException {
         FTI fti = getConditionalSegment(FTI.class);
         if (fti != null) {
-            FrequentFlierVo ffvo = new FrequentFlierVo();
+            FrequentFlyerVo ffvo = new FrequentFlyerVo();
             FrequentFlierDetails ffdetails = fti.getFrequentFlierInfo().get(0);
             ffvo.setAirline(ffdetails.getAirlineCode());
             ffvo.setNumber(ffdetails.getFreqTravelerNumber());
-            currentPnr.getFrequentFlierDetails().add(ffvo);
+            currentPnr.getFrequentFlyerDetails().add(ffvo);
         }
         
         for (;;) {

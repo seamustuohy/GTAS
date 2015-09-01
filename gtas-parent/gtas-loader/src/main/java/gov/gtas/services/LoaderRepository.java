@@ -10,21 +10,35 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import gov.gtas.model.Address;
 import gov.gtas.model.ApisMessage;
+import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Message;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.Phone;
+import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.pnrgov.PnrVo;
+import gov.gtas.parsers.vo.passenger.AddressVo;
+import gov.gtas.parsers.vo.passenger.CreditCardVo;
 import gov.gtas.parsers.vo.passenger.DocumentVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.FrequentFlyerVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
+import gov.gtas.repository.AddressRepository;
+import gov.gtas.repository.CreditCardRepository;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.repository.FlightRepository;
+import gov.gtas.repository.FrequentFlyerRepository;
 import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
+import gov.gtas.repository.PhoneRepository;
 import gov.gtas.repository.ReportingPartyRepository;
 
 @Repository
@@ -43,11 +57,22 @@ public class LoaderRepository {
 
     @Autowired
     private DocumentRepository docDao;
+    
+    @Autowired
+    private PhoneRepository phoneDao;
 
-    // TODO: can't instantiate generic message repo?
+    @Autowired
+    private CreditCardRepository creditDao;
+    
+    @Autowired
+    private AddressRepository addressDao;
+
     @Autowired
     private MessageRepository<Message> messageDao;
 
+    @Autowired
+    private FrequentFlyerRepository ffdao;
+    
     @Autowired
     private LoaderUtils utils;
 
@@ -72,6 +97,44 @@ public class LoaderRepository {
         }
     }
 
+    @Transactional
+    public void processPnr(Pnr pnr, PnrVo vo) throws ParseException {
+        for (AddressVo addressVo : vo.getAddresses()) {
+            Address existingAddress = addressDao.findByLine1AndCityAndStateAndPostalCodeAndCountry(
+                    addressVo.getLine1(), addressVo.getCity(), addressVo.getState(), addressVo.getPostalCode(), addressVo.getCountry());
+            if (existingAddress == null) {
+                Address address = utils.convertAddressVo(addressVo);
+                pnr.addAddress(address);
+            } else {
+                pnr.addAddress(existingAddress);                
+            }
+        }
+        
+        for (PhoneVo phoneVo : vo.getPhoneNumbers()) {
+            Phone existingPhone = phoneDao.findByNumber(phoneVo.getNumber());
+            if (existingPhone == null) {
+                Phone newPhone = utils.convertPhoneVo(phoneVo);
+                pnr.addPhone(newPhone);
+            } else {
+                pnr.addPhone(existingPhone);                
+            }
+        }
+
+        for (CreditCardVo creditVo : vo.getCreditCards()) {
+            CreditCard existingCard = creditDao.findByCardTypeAndNumberAndExpiration(creditVo.getCardType(), creditVo.getNumber(), creditVo.getExpiration());
+            if (existingCard == null) {
+                CreditCard newCard  = utils.convertCreditVo(creditVo);
+                pnr.addCreditCard(newCard);
+            } else {
+                pnr.addCreditCard(existingCard);                
+            }
+        }
+        
+        for (FrequentFlyerVo ffvo : vo.getFrequentFlyerDetails()) {
+            FrequentFlyer existingFf = ffdao.findByAirlineCodeAndFrequentFlyerNumber(ffvo.getAirline(), ffvo.getNumber());
+        }
+    }
+    
     @Transactional
     public void processFlightsAndPassengers(List<FlightVo> flights, List<PassengerVo> passengers, Set<Flight> messageFlights, Set<Passenger> messagePassengers) throws ParseException {
         for (FlightVo fvo : flights) {
