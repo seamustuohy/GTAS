@@ -118,7 +118,7 @@ public class PnrRuleConditionBuilderTest {
 				OperatorCodeEnum.NOT_ENDS_WITH, new String[]{".com"}, ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FREQUENT_FLYER,
-				FrequentFlyerMapping.AIRLINE,
+				FrequentFlyerMapping.CARRIER,
 				OperatorCodeEnum.NOT_EQUAL, new String[]{"NZ"}, ValueTypesEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
@@ -149,7 +149,7 @@ public class PnrRuleConditionBuilderTest {
 				    +PhoneMapping.PHONE_NUMBER.getFieldName()+" not matches \".*456.*\")\n"
 				+ EMAIL_VARIABLE_NAME+":"+EntityEnum.EMAIL.getEntityName()+"(domain != null, domain not matches \".*.com\")\n"
 				+ FREQUENT_FLYER_VARIABLE_NAME+":"+EntityEnum.FREQUENT_FLYER.getEntityName()+"("
-				     +FrequentFlyerMapping.AIRLINE.getFieldName()+" != \"NZ\")\n"
+				     +FrequentFlyerMapping.CARRIER.getFieldName()+" != \"NZ\")\n"
 				+ PNR_VARIABLE_NAME+":"+EntityEnum.PNR.getEntityName()+"()\n"
 				+ PHONE_VARIABLE_NAME+LINK_VARIABLE_SUFFIX+":PnrPhoneLink("+LINK_PNR_ID+" == "
 					       +PNR_VARIABLE_NAME+".id, "+LINK_ATTRIBUTE_ID+" == "+PHONE_VARIABLE_NAME+".id)\n"

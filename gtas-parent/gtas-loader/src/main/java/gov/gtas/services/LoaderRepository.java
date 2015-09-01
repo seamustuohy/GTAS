@@ -131,7 +131,7 @@ public class LoaderRepository {
         }
         
         for (FrequentFlyerVo ffvo : vo.getFrequentFlyerDetails()) {
-            FrequentFlyer existingFf = ffdao.findByAirlineCodeAndFrequentFlyerNumber(ffvo.getAirline(), ffvo.getNumber());
+            FrequentFlyer existingFf = ffdao.findByCarrierAndNumber(ffvo.getCarrier(), ffvo.getNumber());
         }
     }
     

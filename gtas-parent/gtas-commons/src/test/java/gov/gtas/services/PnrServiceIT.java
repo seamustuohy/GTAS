@@ -139,8 +139,8 @@ public class PnrServiceIT {
 		ag.setAgencyState("VA");
 		pnr.setAgency(ag);
 		FrequentFlyer ff = new FrequentFlyer();
-		ff.setFrequentFlyerNumber("7777");
-		ff.setAirlineCode("AA");
+		ff.setNumber("7777");
+		ff.setCarrier("AA");
 		ff.setCreatedAt(new Date());
 		ff.setCreatedBy("JUNIT");
 		pnr.addFrequentFlyer(ff);

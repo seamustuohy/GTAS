@@ -1,14 +1,14 @@
 package gov.gtas.parsers.vo.passenger;
 
 public class FrequentFlyerVo {
-    private String airline;
+    private String carrier;
     private String number;
 
-    public String getAirline() {
-        return airline;
+    public String getCarrier() {
+        return carrier;
     }
-    public void setAirline(String airline) {
-        this.airline = airline;
+    public void setCarrier(String carrier) {
+        this.carrier = carrier;
     }
     public String getNumber() {
         return number;

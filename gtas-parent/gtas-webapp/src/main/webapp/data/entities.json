@@ -387,8 +387,8 @@
     "label": "FREQUENT FLYER",
     "columns": [
       {
-        "id": "FrequentFlyer.airlineCode",
-        "label": "Airline",
+        "id": "FrequentFlyer.carrier",
+        "label": "Carrier",
         "type": "string",
         "operators": [
           "EQUAL",
@@ -399,7 +399,7 @@
         ]
       },
       {
-        "id": "FrequentFlyer.frequentFlyerNumber",
+        "id": "FrequentFlyer.number",
         "label": "Number",
         "type": "string",
         "operators": [

@@ -15,11 +15,11 @@ public class FrequentFlyer extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;  
     public FrequentFlyer() { }
     
-	@Column(name = "airline_code", length = 4)
-    private String airlineCode;
+    @Column(nullable = false)
+    private String carrier;
 	
-	@Column(name = "frequent_flyer_number", nullable = false)
-    private String frequentFlyerNumber;
+	@Column(nullable = false)
+    private String number;
 	
     @ManyToMany(
         mappedBy = "frequentFlyers",
@@ -27,22 +27,6 @@ public class FrequentFlyer extends BaseEntityAudit {
     )
     private Set<Pnr> pnrs = new HashSet<>();
     
-	public String getAirlineCode() {
-		return airlineCode;
-	}
-
-	public void setAirlineCode(String airlineCode) {
-		this.airlineCode = airlineCode;
-	}
-
-	public String getFrequentFlyerNumber() {
-		return frequentFlyerNumber;
-	}
-
-	public void setFrequentFlyerNumber(String frequentFlyerNumber) {
-		this.frequentFlyerNumber = frequentFlyerNumber;
-	}
-	
     public Set<Pnr> getPnrs() {
         return pnrs;
     }
@@ -51,9 +35,25 @@ public class FrequentFlyer extends BaseEntityAudit {
         this.pnrs = pnrs;
     }
 
+    public String getCarrier() {
+        return carrier;
+    }
+
+    public void setCarrier(String carrier) {
+        this.carrier = carrier;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(this.frequentFlyerNumber,this.airlineCode);
+        return Objects.hash(this.number, this.carrier);
     }
     
     @Override
@@ -65,7 +65,7 @@ public class FrequentFlyer extends BaseEntityAudit {
         if (getClass() != obj.getClass())
             return false;
         final FrequentFlyer other = (FrequentFlyer) obj;
-        return Objects.equals(this.frequentFlyerNumber, other.frequentFlyerNumber ) && 
-        		Objects.equals(this.airlineCode, other.airlineCode);
+        return Objects.equals(this.number, other.number) && 
+        		Objects.equals(this.carrier, other.carrier);
     }    	
 }

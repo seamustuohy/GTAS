@@ -208,7 +208,7 @@ public class RuleBuilderTestUtils {
 						OperatorCodeEnum.BEGINS_WITH, "123", ValueTypesEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FREQUENT_FLYER,
-						FrequentFlyerMapping.AIRLINE,
+						FrequentFlyerMapping.CARRIER,
 						OperatorCodeEnum.EQUAL, "AA", ValueTypesEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FLIGHT,

@@ -163,7 +163,7 @@ public final class PnrGovParser extends EdifactParser<PnrMessageVo> {
         if (fti != null) {
             FrequentFlyerVo ffvo = new FrequentFlyerVo();
             FrequentFlierDetails ffdetails = fti.getFrequentFlierInfo().get(0);
-            ffvo.setAirline(ffdetails.getAirlineCode());
+            ffvo.setCarrier(ffdetails.getAirlineCode());
             ffvo.setNumber(ffdetails.getFreqTravelerNumber());
             currentPnr.getFrequentFlyerDetails().add(ffvo);
         }
