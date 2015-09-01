@@ -13,10 +13,12 @@ import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.HitDetail;
 import gov.gtas.model.HitsSummary;
+import gov.gtas.model.Message;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.PnrMessage;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.HitsSummaryRepository;
+import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PnrMessageRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.svc.util.TargetingServiceUtils;
@@ -49,6 +51,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 	/* The rule engine to be used. */
 	private final RuleService ruleService;
+
+	@Autowired
+	private MessageRepository<Message> messageRepository;
 
 	@Autowired
 	private ApisMessageRepository apisMsgRepository;
@@ -177,32 +182,38 @@ public class TargetingServiceImpl implements TargetingService {
 	public RuleServiceResult analyzeLoadedMessages(MessageStatus statusToLoad,
 			MessageStatus statusAfterProcesssing,
 			final boolean updateProcesssedMessageStat) {
-		List<PnrMessage> pnrMsgs = this.retrievePnrMessage(statusToLoad);
-		List<ApisMessage> apisMsgs = this.retrieveApisMessage(statusToLoad);
+		Iterator<Message> source = messageRepository.findAll().iterator();
+		List<Message> target = new ArrayList<Message>();
+		source.forEachRemaining(target::add);
+
 		if (logger.isInfoEnabled()) {
-			logger.info("TargetingServiceImpl.analyzeLoadedMessages() - retrieved PNR message list size-> " + pnrMsgs.size());
-			logger.info("TargetingServiceImpl.analyzeLoadedMessages() - retrieved APIS message list size-> " + apisMsgs.size());
+			logger.info("TargetingServiceImpl.analyzeLoadedMessages() - retrieved  message list size-> "
+					+ target.size());
 		}
-		RuleServiceRequest req = TargetingServiceUtils.createPnrApisRequest(
-				apisMsgs, pnrMsgs);
-		RuleServiceResult udrResult = ruleService.invokeRuleEngine(req);//default Knowledge Base is the UDR KB
-		RuleServiceResult wlResult = ruleService.invokeRuleEngine(req, WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
-		if(udrResult == null && wlResult == null){
-			throw ErrorHandlerFactory.getErrorHandler().createException(
-			RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
-			(RuleConstants.UDR_KNOWLEDGE_BASE_NAME+"/"+WatchlistConstants.WL_KNOWLEDGE_BASE_NAME));			
+
+		RuleServiceRequest req = TargetingServiceUtils
+				.createPnrApisRequest(target);
+		// default knowledge Base is the UDR KB
+		RuleServiceResult udrResult = ruleService.invokeRuleEngine(req);
+
+		RuleServiceResult wlResult = ruleService.invokeRuleEngine(req,
+				WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
+		if (udrResult == null && wlResult == null) {
+			throw ErrorHandlerFactory
+					.getErrorHandler()
+					.createException(
+							RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
+							(RuleConstants.UDR_KNOWLEDGE_BASE_NAME + "/" + WatchlistConstants.WL_KNOWLEDGE_BASE_NAME));
 		}
 		if (updateProcesssedMessageStat) {
-			for (ApisMessage apisMessage : apisMsgs) {
-				apisMessage.setStatus(statusAfterProcesssing);
-			}
-			for (PnrMessage pnrMessage : pnrMsgs) {
-				pnrMessage.setStatus(statusAfterProcesssing);
+			for (Message message : target) {
+				message.setStatus(statusAfterProcesssing);
 			}
 		}
-		//eliminate duplicates
-		if(udrResult != null){
-		    udrResult = TargetingServiceUtils.ruleResultPostProcesssing(udrResult);
+		// eliminate duplicates
+		if (udrResult != null) {
+			udrResult = TargetingServiceUtils
+					.ruleResultPostProcesssing(udrResult);
 		}
 		return new CompositeRuleServiceResult(udrResult, wlResult);
 	}
