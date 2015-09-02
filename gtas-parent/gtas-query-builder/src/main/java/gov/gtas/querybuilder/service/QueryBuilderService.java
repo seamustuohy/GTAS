@@ -249,7 +249,9 @@ public class QueryBuilderService {
 		result.setTitle(query.getTitle());
 		result.setDescription(query.getDescription());
 		try {
-			result.setQuery(mapper.readValue(query.getQueryText(), QueryObject.class));
+			if(query.getQueryText() != null && !query.getQueryText().isEmpty()) {
+				result.setQuery(mapper.readValue(query.getQueryText(), QueryObject.class));
+			}
 		} catch (IOException e) {
 			throw new InvalidQueryException(e.getMessage(), query);
 		}

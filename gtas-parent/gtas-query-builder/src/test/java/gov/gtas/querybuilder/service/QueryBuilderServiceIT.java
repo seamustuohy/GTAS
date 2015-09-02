@@ -6,11 +6,8 @@ import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.OperatorEnum;
 import gov.gtas.enumtype.TypeEnum;
-import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
-import gov.gtas.model.lookup.DocumentTypeCode;
-import gov.gtas.model.lookup.PassengerTypeCode;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
@@ -25,7 +22,6 @@ import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.services.FlightService;
 import gov.gtas.services.PassengerService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -35,18 +31,14 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  *	Query Builder Service Integration Test 
@@ -70,25 +62,15 @@ public class QueryBuilderServiceIT {
 	private static final String DESCRIPTION = "A simple query created during integration test";
 	private static final String USER_ID = "ladebiyi";
 	
-	private QueryObject query;
+	private static QueryObject query;
 	
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void setUp() throws Exception {
 		query = buildSimpleBetweenQuery();
 	}
-
-	@After
-	public void tearDown() throws Exception {
-		query = null;
 		
-		// delete all records from the user_query table
-		// after each test method thereby creating 
-		// isolated integration test
-		deleteAllRecords();
-	}
-		
-//	@Test
-//	@Transactional
+	@Test
+	@Transactional
 	public void testSaveQuery() throws QueryAlreadyExistsException, InvalidQueryException, QueryDoesNotExistException {
 		QueryRequest request = new QueryRequest();
 		
@@ -99,10 +81,12 @@ public class QueryBuilderServiceIT {
 		
 		IUserQueryResult result = queryService.saveQuery(request);
 		assertNotNull(result.getId());
+		
+		deleteUserQuery(result.getId());
 	}
 	
-//	@Test(expected = QueryAlreadyExistsException.class)
-//	@Transactional
+	@Test(expected = QueryAlreadyExistsException.class)
+	@Transactional
 	public void testSaveDuplicateQuery() throws QueryAlreadyExistsException, InvalidQueryException {
 		QueryRequest request = new QueryRequest();
 		
@@ -118,10 +102,12 @@ public class QueryBuilderServiceIT {
 		// try to create a duplicate query
 		// this call should fail and throw exception
 		queryService.saveQuery(request);
+		
+		deleteUserQuery(result.getId());
 	}
 	
-//	@Test(expected = InvalidQueryException.class)
-//	@Transactional
+	@Test(expected = InvalidQueryException.class)
+	@Transactional
 	public void testSaveInvalidQuery() throws QueryAlreadyExistsException, InvalidQueryException {
 		QueryRequest request = new QueryRequest();
 		
@@ -132,18 +118,6 @@ public class QueryBuilderServiceIT {
 		
 		// create a user query
 		queryService.saveQuery(request);
-	}
-	
-//	@Test
-//	@Transactional
-	public void testMaxTitle() {
-		
-	}
-	
-//	@Test
-//	@Transactional
-	public void TestMaxDescription() {
-		
 	}
 	
 	@Test
@@ -166,6 +140,8 @@ public class QueryBuilderServiceIT {
 		
 		assertEquals(result.getId(), updatedResult.getId());
 		assertEquals(UPDATED_TITLE, updatedResult.getTitle());
+		
+		deleteUserQuery(result.getId());
 	}
 	
 	@Test(expected = InvalidQueryException.class)
@@ -188,6 +164,8 @@ public class QueryBuilderServiceIT {
 		
 		// try updating the query with an invalid user query
 		queryService.editQuery(request);
+		
+		deleteUserQuery(result.getId());
 	}
 	
 	@Test(expected = QueryDoesNotExistException.class)
@@ -215,7 +193,7 @@ public class QueryBuilderServiceIT {
 		request.setUserId(USER_ID);
 		
 		// create a new query
-		queryService.saveQuery(request);
+		IUserQueryResult result = queryService.saveQuery(request);
 		
 		// create another query
 		request.setTitle(TITLE + "2");
@@ -232,6 +210,9 @@ public class QueryBuilderServiceIT {
 		request.setTitle(TITLE);
 		request.setId(secondResult.getId());
 		queryService.editQuery(request);
+		
+		deleteUserQuery(result.getId());
+		deleteUserQuery(secondResult.getId());
 	}
 	
 	@Test
@@ -245,15 +226,17 @@ public class QueryBuilderServiceIT {
 		request.setUserId(USER_ID);
 		
 		// create a new query
-		queryService.saveQuery(request);
+		IUserQueryResult result = queryService.saveQuery(request);
 		
-		List<IUserQueryResult> result = queryService.listQueryByUser(USER_ID);
+		List<IUserQueryResult> resultList = queryService.listQueryByUser(USER_ID);
 		
-		assertNotNull(result);
-		assertEquals(1, result.size());
+		assertNotNull(resultList);
+		assertEquals(1, resultList.size());
+		
+		deleteUserQuery(result.getId());
 	}
 
-	@Test
+	@Test(expected = QueryDoesNotExistException.class)
 	@Transactional
 	public void testDeleteQuery() throws QueryAlreadyExistsException, InvalidQueryException, QueryDoesNotExistException {
 		QueryRequest request = new QueryRequest();
@@ -266,7 +249,14 @@ public class QueryBuilderServiceIT {
 		// create a new query
 		IUserQueryResult result = queryService.saveQuery(request);
 		
+		// delete - soft delete
 		queryService.deleteQuery(USER_ID, result.getId());
+	
+		// try updating the query
+		// you should get an exception if the query was
+		// successfully deleted
+		request.setId(result.getId());
+		queryService.editQuery(request);
 	}
 	
 	@Test
@@ -318,25 +308,69 @@ public class QueryBuilderServiceIT {
 		
 		assertNotNull(result);
 		assertEquals(1, result.size());
-//		assertEquals("AB", )
 		
 		flightService.delete(newFlight.getId());
 	}
 
 	@Test
 	public void testRunPassengerQuery() throws InvalidQueryException {
-		TypedQuery<Flight> q = entityManager.createQuery("select f from Flight f left join HitsSummary h on (f.id = h.flightId)", Flight.class);
-		List<Flight> fs = q.getResultList();
+		QueryObject queryObject = new QueryObject();
+		
+		List<QueryEntity> rules = new ArrayList<>();
+		QueryTerm term = new QueryTerm();
+		term.setEntity(EntityEnum.PASSENGER.getEntityName());
+		term.setField("firstName");
+		term.setOperator(OperatorEnum.EQUAL.toString());
+		term.setType(TypeEnum.STRING.toString());
+		term.setValue(new String[]{"Test"});
+		rules.add(term);
+		
+		queryObject.setCondition(Constants.AND);
+		queryObject.setRules(rules);
+		
+		// create flight and passenger record
+		Flight flight = new Flight();
+		
+		flight.setCarrier("AB");
+		flight.setDestination("USA");
+		flight.setDirection("O");
+		flight.setFlightDate(new Date());
+		flight.setFlightNumber("123");
+		flight.setOrigin("CAN");
+		
+		Set<Flight> flights = new HashSet<>();
+		flights.add(flight);
+		
+		Passenger passenger = new Passenger();
+		passenger.setDeleted(false);
+		passenger.setPassengerType("P");
+		passenger.setFirstName("TEST");
+		passenger.setLastName("USER");
+		
+		passenger.setFlights(flights);
+		
+		Set<Passenger> passengers = new HashSet<Passenger>();
+		passengers.add(passenger);
+		flight.setPassengers(passengers);
+		
+		Flight newFlight = flightService.create(flight);
+		
+		// execute flight query
+		List<IQueryResult> result = queryService.runPassengerQuery(queryObject);
+		
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		
+		flightService.delete(newFlight.getId());
 	}
 	
 	@Transactional
-	private void deleteAllRecords() {
-		// delete all records from the user_query table
-		Query deleteQuery = entityManager.createQuery("delete from UserQuery");
+	private void deleteUserQuery(int id) {
+		Query deleteQuery = entityManager.createQuery("delete from UserQuery where id = " + id);
 		deleteQuery.executeUpdate();
 	}
 
-	private QueryObject buildSimpleBetweenQuery() {
+	private static QueryObject buildSimpleBetweenQuery() {
 		QueryTerm rule = new QueryTerm();
 		List<QueryEntity> rules = new ArrayList<>();
 		QueryObject query = new QueryObject();
