@@ -10,6 +10,7 @@ import org.springframework.validation.Errors;
 
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.ConditionEnum;
+import gov.gtas.enumtype.WatchlistEditEnum;
 import gov.gtas.error.CommonValidationException;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.QueryEntity;
@@ -30,20 +31,26 @@ import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 public class WatchlistValidationAdapter {
 	public static void validateWatchlistSpec(WatchlistSpec wljson) {
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(
-				WatchlistSpec.class, "watch list");
-		if (StringUtils.isEmpty(wljson.getName())
-				|| StringUtils.isEmpty(wljson.getEntity())) {
-			errors.reject(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
+				wljson, "watch list");
+		if (StringUtils.isEmpty(wljson.getName())) {
+			errors.rejectValue("name",CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
+					"Watch list name or entity name is missing.");
+		}
+		if (StringUtils.isEmpty(wljson.getEntity())) {
+			errors.rejectValue("entity",CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					"Watch list name or entity name is missing.");
 		}
 		if (CollectionUtils.isEmpty(wljson.getWatchlistItems())) {
-			errors.reject(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
+			errors.rejectValue("watchlistItems", CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					"Watch list does not contain any items.");
 		}
 		if (errors.hasErrors()) {
 			createAndThrowValidationError(errors);
 		}
 		for (WatchlistItemSpec itm : wljson.getWatchlistItems()) {
+			errors = new BeanPropertyBindingResult(
+					itm, "watch list item");
+			validateAction(itm, errors);
 			QueryObject wlObj = new QueryObject();
 			wlObj.setCondition(ConditionEnum.AND.toString());
 			List<QueryEntity> terms = new LinkedList<QueryEntity>();
@@ -60,6 +67,27 @@ public class WatchlistValidationAdapter {
             	createAndThrowValidationError(err);
             }
 		}
+	}
+	private static void validateAction(WatchlistItemSpec itm, Errors errors){
+		try{
+		    WatchlistEditEnum action = WatchlistEditEnum.getEditEnumForOperationName(itm.getAction());
+		    switch(action){
+		    case C:
+		    	if(itm.getId() != null){
+		    		errors.rejectValue("id",CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,"Cannot specify id for create action - "+itm.getId());
+		    	}
+		    case U:
+		    case D:
+		    	if(itm.getId() == null){
+		    		errors.rejectValue("id", CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,"No id specified for update or delete action");		    		
+		    	}
+		    }
+		} catch (IllegalArgumentException iae){
+			errors.rejectValue("action", CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,"Invalid action for watch list item:"+itm.getAction());
+		}
+		if (errors.hasErrors()) {
+			createAndThrowValidationError(errors);
+		}		
 	}
 	private static void createAndThrowValidationError(Errors error){
 		throw new CommonValidationException("Watch list JSON has Errors", error);

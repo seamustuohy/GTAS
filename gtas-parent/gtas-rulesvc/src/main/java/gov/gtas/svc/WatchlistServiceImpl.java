@@ -10,6 +10,7 @@ import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.Watchlist;
 import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
+import gov.gtas.model.watchlist.json.validation.WatchlistValidationAdapter;
 import gov.gtas.services.watchlist.WatchlistPersistenceService;
 import gov.gtas.svc.util.WatchlistBuilder;
 import gov.gtas.svc.util.WatchlistServiceJsonResponseHelper;
@@ -63,10 +64,9 @@ public class WatchlistServiceImpl implements WatchlistService {
 	@Override
 	public JsonServiceResponse createOrUpdateWatchlist(String userId,
 			WatchlistSpec wlToCreateUpdate) {
-		
+		WatchlistValidationAdapter.validateWatchlistSpec(wlToCreateUpdate);
 		WatchlistBuilder bldr = new WatchlistBuilder(wlToCreateUpdate);
-		bldr.buildPersistenceLists();
-		
+		bldr.buildPersistenceLists();		
 		final String wlName = bldr.getName();
 		final EntityEnum entity = bldr.getEntity();
 		List<WatchlistItem> createUpdateList = bldr.getCreateUpdateList();

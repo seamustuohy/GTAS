@@ -15,10 +15,16 @@ public class GtasJsonError implements Serializable {
 	
 	private String errorCode;
 	private String errorMessage;
+	private String[] errorDetail;
 	
 	public GtasJsonError(final String code, final String msg){
 		this.errorCode = code;
 		this.errorMessage = msg;
+	}
+	public GtasJsonError(final String code, final String msg, final String[] details){
+		this.errorCode = code;
+		this.errorMessage = msg;
+		this.errorDetail = details;
 	}
 	/**
 	 * @return the errorCode
@@ -44,7 +50,17 @@ public class GtasJsonError implements Serializable {
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
-	
-	
+	/**
+	 * @return the errorDetail
+	 */
+	public String[] getErrorDetail() {
+		return errorDetail;
+	}
+	/**
+	 * @param errorDetail the errorDetail to set
+	 */
+	public void setErrorDetail(String[] errorDetail) {
+		this.errorDetail = errorDetail;
+	}
 
 }

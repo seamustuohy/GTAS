@@ -67,7 +67,7 @@ public class WebAppGlobalErrorHandler {
 		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
 		ErrorDetails err = errorHandler.processError(ex);
 		return new GtasJsonError(err.getFatalErrorCode(),
-				err.getFatalErrorMessage());
+					err.getFatalErrorMessage(), err.getErrorDetails());			
 	}
 
 }
