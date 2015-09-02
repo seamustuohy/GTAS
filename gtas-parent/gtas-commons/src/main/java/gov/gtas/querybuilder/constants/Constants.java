@@ -29,6 +29,12 @@ public final class Constants {
 	public static final String QUERYOBJECT_OBJECTNAME = "queryObject";
 	public static final String USERQUERY_OBJECTNAME = "userQuery";
 	
+	public static final String UNIQUE_TITLE_QUERY = "UserQuery.checkUniqueTitle";
+	public static final String LIST_QUERY = "UserQuery.listQueryByUser";
+	
+	public static final String IS_RULE_HIT = "isRuleHit";
+	public static final String HITS_ID = "id";
+	
 	public static final String QUERY_EXISTS_ERROR_MSG = "A query with the same title already exists. Please rename this query or edit the existing one.";
 	public static final String QUERY_DOES_NOT_EXIST_ERROR_MSG = "Query cannot be found.";
 }

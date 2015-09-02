@@ -40,8 +40,11 @@ import org.springframework.validation.Errors;
 @Repository
 public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private static final Logger logger = LoggerFactory.getLogger(QueryBuilderRepository.class);
-	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	private SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd h:mm:ss a");
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private static final SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd h:mm:ss a");
+	private static final String CREATED_BY = "createdBy";
+	private static final String TITLE = "title";
+	private static final String PERCENT_SIGN = "%";
 	
 	@PersistenceContext 
  	private EntityManager entityManager;
@@ -135,8 +138,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		
 		if(userId != null) {
 			// get all the user's queries that have not been deleted
-			queryList = entityManager.createNamedQuery("UserQuery.listQueryByUser", UserQuery.class)
-					.setParameter("createdBy", userId).getResultList();
+			queryList = entityManager.createNamedQuery(Constants.LIST_QUERY, UserQuery.class)
+					.setParameter(CREATED_BY, userId).getResultList();
 		}
 		
 		return queryList;
@@ -233,9 +236,9 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		boolean unique = false;
 		
 		// check uniqueness of query title for this user
-		List<Integer> ids = entityManager.createNamedQuery("UserQuery.checkUniqueTitle", Integer.class)
-				.setParameter("createdBy", query.getCreatedBy())
-				.setParameter("title", query.getTitle() != null ? query.getTitle().trim() : query.getTitle()).getResultList();
+		List<Integer> ids = entityManager.createNamedQuery(Constants.UNIQUE_TITLE_QUERY, Integer.class)
+				.setParameter(CREATED_BY, query.getCreatedBy())
+				.setParameter(TITLE, query.getTitle() != null ? query.getTitle().trim() : query.getTitle()).getResultList();
 		
 		if(ids == null || ids.size() == 0) {
 			unique = true;
@@ -272,7 +275,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				!OperatorEnum.IS_NOT_EMPTY.toString().equalsIgnoreCase(operator) &&
 				!OperatorEnum.IS_NULL.toString().equalsIgnoreCase(operator) &&
 				!OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator) &&
-				!(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase("isRuleHit"))) {
+				!(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase(Constants.IS_RULE_HIT))) {
 				
 				positionalParameter.increment();
 				
@@ -286,7 +289,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					if(values != null && values.size() == 2) {
 						
 						if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
-							if(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase("id")) {
+							if(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase(Constants.HITS_ID)) {
 								query.setParameter(positionalParameter.intValue(), Long.parseLong(values.get(0)));
 								positionalParameter.increment();
 								query.setParameter(positionalParameter.intValue(), Long.parseLong(values.get(1)));
@@ -327,7 +330,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 					}
 					
 					if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
-						if(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase("id")) {
+						if(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase(Constants.HITS_ID)) {
 							
 							List<Long> vals = new ArrayList<>();
 							if(values != null) {
@@ -379,19 +382,19 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				}
 				else if(OperatorEnum.BEGINS_WITH.toString().equalsIgnoreCase(operator) || 
 						OperatorEnum.NOT_BEGINS_WITH.toString().equalsIgnoreCase(operator) ) {
-					query.setParameter(positionalParameter.intValue(), value + "%");
+					query.setParameter(positionalParameter.intValue(), value + PERCENT_SIGN);
 				}
 				else if(OperatorEnum.CONTAINS.toString().equalsIgnoreCase(operator) ||
 						OperatorEnum.NOT_CONTAINS.toString().equalsIgnoreCase(operator) ) {
-					query.setParameter(positionalParameter.intValue(), "%" + value + "%");
+					query.setParameter(positionalParameter.intValue(), PERCENT_SIGN + value + PERCENT_SIGN);
 				}
 				else if(OperatorEnum.ENDS_WITH.toString().equalsIgnoreCase(operator) ||
 						OperatorEnum.NOT_ENDS_WITH.toString().equalsIgnoreCase(operator) ) {
-					query.setParameter(positionalParameter.intValue(), "%" + value);
+					query.setParameter(positionalParameter.intValue(), PERCENT_SIGN + value);
 				}
 				else {
 					if(TypeEnum.INTEGER.toString().equalsIgnoreCase(type)) {
-						if(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase("id")) {
+						if(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase(Constants.HITS_ID)) {
 							query.setParameter(positionalParameter.intValue(), Long.parseLong(value));
 						} else {
 							query.setParameter(positionalParameter.intValue(), Integer.parseInt(value));

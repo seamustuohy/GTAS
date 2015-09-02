@@ -122,7 +122,7 @@ public class JPQLGenerator {
 	}
 	
 	/**
-	 * This method parses the query entity and generates the where clause of the query
+	 * This method recursively parses the query entity and generates the where clause of the query
 	 * @param queryEntity contains the user's ad-hoc query
 	 * @param queryType indicates whether the user is querying against the flight or passenger data
 	 * @param joinEntities contains the list of entities that will later be used to generate the join condition
@@ -177,27 +177,27 @@ public class JPQLGenerator {
 			}
 			
 			if(entityEnum == EntityEnum.HITS) {
-				if(field.equalsIgnoreCase("isRuleHit")) {
+				if(field.equalsIgnoreCase(Constants.IS_RULE_HIT)) {
 					
 					joinEntities.remove(entityEnum);
 					String value = (queryTerm.getValue() != null && queryTerm.getValue().length == 1) ? queryTerm.getValue()[0] : null;
 					
 					if(queryType == EntityEnum.FLIGHT) {
 						if(value.equals("1")) {
-							where.append(EntityEnum.FLIGHT.getAlias() + ".id in (select " + EntityEnum.HITS.getAlias()
-									+ ".flightId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + ")");
+							where.append("exists (select " + EntityEnum.HITS.getAlias()
+									+ ".flightId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " where h.flightId = f.id)");
 						} else {
-							where.append(EntityEnum.FLIGHT.getAlias() + ".id not in (select " + EntityEnum.HITS.getAlias()
-									+ ".flightId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + ")");
+							where.append("not exists (select " + EntityEnum.HITS.getAlias()
+									+ ".flightId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " where h.flightId = f.id)");
 						}
 					}
 					else if(queryType == EntityEnum.PASSENGER) {
 						if(value.equals("1")) {
-							where.append(EntityEnum.PASSENGER.getAlias() + ".id in (select " + EntityEnum.HITS.getAlias()
-									+ ".passengerId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + ")");
+							where.append("exists (select " + EntityEnum.HITS.getAlias()
+									+ ".passengerId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " where h.passengerId = p.id)");
 						} else {
-							where.append(EntityEnum.PASSENGER.getAlias() + ".id not in (select " + EntityEnum.HITS.getAlias()
-									+ ".passengerId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + ")");
+							where.append("not exists (select " + EntityEnum.HITS.getAlias()
+									+ ".passengerId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " where h.passengerId = p.id)");
 						}
 					}
 				}

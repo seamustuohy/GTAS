@@ -1,6 +1,7 @@
 package gov.gtas.querybuilder.model;
 
 import gov.gtas.model.User;
+import gov.gtas.querybuilder.constants.Constants;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -21,8 +22,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "user_query")
 @NamedQueries({
-	@NamedQuery(name = "UserQuery.checkUniqueTitle", query = "select q.id from UserQuery q where q.deletedDt is null and q.createdBy = :createdBy and q.title = :title"),
-	@NamedQuery(name = "UserQuery.listQueryByUser", query = "select q from UserQuery q where q.createdBy.userId = :createdBy and q.deletedDt is null order by q.id"),
+	@NamedQuery(name = Constants.UNIQUE_TITLE_QUERY, query = "select q.id from UserQuery q where q.deletedDt is null and q.createdBy = :createdBy and q.title = :title"),
+	@NamedQuery(name = Constants.LIST_QUERY, query = "select q from UserQuery q where q.createdBy.userId = :createdBy and q.deletedDt is null order by q.id"),
 })
 public class UserQuery implements Serializable {
 
