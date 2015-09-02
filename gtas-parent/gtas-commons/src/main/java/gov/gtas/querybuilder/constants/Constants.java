@@ -34,6 +34,11 @@ public final class Constants {
 	
 	public static final String IS_RULE_HIT = "isRuleHit";
 	public static final String HITS_ID = "id";
+	public static final String EXISTS_HITS_PREFIX = "exists (select";
+	public static final String NOT_EXISTS_HITS_PREFIX = "not exists (select";
+	public static final String HITS_FLIGHT_REF = ".flightId";
+	public static final String ID = ".id";
+	public static final String HITS_PASSENGER_REF = ".passengerId";
 	
 	public static final String QUERY_EXISTS_ERROR_MSG = "A query with the same title already exists. Please rename this query or edit the existing one.";
 	public static final String QUERY_DOES_NOT_EXIST_ERROR_MSG = "Query cannot be found.";

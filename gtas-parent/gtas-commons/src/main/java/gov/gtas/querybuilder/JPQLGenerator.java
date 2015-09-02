@@ -183,34 +183,39 @@ public class JPQLGenerator {
 					String value = (queryTerm.getValue() != null && queryTerm.getValue().length == 1) ? queryTerm.getValue()[0] : null;
 					
 					if(queryType == EntityEnum.FLIGHT) {
+						// 1 - YES, 0 - NO
 						if(value.equals("1")) {
-							where.append("exists (select " + EntityEnum.HITS.getAlias()
-									+ ".flightId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " where h.flightId = f.id)");
+							where.append(Constants.EXISTS_HITS_PREFIX + " " + EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " " + Constants.FROM + " " +
+									EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
+									EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " = " + EntityEnum.FLIGHT.getAlias() + Constants.ID + ")");
 						} else {
-							where.append("not exists (select " + EntityEnum.HITS.getAlias()
-									+ ".flightId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " where h.flightId = f.id)");
+							where.append(Constants.NOT_EXISTS_HITS_PREFIX + " " + EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " " + Constants.FROM + " " +
+									EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
+									EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " = " + EntityEnum.FLIGHT.getAlias() + Constants.ID + ")");
 						}
 					}
 					else if(queryType == EntityEnum.PASSENGER) {
 						if(value.equals("1")) {
-							where.append("exists (select " + EntityEnum.HITS.getAlias()
-									+ ".passengerId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " where h.passengerId = p.id)");
+							where.append(Constants.EXISTS_HITS_PREFIX + " " + EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " " + Constants.FROM + " " +
+									EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
+									EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " = " + EntityEnum.PASSENGER.getAlias() + Constants.ID + ")");
 						} else {
-							where.append("not exists (select " + EntityEnum.HITS.getAlias()
-									+ ".passengerId from " + EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " where h.passengerId = p.id)");
+							where.append(Constants.NOT_EXISTS_HITS_PREFIX + " " + EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " " + Constants.FROM + " " +
+									EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
+									EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " = " + EntityEnum.PASSENGER.getAlias() + Constants.ID + ")");
 						}
 					}
 				}
-				else if(field.equalsIgnoreCase("id")) {
+				else if(field.equalsIgnoreCase(Constants.HITS_ID)) {
 					positionalParameter.increment(); // parameter position in the query
 					
 					if(queryType == EntityEnum.FLIGHT) {
-						where.append("(" + EntityEnum.FLIGHT.getAlias() + ".id = " + EntityEnum.HITS.getAlias() + ".flightId and " 
-								+ EntityEnum.HITS.getAlias() + ".id = ?" + positionalParameter + ")");
+						where.append("(" + EntityEnum.FLIGHT.getAlias() + Constants.ID + " = " + EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " " + 
+								Constants.AND + " " + EntityEnum.HITS.getAlias() + Constants.ID + " = ?" + positionalParameter + ")");
 					}
 					else if(queryType == EntityEnum.PASSENGER) {
-						where.append("(" + EntityEnum.PASSENGER.getAlias() + ".id = " + EntityEnum.HITS.getAlias() + ".passengerId and " 
-								+ EntityEnum.HITS.getAlias() + ".id = ?" + positionalParameter + ")");
+						where.append("(" + EntityEnum.PASSENGER.getAlias() + Constants.ID + " = " + EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " " +
+								Constants.AND + " " + EntityEnum.HITS.getAlias() + Constants.ID + " = ?" + positionalParameter + ")");
 					}
 				}
 			} 
