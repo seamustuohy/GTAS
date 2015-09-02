@@ -3,9 +3,12 @@ package gov.gtas.svc;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.WatchlistEditEnum;
+import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.json.JsonServiceResponse;
@@ -161,6 +164,52 @@ public class WatchlistServiceIT {
 		assertEquals(2, createCount);
 		assertEquals(1, updateCount);
 		assertEquals(1, deleteCount);
+	}
+
+	@Test
+	@Transactional
+	public void testUpdateWatchlistItemError() {
+		User user = createUser();
+		WatchlistSpec spec = SampleDataGenerator.newWlWith2Items(WL_NAME1);
+		JsonServiceResponse resp = wlService.createOrUpdateWatchlist(user.getUserId(), spec);
+		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		spec = wlService.fetchWatchlist(WL_NAME1);
+		assertNotNull(spec);
+		List<WatchlistItemSpec> items = spec.getWatchlistItems();
+		assertNotNull(items);
+		assertEquals(2,items.size());
+		items.get(0).setAction(WatchlistEditEnum.U.getOperationName());
+		items.get(0).setId(2341L);
+		items.get(1).setAction(WatchlistEditEnum.D.getOperationName());
+        try{
+		    wlService.createOrUpdateWatchlist(user.getUserId(), spec);
+		    fail("Expecting exception");
+        } catch(CommonServiceException cse){
+		     assertEquals(WatchlistConstants.MISSING_DELETE_OR_UPDATE_ITEM_ERROR_CODE, cse.getErrorCode());
+        }
+	}
+	
+	@Test
+	@Transactional
+	public void testDeleteWatchlistItemError() {
+		User user = createUser();
+		WatchlistSpec spec = SampleDataGenerator.newWlWith2Items(WL_NAME1);
+		JsonServiceResponse resp = wlService.createOrUpdateWatchlist(user.getUserId(), spec);
+		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		spec = wlService.fetchWatchlist(WL_NAME1);
+		assertNotNull(spec);
+		List<WatchlistItemSpec> items = spec.getWatchlistItems();
+		assertNotNull(items);
+		assertEquals(2,items.size());
+		items.get(0).setAction(WatchlistEditEnum.U.getOperationName());
+		items.get(1).setAction(WatchlistEditEnum.D.getOperationName());
+		items.get(1).setId(2341L);
+        try{
+		    wlService.createOrUpdateWatchlist(user.getUserId(), spec);
+		    fail("Expecting exception");
+        } catch(CommonServiceException cse){
+		     assertEquals(WatchlistConstants.MISSING_DELETE_OR_UPDATE_ITEM_ERROR_CODE, cse.getErrorCode());
+        }
 	}
 	@Test
 	@Transactional

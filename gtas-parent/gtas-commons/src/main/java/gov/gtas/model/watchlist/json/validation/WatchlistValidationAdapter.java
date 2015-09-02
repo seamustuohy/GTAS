@@ -11,6 +11,7 @@ import org.springframework.validation.Errors;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.enumtype.ConditionEnum;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.WatchlistEditEnum;
 import gov.gtas.error.CommonValidationException;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
@@ -37,9 +38,11 @@ public class WatchlistValidationAdapter {
 			errors.rejectValue(WatchlistConstants.WL_NAME_FIELD,CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					"Watch list name or entity name is missing.");
 		}
-		if (StringUtils.isEmpty(wljson.getEntity())) {
-			errors.rejectValue("entity",CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
-					"Watch list name or entity name is missing.");
+		try{
+			EntityEnum.getEnum(wljson.getEntity());
+		} catch (IllegalArgumentException iae){
+			errors.rejectValue(WatchlistConstants.WL_ENTITY_FIELD, CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+					"Watch list entity name is missing or invalid.");
 		}
 		if (CollectionUtils.isEmpty(wljson.getWatchlistItems())) {
 			errors.rejectValue("watchlistItems", CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
