@@ -5,6 +5,8 @@ import gov.gtas.repository.PassengerRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -102,6 +104,20 @@ public class PassengerServiceImpl implements PassengerService {
         return passengerList;
     }
     
+	@Override
+    @Transactional
+    public List<Passenger> getPassengersByFlightDates(Date startDate, Date endDate) {
+        List<Passenger> passengerList = passengerRespository.getPassengersByFlightDates(startDate, endDate);
+        return passengerList;
+    }
+    
+    
+    @Override
+    @Transactional
+    public List<Passenger> getPaxByLastName(String lastName, Pageable pageable) {
+        List<Passenger> passengerList = passengerRespository.getPaxByLastName(lastName, pageable).getContent();
+        return passengerList;
+    }
     
     
 }

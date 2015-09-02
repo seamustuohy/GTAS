@@ -2,6 +2,7 @@ package gov.gtas.services;
 
 import gov.gtas.model.Passenger;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.repository.query.Param;
@@ -20,5 +21,7 @@ public interface PassengerService {
     public List<Passenger> getPassengersByLastName(String lastName);
     public List<Passenger> getPassengersByFlightId(Long flightId);
     public List<Passenger> getPassengersFromUpcomingFlights(Pageable pageable) ;
+    public List<Passenger> getPaxByLastName(String lastName, Pageable pageable);
+    public List<Passenger> getPassengersByFlightDates(Date startDate, Date endDate);
 
 }
