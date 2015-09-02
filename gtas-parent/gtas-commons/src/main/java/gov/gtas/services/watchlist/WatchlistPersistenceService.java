@@ -2,6 +2,7 @@ package gov.gtas.services.watchlist;
 
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.watchlist.Watchlist;
+import gov.gtas.model.watchlist.WatchlistEditLog;
 import gov.gtas.model.watchlist.WatchlistItem;
 
 import java.util.List;
@@ -63,7 +64,7 @@ public interface WatchlistPersistenceService {
 	 * 
 	 * @return list of all non-compiled watch lists.
 	 */
-	public List<Watchlist> findUncompiledWatchlists();
+//	public List<Watchlist> findUncompiledWatchlists();
 
 	/**
 	 * Fetches a Watch list by its name. 
@@ -83,4 +84,12 @@ public interface WatchlistPersistenceService {
 	 */
 	public Watchlist deleteWatchlist(String name);
 
+	/**
+	 * Fetches all log entries for a Watch list by its name. 
+	 * 
+	 * @param watchlistName
+	 *            the name of the watch list.
+	 * @return the fetched watch list log entries.
+	 */
+	public List<WatchlistEditLog> findLogEntriesForWatchlist(String watchlistName);
 }

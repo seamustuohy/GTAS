@@ -52,5 +52,36 @@ public class SampleDataGenerator {
 				.getOperationName(), null));
 		return ret;
 	}
+	public static WatchlistSpec newWlWith2Items(String wlName) {
+		WatchlistSpec ret = new WatchlistSpec(wlName,
+				EntityEnum.PASSENGER.getEntityName().toUpperCase());
+		ret.addWatchlistItem(new WatchlistItemSpec(null, WatchlistEditEnum.C
+				.getOperationName(), new WatchlistTerm[] {
+				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
+						.toUpperCase(), PassengerMapping.FIRST_NAME
+						.getFieldName(), PassengerMapping.FIRST_NAME
+						.getFieldType(), "John"),
+				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
+						.toUpperCase(), PassengerMapping.LAST_NAME
+						.getFieldName(), PassengerMapping.LAST_NAME
+						.getFieldType(), "Jones"),
+				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
+						.toUpperCase(), PassengerMapping.DOB.getFieldName(),
+						PassengerMapping.DOB.getFieldType(), "1747-07-06") }));
+		ret.addWatchlistItem(new WatchlistItemSpec(32L, WatchlistEditEnum.C
+				.getOperationName(), new WatchlistTerm[] {
+				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
+						.toUpperCase(), PassengerMapping.FIRST_NAME
+						.getFieldName(), PassengerMapping.FIRST_NAME
+						.getFieldType(), "Julius"),
+				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
+						.toUpperCase(), PassengerMapping.LAST_NAME
+						.getFieldName(), PassengerMapping.LAST_NAME
+						.getFieldType(), "Seizure"),
+				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
+						.toUpperCase(), PassengerMapping.DOB.getFieldName(),
+						PassengerMapping.DOB.getFieldType(), "1966-09-13") }));
+		return ret;
+	}
 
 }

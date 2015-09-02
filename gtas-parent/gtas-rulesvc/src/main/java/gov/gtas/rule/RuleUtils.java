@@ -162,7 +162,6 @@ public class RuleUtils {
 	        	ruleException.addRuleCompilationError(msg);
 	        }
 	        throw ruleException;
-	        //throw errorHandler.createException(RuleServiceConstants.RULE_COMPILE_ERROR_CODE, kfilepath, errors);
 	    }
 	    KieContainer kieContainer =
 	        ks.newKieContainer( ks.getRepository().getDefaultReleaseId() );

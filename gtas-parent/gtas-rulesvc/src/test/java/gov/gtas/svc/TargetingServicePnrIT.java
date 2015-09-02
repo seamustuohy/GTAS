@@ -139,7 +139,7 @@ public class TargetingServicePnrIT {
 	@Transactional
 	public void testPnrRuleExecution3() throws ParseException {
 		// select all passengers in a flight
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
+		PnrMessage msg = PnrDataGenerator.createTestPnrmessage2(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();

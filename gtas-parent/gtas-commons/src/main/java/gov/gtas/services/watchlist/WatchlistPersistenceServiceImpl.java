@@ -3,18 +3,23 @@ package gov.gtas.services.watchlist;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.WatchlistEditEnum;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.User;
 import gov.gtas.model.watchlist.Watchlist;
+import gov.gtas.model.watchlist.WatchlistEditLog;
 import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.repository.watchlist.WatchlistItemRepository;
+import gov.gtas.repository.watchlist.WatchlistLogRepository;
 import gov.gtas.repository.watchlist.WatchlistRepository;
 import gov.gtas.services.UserService;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -43,6 +48,8 @@ public class WatchlistPersistenceServiceImpl implements
 	private static final Logger logger = LoggerFactory
 			.getLogger(WatchlistPersistenceServiceImpl.class);
 
+	// private static final int UPDATE_BATCH_SIZE = 100;
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -51,6 +58,9 @@ public class WatchlistPersistenceServiceImpl implements
 
 	@Resource
 	private WatchlistItemRepository watchlistItemRepository;
+
+	@Resource
+	private WatchlistLogRepository watchlistLogRepository;
 
 	@Autowired
 	private UserService userService;
@@ -77,15 +87,16 @@ public class WatchlistPersistenceServiceImpl implements
 		watchlist.setEditTimestamp(new Date());
 		watchlist.setWatchListEditor(user);
 		watchlist = watchlistRepository.save(watchlist);
-		if (createUpdateList != null && createUpdateList.size() > 0) {
-			for (WatchlistItem item : createUpdateList) {
-				item.setWatchlist(watchlist);
-			}
-			watchlistItemRepository.save(createUpdateList);
-		}
-		if (deleteList != null && deleteList.size() > 0) {
-			watchlistItemRepository.delete(deleteList);
-		}
+//		if (createUpdateList != null && createUpdateList.size() > 0) {
+//			for (WatchlistItem item : createUpdateList) {
+//				item.setWatchlist(watchlist);
+//			}
+//			watchlistItemRepository.save(createUpdateList);
+//		}
+//		if (deleteList != null && deleteList.size() > 0) {
+//			watchlistItemRepository.delete(deleteList);
+//		}
+		doCrudWithLogging(watchlist, user, createUpdateList, deleteList);
 		return watchlist;
 	}
 
@@ -135,10 +146,10 @@ public class WatchlistPersistenceServiceImpl implements
 	 * @see gov.gtas.services.watchlist.WatchlistPersistenceService#
 	 * findUncompiledWatchlists()
 	 */
-	@Override
-	public List<Watchlist> findUncompiledWatchlists() {
-		return watchlistRepository.fetchUncompiledWatchlists();
-	}
+//	@Override
+//	public List<Watchlist> findUncompiledWatchlists() {
+//		return watchlistRepository.fetchUncompiledWatchlists();
+//	}
 
 	/*
 	 * (non-Javadoc)
@@ -149,9 +160,11 @@ public class WatchlistPersistenceServiceImpl implements
 	 */
 	@Override
 	public Watchlist findByName(String name) {
-		Watchlist wl =  watchlistRepository.getWatchlistByName(name);
-		if(wl == null){
-			throw ErrorHandlerFactory.getErrorHandler().createException(CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE, "Watchlist", name);
+		Watchlist wl = watchlistRepository.getWatchlistByName(name);
+		if (wl == null) {
+			throw ErrorHandlerFactory.getErrorHandler().createException(
+					CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE,
+					"Watchlist", name);
 		}
 		return wl;
 	}
@@ -187,21 +200,44 @@ public class WatchlistPersistenceServiceImpl implements
 		return wl;
 	}
 
-	// private Collection<? extends BaseEntity> batchOperation(
-	// Collection<? extends BaseEntity> entities) {
-	// List<BaseEntity> ret = new LinkedList<BaseEntity>();
-	// int count = 0;
-	// for (BaseEntity ent : entities) {
-	// BaseEntity upd = entityManager.merge(ent);
-	// ret.add(upd);
-	// ++count;
-	// if (count > UPDATE_BATCH_SIZE) {
-	// entityManager.flush();
-	// entityManager.clear();
-	// }
-	// }
-	// return ret;
-	// }
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.watchlist.WatchlistPersistenceService#findLogEntriesForWatchlist(java.lang.String)
+	 */
+	@Override
+	public List<WatchlistEditLog> findLogEntriesForWatchlist(String watchlistName) {
+		return watchlistLogRepository.getLogByWatchlistName(watchlistName);
+	}
+
+	private Collection<WatchlistEditLog> doCrudWithLogging(Watchlist watchlist,
+			User editUser, Collection<WatchlistItem> createUpdateItems,
+			Collection<WatchlistItem> deleteItems) {
+		List<WatchlistEditLog> ret = new LinkedList<WatchlistEditLog>();
+		if (createUpdateItems != null && createUpdateItems.size() > 0) {
+			for (WatchlistItem item : createUpdateItems) {
+				ret.add(new WatchlistEditLog(editUser, watchlist,
+						item.getId() == null ? WatchlistEditEnum.C
+								: WatchlistEditEnum.U, item.getItemData()));
+				item.setWatchlist(watchlist);
+			}
+			watchlistItemRepository.save(createUpdateItems);
+		}
+		if (deleteItems != null && deleteItems.size() > 0) {
+			Iterable<Long> itr = deleteItems.stream().map(itm -> itm.getId())
+					.collect(Collectors.toList());
+			Iterable<WatchlistItem> delItems = watchlistItemRepository
+					.findAll(itr);
+			for (WatchlistItem item : delItems) {
+				ret.add(new WatchlistEditLog(editUser, watchlist,
+						WatchlistEditEnum.D, item.getItemData()));
+			}
+			watchlistItemRepository.delete(deleteItems);
+		}
+		if(ret.size() > 0){
+			watchlistLogRepository.save(ret);
+		}
+		return ret;
+	}
+
 	/**
 	 * Fetches the user object and throws an unchecked exception if the user
 	 * cannot be found.
