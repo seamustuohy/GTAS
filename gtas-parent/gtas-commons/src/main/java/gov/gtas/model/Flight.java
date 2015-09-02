@@ -8,18 +8,19 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "flight")
-
+@Table(name = "flight",
+    uniqueConstraints={@UniqueConstraint(columnNames={"carrier", "flight_number", "flight_date", "origin", "destination"})}
+)
 public class Flight extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;  
     public Flight() { }
@@ -75,6 +76,11 @@ public class Flight extends BaseEntityAudit {
         targetEntity = Pnr.class
     ) 
     private Set<Pnr> pnrs = new HashSet<>();
+    
+    public void addPassenger(Passenger passenger) {
+        this.passengers.add(passenger);
+        passenger.getFlights().add(this);
+    }
 
     public Set<Passenger> getPassengers() {
         return passengers;
@@ -142,7 +148,12 @@ public class Flight extends BaseEntityAudit {
     public void setDestinationCountry(String destinationCountry) {
         this.destinationCountry = destinationCountry;
     }
-
+    public Boolean getThru() {
+        return thru;
+    }
+    public void setThru(Boolean thru) {
+        this.thru = thru;
+    }
     public Set<Pnr> getPnrs() {
 		return pnrs;
 	}

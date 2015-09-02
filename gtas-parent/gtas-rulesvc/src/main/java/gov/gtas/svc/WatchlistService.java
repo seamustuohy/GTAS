@@ -43,4 +43,23 @@ public interface WatchlistService {
 	 * @return the list of all available watch list objects.
 	 */
 	List<WatchlistSpec> fetchAllWatchlists();
+
+	/**
+	 * Compiles all watch lists into a named knowledge base
+	 * @param knowledgeBaseName name of the knowledge base to compile the watch list rules into.
+	 * @return the list of all available watch list objects.
+	 */
+	JsonServiceResponse activateAllWatchlists(String knowledgeBaseName);
+	/**
+	 * Compiles all watch lists into the default knowledge base for watch lists.
+	 * @return the list of all available watch list objects.
+	 */
+	JsonServiceResponse activateAllWatchlists();
+
+	/**
+	 * Deletes the named watch list.
+	 * @param wlName the name of the watch list to be deleted.
+	 * @return the delete result.
+	 */
+	JsonServiceResponse deleteWatchlist(String wlName);
 }

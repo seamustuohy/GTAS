@@ -1,83 +1,77 @@
 app.controller('WatchListController', function ($scope, $rootScope, $injector, GridControl, $filter, $q, watchListService, $interval) {
     'use strict';
-    var watchlist = localStorage["watchlist"] === undefined ? {} : JSON.parse(localStorage["watchlist"]);
-    $injector.invoke(GridControl, this, {$scope: $scope });
+    var watchlist = {};
+    $injector.invoke(GridControl, this, {$scope: $scope});
 
-    if (watchlist.types === undefined) {
-        watchlist.types = {
-            "document": {
-                columns: [{
-                    name: "id",
-                    width: "50",
-                    enableCellEdit: false,
-                    enableColumnMenu: false,
-                    enableFiltering: false,
-                    "type": "number"
-                }, {
-                    name: "type",
-                    enableCellEdit: true,
-                    "type": "string"
-                }, {
-                    name: "number",
-                    enableCellEdit: true,
-                    "type": "string"
-                }],
-                data: [
-                    {id: 1, "type": "P", "number": "76283AJLG"},
-                    {id: 2, "type": "V", "number": "111123AJLV"}
-                ]
-            },
-            "passenger": {
-                columns: [{
-                    name: "id",
-                    width: "50",
-                    enableColumnMenu: false,
-                    enableFiltering: false,
-                    enableSorting: false,
-                    enableCellEdit: false,
-                    "type": "number"
-                }, {
-                    name: "first name",
-                    enableCellEdit: true,
-                    "type": "string"
-                }, {
-                    name: "last name",
-                    enableCellEdit: true,
-                    "type": "string"
-                }, {
-                    name: "DOB",
-                    enableCellEdit: true,
-                    "type": "date"
-                }],
-                data: [
-                    {id: 1, "first name": "John", "last name": "Johnnson", "DOB": "1977-01-01"},
-                    {id: 2, "first name": "Jack", "last name": "Johnson", "DOB": "1978-01-01"},
-                    {id: 3, "first name": "John", "last name": "Johnnson", "DOB": "1979-01-01"},
-                    {id: 4, "first name": "Bobby", "last name": "Johnson", "DOB": "1980-01-01"},
-                    {id: 5, "first name": "Billy Bob", "last name": "Thorton", "DOB": "1967-07-05"},
-                    {id: 6, "first name": "Angelina", "last name": "Jolie", "DOB": "1976--12-01"},
-                    {id: 7, "first name": "John", "last name": "Johnnson", "DOB": "1979-01-01"},
-                    {id: 8, "first name": "Jack", "last name": "Johnson", "DOB": "1980-01-01"}
-                ]
-            }
-        };
-    }
-    localStorage["watchlist"] = JSON.stringify(watchlist);
-    $scope.tabs = watchListService.getListTypes();
-    $scope.tabfields = watchlist.types;
+    watchlist.types = {
+        "Document": {
+            entity: "DOCUMENT",
+            columns: [{
+                name: "documentType",
+                displayName: "Type",
+                enableCellEdit: true,
+                "type": "string"
+            }, {
+                name: "documentNumber",
+                displayName: "Number",
+                enableCellEdit: true,
+                "type": "string"
+            }]
+        },
+        "Passenger": {
+            entity: "PASSENGER",
+            columns: [{
+                name: "firstName",
+                displayName: "First Name",
+                enableCellEdit: true,
+                "type": "string"
+            }, {
+                name: "lastName",
+                displayName: "Last Name",
+                enableCellEdit: true,
+                "type": "string"
+            }, {
+                name: "dob",
+                displayName:"DOB",
+                enableCellEdit: true,
+                "type": "date"
+            }]
+        }
+    };
+
+    $scope.gridOpts.enableCellEditOnFocus = true;
+    $scope.gridOpts.columnDefs = watchlist.types.Document.columns;
 
     $scope.updateGrid = function (listName) {
-        $scope.activeTab = listName;
-        $scope.gridOpts.columnDefs = $scope.tabfields[listName].columns;
-        $scope.gridOpts.exporterCsvFilename = 'watchlist-' + listName + '.csv';
-        $scope.gridOpts.exporterPdfHeader.text = 'Watchlist: ' + listName;
-        $scope.gridOpts.data = $scope.tabfields[listName].data;
+        watchListService.getListItems(listName).then(function (response) {
+            var obj, data = [], items;
+            $scope.activeTab = listName;
+            $scope.gridOpts.columnDefs = watchlist.types[listName].columns;
+            $scope.gridOpts.exporterCsvFilename = 'watchlist-' + listName + '.csv';
+            if (response.data.watchlistItems === undefined) {
+                $scope.gridOpts.data = data;
+                return false;
+            }
+            items = response.data.watchlistItems;
+            items.forEach(function (item) {
+                obj = {id: item.id };
+                item.terms.forEach(function (term) {
+                    obj[term.field] = term.type === 'date' ? moment(term.value).format('YYYY-MM-DD') : term.value;
+                });
+                data.push(obj);
+            });
+            console.log(JSON.stringify(data));
+            $scope.gridOpts.data = data;
+        });
     };
-    $scope.gridOpts.enableCellEditOnFocus = true;
-    $scope.gridOpts.exporterCsvFilename = 'watchlist.csv';
-    $scope.gridOpts.exporterPdfHeader = { text: "Query [NAME]", style: 'headerStyle' };
 
-    $scope.updateGrid('document');
+    //watchListService.getTabs().then(function (myData) {
+    $scope.activeTab = 'Document';
+    $scope.tabs = [];
+    Object.keys(watchlist.types).forEach(function (key) {
+        $scope.tabs.push({title: key});
+    });
+    //});
 
     $scope.Add = function () {
         var starterData = {};
@@ -88,64 +82,52 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
     };
 
     $scope.saveRow = function (rowEntity) {
-        // create a fake promise - normally you'd use the promise returned by $http or $resource
-        var promise = $q.defer();
-        console.log(rowEntity);
+        var watchlistType = watchlist.types[$scope.activeTab],
+            columnTypeDict = {},
+            entity = watchlistType.entity,
+            method = !rowEntity.id ? 'addItem' : 'updateItem',
+            terms = [],
+            promise = $q.defer(),
+            columnType,
+            value;
 
-//        $scope.gridApi.rowEdit.setSavePromise(rowEntity, promise.promise);
-        if (!rowEntity.id) {
-            watchListService.addItem($scope.activeTab, rowEntity);
-        } else {
-            watchListService.updateItem($scope.activeTab, rowEntity);
-        }
+        watchlistType.columns.forEach(function (column) {
+            columnTypeDict[column.name] = column.type;
+        });
         $scope.gridApi.rowEdit.setSavePromise(rowEntity, promise.promise);
-        $interval(function () {
-            promise.resolve();
-        }, 300, 1);
+
+        Object.keys(rowEntity).forEach(function (key) {
+            if (['$$hashKey', 'id'].indexOf(key) === -1) {
+                columnType = columnTypeDict[key];
+                value = rowEntity[key];
+                if (columnType === 'date') {
+                    value = moment(value).format('YYYY-MM-DD');
+                }
+                terms.push({entity: entity, field: key, type: columnType, value: value});
+            }
+        });
+
+        watchListService[method]($scope.activeTab, entity, rowEntity.id, terms).then(function (response) {
+            $interval(function () {
+                promise.resolve();
+            }, 300, 1);
+        });
     };
 
     $scope.gridOpts.onRegisterApi = function (gridApi) {
-        //set gridApi on scope
         $scope.gridApi = gridApi;
         gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
     };
 
-    /*    var myRows = $resource('http://testsomethingtofail.com/:id', {id: '@id'}, {
-     query: {method: 'GET', isArray: true},
-     addRows: {method: 'POST', isArray: true},
-     updateAllRows: {method: 'PUT', isArray: true},
-     removeRow: {method: 'DELETE'}
-     });
-     */
-    // call this to see if you can error out a row by calling a bogus URL to delete something.
-    // called from the UI by pressing "Remove Row"
     $scope.removeRow = function () {
-        var selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
+        var entity = watchlist.types[$scope.activeTab].entity,
+            selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
 
         angular.forEach(selectedRowEntities, function (rowEntity) {
             var rowIndexToDelete = $scope.gridOpts.data.indexOf(rowEntity);
-
-            // create a promise to reject errors from server side.
-            var rowDeferred = $q.defer();
-
-            // registering promise with the row to be deleted in the grid.
-            //$scope.gridApi.rowEdit.setSavePromise( $scope.gridApi.grid, rowEntity, rowDeferred.promise );
-
-            console.log('Selected row: ' + rowIndexToDelete + ' to delete.');
-            var deferred = watchListService.removeItem($scope.activeTab, rowEntity.id);
-            deferred.$promise.then(function (response) {
-                    // success callback
-                    var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
-                    rowDeferred.resolve(newLength);
-                },
-                function (error) {
-                    // will fail because URL is not real, but will resolve anyway for purposes of this test.
-
-                    // this is what I expect will remove the row from the ui-grid in the UI.
-                    var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
-                    rowDeferred.resolve(newLength);
-                    //rowDeferred.reject(error);
-                });
+            watchListService.deleteItem($scope.activeTab, entity, rowEntity.id).then(function () {
+                $scope.gridOpts.data.splice(rowIndexToDelete, 1);
+            });
         });
     };
 

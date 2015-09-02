@@ -1,6 +1,7 @@
 package gov.gtas.error;
 
 import static org.junit.Assert.*;
+import gov.gtas.constant.CommonErrorConstants;
 
 import org.junit.After;
 import org.junit.Before;

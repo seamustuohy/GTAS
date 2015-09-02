@@ -1,7 +1,7 @@
 package gov.gtas.services;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,23 +10,36 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import gov.gtas.model.Address;
 import gov.gtas.model.ApisMessage;
+import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Message;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.Phone;
+import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.pnrgov.PnrVo;
+import gov.gtas.parsers.vo.passenger.AddressVo;
+import gov.gtas.parsers.vo.passenger.CreditCardVo;
 import gov.gtas.parsers.vo.passenger.DocumentVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.FrequentFlyerVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
+import gov.gtas.repository.AddressRepository;
+import gov.gtas.repository.CreditCardRepository;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.repository.FlightRepository;
+import gov.gtas.repository.FrequentFlyerRepository;
 import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
+import gov.gtas.repository.PhoneRepository;
 import gov.gtas.repository.ReportingPartyRepository;
-import gov.gtas.util.DateCalendarUtils;
 
 @Repository
 public class LoaderRepository {
@@ -44,11 +57,22 @@ public class LoaderRepository {
 
     @Autowired
     private DocumentRepository docDao;
-
-    // TODO: can't instantiate generic message repo?
+    
     @Autowired
-    private MessageRepository<ApisMessage> messageDao;
+    private PhoneRepository phoneDao;
 
+    @Autowired
+    private CreditCardRepository creditDao;
+    
+    @Autowired
+    private AddressRepository addressDao;
+
+    @Autowired
+    private MessageRepository<Message> messageDao;
+
+    @Autowired
+    private FrequentFlyerRepository ffdao;
+    
     @Autowired
     private LoaderUtils utils;
 
@@ -72,45 +96,95 @@ public class LoaderRepository {
             }
         }
     }
+
+    @Transactional
+    public void processPnr(Pnr pnr, PnrVo vo) throws ParseException {
+        for (AddressVo addressVo : vo.getAddresses()) {
+            Address existingAddress = addressDao.findByLine1AndCityAndStateAndPostalCodeAndCountry(
+                    addressVo.getLine1(), addressVo.getCity(), addressVo.getState(), addressVo.getPostalCode(), addressVo.getCountry());
+            if (existingAddress == null) {
+                Address address = utils.convertAddressVo(addressVo);
+                pnr.addAddress(address);
+            } else {
+                pnr.addAddress(existingAddress);                
+            }
+        }
+        
+        for (PhoneVo phoneVo : vo.getPhoneNumbers()) {
+            Phone existingPhone = phoneDao.findByNumber(phoneVo.getNumber());
+            if (existingPhone == null) {
+                Phone newPhone = utils.convertPhoneVo(phoneVo);
+                pnr.addPhone(newPhone);
+            } else {
+                pnr.addPhone(existingPhone);                
+            }
+        }
+
+        for (CreditCardVo creditVo : vo.getCreditCards()) {
+            CreditCard existingCard = creditDao.findByCardTypeAndNumberAndExpiration(creditVo.getCardType(), creditVo.getNumber(), creditVo.getExpiration());
+            if (existingCard == null) {
+                CreditCard newCard  = utils.convertCreditVo(creditVo);
+                pnr.addCreditCard(newCard);
+            } else {
+                pnr.addCreditCard(existingCard);                
+            }
+        }
+        
+        for (FrequentFlyerVo ffvo : vo.getFrequentFlyerDetails()) {
+            FrequentFlyer existingFf = ffdao.findByCarrierAndNumber(ffvo.getCarrier(), ffvo.getNumber());
+            if (existingFf == null) {
+                FrequentFlyer newFf = utils.convertFrequentFlyerVo(ffvo);
+                pnr.addFrequentFlyer(newFf);
+            } else {
+                pnr.addFrequentFlyer(existingFf);
+            }
+        }
+    }
     
     @Transactional
-    public void processFlightsAndPassengers(ApisMessage apisMessage, List<FlightVo> flights, List<PassengerVo> passengers) throws ParseException {
+    public void processFlightsAndPassengers(List<FlightVo> flights, List<PassengerVo> passengers, Set<Flight> messageFlights, Set<Passenger> messagePassengers) throws ParseException {
         for (FlightVo fvo : flights) {
-            Flight currentFlight = null;
             Flight existingFlight = flightDao.getFlightByCriteria(fvo.getCarrier(), fvo.getFlightNumber(), fvo.getOrigin(), fvo.getDestination(), fvo.getFlightDate());
-            if (existingFlight == null) {
-                Flight newFlight = utils.createNewFlight(fvo);
-                currentFlight = newFlight;
-            } else {
-                utils.updateFlight(fvo, existingFlight);
-                currentFlight = existingFlight;
-            }
-            apisMessage.getFlights().add(currentFlight);
-            
-            for (PassengerVo pvo : passengers) {
-                Passenger currentPassenger = null;
-                Passenger existingPassenger = findPassengerOnFlight(currentFlight, pvo);
-                boolean isNewPax = false;
-                if (existingPassenger == null) {
-                    Passenger p = utils.createNewPassenger(pvo);
-                    currentPassenger = p;
-                    isNewPax = true;
-                } else {
-                    utils.updatePassenger(pvo, existingPassenger);
-                    currentPassenger = existingPassenger;
-                }
-                currentFlight.getPassengers().add(currentPassenger);
 
-                for (DocumentVo dvo : pvo.getDocuments()) {
-                    if (isNewPax) {
-                        currentPassenger.addDocument(utils.createNewDocument(dvo));
+            if (existingFlight == null) {
+                // new flight: just add new pax + docs
+                Flight newFlight = utils.createNewFlight(fvo);
+                messageFlights.add(newFlight);
+                for (PassengerVo pvo : passengers) {
+                    Passenger p = utils.createNewPassenger(pvo);
+                    for (DocumentVo dvo : pvo.getDocuments()) {
+                        p.addDocument(utils.createNewDocument(dvo));
+                    }
+                    messagePassengers.add(p);
+                    newFlight.addPassenger(p);
+                }
+                                
+            } else {
+                // existing flight: lookup pax and update
+                utils.updateFlight(fvo, existingFlight);
+                messageFlights.add(existingFlight);
+                for (PassengerVo pvo : passengers) {
+                    Passenger existingPassenger = findPassengerOnFlight(existingFlight, pvo);
+                    if (existingPassenger == null) {
+                        Passenger p = utils.createNewPassenger(pvo);
+                        for (DocumentVo dvo : pvo.getDocuments()) {
+                            p.addDocument(utils.createNewDocument(dvo));
+                        }
+                        passengerDao.save(p);
+                        messagePassengers.add(p);
+                        existingFlight.addPassenger(p);
+                        
                     } else {
-                        Document existingDoc = docDao.findByDocumentNumberAndPassenger(dvo.getDocumentNumber(), currentPassenger);
-                        if (existingDoc == null) {
-                            currentPassenger.addDocument(utils.createNewDocument(dvo));
-                        } else {
-                            utils.updateDocument(dvo, existingDoc);
-                        }                        
+                        utils.updatePassenger(pvo, existingPassenger);
+                        messagePassengers.add(existingPassenger);
+                        for (DocumentVo dvo : pvo.getDocuments()) {
+                            Document existingDoc = docDao.findByDocumentNumberAndPassenger(dvo.getDocumentNumber(), existingPassenger);
+                            if (existingDoc == null) {
+                                existingPassenger.addDocument(utils.createNewDocument(dvo));
+                            } else {
+                                utils.updateDocument(dvo, existingDoc);
+                            }                        
+                        }
                     }
                 }
             }

@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import gov.gtas.parsers.vo.passenger.AddressVo;
 import gov.gtas.parsers.vo.passenger.CreditCardVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
-import gov.gtas.parsers.vo.passenger.FrequentFlierVo;
+import gov.gtas.parsers.vo.passenger.FrequentFlyerVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.parsers.vo.passenger.PnrReportingAgentVo;
@@ -38,7 +38,7 @@ public class PnrVo {
     private List<AddressVo> addresses = new ArrayList<>();
     private List<PhoneVo> phoneNumbers = new ArrayList<>();
     private List<CreditCardVo> creditCards = new ArrayList<>();
-    private List<FrequentFlierVo> frequentFlierDetails = new ArrayList<>();
+    private List<FrequentFlyerVo> frequentFlyerDetails = new ArrayList<>();
     
     public PnrVo() {
         this.bagCount = 0;
@@ -181,12 +181,12 @@ public class PnrVo {
         this.creditCards = creditCards;
     }
 
-    public List<FrequentFlierVo> getFrequentFlierDetails() {
-        return frequentFlierDetails;
+    public List<FrequentFlyerVo> getFrequentFlyerDetails() {
+        return frequentFlyerDetails;
     }
 
-    public void setFrequentFlierDetails(List<FrequentFlierVo> frequentFlierDetails) {
-        this.frequentFlierDetails = frequentFlierDetails;
+    public void setFrequentFlyerDetails(List<FrequentFlyerVo> frequentFlyerDetails) {
+        this.frequentFlyerDetails = frequentFlyerDetails;
     }
 
     @Override

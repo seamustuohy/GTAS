@@ -1,11 +1,16 @@
 package gov.gtas.delegates.vo;
 
 import gov.gtas.model.PnrMessage;
+import gov.gtas.validators.Validatable;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Class PnrDataVo holds the reservation information for passengers.
@@ -16,7 +21,7 @@ import java.util.Set;
  * @author GTAS4
  *
  */
-public class PnrDataVo extends BaseVo implements Serializable {
+public class PnrDataVo extends BaseVo implements Validatable {
 
     private PnrMessageVo pnrMessage;
  	private String recordLocator;
@@ -167,7 +172,18 @@ public class PnrDataVo extends BaseVo implements Serializable {
 	public void setEmails(Set<EmailVo> emails) {
 		this.emails = emails;
 	}
-    
-    
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    }
+
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.recordLocator) || StringUtils.isBlank(this.carrier)){
+			return false;
+		}
+		return true;
+	}
 
 }

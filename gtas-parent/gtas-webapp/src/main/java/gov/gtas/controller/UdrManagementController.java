@@ -1,7 +1,7 @@
 package gov.gtas.controller;
 
+import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constants.Constants;
-import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
@@ -88,7 +88,7 @@ public class UdrManagementController {
 	private JsonServiceResponse createDrlRulesResponse(String rules){
 		System.out.println("******* The rules:\n"+rules+"\n***************\n");
 		JsonServiceResponse resp = new JsonServiceResponse(JsonServiceResponse.SUCCESS_RESPONSE, 
-				"Rule Management Service", "fetchDefaultDrlRulesFromKnowledgeBase", "Drools rules fetched successsfully");
+				"Rule Management Service", "fetchDefaultDrlRulesFromKnowledgeBase", "Drools rules fetched successfully");
 		String[] lines = rules.split("\n");
 		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute("DRL Rules", lines));
 		return resp;

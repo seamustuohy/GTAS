@@ -93,7 +93,7 @@ public class ApisMessageService implements MessageService {
         ApisMessageVo m = (ApisMessageVo)messageVo;
         try {
             loaderRepo.processReportingParties(this.apisMessage, m.getReportingParties());
-            loaderRepo.processFlightsAndPassengers(this.apisMessage, m.getFlights(), m.getPassengers());
+            loaderRepo.processFlightsAndPassengers(m.getFlights(), m.getPassengers(), this.apisMessage.getFlights(), this.apisMessage.getPassengers());
             this.apisMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {

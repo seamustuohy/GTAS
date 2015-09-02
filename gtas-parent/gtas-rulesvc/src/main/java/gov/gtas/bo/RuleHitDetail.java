@@ -17,7 +17,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	private static final long serialVersionUID = 2946626283174855377L;
 
 	private String hitRule;
-	
+
 	private Long udrRuleId;
 
 	private Long ruleId;
@@ -25,11 +25,11 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	private Long flightId;
 
 	private Long passengerId;
-	
+
 	private String passengerType;
-	
+
 	private String passengerName;
-	
+
 	private String[] hitReasons;
 
 	@JsonIgnore
@@ -41,19 +41,27 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	@JsonIgnore
 	private Passenger passenger;
 
-	
+	@JsonIgnore
+	private boolean watchlistHit;
+
 	/**
-	 * This constructor is used when the knowledge base is Ad Hoc, i.e., built
-	 * from DRL rules in a file or a string.
+	 * This constructor is used when creating a hit detail object as a result of
+	 * a UDR rule hit.
 	 * 
-	 * @param ruleId a numeric rule Id (can be null)
-	 * @param ruleTitle the name of the DRL rule(Rule.getName()).
-	 * @param passenger the Passenger object that matched.
-	 * @param flight the flight object that matched.
-	 * @param cause the reason for the match.
+	 * @param ruleId
+	 *            a numeric rule Id (can be null)
+	 * @param ruleTitle
+	 *            the name of the DRL rule(Rule.getName()).
+	 * @param passenger
+	 *            the Passenger object that matched.
+	 * @param flight
+	 *            the flight object that matched.
+	 * @param cause
+	 *            the reason for the match.
 	 */
-	public RuleHitDetail(final Long udrId, final Long ruleId, final String ruleTitle,
-			final Passenger passenger, final Flight flight, final String cause) {
+	public RuleHitDetail(final Long udrId, final Long ruleId,
+			final String ruleTitle, final Passenger passenger,
+			final Flight flight, final String cause) {
 		this.udrRuleId = udrId;
 		this.ruleId = ruleId;
 		this.title = ruleTitle;
@@ -72,12 +80,48 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	}
 
 	/**
-	 * This constructor is used when the knowledge base is built
-	 * from UDR.
+	 * This constructor is used when creating a hit detail object as a result of
+	 * a watch list hit.
 	 * 
-	 * @param ruleId the id of the GTAS RULE DB object. An UDR can generate multiple RULE objects.
-	 * @param passenger the Passenger object that matched.
-	 * @param flight the flight object that matched.
+	 * @param ruleId
+	 *            a numeric rule Id (can be null)
+	 * @param ruleTitle
+	 *            the name of the DRL rule(Rule.getName()).
+	 * @param passenger
+	 *            the Passenger object that matched.
+	 * @param flight
+	 *            the flight object that matched.
+	 * @param cause
+	 *            the reason for the match.
+	 */
+	public RuleHitDetail(final Long watchlistItemId,
+			final String watchlistTitle, final Passenger passenger,
+			final String cause) {
+		this.udrRuleId = null;
+		this.ruleId = watchlistItemId;
+		this.title = watchlistTitle;
+		this.description = watchlistTitle;
+		this.hitRule = watchlistTitle + "(" + watchlistItemId + ")";
+		this.passengerId = passenger.getId();
+		this.passengerType = decodePassengerTypeName(passenger
+				.getPassengerType());
+		this.passengerName = passenger.getFirstName() + " "
+				+ passenger.getLastName();
+		this.hitReasons = cause.split(HIT_REASON_SEPARATOR);
+		this.passenger = passenger;
+		this.watchlistHit = true;
+	}
+
+	/**
+	 * This constructor is used when the knowledge base is built from UDR.
+	 * 
+	 * @param ruleId
+	 *            the id of the GTAS RULE DB object. An UDR can generate
+	 *            multiple RULE objects.
+	 * @param passenger
+	 *            the Passenger object that matched.
+	 * @param flight
+	 *            the flight object that matched.
 	 * 
 	 */
 	public RuleHitDetail(final Long ruleId, final Passenger passenger,
@@ -95,7 +139,9 @@ public class RuleHitDetail implements Serializable, Cloneable {
 
 	/**
 	 * Converts the passenger type code to a friendly name.
-	 * @param typ the type code.
+	 * 
+	 * @param typ
+	 *            the type code.
 	 * @return the decoded type name.
 	 */
 	private String decodePassengerTypeName(String typ) {
@@ -170,9 +216,10 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	public Long getFlightId() {
 		return flightId;
 	}
-	
-    /**
-	 * @param flightId the flightId to set
+
+	/**
+	 * @param flightId
+	 *            the flightId to set
 	 */
 	public void setFlightId(Long flightId) {
 		this.flightId = flightId;
@@ -186,35 +233,46 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	}
 
 	/**
-	 * @param passenger the passenger to set
+	 * @param passenger
+	 *            the passenger to set
 	 */
 	public void setPassenger(Passenger passenger) {
 		this.passenger = passenger;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * @return the watchlistHit
+	 */
+	public boolean isWatchlistHit() {
+		return watchlistHit;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
 	public RuleHitDetail clone() throws CloneNotSupportedException {
-		return (RuleHitDetail)super.clone();
+		return (RuleHitDetail) super.clone();
 	}
 
 	@Override
-    public int hashCode() {
-       return Objects.hash(this.udrRuleId, this.ruleId, this.passengerId, this.flightId);
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (getClass() != obj.getClass())
-            return false;
-        final RuleHitDetail other = (RuleHitDetail)obj;
-        return Objects.equals(this.udrRuleId, other.udrRuleId)
-                && Objects.equals(this.ruleId, other.ruleId)
-                && Objects.equals(this.passengerId, other.passengerId)
-                && Objects.equals(this.flightId, other.flightId);
-    }
+	public int hashCode() {
+		return Objects.hash(this.udrRuleId, this.ruleId, this.passengerId,
+				this.flightId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (getClass() != obj.getClass())
+			return false;
+		final RuleHitDetail other = (RuleHitDetail) obj;
+		return Objects.equals(this.udrRuleId, other.udrRuleId)
+				&& Objects.equals(this.ruleId, other.ruleId)
+				&& Objects.equals(this.passengerId, other.passengerId)
+				&& Objects.equals(this.flightId, other.flightId);
+	}
 }

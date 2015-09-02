@@ -7,11 +7,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.RuleErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.error.CommonErrorConstants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.error.CommonValidationException;
-import gov.gtas.error.udr.UdrErrorConstants;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.UdrSpecification;
@@ -20,6 +20,7 @@ import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.services.UserService;
 import gov.gtas.services.udr.RulePersistenceService;
+import gov.gtas.svc.util.UdrServiceHelper;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
@@ -212,7 +213,7 @@ public class UdrServiceErrorTest {
 		     udrService.createUdr(authorId, spec);
 		     fail("Expecting exception");
 		  } catch (CommonServiceException cse){
-				assertEquals(UdrErrorConstants.PAST_START_DATE_ERROR_CODE, cse.getErrorCode());		     
+				assertEquals(RuleErrorConstants.PAST_START_DATE_ERROR_CODE, cse.getErrorCode());		     
 		  } catch (Exception ex){
 				ex.printStackTrace();
 				fail("Not Expecting Exception");

@@ -1,8 +1,10 @@
 package gov.gtas.services;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,12 +27,12 @@ public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringConte
     @Autowired
     private ApisMessageService svc;
 
-    private String apisFilePath;
+    private String filePath;
     @Before
     public void setUp() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("apis-messages/airline2.edi").getFile());
-        this.apisFilePath = file.getAbsolutePath();
+        this.filePath = file.getAbsolutePath();
     }
 
     @After
@@ -39,7 +41,9 @@ public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringConte
 
     @Test()
     public void testRunService() throws ParseException {
-        MessageVo msg = svc.parse(this.apisFilePath);
+        List<String> messages = svc.preprocess(this.filePath);
+        assertEquals(1, messages.size());
+        MessageVo msg = svc.parse(messages.get(0));
         assertNotNull(msg);
     }
 }

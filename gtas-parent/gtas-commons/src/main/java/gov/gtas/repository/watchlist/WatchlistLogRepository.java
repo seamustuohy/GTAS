@@ -19,16 +19,16 @@ import org.springframework.data.repository.query.Param;
 public interface WatchlistLogRepository extends
 		CrudRepository<WatchlistEditLog, Long>,
 		JpaSpecificationExecutor<WatchlistEditLog> {
-	@Query("SELECT log FROM WatchlistEditLog log WHERE log.editedWatchlist.watchlistName = :watchlistName")
+	@Query("SELECT log FROM WatchlistEditLog log WHERE log.editedWatchlist = :watchlistName")
 	public List<WatchlistEditLog> getLogByWatchlistName(
 			@Param("watchlistName") String watchlistName);
 
-	@Query("SELECT log FROM WatchlistEditLog log WHERE log.editedWatchlist.watchlistName = :watchlistName and log.editTimestamp >= :editTimestamp")
+	@Query("SELECT log FROM WatchlistEditLog log WHERE log.editedWatchlist = :watchlistName and log.editTimestamp >= :editTimestamp")
 	public List<WatchlistEditLog> getLogByWatchlistNameDateGreater(
 			@Param("watchlistName") String watchlistName,
 			@Param("editTimestamp") Date editTimestamp);
 
-	@Query("SELECT log FROM WatchlistEditLog log WHERE log.editedWatchlist.watchlistName = :watchlistName and log.editTimestamp between :fromDate and :toDate")
+	@Query("SELECT log FROM WatchlistEditLog log WHERE log.editedWatchlist = :watchlistName and log.editTimestamp between :fromDate and :toDate")
 	public List<WatchlistEditLog> getLogByWatchlistNameDateBetween(
 			@Param("watchlistName") String watchlistName,
 			@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);

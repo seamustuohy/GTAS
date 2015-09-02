@@ -1,5 +1,6 @@
 package gov.gtas.model.watchlist;
 
+import gov.gtas.constant.DomainModelConstants;
 import gov.gtas.model.BaseEntity;
 
 import java.util.Objects;
@@ -22,10 +23,10 @@ public class WatchlistItem extends BaseEntity {
     @JoinColumn(name="ITM_WL_REF", referencedColumnName="ID", nullable = false)     
     private Watchlist watchlist;
 	
-	@Column(name = "ITM_DATA", nullable=false, length = 1024)
+	@Column(name = "ITM_DATA", nullable=false, length = DomainModelConstants.WL_ITEM_DATA_COLUMN_SIZE)
 	private String itemData;
 	
-    @Column(name = "ITM_RL_DATA", nullable=true, length = 1024)
+    @Column(name = "ITM_RL_DATA", nullable=true, length = DomainModelConstants.WL_RULE_DATA_COLUMN_SIZE)
     private String itemRuleData;
     
     

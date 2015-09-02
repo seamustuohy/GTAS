@@ -30,7 +30,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Rule Engine Request Builder.
+ * Rule Engine Request Builder constructs Rule Engine execution requests from
+ * APIS and PNR messages. The constructed request contains all objects (e.g.,
+ * passenger, flight) associated with the APIS and PNR messages supplied.
+ * Duplicates are also removed in the construction process.
  * 
  * @author GTAS3 (AB)
  *
@@ -46,7 +49,7 @@ public class RuleEngineRequestBuilder {
 	private final Set<Long> creditCardIdSet;
 	private final Set<Long> frequentFlyerIdSet;
 	private final Set<Long> travelAgencyIdSet;
-	
+
 	private RuleServiceRequestType requestType;
 
 	public RuleEngineRequestBuilder() {
@@ -60,14 +63,12 @@ public class RuleEngineRequestBuilder {
 		this.passengerLinkSet = new HashSet<PnrPassengerLink>();
 		this.phoneIdSet = new HashSet<Long>();
 		this.travelAgencyIdSet = new HashSet<Long>();
-		
+
 		this.requestType = null;
 	}
 
 	public RuleServiceRequest build() {
 		return new BasicRuleServiceRequest(requestObjectList, this.requestType);
-//		return TargetingServiceUtils.createRuleServiceRequest(
-//				this.requestType, requestObjectList);
 	}
 
 	/**
@@ -80,7 +81,8 @@ public class RuleEngineRequestBuilder {
 		// add flights, passengers and documents.
 		// true for the second parameter means add passengers and documents
 		addFlights(apisMessage.getFlights(), true);
-		if(this.requestType == null || this.requestType == RuleServiceRequestType.APIS_MESSAGE){
+		if (this.requestType == null
+				|| this.requestType == RuleServiceRequestType.APIS_MESSAGE) {
 			this.requestType = RuleServiceRequestType.APIS_MESSAGE;
 		} else {
 			this.requestType = RuleServiceRequestType.ANY_MESSAGE;
@@ -110,7 +112,8 @@ public class RuleEngineRequestBuilder {
 
 			addTravelAgencyObject(pnr, pnr.getAgency());
 		}
-		if(this.requestType == null || this.requestType == RuleServiceRequestType.PNR_MESSAGE){
+		if (this.requestType == null
+				|| this.requestType == RuleServiceRequestType.PNR_MESSAGE) {
 			this.requestType = RuleServiceRequestType.PNR_MESSAGE;
 		} else {
 			this.requestType = RuleServiceRequestType.ANY_MESSAGE;
@@ -268,9 +271,9 @@ public class RuleEngineRequestBuilder {
 	private void addPnrPassengerLink(final Pnr pnr, final Passenger passenger) {
 		PnrPassengerLink link = new PnrPassengerLink(pnr.getId(),
 				passenger.getId());
-		if(!this.passengerLinkSet.contains(link)){
-		      requestObjectList.add(link);
-		      this.passengerLinkSet.add(link);
+		if (!this.passengerLinkSet.contains(link)) {
+			requestObjectList.add(link);
+			this.passengerLinkSet.add(link);
 		}
 
 	}

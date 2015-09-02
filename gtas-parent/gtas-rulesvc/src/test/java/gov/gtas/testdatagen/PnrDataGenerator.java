@@ -217,16 +217,16 @@ public class PnrDataGenerator {
         case 1:
             FrequentFlyer ff = new FrequentFlyer();
             String[] params = PNR_FREQUENT_FLYER1.split(",");
-            ff.setAirlineCode(params[0]);
-            ff.setFrequentFlyerNumber(params[1]);
+            ff.setCarrier(params[0]);
+            ff.setNumber(params[1]);
             ff.setId(1L);
             pnr.addFrequentFlyer(ff);
             break;
         case 2:
             ff = new FrequentFlyer();
             params = PNR_FREQUENT_FLYER2.split(",");
-            ff.setAirlineCode(params[0]);
-            ff.setFrequentFlyerNumber(params[1]);
+            ff.setCarrier(params[0]);
+            ff.setNumber(params[1]);
             ff.setId(2L);
             pnr.addFrequentFlyer(ff);
             break;

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.segment.usedifact.CTA;
 import gov.gtas.parsers.paxlst.segment.usedifact.DTM;
@@ -18,12 +17,12 @@ import gov.gtas.parsers.paxlst.segment.usedifact.LOC.LocCode;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.DocType;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
+import gov.gtas.parsers.paxlst.segment.usedifact.TDT;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.passenger.DocumentVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
-import gov.gtas.parsers.paxlst.segment.usedifact.TDT;
 
 public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);
@@ -37,10 +36,6 @@ public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
     }
     
     protected GROUP currentGroup;
-    
-    // TODO
-    protected void validateSegmentName(String segmentName) throws ParseException {
-    }
     
     // TODO
     protected String getPayloadText(String message) throws ParseException {

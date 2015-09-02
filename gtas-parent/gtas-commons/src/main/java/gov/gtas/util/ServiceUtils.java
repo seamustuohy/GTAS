@@ -1,5 +1,6 @@
 package gov.gtas.util;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -225,10 +226,10 @@ public class ServiceUtils {
 	}
 	public static FrequentFlyer mapFrequentFlyerFromFrequentFlyerVo(FrequentFlyerVo vo,FrequentFlyer ff){
 		//BeanUtils.copyProperties(vo, ff);
-		ff.setAirlineCode(vo.getAirlineCode());
+		ff.setCarrier(vo.getAirlineCode());
 		ff.setCreatedAt(vo.getCreatedAt());
 		ff.setCreatedBy(vo.getCreatedBy());
-		ff.setFrequentFlyerNumber(vo.getFrequentFlyerNumber());
+		ff.setNumber(vo.getFrequentFlyerNumber());
 		ff.setId(vo.getId());
 		ff.setUpdatedAt(vo.getUpdatedAt());
 		
@@ -289,5 +290,14 @@ public class ServiceUtils {
 		a.setCreatedBy("SYSTEM");
 		return a;
 	}
+    public static Date stripTime(Date d) {
+        Calendar cal = Calendar.getInstance(); // locale-specific
+        cal.setTime(d);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
 }
 

@@ -1,16 +1,21 @@
 package gov.gtas.delegates.vo;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.MessageStatus;
+import gov.gtas.validators.Validatable;
 
-public class PnrMessageVo {
+public class PnrMessageVo implements Validatable{
+	
 	private EdifactMessage edifactMessage;
 	private MessageStatus status;
-	
 	private String filePath;
 	private String error;
 	private String hashCode;
-	
+    
 	
 	public String getFilePath() {
 		return filePath;
@@ -50,6 +55,19 @@ public class PnrMessageVo {
 
 	public void setEdifactMessage(EdifactMessage edifactMessage) {
 		this.edifactMessage = edifactMessage;
+	}
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    }
+
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.hashCode) ){
+			return false;
+		}
+		return true;
 	}
 	
 }

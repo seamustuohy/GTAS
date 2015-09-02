@@ -1,21 +1,17 @@
 package gov.gtas.delegates.vo;
 
-import gov.gtas.model.Passenger;
-import gov.gtas.model.Pnr;
-
-import java.io.Serializable;
+import gov.gtas.util.ServiceUtils;
+import gov.gtas.validators.Validatable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class FlightVo extends BaseVo implements Serializable {
+public class FlightVo extends BaseVo implements Validatable {
 	
-    public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm aaa";
     private String flightId;
     private String carrier;
     private String flightNumber;
@@ -25,8 +21,8 @@ public class FlightVo extends BaseVo implements Serializable {
     private String destinationCountry;
     private boolean isOverFlight;
     private String direction;
-    
-    
+  
+    public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm aaa";
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date flightDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -35,6 +31,7 @@ public class FlightVo extends BaseVo implements Serializable {
     private Date eta;
     private Set<PassengerVo> passengers = new HashSet<>();
     private Set<PnrDataVo> pnrs = new HashSet<>();
+   
     
     
     public Set<PassengerVo> getPassengers() {
@@ -121,9 +118,40 @@ public class FlightVo extends BaseVo implements Serializable {
     public void setOverFlight(boolean isOverFlight) {
         this.isOverFlight = isOverFlight;
     }
+
+    /**
+     * rules for setting calculated field 'flightDate'
+     */
+    public void setFlightDate(Date etd, Date eta, Date transmissionDate) {
+        Date d = null;
+        if (etd != null) {
+            d = etd;
+        } else if (eta != null) {
+            d = eta;
+        } else {
+            // TODO: verify this case
+            d = transmissionDate;
+        }
+
+        if (d != null) {
+            this.flightDate = ServiceUtils.stripTime(d);
+        }
+    }
+    
+    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
-    }    
+    }
+
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.destination) || StringUtils.isBlank(this.origin) 
+				|| StringUtils.isBlank(this.flightNumber) || this.flightDate == null 
+				|| StringUtils.isBlank(this.carrier)){
+			return false;
+		}
+		return true;
+	}  
 }
 

@@ -1,9 +1,6 @@
 package gov.gtas.parsers.paxlst;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
@@ -36,10 +33,6 @@ import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
 
 public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {   
-    private static final String[] SEGMENT_NAMES = new String[] { "ATT", "AUT", "BGM", "CNT", "COM", "CPI", "CTA", "DOC",
-            "DTM", "EMP", "FTX", "GEI", "GID", "LOC", "MEA", "NAD", "NAT", "QTY", "RFF", "TDT", "UNH", "UNT" };
-    public static final Set<String> UN_EDIFACT_PAXLST_SEGMENT_INDEX = new HashSet<>(Arrays.asList(SEGMENT_NAMES));
-
     public PaxlstParserUNedifact() {
         this.parsedMessage = new ApisMessageVo();
     }
@@ -92,15 +85,6 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
         getMandatorySegment(CNT.class);
     }
 
-    @Override
-    protected void validateSegmentName(String segmentName) throws ParseException {
-        boolean valid = UN_EDIFACT_PAXLST_SEGMENT_INDEX.contains(segmentName)
-                || EdifactLexer.EDIFACT_SEGMENT_INDEX.contains(segmentName);
-        if (!valid) {
-            throw new ParseException("Invalid segment: " + segmentName);
-        }
-    }
-    
     /**
      * Segment group 1: reporting party
      */

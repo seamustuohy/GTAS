@@ -1,6 +1,6 @@
 package gov.gtas.model.udr.json;
 
-import gov.gtas.model.udr.UdrConstants;
+import gov.gtas.constant.RuleConstants;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -21,10 +21,10 @@ public class MetaData implements Serializable {
 	private String title;
 	private String description;
 		
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = UdrConstants.UDR_DATE_FORMAT)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RuleConstants.UDR_DATE_FORMAT)
 	private Date startDate;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = UdrConstants.UDR_DATE_FORMAT)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = RuleConstants.UDR_DATE_FORMAT)
 	private Date endDate;
 	
 	private String author;
