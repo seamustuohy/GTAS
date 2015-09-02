@@ -5,11 +5,13 @@ import gov.gtas.model.udr.json.error.GtasJsonError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class WebAppGlobalErrorHandler {
@@ -19,6 +21,7 @@ public class WebAppGlobalErrorHandler {
 	private static final Logger logger = LoggerFactory
 			.getLogger(WebAppGlobalErrorHandler.class);
 	
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(CommonServiceException.class)
 	public @ResponseBody GtasJsonError handleError(CommonServiceException ex) {
 		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
@@ -26,12 +29,14 @@ public class WebAppGlobalErrorHandler {
 		return new GtasJsonError(err.getFatalErrorCode(),
 				err.getFatalErrorMessage());
 	}
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public @ResponseBody GtasJsonError handleError(HttpMessageNotReadableException ex) {
 		return new GtasJsonError(WebappErrorConstants.MALFORMED_JSON_ERROR_CODE,
 				String.format(WebappErrorConstants.MALFORMED_JSON_ERROR_MESSAGE, ex.getMessage()));		
 	}
 
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(JpaSystemException.class)
 	public @ResponseBody GtasJsonError handleError(JpaSystemException ex) {
 		if(ErrorUtils.isExceptionOfType(ex, "SQLGrammarException")){
@@ -53,6 +58,7 @@ public class WebAppGlobalErrorHandler {
 						+ ex.getMessage());
 		
 	}
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
     @ExceptionHandler(TypeMismatchException.class)
 	public @ResponseBody GtasJsonError handleError(TypeMismatchException ex) {
 		ex.printStackTrace();
@@ -61,6 +67,7 @@ public class WebAppGlobalErrorHandler {
 				+ ex.getMessage());
 	}
     
+	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody GtasJsonError handleError(Exception ex) {
 		ex.printStackTrace();

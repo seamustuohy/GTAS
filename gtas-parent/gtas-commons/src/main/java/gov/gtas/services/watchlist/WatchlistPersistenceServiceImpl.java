@@ -154,11 +154,11 @@ public class WatchlistPersistenceServiceImpl implements
 	@Override
 	public Watchlist findByName(String name) {
 		Watchlist wl = watchlistRepository.getWatchlistByName(name);
-		if (wl == null) {
-			throw ErrorHandlerFactory.getErrorHandler().createException(
-					CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE,
-					"Watchlist", name);
-		}
+//		if (wl == null) {
+//			throw ErrorHandlerFactory.getErrorHandler().createException(
+//					CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE,
+//					"Watchlist", name);
+//		}
 		return wl;
 	}
 
