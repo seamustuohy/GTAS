@@ -8,6 +8,7 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -66,7 +67,15 @@ public class WebAppGlobalErrorHandler {
 		"The REST path variable could not be parsed:"
 				+ ex.getMessage());
 	}
-    
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public @ResponseBody GtasJsonError handleError(HttpRequestMethodNotSupportedException ex) {
+		ex.printStackTrace();
+		return new GtasJsonError("INVALID_INPUT_URL_OR_UNKNOWN_METHOD",
+		"The URL could not be dispatched:"
+				+ ex.getMessage());
+	}
+   
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody GtasJsonError handleError(Exception ex) {

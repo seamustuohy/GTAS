@@ -9,6 +9,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.enumtype.ConditionEnum;
 import gov.gtas.enumtype.WatchlistEditEnum;
 import gov.gtas.error.CommonValidationException;
@@ -33,7 +34,7 @@ public class WatchlistValidationAdapter {
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(
 				wljson, "watch list");
 		if (StringUtils.isEmpty(wljson.getName())) {
-			errors.rejectValue("name",CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
+			errors.rejectValue(WatchlistConstants.WL_NAME_FIELD,CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					"Watch list name or entity name is missing.");
 		}
 		if (StringUtils.isEmpty(wljson.getEntity())) {
@@ -76,11 +77,13 @@ public class WatchlistValidationAdapter {
 		    	if(itm.getId() != null){
 		    		errors.rejectValue("id",CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,"Cannot specify id for create action - "+itm.getId());
 		    	}
+		    	break;
 		    case U:
 		    case D:
 		    	if(itm.getId() == null){
 		    		errors.rejectValue("id", CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,"No id specified for update or delete action");		    		
 		    	}
+		    	break;
 		    }
 		} catch (IllegalArgumentException iae){
 			errors.rejectValue("action", CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,"Invalid action for watch list item:"+itm.getAction());

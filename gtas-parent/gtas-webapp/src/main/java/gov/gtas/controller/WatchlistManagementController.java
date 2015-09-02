@@ -43,7 +43,7 @@ public class WatchlistManagementController {
 	@Autowired
 	private RuleManagementService ruleManagementService;
 
-	@RequestMapping(value = Constants.WL_GET_BY_NAME, method = RequestMethod.GET)
+	@RequestMapping(value = Constants.WL_GET_BY_NAME, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public WatchlistSpec getWatchlist(@PathVariable String entity, @PathVariable String name) {
 		System.out.println("******** name =" + name);
 		WatchlistSpec resp = watchlistService.fetchWatchlist(name);

@@ -68,7 +68,7 @@ public class SampleDataGenerator {
 				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
 						.toUpperCase(), PassengerMapping.DOB.getFieldName(),
 						PassengerMapping.DOB.getFieldType(), "1747-07-06") }));
-		ret.addWatchlistItem(new WatchlistItemSpec(32L, WatchlistEditEnum.C
+		ret.addWatchlistItem(new WatchlistItemSpec(null, WatchlistEditEnum.C
 				.getOperationName(), new WatchlistTerm[] {
 				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
 						.toUpperCase(), PassengerMapping.FIRST_NAME
