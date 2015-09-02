@@ -15,9 +15,25 @@ public class InvalidObjectInfoVo {
 	private String invalidObjectKey;
 	private String invalidObjectValue;
 	private String invalidObjectType;
+	private String description;
 	private Date createdDate;
 	private String createdBy;
+	private Long id;
 	
+	
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public String getInvalidObjectKey() {
 		return invalidObjectKey;
 	}
