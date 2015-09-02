@@ -7,7 +7,6 @@ package gov.gtas.constant;
  */
 public class RuleConstants {
 	public static final String UDR_KNOWLEDGE_BASE_NAME = "UDR Knowledge Base";
-	public static final String WL_KNOWLEDGE_BASE_NAME = "WL Knowledge Base";
 	
 	public static final String UDR_EXTERNAL_CHARACTER_ENCODING = "UTF-8";//StandardCharsets.UTF_8.name()
 	

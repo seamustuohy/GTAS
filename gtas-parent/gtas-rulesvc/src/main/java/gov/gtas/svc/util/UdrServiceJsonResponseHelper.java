@@ -1,4 +1,4 @@
-package gov.gtas.svc;
+package gov.gtas.svc.util;
 
 import org.apache.commons.lang3.StringUtils;
 

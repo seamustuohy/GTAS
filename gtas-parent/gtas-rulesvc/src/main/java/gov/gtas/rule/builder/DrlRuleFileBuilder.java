@@ -78,7 +78,10 @@ public class DrlRuleFileBuilder {
      * @return this builder object.
      */
 	public DrlRuleFileBuilder addWatchlistItemRule(final WatchlistItem wlItem) {
-		String drl = String.format(wlItem.getItemRuleData(), wlItem.getId());
+		//the rule template saved in the data base record for watch list item
+		// has two place holders (for title and for result action)
+		String drl = String.format(wlItem.getItemRuleData(), wlItem.getId(), wlItem.getId());
+		
 		this.stringBuilder.append(drl).append(StringUtils.LF);
 		return this;
 	}

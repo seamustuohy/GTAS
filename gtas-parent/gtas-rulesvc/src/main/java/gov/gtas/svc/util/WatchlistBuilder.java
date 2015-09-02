@@ -1,4 +1,4 @@
-package gov.gtas.model.watchlist.util;
+package gov.gtas.svc.util;
 
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
@@ -8,8 +8,6 @@ import gov.gtas.model.watchlist.Watchlist;
 import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.model.watchlist.json.WatchlistItemSpec;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
-import gov.gtas.model.watchlist.json.WatchlistTerm;
-import gov.gtas.querybuilder.mappings.PassengerMapping;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -107,7 +105,12 @@ public class WatchlistBuilder {
 										CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
 										itemSpec.getId(), "buildPersistenceLists");
 					}
+					
 					item.setItemData(json);
+					StringBuilder ruleBldr = new StringBuilder();
+					List<String> ruleCriteria = WatchlistRuleCreationUtil
+							.createWatchlistRule(itemSpec.getTerms(), this.getName(), ruleBldr);
+					item.setItemRuleData(ruleBldr.toString());
 					this.createUpdateList.add(item);
 					break;
 				case D:
@@ -151,45 +154,6 @@ public class WatchlistBuilder {
 	 */
 	public List<WatchlistItem> getCreateUpdateList() {
 		return createUpdateList;
-	}
-
-	/**
-	 * Creates a sample watch list JSON object. (This is used for testing.)
-	 * 
-	 * @return watch list JSON object.
-	 */
-	public static WatchlistSpec createSampleWatchlist(String wlName) {
-		WatchlistSpec ret = new WatchlistSpec(wlName,
-				EntityEnum.PASSENGER.getEntityName().toUpperCase());
-		ret.addWatchlistItem(new WatchlistItemSpec(null, WatchlistEditEnum.C
-				.getOperationName(), new WatchlistTerm[] {
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.FIRST_NAME
-						.getFieldName(), PassengerMapping.FIRST_NAME
-						.getFieldType(), "John"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.LAST_NAME
-						.getFieldName(), PassengerMapping.LAST_NAME
-						.getFieldType(), "Jones"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.DOB.getFieldName(),
-						PassengerMapping.DOB.getFieldType(), "1747-07-06") }));
-		ret.addWatchlistItem(new WatchlistItemSpec(32L, WatchlistEditEnum.U
-				.getOperationName(), new WatchlistTerm[] {
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.FIRST_NAME
-						.getFieldName(), PassengerMapping.FIRST_NAME
-						.getFieldType(), "Julius"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.LAST_NAME
-						.getFieldName(), PassengerMapping.LAST_NAME
-						.getFieldType(), "Seizure"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.DOB.getFieldName(),
-						PassengerMapping.DOB.getFieldType(), "1966-09-13") }));
-		ret.addWatchlistItem(new WatchlistItemSpec(25L, WatchlistEditEnum.D
-				.getOperationName(), null));
-		return ret;
 	}
 
 }

@@ -20,7 +20,7 @@ import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
 import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
-import gov.gtas.svc.UdrServiceHelper;
+import gov.gtas.svc.util.UdrServiceHelper;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -208,7 +208,7 @@ public class RuleBuilderTestUtils {
 						OperatorCodeEnum.BEGINS_WITH, "123", ValueTypesEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FREQUENT_FLYER,
-						FrequentFlyerMapping.AIRLINE,
+						FrequentFlyerMapping.CARRIER,
 						OperatorCodeEnum.EQUAL, "AA", ValueTypesEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FLIGHT,

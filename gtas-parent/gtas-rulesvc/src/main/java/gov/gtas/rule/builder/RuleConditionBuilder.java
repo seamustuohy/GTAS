@@ -9,7 +9,6 @@ import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
-import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.rule.builder.pnr.PnrRuleConditionBuilder;
 
 import java.text.ParseException;
@@ -227,12 +226,12 @@ public class RuleConditionBuilder {
 
 	private static final String ACTION_WATCHLIST_HIT = "resultList.add(new RuleHitDetail(%s, \"%s\", %s, \"%s\"));\n";
 	public List<String> addWatchlistRuleAction(StringBuilder ruleStringBuilder, String title,
-			WatchlistItem wl, String passengerVariableName) {
+			String passengerVariableName) {
 		String cause = conditionDescriptionBuilder.toString()
 				.replace("\"", "'");
 		ruleStringBuilder.append("then\n");
-			// the UDR ID and/or the rule id may not be available at
-			// this stage so we add defer adding these
+			// the watch list item id id may not be available at
+			// this stage so we add defer adding it
 			ruleStringBuilder.append(String.format(ACTION_WATCHLIST_HIT,
 					"%dL", // the watch list item ID may not be available
 					title, this.passengerVariableName, cause));

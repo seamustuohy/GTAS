@@ -42,6 +42,17 @@ public class ApisMessage extends Message {
     )        
     private Set<Flight> flights = new HashSet<>();
 
+    @ManyToMany(
+        targetEntity=Passenger.class,
+        cascade={CascadeType.PERSIST, CascadeType.MERGE}
+    )
+    @JoinTable(
+        name="apis_message_passenger",
+        joinColumns=@JoinColumn(name="apis_message_id"),
+        inverseJoinColumns=@JoinColumn(name="passenger_id")
+    )        
+    private Set<Passenger> passengers = new HashSet<>();
+    
     public void addReportingParty(ReportingParty rp) {
         if (this.reportingParties == null) {
             this.reportingParties = new HashSet<>();
@@ -63,6 +74,14 @@ public class ApisMessage extends Message {
 
     public void setFlights(Set<Flight> flights) {
         this.flights = flights;
+    }
+
+    public Set<Passenger> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(Set<Passenger> passengers) {
+        this.passengers = passengers;
     }
 
     public EdifactMessage getEdifactMessage() {

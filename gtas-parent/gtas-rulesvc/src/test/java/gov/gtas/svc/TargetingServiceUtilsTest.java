@@ -8,6 +8,7 @@ import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.PnrMessage;
+import gov.gtas.svc.util.TargetingServiceUtils;
 import gov.gtas.testdatagen.ApisDataGenerator;
 import gov.gtas.testdatagen.PnrDataGenerator;
 

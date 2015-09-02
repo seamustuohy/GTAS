@@ -28,7 +28,13 @@ public class Passenger extends BaseEntityAudit {
         targetEntity = Flight.class
     )    
     private Set<Flight> flights = new HashSet<>();
-    
+
+    @ManyToMany(
+        mappedBy = "passengers",
+        targetEntity = ApisMessage.class
+    )
+    private Set<ApisMessage> apisMessage = new HashSet<>();
+
     @ManyToMany(
         mappedBy = "passengers",
         targetEntity = Pnr.class

@@ -1,6 +1,13 @@
 package gov.gtas.delegates.vo;
 
-public class PnrReportingAgentVo {
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import gov.gtas.validators.Validatable;
+
+public class PnrReportingAgentVo implements Validatable{
+	
     private String airlineCode;
     private String locationCode;
     private String identificationNumber;
@@ -58,4 +65,17 @@ public class PnrReportingAgentVo {
     public void setLocaleCode(String localeCode) {
         this.localeCode = localeCode;
     }
+    
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    }
+
+	@Override
+	public boolean validate() {
+		if(StringUtils.isBlank(this.airlineCode) ){
+			return false;
+		}
+		return true;
+	}
 }

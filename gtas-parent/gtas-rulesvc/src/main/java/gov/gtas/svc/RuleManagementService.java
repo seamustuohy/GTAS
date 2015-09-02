@@ -45,6 +45,14 @@ public interface RuleManagementService {
      */
     KnowledgeBase createKnowledgeBaseFromWatchlistItems(String kbName, Iterable<WatchlistItem> rules);
     /**
+     * Creates a Knowledge Base from a list of UDR and watch list item objects and saves it to the DB.
+     * @param kbName the name of the Knowledge Base.
+     * @param rules the collection of UDR rules.
+     * @param wlItems the collection of watch list items.
+     * @return the created Knowledge Base.
+     */
+  //  KnowledgeBase createKnowledgeBaseFromUdrAndWatchlist(String kbName, Collection<UdrRule> rules, Iterable<WatchlistItem> wlItems);
+    /**
      * Deletes the named Knowledge Base.
      * @param kbName the knowledge base name.
      * @return the deleted knowledge base, or null if the knowledge base could not be found.

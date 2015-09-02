@@ -1,15 +1,16 @@
 package gov.gtas.controller;
 
-import java.util.List;
-
 import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.constants.Constants;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
-import gov.gtas.model.watchlist.util.WatchlistBuilder;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.WatchlistService;
+import gov.gtas.util.SampleDataGenerator;
+
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class WatchlistManagementController {
 
 	@RequestMapping(value = Constants.WL_GETDRL, method = RequestMethod.GET)
 	public JsonServiceResponse getDrl() {
-		String rules = ruleManagementService.fetchDefaultDrlRulesFromKnowledgeBase();
+		String rules = ruleManagementService.fetchDrlRulesFromKnowledgeBase(WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
 		return createDrlRulesResponse(rules);
 	}
 	
@@ -100,13 +101,25 @@ public class WatchlistManagementController {
 		return resp;
 	}
 
+	@RequestMapping(value = Constants.WL_DELETE, method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public JsonServiceResponse deleteUDR(@PathVariable String name) {
+		logger.info("******** Received UDR Delete requestfor watch list =" + name);
+		JsonServiceResponse resp = watchlistService.deleteWatchlist(name);
+		return resp;
+	}
+
+	@RequestMapping(value = Constants.WL_COMPILE, method = {RequestMethod.POST, RequestMethod.PUT}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public JsonServiceResponse compileWatchlists(){
+		return watchlistService.activateAllWatchlists();
+	}
+
     /**
      * 
      * @return
      */
 	@RequestMapping(value = Constants.WL_TEST, method = RequestMethod.GET)
 	public WatchlistSpec getTestWatchlist() {
-		WatchlistSpec resp = WatchlistBuilder.createSampleWatchlist("TestWatchlist");
+		WatchlistSpec resp = SampleDataGenerator.createSampleWatchlist("TestWatchlist");
 		return resp;
 	}
 

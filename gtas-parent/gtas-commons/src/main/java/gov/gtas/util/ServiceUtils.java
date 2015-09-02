@@ -226,10 +226,10 @@ public class ServiceUtils {
 	}
 	public static FrequentFlyer mapFrequentFlyerFromFrequentFlyerVo(FrequentFlyerVo vo,FrequentFlyer ff){
 		//BeanUtils.copyProperties(vo, ff);
-		ff.setAirlineCode(vo.getAirlineCode());
+		ff.setCarrier(vo.getAirlineCode());
 		ff.setCreatedAt(vo.getCreatedAt());
 		ff.setCreatedBy(vo.getCreatedBy());
-		ff.setFrequentFlyerNumber(vo.getFrequentFlyerNumber());
+		ff.setNumber(vo.getFrequentFlyerNumber());
 		ff.setId(vo.getId());
 		ff.setUpdatedAt(vo.getUpdatedAt());
 		

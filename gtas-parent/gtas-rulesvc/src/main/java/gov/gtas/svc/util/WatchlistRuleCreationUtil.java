@@ -3,7 +3,6 @@ package gov.gtas.svc.util;
 import static gov.gtas.rule.builder.RuleTemplateConstants.NEW_LINE;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
-import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.model.watchlist.json.WatchlistTerm;
 import gov.gtas.rule.builder.RuleConditionBuilder;
 import gov.gtas.rule.builder.RuleTemplateConstants;
@@ -17,13 +16,13 @@ import java.util.List;
  * @author GTAS3 (AB)
  *
  */
-public class WatchlistServiceHelper {
-	public List<String> createWatchlistRule(List<WatchlistTerm> wlData,
-			String title, WatchlistItem wlRule, StringBuilder ruleOutput) {
+public class WatchlistRuleCreationUtil {
+	public static List<String> createWatchlistRule(WatchlistTerm[] wlData,
+			String title, StringBuilder ruleOutput) {
 		RuleConditionBuilder ruleConditionBuilder = new RuleConditionBuilder(
 				RuleVariablesUtil.createEngineRuleVariableMap());
 
-		ruleOutput.append("rule \"").append(title).append("\"")
+		ruleOutput.append("rule \"").append(title).append(":%d\"")
 				.append(NEW_LINE).append("when\n");
 		for (WatchlistTerm wlterm : wlData) {
 			QueryTerm trm = new QueryTerm(wlterm.getEntity(),
@@ -33,7 +32,7 @@ public class WatchlistServiceHelper {
 		}
 		ruleConditionBuilder.buildConditionsAndApppend(ruleOutput);
 		List<String> causes = ruleConditionBuilder.addWatchlistRuleAction(ruleOutput,
-				title, wlRule, RuleTemplateConstants.PASSENGER_VARIABLE_NAME);
+				title, RuleTemplateConstants.PASSENGER_VARIABLE_NAME);
 
 		return causes;
 	}

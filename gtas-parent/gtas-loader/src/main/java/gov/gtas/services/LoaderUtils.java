@@ -17,6 +17,7 @@ import gov.gtas.model.Address;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
@@ -30,6 +31,7 @@ import gov.gtas.parsers.vo.passenger.AddressVo;
 import gov.gtas.parsers.vo.passenger.CreditCardVo;
 import gov.gtas.parsers.vo.passenger.DocumentVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.FrequentFlyerVo;
 import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
@@ -178,6 +180,13 @@ public class LoaderUtils {
         cc.setCreatedBy(LOADER_USER);
         BeanUtils.copyProperties(vo, cc);
         return cc;
+    }
+    
+    public FrequentFlyer convertFrequentFlyerVo(FrequentFlyerVo vo) {
+        FrequentFlyer ff = new FrequentFlyer();
+        ff.setCreatedBy(LOADER_USER);
+        BeanUtils.copyProperties(vo, ff);
+        return ff;
     }
     
     /**

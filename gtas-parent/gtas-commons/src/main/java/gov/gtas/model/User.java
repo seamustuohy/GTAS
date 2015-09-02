@@ -1,5 +1,7 @@
 package gov.gtas.model;
 
+import gov.gtas.constant.DomainModelConstants;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +22,7 @@ public class User implements Serializable {
     public User() { }
 
     @Id
-    @Column(name="user_id")
+    @Column(name="user_id", length=DomainModelConstants.GTAS_USERID_COLUMN_SIZE)
 	private String userId;
 
     @Column(name="password", nullable = false)

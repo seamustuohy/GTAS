@@ -1,5 +1,6 @@
 package gov.gtas.model.watchlist;
 
+import gov.gtas.constant.DomainModelConstants;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.BaseEntity;
 import gov.gtas.model.User;
@@ -34,20 +35,20 @@ public class Watchlist extends BaseEntity {
     @JoinColumn(name="WL_EDITOR", referencedColumnName="user_id", nullable = false)     
     private User watchListEditor;
     	
-	@Column(name = "WL_NAME", nullable=false, length = 20)
+	@Column(name = "WL_NAME", nullable=false, length = DomainModelConstants.WL_NAME_COLUMN_SIZE)
 	private String watchlistName;
 	
 	@Enumerated(EnumType.STRING)
-    @Column(name = "WL_ENTITY", length = 20)
+    @Column(name = "WL_ENTITY", nullable=false, length = DomainModelConstants.ENTITY_NAME_SIZE)
     private EntityEnum watchlistEntity;
     
 	@Column(name = "WL_EDIT_DTTM", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date editTimestamp;
 
-    @Column(name = "WL_COMPILE_DTTM", nullable = true)
-	@Temporal(TemporalType.TIMESTAMP)
-    private Date compileTimestamp;
+//    @Column(name = "WL_COMPILE_DTTM", nullable = true)
+//	@Temporal(TemporalType.TIMESTAMP)
+//    private Date compileTimestamp;
     
     
     /**
@@ -76,20 +77,6 @@ public class Watchlist extends BaseEntity {
 	 */
 	public void setEditTimestamp(Date editTimestamp) {
 		this.editTimestamp = editTimestamp;
-	}
-
-	/**
-	 * @return the compileTimestamp
-	 */
-	public Date getCompileTimestamp() {
-		return compileTimestamp;
-	}
-
-	/**
-	 * @param compileTimestamp the compileTimestamp to set
-	 */
-	public void setCompileTimestamp(Date compileTimestamp) {
-		this.compileTimestamp = compileTimestamp;
 	}
 
 	/**
