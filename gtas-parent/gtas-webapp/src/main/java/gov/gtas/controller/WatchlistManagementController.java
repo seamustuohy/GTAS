@@ -44,9 +44,12 @@ public class WatchlistManagementController {
 	private RuleManagementService ruleManagementService;
 
 	@RequestMapping(value = Constants.WL_GET_BY_NAME, method = RequestMethod.GET)
-	public WatchlistSpec getWatchlist(@PathVariable String name) {
+	public WatchlistSpec getWatchlist(@PathVariable String entity, @PathVariable String name) {
 		System.out.println("******** name =" + name);
 		WatchlistSpec resp = watchlistService.fetchWatchlist(name);
+		if(resp == null){
+			resp = 	new WatchlistSpec(name, entity);
+		}
 		return resp;
 	}
 
@@ -108,7 +111,7 @@ public class WatchlistManagementController {
 		return resp;
 	}
 
-	@RequestMapping(value = Constants.WL_COMPILE, method = {RequestMethod.POST, RequestMethod.PUT}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = Constants.WL_COMPILE, method = {RequestMethod.POST, RequestMethod.PUT}, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse compileWatchlists(){
 		return watchlistService.activateAllWatchlists();
 	}
