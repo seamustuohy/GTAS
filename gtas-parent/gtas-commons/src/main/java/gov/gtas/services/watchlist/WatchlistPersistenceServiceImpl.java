@@ -17,8 +17,10 @@ import gov.gtas.services.UserService;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -87,15 +89,6 @@ public class WatchlistPersistenceServiceImpl implements
 		watchlist.setEditTimestamp(new Date());
 		watchlist.setWatchListEditor(user);
 		watchlist = watchlistRepository.save(watchlist);
-//		if (createUpdateList != null && createUpdateList.size() > 0) {
-//			for (WatchlistItem item : createUpdateList) {
-//				item.setWatchlist(watchlist);
-//			}
-//			watchlistItemRepository.save(createUpdateList);
-//		}
-//		if (deleteList != null && deleteList.size() > 0) {
-//			watchlistItemRepository.delete(deleteList);
-//		}
 		doCrudWithLogging(watchlist, user, createUpdateList, deleteList);
 		return watchlist;
 	}
@@ -146,10 +139,10 @@ public class WatchlistPersistenceServiceImpl implements
 	 * @see gov.gtas.services.watchlist.WatchlistPersistenceService#
 	 * findUncompiledWatchlists()
 	 */
-//	@Override
-//	public List<Watchlist> findUncompiledWatchlists() {
-//		return watchlistRepository.fetchUncompiledWatchlists();
-//	}
+	// @Override
+	// public List<Watchlist> findUncompiledWatchlists() {
+	// return watchlistRepository.fetchUncompiledWatchlists();
+	// }
 
 	/*
 	 * (non-Javadoc)
@@ -200,11 +193,15 @@ public class WatchlistPersistenceServiceImpl implements
 		return wl;
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.watchlist.WatchlistPersistenceService#findLogEntriesForWatchlist(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.gtas.services.watchlist.WatchlistPersistenceService#
+	 * findLogEntriesForWatchlist(java.lang.String)
 	 */
 	@Override
-	public List<WatchlistEditLog> findLogEntriesForWatchlist(String watchlistName) {
+	public List<WatchlistEditLog> findLogEntriesForWatchlist(
+			String watchlistName) {
 		return watchlistLogRepository.getLogByWatchlistName(watchlistName);
 	}
 
@@ -212,32 +209,64 @@ public class WatchlistPersistenceServiceImpl implements
 			User editUser, Collection<WatchlistItem> createUpdateItems,
 			Collection<WatchlistItem> deleteItems) {
 		List<WatchlistEditLog> ret = new LinkedList<WatchlistEditLog>();
+		Map<Long, WatchlistItem> updateDeleteItemMap = null;
 		if (createUpdateItems != null && createUpdateItems.size() > 0) {
+			List<WatchlistItem> updList = new LinkedList<WatchlistItem>();
 			for (WatchlistItem item : createUpdateItems) {
-				ret.add(new WatchlistEditLog(editUser, watchlist,
-						item.getId() == null ? WatchlistEditEnum.C
-								: WatchlistEditEnum.U, item.getItemData()));
+				if (item.getId() != null) {
+					ret.add(new WatchlistEditLog(editUser, watchlist,
+							WatchlistEditEnum.U, item.getItemData()));
+                    updList.add(item);
+				} else {
+					ret.add(new WatchlistEditLog(editUser, watchlist,
+							WatchlistEditEnum.C, item.getItemData()));
+				}
 				item.setWatchlist(watchlist);
 			}
+			//add the delete items and validate using one query.
+			if(deleteItems != null){
+			    updList.addAll(deleteItems);
+			}
+			updateDeleteItemMap = validateItemsPresentInDb(updList);
 			watchlistItemRepository.save(createUpdateItems);
+		} else {
+			updateDeleteItemMap = validateItemsPresentInDb(deleteItems);
 		}
 		if (deleteItems != null && deleteItems.size() > 0) {
-			Iterable<Long> itr = deleteItems.stream().map(itm -> itm.getId())
-					.collect(Collectors.toList());
-			Iterable<WatchlistItem> delItems = watchlistItemRepository
-					.findAll(itr);
-			for (WatchlistItem item : delItems) {
+			for (WatchlistItem item : deleteItems) {
+				WatchlistItem itemToDelete = updateDeleteItemMap.get(item.getId());
 				ret.add(new WatchlistEditLog(editUser, watchlist,
-						WatchlistEditEnum.D, item.getItemData()));
+						WatchlistEditEnum.D, itemToDelete.getItemData()));
 			}
 			watchlistItemRepository.delete(deleteItems);
 		}
-		if(ret.size() > 0){
+		if (ret.size() > 0) {
 			watchlistLogRepository.save(ret);
 		}
 		return ret;
 	}
 
+	private Map<Long, WatchlistItem> validateItemsPresentInDb(Collection<WatchlistItem> targetItems){
+		Map<Long, WatchlistItem> ret = new HashMap<Long, WatchlistItem>();
+		if (targetItems != null && targetItems.size() > 0) {
+			List<Long> lst = targetItems.stream().map(itm -> itm.getId())
+					.collect(Collectors.toList());
+			Iterable<WatchlistItem> items = watchlistItemRepository
+					.findAll(lst);
+			int itemCount = 0;			
+			for(WatchlistItem itm:items){
+				ret.put(itm.getId(), itm);
+				++itemCount;
+			}
+			if (targetItems.size() != itemCount) {
+				throw ErrorHandlerFactory
+						.getErrorHandler()
+						.createException(
+								WatchlistConstants.MISSING_DELETE_OR_UPDATE_ITEM_ERROR_CODE);
+			}
+		}
+		return ret;
+	}
 	/**
 	 * Fetches the user object and throws an unchecked exception if the user
 	 * cannot be found.

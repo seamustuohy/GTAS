@@ -21,7 +21,7 @@ public class InvalidObjectInfo extends BaseEntityAudit{
 	@Column(name = "object_type")
 	private String invalidObjectType;
 	
-	@Column(name = "desc")
+	@Column(name = "description")
 	private String failureDescription;
 	
 	

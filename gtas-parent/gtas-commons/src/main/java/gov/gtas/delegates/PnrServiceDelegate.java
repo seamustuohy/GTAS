@@ -1,28 +1,40 @@
 package gov.gtas.delegates;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.delegates.vo.PnrDataVo;
-import gov.gtas.delegates.vo.PassengerVo;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.Passenger;
-import gov.gtas.model.Pnr;
-import gov.gtas.services.FlightService;
-import gov.gtas.services.PassengerService;
-import gov.gtas.services.PnrService;
-import gov.gtas.util.PnrServiceDelegateUtils;
-import gov.gtas.util.ServiceUtils;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+
+import gov.gtas.delegates.vo.AddressVo;
+import gov.gtas.delegates.vo.CreditCardVo;
+import gov.gtas.delegates.vo.EmailVo;
+import gov.gtas.delegates.vo.FlightVo;
+import gov.gtas.delegates.vo.FrequentFlyerVo;
+import gov.gtas.delegates.vo.PassengerVo;
+import gov.gtas.delegates.vo.PhoneVo;
+import gov.gtas.delegates.vo.PnrDataVo;
+import gov.gtas.model.Address;
+import gov.gtas.model.CreditCard;
+import gov.gtas.model.Document;
+import gov.gtas.model.Email;
+import gov.gtas.model.Flight;
+import gov.gtas.model.FrequentFlyer;
+import gov.gtas.model.Passenger;
+import gov.gtas.model.Phone;
+import gov.gtas.model.Pnr;
+import gov.gtas.services.FlightService;
+import gov.gtas.services.PassengerService;
+import gov.gtas.services.PnrService;
+import gov.gtas.util.PnrServiceDelegateUtils;
+import gov.gtas.util.ServiceUtils;
 
 @Component
 public class PnrServiceDelegate {
@@ -117,6 +129,61 @@ public class PnrServiceDelegate {
 		return pnrVo;
 	}
 	
+	@Transactional
+    public PnrDataVo getAllPnrData(Long pnrId) {
+	    Pnr pnr = pnrService.findById(pnrId);
+	    PnrDataVo rv = new PnrDataVo();
+	    if (pnr != null) {
+	        String[] ignore = new String[] { "creditCards", "frequentFlyers", "addresses", "phones", "emails", "pnrMessage", "flights", "passengers" };
+	        BeanUtils.copyProperties(pnr, rv, ignore);
+
+	        for (CreditCard entity : pnr.getCreditCards()) {
+	            CreditCardVo vo = new CreditCardVo();
+	            BeanUtils.copyProperties(entity, vo);
+	            rv.getCreditCards().add(vo);
+	        }
+	        
+            for (FrequentFlyer entity : pnr.getFrequentFlyers()) {
+                FrequentFlyerVo vo = new FrequentFlyerVo();
+                BeanUtils.copyProperties(entity, vo);
+                rv.getFrequentFlyers().add(vo);
+            }
+
+            for (Address entity : pnr.getAddresses()) {
+                AddressVo vo = new AddressVo();
+                BeanUtils.copyProperties(entity, vo);
+                rv.getAddresses().add(vo);
+            }
+            
+            for (Phone entity : pnr.getPhones()) {
+                PhoneVo vo = new PhoneVo();
+                BeanUtils.copyProperties(entity, vo);
+                rv.getPhones().add(vo);
+            }
+            
+            for (Email entity : pnr.getEmails()) {
+                EmailVo vo = new EmailVo();
+                BeanUtils.copyProperties(entity, vo);
+                rv.getEmails().add(vo);
+            }            
+	    }
+	    
+	    return rv;
+	}
+	
+    @Transactional
+    public List<PnrDataVo> getRecordLocators(Long passengerId) {
+        List<PnrDataVo> rv = new ArrayList<>();
+        List<Pnr> pnrs = pnrService.findByPassengerId(passengerId);
+        for (Pnr pnr : pnrs) {
+            PnrDataVo vo = new PnrDataVo();
+            vo.setId(pnr.getId());
+            vo.setRecordLocator(pnr.getRecordLocator());
+            rv.add(vo);
+        }
+        
+        return rv;
+    }
 
 	private void updateExistingPassenger(Passenger existingPassenger,Passenger cp,Flight f){
 		existingPassenger.setChangeDate();

@@ -63,6 +63,12 @@ public class PnrServiceImpl implements PnrService {
 		return (List<Pnr>) pnrRespository.findAll();
 	}
 	
+    @Override
+    @Transactional
+    public List<Pnr> findByPassengerId(Long passengerId) {
+        return pnrRespository.getPnrsByPassengerId(passengerId);
+    }
+	
 	private void mapPnr(Pnr source, Pnr target){
 		target.setBagCount(source.getBagCount());
 		target.setDateBooked(source.getDateBooked());

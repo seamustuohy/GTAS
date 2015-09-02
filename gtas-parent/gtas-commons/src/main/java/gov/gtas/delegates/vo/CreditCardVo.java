@@ -18,9 +18,7 @@ public class CreditCardVo extends BaseVo implements Validatable  {
     private Date expiration;
     private String accountHolder;
     
-    
-    private Set<Pnr> pnrs = new HashSet<>();
-    
+        
 	public String getCardType() {
 		return cardType;
 	}
@@ -44,12 +42,6 @@ public class CreditCardVo extends BaseVo implements Validatable  {
 	}
 	public void setAccountHolder(String accountHolder) {
 		this.accountHolder = accountHolder;
-	}
-	public Set<Pnr> getPnrs() {
-		return pnrs;
-	}
-	public void setPnrs(Set<Pnr> pnrs) {
-		this.pnrs = pnrs;
 	}
 	
 	@Override
