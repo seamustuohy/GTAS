@@ -11,5 +11,5 @@ public interface PnrService {
 	public Pnr update(Pnr pnr);
 	public Pnr findById(Long id);
 	public List<Pnr> findAll();
-
+    public List<Pnr> findByPassengerId(Long passengerId);
 }
