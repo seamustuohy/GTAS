@@ -1,6 +1,6 @@
 app.service("watchListService", function ($http, $q) {
     'use strict';
-    var baseUrl = '/gtas/watchlist/',
+    var baseUrl = '/gtas/wl/',
         handleError = function (response) {
             if (!angular.isObject(response.data) || !response.data.message) {
                 return ($q.reject("An unknown error occurred."));
@@ -8,129 +8,87 @@ app.service("watchListService", function ($http, $q) {
             return ($q.reject(response.data.message));
         },
         handleSuccess = function (response) {
-            return (response.data);
+            return (response);
         },
-    /* utility functions */
-        getNewId = function (items) {
-            var highest = 0, tmp, i;
-            if (!items.length) { return 1; }
-            for (i = items.length - 1; i >= 0; i--) {
-                tmp = items[i].id;
-                if (tmp > highest) { highest = tmp; }
-            }
-            return highest + 1;
-        },
-        updatedItems = function (items, valuesObj) {
-            var i = items.length - 1;
-            for (i; i >= 0; i--) {
-                if (items[i].id === valuesObj.id) {
-                    items[i] = valuesObj;
-                    return items;
-                }
-            }
-        },
-    // returns list items for given listType
-        getItemList = function (listTypeId) {
-            //var request;
-            var watchlist = JSON.parse(localStorage['watchlist']);
-
-            if (!listTypeId || listTypeId === null) {
-                console.log('no listTypeId');
-                return "failure";
-            }
-
-            return watchlist[listTypeId];
-            //request = $http({
-            //    method: "get",
-            //    url: baseUrl + "get/" + ruleId
-            //});
-            //
-            //return (request.then(handleSuccess, handleError));
-        },
-        addItem = function (listTypeId, valuesObj) {
-            var watchlist = JSON.parse(localStorage["watchlist"]);
-            if (!listTypeId) {
-                console.log('no listTypeId');
-                return "failure";
-            }
-            delete valuesObj.$$hashKey;
-            console.log(valuesObj);
-            valuesObj.id = getNewId(watchlist.types[listTypeId].data);
-            console.log(valuesObj.id);
-            console.log(valuesObj);
-            watchlist.types[listTypeId].data.unshift(valuesObj);
-            localStorage["watchlist"] = JSON.stringify(watchlist);
-            return true;
-        },
-        removeItem = function (itemId, listTypeId) {
-            var watchlist = JSON.parse(localStorage["watchlist"]),
-                items = watchlist.types[listTypeId];
-
-            if (itemId === undefined || itemId === null) {
-                return false;
-            }
-
-            function filterByID(obj) {
-                return obj.id !== undefined && typeof obj.id === 'number' && !isNaN(obj.id);
-            }
-
-            items = items.filter(filterByID);
-            localStorage["watchlist"] = JSON.stringify(watchlist);
-            return items;
-        },
-        updateItem = function (listTypeId, valuesObj) {
-            var watchlist = JSON.parse(localStorage["watchlist"]);
-            if (listTypeId === undefined ||listTypeId === null) {
-                return false;
-            }
-            watchlist.types[listTypeId].data = updatedItems(watchlist.types[listTypeId].data, valuesObj);
-            localStorage["watchlist"] = JSON.stringify(watchlist);
-            return watchlist[listTypeId];
-        },
-    // creates id and adds name and jsonObj of fieldNames/types to listTypeTable
-        createListType = function (listName, columns) {
-            var watchlist = JSON.parse(localStorage["watchlist"]);
-
-            watchlist.types[listName] = {columns: columns, data: []};
-
-            localStorage["watchlist"] = JSON.stringify(watchlist);
-
-            return watchlist.types;
-        },
-        getListTypes = function () {
-            var watchlist = JSON.parse(localStorage["watchlist"]),
-                types = [];
-
-            Object.keys(watchlist.types).forEach(function (key) {
-                types.push({title: key});
-            });
-            return types;
-        },
-        getItemFieldTypes = function (listTypeId) {
-            var watchlist = JSON.parse(localStorage["watchlist"]),
-                columnNames = [];
-            if (!listTypeId || !watchlist.types) {
-                return false;
-            }
-            return watchlist.types[listTypeId](function (obj) {
-                if (obj.id === listTypeId) {
-                    Object.keys(obj.columns).forEach(function (column) {
-                        columnNames.push(column);
-                    });
-                    return columnNames;
+        getRequest = function (method, listTypeName, entity, id, terms) {
+            var action = !id ? 'Create' : !terms ? 'Delete' : 'Update';
+            return $http({
+                method: method,
+                url: baseUrl + 'adelorie', //to get once angular security in place
+                params: {
+                    "@class": "gov.gtas.model.watchlist.json.WatchlistSpec",
+                    "name": listTypeName,
+                    "entity": entity,
+                    "watchlistItems": [{
+                        "id": id,
+                        "action": action,
+                        "terms": terms
+                    }]
                 }
             });
+        },
+        service = {
+            getTabs: function () {
+                // HAVE TO USE .json for now...
+                var request = $http({
+                    method: 'get',
+                    url: baseUrl + 'list'
+                });
+
+                return (request.then(handleSuccess, handleError));
+            },
+            getListItems: function (listTypeName) {
+                if (!listTypeName) {
+                    return false;
+                }
+                var request = $http({
+                    method: 'get',
+                    url: baseUrl + listTypeName
+                });
+
+                return (request.then(handleSuccess, handleError));
+            },
+            deleteItem: function (listTypeName, entity, id) {
+                var request;
+
+                if (!listTypeName || !entity || !id) {
+                    return false;
+                }
+
+                //Method put not delete until told otherwise
+                request = getRequest('put', listTypeName, entity, id, null);
+
+                return (request.then(handleSuccess, handleError));
+            },
+            addItem: function (listTypeName, entity, id, terms) {
+                var request;
+
+                if (!listTypeName || !entity || !terms) {
+                    return false;
+                }
+
+                request = getRequest('post', listTypeName, entity, id, terms);
+
+                return (request.then(handleSuccess, handleError));
+            },
+            updateItem: function (listTypeName, entity, id, terms) {
+                var request;
+
+                if (!listTypeName || !entity || !terms) {
+                    return false;
+                }
+
+                request = getRequest('put', listTypeName, entity, id, terms);
+
+                return (request.then(handleSuccess, handleError));
+            },
+            // creates id and adds name and jsonObj of fieldNames/types to listTypeTable
+            createListType: function (listName, columns) {
+                //watchlist.types[listName] = {columns: columns, data: []};
+                //return watchlist.types;
+            }
         };
-    //getItemFieldTypes(typeId) returns fieldsObj;
 
     // Return public API.
-    return ({
-        getItemList: getItemList,
-        addItem: addItem,
-        removeItem: removeItem,
-        updateItem: updateItem,
-        createListType: createListType,
-        getListTypes: getListTypes,
-        getItemFieldTypes: getItemFieldTypes
-    });
+    return service;
 });
