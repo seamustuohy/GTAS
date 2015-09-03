@@ -1,4 +1,4 @@
-app.controller('FlightsIIController', function ($scope, $rootScope, $injector, modal, GridControl, $filter, $q, flightService, paxService, jQueryBuilderFactory, riskCriteriaService, $interval, $timeout) {
+app.controller('FlightsIIController', function ($scope, $rootScope, $injector, modal, GridControl, uiGridConstants, $filter, $q, flightService, paxService, jQueryBuilderFactory, riskCriteriaService, $interval, $timeout) {
     'use strict';
     $injector.invoke(GridControl, this, {$scope: $scope });
     $injector.invoke(modal, this, {$scope: $scope });
@@ -8,8 +8,22 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, m
         columns = {
             FLIGHTS: [
                 {"name": "totalPax", "displayName": "P"},
-                {"name": "ruleHits", "displayName": "H"},
-                {"name": "watchlistHits", "displayName": "L"},
+                {
+                    "name": "ruleHits",
+                    "displayName": "H",
+                    "sort": {
+                        direction: uiGridConstants.DESC,
+                        priority: 0
+                    }
+                },
+                {
+                    "name": "watchlistHits",
+                    "displayName": "L",
+                    "sort": {
+                        direction: uiGridConstants.DESC,
+                        priority: 1
+                    }
+                },
                 {"name": "carrier", "displayName": "Carrier"}, //carrier or carrierCode...?
                 {"name": "flightNumber", "displayName": "Flight #"},
                 {"name": "origin", "displayName": "Origin"},
