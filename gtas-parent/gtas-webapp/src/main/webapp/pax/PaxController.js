@@ -283,7 +283,7 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     };
     
     
-//    $state.go('pax.all');
+    $state.go('pax.all');
     
 }); // END of PaxController
 
