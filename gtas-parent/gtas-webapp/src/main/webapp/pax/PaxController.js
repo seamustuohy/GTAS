@@ -1,5 +1,5 @@
 app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jQueryBuilderFactory, $filter, 
-											$q, paxService, sharedPaxData, riskCriteriaService, $stateParams, $state, $interval) {
+											$q, paxService, sharedPaxData, riskCriteriaService, $stateParams, $state, $interval, uiGridConstants) {
     var self = this;
     $injector.invoke(jQueryBuilderFactory, this, {$scope: $scope});
     $injector.invoke(GridControl, this, {$scope: $scope});
@@ -40,19 +40,32 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 		  $scope.toggleMin();
 
 		  $scope.opendt = function($event) {
-			    $scope.status.openeddt = true;
-			    $interval(function () {
-			    	$('.ng-valid.dropdown-menu').eq(0).css({display: 'block'});
-			    }, 0, 1);
-			    
-			    
+			  	if(!$scope.status.openeddt){
+			  		 $interval(function () {
+					    	$('.ng-valid.dropdown-menu').eq(0).css({display: 'block'});
+					    }, 0, 1);
+			  		$scope.status.openeddt = true;
+			  	}else{
+                   $interval(function () {
+					    	$('.ng-valid.dropdown-menu').eq(0).css({display: 'none'});
+					    }, 0, 1);
+                   $scope.status.openeddt = false;
+               }
 			  };
 			  
 		  $scope.opendt3 = function($event) {
-		    $scope.status.openeddt3 = true;
-		    $interval(function () {
-		    	$('.ng-valid.dropdown-menu').eq(1).css({display: 'block'});
-		    }, 0, 1);
+			  	if(!$scope.status.openeddt){
+			  		 $interval(function () {
+					    	$('.ng-valid.dropdown-menu').eq(0).css({display: 'block'});
+					    }, 0, 1);
+			  		$scope.status.openeddt = true;
+			  	}else{
+                   $interval(function () {
+					    	$('.ng-valid.dropdown-menu').eq(0).css({display: 'none'});
+					    }, 0, 1);
+                   $scope.status.openeddt = false;
+               }
+
 		  };
 
 		  $scope.dateOptions = {
@@ -116,9 +129,20 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
             filterOptions: $scope.filterOptions,
             sortInfo: $scope.sortOptions,	
             
-            columnDefs: [{"name": "ruleHit", "displayName": "H", width: 50, enableFiltering: false},
+            columnDefs: [{"name": "ruleHit", "displayName": "H", width: 50, enableFiltering: false,
+			            	 "sort": {
+			                     direction: uiGridConstants.DESC,
+			                     priority: 0
+			                 }
+            			 },
                          // {"name": "onWatchList", "displayName": "L", width: 50, enableFiltering: false},
-                         {"name": "lastName", "displayName": "Last Name", width: 175/*, enableFiltering: false*/},
+                         {"name": "lastName", "displayName": "Last Name", width: 175/*, enableFiltering: false*/,
+            			
+            				 "sort": {
+                                 direction: uiGridConstants.DESC,
+                                 priority: 1
+                             }
+                         },
                          {"name": "firstName", "displayName": "First Name", width: 150/*, enableFiltering: false*/},
                          {"name": "middleName", "displayName": "Middle", width: 100/*, enableFiltering: false*/},
                          {"name": "flightNumber", "displayName": "Flight", width: 90/*, enableFiltering: false*/},
@@ -132,7 +156,45 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
                          {"name": "documentType", "displayName": "T", width: 50, enableFiltering: false},
                          {"name": "carrier", "displayName": "Carrier", width: 50/*, enableFiltering: false*/},
                          {"name": "seat", "displayName": "Seat", width: 75, enableFiltering: false}] ,
-    
+
+                        enableGridMenu: true,
+                 		enableSelectAll: false,
+                 		exporterPdfDefaultStyle: {fontSize: 9},
+                 		exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
+                 		exporterPdfTableHeaderStyle: {
+                 			fontSize: 10,
+                 			bold: true,
+                 			italics: true
+                 		},
+                 		exporterPdfFooter: function (currentPage, pageCount) {
+                 			return {
+                 				text: pageOfPages(currentPage, pageCount),
+                 				style: 'footerStyle'
+                 			};
+                 		},
+                 		exporterPdfCustomFormatter: function (docDefinition) {
+                 			docDefinition.pageMargins = [0, 40, 0, 40];
+                 			docDefinition.styles.headerStyle = {
+                 				fontSize: 22,
+                 				bold: true,
+                 				alignment: 'center',
+                 				lineHeight: 1.5
+                 			};
+                 			docDefinition.styles.footerStyle = {
+                 				fontSize: 10,
+                 				italic: true,
+                 				alignment: 'center'
+                 			};
+                 			return docDefinition;
+                 		},
+                 		exporterPdfOrientation: 'landscape',
+                 		exporterPdfPageSize: 'LETTER',
+                 		exporterPdfMaxGridWidth: 600,
+                 		exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
+
+                 		exporterCsvFilename: 'Passengers.csv',
+                 		exporterPdfHeader: {text: "Passengers", style: 'headerStyle'},
+
                          onRegisterApi: function (gridApi) {
                              $scope.gridApi = gridApi;
                              
@@ -221,7 +283,7 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     };
     
     
-    $state.go('pax.all');
+//    $state.go('pax.all');
     
 }); // END of PaxController
 
