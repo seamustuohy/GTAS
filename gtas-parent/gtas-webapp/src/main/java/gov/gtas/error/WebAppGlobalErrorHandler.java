@@ -1,5 +1,6 @@
 package gov.gtas.error;
 
+import static gov.gtas.constant.DomainModelConstants.UDR_UNIQUE_CONSTRAINT_NAME;
 import gov.gtas.model.udr.json.error.GtasJsonError;
 
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class WebAppGlobalErrorHandler {
 					"There was a data base Error:"
 							+ ex.getMessage());
 
-		} else if(ErrorUtils.isExceptionOfType(ex, "ConstraintViolationException")){
+		} else if(ErrorUtils.isConstraintViolationException(ex, UDR_UNIQUE_CONSTRAINT_NAME)){
 			logger.error("GTAS Webapp:ConstraintViolationException - "+ex.getMessage());
 			return new GtasJsonError("DUPLICATE_UDR_TITLE",
 					"This author has already created a UDR with this title:"

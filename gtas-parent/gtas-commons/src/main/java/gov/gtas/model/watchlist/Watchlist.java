@@ -1,5 +1,6 @@
 package gov.gtas.model.watchlist;
 
+import static gov.gtas.constant.DomainModelConstants.WL_UNIQUE_CONSTRAINT_NAME;
 import gov.gtas.constant.DomainModelConstants;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.BaseEntity;
@@ -21,7 +22,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "WATCH_LIST",
-            uniqueConstraints= {@UniqueConstraint(columnNames={"WL_NAME"})})
+            uniqueConstraints= {@UniqueConstraint(name = WL_UNIQUE_CONSTRAINT_NAME, columnNames={"WL_NAME"})})
 public class Watchlist extends BaseEntity {
     private static final long serialVersionUID = 345L;  
     

@@ -1,5 +1,6 @@
 package gov.gtas.model.udr;
 
+import static gov.gtas.constant.DomainModelConstants.UDR_UNIQUE_CONSTRAINT_NAME;
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.BaseEntity;
 import gov.gtas.model.User;
@@ -36,7 +37,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 @Entity
 @Table(name = "UDR_RULE",
-       uniqueConstraints= {@UniqueConstraint(columnNames={"AUTHOR","TITLE"})})
+       uniqueConstraints= {@UniqueConstraint(name=UDR_UNIQUE_CONSTRAINT_NAME, columnNames={"AUTHOR","TITLE"})})
 public class UdrRule extends BaseEntity {
 
 	/**
