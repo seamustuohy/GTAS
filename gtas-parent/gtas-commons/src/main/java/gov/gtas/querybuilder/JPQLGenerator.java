@@ -211,11 +211,11 @@ public class JPQLGenerator {
 					
 					if(queryType == EntityEnum.FLIGHT) {
 						where.append("(" + EntityEnum.FLIGHT.getAlias() + Constants.ID + " = " + EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " " + 
-								Constants.AND + " " + EntityEnum.HITS.getAlias() + Constants.ID + " = ?" + positionalParameter + ")");
+								Constants.AND + " " + EntityEnum.HITS.getAlias() + Constants.ID + " " + opEnum.getOperator() + " ?" + positionalParameter + ")");
 					}
 					else if(queryType == EntityEnum.PASSENGER) {
 						where.append("(" + EntityEnum.PASSENGER.getAlias() + Constants.ID + " = " + EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " " +
-								Constants.AND + " " + EntityEnum.HITS.getAlias() + Constants.ID + " = ?" + positionalParameter + ")");
+								Constants.AND + " " + EntityEnum.HITS.getAlias() + Constants.ID + " " + opEnum.getOperator() + " ?" + positionalParameter + ")");
 					}
 				}
 			} 
