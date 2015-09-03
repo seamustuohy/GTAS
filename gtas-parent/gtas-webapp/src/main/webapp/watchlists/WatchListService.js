@@ -31,7 +31,7 @@ app.service("watchListService", function ($http, $q) {
             getTabs: function () {
                 // HAVE TO USE .json for now...
                 var request = $http({
-                    method: 'get',
+                    method: "get",
                     url: baseUrl + 'list'
                 });
 
@@ -42,8 +42,8 @@ app.service("watchListService", function ($http, $q) {
                     return false;
                 }
                 var request = $http({
-                    method: 'get',
-                    url: baseUrl + entity + '/' + listTypeName
+                    method: "get",
+                    url: baseUrl + entity + "/" + listTypeName
                 });
 
                 return (request.then(handleSuccess, handleError));
@@ -85,9 +85,8 @@ app.service("watchListService", function ($http, $q) {
                 action = !id ? 'Create' : !terms ? 'Delete' : 'Update';
 //                request = getRequest('post', listTypeName, entity, id, terms);
                 request = $http({
+                    method: "post",
                     url: url,
-                    method: 'post',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
                     params: {
                         "@class": "gov.gtas.model.watchlist.json.WatchlistSpec",
                         "name": listTypeName,
