@@ -73,11 +73,11 @@ public class PnrServiceImpl implements PnrService {
     @Override
     @Transactional
     /*A duplicate method to avoid 'LazyInitializationException' in the Controller -- Can be removed after a fix */
-	public List<Pnr> findPnrByPassengerId(Long passengerId) {
+	public List<Pnr> findPnrByPassengerIdAndFlightId(Long passengerId, Long flightId) {
      	
     	Pnr rv = new Pnr();
     	List<Pnr> _retList = new ArrayList<Pnr>();
-		List<Pnr> _tempPnrList = pnrRespository.getPnrsByPassengerId(passengerId);
+		List<Pnr> _tempPnrList = pnrRespository.getPnrsByPassengerIdAndFlightId(passengerId, flightId);
 		
 		for(Pnr _tempPnr : _tempPnrList ){
 			rv = new Pnr();
