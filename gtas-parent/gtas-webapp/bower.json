@@ -26,7 +26,8 @@
     "bootstrap-select": "^1.6.0",
     "bootbox": "^4.3.0",
     "awesome-bootstrap-checkbox": "^0.3.0",
-    "sql-parser": "^1.0.0"
+    "sql-parser": "^1.0.0",
+    "ui-router-extras": "~0.0.14"
   },
   "keywords": [
     "jquery",
