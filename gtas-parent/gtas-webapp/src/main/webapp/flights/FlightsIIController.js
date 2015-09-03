@@ -62,13 +62,39 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, m
 
     $rootScope.gridOptions = $.extend({
         columnDefs: columns.PASSENGERS,
+        expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions" style="height:150px;"></div>',
+        expandableRowHeight: 150,
+        //subGridVariable will be available in subGrid scope
+        expandableRowScope: {
+            subGridVariable: 'subGridScopeVariable'
+        },
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
+            gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
+                if (row.isExpanded) {
+                    row.entity.subGridOptions = {
+                        columnDefs: [
+                            { name: 'ruleId'},
+                            { name: 'ruleTitle'},
+                            { name: 'ruleConditions'}
+                        ]//,
+//                        data: [{name: 'Tony', gender: 'M', company: 'UNISYS'}, {name: 'Claudia', gender: 'F', company: 'HOMEMAKER'}]
+                    };
+                    paxService.getRuleHits(row.entity.paxId).then(function (myData) {
+                        var j, data = [], jeen;
+                        for (j = 0; j < myData.length; j++) {
+                            jeen = myData[j].ruleConditions;
+                            data.push({
+                                ruleId: myData[j].ruleId,
+                                ruleTitle: myData[j].ruleTitle,
+                                ruleConditions: jeen.substring(0, (jeen.length - 3))
+                            });
 
-            // call resize every 200 ms for 2 s after modal finishes opening - usually only necessary on a bootstrap modal
-            $interval( function() {
-                $scope.gridApi.core.handleWindowResize();
-            }, 10, 500);
+                            row.entity.subGridOptions.data = data;
+                        }
+                    });
+                }
+            });
         }
     }, $scope.gridOpts);
 
@@ -89,10 +115,18 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, m
             if (row.isSelected) {
                 $scope.selectedIndex = $scope.gridOpts.data.indexOf(row.entity);
                 paxService.getPax(row.entity.flightId).then(function (myData) {
+                    var i;
+
                     $rootScope.selectedFlightNumber = row.entity.flightNumber;
                     title = 'Passengers on Flight ' + $rootScope.selectedFlightNumber;
                     $rootScope.gridOptions.exporterCsvFilename = title  + '.csv';
                     $rootScope.gridOptions.exporterPdfHeader = { text: title, style: 'headerStyle' };
+                    for (i = 0; i < myData.length; i++){
+                        myData[i].subGridOptions = {
+                            columnDefs: [ {name:"Id", field:"id"},{name:"Name", field:"name"} ],
+                            data: [{id: 1, name: 'Tony'}, {id: 2, name: 'Tony'}, {id: 3, name: 'Tonio'}, {id: 4, name: 'Toni'}, {id: 5, name: 'Tone'}]
+                        };
+                    }
                     $rootScope.gridOptions.data = myData;
                     myModal.open();
                 });
