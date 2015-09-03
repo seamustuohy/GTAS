@@ -3,7 +3,17 @@ package gov.gtas.constant;
 public class WatchlistConstants {
 	public static final String WL_KNOWLEDGE_BASE_NAME = "WL Knowledge Base";
 	public static final String DELETE_OP_NAME = "delete";
-	///////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+	// VALIDATION FIELDS and ERROR codes
+	/////////////////////////////////////////////////////////////////////////////////
+	public static final String WL_NAME_FIELD = "name";
+	public static final String WL_ENTITY_FIELD = "entity";
+	public static final String WL_ITEMS_FIELD = "watchlistItems";
+
+	public static final String WL_ITEM_ACTION_FIELD = "action";
+	public static final String WL_ITEM_FIELD_FIELD = "field";
+	public static final String WL_ITEM_TYPE_FIELD = "type";
+///////////////////////////////////////////////////////////////////////////////////
 	// ERRORS
 	///////////////////////////////////////////////////////////////////////////////////
 	/*

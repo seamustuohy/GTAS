@@ -1,0 +1,50 @@
+
+<div class="container">
+		<div class="row">
+				<div class="col-sm-6 col-md-5 col-md-offset-3 col-lg-6 col-lg-offset-6" style="max-height: 50px;">
+						<div class="col-md-4" style="max-height: 40px;">
+							<span>ETA Start Date:</span> 
+							
+							<p class="input-group">
+				              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="$parent.dt" is-open="status.openeddt" min-date="minDate" 
+				              		max-date="'2020-06-22'" datepicker-options="dateOptions" show-button-bar="false"
+				              		ng-required="true" close-text="Close" />
+				              <span class="input-group-btn">
+				                <button type="button" class="btn btn-default" ng-click="opendt($event)" ><i class="glyphicon glyphicon-calendar"></i></button>
+				              </span>
+				            </p>
+						
+						</div>
+						
+						<div class="col-md-4" style="max-height: 40px;">
+						<span>End Date:</span>
+				            <p class="input-group">
+				              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="$parent.dt3" is-open="status.openeddt3" min-date="$parent.dt" 
+				              		max-date="'2020-06-22'" datepicker-options="dateOptions" show-button-bar="false"
+				              		ng-required="true"/>
+				              <span class="input-group-btn">
+				                <button type="button" class="btn btn-default" ng-click="opendt3($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+				              </span>
+				            </p>
+				        </div>
+				        
+				        <div class="col-md-4" style="max-height: 40px;  padding-top: 17px;">
+				        		<span></span>
+				        		<p class="input-group">
+				        		<span class="input-group-btn">
+				        		
+				        		<button type="button" class="btn btn-default round col-md-8" ng-click="refreshListing()" 
+				        			style="border-radius: 24px;background: linear-gradient(to bottom,  #fff 50%,#d7d2cc 100%);">Refresh</button>
+				        		
+				        		</span>
+				        		</p>
+				        </div>
+				    
+				</div>
+		</div>
+</div>
+
+<div style="padding: 15px;"></div>
+
+<div id="grid1" ui-grid="passengerGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter ui-grid-resize-columns ui-grid-move-columns class="grid"></div>
+

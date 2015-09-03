@@ -26,11 +26,20 @@ public class PassengerVo {
     private String embarkCountry;
     private String debarkCountry;
     private String paxId;
-
+    private String seat;
+    private String flightId;
+    private String flightNumber;
+    private String carrier;
+    private String flightOrigin;
+    private String flightDestination;
+    private String flightETD;
+    private String flightETA;
     private int ruleHits;
     private int listHits;
     
     private List<PassengerVo> passengers;
+    
+    private PnrVo pnrVo;
     
     /**
 	 * @return the ruleHits
@@ -43,6 +52,12 @@ public class PassengerVo {
 	 */
 	public void setRuleHits(int ruleHits) {
 		this.ruleHits = ruleHits;
+	}
+	public String getFlightId() {
+		return flightId;
+	}
+	public void setFlightId(String flightId) {
+		this.flightId = flightId;
 	}
 	/**
 	 * @return the listHits
@@ -110,7 +125,43 @@ public class PassengerVo {
     public void setGender(String gender) {
         this.gender = gender;
     }
-    public String getCitizenshipCountry() {
+    public String getCarrier() {
+		return carrier;
+	}
+	public void setCarrier(String carrier) {
+		this.carrier = carrier;
+	}
+	public PnrVo getPnrVo() {
+		return pnrVo;
+	}
+	public void setPnrVo(PnrVo pnrVo) {
+		this.pnrVo = pnrVo;
+	}
+	public String getFlightOrigin() {
+		return flightOrigin;
+	}
+	public void setFlightOrigin(String flightOrigin) {
+		this.flightOrigin = flightOrigin;
+	}
+	public String getFlightDestination() {
+		return flightDestination;
+	}
+	public void setFlightDestination(String flightDestination) {
+		this.flightDestination = flightDestination;
+	}
+	public String getFlightETD() {
+		return flightETD;
+	}
+	public void setFlightETD(String flightETD) {
+		this.flightETD = flightETD;
+	}
+	public String getFlightETA() {
+		return flightETA;
+	}
+	public void setFlightETA(String flightETA) {
+		this.flightETA = flightETA;
+	}
+	public String getCitizenshipCountry() {
         return citizenshipCountry;
     }
     public void setCitizenshipCountry(String citizenshipCountry) {
@@ -158,14 +209,26 @@ public class PassengerVo {
     public void setEmbarkCountry(String embarkCountry) {
         this.embarkCountry = embarkCountry;
     }
-    public String getDebarkCountry() {
+    public String getFlightNumber() {
+		return flightNumber;
+	}
+	public void setFlightNumber(String flightNumber) {
+		this.flightNumber = flightNumber;
+	}
+	public String getDebarkCountry() {
         return debarkCountry;
     }
     public void setDebarkCountry(String debarkCountry) {
         this.debarkCountry = debarkCountry;
     }
-
-    @Override
+    
+    public String getSeat() {
+		return seat;
+	}
+	public void setSeat(String seat) {
+		this.seat = seat;
+	}
+	@Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }

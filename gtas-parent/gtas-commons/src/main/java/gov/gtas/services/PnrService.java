@@ -12,4 +12,6 @@ public interface PnrService {
 	public Pnr findById(Long id);
 	public List<Pnr> findAll();
     public List<Pnr> findByPassengerId(Long passengerId);
+    /*A duplicate method to avoid 'LazyInitializationException' in the Controller -- Can be removed after a fix */
+    public List<Pnr> findPnrByPassengerId(Long passengerId);
 }

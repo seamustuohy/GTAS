@@ -5,7 +5,7 @@
   "dependencies": {
     "angular": "1.3.16",
     "angular-bootstrap": "latest",
-    "angular-ui-grid": "~3.0.3",
+    "angular-ui-grid": "3.0.3",
     "angular-ui-router": "latest",
     "bootstrap": "latest",
     "bootstrap-datepicker": "latest",
@@ -17,7 +17,8 @@
     "pdfmake": "~0.1.18",
     "seiyria-bootstrap-slider": "latest",
     "selectize": "latest",
-    "spring-security-csrf-token-interceptor": "latest"
+    "spring-security-csrf-token-interceptor": "latest",
+    "ui-router-extras": "~0.0.14"
   },
   "devDependencies": {
     "blanket": "^1.1.0",

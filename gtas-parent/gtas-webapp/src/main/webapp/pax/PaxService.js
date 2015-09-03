@@ -5,7 +5,8 @@ app.service("paxService", function( $rootScope, $http, $q ) {
         broadcast: broadcast,
         getRuleHits: getRuleHits,
         broadcastRuleID: broadcastRuleID,
-        getAllPax: getAllPax
+        getAllPax: getAllPax,
+        getPaxByPage: getPaxByPage
 	});
 	
 	function getPax(flightId) {
@@ -63,6 +64,39 @@ app.service("paxService", function( $rootScope, $http, $q ) {
 	    return( request.then( handleSuccess, handleError ) );
 	}
     
+	function getAllPax(pax) {
+	    var request = $http({
+	        method: "get",
+	        url: "/gtas/passengers/all",
+	        params: pax
+	    });
+	    return( request.then( handleSuccess, handleError ) );
+	}
+	
+	function getPaxByPage(pax) {
+	    var request = $http({
+	        method: "get",
+	        url: "/gtas/passengers/page/"+pax.pageNumber,
+	        params: pax
+//	        {
+//	            action: "get",
+//	            pageNumber: pageNumber,
+//	            name: ""
+//	        }
+	    });
+	    return( request.then( handleSuccess, handleError ) );
+	}
 });
+
+app.service("paxDetailService",['$http','$stateParams', function($http, $stateParams){
+return({getPaxDetail: getPaxDetail})
+
+	function getPaxDetail($http, $stateParams){
+        var url = "/gtas/passengers/" + $stateParams.id+"?flightId=" + $stateParams.flightId;
+        return $http.get(url);
+            //.then(function(res){ return res.data; });
+    }
+
+}]);
 
 

@@ -1,5 +1,6 @@
 package gov.gtas.error;
 
+import static gov.gtas.constant.DomainModelConstants.UDR_UNIQUE_CONSTRAINT_NAME;
 import gov.gtas.model.udr.json.error.GtasJsonError;
 
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,7 +47,7 @@ public class WebAppGlobalErrorHandler {
 					"There was a data base Error:"
 							+ ex.getMessage());
 
-		} else if(ErrorUtils.isExceptionOfType(ex, "ConstraintViolationException")){
+		} else if(ErrorUtils.isConstraintViolationException(ex, UDR_UNIQUE_CONSTRAINT_NAME)){
 			logger.error("GTAS Webapp:ConstraintViolationException - "+ex.getMessage());
 			return new GtasJsonError("DUPLICATE_UDR_TITLE",
 					"This author has already created a UDR with this title:"
@@ -66,7 +68,15 @@ public class WebAppGlobalErrorHandler {
 		"The REST path variable could not be parsed:"
 				+ ex.getMessage());
 	}
-    
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public @ResponseBody GtasJsonError handleError(HttpRequestMethodNotSupportedException ex) {
+		ex.printStackTrace();
+		return new GtasJsonError("INVALID_INPUT_URL_OR_UNKNOWN_METHOD",
+		"The URL could not be dispatched:"
+				+ ex.getMessage());
+	}
+   
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody GtasJsonError handleError(Exception ex) {

@@ -1,5 +1,6 @@
 package gov.gtas.model.udr;
 
+import static gov.gtas.constant.DomainModelConstants.KB_UNIQUE_CONSTRAINT_NAME;
 import gov.gtas.model.BaseEntity;
 
 import java.util.Date;
@@ -25,7 +26,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 @Entity
 @Table(name = "knowledge_base",
-       uniqueConstraints= {@UniqueConstraint(columnNames={"KB_NAME"})})
+       uniqueConstraints= {@UniqueConstraint(name=KB_UNIQUE_CONSTRAINT_NAME, columnNames={"KB_NAME"})})
 public class KnowledgeBase extends BaseEntity {
 
 	/**

@@ -11,7 +11,8 @@ var app = angular.module('myApp', [
     'ui.grid.rowEdit',
     'ui.grid.cellNav',
     'ui.grid.selection',
-    'ui.grid.exporter'
+    'ui.grid.exporter',
+	'ct.ui.router.extras'
 ]);
 
 app.controller('NavCtrl', function ($scope, $location) {
@@ -121,17 +122,40 @@ app.config(function ($stateProvider) {
             templateUrl: 'flights/flights2.html',
             controller: 'FlightsIIController'
         })
-        .state('passengers', {
-            url: '/passengers',
-            templateUrl: 'pax/pax.html',
-            controller: 'PaxController'
-        })
-        .state('pax', {
-            url: '/pax',
-            templateUrl: 'pax/pax.html',
-            controller: 'PaxController'
-        })
-        .state('query-builder', {
+		.state('pax',{
+  		  url: '/passengers',
+		  controller: 'PaxController',
+  		  templateUrl: 'pax/pax.header.html'
+		})
+		.state('pax.all',{
+	  		  url: '/',
+	  		  sticky: true,
+	  		  dsr: true,
+				views: {
+					
+					"content@pax": {
+						//controller: 'Paginate',
+						//controller: 'PaxController',
+						templateUrl: 'pax/pax.table.html'
+					}
+				}
+			})
+		.state('pax.detail',{
+	  		  url: '/:id/:flightId',
+		  //	  		  sticky: true,
+		  //	  		  dsr: true,
+	  			views: {
+					
+					"content@pax": {
+						controller: 'PaxDetailController',
+						templateUrl: 'pax/pax.detail.html',
+						resolve:   {
+			            	passengers: function($http,$stateParams,paxDetailService){return paxDetailService.getPaxDetail($http, $stateParams);}
+			            }
+					}
+				}
+			})
+ 		.state('query-builder', {
             url: '/query-builder',
             templateUrl: 'query-builder/query.html',
             controller: 'QueryBuilderController'

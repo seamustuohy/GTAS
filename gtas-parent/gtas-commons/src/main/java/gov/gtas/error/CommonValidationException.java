@@ -38,5 +38,12 @@ public class CommonValidationException extends CommonServiceException {
 		}
 		return msg.toString();
 	}
+
+	/**
+	 * @return the validationErrors
+	 */
+	public Errors getValidationErrors() {
+		return validationErrors;
+	}
 	
 }

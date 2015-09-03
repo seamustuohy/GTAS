@@ -76,4 +76,10 @@ public class FlightServiceImpl implements FlightService{
 		return flight;
 	}
 
+	@Override
+	@Transactional
+	public List<Flight> getFlightByPaxId(Long paxId) {
+		return flightRespository.getFlightByPaxId(paxId);
+	}
+	
 }

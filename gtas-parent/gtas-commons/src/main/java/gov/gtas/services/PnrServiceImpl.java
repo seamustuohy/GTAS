@@ -8,6 +8,7 @@ import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.repository.PnrRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -68,7 +69,25 @@ public class PnrServiceImpl implements PnrService {
     public List<Pnr> findByPassengerId(Long passengerId) {
         return pnrRespository.getPnrsByPassengerId(passengerId);
     }
-	
+    
+    @Override
+    @Transactional
+    /*A duplicate method to avoid 'LazyInitializationException' in the Controller -- Can be removed after a fix */
+	public List<Pnr> findPnrByPassengerId(Long passengerId) {
+     	
+    	Pnr rv = new Pnr();
+    	List<Pnr> _retList = new ArrayList<Pnr>();
+		List<Pnr> _tempPnrList = pnrRespository.getPnrsByPassengerId(passengerId);
+		
+		for(Pnr _tempPnr : _tempPnrList ){
+			rv = new Pnr();
+			rv.setRecordLocator(_tempPnr.getRecordLocator());
+			mapPnr(_tempPnr,rv);
+			_retList.add(rv);
+		}
+    	return _retList;
+	}
+
 	private void mapPnr(Pnr source, Pnr target){
 		target.setBagCount(source.getBagCount());
 		target.setDateBooked(source.getDateBooked());

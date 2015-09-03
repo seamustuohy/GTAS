@@ -9,7 +9,9 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.enumtype.ConditionEnum;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.WatchlistEditEnum;
 import gov.gtas.error.CommonValidationException;
 import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
@@ -33,12 +35,14 @@ public class WatchlistValidationAdapter {
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(
 				wljson, "watch list");
 		if (StringUtils.isEmpty(wljson.getName())) {
-			errors.rejectValue("name",CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
+			errors.rejectValue(WatchlistConstants.WL_NAME_FIELD,CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					"Watch list name or entity name is missing.");
 		}
-		if (StringUtils.isEmpty(wljson.getEntity())) {
-			errors.rejectValue("entity",CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
-					"Watch list name or entity name is missing.");
+		try{
+			EntityEnum.getEnum(wljson.getEntity());
+		} catch (IllegalArgumentException iae){
+			errors.rejectValue(WatchlistConstants.WL_ENTITY_FIELD, CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,
+					"Watch list entity name is missing or invalid.");
 		}
 		if (CollectionUtils.isEmpty(wljson.getWatchlistItems())) {
 			errors.rejectValue("watchlistItems", CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
@@ -76,11 +80,13 @@ public class WatchlistValidationAdapter {
 		    	if(itm.getId() != null){
 		    		errors.rejectValue("id",CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,"Cannot specify id for create action - "+itm.getId());
 		    	}
+		    	break;
 		    case U:
 		    case D:
 		    	if(itm.getId() == null){
 		    		errors.rejectValue("id", CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,"No id specified for update or delete action");		    		
 		    	}
+		    	break;
 		    }
 		} catch (IllegalArgumentException iae){
 			errors.rejectValue("action", CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE,"Invalid action for watch list item:"+itm.getAction());
