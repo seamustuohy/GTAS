@@ -1,5 +1,5 @@
 app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jQueryBuilderFactory, $filter, 
-											$q, paxService, sharedPaxData, riskCriteriaService, $stateParams, $state) {
+											$q, paxService, sharedPaxData, riskCriteriaService, $stateParams, $state, $interval) {
     var self = this;
     $injector.invoke(jQueryBuilderFactory, this, {$scope: $scope});
     $injector.invoke(GridControl, this, {$scope: $scope});
@@ -41,12 +41,18 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 
 		  $scope.opendt = function($event) {
 			    $scope.status.openeddt = true;
-			    $('.ng-valid.dropdown-menu').eq(0).css({display: 'block'});
+			    $interval(function () {
+			    	$('.ng-valid.dropdown-menu').eq(0).css({display: 'block'});
+			    }, 0, 1);
+			    
+			    
 			  };
 			  
 		  $scope.opendt3 = function($event) {
 		    $scope.status.openeddt3 = true;
-		    $('.ng-valid.dropdown-menu').eq(1).css({display: 'block'});
+		    $interval(function () {
+		    	$('.ng-valid.dropdown-menu').eq(1).css({display: 'block'});
+		    }, 0, 1);
 		  };
 
 		  $scope.dateOptions = {

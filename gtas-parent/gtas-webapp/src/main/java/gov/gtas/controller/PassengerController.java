@@ -329,6 +329,7 @@ public class PassengerController {
         PassengerVo vo = new PassengerVo();
         Iterator _tempIter;
         Pnr _tempPnr = new Pnr();
+        List _tempPnrList = new ArrayList();
         
         Long id = Long.valueOf(paxId);
         Passenger t = pService.findById(id);
@@ -379,9 +380,10 @@ public class PassengerController {
       //   vo.setRuleHits(getTotalHitsByPaxID(t.getId()));
         
       //Gather PNR Details
-      _tempPnr = pnrService.findPnrByPassengerId(t.getId()).get(0); 
+      _tempPnrList = pnrService.findPnrByPassengerIdAndFlightId(t.getId(), new Long(flightId));
       
-      	vo.setPnrVo(mapPnrToPnrVo(_tempPnr));
+      if(_tempPnrList.size() > 0)
+      	vo.setPnrVo(mapPnrToPnrVo((Pnr)_tempPnrList.get(0)));
       
         hitsList.clear();
         return vo;
