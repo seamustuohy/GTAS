@@ -76,7 +76,8 @@ public class WatchlistManagementController {
 		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute("DRL Rules", lines));
 		return resp;
 	}
-	@RequestMapping(value = Constants.WL_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	//@RequestMapping(value = Constants.WL_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = Constants.WL_POST, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse createWatchlist(
 			@PathVariable String userId, @RequestBody WatchlistSpec inputSpec) {
 
@@ -94,7 +95,8 @@ public class WatchlistManagementController {
 		return resp;
 	}
 
-	@RequestMapping(value = Constants.WL_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	//@RequestMapping(value = Constants.WL_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = Constants.WL_PUT, method = RequestMethod.PUT,  produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse updateUDR(
 			@PathVariable String userId, @RequestBody WatchlistSpec inputSpec) {
 		logger.info("******** Received UDR Update request by user =" + userId);
