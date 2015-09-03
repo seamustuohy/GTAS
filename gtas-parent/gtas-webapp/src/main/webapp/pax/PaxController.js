@@ -41,10 +41,12 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 
 		  $scope.opendt = function($event) {
 			    $scope.status.openeddt = true;
+			    $('.ng-valid.dropdown-menu').eq(0).css({display: 'block'});
 			  };
 			  
 		  $scope.opendt3 = function($event) {
 		    $scope.status.openeddt3 = true;
+		    $('.ng-valid.dropdown-menu').eq(1).css({display: 'block'});
 		  };
 
 		  $scope.dateOptions = {
