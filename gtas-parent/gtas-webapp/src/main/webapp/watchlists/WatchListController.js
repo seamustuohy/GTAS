@@ -43,7 +43,7 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
     $scope.gridOpts.columnDefs = watchlist.types.Document.columns;
 
     $scope.updateGrid = function (listName) {
-        watchListService.getListItems(listName).then(function (response) {
+        watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
             var obj, data = [], items;
             $scope.activeTab = listName;
             $scope.gridOpts.columnDefs = watchlist.types[listName].columns;
@@ -60,7 +60,6 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
                 });
                 data.push(obj);
             });
-            console.log(JSON.stringify(data));
             $scope.gridOpts.data = data;
         });
     };
