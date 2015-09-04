@@ -1,6 +1,7 @@
 var app = angular.module('myApp', [
     'ui.router',
     'ui.bootstrap',
+	'ngTable',
     'spring-security-csrf-token-interceptor',
     'ui.grid',
     'ui.grid.resizeColumns',
