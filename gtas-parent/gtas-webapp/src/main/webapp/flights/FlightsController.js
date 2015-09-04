@@ -66,19 +66,19 @@ app.controller('FlightsController', function($scope, $filter, $q, ngTableParams,
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
     
     // GET RULE OBJECT FUNCTION    
-    $scope.getRuleObject = function(ruleID){
-          riskCriteriaService.loadRuleById(ruleID).then(function (myData) {
-              $scope.$builder.queryBuilder('readOnlyRules', myData.details);
-        	  //console.log(myData);
-              
-              	$scope.hitDetailDisplay = myData.summary.title;
-        	  	document.getElementById("QBModal").style.display="block";
-        	  
-        	  $scope.closeDialog = function() {	    
-        		  document.getElementById("QBModal").style.display = "none";
-        		  };
-        	  
-          });
+    $scope.getRuleObject = function (ruleID) {
+        riskCriteriaService.loadRuleById(ruleID).then(function (myData) {
+            $scope.$builder.queryBuilder('readOnlyRules', myData.details);
+            //console.log(myData);
+
+            $scope.hitDetailDisplay = myData.summary.title;
+            document.getElementById("QBModal").style.display = "block";
+
+            $scope.closeDialog = function () {
+                document.getElementById("QBModal").style.display = "none";
+            };
+
+        });
     };
   
 });
