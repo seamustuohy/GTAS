@@ -6,26 +6,26 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     var myModal = new Modal(),
         self = this,
         columns = {
-            FLIGHTS: [{
+            "FLIGHTS": [{
                 "name": "totalPax",
                 "displayName": "P",
                 "sort": {
-                    direction: uiGridConstants.DESC,
-                    priority: 2
+                    "direction": uiGridConstants.DESC,
+                    "priority": 2
                 }
             }, {
                 "name": "ruleHits",
                 "displayName": "H",
                 "sort": {
-                    direction: uiGridConstants.DESC,
-                    priority: 0
+                    "direction": uiGridConstants.DESC,
+                    "priority": 0
                 }
             }, {
                 "name": "watchlistHits",
                 "displayName": "L",
                 "sort": {
-                    direction: uiGridConstants.DESC,
-                    priority: 1
+                    "direction": uiGridConstants.DESC,
+                    "priority": 1
                 }
             }, {
                 "name": "carrier",
@@ -52,21 +52,21 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                 "name": "arrivalDt",
                 "displayName": "ETA"
             }],
-            PASSENGERS: [{
+            "PASSENGERS": [{
                 "name": "ruleHits",
                 "displayName": "R",
                 width: 50,
                 "sort": {
-                    direction: uiGridConstants.DESC,
-                    priority: 0
+                    "direction": uiGridConstants.DESC,
+                    "priority": 0
                 }
             }, {
                 "name": "listHits",
                 "displayName": "L",
                 width: 50,
                 "sort": {
-                    direction: uiGridConstants.DESC,
-                    priority: 1
+                    "direction": uiGridConstants.DESC,
+                    "priority": 1
                 }
             }, {
                 "name": "lastName",
@@ -138,42 +138,6 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
 
     $rootScope.gridOptions = $.extend({
         columnDefs: columns.PASSENGERS,
-        data: [{
-            "title": null,
-            "firstName": null,
-            "middleName": null,
-            "lastName": null,
-            "suffix": null,
-            "gender": null,
-            "citizenshipCountry": null,
-            "residencyCountry": null,
-            "passengerType": null,
-            "dob": null,
-            "embarkation": "IWA",
-            "debarkation": "SEA",
-            "embarkCountry": "RUS",
-            "debarkCountry": "USA",
-            "paxId": "5151",
-            "seat": null,
-            "flightId": null,
-            "flightNumber": null,
-            "carrier": null,
-            "flightOrigin": null,
-            "flightDestination": null,
-            "flightETD": null,
-            "flightETA": null,
-            "ruleHits": 0,
-            "listHits": 0,
-            "passengers": null,
-            "pnrVo": null,
-            "documents": [{
-                "documentType": "P",
-                "documentNumber": "610252034",
-                "expirationDate": "2018-04-09 04:00 AM",
-                "issuanceDate": null,
-                "issuanceCountry": "USA"
-            }]
-        }],
         expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions" ui-grid-selection class="rule-details-grid"></div>',
         expandableRowHeight: 150,
         //subGridVariable will be available in subGrid scope
@@ -199,11 +163,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                             data.push(obj);
                         }
                         if (data.length) {
-                            row.entity.subGridOptions = {
-                                columnDefs: subGridHeaders,
-                                data: data,
-                                onRegisterApi: subGridRowSelected
-                            };
+                            row.entity.subGridOptions.data = data;
                         } else {
 //                            row.setExpanded(false);
 //                            row.setSelected(false);
@@ -235,6 +195,14 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                     title = 'Passengers on Flight ' + $rootScope.selectedFlightNumber;
                     $rootScope.gridOptions.exporterCsvFilename = title  + '.csv';
                     $rootScope.gridOptions.exporterPdfHeader = { text: title, style: 'headerStyle' };
+
+                    myData.forEach(function(d){
+                        d.subGridOptions = {
+                            columnDefs: subGridHeaders,
+                            onRegisterApi: subGridRowSelected
+                        };
+                    });
+
                     $rootScope.gridOptions.data = myData;
                     $interval(function () {
                         myModal.open();
