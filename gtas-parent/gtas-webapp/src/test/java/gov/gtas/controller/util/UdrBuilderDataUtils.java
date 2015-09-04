@@ -9,6 +9,7 @@ import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
+import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -59,6 +60,23 @@ public class UdrBuilderDataUtils {
 
 		UdrSpecification resp = new UdrSpecification(null, queryObject, new MetaData(
 				"Hello Rule 1", "This is a test", new Date(), "jpjones"));
+		return resp;
+	}
+
+	public UdrSpecification createSimpleSpec(String title, String description, String author) {
+		QueryObject queryObject = new QueryObject();
+		queryObject.setCondition(ConditionEnum.OR.toString());
+		List<QueryEntity> rules = new LinkedList<QueryEntity>();
+		QueryTerm trm = new QueryTerm(EntityEnum.PASSENGER.getEntityName(), PassengerMapping.DOB.getFieldName(), PassengerMapping.DOB.getFieldType(),
+				"EQUAL", new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
+		rules.add(trm);
+		rules.add(new QueryTerm(EntityEnum.PASSENGER.getEntityName(), "lastName", "String", "EQUAL",
+				new String[] { "Jones" }));
+
+		queryObject.setRules(rules);
+
+		UdrSpecification resp = new UdrSpecification(null, queryObject, new MetaData(
+				title, description, new Date(), author));
 		return resp;
 	}
 }
