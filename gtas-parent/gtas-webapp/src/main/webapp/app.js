@@ -72,6 +72,7 @@ app.run(function ($rootScope) {
         QUERIES: [
             {
                 name: "title",
+                displayName: "Name",
                 enableCellEdit: false,
                 enableColumnMenu: false
             }, {
@@ -83,6 +84,7 @@ app.run(function ($rootScope) {
         RISK_CRITERIA: [
             {
                 name: "title",
+                displayName: "Name",
                 enableCellEdit: false,
                 enableColumnMenu: false
             }, {
