@@ -98,7 +98,7 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 		if (kb == null) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
 					RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
-					RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
+					kbName);
 		}
 		String drlRules = null;
 		try {
