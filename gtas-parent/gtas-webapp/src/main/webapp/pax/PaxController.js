@@ -54,16 +54,16 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 			  };
 			  
 		  $scope.opendt3 = function($event) {
-			  	if(!$scope.status.openeddt){
+			  	if(!$scope.status.openeddt3){
 			  		 $interval(function () {
-					    	$('.ng-valid.dropdown-menu').eq(0).css({display: 'block'});
+					    	$('.ng-valid.dropdown-menu').eq(1).css({display: 'block'});
 					    }, 0, 1);
-			  		$scope.status.openeddt = true;
+			  		$scope.status.openeddt3 = true;
 			  	}else{
                    $interval(function () {
-					    	$('.ng-valid.dropdown-menu').eq(0).css({display: 'none'});
+					    	$('.ng-valid.dropdown-menu').eq(1).css({display: 'none'});
 					    }, 0, 1);
-                   $scope.status.openeddt = false;
+                   $scope.status.openeddt3 = false;
                }
 
 		  };
