@@ -1,7 +1,6 @@
 var app = angular.module('myApp', [
     'ui.router',
     'ui.bootstrap',
-    'ngTable',
     'spring-security-csrf-token-interceptor',
     'ui.grid',
     'ui.grid.resizeColumns',
@@ -12,6 +11,7 @@ var app = angular.module('myApp', [
     'ui.grid.cellNav',
     'ui.grid.selection',
     'ui.grid.exporter',
+    'ui.grid.expandable',
     'ct.ui.router.extras'
 ]);
 
