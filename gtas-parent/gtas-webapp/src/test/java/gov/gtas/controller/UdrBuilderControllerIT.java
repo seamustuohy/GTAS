@@ -2,16 +2,19 @@ package gov.gtas.controller;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import static org.junit.Assert.*;
 import javax.transaction.Transactional;
 
 import gov.gtas.common.WebAppConfig;
 import gov.gtas.controller.UdrManagementController;
 import gov.gtas.controller.config.TestMvcRestServiceWebConfig;
 import gov.gtas.controller.util.UdrBuilderDataUtils;
+import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.UdrService;
@@ -41,6 +44,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 public class UdrBuilderControllerIT {
     private static final String TEST_USER = "adelorie";
     private static final String TEST_UDR_TITLE = "TEST_TITLE5634";
+    private static final String TEST_UDR_TITLE2 = "TEST_TITLE2231";
     private static final String TEST_DESCRIPTION = "TREST_DESCRIPTION";
     
 	private MockMvc mockMvc;
@@ -70,7 +74,7 @@ public class UdrBuilderControllerIT {
 
 	@Test
 	@Transactional
-	public void getUDR_ShouldReturnFoundUdrSpecification() throws Exception {
+	public void testGetUdr() throws Exception {
 		UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
 		udrService.createUdr(TEST_USER, udrSpec);
 
@@ -82,4 +86,43 @@ public class UdrBuilderControllerIT {
 
 	}
 
+	@Test
+	@Transactional
+	public void testGetUdrList() throws Exception {
+		UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
+		udrService.createUdr(TEST_USER, udrSpec);
+        udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE2, TEST_DESCRIPTION, TEST_USER);
+		udrService.createUdr(TEST_USER, udrSpec);
+		mockMvc.perform(get("/gtas/udr/list/" + TEST_USER))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON+";charset=UTF-8"))
+				.andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(2))))
+				.andExpect(jsonPath("$[*].summary.title", hasItem(TEST_UDR_TITLE)))
+				.andExpect(jsonPath("$[*].summary.title", hasItem(TEST_UDR_TITLE2)));
+
+	}
+	@Test
+	@Transactional
+	public void testDeleteUdr() throws Exception {
+		UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
+		udrService.createUdr(TEST_USER, udrSpec);
+		udrSpec = udrService.fetchUdr(TEST_USER, TEST_UDR_TITLE);
+		assertTrue(udrSpec.getSummary().isEnabled());
+		Long id = udrSpec.getId();
+		mockMvc.perform(delete("/gtas/udr/" + TEST_USER+"/"+id))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(
+						jsonPath("$.status",
+								is(JsonServiceResponse.SUCCESS_RESPONSE)))
+				.andExpect(jsonPath("$.request", is("Delete UDR")))
+				.andExpect(jsonPath("$.responseDetails", hasSize(2)))
+				.andExpect(
+						jsonPath("$.responseDetails[0].attributeName", is("id")))
+						.andExpect(
+								jsonPath("$.responseDetails[0].attributeValue", is(id.toString())));
+
+		udrSpec = udrService.fetchUdr(id);
+		assertFalse(udrSpec.getSummary().isEnabled());
+	}
 }

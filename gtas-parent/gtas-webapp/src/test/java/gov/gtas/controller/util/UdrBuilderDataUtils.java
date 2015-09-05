@@ -77,6 +77,7 @@ public class UdrBuilderDataUtils {
 
 		UdrSpecification resp = new UdrSpecification(null, queryObject, new MetaData(
 				title, description, new Date(), author));
+		resp.getSummary().setEnabled(true);
 		return resp;
 	}
 }
