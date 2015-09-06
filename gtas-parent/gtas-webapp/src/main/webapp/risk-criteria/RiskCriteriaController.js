@@ -57,25 +57,10 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
         angular.forEach(selectedRowEntities, function (rowEntity) {
             var rowIndexToDelete = $scope.gridOpts.data.indexOf(rowEntity);
 
-            // create a promise to reject errors from server side.
-            var rowDeferred = $q.defer();
-
             console.log('Selected row: ' + rowIndexToDelete + ' to delete.');
-            var deferred = riskCriteriaService.ruleDelete($scope.ruleId, $scope.authorId);
-
-            deferred.$promise.then(function (response) {
-                    // success callback
-                    var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
-                    rowDeferred.resolve(newLength);
-                },
-                function (error) {
-                    // will fail because URL is not real, but will resolve anyway for purposes of this test.
-
-                    // this is what I expect will remove the row from the ui-grid in the UI.
-                    var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
-                    rowDeferred.resolve(newLength);
-                    //rowDeferred.reject(error);
-                });
+            riskCriteriaService.ruleDelete($scope.ruleId, $scope.authorId).then(function (response) {
+                $scope.gridOpts.data.splice(rowIndexToDelete, 1);
+            });
         });
     };
 
