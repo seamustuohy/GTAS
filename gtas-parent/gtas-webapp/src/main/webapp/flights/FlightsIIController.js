@@ -3,59 +3,87 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     $injector.invoke(GridControl, this, {$scope: $scope });
     $injector.invoke(Modal, this, {$scope: $scope });
 
+    // UI ToDos:
+    // Add flight information in header of Modal
+    // Fix Flight Hit count can only be one per passenger that has either one or multiple watchlistHit or ruleHit
+    // Selection on Row [no check mark]
+    // change new Rule to new Query on Query Screen
+    // Require All Fields on watch list to save [add/update]
+    // Follow up on Pull Request to fix column rendering on ui-grid
+    // Submit Pull Request to allow disable/hide expandable on a row by row basis
+    // Fix Sort Estimated Inbound, Time of Arrival, Outbound, ETD
+    // Color code hits greenlight red light on flights' passengers
+    // Color code hits in red text
+
     var myModal = new Modal(),
         self = this,
         columns = {
             "FLIGHTS": [{
                 "name": "totalPax",
                 "displayName": "P",
+                "type": 'number'
+            }, {
+                "name": "ruleHits",
+                "displayName": "H",
+                "type": 'number'
+            }, {
+                "name": "watchlistHits",
+                "displayName": "L",
+                "type": 'number'
+            }, {
+                "name": "carrier",
+                "displayName": "Carrier",
+                "type": "string"
+            }, {
+                "name": "flightNumber",
+                "displayName": "Flight #",
+                "type": "string"
+            }, {
+                "name": "direction",
+                "displayName": "Direction",
+                "type": "string",
+                "sort": {
+                    "direction": uiGridConstants.ASC,
+                    "priority": 0
+                }
+            }, {
+                "name": "origin",
+                "displayName": "Origin",
+                "type": "string"
+            }, {
+                "name": "originCountry",
+                "displayName": "Country",
+                "type": "string"
+            }, {
+                "name": "departureDt",
+                "displayName": "ETD",
+                "type": "date",
                 "sort": {
                     "direction": uiGridConstants.DESC,
                     "priority": 2
                 }
             }, {
-                "name": "ruleHits",
-                "displayName": "H",
-                "sort": {
-                    "direction": uiGridConstants.DESC,
-                    "priority": 0
-                }
+                "name": "destination",
+                "displayName": "Destination",
+                "type": "string"
             }, {
-                "name": "watchlistHits",
-                "displayName": "L",
+                "name": "destinationCountry",
+                "displayName": "Country",
+                "type": "string"
+            }, {
+                "name": "arrivalDt",
+                "displayName": "ETA",
+                "type": "date",
                 "sort": {
                     "direction": uiGridConstants.DESC,
                     "priority": 1
                 }
-            }, {
-                "name": "carrier",
-                "displayName": "Carrier"
-            }, {
-                "name": "flightNumber",
-                "displayName": "Flight #"
-            }, {
-                "name": "origin",
-                "displayName": "Origin"
-            }, {
-                "name": "originCountry",
-                "displayName": "Country"
-            }, {
-                "name": "departureDt",
-                "displayName": "ETD"
-            }, {
-                "name": "destination",
-                "displayName": "Destination"
-            }, {
-                "name": "destinationCountry",
-                "displayName": "Country"
-            }, {
-                "name": "arrivalDt",
-                "displayName": "ETA"
             }],
             "PASSENGERS": [{
                 "name": "ruleHits",
                 "displayName": "R",
-                width: 50,
+                "width": 50,
+                "type": "number",
                 "sort": {
                     "direction": uiGridConstants.DESC,
                     "priority": 0
@@ -63,7 +91,8 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
             }, {
                 "name": "listHits",
                 "displayName": "L",
-                width: 50,
+                "width": 50,
+                "type": "string",
                 "sort": {
                     "direction": uiGridConstants.DESC,
                     "priority": 1
@@ -71,37 +100,47 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
             }, {
                 "name": "lastName",
                 "displayName": "P",
-                width: 150
+                "width": 150,
+                "type": "string"
             }, {
                 "name": "firstName",
                 "displayName": "First Name",
-                width: 150
+                "width": 150,
+                "type": "string"
             }, {
                 "name": "middleName",
-                "displayName": "Middle Name"
+                "displayName": "Middle Name",
+                "type": "string"
             }, {
                 "name": "passengerType",
                 "displayName": "Type",
-                width: 50
+                "width": 50,
+                "type": "string"
             }, {
                 "name": "gender",
-                "displayName": "Gender"
+                "displayName": "Gender",
+                "type": "string"
             }, {
                 "name": "dob",
                 "displayName": "DOB",
-                width: 120
+                "width": 120,
+                "type": "date"
             }, {
                 "name": "citizenshipCountry",
-                "displayName": "CIT"
+                "displayName": "CIT",
+                "type": "string"
             }, {
                 "name": "documents[0].documentNumber",
-                "displayName": "Doc #"
+                "displayName": "Doc #",
+                "type": "string"
             }, {
                 "name": "documents[0].documentType",
-                "displayName": "T"
+                "displayName": "T",
+                "type": "string"
             }, {
                 "name": "documents[0].issuanceCountry",
-                "displayName": "Issuer"
+                "displayName": "Issuer",
+                "type": "string"
             }]
         };
 
@@ -147,7 +186,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
             gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
-                if (row.isExpanded && !!row.entity.ruleHits) {
+                if (row.isExpanded && (!!row.entity.ruleHits || !!row.entity.watchlistHits)) {
                     paxService.getRuleHits(row.entity.paxId).then(function (myData) {
                         var j, obj = {}, data = [];
                         for (j = 0; j < myData.length; j++) {
@@ -196,11 +235,14 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                     $rootScope.gridOptions.exporterCsvFilename = title  + '.csv';
                     $rootScope.gridOptions.exporterPdfHeader = { text: title, style: 'headerStyle' };
 
-                    myData.forEach(function(d){
-                        d.subGridOptions = {
-                            columnDefs: subGridHeaders,
-                            onRegisterApi: subGridRowSelected
-                        };
+                    myData.forEach(function (d){
+                        if (!!d.ruleHits || !!d.watchlistHits) {
+                            d.subGridOptions = {
+                                columnDefs: subGridHeaders,
+                                onRegisterApi: subGridRowSelected
+                            };
+                        } else {
+                        }
                     });
 
                     $rootScope.gridOptions.data = myData;
