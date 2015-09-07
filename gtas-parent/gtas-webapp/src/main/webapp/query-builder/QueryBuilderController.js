@@ -87,7 +87,8 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
                     var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
                     rowDeferred.resolve(newLength);
                     //rowDeferred.reject(error);
-                });
+                }
+            );
         });
     };
 
