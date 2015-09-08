@@ -7,11 +7,11 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     // Add flight information in header of Modal
     // Fix Flight Hit count can only be one per passenger that has either one or multiple watchlistHit or ruleHit
     // Selection on Row [no check mark]
-    // change new Rule to new Query on Query Screen
+    // # change new Rule to new Query on Query Screen
     // Require All Fields on watch list to save [add/update]
     // Follow up on Pull Request to fix column rendering on ui-grid
     // Submit Pull Request to allow disable/hide expandable on a row by row basis
-    // Fix Sort Estimated Inbound, Time of Arrival, Outbound, ETD
+    // #PING MIKE +++++++++++Fix Sort Estimated Inbound, Time of Arrival, Outbound, ETD
     // Color code hits greenlight red light on flights' passengers
     // Color code hits in red text
 
@@ -55,7 +55,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                 "displayName": "Country",
                 "type": "string"
             }, {
-                "name": "departureDt",
+                "name": "etd",
                 "displayName": "ETD",
                 "type": "date",
                 "sort": {
@@ -71,7 +71,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                 "displayName": "Country",
                 "type": "string"
             }, {
-                "name": "arrivalDt",
+                "name": "eta",
                 "displayName": "ETA",
                 "type": "date",
                 "sort": {
@@ -226,14 +226,13 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     $scope.gridOpts.onRegisterApi = function (gridApi) {
         $scope.gridApi = gridApi;
         gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-            var title;
             if (row.isSelected) {
                 $scope.selectedIndex = $scope.gridOpts.data.indexOf(row.entity);
                 paxService.getPax(row.entity.flightId).then(function (myData) {
-                    $rootScope.selectedFlightNumber = row.entity.flightNumber;
-                    title = 'Passengers on Flight ' + $rootScope.selectedFlightNumber;
-                    $rootScope.gridOptions.exporterCsvFilename = title  + '.csv';
-                    $rootScope.gridOptions.exporterPdfHeader = { text: title, style: 'headerStyle' };
+                    $rootScope.modalTitle = "Passengers List";
+                    $rootScope.selectedRow = row.entity;
+                    $rootScope.gridOptions.exporterCsvFilename = $rootScope.modalTitle   + '.csv';
+                    $rootScope.gridOptions.exporterPdfHeader = { text: $rootScope.modalTitle, style: 'headerStyle' };
 
                     myData.forEach(function (d){
                         if (!!d.ruleHits || !!d.watchlistHits) {
