@@ -259,53 +259,6 @@
 
         </div> <!-- main container -->
 
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="resources/bower_components/angular/angular.js"></script>
-        <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    	<script src="resources/bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
-        <script src="resources/bower_components/angular-bootstrap/ui-bootstrap.js"></script>
-        <script src="resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-        <script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
-        <script src="resources/bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js"></script>
-        <script src="resources/bower_components/moment/min/moment.min.js"></script>
-
-        <script src="resources/bower_components/jquery/dist/jquery.js"></script>
-        <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-        <script src="resources/bower_components/bootbox/bootbox.js"></script>
-        <script src="resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-        <script src="resources/bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
-        <script src="resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-        <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
-        <script src='resources/bower_components/pdfmake/build/pdfmake.min.js'></script>
-        <script src='resources/bower_components/pdfmake/build/vfs_fonts.js'></script>
-
-        <!-- <script src="resources/bower_components/datatables/media/js/jquery.dataTables.min.js"></script> -->
-        <script src="resources/bower_components/angular-ui-grid/ui-grid.js"></script>
-
-        <script src="resources/js/query-builder.js"></script>
-        <script src="app.js"></script>
-        <!-- Possible Dependency Injections //-->
-        <script src="factory/GridFactory.js"></script>
-        <script src="factory/ModalGridFactory.js"></script>
-        <script src="factory/QueryBuilderFactory.js"></script>
-        <script src="factory/jQueryBuilderFactory.js"></script>
-        <!-- Controllers & Services //-->
-        <script src="dashboard/DashboardController.js"></script>
-        <script src="flights/FlightsIIController.js"></script>
-        <script src="flights/FlightsService.js"></script>
-        <script src="pax/PaxController.js"></script>
-        <script src="pax/PaxDetailController.js"></script>
-        <script src="pax/PaxService.js"></script>
-        <script src="pax/PaxFactory.js"></script>
-        <script src="query-builder/QueryBuilderController.js"></script>
-        <script src="query-builder/QueryBuilderService.js"></script>
-        <script src="query-builder/QueryService.js"></script>
-        <script src="risk-criteria/RiskCriteriaController.js"></script>
-        <script src="risk-criteria/RiskCriteriaService.js"></script>
-        <script src="watchlists/WatchListService.js"></script>
-        <script src="watchlists/WatchListController.js"></script>
+        <script src="dist/all.js"></script>
         </body>
         </html>
