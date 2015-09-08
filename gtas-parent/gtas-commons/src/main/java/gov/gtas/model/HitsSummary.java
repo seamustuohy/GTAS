@@ -37,6 +37,9 @@ public class HitsSummary extends BaseEntity {
 
 	@Column(name = "description")
 	private String Description;
+	
+	@Column(name = "hit_count")
+	private Integer hitCount;
 
 	public Date getCreateDate() {
 		return createDate;
