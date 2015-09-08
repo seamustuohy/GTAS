@@ -16,8 +16,10 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "hits_summary")
 public class HitsSummary extends BaseEntity {
-    private static final long serialVersionUID = 3436310987156511552L;
-    public HitsSummary() { }
+	private static final long serialVersionUID = 3436310987156511552L;
+
+	public HitsSummary() {
+	}
 
 	@Column(name = "passenger_id", nullable = false)
 	private Long passengerId;
@@ -37,7 +39,7 @@ public class HitsSummary extends BaseEntity {
 
 	@Column(name = "description")
 	private String Description;
-	
+
 	@Column(name = "hit_count")
 	private Integer hitCount;
 
@@ -87,5 +89,13 @@ public class HitsSummary extends BaseEntity {
 
 	public void setDescription(String description) {
 		Description = description;
+	}
+
+	public Integer getHitCount() {
+		return hitCount;
+	}
+
+	public void setHitCount(Integer hitCount) {
+		this.hitCount = hitCount;
 	}
 }
