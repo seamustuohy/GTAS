@@ -24,9 +24,9 @@ public class HitsSummary extends BaseEntity {
 	@Column(name = "passenger_id", nullable = false)
 	private Long passengerId;
 
-	@Column(name = "create_date", nullable = false)
+	@Column(name = "created_date", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date createDate;
+	private Date createdDate;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<HitDetail> hitdetails = new ArrayList<HitDetail>();
@@ -43,12 +43,15 @@ public class HitsSummary extends BaseEntity {
 	@Column(name = "hit_count")
 	private Integer hitCount;
 
-	public Date getCreateDate() {
-		return createDate;
+	@Column(name = "hit_type")
+	private String hitType;
+
+	public Date getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	public Long getPassengerId() {
@@ -97,5 +100,13 @@ public class HitsSummary extends BaseEntity {
 
 	public void setHitCount(Integer hitCount) {
 		this.hitCount = hitCount;
+	}
+
+	public String getHitType() {
+		return hitType;
+	}
+
+	public void setHitType(String hitType) {
+		this.hitType = hitType;
 	}
 }
