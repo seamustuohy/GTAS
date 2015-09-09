@@ -36,9 +36,9 @@ public class HitDetail extends BaseEntity {
 	@Column(name = "cond_text", columnDefinition = "TEXT NULL")
 	private String ruleConditions;
 
-	@Column(name = "create_date", nullable = false)
+	@Column(name = "created_date", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date createDate;
+	private Date createdDate;
 
 	@Column(name = "rule_id", nullable = false)
 	private Long ruleId;
@@ -51,12 +51,12 @@ public class HitDetail extends BaseEntity {
 		this.parent = parent;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
+	public Date getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	public String getRuleConditions() {

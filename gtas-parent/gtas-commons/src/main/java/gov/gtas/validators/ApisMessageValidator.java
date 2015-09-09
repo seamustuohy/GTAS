@@ -1,6 +1,7 @@
 package gov.gtas.validators;
 
 import gov.gtas.delegates.vo.ApisMessageVo;
+import gov.gtas.delegates.vo.DocumentVo;
 import gov.gtas.delegates.vo.FlightVo;
 import gov.gtas.delegates.vo.InvalidObjectInfoVo;
 import gov.gtas.delegates.vo.PassengerVo;
@@ -8,8 +9,10 @@ import gov.gtas.delegates.vo.ReportingPartyVo;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * class ApisMessageValidator accepts the MessageVo and iterate through the objects it contain and 
@@ -22,6 +25,7 @@ import java.util.List;
  * @author GTAS4
  *
  */
+
 public class ApisMessageValidator {
 	
 	private List<InvalidObjectInfoVo> invalidObjects = new ArrayList<>();
@@ -37,58 +41,93 @@ public class ApisMessageValidator {
 			error.setInvalidObjectType(messageVo.getClass().getSimpleName());
 			error.setInvalidObjectValue(value);
 			invalidObjects.add(error);
+			messageVo=null;
 		}else{
-			checkReportingValueObjects(messageVo);
-			checkFlightValueObjects(messageVo);
-			checkPassengerValueObjects(messageVo);
+			List<ReportingPartyVo> rList = checkReportingValueObjects(messageVo);
+			List<FlightVo> fList = checkFlightValueObjects(messageVo);
+			List<PassengerVo> pList = checkPassengerValueObjects(messageVo);
+			messageVo.setFlights(fList);
+			messageVo.setPassengers(pList);
+			messageVo.setReportingParties(rList);
 		}
 		
 		 return messageVo;
 	}
 
-	private void checkReportingValueObjects(ApisMessageVo messageVo){
+	private List<ReportingPartyVo> checkReportingValueObjects(ApisMessageVo messageVo){
 		List<ReportingPartyVo> reportingParties = messageVo.getReportingParties();
+		List<ReportingPartyVo> modifiedList = new ArrayList<>();
 		if(reportingParties != null && reportingParties.size() > 0){
-			Iterator it  = reportingParties.iterator();
+			Iterator<ReportingPartyVo> it  = reportingParties.iterator();
 			while(it.hasNext()){
 				ReportingPartyVo vo = (ReportingPartyVo) it.next();
 				if(!vo.validate()){
 					populateInvalidObjectList(vo, messageVo);
 					vo=null;
 				}
+				else{
+					modifiedList.add(vo);
+				}
 			}
 		}
+		return modifiedList;
 	}
-	private void checkFlightValueObjects(ApisMessageVo messageVo){
+	private List<FlightVo> checkFlightValueObjects(ApisMessageVo messageVo){
 		List<FlightVo> flights = messageVo.getFlights();
+		List<FlightVo> modifiedList = new ArrayList<>();
 		if(flights != null && flights.size() > 0){
-			Iterator it = flights.iterator();
+			Iterator<FlightVo> it = flights.iterator();
 			while(it.hasNext()){
 				FlightVo vo = (FlightVo) it.next();
 				if(!vo.validate()){
 					populateInvalidObjectList(vo, messageVo);
 					vo=null;
 				}
+				else{
+					modifiedList.add(vo);
+				}
 			}
 		}
+		return modifiedList;
 	}
-	private void checkPassengerValueObjects(ApisMessageVo messageVo){
+	private List<PassengerVo> checkPassengerValueObjects(ApisMessageVo messageVo){
 		List<PassengerVo> passengers = messageVo.getPassengers();
+		List<PassengerVo> modifiedList = new ArrayList<>();
 		if(passengers != null && passengers.size() >0){
-			Iterator it = passengers.iterator();
+			Iterator<PassengerVo> it = passengers.iterator();
 			while(it.hasNext()){
 				PassengerVo vo = (PassengerVo) it.next();
 				if(!vo.validate()){
 					populateInvalidObjectList(vo, messageVo);
 					vo=null;
 				}
+				else{
+					if(!vo.getDocuments().isEmpty()){
+						Set<DocumentVo> docs = new HashSet<>();
+						Iterator docSet = vo.getDocuments().iterator();
+						while(docSet.hasNext()){
+							DocumentVo dvo = (DocumentVo) docSet.next();
+							if(!dvo.validate()){
+								populateInvalidObjectList(dvo, messageVo);
+								dvo=null;
+							}
+							else{
+								docs.add(dvo);
+							}
+						}
+						vo.setDocuments(docs);
+					}
+					
+					modifiedList.add(vo);
+				}
 			}
 		}
+		return modifiedList;
 	}
 	
 	private void populateInvalidObjectList(Object o,ApisMessageVo messageVo){
 		InvalidObjectInfoVo error = new InvalidObjectInfoVo();
-		error.setCreatedBy("ApisMessageValidator");
+		error.setCreatedBy(this.getClass().getSimpleName());
 		error.setCreatedDate(new Date());
 		error.setInvalidObjectKey(messageVo.getHashCode());
 		error.setInvalidObjectType(o.getClass().getSimpleName());

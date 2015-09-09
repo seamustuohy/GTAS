@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.MessageStatus;
+import gov.gtas.delegates.vo.PnrVo;
 import gov.gtas.validators.Validatable;
 
 public class PnrMessageVo implements Validatable{
@@ -15,8 +16,17 @@ public class PnrMessageVo implements Validatable{
 	private String filePath;
 	private String error;
 	private String hashCode;
-    
+	private PnrVo pnr;
 	
+	
+	public PnrVo getPnr() {
+		return pnr;
+	}
+
+	public void setPnr(PnrVo pnr) {
+		this.pnr = pnr;
+	}
+
 	public String getFilePath() {
 		return filePath;
 	}
