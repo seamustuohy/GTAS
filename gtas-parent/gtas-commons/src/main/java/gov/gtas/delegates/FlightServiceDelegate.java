@@ -3,6 +3,7 @@ package gov.gtas.delegates;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,7 @@ public class FlightServiceDelegate {
 	private FlightService flightService;
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 	
+	@Transactional
 	public FlightVo saveOrUpdate(FlightVo vo) {
 		Flight f=flightService.getUniqueFlightByCriteria(vo.getCarrier(), vo.getFlightNumber(), vo.getOrigin(), vo.getDestination(), vo.getFlightDate());
 		if(f != null && f.getId() != null){
@@ -37,7 +39,7 @@ public class FlightServiceDelegate {
 			logger.debug("Flight with id "+f.getId()+"  number "+f.getFlightNumber()+" got updated to database");
 		}
 		else{
-			ServiceUtils.mapFlightFromVo(vo,f);
+			f = ServiceUtils.mapFlightFromVo(vo,new Flight());
 			f=flightService.create(f);
 			logger.debug("Flight with id "+f.getId()+"  number "+f.getFlightNumber()+" got saved to database");
 		}

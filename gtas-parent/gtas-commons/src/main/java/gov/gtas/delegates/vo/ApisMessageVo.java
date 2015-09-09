@@ -21,7 +21,19 @@ public class ApisMessageVo extends MessageVo implements Validatable{
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
     
-    public ApisMessageVo() { }
+    public void setReportingParties(List<ReportingPartyVo> reportingParties) {
+		this.reportingParties = reportingParties;
+	}
+
+	public void setFlights(List<FlightVo> flights) {
+		this.flights = flights;
+	}
+
+	public void setPassengers(List<PassengerVo> passengers) {
+		this.passengers = passengers;
+	}
+
+	public ApisMessageVo() { }
     
     public void addFlight(FlightVo f) {
         flights.add(f);

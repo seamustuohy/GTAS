@@ -50,6 +50,16 @@ public class ServiceUtils {
 		flight.setOriginCountry(vo.getOriginCountry());
 		flight.setDirection(vo.getDirection());
 		flight.setFlightNumber(vo.getFlightNumber());
+		if(vo.getPassengers() != null && vo.getPassengers().size() >0){
+			Iterator it = vo.getPassengers().iterator();
+			while(it.hasNext()){
+				PassengerVo pvo = (PassengerVo) it.next();
+				Passenger p = mapPassengerFromVo(pvo,new Passenger());
+				p.getFlights().add(flight);
+				flight.addPassenger(p);
+			}
+		}
+		
 		return flight;
 	}
 
@@ -63,7 +73,6 @@ public class ServiceUtils {
 		vo.setFlightDate(flight.getFlightDate());
 		vo.setFlightNumber(flight.getFlightNumber());
 		if(flight.getId() != null){
-			System.out.println("############FLIGHT ID###########"+flight.getId());
 			vo.setFlightId(flight.getId().toString());
 		}
 		vo.setOrigin(flight.getOrigin());

@@ -216,7 +216,8 @@ public class Passenger extends BaseEntityAudit {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
+        //int result = super.hashCode();
+        int result=10;
         result = prime * result + ((age == null) ? 0 : age.hashCode());
         result = prime * result + ((dob == null) ? 0 : dob.hashCode());
         result = prime * result
@@ -234,8 +235,8 @@ public class Passenger extends BaseEntityAudit {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!super.equals(obj))
-            return false;
+        //if (!super.equals(obj))
+            //return false;
         if (getClass() != obj.getClass())
             return false;
         Passenger other = (Passenger) obj;

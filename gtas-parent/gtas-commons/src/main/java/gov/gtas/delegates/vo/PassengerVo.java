@@ -169,7 +169,14 @@ public class PassengerVo extends BaseVo implements Validatable {
     
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+        //return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("[ First Name : "+this.firstName+" ] ");
+    	sb.append("[ Last Name : "+this.lastName+" ] ");
+    	sb.append("[ Age : "+this.age+" ] ");
+    	sb.append("[ DOB : "+this.dob+" ] ");
+    	sb.append("[ Citizenship : "+this.citizenshipCountry+" ] ");
+    	return sb.toString();
     }
 
 	@Override

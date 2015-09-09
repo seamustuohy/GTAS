@@ -1,6 +1,7 @@
 package gov.gtas.services;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Flight;
+import gov.gtas.model.Passenger;
 import gov.gtas.repository.FlightRepository;
 
 @Service
@@ -58,6 +60,14 @@ public class FlightServiceImpl implements FlightService{
 			flightToUpdate.setUpdatedAt(new Date());
 			//TODO replace with logged in user id
 			flightToUpdate.setUpdatedBy(flight.getUpdatedBy());
+			if(flight.getPassengers() != null && flight.getPassengers().size() >0){
+				Iterator it = flight.getPassengers().iterator();
+				while(it.hasNext()){
+					System.out.println("XXXXXXXXXXX");
+					Passenger p = (Passenger) it.next();
+					flightToUpdate.addPassenger(p);
+				}
+			}
 		}
 		return flightToUpdate;
 	}
