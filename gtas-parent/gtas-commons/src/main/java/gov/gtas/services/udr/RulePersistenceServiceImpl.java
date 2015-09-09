@@ -103,6 +103,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		UdrRule ruleToDelete = udrRuleRepository.findOne(id);
 		if (ruleToDelete != null && ruleToDelete.getDeleted() == YesNoEnum.N) {
 			ruleToDelete.setDeleted(YesNoEnum.Y);
+			ruleToDelete.setDeleteId(ruleToDelete.getId());
 			RuleMeta meta = ruleToDelete.getMetaData();
 			meta.setEnabled(YesNoEnum.N);
 			ruleToDelete.setEditedBy(user);

@@ -37,7 +37,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 @Entity
 @Table(name = "UDR_RULE",
-       uniqueConstraints= {@UniqueConstraint(name=UDR_UNIQUE_CONSTRAINT_NAME, columnNames={"AUTHOR","TITLE"})})
+       uniqueConstraints= {@UniqueConstraint(name=UDR_UNIQUE_CONSTRAINT_NAME, columnNames={"AUTHOR","TITLE","DEL_ID"})})
 public class UdrRule extends BaseEntity {
 
 	/**
@@ -52,6 +52,13 @@ public class UdrRule extends BaseEntity {
 	@Column(name = "DEL_FLAG", nullable = false, length = 1)
 	private YesNoEnum deleted;
 	
+    /*
+     * A transaction Id number in case this object has been deleted.
+     * Otherwise, for non-deleted objects this field is 0L.
+     */
+	@Column(name = "DEL_ID", nullable = false)
+	private Long deleteId;
+
     @ManyToOne
     @JoinColumn(name="AUTHOR", referencedColumnName="user_id", nullable = false)     
     private User author;
@@ -59,6 +66,7 @@ public class UdrRule extends BaseEntity {
 	@Column(name = "TITLE", nullable=false, length = 20)
 	private String title;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "EDIT_DT", nullable = false)
 	private Date editDt;
 
@@ -81,6 +89,7 @@ public class UdrRule extends BaseEntity {
      * Constructor to be used by JPA EntityManager.
      */
 	public UdrRule() {
+		this.deleteId = 0L;
 	}
 
 	public UdrRule(long id, Date editDt) {
@@ -198,6 +207,19 @@ public class UdrRule extends BaseEntity {
 		this.deleted = deleted;
 	}
 
+	/**
+	 * @return the deleteId
+	 */
+	public Long getDeleteId() {
+		return deleteId;
+	}
+
+	/**
+	 * @param deleteId the deleteId to set
+	 */
+	public void setDeleteId(Long deleteId) {
+		this.deleteId = deleteId;
+	}
 
 	/**
 	 * @return the udrConditionObject
