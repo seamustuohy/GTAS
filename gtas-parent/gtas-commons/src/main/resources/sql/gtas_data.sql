@@ -1,5 +1,5 @@
 -- ----------------------------
--- Records of gtas_roles
+-- Records of role
 -- ----------------------------
 INSERT INTO `role` VALUES ('1', 'ROLE_ADMIN');
 INSERT INTO `role` VALUES ('2', 'ROLE_CUST');
@@ -10,18 +10,20 @@ INSERT INTO `role` VALUES ('6', 'MANAGE_WATCHLIST');
 INSERT INTO `role` VALUES ('7', 'ADMIN');
 
 -- ----------------------------
--- Records of gtas_users
+-- Records of user
 -- ----------------------------
 -- password is 'password'
-INSERT INTO `user` VALUES ('svempati', 'Srinivas', 'Vempati', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
-INSERT INTO `user` VALUES ('abandopadhay', 'Amit', 'Bandopadhay', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
-INSERT INTO `user` VALUES ('jtang', 'Jeen', 'Tang', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
-INSERT INTO `user` VALUES ('mcopenhafer', 'Mike', 'Copenhafer', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
-INSERT INTO `user` VALUES ('bstygar', 'Brian', 'Styger', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
-INSERT INTO `user` VALUES ('ladebiyi', 'Lola', 'Adebiyi', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
-INSERT INTO `user` VALUES ('adelorie', 'Anthony', 'Delorie', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu', '1');
+INSERT INTO `user` VALUES ('svempati', 1,'Srinivas', 'Vempati', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
+INSERT INTO `user` VALUES ('abandopadhay',1, 'Amit', 'Bandopadhay', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
+INSERT INTO `user` VALUES ('jtang', 1,'Jeen', 'Tang', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
+INSERT INTO `user` VALUES ('mcopenhafer',1, 'Mike', 'Copenhafer', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
+INSERT INTO `user` VALUES ('bstygar', 1,'Brian', 'Styger', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
+INSERT INTO `user` VALUES ('ladebiyi',1, 'Lola', 'Adebiyi', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
+INSERT INTO `user` VALUES ('adelorie',1, 'Anthony', 'Delorie', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
 
-
+-- ----------------------------
+-- Records of user_role
+-- ----------------------------
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('bstygar', 7);
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('svempati', 7);
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('abandopadhay', 7);
