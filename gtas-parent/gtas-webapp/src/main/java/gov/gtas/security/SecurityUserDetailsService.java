@@ -1,13 +1,6 @@
 package gov.gtas.security;
 
-
-import gov.gtas.model.Authorities;
-import gov.gtas.model.User;
-import gov.gtas.services.UserService;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -20,37 +13,36 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import gov.gtas.model.User;
+import gov.gtas.services.UserService;
+
 /**
  *
- * UserDetails service that reads the user credentials from the database, using a JPA repository.
+ * UserDetails service that reads the user credentials from the database, using
+ * a JPA repository.
  *
  */
 @Service("userDetailsService")
 public class SecurityUserDetailsService implements UserDetailsService {
-    private static final Logger logger = LoggerFactory.getLogger(SecurityUserDetailsService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SecurityUserDetailsService.class);
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.findById(username);
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userService.findById(username);
 
-        if (user == null) {
-            String message = "Username not found: " + username;
-            logger.info(message);
-            throw new UsernameNotFoundException(message);
-        }
-        
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        if (user.getAuthorities() != null) {
-            Iterator<Authorities> tempIter = user.getAuthorities().iterator();
-            while(tempIter.hasNext()){
-                authorities.add(new SimpleGrantedAuthority(((Authorities)tempIter.next()).getUserRole().getRoleDescription()));
-            }
-        }
-        logger.info("Found user in database: " + user);
+		if (user == null) {
+			String message = "Username not found: " + username;
+			logger.info(message);
+			throw new UsernameNotFoundException(message);
+		}
 
-        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
-    }
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		user.getRoles().forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getRoleDescription())));
+		logger.info("Found user in database: " + user);
+
+		return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
+	}
 }

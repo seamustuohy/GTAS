@@ -327,8 +327,6 @@ public class UdrServiceIT {
 	   User usr = new User();
 	   Role role = new Role();
 	   role.setRoleDescription(ROLE_NAME);
-	   //role.setRoleId(ROLE_ID);
-	   usr.setUserRole(role);
 	   usr.setFirstName(USER_FNAME);
 	   usr.setLastName(USER_LASTNAME);
 	   usr.setPassword("password");

@@ -1,9 +1,5 @@
 package gov.gtas.services;
 
-import gov.gtas.model.Role;
-import gov.gtas.model.User;
-import gov.gtas.repository.UserRepository;
-
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,6 +8,9 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
+
+import gov.gtas.model.User;
+import gov.gtas.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,18 +24,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User create(User user) {
-		Role role = user.getUserRole();
-		if(role.getRoleId()!= null){
-		    role = entityManager.find(Role.class, user.getUserRole().getRoleId());
-		} else {
-			entityManager.persist(role);
-		}
-		if(role == null){
-			Role rle = user.getUserRole();
-			rle.setRoleId(null);
-			entityManager.persist(rle);
-			user.setUserRole(rle);
-		}
+		
 		return userRespository.save(user);
 	}
 
@@ -63,8 +51,9 @@ public class UserServiceImpl implements UserService {
 			updateUser.setFirstName(user.getFirstName());
 			updateUser.setLastName(user.getLastName());
 			updateUser.setPassword(user.getPassword());
-			updateUser.setUserRole(user.getUserRole());
-			
+			updateUser.setActive(user.getActive());
+			updateUser.setRoles(user.getRoles());
+			return userRespository.save(updateUser);			
 		}
 
 		return updateUser;
@@ -76,7 +65,4 @@ public class UserServiceImpl implements UserService {
 		User user = userRespository.findOne(id);
 		return user;
 	}
-
-	
-
 }

@@ -46,10 +46,6 @@ public class RuleServiceDataGenUtils {
 			user.setLastName("Jones");
 			user.setUserId(TEST_USER1_ID);
 			user.setPassword("passsword");
-			user.setUserRole(role);
-			List<User> roleUsers = new ArrayList<User>();
-			roleUsers.add(user);
-			role.setUserList(roleUsers);
 			userService.create(user);
 		} catch (Exception e) {
 			e.printStackTrace();
