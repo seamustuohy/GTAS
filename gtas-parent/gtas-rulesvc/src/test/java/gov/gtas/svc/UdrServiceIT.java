@@ -1,12 +1,16 @@
 package gov.gtas.svc;
 
+import static gov.gtas.constant.DomainModelConstants.UDR_UNIQUE_CONSTRAINT_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.constant.RuleConstants;
 import gov.gtas.enumtype.ConditionEnum;
+import gov.gtas.error.ErrorUtils;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
@@ -32,6 +36,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -73,6 +78,20 @@ public class UdrServiceIT {
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
 		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+	}
+	@Test
+	@Transactional
+	public void testCreateDuplicateUdr() {
+		User user = createUser();
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
+		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
+		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		try{
+			udrService.createUdr(user.getUserId(), spec);
+			fail("Expecting Exception");
+		}catch(JpaSystemException jse){
+			assertTrue(ErrorUtils.isConstraintViolationException(jse, UDR_UNIQUE_CONSTRAINT_NAME));
+		}
 	}
 	@Test
 	@Transactional
@@ -248,6 +267,34 @@ public class UdrServiceIT {
 		assertNotNull(listResp);
 		assertEquals(1, listResp.size());
 	}
+	@Test
+	@Transactional
+	public void testDeleteAndRecreate() {
+		User user = createUser();
+		UdrSpecification spec1 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
+		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec1);
+		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		Long id = Long.valueOf((String)(resp.getResponseDetails().get(0).getAttributeValue()));       
+
+		List<JsonUdrListElement> listResp = udrService.fetchUdrSummaryList(user.getUserId());
+		assertNotNull(listResp);
+		assertEquals(1, listResp.size());
+		
+		udrService.deleteUdr(user.getUserId(),id);
+		
+		listResp = udrService.fetchUdrSummaryList(user.getUserId());
+		assertNotNull(listResp);
+		assertEquals(0, listResp.size());
+
+		resp = udrService.createUdr(user.getUserId(), spec1);
+		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		Long id2 = Long.valueOf((String)(resp.getResponseDetails().get(0).getAttributeValue()));  
+		assertTrue(id.longValue() != id2.longValue());
+		
+		listResp = udrService.fetchUdrSummaryList(user.getUserId());
+		assertNotNull(listResp);
+		assertEquals(1, listResp.size());
+}
 	@Test
 	@Transactional
 	public void testKnowledgeBaseReferences() {
