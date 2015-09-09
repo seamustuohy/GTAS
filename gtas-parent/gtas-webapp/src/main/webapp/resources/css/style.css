@@ -118,3 +118,139 @@ border: none;
 text-shadow: none;
 box-shadow: none; 
 }
+
+.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0,0,0, .8);
+    z-index: 101;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.full {
+    background: url(http://placehold.it/1920x1080) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+/*        THIS OVERRIDES ALL NG-TABLES table headers
+please add class to table and scope by additional parent class-name
+you also have this same class name in the styles.css so should consolidate there
+.header{
+background: rgb(247, 250, 250);
+}
+*/
+.hiddenRow {
+    padding: 0 !important;
+
+}
+
+/* .accordian-body {
+margin-left: 50px;
+} */
+
+#flightTable thead th {
+    text-align:center;
+}
+
+#flightTable tbody td {
+    text-align:center;
+}
+
+#paxTable thead th {
+    text-align:center;
+}
+
+#paxTable tbody td {
+    text-align:center;
+}
+
+/* Exclusive for nested Rule List Display */
+.collapse {
+    display: none;
+}
+.collapse.in {
+    display: block;
+}
+tr.collapse.in {
+    display: table-row;
+}
+tbody.collapse.in {
+    display: table-row-group;
+}
+.collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    -webkit-transition: height .35s ease;
+    -o-transition: height .35s ease;
+    transition: height .35s ease;
+}
+
+.glyph {
+    text-align: center;
+}
+
+
+/* Exclusive for nested Rule List Display */
+
+
+.glyphiconFlightPax {
+    margin: 1px 0px 5px 1px;
+    font-size: 26px;
+    color: #222;
+    /*background-color: #F0C425;*/
+    padding: 5px;}
+
+header {
+    height: 84px;
+    position: relative;
+}
+header::before {
+    content: "";
+    display: block;
+    height: 84px;
+    background-color: rgb(43,127,184);
+    background-image: url(../../resources/img/gtas_logo.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+    position: relative;
+    top: 0;
+}
+header::after {
+    content: "";
+    display: block;
+    background-color: rgba(167,169,172, 1);
+    height: 10px;
+    position: relative;
+    bottom: 10px;
+    margin-left: 1170px;
+}
+
+.glyphiconFlightPax:hover, .glyphiconFlightPax:focus {
+    color: #222;
+    /* background-color: #FFFFFF;  #1F2E54 */
+    padding: 5px;}
+
+
+.glyph {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        width: 1000px;
+    }
+}
+.ui-grid-pager-control input {
+    width: 100px;
+}

@@ -1,12 +1,33 @@
-// Include gulp
-var gulp = require('gulp');
+var gulp = require('gulp'),
+    concat = require('gulp-concat'),
+    jshint = require('gulp-jshint'),
+    minifyCSS = require('gulp-minify-css'),
+    rename = require('gulp-rename'),
+    sass = require('gulp-sass'),
+    uglify = require('gulp-uglify');
 
-// Include Our Plugins
-var jshint = require('gulp-jshint');
-var sass = require('gulp-sass');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
+//will concat and minify CSS
+gulp.task('minify-css', function () {
+    'use strict';
+    return gulp.src([
+        'resources/css/style.css',
+        'resources/bower_components/bootstrap/dist/css/bootstrap.css',
+        'resources/css/gtas.css',
+        'resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css',
+        'resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css',
+        'resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css',
+        'resources/bower_components/selectize/dist/css/selectize.bootstrap3.css',
+        'resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css',
+        'resources/bower_components/angular-ui-grid/dist/css/ui-grid.css',
+        'resources/css/query-builder.default.css',
+        'http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css'
+    ])
+        .pipe(concat('style.css'))
+        .pipe(gulp.dest('dist/css'))
+        .pipe(minifyCSS())
+        .pipe(rename('style.min.css'))
+        .pipe(gulp.dest('dist/css'));
+});
 
 // Lint Task
 gulp.task('lint', function () {
@@ -66,10 +87,10 @@ gulp.task('scripts', function () {
         'watchlists/WatchListService.js',
         'watchlists/WatchListController.js'])
         .pipe(concat('all.js'))
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('dist/js'))
         .pipe(rename('all.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist/js'));
 });
 
 // Watch Files For Changes
@@ -79,4 +100,5 @@ gulp.task('watch', function() {
 });
 
 // Default Task
-gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
+//gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
+gulp.task('default', ['scripts', 'minify-css']);
