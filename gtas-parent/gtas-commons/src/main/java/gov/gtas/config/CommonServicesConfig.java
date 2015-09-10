@@ -59,6 +59,11 @@ public class CommonServicesConfig {
 	private static final String PROPERTY_NAME_HIBERNATE_USE_MINIMAL_PUTS = "hibernate.cache.use_minimal_puts";
 	private static final String PROPERTY_NAME_SHAREDCACHE_MODE = "javax.persistence.sharedCache.mode";
 	private static final String PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
+	private static final String PROPERTY_NAME_HIBERNATE_USE_SQL_COMMENTS = "hibernate.use_sql_comments";
+	private static final String PROPERTY_NAME_HIBERNATE_ORDER_INSERTS = "hibernate.order_inserts";
+	private static final String PROPERTY_NAME_HIBERNATE_ORDER_UPDATES = "hibernate.order_updates";
+	private static final String PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA = "hibernate.jdbc.batch_versioned_data";
+
 
 	private Properties hibProperties() {
 		Properties properties = new Properties();
@@ -83,6 +88,14 @@ public class CommonServicesConfig {
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_USE_MINIMAL_PUTS));
 		properties.put(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE, env
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE));
+		properties.put(PROPERTY_NAME_HIBERNATE_USE_SQL_COMMENTS, env
+				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_USE_SQL_COMMENTS));
+		properties.put(PROPERTY_NAME_HIBERNATE_ORDER_INSERTS, env
+				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_ORDER_INSERTS));
+		properties.put(PROPERTY_NAME_HIBERNATE_ORDER_UPDATES, env
+				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_ORDER_UPDATES));
+		properties.put(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA, env
+				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA));
 
 		return properties;
 	}
