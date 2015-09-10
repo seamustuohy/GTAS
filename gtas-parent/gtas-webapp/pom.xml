@@ -19,6 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <rest-assured.version>2.4.0</rest-assured.version>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>gov.gtas</groupId>
@@ -40,13 +41,11 @@
       <artifactId>gtas-udr-builder</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
-
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
@@ -59,7 +58,6 @@
       <groupId>commons-dbcp</groupId>
       <artifactId>commons-dbcp</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
@@ -84,7 +82,6 @@
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
     </dependency>
-
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
@@ -101,7 +98,6 @@
       <artifactId>jstl</artifactId>
       <version>1.2</version>
     </dependency>
-
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-taglibs</artifactId>
@@ -147,7 +143,6 @@
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-jpa</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
@@ -169,19 +164,20 @@
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.apache.tiles</groupId>
       <artifactId>tiles-jsp</artifactId>
     </dependency>
-    
 	<dependency>
 	     <groupId>com.jayway.jsonpath</groupId>
 	    <artifactId>json-path</artifactId>
 	    <scope>test</scope>
 	 </dependency>
   </dependencies>
+
   <build>
+    <finalName>gtas</finalName>
+
     <plugins>
       <plugin>
         <artifactId>maven-eclipse-plugin</artifactId>
@@ -197,7 +193,52 @@
           <downloadJavadocs>true</downloadJavadocs>
         </configuration>
       </plugin>
+      
+      <!-- gulp, bower integration -->      
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>0.0.23</version>
+        <executions>
+          <execution>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>v0.12.2</nodeVersion>
+              <npmVersion>2.7.6</npmVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <!-- Optional configuration which provides for running any npm command -->
+            <configuration>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+          <!-- 
+          <execution>
+            <id>npm run build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run build</arguments>
+            </configuration>
+          </execution>
+           -->       
+          <execution>
+            <id>bower install</id>
+            <goals>
+              <goal>bower</goal>
+            </goals>
+          </execution>           
+        </executions>
+      </plugin>      
     </plugins>
-    <finalName>gtas</finalName>
   </build>
 </project>

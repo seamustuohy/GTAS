@@ -166,7 +166,7 @@ public class LoaderRepository {
             }
         }
                
-        // create pax
+        // create any new passengers
         for (PassengerVo pvo : passengers) {
             if (existingPassengers.contains(pvo)) {
                 continue;
@@ -181,7 +181,7 @@ public class LoaderRepository {
         }
         
         
-        // assoc pax w/ flights
+        // assoc all passengers w/ flights
         for (Flight f : messageFlights) {
             for (Passenger p : messagePassengers) {
                 f.addPassenger(p);
