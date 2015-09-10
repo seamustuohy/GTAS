@@ -8,6 +8,7 @@ import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Message;
 import gov.gtas.model.PnrMessage;
+import gov.gtas.svc.request.builder.PassengerFlightTuple;
 import gov.gtas.svc.request.builder.RuleEngineRequestBuilder;
 
 import java.util.Collection;
@@ -71,6 +72,8 @@ public class TargetingServiceUtils {
 		return createPnrApisRequest(null, reqList);
 	}
 
+	private static Set<PassengerFlightTuple> paxFlightTuples;
+
 	/**
 	 * Creates a Rule Engine request containing data from a collection of APIS
 	 * and PNR messages.
@@ -93,6 +96,7 @@ public class TargetingServiceUtils {
 				bldr.addApisMessage(msg);
 			}
 		}
+		setPaxFlightTuples(bldr.getPassengerFlightSet());
 		return bldr.build();
 	}
 
@@ -116,6 +120,8 @@ public class TargetingServiceUtils {
 				}
 			}
 		}
+		setPaxFlightTuples(bldr.getPassengerFlightSet());
+
 		return bldr.build();
 	}
 
@@ -179,5 +185,14 @@ public class TargetingServiceUtils {
 				new LinkedList<RuleHitDetail>(resultSet),
 				result.getExecutionStatistics());
 		return ret;
+	}
+
+	public static Set<PassengerFlightTuple> getPaxFlightTuples() {
+		return paxFlightTuples;
+	}
+
+	public static void setPaxFlightTuples(
+			Set<PassengerFlightTuple> paxFlightTuples) {
+		TargetingServiceUtils.paxFlightTuples = paxFlightTuples;
 	}
 }
