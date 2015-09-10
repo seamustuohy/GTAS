@@ -1,5 +1,6 @@
 package gov.gtas.services;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -140,57 +141,66 @@ public class LoaderRepository {
             }
         }
     }
-    
+
     @Transactional
     public void processFlightsAndPassengers(List<FlightVo> flights, List<PassengerVo> passengers, Set<Flight> messageFlights, Set<Passenger> messagePassengers) throws ParseException {
+        Set<PassengerVo> existingPassengers = new HashSet<>();
+        
+        // first find all existing passengers, create any missing flights
         for (FlightVo fvo : flights) {
             Flight existingFlight = flightDao.getFlightByCriteria(fvo.getCarrier(), fvo.getFlightNumber(), fvo.getOrigin(), fvo.getDestination(), fvo.getFlightDate());
-
-            if (existingFlight == null) {
-                // new flight: just add new pax + docs
-                Flight newFlight = utils.createNewFlight(fvo);
-                messageFlights.add(newFlight);
-                for (PassengerVo pvo : passengers) {
-                    Passenger p = utils.createNewPassenger(pvo);
-                    for (DocumentVo dvo : pvo.getDocuments()) {
-                        p.addDocument(utils.createNewDocument(dvo));
-                    }
-                    messagePassengers.add(p);
-                    newFlight.addPassenger(p);
-                }
-                                
-            } else {
-                // existing flight: lookup pax and update
-                utils.updateFlight(fvo, existingFlight);
+            if (existingFlight != null) {
                 messageFlights.add(existingFlight);
                 for (PassengerVo pvo : passengers) {
                     Passenger existingPassenger = findPassengerOnFlight(existingFlight, pvo);
-                    if (existingPassenger == null) {
-                        Passenger p = utils.createNewPassenger(pvo);
-                        for (DocumentVo dvo : pvo.getDocuments()) {
-                            p.addDocument(utils.createNewDocument(dvo));
-                        }
-                        passengerDao.save(p);
-                        messagePassengers.add(p);
-                        existingFlight.addPassenger(p);
-                        
-                    } else {
-                        utils.updatePassenger(pvo, existingPassenger);
+                    if (existingPassenger != null) {
+                        updatePassenger(existingPassenger, pvo);
                         messagePassengers.add(existingPassenger);
-                        for (DocumentVo dvo : pvo.getDocuments()) {
-                            Document existingDoc = docDao.findByDocumentNumberAndPassenger(dvo.getDocumentNumber(), existingPassenger);
-                            if (existingDoc == null) {
-                                existingPassenger.addDocument(utils.createNewDocument(dvo));
-                            } else {
-                                utils.updateDocument(dvo, existingDoc);
-                            }                        
-                        }
+                        existingPassengers.add(pvo);
                     }
                 }
+                
+            } else {
+                Flight newFlight = utils.createNewFlight(fvo);
+                messageFlights.add(newFlight);
+            }
+        }
+               
+        // create pax
+        for (PassengerVo pvo : passengers) {
+            if (existingPassengers.contains(pvo)) {
+                continue;
+            }
+            
+            Passenger p = utils.createNewPassenger(pvo);
+            for (DocumentVo dvo : pvo.getDocuments()) {
+                p.addDocument(utils.createNewDocument(dvo));
+            }
+            passengerDao.save(p);
+            messagePassengers.add(p);
+        }
+        
+        
+        // assoc pax w/ flights
+        for (Flight f : messageFlights) {
+            for (Passenger p : messagePassengers) {
+                f.addPassenger(p);
             }
         }
     }
 
+    private void updatePassenger(Passenger existingPassenger, PassengerVo pvo) throws ParseException {
+        utils.updatePassenger(pvo, existingPassenger);
+        for (DocumentVo dvo : pvo.getDocuments()) {
+            Document existingDoc = docDao.findByDocumentNumberAndPassenger(dvo.getDocumentNumber(), existingPassenger);
+            if (existingDoc == null) {
+                existingPassenger.addDocument(utils.createNewDocument(dvo));
+            } else {
+                utils.updateDocument(dvo, existingDoc);
+            }                        
+        }
+    }
+    
     /**
      * TODO: update how we find passengers here, use document ,etc
      */
