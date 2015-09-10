@@ -23,6 +23,7 @@ import java.util.Set;
  * Duplicates are also removed in the construction process.
  * 
  * @author GTAS3 (AB)
+ * @deprecated
  *
  */
 public class WatchlistRequestBuilder {

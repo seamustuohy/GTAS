@@ -31,9 +31,9 @@ import java.util.Set;
 
 /**
  * Rule Engine Request Builder constructs Rule Engine execution requests from
- * APIS and PNR messages. The constructed request contains all objects (e.g.,
+ * APIS and PNR messages. The constructed request contains all entities (e.g.,
  * passenger, flight) associated with the APIS and PNR messages supplied.
- * Duplicates are also removed in the construction process.
+ * Duplicate entities are removed in the construction process.
  * 
  * @author GTAS3 (AB)
  *
@@ -49,6 +49,8 @@ public class RuleEngineRequestBuilder {
 	private final Set<Long> creditCardIdSet;
 	private final Set<Long> frequentFlyerIdSet;
 	private final Set<Long> travelAgencyIdSet;
+	
+	private final Set<PassengerFlightTuple> passengerFlightSet;
 
 	private RuleServiceRequestType requestType;
 
@@ -63,16 +65,28 @@ public class RuleEngineRequestBuilder {
 		this.passengerLinkSet = new HashSet<PnrPassengerLink>();
 		this.phoneIdSet = new HashSet<Long>();
 		this.travelAgencyIdSet = new HashSet<Long>();
-
+        this.passengerFlightSet = new HashSet<PassengerFlightTuple>();
+        
 		this.requestType = null;
 	}
-
+	
+    /**
+     * Builds and returns the request object.
+     * @return the request object.
+     */
 	public RuleServiceRequest build() {
 		return new BasicRuleServiceRequest(requestObjectList, this.requestType);
 	}
 
 	/**
-	 * Adds an Apis Message.
+	 * @return the passengerFlightSet
+	 */
+	public Set<PassengerFlightTuple> getPassengerFlightSet() {
+		return passengerFlightSet;
+	}
+
+	/**
+	 * Adds an Apis Message and its associated entities.
 	 * 
 	 * @param apisMessage
 	 *            the message to add.
@@ -90,7 +104,7 @@ public class RuleEngineRequestBuilder {
 	}
 
 	/**
-	 * Adds a PNR message and its associated components.
+	 * Adds a PNR message and its associated entities.
 	 * 
 	 * @param pnrMessage
 	 *            the message to add.
@@ -111,6 +125,15 @@ public class RuleEngineRequestBuilder {
 			addPassengerObjects(pnr, pnr.getPassengers());
 
 			addTravelAgencyObject(pnr, pnr.getAgency());
+			
+			// add the passenger flight tuples
+			if(pnr.getFlights() != null && pnr.getPassengers() != null){
+				for(Flight flight:pnr.getFlights()){
+					for(Passenger passenger:pnr.getPassengers()){
+						passengerFlightSet.add(new PassengerFlightTuple(passenger, flight));
+					}
+				}
+			}
 		}
 		if (this.requestType == null
 				|| this.requestType == RuleServiceRequestType.PNR_MESSAGE) {
@@ -140,6 +163,12 @@ public class RuleEngineRequestBuilder {
 				}
 				if (addAssociatedPassengers) {
 					addPassengerObjects(null, flight.getPassengers());
+					// add the passenger flight tuples
+					if(flight.getPassengers() != null){
+						for(Passenger passenger:flight.getPassengers()){
+							passengerFlightSet.add(new PassengerFlightTuple(passenger, flight));
+						}
+					}
 				}
 			}
 		}

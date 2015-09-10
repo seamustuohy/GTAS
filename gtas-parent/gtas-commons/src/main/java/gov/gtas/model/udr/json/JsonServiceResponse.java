@@ -19,6 +19,9 @@ public class JsonServiceResponse implements Serializable {
 	public static final String SUCCESS_RESPONSE = "SUCCESS";
 	public static final String FAILURE_RESPONSE = "FAILED";
 
+	public static final String ATTR_ERROR_DETAIL = "ErrorDetail";
+	public static final String ATTR_ERROR_CODE = "ErrorCode";
+
 	private String status;
 	private String serviceName;
 	private String request;
@@ -38,6 +41,18 @@ public class JsonServiceResponse implements Serializable {
 		this.request = request;
 		this.message = message;
 		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();
+	}
+	/**
+	 * Constructor for error response.
+	 * @param request
+	 * @param message
+	 */
+	public JsonServiceResponse(String errorCode, String message, String[] errorDetail){
+		this.status = FAILURE_RESPONSE;
+		this.message = message;
+		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();
+		responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_CODE, errorCode));
+		responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_DETAIL, errorDetail));
 	}
 	/**
 	 * Fetches the value of an attribute by name.
