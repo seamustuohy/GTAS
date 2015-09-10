@@ -40,10 +40,6 @@ public class RuleServiceConfig {
 	@Resource
 	private Environment env;
 
-	@Autowired
-	@Value("${some.interesting.property}")
-	private String someInterestingProperty;
-
 	@Bean(name = "cacheManager")
 	HazelcastCacheManager hazelcastcacheManager() throws Exception {
 		return new HazelcastCacheManager(hazelcastInstance());
