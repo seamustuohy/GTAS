@@ -3,6 +3,7 @@ package gov.gtas.parsers.edifact;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -69,11 +70,19 @@ public class EdifactLexer {
         return msg.substring(start, end);
     }
     
+    public static String prettyPrint(List<Segment> segments) {
+        StringBuffer buff = new StringBuffer();
+        for (Segment s : segments) {
+            buff.append(s.getText()).append("\n");
+        }
+        return buff.toString();
+    }
+    
     public LinkedList<Segment> tokenize(String msg) throws ParseException {
         if (StringUtils.isEmpty(msg)) {
             return null;
         }
-        msg = preprocessMessage(msg);
+        msg = ParseUtils.convertToSingleLine(msg).toUpperCase();
         
         UNA una = getUnaSegment(msg);
         SegmentTokenizer segmentTokenizer = new SegmentTokenizer(una);
@@ -97,18 +106,5 @@ public class EdifactLexer {
         }
         
         return segments;
-    }
-    
-    /**
-     * Strip any extraneous header or trailer info, make sure the file is
-     * upper case text only.
-     * 
-     * Messages must be transmitted as a continuous bit stream. "Lines" have no
-     * meaning; there is no such thing as a "maximum" or "minimum" segment
-     * length, other than that specified in the segment definitions.
-     */
-    private String preprocessMessage(String msg) {
-        String txt = ParseUtils.stripStxEtxHeaderAndFooter(msg);
-        return ParseUtils.convertToSingleLine(txt).toUpperCase();
     }
 }

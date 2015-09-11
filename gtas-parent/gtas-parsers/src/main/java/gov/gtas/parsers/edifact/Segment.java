@@ -16,6 +16,7 @@ public class Segment {
     protected static final Logger logger = LoggerFactory.getLogger(Segment.class);
 
     private String name;
+    private String text;
     private List<Composite> composites;
 
     @SuppressWarnings("unused")
@@ -40,6 +41,14 @@ public class Segment {
 
     public String getName() {
         return this.name;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public List<Composite> getComposites() {

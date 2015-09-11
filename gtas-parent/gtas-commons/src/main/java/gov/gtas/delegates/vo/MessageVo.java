@@ -6,17 +6,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class MessageVo {
-    private byte[] raw;
+    private String raw;
     private String hashCode;
     private String transmissionSource;
     private Date transmissionDate;
     private String messageType;
     private String version;
     
-    public byte[] getRaw() {
+    public String getRaw() {
         return raw;
     }
-    public void setRaw(byte[] raw) {
+    public void setRaw(String raw) {
         this.raw = raw;
     }
     public String getHashCode() {

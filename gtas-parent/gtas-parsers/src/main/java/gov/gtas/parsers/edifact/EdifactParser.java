@@ -73,6 +73,7 @@ public abstract class EdifactParser <T extends MessageVo> {
         }
         String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
         this.parsedMessage.setHashCode(md5);
+        this.parsedMessage.setRaw(EdifactLexer.prettyPrint(this.segments));
         
         parseHeader();
         parsePayload();

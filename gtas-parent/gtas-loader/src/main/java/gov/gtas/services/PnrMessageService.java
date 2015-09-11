@@ -23,7 +23,9 @@ import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrUtils;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
+import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.PnrRepository;
+import gov.gtas.util.LobUtils;
 
 @Service
 public class PnrMessageService implements MessageService {
@@ -51,7 +53,9 @@ public class PnrMessageService implements MessageService {
             e.printStackTrace();
             return new ArrayList<>();
         }
-        String message = new String(raw, StandardCharsets.US_ASCII);
+        
+        String tmp = new String(raw, StandardCharsets.US_ASCII);        
+        String message = ParseUtils.stripStxEtxHeaderAndFooter(tmp);
         return PnrUtils.getPnrs(message);
     }
     
@@ -65,7 +69,8 @@ public class PnrMessageService implements MessageService {
         try {
             vo = parser.parse(message);
             loaderRepo.checkHashCode(vo.getHashCode());
-            
+            this.pnr.setRaw(LobUtils.createClob(vo.getRaw()));
+
             this.pnr.setStatus(MessageStatus.PARSED);
             this.pnr.setHashCode(vo.getHashCode());            
             EdifactMessage em = new EdifactMessage();

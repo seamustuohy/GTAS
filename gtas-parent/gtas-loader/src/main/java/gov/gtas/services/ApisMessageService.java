@@ -24,7 +24,9 @@ import gov.gtas.parsers.paxlst.ApisMessageVo;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
 import gov.gtas.parsers.util.FileUtils;
+import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.util.LobUtils;
 
 @Service
 public class ApisMessageService implements MessageService {
@@ -48,7 +50,9 @@ public class ApisMessageService implements MessageService {
             e.printStackTrace();
             return new ArrayList<>();
         }
-        String message = new String(raw, StandardCharsets.US_ASCII);
+        
+        String tmp = new String(raw, StandardCharsets.US_ASCII);        
+        String message = ParseUtils.stripStxEtxHeaderAndFooter(tmp);
         return Arrays.asList(message);
     }
     
@@ -69,6 +73,7 @@ public class ApisMessageService implements MessageService {
     
             vo = parser.parse(message);
             loaderRepo.checkHashCode(vo.getHashCode());
+            this.apisMessage.setRaw(LobUtils.createClob(vo.getRaw()));
 
             this.apisMessage.setStatus(MessageStatus.PARSED);
             this.apisMessage.setHashCode(vo.getHashCode());
