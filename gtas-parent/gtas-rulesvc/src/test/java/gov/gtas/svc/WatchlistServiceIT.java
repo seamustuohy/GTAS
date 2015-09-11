@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.Status;
 import gov.gtas.enumtype.WatchlistEditEnum;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.Role;
@@ -76,7 +77,7 @@ public class WatchlistServiceIT {
 		User user = createUser();
 		WatchlistSpec spec = SampleDataGenerator.newWlWith2Items(WL_NAME1);
 		JsonServiceResponse resp = wlService.createOrUpdateWatchlist(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		List<ServiceResponseDetailAttribute> respDetails = resp.getResponseDetails();
 		assertEquals(2, respDetails.size());
 		Watchlist wl = wlPersistenceService.findByName(WL_NAME1);
@@ -115,7 +116,7 @@ public class WatchlistServiceIT {
 		User user = createUser();
 		WatchlistSpec spec = SampleDataGenerator.newWlWith2Items(WL_NAME1);
 		JsonServiceResponse resp = wlService.createOrUpdateWatchlist(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		spec = wlService.fetchWatchlist(WL_NAME1);
 		assertNotNull(spec);
 		List<WatchlistItemSpec> items = spec.getWatchlistItems();
@@ -125,7 +126,7 @@ public class WatchlistServiceIT {
 		items.get(1).setAction(WatchlistEditEnum.D.getOperationName());
 
 		resp = wlService.createOrUpdateWatchlist(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 
 		List<WatchlistItem> updItems = wlPersistenceService.findWatchlistItems(WL_NAME1);
 		assertEquals(1, updItems.size());
@@ -172,7 +173,7 @@ public class WatchlistServiceIT {
 		User user = createUser();
 		WatchlistSpec spec = SampleDataGenerator.newWlWith2Items(WL_NAME1);
 		JsonServiceResponse resp = wlService.createOrUpdateWatchlist(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		spec = wlService.fetchWatchlist(WL_NAME1);
 		assertNotNull(spec);
 		List<WatchlistItemSpec> items = spec.getWatchlistItems();
@@ -195,7 +196,7 @@ public class WatchlistServiceIT {
 		User user = createUser();
 		WatchlistSpec spec = SampleDataGenerator.newWlWith2Items(WL_NAME1);
 		JsonServiceResponse resp = wlService.createOrUpdateWatchlist(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		spec = wlService.fetchWatchlist(WL_NAME1);
 		assertNotNull(spec);
 		List<WatchlistItemSpec> items = spec.getWatchlistItems();
@@ -217,9 +218,9 @@ public class WatchlistServiceIT {
 		User user = createUser();
 		WatchlistSpec spec = SampleDataGenerator.newWlWith2Items(WL_NAME1);
 		JsonServiceResponse resp = wlService.createOrUpdateWatchlist(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		resp = wlService.activateAllWatchlists(WL_KB_NAME);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		String drl = ruleManagementService.fetchDrlRulesFromKnowledgeBase(WL_KB_NAME);
 		assertNotNull(drl);
 	}

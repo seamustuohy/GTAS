@@ -10,6 +10,7 @@ import static org.junit.Assert.fail;
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.constant.RuleConstants;
 import gov.gtas.enumtype.ConditionEnum;
+import gov.gtas.enumtype.Status;
 import gov.gtas.error.ErrorUtils;
 import gov.gtas.model.Role;
 import gov.gtas.model.User;
@@ -77,7 +78,7 @@ public class UdrServiceIT {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 	}
 	@Test
 	@Transactional
@@ -85,7 +86,7 @@ public class UdrServiceIT {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		try{
 			udrService.createUdr(user.getUserId(), spec);
 			fail("Expecting Exception");
@@ -105,7 +106,7 @@ public class UdrServiceIT {
 		newterms.add(terms.get(0));
 		details.setRules(newterms);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		Long id = Long.valueOf(resp.findResponseDetailValue(RuleConstants.UDR_ID_ATTRIBUTE_NAME));
 		assertNotNull("The saved ID is null",id);
 		UdrRule rule = ruleService.findById(id);
@@ -131,7 +132,7 @@ public class UdrServiceIT {
 		newterms.add(terms.get(0));
 		details.setRules(newterms);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		Long id = Long.valueOf(resp.findResponseDetailValue(RuleConstants.UDR_ID_ATTRIBUTE_NAME));
 		assertNotNull("The saved ID is null",id);
 		UdrRule rule = ruleService.findById(id);
@@ -153,9 +154,9 @@ public class UdrServiceIT {
 		UdrSpecification spec1 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		UdrSpecification spec2 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE2, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec1);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		resp = udrService.createUdr(user.getUserId(), spec2);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		List<JsonUdrListElement> listResp = udrService.fetchUdrSummaryList(user.getUserId());
 		assertNotNull(listResp);
 		assertEquals(2, listResp.size());
@@ -167,7 +168,7 @@ public class UdrServiceIT {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		assertNotNull(resp.getResponseDetails());
 		Long id = Long.valueOf((String)(resp.getResponseDetails().get(0).getAttributeValue()));       
 		assertNotNull(id);
@@ -184,7 +185,7 @@ public class UdrServiceIT {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		assertNotNull(resp.getResponseDetails());
 		String title = (String)resp.getResponseDetails().get(1).getAttributeValue();       
 		assertEquals(RULE_TITLE1, title);
@@ -200,7 +201,7 @@ public class UdrServiceIT {
 		
 		//create Udr Rule
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		assertNotNull(resp.getResponseDetails());
 		String title = (String)resp.getResponseDetails().get(1).getAttributeValue();       
 		assertEquals(RULE_TITLE1, title);
@@ -233,7 +234,7 @@ public class UdrServiceIT {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		assertNotNull(resp.getResponseDetails());
 		String title = (String)resp.getResponseDetails().get(1).getAttributeValue();       
 		assertEquals(RULE_TITLE1, title);
@@ -252,11 +253,11 @@ public class UdrServiceIT {
 		UdrSpecification spec1 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		UdrSpecification spec2 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE2, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec1);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		Long id = Long.valueOf((String)(resp.getResponseDetails().get(0).getAttributeValue()));       
 
 		resp = udrService.createUdr(user.getUserId(), spec2);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		List<JsonUdrListElement> listResp = udrService.fetchUdrSummaryList(user.getUserId());
 		assertNotNull(listResp);
 		assertEquals(2, listResp.size());
@@ -273,7 +274,7 @@ public class UdrServiceIT {
 		User user = createUser();
 		UdrSpecification spec1 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec1);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		Long id = Long.valueOf((String)(resp.getResponseDetails().get(0).getAttributeValue()));       
 
 		List<JsonUdrListElement> listResp = udrService.fetchUdrSummaryList(user.getUserId());
@@ -287,7 +288,7 @@ public class UdrServiceIT {
 		assertEquals(0, listResp.size());
 
 		resp = udrService.createUdr(user.getUserId(), spec1);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		Long id2 = Long.valueOf((String)(resp.getResponseDetails().get(0).getAttributeValue()));  
 		assertTrue(id.longValue() != id2.longValue());
 		
@@ -301,7 +302,7 @@ public class UdrServiceIT {
 		User user = createUser();
 		UdrSpecification spec1 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1, RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec1);
-		assertEquals(JsonServiceResponse.SUCCESS_RESPONSE, resp.getStatus());
+		assertEquals(Status.SUCCESS, resp.getStatus());
 		Long id = Long.valueOf((String)(resp.getResponseDetails().get(0).getAttributeValue()));       
         UdrRule rule = ruleService.findById(id);
         assertNotNull("Could not fetch saved UDR",rule);

@@ -1,29 +1,33 @@
 package gov.gtas.controller;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.junit.Assert.*;
-import javax.transaction.Transactional;
-
 import gov.gtas.common.WebAppConfig;
-import gov.gtas.controller.UdrManagementController;
 import gov.gtas.controller.config.TestMvcRestServiceWebConfig;
 import gov.gtas.controller.util.UdrBuilderDataUtils;
-import gov.gtas.model.udr.json.JsonServiceResponse;
+import gov.gtas.enumtype.Status;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.UdrService;
+
+import javax.transaction.Transactional;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -88,12 +92,13 @@ public class UdrBuilderControllerIT {
 
 	@Test
 	@Transactional
+	@WithUserDetails(TEST_USER)
 	public void testGetUdrList() throws Exception {
 		UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
 		udrService.createUdr(TEST_USER, udrSpec);
         udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE2, TEST_DESCRIPTION, TEST_USER);
 		udrService.createUdr(TEST_USER, udrSpec);
-		mockMvc.perform(get("/gtas/udr/list/" + TEST_USER))
+		mockMvc.perform(get("/gtas/udr"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON+";charset=UTF-8"))
 				.andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(2))))
@@ -103,19 +108,19 @@ public class UdrBuilderControllerIT {
 	}
 	@Test
 	@Transactional
+	@WithUserDetails(TEST_USER)
 	public void testDeleteUdr() throws Exception {
 		UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
 		udrService.createUdr(TEST_USER, udrSpec);
 		udrSpec = udrService.fetchUdr(TEST_USER, TEST_UDR_TITLE);
 		assertTrue(udrSpec.getSummary().isEnabled());
 		Long id = udrSpec.getId();
-		mockMvc.perform(delete("/gtas/udr/" + TEST_USER+"/"+id))
+		mockMvc.perform(delete("/gtas/udr/"+id))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(
 						jsonPath("$.status",
-								is(JsonServiceResponse.SUCCESS_RESPONSE)))
-				.andExpect(jsonPath("$.request", is("Delete UDR")))
+								is(Status.SUCCESS.toString())))
 				.andExpect(jsonPath("$.responseDetails", hasSize(2)))
 				.andExpect(
 						jsonPath("$.responseDetails[0].attributeName", is("id")))

@@ -3,6 +3,7 @@ package gov.gtas.svc.util;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.constant.RuleConstants;
+import gov.gtas.enumtype.Status;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 
@@ -22,9 +23,7 @@ public class UdrServiceJsonResponseHelper {
 		JsonServiceResponse resp = null;
 		if (success) {
 			resp = new JsonServiceResponse(
-					JsonServiceResponse.SUCCESS_RESPONSE,
-					"UDR Service",
-					op,
+					Status.SUCCESS,
 					String.format(
 							op
 									+ " on UDR Rule with title='%s' and ID='%s' was successful.",
@@ -38,9 +37,7 @@ public class UdrServiceJsonResponseHelper {
 		} else {
 			if (rule != null) {
 				resp = new JsonServiceResponse(
-						JsonServiceResponse.FAILURE_RESPONSE,
-						"UDR Service",
-						op,
+						Status.SUCCESS,
 						String.format(
 								op
 										+ " on UDR Rule with title='%s' and ID='%s' failed.",
@@ -53,8 +50,7 @@ public class UdrServiceJsonResponseHelper {
 					msg = op + " failed " + failureReason + ".";
 				}
 				resp = new JsonServiceResponse(
-						JsonServiceResponse.FAILURE_RESPONSE, "UDR Service",
-						op, msg);
+						Status.FAILURE,  msg);
 			}
 
 		}

@@ -3,6 +3,7 @@ package gov.gtas.controller;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.constants.Constants;
+import gov.gtas.enumtype.Status;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
@@ -70,8 +71,7 @@ public class WatchlistManagementController {
 	 * @return the JSON response object containing the rules.
 	 */
 	private JsonServiceResponse createDrlRulesResponse(String rules){
-		JsonServiceResponse resp = new JsonServiceResponse(JsonServiceResponse.SUCCESS_RESPONSE, 
-				"Watchlist Service", "fetchDefaultDrlRulesFromKnowledgeBase", "Drools rules fetched successfully");
+		JsonServiceResponse resp = new JsonServiceResponse(Status.SUCCESS, "Drools rules fetched successfully");
 		String[] lines = rules.split("\n");
 		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute("DRL Rules", lines));
 		return resp;

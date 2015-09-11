@@ -2,12 +2,14 @@ package gov.gtas.controller;
 
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constants.Constants;
+import gov.gtas.enumtype.Status;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
+import gov.gtas.security.service.GtasSecurityUtils;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.UdrService;
 import gov.gtas.util.DateCalendarUtils;
@@ -33,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping(Constants.UDR_ROOT)
+//@RequestMapping(Constants.UDR_ROOT)
 public class UdrManagementController {
 	/*
 	 * The logger for the UdrManagementController
@@ -50,22 +52,23 @@ public class UdrManagementController {
 	@RequestMapping(value = Constants.UDR_GET_BY_AUTHOR_TITLE, method = RequestMethod.GET)
 	public UdrSpecification getUDR(@PathVariable String authorId,
 			@PathVariable String title) {
-		System.out.println("******** user =" + authorId + ", title=" + title);
+		logger.debug("******** user =" + authorId + ", title=" + title);
 		UdrSpecification resp = udrService.fetchUdr(authorId, title);
 		return resp;
 	}
 
 	@RequestMapping(value = Constants.UDR_GET_BY_ID, method = RequestMethod.GET)
 	public UdrSpecification getUDRById(@PathVariable Long id) {
-		System.out.println("******** Received GET UDR request for id=" + id);
+		logger.debug("******** Received GET UDR request for id=" + id);
 		UdrSpecification resp = udrService.fetchUdr(id);
 		return resp;
 	}
 
 	@RequestMapping(value = Constants.UDR_GETALL, method = RequestMethod.GET)
 	public List<JsonUdrListElement> getUDRList(
-			@PathVariable String userId) {
-		System.out.println("******** user =" + userId);
+			/*@PathVariable String userId*/) {
+        String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.debug("******** user =" + userId);
 		List<JsonUdrListElement> resp = udrService.fetchUdrSummaryList(userId);
 		return resp;
 	}
@@ -86,18 +89,17 @@ public class UdrManagementController {
 	 * @return the JSON response object containing the rules.
 	 */
 	private JsonServiceResponse createDrlRulesResponse(String rules){
-		System.out.println("******* The rules:\n"+rules+"\n***************\n");
-		JsonServiceResponse resp = new JsonServiceResponse(JsonServiceResponse.SUCCESS_RESPONSE, 
-				"Rule Management Service", "fetchDefaultDrlRulesFromKnowledgeBase", "Drools rules fetched successfully");
+		logger.debug("******* The rules:\n"+rules+"\n***************\n");
+		JsonServiceResponse resp = new JsonServiceResponse(Status.SUCCESS, "Drools rules fetched successfully");
 		String[] lines = rules.split("\n");
 		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute("DRL Rules", lines));
 		return resp;
 	}
 	@RequestMapping(value = Constants.UDR_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse createUDR(
-			@PathVariable String userId, @RequestBody UdrSpecification inputSpec) {
-
-		logger.info("******** Received UDR Create request by user =" + userId);
+			/*@PathVariable String userId,*/ @RequestBody UdrSpecification inputSpec) {
+        String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.debug("******** Received UDR Create request by user =" + userId);
 		if (inputSpec == null) {
 			throw new CommonServiceException(
 					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
@@ -139,9 +141,10 @@ public class UdrManagementController {
 	}
 
 	@RequestMapping(value = Constants.UDR_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonServiceResponse updateUDR(
-			@PathVariable String userId, @RequestBody UdrSpecification inputSpec) {
-		logger.info("******** Received UDR Update request by user =" + userId);
+	public JsonServiceResponse updateUDR( 
+			/*@PathVariable String userId,*/ @RequestBody UdrSpecification inputSpec) {
+        String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.debug("******** Received UDR Update request by user =" + userId);
 		
 		/*
 		 * The Jackson JSON parser assumes that the time zone is GMT if no
@@ -162,8 +165,9 @@ public class UdrManagementController {
 
 	@RequestMapping(value = Constants.UDR_DELETE, method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse deleteUDR(
-			@PathVariable String userId, @PathVariable Long id) {
-		logger.info("******** Received UDR Delete request by user =" + userId
+			/*@PathVariable String userId,*/ @PathVariable Long id) {
+        String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.debug("******** Received UDR Delete request by user =" + userId
 				+ " for " + id);
 		JsonServiceResponse resp = udrService.deleteUdr(userId, id);
 

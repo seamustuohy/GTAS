@@ -15,15 +15,15 @@ public final class Constants {
 	
 	//UDR URI
 	public static final String UDR_ROOT = "/udr";
-	public static final String UDR_GET_BY_AUTHOR_TITLE = "/{authorId}/{title}";
-	public static final String UDR_GET_BY_ID = "/get/{id}";
-	public static final String UDR_GETALL = "/list/{userId}";
-	public static final String UDR_GETDRL = "/drl";
-	public static final String UDR_GETDRL_BY_NAME = "/drl/{kbName}";
-	public static final String UDR_POST = "/{userId}";
-	public static final String UDR_PUT = "/{userId}";
-	public static final String UDR_DELETE = "/{userId}/{id}";
-	public static final String UDR_TEST = "/testUdr";
+	public static final String UDR_GET_BY_AUTHOR_TITLE = "/udr/{authorId}/{title}";
+	public static final String UDR_GET_BY_ID = "/udr/{id}";
+	public static final String UDR_GETALL = "/udr";
+	public static final String UDR_GETDRL = "/udr_drl";
+	public static final String UDR_GETDRL_BY_NAME = "/udr_drl/{kbName}";
+	public static final String UDR_POST = "/udr";
+	public static final String UDR_PUT = "/udr";
+	public static final String UDR_DELETE = "/udr/{id}";
+	public static final String UDR_TEST = "/udr_test";
 
 	//Targeting URI
 	public static final String TARGET_ONE_APIS_MSG = "/apis/{id}";

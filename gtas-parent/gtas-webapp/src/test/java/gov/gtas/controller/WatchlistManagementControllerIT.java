@@ -1,23 +1,24 @@
 package gov.gtas.controller;
 
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.hamcrest.Matchers.*;
-
-import javax.transaction.Transactional;
-
 import gov.gtas.common.WebAppConfig;
 import gov.gtas.controller.config.TestMvcRestServiceWebConfig;
+import gov.gtas.enumtype.Status;
 import gov.gtas.enumtype.WatchlistEditEnum;
-import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.WatchlistService;
 import gov.gtas.util.SampleDataGenerator;
+
+import javax.transaction.Transactional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -118,8 +119,7 @@ public class WatchlistManagementControllerIT {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(
 						jsonPath("$.status",
-								is(JsonServiceResponse.SUCCESS_RESPONSE)))
-				.andExpect(jsonPath("$.request", is("Create/Update")))
+								is(Status.SUCCESS.toString())))
 				.andExpect(jsonPath("$.responseDetails", hasSize(2)))
 				.andExpect(
 						jsonPath("$.responseDetails[0].attributeName", is("id")))
@@ -154,9 +154,7 @@ public class WatchlistManagementControllerIT {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(
 						jsonPath("$.status",
-								is(JsonServiceResponse.SUCCESS_RESPONSE)))
-				.andExpect(jsonPath("$.request", is("Create/Update")))
-				.andExpect(jsonPath("$.responseDetails", hasSize(2)))
+								is(Status.SUCCESS.toString())))
 				.andExpect(
 						jsonPath("$.responseDetails[0].attributeName", is("id")))
 				.andExpect(

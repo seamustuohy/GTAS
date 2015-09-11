@@ -110,13 +110,13 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 		
       http
         .authorizeRequests()
-        .antMatchers("/**/*").permitAll()
-        .antMatchers(Constants.LOGIN_PAGE).permitAll()
-        .antMatchers(Constants.HOME_PAGE).hasAnyAuthority(Constants.MANAGE_RULES_ROLE,Constants.MANAGE_QUERIES_ROLE,Constants.VIEW_FLIGHT_PASSENGERS_ROLE,Constants.MANAGE_WATCHLIST_ROLE,Constants.ADMIN_ROLE)
-		.antMatchers("/travelers").hasAnyAuthority(Constants.MANAGE_RULES_ROLE,Constants.MANAGE_QUERIES_ROLE,Constants.VIEW_FLIGHT_PASSENGERS_ROLE,Constants.MANAGE_WATCHLIST_ROLE,Constants.ADMIN_ROLE)
-		.antMatchers("/query**").hasAnyAuthority(Constants.MANAGE_QUERIES_ROLE, Constants.ADMIN_ROLE)
-		.antMatchers("/index.html").denyAll()//.access("/home.action")//
-		.anyRequest().authenticated()
+	        .antMatchers("/**/*").permitAll()
+	        .antMatchers(Constants.LOGIN_PAGE).permitAll()
+	        .antMatchers(Constants.HOME_PAGE).hasAnyAuthority(Constants.MANAGE_RULES_ROLE,Constants.MANAGE_QUERIES_ROLE,Constants.VIEW_FLIGHT_PASSENGERS_ROLE,Constants.MANAGE_WATCHLIST_ROLE,Constants.ADMIN_ROLE)
+			.antMatchers("/travelers").hasAnyAuthority(Constants.MANAGE_RULES_ROLE,Constants.MANAGE_QUERIES_ROLE,Constants.VIEW_FLIGHT_PASSENGERS_ROLE,Constants.MANAGE_WATCHLIST_ROLE,Constants.ADMIN_ROLE)
+			.antMatchers("/query**").hasAnyAuthority(Constants.MANAGE_QUERIES_ROLE, Constants.ADMIN_ROLE)
+			.antMatchers("/index.html").denyAll()//.access("/home.action")//
+			.anyRequest().authenticated()
         .and()
         .csrf().disable()
         .formLogin()
@@ -129,6 +129,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         .defaultSuccessUrl(Constants.HOME_PAGE)
         .loginPage(Constants.LOGIN_PAGE)
         .and().logout().logoutUrl(Constants.LOGOUT_MAPPING).logoutSuccessUrl(Constants.LOGIN_PAGE).permitAll()
+        .and().httpBasic()
        	;
       
       	// Map any specific URL pattern Exception Handling here 
