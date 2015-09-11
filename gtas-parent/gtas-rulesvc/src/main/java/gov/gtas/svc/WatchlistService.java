@@ -1,6 +1,6 @@
 package gov.gtas.svc;
 
-import gov.gtas.model.udr.json.JsonServiceResponse;
+import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
 
 import java.util.List;

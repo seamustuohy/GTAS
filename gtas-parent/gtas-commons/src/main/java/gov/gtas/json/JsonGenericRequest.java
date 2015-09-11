@@ -1,4 +1,4 @@
-package gov.gtas.model.udr.json;
+package gov.gtas.json;
 
 import java.io.Serializable;
 import java.util.Collections;

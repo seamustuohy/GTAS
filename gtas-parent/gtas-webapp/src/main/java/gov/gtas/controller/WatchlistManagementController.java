@@ -5,7 +5,7 @@ import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.constants.Constants;
 import gov.gtas.enumtype.Status;
 import gov.gtas.error.CommonServiceException;
-import gov.gtas.model.udr.json.JsonServiceResponse;
+import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.WatchlistService;

@@ -2,7 +2,7 @@ package gov.gtas.svc;
 
 import java.util.List;
 
-import gov.gtas.model.udr.json.JsonServiceResponse;
+import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.UdrSpecification;
 

@@ -4,8 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.constant.RuleConstants;
 import gov.gtas.enumtype.Status;
+import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.json.JsonServiceResponse;
 
 /** 
  * Helper class for the UDR service response generation.

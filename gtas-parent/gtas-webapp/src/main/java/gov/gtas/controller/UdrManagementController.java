@@ -4,7 +4,7 @@ import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constants.Constants;
 import gov.gtas.enumtype.Status;
 import gov.gtas.error.CommonServiceException;
-import gov.gtas.model.udr.json.JsonServiceResponse;
+import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.JsonUdrListElement;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.UdrSpecification;

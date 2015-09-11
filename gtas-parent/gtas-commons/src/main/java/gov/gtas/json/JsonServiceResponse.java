@@ -1,4 +1,4 @@
-package gov.gtas.model.udr.json;
+package gov.gtas.json;
 
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_CODE;
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_DETAIL;

@@ -2,8 +2,8 @@ package gov.gtas.svc.util;
 
 import gov.gtas.constant.RuleConstants;
 import gov.gtas.enumtype.Status;
+import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.udr.KnowledgeBase;
-import gov.gtas.model.udr.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.Watchlist;
 
 import org.apache.commons.lang3.StringUtils;
