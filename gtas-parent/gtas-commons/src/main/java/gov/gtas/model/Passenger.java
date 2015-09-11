@@ -227,16 +227,12 @@ public class Passenger extends BaseEntityAudit {
                 + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result
                 + ((middleName == null) ? 0 : middleName.hashCode());
-        //result = prime * result + ((suffix == null) ? 0 : suffix.hashCode());
-        //result = prime * result + ((title == null) ? 0 : title.hashCode());
         return result;
     }
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        //if (!super.equals(obj))
-            //return false;
         if (getClass() != obj.getClass())
             return false;
         Passenger other = (Passenger) obj;
@@ -267,18 +263,7 @@ public class Passenger extends BaseEntityAudit {
                 return false;
         } else if (!middleName.equals(other.middleName))
             return false;
-        /**
-        if (suffix == null) {
-            if (other.suffix != null)
-                return false;
-        } else if (!suffix.equals(other.suffix))
-            return false;
-        if (title == null) {
-            if (other.title != null)
-                return false;
-        } else if (!title.equals(other.title))
-            return false;
-            */
+
         return true;
     }
 }

@@ -89,8 +89,6 @@ public class Document extends BaseEntity {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!super.equals(obj))
-            return false;
         if (getClass() != obj.getClass())
             return false;
         final Document other = (Document)obj;
