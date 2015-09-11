@@ -1,17 +1,5 @@
 package gov.gtas.svc;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import gov.gtas.bo.CompositeRuleServiceResult;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
@@ -33,7 +21,21 @@ import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PnrRepository;
 import gov.gtas.rule.RuleService;
+import gov.gtas.svc.request.builder.PassengerFlightTuple;
 import gov.gtas.svc.util.TargetingServiceUtils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation of the Targeting Service API.
@@ -245,7 +247,7 @@ public class TargetingServiceImpl implements TargetingService {
 	@Override
 	@Transactional
 	public void updatePnr(Pnr message, MessageStatus messageStatus) {
-	    Pnr pnr = PnrMsgRepository.findOne(message.getId());
+		Pnr pnr = PnrMsgRepository.findOne(message.getId());
 		if (pnr != null) {
 			pnr.setStatus(messageStatus);
 		}
@@ -266,6 +268,9 @@ public class TargetingServiceImpl implements TargetingService {
 			logger.info(("\nTargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> " + ruleExeStatus
 					.getTotalRulesFired()));
 		}
+
+		deleteExistingHitRecords();
+
 		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
 				.getResultList();
 		Iterator<RuleHitDetail> iter = results.iterator();
@@ -275,6 +280,20 @@ public class TargetingServiceImpl implements TargetingService {
 			hitsSummaryList.add(hitsSummary);
 		}
 		hitsSummaryRepository.save(hitsSummaryList);
+	}
+
+	private void deleteExistingHitRecords() {
+		Set<PassengerFlightTuple> passengerFlightTuples = TargetingServiceUtils
+				.getPaxFlightTuples();
+		passengerFlightTuples.forEach(passengerFlightTuple -> {
+			HitsSummary found = hitsSummaryRepository
+					.findByFlightIdAndPassengerId(passengerFlightTuple
+							.getFlight().getId(), passengerFlightTuple
+							.getPassenger().getId());
+			if (found != null) {
+				hitsSummaryRepository.delete(found);
+			}
+		});
 	}
 
 	/**
@@ -294,8 +313,7 @@ public class TargetingServiceImpl implements TargetingService {
 		hitsSummary.setPassengerId(ruleHitDetail.getPassengerId());
 		hitsSummary.setDescription(ruleHitDetail.getDescription());
 		hitsSummary.setTitle(ruleHitDetail.getTitle());
-		if (ruleHitDetail.getFlightId() != null)
-			hitsSummary.setFlightId(ruleHitDetail.getFlightId());
+		hitsSummary.setFlightId(ruleHitDetail.getFlightId());
 		hitsSummary.setCreatedDate(new Date());
 
 		HitDetail hitDetail = new HitDetail();
