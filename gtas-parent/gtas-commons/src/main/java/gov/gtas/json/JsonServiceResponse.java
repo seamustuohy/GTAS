@@ -56,7 +56,9 @@ public class JsonServiceResponse implements Serializable {
 		this.message = message;
 		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();
 		responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_CODE, errorCode));
-		responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_DETAIL, errorDetail));
+		if(errorDetail != null && errorDetail.length > 0){
+		    responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_DETAIL, errorDetail));
+		}
 	}
 	/**
 	 * Fetches the value of an attribute by name.

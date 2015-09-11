@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-//@RequestMapping(Constants.UDR_ROOT)
 public class UdrManagementController {
 	/*
 	 * The logger for the UdrManagementController
@@ -65,8 +64,7 @@ public class UdrManagementController {
 	}
 
 	@RequestMapping(value = Constants.UDR_GETALL, method = RequestMethod.GET)
-	public List<JsonUdrListElement> getUDRList(
-			/*@PathVariable String userId*/) {
+	public List<JsonUdrListElement> getUDRList() {
         String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** user =" + userId);
 		List<JsonUdrListElement> resp = udrService.fetchUdrSummaryList(userId);
@@ -96,8 +94,7 @@ public class UdrManagementController {
 		return resp;
 	}
 	@RequestMapping(value = Constants.UDR_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonServiceResponse createUDR(
-			/*@PathVariable String userId,*/ @RequestBody UdrSpecification inputSpec) {
+	public JsonServiceResponse createUDR(@RequestBody UdrSpecification inputSpec) {
         String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** Received UDR Create request by user =" + userId);
 		if (inputSpec == null) {
@@ -141,8 +138,7 @@ public class UdrManagementController {
 	}
 
 	@RequestMapping(value = Constants.UDR_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonServiceResponse updateUDR( 
-			/*@PathVariable String userId,*/ @RequestBody UdrSpecification inputSpec) {
+	public JsonServiceResponse updateUDR(@RequestBody UdrSpecification inputSpec) {
         String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** Received UDR Update request by user =" + userId);
 		
@@ -164,8 +160,7 @@ public class UdrManagementController {
 	}
 
 	@RequestMapping(value = Constants.UDR_DELETE, method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonServiceResponse deleteUDR(
-			/*@PathVariable String userId,*/ @PathVariable Long id) {
+	public JsonServiceResponse deleteUDR(@PathVariable Long id) {
         String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** Received UDR Delete request by user =" + userId
 				+ " for " + id);

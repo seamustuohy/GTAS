@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -45,6 +46,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @WebAppConfiguration
 @TransactionConfiguration(defaultRollback = true)
 public class WatchlistManagementControllerIT {
+    private static final String TEST_USER = "adelorie";
 	private static final String WL_NAME = "TestWL123";
 	private MockMvc mockMvc;
 
@@ -108,6 +110,7 @@ public class WatchlistManagementControllerIT {
 
 	@Test
 	@Transactional
+	@WithUserDetails(TEST_USER)
 	public void testCreateWl() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mockMvc.perform(
@@ -131,8 +134,9 @@ public class WatchlistManagementControllerIT {
 
 	@Test
 	@Transactional
+	@WithUserDetails(TEST_USER)
 	public void testUpdateDeleteWl() throws Exception {
-		watchlistService.createOrUpdateWatchlist("adelorie",
+		watchlistService.createOrUpdateWatchlist(TEST_USER,
 				SampleDataGenerator.newWlWith2Items(WL_NAME));
 		WatchlistSpec wlSpec = watchlistService.fetchWatchlist(WL_NAME);
 		assertNotNull(wlSpec);
@@ -147,7 +151,7 @@ public class WatchlistManagementControllerIT {
 																	// item
 		ObjectMapper mapper = new ObjectMapper();
 		mockMvc.perform(
-				post("/gtas/wl/adelorie").contentType(
+				post("/gtas/wl/passenger").contentType(
 						MediaType.APPLICATION_JSON).content(
 						mapper.writeValueAsString(wlSpec)))
 				.andExpect(status().isOk())

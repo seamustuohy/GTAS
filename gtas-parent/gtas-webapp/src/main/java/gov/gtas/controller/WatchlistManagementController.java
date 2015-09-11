@@ -7,6 +7,7 @@ import gov.gtas.enumtype.Status;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
+import gov.gtas.security.service.GtasSecurityUtils;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.WatchlistService;
 import gov.gtas.util.SampleDataGenerator;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping(Constants.WL_ROOT)
+//@RequestMapping(Constants.WL_ROOT)
 public class WatchlistManagementController {
 	/*
 	 * The logger for the UdrManagementController
@@ -46,7 +47,7 @@ public class WatchlistManagementController {
 
 	@RequestMapping(value = Constants.WL_GET_BY_NAME, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public WatchlistSpec getWatchlist(@PathVariable String entity, @PathVariable String name) {
-		System.out.println("******** name =" + name);
+		logger.debug("******** name =" + name);
 		WatchlistSpec resp = watchlistService.fetchWatchlist(name);
 		if(resp == null){
 			resp = 	new WatchlistSpec(name, entity);
@@ -79,8 +80,9 @@ public class WatchlistManagementController {
 	//@RequestMapping(value = Constants.WL_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequestMapping(value = Constants.WL_POST, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse createWatchlist(
-			@PathVariable String userId, @RequestBody WatchlistSpec inputSpec) {
+			@PathVariable String entity, @RequestBody WatchlistSpec inputSpec) {
 
+		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.info("******** Received UDR Create request by user =" + userId);
 		if (inputSpec == null) {
 			throw new CommonServiceException(
@@ -98,8 +100,10 @@ public class WatchlistManagementController {
 	//@RequestMapping(value = Constants.WL_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@RequestMapping(value = Constants.WL_PUT, method = RequestMethod.PUT,  produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse updateUDR(
-			@PathVariable String userId, @RequestBody WatchlistSpec inputSpec) {
-		logger.info("******** Received UDR Update request by user =" + userId);
+			@PathVariable String entity, @RequestBody WatchlistSpec inputSpec) {
+
+		String userId = GtasSecurityUtils.fetchLoggedInUserId();
+        logger.info("******** Received UDR Update request by user =" + userId);
 						
 		JsonServiceResponse resp = watchlistService.createOrUpdateWatchlist(userId, inputSpec);
 

@@ -1,6 +1,7 @@
 package gov.gtas.error;
 
 import static gov.gtas.constant.DomainModelConstants.UDR_UNIQUE_CONSTRAINT_NAME;
+import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.error.GtasJsonError;
 
 import org.slf4j.Logger;
@@ -25,65 +26,65 @@ public class WebAppGlobalErrorHandler {
 	
 	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(CommonServiceException.class)
-	public @ResponseBody GtasJsonError handleError(CommonServiceException ex) {
+	public @ResponseBody JsonServiceResponse handleError(CommonServiceException ex) {
 		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
 		ErrorDetails err = errorHandler.processError(ex);
-		return new GtasJsonError(err.getFatalErrorCode(),
-				err.getFatalErrorMessage());
+		return new JsonServiceResponse(err.getFatalErrorCode(),
+				err.getFatalErrorMessage(), null);
 	}
 	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public @ResponseBody GtasJsonError handleError(HttpMessageNotReadableException ex) {
-		return new GtasJsonError(WebappErrorConstants.MALFORMED_JSON_ERROR_CODE,
-				String.format(WebappErrorConstants.MALFORMED_JSON_ERROR_MESSAGE, ex.getMessage()));		
+	public @ResponseBody JsonServiceResponse handleError(HttpMessageNotReadableException ex) {
+		return new JsonServiceResponse(WebappErrorConstants.MALFORMED_JSON_ERROR_CODE,
+				String.format(WebappErrorConstants.MALFORMED_JSON_ERROR_MESSAGE, ex.getMessage()), null);		
 	}
 
 	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(JpaSystemException.class)
-	public @ResponseBody GtasJsonError handleError(JpaSystemException ex) {
+	public @ResponseBody JsonServiceResponse handleError(JpaSystemException ex) {
 		if(ErrorUtils.isExceptionOfType(ex, "SQLGrammarException")){
 		   logger.error("GTAS Webapp:SQLGrammarException - "+ex.getMessage());
-			return new GtasJsonError("DB_ERROR",
+			return new JsonServiceResponse("DB_ERROR",
 					"There was a data base Error:"
-							+ ex.getMessage());
+							+ ex.getMessage(), null);
 
 		} else if(ErrorUtils.isConstraintViolationException(ex, UDR_UNIQUE_CONSTRAINT_NAME)){
 			logger.error("GTAS Webapp:ConstraintViolationException - "+ex.getMessage());
-			return new GtasJsonError("DUPLICATE_UDR_TITLE",
+			return new JsonServiceResponse("DUPLICATE_UDR_TITLE",
 					"This author has already created a UDR with this title:"
-							+ ex.getMessage());
+							+ ex.getMessage(), null);
 		}
 		
 		ex.printStackTrace();
-		return new GtasJsonError("UNKNOWN_DB_ERROR",
+		return new JsonServiceResponse("UNKNOWN_DB_ERROR",
 				"There was a backend DB error:"
-						+ ex.getMessage());
+						+ ex.getMessage(), null);
 		
 	}
 	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
     @ExceptionHandler(TypeMismatchException.class)
-	public @ResponseBody GtasJsonError handleError(TypeMismatchException ex) {
+	public @ResponseBody JsonServiceResponse handleError(TypeMismatchException ex) {
 		ex.printStackTrace();
-		return new GtasJsonError("INVALID_INPUT_URL",
+		return new JsonServiceResponse("INVALID_INPUT_URL",
 		"The REST path variable could not be parsed:"
-				+ ex.getMessage());
+				+ ex.getMessage(), null);
 	}
 	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	public @ResponseBody GtasJsonError handleError(HttpRequestMethodNotSupportedException ex) {
+	public @ResponseBody JsonServiceResponse handleError(HttpRequestMethodNotSupportedException ex) {
 		ex.printStackTrace();
-		return new GtasJsonError("INVALID_INPUT_URL_OR_UNKNOWN_METHOD",
+		return new JsonServiceResponse("INVALID_INPUT_URL_OR_UNKNOWN_METHOD",
 		"The URL could not be dispatched:"
-				+ ex.getMessage());
+				+ ex.getMessage(), null);
 	}
    
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
-	public @ResponseBody GtasJsonError handleError(Exception ex) {
+	public @ResponseBody JsonServiceResponse handleError(Exception ex) {
 		ex.printStackTrace();
 		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
 		ErrorDetails err = errorHandler.processError(ex);
-		return new GtasJsonError(err.getFatalErrorCode(),
+		return new JsonServiceResponse(err.getFatalErrorCode(),
 					err.getFatalErrorMessage(), err.getErrorDetails());			
 	}
 
