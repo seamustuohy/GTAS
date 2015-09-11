@@ -91,9 +91,6 @@ public class PnrServiceIT {
 		pnr.setDateReceived(new Date("7/7/2015"));
 		String cr = "AA";
 		pnr.setCarrier(cr);
-		pnr.setCreatedAt(new Date());
-		pnr.setCreationDate();
-		pnr.setCreatedBy("JUNIT TEST");
 		pnr.setDaysBookedBeforeTravel(30);
 		pnr.setDepartureDate(new Date());
 		pnr.setFormOfPayment("CC");

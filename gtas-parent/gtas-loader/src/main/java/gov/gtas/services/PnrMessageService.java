@@ -17,18 +17,13 @@ import gov.gtas.error.ErrorUtils;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Pnr;
-import gov.gtas.model.PnrMessage;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
-import gov.gtas.parsers.pnrgov.PnrMessageVo;
 import gov.gtas.parsers.pnrgov.PnrUtils;
 import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
-import gov.gtas.parsers.vo.passenger.AddressVo;
-import gov.gtas.parsers.vo.passenger.CreditCardVo;
-import gov.gtas.parsers.vo.passenger.PhoneVo;
-import gov.gtas.repository.PnrMessageRepository;
+import gov.gtas.repository.PnrRepository;
 
 @Service
 public class PnrMessageService implements MessageService {
@@ -41,10 +36,10 @@ public class PnrMessageService implements MessageService {
     private LoaderRepository loaderRepo;
 
     @Autowired
-    private PnrMessageRepository msgDao;
+    private PnrRepository msgDao;
     
-    private PnrMessage pnrMessage;
-    private EdifactParser<PnrMessageVo> parser = new PnrGovParser();
+    private Pnr pnrMessage;
+    private EdifactParser<PnrVo> parser = new PnrGovParser();
     private String filePath;
 
     public List<String> preprocess(String filePath) {
@@ -61,7 +56,7 @@ public class PnrMessageService implements MessageService {
     }
     
     public MessageVo parse(String message) {
-        this.pnrMessage = new PnrMessage();
+        this.pnrMessage = new Pnr();
         this.pnrMessage.setCreateDate(new Date());
         this.pnrMessage.setStatus(MessageStatus.RECEIVED);
         this.pnrMessage.setFilePath(this.filePath);
@@ -91,13 +86,13 @@ public class PnrMessageService implements MessageService {
     }
     
     public void load(MessageVo messageVo) {
-        PnrMessageVo m = (PnrMessageVo)messageVo;
-        PnrVo vo = m.getPnr();
         try {
-            Pnr pnr = utils.convertPnrVo(vo);
-            this.pnrMessage.setPnr(pnr);
-            loaderRepo.processPnr(pnr, vo);
-            loaderRepo.processFlightsAndPassengers(vo.getFlights(), vo.getPassengers(), pnr.getFlights(), pnr.getPassengers());
+            PnrVo vo = (PnrVo)messageVo;
+            // TODO: fix this, combine methods
+            utils.convertPnrVo(this.pnrMessage, vo);
+            loaderRepo.processPnr(this.pnrMessage, vo);
+            loaderRepo.processFlightsAndPassengers(vo.getFlights(), vo.getPassengers(), 
+                    this.pnrMessage.getFlights(), this.pnrMessage.getPassengers());
             this.pnrMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
@@ -108,15 +103,19 @@ public class PnrMessageService implements MessageService {
     }
 
     private void handleException(Exception e, MessageStatus status) {
-        this.pnrMessage.setPnr(null);        
-        this.pnrMessage.setStatus(status);
+        pnrMessage.setFlights(null);
+        pnrMessage.setPassengers(null);
+        pnrMessage.setCreditCards(null);
+        // etc
+        
+        pnrMessage.setStatus(status);
         String stacktrace = ErrorUtils.getStacktrace(e);
-        this.pnrMessage.setError(stacktrace);
+        pnrMessage.setError(stacktrace);
         logger.error(stacktrace);
     }
 
     @Transactional
-    private void createMessage(PnrMessage m) {
+    private void createMessage(Pnr m) {
         try {
             msgDao.save(m);
         } catch (Exception e) {

@@ -1,15 +1,6 @@
 package gov.gtas.services;
 
-import gov.gtas.model.Address;
-import gov.gtas.model.CreditCard;
-import gov.gtas.model.Email;
-import gov.gtas.model.FrequentFlyer;
-import gov.gtas.model.Phone;
-import gov.gtas.model.Pnr;
-import gov.gtas.repository.PnrRepository;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +10,14 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import gov.gtas.model.Address;
+import gov.gtas.model.CreditCard;
+import gov.gtas.model.Email;
+import gov.gtas.model.FrequentFlyer;
+import gov.gtas.model.Phone;
+import gov.gtas.model.Pnr;
+import gov.gtas.repository.PnrRepository;
 
 @Service
 public class PnrServiceImpl implements PnrService {
@@ -92,7 +91,6 @@ public class PnrServiceImpl implements PnrService {
 		target.setBagCount(source.getBagCount());
 		target.setDateBooked(source.getDateBooked());
 		target.setCarrier(source.getCarrier());
-		target.setChangeDate();
 		target.setDaysBookedBeforeTravel(source.getDaysBookedBeforeTravel());
 		target.setDepartureDate(source.getDepartureDate());
 		target.setFormOfPayment(source.getFormOfPayment());
@@ -101,8 +99,6 @@ public class PnrServiceImpl implements PnrService {
 		target.setPassengerCount(source.getPassengerCount());
 		target.setDateReceived(source.getDateReceived());
 		target.setTotalDwellTime(source.getTotalDwellTime());
-		target.setUpdatedAt(new Date());
-		target.setUpdatedBy(source.getUpdatedBy());
 		
 		if(source.getAddresses() != null && source.getAddresses().size() >0){
 			Iterator it = source.getAddresses().iterator();

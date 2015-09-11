@@ -136,9 +136,7 @@ public class LoaderUtils {
         }
     }
 
-    public Pnr convertPnrVo(PnrVo vo) throws ParseException {
-        Pnr pnr = new Pnr();
-        pnr.setCreatedBy(LOADER_USER);
+    public void convertPnrVo(Pnr pnr, PnrVo vo) throws ParseException {
         BeanUtils.copyProperties(vo, pnr);
         
         Airport origin = getAirport(vo.getOrigin());
@@ -156,8 +154,6 @@ public class LoaderUtils {
             int days = (int)TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
             pnr.setDaysBookedBeforeTravel(days);
         }
-
-        return pnr;
     }
     
     public Address convertAddressVo(AddressVo vo) throws ParseException {

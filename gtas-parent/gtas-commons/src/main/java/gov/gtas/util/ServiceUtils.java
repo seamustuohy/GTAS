@@ -2,11 +2,9 @@ package gov.gtas.util;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 
 import gov.gtas.delegates.vo.AddressVo;
 import gov.gtas.delegates.vo.AgencyVo;
@@ -29,7 +27,6 @@ import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
-import gov.gtas.model.PnrMessage;
 
 public class ServiceUtils {
 	
@@ -142,8 +139,6 @@ public class ServiceUtils {
 		//BeanUtils.copyProperties(vo, pnr);
 		pnr.setBagCount(vo.getBagCount());
 		pnr.setCarrier(vo.getCarrier());
-		pnr.setCreatedAt(vo.getCreatedAt());
-		pnr.setCreatedBy(vo.getCreatedBy());
 		pnr.setDateBooked(vo.getDateBooked());
 		pnr.setDateReceived(vo.getDateReceived());
 		pnr.setDaysBookedBeforeTravel(vo.getDaysBookedBeforeTravel());
@@ -157,8 +152,6 @@ public class ServiceUtils {
 		pnr.setPassengerCount(vo.getPassengerCount());
 		pnr.setRecordLocator(vo.getRecordLocator());
 		pnr.setTotalDwellTime(vo.getTotalDwellTime());
-		pnr.setUpdatedAt(vo.getUpdatedAt());
-		pnr.setUpdatedBy(vo.getUpdatedBy());
 		
 		if (vo.getAgency() != null && vo.getAgency().getAgencyIdentifier() != null){
 			Agency a = mapAgencyFromAgencyVo(vo.getAgency(),new Agency());
@@ -166,9 +159,10 @@ public class ServiceUtils {
 			pnr.setAgency(a);
 		}
 		if(vo.getPnrMessage() != null && vo.getPnrMessage().getEdifactMessage() != null){
-			PnrMessage p = mapPnrMessageFromPnrVo(vo.getPnrMessage(),new PnrMessage());
-			p.setPnr(pnr);
-			pnr.getPnrMessages().add(p);
+			Pnr p = mapPnrMessageFromPnrVo(vo.getPnrMessage(),new Pnr());
+			// TODO
+//			p.setPnr(pnr);
+//			pnr.getPnrMessages().add(p);
 		}
 		if(vo.getAddresses().size() >0){
 			Iterator adresses = vo.getAddresses().iterator();
@@ -216,7 +210,7 @@ public class ServiceUtils {
 		return pnr;
 	}
 	
-	public static PnrMessage mapPnrMessageFromPnrVo(PnrMessageVo vo,PnrMessage p){
+	public static Pnr mapPnrMessageFromPnrVo(PnrMessageVo vo,Pnr p){
 		p.setCreateDate(new Date());
 		p.setEdifactMessage(vo.getEdifactMessage());
 		p.setFilePath(vo.getFilePath());

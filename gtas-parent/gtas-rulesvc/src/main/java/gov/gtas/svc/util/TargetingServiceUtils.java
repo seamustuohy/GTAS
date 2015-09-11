@@ -1,5 +1,11 @@
 package gov.gtas.svc.util;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import gov.gtas.bo.BasicRuleServiceResult;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
@@ -7,15 +13,9 @@ import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Message;
-import gov.gtas.model.PnrMessage;
+import gov.gtas.model.Pnr;
 import gov.gtas.svc.request.builder.PassengerFlightTuple;
 import gov.gtas.svc.request.builder.RuleEngineRequestBuilder;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 public class TargetingServiceUtils {
 	/**
@@ -38,8 +38,8 @@ public class TargetingServiceUtils {
 	 *            the PNR message.
 	 * @return RuleServiceRequest object.
 	 */
-	public static RuleServiceRequest createPnrRequest(final PnrMessage req) {
-		Collection<PnrMessage> pnrMessages = new LinkedList<PnrMessage>();
+	public static RuleServiceRequest createPnrRequest(final Pnr req) {
+		Collection<Pnr> pnrMessages = new LinkedList<Pnr>();
 		pnrMessages.add(req);
 		return createPnrApisRequest(null, pnrMessages);
 	}
@@ -68,7 +68,7 @@ public class TargetingServiceUtils {
 	 *         invocation.
 	 */
 	public static RuleServiceRequest createPnrRequest(
-			final List<PnrMessage> reqList) {
+			final List<Pnr> reqList) {
 		return createPnrApisRequest(null, reqList);
 	}
 
@@ -84,10 +84,10 @@ public class TargetingServiceUtils {
 	 */
 	public static RuleServiceRequest createPnrApisRequest(
 			final Collection<ApisMessage> apisMessages,
-			final Collection<PnrMessage> pnrMessages) {
+			final Collection<Pnr> pnrMessages) {
 		RuleEngineRequestBuilder bldr = new RuleEngineRequestBuilder();
 		if (pnrMessages != null) {
-			for (PnrMessage msg : pnrMessages) {
+			for (Pnr msg : pnrMessages) {
 				bldr.addPnrMessage(msg);
 			}
 		}
@@ -115,8 +115,8 @@ public class TargetingServiceUtils {
 			for (Message message : loadedMessages) {
 				if (message instanceof ApisMessage) {
 					bldr.addApisMessage((ApisMessage) message);
-				} else if (message instanceof PnrMessage) {
-					bldr.addPnrMessage((PnrMessage) message);
+				} else if (message instanceof Pnr) {
+					bldr.addPnrMessage((Pnr) message);
 				}
 			}
 		}

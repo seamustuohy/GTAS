@@ -87,8 +87,6 @@ public class PnrServiceDelegate {
 						else{
 							logger.info("########## OLD FLIGHT/OLD PASSENGER/OLD PNR ###########");
 							newReservation.setId(existingReservation.getId());
-							newReservation.setChangeDate();
-							newReservation.setUpdatedBy("SYSTEM");
 							pnrService.update(newReservation);
 						}
 					}

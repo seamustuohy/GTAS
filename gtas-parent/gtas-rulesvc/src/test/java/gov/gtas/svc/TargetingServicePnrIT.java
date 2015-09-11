@@ -6,19 +6,6 @@ import static gov.gtas.rule.builder.RuleBuilderTestUtils.PNR_PASSENGER_RULE_INDX
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import gov.gtas.bo.RuleHitDetail;
-import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.bo.RuleServiceResult;
-import gov.gtas.config.RuleServiceConfig;
-import gov.gtas.model.Passenger;
-import gov.gtas.model.Pnr;
-import gov.gtas.model.PnrMessage;
-import gov.gtas.model.udr.UdrRule;
-import gov.gtas.repository.PnrMessageRepository;
-import gov.gtas.rule.builder.DrlRuleFileBuilder;
-import gov.gtas.rule.builder.RuleBuilderTestUtils;
-import gov.gtas.svc.util.TargetingServiceUtils;
-import gov.gtas.testdatagen.PnrDataGenerator;
 
 import java.text.ParseException;
 import java.util.Iterator;
@@ -35,6 +22,19 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import gov.gtas.bo.RuleHitDetail;
+import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.bo.RuleServiceResult;
+import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.model.Passenger;
+import gov.gtas.model.Pnr;
+import gov.gtas.model.udr.UdrRule;
+import gov.gtas.repository.PnrRepository;
+import gov.gtas.rule.builder.DrlRuleFileBuilder;
+import gov.gtas.rule.builder.RuleBuilderTestUtils;
+import gov.gtas.svc.util.TargetingServiceUtils;
+import gov.gtas.testdatagen.PnrDataGenerator;
+
 /**
  * Unit tests for the TargetingService using spring support and Mockito.
  * 
@@ -50,7 +50,7 @@ public class TargetingServicePnrIT {
 	TargetingService targetingService;
 
 	@Resource
-	private PnrMessageRepository pnrMessageRepository;
+	private PnrRepository pnrMessageRepository;
 
 	@Before
 	public void setUp() throws Exception {
@@ -64,10 +64,9 @@ public class TargetingServicePnrIT {
 	@Test
 	@Transactional
 	public void testDataGeneration() {
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
-		assertNotNull(msg);
-		assertNotNull(msg.getId());
-		Pnr pnr1 = msg.getPnr();
+		Pnr pnr1 = PnrDataGenerator.createTestPnrmessage(1L);
+		assertNotNull(pnr1);
+		assertNotNull(pnr1.getId());
 		int size1 = pnr1.getPassengers().size();
 		assertTrue(size1 == 4 || size1 == 2 );
 		Passenger pax = pnr1.getPassengers().iterator().next();
@@ -87,7 +86,7 @@ public class TargetingServicePnrIT {
 		 * one rule with multiple conditions involving PNR record locator
 		 * and passenger type and last name.
 		 */
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
+		Pnr msg = PnrDataGenerator.createTestPnrmessage(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(PNR_PASSENGER_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
@@ -109,7 +108,7 @@ public class TargetingServicePnrIT {
 	@Test
 	@Transactional
 	public void testPnrRuleExecution2() throws ParseException {
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage(1L);
+		Pnr msg = PnrDataGenerator.createTestPnrmessage(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
@@ -139,7 +138,7 @@ public class TargetingServicePnrIT {
 	@Transactional
 	public void testPnrRuleExecution3() throws ParseException {
 		// select all passengers in a flight
-		PnrMessage msg = PnrDataGenerator.createTestPnrmessage2(1L);
+	    Pnr msg = PnrDataGenerator.createTestPnrmessage2(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();

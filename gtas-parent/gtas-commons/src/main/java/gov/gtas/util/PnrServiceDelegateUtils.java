@@ -38,8 +38,6 @@ public class PnrServiceDelegateUtils {
 		}
 		target.setAgency(source.getAgency());
 		target.setBagCount(source.getBagCount());
-		target.setChangeDate();
-		target.setUpdatedBy("SYSTEM");
 		target.setDateBooked(source.getDateBooked());
 		target.setDateReceived(source.getDateReceived());
 		target.setDepartureDate(source.getDepartureDate());

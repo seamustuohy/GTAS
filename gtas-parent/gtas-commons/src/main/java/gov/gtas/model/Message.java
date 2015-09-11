@@ -1,5 +1,6 @@
 package gov.gtas.model;
 
+import java.sql.Clob;
 import java.util.Date;
 import java.util.Objects;
 
@@ -9,6 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,6 +25,9 @@ public class Message extends BaseEntity {
     @Column(name = "create_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)  
     private Date createDate;
+    
+    @Lob
+    private Clob raw;
 
     @Column(name = "hash_code", unique = true)
     private String hashCode;
@@ -42,6 +47,12 @@ public class Message extends BaseEntity {
     }
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+    public Clob getRaw() {
+        return raw;
+    }
+    public void setRaw(Clob raw) {
+        this.raw = raw;
     }
     public String getHashCode() {
         return hashCode;

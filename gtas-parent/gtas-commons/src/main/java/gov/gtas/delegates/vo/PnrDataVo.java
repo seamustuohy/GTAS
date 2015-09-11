@@ -1,9 +1,5 @@
 package gov.gtas.delegates.vo;
 
-import gov.gtas.model.PnrMessage;
-import gov.gtas.validators.Validatable;
-
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +7,8 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import gov.gtas.validators.Validatable;
 
 /**
  * Class PnrDataVo holds the reservation information for passengers.

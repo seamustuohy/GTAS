@@ -90,8 +90,8 @@ public class ApisMessageService implements MessageService {
     }
 
     public void load(MessageVo messageVo) {
-        ApisMessageVo m = (ApisMessageVo)messageVo;
         try {
+            ApisMessageVo m = (ApisMessageVo)messageVo;
             loaderRepo.processReportingParties(this.apisMessage, m.getReportingParties());
             loaderRepo.processFlightsAndPassengers(m.getFlights(), m.getPassengers(), this.apisMessage.getFlights(), this.apisMessage.getPassengers());
             this.apisMessage.setStatus(MessageStatus.LOADED);

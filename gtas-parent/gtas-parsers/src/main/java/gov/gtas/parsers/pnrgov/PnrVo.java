@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import gov.gtas.parsers.edifact.MessageVo;
+import gov.gtas.parsers.pnrgov.segment.MSG.MsgCode;
 import gov.gtas.parsers.vo.passenger.AddressVo;
 import gov.gtas.parsers.vo.passenger.CreditCardVo;
 import gov.gtas.parsers.vo.passenger.FlightVo;
@@ -15,7 +17,9 @@ import gov.gtas.parsers.vo.passenger.PassengerVo;
 import gov.gtas.parsers.vo.passenger.PhoneVo;
 import gov.gtas.parsers.vo.passenger.PnrReportingAgentVo;
 
-public class PnrVo {
+public class PnrVo extends MessageVo {
+    private MsgCode messageCode;
+    
     private String recordLocator;
     private String carrier;
     private String origin;
@@ -45,6 +49,16 @@ public class PnrVo {
         this.passengerCount = 0;
     }
     
+    public MsgCode getMessageCode() {
+        return messageCode;
+    }
+
+
+    public void setMessageCode(MsgCode messageCode) {
+        this.messageCode = messageCode;
+    }
+
+
     public String getRecordLocator() {
         return recordLocator;
     }

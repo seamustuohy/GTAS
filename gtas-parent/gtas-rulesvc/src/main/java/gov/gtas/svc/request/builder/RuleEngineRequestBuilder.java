@@ -1,5 +1,11 @@
 package gov.gtas.svc.request.builder;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import gov.gtas.bo.BasicRuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
@@ -21,13 +27,6 @@ import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
-import gov.gtas.model.PnrMessage;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Rule Engine Request Builder constructs Rule Engine execution requests from
@@ -109,9 +108,8 @@ public class RuleEngineRequestBuilder {
 	 * @param pnrMessage
 	 *            the message to add.
 	 */
-	public void addPnrMessage(PnrMessage pnrMessage) {
+	public void addPnrMessage(Pnr pnr) {
 		// add PNR objects
-		Pnr pnr = pnrMessage.getPnr();
 		if (pnr != null) {
 			// add all the PNR related objects
 			requestObjectList.add(pnr);

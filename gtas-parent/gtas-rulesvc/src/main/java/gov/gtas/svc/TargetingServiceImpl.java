@@ -1,5 +1,17 @@
 package gov.gtas.svc;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import gov.gtas.bo.CompositeRuleServiceResult;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
@@ -15,25 +27,13 @@ import gov.gtas.model.HitDetail;
 import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Message;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.PnrMessage;
+import gov.gtas.model.Pnr;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.MessageRepository;
-import gov.gtas.repository.PnrMessageRepository;
+import gov.gtas.repository.PnrRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.svc.util.TargetingServiceUtils;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * Implementation of the Targeting Service API.
@@ -59,7 +59,7 @@ public class TargetingServiceImpl implements TargetingService {
 	private ApisMessageRepository apisMsgRepository;
 
 	@Autowired
-	private PnrMessageRepository PnrMsgRepository;
+	private PnrRepository PnrMsgRepository;
 
 	@Autowired
 	private HitsSummaryRepository hitsSummaryRepository;
@@ -161,7 +161,7 @@ public class TargetingServiceImpl implements TargetingService {
 	@Transactional
 	public List<RuleHitDetail> analyzeLoadedPnrMessage() {
 		List<RuleHitDetail> ret = null;
-		List<PnrMessage> msgs = this.retrievePnrMessage(MessageStatus.LOADED);
+		List<Pnr> msgs = this.retrievePnrMessage(MessageStatus.LOADED);
 		if (msgs != null) {
 			RuleServiceRequest req = TargetingServiceUtils
 					.createPnrRequest(msgs);
@@ -227,7 +227,7 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Override
 	@Transactional
-	public List<PnrMessage> retrievePnrMessage(MessageStatus messageStatus) {
+	public List<Pnr> retrievePnrMessage(MessageStatus messageStatus) {
 		return PnrMsgRepository.findByStatus(messageStatus);
 
 	}
@@ -244,8 +244,8 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Override
 	@Transactional
-	public void updatePnrMessage(PnrMessage message, MessageStatus messageStatus) {
-		PnrMessage pnrMessage = PnrMsgRepository.findOne(message.getId());
+	public void updatePnrMessage(Pnr message, MessageStatus messageStatus) {
+	    Pnr pnrMessage = PnrMsgRepository.findOne(message.getId());
 		if (pnrMessage != null) {
 			pnrMessage.setStatus(messageStatus);
 		}

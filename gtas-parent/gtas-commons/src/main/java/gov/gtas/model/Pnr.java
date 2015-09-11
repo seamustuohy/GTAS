@@ -7,25 +7,25 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "pnr")
-public class Pnr extends BaseEntityAudit{
+public class Pnr extends Message {
     private static final long serialVersionUID = 1L;  
     public Pnr() { }
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
-    private Set<PnrMessage> pnrMessages;
+    @Embedded
+    private EdifactMessage edifactMessage;
     
 	@Column(name = "record_locator", length = 20)
 	private String recordLocator;
@@ -201,7 +201,15 @@ public class Pnr extends BaseEntityAudit{
         this.emails.add(email);
     }
 
-	public Agency getAgency() {
+	public EdifactMessage getEdifactMessage() {
+        return edifactMessage;
+    }
+
+    public void setEdifactMessage(EdifactMessage edifactMessage) {
+        this.edifactMessage = edifactMessage;
+    }
+
+    public Agency getAgency() {
 		return agency;
 	}
 
@@ -264,14 +272,6 @@ public class Pnr extends BaseEntityAudit{
 	public void setRecordLocator(String recordLocator) {
 		this.recordLocator = recordLocator;
 	}
-
-    public Set<PnrMessage> getPnrMessages() {
-        return pnrMessages;
-    }
-
-    public void setPnrMessages(Set<PnrMessage> pnrMessages) {
-        this.pnrMessages = pnrMessages;
-    }
 
     public String getCarrier() {
         return carrier;

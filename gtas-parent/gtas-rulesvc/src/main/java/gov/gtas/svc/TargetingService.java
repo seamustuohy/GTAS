@@ -3,14 +3,14 @@
  */
 package gov.gtas.svc;
 
+import java.util.List;
+
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.MessageStatus;
-import gov.gtas.model.PnrMessage;
-
-import java.util.List;
+import gov.gtas.model.Pnr;
 
 /**
  * The API for the Targeting Service.
@@ -100,10 +100,10 @@ public interface TargetingService {
 	/**
 	 * retrieve ApisMessage from db
 	 */
-	public List<PnrMessage> retrievePnrMessage(MessageStatus messageStatus);
+	public List<Pnr> retrievePnrMessage(MessageStatus messageStatus);
 
 	/**
 	 * update PnrMessage with message status
 	 */
-	public void updatePnrMessage(PnrMessage message, MessageStatus messageStatus);
+	public void updatePnrMessage(Pnr message, MessageStatus messageStatus);
 }

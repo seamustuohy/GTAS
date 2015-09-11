@@ -1,5 +1,11 @@
 package gov.gtas.svc.request.builder;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import gov.gtas.bo.BasicRuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
@@ -8,13 +14,6 @@ import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Pnr;
-import gov.gtas.model.PnrMessage;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Watch list Request Builder constructs Rule Engine execution request for watch lists from
@@ -70,9 +69,8 @@ public class WatchlistRequestBuilder {
 	 * @param pnrMessage
 	 *            the message to add.
 	 */
-	public void addPnrMessage(PnrMessage pnrMessage) {
+	public void addPnrMessage(Pnr pnr) {
 		// add PNR objects
-		Pnr pnr = pnrMessage.getPnr();
 		if (pnr != null) {
 			// add all the PNR related objects
 			requestObjectList.add(pnr);

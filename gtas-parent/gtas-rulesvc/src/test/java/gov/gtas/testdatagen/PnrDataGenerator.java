@@ -12,7 +12,6 @@ import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
-import gov.gtas.model.PnrMessage;
 import gov.gtas.util.DateCalendarUtils;
 
 public class PnrDataGenerator {
@@ -52,11 +51,10 @@ public class PnrDataGenerator {
 	public static final String PNR_AGENCY1 = "USA,Alexandria,Amnesia Travels,1234567890123456";
 	public static final String PNR_AGENCY2 = "GBR,Leeds,Island Tours,1231456823941111";
 
-    public static PnrMessage createTestPnrmessage(long id) {
-        PnrMessage msg = new PnrMessage();
+    public static Pnr createTestPnrmessage(long id) {
+        Pnr pnr = null;
         try {
-            msg.setId(id);
-            Pnr pnr = createPnr(PNR_ID1, PNR_ATTR_CARRIER1, PNR_ATTR_RECORD_LOCATOR1);
+            pnr = createPnr(PNR_ID1, PNR_ATTR_CARRIER1, PNR_ATTR_RECORD_LOCATOR1);
             addAddress(pnr, 1);
             addAddress(pnr, 2);
             addEmail(pnr, 1);
@@ -70,19 +68,16 @@ public class PnrDataGenerator {
             addPassenger(pnr, 2, flight);
             addPassenger(pnr, 3, flight);
             addPassenger(pnr, 4, flight);
-            msg.setPnr(pnr);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return msg;
+        return pnr;
     }
 
-    public static PnrMessage createTestPnrmessage2(long id) {
-        PnrMessage msg = new PnrMessage();
+    public static Pnr createTestPnrmessage2(long id) {
+        Pnr pnr = null;
         try {
-            msg.setId(id);
-            Pnr pnr = createPnr(PNR_ID2, PNR_ATTR_CARRIER2, PNR_ATTR_RECORD_LOCATOR2);
-            msg.setPnr(pnr);
+            pnr = createPnr(PNR_ID2, PNR_ATTR_CARRIER2, PNR_ATTR_RECORD_LOCATOR2);
             addAddress(pnr, 3);
             addEmail(pnr, 2);
             addPhone(pnr, 2);
@@ -96,7 +91,7 @@ public class PnrDataGenerator {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return msg;
+        return pnr;
     }	
 	
     private static Pnr createPnr(long id, String carrier, String recLocator) {
