@@ -51,7 +51,7 @@ public class TargetingManagementController {
 
 	@RequestMapping(value = Constants.TARGET_ALL_PNR, method = RequestMethod.GET)
 	public List<?> getTargetingPnrResult() {
-		List<RuleHitDetail> ret = targetingService.analyzeLoadedPnrMessage();
+		List<RuleHitDetail> ret = targetingService.analyzeLoadedPnr();
 		return ret;
 	}
 

@@ -155,13 +155,13 @@ public class TargetingServiceImpl implements TargetingService {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see gov.gtas.svc.TargetingService#analyzeLoadedPnrMessage()
+	 * @see gov.gtas.svc.TargetingService#analyzeLoadedPnr()
 	 */
 	@Override
 	@Transactional
-	public List<RuleHitDetail> analyzeLoadedPnrMessage() {
+	public List<RuleHitDetail> analyzeLoadedPnr() {
 		List<RuleHitDetail> ret = null;
-		List<Pnr> msgs = this.retrievePnrMessage(MessageStatus.LOADED);
+		List<Pnr> msgs = this.retrievePnr(MessageStatus.LOADED);
 		if (msgs != null) {
 			RuleServiceRequest req = TargetingServiceUtils
 					.createPnrRequest(msgs);
@@ -227,7 +227,7 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Override
 	@Transactional
-	public List<Pnr> retrievePnrMessage(MessageStatus messageStatus) {
+	public List<Pnr> retrievePnr(MessageStatus messageStatus) {
 		return PnrMsgRepository.findByStatus(messageStatus);
 
 	}
@@ -244,10 +244,10 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Override
 	@Transactional
-	public void updatePnrMessage(Pnr message, MessageStatus messageStatus) {
-	    Pnr pnrMessage = PnrMsgRepository.findOne(message.getId());
-		if (pnrMessage != null) {
-			pnrMessage.setStatus(messageStatus);
+	public void updatePnr(Pnr message, MessageStatus messageStatus) {
+	    Pnr pnr = PnrMsgRepository.findOne(message.getId());
+		if (pnr != null) {
+			pnr.setStatus(messageStatus);
 		}
 	}
 

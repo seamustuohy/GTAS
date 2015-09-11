@@ -38,7 +38,7 @@ public class PnrMessageService implements MessageService {
     @Autowired
     private PnrRepository msgDao;
     
-    private Pnr pnrMessage;
+    private Pnr pnr;
     private EdifactParser<PnrVo> parser = new PnrGovParser();
     private String filePath;
 
@@ -56,30 +56,30 @@ public class PnrMessageService implements MessageService {
     }
     
     public MessageVo parse(String message) {
-        this.pnrMessage = new Pnr();
-        this.pnrMessage.setCreateDate(new Date());
-        this.pnrMessage.setStatus(MessageStatus.RECEIVED);
-        this.pnrMessage.setFilePath(this.filePath);
+        this.pnr = new Pnr();
+        this.pnr.setCreateDate(new Date());
+        this.pnr.setStatus(MessageStatus.RECEIVED);
+        this.pnr.setFilePath(this.filePath);
         
         MessageVo vo = null;
         try {
             vo = parser.parse(message);
             loaderRepo.checkHashCode(vo.getHashCode());
             
-            this.pnrMessage.setStatus(MessageStatus.PARSED);
-            this.pnrMessage.setHashCode(vo.getHashCode());            
+            this.pnr.setStatus(MessageStatus.PARSED);
+            this.pnr.setHashCode(vo.getHashCode());            
             EdifactMessage em = new EdifactMessage();
             em.setTransmissionDate(vo.getTransmissionDate());
             em.setTransmissionSource(vo.getTransmissionSource());
             em.setMessageType(vo.getMessageType());
             em.setVersion(vo.getVersion());
-            this.pnrMessage.setEdifactMessage(em);
+            this.pnr.setEdifactMessage(em);
             
         } catch (Exception e) {
             handleException(e, MessageStatus.FAILED_PARSING);
             return null;
         } finally {
-            createMessage(pnrMessage);
+            createMessage(pnr);
         }
 
         return vo;
@@ -89,28 +89,28 @@ public class PnrMessageService implements MessageService {
         try {
             PnrVo vo = (PnrVo)messageVo;
             // TODO: fix this, combine methods
-            utils.convertPnrVo(this.pnrMessage, vo);
-            loaderRepo.processPnr(this.pnrMessage, vo);
+            utils.convertPnrVo(this.pnr, vo);
+            loaderRepo.processPnr(this.pnr, vo);
             loaderRepo.processFlightsAndPassengers(vo.getFlights(), vo.getPassengers(), 
-                    this.pnrMessage.getFlights(), this.pnrMessage.getPassengers());
-            this.pnrMessage.setStatus(MessageStatus.LOADED);
+                    this.pnr.getFlights(), this.pnr.getPassengers());
+            this.pnr.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
             handleException(e, MessageStatus.FAILED_LOADING);
         } finally {
-            createMessage(pnrMessage);            
+            createMessage(pnr);            
         }
     }
 
     private void handleException(Exception e, MessageStatus status) {
-        pnrMessage.setFlights(null);
-        pnrMessage.setPassengers(null);
-        pnrMessage.setCreditCards(null);
+        pnr.setFlights(null);
+        pnr.setPassengers(null);
+        pnr.setCreditCards(null);
         // etc
         
-        pnrMessage.setStatus(status);
+        pnr.setStatus(status);
         String stacktrace = ErrorUtils.getStacktrace(e);
-        pnrMessage.setError(stacktrace);
+        pnr.setError(stacktrace);
         logger.error(stacktrace);
     }
 

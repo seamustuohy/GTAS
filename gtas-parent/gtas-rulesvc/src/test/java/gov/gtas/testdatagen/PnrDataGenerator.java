@@ -51,7 +51,7 @@ public class PnrDataGenerator {
 	public static final String PNR_AGENCY1 = "USA,Alexandria,Amnesia Travels,1234567890123456";
 	public static final String PNR_AGENCY2 = "GBR,Leeds,Island Tours,1231456823941111";
 
-    public static Pnr createTestPnrmessage(long id) {
+    public static Pnr createTestPnr(long id) {
         Pnr pnr = null;
         try {
             pnr = createPnr(PNR_ID1, PNR_ATTR_CARRIER1, PNR_ATTR_RECORD_LOCATOR1);
@@ -74,7 +74,7 @@ public class PnrDataGenerator {
         return pnr;
     }
 
-    public static Pnr createTestPnrmessage2(long id) {
+    public static Pnr createTestPnr2(long id) {
         Pnr pnr = null;
         try {
             pnr = createPnr(PNR_ID2, PNR_ATTR_CARRIER2, PNR_ATTR_RECORD_LOCATOR2);

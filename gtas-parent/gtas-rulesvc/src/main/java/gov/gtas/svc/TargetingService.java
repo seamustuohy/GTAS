@@ -50,7 +50,7 @@ public interface TargetingService {
 	 * 
 	 * @return the result of the invocation.
 	 */
-	List<RuleHitDetail> analyzeLoadedPnrMessage();
+	List<RuleHitDetail> analyzeLoadedPnr();
 
 	/**
 	 * Invokes the Targeting service for all unprocessed PNR and APIS messages.
@@ -100,10 +100,10 @@ public interface TargetingService {
 	/**
 	 * retrieve ApisMessage from db
 	 */
-	public List<Pnr> retrievePnrMessage(MessageStatus messageStatus);
+	public List<Pnr> retrievePnr(MessageStatus messageStatus);
 
 	/**
-	 * update PnrMessage with message status
+	 * update Pnr with message status
 	 */
-	public void updatePnrMessage(Pnr message, MessageStatus messageStatus);
+	public void updatePnr(Pnr message, MessageStatus messageStatus);
 }

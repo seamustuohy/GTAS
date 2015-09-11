@@ -39,9 +39,9 @@ public class TargetingServiceUtils {
 	 * @return RuleServiceRequest object.
 	 */
 	public static RuleServiceRequest createPnrRequest(final Pnr req) {
-		Collection<Pnr> pnrMessages = new LinkedList<Pnr>();
-		pnrMessages.add(req);
-		return createPnrApisRequest(null, pnrMessages);
+		Collection<Pnr> pnrs = new LinkedList<Pnr>();
+		pnrs.add(req);
+		return createPnrApisRequest(null, pnrs);
 	}
 
 	/**
@@ -79,16 +79,16 @@ public class TargetingServiceUtils {
 	 * and PNR messages.
 	 * 
 	 * @param apisMessages
-	 * @param pnrMessages
+	 * @param pnrs
 	 * @return the rule engine request object.
 	 */
 	public static RuleServiceRequest createPnrApisRequest(
 			final Collection<ApisMessage> apisMessages,
-			final Collection<Pnr> pnrMessages) {
+			final Collection<Pnr> pnrs) {
 		RuleEngineRequestBuilder bldr = new RuleEngineRequestBuilder();
-		if (pnrMessages != null) {
-			for (Pnr msg : pnrMessages) {
-				bldr.addPnrMessage(msg);
+		if (pnrs != null) {
+			for (Pnr msg : pnrs) {
+				bldr.addPnr(msg);
 			}
 		}
 		if (apisMessages != null) {
@@ -116,7 +116,7 @@ public class TargetingServiceUtils {
 				if (message instanceof ApisMessage) {
 					bldr.addApisMessage((ApisMessage) message);
 				} else if (message instanceof Pnr) {
-					bldr.addPnrMessage((Pnr) message);
+					bldr.addPnr((Pnr) message);
 				}
 			}
 		}

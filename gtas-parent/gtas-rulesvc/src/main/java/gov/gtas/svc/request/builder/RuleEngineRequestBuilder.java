@@ -105,10 +105,10 @@ public class RuleEngineRequestBuilder {
 	/**
 	 * Adds a PNR message and its associated entities.
 	 * 
-	 * @param pnrMessage
-	 *            the message to add.
+	 * @param pnr
+	 *            the pnr to add.
 	 */
-	public void addPnrMessage(Pnr pnr) {
+	public void addPnr(Pnr pnr) {
 		// add PNR objects
 		if (pnr != null) {
 			// add all the PNR related objects
