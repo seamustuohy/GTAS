@@ -50,6 +50,7 @@ import gov.gtas.dataobject.PnrVo;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.services.FlightService;
 import gov.gtas.services.PnrService;
+import gov.gtas.util.LobUtils;
 import gov.gtas.services.HitsSummaryService;
 import gov.gtas.services.PassengerService;
 
@@ -392,7 +393,6 @@ public class PassengerController {
     
     
     public PnrVo mapPnrToPnrVo(Pnr source){
-    	
     	PnrVo target = new PnrVo();
     	
     	target.setRecordLocator(source.getRecordLocator());
@@ -408,8 +408,7 @@ public class PassengerController {
 		target.setPassengerCount(source.getPassengerCount());
 		target.setDateReceived(source.getDateReceived());
 		target.setTotalDwellTime(source.getTotalDwellTime());
-		//target.setUpdatedAt(new Date());
-		//target.setUpdatedBy(source.getUpdatedBy());
+		target.setRaw(LobUtils.convertClobToString(source.getRaw()));
 		
 		if(source.getAddresses() != null && source.getAddresses().size() >0){
 			Iterator it = source.getAddresses().iterator();

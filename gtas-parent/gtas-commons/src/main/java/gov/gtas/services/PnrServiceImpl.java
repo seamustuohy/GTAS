@@ -99,7 +99,8 @@ public class PnrServiceImpl implements PnrService {
 		target.setPassengerCount(source.getPassengerCount());
 		target.setDateReceived(source.getDateReceived());
 		target.setTotalDwellTime(source.getTotalDwellTime());
-		
+        target.setRaw(source.getRaw());
+        	
 		if(source.getAddresses() != null && source.getAddresses().size() >0){
 			Iterator it = source.getAddresses().iterator();
 			while(it.hasNext()){
@@ -116,10 +117,6 @@ public class PnrServiceImpl implements PnrService {
 			target.setAgency(source.getAgency());
 		}
 		
-		// TODO
-//		if(source.getPnrMessage() != null && target.getPnrMessage() == null){
-//			target.setPnrMessage(source.getPnrMessage());
-//		}
 		if(source.getCreditCards()!= null && source.getCreditCards().size() >0){
 			Iterator it1 = source.getCreditCards().iterator();
 			while(it1.hasNext()){

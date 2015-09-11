@@ -12,6 +12,7 @@ public class PnrVo {
     private String originCountry;
     private Date dateBooked;
     private Date dateReceived;
+    private String raw;
     
     private Date departureDate;
     private Integer daysBookedBeforeTravel;
@@ -39,7 +40,15 @@ public class PnrVo {
 		return recordLocator;
 	}
 
-	public void setRecordLocator(String recordLocator) {
+	public String getRaw() {
+        return raw;
+    }
+
+    public void setRaw(String raw) {
+        this.raw = raw;
+    }
+
+    public void setRecordLocator(String recordLocator) {
 		this.recordLocator = recordLocator;
 	}
 

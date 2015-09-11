@@ -7,19 +7,39 @@ import java.sql.SQLException;
 
 import javax.sql.rowset.serial.SerialClob;
 
-public class LobUtils {
-    public static String convertClobToString(Clob clob) throws IOException, SQLException {
-        Reader reader = clob.getCharacterStream();
-        int c = -1;
-        StringBuilder sb = new StringBuilder();
-        while((c = reader.read()) != -1) {
-             sb.append(((char)c));
-        }
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import gov.gtas.error.ErrorUtils;
+
+public class LobUtils {
+    private static final Logger logger = LoggerFactory.getLogger(LobUtils.class);
+    
+    public static String convertClobToString(Clob clob) {
+        StringBuilder sb = null;
+        try {
+            Reader reader = clob.getCharacterStream();
+            int c = -1;
+            sb = new StringBuilder();
+            while((c = reader.read()) != -1) {
+                 sb.append(((char)c));
+            }
+        } catch (SQLException | IOException e) {
+            logger.error(ErrorUtils.getStacktrace(e));
+            return null;
+        }
+        
         return sb.toString();
     }
 
-    public static Clob createClob(String s) throws SQLException {
-        return new SerialClob(s.toCharArray());
+    public static Clob createClob(String s) {
+        Clob rv = null;
+        try {
+            rv = new SerialClob(s.toCharArray());
+        } catch (SQLException e) {
+            logger.error(ErrorUtils.getStacktrace(e));
+            return null;
+        }
+        return rv;
     }
 }
