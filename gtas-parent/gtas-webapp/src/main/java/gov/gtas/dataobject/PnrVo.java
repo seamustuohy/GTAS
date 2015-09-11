@@ -6,8 +6,6 @@ import java.util.Set;
 
 
 public class PnrVo {
-	
-    private Set<PnrMessageVo> pnrMessages;
 	private String recordLocator;
     private String carrier;
     private String origin;
@@ -36,14 +34,6 @@ public class PnrVo {
     private Set<PhoneVo> phones = new HashSet<>();
 
     private Set<EmailVo> emails = new HashSet<>();
-
-	public Set<PnrMessageVo> getPnrMessages() {
-		return pnrMessages;
-	}
-
-	public void setPnrMessages(Set<PnrMessageVo> pnrMessages) {
-		this.pnrMessages = pnrMessages;
-	}
 
 	public String getRecordLocator() {
 		return recordLocator;
