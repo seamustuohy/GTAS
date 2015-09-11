@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.json.QueryConditionEnum;
 import gov.gtas.model.udr.json.QueryEntity;
@@ -54,16 +54,16 @@ public class UdrSpecificationBuilderTest {
 		// add terms and then another query object
 		builder.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.DEBARKATION.getFieldName(),
-				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, CriteriaOperatorEnum.EQUAL,
 				new String[] { "IAD" });
 		builder.addNestedQueryObject(QueryConditionEnum.AND);
 		builder.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.LAST_NAME.getFieldName(),
-				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, CriteriaOperatorEnum.EQUAL,
 				new String[] { "Jones" });
 		builder.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.EMBARKATION.getFieldName(),
-				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, CriteriaOperatorEnum.EQUAL,
 				new String[] { "DBY" });
 
 		UdrSpecification spec = builder.build();
@@ -79,7 +79,7 @@ public class UdrSpecificationBuilderTest {
 		assertEquals(2, rules.size());
 		verifyQueryTerm(rules.get(0), EntityEnum.PASSENGER,
 				PassengerMapping.DEBARKATION.getFieldName(),
-				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, CriteriaOperatorEnum.EQUAL,
 				new String[] { "IAD" });
 		assertTrue(rules.get(1) instanceof QueryObject);
 		QueryObject embedded = (QueryObject) (rules.get(1));
@@ -88,11 +88,11 @@ public class UdrSpecificationBuilderTest {
 		assertEquals(2, rules.size());
 		verifyQueryTerm(rules.get(0), EntityEnum.PASSENGER,
 				PassengerMapping.LAST_NAME.getFieldName(),
-				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, CriteriaOperatorEnum.EQUAL,
 				new String[] { "Jones" });
 		verifyQueryTerm(rules.get(1), EntityEnum.PASSENGER,
 				PassengerMapping.EMBARKATION.getFieldName(),
-				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, CriteriaOperatorEnum.EQUAL,
 				new String[] { "DBY" });
 	}
 
@@ -116,11 +116,11 @@ public class UdrSpecificationBuilderTest {
 		assertEquals(2, rules.size());		
 		verifyQueryTerm(rules.get(0), EntityEnum.PASSENGER,
 				PassengerMapping.DOB.getFieldName(),
-				TypeEnum.DATE, OperatorCodeEnum.EQUAL,
+				TypeEnum.DATE, CriteriaOperatorEnum.EQUAL,
 				new String[] {  DateCalendarUtils.formatJsonDate(new Date()) });
 		verifyQueryTerm(rules.get(1), EntityEnum.PASSENGER,
 				PassengerMapping.LAST_NAME.getFieldName(),
-				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, CriteriaOperatorEnum.EQUAL,
 				new String[] {  "Jones" });
 		
 		assertTrue(topLevel.getRules().get(1) instanceof QueryObject);
@@ -130,15 +130,15 @@ public class UdrSpecificationBuilderTest {
 		assertEquals(2, rules.size());
 		verifyQueryTerm(rules.get(0), EntityEnum.PASSENGER,
 				PassengerMapping.EMBARKATION.getFieldName(),
-				TypeEnum.STRING, OperatorCodeEnum.IN,
+				TypeEnum.STRING, CriteriaOperatorEnum.IN,
 				new String[] { "DBY", "PKY", "FLT"});
 		verifyQueryTerm(rules.get(1), EntityEnum.PASSENGER,
 				PassengerMapping.DEBARKATION.getFieldName(),
-				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, CriteriaOperatorEnum.EQUAL,
 				new String[] { "IAD" });
 	}
 	private void verifyQueryTerm(QueryEntity obj, EntityEnum entity,
-			String attr, TypeEnum type, OperatorCodeEnum op,
+			String attr, TypeEnum type, CriteriaOperatorEnum op,
 			String[] val) {
 		assertTrue(obj instanceof QueryTerm);
 		QueryTerm term = (QueryTerm)obj;

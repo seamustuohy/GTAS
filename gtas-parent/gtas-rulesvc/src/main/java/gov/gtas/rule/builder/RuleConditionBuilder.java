@@ -3,7 +3,7 @@ package gov.gtas.rule.builder;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.udr.Rule;
@@ -150,7 +150,7 @@ public class RuleConditionBuilder {
 
 			EntityEnum entity = EntityEnum.getEnum(trm.getEntity());
 			TypeEnum attributeType = TypeEnum.getEnum(trm.getType());
-			OperatorCodeEnum opCode = OperatorCodeEnum.getEnum(trm
+			CriteriaOperatorEnum opCode = CriteriaOperatorEnum.getEnum(trm
 					.getOperator());
 			switch (entity) {
 			case PASSENGER:

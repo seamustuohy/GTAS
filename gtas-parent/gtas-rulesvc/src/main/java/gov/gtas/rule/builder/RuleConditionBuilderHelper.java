@@ -9,7 +9,7 @@ import static gov.gtas.rule.builder.RuleTemplateConstants.RIGHT_PAREN_CHAR;
 import static gov.gtas.rule.builder.RuleTemplateConstants.SPACE_CHAR;
 import static gov.gtas.rule.builder.RuleTemplateConstants.TRUE_STRING;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.AddressMapping;
@@ -150,7 +150,7 @@ public class RuleConditionBuilderHelper {
 	 */
 	public static void addConditionDescription(final QueryTerm cond,
 			StringBuilder bldr) throws ParseException {
-		OperatorCodeEnum opCode = OperatorCodeEnum.getEnum(cond.getOperator());
+		CriteriaOperatorEnum opCode = CriteriaOperatorEnum.getEnum(cond.getOperator());
 		TypeEnum attributeType = TypeEnum.getEnum(cond.getType());
 
 		EntityEnum entity = EntityEnum.getEnum(cond.getEntity());

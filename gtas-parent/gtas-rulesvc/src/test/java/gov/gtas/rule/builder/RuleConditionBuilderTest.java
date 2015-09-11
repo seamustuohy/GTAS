@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
@@ -43,7 +43,7 @@ public class RuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
 				PassengerMapping.DOB,
-				OperatorCodeEnum.BETWEEN, new String[]{"1990-01-01","1998-12-31"}, TypeEnum.DATE);
+				CriteriaOperatorEnum.BETWEEN, new String[]{"1990-01-01","1998-12-31"}, TypeEnum.DATE);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -59,7 +59,7 @@ public class RuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
 				FlightMapping.AIRPORT_DESTINATION,
-				OperatorCodeEnum.IN, new String[]{"DBY","XYZ","PQR"}, TypeEnum.STRING);
+				CriteriaOperatorEnum.IN, new String[]{"DBY","XYZ","PQR"}, TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -78,7 +78,7 @@ public class RuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", TypeEnum.STRING);
+				CriteriaOperatorEnum.NOT_EQUAL, "US", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -90,23 +90,23 @@ public class RuleConditionBuilderTest {
 	
 	@Test
 	public void testStringConditionsOnPassenger() throws ParseException {
-		for(OperatorCodeEnum op:
-			new OperatorCodeEnum[]{
-				OperatorCodeEnum.EQUAL, 
-				OperatorCodeEnum.NOT_EQUAL,
-				OperatorCodeEnum.BEGINS_WITH,
-				OperatorCodeEnum.ENDS_WITH,
-				OperatorCodeEnum.CONTAINS,
-				OperatorCodeEnum.NOT_BEGINS_WITH,
-				OperatorCodeEnum.NOT_ENDS_WITH,
-				OperatorCodeEnum.NOT_CONTAINS,
-				OperatorCodeEnum.NOT_IN,
-				OperatorCodeEnum.IN
+		for(CriteriaOperatorEnum op:
+			new CriteriaOperatorEnum[]{
+				CriteriaOperatorEnum.EQUAL, 
+				CriteriaOperatorEnum.NOT_EQUAL,
+				CriteriaOperatorEnum.BEGINS_WITH,
+				CriteriaOperatorEnum.ENDS_WITH,
+				CriteriaOperatorEnum.CONTAINS,
+				CriteriaOperatorEnum.NOT_BEGINS_WITH,
+				CriteriaOperatorEnum.NOT_ENDS_WITH,
+				CriteriaOperatorEnum.NOT_CONTAINS,
+				CriteriaOperatorEnum.NOT_IN,
+				CriteriaOperatorEnum.IN
 				}){
 			verifyStringConditionOnPassenger(op);
 		}
 	}
-	private void verifyStringConditionOnPassenger(OperatorCodeEnum op) throws ParseException{
+	private void verifyStringConditionOnPassenger(CriteriaOperatorEnum op) throws ParseException{
 		String[] val = new String[]{"Foo", "Bar"};
 		String attr = PassengerMapping.LAST_NAME.getFieldName();
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
@@ -167,23 +167,23 @@ public class RuleConditionBuilderTest {
 	}
 	@Test
 	public void testDateConditionsOnPassenger() throws ParseException {
-		for(OperatorCodeEnum op:
-			new OperatorCodeEnum[]{
-				OperatorCodeEnum.EQUAL, 
-				OperatorCodeEnum.NOT_EQUAL,
-				OperatorCodeEnum.BETWEEN,
-				OperatorCodeEnum.NOT_BETWEEN,
-				OperatorCodeEnum.GREATER,
-				OperatorCodeEnum.GREATER_OR_EQUAL,
-				OperatorCodeEnum.LESS,
-				OperatorCodeEnum.LESS_OR_EQUAL,
-				OperatorCodeEnum.NOT_IN,
-				OperatorCodeEnum.IN
+		for(CriteriaOperatorEnum op:
+			new CriteriaOperatorEnum[]{
+				CriteriaOperatorEnum.EQUAL, 
+				CriteriaOperatorEnum.NOT_EQUAL,
+				CriteriaOperatorEnum.BETWEEN,
+				CriteriaOperatorEnum.NOT_BETWEEN,
+				CriteriaOperatorEnum.GREATER,
+				CriteriaOperatorEnum.GREATER_OR_EQUAL,
+				CriteriaOperatorEnum.LESS,
+				CriteriaOperatorEnum.LESS_OR_EQUAL,
+				CriteriaOperatorEnum.NOT_IN,
+				CriteriaOperatorEnum.IN
 				}){
 			verifyDateConditionOnPassenger(op);
 		}
 	}
-	private void verifyDateConditionOnPassenger(OperatorCodeEnum op) throws ParseException{
+	private void verifyDateConditionOnPassenger(CriteriaOperatorEnum op) throws ParseException{
 		String[] val = new String[]{"2011-05-24", "2015-01-25"};
 		String attr = PassengerMapping.DOB.getFieldName();
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
@@ -256,11 +256,11 @@ public class RuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", TypeEnum.STRING);
+				CriteriaOperatorEnum.NOT_EQUAL, "US", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.ISSUANCE_DATE,
-				OperatorCodeEnum.GREATER_OR_EQUAL, "2010-01-01", TypeEnum.DATE);
+				CriteriaOperatorEnum.GREATER_OR_EQUAL, "2010-01-01", TypeEnum.DATE);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -279,11 +279,11 @@ public class RuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", TypeEnum.STRING);
+				CriteriaOperatorEnum.NOT_EQUAL, "US", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.DOCUMENT_TYPE,
-				OperatorCodeEnum.EQUAL, "P", TypeEnum.STRING);
+				CriteriaOperatorEnum.EQUAL, "P", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -300,7 +300,7 @@ public class RuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.DOCUMENT_TYPE,
-				OperatorCodeEnum.EQUAL, "P", TypeEnum.STRING);
+				CriteriaOperatorEnum.EQUAL, "P", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -316,11 +316,11 @@ public class RuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", TypeEnum.STRING);
+				CriteriaOperatorEnum.NOT_EQUAL, "US", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.DOCUMENT_TYPE,
-				OperatorCodeEnum.NOT_EQUAL, "P", TypeEnum.STRING);
+				CriteriaOperatorEnum.NOT_EQUAL, "P", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -338,7 +338,7 @@ public class RuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.DOCUMENT_TYPE,
-				OperatorCodeEnum.NOT_EQUAL, "P", TypeEnum.STRING);
+				CriteriaOperatorEnum.NOT_EQUAL, "P", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -354,30 +354,30 @@ public class RuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", TypeEnum.STRING);
+				CriteriaOperatorEnum.NOT_EQUAL, "US", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.ISSUANCE_DATE,
-				OperatorCodeEnum.GREATER_OR_EQUAL, "2010-01-01", TypeEnum.DATE);
+				CriteriaOperatorEnum.GREATER_OR_EQUAL, "2010-01-01", TypeEnum.DATE);
 		testTarget.addRuleCondition(cond);
 
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
 				PassengerMapping.DOB,
-				OperatorCodeEnum.BETWEEN, new String[]{"1990-01-01","1998-12-31"}, TypeEnum.DATE);
+				CriteriaOperatorEnum.BETWEEN, new String[]{"1990-01-01","1998-12-31"}, TypeEnum.DATE);
 		testTarget.addRuleCondition(cond);
 
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
 				FlightMapping.AIRPORT_DESTINATION,
-				OperatorCodeEnum.EQUAL, "DBY", TypeEnum.STRING);
+				CriteriaOperatorEnum.EQUAL, "DBY", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
 				FlightMapping.FLIGHT_NUMBER,
-				OperatorCodeEnum.EQUAL, "2231", TypeEnum.INTEGER);
+				CriteriaOperatorEnum.EQUAL, "2231", TypeEnum.INTEGER);
 		testTarget.addRuleCondition(cond);
 
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
 				PassengerMapping.LAST_NAME,
-				OperatorCodeEnum.EQUAL, "Jones", TypeEnum.STRING);
+				CriteriaOperatorEnum.EQUAL, "Jones", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 				
 		StringBuilder result = new StringBuilder();

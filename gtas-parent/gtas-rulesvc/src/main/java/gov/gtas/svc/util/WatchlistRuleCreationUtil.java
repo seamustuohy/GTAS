@@ -1,7 +1,7 @@
 package gov.gtas.svc.util;
 
 import static gov.gtas.rule.builder.RuleTemplateConstants.NEW_LINE;
-import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.watchlist.json.WatchlistTerm;
 import gov.gtas.rule.builder.RuleConditionBuilder;
@@ -27,7 +27,7 @@ public class WatchlistRuleCreationUtil {
 		for (WatchlistTerm wlterm : wlData) {
 			QueryTerm trm = new QueryTerm(wlterm.getEntity(),
 					wlterm.getField(), wlterm.getType(),
-					OperatorCodeEnum.EQUAL.toString(), new String[]{wlterm.getValue()});
+					CriteriaOperatorEnum.EQUAL.toString(), new String[]{wlterm.getValue()});
 			ruleConditionBuilder.addRuleCondition(trm);
 		}
 		ruleConditionBuilder.buildConditionsAndApppend(ruleOutput);

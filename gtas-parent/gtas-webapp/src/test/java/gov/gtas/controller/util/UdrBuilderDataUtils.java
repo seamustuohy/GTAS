@@ -2,7 +2,7 @@ package gov.gtas.controller.util;
 
 import gov.gtas.enumtype.ConditionEnum;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;
@@ -22,10 +22,10 @@ public class UdrBuilderDataUtils {
 		queryObject.setCondition(ConditionEnum.OR.toString());
 		List<QueryEntity> rules = new LinkedList<QueryEntity>();
 		QueryTerm trm = new QueryTerm(EntityEnum.PASSENGER.getEntityName(),  "embarkationDate", "String",
-				OperatorCodeEnum.EQUAL.toString(), new String[] { new Date().toString() });
+				CriteriaOperatorEnum.EQUAL.toString(), new String[] { new Date().toString() });
 		rules.add(trm);
 		rules.add(new QueryTerm(EntityEnum.PASSENGER.getEntityName(), PassengerMapping.LAST_NAME.getFieldName(), 
-				"String", OperatorCodeEnum.EQUAL.toString(),
+				"String", CriteriaOperatorEnum.EQUAL.toString(),
 				new String[] { "Jones" }));
 
 		QueryObject queryObjectEmbedded = new QueryObject();
@@ -33,9 +33,9 @@ public class UdrBuilderDataUtils {
 		List<QueryEntity> rules2 = new LinkedList<QueryEntity>();
 
 		QueryTerm trm2 = new QueryTerm(EntityEnum.PASSENGER.getEntityName(), PassengerMapping.EMBARKATION.getFieldName(), "String",
-				OperatorCodeEnum.IN.toString(), new String[] { "DBY", "PKY", "FLT" });
+				CriteriaOperatorEnum.IN.toString(), new String[] { "DBY", "PKY", "FLT" });
 		rules2.add(trm2);
-		rules2.add(new QueryTerm(EntityEnum.PASSENGER.getEntityName(), PassengerMapping.DEBARKATION.getFieldName(), "String", OperatorCodeEnum.EQUAL.toString(),
+		rules2.add(new QueryTerm(EntityEnum.PASSENGER.getEntityName(), PassengerMapping.DEBARKATION.getFieldName(), "String", CriteriaOperatorEnum.EQUAL.toString(),
 				new String[] { "IAD" }));
 		queryObjectEmbedded.setRules(rules2);
 

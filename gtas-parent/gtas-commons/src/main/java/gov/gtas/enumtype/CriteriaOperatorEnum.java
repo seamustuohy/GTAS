@@ -1,7 +1,7 @@
 package gov.gtas.enumtype;
 
 
-public enum OperatorCodeEnum {
+public enum CriteriaOperatorEnum {
   EQUAL("==", "is", false),
   NOT_EQUAL("!=", "is not", false),
   GREATER(">", "is greater than", false),
@@ -50,14 +50,14 @@ public boolean isTakesMultipleArguements() {
 	return takesMultipleArguements;
 }
 
-private OperatorCodeEnum(final String opString, final String displayName, final boolean isMultivalued){
+private CriteriaOperatorEnum(final String opString, final String displayName, final boolean isMultivalued){
 	  this.operatorString = opString;
 	  this.displayName = displayName;
 	  this.takesMultipleArguements = isMultivalued;
   }
 
-public static OperatorCodeEnum getEnum(String value) {	
-	for (OperatorCodeEnum opEnum : OperatorCodeEnum.values()) {
+public static CriteriaOperatorEnum getEnum(String value) {	
+	for (CriteriaOperatorEnum opEnum : CriteriaOperatorEnum.values()) {
 	     if(opEnum.name().equalsIgnoreCase(value)) {
 	    	 return opEnum;
 	     }

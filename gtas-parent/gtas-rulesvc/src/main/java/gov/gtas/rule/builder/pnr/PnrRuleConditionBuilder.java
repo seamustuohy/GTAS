@@ -11,7 +11,7 @@ import gov.gtas.bo.match.PnrPhoneLink;
 import gov.gtas.bo.match.PnrTravelAgencyLink;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.udr.json.QueryTerm;
@@ -190,7 +190,7 @@ public class PnrRuleConditionBuilder {
 	 *            the condition to add.
 	 */
 	public void addRuleCondition(final EntityEnum entity,
-			final TypeEnum attributeType, final OperatorCodeEnum opCode,
+			final TypeEnum attributeType, final CriteriaOperatorEnum opCode,
 			final QueryTerm trm) {
 		try {
 			switch (entity) {

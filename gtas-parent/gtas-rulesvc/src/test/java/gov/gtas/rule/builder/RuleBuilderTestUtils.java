@@ -1,7 +1,7 @@
 package gov.gtas.rule.builder;
 
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.udr.Rule;
@@ -59,13 +59,13 @@ public class RuleBuilderTestUtils {
 	 * @throws ParseException
 	 */
 	public static QueryTerm createQueryTerm(EntityEnum entity,
-			IEntityMapping attr, OperatorCodeEnum op, String value,
+			IEntityMapping attr, CriteriaOperatorEnum op, String value,
 			TypeEnum type) throws ParseException {
 		QueryTerm ret = new QueryTerm(entity.getEntityName(), attr.getFieldName(), type.getType(), op.toString(), new String[]{value});
 		return ret;
 	}
 	public static QueryTerm createQueryTerm(EntityEnum entity,
-			IEntityMapping attr, OperatorCodeEnum op, String[] values,
+			IEntityMapping attr, CriteriaOperatorEnum op, String[] values,
 			TypeEnum type) throws ParseException {
 		QueryTerm ret = new QueryTerm(entity.getEntityName(), attr.getFieldName(), type.getType(), op.toString(), values);
 		return ret;
@@ -81,15 +81,15 @@ public class RuleBuilderTestUtils {
 			case DOC_FLIGHT_CRITERIA_RULE_INDX:/* doc.iso2 != US && doc.issueDate > 2012-01-01 && flight# == 0012  */
 				QueryTerm cond = createQueryTerm(EntityEnum.DOCUMENT,
 						DocumentMapping.ISSUANCE_COUNTRY,
-						OperatorCodeEnum.NOT_EQUAL, "US", TypeEnum.STRING);
+						CriteriaOperatorEnum.NOT_EQUAL, "US", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.DOCUMENT,
 						DocumentMapping.ISSUANCE_DATE,
-						OperatorCodeEnum.GREATER_OR_EQUAL, "2012-01-01", TypeEnum.DATE);
+						CriteriaOperatorEnum.GREATER_OR_EQUAL, "2012-01-01", TypeEnum.DATE);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FLIGHT,
 						FlightMapping.FLIGHT_NUMBER,
-						OperatorCodeEnum.EQUAL, "0012", TypeEnum.STRING);				
+						CriteriaOperatorEnum.EQUAL, "0012", TypeEnum.STRING);				
 				ruleMinTerm.add(cond);
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
@@ -97,15 +97,15 @@ public class RuleBuilderTestUtils {
 			case ENGINE_RULE_INDX2:/* doc.iso2 in (YE,GB) && flight.origin.iata == LHR && flight.carrier.iata==CO  */
 				cond = createQueryTerm(EntityEnum.DOCUMENT,
 						DocumentMapping.ISSUANCE_COUNTRY,
-						OperatorCodeEnum.IN, new String[]{"YE", "GB"}, TypeEnum.STRING);
+						CriteriaOperatorEnum.IN, new String[]{"YE", "GB"}, TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FLIGHT,
 						FlightMapping.AIRPORT_ORIGIN,
-						OperatorCodeEnum.EQUAL, "LHR", TypeEnum.STRING);
+						CriteriaOperatorEnum.EQUAL, "LHR", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FLIGHT,
 						FlightMapping.CARRIER,
-						OperatorCodeEnum.EQUAL, "CO", TypeEnum.STRING);
+						CriteriaOperatorEnum.EQUAL, "CO", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
@@ -113,15 +113,15 @@ public class RuleBuilderTestUtils {
 			case ENGINE_RULE_INDX3:/* flight.origin.iata == LHR && flight.carrier.iata==CO  */
 				cond = createQueryTerm(EntityEnum.FLIGHT,
 						FlightMapping.AIRPORT_ORIGIN,
-						OperatorCodeEnum.EQUAL, "LHR", TypeEnum.STRING);
+						CriteriaOperatorEnum.EQUAL, "LHR", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FLIGHT,
 						FlightMapping.CARRIER,
-						OperatorCodeEnum.EQUAL, "CO", TypeEnum.STRING);
+						CriteriaOperatorEnum.EQUAL, "CO", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FLIGHT,
 						FlightMapping.FLIGHT_DATE,
-						OperatorCodeEnum.GREATER, "2015-07-20 14:00:00", TypeEnum.DATETIME);
+						CriteriaOperatorEnum.GREATER, "2015-07-20 14:00:00", TypeEnum.DATETIME);
 				ruleMinTerm.add(cond);
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
@@ -129,15 +129,15 @@ public class RuleBuilderTestUtils {
 			case PNR_CRITERIA_RULE_INDX:
 				cond = createQueryTerm(EntityEnum.PNR,
 						PNRMapping.RECORD_LOCATOR,
-						OperatorCodeEnum.NOT_CONTAINS, "FOO", TypeEnum.STRING);
+						CriteriaOperatorEnum.NOT_CONTAINS, "FOO", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.PNR,
 						PNRMapping.RECORD_LOCATOR,
-						OperatorCodeEnum.CONTAINS, "CO", TypeEnum.STRING);
+						CriteriaOperatorEnum.CONTAINS, "CO", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.PNR,
 						PNRMapping.RECORD_LOCATOR,
-						OperatorCodeEnum.BEGINS_WITH, "DU", TypeEnum.STRING);
+						CriteriaOperatorEnum.BEGINS_WITH, "DU", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
@@ -145,23 +145,23 @@ public class RuleBuilderTestUtils {
 			case PNR_PASSENGER_RULE_INDX:
 				cond = createQueryTerm(EntityEnum.PNR,
 						PNRMapping.RECORD_LOCATOR,
-						OperatorCodeEnum.NOT_CONTAINS, "3255", TypeEnum.STRING);
+						CriteriaOperatorEnum.NOT_CONTAINS, "3255", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.PNR,
 						PNRMapping.RECORD_LOCATOR,
-						OperatorCodeEnum.CONTAINS, "901", TypeEnum.STRING);
+						CriteriaOperatorEnum.CONTAINS, "901", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.PNR,
 						PNRMapping.RECORD_LOCATOR,
-						OperatorCodeEnum.BEGINS_WITH, "VYZ", TypeEnum.STRING);
+						CriteriaOperatorEnum.BEGINS_WITH, "VYZ", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.PASSENGER,
 						PassengerMapping.PASSENGER_TYPE,
-						OperatorCodeEnum.EQUAL, "P", TypeEnum.STRING);
+						CriteriaOperatorEnum.EQUAL, "P", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.PASSENGER,
 						PassengerMapping.LAST_NAME,
-						OperatorCodeEnum.EQUAL, "Baggins", TypeEnum.STRING);
+						CriteriaOperatorEnum.EQUAL, "Baggins", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
@@ -169,31 +169,31 @@ public class RuleBuilderTestUtils {
 			case ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX:
 				cond = createQueryTerm(EntityEnum.ADDRESS,
 						AddressMapping.COUNTRY,
-						OperatorCodeEnum.NOT_EQUAL, "USA", TypeEnum.STRING);
+						CriteriaOperatorEnum.NOT_EQUAL, "USA", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.ADDRESS,
 						AddressMapping.ADDRESS_LINE_1,
-						OperatorCodeEnum.CONTAINS, "Nowhere", TypeEnum.STRING);
+						CriteriaOperatorEnum.CONTAINS, "Nowhere", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.PHONE,
 						PhoneMapping.PHONE_NUMBER,
-						OperatorCodeEnum.ENDS_WITH, "9087", TypeEnum.STRING);
+						CriteriaOperatorEnum.ENDS_WITH, "9087", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.EMAIL,
 						EmailMapping.DOMAIN,
-						OperatorCodeEnum.NOT_ENDS_WITH, "om", TypeEnum.STRING);
+						CriteriaOperatorEnum.NOT_ENDS_WITH, "om", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.EMAIL,
 						EmailMapping.DOMAIN,
-						OperatorCodeEnum.NOT_BEGINS_WITH, "all", TypeEnum.STRING);
+						CriteriaOperatorEnum.NOT_BEGINS_WITH, "all", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.DOCUMENT,
 						DocumentMapping.ISSUANCE_COUNTRY,
-						OperatorCodeEnum.NOT_IN, new String[]{"GBR", "USA"}, TypeEnum.STRING);
+						CriteriaOperatorEnum.NOT_IN, new String[]{"GBR", "USA"}, TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.DOCUMENT,
 						DocumentMapping.ISSUANCE_DATE,
-						OperatorCodeEnum.BETWEEN, new String[]{"2012-05-01", "2013-06-30"}, TypeEnum.DATE);
+						CriteriaOperatorEnum.BETWEEN, new String[]{"2012-05-01", "2013-06-30"}, TypeEnum.DATE);
 				ruleMinTerm.add(cond);
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
@@ -201,23 +201,23 @@ public class RuleBuilderTestUtils {
 			case AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX:
 				cond = createQueryTerm(EntityEnum.TRAVEL_AGENCY,
 						TravelAgencyMapping.NAME,
-						OperatorCodeEnum.ENDS_WITH, "Tours", TypeEnum.STRING);
+						CriteriaOperatorEnum.ENDS_WITH, "Tours", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.CREDIT_CARD,
 						CreditCardMapping.CREDIT_CARD_NUMBER,
-						OperatorCodeEnum.BEGINS_WITH, "123", TypeEnum.STRING);
+						CriteriaOperatorEnum.BEGINS_WITH, "123", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FREQUENT_FLYER,
 						FrequentFlyerMapping.CARRIER,
-						OperatorCodeEnum.EQUAL, "AA", TypeEnum.STRING);
+						CriteriaOperatorEnum.EQUAL, "AA", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FLIGHT,
 						FlightMapping.AIRPORT_DESTINATION,
-						OperatorCodeEnum.EQUAL, "JFK", TypeEnum.STRING);
+						CriteriaOperatorEnum.EQUAL, "JFK", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.DOCUMENT,
 						DocumentMapping.ISSUANCE_DATE,
-						OperatorCodeEnum.LESS, "2014-01-30", TypeEnum.DATE);
+						CriteriaOperatorEnum.LESS, "2014-01-30", TypeEnum.DATE);
 				ruleMinTerm.add(cond);
 				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);

@@ -1,6 +1,6 @@
 package gov.gtas.rule.builder;
 
-import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.util.DateCalendarUtils;
 
@@ -95,7 +95,7 @@ public abstract class EntityConditionBuilder {
 
 	protected abstract void addSpecialConditions(final StringBuilder bldr);
 
-	public void addCondition(final OperatorCodeEnum opCode,
+	public void addCondition(final CriteriaOperatorEnum opCode,
 			final String attributeName, final TypeEnum attributeType,
 			String[] values) throws ParseException {
 		final StringBuilder bldr = new StringBuilder();
@@ -239,7 +239,7 @@ public abstract class EntityConditionBuilder {
 		if (!this.attributesWithNotEmptyCondition.contains(attributeName)) {
 			this.attributesWithNotEmptyCondition.add(attributeName);
 			bldr.append(attributeName).append(" ")
-					.append(OperatorCodeEnum.IS_NOT_EMPTY.getOperatorString());
+					.append(CriteriaOperatorEnum.IS_NOT_EMPTY.getOperatorString());
 			bldr.append(", ");
 		}
 

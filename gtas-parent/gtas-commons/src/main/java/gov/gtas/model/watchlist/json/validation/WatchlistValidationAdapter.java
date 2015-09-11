@@ -12,7 +12,7 @@ import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.enumtype.ConditionEnum;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.enumtype.WatchlistEditEnum;
 import gov.gtas.error.CommonValidationException;
 import gov.gtas.error.ErrorHandlerFactory;
@@ -68,7 +68,7 @@ public class WatchlistValidationAdapter {
 				List<QueryEntity> terms = new LinkedList<QueryEntity>();
 				for (WatchlistTerm trm : itm.getTerms()) {
 					QueryTerm t = new QueryTerm(trm.getEntity(), trm.getField(),
-							trm.getType(), OperatorCodeEnum.EQUAL.toString(),
+							trm.getType(), CriteriaOperatorEnum.EQUAL.toString(),
 							new String[] { trm.getValue() });
 					terms.add(t);
 				}
