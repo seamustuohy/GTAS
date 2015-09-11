@@ -1,7 +1,7 @@
 package gov.gtas.svc.util;
 
 import static gov.gtas.rule.builder.RuleTemplateConstants.NEW_LINE;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.watchlist.json.WatchlistTerm;
 import gov.gtas.rule.builder.RuleConditionBuilder;

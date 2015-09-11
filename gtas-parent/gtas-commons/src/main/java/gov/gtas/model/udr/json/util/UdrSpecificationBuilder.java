@@ -1,8 +1,8 @@
 package gov.gtas.model.udr.json.util;
 
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
-import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryConditionEnum;
 import gov.gtas.model.udr.json.QueryEntity;
@@ -61,7 +61,7 @@ public class UdrSpecificationBuilder {
 	}
 
 	public UdrSpecificationBuilder addTerm(EntityEnum entity,
-			String attr, ValueTypesEnum type, OperatorCodeEnum op, String[] val) {
+			String attr, TypeEnum type, OperatorCodeEnum op, String[] val) {
 		queryObjectStack
 				.peek()
 				.getRules()
@@ -138,21 +138,21 @@ public class UdrSpecificationBuilder {
 		final UdrSpecificationBuilder bldr = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.OR);
 		bldr.addTerm(EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(),
-				ValueTypesEnum.DATE,
+				TypeEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
 		bldr.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.LAST_NAME.getFieldName(),
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.EMBARKATION.getFieldName(),
-				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
+				TypeEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
 		bldr.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.DEBARKATION.getFieldName(),
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		bldr.addMeta(title, description, new Date(), null, true, userId);
 		return bldr.build();
@@ -164,12 +164,12 @@ public class UdrSpecificationBuilder {
 				QueryConditionEnum.AND);
 		bldr.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.DOB.getFieldName(),
-				ValueTypesEnum.DATE,
+				TypeEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
 		bldr.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.LAST_NAME.getFieldName(),
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.addMeta(title, description, new Date(), null, true, userId);
 		return bldr.build();
@@ -180,22 +180,22 @@ public class UdrSpecificationBuilder {
 				QueryConditionEnum.OR);
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityEnum.PASSENGER,
-				PassengerMapping.DOB.getFieldName(), ValueTypesEnum.DATE,
+				PassengerMapping.DOB.getFieldName(), TypeEnum.DATE,
 				OperatorCodeEnum.EQUAL,
 				new String[] { DateCalendarUtils.formatJsonDate(new Date()) });
 		bldr.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.LAST_NAME.getFieldName(),
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "Jones" });
 		bldr.endCurrentQueryObject();
 		bldr.addNestedQueryObject(QueryConditionEnum.AND);
 		bldr.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.EMBARKATION.getFieldName(),
-				ValueTypesEnum.STRING, OperatorCodeEnum.IN, new String[] {
+				TypeEnum.STRING, OperatorCodeEnum.IN, new String[] {
 						"DBY", "PKY", "FLT" });
 		bldr.addTerm(EntityEnum.PASSENGER,
 				PassengerMapping.DEBARKATION.getFieldName(),
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL,
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL,
 				new String[] { "IAD" });
 		bldr.addMeta(title, description, new Date(), null, true, userId);
 		return bldr.build();

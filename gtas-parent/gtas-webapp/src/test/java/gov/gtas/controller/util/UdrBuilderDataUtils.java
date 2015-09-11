@@ -2,7 +2,7 @@ package gov.gtas.controller.util;
 
 import gov.gtas.enumtype.ConditionEnum;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryEntity;
 import gov.gtas.model.udr.json.QueryObject;

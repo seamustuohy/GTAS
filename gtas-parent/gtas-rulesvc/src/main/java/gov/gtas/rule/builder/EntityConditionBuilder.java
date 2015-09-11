@@ -1,7 +1,7 @@
 package gov.gtas.rule.builder;
 
+import gov.gtas.enumtype.OperatorCodeEnum;
 import gov.gtas.enumtype.TypeEnum;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.text.ParseException;

@@ -14,8 +14,8 @@ import static gov.gtas.rule.builder.RuleTemplateConstants.PNR_VARIABLE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
-import gov.gtas.model.udr.enumtype.ValueTypesEnum;
+import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.AddressMapping;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
@@ -52,7 +52,7 @@ public class PnrRuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PNR,
 				PNRMapping.BAG_COUNT,
-				OperatorCodeEnum.EQUAL, new String[]{"0"}, ValueTypesEnum.INTEGER);
+				OperatorCodeEnum.EQUAL, new String[]{"0"}, TypeEnum.INTEGER);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -75,15 +75,15 @@ public class PnrRuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.ADDRESS,
 				AddressMapping.COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"}, ValueTypesEnum.STRING);
+				OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"}, TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.ADDRESS,
 				AddressMapping.CITY,
-				OperatorCodeEnum.IN, new String[]{"FOO", "BAR"}, ValueTypesEnum.STRING);
+				OperatorCodeEnum.IN, new String[]{"FOO", "BAR"}, TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
 				FlightMapping.AIRPORT_DESTINATION,
-				OperatorCodeEnum.IN, new String[]{"DBY","XYZ","PQR"}, ValueTypesEnum.STRING);
+				OperatorCodeEnum.IN, new String[]{"DBY","XYZ","PQR"}, TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -111,19 +111,19 @@ public class PnrRuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PHONE,
 				PhoneMapping.PHONE_NUMBER,
-				OperatorCodeEnum.NOT_CONTAINS, new String[]{"456"}, ValueTypesEnum.STRING);
+				OperatorCodeEnum.NOT_CONTAINS, new String[]{"456"}, TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.EMAIL,
 				EmailMapping.DOMAIN,
-				OperatorCodeEnum.NOT_ENDS_WITH, new String[]{".com"}, ValueTypesEnum.STRING);
+				OperatorCodeEnum.NOT_ENDS_WITH, new String[]{".com"}, TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FREQUENT_FLYER,
 				FrequentFlyerMapping.CARRIER,
-				OperatorCodeEnum.NOT_EQUAL, new String[]{"NZ"}, ValueTypesEnum.STRING);
+				OperatorCodeEnum.NOT_EQUAL, new String[]{"NZ"}, TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
 				DocumentMapping.ISSUANCE_COUNTRY,
-				OperatorCodeEnum.NOT_EQUAL, "US", ValueTypesEnum.STRING);
+				OperatorCodeEnum.NOT_EQUAL, "US", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);

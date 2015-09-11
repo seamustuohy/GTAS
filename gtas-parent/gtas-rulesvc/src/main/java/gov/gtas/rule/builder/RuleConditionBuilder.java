@@ -3,11 +3,11 @@ package gov.gtas.rule.builder;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.OperatorCodeEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.rule.builder.pnr.PnrRuleConditionBuilder;
 

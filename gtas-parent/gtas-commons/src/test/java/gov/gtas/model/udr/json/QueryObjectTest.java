@@ -3,9 +3,9 @@ package gov.gtas.model.udr.json;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.OperatorCodeEnum;
+import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.error.CommonServiceException;
-import gov.gtas.model.udr.enumtype.OperatorCodeEnum;
-import gov.gtas.model.udr.enumtype.ValueTypesEnum;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 
@@ -39,9 +39,9 @@ public class QueryObjectTest {
 		UdrSpecificationBuilder builder = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.AND);
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.CITIZENSHIP_COUNTRY.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Jones"});
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Jones"});
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
+				TypeEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
 		QueryObject qobj = builder.build().getDetails();
 		List<List<QueryTerm>> flatList = qobj.createFlattenedList();
 		assertNotNull(flatList);
@@ -54,14 +54,14 @@ public class QueryObjectTest {
 		UdrSpecificationBuilder builder = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.AND);
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.LAST_NAME.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Jones"});
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Jones"});
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
+				TypeEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
 		builder.addNestedQueryObject(QueryConditionEnum.OR);
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.EMBARKATION.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"DBY"});
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"DBY"});
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.CITIZENSHIP_COUNTRY.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"});
+				TypeEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"});
 		
 		QueryObject qobj = builder.build().getDetails();
 		List<List<QueryTerm>> flatList = qobj.createFlattenedList();
@@ -92,24 +92,24 @@ public class QueryObjectTest {
 		UdrSpecificationBuilder builder = new UdrSpecificationBuilder(null,
 				QueryConditionEnum.AND);
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.LAST_NAME.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Jones"});
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Jones"});
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
+				TypeEnum.STRING, OperatorCodeEnum.LESS, new String[]{"1978-12-24"});
 		builder.addNestedQueryObject(QueryConditionEnum.OR);
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.EMBARKATION.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"DBY"});
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"DBY"});
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.CITIZENSHIP_COUNTRY.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"});
+				TypeEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"USA"});
 		builder.addNestedQueryObject(QueryConditionEnum.AND);
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.MIDDLE_NAME.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Paul"});
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"Paul"});
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.FIRST_NAME.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"John"});
+				TypeEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"John"});
 		builder.addNestedQueryObject(QueryConditionEnum.OR);
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.SEAT.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"12345"});
+				TypeEnum.STRING, OperatorCodeEnum.EQUAL, new String[]{"12345"});
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.DEBARKATION.getFieldName(), 
-				ValueTypesEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"Timbuktu"});
+				TypeEnum.STRING, OperatorCodeEnum.NOT_EQUAL, new String[]{"Timbuktu"});
 
 		QueryObject qobj = builder.build().getDetails();
 		List<List<QueryTerm>> flatList = qobj.createFlattenedList();
