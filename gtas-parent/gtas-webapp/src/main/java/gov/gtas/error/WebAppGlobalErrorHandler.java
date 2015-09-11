@@ -2,7 +2,6 @@ package gov.gtas.error;
 
 import static gov.gtas.constant.DomainModelConstants.UDR_UNIQUE_CONSTRAINT_NAME;
 import gov.gtas.json.JsonServiceResponse;
-import gov.gtas.model.udr.json.error.GtasJsonError;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
