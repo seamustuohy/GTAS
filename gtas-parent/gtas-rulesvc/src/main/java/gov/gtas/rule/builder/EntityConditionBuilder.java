@@ -102,7 +102,7 @@ public abstract class EntityConditionBuilder {
 		switch (opCode) {
 		case EQUAL:
 			if(attributeType == TypeEnum.DATETIME){
-				//special 'between like' treatment for date-time equality check
+				//special 'between-like' treatment for date-time equality check
 				//since Drools only supports date comparisons only
 				bldr.append(attributeName).append(" >= ");
 				RuleConditionBuilderHelper.addConditionValue(TypeEnum.DATE,
@@ -114,7 +114,7 @@ public abstract class EntityConditionBuilder {
 			}
 		case NOT_EQUAL:
 			if(attributeType == TypeEnum.DATETIME){
-				//special 'between like' treatment for date-time inequality check
+				//special 'between-like' treatment for date-time inequality check
 				//since Drools only supports date comparisons only
 				bldr.append("(").append(attributeName).append(" < ");
 				RuleConditionBuilderHelper.addConditionValue(attributeType,
@@ -133,6 +133,8 @@ public abstract class EntityConditionBuilder {
 		case LESS_OR_EQUAL:
 			bldr.append(attributeName).append(" ")
 					.append(opCode.getOperatorString()).append(" ");
+			//TODO - if email strings are not to be made upper case
+			//then handle here
 			RuleConditionBuilderHelper.addConditionValue(attributeType,
 					values[0], bldr);
 			break;

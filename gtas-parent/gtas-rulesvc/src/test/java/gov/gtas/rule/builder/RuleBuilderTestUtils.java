@@ -4,6 +4,7 @@ import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.CriteriaOperatorEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.enumtype.YesNoEnum;
+import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
 //import gov.gtas.model.udr.RuleCond;
 //import gov.gtas.model.udr.RuleCondPk;
@@ -39,8 +40,11 @@ public class RuleBuilderTestUtils {
 	public static final int ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX=6;
 	public static final int AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX=7;
 	
-	public static UdrRule createSimpleUdrRule(int indx) throws ParseException{
+	public static UdrRule createSimpleUdrRule(String userId, int indx) throws ParseException{
 		UdrRule ret = new UdrRule(UDR_RULE_ID, YesNoEnum.N, null, new Date());
+		User author = new User();
+		author.setUserId(userId);
+		ret.setAuthor(author);
 		ret.setTitle(UDR_RULE_TITLE);
 		Rule engineRule = createEngineRule(ENGINE_RULE_ID, ret, indx);		
 		ret.addEngineRule(engineRule);
@@ -209,11 +213,11 @@ public class RuleBuilderTestUtils {
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FREQUENT_FLYER,
 						FrequentFlyerMapping.CARRIER,
-						CriteriaOperatorEnum.EQUAL, "AA", TypeEnum.STRING);
+						CriteriaOperatorEnum.EQUAL, "aa", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.FLIGHT,
 						FlightMapping.AIRPORT_DESTINATION,
-						CriteriaOperatorEnum.EQUAL, "JFK", TypeEnum.STRING);
+						CriteriaOperatorEnum.EQUAL, "jfk", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.DOCUMENT,
 						DocumentMapping.ISSUANCE_DATE,

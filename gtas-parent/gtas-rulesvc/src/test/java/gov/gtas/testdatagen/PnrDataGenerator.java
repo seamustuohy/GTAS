@@ -119,10 +119,10 @@ public class PnrDataGenerator {
     private static Address createAdddress(long id, String address) {
         Address addr = new Address();
         String[] params = address.split(",");
-        addr.setCountry(params[0]);
-        addr.setCity(params[1]);
+        addr.setCountry(params[0].toUpperCase());
+        addr.setCity(params[1].toUpperCase());
         addr.setPostalCode(params[2]);
-        addr.setLine1(params[3]);
+        addr.setLine1(params[3].toUpperCase());
         addr.setId(id);
         return addr;
     }
@@ -153,9 +153,9 @@ public class PnrDataGenerator {
         case 1:
             Agency agency = new Agency();
             String[] params = PNR_AGENCY1.split(",");
-            agency.setAgencyCountry(params[0]);
-            agency.setAgencyCity(params[1]);
-            agency.setAgencyName(params[2]);
+            agency.setAgencyCountry(params[0].toUpperCase());
+            agency.setAgencyCity(params[1].toUpperCase());
+            agency.setAgencyName(params[2].toUpperCase());
             agency.setAgencyIdentifier(params[3]);
             agency.setId(1L);
             pnr.setAgency(agency);
@@ -163,9 +163,9 @@ public class PnrDataGenerator {
         case 2:
             agency = new Agency();
             params = PNR_AGENCY2.split(",");
-            agency.setAgencyCountry(params[0]);
-            agency.setAgencyCity(params[1]);
-            agency.setAgencyName(params[2]);
+            agency.setAgencyCountry(params[0].toUpperCase());
+            agency.setAgencyCity(params[1].toUpperCase());
+            agency.setAgencyName(params[2].toUpperCase());
             agency.setAgencyIdentifier(params[3]);
             agency.setId(2L);
             pnr.setAgency(agency);
@@ -212,7 +212,7 @@ public class PnrDataGenerator {
         case 1:
             FrequentFlyer ff = new FrequentFlyer();
             String[] params = PNR_FREQUENT_FLYER1.split(",");
-            ff.setCarrier(params[0]);
+            ff.setCarrier(params[0].toUpperCase());
             ff.setNumber(params[1]);
             ff.setId(1L);
             pnr.addFrequentFlyer(ff);
@@ -220,24 +220,27 @@ public class PnrDataGenerator {
         case 2:
             ff = new FrequentFlyer();
             params = PNR_FREQUENT_FLYER2.split(",");
-            ff.setCarrier(params[0]);
+            ff.setCarrier(params[0].toUpperCase());
             ff.setNumber(params[1]);
             ff.setId(2L);
             pnr.addFrequentFlyer(ff);
             break;
         }
     }
-
+    private static void setupPassenger(Passenger p, long id, String[] params){
+        p.setPassengerType(params[0]);
+        p.setFirstName(params[1].toUpperCase());
+        p.setMiddleName(params[2].toUpperCase());
+        p.setLastName(params[3].toUpperCase());
+        p.setId(id);
+    	
+    }
     private static void addPassenger(Pnr pnr, int indx, Flight flight) throws ParseException {
         switch (indx) {
         case 1:
             Passenger p = new Passenger();
             String[] params = PNR_PASSENGER1.split(",");
-            p.setPassengerType(params[0]);
-            p.setFirstName(params[1]);
-            p.setMiddleName(params[2]);
-            p.setLastName(params[3]);
-            p.setId(1L);
+            setupPassenger(p, 1L, params);
             addDocumentToPassenger(p, params[4], params[5]);
             pnr.getPassengers().add(p);
             flight.getPassengers().add(p);
@@ -245,11 +248,7 @@ public class PnrDataGenerator {
         case 2:
             p = new Passenger();
             params = PNR_PASSENGER2.split(",");
-            p.setPassengerType(params[0]);
-            p.setFirstName(params[1]);
-            p.setMiddleName(params[2]);
-            p.setLastName(params[3]);
-            p.setId(2L);
+            setupPassenger(p, 2L, params);
             addDocumentToPassenger(p, params[4], params[5]);
             pnr.getPassengers().add(p);
             flight.getPassengers().add(p);
@@ -257,11 +256,7 @@ public class PnrDataGenerator {
         case 3:
             p = new Passenger();
             params = PNR_PASSENGER3.split(",");
-            p.setPassengerType(params[0]);
-            p.setFirstName(params[1]);
-            p.setMiddleName(params[2]);
-            p.setLastName(params[3]);
-            p.setId(3L);
+            setupPassenger(p, 3L, params);
             addDocumentToPassenger(p, params[4], params[5]);
             pnr.getPassengers().add(p);
             flight.getPassengers().add(p);
@@ -269,11 +264,7 @@ public class PnrDataGenerator {
         case 4:
             p = new Passenger();
             params = PNR_PASSENGER4.split(",");
-            p.setPassengerType(params[0]);
-            p.setFirstName(params[1]);
-            p.setMiddleName(params[2]);
-            p.setLastName(params[3]);
-            p.setId(4L);
+            setupPassenger(p, 4L, params);
             addDocumentToPassenger(p, params[4], params[5]);
             pnr.getPassengers().add(p);
             flight.getPassengers().add(p);
@@ -281,11 +272,7 @@ public class PnrDataGenerator {
         case 5:
             p = new Passenger();
             params = PNR_PASSENGER5.split(",");
-            p.setPassengerType(params[0]);
-            p.setFirstName(params[1]);
-            p.setMiddleName(params[2]);
-            p.setLastName(params[3]);
-            p.setId(5L);
+            setupPassenger(p, 5L, params);
             addDocumentToPassenger(p, params[4], params[5]);
             pnr.getPassengers().add(p);
             flight.getPassengers().add(p);
@@ -293,11 +280,7 @@ public class PnrDataGenerator {
         case 6:
             p = new Passenger();
             params = PNR_PASSENGER6.split(",");
-            p.setPassengerType(params[0]);
-            p.setFirstName(params[1]);
-            p.setMiddleName(params[2]);
-            p.setLastName(params[3]);
-            p.setId(6L);
+            setupPassenger(p, 6L, params);
             addDocumentToPassenger(p, params[4], params[5]);
             pnr.getPassengers().add(p);
             flight.getPassengers().add(p);
@@ -308,7 +291,7 @@ public class PnrDataGenerator {
     private static void addDocumentToPassenger(Passenger pass, String country, String date) throws ParseException {
         Document doc = new Document();
         doc.setId(pass.getId());
-        doc.setIssuanceCountry(country);
+        doc.setIssuanceCountry(country.toUpperCase());
         doc.setIssuanceDate(DateCalendarUtils.parseJsonDate(date));
         pass.addDocument(doc);
     }

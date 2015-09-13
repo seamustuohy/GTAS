@@ -45,6 +45,7 @@ import gov.gtas.testdatagen.PnrDataGenerator;
 @ContextConfiguration(classes = RuleServiceConfig.class)
 @TransactionConfiguration(defaultRollback = true)
 public class TargetingServicePnrIT {
+	public static final String UDR_RULE_AUTHOR="adelorie";
 
 	@Autowired
 	TargetingService targetingService;
@@ -88,7 +89,7 @@ public class TargetingServicePnrIT {
 		 */
 		Pnr msg = PnrDataGenerator.createTestPnr(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(PNR_PASSENGER_RULE_INDX);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, PNR_PASSENGER_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		RuleServiceRequest request = TargetingServiceUtils
 				.createPnrRequest(msg);
@@ -110,7 +111,7 @@ public class TargetingServicePnrIT {
 	public void testPnrRuleExecution2() throws ParseException {
 		Pnr msg = PnrDataGenerator.createTestPnr(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		RuleServiceRequest request = TargetingServiceUtils
 				.createPnrRequest(msg);
@@ -140,7 +141,7 @@ public class TargetingServicePnrIT {
 		// select all passengers in a flight
 	    Pnr msg = PnrDataGenerator.createTestPnr2(1L);
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		System.out.println(drlRules);
 		RuleServiceRequest request = TargetingServiceUtils

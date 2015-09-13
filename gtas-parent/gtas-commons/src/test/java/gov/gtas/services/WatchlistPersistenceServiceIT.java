@@ -151,10 +151,15 @@ public class WatchlistPersistenceServiceIT {
 		Watchlist wl = testTarget.createOrUpdate(TEST_WL_NAME, TEST_WL_ENTITY, createList, null, WatchlistDataGenUtils.TEST_USER1_ID);
 		assertNotNull(wl);
 		List<Watchlist> summaryList = testTarget.findAllSummary();
-		assertEquals(1, summaryList.size());
-		wl = summaryList.get(0);
-		assertEquals(TEST_WL_NAME, wl.getWatchlistName());
-		assertEquals(TEST_WL_ENTITY, wl.getWatchlistEntity());		
+		assertTrue(summaryList.size() >= 1);//there may be existing Watch lists
+		int matchcount =0;
+		for(Watchlist watchlist:summaryList){
+			if(TEST_WL_NAME.equals(watchlist.getWatchlistName())){
+			   assertEquals(TEST_WL_ENTITY, watchlist.getWatchlistEntity());
+			   ++matchcount;
+			}
+		}
+		assertEquals(1,matchcount);
 	}
 private String addDeleteItem(List<WatchlistItem> delList, WatchlistItem item){
 		String deldata = item.getItemData();

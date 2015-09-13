@@ -28,9 +28,16 @@ import org.springframework.validation.Errors;
  *
  */
 public class UdrServiceHelper {
+	/**
+	 * Creates the header including the rule title. 
+	 * @param parent
+	 * @param rule
+	 * @param bldr
+	 */
 	private static void addRuleHeader(UdrRule parent, Rule rule,
 			StringBuilder bldr) {
 		bldr.append("rule \"").append(parent.getTitle()).append(":")
+		        .append(parent.getAuthor().getUserId()).append(":")
 				.append(rule.getRuleIndex()).append("\"").append(NEW_LINE)
 				.append("when\n");
 	}

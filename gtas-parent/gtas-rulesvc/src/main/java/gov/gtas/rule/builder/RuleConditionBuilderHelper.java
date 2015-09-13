@@ -53,10 +53,12 @@ public class RuleConditionBuilderHelper {
 			}
 			break;
 		case STRING:
+			//added value.toUpperCase() since Loader converts strings to upper case.
+			//Thus string equality will be case insensitive
 			if (beginsWithWildcard || endsWithWildcard) {
-				ret = createRegex(value, beginsWithWildcard, endsWithWildcard);
+				ret = createRegex(value.toUpperCase(), beginsWithWildcard, endsWithWildcard);
 			} else {
-				ret = DOUBLE_QUOTE_CHAR + value + DOUBLE_QUOTE_CHAR;
+				ret = DOUBLE_QUOTE_CHAR + value.toUpperCase() + DOUBLE_QUOTE_CHAR;
 			}
 			break;
 		case DATE:

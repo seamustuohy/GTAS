@@ -17,6 +17,7 @@ import org.kie.api.KieBase;
 import org.kie.api.runtime.KieSession;
 
 public class DrlRuleFileBuilderTest {
+	public static final String UDR_RULE_AUTHOR="adelorie";
     private DrlRuleFileBuilder testTarget;
 	@Before
 	public void setUp() throws Exception {
@@ -30,7 +31,7 @@ public class DrlRuleFileBuilderTest {
 	@Test
 	public void testSimpleRuleGenerationAndCompilation1() {
 		try{
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(1);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, 1);
 		testTarget.addRule(udrRule);
 		String result = testTarget.build();
 		System.out.println(result);
@@ -44,7 +45,7 @@ public class DrlRuleFileBuilderTest {
 	@Test
 	public void testSimpleRuleGenerationAndCompilation2() {
 		try{
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(2);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, 2);
 		testTarget.addRule(udrRule);
 		String result = testTarget.build();
 		System.out.println(result);
@@ -58,7 +59,7 @@ public class DrlRuleFileBuilderTest {
 	@Test
 	public void testSimpleRuleGenerationAndCompilation4() {
 		try{
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(4);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, 4);
 		testTarget.addRule(udrRule);
 		String result = testTarget.build();
 		System.out.println(result);
@@ -70,7 +71,7 @@ public class DrlRuleFileBuilderTest {
 		}
 	}
 	public static void verifyDrl(String drl, int indx){
-		String target = "rule \""+UDR_RULE_TITLE+":"+indx+"\"";
+		String target = "rule \""+UDR_RULE_TITLE+":"+UDR_RULE_AUTHOR+":"+indx+"\"";
 		assertTrue(drl.indexOf(target) > 0);
 	}
     private void testKnowledgeBaseTest(String testDrl) throws IOException, ClassNotFoundException{

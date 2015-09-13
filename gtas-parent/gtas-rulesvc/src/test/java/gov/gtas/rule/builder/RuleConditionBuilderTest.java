@@ -121,10 +121,10 @@ public class RuleConditionBuilderTest {
 		String prefix = "$p:Passenger(";
 		switch(op){
 		case EQUAL:
-			assertEquals(prefix+attr+" == \"" + val[0] + "\")", result);
+			assertEquals(prefix+attr+" == \"" + val[0].toUpperCase() + "\")", result);
 			break;
 		case NOT_EQUAL:
-			assertEquals(prefix+attr+" != \"" + val[0] + "\")", result);
+			assertEquals(prefix+attr+" != \"" + val[0].toUpperCase() + "\")", result);
 			break;
 		case IN:
 			assertEquals(prefix+attr+" in " + createStringValueList(val)+")", result);
@@ -134,27 +134,27 @@ public class RuleConditionBuilderTest {
 			break;
 		case BEGINS_WITH:
 			assertEquals(prefix + attr + " != null, "
-					+attr+" str[startsWith] \"" + val[0] + "\")", result);
+					+attr+" str[startsWith] \"" + val[0].toUpperCase() + "\")", result);
 			break;
 		case NOT_BEGINS_WITH:
 			assertEquals(prefix + attr + " != null, "
-					+attr+" not matches \"" + val[0] + ".*\")", result);
+					+attr+" not matches \"" + val[0].toUpperCase() + ".*\")", result);
 			break;
 		case ENDS_WITH:
 			assertEquals(prefix + attr + " != null, "
-					+attr+" str[endsWith] \"" + val[0] + "\")", result);
+					+attr+" str[endsWith] \"" + val[0].toUpperCase() + "\")", result);
 			break;
 		case NOT_ENDS_WITH:
 			assertEquals(prefix + attr + " != null, "+
-					attr+" not matches \".*" + val[0] + "\")", result);
+					attr+" not matches \".*" + val[0].toUpperCase() + "\")", result);
 			break;
 		case CONTAINS:
 			assertEquals(prefix + attr + " != null, "
-					+attr+" matches \".*" + val[0] + ".*\")", result);
+					+attr+" matches \".*" + val[0].toUpperCase() + ".*\")", result);
 			break;
 		case NOT_CONTAINS:
 			assertEquals(prefix + attr + " != null, "
-					+attr+" not matches \".*" + val[0] + ".*\")", result);
+					+attr+" not matches \".*" + val[0].toUpperCase() + ".*\")", result);
 			break;
 			default:
 				fail("Unknown String operator");
@@ -163,7 +163,7 @@ public class RuleConditionBuilderTest {
 	private String createStringValueList(String[] values){
 		List<String> strList = Arrays.asList(values);
 		String res = String.join("\", \"", strList);
-		return "(\""+res+"\")";
+		return "(\""+res.toUpperCase()+"\")";
 	}
 	@Test
 	public void testDateConditionsOnPassenger() throws ParseException {
@@ -390,7 +390,7 @@ public class RuleConditionBuilderTest {
    				+"$p:Passenger("
 					+PassengerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
 					+PassengerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\", "
-					+PassengerMapping.LAST_NAME.getFieldName()+" == \"Jones\", "
+					+PassengerMapping.LAST_NAME.getFieldName()+" == \"JONES\", "
 					+"id == $d.passenger.id)\n"
 
 		        + "$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" == \"DBY\", "

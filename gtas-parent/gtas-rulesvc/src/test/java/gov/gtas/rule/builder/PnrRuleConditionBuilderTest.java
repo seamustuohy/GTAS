@@ -75,15 +75,15 @@ public class PnrRuleConditionBuilderTest {
 		 */
 		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.ADDRESS,
 				AddressMapping.COUNTRY,
-				CriteriaOperatorEnum.NOT_EQUAL, new String[]{"USA"}, TypeEnum.STRING);
+				CriteriaOperatorEnum.NOT_EQUAL, new String[]{"usa"}, TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.ADDRESS,
 				AddressMapping.CITY,
-				CriteriaOperatorEnum.IN, new String[]{"FOO", "BAR"}, TypeEnum.STRING);
+				CriteriaOperatorEnum.IN, new String[]{"foo", "BAR"}, TypeEnum.STRING);//note foo lower case
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
 				FlightMapping.AIRPORT_DESTINATION,
-				CriteriaOperatorEnum.IN, new String[]{"DBY","XYZ","PQR"}, TypeEnum.STRING);
+				CriteriaOperatorEnum.IN, new String[]{"DBY","xyz","PQR"}, TypeEnum.STRING);//note lower case
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
@@ -94,7 +94,7 @@ public class PnrRuleConditionBuilderTest {
 				+ PASSENGER_VARIABLE_NAME+":"+EntityEnum.PASSENGER.getEntityName()+"() from "+ FLIGHT_VARIABLE_NAME+".passengers\n"
 				+ ADDRESS_VARIABLE_NAME+":"+EntityEnum.ADDRESS.getEntityName()+"("
 				      +AddressMapping.COUNTRY.getFieldName()+" != \"USA\", "
-				      +AddressMapping.CITY.getFieldName()+" in (\"FOO\", \"BAR\"))\n"
+				      +AddressMapping.CITY.getFieldName()+" in (\"FOO\", \"BAR\"))\n"  //note "foo" converted to upper case
 				+ PNR_VARIABLE_NAME+":"+EntityEnum.PNR.getEntityName()+"()\n"
 				+ ADDRESS_VARIABLE_NAME+LINK_VARIABLE_SUFFIX+":PnrAddressLink("+LINK_PNR_ID+" == "
 				       +PNR_VARIABLE_NAME+".id, "+LINK_ATTRIBUTE_ID+" == "+ADDRESS_VARIABLE_NAME+".id)\n"
@@ -147,7 +147,7 @@ public class PnrRuleConditionBuilderTest {
 				+ PHONE_VARIABLE_NAME+":"+EntityEnum.PHONE.getEntityName()+"("
 				    +PhoneMapping.PHONE_NUMBER.getFieldName()+" != null, "
 				    +PhoneMapping.PHONE_NUMBER.getFieldName()+" not matches \".*456.*\")\n"
-				+ EMAIL_VARIABLE_NAME+":"+EntityEnum.EMAIL.getEntityName()+"(domain != null, domain not matches \".*.com\")\n"
+				+ EMAIL_VARIABLE_NAME+":"+EntityEnum.EMAIL.getEntityName()+"(domain != null, domain not matches \".*.COM\")\n"
 				+ FREQUENT_FLYER_VARIABLE_NAME+":"+EntityEnum.FREQUENT_FLYER.getEntityName()+"("
 				     +FrequentFlyerMapping.CARRIER.getFieldName()+" != \"NZ\")\n"
 				+ PNR_VARIABLE_NAME+":"+EntityEnum.PNR.getEntityName()+"()\n"

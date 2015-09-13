@@ -44,6 +44,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 @ContextConfiguration(classes = RuleServiceConfig.class)
 @TransactionConfiguration(defaultRollback = true)
 public class TargetingServiceIT {
+	public static final String UDR_RULE_AUTHOR="adelorie";
 
 	@Autowired
 	TargetingService targetingService;
@@ -84,7 +85,7 @@ public class TargetingServiceIT {
 	public void testApisRuleExecution1() throws ParseException {
 		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(DOC_FLIGHT_CRITERIA_RULE_INDX);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, DOC_FLIGHT_CRITERIA_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		System.out.println(drlRules);
 		RuleServiceRequest request = TargetingServiceUtils
@@ -104,7 +105,7 @@ public class TargetingServiceIT {
 	public void testApisRuleExecution2() throws ParseException {
 		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(2);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, 2);
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		System.out.println(drlRules);
 		RuleServiceRequest request = TargetingServiceUtils
@@ -127,7 +128,7 @@ public class TargetingServiceIT {
 		// select all passengers in a flight
 		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
 		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
-		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(3);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, 3);
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		System.out.println(drlRules);
 		RuleServiceRequest request = TargetingServiceUtils
