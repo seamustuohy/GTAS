@@ -11,9 +11,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "credit_card")
+@Table(name = "credit_card",
+    uniqueConstraints={@UniqueConstraint(columnNames={"card_type", "number", "expiration"})}
+)
 public class CreditCard extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;  
     public CreditCard() { }

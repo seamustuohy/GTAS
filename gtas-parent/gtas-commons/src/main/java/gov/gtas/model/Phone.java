@@ -8,9 +8,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "phone")
+@Table(name = "phone",
+    uniqueConstraints={@UniqueConstraint(columnNames={"number"})}
+)
 public class Phone extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;  
     public Phone() { }

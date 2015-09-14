@@ -6,10 +6,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "itinerary")
-public class Itinerary extends BaseEntity {
+@Table(name = "flight_leg")
+public class FlightLeg extends BaseEntity {
     private static final long serialVersionUID = 1L;  
-    public Itinerary() { }
+    public FlightLeg() { }
     
     @ManyToOne
     private Flight flight;
