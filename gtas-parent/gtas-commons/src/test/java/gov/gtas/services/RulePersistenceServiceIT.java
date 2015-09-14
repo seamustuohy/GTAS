@@ -4,16 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.constant.RuleConstants;
-import gov.gtas.enumtype.YesNoEnum;
-import gov.gtas.model.udr.KnowledgeBase;
-import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.RuleMeta;
-import gov.gtas.model.udr.UdrRule;
-import gov.gtas.services.udr.RulePersistenceService;
-import gov.gtas.test.util.RuleServiceDataGenUtils;
-import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -29,6 +19,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.constant.RuleConstants;
+import gov.gtas.enumtype.YesNoEnum;
+import gov.gtas.model.udr.KnowledgeBase;
+import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.RuleMeta;
+import gov.gtas.model.udr.UdrRule;
+import gov.gtas.services.security.UserService;
+import gov.gtas.services.udr.RulePersistenceService;
+import gov.gtas.test.util.RuleServiceDataGenUtils;
+import gov.gtas.util.DateCalendarUtils;
 /**
  * Persistence layer tests for UDR and the Rule Engine.
  * The parent domain object for UDR is UdrRule.

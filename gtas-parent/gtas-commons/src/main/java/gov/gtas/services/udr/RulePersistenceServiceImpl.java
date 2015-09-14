@@ -1,19 +1,5 @@
 package gov.gtas.services.udr;
 
-import gov.gtas.constant.CommonErrorConstants;
-import gov.gtas.constant.RuleConstants;
-import gov.gtas.enumtype.YesNoEnum;
-import gov.gtas.error.ErrorHandler;
-import gov.gtas.error.ErrorHandlerFactory;
-import gov.gtas.model.BaseEntity;
-import gov.gtas.model.User;
-import gov.gtas.model.udr.KnowledgeBase;
-import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.RuleMeta;
-import gov.gtas.model.udr.UdrRule;
-import gov.gtas.repository.udr.UdrRuleRepository;
-import gov.gtas.services.UserService;
-
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -32,6 +18,22 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.RuleConstants;
+import gov.gtas.enumtype.YesNoEnum;
+import gov.gtas.error.ErrorHandler;
+import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.model.BaseEntity;
+import gov.gtas.model.User;
+import gov.gtas.model.udr.KnowledgeBase;
+import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.RuleMeta;
+import gov.gtas.model.udr.UdrRule;
+import gov.gtas.repository.udr.UdrRuleRepository;
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
+import gov.gtas.services.security.UserServiceUtil;
+
 /**
  * The back-end service for persisting rules.
  * 
@@ -43,8 +45,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	/*
 	 * The logger for the RulePersistenceService.
 	 */
-	private static final Logger logger = LoggerFactory
-			.getLogger(RulePersistenceServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(RulePersistenceServiceImpl.class);
 
 	private static final int UPDATE_BATCH_SIZE = 100;
 
@@ -56,6 +57,9 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private UserServiceUtil userServiceUtil;
 
 	@Override
 	@Transactional
@@ -70,9 +74,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 
 		if (savedMeta == null) {
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(
-					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
-					"UDR metatdata", "RulePersistenceServiceImpl.create()");
+			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "UDR metatdata",
+					"RulePersistenceServiceImpl.create()");
 		}
 
 		// set the audit fields
@@ -117,9 +120,9 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 			}
 			udrRuleRepository.save(ruleToDelete);
 		} else {
-			ruleToDelete = null; //in case delete flag was Y
-			logger.warn("RulePersistenceServiceImpl.delete() - object does not exist or has already been deleted:"
-					+ id);
+			ruleToDelete = null; // in case delete flag was Y
+			logger.warn(
+					"RulePersistenceServiceImpl.delete() - object does not exist or has already been deleted:" + id);
 		}
 		return ruleToDelete;
 	}
@@ -137,8 +140,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 * gov.gtas.services.udr.RulePersistenceService#batchUpdate(java.util.List)
 	 */
 	@Override
-	public Collection<? extends BaseEntity> batchUpdate(
-			Collection<? extends BaseEntity> entities) {
+	public Collection<? extends BaseEntity> batchUpdate(Collection<? extends BaseEntity> entities) {
 		List<BaseEntity> ret = new LinkedList<BaseEntity>();
 		int count = 0;
 		for (BaseEntity ent : entities) {
@@ -160,9 +162,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 
 		if (rule.getId() == null) {
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(
-					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "id",
-					"Update UDR");
+			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "id", "Update UDR");
 		}
 
 		rule.setEditDt(new Date());
@@ -187,16 +187,14 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	@Override
 	@Transactional(TxType.SUPPORTS)
 	public UdrRule findByTitleAndAuthor(String title, String authorUserId) {
-		return udrRuleRepository
-				.getUdrRuleByTitleAndAuthor(title, authorUserId);
+		return udrRuleRepository.getUdrRuleByTitleAndAuthor(title, authorUserId);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * gov.gtas.services.udr.RulePersistenceService#findByAuthor(java.lang.String
-	 * )
+	 * @see gov.gtas.services.udr.RulePersistenceService#findByAuthor(java.lang.
+	 * String )
 	 */
 	@Override
 	public List<UdrRule> findByAuthor(String authorUserId) {
@@ -236,7 +234,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 * .model.udr.KnowledgeBase)
 	 */
 	@Override
-	@CacheEvict(value = "knowledgebase", allEntries=true)
+	@CacheEvict(value = "knowledgebase", allEntries = true)
 	public KnowledgeBase saveKnowledgeBase(KnowledgeBase kb) {
 		kb.setCreationDt(new Date());
 		if (kb.getId() == null) {
@@ -255,7 +253,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 * .lang.String)
 	 */
 	@Override
-	@CacheEvict(value = "knowledgebase", allEntries=true)
+	@CacheEvict(value = "knowledgebase", allEntries = true)
 	public KnowledgeBase deleteKnowledgeBase(String kbName) {
 		KnowledgeBase kb = findUdrKnowledgeBase(kbName);
 		if (kb != null) {
@@ -264,8 +262,12 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		return kb;
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.udr.RulePersistenceService#findRulesByKnowledgeBaseId(java.lang.Long)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.udr.RulePersistenceService#findRulesByKnowledgeBaseId(
+	 * java.lang.Long)
 	 */
 	@Override
 	public List<Rule> findRulesByKnowledgeBaseId(Long id) {
@@ -281,13 +283,13 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 * @return the user fetched from the DB.
 	 */
 	private User fetchUser(final String userId) {
-		final User user = userService.findById(userId);
-		if (user == null) {
+		UserData userData = userService.findById(userId);
+		final User user = userServiceUtil.mapUserEntityFromUserData(userData);
+		if (user.getUserId() == null) {
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(
-					CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
+			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
 		return user;
 	}
-	
+
 }

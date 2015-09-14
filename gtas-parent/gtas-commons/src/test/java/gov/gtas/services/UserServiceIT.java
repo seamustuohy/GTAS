@@ -18,8 +18,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.Role;
-import gov.gtas.model.User;
+import gov.gtas.services.security.RoleData;
+import gov.gtas.services.security.RoleService;
+import gov.gtas.services.security.RoleServiceUtil;
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
+import gov.gtas.services.security.UserServiceUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
@@ -35,59 +39,53 @@ public class UserServiceIT {
 	UserService userService;
 
 	@Autowired
+	UserServiceUtil userServiceUtil;
+
+	@Autowired
 	RoleService roleService;
 
-	List<Role> roles;
+	@Autowired
+	RoleServiceUtil roleServiceUtil;
+
+	Set<RoleData> roles;
 
 	@Before
 	public void setUp() throws Exception {
 		roles = roleService.findAll();
-		
+
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		//userService.delete(USER_ID);
+		// userService.delete(USER_ID);
 	}
 
 	@Test
 	public void testGetAllUser() {
-		//TBD
-		List<User> users = userService.findAll();
-		users.forEach(r->r.getRoles().forEach(role->System.out.println(role.getRoleDescription())));
+		// TBD
+		List<UserData> users = userService.findAll();
+		users.forEach(r -> r.getRoles().forEach(role -> System.out.println(role.getRoleDescription())));
 
 	}
-	
+
 	@Test
 	public void testGetSpecifUser() {
 
-		User user = userService.findById("VTAMMINENI");
-		user.getRoles().forEach(r->System.out.println(r.getRoleDescription()));
+		UserData user = userService.findById("VTAMMINENI");
+		user.getRoles().forEach(r -> System.out.println(r.getRoleDescription()));
 	}
 
 	@Test
 	public void testCreateUser() {
 		// Arrange
-		
-		User expectedUser = new User();
 
-		Stream<Role> streamRoles = roles.stream().filter(r -> r.getRoleId() == 2 || r.getRoleId() == 7);
-		Set<Role> authRoles = streamRoles.collect(Collectors.toSet());
+		Stream<RoleData> streamRoles = roles.stream().filter(r -> r.getRoleId() == 2 || r.getRoleId() == 7);
+		Set<RoleData> authRoles = streamRoles.collect(Collectors.toSet());
 
 		System.out.println(authRoles);
-		
-		expectedUser.setRoles(authRoles);
-		expectedUser.setUserId(USER_ID);
-		expectedUser.setFirstName(FIRST_NAME);
-		expectedUser.setLastName(LAST_NAME);
-		expectedUser.setPassword(PASSWORD);
-		expectedUser.setUserId(USER_ID);
-		expectedUser.setFirstName(FIRST_NAME);
-		expectedUser.setLastName(LAST_NAME);
-		expectedUser.setPassword(PASSWORD);
-		expectedUser.setActive(1);
-		expectedUser.setRoles(authRoles);
-		User actualUser = null;
+		UserData expectedUser = new UserData(USER_ID, PASSWORD, FIRST_NAME, LAST_NAME, 1, authRoles);
+
+		UserData actualUser = null;
 		// Act
 		try {
 			actualUser = userService.create(expectedUser);
@@ -96,33 +94,20 @@ public class UserServiceIT {
 		}
 
 		// Assert
-		assertEquals(expectedUser,actualUser);
+		assertEquals(expectedUser, actualUser);
 	}
-	
-	
+
 	@Test
 	public void testUpdateUser() {
 		// Arrange
-		
-		User expectedUser = new User();
-		Stream<Role> streamRoles = roles.stream().filter(r -> r.getRoleId() == 7 || r.getRoleId() == 4);
-		Set<Role> authRoles = streamRoles.collect(Collectors.toSet());
+
+		Stream<RoleData> streamRoles = roles.stream().filter(r -> r.getRoleId() == 7 || r.getRoleId() == 4);
+		Set<RoleData> authRoles = streamRoles.collect(Collectors.toSet());
 
 		System.out.println(authRoles);
-		
-		expectedUser.setRoles(authRoles);
+		UserData expectedUser = new UserData(USER_ID, PASSWORD, FIRST_NAME, LAST_NAME, 1, authRoles);
 
-		expectedUser.setUserId(USER_ID);
-		expectedUser.setFirstName(FIRST_NAME);
-		expectedUser.setLastName(LAST_NAME);
-		expectedUser.setPassword(PASSWORD);
-		expectedUser.setUserId(USER_ID);
-		expectedUser.setFirstName(FIRST_NAME);
-		expectedUser.setLastName(LAST_NAME);
-		expectedUser.setPassword(PASSWORD);
-		expectedUser.setActive(0);
-		expectedUser.setRoles(authRoles);
-		User actualUser = null;
+		UserData actualUser = null;
 		// Act
 		try {
 			actualUser = userService.update(expectedUser);
@@ -131,8 +116,7 @@ public class UserServiceIT {
 		}
 
 		// Assert
-		assertEquals(expectedUser,actualUser);
+		assertEquals(expectedUser, actualUser);
 	}
-
 
 }

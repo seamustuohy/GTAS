@@ -1,20 +1,5 @@
 package gov.gtas.svc;
 
-import gov.gtas.constant.CommonErrorConstants;
-import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.constant.RuleConstants;
-import gov.gtas.error.ErrorHandler;
-import gov.gtas.error.ErrorHandlerFactory;
-import gov.gtas.error.RuleServiceErrorHandler;
-import gov.gtas.model.udr.KnowledgeBase;
-import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.watchlist.WatchlistItem;
-import gov.gtas.rule.RuleUtils;
-import gov.gtas.rule.builder.DrlRuleFileBuilder;
-import gov.gtas.services.UserService;
-import gov.gtas.services.udr.RulePersistenceService;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
@@ -30,6 +15,21 @@ import org.kie.api.KieBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.RuleConstants;
+import gov.gtas.constant.RuleServiceConstants;
+import gov.gtas.error.ErrorHandler;
+import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.error.RuleServiceErrorHandler;
+import gov.gtas.model.udr.KnowledgeBase;
+import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.UdrRule;
+import gov.gtas.model.watchlist.WatchlistItem;
+import gov.gtas.rule.RuleUtils;
+import gov.gtas.rule.builder.DrlRuleFileBuilder;
+import gov.gtas.services.security.UserService;
+import gov.gtas.services.udr.RulePersistenceService;
 
 /**
  * Implementation of the Knowledge Base and Rule management service interface.

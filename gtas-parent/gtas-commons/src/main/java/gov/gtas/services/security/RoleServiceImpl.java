@@ -1,12 +1,13 @@
-package gov.gtas.services;
+package gov.gtas.services.security;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Role;
@@ -20,10 +21,17 @@ public class RoleServiceImpl implements RoleService {
 
 	@Resource
 	private RoleRepository roleRepository;
+	
+	@Autowired
+	private RoleServiceUtil roleServiceUtil;
 
 	@Override
 	@Transactional
-	public List<Role> findAll() {
-		return (List<Role>) roleRepository.findAll();
+	public Set<RoleData> findAll() {
+
+		Iterable<Role> roleEntityCollection = roleRepository.findAll();
+		Set<RoleData> roles = roleServiceUtil.getRoleDataSetFromEntityCollection(roleEntityCollection);
+
+		return roles;
 	}
 }

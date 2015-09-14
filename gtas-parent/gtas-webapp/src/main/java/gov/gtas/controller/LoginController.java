@@ -1,8 +1,5 @@
 package gov.gtas.controller;
 
-import gov.gtas.model.User;
-import gov.gtas.services.UserService;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +10,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
+
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
 
 @Controller
 public class LoginController extends AbstractController {
@@ -39,7 +39,8 @@ public class LoginController extends AbstractController {
 			mav.setViewName(viewString);
 			return mav;
 		}
-		User user = userService.findById(userName);
+
+		UserData user = userService.findById(userName);
 		if (user == null) {
 			logger.info("Invalid Credentials");
 			message = "Invalid User Name.";

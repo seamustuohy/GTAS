@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import gov.gtas.model.User;
-import gov.gtas.services.UserService;
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
 
 /**
  *
@@ -31,7 +31,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userService.findById(username);
+		UserData user = userService.findById(username);
 
 		if (user == null) {
 			String message = "Username not found: " + username;

@@ -4,13 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.model.User;
-import gov.gtas.model.watchlist.Watchlist;
-import gov.gtas.model.watchlist.WatchlistItem;
-import gov.gtas.services.watchlist.WatchlistPersistenceService;
-import gov.gtas.test.util.WatchlistDataGenUtils;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,6 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.model.User;
+import gov.gtas.model.watchlist.Watchlist;
+import gov.gtas.model.watchlist.WatchlistItem;
+import gov.gtas.services.security.UserService;
+import gov.gtas.services.watchlist.WatchlistPersistenceService;
+import gov.gtas.test.util.WatchlistDataGenUtils;
 /**
  * Persistence layer tests for Watch list.
  * @author GTAS3 (AB)

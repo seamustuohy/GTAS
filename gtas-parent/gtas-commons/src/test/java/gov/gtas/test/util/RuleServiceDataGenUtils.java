@@ -1,16 +1,16 @@
 package gov.gtas.test.util;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+
 import gov.gtas.enumtype.YesNoEnum;
-import gov.gtas.model.Role;
-import gov.gtas.model.User;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.services.UserService;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import gov.gtas.services.security.RoleData;
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
 
 /**
  * Generates test data for rules domain objects.
@@ -37,16 +37,11 @@ public class RuleServiceDataGenUtils {
 
 	public void initUserData() {
 		try {
-			Role role = new Role();
-			User user = new User();
+			Set<RoleData> roles = new HashSet<RoleData>();
+			roles.add(new RoleData(1, "ADMIN"));
+			UserData userData = new UserData("jJone", "password", "JP", "Jones", 1, roles);
 
-			role.setRoleDescription(TEST_ROLE1_DESCRIPTION);
-			role.setRoleId(TEST_ROLE1_ID);
-			user.setFirstName("JP");
-			user.setLastName("Jones");
-			user.setUserId(TEST_USER1_ID);
-			user.setPassword("passsword");
-			userService.create(user);
+			userService.create(userData);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -105,8 +100,7 @@ public class RuleServiceDataGenUtils {
 		return bldr.toString();
 	}
 
-	private RuleMeta createRuleMeta(String title, String descr,
-			YesNoEnum enabled) {
+	private RuleMeta createRuleMeta(String title, String descr, YesNoEnum enabled) {
 		RuleMeta meta = new RuleMeta();
 		meta.setDescription(descr);
 		meta.setEnabled(enabled);

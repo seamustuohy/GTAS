@@ -24,6 +24,16 @@ public class User implements Serializable {
 	public User() {
 	}
 
+	public User(String userId, String password, String firstName, String lastName, int active, Set<Role> roles) {
+
+		this.userId = userId;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.active = active;
+		this.roles = roles;
+	}
+
 	@Id
 	@Column(name = "user_id", length = DomainModelConstants.GTAS_USERID_COLUMN_SIZE)
 	private String userId;

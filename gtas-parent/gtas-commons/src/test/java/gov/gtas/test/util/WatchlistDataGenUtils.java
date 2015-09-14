@@ -1,13 +1,14 @@
 package gov.gtas.test.util;
 
-import gov.gtas.model.Role;
-import gov.gtas.model.User;
-import gov.gtas.model.watchlist.WatchlistItem;
-import gov.gtas.services.UserService;
-
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
+import gov.gtas.model.watchlist.WatchlistItem;
+import gov.gtas.services.security.RoleData;
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
 
 /**
  * Generates test data for rules domain objects.
@@ -34,16 +35,10 @@ public class WatchlistDataGenUtils {
 
 	public void initUserData() {
 		try {
-			Role role = new Role();
-			User user = new User();
-
-			role.setRoleDescription(TEST_ROLE1_DESCRIPTION);
-			role.setRoleId(TEST_ROLE1_ID);
-			user.setFirstName("JP");
-			user.setLastName("Jones");
-			user.setUserId(TEST_USER1_ID);
-			user.setPassword("passsword");
-			userService.create(user);
+			Set<RoleData> roles = new HashSet<RoleData>();
+			roles.add(new RoleData(1, "ADMIN"));
+			UserData userData = new UserData("jJone", "password", "JP", "Jones", 1, roles);
+			userService.create(userData);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,7 +46,7 @@ public class WatchlistDataGenUtils {
 
 	public List<WatchlistItem> createWatchlistItems(String[] jsonArray) {
 		List<WatchlistItem> ret = new LinkedList<WatchlistItem>();
-		for(String json:jsonArray){
+		for (String json : jsonArray) {
 			WatchlistItem item = new WatchlistItem();
 			item.setItemData(json);
 			ret.add(item);

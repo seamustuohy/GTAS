@@ -18,7 +18,14 @@ public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public Role() {
+
 	}
+
+	public Role(int roleId, String roleDescription) {
+		this.roleId = roleId;
+		this.roleDescription = roleDescription;
+	}
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,7 +55,6 @@ public class Role implements Serializable {
 	public void setRoleDescription(String roleDescription) {
 		this.roleDescription = roleDescription;
 	}
-
 
 	@ManyToMany(mappedBy = "roles", targetEntity = User.class)
 	private Set<User> users = new HashSet<User>();
