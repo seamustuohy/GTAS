@@ -1,10 +1,6 @@
 package gov.gtas.validators;
 
-import static org.junit.Assert.*;
-
-import java.util.Date;
-import java.util.HashSet;
-
+import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.delegates.ErrorLoggingDelegate;
 import gov.gtas.delegates.FlightServiceDelegate;
@@ -12,6 +8,9 @@ import gov.gtas.delegates.vo.ApisMessageVo;
 import gov.gtas.delegates.vo.DocumentVo;
 import gov.gtas.delegates.vo.FlightVo;
 import gov.gtas.delegates.vo.PassengerVo;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -124,7 +123,7 @@ public class ApisValidatorIT {
 		vo.setResidencyCountry("USA");
 		vo.setTitle("");
 		vo.setSuffix("");
-		HashSet<DocumentVo> h = new HashSet<>();
+		List<DocumentVo> h = new ArrayList<>();
 		h.add(this.prepareDocumentVo());
 		h.add(this.prepareDocumentVo1());
 		vo.setDocuments(h);
@@ -149,7 +148,7 @@ public class ApisValidatorIT {
 		vo.setResidencyCountry("USA");
 		vo.setTitle("");
 		vo.setSuffix("");
-		HashSet<DocumentVo> h = new HashSet<>();
+		List<DocumentVo> h = new ArrayList<>();
 		vo.setDocuments(h);
 		vo.getFlights().add(prepareFlightVo());
 		return vo;

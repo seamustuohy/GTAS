@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import gov.gtas.error.ErrorUtils;
 import gov.gtas.model.EdifactMessage;
+import gov.gtas.model.FlightLeg;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Pnr;
 import gov.gtas.parsers.edifact.EdifactParser;
@@ -98,7 +99,10 @@ public class PnrMessageService implements MessageService {
             utils.convertPnrVo(this.pnr, vo);
             loaderRepo.processPnr(this.pnr, vo);
             loaderRepo.processFlightsAndPassengers(vo.getFlights(), vo.getPassengers(), 
-                    this.pnr.getFlights(), this.pnr.getPassengers());
+                    this.pnr.getFlights(), this.pnr.getPassengers(), pnr.getFlightLegs());
+            for (FlightLeg leg : pnr.getFlightLegs()) {
+                leg.setPnr(this.pnr);
+            }
             this.pnr.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {

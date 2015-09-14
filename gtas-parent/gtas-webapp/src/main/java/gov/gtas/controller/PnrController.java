@@ -1,7 +1,6 @@
 package gov.gtas.controller;
 
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
 import gov.gtas.delegates.PnrServiceDelegate;
-import gov.gtas.delegates.vo.PnrDataVo;
+import gov.gtas.delegates.vo.PnrVo;
 
 @Controller
 public class PnrController {
@@ -26,14 +24,14 @@ public class PnrController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/pnrdata/{pnrId}", method = RequestMethod.GET)
-    public PnrDataVo getPnrData(@PathVariable Long pnrId) {
+    public PnrVo getPnrData(@PathVariable Long pnrId) {
         return pnrDelegate.getAllPnrData(pnrId);
     }    
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/pnrdata/pax/{paxId}", method = RequestMethod.GET)
-    public List<PnrDataVo> getRecordLocators(@PathVariable Long paxId) {
+    public List<PnrVo> getRecordLocators(@PathVariable Long paxId) {
         return pnrDelegate.getRecordLocators(paxId);
     }    
 }

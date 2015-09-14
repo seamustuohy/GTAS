@@ -21,6 +21,7 @@ public class AgencyVo extends BaseVo implements Validatable  {
 	public AgencyVo(){
 		
 	}
+	
 	public AgencyVo(String aName,String identifier,String city,String state,String country){
 		this.agencyName=aName;
 		this.agencyIdentifier=identifier;
@@ -29,6 +30,7 @@ public class AgencyVo extends BaseVo implements Validatable  {
 		this.agencyCountry=country;
 		
 	}
+	
 	public String getAgencyName() {
 		return agencyName;
 	}
@@ -64,6 +66,7 @@ public class AgencyVo extends BaseVo implements Validatable  {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+    
 	@Override
 	public boolean validate() {
 		if(StringUtils.isBlank(this.agencyIdentifier) ){

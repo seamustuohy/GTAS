@@ -3,9 +3,7 @@ package gov.gtas.util;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-
 import org.apache.commons.lang3.StringUtils;
-
 import gov.gtas.delegates.vo.AddressVo;
 import gov.gtas.delegates.vo.AgencyVo;
 import gov.gtas.delegates.vo.CreditCardVo;
@@ -15,7 +13,7 @@ import gov.gtas.delegates.vo.FlightVo;
 import gov.gtas.delegates.vo.FrequentFlyerVo;
 import gov.gtas.delegates.vo.PassengerVo;
 import gov.gtas.delegates.vo.PhoneVo;
-import gov.gtas.delegates.vo.PnrDataVo;
+import gov.gtas.delegates.vo.PnrVo;
 import gov.gtas.delegates.vo.PnrMessageVo;
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
@@ -79,7 +77,6 @@ public class ServiceUtils {
 	}
 	
 	public static Passenger mapPassengerFromVo(PassengerVo  vo,Passenger p){
-		
 		//BeanUtils.copyProperties(vo, p);
 		p.setAge(vo.getAge());
 		p.setCitizenshipCountry(vo.getCitizenshipCountry());
@@ -102,7 +99,6 @@ public class ServiceUtils {
 		p.setTitle(vo.getTitle());
 		p.setUpdatedAt(vo.getUpdatedAt());
 		p.setUpdatedBy(vo.getUpdatedBy());
-		
 		if(vo.getDocuments().size() >0){
 			Iterator it = vo.getDocuments().iterator();
 			while(it.hasNext()){
@@ -114,14 +110,14 @@ public class ServiceUtils {
 		if(vo.getPnrs() != null && vo.getPnrs().size() >0){
 			Iterator pnrs = vo.getPnrs().iterator();
 			while(pnrs.hasNext()){
-				Pnr pnr = mapPnrFromPnrVo((PnrDataVo)pnrs.next(),new Pnr() );
+				Pnr pnr = mapPnrFromPnrVo((PnrVo)pnrs.next(),new Pnr() );
 				pnr.addPassenger(p);
 				p.getPnrs().add(pnr);
 			}
 		}
 		return p;
-		
 	}
+	
 	public static Document mapDocumentFromVo(DocumentVo vo, Document d){
 		//BeanUtils.copyProperties(vo, d);
 		d.setDocumentNumber(vo.getDocumentNumber());
@@ -130,12 +126,10 @@ public class ServiceUtils {
 		d.setId(vo.getId());
 		d.setIssuanceCountry(vo.getIssuanceCountry());
 		d.setIssuanceDate(vo.getIssuanceDate());
-		
 		return d;
-		
 	}
 
-	public static Pnr mapPnrFromPnrVo(PnrDataVo vo,Pnr pnr ){
+	public static Pnr mapPnrFromPnrVo(PnrVo vo,Pnr pnr ){
 		//BeanUtils.copyProperties(vo, pnr);
 		pnr.setBagCount(vo.getBagCount());
 		pnr.setCarrier(vo.getCarrier());
@@ -152,7 +146,6 @@ public class ServiceUtils {
 		pnr.setPassengerCount(vo.getPassengerCount());
 		pnr.setRecordLocator(vo.getRecordLocator());
 		pnr.setTotalDwellTime(vo.getTotalDwellTime());
-		
 		if (vo.getAgency() != null && vo.getAgency().getAgencyIdentifier() != null){
 			Agency a = mapAgencyFromAgencyVo(vo.getAgency(),new Agency());
 			a.addPnr(pnr);
@@ -172,16 +165,14 @@ public class ServiceUtils {
 				pnr.addAddress(a);
 			}
 		}
-		
-		if(vo.getPhones().size() >0){
-			Iterator phones = vo.getPhones().iterator();
+		if(vo.getPhoneNumbers().size() >0){
+			Iterator phones = vo.getPhoneNumbers().iterator();
 			while(phones.hasNext()){
 				Phone p = mapPhoneFromPhoneVo((PhoneVo)phones.next(),new Phone());
 				p.getPnrs().add(pnr);
 				pnr.addPhone(p);
 			}
 		}
-		
 		if(vo.getCreditCards().size() > 0){
 			Iterator ccards = vo.getCreditCards().iterator();
 			while(ccards.hasNext()){
@@ -190,9 +181,8 @@ public class ServiceUtils {
 				pnr.addCreditCard(cc);
 			}
 		}
-
-		if(vo.getFrequentFlyers().size() > 0){
-			Iterator ffs=vo.getFrequentFlyers().iterator();
+		if(vo.getFrequentFlyerDetails().size() > 0){
+			Iterator ffs=vo.getFrequentFlyerDetails().iterator();
 			while(ffs.hasNext()){
 				FrequentFlyer ff = mapFrequentFlyerFromFrequentFlyerVo((FrequentFlyerVo)ffs.next(),new FrequentFlyer());
 				ff.getPnrs().add(pnr);
@@ -219,6 +209,7 @@ public class ServiceUtils {
 		p.setStatus(vo.getStatus());
 		return p;
 	}
+	
 	public static Email mapEmailFromEmailVo(EmailVo vo,Email e){
 		e.setAddress(vo.getAddress());
 		e.setCreatedAt(new Date());
@@ -227,12 +218,13 @@ public class ServiceUtils {
 		return e;
 		
 	}
+	
 	public static FrequentFlyer mapFrequentFlyerFromFrequentFlyerVo(FrequentFlyerVo vo,FrequentFlyer ff){
 		//BeanUtils.copyProperties(vo, ff);
-		ff.setCarrier(vo.getAirlineCode());
+		ff.setCarrier(vo.getAirline());
 		ff.setCreatedAt(vo.getCreatedAt());
 		ff.setCreatedBy(vo.getCreatedBy());
-		ff.setNumber(vo.getFrequentFlyerNumber());
+		ff.setNumber(vo.getNumber());
 		ff.setId(vo.getId());
 		ff.setUpdatedAt(vo.getUpdatedAt());
 		
@@ -252,6 +244,7 @@ public class ServiceUtils {
 		cc.setUpdatedBy("SYSTEM");
 		return cc;
 	}
+	
 	public static Phone mapPhoneFromPhoneVo(PhoneVo vo,Phone p){
 		//BeanUtils.copyProperties(vo, phone);
 		p.setCreatedAt(new Date());
@@ -259,7 +252,7 @@ public class ServiceUtils {
 		if(vo.getId() != null){
 			p.setId(vo.getId());
 		}
-		p.setNumber(vo.getPhoneNumber());
+		p.setNumber(vo.getNumber());
 		p.setUpdatedAt(vo.getUpdatedAt());
 		p.setUpdatedBy(vo.getUpdatedBy());
 		return p;
@@ -293,6 +286,7 @@ public class ServiceUtils {
 		a.setCreatedBy("SYSTEM");
 		return a;
 	}
+	
     public static Date stripTime(Date d) {
         Calendar cal = Calendar.getInstance(); // locale-specific
         cal.setTime(d);

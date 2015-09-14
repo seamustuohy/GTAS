@@ -1,15 +1,6 @@
 package gov.gtas.delegates.vo;
 
 import java.util.Date;
-import java.util.Map;
-
-import javax.persistence.Column;
-import javax.persistence.LockModeType;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.springframework.data.jpa.repository.query.JpaEntityGraph;
-import org.springframework.data.jpa.repository.support.CrudMethodMetadata;
 
 public class BaseVo  {
 
@@ -18,6 +9,7 @@ public class BaseVo  {
     private String createdBy;  
     private Date updatedAt;  
     private String updatedBy;
+    
 	public Long getId() {
 		return id;
 	}
@@ -48,7 +40,5 @@ public class BaseVo  {
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}  
-    
-    
-
+ 
 }

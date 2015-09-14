@@ -3,13 +3,8 @@ package gov.gtas.delegates;
 import gov.gtas.delegates.vo.InvalidObjectInfoVo;
 import gov.gtas.model.InvalidObjectInfo;
 import gov.gtas.services.ErrorLoggingService;
-
 import java.util.List;
-
 import javax.annotation.Resource;
-
-import javassist.bytecode.Descriptor.Iterator;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,11 +23,8 @@ public class ErrorLoggingDelegate {
 				else{
 					service.create(info);
 				}
-				
 			}
 		}
-		
-		
 		return null;
 	}
 	

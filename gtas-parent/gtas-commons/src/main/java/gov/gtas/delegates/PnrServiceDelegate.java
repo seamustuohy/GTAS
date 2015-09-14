@@ -1,18 +1,5 @@
 package gov.gtas.delegates;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.transaction.Transactional;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
-
 import gov.gtas.delegates.vo.AddressVo;
 import gov.gtas.delegates.vo.CreditCardVo;
 import gov.gtas.delegates.vo.EmailVo;
@@ -20,7 +7,7 @@ import gov.gtas.delegates.vo.FlightVo;
 import gov.gtas.delegates.vo.FrequentFlyerVo;
 import gov.gtas.delegates.vo.PassengerVo;
 import gov.gtas.delegates.vo.PhoneVo;
-import gov.gtas.delegates.vo.PnrDataVo;
+import gov.gtas.delegates.vo.PnrVo;
 import gov.gtas.model.Address;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
@@ -35,6 +22,18 @@ import gov.gtas.services.PassengerService;
 import gov.gtas.services.PnrService;
 import gov.gtas.util.PnrServiceDelegateUtils;
 import gov.gtas.util.ServiceUtils;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.transaction.Transactional;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 
 @Component
 public class PnrServiceDelegate {
@@ -51,16 +50,14 @@ public class PnrServiceDelegate {
 	private PnrService pnrService;
 
 	@Transactional
-	public PnrDataVo saveOrUpdate(PnrDataVo pnrVo){
-		Pnr newReservation = ServiceUtils.mapPnrFromPnrVo(pnrVo,new Pnr() );
+	public PnrVo saveOrUpdate(PnrVo pnrVo){
 		
+		Pnr newReservation = ServiceUtils.mapPnrFromPnrVo(pnrVo,new Pnr() );
 		//Iterate through the PnrDataVo and see if there is an existing flight for this reservation in the DB
 		Iterator it = pnrVo.getFlights().iterator();
 		while(it.hasNext()){
 			FlightVo fvo = (FlightVo)it.next();
-			
 			Flight f=flightService.getUniqueFlightByCriteria(fvo.getCarrier(), fvo.getFlightNumber(), fvo.getOrigin(), fvo.getDestination(), fvo.getFlightDate());
-			
 			if(f != null && f.getId() != null){
 				f.setUpdatedAt(new Date());
 				f.setUpdatedBy("SYSTEM");
@@ -75,7 +72,7 @@ public class PnrServiceDelegate {
 						//verify if PNR exist in DB
 						Pnr existingReservation = getExistingReservationForPassenger(existingPassenger,newReservation);
 						if(existingReservation == null){
-							logger.info("########## OLD FLIGHT/OLD PASSENGER/NEW PNR ###########");
+							logger.info("********* OLD FLIGHT/OLD PASSENGER/NEW PNR *************");
 							existingPassenger.setChangeDate();
 							existingPassenger.setUpdatedBy("SYSTEM");
 							existingPassenger.getPnrs().add(newReservation);
@@ -85,13 +82,13 @@ public class PnrServiceDelegate {
 							pnrService.create(newReservation);
 						}
 						else{
-							logger.info("########## OLD FLIGHT/OLD PASSENGER/OLD PNR ###########");
+							logger.info("*********  OLD FLIGHT/OLD PASSENGER/OLD PNR ********* ");
 							newReservation.setId(existingReservation.getId());
 							pnrService.update(newReservation);
 						}
 					}
 					else{
-						logger.info("########## OLD FLIGHT/NEW PASSENGER/NEW PNR ###########");
+						logger.info("*********  OLD FLIGHT/NEW PASSENGER/NEW PNR ********* ");
 						currentPassenger.setCreationDate();
 						currentPassenger.setCreatedBy("JUNIT");
 						currentPassenger.getPnrs().add(newReservation);
@@ -105,13 +102,11 @@ public class PnrServiceDelegate {
 				}
 			}
 			else{
-				
-				logger.info("########## NEW FLIGHT/NEW PASSENGER/NEW PNR ###########");
+				logger.info("*********  NEW FLIGHT/NEW PASSENGER/NEW PNR ********* ");
 				//new flight..persist the new reservation data
 				f=ServiceUtils.mapFlightFromVo(fvo, new Flight());
 				Iterator passengers = pnrVo.getPassengers().iterator();
 				while(passengers.hasNext()){
-					
 					Passenger newPassenger = ServiceUtils.mapPassengerFromVo((PassengerVo)passengers.next(), new Passenger());
 					newPassenger.getPnrs().add(newReservation);
 					newReservation.getPassengers().add(newPassenger);
@@ -120,66 +115,57 @@ public class PnrServiceDelegate {
 				f.getPnrs().add(newReservation);
 				newReservation.getFlights().add(f);
 				pnrService.create(newReservation);
-
 			}
 		}
-		
 		return pnrVo;
 	}
 	
 	@Transactional
-    public PnrDataVo getAllPnrData(Long pnrId) {
+    public PnrVo getAllPnrData(Long pnrId) {
 	    Pnr pnr = pnrService.findById(pnrId);
-	    PnrDataVo rv = new PnrDataVo();
+	    PnrVo rv = new PnrVo();
 	    if (pnr != null) {
 	        String[] ignore = new String[] { "creditCards", "frequentFlyers", "addresses", "phones", "emails", "pnrMessage", "flights", "passengers" };
 	        BeanUtils.copyProperties(pnr, rv, ignore);
-
 	        for (CreditCard entity : pnr.getCreditCards()) {
 	            CreditCardVo vo = new CreditCardVo();
 	            BeanUtils.copyProperties(entity, vo);
 	            rv.getCreditCards().add(vo);
 	        }
-	        
             for (FrequentFlyer entity : pnr.getFrequentFlyers()) {
                 FrequentFlyerVo vo = new FrequentFlyerVo();
                 BeanUtils.copyProperties(entity, vo);
-                rv.getFrequentFlyers().add(vo);
+                rv.getFrequentFlyerDetails().add(vo);
             }
-
             for (Address entity : pnr.getAddresses()) {
                 AddressVo vo = new AddressVo();
                 BeanUtils.copyProperties(entity, vo);
                 rv.getAddresses().add(vo);
             }
-            
             for (Phone entity : pnr.getPhones()) {
                 PhoneVo vo = new PhoneVo();
                 BeanUtils.copyProperties(entity, vo);
-                rv.getPhones().add(vo);
+                rv.getPhoneNumbers().add(vo);
             }
-            
             for (Email entity : pnr.getEmails()) {
                 EmailVo vo = new EmailVo();
                 BeanUtils.copyProperties(entity, vo);
                 rv.getEmails().add(vo);
             }            
 	    }
-	    
 	    return rv;
 	}
 	
     @Transactional
-    public List<PnrDataVo> getRecordLocators(Long passengerId) {
-        List<PnrDataVo> rv = new ArrayList<>();
+    public List<PnrVo> getRecordLocators(Long passengerId) {
+        List<PnrVo> rv = new ArrayList<>();
         List<Pnr> pnrs = pnrService.findByPassengerId(passengerId);
         for (Pnr pnr : pnrs) {
-            PnrDataVo vo = new PnrDataVo();
+            PnrVo vo = new PnrVo();
             vo.setId(pnr.getId());
             vo.setRecordLocator(pnr.getRecordLocator());
             rv.add(vo);
         }
-        
         return rv;
     }
 
@@ -198,8 +184,8 @@ public class PnrServiceDelegate {
 			p.addPassenger(existingPassenger);
 			existingPassenger.getPnrs().add(p);
 		}
-		
 	}
+	
 	private Passenger getExistingPassengerInFlight(Flight f, Passenger currentPassenger){
 		Passenger passengerInFlight = null;
 		Iterator it = f.getPassengers().iterator();
@@ -219,6 +205,7 @@ public class PnrServiceDelegate {
 		}
 		return passengerInFlight;
 	}
+	
 	private Pnr getExistingReservationForPassenger(Passenger existingPassenger,Pnr newReservation){
 		Pnr p = null;
 		Iterator it = existingPassenger.getPnrs().iterator();
@@ -230,6 +217,5 @@ public class PnrServiceDelegate {
 			}
 		}
 		return p;
-		
 	}
 }

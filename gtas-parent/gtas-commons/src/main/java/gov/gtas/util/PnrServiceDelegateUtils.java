@@ -2,7 +2,7 @@ package gov.gtas.util;
 
 import java.util.Iterator;
 
-import gov.gtas.delegates.vo.PnrDataVo;
+import gov.gtas.delegates.vo.PnrVo;
 import gov.gtas.model.Address;
 import gov.gtas.model.Email;
 import gov.gtas.model.FrequentFlyer;
@@ -11,7 +11,7 @@ import gov.gtas.model.Pnr;
 
 public class PnrServiceDelegateUtils {
 
-	public static Pnr mapPnrFromPnrDataVo(PnrDataVo vo, Pnr pnr){
+	public static Pnr mapPnrFromPnrDataVo(PnrVo vo, Pnr pnr){
 		return pnr;
 	}
 	

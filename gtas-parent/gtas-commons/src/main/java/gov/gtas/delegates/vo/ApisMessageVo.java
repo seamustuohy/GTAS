@@ -2,11 +2,9 @@ package gov.gtas.delegates.vo;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 import gov.gtas.delegates.vo.MessageVo;
 import gov.gtas.delegates.vo.FlightVo;
 import gov.gtas.delegates.vo.PassengerVo;
@@ -14,27 +12,24 @@ import gov.gtas.delegates.vo.ReportingPartyVo;
 import gov.gtas.validators.Validatable;
 
 public class ApisMessageVo extends MessageVo implements Validatable{
-    /** type of message: new pax, update, delete, etc */
+   
+	/** type of message: new pax, update, delete, etc */
     private String messageCode;
-
     private List<ReportingPartyVo> reportingParties = new ArrayList<>();
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
     
+    public ApisMessageVo() { }
+    
     public void setReportingParties(List<ReportingPartyVo> reportingParties) {
 		this.reportingParties = reportingParties;
 	}
-
 	public void setFlights(List<FlightVo> flights) {
 		this.flights = flights;
 	}
-
 	public void setPassengers(List<PassengerVo> passengers) {
 		this.passengers = passengers;
 	}
-
-	public ApisMessageVo() { }
-    
     public void addFlight(FlightVo f) {
         flights.add(f);
     }

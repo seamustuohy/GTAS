@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Flight;
+import gov.gtas.model.FlightLeg;
 import gov.gtas.model.Passenger;
 import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.exception.ParseException;
@@ -105,7 +106,7 @@ public class PnrMessageServiceIT extends AbstractTransactionalJUnit4SpringContex
         
         Set<Flight> dummy = new HashSet<>();
         Set<Passenger> paxDummy = new HashSet<>();
-        loaderRepo.processFlightsAndPassengers(flights, passengers, dummy, paxDummy);
+        loaderRepo.processFlightsAndPassengers(flights, passengers, dummy, paxDummy, new ArrayList<FlightLeg>());
         List<Passenger> pax = paxDao.getPassengersByLastName("doe");
         assertEquals(2, pax.size());        
     }

@@ -20,8 +20,6 @@ public class InvalidObjectInfoVo {
 	private String createdBy;
 	private Long id;
 	
-	
-	
 	public Long getId() {
 		return id;
 	}
