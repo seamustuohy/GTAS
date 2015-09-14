@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,26 +15,19 @@ public class Agency extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;
     public Agency() { }
     
-	@Column(name = "agency_name")
-	private String agencyName;
+	private String name;
 	
-	@Column(name = "agency_identifier")
-	private String agencyIdentifier;
+	private String identifier;
 	
-	@Column(name = "agency_city")
-	private String agencyCity;
+	private String city;
 	
-	@Column(name = "agency_state")
-	private String agencyState;
+	private String state;
 	
-	@Column(name = "agency_country")
-	private String agencyCountry;
+	private String country;
 
-
-	private String phoneNumber;
+	private String phone;
 	
-
-   @OneToMany(cascade = CascadeType.ALL, mappedBy = "agency")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "agency")
     private Set<Pnr> pnrs = new HashSet<>();
     
     public void addPnr(Pnr pnr) {
@@ -55,57 +47,57 @@ public class Agency extends BaseEntityAudit {
 	}
 
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
-	public String getAgencyName() {
-		return agencyName;
+	public String getName() {
+		return name;
 	}
 
-	public void setAgencyName(String agencyName) {
-		this.agencyName = agencyName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getAgencyIdentifier() {
-		return agencyIdentifier;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public void setAgencyIdentifier(String agencyIdentifier) {
-		this.agencyIdentifier = agencyIdentifier;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
-	public String getAgencyCity() {
-		return agencyCity;
+	public String getCity() {
+		return city;
 	}
 
-	public void setAgencyCity(String agencyCity) {
-		this.agencyCity = agencyCity;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
-	public String getAgencyState() {
-		return agencyState;
+	public String getState() {
+		return state;
 	}
 
-	public void setAgencyState(String agencyState) {
-		this.agencyState = agencyState;
+	public void setState(String state) {
+		this.state = state;
 	}
 
-	public String getAgencyCountry() {
-		return agencyCountry;
+	public String getCountry() {
+		return country;
 	}
 
-	public void setAgencyCountry(String agencyCountry) {
-		this.agencyCountry = agencyCountry;
+	public void setCountry(String country) {
+		this.country = country;
 	}
 	
     @Override
     public int hashCode() {
-        return Objects.hash(this.agencyName,this.agencyIdentifier);
+        return Objects.hash(this.name,this.identifier);
     }
     
     @Override
@@ -117,7 +109,7 @@ public class Agency extends BaseEntityAudit {
         if (getClass() != obj.getClass())
             return false;
         final Agency other = (Agency) obj;
-        return Objects.equals(this.agencyName, other.agencyName)
-        		&& Objects.equals(this.agencyIdentifier, other.agencyIdentifier);
+        return Objects.equals(this.name, other.name)
+        		&& Objects.equals(this.identifier, other.identifier);
     }    	
 }

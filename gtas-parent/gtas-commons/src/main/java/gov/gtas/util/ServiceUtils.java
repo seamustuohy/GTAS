@@ -284,11 +284,11 @@ public class ServiceUtils {
 	
 	public static Agency mapAgencyFromAgencyVo(AgencyVo vo,Agency a){
 		//BeanUtils.copyProperties(vo, a);
-		a.setAgencyCity(vo.getAgencyCity());
-		a.setAgencyCountry(vo.getAgencyCountry());
-		a.setAgencyIdentifier(vo.getAgencyIdentifier());
-		a.setAgencyName(vo.getAgencyName());
-		a.setAgencyState(vo.getAgencyState());
+		a.setCity(vo.getAgencyCity());
+		a.setCountry(vo.getAgencyCountry());
+		a.setIdentifier(vo.getAgencyIdentifier());
+		a.setName(vo.getAgencyName());
+		a.setState(vo.getAgencyState());
 		a.setCreatedAt(new Date());
 		a.setCreatedBy("SYSTEM");
 		return a;
