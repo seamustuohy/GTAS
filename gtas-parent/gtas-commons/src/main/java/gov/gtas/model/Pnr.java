@@ -150,6 +150,18 @@ public class Pnr extends Message {
     )    
     private Set<Email> emails = new HashSet<>();
 
+    @ManyToMany(
+        targetEntity=Agency.class,
+        cascade={CascadeType.ALL}
+    )
+    @JoinTable(
+        name="pnr_agency",
+        joinColumns=@JoinColumn(name="pnr_id"),
+        inverseJoinColumns=@JoinColumn(name="agency_id")
+    )    
+    private Set<Agency> agencies = new HashSet<>();
+    
+    
     public void addPassenger(Passenger p) {
         if (this.passengers == null) {
             this.passengers = new HashSet<>();

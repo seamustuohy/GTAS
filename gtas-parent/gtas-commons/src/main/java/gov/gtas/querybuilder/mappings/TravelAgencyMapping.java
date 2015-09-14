@@ -4,9 +4,9 @@ import gov.gtas.enumtype.TypeEnum;
 
 public enum TravelAgencyMapping implements IEntityMapping {
 
-	CITY ("agencyCity", "City", TypeEnum.STRING.getType()),
-	NAME ("agencyName", "Name", TypeEnum.STRING.getType()),
-	PHONE ("phoneNumber", "Phone", TypeEnum.STRING.getType()); 
+	CITY ("city", "City", TypeEnum.STRING.getType()),
+	NAME ("name", "Name", TypeEnum.STRING.getType()),
+	PHONE ("phone", "Phone", TypeEnum.STRING.getType()); 
 	
 	private String fieldName;
 	private String friendlyName;
