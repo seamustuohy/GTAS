@@ -177,7 +177,7 @@ public class JPQLGenerator {
 			}
 			
 			if(entityEnum == EntityEnum.HITS) {
-				if(field.equalsIgnoreCase(Constants.IS_RULE_HIT)) {
+				if(field.equalsIgnoreCase(Constants.IS_RULE_HIT) || field.equalsIgnoreCase(Constants.IS_WATCHLIST_HIT)) {
 					
 					joinEntities.remove(entityEnum);
 					String value = (queryTerm.getValue() != null && queryTerm.getValue().length == 1) ? queryTerm.getValue()[0] : null;
@@ -187,11 +187,19 @@ public class JPQLGenerator {
 						if(value.equals("1")) {
 							where.append(Constants.EXISTS_HITS_PREFIX + " " + EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " " + Constants.FROM + " " +
 									EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
-									EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " = " + EntityEnum.FLIGHT.getAlias() + Constants.ID + ")");
+									EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " = " + EntityEnum.FLIGHT.getAlias() + Constants.ID + " ");
 						} else {
 							where.append(Constants.NOT_EXISTS_HITS_PREFIX + " " + EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " " + Constants.FROM + " " +
 									EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
-									EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " = " + EntityEnum.FLIGHT.getAlias() + Constants.ID + ")");
+									EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " = " + EntityEnum.FLIGHT.getAlias() + Constants.ID + " ");
+						}
+						
+						if(field.equalsIgnoreCase(Constants.IS_RULE_HIT)) { 
+							where.append(Constants.AND + EntityEnum.HITS.getAlias() + "hitType like '%r%'" + ")");
+						}
+						else {
+							where.append(Constants.AND + EntityEnum.HITS.getAlias() + "hitType like '%p%' or " +
+								EntityEnum.HITS.getAlias() + "hitType like '%d%')");
 						}
 					}
 					else if(queryType == EntityEnum.PASSENGER) {

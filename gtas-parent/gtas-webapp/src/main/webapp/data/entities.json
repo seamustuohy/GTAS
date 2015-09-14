@@ -431,7 +431,7 @@
         }
       },
       {
-        "id": "HitsSummary.has_list_rule_hit",
+        "id": "HitsSummary.isWatchListHit",
         "label": "Has Watch List Hit",
         "type": "integer",
         "operators": "EQUALS",
