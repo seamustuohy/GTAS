@@ -33,6 +33,7 @@ import gov.gtas.repository.udr.UdrRuleRepository;
 import gov.gtas.services.security.UserData;
 import gov.gtas.services.security.UserService;
 import gov.gtas.services.security.UserServiceUtil;
+import gov.gtas.util.DateCalendarUtils;
 
 /**
  * The back-end service for persisting rules.
@@ -199,6 +200,22 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	@Override
 	public List<UdrRule> findByAuthor(String authorUserId) {
 		return udrRuleRepository.getUdrRuleByAuthor(authorUserId);
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.udr.RulePersistenceService#findValidUdrOnDate(java.util.Date)
+	 */
+	@Override
+	public List<UdrRule> findValidUdrOnDate(Date targetDate) {
+		List<UdrRule> ret = null;
+		try{
+			//remove the time portion of the date
+		     Date tDate = DateCalendarUtils.parseJsonDate(DateCalendarUtils.formatJsonDate(targetDate));
+		     ret = udrRuleRepository.findValidUdrRuleByDate(tDate);
+		} catch(Exception ex){
+			throw ErrorHandlerFactory.getErrorHandler().createException(CommonErrorConstants.SYSTEM_ERROR_CODE, ex);
+		}
+		return ret;
 	}
 
 	/*

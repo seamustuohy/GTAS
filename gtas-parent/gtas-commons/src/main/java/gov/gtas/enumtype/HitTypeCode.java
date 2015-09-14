@@ -1,4 +1,4 @@
-package gov.gtas.model.lookup;
+package gov.gtas.enumtype;
 
 public enum HitTypeCode {
     R,   // Rule Hit
