@@ -41,7 +41,7 @@ public class PnrMessageService implements MessageService {
     private PnrRepository msgDao;
     
     private Pnr pnr;
-    private EdifactParser<PnrVo> parser = new PnrGovParser();
+    private EdifactParser<PnrVo> parser;
     private String filePath;
 
     public List<String> preprocess(String filePath) {
@@ -67,6 +67,7 @@ public class PnrMessageService implements MessageService {
         
         MessageVo vo = null;
         try {
+            parser = new PnrGovParser();
             vo = parser.parse(message);
             loaderRepo.checkHashCode(vo.getHashCode());
             this.pnr.setRaw(LobUtils.createClob(vo.getRaw()));
