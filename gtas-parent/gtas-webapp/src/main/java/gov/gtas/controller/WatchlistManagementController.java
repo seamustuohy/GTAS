@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-//@RequestMapping(Constants.WL_ROOT)
 public class WatchlistManagementController {
 	/*
 	 * The logger for the UdrManagementController
@@ -46,13 +45,13 @@ public class WatchlistManagementController {
 	private RuleManagementService ruleManagementService;
 
 	@RequestMapping(value = Constants.WL_GET_BY_NAME, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public WatchlistSpec getWatchlist(@PathVariable String entity, @PathVariable String name) {
+	public JsonServiceResponse getWatchlist(@PathVariable String entity, @PathVariable String name) {
 		logger.debug("******** name =" + name);
 		WatchlistSpec resp = watchlistService.fetchWatchlist(name);
 		if(resp == null){
 			resp = 	new WatchlistSpec(name, entity);
 		}
-		return resp;
+		return new JsonServiceResponse(Status.SUCCESS, "GET Watchlist By Name was successful", resp);
 	}
 
 	@RequestMapping(value = Constants.WL_GETALL, method = RequestMethod.GET)

@@ -28,6 +28,7 @@ public class UdrServiceJsonResponseHelper {
 							op
 									+ " on UDR Rule with title='%s' and ID='%s' was successful.",
 							rule.getTitle(), rule.getId()));
+			resp.setResult(rule.getId());
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
 					RuleConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(rule
 							.getId())));
@@ -37,11 +38,12 @@ public class UdrServiceJsonResponseHelper {
 		} else {
 			if (rule != null) {
 				resp = new JsonServiceResponse(
-						Status.SUCCESS,
+						Status.FAILURE,
 						String.format(
 								op
 										+ " on UDR Rule with title='%s' and ID='%s' failed.",
 								rule.getTitle(), rule.getId()));
+				resp.setResult(rule.getId());
 			} else {
 				String msg =null;
 				if(StringUtils.isEmpty(failureReason)){

@@ -49,26 +49,26 @@ public class UdrManagementController {
 	private RuleManagementService ruleManagementService;
 
 	@RequestMapping(value = Constants.UDR_GET_BY_AUTHOR_TITLE, method = RequestMethod.GET)
-	public UdrSpecification getUDR(@PathVariable String authorId,
+	public JsonServiceResponse getUDR(@PathVariable String authorId,
 			@PathVariable String title) {
 		logger.debug("******** user =" + authorId + ", title=" + title);
 		UdrSpecification resp = udrService.fetchUdr(authorId, title);
-		return resp;
+		return new JsonServiceResponse(Status.SUCCESS, "GET UDR was successful", resp);
 	}
 
 	@RequestMapping(value = Constants.UDR_GET_BY_ID, method = RequestMethod.GET)
-	public UdrSpecification getUDRById(@PathVariable Long id) {
+	public JsonServiceResponse getUDRById(@PathVariable Long id) {
 		logger.debug("******** Received GET UDR request for id=" + id);
 		UdrSpecification resp = udrService.fetchUdr(id);
-		return resp;
+		return new JsonServiceResponse(Status.SUCCESS, "GET UDR by ID was successful", resp);
 	}
 
 	@RequestMapping(value = Constants.UDR_GETALL, method = RequestMethod.GET)
-	public List<JsonUdrListElement> getUDRList() {
+	public JsonServiceResponse getUDRList() {
         String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** user =" + userId);
 		List<JsonUdrListElement> resp = udrService.fetchUdrSummaryList(userId);
-		return resp;
+		return new JsonServiceResponse(Status.SUCCESS, "GET all UDR was successful", resp);
 	}
 
 	@RequestMapping(value = Constants.UDR_GETDRL, method = RequestMethod.GET)
