@@ -1,12 +1,7 @@
 package gov.gtas.delegates.vo;
 
-import gov.gtas.model.Pnr;
 import gov.gtas.validators.Validatable;
-
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,8 +12,7 @@ public class CreditCardVo extends BaseVo implements Validatable  {
     private String number;
     private Date expiration;
     private String accountHolder;
-    
-        
+         
 	public String getCardType() {
 		return cardType;
 	}

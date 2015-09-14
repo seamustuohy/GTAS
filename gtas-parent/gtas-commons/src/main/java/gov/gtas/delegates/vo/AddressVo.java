@@ -1,19 +1,14 @@
 package gov.gtas.delegates.vo;
 
-import gov.gtas.model.Pnr;
 import gov.gtas.validators.Validatable;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class AddressVo extends BaseVo implements Validatable {
 
-	//TODO taken for compatability with parser code-remove after refacroring
-	private String type;
-	//TODO taken for compatability with parser code-remove after refacroring
+
 	private String phoneNumber;
-	
 	private String addressType;
 	private String line1;
 	private String line2;
@@ -22,15 +17,7 @@ public class AddressVo extends BaseVo implements Validatable {
 	private String state;
 	private String country;
 	private String postalCode;
-    private Pnr pnrData;
     
-    
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -85,17 +72,12 @@ public class AddressVo extends BaseVo implements Validatable {
 	public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
 	}
-	public Pnr getPnrData() {
-		return pnrData;
-	}
-	public void setPnrData(Pnr pnrData) {
-		this.pnrData = pnrData;
-	}
-	
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+    
 	@Override
 	public boolean validate() {
 		if(StringUtils.isBlank(this.postalCode) || StringUtils.isBlank(this.state) 

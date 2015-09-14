@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -15,7 +14,6 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
@@ -74,8 +72,6 @@ public class PnrServiceIT {
 		passengerToUpdate.getPnrs().add(pnr);
 		passengerToUpdate.getFlights().add(f);
 		pnr.getPassengers().add(passengerToUpdate);
-		
-		
 		f.getPassengers().add(passengerToUpdate);
 		//testTarget.create(f);
 		pnr.getFlights().add(f);
@@ -147,23 +143,18 @@ public class PnrServiceIT {
 	    f.setDirection("I");
 		f.setCreatedAt(new Date());
 		f.setCreatedBy("JUNIT");
-		// Airport a = new Airport(3616l,"Washington","IAD","KAID");
 		String a = "IAD";
 		System.out.println(a);
 		f.setOrigin(a);
 		String b = "JFK";
-		// Airport b = new Airport (3584l,"Atlanta","ATL","KATL");
-
 		f.setDestination(b);
 		f.setEta(new Date());
 		f.setEtd(new Date("7/31/2015"));
 		f.setFlightDate(new Date());
 		f.setFlightNumber("528");
-
 		String c = "US";
 		f.setDestinationCountry(c);
 		f.setOriginCountry(c);
-
 		String cr = "AA";
 		f.setCarrier(cr);
 		f.setUpdatedAt(new Date());

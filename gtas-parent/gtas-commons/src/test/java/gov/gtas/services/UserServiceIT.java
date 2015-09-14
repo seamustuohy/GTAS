@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -16,7 +15,6 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.services.security.RoleData;
 import gov.gtas.services.security.RoleService;
