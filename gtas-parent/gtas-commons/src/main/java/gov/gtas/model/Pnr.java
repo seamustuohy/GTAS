@@ -1,7 +1,9 @@
 package gov.gtas.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -161,6 +164,12 @@ public class Pnr extends Message {
     )    
     private Set<Agency> agencies = new HashSet<>();
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pnr")
+    private List<FlightLeg> flightLegs = new ArrayList<>();
+    
+    public void addFlightLeg(FlightLeg leg) {
+        flightLegs.add(leg);
+    }
     
     public void addPassenger(Passenger p) {
         if (this.passengers == null) {
@@ -380,6 +389,14 @@ public class Pnr extends Message {
 	public void setFlights(Set<Flight> flights) {
 		this.flights = flights;
 	}
+
+    public List<FlightLeg> getFlightLegs() {
+        return flightLegs;
+    }
+
+    public void setFlightLegs(List<FlightLeg> flightLegs) {
+        this.flightLegs = flightLegs;
+    }
 
     @Override
     public int hashCode() {

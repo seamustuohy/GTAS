@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import gov.gtas.error.ErrorUtils;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.EdifactMessage;
+import gov.gtas.model.FlightLeg;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.MessageVo;
@@ -98,7 +99,8 @@ public class ApisMessageService implements MessageService {
         try {
             ApisMessageVo m = (ApisMessageVo)messageVo;
             loaderRepo.processReportingParties(this.apisMessage, m.getReportingParties());
-            loaderRepo.processFlightsAndPassengers(m.getFlights(), m.getPassengers(), this.apisMessage.getFlights(), this.apisMessage.getPassengers());
+            loaderRepo.processFlightsAndPassengers(m.getFlights(), m.getPassengers(), 
+                    this.apisMessage.getFlights(), this.apisMessage.getPassengers(), new ArrayList<FlightLeg>());
             this.apisMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
