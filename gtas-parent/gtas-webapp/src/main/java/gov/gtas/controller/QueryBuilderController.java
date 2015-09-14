@@ -16,6 +16,7 @@ import gov.gtas.querybuilder.model.QueryErrorResponse;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.QueryResponse;
 import gov.gtas.querybuilder.service.QueryBuilderService;
+import gov.gtas.security.service.GtasSecurityUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -101,7 +103,7 @@ public class QueryBuilderController {
 	 * @throws InvalidQueryException
 	 * @throws QueryAlreadyExistsException
 	 */
-	@RequestMapping(value = Constants.SAVE_QUERY_URI, method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public IQueryResponse saveQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
 		IQueryResponse response = new QueryResponse();
 		List<IUserQueryResult> resultList = new ArrayList<>();
@@ -121,7 +123,7 @@ public class QueryBuilderController {
 	 * @throws QueryAlreadyExistsException
 	 * @throws QueryDoesNotExistException
 	 */
-	@RequestMapping(value = Constants.EDIT_QUERY_URI, method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.PUT)
 	public IQueryResponse editQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
 		IQueryResponse response = new QueryResponse();
 		List<IUserQueryResult> resultList = new ArrayList<>();
@@ -136,13 +138,14 @@ public class QueryBuilderController {
 	/**
 	 * This method makes a call to the method in the service layer to list a user's 
 	 * query
-	 * @param userId
 	 * @return
 	 * @throws InvalidQueryException
 	 */
-	@RequestMapping(value = Constants.LIST_QUERY_URI, method = RequestMethod.GET)
-	public IQueryResponse listQueryByUser(@RequestParam("userId") String userId) throws InvalidQueryException {
+	@RequestMapping(method = RequestMethod.GET)
+	public IQueryResponse listQueryByUser() throws InvalidQueryException {
 		IQueryResponse response = new QueryResponse();
+		String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.debug("******** Received Query Builder List request by user =" + userId);
 		
 		if(userId != null) {
 			List<IUserQueryResult> resultList = new ArrayList<>();
@@ -157,14 +160,16 @@ public class QueryBuilderController {
 	
 	/**
 	 * This method makes a call to the method in the service layer to delete a user's query
-	 * @param userId the id of the user whose query will be deleted
 	 * @param id the id of the query to be deleted
 	 * @return
 	 * @throws QueryDoesNotExistException
 	 */
-	@RequestMapping(value = Constants.DELETE_QUERY_URI, method = RequestMethod.DELETE)
-	public IQueryResponse deleteQuery(@RequestParam("userId") String userId, @RequestParam("id") int id) throws QueryDoesNotExistException {
+	@RequestMapping(method = RequestMethod.DELETE)
+	public IQueryResponse deleteQuery(@PathVariable int id) throws QueryDoesNotExistException {
 		IQueryResponse response = new QueryResponse();
+		String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.debug("******** Received Query Builder Delete request by user =" + userId
+				+ " for " + id);
 		
 		if(userId != null && id > 0) {
 			queryService.deleteQuery(userId, id);
