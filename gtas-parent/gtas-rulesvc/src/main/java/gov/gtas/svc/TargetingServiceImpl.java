@@ -30,11 +30,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -65,6 +67,12 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private HitsSummaryRepository hitsSummaryRepository;
+
+	@Autowired
+	private EntityManager em;
+
+	@Value("${hibernate.jdbc.batch_size}")
+	private String batchSize;
 
 	/**
 	 * Constructor obtained from the spring context by auto-wiring.
@@ -285,15 +293,22 @@ public class TargetingServiceImpl implements TargetingService {
 	private void deleteExistingHitRecords() {
 		Set<PassengerFlightTuple> passengerFlightTuples = TargetingServiceUtils
 				.getPaxFlightTuples();
-		passengerFlightTuples.forEach(passengerFlightTuple -> {
+		List<PassengerFlightTuple> setList = new ArrayList<PassengerFlightTuple>(
+				passengerFlightTuples);
+		for (int i = 0; i < setList.size(); i++) {
+			PassengerFlightTuple passengerFlightTuple = setList.get(i);
 			HitsSummary found = hitsSummaryRepository
 					.findByFlightIdAndPassengerId(passengerFlightTuple
 							.getFlight().getId(), passengerFlightTuple
 							.getPassenger().getId());
 			if (found != null) {
-				hitsSummaryRepository.delete(found);
+				em.remove(found);
 			}
-		});
+			if (i % Integer.valueOf(batchSize) == 0) {
+				em.flush();
+				em.clear();
+			}
+		}
 	}
 
 	/**
