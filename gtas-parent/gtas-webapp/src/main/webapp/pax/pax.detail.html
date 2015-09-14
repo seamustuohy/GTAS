@@ -432,9 +432,9 @@
 	
 		<table class="table table-striped">
 		
-			<tbody ng-init="arr = ['1','2','3','4','5','','','','','','','','','','','','','1','2','3','4','5','','','','','','','','','','','','','1','2','3','4','5','','','','','','','','','','','','']">
-				<tr ng-repeat="i in arr track by $index">
-					<td><span>{{ $index }}</span></td>
+			<tbody>
+				<tr ng-repeat="i in passenger.pnrVo.rawList track by $index">
+					<td><span>{{ $index+1 }} .&nbsp;&nbsp;&nbsp; {{ i }}</span></td>
 				</tr>
 				
 				
