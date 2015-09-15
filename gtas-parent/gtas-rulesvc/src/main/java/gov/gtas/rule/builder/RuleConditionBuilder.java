@@ -4,7 +4,7 @@ import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.CriteriaOperatorEnum;
-import gov.gtas.enumtype.HitTypeCode;
+import gov.gtas.enumtype.HitTypeEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.udr.Rule;
@@ -232,7 +232,7 @@ public class RuleConditionBuilder {
 				.replace("\"", "'");
 		ruleStringBuilder.append("then\n");
 		
-		HitTypeCode hitType = (entity == EntityEnum.PASSENGER) ? HitTypeCode.P : HitTypeCode.D;
+		HitTypeEnum hitType = (entity == EntityEnum.PASSENGER) ? HitTypeEnum.P : HitTypeEnum.D;
 		 
 		// the watch list item id id may not be available at
 		// this stage so we add defer adding it
