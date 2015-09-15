@@ -35,13 +35,13 @@ public class TargetingServiceUtilsTest {
     @Test
     public void testPnrRuleRequestCreation() {
         Pnr msg = PnrDataGenerator.createTestPnr(1L);
-        RuleServiceRequest request = TargetingServiceUtils.createPnrRequest(msg);
+        RuleServiceRequest request = TargetingServiceUtils.createPnrRequestContext(msg).getRuleServiceRequest();
         Collection<?> reqObjects = request.getRequestObjects();
         assertNotNull(reqObjects);
         assertEquals(28, reqObjects.size());
 
         msg = PnrDataGenerator.createTestPnr2(1L);
-        request = TargetingServiceUtils.createPnrRequest(msg);
+        request = TargetingServiceUtils.createPnrRequestContext(msg).getRuleServiceRequest();
         reqObjects = request.getRequestObjects();
         assertNotNull(reqObjects);
         assertEquals(20, reqObjects.size());
@@ -52,7 +52,7 @@ public class TargetingServiceUtilsTest {
 		ApisMessage message = ApisDataGenerator.createSimpleTestApisMesssage();
 		assertNotNull(message);
 		RuleServiceRequest request = TargetingServiceUtils
-						.createApisRequest(message);
+						.createApisRequest(message).getRuleServiceRequest();
 		Collection<?> reqObjects = request.getRequestObjects();
 		assertNotNull(reqObjects);		
 		assertEquals(14, reqObjects.size());//2 flights with 3 passengers each. Each passenger has 1 doc.		
@@ -63,7 +63,7 @@ public class TargetingServiceUtilsTest {
 		ApisMessage apis = ApisDataGenerator.createSimpleTestApisMesssage();
 		Pnr pnr = PnrDataGenerator.createTestPnr(1L);
 		RuleServiceRequest request = TargetingServiceUtils
-						.createPnrApisRequest(Arrays.asList(apis), Arrays.asList(pnr));
+						.createPnrApisRequestContext(Arrays.asList(apis), Arrays.asList(pnr)).getRuleServiceRequest();
 		Collection<?> reqObjects = request.getRequestObjects();
 		assertNotNull(reqObjects);		
 		assertEquals(42, reqObjects.size());//28 PNR + 14 APIS		
@@ -90,7 +90,7 @@ public class TargetingServiceUtilsTest {
 		//END:create common flights aand passengers
 		
 		RuleServiceRequest request = TargetingServiceUtils
-						.createPnrApisRequest(Arrays.asList(apisMsg), Arrays.asList(pnr));
+						.createPnrApisRequestContext(Arrays.asList(apisMsg), Arrays.asList(pnr)).getRuleServiceRequest();
 		Collection<?> reqObjects = request.getRequestObjects();
 		assertNotNull(reqObjects);		
 		assertEquals(45, reqObjects.size());//28 PNR + 14 APIS + 3 common passenger links	

@@ -11,6 +11,7 @@ import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Pnr;
+import gov.gtas.svc.util.RuleExecutionContext;
 
 /**
  * The API for the Targeting Service.
@@ -64,7 +65,7 @@ public interface TargetingService {
 	 *            status to update after processing.
 	 * @return the result of the invocation.
 	 */
-	RuleServiceResult analyzeLoadedMessages(MessageStatus statusToLoad,
+	RuleExecutionContext analyzeLoadedMessages(MessageStatus statusToLoad,
 			MessageStatus statusAfterProcesssing,
 			boolean updateProcesssedMessageStatus);
 

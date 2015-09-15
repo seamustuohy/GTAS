@@ -1,23 +1,28 @@
 package gov.gtas.svc.util;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import gov.gtas.bo.BasicRuleServiceResult;
 import gov.gtas.bo.RuleHitDetail;
-import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceResult;
+import gov.gtas.enumtype.HitTypeCode;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Message;
 import gov.gtas.model.Pnr;
-import gov.gtas.svc.request.builder.PassengerFlightTuple;
 import gov.gtas.svc.request.builder.RuleEngineRequestBuilder;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TargetingServiceUtils {
+	private static final Logger logger = LoggerFactory
+			.getLogger(TargetingServiceUtils.class);
+
 	/**
 	 * Creates a request from a API message.
 	 * 
@@ -25,10 +30,10 @@ public class TargetingServiceUtils {
 	 *            the API message.
 	 * @return RuleServiceRequest object.
 	 */
-	public static RuleServiceRequest createApisRequest(final ApisMessage req) {
+	public static RuleExecutionContext createApisRequest(final ApisMessage req) {
 		Collection<ApisMessage> apisMessages = new LinkedList<ApisMessage>();
 		apisMessages.add(req);
-		return createPnrApisRequest(apisMessages, null);
+		return createPnrApisRequestContext(apisMessages, null);
 	}
 
 	/**
@@ -38,10 +43,10 @@ public class TargetingServiceUtils {
 	 *            the PNR message.
 	 * @return RuleServiceRequest object.
 	 */
-	public static RuleServiceRequest createPnrRequest(final Pnr req) {
+	public static RuleExecutionContext createPnrRequestContext(final Pnr req) {
 		Collection<Pnr> pnrs = new LinkedList<Pnr>();
 		pnrs.add(req);
-		return createPnrApisRequest(null, pnrs);
+		return createPnrApisRequestContext(null, pnrs);
 	}
 
 	/**
@@ -53,9 +58,9 @@ public class TargetingServiceUtils {
 	 * @return the constructed rule engine request suitable for Rule Engine
 	 *         invocation.
 	 */
-	public static RuleServiceRequest createApisRequest(
+	public static RuleExecutionContext createApisRequestContext(
 			final List<ApisMessage> reqList) {
-		return createPnrApisRequest(reqList, null);
+		return createPnrApisRequestContext(reqList, null);
 	}
 
 	/**
@@ -67,12 +72,10 @@ public class TargetingServiceUtils {
 	 * @return the constructed rule engine request suitable for Rule Engine
 	 *         invocation.
 	 */
-	public static RuleServiceRequest createPnrRequest(
+	public static RuleExecutionContext createPnrRequestContext(
 			final List<Pnr> reqList) {
-		return createPnrApisRequest(null, reqList);
+		return createPnrApisRequestContext(null, reqList);
 	}
-
-	private static Set<PassengerFlightTuple> paxFlightTuples;
 
 	/**
 	 * Creates a Rule Engine request containing data from a collection of APIS
@@ -82,7 +85,7 @@ public class TargetingServiceUtils {
 	 * @param pnrs
 	 * @return the rule engine request object.
 	 */
-	public static RuleServiceRequest createPnrApisRequest(
+	public static RuleExecutionContext createPnrApisRequestContext(
 			final Collection<ApisMessage> apisMessages,
 			final Collection<Pnr> pnrs) {
 		RuleEngineRequestBuilder bldr = new RuleEngineRequestBuilder();
@@ -96,8 +99,10 @@ public class TargetingServiceUtils {
 				bldr.addApisMessage(msg);
 			}
 		}
-		setPaxFlightTuples(bldr.getPassengerFlightSet());
-		return bldr.build();
+		RuleExecutionContext context = new RuleExecutionContext();
+		context.setPaxFlightTuples(bldr.getPassengerFlightSet());
+		context.setRuleServiceRequest(bldr.build());
+		return context;
 	}
 
 	/**
@@ -107,7 +112,7 @@ public class TargetingServiceUtils {
 	 *            List of Messages
 	 * @return the rule engine request object.
 	 */
-	public static RuleServiceRequest createPnrApisRequest(
+	public static RuleExecutionContext createPnrApisRequestContext(
 			final List<Message> loadedMessages) {
 		RuleEngineRequestBuilder bldr = new RuleEngineRequestBuilder();
 
@@ -120,9 +125,10 @@ public class TargetingServiceUtils {
 				}
 			}
 		}
-		setPaxFlightTuples(bldr.getPassengerFlightSet());
-
-		return bldr.build();
+		RuleExecutionContext context = new RuleExecutionContext();
+		context.setPaxFlightTuples(bldr.getPassengerFlightSet());
+		context.setRuleServiceRequest(bldr.build());
+		return context;
 	}
 
 	/**
@@ -136,11 +142,11 @@ public class TargetingServiceUtils {
 		// get the list of RuleHitDetail objects returned by the Rule Engine
 		List<RuleHitDetail> resultList = result.getResultList();
 
-		// create a set to eliminate duplicates
-		Set<RuleHitDetail> resultSet = new HashSet<RuleHitDetail>();
+		// create a Map to eliminate duplicates
+		Map<RuleHitDetail, RuleHitDetail> resultMap = new HashMap<>();
 
 		for (RuleHitDetail rhd : resultList) {
-			RuleHitDetail hitDetail = rhd;
+			//RuleHitDetail hitDetail = rhd;
 			if (rhd.getFlightId() == null) {
 				// get all the flights for the passenger
 				// and replicate the RuleHitDetail object, for each flight id
@@ -151,48 +157,50 @@ public class TargetingServiceUtils {
 					try {
 						for (Flight flight : flights) {
 							RuleHitDetail newrhd = rhd.clone();
-							newrhd.setFlightId(flight.getId());
-
-							// set the passenger object to null
-							// since its only purpose was to provide flight
-							// details.
-							newrhd.setPassenger(null);
-
-							resultSet.add(newrhd);
-
-							// set the original RuleHitDetail reference to null
-							// so that it it will not get inserted into the
-							// resultset.
-							hitDetail = null;
+                            processPassengerFlight(newrhd, flight.getId(), resultMap);
 						}
 					} catch (CloneNotSupportedException cnse) {
 						cnse.printStackTrace();
 					}
+				} else {
+					//ERROR we do not have flights for this passenger
+					logger.error("TargetingServiceUtils.ruleResultPostProcesssing() no flight information for passenger  with ID:"+rhd.getPassenger().getId());
 				}
-			}
-			// Check that the RuleHitDetail was not already cloned and inserted
-			// (see line 126 above)
-			if (hitDetail != null) {
-				// set the passenger object to null
-				// since its only purpose was to provide flight details.
-				hitDetail.setPassenger(null);
-
-				resultSet.add(hitDetail);
+			} else{
+				rhd.setPassenger(null);
+				processPassengerFlight(rhd, rhd.getFlightId(), resultMap);				
 			}
 		}
 		// Now create the return list from the set, thus eliminating duplicates.
 		RuleServiceResult ret = new BasicRuleServiceResult(
-				new LinkedList<RuleHitDetail>(resultSet),
+				new LinkedList<RuleHitDetail>(resultMap.values()),
 				result.getExecutionStatistics());
 		return ret;
 	}
+	
+	private static void processPassengerFlight(RuleHitDetail rhd, Long flightId, Map<RuleHitDetail, RuleHitDetail> resultMap){
+		
+		rhd.setFlightId(flightId);
 
-	public static Set<PassengerFlightTuple> getPaxFlightTuples() {
-		return paxFlightTuples;
-	}
+		// set the passenger object to null
+		// since its only purpose was to provide flight
+		// details.
+		rhd.setPassenger(null);
+		RuleHitDetail resrhd = resultMap.get(rhd);
+		if(resrhd != null){
+			resrhd.incrementHitCount();
+			if(resrhd.getUdrRuleId() != null){
+				//this is a rule hit
+				resrhd.incrementRuleHitCount();
+			} else {
+				//this is a watch list hit
+				if(resrhd.getHitType() != rhd.getHitType()){
+					resrhd.setHitType(HitTypeCode.PD);
+				}
+			}
+		} else {
+		    resultMap.put(rhd, rhd);
+		}
 
-	public static void setPaxFlightTuples(
-			Set<PassengerFlightTuple> paxFlightTuples) {
-		TargetingServiceUtils.paxFlightTuples = paxFlightTuples;
 	}
 }

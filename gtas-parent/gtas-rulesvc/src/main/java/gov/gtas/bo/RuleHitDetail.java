@@ -1,5 +1,6 @@
 package gov.gtas.bo;
 
+import gov.gtas.enumtype.HitTypeCode;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.PassengerTypeCode;
@@ -29,6 +30,8 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	private String passengerType;
 
 	private String passengerName;
+	
+	private int hitCount;
 
 	private String[] hitReasons;
 
@@ -42,7 +45,10 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	private Passenger passenger;
 
 	@JsonIgnore
-	private boolean watchlistHit;
+	private HitTypeCode hitType;
+
+	@JsonIgnore
+	private int ruleHitCount;
 
 	/**
 	 * This constructor is used when creating a hit detail object as a result of
@@ -77,6 +83,8 @@ public class RuleHitDetail implements Serializable, Cloneable {
 			this.flightId = flight.getId();
 		}
 		this.passenger = passenger;
+		this.hitType = HitTypeCode.R;
+		this.hitCount = 1;
 	}
 
 	/**
@@ -95,13 +103,24 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	 *            the reason for the match.
 	 */
 	public RuleHitDetail(final Long watchlistItemId,
-			final String watchlistTitle, final Passenger passenger,
+			final String hitType, final Passenger passenger,
 			final String cause) {
 		this.udrRuleId = null;
 		this.ruleId = watchlistItemId;
-		this.title = watchlistTitle;
-		this.description = watchlistTitle;
-		this.hitRule = watchlistTitle + "(" + watchlistItemId + ")";
+		switch(hitType){
+			case "D":
+				this.title = "Document List Rule #"+watchlistItemId;
+				this.hitType = HitTypeCode.D;
+				break;
+			case "P":
+				this.title = "Passenger List Rule #"+watchlistItemId;
+				this.hitType = HitTypeCode.P;
+				break;
+			default:
+				break;
+		}
+		this.description = this.title;
+		this.hitRule = this.title + "(" + watchlistItemId + ")";
 		this.passengerId = passenger.getId();
 		this.passengerType = decodePassengerTypeName(passenger
 				.getPassengerType());
@@ -109,7 +128,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 				+ passenger.getLastName();
 		this.hitReasons = cause.split(HIT_REASON_SEPARATOR);
 		this.passenger = passenger;
-		this.watchlistHit = true;
+		this.hitCount = 1;		
 	}
 
 	/**
@@ -124,18 +143,18 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	 *            the flight object that matched.
 	 * 
 	 */
-	public RuleHitDetail(final Long ruleId, final Passenger passenger,
-			final Flight flight) {
-		this.ruleId = ruleId;
-		this.passengerId = passenger.getId();
-		this.passengerType = decodePassengerTypeName(passenger
-				.getPassengerType());
-		this.passengerName = passenger.getFirstName() + " "
-				+ passenger.getLastName();
-		if (flight != null) {
-			this.flightId = flight.getId();
-		}
-	}
+//	public RuleHitDetail(final Long ruleId, final Passenger passenger,
+//			final Flight flight) {
+//		this.ruleId = ruleId;
+//		this.passengerId = passenger.getId();
+//		this.passengerType = decodePassengerTypeName(passenger
+//				.getPassengerType());
+//		this.passengerName = passenger.getFirstName() + " "
+//				+ passenger.getLastName();
+//		if (flight != null) {
+//			this.flightId = flight.getId();
+//		}
+//	}
 
 	/**
 	 * Converts the passenger type code to a friendly name.
@@ -164,7 +183,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	/**
 	 * @return the udrRuleId
 	 */
-	public long getUdrRuleId() {
+	public Long getUdrRuleId() {
 		return udrRuleId;
 	}
 
@@ -226,6 +245,48 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	}
 
 	/**
+	 * @return the hitType
+	 */
+	public HitTypeCode getHitType() {
+		return hitType;
+	}
+
+	/**
+	 * @param hitType the hitType to set
+	 */
+	public void setHitType(HitTypeCode hitType) {
+		this.hitType = hitType;
+	}
+
+	/**
+	 * @return the hitCount
+	 */
+	public int getHitCount() {
+		return hitCount;
+	}
+
+	/**
+	 * @param hitCount the hitCount to set
+	 */
+	public void incrementHitCount() {
+		this.hitCount++;
+	}
+
+	/**
+	 * @return the ruleHitCount
+	 */
+	public int getRuleHitCount() {
+		return ruleHitCount;
+	}
+
+	/**
+	 * @param ruleHitCount the ruleHitCount to set
+	 */
+	public void incrementRuleHitCount() {
+		this.ruleHitCount++;
+	}
+
+	/**
 	 * @return the passenger
 	 */
 	public Passenger getPassenger() {
@@ -238,13 +299,6 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	 */
 	public void setPassenger(Passenger passenger) {
 		this.passenger = passenger;
-	}
-
-	/**
-	 * @return the watchlistHit
-	 */
-	public boolean isWatchlistHit() {
-		return watchlistHit;
 	}
 
 	/*
@@ -270,9 +324,11 @@ public class RuleHitDetail implements Serializable, Cloneable {
 		if (getClass() != obj.getClass())
 			return false;
 		final RuleHitDetail other = (RuleHitDetail) obj;
-		return Objects.equals(this.udrRuleId, other.udrRuleId)
-				&& Objects.equals(this.ruleId, other.ruleId)
-				&& Objects.equals(this.passengerId, other.passengerId)
+//		return Objects.equals(this.udrRuleId, other.udrRuleId)
+//				&& Objects.equals(this.ruleId, other.ruleId)
+//				&& Objects.equals(this.passengerId, other.passengerId)
+//				&& Objects.equals(this.flightId, other.flightId);
+		return  Objects.equals(this.passengerId, other.passengerId)
 				&& Objects.equals(this.flightId, other.flightId);
 	}
 }

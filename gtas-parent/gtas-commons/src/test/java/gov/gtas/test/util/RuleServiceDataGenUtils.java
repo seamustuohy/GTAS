@@ -57,7 +57,11 @@ public class RuleServiceDataGenUtils {
 	}
 	public UdrRule createUdrRule(String title, String descr, YesNoEnum enabled, Date startDate, Date endDate) {
 		UdrRule rule = new UdrRule();
-		rule.setDeleted(YesNoEnum.N);
+		if(enabled == YesNoEnum.Y){
+		  rule.setDeleted(YesNoEnum.N);
+		} else {
+			rule.setDeleted(YesNoEnum.Y);
+		}
 		rule.setEditDt(new Date());
 		rule.setTitle(title);
 		RuleMeta meta =  null;

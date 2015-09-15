@@ -2,6 +2,7 @@ package gov.gtas.svc.util;
 
 import static gov.gtas.rule.builder.RuleTemplateConstants.NEW_LINE;
 import gov.gtas.enumtype.CriteriaOperatorEnum;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.watchlist.json.WatchlistTerm;
 import gov.gtas.rule.builder.RuleConditionBuilder;
@@ -17,7 +18,7 @@ import java.util.List;
  *
  */
 public class WatchlistRuleCreationUtil {
-	public static List<String> createWatchlistRule(WatchlistTerm[] wlData,
+	public static List<String> createWatchlistRule(EntityEnum entity, WatchlistTerm[] wlData,
 			String title, StringBuilder ruleOutput) {
 		RuleConditionBuilder ruleConditionBuilder = new RuleConditionBuilder(
 				RuleVariablesUtil.createEngineRuleVariableMap());
@@ -31,7 +32,7 @@ public class WatchlistRuleCreationUtil {
 			ruleConditionBuilder.addRuleCondition(trm);
 		}
 		ruleConditionBuilder.buildConditionsAndApppend(ruleOutput);
-		List<String> causes = ruleConditionBuilder.addWatchlistRuleAction(ruleOutput,
+		List<String> causes = ruleConditionBuilder.addWatchlistRuleAction(ruleOutput, entity, 
 				title, RuleTemplateConstants.PASSENGER_VARIABLE_NAME);
 
 		return causes;

@@ -9,6 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -182,6 +184,9 @@ public class UdrServiceErrorTest {
 			UdrRule rule = JsonToDomainObjectConverter.createUdrRuleFromJson(spec, author);
 			rule.setId(1L);
 			when(mockRulePersistenceSvc.create(any(UdrRule.class), any())).thenReturn(rule);
+			List<UdrRule> rlList = new LinkedList<UdrRule>();
+			rlList.add(rule);
+			when(mockRulePersistenceSvc.findAll()).thenReturn(rlList);
 			udrService.createUdr(authorId, spec);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -308,6 +313,9 @@ public class UdrServiceErrorTest {
 			UdrRule rule = JsonToDomainObjectConverter.createUdrRuleFromJson(testObj, author);
 			rule.setId(1L);
 			when(mockRulePersistenceSvc.create(any(UdrRule.class), any())).thenReturn(rule);
+			List<UdrRule> rlList = new LinkedList<UdrRule>();
+			rlList.add(rule);
+			when(mockRulePersistenceSvc.findAll()).thenReturn(rlList);
 			when(mockUserService.findById(authorId)).thenReturn(authorData);
 			when(mockUserServiceUtil.mapUserEntityFromUserData(authorData)).thenReturn(author);
 			udrService.createUdr(authorId, testObj);

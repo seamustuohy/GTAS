@@ -141,6 +141,9 @@ public class RulePersistenceServiceIT {
 		r = testGenUtils.createUdrRule(testRuleTitle+"3", RULE_DESCRIPTION,
 				YesNoEnum.Y, startDate, testDate);
 		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		r = testGenUtils.createUdrRule(testRuleTitle+"4", RULE_DESCRIPTION,
+				YesNoEnum.N, startDate, testDate);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
 		List<UdrRule> udrList = testTarget.findByAuthor(RuleServiceDataGenUtils.TEST_USER1_ID);
 		assertTrue(udrList.size() >= 3);
 		udrList = testTarget.findValidUdrOnDate(testDate);
