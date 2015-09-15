@@ -45,7 +45,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	private Passenger passenger;
 
 	@JsonIgnore
-	private HitTypeCode hitType;
+	private String hitType;
 
 	@JsonIgnore
 	private int ruleHitCount;
@@ -83,7 +83,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 			this.flightId = flight.getId();
 		}
 		this.passenger = passenger;
-		this.hitType = HitTypeCode.R;
+		this.hitType = HitTypeCode.R.toString();
 		this.hitCount = 1;
 	}
 
@@ -110,11 +110,11 @@ public class RuleHitDetail implements Serializable, Cloneable {
 		switch(hitType){
 			case "D":
 				this.title = "Document List Rule #"+watchlistItemId;
-				this.hitType = HitTypeCode.D;
+				this.hitType = HitTypeCode.D.toString();
 				break;
 			case "P":
 				this.title = "Passenger List Rule #"+watchlistItemId;
-				this.hitType = HitTypeCode.P;
+				this.hitType = HitTypeCode.P.toString();
 				break;
 			default:
 				break;
@@ -247,14 +247,14 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	/**
 	 * @return the hitType
 	 */
-	public HitTypeCode getHitType() {
+	public String getHitType() {
 		return hitType;
 	}
 
 	/**
 	 * @param hitType the hitType to set
 	 */
-	public void setHitType(HitTypeCode hitType) {
+	public void setHitType(String hitType) {
 		this.hitType = hitType;
 	}
 

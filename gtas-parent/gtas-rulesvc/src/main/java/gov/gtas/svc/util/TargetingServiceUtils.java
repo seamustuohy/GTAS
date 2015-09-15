@@ -195,7 +195,7 @@ public class TargetingServiceUtils {
 			} else {
 				//this is a watch list hit
 				if(resrhd.getHitType() != rhd.getHitType()){
-					resrhd.setHitType(HitTypeCode.PD);
+					resrhd.setHitType(HitTypeCode.PD.toString());
 				}
 			}
 		} else {
