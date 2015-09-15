@@ -5,13 +5,11 @@ app.service("flightService", function ($http, $q) {
         getFlights: getFlights
     });
 
-    function getFlights() {
+    function getFlights(objParams) {
         var request = $http({
             method: "get",
             url: "/gtas/flights",
-            params: {
-                action: "get"
-            }
+            params: objParams
         });
         return ( request.then(handleSuccess, handleError) );
     }

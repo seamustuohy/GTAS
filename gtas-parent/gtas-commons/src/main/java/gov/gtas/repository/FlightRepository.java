@@ -42,7 +42,7 @@ public interface FlightRepository extends CrudRepository<Flight, Long> {
     @Query("SELECT f FROM Flight f join f.passengers p where p.id = (:paxId)")
     public List<Flight> getFlightByPaxId(@Param("paxId") Long paxId);
 
-    @Query("SELECT f FROM Flight f WHERE f.flightDate between :startDate AND :endDate")
+    @Query("SELECT f FROM Flight f WHERE f.eta between :startDate AND :endDate")
     public List<Flight> getFlightsByDates(@Param("startDate") Date startDate, 
             							  @Param("endDate") Date endDate);
 

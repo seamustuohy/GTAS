@@ -1,5 +1,6 @@
 app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jQueryBuilderFactory, $filter, 
-											$q, paxService, sharedPaxData, riskCriteriaService, $stateParams, $state, $interval, uiGridConstants) {
+											$q, paxService, sharedPaxData, riskCriteriaService, $stateParams, $state,
+                                            $timeout, $interval, uiGridConstants) {
     var self = this;
     $injector.invoke(jQueryBuilderFactory, this, {$scope: $scope});
     $injector.invoke(GridControl, this, {$scope: $scope});
@@ -16,102 +17,158 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 
       //--------Date functions-----------------------
 
-    
-	  $scope.today = function() {
-		    $scope.dt = $filter('date')(new Date(), 'MM/dd/yyyy');
-		    $scope.dt3 = new Date();
-		    $scope.dt3.setDate((new Date()).getDate()+3);
-//		    $scope.dt3 = $filter('date')(((new Date())+3), 'MM/dd/yyyy');
-		  };
-		  $scope.today();
+    $scope.dt;
+    $scope.dt3;
+    $scope.startDate = '';
+    $scope.endDate = '';
 
-		  $scope.clear = function () {
-		    $scope.dt = null;
-		  };
+    $scope.today = function () {
+        $scope.dt = $filter('date')(new Date(), 'MM/dd/yyyy');
+        $scope.dt3 = new Date();
+        $scope.dt3.setDate((new Date()).getDate() + 3);
+        $scope.dt3 = $filter('date')(($scope.dt3), 'MM/dd/yyyy');
+        $scope.startDate = $scope.dt;
+        $scope.endDate = $scope.dt3;
+    };
+    $scope.today();
 
-		  // Disable weekend selection
-		  $scope.disabled = function(date, mode) {
-		    return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-		  };
+    $scope.clear = function () {
+        $scope.dt = null;
+    };
 
-		  $scope.toggleMin = function() {
-		    $scope.minDate = $scope.minDate ? null : new Date();
-		  };
-		  $scope.toggleMin();
+    // Disable weekend selection
+    $scope.disabled = function (date, mode) {
+        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    };
 
-		  $scope.opendt = function($event) {
-			  	if(!$scope.status.openeddt){
-			  		 $interval(function () {
-					    	$('.ng-valid.dropdown-menu').eq(0).css({display: 'block'});
-					    }, 0, 1);
-			  		$scope.status.openeddt = true;
-			  	}else{
-                   $interval(function () {
-					    	$('.ng-valid.dropdown-menu').eq(0).css({display: 'none'});
-					    }, 0, 1);
-                   $scope.status.openeddt = false;
-               }
-			  };
-			  
-		  $scope.opendt3 = function($event) {
-			  	if(!$scope.status.openeddt3){
-			  		 $interval(function () {
-					    	$('.ng-valid.dropdown-menu').eq(1).css({display: 'block'});
-					    }, 0, 1);
-			  		$scope.status.openeddt3 = true;
-			  	}else{
-                   $interval(function () {
-					    	$('.ng-valid.dropdown-menu').eq(1).css({display: 'none'});
-					    }, 0, 1);
-                   $scope.status.openeddt3 = false;
-               }
+    $scope.toggleMin = function () {
+        $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
 
-		  };
+    $scope.opendt = function ($event) {
+        if (!$scope.status.openeddt) {
+            $interval(function () {
+                $('.ng-valid.dropdown-menu').eq(0).css({display: 'block'});
+            }, 0, 1);
+            $scope.status.openeddt = true;
+        } else {
+            $interval(function () {
+                $('.ng-valid.dropdown-menu').eq(0).css({display: 'none'});
+            }, 0, 1);
+            $scope.status.openeddt = false;
+        }
+    };
 
-		  $scope.dateOptions = {
-		    formatYear: 'yy',
-		    startingDay: 1
-		  };
+    $scope.opendt3 = function ($event) {
+        if (!$scope.status.openeddt3) {
+            $interval(function () {
+                $('.ng-valid.dropdown-menu').eq(1).css({display: 'block'});
+            }, 0, 1);
+            $scope.status.openeddt3 = true;
+        } else {
+            $interval(function () {
+                $('.ng-valid.dropdown-menu').eq(1).css({display: 'none'});
+            }, 0, 1);
+            $scope.status.openeddt3 = false;
+        }
 
-		  $scope.formats = ['MM/dd/yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-		  $scope.format = $scope.formats[0];
+    };
 
-		  $scope.status = {
-		    openeddt: false,
-		    openeddt3: false
-		  };
+    $scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+    };
 
-		  var tomorrow = new Date();
-		  tomorrow.setDate(tomorrow.getDate() + 1);
-		  var afterTomorrow = new Date();
-		  afterTomorrow.setDate(tomorrow.getDate() + 2);
-		  $scope.events =
-		    [
-		      {
-		        date: tomorrow,
-		        status: 'full'
-		      },
-		      {
-		        date: afterTomorrow,
-		        status: 'partially'
-		      }
-		    ];
+    $scope.formats = ['MM/dd/yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    $scope.format = $scope.formats[0];
 
-		  $scope.getDayClass = function(date, mode) {
-		    if (mode === 'day') {
-		      var dayToCheck = new Date(date).setHours(0,0,0,0);
+    $scope.status = {
+        openeddt: false,
+        openeddt3: false
+    };
 
-		      for (var i=0;i<$scope.events.length;i++){
-		        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var afterTomorrow = new Date();
+    afterTomorrow.setDate(tomorrow.getDate() + 2);
+    $scope.events =
+        [
+            {
+                date: tomorrow,
+                status: 'full'
+            },
+            {
+                date: afterTomorrow,
+                status: 'partially'
+            }
+        ];
 
-		        if (dayToCheck === currentDay) {
-		          return $scope.events[i].status;
-		        }
-		      }
-		    }
+    $scope.getDayClass = function (date, mode) {
+        if (mode === 'day') {
+            var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
 
-		    return '';
-		  };
+            for (var i = 0; i < $scope.events.length; i++) {
+                var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
+
+                if (dayToCheck === currentDay) {
+                    return $scope.events[i].status;
+                }
+            }
+        }
+
+        return '';
+    };
+
+
+    $('#start-date').datepicker().on('changeDate', function (ev) {
+        var element = angular.element($('#start-date'));
+        var controller = element.controller();
+        var scope = element.scope();
+
+        scope.$apply(function () {
+            $scope.startDate = $filter('date')(ev.date, 'MM/dd/yyyy');
+
+        });
+    });
+
+    $('#end-date').datepicker().on('changeDate', function (ev) {
+        var element = angular.element($('#end-date'));
+        var controller = element.controller();
+        var scope = element.scope();
+
+        scope.$apply(function () {
+            $scope.endDate = $filter('date')(ev.date, 'MM/dd/yyyy');
+        });
+    });
+
+    $timeout(function () {
+        var $startDate = $('#start-date');
+        $startDate.datepicker({
+//          minDate: "today",
+            startDate: "today",
+            format: 'mm/dd/yyyy',
+            autoClose: true
+        });
+
+        var $endDate = $('#end-date');
+        $endDate.datepicker({
+            startDate: "today",
+//          minDate: startDate,
+//            endDate: '+3d',
+            format: 'mm/dd/yyyy',
+            autoClose: true
+        });
+
+        $startDate.datepicker('setDate', $scope.dt);
+        $startDate.datepicker('update');
+        $startDate.val($scope.dt.toString());
+        //
+        $endDate.datepicker('setDate', $scope.dt3);
+        $endDate.datepicker('update');
+        $endDate.val($scope.dt3.toString());
+
+    }, 100);
 	//--------------------------------------------
     
     $scope.passengerGrid = {
@@ -211,17 +268,12 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     
     	} // END of Passenger Grid
     	
-		//    	$.extend({
-		//        columnDefs: $rootScope.columns.PASSENGER_UI,
-		//        exporterCsvFilename: 'Passengers.csv',
-		//        exporterPdfHeader: {text: "Passengers", style: 'headerStyle'}
-		//    }, $scope.gridOpts);
 
 
 	    var pax = {
-	        	startDate: $filter('date')($scope.dt, 'MM/dd/yyyy'),
-	    		endDate: $filter('date')($scope.dt3, 'MM/dd/yyyy')
-	        	//endDate: $scope.dt3
+            startDate: $filter('date')($scope.startDate, 'MM/dd/yyyy'),
+            endDate: $filter('date')($scope.endDate, 'MM/dd/yyyy')
+
 	        };
 	    
 	    paxService.getAllPax(pax).then(function (myData) {
@@ -233,9 +285,8 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     $scope.refreshListing = function(){
     	
         var pax = {
-	        	startDate: $filter('date')($scope.dt, 'MM/dd/yyyy'),
-	    		endDate: $filter('date')($scope.dt3, 'MM/dd/yyyy')
-	        	//endDate: $scope.dt3
+            startDate: $filter('date')($scope.startDate, 'MM/dd/yyyy'),
+            endDate: $filter('date')($scope.endDate, 'MM/dd/yyyy')
 	        };
 	    
 	    paxService.getAllPax(pax).then(function (myData) {
@@ -244,10 +295,10 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 	    });
 	    
     }
-    
-    
-    
-    
+
+
+
+    $scope.$scope = $scope;
     
     
     

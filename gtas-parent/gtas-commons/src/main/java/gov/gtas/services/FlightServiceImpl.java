@@ -91,5 +91,13 @@ public class FlightServiceImpl implements FlightService{
 	public List<Flight> getFlightByPaxId(Long paxId) {
 		return flightRespository.getFlightByPaxId(paxId);
 	}
+
+	@Override
+	@Transactional
+	public List<Flight> getFlightsByDates(Date startDate, Date endDate) {
+		return flightRespository.getFlightsByDates(startDate, endDate);
+	}
+	
+	
 	
 }

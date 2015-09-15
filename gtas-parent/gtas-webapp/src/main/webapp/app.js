@@ -145,8 +145,8 @@ app.config(function ($stateProvider) {
         })
         .state('pax.detail', {
             url: '/:id/:flightId',
-            //	  		  sticky: true,
-            //	  		  dsr: true,
+            sticky: true,
+            dsr: true,
             views: {
 
                 "content@pax": {
