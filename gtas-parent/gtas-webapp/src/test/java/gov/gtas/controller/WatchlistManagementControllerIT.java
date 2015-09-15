@@ -82,14 +82,14 @@ public class WatchlistManagementControllerIT {
 		mockMvc.perform(get("/gtas/wl/PASSENGER/" + WL_NAME))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.name", is(WL_NAME)))
-				.andExpect(jsonPath("$.entity", is("Passenger")))
-				.andExpect(jsonPath("$.watchlistItems", hasSize(2)))
+				.andExpect(jsonPath("$result.name", is(WL_NAME)))
+				.andExpect(jsonPath("$result.entity", is("Passenger")))
+				.andExpect(jsonPath("$result.watchlistItems", hasSize(2)))
 				.andExpect(
-						jsonPath("$.watchlistItems[0].action",
+						jsonPath("$result.watchlistItems[0].action",
 								is((String) null)))
 				.andExpect(
-						jsonPath("$.watchlistItems[1].action",
+						jsonPath("$result.watchlistItems[1].action",
 								is((String) null)));
 	}
 
@@ -103,9 +103,9 @@ public class WatchlistManagementControllerIT {
 		mockMvc.perform(get("/gtas/wl/PASSENGER/foobar"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.name", is("foobar")))
-				.andExpect(jsonPath("$.entity", is("PASSENGER")))
-				.andExpect(jsonPath("$.watchlistItems", hasSize(0)));
+				.andExpect(jsonPath("$result.name", is("foobar")))
+				.andExpect(jsonPath("$result.entity", is("PASSENGER")))
+				.andExpect(jsonPath("$result.watchlistItems", hasSize(0)));
 	}
 
 	@Test
