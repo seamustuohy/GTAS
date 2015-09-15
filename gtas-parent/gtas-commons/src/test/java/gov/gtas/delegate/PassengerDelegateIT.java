@@ -1,18 +1,15 @@
 package gov.gtas.delegate;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.util.Date;
-import java.util.HashSet;
-
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.delegates.FlightServiceDelegate;
 import gov.gtas.delegates.PassengerServiceDelegate;
 import gov.gtas.delegates.vo.DocumentVo;
 import gov.gtas.delegates.vo.FlightVo;
 import gov.gtas.delegates.vo.PassengerVo;
-
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,7 +69,7 @@ public class PassengerDelegateIT {
 		vo.setResidencyCountry("USA");
 		vo.setTitle("");
 		vo.setSuffix("");
-		HashSet<DocumentVo> h = new HashSet<>();
+		List<DocumentVo> h = new ArrayList<>();
 		h.add(prepareDocumentVo());
 		h.add(prepareDocumentVo1());
 		h.add(prepareDocumentVo2());

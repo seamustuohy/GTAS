@@ -1,17 +1,10 @@
 package gov.gtas.delegates.vo;
 
-import gov.gtas.model.Document;
-import gov.gtas.model.Pnr;
 import gov.gtas.validators.Validatable;
-
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class PassengerVo extends BaseVo implements Validatable {
 
@@ -20,9 +13,9 @@ public class PassengerVo extends BaseVo implements Validatable {
     private String travelerReferenceNumber;
     private Boolean deleted = Boolean.FALSE;
     private String passengerType;
-    private Set<FlightVo> flights = new HashSet<FlightVo>();
-    private Set<PnrDataVo> pnrs = new HashSet<>();
-    private Set<DocumentVo> documents = new HashSet<>();
+    private List<FlightVo> flights = new ArrayList<FlightVo>();
+    private List<PnrVo> pnrs = new ArrayList<>();
+    private List<DocumentVo> documents = new ArrayList<>();
 	private String title;
     private String firstName;
     private String middleName;
@@ -38,8 +31,7 @@ public class PassengerVo extends BaseVo implements Validatable {
     private String embarkCountry;
     private String debarkCountry;
     private String seat;
-    
-    
+ 
 	public String getTravelerReferenceNumber() {
 		return travelerReferenceNumber;
 	}
@@ -58,29 +50,29 @@ public class PassengerVo extends BaseVo implements Validatable {
 	public void setSeat(String seat) {
 		this.seat = seat;
 	}
-	public Set<PnrDataVo> getPnrs() {
-		return pnrs;
-	}
-	public void setPnrs(Set<PnrDataVo> pnrs) {
-		this.pnrs = pnrs;
-	}
-	public Set<DocumentVo> getDocuments() {
-		return documents;
-	}
-	public void setDocuments(Set<DocumentVo> documents) {
-		this.documents = documents;
-	}
 	public String getPassengerType() {
 		return passengerType;
 	}
 	public void setPassengerType(String passengerType) {
 		this.passengerType = passengerType;
 	}
-	public Set<FlightVo> getFlights() {
+	public List<FlightVo> getFlights() {
 		return flights;
 	}
-	public void setFlights(Set<FlightVo> flights) {
+	public void setFlights(List<FlightVo> flights) {
 		this.flights = flights;
+	}
+	public List<PnrVo> getPnrs() {
+		return pnrs;
+	}
+	public void setPnrs(List<PnrVo> pnrs) {
+		this.pnrs = pnrs;
+	}
+	public List<DocumentVo> getDocuments() {
+		return documents;
+	}
+	public void setDocuments(List<DocumentVo> documents) {
+		this.documents = documents;
 	}
 	public String getTitle() {
 		return title;
@@ -167,6 +159,10 @@ public class PassengerVo extends BaseVo implements Validatable {
 		this.debarkCountry = debarkCountry;
 	}
     
+	/**
+	 * The Invalid Object logs string represenation of the entire object graph.Since the length is 4000 chars
+	 * we need to log exactly what is missing in the mandatory section.So the below method is modified.
+	 */
     @Override
     public String toString() {
         //return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 

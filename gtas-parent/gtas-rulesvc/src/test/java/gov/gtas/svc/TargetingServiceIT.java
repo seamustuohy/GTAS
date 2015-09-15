@@ -89,7 +89,7 @@ public class TargetingServiceIT {
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		System.out.println(drlRules);
 		RuleServiceRequest request = TargetingServiceUtils
-				.createApisRequest(msg);
+				.createApisRequest(msg).getRuleServiceRequest();
 		RuleServiceResult result = targetingService.applyRules(request,
 				drlRules);
 		assertNotNull(result);
@@ -109,7 +109,7 @@ public class TargetingServiceIT {
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		System.out.println(drlRules);
 		RuleServiceRequest request = TargetingServiceUtils
-				.createApisRequest(msg);
+				.createApisRequest(msg).getRuleServiceRequest();
 		RuleServiceResult result = targetingService.applyRules(request,
 				drlRules);
 		assertNotNull(result);
@@ -132,7 +132,7 @@ public class TargetingServiceIT {
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		System.out.println(drlRules);
 		RuleServiceRequest request = TargetingServiceUtils
-				.createApisRequest(msg);
+				.createApisRequest(msg).getRuleServiceRequest();
 		RuleServiceResult result = targetingService.applyRules(request,
 				drlRules);
 		assertNotNull(result);

@@ -2,9 +2,9 @@ package gov.gtas.delegates.vo;
 
 import gov.gtas.util.ServiceUtils;
 import gov.gtas.validators.Validatable;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -21,7 +21,6 @@ public class FlightVo extends BaseVo implements Validatable {
     private String destinationCountry;
     private boolean isOverFlight;
     private String direction;
-  
     public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm aaa";
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date flightDate;
@@ -29,21 +28,19 @@ public class FlightVo extends BaseVo implements Validatable {
     private Date etd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date eta;
-    private Set<PassengerVo> passengers = new HashSet<>();
-    private Set<PnrDataVo> pnrs = new HashSet<>();
-   
-    
-    
-    public Set<PassengerVo> getPassengers() {
+    private List<PassengerVo> passengers = new ArrayList<>();
+    private List<PnrVo> pnrs = new ArrayList<>();
+
+	public List<PassengerVo> getPassengers() {
 		return passengers;
 	}
-	public void setPassengers(Set<PassengerVo> passengers) {
+	public void setPassengers(List<PassengerVo> passengers) {
 		this.passengers = passengers;
 	}
-	public Set<PnrDataVo> getPnrs() {
+	public List<PnrVo> getPnrs() {
 		return pnrs;
 	}
-	public void setPnrs(Set<PnrDataVo> pnrs) {
+	public void setPnrs(List<PnrVo> pnrs) {
 		this.pnrs = pnrs;
 	}
 	public String getDirection() {
@@ -137,8 +134,7 @@ public class FlightVo extends BaseVo implements Validatable {
             this.flightDate = ServiceUtils.stripTime(d);
         }
     }
-    
-    
+     
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 

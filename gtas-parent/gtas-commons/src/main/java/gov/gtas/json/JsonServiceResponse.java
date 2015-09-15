@@ -2,7 +2,6 @@ package gov.gtas.json;
 
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_CODE;
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_DETAIL;
-import static gov.gtas.constant.JsonResponseConstants.ATTR_RESULT;
 import gov.gtas.enumtype.Status;
 
 import java.io.Serializable;
@@ -22,6 +21,7 @@ public class JsonServiceResponse implements Serializable {
 	private static final long serialVersionUID = -1376823917772400644L;
 	private Status status;
 	private String message;
+	private Object result;
 	private List<ServiceResponseDetailAttribute> responseDetails;
 	
 	/**
@@ -35,16 +35,16 @@ public class JsonServiceResponse implements Serializable {
 		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();
 	}
 	/**
-	 * Constructor to support query builder response.
+	 * Constructor to support get or "get list" response.
 	 * @param status the status.
 	 * @param message response message.
 	 * @param result the result object.
 	 */
-	public JsonServiceResponse(Status status, String message, Serializable result){
+	public JsonServiceResponse(Status status, String message, Object result){
 		this.status = status;
 		this.message = message;
+		this.result = result;
 		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();
-		responseDetails.add(new ServiceResponseDetailAttribute(ATTR_RESULT, result));
 	}
 	/**
 	 * Constructor for error response.
@@ -95,10 +95,23 @@ public class JsonServiceResponse implements Serializable {
 	}
 	
 	/**
+	 * @return the result
+	 */
+	public Object getResult() {
+		return result;
+	}
+	/**
+	 * @param result the result to set
+	 */
+	public void setResult(Object result) {
+		this.result = result;
+	}
+	/**
 	 * @return the responseDetails
 	 */
 	public List<ServiceResponseDetailAttribute> getResponseDetails() {
 		return Collections.unmodifiableList(responseDetails);
+//		return responseDetails;
 	}
 	/**
 	 * @param responseDetail the responseDetail to add.

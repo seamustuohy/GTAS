@@ -1,7 +1,9 @@
 package gov.gtas.dataobject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -13,7 +15,7 @@ public class PnrVo {
     private Date dateBooked;
     private Date dateReceived;
     private String raw;
-    
+    private List<String> rawList = new ArrayList<String>();
     private Date departureDate;
     private Integer daysBookedBeforeTravel;
     private Integer passengerCount;
@@ -24,17 +26,23 @@ public class PnrVo {
     private String dwellCountry;
     private Integer dwellDuration;
     private String route;
-    
     private Set<FlightVo> flights = new HashSet<>();
     private Set<PassengerVo> passengers = new HashSet<>();
     private AgencyVo agency;
     private Set<CreditCardVo> creditCards = new HashSet<>();
     private Set<FrequentFlyerVo> frequentFlyers = new HashSet<>();
-
     private Set<AddressVo> addresses = new HashSet<>();
     private Set<PhoneVo> phones = new HashSet<>();
-
     private Set<EmailVo> emails = new HashSet<>();
+
+    
+    public List<String> getRawList() {
+		return rawList;
+	}
+
+	public void setRawList(List<String> rawList) {
+		this.rawList = rawList;
+	}
 
 	public String getRecordLocator() {
 		return recordLocator;

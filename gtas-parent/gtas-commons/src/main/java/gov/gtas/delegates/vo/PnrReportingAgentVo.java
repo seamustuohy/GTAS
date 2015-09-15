@@ -3,7 +3,6 @@ package gov.gtas.delegates.vo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 import gov.gtas.validators.Validatable;
 
 public class PnrReportingAgentVo implements Validatable{

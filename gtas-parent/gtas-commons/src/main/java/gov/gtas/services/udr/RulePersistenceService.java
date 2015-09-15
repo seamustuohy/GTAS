@@ -6,6 +6,7 @@ import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -100,6 +101,16 @@ public interface RulePersistenceService {
 	 */
 	public List<UdrRule> findByAuthor(String authorUserId);
 
+	/**
+	 * Fetches a list of rules that are valid on a particular target date.
+	 * (i.e., rule.startDate <= targetDate and rule.endDate >= targetDate)
+	 * Note: the time part of target date will not be used.
+	 * 
+	 * @param targetDate
+	 *            the target date.
+	 * @return list of rules valid on the target date or an empty list.
+	 */
+	public List<UdrRule> findValidUdrOnDate(Date targetDate);
 	/**
 	 * Fetches the latest version of the default knowledge base.
 	 * 

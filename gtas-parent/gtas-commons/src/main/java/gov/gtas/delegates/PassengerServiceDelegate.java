@@ -2,8 +2,6 @@ package gov.gtas.delegates;
 
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
-
 import gov.gtas.delegates.vo.FlightVo;
 import gov.gtas.delegates.vo.PassengerVo;
 import gov.gtas.model.Document;
@@ -12,10 +10,8 @@ import gov.gtas.model.Passenger;
 import gov.gtas.services.FlightService;
 import gov.gtas.services.PassengerService;
 import gov.gtas.util.ServiceUtils;
-
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
@@ -24,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class PassengerServiceDelegate {
 
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
+	
 	@Resource
 	PassengerService passengerService;
 	
@@ -32,6 +29,7 @@ public class PassengerServiceDelegate {
 	
 	@Transactional
 	public PassengerVo saveOrUpdate(PassengerVo passengerVo){
+		logger.debug("From saveOrUpdate method of "+this.getClass().getSimpleName());
 		FlightVo vo=new FlightVo();
 		if(passengerVo != null && passengerVo.getFlights() != null && passengerVo.getFlights().size() >0 ){
 			Iterator it = passengerVo.getFlights().iterator();
@@ -39,7 +37,6 @@ public class PassengerServiceDelegate {
 				vo=(FlightVo) it.next();
 				break;
 			}
-			
 			Flight f=flightService.getUniqueFlightByCriteria(vo.getCarrier(), vo.getFlightNumber(), vo.getOrigin(), vo.getDestination(), vo.getFlightDate());
 			if(f != null && f.getId() != null){
 				Passenger p = ServiceUtils.mapPassengerFromVo(passengerVo,new Passenger());
@@ -50,7 +47,6 @@ public class PassengerServiceDelegate {
 				f.setUpdatedAt(new Date());
 				f.setUpdatedBy("SYSTEM");
 				passengerService.update(existingPassenger);
-				
 			}
 			else{
 				f=ServiceUtils.mapFlightFromVo(vo, new Flight());
@@ -59,7 +55,6 @@ public class PassengerServiceDelegate {
 				p.getFlights().add(f);
 				flightService.create(f);
 			}
-			
 		}
 		return passengerVo;
 	}
@@ -85,8 +80,8 @@ public class PassengerServiceDelegate {
 			d.setPassenger(target);
 			target.getDocuments().add(d);
 		}
-		
 	}
+	
 	private Passenger getPassengerIfExists(Flight f,Passenger p){
 		Iterator it = f.getPassengers().iterator();
 		Passenger chkPsgr=null;
@@ -96,8 +91,8 @@ public class PassengerServiceDelegate {
 					&& StringUtils.equalsIgnoreCase(chkPsgr.getLastName(), p.getLastName())
 							&& chkPsgr.getAge().equals(p.getAge())
 									&& chkPsgr.getDob().equals(p.getDob())){
-								break;
-							}
+				break;
+			}
 		}
 		return chkPsgr;
 	}

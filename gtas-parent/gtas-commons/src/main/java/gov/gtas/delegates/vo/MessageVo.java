@@ -1,11 +1,11 @@
 package gov.gtas.delegates.vo;
 
 import java.util.Date;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class MessageVo {
+	
     private String raw;
     private String hashCode;
     private String transmissionSource;

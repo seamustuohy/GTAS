@@ -84,8 +84,8 @@ public class UdrBuilderControllerIT {
 		mockMvc.perform(get("/gtas/udr/" + TEST_USER+"/"+TEST_UDR_TITLE))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON+";charset=UTF-8"))
-				.andExpect(jsonPath("$.summary.title", is(TEST_UDR_TITLE)))
-				.andExpect(jsonPath("$.summary.description", is(TEST_DESCRIPTION)));
+				.andExpect(jsonPath("$.result.summary.title", is(TEST_UDR_TITLE)))
+				.andExpect(jsonPath("$.result.summary.description", is(TEST_DESCRIPTION)));
 
 	}
 
@@ -100,9 +100,9 @@ public class UdrBuilderControllerIT {
 		mockMvc.perform(get("/gtas/udr"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON+";charset=UTF-8"))
-				.andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(2))))
-				.andExpect(jsonPath("$[*].summary.title", hasItem(TEST_UDR_TITLE)))
-				.andExpect(jsonPath("$[*].summary.title", hasItem(TEST_UDR_TITLE2)));
+				.andExpect(jsonPath("$.result", hasSize(greaterThanOrEqualTo(2))))
+				.andExpect(jsonPath("$.result[*].summary.title", hasItem(TEST_UDR_TITLE)))
+				.andExpect(jsonPath("$.result[*].summary.title", hasItem(TEST_UDR_TITLE2)));
 
 	}
 	@Test

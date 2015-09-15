@@ -92,7 +92,7 @@ public class TargetingServicePnrIT {
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, PNR_PASSENGER_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		RuleServiceRequest request = TargetingServiceUtils
-				.createPnrRequest(msg);
+				.createPnrRequestContext(msg).getRuleServiceRequest();
 		RuleServiceResult result = targetingService.applyRules(request,
 				drlRules);
 		assertNotNull(result);
@@ -114,7 +114,7 @@ public class TargetingServicePnrIT {
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX);
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		RuleServiceRequest request = TargetingServiceUtils
-				.createPnrRequest(msg);
+				.createPnrRequestContext(msg).getRuleServiceRequest();
 		RuleServiceResult result = targetingService.applyRules(request,
 				drlRules);
 		assertNotNull(result);
@@ -145,7 +145,7 @@ public class TargetingServicePnrIT {
 		String drlRules = drlBuilder.addRule(udrRule).build();
 		System.out.println(drlRules);
 		RuleServiceRequest request = TargetingServiceUtils
-				.createPnrRequest(msg);
+				.createPnrRequestContext(msg).getRuleServiceRequest();
 		RuleServiceResult result = targetingService.applyRules(request,
 				drlRules);
 		assertNotNull(result);

@@ -5,6 +5,7 @@ import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -30,4 +31,7 @@ public interface UdrRuleRepository extends CrudRepository<UdrRule, Long>, JpaSpe
 
 	@Query("SELECT rl FROM Rule rl WHERE rl.knowledgeBase.id = :kbId")
 	public List<Rule> getRuleByKbId(@Param("kbId") Long kbId);
+
+	@Query("SELECT udr FROM UdrRule udr WHERE  udr.deleted = 'N' and udr.metaData.startDt <= :targetDate and (udr.metaData.endDt is null or udr.metaData.endDt >= :targetDate)")
+	public List<UdrRule>findValidUdrRuleByDate(@Param("targetDate") Date targetDate);
 }

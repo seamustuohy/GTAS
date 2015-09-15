@@ -58,7 +58,7 @@ public class TargetingManagementController {
 	@RequestMapping(value = Constants.TARGET_ALL_MSG, method = RequestMethod.GET)
 	public List<?> getTargetingResult() {
 		RuleServiceResult result = targetingService.analyzeLoadedMessages(
-				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
+				MessageStatus.LOADED, MessageStatus.ANALYZED, true).getRuleServiceResult();
 		logger.info("TargetingManagementController.getTargetingResult() - rules fired ="
 				+ result.getExecutionStatistics().getTotalRulesFired());
 		List<RuleHitDetail> ret = result.getResultList();

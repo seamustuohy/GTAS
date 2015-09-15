@@ -6,13 +6,10 @@ import gov.gtas.delegates.vo.FlightVo;
 import gov.gtas.delegates.vo.InvalidObjectInfoVo;
 import gov.gtas.delegates.vo.PassengerVo;
 import gov.gtas.delegates.vo.ReportingPartyVo;
-
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * class ApisMessageValidator accepts the MessageVo and iterate through the objects it contain and 
@@ -103,7 +100,7 @@ public class ApisMessageValidator {
 				}
 				else{
 					if(!vo.getDocuments().isEmpty()){
-						Set<DocumentVo> docs = new HashSet<>();
+						List<DocumentVo> docs = new ArrayList<>();
 						Iterator docSet = vo.getDocuments().iterator();
 						while(docSet.hasNext()){
 							DocumentVo dvo = (DocumentVo) docSet.next();

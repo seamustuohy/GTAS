@@ -10,7 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author GTAS3 (AB)
  *
  */
-//@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@class")
 public class WatchlistItemSpec implements Serializable{
 	
 	/**

@@ -102,7 +102,55 @@ public class RulePersistenceServiceIT {
 		assertNotNull(readRule.getMetaData());
 		assertEquals(meta, readRule.getMetaData());
 	}
-	/**
+
+	@Transactional
+	@Test()
+	public void testFetchValidUdrRuleOnDate() throws Exception{
+		Date testDate = DateCalendarUtils.parseJsonDate("1990-01-30");
+		final String RULE_DESCRIPTION = "This is a Simple Rule";
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(2);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
+				YesNoEnum.Y);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		r = testGenUtils.createUdrRule(testRuleTitle+"2", RULE_DESCRIPTION,
+				YesNoEnum.Y, testDate, null);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		r = testGenUtils.createUdrRule(testRuleTitle+"3", RULE_DESCRIPTION,
+				YesNoEnum.Y, testDate, testDate);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		List<UdrRule> udrList = testTarget.findByAuthor(RuleServiceDataGenUtils.TEST_USER1_ID);
+		assertTrue(udrList.size() >= 3);
+		udrList = testTarget.findValidUdrOnDate(testDate);
+		assertNotNull(udrList);
+		assertEquals(2, udrList.size());
+	}
+	@Transactional
+	@Test()
+	public void testFetchValidUdrRuleOnDate2() throws Exception{
+		Date testDate = DateCalendarUtils.parseJsonDate("1990-01-30");
+		Date startDate = DateCalendarUtils.parseJsonDate("1990-01-01");
+		Date endDate = DateCalendarUtils.parseJsonDate("1990-01-29");
+		final String RULE_DESCRIPTION = "This is a Simple Rule";
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(2);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
+				YesNoEnum.Y, startDate, null);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		r = testGenUtils.createUdrRule(testRuleTitle+"2", RULE_DESCRIPTION,
+				YesNoEnum.Y, startDate, endDate);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		r = testGenUtils.createUdrRule(testRuleTitle+"3", RULE_DESCRIPTION,
+				YesNoEnum.Y, startDate, testDate);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		r = testGenUtils.createUdrRule(testRuleTitle+"4", RULE_DESCRIPTION,
+				YesNoEnum.N, startDate, testDate);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		List<UdrRule> udrList = testTarget.findByAuthor(RuleServiceDataGenUtils.TEST_USER1_ID);
+		assertTrue(udrList.size() >= 3);
+		udrList = testTarget.findValidUdrOnDate(testDate);
+		assertNotNull(udrList);
+		assertEquals(2, udrList.size());
+	}
+    /**
 	 * The update pattern tested here is:
 	 * 1. Fetch a UdrRule from the persistence service.
 	 * 2. Modify some of UdrRule attributes.

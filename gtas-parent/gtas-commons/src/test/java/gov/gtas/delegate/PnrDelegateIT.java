@@ -12,14 +12,13 @@ import gov.gtas.delegates.vo.FlightVo;
 import gov.gtas.delegates.vo.FrequentFlyerVo;
 import gov.gtas.delegates.vo.PassengerVo;
 import gov.gtas.delegates.vo.PhoneVo;
-import gov.gtas.delegates.vo.PnrDataVo;
 import gov.gtas.delegates.vo.PnrMessageVo;
+import gov.gtas.delegates.vo.PnrVo;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.MessageStatus;
-
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-
+import java.util.List;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,15 +41,15 @@ public class PnrDelegateIT {
 	@Test
 	public void testPnrServiceDelegate() {
 		logger.info("#####################  Begin testPnrServiceDelegate #############################");
-		PnrDataVo vo=this.preparePnrDataVo();
+		PnrVo vo=this.preparePnrDataVo();
 		pnrDelegate.saveOrUpdate(vo);
 		assertNotNull(vo.getCarrier());
 		logger.info("#####################  End testPnrServiceDelegate #############################");
 	}	
 	
 	//prepare PnrDataVo from calling application..Loader
-	private PnrDataVo preparePnrDataVo(){
-		PnrDataVo vo = new PnrDataVo();
+	private PnrVo preparePnrDataVo(){
+		PnrVo vo = new PnrVo();
 		vo.setBagCount(4);
 		vo.setDateBooked(new Date("7/18/2015"));
 		vo.setCarrier("DL");
@@ -67,11 +66,11 @@ public class PnrDelegateIT {
 		vo.setAgency(new AgencyVo("Test Agency","A12343","ALDIE","VA","USA"));
 		vo.getAddresses().add(prepareAddressVo());
 		vo.getCreditCards().add(prepareCreditCardVo());
-		vo.getFrequentFlyers().add(prepareFrequentFlyerVo());
+		vo.getFrequentFlyerDetails().add(prepareFrequentFlyerVo());
 		vo.getEmails().add(this.prepareEmailVo());
 		//use with different hash--throws unique constraint exception.
 		//vo.setPnrMessage(this.preparePnrMessageVo());
-		vo.getPhones().add(this.preparePhoneData());
+		vo.getPhoneNumbers().add(this.preparePhoneData());
 		//set flightVo to vo
 		vo.getFlights().add(prepareFlightVo());
 		//set Passengers
@@ -83,7 +82,7 @@ public class PnrDelegateIT {
 	}
 	 private PhoneVo preparePhoneData(){
 		 PhoneVo vo = new PhoneVo();
-		 vo.setPhoneNumber("4566547788");
+		 vo.setNumber("4566547788");
 		 vo.setCreatedAt(new Date());
 		 vo.setPhoneType("H");
 		 vo.setCreatedBy("SYSTEM");
@@ -122,7 +121,7 @@ public class PnrDelegateIT {
 		vo.setResidencyCountry("USA");
 		vo.setTitle("");
 		vo.setSuffix("");
-		HashSet<DocumentVo> h = new HashSet<>();
+		List<DocumentVo> h = new ArrayList<>();
 		h.add(prepareDocumentVo());
 		vo.setDocuments(h);
 		vo.getFlights().add(prepareFlightVo());
@@ -156,8 +155,8 @@ public class PnrDelegateIT {
 	
 	private FrequentFlyerVo prepareFrequentFlyerVo(){
 		FrequentFlyerVo vo = new FrequentFlyerVo();
-		vo.setAirlineCode("AA");
-		vo.setFrequentFlyerNumber("AA8888");
+		vo.setAirline("AA");
+		vo.setNumber("AA8888");
 		vo.setCreatedBy("JUNIT");
 		vo.setCreatedAt(new Date());
 		return vo;

@@ -1,16 +1,21 @@
 package gov.gtas.test.util;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-
+import static gov.gtas.util.DateCalendarUtils.formatJsonDate;
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.services.security.RoleData;
 import gov.gtas.services.security.UserData;
 import gov.gtas.services.security.UserService;
+import gov.gtas.util.DateCalendarUtils;
+
+import java.text.ParseException;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Generates test data for rules domain objects.
@@ -23,7 +28,7 @@ public class RuleServiceDataGenUtils {
 
 	public static final int TEST_ROLE1_ID = 1;
 	public static final String TEST_ROLE1_DESCRIPTION = "admin";
-	public static final String TEST_USER1_ID = "abandopadhay";
+	public static final String TEST_USER1_ID = "svempati";
 
 	public static final int TEST_ROLE2_ID = 99;
 	public static final String TEST_ROLE2_DESCRIPTION = "readonly";
@@ -48,49 +53,30 @@ public class RuleServiceDataGenUtils {
 	}
 
 	public UdrRule createUdrRule(String title, String descr, YesNoEnum enabled) {
+		return createUdrRule(title, descr, enabled, new Date(), null);
+	}
+	public UdrRule createUdrRule(String title, String descr, YesNoEnum enabled, Date startDate, Date endDate) {
 		UdrRule rule = new UdrRule();
-		rule.setDeleted(YesNoEnum.N);
+		if(enabled == YesNoEnum.Y){
+		  rule.setDeleted(YesNoEnum.N);
+		} else {
+			rule.setDeleted(YesNoEnum.Y);
+		}
 		rule.setEditDt(new Date());
 		rule.setTitle(title);
-		RuleMeta meta = createRuleMeta(title, descr, enabled);
+		RuleMeta meta =  null;
+		try{
+			if(endDate != null){
+			   meta = createRuleMeta(title, descr, enabled, formatJsonDate(startDate),  formatJsonDate(endDate));
+			} else {
+				   meta = createRuleMeta(title, descr, enabled, formatJsonDate(startDate), null);				
+			}
+		} catch(Exception ex){
+			ex.printStackTrace();
+		}
 		rule.setMetaData(meta);
 		return rule;
 	}
-
-	// public RuleCond createCondition(int seq, EntityEnum entity,
-	// String attr, OperatorCodeEnum opCode, Object value) {
-	// RuleCondPk key = new RuleCondPk(0L, seq);
-	// RuleCond cond = new RuleCond(key, entity, attr, opCode);
-	// try{
-	// addCondValue(cond, value);
-	// } catch(ParseException pe){
-	// throw new RuntimeException("Parse error", pe);
-	// }
-	// return cond;
-	// }
-	// private void addCondValue(RuleCond cond, Object val) throws
-	// ParseException{
-	// if(val instanceof Date){
-	// cond.addValuesToCondition(new
-	// String[]{DateCalendarUtils.formatJsonDate((Date)val)},
-	// ValueTypesEnum.DATE);
-	// } else if(val instanceof String){
-	// cond.addValuesToCondition(new String[]{(String)val},
-	// ValueTypesEnum.STRING);
-	// } else if(val instanceof Double){
-	// cond.addValuesToCondition(new String[]{val.toString()},
-	// ValueTypesEnum.DOUBLE);
-	// } else if(val instanceof Long){
-	// cond.addValuesToCondition(new String[]{val.toString()},
-	// ValueTypesEnum.LONG);
-	// } else if(val instanceof Integer){
-	// cond.addValuesToCondition(new String[]{val.toString()},
-	// ValueTypesEnum.INTEGER);
-	// } else {
-	// cond.addValuesToCondition(new String[]{val.toString()},
-	// ValueTypesEnum.STRING);
-	// }
-	// }
 
 	public String generateTestRuleTitle(int ruleIndx) {
 		StringBuilder bldr = new StringBuilder(TEST_RULE_TITLE_PREFIX);
@@ -100,13 +86,17 @@ public class RuleServiceDataGenUtils {
 		return bldr.toString();
 	}
 
-	private RuleMeta createRuleMeta(String title, String descr, YesNoEnum enabled) {
+	private RuleMeta createRuleMeta(String title, String descr,
+			YesNoEnum enabled, String jsonStartDate, String jsonEndDate) throws ParseException{
 		RuleMeta meta = new RuleMeta();
 		meta.setDescription(descr);
 		meta.setEnabled(enabled);
 		meta.setHitSharing(YesNoEnum.N);
 		meta.setPriorityHigh(YesNoEnum.N);
-		meta.setStartDt(new Date());
+		meta.setStartDt(DateCalendarUtils.parseJsonDate(jsonStartDate));
+		if(!StringUtils.isEmpty(jsonEndDate)){
+			meta.setEndDt(DateCalendarUtils.parseJsonDate(jsonEndDate));			
+		}
 		meta.setTitle(title);
 		return meta;
 	}

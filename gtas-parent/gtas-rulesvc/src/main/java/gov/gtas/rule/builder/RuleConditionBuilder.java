@@ -4,6 +4,7 @@ import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.CriteriaOperatorEnum;
+import gov.gtas.enumtype.HitTypeCode;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.udr.Rule;
@@ -225,16 +226,19 @@ public class RuleConditionBuilder {
 	}
 
 	private static final String ACTION_WATCHLIST_HIT = "resultList.add(new RuleHitDetail(%s, \"%s\", %s, \"%s\"));\n";
-	public List<String> addWatchlistRuleAction(StringBuilder ruleStringBuilder, String title,
+	public List<String> addWatchlistRuleAction(StringBuilder ruleStringBuilder, EntityEnum entity, String title,
 			String passengerVariableName) {
 		String cause = conditionDescriptionBuilder.toString()
 				.replace("\"", "'");
 		ruleStringBuilder.append("then\n");
-			// the watch list item id id may not be available at
-			// this stage so we add defer adding it
-			ruleStringBuilder.append(String.format(ACTION_WATCHLIST_HIT,
-					"%dL", // the watch list item ID may not be available
-					title, this.passengerVariableName, cause));
+		
+		HitTypeCode hitType = (entity == EntityEnum.PASSENGER) ? HitTypeCode.P : HitTypeCode.D;
+		 
+		// the watch list item id id may not be available at
+		// this stage so we add defer adding it
+		ruleStringBuilder.append(String.format(ACTION_WATCHLIST_HIT,
+				"%dL", // the watch list item ID may not be available
+				 hitType.toString(), this.passengerVariableName, cause));
 
 		ruleStringBuilder.append("end\n");
 		conditionDescriptionBuilder = null;

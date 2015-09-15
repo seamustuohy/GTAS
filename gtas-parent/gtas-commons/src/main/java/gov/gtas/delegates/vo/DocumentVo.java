@@ -1,6 +1,7 @@
 package gov.gtas.delegates.vo;
 
 import gov.gtas.validators.Validatable;
+
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,7 +15,7 @@ public class DocumentVo extends BaseVo implements Validatable {
     private Date expirationDate;
     private Date issuanceDate;
     private String issuanceCountry;
-    
+   
 	public String getDocumentType() {
 		return documentType;
 	}

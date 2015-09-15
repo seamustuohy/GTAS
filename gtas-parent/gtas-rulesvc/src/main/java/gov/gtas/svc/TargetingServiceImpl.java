@@ -22,6 +22,7 @@ import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PnrRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.svc.request.builder.PassengerFlightTuple;
+import gov.gtas.svc.util.RuleExecutionContext;
 import gov.gtas.svc.util.TargetingServiceUtils;
 
 import java.util.ArrayList;
@@ -30,11 +31,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -66,6 +69,12 @@ public class TargetingServiceImpl implements TargetingService {
 	@Autowired
 	private HitsSummaryRepository hitsSummaryRepository;
 
+	@Autowired
+	private EntityManager em;
+
+	@Value("${hibernate.jdbc.batch_size}")
+	private String batchSize;
+
 	/**
 	 * Constructor obtained from the spring context by auto-wiring.
 	 * 
@@ -93,7 +102,7 @@ public class TargetingServiceImpl implements TargetingService {
 					"ApisMessage", "TargetingServiceImpl.analyzeApisMessage()");
 		}
 		RuleServiceRequest req = TargetingServiceUtils
-				.createApisRequest(message);
+				.createApisRequest(message).getRuleServiceRequest();
 		RuleServiceResult res = ruleService.invokeRuleEngine(req);
 		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 		return res;
@@ -145,9 +154,9 @@ public class TargetingServiceImpl implements TargetingService {
 		List<RuleHitDetail> ret = null;
 		List<ApisMessage> msgs = this.retrieveApisMessage(MessageStatus.LOADED);
 		if (msgs != null) {
-			RuleServiceRequest req = TargetingServiceUtils
-					.createApisRequest(msgs);
-			RuleServiceResult res = ruleService.invokeRuleEngine(req);
+			RuleExecutionContext ctx = TargetingServiceUtils
+					.createApisRequestContext(msgs);
+			RuleServiceResult res = ruleService.invokeRuleEngine(ctx.getRuleServiceRequest());
 			res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 			ret = res.getResultList();
 		}
@@ -165,9 +174,9 @@ public class TargetingServiceImpl implements TargetingService {
 		List<RuleHitDetail> ret = null;
 		List<Pnr> msgs = this.retrievePnr(MessageStatus.LOADED);
 		if (msgs != null) {
-			RuleServiceRequest req = TargetingServiceUtils
-					.createPnrRequest(msgs);
-			RuleServiceResult res = ruleService.invokeRuleEngine(req);
+			RuleExecutionContext ctx = TargetingServiceUtils
+					.createPnrRequestContext(msgs);
+			RuleServiceResult res = ruleService.invokeRuleEngine(ctx.getRuleServiceRequest());
 			res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 			ret = res.getResultList();
 		}
@@ -181,7 +190,7 @@ public class TargetingServiceImpl implements TargetingService {
 	 */
 	@Override
 	@Transactional
-	public RuleServiceResult analyzeLoadedMessages(MessageStatus statusToLoad,
+	public RuleExecutionContext analyzeLoadedMessages(MessageStatus statusToLoad,
 			MessageStatus statusAfterProcesssing,
 			final boolean updateProcesssedMessageStat) {
 		Iterator<Message> source = messageRepository.findAll().iterator();
@@ -193,12 +202,12 @@ public class TargetingServiceImpl implements TargetingService {
 					+ target.size());
 		}
 
-		RuleServiceRequest req = TargetingServiceUtils
-				.createPnrApisRequest(target);
+		RuleExecutionContext ctx = TargetingServiceUtils
+				.createPnrApisRequestContext(target);
 		// default knowledge Base is the UDR KB
-		RuleServiceResult udrResult = ruleService.invokeRuleEngine(req);
+		RuleServiceResult udrResult = ruleService.invokeRuleEngine(ctx.getRuleServiceRequest());
 
-		RuleServiceResult wlResult = ruleService.invokeRuleEngine(req,
+		RuleServiceResult wlResult = ruleService.invokeRuleEngine(ctx.getRuleServiceRequest(),
 				WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
 		if (udrResult == null && wlResult == null) {
 			throw ErrorHandlerFactory
@@ -217,7 +226,9 @@ public class TargetingServiceImpl implements TargetingService {
 			udrResult = TargetingServiceUtils
 					.ruleResultPostProcesssing(udrResult);
 		}
-		return new CompositeRuleServiceResult(udrResult, wlResult);
+		
+		ctx.setRuleServiceResult(new CompositeRuleServiceResult(udrResult, wlResult));
+		return ctx;
 	}
 
 	@Override
@@ -259,19 +270,19 @@ public class TargetingServiceImpl implements TargetingService {
 		// logger.info(new Date() + " a fixed delay running");
 		List<HitsSummary> hitsSummaryList = new ArrayList<HitsSummary>();
 
-		RuleServiceResult ruleRunningResult = analyzeLoadedMessages(
+		RuleExecutionContext ruleRunningResult = analyzeLoadedMessages(
 				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
 
-		RuleExecutionStatistics ruleExeStatus = ruleRunningResult
+		RuleExecutionStatistics ruleExeStatus = ruleRunningResult.getRuleServiceResult()
 				.getExecutionStatistics();
 		if (logger.isInfoEnabled()) {
 			logger.info(("\nTargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> " + ruleExeStatus
 					.getTotalRulesFired()));
 		}
 
-		deleteExistingHitRecords();
+		deleteExistingHitRecords(ruleRunningResult.getPaxFlightTuples());
 
-		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
+		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult.getRuleServiceResult()
 				.getResultList();
 		Iterator<RuleHitDetail> iter = results.iterator();
 		while (iter.hasNext()) {
@@ -282,18 +293,23 @@ public class TargetingServiceImpl implements TargetingService {
 		hitsSummaryRepository.save(hitsSummaryList);
 	}
 
-	private void deleteExistingHitRecords() {
-		Set<PassengerFlightTuple> passengerFlightTuples = TargetingServiceUtils
-				.getPaxFlightTuples();
-		passengerFlightTuples.forEach(passengerFlightTuple -> {
+	private void deleteExistingHitRecords(Set<PassengerFlightTuple> passengerFlightTuples) {
+		List<PassengerFlightTuple> setList = new ArrayList<PassengerFlightTuple>(
+				passengerFlightTuples);
+		for (int i = 0; i < setList.size(); i++) {
+			PassengerFlightTuple passengerFlightTuple = setList.get(i);
 			HitsSummary found = hitsSummaryRepository
 					.findByFlightIdAndPassengerId(passengerFlightTuple
 							.getFlight().getId(), passengerFlightTuple
 							.getPassenger().getId());
 			if (found != null) {
-				hitsSummaryRepository.delete(found);
+				em.remove(found);
 			}
-		});
+			if (i % Integer.valueOf(batchSize) == 0) {
+				em.flush();
+				em.clear();
+			}
+		}
 	}
 
 	/**

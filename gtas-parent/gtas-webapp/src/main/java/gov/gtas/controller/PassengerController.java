@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.transaction.Transactional;
 
@@ -409,6 +410,7 @@ public class PassengerController {
 		target.setDateReceived(source.getDateReceived());
 		target.setTotalDwellTime(source.getTotalDwellTime());
 		target.setRaw(LobUtils.convertClobToString(source.getRaw()));
+		parseRawMessageToList(target);
 		
 		if(source.getAddresses() != null && source.getAddresses().size() >0){
 			Iterator it = source.getAddresses().iterator();
@@ -488,13 +490,32 @@ public class PassengerController {
     	return target;
     }
     
+
+    /**
+     * Util Method To Parse PNR Raw Format Message to List For The Front End
+     * @param targetVo
+     */
+    private void parseRawMessageToList(PnrVo targetVo){
+    	
+    	if(targetVo!=null && targetVo.getRaw()!=null){
+    		StringTokenizer _tempStr = new StringTokenizer(targetVo.getRaw(),"\n");
+    		ArrayList<String> _tempList = new ArrayList<String>();
+    		while(_tempStr.hasMoreTokens()){
+    			_tempList.add(_tempStr.nextToken());
+    		}
+    		targetVo.setRawList(_tempList);
+    	}
+    }
     
+    /**
+     * 
+     * @param source
+     * @param target
+     */
     private void copyModelToVo(Object source, Object target){
     	
     	try {
-			
 			BeanUtils.copyProperties(target, source);
-			
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -502,7 +523,6 @@ public class PassengerController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
     }
     
 }

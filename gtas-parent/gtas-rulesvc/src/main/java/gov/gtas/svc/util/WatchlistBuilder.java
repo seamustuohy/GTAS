@@ -108,8 +108,8 @@ public class WatchlistBuilder {
 					
 					item.setItemData(json);
 					StringBuilder ruleBldr = new StringBuilder();
-					List<String> ruleCriteria = WatchlistRuleCreationUtil
-							.createWatchlistRule(itemSpec.getTerms(), this.getName(), ruleBldr);
+					/*List<String> ruleCriteria = */ WatchlistRuleCreationUtil
+							.createWatchlistRule(this.entity, itemSpec.getTerms(), this.getName(), ruleBldr);
 					item.setItemRuleData(ruleBldr.toString());
 					this.createUpdateList.add(item);
 					break;

@@ -1,19 +1,5 @@
 package gov.gtas.svc;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.RuleConstants;
 import gov.gtas.error.ErrorHandler;
@@ -35,6 +21,20 @@ import gov.gtas.services.security.UserServiceUtil;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.svc.util.UdrServiceHelper;
 import gov.gtas.svc.util.UdrServiceJsonResponseHelper;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of the UDR Service API.
@@ -165,13 +165,25 @@ public class UdrServiceImpl implements UdrService {
 		}
 
 		UdrRule savedRule = rulePersistenceService.create(ruleToSave, userId);
-
-		List<UdrRule> ruleList = rulePersistenceService.findAll();
-		ruleManagementService.createKnowledgeBaseFromUdrRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList, userId);
-
+        recompileRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, userId);
 		return UdrServiceJsonResponseHelper.createResponse(true, RuleConstants.UDR_CREATE_OP_NAME, savedRule);
 	}
-
+	/**
+	 * Fetches all the active rules and recompiles the Knowledge Base.
+	 * If no rules are found then the knowledge Base is deleted.
+	 * @param kbName
+	 * @param userId
+	 */
+    private void recompileRules(final String kbName, String userId){
+		List<UdrRule> ruleList = rulePersistenceService.findAll();
+		if (!CollectionUtils.isEmpty(ruleList)) {
+			ruleManagementService.createKnowledgeBaseFromUdrRules(kbName, ruleList,
+					userId);
+		} else {
+			ruleManagementService.deleteKnowledgeBase(kbName);
+			logger.warn("UdrService - no active rules -> deleting Knowledge Base!");
+		}
+    }
 	private User fetchRuleAuthor(final String userId, final String authorUserId) {
 		String authorId = authorUserId;
 		if (StringUtils.isEmpty(authorId)) {
@@ -251,11 +263,7 @@ public class UdrServiceImpl implements UdrService {
 			}
 
 			updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
-
-			List<UdrRule> ruleList = rulePersistenceService.findAll();
-			ruleManagementService.createKnowledgeBaseFromUdrRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList,
-					userId);
-
+			recompileRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, userId);
 		} else {
 			// simple update - meta data only
 			// no need to re-generate the Knowledge Base.
@@ -275,13 +283,7 @@ public class UdrServiceImpl implements UdrService {
 	public JsonServiceResponse deleteUdr(String userId, Long id) {
 		UdrRule deletedRule = rulePersistenceService.delete(id, userId);
 		if (deletedRule != null) {
-			List<UdrRule> ruleList = rulePersistenceService.findAll();
-			if (!CollectionUtils.isEmpty(ruleList)) {
-				ruleManagementService.createKnowledgeBaseFromUdrRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, ruleList,
-						userId);
-			} else {
-				ruleManagementService.deleteKnowledgeBase(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
-			}
+			recompileRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, userId);
 			return UdrServiceJsonResponseHelper.createResponse(true, RuleConstants.UDR_DELETE_OP_NAME, deletedRule);
 		} else {
 			return UdrServiceJsonResponseHelper.createResponse(false, RuleConstants.UDR_DELETE_OP_NAME, deletedRule,

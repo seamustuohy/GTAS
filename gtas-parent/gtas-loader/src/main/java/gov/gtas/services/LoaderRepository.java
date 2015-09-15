@@ -16,6 +16,7 @@ import gov.gtas.model.ApisMessage;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
+import gov.gtas.model.FlightLeg;
 import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Message;
 import gov.gtas.model.Passenger;
@@ -143,14 +144,16 @@ public class LoaderRepository {
     }
 
     @Transactional
-    public void processFlightsAndPassengers(List<FlightVo> flights, List<PassengerVo> passengers, Set<Flight> messageFlights, Set<Passenger> messagePassengers) throws ParseException {
+    public void processFlightsAndPassengers(List<FlightVo> flights, List<PassengerVo> passengers, Set<Flight> messageFlights, Set<Passenger> messagePassengers, List<FlightLeg> flightLegs) throws ParseException {
         Set<PassengerVo> existingPassengers = new HashSet<>();
         
         // first find all existing passengers, create any missing flights
-        for (FlightVo fvo : flights) {
+        for (int i=0; i<flights.size(); i++) {
+            FlightVo fvo = flights.get(i);
             Flight existingFlight = flightDao.getFlightByCriteria(fvo.getCarrier(), fvo.getFlightNumber(), fvo.getOrigin(), fvo.getDestination(), fvo.getFlightDate());
+            Flight currentFlight = null;
             if (existingFlight != null) {
-                messageFlights.add(existingFlight);
+                currentFlight = existingFlight;
                 for (PassengerVo pvo : passengers) {
                     Passenger existingPassenger = findPassengerOnFlight(existingFlight, pvo);
                     if (existingPassenger != null) {
@@ -161,9 +164,14 @@ public class LoaderRepository {
                 }
                 
             } else {
-                Flight newFlight = utils.createNewFlight(fvo);
-                messageFlights.add(newFlight);
+                currentFlight = utils.createNewFlight(fvo);
             }
+            
+            messageFlights.add(currentFlight);
+            FlightLeg leg = new FlightLeg();
+            leg.setFlight(currentFlight);
+            leg.setLegNumber(i);
+            flightLegs.add(leg);
         }
                
         // create any new passengers
