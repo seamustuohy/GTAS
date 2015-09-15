@@ -3,9 +3,11 @@ package gov.gtas.controller;
 import gov.gtas.constants.Constants;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.Status;
+import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
+import gov.gtas.querybuilder.exceptions.QueryBuilderException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
 import gov.gtas.querybuilder.mappings.QueryBuilderMapping;
 import gov.gtas.querybuilder.mappings.QueryBuilderMappingFactory;
@@ -70,8 +72,8 @@ public class QueryBuilderController {
 	 * @throws InvalidQueryException
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.POST)
-	public IQueryResponse runFlightQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
-		IQueryResponse response = new QueryResponse();
+	public JsonServiceResponse runFlightQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
+		JsonServiceResponse response = new QueryResponse();
 		
 		List<IQueryResult> flights = queryService.runFlightQuery(queryObject);
 		response = createQueryResponse(Status.SUCCESS, flights != null ? flights.size() + " record(s)" : "flight is null" , flights);
@@ -87,8 +89,8 @@ public class QueryBuilderController {
 	 * @throws InvalidQueryException
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_PASSENGER_URI, method = RequestMethod.POST)
-	public IQueryResponse runPassengerQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
-		IQueryResponse response = new QueryResponse();
+	public JsonServiceResponse runPassengerQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
+		JsonServiceResponse response = new QueryResponse();
 		
 		List<IQueryResult> passengers = queryService.runPassengerQuery(queryObject);
 		response = createQueryResponse(Status.SUCCESS, passengers != null ? passengers.size() + " record(s)" : "query result is null", passengers);
@@ -104,8 +106,8 @@ public class QueryBuilderController {
 	 * @throws QueryAlreadyExistsException
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public IQueryResponse saveQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
-		IQueryResponse response = new QueryResponse();
+	public JsonServiceResponse saveQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
+		JsonServiceResponse response = new QueryResponse();
 		List<IUserQueryResult> resultList = new ArrayList<>();
 
 		resultList.add(queryService.saveQuery(queryRequest));
@@ -124,8 +126,8 @@ public class QueryBuilderController {
 	 * @throws QueryDoesNotExistException
 	 */
 	@RequestMapping(method = RequestMethod.PUT)
-	public IQueryResponse editQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
-		IQueryResponse response = new QueryResponse();
+	public JsonServiceResponse editQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
+		JsonServiceResponse response = new QueryResponse();
 		List<IUserQueryResult> resultList = new ArrayList<>();
 			
 		resultList.add(queryService.editQuery(queryRequest));
@@ -142,8 +144,8 @@ public class QueryBuilderController {
 	 * @throws InvalidQueryException
 	 */
 	@RequestMapping(method = RequestMethod.GET)
-	public IQueryResponse listQueryByUser() throws InvalidQueryException {
-		IQueryResponse response = new QueryResponse();
+	public JsonServiceResponse listQueryByUser() throws InvalidQueryException {
+		JsonServiceResponse response = new QueryResponse();
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** Received Query Builder List request by user =" + userId);
 		
@@ -165,8 +167,8 @@ public class QueryBuilderController {
 	 * @throws QueryDoesNotExistException
 	 */
 	@RequestMapping(method = RequestMethod.DELETE)
-	public IQueryResponse deleteQuery(@PathVariable int id) throws QueryDoesNotExistException {
-		IQueryResponse response = new QueryResponse();
+	public JsonServiceResponse deleteQuery(@PathVariable int id) throws QueryDoesNotExistException {
+		JsonServiceResponse response = new QueryResponse();
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** Received Query Builder Delete request by user =" + userId
 				+ " for " + id);
@@ -179,7 +181,7 @@ public class QueryBuilderController {
 		return response;
 	}
 	
-	private IQueryResponse createQueryResponse(Status status, String message, Object resultList) {
+	private JsonServiceResponse createQueryResponse(Status status, String message, Object resultList) {
 		QueryResponse response = new QueryResponse();
 		
 		response.setStatus(status);
@@ -189,7 +191,7 @@ public class QueryBuilderController {
 		return response;
 	}
 	
-	private IQueryResponse createQueryErrorResponse(Status status, String message, Object request) {
+	private JsonServiceResponse createQueryErrorResponse(Status status, String message, Object request) {
 		QueryErrorResponse response = new QueryErrorResponse();
 		
 		response.setStatus(status);
@@ -225,10 +227,9 @@ public class QueryBuilderController {
 		return model;
 	}
 	
-	@ExceptionHandler({QueryAlreadyExistsException.class, QueryDoesNotExistException.class, InvalidQueryException.class,
-		ConstraintViolationException.class})
+	@ExceptionHandler(QueryBuilderException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public IQueryResponse handleExceptions(Exception exception) {
+    public JsonServiceResponse handleExceptions(Exception exception) {
 		
 		if(exception instanceof QueryAlreadyExistsException) {
 			QueryAlreadyExistsException qae = (QueryAlreadyExistsException) exception;
@@ -248,13 +249,5 @@ public class QueryBuilderController {
 		
 		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), null);
     }
-	
-	@ExceptionHandler
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-	public IQueryResponse handleAllOtherExceptions(Exception e) {
-		
-		logger.info("An error occurred", e);
-		
-		return createQueryErrorResponse(Status.FAILURE, e.getMessage(), null);
-	}
+
 }
