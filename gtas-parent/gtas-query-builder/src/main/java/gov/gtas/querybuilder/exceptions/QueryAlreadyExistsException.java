@@ -2,13 +2,13 @@ package gov.gtas.querybuilder.exceptions;
 
 import gov.gtas.querybuilder.model.QueryRequest;
 
-public class QueryAlreadyExistsException extends Exception {
+public class QueryAlreadyExistsException extends QueryBuilderException {
 
 	private static final long serialVersionUID = 1L;
 	private QueryRequest queryRequest;
 		
 	public QueryAlreadyExistsException(String message, QueryRequest queryRequest) {
-		super(message);
+		super(message, queryRequest);
 		this.queryRequest = queryRequest;
 	}
 

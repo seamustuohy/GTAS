@@ -1,12 +1,12 @@
 package gov.gtas.querybuilder.exceptions;
 
-public class InvalidQueryException extends QueryBuilderException {
+public class QueryBuilderException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	private Object object;
-	
-	public InvalidQueryException(String message, Object object) {
-		super(message, object);
+
+	public QueryBuilderException(String message, Object object) {
+		super(message);
 		this.object = object;
 	}
 
