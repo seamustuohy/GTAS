@@ -116,7 +116,7 @@ public class WatchlistManagementController {
 		return resp;
 	}
 
-	@RequestMapping(value = Constants.WL_COMPILE, method = {RequestMethod.POST, RequestMethod.PUT}, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = Constants.WL_COMPILE, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse compileWatchlists(){
 		return watchlistService.activateAllWatchlists();
 	}
