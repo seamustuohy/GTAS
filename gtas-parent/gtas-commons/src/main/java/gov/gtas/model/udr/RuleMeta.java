@@ -82,7 +82,7 @@ public class RuleMeta implements Serializable {
 		this.endDt = endDt;
 	}
 
-	public RuleMeta(Rule parentRule, String title, String description, Date startDt,
+	public RuleMeta(UdrRule parentRule, String title, String description, Date startDt,
 			Date endDt, YesNoEnum enabled, YesNoEnum priorityHigh,
 			YesNoEnum hitSharing) {
 		this.id = parentRule.getId();

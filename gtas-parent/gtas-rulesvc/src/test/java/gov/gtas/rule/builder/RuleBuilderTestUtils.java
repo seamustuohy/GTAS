@@ -1,14 +1,16 @@
 package gov.gtas.rule.builder;
 
-import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.CriteriaOperatorEnum;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.RuleMeta;
 //import gov.gtas.model.udr.RuleCond;
 //import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.UdrRule;
+import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.AddressMapping;
 import gov.gtas.querybuilder.mappings.CreditCardMapping;
@@ -21,7 +23,6 @@ import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
 import gov.gtas.querybuilder.mappings.TravelAgencyMapping;
-import gov.gtas.svc.util.UdrServiceHelper;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -46,6 +47,8 @@ public class RuleBuilderTestUtils {
 		author.setUserId(userId);
 		ret.setAuthor(author);
 		ret.setTitle(UDR_RULE_TITLE);
+		RuleMeta meta = new RuleMeta(ret, UDR_RULE_TITLE, UDR_RULE_TITLE, new Date(), null, YesNoEnum.Y, YesNoEnum.Y, YesNoEnum.Y);
+		ret.setMetaData(meta);
 		Rule engineRule = createEngineRule(ENGINE_RULE_ID, ret, indx);		
 		ret.addEngineRule(engineRule);
 		
@@ -95,7 +98,7 @@ public class RuleBuilderTestUtils {
 						FlightMapping.FLIGHT_NUMBER,
 						CriteriaOperatorEnum.EQUAL, "0012", TypeEnum.STRING);				
 				ruleMinTerm.add(cond);
-				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
 			case ENGINE_RULE_INDX2:/* doc.iso2 in (YE,GB) && flight.origin.iata == LHR && flight.carrier.iata==CO  */
@@ -111,7 +114,7 @@ public class RuleBuilderTestUtils {
 						FlightMapping.CARRIER,
 						CriteriaOperatorEnum.EQUAL, "CO", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
-				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
 			case ENGINE_RULE_INDX3:/* flight.origin.iata == LHR && flight.carrier.iata==CO  */
@@ -127,7 +130,7 @@ public class RuleBuilderTestUtils {
 						FlightMapping.FLIGHT_DATE,
 						CriteriaOperatorEnum.GREATER, "2015-07-20 14:00:00", TypeEnum.DATETIME);
 				ruleMinTerm.add(cond);
-				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
 			case PNR_CRITERIA_RULE_INDX:
@@ -143,7 +146,7 @@ public class RuleBuilderTestUtils {
 						PNRMapping.RECORD_LOCATOR,
 						CriteriaOperatorEnum.BEGINS_WITH, "DU", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
-				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
 			case PNR_PASSENGER_RULE_INDX:
@@ -167,7 +170,7 @@ public class RuleBuilderTestUtils {
 						PassengerMapping.LAST_NAME,
 						CriteriaOperatorEnum.EQUAL, "Baggins", TypeEnum.STRING);
 				ruleMinTerm.add(cond);
-				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
 			case ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX:
@@ -199,7 +202,7 @@ public class RuleBuilderTestUtils {
 						DocumentMapping.ISSUANCE_DATE,
 						CriteriaOperatorEnum.BETWEEN, new String[]{"2012-05-01", "2013-06-30"}, TypeEnum.DATE);
 				ruleMinTerm.add(cond);
-				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
 			case AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX:
@@ -223,7 +226,7 @@ public class RuleBuilderTestUtils {
 						DocumentMapping.ISSUANCE_DATE,
 						CriteriaOperatorEnum.LESS, "2014-01-30", TypeEnum.DATE);
 				ruleMinTerm.add(cond);
-				engineRule = UdrServiceHelper.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
 		}

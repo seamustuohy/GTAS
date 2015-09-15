@@ -26,7 +26,7 @@ public class RuleVariablesUtil {
 	 * 
 	 * @return the rule variable map.
 	 */
-	public static Map<EntityEnum, String> createEngineRuleVariableMap() {
+	public static Map<EntityEnum, String> createEngineRuleVariableMap2() {
 		Map<EntityEnum, String> ret = new HashMap<EntityEnum, String>();
 		ret.put(EntityEnum.PASSENGER, PASSENGER_VARIABLE_NAME);
 		ret.put(EntityEnum.DOCUMENT, DOCUMENT_VARIABLE_NAME);
