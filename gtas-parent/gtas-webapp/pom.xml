@@ -201,7 +201,7 @@
       </plugin>
       
       <!-- gulp, bower integration -->      
-      <!-- <plugin>
+      <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
         <version>0.0.23</version>
@@ -216,7 +216,7 @@
               <npmVersion>2.7.6</npmVersion>
             </configuration>
           </execution>
-          <execution>
+          <!-- <execution>
             <id>npm install</id>
             <goals>
               <goal>npm</goal>
@@ -225,9 +225,9 @@
             <configuration>
               <arguments>install</arguments>
             </configuration>
-          </execution>
+          </execution> -->
           
-          <execution>
+          <!-- <execution>
             <id>npm run build</id>
             <goals>
               <goal>npm</goal>
@@ -235,7 +235,7 @@
             <configuration>
               <arguments>run build</arguments>
             </configuration>
-          </execution>
+          </execution> -->
                  
           <execution>
             <id>bower install</id>
@@ -245,7 +245,6 @@
           </execution>           
         </executions>
       </plugin>  
-       -->
       
           
     </plugins>

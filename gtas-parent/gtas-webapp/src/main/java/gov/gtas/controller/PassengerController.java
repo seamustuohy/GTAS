@@ -85,10 +85,12 @@ public class PassengerController {
     public List<PassengerVo> getAllPassengers(@RequestParam(value = "flightId", required = false) String flightId) {
         List<PassengerVo> rv = new ArrayList<>();
         List<Passenger> passengers = null;
+        Long id = new Long(0);
         if (flightId != null) {
-            Long id = Long.valueOf(flightId);
+            id = Long.valueOf(flightId);
             passengers = pService.getPassengersByFlightId(id);
         } else {
+        	
             passengers = pService.findAll();
         }
         
@@ -124,7 +126,7 @@ public class PassengerController {
                 vo.addDocument(docVo);
             }
             
-            vo.setRuleHits(getTotalHitsByPaxID(t.getId()));
+            vo.setRuleHits(getTotalHitsByPaxID(t.getId(), id));
 
             rv.add(vo);
         }
@@ -181,21 +183,22 @@ public class PassengerController {
             vo.setSuffix(t.getSuffix());
             vo.setTitle(t.getTitle());
             
-            vo.setRuleHits(getTotalHitsByPaxID(t.getId()));
+            //vo.setRuleHits(getTotalHitsByPaxID(t.getId()));
             
         	List<Flight> flightList = fService.getFlightByPaxId(t.getId());
         	for(Flight _tempFlight : flightList) {
         		PassengerVo tempVo = new PassengerVo();
         		
 				BeanUtils.copyProperties(tempVo, vo);
-				
-        		tempVo.setFlightNumber(_tempFlight.getFlightNumber());
+        		
         		tempVo.setCarrier(_tempFlight.getCarrier());
+        		tempVo.setFlightNumber(_tempFlight.getCarrier()+_tempFlight.getFlightNumber());
         		tempVo.setFlightOrigin(_tempFlight.getOrigin());
         		tempVo.setFlightDestination(_tempFlight.getDestination());
         		tempVo.setFlightETA((_tempFlight.getEta()!=null)?_tempFlight.getEta().toString(): EMPTY_STRING);
         		tempVo.setFlightETD((_tempFlight.getEtd()!=null)?_tempFlight.getEtd().toString(): EMPTY_STRING);
         		tempVo.setFlightId(_tempFlight.getId().toString());
+        		tempVo.setRuleHits(getTotalHitsByPaxID(t.getId(),_tempFlight.getId()));
                 rv.add(tempVo);
             
         	} // for loop
@@ -270,7 +273,7 @@ public class PassengerController {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}            
-            vo.setRuleHits(getTotalHitsByPaxID(t.getId()));
+            //vo.setRuleHits(getTotalHitsByPaxID(t.getId()));
             
         	List<Flight> flightList = fService.getFlightByPaxId(t.getId());
         	for(Flight _tempFlight : flightList) {
@@ -291,6 +294,7 @@ public class PassengerController {
         		tempVo.setFlightETA(_tempFlight.getEta().toString());
         		tempVo.setFlightETD(_tempFlight.getEtd().toString());
         		tempVo.setFlightId(_tempFlight.getId().toString());
+        		tempVo.setRuleHits(getTotalHitsByPaxID(t.getId(),_tempFlight.getId()));
                 rv.add(tempVo);
             
         	} // while loop
@@ -302,7 +306,7 @@ public class PassengerController {
     
     
     @Transactional
-    public int getTotalHitsByPaxID(Long passengerID){
+    public int getTotalHitsByPaxID(Long passengerID, Long flightId){
 
     	int totalHits = 0;
     	if(hitsList == null || hitsList.isEmpty()){
@@ -314,7 +318,7 @@ public class PassengerController {
     	} // END IF
     	    		
     	for(HitsSummary s: hitsList){
-    		if(s.getPassengerId().equals(passengerID)){
+    		if((s.getPassengerId().equals(passengerID)) && (s.getFlightId().equals(flightId))){
     			totalHits++;
     			}
     		}
