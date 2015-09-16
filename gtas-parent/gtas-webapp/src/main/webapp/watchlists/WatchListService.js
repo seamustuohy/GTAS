@@ -11,8 +11,15 @@ app.service("watchListService", function ($http, $q) {
             return (response);
         },
         service = {
+            compile: function () {
+                var request = $http({
+                    method: "get",
+                    url: baseUrl + 'compile'
+                });
+
+                return (request.then(handleSuccess, handleError));
+            },
             getTabs: function () {
-                // HAVE TO USE .json for now...
                 var request = $http({
                     method: "get",
                     url: baseUrl + 'list'

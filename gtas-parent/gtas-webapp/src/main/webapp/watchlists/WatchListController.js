@@ -130,5 +130,11 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
         });
     };
 
+    $scope.updateWatchlistService = function () {
+        watchListService.compile().then(function () {
+            console.log('SUCCESS');
+        });
+    };
+
     $scope.$scope = $scope;
 });
