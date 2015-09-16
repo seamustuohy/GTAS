@@ -106,14 +106,15 @@ public class RulePersistenceServiceIT {
 	@Transactional
 	@Test()
 	public void testFetchValidUdrRuleOnDate() throws Exception{
-		Date testDate = DateCalendarUtils.parseJsonDate("1990-01-30");
+		Date testDate = DateCalendarUtils.parseJsonDate("2125-01-30");
+		Date today = new Date();
 		final String RULE_DESCRIPTION = "This is a Simple Rule";
 		String testRuleTitle = testGenUtils.generateTestRuleTitle(2);
 		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
 				YesNoEnum.Y);
 		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
 		r = testGenUtils.createUdrRule(testRuleTitle+"2", RULE_DESCRIPTION,
-				YesNoEnum.Y, testDate, null);
+				YesNoEnum.Y, today, today);
 		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
 		r = testGenUtils.createUdrRule(testRuleTitle+"3", RULE_DESCRIPTION,
 				YesNoEnum.Y, testDate, testDate);
@@ -122,12 +123,17 @@ public class RulePersistenceServiceIT {
 		assertTrue(udrList.size() >= 3);
 		udrList = testTarget.findValidUdrOnDate(testDate);
 		assertNotNull(udrList);
-		assertEquals(2, udrList.size());
+		for(UdrRule rl:udrList){
+			Date endDate = rl.getMetaData().getEndDt();
+			if(endDate != null){
+				assertEquals(testDate, endDate);
+			}
+		}
 	}
 	@Transactional
 	@Test()
 	public void testFetchValidUdrRuleOnDate2() throws Exception{
-		Date testDate = DateCalendarUtils.parseJsonDate("1990-01-30");
+		Date testDate = DateCalendarUtils.parseJsonDate("2015-01-30");
 		Date startDate = DateCalendarUtils.parseJsonDate("1990-01-01");
 		Date endDate = DateCalendarUtils.parseJsonDate("1990-01-29");
 		final String RULE_DESCRIPTION = "This is a Simple Rule";
@@ -148,7 +154,12 @@ public class RulePersistenceServiceIT {
 		assertTrue(udrList.size() >= 3);
 		udrList = testTarget.findValidUdrOnDate(testDate);
 		assertNotNull(udrList);
-		assertEquals(2, udrList.size());
+		for(UdrRule rl:udrList){
+			Date endDt = rl.getMetaData().getEndDt();
+			if(endDt != null){
+				assertEquals(testDate, endDt);
+			}
+		}
 	}
     /**
 	 * The update pattern tested here is:

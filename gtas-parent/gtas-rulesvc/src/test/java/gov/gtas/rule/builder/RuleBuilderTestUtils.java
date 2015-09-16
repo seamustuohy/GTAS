@@ -10,7 +10,6 @@ import gov.gtas.model.udr.RuleMeta;
 //import gov.gtas.model.udr.RuleCond;
 //import gov.gtas.model.udr.RuleCondPk;
 import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.AddressMapping;
 import gov.gtas.querybuilder.mappings.CreditCardMapping;
@@ -42,12 +41,15 @@ public class RuleBuilderTestUtils {
 	public static final int AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX=7;
 	
 	public static UdrRule createSimpleUdrRule(String userId, int indx) throws ParseException{
+		return createSimpleUdrRule(userId, indx, new Date(), null);
+	}
+	public static UdrRule createSimpleUdrRule(String userId, int indx, Date startDate, Date endDate) throws ParseException{
 		UdrRule ret = new UdrRule(UDR_RULE_ID, YesNoEnum.N, null, new Date());
 		User author = new User();
 		author.setUserId(userId);
 		ret.setAuthor(author);
 		ret.setTitle(UDR_RULE_TITLE);
-		RuleMeta meta = new RuleMeta(ret, UDR_RULE_TITLE, UDR_RULE_TITLE, new Date(), null, YesNoEnum.Y, YesNoEnum.Y, YesNoEnum.Y);
+		RuleMeta meta = new RuleMeta(ret, UDR_RULE_TITLE, UDR_RULE_TITLE, startDate, endDate, YesNoEnum.Y, YesNoEnum.Y, YesNoEnum.Y);
 		ret.setMetaData(meta);
 		Rule engineRule = createEngineRule(ENGINE_RULE_ID, ret, indx);		
 		ret.addEngineRule(engineRule);

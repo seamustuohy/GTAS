@@ -19,8 +19,10 @@ import gov.gtas.rule.builder.DrlRuleFileBuilder;
 import gov.gtas.rule.builder.RuleBuilderTestUtils;
 import gov.gtas.svc.util.TargetingServiceUtils;
 import gov.gtas.testdatagen.ApisDataGenerator;
+import gov.gtas.util.DateCalendarUtils;
 
 import java.text.ParseException;
+import java.util.Date;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
@@ -35,7 +37,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 /**
- * Unit tests for the TargetingService using spring support and Mockito.
+ * Unit tests for the TargetingService using spring support.
+ * (Also contains tests for date-effective and date-expires properties of rules.)
  * 
  * @author GTAS3 (AB)
  *
@@ -98,6 +101,83 @@ public class TargetingServiceIT {
 		assertNotNull("passenger ID in result is null", res.getPassengerId());
 		assertEquals("Expected passenger with id = 11", 11L,
 				res.getPassengerId());
+	}
+	@Test
+	@Transactional
+	public void testApisRuleExecution1FutureDate() throws ParseException {
+		/*
+		 * same test as "testApisRuleExecution1" but with rule start date in the future.
+		 * Hence there should be no hits.
+		 */
+		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
+		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
+		
+		//set the start date in the future
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, DOC_FLIGHT_CRITERIA_RULE_INDX, 
+				DateCalendarUtils.addOneDayToDate(new Date()), null);
+		
+		String drlRules = drlBuilder.addRule(udrRule).build();
+		System.out.println(drlRules);
+		RuleServiceRequest request = TargetingServiceUtils
+				.createApisRequest(msg).getRuleServiceRequest();
+		RuleServiceResult result = targetingService.applyRules(request,
+				drlRules);
+		assertNotNull(result);
+		assertEquals("Expected no hit", 0, result.getResultList().size());
+	}
+	@Test
+	@Transactional
+	public void testApisRuleExecution1ValidUptoToday() throws ParseException {
+		/*
+		 * same test as "testApisRuleExecution1" but with rule start date in the past
+		 * and end date today.
+		 * Hence there should be 1 hit as in "testApisRuleExecution1".
+		 */
+		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
+		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
+		
+		//set the start date to yesterday and end date to today
+		Date endDate = new Date();
+		Date startDate = DateCalendarUtils.subtractOneDayFromDate(endDate);
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, DOC_FLIGHT_CRITERIA_RULE_INDX, 
+				startDate, endDate);
+		
+		String drlRules = drlBuilder.addRule(udrRule).build();
+		System.out.println(drlRules);
+		RuleServiceRequest request = TargetingServiceUtils
+				.createApisRequest(msg).getRuleServiceRequest();
+		RuleServiceResult result = targetingService.applyRules(request,
+				drlRules);
+		assertNotNull(result);
+		assertEquals("Expected 1 hit", 1, result.getResultList().size());
+		RuleHitDetail res = (RuleHitDetail) (result.getResultList().get(0));
+		assertNotNull("passenger ID in result is null", res.getPassengerId());
+		assertEquals("Expected passenger with id = 11", 11L,
+				res.getPassengerId());
+	}
+	@Test
+	@Transactional
+	public void testApisRuleExecution1PastEndDate() throws ParseException {
+		/*
+		 * same test as "testApisRuleExecution1" but with rule start date and end date set to yesterday.
+		 * Hence there should be no hits.
+		 */
+		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
+		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
+		
+		//set the start/end date to yesterday
+		Date date = DateCalendarUtils.subtractOneDayFromDate(new Date());
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, DOC_FLIGHT_CRITERIA_RULE_INDX, 
+				date, date);
+		
+		String drlRules = drlBuilder.addRule(udrRule).build();
+		System.out.println(drlRules);
+		RuleServiceRequest request = TargetingServiceUtils
+				.createApisRequest(msg).getRuleServiceRequest();
+		RuleServiceResult result = targetingService.applyRules(request,
+				drlRules);
+		assertNotNull(result);
+		assertEquals("Expected no hit", 0, result.getResultList().size());
 	}
 
 	@Test

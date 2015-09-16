@@ -28,6 +28,9 @@ public class DateCalendarUtils {
 	public static Date addOneDayToDate(Date date){
 		return new Date(date.getTime()+MILLIS_IN_ONE_DAY);
 	}
+	public static Date subtractOneDayFromDate(Date date){
+		return new Date(date.getTime() - MILLIS_IN_ONE_DAY);
+	}
 	/**
 	 * return starting and ending dates within a day 
 	 */

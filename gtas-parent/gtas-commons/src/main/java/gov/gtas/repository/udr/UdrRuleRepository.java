@@ -32,6 +32,6 @@ public interface UdrRuleRepository extends CrudRepository<UdrRule, Long>, JpaSpe
 	@Query("SELECT rl FROM Rule rl WHERE rl.knowledgeBase.id = :kbId")
 	public List<Rule> getRuleByKbId(@Param("kbId") Long kbId);
 
-	@Query("SELECT udr FROM UdrRule udr WHERE  udr.deleted = 'N' and udr.metaData.startDt <= :targetDate and (udr.metaData.endDt is null or udr.metaData.endDt >= :targetDate)")
+	@Query("SELECT udr FROM UdrRule udr WHERE  udr.deleted = 'N' and (udr.metaData.endDt is null or udr.metaData.endDt >= :targetDate)")
 	public List<UdrRule>findValidUdrRuleByDate(@Param("targetDate") Date targetDate);
 }
