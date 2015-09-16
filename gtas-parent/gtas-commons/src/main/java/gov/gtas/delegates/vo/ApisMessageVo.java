@@ -30,7 +30,15 @@ public class ApisMessageVo extends MessageVo implements Validatable{
 	public void setPassengers(List<PassengerVo> passengers) {
 		this.passengers = passengers;
 	}
-   
+    public void addFlight(FlightVo f) {
+        flights.add(f);
+    }
+    public void addPax(PassengerVo p) {
+        passengers.add(p);
+    }
+    public void addReportingParty(ReportingPartyVo rp) {
+        reportingParties.add(rp);
+    }
     public List<FlightVo> getFlights() {
         return flights;
     }
@@ -47,16 +55,6 @@ public class ApisMessageVo extends MessageVo implements Validatable{
         this.messageCode = messageCode;
     }
 
-    public void addFlight(FlightVo f) {
-        flights.add(f);
-    }
-    public void addPax(PassengerVo p) {
-        passengers.add(p);
-    }
-    public void addReportingParty(ReportingPartyVo rp) {
-        reportingParties.add(rp);
-    }
-    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 

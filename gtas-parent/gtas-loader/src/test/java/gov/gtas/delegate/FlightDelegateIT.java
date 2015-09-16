@@ -1,9 +1,6 @@
 package gov.gtas.delegate;
 
 import static org.junit.Assert.assertNull;
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.services.FlightServiceDelegate2;
 
 import java.util.Date;
 
@@ -14,6 +11,10 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.services.FlightServiceDelegate2;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)

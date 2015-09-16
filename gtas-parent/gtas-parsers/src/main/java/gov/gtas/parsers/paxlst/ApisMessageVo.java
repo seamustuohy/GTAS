@@ -6,10 +6,10 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gov.gtas.delegates.vo.MessageVo;
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.delegates.vo.PassengerVo;
-import gov.gtas.delegates.vo.ReportingPartyVo;
+import gov.gtas.parsers.edifact.MessageVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
 
 public class ApisMessageVo extends MessageVo {
     /** type of message: new pax, update, delete, etc */

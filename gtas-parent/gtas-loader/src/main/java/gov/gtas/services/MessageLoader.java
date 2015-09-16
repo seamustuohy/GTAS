@@ -7,7 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.delegates.vo.MessageVo;
+import gov.gtas.parsers.edifact.MessageVo;
 
 public class MessageLoader {
     public static void processSingleFile(MessageService svc, File f) {

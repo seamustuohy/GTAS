@@ -27,11 +27,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-        <dependency>
-      <groupId>gov.gtas</groupId>
-      <artifactId>gtas-commons</artifactId>
-      <version>0.1-SNAPSHOT</version>
-    </dependency>
   </dependencies>
 </project>
 

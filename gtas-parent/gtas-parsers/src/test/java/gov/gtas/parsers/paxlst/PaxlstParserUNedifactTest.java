@@ -9,8 +9,7 @@ import org.junit.Test;
 
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.delegates.vo.ApisMessageVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
 
 public final class PaxlstParserUNedifactTest {
     EdifactParser<ApisMessageVo> parser; 

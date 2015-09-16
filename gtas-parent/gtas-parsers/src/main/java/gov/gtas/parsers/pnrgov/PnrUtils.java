@@ -16,10 +16,10 @@ import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TIF;
 import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.delegates.vo.AddressVo;
-import gov.gtas.delegates.vo.DocumentVo;
-import gov.gtas.delegates.vo.PassengerVo;
-import gov.gtas.delegates.vo.PhoneVo;
+import gov.gtas.parsers.vo.passenger.AddressVo;
+import gov.gtas.parsers.vo.passenger.DocumentVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.PhoneVo;
 
 public class PnrUtils {
     public static Date parseDateTime(String dt) throws ParseException {
@@ -96,7 +96,7 @@ public class PnrUtils {
     
     public static AddressVo createAddress(ADD add) {
         AddressVo rv = new AddressVo();
-        rv.setAddressType(add.getAddressType());
+        rv.setType(add.getAddressType());
         rv.setLine1(add.getStreetNumberAndName());
         rv.setCity(add.getCity());
         rv.setState(add.getStateOrProvinceCode());

@@ -19,11 +19,10 @@ import gov.gtas.parsers.paxlst.segment.usedifact.PDT.DocType;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
 import gov.gtas.parsers.paxlst.segment.usedifact.TDT;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.delegates.vo.DocumentVo;
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.delegates.vo.PassengerVo;
-import gov.gtas.delegates.vo.ReportingPartyVo;
-import gov.gtas.delegates.vo.ApisMessageVo;
+import gov.gtas.parsers.vo.passenger.DocumentVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
 
 public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);
