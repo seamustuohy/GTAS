@@ -187,7 +187,7 @@ public class TargetingServiceUtils {
 		// details.
 		rhd.setPassenger(null);
 		RuleHitDetail resrhd = resultMap.get(rhd);
-		if(resrhd != null){
+		if(resrhd != null && resrhd.getRuleId() != rhd.getRuleId()){
 			resrhd.incrementHitCount();
 			if(resrhd.getUdrRuleId() != null){
 				//this is a rule hit
@@ -198,7 +198,7 @@ public class TargetingServiceUtils {
 					resrhd.setHitType(HitTypeEnum.PD.toString());
 				}
 			}
-		} else {
+		} else if (resrhd == null){
 		    resultMap.put(rhd, rhd);
 		}
 
