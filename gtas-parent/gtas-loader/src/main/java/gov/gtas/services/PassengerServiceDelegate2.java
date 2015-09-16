@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
-import gov.gtas.parsers.vo.passenger.FlightVo;
-import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.delegates.vo.FlightVo;
+import gov.gtas.delegates.vo.PassengerVo;
 
 @Component
 public class PassengerServiceDelegate2 {

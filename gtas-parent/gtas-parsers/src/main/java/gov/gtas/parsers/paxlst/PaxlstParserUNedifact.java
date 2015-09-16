@@ -27,10 +27,11 @@ import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT.TdtType;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.parsers.vo.passenger.DocumentVo;
-import gov.gtas.parsers.vo.passenger.FlightVo;
-import gov.gtas.parsers.vo.passenger.PassengerVo;
-import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
+import gov.gtas.delegates.vo.DocumentVo;
+import gov.gtas.delegates.vo.FlightVo;
+import gov.gtas.delegates.vo.PassengerVo;
+import gov.gtas.delegates.vo.ReportingPartyVo;
+import gov.gtas.delegates.vo.ApisMessageVo;
 
 public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {   
     public PaxlstParserUNedifact() {

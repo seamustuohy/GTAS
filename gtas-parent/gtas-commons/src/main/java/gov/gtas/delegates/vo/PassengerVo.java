@@ -1,9 +1,12 @@
 package gov.gtas.delegates.vo;
 
+import gov.gtas.delegates.vo.DocumentVo;
 import gov.gtas.validators.Validatable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class PassengerVo extends BaseVo implements Validatable {
@@ -32,6 +35,10 @@ public class PassengerVo extends BaseVo implements Validatable {
     private String debarkCountry;
     private String seat;
  
+    public void addDocument(DocumentVo d) {
+        documents.add(d);
+    }
+    
 	public String getTravelerReferenceNumber() {
 		return travelerReferenceNumber;
 	}
@@ -184,4 +191,6 @@ public class PassengerVo extends BaseVo implements Validatable {
 		}
 		return true;
 	}
+	
+
 }

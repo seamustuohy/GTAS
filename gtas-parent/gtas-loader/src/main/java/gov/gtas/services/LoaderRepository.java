@@ -24,15 +24,15 @@ import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.pnrgov.PnrVo;
-import gov.gtas.parsers.vo.passenger.AddressVo;
-import gov.gtas.parsers.vo.passenger.CreditCardVo;
-import gov.gtas.parsers.vo.passenger.DocumentVo;
-import gov.gtas.parsers.vo.passenger.FlightVo;
-import gov.gtas.parsers.vo.passenger.FrequentFlyerVo;
-import gov.gtas.parsers.vo.passenger.PassengerVo;
-import gov.gtas.parsers.vo.passenger.PhoneVo;
-import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
+import gov.gtas.delegates.vo.PnrVo;
+import gov.gtas.delegates.vo.AddressVo;
+import gov.gtas.delegates.vo.CreditCardVo;
+import gov.gtas.delegates.vo.DocumentVo;
+import gov.gtas.delegates.vo.FlightVo;
+import gov.gtas.delegates.vo.FrequentFlyerVo;
+import gov.gtas.delegates.vo.PassengerVo;
+import gov.gtas.delegates.vo.PhoneVo;
+import gov.gtas.delegates.vo.ReportingPartyVo;
 import gov.gtas.repository.AddressRepository;
 import gov.gtas.repository.CreditCardRepository;
 import gov.gtas.repository.DocumentRepository;
@@ -133,7 +133,7 @@ public class LoaderRepository {
         }
         
         for (FrequentFlyerVo ffvo : vo.getFrequentFlyerDetails()) {
-            FrequentFlyer existingFf = ffdao.findByCarrierAndNumber(ffvo.getCarrier(), ffvo.getNumber());
+            FrequentFlyer existingFf = ffdao.findByCarrierAndNumber(ffvo.getAirline(), ffvo.getNumber());
             if (existingFf == null) {
                 FrequentFlyer newFf = utils.convertFrequentFlyerVo(ffvo);
                 pnr.addFrequentFlyer(newFf);

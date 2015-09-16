@@ -24,10 +24,10 @@ import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FlightLeg;
 import gov.gtas.model.Passenger;
-import gov.gtas.parsers.edifact.MessageVo;
+import gov.gtas.delegates.vo.MessageVo;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.vo.passenger.FlightVo;
-import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.delegates.vo.FlightVo;
+import gov.gtas.delegates.vo.PassengerVo;
 import gov.gtas.repository.FlightRepository;
 import gov.gtas.repository.PassengerRepository;
 
