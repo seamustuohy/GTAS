@@ -40,11 +40,14 @@ public class HitsSummary extends BaseEntity {
 	@Column(name = "description")
 	private String Description;
 
-	@Column(name = "hit_count")
-	private Integer hitCount;
+	@Column(name = "rule_hit_count")
+	private Integer ruleHitCount;
 
 	@Column(name = "hit_type")
 	private String hitType;
+
+	@Column(name = "wl_hit_count")
+	private Integer watchListHitCount;
 
 	public Date getCreatedDate() {
 		return createdDate;
@@ -94,19 +97,27 @@ public class HitsSummary extends BaseEntity {
 		Description = description;
 	}
 
-	public Integer getHitCount() {
-		return hitCount;
-	}
-
-	public void setHitCount(Integer hitCount) {
-		this.hitCount = hitCount;
-	}
-
 	public String getHitType() {
 		return hitType;
 	}
 
 	public void setHitType(String hitType) {
 		this.hitType = hitType;
+	}
+
+	public Integer getRuleHitCount() {
+		return ruleHitCount;
+	}
+
+	public void setRuleHitCount(Integer ruleHitCount) {
+		this.ruleHitCount = ruleHitCount;
+	}
+
+	public Integer getWatchListHitCount() {
+		return watchListHitCount;
+	}
+
+	public void setWatchListHitCount(Integer watchListHitCount) {
+		this.watchListHitCount = watchListHitCount;
 	}
 }
