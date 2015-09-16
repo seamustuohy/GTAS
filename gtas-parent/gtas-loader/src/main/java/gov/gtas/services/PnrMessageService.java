@@ -19,15 +19,14 @@ import gov.gtas.model.FlightLeg;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Pnr;
 import gov.gtas.parsers.edifact.EdifactParser;
-import gov.gtas.delegates.vo.MessageVo;
+import gov.gtas.parsers.edifact.MessageVo;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrUtils;
-import gov.gtas.delegates.vo.PnrVo;
+import gov.gtas.parsers.pnrgov.PnrVo;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.PnrRepository;
 import gov.gtas.util.LobUtils;
-
 
 @Service
 public class PnrMessageService implements MessageService {

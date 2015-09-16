@@ -42,15 +42,13 @@ import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.delegates.vo.AddressVo;
-import gov.gtas.delegates.vo.CreditCardVo;
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.delegates.vo.FrequentFlyerVo;
-import gov.gtas.delegates.vo.PassengerVo;
-import gov.gtas.delegates.vo.PhoneVo;
-import gov.gtas.delegates.vo.PnrReportingAgentVo;
-import gov.gtas.delegates.vo.MessageVo;
-import gov.gtas.delegates.vo.PnrVo;
+import gov.gtas.parsers.vo.passenger.AddressVo;
+import gov.gtas.parsers.vo.passenger.CreditCardVo;
+import gov.gtas.parsers.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.passenger.FrequentFlyerVo;
+import gov.gtas.parsers.vo.passenger.PassengerVo;
+import gov.gtas.parsers.vo.passenger.PhoneVo;
+import gov.gtas.parsers.vo.passenger.PnrReportingAgentVo;
 
 public final class PnrGovParser extends EdifactParser<PnrVo> {
    
@@ -65,10 +63,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     @Override
     public void parsePayload() throws ParseException {
         MSG msg = getMandatorySegment(MSG.class);
-
-        if(msg.getMessageTypeCode() != null){
-        	parsedMessage.setMessageCode(msg.getMessageTypeCode().getCode());
-        }
+        parsedMessage.setMessageCode(msg.getMessageTypeCode());
         getMandatorySegment(ORG.class);
         TVL_L0 tvl = getMandatorySegment(TVL_L0.class, "TVL");
         getMandatorySegment(EQN.class);
@@ -163,7 +158,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         if (fti != null) {
             FrequentFlyerVo ffvo = new FrequentFlyerVo();
             FrequentFlierDetails ffdetails = fti.getFrequentFlierInfo().get(0);
-            ffvo.setAirline(ffdetails.getAirlineCode());
+            ffvo.setCarrier(ffdetails.getAirlineCode());
             ffvo.setNumber(ffdetails.getFreqTravelerNumber());
             parsedMessage.getFrequentFlyerDetails().add(ffvo);
         }

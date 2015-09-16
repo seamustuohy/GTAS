@@ -101,8 +101,8 @@ public class TargetingServiceImpl implements TargetingService {
 					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					"ApisMessage", "TargetingServiceImpl.analyzeApisMessage()");
 		}
-		RuleServiceRequest req = TargetingServiceUtils
-				.createApisRequest(message).getRuleServiceRequest();
+		RuleServiceRequest req = TargetingServiceUtils.createApisRequest(
+				message).getRuleServiceRequest();
 		RuleServiceResult res = ruleService.invokeRuleEngine(req);
 		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 		return res;
@@ -156,7 +156,8 @@ public class TargetingServiceImpl implements TargetingService {
 		if (msgs != null) {
 			RuleExecutionContext ctx = TargetingServiceUtils
 					.createApisRequestContext(msgs);
-			RuleServiceResult res = ruleService.invokeRuleEngine(ctx.getRuleServiceRequest());
+			RuleServiceResult res = ruleService.invokeRuleEngine(ctx
+					.getRuleServiceRequest());
 			res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 			ret = res.getResultList();
 		}
@@ -176,7 +177,8 @@ public class TargetingServiceImpl implements TargetingService {
 		if (msgs != null) {
 			RuleExecutionContext ctx = TargetingServiceUtils
 					.createPnrRequestContext(msgs);
-			RuleServiceResult res = ruleService.invokeRuleEngine(ctx.getRuleServiceRequest());
+			RuleServiceResult res = ruleService.invokeRuleEngine(ctx
+					.getRuleServiceRequest());
 			res = TargetingServiceUtils.ruleResultPostProcesssing(res);
 			ret = res.getResultList();
 		}
@@ -190,8 +192,8 @@ public class TargetingServiceImpl implements TargetingService {
 	 */
 	@Override
 	@Transactional
-	public RuleExecutionContext analyzeLoadedMessages(MessageStatus statusToLoad,
-			MessageStatus statusAfterProcesssing,
+	public RuleExecutionContext analyzeLoadedMessages(
+			MessageStatus statusToLoad, MessageStatus statusAfterProcesssing,
 			final boolean updateProcesssedMessageStat) {
 		Iterator<Message> source = messageRepository.findAll().iterator();
 		List<Message> target = new ArrayList<Message>();
@@ -205,9 +207,11 @@ public class TargetingServiceImpl implements TargetingService {
 		RuleExecutionContext ctx = TargetingServiceUtils
 				.createPnrApisRequestContext(target);
 		// default knowledge Base is the UDR KB
-		RuleServiceResult udrResult = ruleService.invokeRuleEngine(ctx.getRuleServiceRequest());
+		RuleServiceResult udrResult = ruleService.invokeRuleEngine(ctx
+				.getRuleServiceRequest());
 
-		RuleServiceResult wlResult = ruleService.invokeRuleEngine(ctx.getRuleServiceRequest(),
+		RuleServiceResult wlResult = ruleService.invokeRuleEngine(
+				ctx.getRuleServiceRequest(),
 				WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
 		if (udrResult == null && wlResult == null) {
 			throw ErrorHandlerFactory
@@ -226,8 +230,9 @@ public class TargetingServiceImpl implements TargetingService {
 			udrResult = TargetingServiceUtils
 					.ruleResultPostProcesssing(udrResult);
 		}
-		
-		ctx.setRuleServiceResult(new CompositeRuleServiceResult(udrResult, wlResult));
+
+		ctx.setRuleServiceResult(new CompositeRuleServiceResult(udrResult,
+				wlResult));
 		return ctx;
 	}
 
@@ -273,8 +278,8 @@ public class TargetingServiceImpl implements TargetingService {
 		RuleExecutionContext ruleRunningResult = analyzeLoadedMessages(
 				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
 
-		RuleExecutionStatistics ruleExeStatus = ruleRunningResult.getRuleServiceResult()
-				.getExecutionStatistics();
+		RuleExecutionStatistics ruleExeStatus = ruleRunningResult
+				.getRuleServiceResult().getExecutionStatistics();
 		if (logger.isInfoEnabled()) {
 			logger.info(("\nTargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> " + ruleExeStatus
 					.getTotalRulesFired()));
@@ -282,8 +287,8 @@ public class TargetingServiceImpl implements TargetingService {
 
 		deleteExistingHitRecords(ruleRunningResult.getPaxFlightTuples());
 
-		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult.getRuleServiceResult()
-				.getResultList();
+		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
+				.getRuleServiceResult().getResultList();
 		Iterator<RuleHitDetail> iter = results.iterator();
 		while (iter.hasNext()) {
 			RuleHitDetail ruleDetail = iter.next();
@@ -293,7 +298,8 @@ public class TargetingServiceImpl implements TargetingService {
 		hitsSummaryRepository.save(hitsSummaryList);
 	}
 
-	private void deleteExistingHitRecords(Set<PassengerFlightTuple> passengerFlightTuples) {
+	private void deleteExistingHitRecords(
+			Set<PassengerFlightTuple> passengerFlightTuples) {
 		List<PassengerFlightTuple> setList = new ArrayList<PassengerFlightTuple>(
 				passengerFlightTuples);
 		for (int i = 0; i < setList.size(); i++) {
@@ -331,8 +337,10 @@ public class TargetingServiceImpl implements TargetingService {
 		hitsSummary.setTitle(ruleHitDetail.getTitle());
 		hitsSummary.setFlightId(ruleHitDetail.getFlightId());
 		hitsSummary.setCreatedDate(new Date());
-		hitsSummary.setHitCount(ruleHitDetail.getHitCount());
 		hitsSummary.setHitType(ruleHitDetail.getHitType());
+		hitsSummary.setRuleHitCount(ruleHitDetail.getRuleHitCount());
+		hitsSummary.setWatchListHitCount(ruleHitDetail.getHitCount()
+				- ruleHitDetail.getRuleHitCount());
 
 		HitDetail hitDetail = new HitDetail();
 		hitDetail.setRuleId(ruleHitDetail.getUdrRuleId());
