@@ -73,12 +73,9 @@ public class QueryBuilderController {
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.POST)
 	public JsonServiceResponse runFlightQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
-		JsonServiceResponse response = new QueryResponse();
 		
 		List<IQueryResult> flights = queryService.runFlightQuery(queryObject);
-		response = createQueryResponse(Status.SUCCESS, flights != null ? flights.size() + " record(s)" : "flight is null" , flights);
-		
-		return response;
+		return new JsonServiceResponse(Status.SUCCESS, flights != null ? flights.size() + " record(s)" : "flight is null" , flights);
 	}
 	
 	/**
@@ -90,12 +87,9 @@ public class QueryBuilderController {
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_PASSENGER_URI, method = RequestMethod.POST)
 	public JsonServiceResponse runPassengerQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
-		JsonServiceResponse response = new QueryResponse();
 		
 		List<IQueryResult> passengers = queryService.runPassengerQuery(queryObject);
-		response = createQueryResponse(Status.SUCCESS, passengers != null ? passengers.size() + " record(s)" : "query result is null", passengers);
-
-		return response;
+		return new JsonServiceResponse(Status.SUCCESS, passengers != null ? passengers.size() + " record(s)" : "query result is null", passengers);
 	}
 	
 	/**
@@ -107,14 +101,11 @@ public class QueryBuilderController {
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public JsonServiceResponse saveQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
-		JsonServiceResponse response = new QueryResponse();
 		List<IUserQueryResult> resultList = new ArrayList<>();
 
 		resultList.add(queryService.saveQuery(queryRequest));
 		
-		response = createQueryResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, resultList);
-		
-		return response;
+		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, resultList);
 	}
 
 	/**
@@ -127,14 +118,11 @@ public class QueryBuilderController {
 	 */
 	@RequestMapping(method = RequestMethod.PUT)
 	public JsonServiceResponse editQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
-		JsonServiceResponse response = new QueryResponse();
 		List<IUserQueryResult> resultList = new ArrayList<>();
 			
 		resultList.add(queryService.editQuery(queryRequest));
 		
-		response = createQueryResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, resultList);
-		
-		return response;
+		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, resultList);
 	}
 	
 	/**
@@ -145,19 +133,13 @@ public class QueryBuilderController {
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public JsonServiceResponse listQueryByUser() throws InvalidQueryException {
-		JsonServiceResponse response = new QueryResponse();
+		List<IUserQueryResult> resultList = new ArrayList<>();
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** Received Query Builder List request by user =" + userId);
 		
-		if(userId != null) {
-			List<IUserQueryResult> resultList = new ArrayList<>();
-			
-			resultList = queryService.listQueryByUser(userId);
-			
-			response = createQueryResponse(Status.SUCCESS, resultList != null ? resultList.size() + " record(s)" : "resultList is null", resultList);
-		}
+		resultList = queryService.listQueryByUser(userId);
 		
-		return response;
+		return new JsonServiceResponse(Status.SUCCESS, resultList != null ? resultList.size() + " record(s)" : "resultList is null", resultList);
 	}
 	
 	/**
@@ -168,37 +150,12 @@ public class QueryBuilderController {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE)
 	public JsonServiceResponse deleteQuery(@PathVariable int id) throws QueryDoesNotExistException {
-		JsonServiceResponse response = new QueryResponse();
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** Received Query Builder Delete request by user =" + userId
 				+ " for " + id);
 		
-		if(userId != null && id > 0) {
-			queryService.deleteQuery(userId, id);
-			response = createQueryResponse(Status.SUCCESS, Constants.QUERY_DELETED_SUCCESS_MSG, null);
-		}
-		
-		return response;
-	}
-	
-	private JsonServiceResponse createQueryResponse(Status status, String message, Object resultList) {
-		QueryResponse response = new QueryResponse();
-		
-		response.setStatus(status);
-		response.setMessage(message);
-		response.setResult(resultList);
-		
-		return response;
-	}
-	
-	private JsonServiceResponse createQueryErrorResponse(Status status, String message, Object request) {
-		QueryErrorResponse response = new QueryErrorResponse();
-		
-		response.setStatus(status);
-		response.setMessage(message);
-		response.setRequest(request);
-		
-		return response;
+		queryService.deleteQuery(userId, id);
+		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_DELETED_SUCCESS_MSG, null);
 	}
 	
 	private Map<String, QueryBuilderMapping> getQueryBuilderMapping() {
@@ -229,25 +186,9 @@ public class QueryBuilderController {
 	
 	@ExceptionHandler(QueryBuilderException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public JsonServiceResponse handleExceptions(Exception exception) {
+    public JsonServiceResponse handleExceptions(QueryBuilderException exception) {
 		
-		if(exception instanceof QueryAlreadyExistsException) {
-			QueryAlreadyExistsException qae = (QueryAlreadyExistsException) exception;
-		
-			return createQueryErrorResponse(Status.FAILURE, qae.getMessage(), qae.getQueryRequest());
-		}
-		else if(exception instanceof QueryDoesNotExistException) {
-			QueryDoesNotExistException qdne = (QueryDoesNotExistException) exception;
-			
-			return createQueryErrorResponse(Status.FAILURE, qdne.getMessage(), qdne.getQueryRequest());
-		}
-		else if(exception instanceof InvalidQueryException) {
-			InvalidQueryException iqe = (InvalidQueryException) exception;
-		
-			return createQueryErrorResponse(Status.FAILURE, iqe.getMessage(), iqe.getObject());
-		}
-		
-		return createQueryErrorResponse(Status.FAILURE, exception.getMessage(), null);
+		return new JsonServiceResponse(Status.FAILURE, exception.getMessage(), exception.getObject());
     }
 
 }
