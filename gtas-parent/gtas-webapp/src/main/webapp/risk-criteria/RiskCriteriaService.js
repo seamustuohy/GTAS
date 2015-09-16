@@ -19,7 +19,7 @@ app.service("riskCriteriaService", function ($http, $q) {
 
             request = $http({
                 method: "get",
-                url: baseUrl + "get/" + ruleId
+                url: baseUrl
             });
 
             return (request.then(handleSuccess, handleError));
@@ -48,7 +48,7 @@ app.service("riskCriteriaService", function ($http, $q) {
             method = ruleObj.id === null ? 'post' : 'put';
             request = $http({
                 method: method,
-                url: baseUrl + userId,
+                url: baseUrl,
                 data: ruleObj
             });
 
@@ -63,10 +63,7 @@ app.service("riskCriteriaService", function ($http, $q) {
 
             request = $http({
                 method: "get",
-                url: baseUrl + "list/" + userId,
-                params: {
-                    action: "get"
-                }
+                url: baseUrl
             });
             return (request.then(handleSuccess, handleError));
         };

@@ -17,7 +17,7 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
     $scope.gridOpts.exporterPdfHeader = { text: "Risk Criteria", style: 'headerStyle' };
 
     riskCriteriaService.getList($scope.authorId).then(function (myData) {
-        setData(myData);
+        setData(myData.result);
     });
 
     $scope.gridOpts.onRegisterApi = function (gridApi) {
@@ -27,9 +27,10 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
             if (row.isSelected) {
                 $scope.selectedIndex = $scope.gridOpts.data.indexOf(row.entity);
                 riskCriteriaService.loadRuleById(row.entity.id).then(function (myData) {
-                    $scope.ruleId = myData.id;
-                    $scope.loadSummary(myData.summary);
-                    $scope.$builder.queryBuilder('loadRules', myData.details);
+                    var result = myData.result[0];
+                    $scope.ruleId = result.id;
+                    $scope.loadSummary(result.summary);
+                    $scope.$builder.queryBuilder('loadRules', result.details);
                 });
             } else {
                 $scope.newRule();
@@ -140,7 +141,7 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
 
             riskCriteriaService.getList($scope.authorId).then(function (myData) {
 
-                setData(myData);
+                setData(myData.result);
                 $interval( function() {
                     var page;
                     if (!$scope.selectedIndex) {
