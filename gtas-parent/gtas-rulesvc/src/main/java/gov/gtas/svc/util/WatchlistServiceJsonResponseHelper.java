@@ -29,6 +29,7 @@ public class WatchlistServiceJsonResponseHelper {
 							op
 									+ " on Watch list with name='%s' and ID='%s' was successful.",
 							wl.getWatchlistName(), wl.getId()));
+			resp.setResult(wl.getId());
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
 					RuleConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(wl
 							.getId())));
