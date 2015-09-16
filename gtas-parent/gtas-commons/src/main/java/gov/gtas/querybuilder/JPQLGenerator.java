@@ -185,32 +185,40 @@ public class JPQLGenerator {
 					if(queryType == EntityEnum.FLIGHT) {
 						// 1 - YES, 0 - NO
 						if(value.equals("1")) {
-							where.append(Constants.EXISTS_HITS_PREFIX + " " + EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " " + Constants.FROM + " " +
-									EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
-									EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " = " + EntityEnum.FLIGHT.getAlias() + Constants.ID + " ");
+							where.append(Constants.EXISTS_HITS_PREFIX);
 						} else {
-							where.append(Constants.NOT_EXISTS_HITS_PREFIX + " " + EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " " + Constants.FROM + " " +
-									EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
-									EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " = " + EntityEnum.FLIGHT.getAlias() + Constants.ID + " ");
+							where.append(Constants.NOT_EXISTS_HITS_PREFIX);
 						}
 						
+						where.append(" " + EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " " + Constants.FROM + " " +
+								EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
+								EntityEnum.HITS.getAlias() + Constants.HITS_FLIGHT_REF + " = " + EntityEnum.FLIGHT.getAlias() + Constants.ID + " ");
+						
 						if(field.equalsIgnoreCase(Constants.IS_RULE_HIT)) { 
-							where.append(Constants.AND + EntityEnum.HITS.getAlias() + "hitType like '%r%'" + ")");
+							where.append(Constants.AND + " " + EntityEnum.HITS.getAlias() + "." + Constants.RULE_HIT_TYPE + ")");
 						}
 						else {
-							where.append(Constants.AND + EntityEnum.HITS.getAlias() + "hitType like '%p%' or " +
-								EntityEnum.HITS.getAlias() + "hitType like '%d%')");
+							where.append(Constants.AND + " (" + EntityEnum.HITS.getAlias() + "." + Constants.PASSENGER_HIT_TYPE + " " + Constants.OR +
+								" " + EntityEnum.HITS.getAlias() + "." + Constants.DOCUMENT_HIT_TYPE + "))");
 						}
 					}
 					else if(queryType == EntityEnum.PASSENGER) {
 						if(value.equals("1")) {
-							where.append(Constants.EXISTS_HITS_PREFIX + " " + EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " " + Constants.FROM + " " +
-									EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
-									EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " = " + EntityEnum.PASSENGER.getAlias() + Constants.ID + ")");
+							where.append(Constants.EXISTS_HITS_PREFIX);
 						} else {
-							where.append(Constants.NOT_EXISTS_HITS_PREFIX + " " + EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " " + Constants.FROM + " " +
-									EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
-									EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " = " + EntityEnum.PASSENGER.getAlias() + Constants.ID + ")");
+							where.append(Constants.NOT_EXISTS_HITS_PREFIX);
+						}
+						
+						where.append(" " + EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " " + Constants.FROM + " " +
+								EntityEnum.HITS.getEntityName() + " " + EntityEnum.HITS.getAlias() + " " + Constants.WHERE + " " +
+								EntityEnum.HITS.getAlias() + Constants.HITS_PASSENGER_REF + " = " + EntityEnum.PASSENGER.getAlias() + Constants.ID + " ");
+						
+						if(field.equalsIgnoreCase(Constants.IS_RULE_HIT)) { 
+							where.append(Constants.AND + " " + EntityEnum.HITS.getAlias() + "." + Constants.RULE_HIT_TYPE + ")");
+						}
+						else {
+							where.append(Constants.AND + " (" + EntityEnum.HITS.getAlias() + "." + Constants.PASSENGER_HIT_TYPE + " " + Constants.OR +
+								" " + EntityEnum.HITS.getAlias() + "." + Constants.DOCUMENT_HIT_TYPE + "))");
 						}
 					}
 				}

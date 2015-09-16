@@ -275,7 +275,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 				!OperatorEnum.IS_NOT_EMPTY.toString().equalsIgnoreCase(operator) &&
 				!OperatorEnum.IS_NULL.toString().equalsIgnoreCase(operator) &&
 				!OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator) &&
-				!(entityEnum == EntityEnum.HITS && field.equalsIgnoreCase(Constants.IS_RULE_HIT))) {
+				!(entityEnum == EntityEnum.HITS && (field.equalsIgnoreCase(Constants.IS_RULE_HIT) || 
+						field.equalsIgnoreCase(Constants.IS_WATCHLIST_HIT)))) {
 				
 				positionalParameter.increment();
 				

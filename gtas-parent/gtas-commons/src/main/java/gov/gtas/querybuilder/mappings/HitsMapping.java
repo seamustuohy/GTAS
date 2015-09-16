@@ -5,7 +5,7 @@ import gov.gtas.enumtype.TypeEnum;
 public enum HitsMapping implements IEntityMapping {
 
 	HAS_RULE_HIT ("isRuleHit", "Has Rule Hit", TypeEnum.BOOLEAN.getType()),
-	HAS_WATCHLIST_HIT ("", "Has Watch List Hit", TypeEnum.BOOLEAN.getType()), // not yet available
+	HAS_WATCHLIST_HIT ("isWatchListHit", "Has Watch List Hit", TypeEnum.BOOLEAN.getType()),
 	RULE_ID ("id", "Rules Hit Id", TypeEnum.INTEGER.getType());
 	
 	private String fieldName;

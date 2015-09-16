@@ -8,6 +8,7 @@ public final class Constants {
 	public static final String FROM = "from";
 	public static final String WHERE = "where";
 	public static final String AND = "and";
+	public static final String OR = "or";
 	public static final String JOIN = " join ";
 	public static final String JOIN_FETCH = " join fetch ";
 	public static final String LEFT_JOIN = " left join ";
@@ -40,6 +41,9 @@ public final class Constants {
 	public static final String HITS_FLIGHT_REF = ".flightId";
 	public static final String ID = ".id";
 	public static final String HITS_PASSENGER_REF = ".passengerId";
+	public static final String RULE_HIT_TYPE = "hitType like '%r%'";
+	public static final String PASSENGER_HIT_TYPE = "hitType like '%p%'";
+	public static final String DOCUMENT_HIT_TYPE = "hitType like '%d%'";
 	
 	public static final String QUERY_EXISTS_ERROR_MSG = "A query with the same title already exists. Please rename this query or edit the existing one.";
 	public static final String QUERY_DOES_NOT_EXIST_ERROR_MSG = "Query cannot be found.";
