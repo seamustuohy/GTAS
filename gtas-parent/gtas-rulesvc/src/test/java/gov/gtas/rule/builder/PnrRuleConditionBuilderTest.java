@@ -13,8 +13,8 @@ import static gov.gtas.rule.builder.RuleTemplateConstants.PHONE_VARIABLE_NAME;
 import static gov.gtas.rule.builder.RuleTemplateConstants.PNR_VARIABLE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.CriteriaOperatorEnum;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.AddressMapping;
@@ -24,7 +24,6 @@ import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.querybuilder.mappings.FrequentFlyerMapping;
 import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PhoneMapping;
-import gov.gtas.rule.builder.util.RuleVariablesUtil;
 
 import java.text.ParseException;
 
@@ -38,7 +37,7 @@ public class PnrRuleConditionBuilderTest {
 
 	@Before
 	public void setUp() throws Exception {
-		testTarget = new RuleConditionBuilder(RuleVariablesUtil.createEngineRuleVariableMap());
+		testTarget = new RuleConditionBuilder(EngineRuleUtils.createEngineRuleVariableMap());
 	}
 
 	@After

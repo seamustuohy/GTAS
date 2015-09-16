@@ -1,6 +1,6 @@
 package gov.gtas.bo;
 
-import gov.gtas.enumtype.HitTypeCode;
+import gov.gtas.enumtype.HitTypeEnum;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.PassengerTypeCode;
@@ -30,7 +30,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	private String passengerType;
 
 	private String passengerName;
-	
+
 	private int hitCount;
 
 	private String[] hitReasons;
@@ -45,7 +45,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	private Passenger passenger;
 
 	@JsonIgnore
-	private HitTypeCode hitType;
+	private String hitType;
 
 	@JsonIgnore
 	private int ruleHitCount;
@@ -83,7 +83,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 			this.flightId = flight.getId();
 		}
 		this.passenger = passenger;
-		this.hitType = HitTypeCode.R;
+		this.hitType = HitTypeEnum.R.toString();
 		this.hitCount = 1;
 	}
 
@@ -102,22 +102,21 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	 * @param cause
 	 *            the reason for the match.
 	 */
-	public RuleHitDetail(final Long watchlistItemId,
-			final String hitType, final Passenger passenger,
-			final String cause) {
+	public RuleHitDetail(final Long watchlistItemId, final String hitType,
+			final Passenger passenger, final String cause) {
 		this.udrRuleId = null;
 		this.ruleId = watchlistItemId;
-		switch(hitType){
-			case "D":
-				this.title = "Document List Rule #"+watchlistItemId;
-				this.hitType = HitTypeCode.D;
-				break;
-			case "P":
-				this.title = "Passenger List Rule #"+watchlistItemId;
-				this.hitType = HitTypeCode.P;
-				break;
-			default:
-				break;
+		switch (hitType) {
+		case "D":
+			this.title = "Document List Rule #" + watchlistItemId;
+			this.hitType = HitTypeEnum.D.toString();
+			break;
+		case "P":
+			this.title = "Passenger List Rule #" + watchlistItemId;
+			this.hitType = HitTypeEnum.P.toString();
+			break;
+		default:
+			break;
 		}
 		this.description = this.title;
 		this.hitRule = this.title + "(" + watchlistItemId + ")";
@@ -128,7 +127,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 				+ passenger.getLastName();
 		this.hitReasons = cause.split(HIT_REASON_SEPARATOR);
 		this.passenger = passenger;
-		this.hitCount = 1;		
+		this.hitCount = 1;
 	}
 
 	/**
@@ -143,18 +142,18 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	 *            the flight object that matched.
 	 * 
 	 */
-//	public RuleHitDetail(final Long ruleId, final Passenger passenger,
-//			final Flight flight) {
-//		this.ruleId = ruleId;
-//		this.passengerId = passenger.getId();
-//		this.passengerType = decodePassengerTypeName(passenger
-//				.getPassengerType());
-//		this.passengerName = passenger.getFirstName() + " "
-//				+ passenger.getLastName();
-//		if (flight != null) {
-//			this.flightId = flight.getId();
-//		}
-//	}
+	// public RuleHitDetail(final Long ruleId, final Passenger passenger,
+	// final Flight flight) {
+	// this.ruleId = ruleId;
+	// this.passengerId = passenger.getId();
+	// this.passengerType = decodePassengerTypeName(passenger
+	// .getPassengerType());
+	// this.passengerName = passenger.getFirstName() + " "
+	// + passenger.getLastName();
+	// if (flight != null) {
+	// this.flightId = flight.getId();
+	// }
+	// }
 
 	/**
 	 * Converts the passenger type code to a friendly name.
@@ -247,14 +246,15 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	/**
 	 * @return the hitType
 	 */
-	public HitTypeCode getHitType() {
+	public String getHitType() {
 		return hitType;
 	}
 
 	/**
-	 * @param hitType the hitType to set
+	 * @param hitType
+	 *            the hitType to set
 	 */
-	public void setHitType(HitTypeCode hitType) {
+	public void setHitType(String hitType) {
 		this.hitType = hitType;
 	}
 
@@ -266,7 +266,8 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	}
 
 	/**
-	 * @param hitCount the hitCount to set
+	 * @param hitCount
+	 *            the hitCount to set
 	 */
 	public void incrementHitCount() {
 		this.hitCount++;
@@ -280,7 +281,8 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	}
 
 	/**
-	 * @param ruleHitCount the ruleHitCount to set
+	 * @param ruleHitCount
+	 *            the ruleHitCount to set
 	 */
 	public void incrementRuleHitCount() {
 		this.ruleHitCount++;
@@ -324,11 +326,11 @@ public class RuleHitDetail implements Serializable, Cloneable {
 		if (getClass() != obj.getClass())
 			return false;
 		final RuleHitDetail other = (RuleHitDetail) obj;
-//		return Objects.equals(this.udrRuleId, other.udrRuleId)
-//				&& Objects.equals(this.ruleId, other.ruleId)
-//				&& Objects.equals(this.passengerId, other.passengerId)
-//				&& Objects.equals(this.flightId, other.flightId);
-		return  Objects.equals(this.passengerId, other.passengerId)
+		// return Objects.equals(this.udrRuleId, other.udrRuleId)
+		// && Objects.equals(this.ruleId, other.ruleId)
+		// && Objects.equals(this.passengerId, other.passengerId)
+		// && Objects.equals(this.flightId, other.flightId);
+		return Objects.equals(this.passengerId, other.passengerId)
 				&& Objects.equals(this.flightId, other.flightId);
 	}
 }

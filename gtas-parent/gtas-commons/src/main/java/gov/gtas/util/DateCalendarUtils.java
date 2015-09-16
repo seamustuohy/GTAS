@@ -19,12 +19,15 @@ public class DateCalendarUtils {
 	// TODO create utility methods using Java 8 java.time
 
 	private static final long MILLIS_IN_ONE_DAY = 86400000L;
-	public static final String addOneDayToJsondateString(String jsonDateString) throws ParseException{
+	public static String addOneDayToJsondateString(String jsonDateString) throws ParseException{
 		Date dt = parseJsonDate(jsonDateString);
 		dt = new Date(dt.getTime()+MILLIS_IN_ONE_DAY);
 		return formatJsonDate(dt);
 	}
 	
+	public static Date addOneDayToDate(Date date){
+		return new Date(date.getTime()+MILLIS_IN_ONE_DAY);
+	}
 	/**
 	 * return starting and ending dates within a day 
 	 */

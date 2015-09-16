@@ -11,6 +11,8 @@ import gov.gtas.model.lookup.PassengerTypeCode;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -77,6 +79,9 @@ public class ApisDataGenerator {
     	       }
     			);
     	flight.setPassengers(passengers);
+    	for(Passenger pas:passengers){
+    		pas.getFlights().add(flight);
+    	}
     	flight.setCarrier("V7");//Continental
     	flight.setDestination("BOB");
     	flight.setFlightDate(new Date());
@@ -96,6 +101,10 @@ public class ApisDataGenerator {
     	       }
     			);
     	flight.setPassengers(passengers);
+    	for(Passenger pas:passengers){
+    		pas.getFlights().add(flight);
+    	}
+
     	flight.setCarrier("CO");//Continental
     	flight.setDestination("HOD");
     	Date flDate = null;

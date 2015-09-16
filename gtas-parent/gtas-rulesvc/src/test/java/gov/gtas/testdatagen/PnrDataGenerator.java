@@ -227,67 +227,45 @@ public class PnrDataGenerator {
             break;
         }
     }
-    private static void setupPassenger(Passenger p, long id, String[] params){
+    private static void addPassenger(Pnr pnr, int indx, Flight flight) throws ParseException {
+        switch (indx) {
+        case 1:
+        	configurePassenger(1L, pnr, flight, PNR_PASSENGER1);
+            break;
+        case 2:
+        	configurePassenger(2L, pnr, flight, PNR_PASSENGER2);
+            break;
+        case 3:
+        	configurePassenger(3L, pnr, flight, PNR_PASSENGER3);
+            break;
+        case 4:
+        	configurePassenger(4L, pnr, flight, PNR_PASSENGER4);
+            break;
+        case 5:
+        	configurePassenger(5L, pnr, flight, PNR_PASSENGER5);
+            break;
+        case 6:
+        	configurePassenger(6L, pnr, flight, PNR_PASSENGER6);
+            break;
+        }
+    }
+    private static void configurePassenger(Long id,Pnr pnr, Flight flight, String passengerData) throws ParseException{
+    	Passenger p = new Passenger();
+        String[] params = passengerData.split(",");
+        
+        // setup passenger
         p.setPassengerType(params[0]);
         p.setFirstName(params[1].toUpperCase());
         p.setMiddleName(params[2].toUpperCase());
         p.setLastName(params[3].toUpperCase());
         p.setId(id);
-    	
+        p.getFlights().add(flight);
+        
+        addDocumentToPassenger(p, params[4], params[5]);
+        pnr.getPassengers().add(p);
+        flight.getPassengers().add(p);
+   	
     }
-    private static void addPassenger(Pnr pnr, int indx, Flight flight) throws ParseException {
-        switch (indx) {
-        case 1:
-            Passenger p = new Passenger();
-            String[] params = PNR_PASSENGER1.split(",");
-            setupPassenger(p, 1L, params);
-            addDocumentToPassenger(p, params[4], params[5]);
-            pnr.getPassengers().add(p);
-            flight.getPassengers().add(p);
-            break;
-        case 2:
-            p = new Passenger();
-            params = PNR_PASSENGER2.split(",");
-            setupPassenger(p, 2L, params);
-            addDocumentToPassenger(p, params[4], params[5]);
-            pnr.getPassengers().add(p);
-            flight.getPassengers().add(p);
-            break;
-        case 3:
-            p = new Passenger();
-            params = PNR_PASSENGER3.split(",");
-            setupPassenger(p, 3L, params);
-            addDocumentToPassenger(p, params[4], params[5]);
-            pnr.getPassengers().add(p);
-            flight.getPassengers().add(p);
-            break;
-        case 4:
-            p = new Passenger();
-            params = PNR_PASSENGER4.split(",");
-            setupPassenger(p, 4L, params);
-            addDocumentToPassenger(p, params[4], params[5]);
-            pnr.getPassengers().add(p);
-            flight.getPassengers().add(p);
-            break;
-        case 5:
-            p = new Passenger();
-            params = PNR_PASSENGER5.split(",");
-            setupPassenger(p, 5L, params);
-            addDocumentToPassenger(p, params[4], params[5]);
-            pnr.getPassengers().add(p);
-            flight.getPassengers().add(p);
-            break;
-        case 6:
-            p = new Passenger();
-            params = PNR_PASSENGER6.split(",");
-            setupPassenger(p, 6L, params);
-            addDocumentToPassenger(p, params[4], params[5]);
-            pnr.getPassengers().add(p);
-            flight.getPassengers().add(p);
-            break;
-        }
-    }
-
     private static void addDocumentToPassenger(Passenger pass, String country, String date) throws ParseException {
         Document doc = new Document();
         doc.setId(pass.getId());

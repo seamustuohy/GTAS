@@ -1,6 +1,5 @@
 package gov.gtas.svc.util;
 
-import static gov.gtas.rule.builder.RuleTemplateConstants.NEW_LINE;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.error.CommonValidationException;
 import gov.gtas.error.ErrorHandlerFactory;
@@ -10,9 +9,7 @@ import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
-import gov.gtas.rule.builder.RuleConditionBuilder;
-import gov.gtas.rule.builder.RuleTemplateConstants;
-import gov.gtas.rule.builder.util.RuleVariablesUtil;
+import gov.gtas.rule.builder.EngineRuleUtils;
 import gov.gtas.rule.builder.util.UdrSplitterUtils;
 
 import java.text.ParseException;
@@ -28,19 +25,6 @@ import org.springframework.validation.Errors;
  *
  */
 public class UdrServiceHelper {
-	/**
-	 * Creates the header including the rule title. 
-	 * @param parent
-	 * @param rule
-	 * @param bldr
-	 */
-	private static void addRuleHeader(UdrRule parent, Rule rule,
-			StringBuilder bldr) {
-		bldr.append("rule \"").append(parent.getTitle()).append(":")
-		        .append(parent.getAuthor().getUserId()).append(":")
-				.append(rule.getRuleIndex()).append("\"").append(NEW_LINE)
-				.append("when\n");
-	}
 
 	public static void addEngineRulesToUdrRule(UdrRule parent,
 			UdrSpecification inputJson) {
@@ -48,7 +32,7 @@ public class UdrServiceHelper {
 		List<List<QueryTerm>> mintermList = createRuleMinterms(inputJson);
 		int indx = 0;
 		for (List<QueryTerm> minterm : mintermList) {
-			Rule rule = createEngineRule(minterm, parent, indx++);
+			Rule rule = EngineRuleUtils.createEngineRule(minterm, parent, indx++);
 			parent.addEngineRule(rule);
 		}
 	}
@@ -100,7 +84,7 @@ public class UdrServiceHelper {
 		List<List<QueryTerm>> ruleDataList = createRuleMinterms(inputJson);
 		int indx = 0;
 		for (List<QueryTerm> ruleData : ruleDataList) {
-			Rule r = createEngineRule(ruleData, parent, indx);
+			Rule r = EngineRuleUtils.createEngineRule(ruleData, parent, indx);
 			r.setParent(parent);
 			ret.add(r);
 			++indx;
@@ -108,38 +92,4 @@ public class UdrServiceHelper {
 		return ret;
 	}
 
-	/**
-	 * Creates a single engine rule from a minterm.
-	 * 
-	 * @param ruleData
-	 *            the minterm.
-	 * @param parent
-	 *            the parent UDR rule.
-	 * @param indx
-	 *            the ordering index of the rule with respect to the parent.
-	 * @return the engine rule created.
-	 * @throws ParseException
-	 *             parse exception.
-	 */
-	public static Rule createEngineRule(List<QueryTerm> ruleData,
-			UdrRule parent, int indx) {
-
-		StringBuilder stringBuilder = new StringBuilder();
-		RuleConditionBuilder ruleConditionBuilder = new RuleConditionBuilder(
-				RuleVariablesUtil.createEngineRuleVariableMap());
-
-		Rule ret = new Rule(parent, indx, null);
-		addRuleHeader(parent, ret, stringBuilder);
-		for (QueryTerm trm : ruleData) {
-			ruleConditionBuilder.addRuleCondition(trm);
-		}
-		ruleConditionBuilder.buildConditionsAndApppend(stringBuilder);
-		List<String> causes = ruleConditionBuilder.addRuleAction(stringBuilder,
-				parent, ret, RuleTemplateConstants.PASSENGER_VARIABLE_NAME);
-
-		ret.setRuleDrl(stringBuilder.toString());
-		ret.addRuleCriteria(causes);
-
-		return ret;
-	}
 }

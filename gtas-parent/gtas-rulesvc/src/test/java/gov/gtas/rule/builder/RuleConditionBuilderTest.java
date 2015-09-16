@@ -5,14 +5,13 @@ import static gov.gtas.util.DateCalendarUtils.parseJsonDate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.CriteriaOperatorEnum;
+import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
-import gov.gtas.rule.builder.util.RuleVariablesUtil;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -28,7 +27,7 @@ public class RuleConditionBuilderTest {
 
 	@Before
 	public void setUp() throws Exception {
-		testTarget = new RuleConditionBuilder(RuleVariablesUtil.createEngineRuleVariableMap());
+		testTarget = new RuleConditionBuilder(EngineRuleUtils.createEngineRuleVariableMap());
 	}
 
 	@After

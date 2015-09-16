@@ -22,7 +22,7 @@ public class FlightVo {
     private Date etd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private Date eta;
-    
+    private String direction;
     private int ruleHits;
     private int listHits;
     private int totalPax;
@@ -118,7 +118,13 @@ public class FlightVo {
         this.eta = eta;
     }
     
-    @Override
+    public String getDirection() {
+		return direction;
+	}
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+	@Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }    

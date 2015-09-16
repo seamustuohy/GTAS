@@ -1,7 +1,9 @@
-app.controller('FlightsIIController', function ($scope, $rootScope, $injector, Modal, GridControl, uiGridConstants, $filter, $q, flightService, paxService, jQueryBuilderFactory, riskCriteriaService, $interval, $timeout) {
+app.controller('FlightsIIController', function ($scope, $rootScope, $injector, Modal, GridControl, uiGridConstants,
+                                                $filter, $q, flightService, paxService, jQueryBuilderFactory,
+                                                riskCriteriaService, $interval, $timeout) {
     'use strict';
-    $injector.invoke(GridControl, this, {$scope: $scope });
-    $injector.invoke(Modal, this, {$scope: $scope });
+    $injector.invoke(GridControl, this, {$scope: $scope});
+    $injector.invoke(Modal, this, {$scope: $scope});
 
     // UI ToDos:
     // Add flight information in header of Modal
@@ -15,25 +17,181 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     // Color code hits greenlight red light on flights' passengers
     // Color code hits in red text
 
+    //--------Date functions-----------------------
+
+    $scope.dt;
+    $scope.dt3;
+    $scope.startDate = '';
+    $scope.endDate = '';
+
+    $scope.today = function () {
+        $scope.dt = $filter('date')(new Date(), 'MM/dd/yyyy');
+        $scope.dt3 = new Date();
+        $scope.dt3.setDate((new Date()).getDate() + 3);
+        $scope.dt3 = $filter('date')(($scope.dt3), 'MM/dd/yyyy');
+        $scope.startDate = $scope.dt;
+        $scope.endDate = $scope.dt3;
+    };
+    $scope.today();
+
+    $scope.clear = function () {
+        $scope.dt = null;
+    };
+
+    // Disable weekend selection
+    $scope.disabled = function (date, mode) {
+        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    };
+
+    $scope.toggleMin = function () {
+        $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
+
+    $scope.opendt = function ($event) {
+        if (!$scope.status.openeddt) {
+            $interval(function () {
+                $('.ng-valid.dropdown-menu').eq(0).css({display: 'block'});
+            }, 0, 1);
+            $scope.status.openeddt = true;
+        } else {
+            $interval(function () {
+                $('.ng-valid.dropdown-menu').eq(0).css({display: 'none'});
+            }, 0, 1);
+            $scope.status.openeddt = false;
+        }
+    };
+
+    $scope.opendt3 = function ($event) {
+        if (!$scope.status.openeddt3) {
+            $interval(function () {
+                $('.ng-valid.dropdown-menu').eq(1).css({display: 'block'});
+            }, 0, 1);
+            $scope.status.openeddt3 = true;
+        } else {
+            $interval(function () {
+                $('.ng-valid.dropdown-menu').eq(1).css({display: 'none'});
+            }, 0, 1);
+            $scope.status.openeddt3 = false;
+        }
+
+    };
+
+    $scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+    };
+
+    $scope.formats = ['MM/dd/yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    $scope.format = $scope.formats[0];
+
+    $scope.status = {
+        openeddt: false,
+        openeddt3: false
+    };
+
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var afterTomorrow = new Date();
+    afterTomorrow.setDate(tomorrow.getDate() + 2);
+    $scope.events =
+        [
+            {
+                date: tomorrow,
+                status: 'full'
+            },
+            {
+                date: afterTomorrow,
+                status: 'partially'
+            }
+        ];
+
+    $scope.getDayClass = function (date, mode) {
+        if (mode === 'day') {
+            var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
+
+            for (var i = 0; i < $scope.events.length; i++) {
+                var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
+
+                if (dayToCheck === currentDay) {
+                    return $scope.events[i].status;
+                }
+            }
+        }
+
+        return '';
+    };
+
+
+    $('#start-date').datepicker().on('changeDate', function (ev) {
+        var element = angular.element($('#start-date'));
+        var controller = element.controller();
+        var scope = element.scope();
+
+        scope.$apply(function () {
+            $scope.startDate = $filter('date')(ev.date, 'MM/dd/yyyy');
+
+        });
+    });
+
+    $('#end-date').datepicker().on('changeDate', function (ev) {
+        var element = angular.element($('#end-date'));
+        var controller = element.controller();
+        var scope = element.scope();
+
+        scope.$apply(function () {
+            $scope.endDate = $filter('date')(ev.date, 'MM/dd/yyyy');
+        });
+    });
+
+    $timeout(function () {
+        var $startDate = $('#start-date');
+        $startDate.datepicker({
+//          minDate: "today",
+            startDate: "today",
+            format: 'mm/dd/yyyy',
+            autoClose: true
+        });
+
+        var $endDate = $('#end-date');
+        $endDate.datepicker({
+            startDate: "today",
+//          minDate: startDate,
+//            endDate: '+3d',
+            format: 'mm/dd/yyyy',
+            autoClose: true
+        });
+
+        $startDate.datepicker('setDate', $scope.dt);
+        $startDate.datepicker('update');
+        $startDate.val($scope.dt.toString());
+        //
+        $endDate.datepicker('setDate', $scope.dt3);
+        $endDate.datepicker('update');
+        $endDate.val($scope.dt3.toString());
+
+    }, 100);
+    //--------------------------------------------
+
+
     var myModal = new Modal(),
         self = this,
         columns = {
             "FLIGHTS": [{
                 "name": "totalPax",
                 "displayName": "P",
+                "width": 50,
                 "type": 'number'
             }, {
                 "name": "ruleHits",
                 "displayName": "H",
+                "width": 50,
                 "type": 'number'
             }, {
                 "name": "watchlistHits",
                 "displayName": "L",
+                "width": 50,
                 "type": 'number'
-            }, {
-                "name": "carrier",
-                "displayName": "Carrier",
-                "type": "string"
             }, {
                 "name": "flightNumber",
                 "displayName": "Flight #",
@@ -42,43 +200,47 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                 "name": "direction",
                 "displayName": "Direction",
                 "type": "string",
+                "width": 50,
                 "sort": {
                     "direction": uiGridConstants.ASC,
                     "priority": 0
                 }
             }, {
-                "name": "origin",
-                "displayName": "Origin",
-                "type": "string"
-            }, {
-                "name": "originCountry",
-                "displayName": "Country",
-                "type": "string"
-            }, {
-                "name": "etd",
-                "displayName": "ETD",
-                "type": "date",
-                "sort": {
-                    "direction": uiGridConstants.DESC,
-                    "priority": 2
-                }
-            }, {
-                "name": "destination",
-                "displayName": "Destination",
-                "type": "string"
-            }, {
-                "name": "destinationCountry",
-                "displayName": "Country",
-                "type": "string"
-            }, {
                 "name": "eta",
                 "displayName": "ETA",
                 "type": "date",
+                "width": 170,
                 "sort": {
                     "direction": uiGridConstants.DESC,
                     "priority": 1
                 }
-            }],
+            }, {
+                "name": "etd",
+                "displayName": "ETD",
+                "type": "date",
+                "width": 170,
+                "sort": {
+                    "direction": uiGridConstants.DESC,
+                    "priority": 2
+                }
+            }
+                , {
+                    "name": "origin",
+                    "displayName": "Origin",
+                    "type": "string"
+                }, {
+                    "name": "originCountry",
+                    "displayName": "Country",
+                    "type": "string"
+                }, {
+                    "name": "destination",
+                    "displayName": "Destination",
+                    "type": "string"
+                }, {
+                    "name": "destinationCountry",
+                    "displayName": "Country",
+                    "type": "string"
+                }],
             "PASSENGERS": [{
                 "name": "ruleHits",
                 "displayName": "R",
@@ -221,7 +383,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
 
     $scope.gridOpts.columnDefs = columns.FLIGHTS;
     $scope.gridOpts.exporterCsvFilename = 'MySavedQueries.csv';
-    $scope.gridOpts.exporterPdfHeader = { text: "Saved Queries", style: 'headerStyle' };
+    $scope.gridOpts.exporterPdfHeader = {text: "Saved Queries", style: 'headerStyle'};
 
     $scope.gridOpts.onRegisterApi = function (gridApi) {
         $scope.gridApi = gridApi;
@@ -231,10 +393,10 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                 paxService.getPax(row.entity.flightId).then(function (myData) {
                     $rootScope.modalTitle = "Passengers List";
                     $rootScope.selectedRow = row.entity;
-                    $rootScope.gridOptions.exporterCsvFilename = $rootScope.modalTitle   + '.csv';
-                    $rootScope.gridOptions.exporterPdfHeader = { text: $rootScope.modalTitle, style: 'headerStyle' };
+                    $rootScope.gridOptions.exporterCsvFilename = $rootScope.modalTitle + '.csv';
+                    $rootScope.gridOptions.exporterPdfHeader = {text: $rootScope.modalTitle, style: 'headerStyle'};
 
-                    myData.forEach(function (d){
+                    myData.forEach(function (d) {
                         if (!!d.ruleHits || !!d.watchlistHits) {
                             d.subGridOptions = {
                                 columnDefs: subGridHeaders,
@@ -253,10 +415,37 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
         });
     };
 
-    flightService.getFlights().then(function (myData) {
-        $scope.gridOpts.data = myData;
+    var objParams = {
+        startDate: $scope.startDate,
+        endDate: $scope.endDate
+    };
+
+    flightService.getFlights(objParams).then(function (myData) {
         $scope.loading = false;
+        $scope.gridOpts.totalItems = myData[0];
+        $scope.gridOpts.data = myData[1];
     });
+
+
+    $scope.refreshListing = function () {
+
+        $scope.loading = true;
+        //var startDate = moment($scope.startDate, $scope.formats, true);
+        //var endDate = moment($scope.dt3, $scope.formats, true);
+
+        var objParams = {
+            startDate: $scope.startDate,
+            endDate: $scope.endDate
+        };
+
+        flightService.getFlights(objParams).then(function (myData) {
+            $scope.loading = false;
+            $scope.gridOpts.totalItems = myData[0];
+            $scope.gridOpts.data = myData[1];
+        });
+
+    }
+
 
     // Rule UI Modal Section
 
@@ -281,4 +470,8 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
             };
         });
     };
+
+
+    $scope.$scope = $scope;
+
 });

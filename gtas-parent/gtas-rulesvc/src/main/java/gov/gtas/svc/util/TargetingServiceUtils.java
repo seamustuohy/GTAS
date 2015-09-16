@@ -3,7 +3,7 @@ package gov.gtas.svc.util;
 import gov.gtas.bo.BasicRuleServiceResult;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceResult;
-import gov.gtas.enumtype.HitTypeCode;
+import gov.gtas.enumtype.HitTypeEnum;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Message;
@@ -195,7 +195,7 @@ public class TargetingServiceUtils {
 			} else {
 				//this is a watch list hit
 				if(resrhd.getHitType() != rhd.getHitType()){
-					resrhd.setHitType(HitTypeCode.PD);
+					resrhd.setHitType(HitTypeEnum.PD.toString());
 				}
 			}
 		} else {
