@@ -31,6 +31,9 @@ public class RuleHitDetail implements Serializable, Cloneable {
 
 	private String passengerName;
 
+	//@JsonIgnore
+	private String hitType;
+
 	private int hitCount;
 	//@JsonIgnore
 	private int ruleHitCount;
@@ -45,9 +48,6 @@ public class RuleHitDetail implements Serializable, Cloneable {
 
 	@JsonIgnore
 	private Passenger passenger;
-
-	@JsonIgnore
-	private String hitType;
 
 	/**
 	 * This constructor is used when creating a hit detail object as a result of
