@@ -115,8 +115,8 @@ public class QueryBuilderController {
 	 * @throws QueryAlreadyExistsException
 	 * @throws QueryDoesNotExistException
 	 */
-	@RequestMapping(method = RequestMethod.PUT)
-	public JsonServiceResponse editQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
+	@RequestMapping(value = Constants.PATH_VARIABLE_ID, method = RequestMethod.PUT)
+	public JsonServiceResponse editQuery(@PathVariable int id, @RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
 			
 		queryService.editQuery(queryRequest);
 		
@@ -146,7 +146,7 @@ public class QueryBuilderController {
 	 * @return
 	 * @throws QueryDoesNotExistException
 	 */
-	@RequestMapping(value = Constants.DELETE_QUERY_URI, method = RequestMethod.DELETE)
+	@RequestMapping(value = Constants.PATH_VARIABLE_ID, method = RequestMethod.DELETE)
 	public JsonServiceResponse deleteQuery(@PathVariable int id) throws QueryDoesNotExistException {
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** Received Query Builder Delete request by user =" + userId
