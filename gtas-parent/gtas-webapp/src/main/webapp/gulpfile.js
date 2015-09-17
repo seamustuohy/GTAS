@@ -20,7 +20,8 @@ gulp.task('minify-css', function () {
         'resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css',
         'resources/bower_components/angular-ui-grid/dist/css/ui-grid.css',
         'resources/css/query-builder.default.css',
-        'http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css'
+        'http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css',
+        'resources/bower_components/angular-material/angular-material.min.css',
     ])
         .pipe(concat('style.css'))
         .pipe(gulp.dest('dist/css'))
@@ -65,6 +66,10 @@ gulp.task('scripts', function () {
         'resources/bower_components/pdfmake/build/pdfmake.min.js',
         'resources/bower_components/pdfmake/build/vfs_fonts.js',
         'resources/bower_components/angular-ui-grid/ui-grid.js',
+        'resources/bower_components/angular-material/angular-material.min.js',
+        'resources/bower_components/angular-aria/angular-aria.min.js',
+        'resources/bower_components/angular-animate/angular-animate.min.js',
+        'resources/bower_components/angular-messages/angular-messages.min.js',
         'resources/js/query-builder.js',
         'app.js',
         'factory/GridFactory.js',
@@ -85,7 +90,9 @@ gulp.task('scripts', function () {
         'risk-criteria/RiskCriteriaController.js',
         'risk-criteria/RiskCriteriaService.js',
         'watchlists/WatchListService.js',
-        'watchlists/WatchListController.js'])
+        'watchlists/WatchListController.js',
+        'admin/AdminController.js',
+		'admin/UserController.js'])
         .pipe(concat('all.js'))
         .pipe(gulp.dest('dist/js'))
         .pipe(rename('all.min.js'))

@@ -1,0 +1,58 @@
+<div  layout="column">
+
+	<md-content layout-padding>
+	<form name="userForm">
+		<div layout layout-sm="column">
+			<md-input-container flex> <label>User Id</label>
+			<input ng-model="user.userId" required > </md-input-container>
+			<md-input-container flex> <label>Password</label>
+			<input ng-model="user.password" required> </md-input-container>
+		</div>
+		<div layout layout-sm="column">
+			<md-input-container flex> <label>First
+				name</label> <input ng-model="user.firstName" required> </md-input-container>
+			<md-input-container flex> <label>Last
+				Name</label> <input ng-model="user.lastName" required> </md-input-container>
+		</div>
+
+		<div layout layout-sm="column">
+			<fieldset class="standard" flex>
+				
+					<code>Status</code>
+				<md-radio-group ng-model="data.group1"> <md-radio-button
+					value=1 class="md-primary">Enable</md-radio-button> <md-radio-button
+					value=0> Disable </md-radio-button> </md-radio-group>
+			</fieldset>
+		</div>
+
+		<div layout="row">
+			<div flex="100" flex-md="100" layout="column">
+				<fieldset class="standard" flex >
+					
+						<code>Roles</code>
+					<div layout="row" layout-wrap>
+						<div flex="25" ng-repeat="item in items">
+							<md-checkbox class="md-primary" required
+								ng-checked="exists(item, selected)"
+								ng-click="toggle(item, selected)"> {{ item }} <span
+								ng-if="exists(item, selected)"></span> </md-checkbox>
+						</div>
+					</div>
+				</fieldset>
+			</div>			
+		</div>
+		<div layout="row">
+		</div>
+		<div class="md-actions" layout="row">
+		<span flex="80"></span>
+		<md-button class="md-raised md-primary">Save</md-button>
+		</div>
+
+		<!-- <section layout="row" layout-sm="column"
+					layout-align="center end" layout-wrap>
+
+					
+				</section> -->
+	</form>
+	</md-content>
+</div>

@@ -3,8 +3,10 @@
   "version": "1.0",
   "description": "GTAS Webapp",
   "dependencies": {
-    "angular": "1.3.16",
+    "angular": "latest",
     "angular-bootstrap": "latest",
+    "angular-material": "~0.11.0",
+    "angular-messages": "~1.4.6",
     "angular-ui-grid": "3.0.3",
     "angular-ui-router": "latest",
     "bootstrap": "latest",
@@ -34,5 +36,8 @@
     "query",
     "builder",
     "filter"
-  ]
+  ],
+  "resolutions": {
+    "angular": "1.4.6"
+  }
 }
