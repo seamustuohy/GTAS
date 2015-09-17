@@ -88,7 +88,7 @@ public class FlightController {
 				vo.setEta(f.getEta());
 
 				passengers = pService.getPassengersByFlightId(f.getId());
-				vo.setRuleHits(getTotalHitsByFlightId(passengers));
+				vo.setRuleHits(getTotalHitsByFlightId(passengers,f.getId()));
 				vo.setTotalPax(passengers.size());
 				rv.add(vo);
 			}
@@ -149,7 +149,7 @@ public class FlightController {
 				vo.setDirection(f.getDirection());
 
 				passengers = pService.getPassengersByFlightId(f.getId());
-				vo.setRuleHits(getTotalHitsByFlightId(passengers));
+				vo.setRuleHits(getTotalHitsByFlightId(passengers, f.getId()));
 				vo.setTotalPax(passengers.size());
 				rv.add(vo);
 			
@@ -219,7 +219,7 @@ public class FlightController {
 	}
 
 	@Transactional
-	public int getTotalHitsByFlightId(List<Passenger> passengers) {
+	public int getTotalHitsByFlightId(List<Passenger> passengers, Long flightId) {
 
 		int totalHits = 0;
 
@@ -238,7 +238,7 @@ public class FlightController {
 
 			for (HitsSummary s : hitsList) {
 
-				if (s.getPassengerId().equals(t.getId())) {
+				if ((s.getPassengerId().equals(t.getId())) && (s.getFlightId().equals(flightId))) {
 					totalHits++;
 				}
 			}

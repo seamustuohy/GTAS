@@ -21,6 +21,7 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     $scope.dt3;
     $scope.startDate = '';
     $scope.endDate = '';
+    $scope.loading = true;
 
     $scope.today = function () {
         $scope.dt = $filter('date')(new Date(), 'MM/dd/yyyy');
@@ -172,6 +173,9 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 	//--------------------------------------------
     
     $scope.passengerGrid = {
+            saveFocus: true,
+            saveScroll: true,
+            saveGroupingExpandedStates: true,
     		minRowsToShow : 12,	
             enableFiltering: true,
             useExternalSorting: false,
@@ -270,19 +274,21 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     	
 
 
-	    var pax = {
-            startDate: $filter('date')($scope.startDate, 'MM/dd/yyyy'),
-            endDate: $filter('date')($scope.endDate, 'MM/dd/yyyy')
+	    //var pax = {
+         //   startDate: $filter('date')($scope.startDate, 'MM/dd/yyyy'),
+         //   endDate: $filter('date')($scope.endDate, 'MM/dd/yyyy')
+        //
+	    //    };
+	    //
+	    //paxService.getAllPax(pax).then(function (myData) {
+         //  // $scope.loading = false;
+	    //	$scope.passengerGrid.totalItems = myData[0];
+	    //    $scope.passengerGrid.data = myData[1];
+	    //});
 
-	        };
-	    
-	    paxService.getAllPax(pax).then(function (myData) {
-	    	$scope.passengerGrid.totalItems = myData[0];
-	        $scope.passengerGrid.data = myData[1];
-	    });
-
-    
     $scope.refreshListing = function(){
+        $scope.loading = true;
+        $scope.passengerGrid.data = [];
     	
         var pax = {
             startDate: $filter('date')($scope.startDate, 'MM/dd/yyyy'),
@@ -290,20 +296,17 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 	        };
 	    
 	    paxService.getAllPax(pax).then(function (myData) {
+            $scope.loading = false;
 	    	$scope.passengerGrid.totalItems = myData[0];
 	        $scope.passengerGrid.data = myData[1];
+
 	    });
 	    
-    }
+    };
+
+    $scope.refreshListing();
 
 
-
-    $scope.$scope = $scope;
-    
-    
-    
-    
-    
     //------- Pre-Refactor-------------------
     //Function to get Rule Hits per Passenger
     $scope.getRuleHits = function (passengerId) {
@@ -333,9 +336,8 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
         }
     };
     
-    
-    $state.go('pax.all');
-    
+
+
 }); // END of PaxController
 
 // Customs Filters
@@ -367,4 +369,13 @@ app.filter('orderObjectBy', function() {
 	    return filtered;
 	  };
 	});
+
+app.filter('flagImageFilter', function() {
+    return function(hits) {
+        if(hits==='0') { return 'padding: 1.5px; color: #007500;'; }
+        if(hits!='0')  { return 'padding: 1.5px; color: #d9534f;'; }
+        return 'color: #007500;';
+    };
+
+})
 

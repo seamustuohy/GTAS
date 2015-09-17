@@ -32,6 +32,8 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	private String passengerName;
 
 	private int hitCount;
+	//@JsonIgnore
+	private int ruleHitCount;
 
 	private String[] hitReasons;
 
@@ -46,9 +48,6 @@ public class RuleHitDetail implements Serializable, Cloneable {
 
 	@JsonIgnore
 	private String hitType;
-
-	@JsonIgnore
-	private int ruleHitCount;
 
 	/**
 	 * This constructor is used when creating a hit detail object as a result of
@@ -85,6 +84,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 		this.passenger = passenger;
 		this.hitType = HitTypeEnum.R.toString();
 		this.hitCount = 1;
+		this.ruleHitCount = 1;
 	}
 
 	/**
@@ -256,6 +256,13 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	 */
 	public void setHitType(String hitType) {
 		this.hitType = hitType;
+	}
+
+	/**
+	 * @return the ruleId
+	 */
+	public Long getRuleId() {
+		return ruleId;
 	}
 
 	/**

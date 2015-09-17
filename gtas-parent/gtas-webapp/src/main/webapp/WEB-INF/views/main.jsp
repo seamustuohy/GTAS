@@ -297,6 +297,7 @@
         <script src="flights/FlightsIIController.js"></script>
         <script src="flights/FlightsService.js"></script>
         <script src="pax/PaxController.js"></script>
+        <script src="pax/PaxMainController.js"></script>
         <script src="pax/PaxDetailController.js"></script>
         <script src="pax/PaxService.js"></script>
         <script src="pax/PaxFactory.js"></script>

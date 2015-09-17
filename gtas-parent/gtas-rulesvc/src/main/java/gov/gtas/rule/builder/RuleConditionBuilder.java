@@ -69,8 +69,6 @@ public class RuleConditionBuilder {
 
 		this.pnrRuleConditionBuilder = new PnrRuleConditionBuilder(
 				entityVariableNameMap);
-
-		// this.causeList = new LinkedList<String>();
 	}
 
 	/**
@@ -106,7 +104,7 @@ public class RuleConditionBuilder {
 		passengerConditionBuilder.reset();
 		documentConditionBuilder.reset();
 		flightConditionBuilder.reset();
-		this.flightCriteriaPresent = false;
+		//this.flightCriteriaPresent = false;
 
 	}
 

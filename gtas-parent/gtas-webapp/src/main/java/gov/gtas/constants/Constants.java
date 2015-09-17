@@ -7,10 +7,7 @@ public final class Constants {
 	public static final String INIT = "/init";
 	public static final String RUN_QUERY_FLIGHT_URI = "/queryFlights";
 	public static final String RUN_QUERY_PASSENGER_URI = "/queryPassengers";
-	public static final String SAVE_QUERY_URI = "/saveQuery";
-	public static final String LIST_QUERY_URI = "/listQuery";
-	public static final String EDIT_QUERY_URI = "/editQuery";
-	public static final String DELETE_QUERY_URI = "/deleteQuery";
+	public static final String DELETE_QUERY_URI = "/{id}";
 	
 	
 	//UDR URI

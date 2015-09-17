@@ -185,22 +185,29 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
             }, {
                 "name": "ruleHits",
                 "displayName": "H",
-                "width": 50,
+                cellTemplate:'<div><span class=\"glyphicon glyphicon-flag glyphiconFlightPax\" style=\"{{row.entity.ruleHits | flagImageFilter}}\"></span></div>',
+                "sort": {
+                    "direction": uiGridConstants.DESC,
+                    "priority": 0
+                },
+                "width": 40,
                 "type": 'number'
             }, {
                 "name": "watchlistHits",
                 "displayName": "L",
-                "width": 50,
+                "width": 40,
                 "type": 'number'
             }, {
                 "name": "flightNumber",
                 "displayName": "Flight #",
+              //  cellTemplate: '<div>{{ row.entity.flightNumber }}</div>',
+                "width": 80,
                 "type": "string"
             }, {
                 "name": "direction",
                 "displayName": "Direction",
                 "type": "string",
-                "width": 50,
+                "width": 30,
                 "sort": {
                     "direction": uiGridConstants.ASC,
                     "priority": 0

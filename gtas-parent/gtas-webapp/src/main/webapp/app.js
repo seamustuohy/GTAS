@@ -127,7 +127,7 @@ app.config(function ($stateProvider) {
         })
         .state('pax', {
             url: '/passengers',
-            controller: 'PaxController',
+            controller: 'PaxMainController',
             templateUrl: 'pax/pax.header.html'
         })
         .state('pax.all', {
@@ -138,7 +138,7 @@ app.config(function ($stateProvider) {
 
                 "content@pax": {
                     //controller: 'Paginate',
-                    //controller: 'PaxController',
+                    controller: 'PaxController',
                     templateUrl: 'pax/pax.table.html'
                 }
             }

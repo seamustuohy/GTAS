@@ -433,7 +433,7 @@
       {
         "id": "HitsSummary.isWatchListHit",
         "label": "Has Watch List Hit",
-        "type": "integer",
+        "type": "boolean",
         "operators": "EQUALS",
         "input": "radio",
         "values": {
