@@ -188,8 +188,8 @@ public class PnrUtils {
             if (pnr == null) {
                 break;
             } else {
-                StringBuffer buff = new StringBuffer(header);
-                buff.append(pnr).append(footer);
+                StringBuffer buff = new StringBuffer(una.getSegmentText());
+                buff.append(header).append(pnr).append(footer);
                 rv.add(buff.toString());
             }
         }

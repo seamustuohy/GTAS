@@ -1,0 +1,18 @@
+package gov.gtas;
+
+import gov.gtas.repository.ServiceRepositoryIT;
+import gov.gtas.services.PnrServiceIT;
+import gov.gtas.services.RulePersistenceServiceIT;
+import gov.gtas.services.UserServiceIT;
+import gov.gtas.services.WatchlistPersistenceServiceIT;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
+@RunWith(Suite.class)
+@SuiteClasses({ ServiceRepositoryIT.class, RulePersistenceServiceIT.class,
+		UserServiceIT.class, PnrServiceIT.class,
+		WatchlistPersistenceServiceIT.class })
+public class RunAllCommonIT {
+}
