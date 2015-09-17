@@ -138,7 +138,7 @@ public class UdrManagementController {
 	}
 
 	@RequestMapping(value = Constants.UDR_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonServiceResponse updateUDR(@RequestBody UdrSpecification inputSpec) {
+	public JsonServiceResponse updateUDR(@PathVariable Long id, @RequestBody UdrSpecification inputSpec) {
         String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** Received UDR Update request by user =" + userId);
 		
