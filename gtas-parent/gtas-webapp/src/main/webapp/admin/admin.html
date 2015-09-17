@@ -1,1 +1,13 @@
-admin
+<html ng-app="myApp">
+  
+  <body>
+    <div >
+      
+      <button type="button" id="addData" class="btn btn-success" ng-click="addData()">Modify User</button>
+      <button type="button" id="reset" class="btn btn-success" ng-click="reset()">Create User</button>
+      <br>
+      <br>
+      <div ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+    </div>
+  </body>
+</html>
