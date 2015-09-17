@@ -58,7 +58,6 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
         angular.forEach(selectedRowEntities, function (rowEntity) {
             var rowIndexToDelete = $scope.gridOpts.data.indexOf(rowEntity);
 
-            console.log('Selected row: ' + rowIndexToDelete + ' to delete.');
             riskCriteriaService.ruleDelete($scope.ruleId, $scope.authorId).then(function (response) {
                 $scope.gridOpts.data.splice(rowIndexToDelete, 1);
             });

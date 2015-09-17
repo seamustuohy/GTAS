@@ -2,12 +2,12 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
     'use strict';
     var setData = function (myData) {
         var data = [];
-        if (myData.result === undefined || !Array.isArray(myData.result)) {
+        if (myData === undefined || !Array.isArray(myData)) {
             $scope.saving = false;
             return;
         }
 
-        myData.result.forEach(function (obj) {
+        myData.forEach(function (obj) {
             data.push(obj);
         });
         $scope.gridOpts.data = data;
@@ -24,8 +24,8 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
     $scope.gridOpts.exporterPdfHeader = { text: "My Saved Queries", style: 'headerStyle' };
 
 
-    queryBuilderService.getList($scope.authorId).then(function (myData) {
-        setData(myData);
+    queryBuilderService.getList().then(function (myData) {
+        setData(myData.result);
     });
 
     $scope.hideGrid = true;
@@ -59,11 +59,6 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
             return;
         }
 
-        if (!$scope.authorId) {
-            $scope.alertError('No user authenticated');
-            return;
-        }
-
         var selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
 
         angular.forEach(selectedRowEntities, function (rowEntity) {
@@ -73,9 +68,10 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
             var rowDeferred = $q.defer();
 
             console.log('Selected row: ' + rowIndexToDelete + ' to delete.');
-            var deferred = queryBuilderService.deleteQuery($scope.ruleId, $scope.authorId);
+            var deferred = queryBuilderService.delete($scope.ruleId);
 
-            deferred.$promise.then(function (response) {
+            deferred.$promise.then(
+                function (response) {
                     // success callback
                     var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
                     rowDeferred.resolve(newLength);
@@ -124,14 +120,14 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
             query: query
         };
 
-        queryBuilderService.saveQuery(queryObject).then(function (myData) {
+        queryBuilderService.save(queryObject).then(function (myData) {
             if (myData.status === 'FAILURE') {
                 $scope.alertError(myData.message);
                 $scope.saving = false;
                 return;
             }
-            queryBuilderService.getList($scope.authorId).then(function (myData) {
-                setData(myData);
+            queryBuilderService.getList().then(function (myData) {
+                setData(myData.result);
                 $interval(function () {
                     var page;
                     if (!$scope.selectedIndex) {

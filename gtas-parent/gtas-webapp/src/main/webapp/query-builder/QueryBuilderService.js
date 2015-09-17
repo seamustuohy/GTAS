@@ -11,58 +11,36 @@ app.service("queryBuilderService", function ($http, $q) {
             return (response.data);
         },
         services = {
-            deleteQuery: function (ruleId, userId) {
+            delete: function (ruleId) {
                 var request;
 
-                if (userId === undefined || userId === null || ruleId === undefined || ruleId === null) {
-                    return;
-                }
+                if (!ruleId) { return false; }
 
-                // uniform would be: url: '/gtas/query/deleteQuery/'+ userId + '/' + ruleId
                 request = $http({
                     method: 'delete',
-                    url: baseUrl + 'deleteQuery',
-                    params: {
-                        userId: userId,
-                        id: ruleId
-                    }
+                    url: [baseUrl, ruleId].join(':')
                 });
 
                 return (request.then(handleSuccess, handleError));
             },
-            saveQuery: function (data) {
-                var request;
+            save: function (data) {
+                var method, request;
 
-                if (data.id === null) {
-                    request = $http({
-                        method: 'post',
-                        url: baseUrl + 'saveQuery',
-                        data: data
-                    });
-                } else {
-                    request = $http({
-                        method: 'put',
-                        url: baseUrl + 'editQuery',
-                        data: data
-                    });
-                }
+                method = data.id === null ? 'post' : 'put';
+                request = $http({
+                    method: method,
+                    url: baseUrl,
+                    data: data
+                });
 
                 return (request.then(handleSuccess, handleError));
             },
-            getListByAuthor: function (userId) {
+            getListByAuthor: function () {
                 var request;
-
-                if (userId === undefined || userId === null) {
-                    //console.log('not valid user');
-                    return;
-                }
 
                 request = $http({
                     method: "get",
-                    url: baseUrl + "listQuery",
-                    params: {
-                        userId: userId
-                    }
+                    url: baseUrl
                 });
 
                 return (request.then(handleSuccess, handleError));
@@ -71,7 +49,7 @@ app.service("queryBuilderService", function ($http, $q) {
 
     return ({
         getList: services.getListByAuthor,
-        deleteQuery: services.deleteQuery,
-        saveQuery: services.saveQuery
+        delete: services.delete,
+        save: services.save
     });
 });

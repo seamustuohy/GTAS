@@ -10,69 +10,60 @@ app.service("riskCriteriaService", function ($http, $q) {
         handleSuccess = function (response) {
             return (response.data);
         },
-        loadRuleById = function (ruleId) {
-            var request;
+        services = {
+            loadRuleById: function (ruleId) {
+                var request;
 
-            if (ruleId === undefined || ruleId === null) {
-                return;
+                if (!ruleId) { return false; }
+
+                request = $http({
+                    method: "get",
+                    url: [baseUrl, ruleId].join(':')
+                });
+
+                return (request.then(handleSuccess, handleError));
+            },
+            delete: function (ruleId) {
+                var request;
+
+                if (!ruleId) { return false; }
+
+                request = $http({
+                    method: 'delete',
+                    url: [baseUrl, ruleId].join(':')
+                });
+
+                return (request.then(handleSuccess, handleError));
+            },
+            save: function (data) {
+                var method, request;
+
+                method = data.id === null ? 'post' : 'put';
+                request = $http({
+                    method: method,
+                    url: baseUrl,
+                    data: data
+                });
+
+                return (request.then(handleSuccess, handleError));
+            },
+            getListByAuthor: function () {
+                var request;
+
+                request = $http({
+                    method: "get",
+                    url: baseUrl
+                });
+
+                return (request.then(handleSuccess, handleError));
             }
-
-            request = $http({
-                method: "get",
-                url: baseUrl
-            });
-
-            return (request.then(handleSuccess, handleError));
-        },
-        ruleDelete = function (ruleId, userId) {
-            var request;
-
-            if (userId === undefined || userId === null || ruleId === undefined || ruleId === null) {
-                return;
-            }
-
-            request = $http({
-                method: 'delete',
-                url: baseUrl + userId + '/' + ruleId
-            });
-
-            return (request.then(handleSuccess, handleError));
-        },
-        ruleSave = function (ruleObj, userId) {
-            var method, request;
-
-            if (userId === undefined || userId === null) {
-                return;
-            }
-
-            method = ruleObj.id === null ? 'post' : 'put';
-            request = $http({
-                method: method,
-                url: baseUrl,
-                data: ruleObj
-            });
-
-            return (request.then(handleSuccess, handleError));
-        },
-        getListByAuthor = function (userId) {
-            var request;
-
-            if (userId === undefined || userId === null) {
-                return;
-            }
-
-            request = $http({
-                method: "get",
-                url: baseUrl
-            });
-            return (request.then(handleSuccess, handleError));
         };
 
     // Return public API.
     return ({
-        getList: getListByAuthor,
-        loadRuleById: loadRuleById,
-        ruleDelete: ruleDelete,
-        ruleSave: ruleSave
+        getList: services.getListByAuthor,
+        loadRuleById: services.loadRuleById,
+        delete: services.delete,
+        save: services.save
     });
 });
