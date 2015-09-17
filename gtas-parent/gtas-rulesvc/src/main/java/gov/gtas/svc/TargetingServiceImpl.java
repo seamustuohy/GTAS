@@ -230,6 +230,10 @@ public class TargetingServiceImpl implements TargetingService {
 			udrResult = TargetingServiceUtils
 					.ruleResultPostProcesssing(udrResult);
 		}
+		if (wlResult != null) {
+			wlResult = TargetingServiceUtils
+					.ruleResultPostProcesssing(wlResult);
+		}
 
 		ctx.setRuleServiceResult(new CompositeRuleServiceResult(udrResult,
 				wlResult));
