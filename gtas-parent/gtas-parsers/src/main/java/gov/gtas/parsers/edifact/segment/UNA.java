@@ -21,6 +21,7 @@ public final class UNA {
     public static final int NUM_UNA_CHARS = 6;
     private static final int TOTAL_UNA_SEGMENT_LENGTH = DEFAULT_UNA.length();
 
+    private String segmentText;
     private char componentDataElementSeparator;
     private char dataElementSeparator;
     private char decimalMark;
@@ -33,15 +34,21 @@ public final class UNA {
     }
 
     public UNA(String unaSegment) {
-        if (unaSegment.length() != TOTAL_UNA_SEGMENT_LENGTH) {
+        if (unaSegment == null || unaSegment.length() != TOTAL_UNA_SEGMENT_LENGTH) {
             throw new IllegalArgumentException("una segment length != " + TOTAL_UNA_SEGMENT_LENGTH);
         }
-        componentDataElementSeparator = unaSegment.charAt(3);
-        dataElementSeparator = unaSegment.charAt(4);
-        decimalMark = unaSegment.charAt(5);
-        releaseCharacter = unaSegment.charAt(6);
-        repetitionSeparator = unaSegment.charAt(7);
-        segmentTerminator = unaSegment.charAt(8);
+        this.segmentText = unaSegment;
+        
+        this.componentDataElementSeparator = unaSegment.charAt(3);
+        this.dataElementSeparator = unaSegment.charAt(4);
+        this.decimalMark = unaSegment.charAt(5);
+        this.releaseCharacter = unaSegment.charAt(6);
+        this.repetitionSeparator = unaSegment.charAt(7);
+        this.segmentTerminator = unaSegment.charAt(8);
+    }
+
+    public String getSegmentText() {
+        return segmentText;
     }
 
     public char getComponentDataElementSeparator() {
