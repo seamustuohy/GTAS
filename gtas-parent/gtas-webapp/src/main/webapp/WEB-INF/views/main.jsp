@@ -302,10 +302,9 @@
         <script src="pax/PaxService.js"></script>
         <script src="pax/PaxFactory.js"></script>
         <script src="query-builder/QueryBuilderController.js"></script>
-        <script src="query-builder/QueryBuilderService.js"></script>
-        <script src="query-builder/QueryService.js"></script>
         <script src="risk-criteria/RiskCriteriaController.js"></script>
-        <script src="risk-criteria/RiskCriteriaService.js"></script>
+        <script src="resources/CrudService.js"></script>
+        <script src="query-builder/QueryService.js"></script>
         <script src="watchlists/WatchListService.js"></script>
         <script src="watchlists/WatchListController.js"></script>
         </body>

@@ -1,7 +1,9 @@
-app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector, QueryBuilderCtrl, GridControl, $filter, $q, riskCriteriaService, $timeout, $interval) {
+app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector, QueryBuilderCtrl, GridControl, $filter, $q, crudService, $timeout, $interval) {
     'use strict';
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     $injector.invoke(GridControl, this, {$scope: $scope });
+
+    crudService.init('riskcriteria');
 
     var setData = function (myData) {
         var temp, data = [];
@@ -16,7 +18,7 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
     $scope.gridOpts.exporterCsvFilename = 'riskCriteria.csv';
     $scope.gridOpts.exporterPdfHeader = { text: "Risk Criteria", style: 'headerStyle' };
 
-    riskCriteriaService.getList($scope.authorId).then(function (myData) {
+    crudService.getList().then(function (myData) {
         setData(myData.result);
     });
 
@@ -26,8 +28,8 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
         gridApi.selection.on.rowSelectionChanged($scope, function (row) {
             if (row.isSelected) {
                 $scope.selectedIndex = $scope.gridOpts.data.indexOf(row.entity);
-                riskCriteriaService.loadRuleById(row.entity.id).then(function (myData) {
-                    var result = myData.result[0];
+                crudService.loadRuleById(row.entity.id).then(function (myData) {
+                    var result = myData.result;
                     $scope.ruleId = result.id;
                     $scope.loadSummary(result.summary);
                     $scope.$builder.queryBuilder('loadRules', result.details);
@@ -58,7 +60,7 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
         angular.forEach(selectedRowEntities, function (rowEntity) {
             var rowIndexToDelete = $scope.gridOpts.data.indexOf(rowEntity);
 
-            riskCriteriaService.ruleDelete($scope.ruleId, $scope.authorId).then(function (response) {
+            crudService.delete($scope.ruleId).then(function (response) {
                 $scope.gridOpts.data.splice(rowIndexToDelete, 1);
             });
         });
@@ -131,14 +133,14 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
             }
         };
 
-        riskCriteriaService.ruleSave(ruleObject, $scope.authorId).then(function (myData) {
+        crudService.save(ruleObject).then(function (myData) {
             var temp, data = [];
             if (typeof myData.errorCode !== "undefined") {
                 $scope.alertError(myData.errorMessage);
                 return;
             }
 
-            riskCriteriaService.getList($scope.authorId).then(function (myData) {
+            crudService.getList().then(function (myData) {
 
                 setData(myData.result);
                 $interval( function() {

@@ -1,4 +1,4 @@
-app.controller('QueryBuilderController', function ($scope, $rootScope, $injector, QueryBuilderCtrl, GridControl, $filter, $q, queryBuilderService, queryService, $timeout, $interval) {
+app.controller('QueryBuilderController', function ($scope, $rootScope, $injector, QueryBuilderCtrl, GridControl, $filter, $q, crudService, queryService, $timeout, $interval) {
     'use strict';
     var setData = function (myData) {
         var data = [];
@@ -16,6 +16,8 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
     $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
     $injector.invoke(GridControl, this, {$scope: $scope });
 
+    crudService.init('querybuilder');
+
     $scope.resultsGrid = $.extend({}, $scope.gridOpts);
     $scope.resultsGrid.enableColumnResizing = true;
 
@@ -24,7 +26,7 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
     $scope.gridOpts.exporterPdfHeader = { text: "My Saved Queries", style: 'headerStyle' };
 
 
-    queryBuilderService.getList().then(function (myData) {
+    crudService.getList().then(function (myData) {
         setData(myData.result);
     });
 
@@ -68,9 +70,7 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
             var rowDeferred = $q.defer();
 
             console.log('Selected row: ' + rowIndexToDelete + ' to delete.');
-            var deferred = queryBuilderService.delete($scope.ruleId);
-
-            deferred.$promise.then(
+            crudService.delete($scope.ruleId).then(
                 function (response) {
                     // success callback
                     var newLength = $scope.gridOpts.data.splice(rowIndexToDelete, 1);
@@ -120,13 +120,13 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
             query: query
         };
 
-        queryBuilderService.save(queryObject).then(function (myData) {
+        crudService.save(queryObject).then(function (myData) {
             if (myData.status === 'FAILURE') {
                 $scope.alertError(myData.message);
                 $scope.saving = false;
                 return;
             }
-            queryBuilderService.getList().then(function (myData) {
+            crudService.getList().then(function (myData) {
                 setData(myData.result);
                 $interval(function () {
                     var page;
