@@ -1,6 +1,6 @@
 app.controller('WatchListController', function ($scope, $rootScope, $injector, GridControl, $filter, $q, watchListService, $interval) {
     'use strict';
-    var watchlist = {};
+    var watchlist = {}, tabs = [];
     $injector.invoke(GridControl, this, {$scope: $scope});
 
     watchlist.types = {
@@ -44,15 +44,14 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
 
     $scope.updateGrid = function (listName) {
         watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
-            var obj, data = [], items;
+            var obj, data = [], items = response.data.result.watchlistItems;
             $scope.activeTab = listName;
             $scope.gridOpts.columnDefs = watchlist.types[listName].columns;
             $scope.gridOpts.exporterCsvFilename = 'watchlist-' + listName + '.csv';
-            if (response.data.watchlistItems === undefined) {
-                $scope.gridOpts.data = data;
+            if (items === undefined) {
+                $scope.gridOpts.data = [];
                 return false;
             }
-            items = response.data.watchlistItems;
             items.forEach(function (item) {
                 obj = {id: item.id };
                 item.terms.forEach(function (term) {
@@ -64,13 +63,11 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
         });
     };
 
-    //watchListService.getTabs().then(function (myData) {
     $scope.activeTab = 'Document';
-    $scope.tabs = [];
     Object.keys(watchlist.types).forEach(function (key) {
-        $scope.tabs.push({title: key});
+        tabs.push({title: key});
     });
-    //});
+    $scope.tabs = tabs;
 
     $scope.Add = function () {
         var starterData = {};
@@ -131,8 +128,10 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
     };
 
     $scope.updateWatchlistService = function () {
+        if ($scope.updating) { return false; }
+        $scope.updating = true;
         watchListService.compile().then(function () {
-            console.log('SUCCESS');
+            $scope.updating = false;
         });
     };
 
