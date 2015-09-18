@@ -78,6 +78,10 @@ public class PassengerController {
     
     private static final int PAGE_SIZE = 25;
     private static final String EMPTY_STRING="";
+	private static final String RULE_HIT_TYPE = "R";
+	private static final String WL_PASSENGER_HIT_TYPE = "P";
+	private static final String WL_DOCUMENT_HIT_TYPE = "D";
+
        
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
@@ -126,7 +130,21 @@ public class PassengerController {
                 vo.addDocument(docVo);
             }
             
-            vo.setRuleHits(getTotalHitsByPaxID(t.getId(), id));
+            //vo.setRuleHits(getTotalHitsByPaxID(t.getId(), id));
+            
+            
+            List<Integer> _tempHitCountList = getTotalHitsByFlightId(t.getId(), id);
+			vo.setRuleHits(_tempHitCountList.get(0));
+			vo.setListHits(0);
+			
+			// Pax Watchlist                                // Document Watchlist
+			if((_tempHitCountList.get(1).intValue()>0) && (_tempHitCountList.get(2).intValue()>0)){
+			vo.setListHits(3);								// Both 'PD'
+			}else if(_tempHitCountList.get(1).intValue()>0){// Pax Watchlist -- P
+			vo.setListHits(1);	
+			}else if(_tempHitCountList.get(2).intValue()>0){// Document Watchlist -- D
+			vo.setListHits(2);
+			}
 
             rv.add(vo);
         }
@@ -198,7 +216,20 @@ public class PassengerController {
         		tempVo.setFlightETA((_tempFlight.getEta()!=null)?_tempFlight.getEta().toString(): EMPTY_STRING);
         		tempVo.setFlightETD((_tempFlight.getEtd()!=null)?_tempFlight.getEtd().toString(): EMPTY_STRING);
         		tempVo.setFlightId(_tempFlight.getId().toString());
-        		tempVo.setRuleHits(getTotalHitsByPaxID(t.getId(),_tempFlight.getId()));
+        		//tempVo.setRuleHits(getTotalHitsByPaxID(t.getId(),_tempFlight.getId()));
+                List<Integer> _tempHitCountList = getTotalHitsByFlightId(t.getId(), _tempFlight.getId());
+    			vo.setRuleHits(_tempHitCountList.get(0));
+    			vo.setListHits(0);
+    			
+    			// Pax Watchlist                                // Document Watchlist
+    			if((_tempHitCountList.get(1).intValue()>0) && (_tempHitCountList.get(2).intValue()>0)){
+    			vo.setListHits(3);								// Both 'PD'
+    			}else if(_tempHitCountList.get(1).intValue()>0){// Pax Watchlist -- P
+    			vo.setListHits(1);	
+    			}else if(_tempHitCountList.get(2).intValue()>0){// Document Watchlist -- D
+    			vo.setListHits(2);
+    			}
+        		
                 rv.add(tempVo);
             
         	} // for loop
@@ -294,7 +325,19 @@ public class PassengerController {
         		tempVo.setFlightETA(_tempFlight.getEta().toString());
         		tempVo.setFlightETD(_tempFlight.getEtd().toString());
         		tempVo.setFlightId(_tempFlight.getId().toString());
-        		tempVo.setRuleHits(getTotalHitsByPaxID(t.getId(),_tempFlight.getId()));
+        		//tempVo.setRuleHits(getTotalHitsByPaxID(t.getId(),_tempFlight.getId()));
+                List<Integer> _tempHitCountList = getTotalHitsByFlightId(t.getId(), _tempFlight.getId());
+    			vo.setRuleHits(_tempHitCountList.get(0));
+    			vo.setListHits(0);
+    			
+    			// Pax Watchlist                                // Document Watchlist
+    			if((_tempHitCountList.get(1).intValue()>0) && (_tempHitCountList.get(2).intValue()>0)){
+    			vo.setListHits(3);								// Both 'PD'
+    			}else if(_tempHitCountList.get(1).intValue()>0){// Pax Watchlist -- P
+    			vo.setListHits(1);	
+    			}else if(_tempHitCountList.get(2).intValue()>0){// Document Watchlist -- D
+    			vo.setListHits(2);
+    			}
                 rv.add(tempVo);
             
         	} // while loop
@@ -303,7 +346,43 @@ public class PassengerController {
         return rv;
     }
     
-    
+	@Transactional
+	public List<Integer> getTotalHitsByFlightId(Long passengerID, Long flightId) {
+
+		int totalHits = 0;
+		int wlPassengerHit = 0;
+		int wlDocumentHit = 0;
+		List<Integer> _tempHitCountList = new ArrayList<Integer>();
+
+		if (hitsList == null || hitsList.isEmpty()) {
+			Iterable<HitsSummary> summary = hitsSummaryService.findAll();
+			for (HitsSummary s : summary) {
+				hitsList.add((HitsSummary) s);
+			}
+		} // END IF
+
+		// Iterate over PAX to get total hit count
+			for (HitsSummary s : hitsList) {
+
+				if ((s.getPassengerId().equals(passengerID)) 
+						&& (s.getFlightId().equals(flightId)) && (s.getHitType().equalsIgnoreCase(RULE_HIT_TYPE))) {
+					totalHits++;
+				}else if((s.getPassengerId().equals(passengerID)) 
+						&& (s.getFlightId().equals(flightId)) && (s.getHitType().equalsIgnoreCase(WL_PASSENGER_HIT_TYPE))){
+					wlPassengerHit++;
+				}else if((s.getPassengerId().equals(passengerID)) 
+						&& (s.getFlightId().equals(flightId)) && (s.getHitType().equalsIgnoreCase(WL_DOCUMENT_HIT_TYPE))){
+					wlDocumentHit++;
+				}
+			}
+
+		
+		_tempHitCountList.add(new Integer(totalHits));
+		_tempHitCountList.add(new Integer(wlPassengerHit));
+		_tempHitCountList.add(new Integer(wlDocumentHit));
+		
+		return _tempHitCountList;
+	}
     
     @Transactional
     public int getTotalHitsByPaxID(Long passengerID, Long flightId){
@@ -346,8 +425,8 @@ public class PassengerController {
 		    		vo.setCarrier(_tempFlight.getCarrier());
 		    		vo.setFlightOrigin(_tempFlight.getOrigin());
 		    		vo.setFlightDestination(_tempFlight.getDestination());
-		    		vo.setFlightETA(_tempFlight.getEta().toString());
-		    		vo.setFlightETD(_tempFlight.getEtd().toString());
+		    		vo.setFlightETA((_tempFlight.getEta()!=null)?_tempFlight.getEta().toString(): EMPTY_STRING);
+		    		vo.setFlightETD((_tempFlight.getEta()!=null)?_tempFlight.getEta().toString(): EMPTY_STRING);
 		    		vo.setFlightId(_tempFlight.getId().toString());
 	    		}
 			}

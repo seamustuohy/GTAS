@@ -34,7 +34,7 @@ public interface PassengerRepository extends PagingAndSortingRepository<Passenge
     @Query("SELECT p FROM Passenger p WHERE UPPER(p.lastName) LIKE %?1%")
 	public Page<Passenger> getPaxByLastName(String lastName, Pageable pageable);
     
-    @Query("SELECT p FROM Passenger p JOIN p.flights f WHERE f.eta between :startDate AND :endDate")
+    @Query("SELECT p FROM Passenger p JOIN p.flights f WHERE f.flightDate between :startDate AND :endDate")
     public List<Passenger> getPassengersByFlightDates(@Param("startDate") Date startDate, 
             							  @Param("endDate") Date endDate);
 

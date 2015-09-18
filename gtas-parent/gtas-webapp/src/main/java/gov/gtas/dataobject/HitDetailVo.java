@@ -23,6 +23,8 @@ public class HitDetailVo {
 	
 	private String ruleDesc;
 	
+	private String ruleType;
+	
 	private HashMap<Integer, List<HitDetail>> HitsRulesAndDetails;
 
 	private List<HitDetail> hitsDetailsList = new ArrayList<HitDetail>();
@@ -73,6 +75,14 @@ public class HitDetailVo {
 
 	public void setRuleId(Long ruleId) {
 		this.ruleId = ruleId;
+	}
+
+	public String getRuleType() {
+		return ruleType;
+	}
+
+	public void setRuleType(String ruleType) {
+		this.ruleType = ruleType;
 	}
 
 	public List<HitDetail> getHitsDetailsList() {

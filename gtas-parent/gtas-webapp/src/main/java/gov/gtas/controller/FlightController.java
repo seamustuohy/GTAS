@@ -52,6 +52,9 @@ public class FlightController {
 
 	private static List<HitsSummary> hitsList = new ArrayList<HitsSummary>();
 	private static final String EMPTY_STRING = "";
+	private static final String RULE_HIT_TYPE = "R";
+	private static final String WL_PASSENGER_HIT_TYPE = "P";
+	private static final String WL_DOCUMENT_HIT_TYPE = "D";
 
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
@@ -88,7 +91,7 @@ public class FlightController {
 				vo.setEta(f.getEta());
 
 				passengers = pService.getPassengersByFlightId(f.getId());
-				vo.setRuleHits(getTotalHitsByFlightId(passengers,f.getId()));
+//				vo.setRuleHits(getTotalHitsByFlightId(passengers,f.getId()));
 				vo.setTotalPax(passengers.size());
 				rv.add(vo);
 			}
@@ -149,7 +152,19 @@ public class FlightController {
 				vo.setDirection(f.getDirection());
 
 				passengers = pService.getPassengersByFlightId(f.getId());
-				vo.setRuleHits(getTotalHitsByFlightId(passengers, f.getId()));
+				List<Integer> _tempHitCountList = getTotalHitsByFlightId(passengers, f.getId());
+				vo.setRuleHits(_tempHitCountList.get(0));
+				vo.setListHits(0);
+				
+				// Pax Watchlist                                // Document Watchlist
+				if((_tempHitCountList.get(1).intValue()>0) && (_tempHitCountList.get(2).intValue()>0)){
+				vo.setListHits(3);								// Both 'PD'
+				}else if(_tempHitCountList.get(1).intValue()>0){// Pax Watchlist -- P
+				vo.setListHits(1);	
+				}else if(_tempHitCountList.get(2).intValue()>0){// Document Watchlist -- D
+				vo.setListHits(2);
+				}
+				
 				vo.setTotalPax(passengers.size());
 				rv.add(vo);
 			
@@ -219,18 +234,18 @@ public class FlightController {
 	}
 
 	@Transactional
-	public int getTotalHitsByFlightId(List<Passenger> passengers, Long flightId) {
+	public List<Integer> getTotalHitsByFlightId(List<Passenger> passengers, Long flightId) {
 
 		int totalHits = 0;
+		int wlPassengerHit = 0;
+		int wlDocumentHit = 0;
+		List<Integer> _tempHitCountList = new ArrayList<Integer>();
 
 		if (hitsList == null || hitsList.isEmpty()) {
-
 			Iterable<HitsSummary> summary = hitsSummaryService.findAll();
-
 			for (HitsSummary s : summary) {
 				hitsList.add((HitsSummary) s);
 			}
-
 		} // END IF
 
 		// Iterate over PAX to get total hit count
@@ -238,13 +253,24 @@ public class FlightController {
 
 			for (HitsSummary s : hitsList) {
 
-				if ((s.getPassengerId().equals(t.getId())) && (s.getFlightId().equals(flightId))) {
+				if ((s.getPassengerId().equals(t.getId())) 
+						&& (s.getFlightId().equals(flightId)) && (s.getHitType().equalsIgnoreCase(RULE_HIT_TYPE))) {
 					totalHits++;
+				}else if((s.getPassengerId().equals(t.getId())) 
+						&& (s.getFlightId().equals(flightId)) && (s.getHitType().equalsIgnoreCase(WL_PASSENGER_HIT_TYPE))){
+					wlPassengerHit++;
+				}else if((s.getPassengerId().equals(t.getId())) 
+						&& (s.getFlightId().equals(flightId)) && (s.getHitType().equalsIgnoreCase(WL_DOCUMENT_HIT_TYPE))){
+					wlDocumentHit++;
 				}
 			}
 		}
-
-		return totalHits;
+		
+		_tempHitCountList.add(new Integer(totalHits));
+		_tempHitCountList.add(new Integer(wlPassengerHit));
+		_tempHitCountList.add(new Integer(wlDocumentHit));
+		
+		return _tempHitCountList;
 	}
-
+	
 }

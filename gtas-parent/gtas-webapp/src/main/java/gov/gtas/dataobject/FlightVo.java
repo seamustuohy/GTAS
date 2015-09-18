@@ -25,9 +25,24 @@ public class FlightVo {
     private String direction;
     private int ruleHits;
     private int listHits;
+    private int paxListHit;
+    private int docListHit;
     private int totalPax;
     
-    /**
+    
+    public int getPaxListHit() {
+		return paxListHit;
+	}
+	public void setPaxListHit(int paxListHit) {
+		this.paxListHit = paxListHit;
+	}
+	public int getDocListHit() {
+		return docListHit;
+	}
+	public void setDocListHit(int docListHit) {
+		this.docListHit = docListHit;
+	}
+	/**
 	 * @return the ruleHits
 	 */
 	public int getRuleHits() {

@@ -36,6 +36,9 @@ public class PassengerVo {
     private String flightETA;
     private int ruleHits;
     private int listHits;
+    private int paxListHit;
+    private int docListHit;
+
     
     private List<PassengerVo> passengers;
     
@@ -125,7 +128,19 @@ public class PassengerVo {
     public void setGender(String gender) {
         this.gender = gender;
     }
-    public String getCarrier() {
+    public int getPaxListHit() {
+		return paxListHit;
+	}
+	public void setPaxListHit(int paxListHit) {
+		this.paxListHit = paxListHit;
+	}
+	public int getDocListHit() {
+		return docListHit;
+	}
+	public void setDocListHit(int docListHit) {
+		this.docListHit = docListHit;
+	}
+	public String getCarrier() {
 		return carrier;
 	}
 	public void setCarrier(String carrier) {
