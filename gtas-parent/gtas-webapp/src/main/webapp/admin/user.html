@@ -6,7 +6,7 @@
 			<md-input-container flex> <label>User Id</label>
 			<input ng-model="user.userId" required > </md-input-container>
 			<md-input-container flex> <label>Password</label>
-			<input ng-model="user.password" required> </md-input-container>
+			<input ng-model="user.password"  type="password" > </md-input-container>
 		</div>
 		<div layout layout-sm="column">
 			<md-input-container flex> <label>First
@@ -15,20 +15,27 @@
 				Name</label> <input ng-model="user.lastName" required> </md-input-container>
 		</div>
 
-		<div layout layout-sm="column">
+		<div layout="row" >
 			<fieldset class="standard" flex>
 				
 					<code>Status</code>
-				<md-radio-group ng-model="data.group1"> <md-radio-button
+				<!-- <md-radio-group ng-model="data.group1"> <md-radio-button
 					value=1 class="md-primary">Enable</md-radio-button> <md-radio-button
-					value=0> Disable </md-radio-button> </md-radio-group>
+					value=0> Disable </md-radio-button> </md-radio-group> -->
+					
+					<md-radio-group ng-model="userStatus" class="md-primary">
+        <md-radio-button ng-repeat="d in radioData"
+                         ng-value="d.value"
+                         ng-class="{'md-align-top-left': $index==1}" >
+            {{ d.label }}<br/> <br/>
+        </md-radio-button>
+    </md-radio-group>
 			</fieldset>
-		</div>
+			</div>
 
-		<div layout="row">
+		<div layout="row" >
 			<div flex="100" flex-md="100" layout="column">
 				<fieldset class="standard" flex >
-					
 						<code>Roles</code>
 					<div layout="row" layout-wrap>
 						<div flex="25" ng-repeat="item in items">
@@ -48,11 +55,6 @@
 		<md-button class="md-raised md-primary">Save</md-button>
 		</div>
 
-		<!-- <section layout="row" layout-sm="column"
-					layout-align="center end" layout-wrap>
-
-					
-				</section> -->
 	</form>
 	</md-content>
 </div>
