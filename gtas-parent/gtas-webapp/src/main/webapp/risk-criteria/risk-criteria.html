@@ -73,10 +73,10 @@
         content: '\c357' !important;
     }
 </style>
-<h1>Risk Criteria:</h1>
+<h2><span class="glyphicon glyphicon-flag"></span> Risk Criteria</h2>
 <div ui-grid="gridOpts" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
 <section class="qb-interface">
-    <button data-ng-click="newRule()" class="btn btn-xs btn-primary pull-right" data-add="rule">New Rule</button>
+    <button data-ng-click="newRule()" class="md-raised md-button md-default-theme pull-right" data-add="rule"><span class="glyphicon glyphicon-plus"></span> Add New</button>
 
     <h2>Summary:</h2>
     <label for="title" class="hide">Name:</label>
@@ -93,7 +93,7 @@
     <h2>Conditions:</h2>
     <div id="builder"></div>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
-    <button type="button" data-ng-click="resetQueryBuilder()" class="btn btn-xs btn-primary reset pull-right" data->Clear Conditions</button>
-    <button type="button" ng-show="ruleId !== null" data-ng-click="delete()" type="button" class="btn btn-xs btn-primary pull-right" title="delete">Delete</button>
-    <button type="button" data-ng-click="save()" id="submit" class="btn btn-xs btn-primary pull-right">Save</button>
+    <button type="button" data-ng-click="resetQueryBuilder()" class="md-raised md-button md-default-theme">Clear Conditions</button>
+    <button type="button" ng-show="ruleId !== null" data-ng-click="delete()" type="button" class="md-raised md-warn md-button md-default-theme" title="delete">Delete</button>
+    <button type="button" data-ng-click="save()" id="submit" class="md-raised md-primary md-button md-default-theme">Save</button>
 </section>
