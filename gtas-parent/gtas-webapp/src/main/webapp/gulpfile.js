@@ -148,7 +148,7 @@ gulp.task('deployCSS', function () {
 gulp.task('deployImages', function () {
     'use strict';
     return gulp.src(images)
-        .pip(gulp.dest('dist/img'));
+        .pipe(gulp.dest('dist/img'));
 });
 
 gulp.task('deploy', ['deployImages', 'deployCSS', 'deployJS', 'deployFonts']);

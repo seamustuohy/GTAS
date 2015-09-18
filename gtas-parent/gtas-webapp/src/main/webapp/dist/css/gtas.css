@@ -335,7 +335,7 @@ header::before {
   display: block;
   height: 84px;
   background-color: rgb(43,127,184);
-  background-image: url(../../resources/img/gtas_logo.png);
+  background-image: url(../img/gtas_logo.png);
   background-repeat: no-repeat;
   background-position: top left;
   position: relative;
