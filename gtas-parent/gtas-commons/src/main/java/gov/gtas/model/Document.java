@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "document")
@@ -21,9 +23,11 @@ public class Document extends BaseEntity {
     private String documentNumber;
     
     @Column(name = "expiration_date")
+    @Temporal(TemporalType.DATE)      
     private Date expirationDate;
     
     @Column(name = "issuance_date")
+    @Temporal(TemporalType.DATE)      
     private Date issuanceDate;
     
     @Column(name = "issuance_country")
