@@ -81,10 +81,8 @@
     <h2>Summary:</h2>
     <label for="title" class="hide">Name:</label>
     <input title="Name" placeholder="Name:" type="text" ng-model="title" id="title" maxlength="20" />
-    <label for="start-date" class="hide">Start Date:</label>
-    <input placeholder="Start Date:" type="text" ng-model="startDate" id="start-date" class="datepicker" />
-    <label for="end-date" class="hide">End Date:</label>
-    <input placeholder="End Date:" type="text" ng-model="endDate" id="end-date" class="datepicker" />
+    <md-datepicker ng-model="startDate" md-placeholder="Start Date"></md-datepicker>
+    <md-datepicker ng-model="endDate" md-placeholder="End Date"></md-datepicker>
     <label for="enabled">Enabled:</label>
     <input type="checkbox" ng-model="enabled" id="enabled" />
     <label for="description" class="hide">Description:</label>
@@ -92,7 +90,7 @@
 
     <h2>Conditions:</h2>
     <div id="builder"></div>
-    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
+    <!--<alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>-->
     <button type="button" data-ng-click="resetQueryBuilder()" class="md-raised md-button md-default-theme">Clear Conditions</button>
     <button type="button" ng-show="ruleId !== null" data-ng-click="delete()" type="button" class="md-raised md-warn md-button md-default-theme" title="delete">Delete</button>
     <button type="button" data-ng-click="save()" id="submit" class="md-raised md-primary md-button md-default-theme">Save</button>

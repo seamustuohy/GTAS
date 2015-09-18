@@ -207,6 +207,9 @@ app.factory('QueryBuilderCtrl', function () {
             $scope.ruleId = null;
             $scope.$builder.queryBuilder('reset');
             $scope.loadSummary($scope.summaryDefaults);
+            if (document.querySelector('[ng-model="endDate"] input')) {
+                document.querySelector('[ng-model="endDate"] input').value = null;
+            }
             document.getElementById('title').focus();
             if ($scope.gridApi !== undefined) {
                 $scope.gridApi.selection.clearSelectedRows();

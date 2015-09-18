@@ -1,7 +1,7 @@
 app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector, QueryBuilderCtrl, GridControl, $filter, $q, crudService, $timeout, $interval) {
     'use strict';
-    $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope });
-    $injector.invoke(GridControl, this, {$scope: $scope });
+    $injector.invoke(QueryBuilderCtrl, this, {$scope: $scope});
+    $injector.invoke(GridControl, this, {$scope: $scope});
 
     crudService.init('riskcriteria');
 
@@ -16,7 +16,7 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
 
     $scope.gridOpts.columnDefs = $rootScope.columns.RISK_CRITERIA;
     $scope.gridOpts.exporterCsvFilename = 'riskCriteria.csv';
-    $scope.gridOpts.exporterPdfHeader = { text: "Risk Criteria", style: 'headerStyle' };
+    $scope.gridOpts.exporterPdfHeader = {text: "Risk Criteria", style: 'headerStyle'};
 
     crudService.getList().then(function (myData) {
         setData(myData.result);
@@ -66,7 +66,7 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
         });
     };
 
-    $scope.summaryDefaults = {title: '', description: null, startDate: $scope.today.toString(), endDate: null, enabled: true};
+    $scope.summaryDefaults = {title: '', description: null, enabled: true};
 
 
 //    $scope.newRule();
@@ -74,14 +74,16 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
     $scope.save = function () {
         var ruleObject, startDate, endDate, details;
 
-        if ($scope.saving) return;
+        if ($scope.saving) {
+            return;
+        }
 
         $scope.saving = true;
         startDate = moment($scope.startDate, $scope.formats, true);
         endDate = moment($scope.endDate, $scope.formats, true);
 
         $scope.title = $scope.title.trim();
-        if (!$scope.title.length ) {
+        if (!$scope.title.length) {
             $scope.alertError('Title summary can not be blank!');
             $scope.saving = false;
             return;
@@ -89,30 +91,29 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
 
         /* was told startDate ignored on updates so only matters on new rules */
         if ($scope.ruleId === null) {
-            if (!startDate.isValid())
-            {
-                $scope.alertError('Dates must be in this format: ' + $scope.formats.toString());
-                $scope.saving = false;
-                return;
-            }
-            if (startDate < $scope.today ) {
-                $scope.alertError('Start date must be today or later when created new.');
-                $scope.saving = false;
-                return;
-            }
+            //if (!startDate.isValid()) {
+            //    $scope.alertError('Dates must be in this format: ' + $scope.formats.toString());
+            //    $scope.saving = false;
+            //    return;
+            //}
+            //if (startDate < $scope.today) {
+            //    $scope.alertError('Start date must be today or later when created new.');
+            //    $scope.saving = false;
+            //    return;
+            //}
         }
 
         if ($scope.endDate) {
-            if (!endDate.isValid() ) {
-                $scope.alertError('End Date must be empty/open or in this format: ' + $scope.formats.toString());
-                $scope.saving = false;
-                return;
-            }
-            if (endDate < startDate ) {
-                $scope.alertError('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
-                $scope.saving = false;
-                return;
-            }
+            //if (!endDate.isValid()) {
+            //    $scope.alertError('End Date must be empty/open or in this format: ' + $scope.formats.toString());
+            //    $scope.saving = false;
+            //    return;
+            //}
+            //if (endDate < startDate) {
+            //    $scope.alertError('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
+            //    $scope.saving = false;
+            //    return;
+            //}
         }
 
         details = $scope.$builder.queryBuilder('getDrools');
@@ -143,7 +144,7 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
             crudService.getList().then(function (myData) {
 
                 setData(myData.result);
-                $interval( function() {
+                $interval(function () {
                     var page;
                     if (!$scope.selectedIndex) {
                         page = $scope.gridApi.pagination.getTotalPages();
@@ -158,19 +159,10 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
         });
     };
 
-    $timeout(function() {
-        var $startDate = $('#start-date')
-        $startDate.datepicker({
-            minDate: "today",
-            startDate: "today",
-            format: 'yyyy-mm-dd',
-            autoClose: true
-        });
-
-        $startDate.datepicker('setDate', new Date($scope.today));
-        $startDate.datepicker('update');
-        $startDate.val($scope.today.toString());
-    }, 100);
-
     $scope.$scope = $scope;
+}).config(function ($mdDateLocaleProvider) {
+    'use strict';
+    $mdDateLocaleProvider.formatDate = function (date) {
+        return moment(date).format('YYYY-MM-DD');
+    };
 });
