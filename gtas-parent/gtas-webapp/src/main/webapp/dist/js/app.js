@@ -43,7 +43,7 @@ app.run(function ($rootScope) {
         }, {
             "name": "arrivalDt",
             "displayName": "ETA"
-        }],
+        }], 
         PASSENGER_UI: [{
             "name": "ruleHit",
             "displayName": "H",
