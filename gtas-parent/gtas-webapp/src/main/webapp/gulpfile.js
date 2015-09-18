@@ -6,6 +6,10 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify');
 
+var images = [
+    'resources/img/gtas_logo.png'
+];
+
 var cssFiles = [
     'resources/css/style.css',
     'resources/bower_components/bootstrap/dist/css/bootstrap.css',
@@ -129,14 +133,21 @@ gulp.task('deployCSS', function () {
         .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('deploy', ['deployCSS', 'deployJS']);
+gulp.task('deployImages', function () {
+    'use strict';
+    return gulp.src(images)
+        .pip(gulp.dest('dist/img'));
+});
+
+gulp.task('deploy', ['deplyImages', 'deployCSS', 'deployJS']);
 
 // Watch Files For Changes
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     'use strict';
     gulp.watch('js/*.js', ['lint', 'scripts']);
     gulp.watch('scss/*.scss', ['sass']);
 });
+
 
 // Default Task
 //gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
