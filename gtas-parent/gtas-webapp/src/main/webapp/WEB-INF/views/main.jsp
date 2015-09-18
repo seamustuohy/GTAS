@@ -1,208 +1,25 @@
 
 <!DOCTYPE html>
 <html lang="en" ng-app="myApp">
-<head>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Bootstrap core CSS -->
-<link href="resources/css/bootstrap.css" rel="stylesheet">
-<!-- Custom styles for this template -->
-<link href="resources/css/style.css" rel="stylesheet">
+	<head>
+	<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>GTAS</title>
 
-<title>GTAS</title>
-<!-- <link rel="stylesheet" href="resources/css/bootstrap-combined.min.css" /> //-->
-<link rel="stylesheet"
-	href="resources/bower_components/bootstrap/dist/css/bootstrap.css">
-<link rel="stylesheet"
-	href="resources/bower_components/ng-table/dist/ng-table.css" />
-<link rel="stylesheet" href="resources/css/gtas.css" />
-
-<link rel="stylesheet"
-	href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/angular-ui-grid/ui-grid.css" />
-
-<link rel="stylesheet" href="resources/css/query-builder.default.css"
-	id="qb-theme" />
-
-<link rel="stylesheet"
-	href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css" />
-
-<link rel="stylesheet"
-	href="resources/bower_components/angular-material/angular-material.min.css" />
-
-<style type="text/css">
-.modal-wrapper {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	background-color: rgba(0, 0, 0, .8);
-	z-index: 101;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	pointer-events: none;
-}
-
-.full {
-	background: url(http://placehold.it/1920x1080) no-repeat center center
-		fixed;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
-}
-
-/*        THIS OVERRIDES ALL NG-TABLES table headers
-        please add class to table and scope by additional parent class-name
-        you also have this same class name in the styles.css so should consolidate there
-        .header{
-        background: rgb(247, 250, 250);
-        }
-        */
-.hiddenRow {
-	padding: 0 !important;
-}
-
-/* .accordian-body {
-        margin-left: 50px;
-        } */
-#flightTable thead th {
-	text-align: center;
-}
-
-#flightTable tbody td {
-	text-align: center;
-}
-
-#paxTable thead th {
-	text-align: center;
-}
-
-#paxTable tbody td {
-	text-align: center;
-}
-
-/* Exclusive for nested Rule List Display */
-.collapse {
-	display: none;
-}
-
-.collapse.in {
-	display: block;
-}
-
-tr.collapse.in {
-	display: table-row;
-}
-
-tbody.collapse.in {
-	display: table-row-group;
-}
-
-.collapsing {
-	position: relative;
-	height: 0;
-	overflow: hidden;
-	-webkit-transition: height .35s ease;
-	-o-transition: height .35s ease;
-	transition: height .35s ease;
-}
-
-/*					.glyphicon {
-        margin: 1px 0px 5px 1px;
-        font-size: 26px;
-        color: #222;
-        padding: 5px;}
-
-        .glyphicon:hover, .glyphicon:focus {
-        color: #222;
-        padding: 5px;}
-        */
-.glyph {
-	text-align: center;
-}
-
-/* Bootstrap colors
-
-        @brand-success: #5cb85c;
-        @brand-danger:  #d9534f;
-
-        */
-
-/* Exclusive for nested Rule List Display */
-.glyphiconFlightPax {
-	margin: 1px 0px 5px 1px;
-	font-size: 26px;
-	color: #222;
-	/*background-color: #F0C425;*/
-	padding: 5px;
-}
-
-header {
-	height: 84px;
-	position: relative;
-}
-
-header::before {
-	content: "";
-	display: block;
-	height: 84px;
-	background-color: rgb(43, 127, 184);
-	background-image: url(resources/img/gtas_logo.png);
-	background-repeat: no-repeat;
-	background-position: top left;
-	position: relative;
-	top: 0;
-}
-
-header::after {
-	content: "";
-	display: block;
-	background-color: rgba(167, 169, 172, 1);
-	height: 10px;
-	position: relative;
-	bottom: 10px;
-	margin-left: 1170px;
-}
-
-.glyphiconFlightPax:hover, .glyphiconFlightPax:focus {
-	color: #222;
-	/* background-color: #FFFFFF;  #1F2E54 */
-	padding: 5px;
-}
-
-.glyph {
-	text-align: center;
-}
-
-@media ( min-width : 768px) {
-	.modal-dialog {
-		width: 1000px;
-	}
-}
-
-.ui-grid-pager-control input {
-	width: 100px;
-}
-</style>
-
-</head>
-
+	<link rel="stylesheet" href="dist/css/bootstrap.css" />
+	<link rel="stylesheet" href="dist/css/gtas.css" />
+	<link rel="stylesheet" href="dist/css/bootstrap-select.min.css" />
+	<link rel="stylesheet" href="dist/css/awesome-bootstrap-checkbox.css" />
+	<link rel="stylesheet" href="dist/css/bootstrap-slider.min.css" />
+	<link rel="stylesheet" href="dist/css/selectize.bootstrap3.css" />
+	<link rel="stylesheet" href="dist/css/bootstrap-datepicker.min.css" />
+	<link rel="stylesheet" href="dist/css/angular-ui-grid/ui-grid.css" />
+	<link rel="stylesheet" href="dist/css/query-builder.default.css" id="qb-theme" />
+	<link rel="stylesheet" href="dist/css/flags.css" />
+	<link rel="stylesheet" href="dist/css/angular-material.min.css" />
+	</head>
 <body>
 	<header></header>
 
@@ -270,74 +87,56 @@ header::after {
 	<!-- Bootstrap core JavaScript
         ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="resources/bower_components/angular/angular.js"></script>
-	<script
-		src="resources/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-	<script
-		src="resources/bower_components/ui-router-extras/release/ct-ui-router-extras.js"></script>
-	<script
-		src="resources/bower_components/angular-bootstrap/ui-bootstrap.js"></script>
-	<script
-		src="resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-	<script src="resources/bower_components/ng-table/dist/ng-table.js"></script>
-	<script
-		src="resources/bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js"></script>
-	<script src="resources/bower_components/moment/min/moment.min.js"></script>
+	<script src="dist/js/angular.js"></script>
+	<script src="dist/js/angular-ui-router.js"></script>
+	<script src="dist/js/ct-ui-router-extras.js"></script>
+	<script	src="dist/js/ui-bootstrap.js"></script>
+	<script src="dist/js/ui-bootstrap-tpls.js"></script>
+	<script src="dist/js/ng-table.js"></script>
+	<script src="dist/js/spring-security-csrf-token-interceptor.min.js"></script>
+	<script src="dist/js/moment.min.js"></script>
 
-	<script src="resources/bower_components/jquery/dist/jquery.js"></script>
-	<script
-		src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script
-		src="resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-	<script src="resources/bower_components/bootbox/bootbox.js"></script>
-	<script
-		src="resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-	<script
-		src="resources/bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
-	<script
-		src="resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-	<script
-		src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
-	<script src='resources/bower_components/pdfmake/build/pdfmake.min.js'></script>
-	<script src='resources/bower_components/pdfmake/build/vfs_fonts.js'></script>
-	<script
-		src="resources/bower_components/angular-material/angular-material.min.js"></script>
-	<script
-	src="resources/bower_components/material-date-picker/build/mbdatepicker.js"></script>
-	<script
-		src="resources/bower_components/angular-aria/angular-aria.min.js"></script>
-	<script
-		src="resources/bower_components/angular-animate/angular-animate.min.js"></script>
-	<script
-		src="resources/bower_components/angular-messages/angular-messages.min.js"></script>
+	<script src="dist/js/jquery.js"></script>
+	<script src="dist/js/bootstrap.min.js"></script>
+	<script src="dist/js/bootstrap-select.min.js"></script>
+	<script src="dist/js/bootbox.js"></script>
+	<script src="dist/js/bootstrap-slider.min.js"></script>
+	<script src="dist/js/selectize.min.js"></script>
+	<script src="dist/js/bootstrap-datepicker.min.js"></script>
+	<script src="dist/js/jQuery.extendext.min.js"></script>
+	<script src="dist/js/pdfmake.min.js"></script>
+	<script src="dist/js/vfs_fonts.js"></script>
+	<script src="dist/js/angular-material.min.js"></script>
+	<script src="dist/js/angular-aria.min.js"></script>
+	<script src="resources/bower_components/angular-animate/angular-animate.min.js"></script>
+	<script src="resources/bower_components/angular-messages/angular-messages.min.js"></script>
 
 	<!-- <script src="resources/bower_components/datatables/media/js/jquery.dataTables.min.js"></script> -->
-	<script src="resources/bower_components/angular-ui-grid/ui-grid.js"></script>
-
-	<script src="resources/js/query-builder.js"></script>
-	<script src="app.js"></script>
+	<script src="dist/js/ui-grid.js"></script>
+	<script src="dist/js/query-builder.js"></script>
+	<script src="dist/js/app.js"></script>
 	<!-- Possible Dependency Injections //-->
-	<script src="factory/GridFactory.js"></script>
-	<script src="factory/ModalGridFactory.js"></script>
-	<script src="factory/QueryBuilderFactory.js"></script>
-	<script src="factory/jQueryBuilderFactory.js"></script>
+	<script src="dist/js/GridFactory.js"></script>
+	<script src="dist/js/ModalGridFactory.js"></script>
+	<script src="dist/js/QueryBuilderFactory.js"></script>
+	<script src="dist/js/jQueryBuilderFactory.js"></script>
 	<!-- Controllers & Services //-->
-	<script src="dashboard/DashboardController.js"></script>
-	<script src="flights/FlightsIIController.js"></script>
-	<script src="flights/FlightsService.js"></script>
-	<script src="pax/PaxController.js"></script>
-	<script src="pax/PaxMainController.js"></script>
-	<script src="pax/PaxDetailController.js"></script>
-	<script src="pax/PaxService.js"></script>
-	<script src="pax/PaxFactory.js"></script>
-	<script src="query-builder/QueryBuilderController.js"></script>
-	<script src="risk-criteria/RiskCriteriaController.js"></script>
-	<script src="risk-criteria/RiskCriteriaService.js"></script>
-	<script src="resources/CrudService.js"></script>
-	<script src="query-builder/QueryService.js"></script>
-	<script src="watchlists/WatchListService.js"></script>
-	<script src="watchlists/WatchListController.js"></script>
-	<script src="admin/AdminController.js"></script>
-	<script src="admin/UserController.js"></script>
+	<script src="dist/js/DashboardController.js"></script>
+	<script src="dist/js/FlightsIIController.js"></script>
+	<script src="dist/js/FlightsService.js"></script>
+	<script src="dist/js/PaxController.js"></script>
+	<script src="dist/js/PaxMainController.js"></script>
+	<script src="dist/js/PaxDetailController.js"></script>
+	<script src="dist/js/PaxService.js"></script>
+	<script src="dist/js/PaxFactory.js"></script>
+	<script src="dist/js/QueryBuilderController.js"></script>
+	<script src="dist/js/RiskCriteriaController.js"></script>
+	<script src="dist/js/RiskCriteriaService.js"></script>
+	<script src="dist/js/CrudService.js"></script>
+	<script src="dist/js/QueryService.js"></script>
+	<script src="dist/js/WatchListService.js"></script>
+	<script src="dist/js/WatchListController.js"></script>
+	<script src="dist/js/AdminController.js"></script>
+	<script src="dist/js/UserController.js"></script>
 </body>
 </html>
