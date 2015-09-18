@@ -31,11 +31,10 @@ public class RuleHitDetail implements Serializable, Cloneable {
 
 	private String passengerName;
 
-	//@JsonIgnore
 	private String hitType;
 
 	private int hitCount;
-	//@JsonIgnore
+
 	private int ruleHitCount;
 
 	private String[] hitReasons;
