@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="dist/css/bootstrap-slider.min.css" />
 	<link rel="stylesheet" href="dist/css/selectize.bootstrap3.css" />
 	<link rel="stylesheet" href="dist/css/bootstrap-datepicker.min.css" />
-	<link rel="stylesheet" href="dist/css/angular-ui-grid/ui-grid.css" />
+	<link rel="stylesheet" href="dist/css/ui-grid.css" />
 	<link rel="stylesheet" href="dist/css/query-builder.default.css" id="qb-theme" />
 	<link rel="stylesheet" href="dist/css/flags.css" />
 	<link rel="stylesheet" href="dist/css/angular-material.min.css" />

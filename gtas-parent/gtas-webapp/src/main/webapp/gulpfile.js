@@ -58,6 +58,7 @@ var jsFiles = [
     'flights/FlightsService.js',
     'pax/PaxController.js',
     'pax/PaxDetailController.js',
+    'pax/PaxMainController.js',
     'pax/PaxService.js',
     'pax/PaxFactory.js',
     'query-builder/QueryBuilderService.js',
