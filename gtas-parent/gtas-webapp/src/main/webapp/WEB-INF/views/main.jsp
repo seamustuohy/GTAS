@@ -18,6 +18,7 @@
 	<link rel="stylesheet" href="dist/css/ui-grid.css" />
 	<link rel="stylesheet" href="dist/css/query-builder.default.css" id="qb-theme" />
 	<link rel="stylesheet" href="dist/css/flags.css" />
+	<link rel="stylesheet" href="dist/css/style-icomoon.css" />
 	<link rel="stylesheet" href="dist/css/angular-material.min.css" />
 	</head>
 <body>

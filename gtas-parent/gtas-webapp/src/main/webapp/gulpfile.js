@@ -11,7 +11,7 @@ var images = [
 ];
 
 var cssFiles = [
-    'resources/css/style.css',
+    'resources/css/style-icomoon.css',
     'resources/bower_components/bootstrap/dist/css/bootstrap.css',
     'resources/css/gtas.css',
     'resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css',
@@ -23,6 +23,13 @@ var cssFiles = [
     'resources/css/query-builder.default.css',
     'http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css',
     'resources/bower_components/angular-material/angular-material.min.css'
+];
+
+var fontFiles = [
+    'resources/fonts/icomoon.woff',
+    'resources/fonts/icomoon.ttf',
+    'resources/fonts/icomoon.svg',
+    'resources/fonts/icomoon.eot'
 ];
 
 var jsFiles = [
@@ -73,7 +80,6 @@ var jsFiles = [
     'admin/AdminController.js',
     'admin/UserController.js'
 ];
-
 
 //will concat and minify CSS
 gulp.task('minify-css', function () {
@@ -127,6 +133,12 @@ gulp.task('deployJS', function () {
         .pipe(gulp.dest('dist/js'));
 });
 
+gulp.task('deployFonts', function () {
+    'use strict';
+    return gulp.src(fontFiles)
+        .pipe(gulp.dest('dist/fonts'));
+});
+
 gulp.task('deployCSS', function () {
     'use strict';
     return gulp.src(cssFiles)
@@ -139,7 +151,7 @@ gulp.task('deployImages', function () {
         .pip(gulp.dest('dist/img'));
 });
 
-gulp.task('deploy', ['deplyImages', 'deployCSS', 'deployJS']);
+gulp.task('deploy', ['deployImages', 'deployCSS', 'deployJS', 'deployFonts']);
 
 // Watch Files For Changes
 gulp.task('watch', function () {
