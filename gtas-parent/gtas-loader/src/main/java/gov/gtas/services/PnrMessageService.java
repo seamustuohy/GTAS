@@ -113,11 +113,17 @@ public class PnrMessageService implements MessageService {
     }
 
     private void handleException(Exception e, MessageStatus status) {
+        // set all the collections to null so we can save the message itself
         pnr.setFlights(null);
         pnr.setPassengers(null);
+        pnr.setFlightLegs(null);
         pnr.setCreditCards(null);
-        // etc
-        
+        pnr.setAddresses(null);
+        pnr.setAgency(null);
+        pnr.setEmails(null);
+        pnr.setFrequentFlyers(null);
+        pnr.setPhones(null);
+
         pnr.setStatus(status);
         String stacktrace = ErrorUtils.getStacktrace(e);
         pnr.setError(stacktrace);
