@@ -190,7 +190,7 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
             filterOptions: $scope.filterOptions,
             sortInfo: $scope.sortOptions,	
             
-            columnDefs: [{"name": "ruleHit", "displayName": "H", width: 50, enableFiltering: false,
+            columnDefs: [{"name": "ruleHits", "displayName": "H", width: 50, enableFiltering: false,
 			            	 "sort": {
 			                     direction: uiGridConstants.DESC,
 			                     priority: 0
@@ -378,4 +378,37 @@ app.filter('flagImageFilter', function() {
     };
 
 })
+
+//flagImageFilter
+
+app.filter('watchListImageFilter', function() {
+    return function(hits) {
+        if(hits===1)  { return 'icon-user-check glyphiconWLPax col-sm-4'; } // glyphiconWLPax
+        if(hits===2)  { return 'icon-book glyphiconWLDocs col-sm-4'; } // glyphiconWLDocs
+        if(hits===3)  { return 'icon-user-check glyphiconWLPaxDocs col-sm-4'; } // glyphiconWLPaxDocs  glyphicon-user
+        return '';
+    };
+
+})
+
+app.filter('watchListImageInsertFilter', function() {
+    return function(hits) {
+        if(hits===1)  { return ''; } // glyphiconWLPax
+        if(hits===2)  { return ''; } // glyphiconWLDocs
+        if(hits===3)  { return 'icon-book'; } // glyphiconWLPaxDocs
+        return '';
+    };
+
+})
+
+app.filter('watchListImageColorFilter', function() {
+    return function(hits) {
+        if(hits===1)  { return 'padding: 7.5px; color: #d9534f;'; } // glyphiconWLPax
+        if(hits===2)  { return 'padding: 7.5px; color: #d9534f;'; } // glyphiconWLDocs
+        if(hits===3)  { return 'padding: 7.5px; color: #d9534f;'; } // glyphiconWLPaxDocs
+        return '';
+    };
+
+})
+
 

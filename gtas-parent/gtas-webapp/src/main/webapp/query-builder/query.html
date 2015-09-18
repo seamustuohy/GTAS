@@ -86,9 +86,9 @@
     </md-radio-group>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
     <button type="button" data-ng-click="executeQuery()"  class="md-raised md-primary md-button md-default-theme" >Execute Query</button>
-    <button type="button" data-ng-click="resetQueryBuilder()" class="md-raised md-primary md-button md-default-theme">Clear Conditions</button>
-    <button type="button" ng-show="ruleId !== null" data-ng-click="delete()" type="button" class="md-raised md-primary md-button md-default-theme" title="delete">Delete</button>
-    <button type="button" data-ng-click="save()" id="submit" class=" md-primary md-button md-default-theme">Save</button>
+    <button type="button" data-ng-click="resetQueryBuilder()" class="md-raised md-button md-default-theme">Clear Conditions</button>
+    <button type="button" ng-show="ruleId !== null" data-ng-click="delete()" type="button" class="md-raised md-warn md-button md-default-theme" title="delete">Delete</button>
+    <button type="button" data-ng-click="save()" id="submit" class="md-raised md-primary md-button md-default-theme">Save</button>
 </section>
 <div align="center" ng-show="loading" class="jumbotron" style="background-color: #FFFFFF">
     <svg width="300%" height="50%" viewBox="0 0 900 350">

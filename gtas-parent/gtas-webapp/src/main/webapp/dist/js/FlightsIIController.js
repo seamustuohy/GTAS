@@ -1,6 +1,6 @@
 app.controller('FlightsIIController', function ($scope, $rootScope, $injector, Modal, GridControl, uiGridConstants,
-                                                $filter, $q, flightService, paxService, jQueryBuilderFactory,
-                                                riskCriteriaService, $interval, $timeout) {
+                                                $filter, $q, flightService, paxService, QueryBuilderCtrl,
+                                                crudService, $interval, $timeout) {
     'use strict';
     $injector.invoke(GridControl, this, {$scope: $scope});
     $injector.invoke(Modal, this, {$scope: $scope});
@@ -191,23 +191,25 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                     "priority": 0
                 },
                 "width": 40,
-                "type": 'number'
+                "type": 'number',
+                enableFiltering: false
             }, {
                 "name": "watchlistHits",
                 "displayName": "L",
-                "width": 40,
-                "type": 'number'
+                cellTemplate:'<div><span class=\"{{row.entity.listHits | watchListImageFilter}}\" style=\"{{row.entity.listHits | watchListImageColorFilter}} \"><span class=\"{{row.entity.listHits | watchListImageInsertFilter}}\" style=\"{{row.entity.listHits | watchListImageColorFilter}} \"></span></div>',
+                "width": 70,
+                "type": 'number',
+                enableFiltering: false
             }, {
                 "name": "flightNumber",
                 "displayName": "Flight #",
-              //  cellTemplate: '<div>{{ row.entity.flightNumber }}</div>',
                 "width": 80,
                 "type": "string"
             }, {
                 "name": "direction",
                 "displayName": "Direction",
                 "type": "string",
-                "width": 30,
+                "width": 50,
                 "sort": {
                     "direction": uiGridConstants.ASC,
                     "priority": 0
@@ -317,6 +319,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
 
     var subGridHeaders = [{
         name: 'ruleId',
+        "width": 60,
         displayName: 'Id'
     }, {
         name: 'ruleTitle',
@@ -326,13 +329,15 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
         displayName: 'Conditions'
     }];
 
+    crudService.init('riskcriteria');
+
     var subGridRowSelected = function (subGridApi) {
         $scope.subGridApi = subGridApi;
         subGridApi.selection.on.rowSelectionChanged($scope, function (row) {
             if (row.isSelected) {
-                riskCriteriaService.loadRuleById(row.entity.ruleId).then(function (myData) {
-                    $scope.$builder.queryBuilder('readOnlyRules', myData.details);
-                    $scope.hitDetailDisplay = myData.summary.title;
+                crudService.loadRuleById(row.entity.ruleId).then(function (myData) {
+                    $scope.$builder.queryBuilder('loadRules', myData.result.details);
+                    $scope.hitDetailDisplay = myData.result.summary.title;
                     document.getElementById("QBModal").style.display = "block";
 
                     $scope.closeDialog = function () {
@@ -359,6 +364,9 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                     paxService.getRuleHits(row.entity.paxId).then(function (myData) {
                         var j, obj = {}, data = [];
                         for (j = 0; j < myData.length; j++) {
+
+                            if (myData[j].ruleType != 'R') { //<REMOVE THIS AFTER ADDING WATCHLIST SUPPORT>
+                            }else if(myData[j].ruleType === 'Z'){
                             obj = {
                                 ruleId: myData[j].ruleId,
                                 ruleTitle: myData[j].ruleTitle
@@ -369,6 +377,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                             }
 
                             data.push(obj);
+                        }// end of Else <REMOVE THIS AFTER ADDING WATCHLIST SUPPORT>
                         }
                         if (data.length) {
                             row.entity.subGridOptions.data = data;
@@ -385,7 +394,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     $scope.hitDetailDisplay = '';
     $scope.ruleHitsRendered = false; // flag to render rule hits only once
 
-    $injector.invoke(jQueryBuilderFactory, self, {$scope: $scope});
+    $injector.invoke(QueryBuilderCtrl, self, {$scope: $scope});
     $scope.loading = true;
 
     $scope.gridOpts.columnDefs = columns.FLIGHTS;
@@ -469,7 +478,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     $scope.getRuleObject = function (ruleID) {
         riskCriteriaService.loadRuleById(ruleID).then(function (myData) {
             $scope.$builder.queryBuilder('readOnlyRules', myData.details);
-            $scope.hitDetailDisplay = myData.summary.title;
+            $scope.hitDetailDisplay = myData.result.summary.title;
             document.getElementById("QBModal").style.display = "block";
 
             $scope.closeDialog = function () {
