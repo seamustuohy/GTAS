@@ -3,16 +3,26 @@
 	<md-content layout-padding>
 	<form name="userForm">
 		<div layout layout-sm="column">
-			<md-input-container flex> <label>User Id</label>
-			<input ng-model="user.userId" required > </md-input-container>
+
+			<md-input-container flex  ng-show="action === 'modify'"> <label>User Id</label>
+
+			<input ng-model="persistUser.userId"  disabled>
+
+			</md-input-container>
+			<md-input-container flex  ng-show="action === 'create'"> <label>User Id</label>
+
+				<input ng-model="persistUser.userId"  required>
+
+			</md-input-container>
+
 			<md-input-container flex> <label>Password</label>
-			<input ng-model="user.password"  type="password" > </md-input-container>
+			<input ng-model="persistUser.password"  type="password" > </md-input-container>
 		</div>
 		<div layout layout-sm="column">
 			<md-input-container flex> <label>First
-				name</label> <input ng-model="user.firstName" required> </md-input-container>
+				name</label> <input ng-model="persistUser.firstName" required> </md-input-container>
 			<md-input-container flex> <label>Last
-				Name</label> <input ng-model="user.lastName" required> </md-input-container>
+				Name</label> <input ng-model="persistUser.lastName" required> </md-input-container>
 		</div>
 
 		<div layout="row" >
@@ -23,7 +33,7 @@
 					value=1 class="md-primary">Enable</md-radio-button> <md-radio-button
 					value=0> Disable </md-radio-button> </md-radio-group> -->
 					
-					<md-radio-group ng-model="userStatus" class="md-primary">
+					<md-radio-group ng-model="persistUser.active" class="md-primary">
         <md-radio-button ng-repeat="d in radioData"
                          ng-value="d.value"
                          ng-class="{'md-align-top-left': $index==1}" >
@@ -38,11 +48,11 @@
 				<fieldset class="standard" flex >
 						<code>Roles</code>
 					<div layout="row" layout-wrap>
-						<div flex="25" ng-repeat="item in items">
+						<div flex="25" ng-repeat="role in roles">
 							<md-checkbox class="md-primary" required
-								ng-checked="exists(item, selected)"
-								ng-click="toggle(item, selected)"> {{ item }} <span
-								ng-if="exists(item, selected)"></span> </md-checkbox>
+								ng-checked="exists(role, selectedRoles)"
+								ng-click="toggle(role, selectedRoles)"> {{ role }} <span
+								ng-if="exists(role, selectedRoles)"></span> </md-checkbox>
 						</div>
 					</div>
 				</fieldset>
@@ -52,7 +62,8 @@
 		</div>
 		<div class="md-actions" layout="row">
 		<span flex="80"></span>
-		<md-button class="md-raised md-primary">Save</md-button>
+			<md-button class="md-raised md-primary" ng-click="back()">back</md-button>
+		<md-button class="md-raised md-primary" ng-click="saveUser()">Save</md-button>
 		</div>
 
 	</form>

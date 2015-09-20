@@ -1,9 +1,9 @@
-app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams','$interval', 'uiGridConstants', '$injector', 'GridControl',
-                             function ($scope, $http,$state,$stateParams,$interval, uiGridConstants, $injector, GridControl) {
+app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams', 'uiGridConstants','$interval',
+                             function ($scope, $http,$state,$stateParams, uiGridConstants,$interval) {
 	
 	$scope.gridOptions = { enableRowSelection: true, enableRowHeaderSelection: false };
 
-	$scope.selectedUser=';'
+	$scope.selectedUser=$stateParams.user;
   $scope.gridOptions.columnDefs = [
     { name: 'userId' ,field: 'userId'},
     { name: 'firstName',field:'firstName'},
@@ -11,13 +11,7 @@ app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams','$interv
     { name: 'active' ,field:'active'},
     {name: 'roles', field:'roles'}
   ];
-  
-	/*angular.forEach($scope.gridOptions.data,function(row){
-		  row.getNameAndAge = function(){
-		    return this.name + '-' + this.age;
-		  }
-		});*/
- 
+
   $scope.gridOptions.multiSelect = false;
   $scope.gridOptions.modifierKeysToMultiSelect = false;
   $scope.gridOptions.noUnselect = true;
@@ -25,11 +19,31 @@ app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams','$interv
 	  
     $scope.gridApi = gridApi;
     gridApi.selection.on.rowSelectionChanged($scope,function(row){
-        var msg = 'row selected ' + row.isSelected;
+
         $scope.selectedUser=row.entity;
        
       });
- 
+
+      if($scope.selectedUser!=null && $scope.selectedUser.userId.length>0 ) {
+          var selectedRowIndex=$scope. getSelectedRowIndexOnUserId($scope.selectedUser.userId);
+          if(selectedRowIndex!=null) {
+              $interval(function () {
+                  $scope.gridApi.selection.selectRow($scope.gridOptions.data[selectedRowIndex]);
+              }, 0, 1);
+          }
+          else
+          {
+             //User created ,refresh all users
+              $http.get('/gtas/users/')
+                  .success(function(data) {
+
+                      $scope.gridOptions.data = data;
+                      // $interval whilst we wait for the grid to digest the data we just gave it
+                      $interval( function() {$scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);}, 0, 1);
+                  });
+
+          }
+      }
   };
  
   $scope.toggleRowSelection = function(gridApi) {
@@ -40,7 +54,7 @@ app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams','$interv
   };
  
   $http.get('/gtas/users/')
-    .success(function(data) {    	
+    .success(function(data) {
     	
       $scope.gridOptions.data = data;
  
@@ -48,11 +62,32 @@ app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams','$interv
       $interval( function() {$scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);}, 0, 1);
     });
   
-  $scope.addData = function() {
+  $scope.modifyUser = function() {
 	  
-	  $state.go('admin.addUser', { action: 'add', user: $scope.selectedUser });
-	    
-	  };
-	  
+	  $state.go('admin.addUser', { action: 'modify', user: $scope.selectedUser });
+
+  };
+
+ $scope.getSelectedRowIndexOnUserId=function (userId) {
+     var i = 0, len = $scope.gridOptions.data.length;
+
+     if (userId.length <= 0) {
+     } else {
+         for (i = 0; i < len; i++) {
+             if ( $scope.gridOptions.data[i].userId === userId) {
+                 {
+                     //alert("Found match");
+                     return i;
+                 }
+             }
+         }
+     }
+     return null;
+ };
+ $scope.createUser = function() {
+
+   $state.go('admin.addUser', { action: 'create', user: null });
+
+ };
 	  $state.go('admin.users');
 }]);
