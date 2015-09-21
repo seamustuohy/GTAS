@@ -7,7 +7,13 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify');
 
 var images = [
-    'resources/img/gtas_logo.png'
+    'resources/img/404.png',
+    'resources/img/banner.png',
+    'resources/img/circle_arrow_back.png',
+    'resources/img/loading_default_en.gif',
+    'resources/img/logo.jpg',
+    'resources/img/gtas_logo.png',
+    'resources/img/top_banner.jpg'
 ];
 
 var cssFiles = [
@@ -21,7 +27,7 @@ var cssFiles = [
     'resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css',
     'resources/bower_components/angular-ui-grid/dist/css/ui-grid.css',
     'resources/css/query-builder.default.css',
-    'http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css',
+/*    'http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css',*/
     'resources/bower_components/angular-material/angular-material.min.css'
 ];
 

@@ -85,9 +85,9 @@
 	</div>
 	<!-- main container -->
 
-	<!-- Bootstrap core JavaScript
-        ================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
+	<!-- for Debug purposes -->
+	<script src="dist/all.min.js"></script>
+<!--
 	<script src="dist/js/angular.js"></script>
 	<script src="dist/js/angular-ui-router.js"></script>
 	<script src="dist/js/ct-ui-router-extras.js"></script>
@@ -96,7 +96,6 @@
 	<script src="dist/js/ng-table.js"></script>
 	<script src="dist/js/spring-security-csrf-token-interceptor.min.js"></script>
 	<script src="dist/js/moment.min.js"></script>
-
 	<script src="dist/js/jquery.js"></script>
 	<script src="dist/js/bootstrap.min.js"></script>
 	<script src="dist/js/bootstrap-select.min.js"></script>
@@ -111,17 +110,13 @@
 	<script src="dist/js/angular-aria.min.js"></script>
 	<script src="resources/bower_components/angular-animate/angular-animate.min.js"></script>
 	<script src="resources/bower_components/angular-messages/angular-messages.min.js"></script>
-
-	<!-- <script src="resources/bower_components/datatables/media/js/jquery.dataTables.min.js"></script> -->
 	<script src="dist/js/ui-grid.js"></script>
 	<script src="dist/js/query-builder.js"></script>
 	<script src="dist/js/app.js"></script>
-	<!-- Possible Dependency Injections //-->
 	<script src="dist/js/GridFactory.js"></script>
 	<script src="dist/js/ModalGridFactory.js"></script>
 	<script src="dist/js/QueryBuilderFactory.js"></script>
 	<script src="dist/js/jQueryBuilderFactory.js"></script>
-	<!-- Controllers & Services //-->
 	<script src="dist/js/DashboardController.js"></script>
 	<script src="dist/js/FlightsIIController.js"></script>
 	<script src="dist/js/FlightsService.js"></script>
@@ -139,5 +134,6 @@
 	<script src="dist/js/WatchListController.js"></script>
 	<script src="dist/js/AdminController.js"></script>
 	<script src="dist/js/UserController.js"></script>
-</body>
+//-->
+	</body>
 </html>
