@@ -335,6 +335,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
 
     var entityMapper = {
         'PASSENGER': 'Passenger',
+        'ADDRESS': 'Address',
         'DOCUMENT': 'Document'
     };
 
