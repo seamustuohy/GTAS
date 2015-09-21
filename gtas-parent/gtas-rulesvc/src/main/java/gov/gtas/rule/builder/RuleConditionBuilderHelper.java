@@ -156,7 +156,7 @@ public class RuleConditionBuilderHelper {
 		TypeEnum attributeType = TypeEnum.getEnum(cond.getType());
 
 		EntityEnum entity = EntityEnum.getEnum(cond.getEntity());
-		bldr.append(entity.getFriendlyName()).append(SPACE_CHAR)
+		bldr.append(entity.getEntityName()).append(SPACE_CHAR)
 				.append(getFieldName(entity, cond.getField()))
 				.append(SPACE_CHAR).append(opCode.getDisplayName())
 				.append(SPACE_CHAR);
