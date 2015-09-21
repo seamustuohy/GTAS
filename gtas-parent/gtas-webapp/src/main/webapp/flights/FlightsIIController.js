@@ -259,16 +259,18 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                     "direction": uiGridConstants.DESC,
                     "priority": 0
                 }
-            }, {
-                "name": "listHits",
-                "displayName": "L",
-                "width": 50,
-                "type": "string",
-                "sort": {
-                    "direction": uiGridConstants.DESC,
-                    "priority": 1
-                }
-            }, {
+            },
+            //    {
+            //    "name": "listHits",
+            //    "displayName": "L",
+            //    "width": 50,
+            //    "type": "string",
+            //    "sort": {
+            //        "direction": uiGridConstants.DESC,
+            //        "priority": 1
+            //    }
+            //},
+                {
                 "name": "lastName",
                 "displayName": "P",
                 "width": 150,

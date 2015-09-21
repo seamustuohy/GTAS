@@ -179,6 +179,7 @@ public class FlightController {
         _tempLL.add(0, flights.size());
         _tempLL.add(1, rv);
 
+    	hitsList.clear();
         return _tempLL;
     }
     
@@ -229,6 +230,7 @@ public class FlightController {
 			ex.printStackTrace();
 		}
 
+		hitsList.clear();
 		return new FlightVo();
 
 	}
