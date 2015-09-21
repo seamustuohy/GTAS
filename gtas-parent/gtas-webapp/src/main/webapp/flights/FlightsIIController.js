@@ -1,5 +1,5 @@
 app.controller('FlightsIIController', function ($scope, $rootScope, $injector, Modal, GridControl, uiGridConstants,
-                                                $filter, $q, flightService, paxService, QueryBuilderCtrl,
+                                                $filter, $q, flightService, paxService, jQueryBuilderFactory,
                                                 crudService, $interval, $timeout) {
     'use strict';
     $injector.invoke(GridControl, this, {$scope: $scope});
@@ -331,12 +331,21 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
 
     crudService.init('riskcriteria');
 
+    var entityMapper = {
+        'PASSENGER': 'Passenger',
+        'DOCUMENT': 'Document'
+    };
+
     var subGridRowSelected = function (subGridApi) {
         $scope.subGridApi = subGridApi;
         subGridApi.selection.on.rowSelectionChanged($scope, function (row) {
             if (row.isSelected) {
                 crudService.loadRuleById(row.entity.ruleId).then(function (myData) {
-                    $scope.$builder.queryBuilder('loadRules', myData.result.details);
+                    var details = myData.result.details;
+                    details.rules.forEach(function(rule) {
+                        rule.entity = entityMapper[rule.entity];
+                    });
+                    $scope.$builder.queryBuilder('loadRules', details);
                     $scope.hitDetailDisplay = myData.result.summary.title;
                     document.getElementById("QBModal").style.display = "block";
 
@@ -348,6 +357,24 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
             }
         });
     };
+
+    //var subGridRowSelected = function (subGridApi) {
+    //    $scope.subGridApi = subGridApi;
+    //    subGridApi.selection.on.rowSelectionChanged($scope, function (row) {
+    //        if (row.isSelected) {
+    //            crudService.loadRuleById(row.entity.ruleId).then(function (myData) {
+    //                $scope.$builder.queryBuilder('readOnlyRules', myData.result.details);
+    //                $scope.hitDetailDisplay = myData.result.summary.title;
+    //                document.getElementById("QBModal").style.display = "block";
+    //
+    //                $scope.closeDialog = function () {
+    //                    document.getElementById("QBModal").style.display = "none";
+    //                };
+    //
+    //            });
+    //        }
+    //    });
+    //};
 
     $rootScope.gridOptions = $.extend({
         columnDefs: columns.PASSENGERS,
@@ -366,7 +393,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
                         for (j = 0; j < myData.length; j++) {
 
                             if (myData[j].ruleType != 'R') { //<REMOVE THIS AFTER ADDING WATCHLIST SUPPORT>
-                            }else if(myData[j].ruleType === 'Z'){
+                            }else if(myData[j].ruleType === 'R'){
                             obj = {
                                 ruleId: myData[j].ruleId,
                                 ruleTitle: myData[j].ruleTitle
@@ -394,7 +421,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     $scope.hitDetailDisplay = '';
     $scope.ruleHitsRendered = false; // flag to render rule hits only once
 
-    $injector.invoke(QueryBuilderCtrl, self, {$scope: $scope});
+    $injector.invoke(jQueryBuilderFactory, self, {$scope: $scope});
     $scope.loading = true;
 
     $scope.gridOpts.columnDefs = columns.FLIGHTS;
@@ -455,6 +482,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
         };
 
         flightService.getFlights(objParams).then(function (myData) {
+            $scope.gridOpts.data = [];
             $scope.loading = false;
             $scope.gridOpts.totalItems = myData[0];
             $scope.gridOpts.data = myData[1];
@@ -477,7 +505,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
 
     $scope.getRuleObject = function (ruleID) {
         riskCriteriaService.loadRuleById(ruleID).then(function (myData) {
-            $scope.$builder.queryBuilder('readOnlyRules', myData.details);
+            $scope.$builder.queryBuilder('readOnlyRules', myData.result.details);
             $scope.hitDetailDisplay = myData.result.summary.title;
             document.getElementById("QBModal").style.display = "block";
 

@@ -206,7 +206,7 @@ app.run(function ($rootScope) {
 });
 
 app.config(function ($stateProvider) {
-    $stateProvider
+
     $stateProvider.state('admin', {
         url: '/admin',
         templateUrl: 'admin/admin.header.html',
