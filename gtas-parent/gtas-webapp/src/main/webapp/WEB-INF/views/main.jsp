@@ -84,10 +84,10 @@
 
 	</div>
 	<!-- main container -->
-
-	<!-- for Debug purposes -->
+	<!--
 	<script src="dist/all.min.js"></script>
-<!--
+	//-->
+	<!-- for Debug purposes -->
 	<script src="dist/js/angular.js"></script>
 	<script src="dist/js/angular-ui-router.js"></script>
 	<script src="dist/js/ct-ui-router-extras.js"></script>
@@ -135,6 +135,5 @@
 	<script src="dist/js/AdminController.js"></script>
 	<script src="dist/js/UserController.js"></script>
 	<script src="dist/js/UserService.js"></script>
-//-->
 	</body>
 </html>
