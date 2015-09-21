@@ -84,7 +84,8 @@ var jsFiles = [
     'watchlists/WatchListService.js',
     'watchlists/WatchListController.js',
     'admin/AdminController.js',
-    'admin/UserController.js'
+    'admin/UserController.js',
+    'admin/UserService.js'
 ];
 
 //will concat and minify CSS

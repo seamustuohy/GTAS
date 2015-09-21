@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of the Targeting Service API.
@@ -308,12 +309,12 @@ public class TargetingServiceImpl implements TargetingService {
 				passengerFlightTuples);
 		for (int i = 0; i < setList.size(); i++) {
 			PassengerFlightTuple passengerFlightTuple = setList.get(i);
-			HitsSummary found = hitsSummaryRepository
+			List<HitsSummary> found = hitsSummaryRepository
 					.findByFlightIdAndPassengerId(passengerFlightTuple
 							.getFlight().getId(), passengerFlightTuple
 							.getPassenger().getId());
-			if (found != null) {
-				em.remove(found);
+			if (!CollectionUtils.isEmpty(found)) {
+				hitsSummaryRepository.delete(found);
 			}
 			if (i % Integer.valueOf(batchSize) == 0) {
 				em.flush();

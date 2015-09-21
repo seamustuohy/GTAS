@@ -134,6 +134,7 @@
 	<script src="dist/js/WatchListController.js"></script>
 	<script src="dist/js/AdminController.js"></script>
 	<script src="dist/js/UserController.js"></script>
+	<script src="dist/js/UserService.js"></script>
 //-->
 	</body>
 </html>

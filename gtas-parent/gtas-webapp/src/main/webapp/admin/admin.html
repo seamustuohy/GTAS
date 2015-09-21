@@ -1,13 +1,16 @@
-<html ng-app="myApp">
-  
-  <body>
-    <div >
-      
-      <button type="button" id="addData" class="btn btn-success" ng-click="addData()">Modify User</button>
-      <button type="button" id="reset" class="btn btn-success" ng-click="reset()">Create User</button>
+<html >
+<div  layout="column">
+
+  <md-content layout-padding>
+      <div >
+      <div class="md-actions" layout="row">
+        <md-button class="md-raised md-primary" ng-click="modifyUser()">Modify User</md-button>
+        <md-button class="md-raised md-primary" ng-click="createUser()">Add User</md-button>
+        </div>
+      </div>
       <br>
       <br>
-      <div ui-grid="gridOptions" ui-grid-selection class="grid"></div>
-    </div>
-  </body>
+      <div layout="row" layout-align="start center" ui-grid="gridOptions" ui-grid-selection class="grid"></div>
+    </md-content>
+  </div>
 </html>

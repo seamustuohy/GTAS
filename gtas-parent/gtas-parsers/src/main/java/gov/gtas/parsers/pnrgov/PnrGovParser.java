@@ -91,7 +91,9 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         }
 
         DAT_G1 dat = getConditionalSegment(DAT_G1.class, "DAT");
-        parsedMessage.setDateBooked(dat.getTicketIssueDate());
+        if (dat != null) {
+            parsedMessage.setDateBooked(dat.getTicketIssueDate());
+        }
 
         for (;;) {
             IFT ift = getConditionalSegment(IFT.class);
