@@ -128,7 +128,7 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
             summary: {
                 title: $scope.title,
                 description: $scope.description || null,
-                startDate: $scope.startDate,
+                startDate: $scope.startDate || $scope.today,
                 endDate: $scope.endDate || null,
                 enabled: $scope.enabled
             }
