@@ -508,7 +508,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
 
     $scope.getRuleObject = function (ruleID) {
-        riskCriteriaService.loadRuleById(ruleID).then(function (myData) {
+        crudService.loadRuleById(ruleID).then(function (myData) {
             $scope.$builder.queryBuilder('readOnlyRules', myData.result.details);
             $scope.hitDetailDisplay = myData.result.summary.title;
             document.getElementById("QBModal").style.display = "block";

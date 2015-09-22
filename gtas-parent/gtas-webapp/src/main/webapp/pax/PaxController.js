@@ -1,5 +1,5 @@
 app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jQueryBuilderFactory, $filter,
-                                          $q, paxService, sharedPaxData, riskCriteriaService, $stateParams, $state,
+                                          $q, paxService, sharedPaxData, $stateParams, $state,
                                           $timeout, $interval, uiGridConstants) {
     var self = this;
     $injector.invoke(jQueryBuilderFactory, this, {$scope: $scope});
@@ -365,16 +365,16 @@ app.filter('flagImageFilter', function () {
 
 app.filter('watchListImageFilter', function () {
     return function (hits) {
-        if (hits === 1) {
-            return 'icon-user-check glyphiconWLPax col-sm-4';
-        } // glyphiconWLPax
-        if (hits === 2) {
-            return 'icon-book glyphiconWLDocs col-sm-4';
-        } // glyphiconWLDocs
-        if (hits === 3) {
-            return 'icon-user-check glyphiconWLPaxDocs col-sm-4';
-        } // glyphiconWLPaxDocs  glyphicon-user
-        return '';
+        switch (hits) {
+            case 1:
+                return 'icon-user-check glyphiconWLPax col-sm-4';
+            case 2:
+                return 'icon-book glyphiconWLDocs col-sm-4';
+            case 3:
+                return 'icon-user-check glyphiconWLPaxDocs col-sm-4';
+            default:
+                return '';
+        }
     };
 });
 
