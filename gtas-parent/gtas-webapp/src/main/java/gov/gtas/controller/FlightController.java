@@ -156,7 +156,7 @@ public class FlightController {
 				vo.setListHits(2);
 				}
 				
-				vo.setTotalPax(passengers.size());
+				vo.setPassengerCount(passengers.size());
 				rv.add(vo);
 			
         	} catch(Exception ex){

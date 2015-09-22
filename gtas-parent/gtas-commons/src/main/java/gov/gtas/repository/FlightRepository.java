@@ -38,7 +38,6 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
             @Param("startDate") Date startDate, 
             @Param("endDate") Date endDate);
 
-
     @Query("SELECT f FROM Flight f join f.passengers p where p.id = (:paxId)")
     public List<Flight> getFlightByPaxId(@Param("paxId") Long paxId);
 

@@ -175,6 +175,7 @@ public class LoaderRepository {
         }
                
         // create any new passengers
+        int newPax = 0;
         for (PassengerVo pvo : passengers) {
             if (existingPassengers.contains(pvo)) {
                 continue;
@@ -186,6 +187,7 @@ public class LoaderRepository {
             }
             passengerDao.save(p);
             messagePassengers.add(p);
+            newPax++;
         }
         
         // assoc all passengers w/ flights
@@ -193,6 +195,7 @@ public class LoaderRepository {
             for (Passenger p : messagePassengers) {
                 f.addPassenger(p);
             }
+            f.setPassengerCount(f.getPassengerCount() + newPax);
         }
     }
 

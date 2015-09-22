@@ -23,7 +23,7 @@ app.controller('FlightsController', function ($scope, $http, flightService) {
   };
 
   $scope.gridOptions.columnDefs = [
-    { name: 'P', field: 'totalPax', width: 50 },
+    { name: 'P', field: 'passengerCount', width: 50 },
     { name: 'H', field: 'ruleHits', width: 50 },
     { name: 'L', field: 'listHits', width: 50 },
     { name: 'Flight', field: 'flightNumber' },
