@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import gov.gtas.delegates.PnrServiceDelegate;
-import gov.gtas.delegates.vo.PnrVo;
+import gov.gtas.vo.PnrVo;
 
 @Controller
 public class PnrController {

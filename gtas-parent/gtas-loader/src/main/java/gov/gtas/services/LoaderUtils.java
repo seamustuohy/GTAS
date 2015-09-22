@@ -26,15 +26,15 @@ import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Country;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.pnrgov.PnrVo;
-import gov.gtas.parsers.vo.passenger.AddressVo;
-import gov.gtas.parsers.vo.passenger.CreditCardVo;
-import gov.gtas.parsers.vo.passenger.DocumentVo;
-import gov.gtas.parsers.vo.passenger.FlightVo;
-import gov.gtas.parsers.vo.passenger.FrequentFlyerVo;
-import gov.gtas.parsers.vo.passenger.PassengerVo;
-import gov.gtas.parsers.vo.passenger.PhoneVo;
-import gov.gtas.parsers.vo.passenger.ReportingPartyVo;
+import gov.gtas.vo.PnrVo;
+import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.DocumentVo;
+import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.passenger.FrequentFlyerVo;
+import gov.gtas.vo.passenger.PassengerVo;
+import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.ReportingPartyVo;
 
 @Service
 public class LoaderUtils {

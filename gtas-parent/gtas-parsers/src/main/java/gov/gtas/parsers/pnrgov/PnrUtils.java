@@ -16,10 +16,10 @@ import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TIF;
 import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.parsers.vo.passenger.AddressVo;
-import gov.gtas.parsers.vo.passenger.DocumentVo;
-import gov.gtas.parsers.vo.passenger.PassengerVo;
-import gov.gtas.parsers.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.DocumentVo;
+import gov.gtas.vo.passenger.PassengerVo;
+import gov.gtas.vo.passenger.PhoneVo;
 
 public class PnrUtils {
     public static Date parseDateTime(String dt) throws ParseException {

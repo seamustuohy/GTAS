@@ -1,11 +1,11 @@
 package gov.gtas.validators;
 
-import gov.gtas.delegates.vo.ApisMessageVo;
-import gov.gtas.delegates.vo.DocumentVo;
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.delegates.vo.InvalidObjectInfoVo;
-import gov.gtas.delegates.vo.PassengerVo;
-import gov.gtas.delegates.vo.ReportingPartyVo;
+import gov.gtas.vo.ApisMessageVo;
+import gov.gtas.vo.passenger.DocumentVo;
+import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.InvalidObjectInfoVo;
+import gov.gtas.vo.passenger.PassengerVo;
+import gov.gtas.vo.passenger.ReportingPartyVo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -58,13 +58,13 @@ public class ApisMessageValidator {
 			Iterator<ReportingPartyVo> it  = reportingParties.iterator();
 			while(it.hasNext()){
 				ReportingPartyVo vo = (ReportingPartyVo) it.next();
-				if(!vo.validate()){
+				/*if(!vo.validate()){
 					populateInvalidObjectList(vo, messageVo);
 					vo=null;
 				}
 				else{
 					modifiedList.add(vo);
-				}
+				}*/
 			}
 		}
 		return modifiedList;

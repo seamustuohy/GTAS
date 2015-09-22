@@ -1,4 +1,4 @@
-package gov.gtas.delegates.vo;
+package gov.gtas.vo.passenger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;

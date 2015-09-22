@@ -1,6 +1,6 @@
 package gov.gtas.delegates;
 
-import gov.gtas.delegates.vo.InvalidObjectInfoVo;
+import gov.gtas.vo.InvalidObjectInfoVo;
 import gov.gtas.model.InvalidObjectInfo;
 import gov.gtas.services.ErrorLoggingService;
 import java.util.List;

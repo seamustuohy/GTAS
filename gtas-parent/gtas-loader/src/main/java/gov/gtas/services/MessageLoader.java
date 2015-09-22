@@ -7,7 +7,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.parsers.edifact.MessageVo;
+import gov.gtas.vo.MessageVo;
+
 
 public class MessageLoader {
     public static void processSingleFile(MessageService svc, File f) {
@@ -31,8 +32,8 @@ public class MessageLoader {
     }
     
     /**
-     * For APIS messages, Type “B” messages are no longer limited to a length of
-     * 3840 bytes. SITA and ARInc now support Type “B” message lengths up to
+     * For APIS messages, Type â€œBâ€� messages are no longer limited to a length of
+     * 3840 bytes. SITA and ARInc now support Type â€œBâ€� message lengths up to
      * 64,000 bytes.
      * 
      * TODO: what about pnr?

@@ -20,6 +20,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>gov.gtas</groupId>
+      <artifactId>gtas-commons</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
     </dependency>

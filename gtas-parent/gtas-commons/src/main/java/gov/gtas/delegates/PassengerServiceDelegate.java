@@ -2,8 +2,8 @@ package gov.gtas.delegates;
 
 import java.util.Date;
 import java.util.Iterator;
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.delegates.vo.PassengerVo;
+import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
@@ -30,7 +30,7 @@ public class PassengerServiceDelegate {
 	@Transactional
 	public PassengerVo saveOrUpdate(PassengerVo passengerVo){
 		logger.debug("From saveOrUpdate method of "+this.getClass().getSimpleName());
-		FlightVo vo=new FlightVo();
+/*		FlightVo vo=new FlightVo();
 		if(passengerVo != null && passengerVo.getFlights() != null && passengerVo.getFlights().size() >0 ){
 			Iterator it = passengerVo.getFlights().iterator();
 			while(it.hasNext()){
@@ -55,7 +55,7 @@ public class PassengerServiceDelegate {
 				p.getFlights().add(f);
 				flightService.create(f);
 			}
-		}
+		}*/
 		return passengerVo;
 	}
 	

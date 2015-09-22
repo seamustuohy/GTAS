@@ -1,4 +1,4 @@
-package gov.gtas.delegates.vo;
+package gov.gtas.vo;
 
 import java.util.Date;
 /**

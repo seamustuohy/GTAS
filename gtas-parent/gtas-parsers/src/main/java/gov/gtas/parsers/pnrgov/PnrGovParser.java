@@ -42,13 +42,15 @@ import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.parsers.vo.passenger.AddressVo;
-import gov.gtas.parsers.vo.passenger.CreditCardVo;
-import gov.gtas.parsers.vo.passenger.FlightVo;
-import gov.gtas.parsers.vo.passenger.FrequentFlyerVo;
-import gov.gtas.parsers.vo.passenger.PassengerVo;
-import gov.gtas.parsers.vo.passenger.PhoneVo;
-import gov.gtas.parsers.vo.passenger.PnrReportingAgentVo;
+import gov.gtas.vo.PnrVo;
+import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.passenger.FrequentFlyerVo;
+import gov.gtas.vo.passenger.PassengerVo;
+import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.PnrReportingAgentVo;
+
 
 public final class PnrGovParser extends EdifactParser<PnrVo> {
    
@@ -63,7 +65,10 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     @Override
     public void parsePayload() throws ParseException {
         MSG msg = getMandatorySegment(MSG.class);
-        parsedMessage.setMessageCode(msg.getMessageTypeCode());
+        if(msg != null && msg.getMessageTypeCode() != null){
+        	parsedMessage.setMessageCode(msg.getMessageTypeCode().getCode());
+        }
+        
         getMandatorySegment(ORG.class);
         TVL_L0 tvl = getMandatorySegment(TVL_L0.class, "TVL");
         getMandatorySegment(EQN.class);

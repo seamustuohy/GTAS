@@ -1,13 +1,8 @@
 package gov.gtas.validators;
 
-import gov.gtas.delegates.vo.AddressVo;
-import gov.gtas.delegates.vo.CreditCardVo;
-import gov.gtas.delegates.vo.FrequentFlyerVo;
-import gov.gtas.delegates.vo.InvalidObjectInfoVo;
-import gov.gtas.delegates.vo.PhoneVo;
-import gov.gtas.delegates.vo.PnrMessageVo;
-import gov.gtas.delegates.vo.PnrReportingAgentVo;
-import gov.gtas.delegates.vo.PnrVo;
+import gov.gtas.vo.*;
+import gov.gtas.vo.passenger.*;
+import gov.gtas.vo.InvalidObjectInfoVo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -4,17 +4,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import org.apache.commons.lang3.StringUtils;
-import gov.gtas.delegates.vo.AddressVo;
-import gov.gtas.delegates.vo.AgencyVo;
-import gov.gtas.delegates.vo.CreditCardVo;
-import gov.gtas.delegates.vo.DocumentVo;
-import gov.gtas.delegates.vo.EmailVo;
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.delegates.vo.FrequentFlyerVo;
-import gov.gtas.delegates.vo.PassengerVo;
-import gov.gtas.delegates.vo.PhoneVo;
-import gov.gtas.delegates.vo.PnrVo;
-import gov.gtas.delegates.vo.PnrMessageVo;
+import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.DocumentVo;
+import gov.gtas.vo.passenger.EmailVo;
+import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.passenger.FrequentFlyerVo;
+import gov.gtas.vo.passenger.PassengerVo;
+import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.AgencyVo;
+import gov.gtas.vo.PnrVo;
+import gov.gtas.vo.PnrMessageVo;
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
@@ -45,7 +45,7 @@ public class ServiceUtils {
 		flight.setOriginCountry(vo.getOriginCountry());
 		flight.setDirection(vo.getDirection());
 		flight.setFlightNumber(vo.getFlightNumber());
-		if(vo.getPassengers() != null && vo.getPassengers().size() >0){
+/*		if(vo.getPassengers() != null && vo.getPassengers().size() >0){
 			Iterator it = vo.getPassengers().iterator();
 			while(it.hasNext()){
 				PassengerVo pvo = (PassengerVo) it.next();
@@ -53,7 +53,7 @@ public class ServiceUtils {
 				p.getFlights().add(flight);
 				flight.addPassenger(p);
 			}
-		}
+		}*/
 		
 		return flight;
 	}
@@ -80,8 +80,8 @@ public class ServiceUtils {
 		//BeanUtils.copyProperties(vo, p);
 		p.setAge(vo.getAge());
 		p.setCitizenshipCountry(vo.getCitizenshipCountry());
-		p.setCreatedAt(vo.getCreatedAt());
-		p.setCreatedBy(vo.getCreatedBy());
+		//p.setCreatedAt(vo.getCreatedAt());
+		//p.setCreatedBy(vo.getCreatedBy());
 		p.setDebarkation(vo.getDebarkation());
 		p.setDebarkCountry(vo.getDebarkCountry());
 		p.setDob(vo.getDob());
@@ -89,7 +89,7 @@ public class ServiceUtils {
 		p.setEmbarkCountry(vo.getEmbarkCountry());
 		p.setFirstName(vo.getFirstName());
 		p.setGender(vo.getGender());
-		p.setId(vo.getId());
+		//p.setId(vo.getId());
 		p.setLastName(vo.getLastName());
 		p.setMiddleName(vo.getMiddleName());
 		p.setPassengerType(vo.getPassengerType());
@@ -97,8 +97,8 @@ public class ServiceUtils {
 		p.setSeat(vo.getSeat());
 		p.setSuffix(vo.getSuffix());
 		p.setTitle(vo.getTitle());
-		p.setUpdatedAt(vo.getUpdatedAt());
-		p.setUpdatedBy(vo.getUpdatedBy());
+		//p.setUpdatedAt(vo.getUpdatedAt());
+		//p.setUpdatedBy(vo.getUpdatedBy());
 		if(vo.getDocuments().size() >0){
 			Iterator it = vo.getDocuments().iterator();
 			while(it.hasNext()){
@@ -107,14 +107,14 @@ public class ServiceUtils {
 				p.getDocuments().add(d);
 			}
 		}
-		if(vo.getPnrs() != null && vo.getPnrs().size() >0){
+/*		if(vo.getPnrs() != null && vo.getPnrs().size() >0){
 			Iterator pnrs = vo.getPnrs().iterator();
 			while(pnrs.hasNext()){
 				Pnr pnr = mapPnrFromPnrVo((PnrVo)pnrs.next(),new Pnr() );
 				pnr.addPassenger(p);
 				p.getPnrs().add(pnr);
 			}
-		}
+		}*/
 		return p;
 	}
 	
@@ -123,7 +123,6 @@ public class ServiceUtils {
 		d.setDocumentNumber(vo.getDocumentNumber());
 		d.setDocumentType(vo.getDocumentType());
 		d.setExpirationDate(vo.getExpirationDate());
-		d.setId(vo.getId());
 		d.setIssuanceCountry(vo.getIssuanceCountry());
 		d.setIssuanceDate(vo.getIssuanceDate());
 		return d;
@@ -135,18 +134,17 @@ public class ServiceUtils {
 		pnr.setCarrier(vo.getCarrier());
 		pnr.setDateBooked(vo.getDateBooked());
 		pnr.setDateReceived(vo.getDateReceived());
-		pnr.setDaysBookedBeforeTravel(vo.getDaysBookedBeforeTravel());
+		//pnr.setDaysBookedBeforeTravel(vo.getDaysBookedBeforeTravel());
 		pnr.setDepartureDate(vo.getDepartureDate());
 		pnr.setFormOfPayment(vo.getFormOfPayment());
-		if(vo.getId() != null){
-			pnr.setId(vo.getId());
-		}
+		//if(vo.getId() != null){
+			//pnr.setId(vo.getId());
+		//}
 		pnr.setOrigin(vo.getOrigin());
 		pnr.setOriginCountry(vo.getOriginCountry());
 		pnr.setPassengerCount(vo.getPassengerCount());
 		pnr.setRecordLocator(vo.getRecordLocator());
-		pnr.setTotalDwellTime(vo.getTotalDwellTime());
-		if (vo.getAgency() != null && vo.getAgency().getAgencyIdentifier() != null){
+		/*if (vo.getAgency() != null && vo.getAgency().getAgencyIdentifier() != null){
 			Agency a = mapAgencyFromAgencyVo(vo.getAgency(),new Agency());
 			a.addPnr(pnr);
 			pnr.setAgency(a);
@@ -156,7 +154,7 @@ public class ServiceUtils {
 			// TODO
 //			p.setPnr(pnr);
 //			pnr.getPnrMessages().add(p);
-		}
+		}*/
 		if(vo.getAddresses().size() >0){
 			Iterator adresses = vo.getAddresses().iterator();
 			while(adresses.hasNext()){
@@ -189,14 +187,14 @@ public class ServiceUtils {
 				pnr.addFrequentFlyer(ff);				
 			}
 		}
-		if(vo.getEmails().size() >0){
+/*		if(vo.getEmails().size() >0){
 			Iterator emails = vo.getEmails().iterator();
 			while(emails.hasNext()){
 				Email e = mapEmailFromEmailVo((EmailVo)emails.next(),new Email());
 				e.getPnrs().add(pnr);
 				pnr.addEmail(e);
 			}
-		}
+		}*/
 		return pnr;
 	}
 	
@@ -221,12 +219,10 @@ public class ServiceUtils {
 	
 	public static FrequentFlyer mapFrequentFlyerFromFrequentFlyerVo(FrequentFlyerVo vo,FrequentFlyer ff){
 		//BeanUtils.copyProperties(vo, ff);
-		ff.setCarrier(vo.getAirline());
-		ff.setCreatedAt(vo.getCreatedAt());
-		ff.setCreatedBy(vo.getCreatedBy());
+		ff.setCarrier(vo.getCarrier());
+		ff.setCreatedAt(new Date());
+		ff.setCreatedBy("SYSTEM");
 		ff.setNumber(vo.getNumber());
-		ff.setId(vo.getId());
-		ff.setUpdatedAt(vo.getUpdatedAt());
 		
 		return ff;
 	}
@@ -235,12 +231,10 @@ public class ServiceUtils {
 		//BeanUtils.copyProperties(vo, cc);
 		cc.setAccountHolder(vo.getAccountHolder());
 		cc.setCardType(vo.getCardType());
-		cc.setCreatedAt(vo.getCreatedAt());
-		cc.setCreatedBy(vo.getCreatedBy());
+		cc.setCreatedAt(new Date());
+		cc.setCreatedBy("SYSTEM");
 		cc.setExpiration(vo.getExpiration());
-		cc.setId(vo.getId());
 		cc.setNumber(vo.getNumber());
-		cc.setUpdatedAt(vo.getUpdatedAt());
 		cc.setUpdatedBy("SYSTEM");
 		return cc;
 	}
@@ -249,12 +243,7 @@ public class ServiceUtils {
 		//BeanUtils.copyProperties(vo, phone);
 		p.setCreatedAt(new Date());
 		p.setCreatedBy("SYSTEM");
-		if(vo.getId() != null){
-			p.setId(vo.getId());
-		}
 		p.setNumber(vo.getNumber());
-		p.setUpdatedAt(vo.getUpdatedAt());
-		p.setUpdatedBy(vo.getUpdatedBy());
 		return p;
 	}
 	
@@ -264,9 +253,6 @@ public class ServiceUtils {
 		add.setCountry(vo.getCountry());
 		add.setCreatedAt(new Date());
 		add.setCreatedBy("SYSTEM");
-		if(vo.getId() != null){
-			add.setId(vo.getId());
-		}
 		add.setLine1(vo.getLine1());
 		add.setLine2(vo.getLine2());
 		add.setLine3(vo.getLine3());

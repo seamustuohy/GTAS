@@ -12,7 +12,7 @@ import gov.gtas.parsers.edifact.segment.UNT;
 import gov.gtas.parsers.edifact.segment.UNZ;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.util.ParseUtils;
-
+import gov.gtas.vo.MessageVo;
 /**
  * The parser takes the output from the Edifact lexer and starts the process of
  * parsing the individual segments and extracting data. This class implements

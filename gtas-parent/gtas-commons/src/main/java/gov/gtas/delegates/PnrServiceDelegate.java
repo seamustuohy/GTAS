@@ -1,13 +1,7 @@
 package gov.gtas.delegates;
 
-import gov.gtas.delegates.vo.AddressVo;
-import gov.gtas.delegates.vo.CreditCardVo;
-import gov.gtas.delegates.vo.EmailVo;
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.delegates.vo.FrequentFlyerVo;
-import gov.gtas.delegates.vo.PassengerVo;
-import gov.gtas.delegates.vo.PhoneVo;
-import gov.gtas.delegates.vo.PnrVo;
+import gov.gtas.vo.passenger.*;
+import gov.gtas.vo.PnrVo;
 import gov.gtas.model.Address;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
@@ -147,11 +141,11 @@ public class PnrServiceDelegate {
                 BeanUtils.copyProperties(entity, vo);
                 rv.getPhoneNumbers().add(vo);
             }
-            for (Email entity : pnr.getEmails()) {
+           /* for (Email entity : pnr.getEmails()) {
                 EmailVo vo = new EmailVo();
                 BeanUtils.copyProperties(entity, vo);
                 rv.getEmails().add(vo);
-            }            
+            }     */       
 	    }
 	    return rv;
 	}
@@ -162,7 +156,7 @@ public class PnrServiceDelegate {
         List<Pnr> pnrs = pnrService.findByPassengerId(passengerId);
         for (Pnr pnr : pnrs) {
             PnrVo vo = new PnrVo();
-            vo.setId(pnr.getId());
+            //vo.setId(pnr.getId());
             vo.setRecordLocator(pnr.getRecordLocator());
             rv.add(vo);
         }

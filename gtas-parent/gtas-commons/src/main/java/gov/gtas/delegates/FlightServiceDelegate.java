@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
-import gov.gtas.delegates.vo.FlightVo;
+import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.model.Flight;
 import gov.gtas.services.FlightService;
 import gov.gtas.util.ServiceUtils;

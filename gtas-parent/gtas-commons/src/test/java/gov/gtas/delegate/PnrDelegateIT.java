@@ -3,17 +3,9 @@ package gov.gtas.delegate;
 import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.delegates.PnrServiceDelegate;
-import gov.gtas.delegates.vo.AddressVo;
-import gov.gtas.delegates.vo.AgencyVo;
-import gov.gtas.delegates.vo.CreditCardVo;
-import gov.gtas.delegates.vo.DocumentVo;
-import gov.gtas.delegates.vo.EmailVo;
-import gov.gtas.delegates.vo.FlightVo;
-import gov.gtas.delegates.vo.FrequentFlyerVo;
-import gov.gtas.delegates.vo.PassengerVo;
-import gov.gtas.delegates.vo.PhoneVo;
-import gov.gtas.delegates.vo.PnrMessageVo;
-import gov.gtas.delegates.vo.PnrVo;
+import gov.gtas.vo.passenger.*;
+import gov.gtas.vo.PnrMessageVo;
+import gov.gtas.vo.PnrVo;
 import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.MessageStatus;
 import java.util.ArrayList;
@@ -53,21 +45,20 @@ public class PnrDelegateIT {
 		vo.setBagCount(4);
 		vo.setDateBooked(new Date("7/18/2015"));
 		vo.setCarrier("DL");
-		vo.setCreatedAt(new Date());
-		vo.setCreatedBy("SYSTEM");
+		//vo.setCreatedAt(new Date());
+		//vo.setCreatedBy("SYSTEM");
 		vo.setDateReceived(new Date("7/18/2015"));
-		vo.setDaysBookedBeforeTravel(20);
+		//vo.setDaysBookedBeforeTravel(20);
 		vo.setDepartureDate(new Date("8/18/2015"));
 		vo.setFormOfPayment("CC");
 		vo.setOrigin("IAD");
 		vo.setPassengerCount(2);
 		vo.setRecordLocator("D12345");
-		vo.setTotalDwellTime(3600000);
-		vo.setAgency(new AgencyVo("Test Agency","A12343","ALDIE","VA","USA"));
+		//vo.setAgency(new AgencyVo("Test Agency","A12343","ALDIE","VA","USA"));
 		vo.getAddresses().add(prepareAddressVo());
 		vo.getCreditCards().add(prepareCreditCardVo());
 		vo.getFrequentFlyerDetails().add(prepareFrequentFlyerVo());
-		vo.getEmails().add(this.prepareEmailVo());
+		//vo.getEmails().add(this.prepareEmailVo());
 		//use with different hash--throws unique constraint exception.
 		//vo.setPnrMessage(this.preparePnrMessageVo());
 		vo.getPhoneNumbers().add(this.preparePhoneData());
@@ -83,10 +74,7 @@ public class PnrDelegateIT {
 	 private PhoneVo preparePhoneData(){
 		 PhoneVo vo = new PhoneVo();
 		 vo.setNumber("4566547788");
-		 vo.setCreatedAt(new Date());
-		 vo.setPhoneType("H");
-		 vo.setCreatedBy("SYSTEM");
-		 return vo;
+		  return vo;
 	 }
 	private FlightVo prepareFlightVo(){
 		
@@ -108,8 +96,8 @@ public class PnrDelegateIT {
 		PassengerVo vo = new PassengerVo();
 		vo.setAge(30);
 		vo.setCitizenshipCountry("USA");
-		vo.setCreatedAt(new Date());
-		vo.setCreatedBy("TEST");
+		//vo.setCreatedAt(new Date());
+		//vo.setCreatedBy("TEST");
 		vo.setDebarkation("JFK");
 		vo.setDebarkCountry("USA");
 		vo.setDob(new Date("7/8/1996"));
@@ -124,16 +112,11 @@ public class PnrDelegateIT {
 		List<DocumentVo> h = new ArrayList<>();
 		h.add(prepareDocumentVo());
 		vo.setDocuments(h);
-		vo.getFlights().add(prepareFlightVo());
-		
-		
 		return vo;
 	}
 
 	private DocumentVo prepareDocumentVo(){
 		DocumentVo dvo = new DocumentVo();
-		dvo.setCreatedAt(new Date());
-		dvo.setCreatedBy("TEST");
 		dvo.setDocumentNumber("P123456");
 		dvo.setDocumentType("P");
 		dvo.setIssuanceCountry("USA");
@@ -148,26 +131,21 @@ public class PnrDelegateIT {
 		vo.setCardType("VISA");
 		vo.setExpiration(new Date("8/4/2016"));
 		vo.setNumber("2233445566778899");
-		vo.setCreatedAt(new Date());
-		vo.setCreatedBy("JUINT");
 		return vo;
 	}
 	
 	private FrequentFlyerVo prepareFrequentFlyerVo(){
 		FrequentFlyerVo vo = new FrequentFlyerVo();
-		vo.setAirline("AA");
+		vo.setCarrier("AA");
 		vo.setNumber("AA8888");
-		vo.setCreatedBy("JUNIT");
-		vo.setCreatedAt(new Date());
+		
 		return vo;
 	}
 	private AddressVo prepareAddressVo(){
 		AddressVo vo = new AddressVo();
-		vo.setAddressType("H");
+		vo.setType("H");
 		vo.setCity("STERLING");
 		vo.setCountry("USA");
-		vo.setCreatedAt(new Date());
-		vo.setCreatedBy("JUNIT");
 		vo.setLine1("2234 NOLINE");
 		return vo;
 	}

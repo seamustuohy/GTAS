@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.parsers.edifact.MessageVo;
+import gov.gtas.vo.MessageVo;
 import gov.gtas.parsers.exception.ParseException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
