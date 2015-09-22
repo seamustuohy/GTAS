@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     concat = require('gulp-concat'),
     jshint = require('gulp-jshint'),
+    iife = require('gulp-iife'),
     minifyCSS = require('gulp-minify-css'),
     rename = require('gulp-rename'),
     sass = require('gulp-sass'),
@@ -27,7 +28,6 @@ var cssFiles = [
     'resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css',
     'resources/bower_components/angular-ui-grid/dist/css/ui-grid.css',
     'resources/css/query-builder.default.css',
-/*    'http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css',*/
     'resources/bower_components/angular-material/angular-material.min.css'
 ];
 
@@ -111,13 +111,18 @@ gulp.task('pub', function () {
 
 // Lint Task
 gulp.task('lint', function () {
-    return gulp.src('./*.js')
+    'use strict';
+    return gulp.src('./pax/*.js')
         .pipe(jshint())
-        .pipe(jshint.reporter('default'));
+        .pipe(jshint.reporter('gulp-jshint-html-reporter', {
+            filename: __dirname + '/jshint-output.html',
+            createMissingFolders : false
+        }));
 });
 
 // Compile Our Sass
 gulp.task('sass', function () {
+    'use strict';
     return gulp.src('scss/*.scss')
         .pipe(sass())
         .pipe(gulp.dest('css'));
@@ -127,6 +132,7 @@ gulp.task('sass', function () {
 gulp.task('scripts', function () {
     'use strict';
     return gulp.src(jsFiles)
+        .pipe(iife())
         .pipe(concat('all.js'))
         .pipe(gulp.dest('dist/js'))
         .pipe(rename('all.min.js'))
