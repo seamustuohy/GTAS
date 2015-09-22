@@ -206,7 +206,7 @@ app.run(function ($rootScope) {
 });
 
 app.config(function ($stateProvider) {
-
+    'use strict';
     $stateProvider.state('admin', {
         url: '/admin',
         templateUrl: 'admin/admin.header.html',
@@ -216,7 +216,6 @@ app.config(function ($stateProvider) {
         sticky: true,
         dsr: true,
         views: {
-
             "content@admin": {
                 templateUrl: 'admin/admin.html'
             }
@@ -259,34 +258,31 @@ app.config(function ($stateProvider) {
             }
         }
     }).state('pax.detail', {
-            url: '/:id/:flightId',
-            sticky: true,
-            dsr: true,
-            views: {
-
-                "content@pax": {
-                    controller: 'PaxDetailController',
-                    templateUrl: 'pax/pax.detail.html',
-                    resolve: {
-                        passengers: function ($http, $stateParams,
-                                              paxDetailService) {
-                            return paxDetailService.getPaxDetail($http,
-                                $stateParams);
-                        }
+        url: '/:id/:flightId',
+        sticky: true,
+        dsr: true,
+        views: {
+            "content@pax": {
+                controller: 'PaxDetailController',
+                templateUrl: 'pax/pax.detail.html',
+                resolve: {
+                    passengers: function ($http, $stateParams, paxDetailService) {
+                        return paxDetailService.getPaxDetail($http, $stateParams);
                     }
                 }
             }
-        }).state('query-builder', {
-            url: '/query-builder',
-            templateUrl: 'query-builder/query.html',
-            controller: 'QueryBuilderController'
-        }).state('risk-criteria', {
-            url: '/risk-criteria',
-            templateUrl: 'risk-criteria/risk-criteria.html',
-            controller: 'RiskCriteriaController'
-        }).state('watchlists', {
-            url: '/watchlists',
-            templateUrl: 'watchlists/watchlists.html',
-            controller: 'WatchListController'
-        });
+        }
+    }).state('query-builder', {
+        url: '/query-builder',
+        templateUrl: 'query-builder/query.html',
+        controller: 'QueryBuilderController'
+    }).state('risk-criteria', {
+        url: '/risk-criteria',
+        templateUrl: 'risk-criteria/risk-criteria.html',
+        controller: 'RiskCriteriaController'
+    }).state('watchlists', {
+        url: '/watchlists',
+        templateUrl: 'watchlists/watchlists.html',
+        controller: 'WatchListController'
+    });
 });
