@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
 	<link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
 	<link rel="stylesheet" href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
-	<link rel="stylesheet" href="resources/bower_components/angular-ui-grid/dist/css/ui-grid.css" />
+	<link rel="stylesheet" href="resources/bower_components/angular-ui-grid/ui-grid.css" />
 	<link rel="stylesheet" href="resources/css/query-builder.default.css" />
 	<link rel="stylesheet" href="resources/bower_components/angular-material/angular-material.min.css" />
 	</head>
@@ -115,7 +115,7 @@
 	<script src='factory/ModalGridFactory.js'></script>
 	<script src='factory/QueryBuilderFactory.js'></script>
 	<script src='factory/jQueryBuilderFactory.js'></script>
-	<script src='factory/jQueryBuilderFactory.js'></script>
+	<script src='factory/jQueryBuilderFactory.js'></script>ui-
 	<script src='dashboard/DashboardController.js'></script>
 	<script src='flights/FlightsIIController.js'></script>
 	<script src='flights/FlightsService.js'></script>
@@ -124,7 +124,7 @@
 	<script src='pax/PaxMainController.js'></script>
 	<script src='pax/PaxService.js'></script>
 	<script src='pax/PaxFactory.js'></script>
-	<script src='query-builder/QueryBuilderService.js'></script>
+	<script src='query-builder/QueryService.js'></script>
 	<script src='query-builder/QueryService.js'></script>
 	<script src='risk-criteria/RiskCriteriaController.js'></script>
 	<script src='watchlists/WatchListService.js'></script>
