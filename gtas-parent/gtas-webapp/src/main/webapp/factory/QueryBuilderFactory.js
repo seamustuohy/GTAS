@@ -5,7 +5,7 @@ app.factory('QueryBuilderCtrl', function () {
                 $selectize[0].selectize.setValue(value);
                 $timeout(function () {
                     if ($selectize[0].selectize.getValue().length === 0) setSelectizeValue($selectize, value);
-                },50)
+                },50);
             },
             selectizeValueSetter = function (rule, value) {
                 rule.$el.find(".rule-value-container select").val(value);
