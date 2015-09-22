@@ -344,11 +344,12 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
         subGridApi.selection.on.rowSelectionChanged($scope, function (row) {
             if (row.isSelected) {
                 crudService.loadRuleById(row.entity.ruleId).then(function (myData) {
-                    var details = myData.result.details;
-                    details.rules.forEach(function(rule) {
-                        rule.entity = entityMapper[rule.entity];
-                    });
-                    $scope.$builder.queryBuilder('loadRules', details);
+                    //var details = myData.result.details;
+                    //details.rules.forEach(function(rule) {
+                    //    rule.entity = entityMapper[rule.entity];
+                    //});
+                 //   $scope.$builder.queryBuilder('loadRules', details);
+                    $scope.$builder.queryBuilder('loadRules', myData.result.details);
                     $scope.hitDetailDisplay = myData.result.summary.title;
                     document.getElementById("QBModal").style.display = "block";
 
