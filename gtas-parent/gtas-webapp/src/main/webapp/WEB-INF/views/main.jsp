@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" ng-app="myApp">
 	<head>
@@ -8,22 +7,20 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>GTAS</title>
 
-	<link rel="stylesheet" href="dist/css/bootstrap.css" />
-	<link rel="stylesheet" href="dist/css/gtas.css" />
-	<link rel="stylesheet" href="dist/css/bootstrap-select.min.css" />
-	<link rel="stylesheet" href="dist/css/awesome-bootstrap-checkbox.css" />
-	<link rel="stylesheet" href="dist/css/bootstrap-slider.min.css" />
-	<link rel="stylesheet" href="dist/css/selectize.bootstrap3.css" />
-	<link rel="stylesheet" href="dist/css/bootstrap-datepicker.min.css" />
-	<link rel="stylesheet" href="dist/css/ui-grid.css" />
-	<link rel="stylesheet" href="dist/css/query-builder.default.css" id="qb-theme" />
-	<%--<link rel="stylesheet" href="dist/css/flags.css" />--%>
-	<link rel="stylesheet" href="dist/css/style-icomoon.css" />
-	<link rel="stylesheet" href="dist/css/angular-material.min.css" />
+	<link rel="stylesheet" href="resources/css/style-icomoon.css" />
+	<link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css" />
+	<link rel="stylesheet" href="resources/css/gtas.css" />
+	<link rel="stylesheet" href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css" />
+	<link rel="stylesheet" href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+	<link rel="stylesheet" href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
+	<link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
+	<link rel="stylesheet" href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+	<link rel="stylesheet" href="resources/bower_components/angular-ui-grid/dist/css/ui-grid.css" />
+	<link rel="stylesheet" href="resources/css/query-builder.default.css" />
+	<link rel="stylesheet" href="resources/bower_components/angular-material/angular-material.min.css" />
 	</head>
 <body>
 	<header></header>
-
 	<div>
 		<nav class="navbar navbar-default">
 			<div id="navbar">
@@ -85,55 +82,55 @@
 	</div>
 	<!-- main container -->
 	<!--
-	<script src="dist/all.min.js"></script>
+	<script src="dist/js/all.min.js"></script>
 	//-->
 	<!-- for Debug purposes -->
-	<script src="dist/js/angular.js"></script>
-	<script src="dist/js/angular-ui-router.js"></script>
-	<script src="dist/js/ct-ui-router-extras.js"></script>
-	<script	src="dist/js/ui-bootstrap.js"></script>
-	<script src="dist/js/ui-bootstrap-tpls.js"></script>
-	<script src="dist/js/ng-table.js"></script>
-	<script src="dist/js/spring-security-csrf-token-interceptor.min.js"></script>
-	<script src="dist/js/moment.min.js"></script>
-	<script src="dist/js/jquery.js"></script>
-	<script src="dist/js/bootstrap.min.js"></script>
-	<script src="dist/js/bootstrap-select.min.js"></script>
-	<script src="dist/js/bootbox.js"></script>
-	<script src="dist/js/bootstrap-slider.min.js"></script>
-	<script src="dist/js/selectize.min.js"></script>
-	<script src="dist/js/bootstrap-datepicker.min.js"></script>
-	<script src="dist/js/jQuery.extendext.min.js"></script>
-	<script src="dist/js/pdfmake.min.js"></script>
-	<script src="dist/js/vfs_fonts.js"></script>
-	<script src="dist/js/angular-material.min.js"></script>
-	<script src="dist/js/angular-aria.min.js"></script>
-	<script src="resources/bower_components/angular-animate/angular-animate.min.js"></script>
-	<script src="resources/bower_components/angular-messages/angular-messages.min.js"></script>
-	<script src="dist/js/ui-grid.js"></script>
-	<script src="dist/js/query-builder.js"></script>
-	<script src="dist/js/app.js"></script>
-	<script src="dist/js/GridFactory.js"></script>
-	<script src="dist/js/ModalGridFactory.js"></script>
-	<script src="dist/js/QueryBuilderFactory.js"></script>
-	<script src="dist/js/jQueryBuilderFactory.js"></script>
-	<script src="dist/js/DashboardController.js"></script>
-	<script src="dist/js/FlightsIIController.js"></script>
-	<script src="dist/js/FlightsService.js"></script>
-	<script src="dist/js/PaxController.js"></script>
-	<script src="dist/js/PaxMainController.js"></script>
-	<script src="dist/js/PaxDetailController.js"></script>
-	<script src="dist/js/PaxService.js"></script>
-	<script src="dist/js/PaxFactory.js"></script>
-	<script src="dist/js/QueryBuilderController.js"></script>
-	<script src="dist/js/RiskCriteriaController.js"></script>
-	<script src="dist/js/RiskCriteriaService.js"></script>
-	<script src="dist/js/CrudService.js"></script>
-	<script src="dist/js/QueryService.js"></script>
-	<script src="dist/js/WatchListService.js"></script>
-	<script src="dist/js/WatchListController.js"></script>
-	<script src="dist/js/AdminController.js"></script>
-	<script src="dist/js/UserController.js"></script>
-	<script src="dist/js/UserService.js"></script>
+	<script src='resources/bower_components/angular/angular.js'></script>
+	<script src='resources/bower_components/angular-ui-router/release/angular-ui-router.js'></script>
+	<script src='resources/bower_components/ui-router-extras/release/ct-ui-router-extras.js'></script>
+	<script src='resources/bower_components/angular-bootstrap/ui-bootstrap.js'></script>
+	<script src='resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js'></script>
+	<script src='resources/bower_components/ng-table/dist/ng-table.js'></script>
+	<script src='resources/bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js'></script>
+	<script src='resources/bower_components/moment/min/moment.min.js'></script>
+	<script src='resources/bower_components/jquery/dist/jquery.js'></script>
+	<script src='resources/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+	<script src='resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js'></script>
+	<script src='resources/bower_components/bootbox/bootbox.js'></script>
+	<script src='resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js'></script>
+	<script src='resources/bower_components/selectize/dist/js/standalone/selectize.min.js'></script>
+	<script src='resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
+	<script src='resources/bower_components/jquery-extendext/jQuery.extendext.min.js'></script>
+	<script src='resources/bower_components/pdfmake/build/pdfmake.min.js'></script>
+	<script src='resources/bower_components/pdfmake/build/vfs_fonts.js'></script>
+	<script src='resources/bower_components/angular-ui-grid/ui-grid.js'></script>
+	<script src='resources/bower_components/angular-material/angular-material.min.js'></script>
+	<script src='resources/bower_components/angular-aria/angular-aria.min.js'></script>
+	<script src='resources/bower_components/angular-animate/angular-animate.min.js'></script>
+	<script src='resources/bower_components/angular-messages/angular-messages.min.js'></script>
+	<script src='resources/js/query-builder.js'></script>
+	<script src='app.js'></script>
+	<script src='resources/js/CrudService.js'></script>
+	<script src='factory/GridFactory.js'></script>
+	<script src='factory/ModalGridFactory.js'></script>
+	<script src='factory/QueryBuilderFactory.js'></script>
+	<script src='factory/jQueryBuilderFactory.js'></script>
+	<script src='factory/jQueryBuilderFactory.js'></script>
+	<script src='dashboard/DashboardController.js'></script>
+	<script src='flights/FlightsIIController.js'></script>
+	<script src='flights/FlightsService.js'></script>
+	<script src='pax/PaxController.js'></script>
+	<script src='pax/PaxDetailController.js'></script>
+	<script src='pax/PaxMainController.js'></script>
+	<script src='pax/PaxService.js'></script>
+	<script src='pax/PaxFactory.js'></script>
+	<script src='query-builder/QueryBuilderService.js'></script>
+	<script src='query-builder/QueryService.js'></script>
+	<script src='risk-criteria/RiskCriteriaController.js'></script>
+	<script src='watchlists/WatchListService.js'></script>
+	<script src='watchlists/WatchListController.js'></script>
+	<script src='admin/AdminController.js'></script>
+	<script src='admin/UserController.js'></script>
+	<script src='admin/UserService.js'></script>
 	</body>
 </html>
