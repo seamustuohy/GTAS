@@ -140,9 +140,8 @@
 	<script src='factory/QueryBuilderFactory.js'></script>
 	<script src='factory/jQueryBuilderFactory.js'></script>
 	<script src='factory/jQueryBuilderFactory.js'></script>
-	ui-
 	<script src='dashboard/DashboardController.js'></script>
-	<script src='flights/FlightsIIController.js'></script>
+	<script src='flights/FlightsController.js'></script>
 	<script src='flights/FlightsService.js'></script>
 	<script src='pax/PaxController.js'></script>
 	<script src='pax/PaxDetailController.js'></script>
