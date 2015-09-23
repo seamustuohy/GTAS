@@ -1,4 +1,4 @@
-app.controller('FlightsController', function ($scope, $http, flightService) {
+app.controller('FlightsController', function ($scope, $http, flightService,$state) {
 
   var paginationOptions = {
     pageNumber: 1,
@@ -32,7 +32,7 @@ app.controller('FlightsController', function ($scope, $http, flightService) {
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
-    rowTemplate: rowTemplate(),   
+    //rowTemplate: rowTemplate(),
     
     onRegisterApi: function(gridApi) {
       $scope.gridApi = gridApi;
@@ -60,7 +60,9 @@ app.controller('FlightsController', function ($scope, $http, flightService) {
   };
 
   $scope.gridOptions.columnDefs = [
-    { name: 'P', field: 'passengerCount', width: 50, enableFiltering: false },
+    { name: 'P', field: 'passengerCount', width: 50, enableFiltering: false,
+        cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.passengerNav()">{{COL_FIELD}}</button> ' ,
+    },
     { name: 'H', field: 'ruleHitCount', width: 50, enableFiltering: false },
     { name: 'L', field: 'listHitCount', width: 50, enableFiltering: false },
     { name: 'Carrier', field: 'carrier', width: 75 },
@@ -73,8 +75,12 @@ app.controller('FlightsController', function ($scope, $http, flightService) {
     { name: 'Dest', field: 'destination' },
     { name: 'DestCountry', displayName: "Country", field: 'destinationCountry' }
   ];
-  
-  var getPage = function() {
+
+    $scope.passengerNav = function(){
+        $state.go('flights.passengers');
+    };
+
+    var getPage = function() {
     console.log('requesting page #' + paginationOptions.pageNumber);
     flightService.getFlights(paginationOptions).then(function (page) {
       $scope.gridOptions.totalItems = page.totalFlights;
@@ -83,4 +89,6 @@ app.controller('FlightsController', function ($scope, $http, flightService) {
   };
   
   getPage();
+
+    $state.go('flights.all');
 });
