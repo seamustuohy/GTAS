@@ -139,10 +139,6 @@ public class RuleServiceImpl implements RuleService {
 		}
 		if (kbRecord == null) {
 			return null;
-//			throw ErrorHandlerFactory.getErrorHandler().createException(
-//					RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
-//					kbName == null ? RuleConstants.UDR_KNOWLEDGE_BASE_NAME
-//							: kbName);
 		}
 		try {
 			KieBase kb = RuleUtils

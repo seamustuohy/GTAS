@@ -34,12 +34,6 @@ public class HitsSummary extends BaseEntity {
 	@Column(name = "flight_id")
 	private Long flightId;
 
-	@Column(name = "title", nullable = false)
-	private String Title;
-
-	@Column(name = "description")
-	private String Description;
-
 	@Column(name = "rule_hit_count")
 	private Integer ruleHitCount;
 
@@ -79,22 +73,6 @@ public class HitsSummary extends BaseEntity {
 
 	public void setFlightId(Long flightId) {
 		this.flightId = flightId;
-	}
-
-	public String getTitle() {
-		return Title;
-	}
-
-	public void setTitle(String title) {
-		Title = title;
-	}
-
-	public String getDescription() {
-		return Description;
-	}
-
-	public void setDescription(String description) {
-		Description = description;
 	}
 
 	public String getHitType() {

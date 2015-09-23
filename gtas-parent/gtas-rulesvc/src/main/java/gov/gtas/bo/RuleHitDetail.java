@@ -27,11 +27,11 @@ public class RuleHitDetail implements Serializable, Cloneable {
 
 	private Long passengerId;
 
-	private String passengerType;
+	private PassengerTypeCode passengerType;
 
 	private String passengerName;
 
-	private String hitType;
+	private HitTypeEnum hitType;
 
 	private int hitCount;
 
@@ -72,7 +72,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 		this.description = ruleTitle;
 		this.hitRule = ruleTitle + "(" + udrId + ")";
 		this.passengerId = passenger.getId();
-		this.passengerType = decodePassengerTypeName(passenger
+		this.passengerType = PassengerTypeCode.valueOf(passenger
 				.getPassengerType());
 		this.passengerName = passenger.getFirstName() + " "
 				+ passenger.getLastName();
@@ -81,7 +81,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 			this.flightId = flight.getId();
 		}
 		this.passenger = passenger;
-		this.hitType = HitTypeEnum.R.toString();
+		this.hitType = HitTypeEnum.R;
 		this.hitCount = 1;
 		this.ruleHitCount = 1;
 	}
@@ -108,11 +108,11 @@ public class RuleHitDetail implements Serializable, Cloneable {
 		switch (hitType) {
 		case "D":
 			this.title = "Document List Rule #" + watchlistItemId;
-			this.hitType = HitTypeEnum.D.toString();
+			this.hitType = HitTypeEnum.D;
 			break;
 		case "P":
 			this.title = "Passenger List Rule #" + watchlistItemId;
-			this.hitType = HitTypeEnum.P.toString();
+			this.hitType = HitTypeEnum.P;
 			break;
 		default:
 			break;
@@ -120,7 +120,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 		this.description = this.title;
 		this.hitRule = this.title + "(" + watchlistItemId + ")";
 		this.passengerId = passenger.getId();
-		this.passengerType = decodePassengerTypeName(passenger
+		this.passengerType = PassengerTypeCode.valueOf(passenger
 				.getPassengerType());
 		this.passengerName = passenger.getFirstName() + " "
 				+ passenger.getLastName();
@@ -155,23 +155,6 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	// }
 
 	/**
-	 * Converts the passenger type code to a friendly name.
-	 * 
-	 * @param typ
-	 *            the type code.
-	 * @return the decoded type name.
-	 */
-	private String decodePassengerTypeName(String typ) {
-		String ret = typ;
-		for (PassengerTypeCode typeEnum : PassengerTypeCode.values()) {
-			if (typ.equalsIgnoreCase(typeEnum.name())) {
-				ret = typeEnum.getPassengerTypeName();
-			}
-		}
-		return ret;
-	}
-
-	/**
 	 * @return the hitRule
 	 */
 	public String getHitRule() {
@@ -195,7 +178,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	/**
 	 * @return the passengerType
 	 */
-	public String getPassengerType() {
+	public PassengerTypeCode getPassengerType() {
 		return passengerType;
 	}
 
@@ -245,7 +228,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	/**
 	 * @return the hitType
 	 */
-	public String getHitType() {
+	public HitTypeEnum getHitType() {
 		return hitType;
 	}
 
@@ -253,7 +236,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 	 * @param hitType
 	 *            the hitType to set
 	 */
-	public void setHitType(String hitType) {
+	public void setHitType(HitTypeEnum hitType) {
 		this.hitType = hitType;
 	}
 
@@ -321,8 +304,7 @@ public class RuleHitDetail implements Serializable, Cloneable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.udrRuleId, this.ruleId, this.passengerId,
-				this.flightId);
+		return Objects.hash(this.ruleId, this.passengerId, this.flightId);
 	}
 
 	@Override
@@ -332,11 +314,8 @@ public class RuleHitDetail implements Serializable, Cloneable {
 		if (getClass() != obj.getClass())
 			return false;
 		final RuleHitDetail other = (RuleHitDetail) obj;
-		// return Objects.equals(this.udrRuleId, other.udrRuleId)
-		// && Objects.equals(this.ruleId, other.ruleId)
-		// && Objects.equals(this.passengerId, other.passengerId)
-		// && Objects.equals(this.flightId, other.flightId);
-		return Objects.equals(this.passengerId, other.passengerId)
+		return Objects.equals(this.ruleId, other.ruleId)
+				&& Objects.equals(this.passengerId, other.passengerId)
 				&& Objects.equals(this.flightId, other.flightId);
 	}
 }

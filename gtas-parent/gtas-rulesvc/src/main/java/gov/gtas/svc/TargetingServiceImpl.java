@@ -1,6 +1,7 @@
 package gov.gtas.svc;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import gov.gtas.bo.CompositeRuleServiceResult;
+import gov.gtas.bo.TargetDetailVo;
+import gov.gtas.bo.TargetSummaryVo;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
@@ -41,6 +44,7 @@ import gov.gtas.repository.PnrRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.svc.request.builder.PassengerFlightTuple;
 import gov.gtas.svc.util.RuleExecutionContext;
+import gov.gtas.svc.util.TargetingResultUtils;
 import gov.gtas.svc.util.TargetingServiceUtils;
 
 /**
@@ -110,7 +114,7 @@ public class TargetingServiceImpl implements TargetingService {
 		RuleServiceRequest req = TargetingServiceUtils.createApisRequest(
 				message).getRuleServiceRequest();
 		RuleServiceResult res = ruleService.invokeRuleEngine(req);
-		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
+		res = TargetingResultUtils.ruleResultPostProcesssing(res);
 		return res;
 	}
 
@@ -126,7 +130,7 @@ public class TargetingServiceImpl implements TargetingService {
 			String drlRules) {
 		RuleServiceResult res = ruleService.invokeAdhocRulesFromString(
 				drlRules, request);
-		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
+		res = TargetingResultUtils.ruleResultPostProcesssing(res);
 		return res;
 	}
 
@@ -145,7 +149,7 @@ public class TargetingServiceImpl implements TargetingService {
 					messageId);
 		}
 		RuleServiceResult res = this.analyzeApisMessage(msg);
-		res = TargetingServiceUtils.ruleResultPostProcesssing(res);
+		res = TargetingResultUtils.ruleResultPostProcesssing(res);
 		return res;
 	}
 
@@ -164,7 +168,7 @@ public class TargetingServiceImpl implements TargetingService {
 					.createApisRequestContext(msgs);
 			RuleServiceResult res = ruleService.invokeRuleEngine(ctx
 					.getRuleServiceRequest());
-			res = TargetingServiceUtils.ruleResultPostProcesssing(res);
+			res = TargetingResultUtils.ruleResultPostProcesssing(res);
 			ret = res.getResultList();
 		}
 		return ret;
@@ -185,7 +189,7 @@ public class TargetingServiceImpl implements TargetingService {
 					.createPnrRequestContext(msgs);
 			RuleServiceResult res = ruleService.invokeRuleEngine(ctx
 					.getRuleServiceRequest());
-			res = TargetingServiceUtils.ruleResultPostProcesssing(res);
+			res = TargetingResultUtils.ruleResultPostProcesssing(res);
 			ret = res.getResultList();
 		}
 		return ret;
@@ -240,15 +244,16 @@ public class TargetingServiceImpl implements TargetingService {
 
 		// eliminate duplicates
 		if (udrResult != null) {
-			udrResult = TargetingServiceUtils
+			udrResult = TargetingResultUtils
 					.ruleResultPostProcesssing(udrResult);
 		}
 		if (wlResult != null) {
-			wlResult = TargetingServiceUtils
+			wlResult = TargetingResultUtils
 					.ruleResultPostProcesssing(wlResult);
 		}
 
-		ctx.setRuleServiceResult(new CompositeRuleServiceResult(udrResult,
+		TargetingResultUtils.
+		updateRuleExecutionContext(ctx, new CompositeRuleServiceResult(udrResult,
 				wlResult));
 		return ctx;
 	}
@@ -292,7 +297,7 @@ public class TargetingServiceImpl implements TargetingService {
 				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
 
 		RuleExecutionStatistics ruleExeStatus = ruleRunningResult
-				.getRuleServiceResult().getExecutionStatistics();
+				.getRuleExecutionStatistics();
 		if (logger.isInfoEnabled()) {
 			logger.info("\nTargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> " + ruleExeStatus.getTotalRulesFired());
 		}
@@ -318,11 +323,11 @@ public class TargetingServiceImpl implements TargetingService {
 
 	private List<HitsSummary> storeHitsInfo(RuleExecutionContext ruleRunningResult) {
 		List<HitsSummary> hitsSummaryList = new ArrayList<HitsSummary>();
-		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
-				.getRuleServiceResult().getResultList();
-		Iterator<RuleHitDetail> iter = results.iterator();
+		Collection<TargetSummaryVo> results = ruleRunningResult.getTargetingResult();
+				
+		Iterator<TargetSummaryVo> iter = results.iterator();
 		while (iter.hasNext()) {
-			RuleHitDetail ruleDetail = iter.next();
+			TargetSummaryVo ruleDetail = iter.next();
 			HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
 			hitsSummaryList.add(hitsSummary);
 		}
@@ -354,11 +359,35 @@ public class TargetingServiceImpl implements TargetingService {
 	}
 
 	/**
-	 * @param ruleHitDetail
+	 * @param hitSummmaryVo
 	 * @return HitsSummary
 	 */
-	private HitsSummary constructHitsInfo(RuleHitDetail ruleHitDetail) {
-		String[] hitReasons = ruleHitDetail.getHitReasons();
+	private HitsSummary constructHitsInfo(TargetSummaryVo hitSummmaryVo) {
+
+		HitsSummary hitsSummary = new HitsSummary();
+		hitsSummary.setPassengerId(hitSummmaryVo.getPassengerId());
+		hitsSummary.setFlightId(hitSummmaryVo.getFlightId());
+		hitsSummary.setCreatedDate(new Date());
+		hitsSummary.setHitType(hitSummmaryVo.getHitType().toString());
+		
+		hitsSummary.setRuleHitCount(hitSummmaryVo.getRuleHitCount());
+		hitsSummary.setWatchListHitCount(hitSummmaryVo.getWatchlistHitCount());
+		List<HitDetail> detailList = new ArrayList<HitDetail>();
+        for(TargetDetailVo hdv:hitSummmaryVo.getHitDetails()){
+		    detailList.add(createHitDetail(hitsSummary, hdv));
+        }
+		hitsSummary.setHitdetails(detailList);
+		return hitsSummary;
+	}
+	private HitDetail createHitDetail(HitsSummary hitsSummary, TargetDetailVo hitDetailVo){
+		HitDetail hitDetail = new HitDetail();		
+		if (hitDetailVo.getUdrRuleId() != null)
+			hitDetail.setRuleId(hitDetailVo.getUdrRuleId());
+		else {
+			hitDetail.setRuleId(hitDetailVo.getRuleId());
+		}
+
+		String[] hitReasons = hitDetailVo.getHitReasons();
 
 		StringBuilder sb = new StringBuilder();
 		for (String hitReason : hitReasons) {
@@ -366,33 +395,10 @@ public class TargetingServiceImpl implements TargetingService {
 			sb.append(HITS_REASONS_SEPARATOR);
 		}
 
-		HitsSummary hitsSummary = new HitsSummary();
-		hitsSummary.setPassengerId(ruleHitDetail.getPassengerId());
-		hitsSummary.setDescription(ruleHitDetail.getDescription());
-		hitsSummary.setTitle(ruleHitDetail.getTitle());
-		hitsSummary.setFlightId(ruleHitDetail.getFlightId());
-		hitsSummary.setCreatedDate(new Date());
-		hitsSummary.setHitType(ruleHitDetail.getHitType());
-
-		hitsSummary.setRuleHitCount(ruleHitDetail.getRuleHitCount());
-		hitsSummary.setWatchListHitCount(ruleHitDetail.getHitCount()
-				- ruleHitDetail.getRuleHitCount());
-		HitDetail hitDetail = new HitDetail();
-		String type = ruleHitDetail.getHitType();
-		if (type.equalsIgnoreCase("R"))
-			hitDetail.setRuleId(ruleHitDetail.getUdrRuleId());
-		else {
-			hitDetail.setRuleId(ruleHitDetail.getRuleId());
-		}
-
 		hitDetail.setRuleConditions(sb.toString());
 		hitDetail.setCreatedDate(new Date());
 		hitDetail.setParent(hitsSummary);
 
-		List<HitDetail> detailList = new ArrayList<HitDetail>();
-
-		detailList.add(hitDetail);
-		hitsSummary.setHitdetails(detailList);
-		return hitsSummary;
+		return hitDetail;
 	}
 }

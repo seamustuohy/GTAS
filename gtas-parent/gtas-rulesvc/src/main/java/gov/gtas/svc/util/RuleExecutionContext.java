@@ -1,10 +1,12 @@
 package gov.gtas.svc.util;
 
-import java.util.Set;
-
+import gov.gtas.bo.TargetSummaryVo;
+import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.svc.request.builder.PassengerFlightTuple;
+
+import java.util.Collection;
+import java.util.Set;
 /**
  * This class is for objects that carry state information during 
  * Targeting operations.
@@ -14,7 +16,8 @@ import gov.gtas.svc.request.builder.PassengerFlightTuple;
 public class RuleExecutionContext {
 	private Set<PassengerFlightTuple> paxFlightTuples;
 	private RuleServiceRequest ruleServiceRequest;
-	private RuleServiceResult ruleServiceResult;
+	private Collection<TargetSummaryVo> targetingResult;
+	private RuleExecutionStatistics ruleExecutionStatistics;
 	/**
 	 * @return the paxFlightTuples
 	 */
@@ -40,16 +43,29 @@ public class RuleExecutionContext {
 		this.ruleServiceRequest = ruleServiceRequest;
 	}
 	/**
-	 * @return the ruleServiceResult
+	 * @return the targetingResult
 	 */
-	public RuleServiceResult getRuleServiceResult() {
-		return ruleServiceResult;
+	public Collection<TargetSummaryVo> getTargetingResult() {
+		return targetingResult;
 	}
 	/**
-	 * @param ruleServiceResult the ruleServiceResult to set
+	 * @param targetingResult the targetingResult to set
 	 */
-	public void setRuleServiceResult(RuleServiceResult ruleServiceResult) {
-		this.ruleServiceResult = ruleServiceResult;
+	public void setTargetingResult(Collection<TargetSummaryVo> targetingResult) {
+		this.targetingResult = targetingResult;
+	}
+	/**
+	 * @return the ruleExecutionStatistics
+	 */
+	public RuleExecutionStatistics getRuleExecutionStatistics() {
+		return ruleExecutionStatistics;
+	}
+	/**
+	 * @param ruleExecutionStatistics the ruleExecutionStatistics to set
+	 */
+	public void setRuleExecutionStatistics(
+			RuleExecutionStatistics ruleExecutionStatistics) {
+		this.ruleExecutionStatistics = ruleExecutionStatistics;
 	}
 	
 }

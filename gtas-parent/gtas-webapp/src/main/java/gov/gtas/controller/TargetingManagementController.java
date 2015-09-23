@@ -6,7 +6,9 @@ import gov.gtas.constants.Constants;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.svc.RuleManagementService;
 import gov.gtas.svc.TargetingService;
+import gov.gtas.svc.util.RuleExecutionContext;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -56,12 +58,12 @@ public class TargetingManagementController {
 	}
 
 	@RequestMapping(value = Constants.TARGET_ALL_MSG, method = RequestMethod.GET)
-	public List<?> getTargetingResult() {
-		RuleServiceResult result = targetingService.analyzeLoadedMessages(
-				MessageStatus.LOADED, MessageStatus.ANALYZED, true).getRuleServiceResult();
+	public Collection<?> getTargetingResult() {
+		RuleExecutionContext result = targetingService.analyzeLoadedMessages(
+				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
 		logger.info("TargetingManagementController.getTargetingResult() - rules fired ="
-				+ result.getExecutionStatistics().getTotalRulesFired());
-		List<RuleHitDetail> ret = result.getResultList();
+				+ result.getRuleExecutionStatistics().getTotalRulesFired());
+		Collection<?> ret = result.getTargetingResult();
 		return ret;
 	}
 }
