@@ -7,6 +7,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Flight;
@@ -40,6 +42,13 @@ public class FlightServiceImpl implements FlightService{
 	public List<Flight> findAll() {
 		return (List<Flight>)flightRespository.findAll();
 	}
+
+    @Override
+    @Transactional
+    public Page<Flight> findAll(int pageNumber, int pageSize) {
+        int pn = pageNumber > 0 ? pageNumber - 1 : 0;
+        return flightRespository.findAll(new PageRequest(pn, pageSize));
+    }
 
 	@Override
 	@Transactional

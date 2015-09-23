@@ -27,7 +27,7 @@ public class FlightVo {
     private int listHits;
     private int paxListHit;
     private int docListHit;
-    private int totalPax;
+    private Integer passengerCount;
     
     
     public int getPaxListHit() {
@@ -120,13 +120,13 @@ public class FlightVo {
     public void setEtd(Date etd) {
         this.etd = etd;
     }
-    public int getTotalPax() {
-		return totalPax;
-	}
-	public void setTotalPax(int totalPax) {
-		this.totalPax = totalPax;
-	}
-	public Date getEta() {
+	public Integer getPassengerCount() {
+        return passengerCount;
+    }
+    public void setPassengerCount(Integer passengerCount) {
+        this.passengerCount = passengerCount;
+    }
+    public Date getEta() {
         return eta;
     }
     public void setEta(Date eta) {

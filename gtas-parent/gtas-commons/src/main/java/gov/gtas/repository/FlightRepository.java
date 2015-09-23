@@ -4,12 +4,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import gov.gtas.model.Flight;
 
-public interface FlightRepository extends CrudRepository<Flight, Long> {
+public interface FlightRepository extends PagingAndSortingRepository<Flight, Long> {
 	@Query("SELECT f FROM Flight f WHERE f.carrier = :carrier "
 	        + "AND f.flightNumber = :flightNumber "
 	        + "AND f.origin = :origin "
@@ -37,7 +37,6 @@ public interface FlightRepository extends CrudRepository<Flight, Long> {
             @Param("destination") String destination, 
             @Param("startDate") Date startDate, 
             @Param("endDate") Date endDate);
-
 
     @Query("SELECT f FROM Flight f join f.passengers p where p.id = (:paxId)")
     public List<Flight> getFlightByPaxId(@Param("paxId") Long paxId);

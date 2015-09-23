@@ -71,6 +71,9 @@ public class Flight extends BaseEntityAudit {
     )    
     private Set<Passenger> passengers = new HashSet<>();
 
+    @Column(name = "passenger_count", nullable = false)
+    private Integer passengerCount = Integer.valueOf(0);
+    
     @ManyToMany(
         mappedBy = "flights",
         targetEntity = Pnr.class
@@ -160,7 +163,13 @@ public class Flight extends BaseEntityAudit {
 	public void setPnrs(Set<Pnr> pnrs) {
 		this.pnrs = pnrs;
 	}
-	
+    public Integer getPassengerCount() {
+        return passengerCount;
+    }
+    public void setPassengerCount(Integer passengerCount) {
+        this.passengerCount = passengerCount;
+    }
+
     @Override
     public int hashCode() {
        return Objects.hash(this.carrier, this.flightNumber, this.flightDate, this.origin, this.destination);

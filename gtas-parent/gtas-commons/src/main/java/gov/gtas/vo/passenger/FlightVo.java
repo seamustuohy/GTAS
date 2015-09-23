@@ -21,6 +21,7 @@ public class FlightVo implements Validatable{
     private Date flightDate;
     private Date etd;
     private Date eta;
+    private Integer passengerCount = Integer.valueOf(0);
     
     /**
      * rules for setting calculated field 'flightDate'
@@ -113,7 +114,13 @@ public class FlightVo implements Validatable{
     public void setOverFlight(boolean isOverFlight) {
         this.isOverFlight = isOverFlight;
     }
- 
+    public Integer getPassengerCount() {
+        return passengerCount;
+    }
+    public void setPassengerCount(Integer passengerCount) {
+        this.passengerCount = passengerCount;
+    }
+
     public Date stripTime(Date d) {
         Calendar cal = Calendar.getInstance(); // locale-specific
         cal.setTime(d);

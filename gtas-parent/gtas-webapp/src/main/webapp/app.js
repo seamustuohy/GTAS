@@ -264,8 +264,8 @@ app.config(function ($stateProvider) {
         controller: 'DashboardController'
     }).state('flights', {
         url: '/flights',
-        templateUrl: 'flights/flights2.html',
-        controller: 'FlightsIIController'
+        templateUrl: 'flights/flights.html',
+        controller: 'FlightsController'
     }).state('pax', {
         url: '/passengers',
         controller: 'PaxMainController',
