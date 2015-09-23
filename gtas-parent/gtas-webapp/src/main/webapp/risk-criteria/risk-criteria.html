@@ -85,6 +85,6 @@
     <div id="builder"></div>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
     <button type="button" data-ng-click="resetQueryBuilder()" class="md-raised md-button md-default-theme">Clear Conditions</button>
-    <button type="button" ng-show="!ruleId" data-ng-click="delete()" type="button" class="md-raised md-warn md-button md-default-theme" title="delete">Delete</button>
+    <button type="button" ng-show="ruleId !== null" data-ng-click="delete()" type="button" class="md-raised md-warn md-button md-default-theme" title="delete">Delete</button>
     <button type="button" data-ng-click="save()" id="submit" class="md-raised md-primary md-button md-default-theme">Save</button>
 </section>

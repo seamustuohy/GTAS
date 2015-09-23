@@ -5,7 +5,7 @@ var app = angular.module('myApp', [
     'ui.grid.edit', 'ui.grid.rowEdit', 'ui.grid.cellNav',
     'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.expandable',
     'ct.ui.router.extras', 'ngMaterial', 'ngMessages', 'ngAria',
-    'ngAnimate'
+    'ngAnimate', 'angularSpinners'
 ]);
 
 app.controller('NavCtrl', function ($scope, $location) {

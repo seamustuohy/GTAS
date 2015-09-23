@@ -108,6 +108,8 @@
 	<script
 		src='resources/bower_components/angular-aria/angular-aria.min.js'></script>
 	<script
+	src='resources/bower_components/angular-spinners/dist/angular-spinners.min.js'></script>
+	<script
 		src='resources/bower_components/angular-animate/angular-animate.min.js'></script>
 	<script
 		src='resources/bower_components/angular-messages/angular-messages.min.js'></script>

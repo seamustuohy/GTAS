@@ -1,4 +1,4 @@
-app.controller('WatchListController', function ($scope, $rootScope, $injector, GridControl, $filter, $q, watchListService, $interval) {
+app.controller('WatchListController', function ($scope, $rootScope, $injector, GridControl, $filter, $q, watchListService, $interval, spinnerService, $timeout) {
     'use strict';
     var watchlist = {}, tabs = [];
     $injector.invoke(GridControl, this, {$scope: $scope});
@@ -129,9 +129,12 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
 
     $scope.updateWatchlistService = function () {
         if ($scope.updating) { return false; }
-        $scope.updating = true;
         watchListService.compile().then(function () {
-            $scope.updating = false;
+            spinnerService.show('html5spinner');
+            $timeout(function () {
+                spinnerService.hide('html5spinner');
+                $scope.updating = false;
+            }, 2500);
         });
     };
 
