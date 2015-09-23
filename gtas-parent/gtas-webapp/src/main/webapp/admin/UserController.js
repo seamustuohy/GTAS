@@ -1,5 +1,6 @@
 
-app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService',function($state,$scope,$q,$stateParams,userService) {
+app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService','Base64',
+    function($state,$scope,$q,$stateParams,userService,Base64) {
 	
 	$scope.user = $stateParams.user;
 	
@@ -98,7 +99,7 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
     $scope.saveUser=function()
     {
     	$scope.populateSelectedRoles();
-        console.log($scope.persistUser);
+      
         if ($scope.action == 'modify') {
             userService.updateUser($scope.persistUser)
                 .then(
@@ -115,8 +116,6 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
 
                 });
         }
-        	
-
     };
 
     $scope.back=function()    {
@@ -124,6 +123,3 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
         $state.go('admin.users');
     };
   }]);
-  
- 
- 

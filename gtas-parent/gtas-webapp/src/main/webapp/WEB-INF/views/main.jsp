@@ -116,6 +116,7 @@
 	<script src='resources/js/query-builder.js'></script>
 	<script src='app.js'></script>
 	<script src='resources/js/JqueryQueryBuilderService.js'></script>
+	<script src='factory/SecurityFactory.js'></script>
 	<script src='factory/GridFactory.js'></script>
 	<script src='factory/ModalGridFactory.js'></script>
 	<script src='factory/QueryBuilderFactory.js'></script>

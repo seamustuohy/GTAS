@@ -2,6 +2,7 @@ package gov.gtas.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -49,5 +50,11 @@ public class UserController {
 	public UserData updateUser(@RequestBody @Valid UserData userData) {
 		return userService.update(userData);
 	}
+	
+	/*@RequestMapping(method = RequestMethod.GET)
+	public String testMestod(HttpServletRequest request){
+	  // ShoppingCart cart = (ShoppingCart)request.getSession().setAttribute("cart",value);
+	   return "testJsp";
+	}*/
 
 }
