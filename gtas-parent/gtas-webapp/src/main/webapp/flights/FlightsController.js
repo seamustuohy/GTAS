@@ -8,12 +8,34 @@ app.controller('FlightsController', function ($scope, $http, flightService) {
   
   $scope.gridOptions = { 
   	enableRowSelection: true, 
+  	multiSelect: false,
+    enableFiltering: true,  	
   	paginationPageSizes: [10, 25, 50],
     paginationPageSize: 10,
     useExternalPagination: true,
     useExternalSorting: true,
+    useExternalFiltering: true,
+    
     onRegisterApi: function(gridApi) {
       $scope.gridApi = gridApi;
+      
+      gridApi.selection.on.rowSelectionChanged($scope,function(row) {
+      });
+      
+      gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
+        if (sortColumns.length == 0) {
+          paginationOptions.sort = null;
+        } else {
+          paginationOptions.sort = sortColumns[0].sort.direction;
+        }
+        getPage();
+      });      
+      
+      gridApi.core.on.filterChanged( $scope, function() {
+        var grid = this.grid;
+        //alert(grid.columns[4].filters[0].term);
+      });
+      
       gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
         paginationOptions.pageNumber = newPage;
         paginationOptions.pageSize = pageSize;
@@ -22,19 +44,19 @@ app.controller('FlightsController', function ($scope, $http, flightService) {
     }    
   };
 
+
   $scope.gridOptions.columnDefs = [
-    { name: 'P', field: 'passengerCount', width: 50 },
-    { name: 'H', field: 'ruleHits', width: 50 },
-    { name: 'L', field: 'listHits', width: 50 },
+    { name: 'P', field: 'passengerCount', width: 50, enableFiltering: false },
+    { name: 'H', field: 'ruleHits', width: 50, enableFiltering: false },
+    { name: 'L', field: 'listHits', width: 50, enableFiltering: false },
     { name: 'Flight', field: 'flightNumber' },
-    { name: 'Dir', field: 'direction' },    
+    { name: 'Dir', field: 'direction', width: 50 },    
     { name: 'ETA', displayName: 'ETA', field: 'eta' },
     { name: 'ETD', displayName: 'ETD', field: 'etd' },    
     { name: 'Origin', field: 'origin' },
-    { name: 'Country', field: 'originCountry' },
+    { name: 'OriginCountry', displayName: "Country", field: 'originCountry' },
     { name: 'Dest', field: 'destination' },
-    { name: 'Country', field: 'destinationCountry' }
-    
+    { name: 'DestCountry', displayName: "Country", field: 'destinationCountry' }
   ];
   
   var getPage = function() {

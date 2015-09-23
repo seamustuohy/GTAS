@@ -195,6 +195,13 @@ public class LoaderRepository {
             for (Passenger p : messagePassengers) {
                 f.addPassenger(p);
             }
+            
+            /*
+             * update pax count to backend; for now it calculates the number of
+             * pax added and updates the count in the db; however, pax could be
+             * deleted in the future (canceled pnr), so have to update this
+             * logic eventually.
+             */
             f.setPassengerCount(f.getPassengerCount() + newPax);
         }
     }
