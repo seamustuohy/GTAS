@@ -1,33 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="myApp">
 <head>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GTAS</title>
-
-<link rel="stylesheet" href="resources/css/style-icomoon.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/bootstrap/dist/css/bootstrap.css" />
-<link rel="stylesheet" href="resources/css/gtas.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/angular-ui-grid/ui-grid.css" />
-<link rel="stylesheet" href="resources/css/query-builder.default.css" />
-<link rel="stylesheet"
-	href="resources/bower_components/angular-material/angular-material.min.css" />
+  <%@ taglib prefix="sec"
+  	uri="http://www.springframework.org/security/tags"%>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GTAS</title>
+  
+  <link rel="stylesheet" href="resources/css/style-icomoon.css" />
+  <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="resources/css/gtas.css" />
+  <link rel="stylesheet" href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css" />
+  <link rel="stylesheet" href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+  <link rel="stylesheet" href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
+  <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
+  <link rel="stylesheet" href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+  <link rel="stylesheet" href="resources/bower_components/angular-ui-grid/ui-grid.css" />
+  <link rel="stylesheet" href="resources/css/query-builder.default.css" />
+  <link rel="stylesheet" href="resources/bower_components/angular-material/angular-material.min.css" />
 </head>
+
 <body>
 	<header></header>
 	<nav ng-controller="NavCtrl">
@@ -74,46 +67,27 @@
 	//-->
 	<!-- for Debug purposes -->
 	<script src='resources/bower_components/angular/angular.js'></script>
-	<script
-		src='resources/bower_components/angular-ui-router/release/angular-ui-router.js'></script>
-	<script
-		src='resources/bower_components/ui-router-extras/release/ct-ui-router-extras.js'></script>
-	<script
-		src='resources/bower_components/angular-bootstrap/ui-bootstrap.js'></script>
-	<script
-		src='resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js'></script>
-	<script src='resources/bower_components/ng-table/dist/ng-table.js'></script>
-	<script
-		src='resources/bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js'></script>
+	<script src='resources/bower_components/angular-ui-router/release/angular-ui-router.js'></script>
+	<script src='resources/bower_components/ui-router-extras/release/ct-ui-router-extras.js'></script>
 	<script src='resources/bower_components/moment/min/moment.min.js'></script>
 	<script src='resources/bower_components/jquery/dist/jquery.js'></script>
-	<script
-		src='resources/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
-	<script
-		src='resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js'></script>
+	<script src='resources/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+	<script src='resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js'></script>
 	<script src='resources/bower_components/bootbox/bootbox.js'></script>
-	<script
-		src='resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js'></script>
-	<script
-		src='resources/bower_components/selectize/dist/js/standalone/selectize.min.js'></script>
-	<script
-		src='resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
-	<script
-		src='resources/bower_components/jquery-extendext/jQuery.extendext.min.js'></script>
+	<script src='resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js'></script>
+	<script src='resources/bower_components/selectize/dist/js/standalone/selectize.min.js'></script>
+	<script src='resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
+	<script src='resources/bower_components/jquery-extendext/jQuery.extendext.min.js'></script>
 	<script src='resources/bower_components/pdfmake/build/pdfmake.min.js'></script>
 	<script src='resources/bower_components/pdfmake/build/vfs_fonts.js'></script>
 	<script src='resources/bower_components/angular-ui-grid/ui-grid.js'></script>
-	<script
-		src='resources/bower_components/angular-material/angular-material.min.js'></script>
-	<script
-		src='resources/bower_components/angular-aria/angular-aria.min.js'></script>
-	<script
-	src='resources/bower_components/angular-spinners/dist/angular-spinners.min.js'></script>
-	<script
-		src='resources/bower_components/angular-animate/angular-animate.min.js'></script>
-	<script
-		src='resources/bower_components/angular-messages/angular-messages.min.js'></script>
+	<script src='resources/bower_components/angular-material/angular-material.min.js'></script>
+	<script src='resources/bower_components/angular-aria/angular-aria.min.js'></script>
+	<script src='resources/bower_components/angular-spinners/dist/angular-spinners.min.js'></script>
+	<script src='resources/bower_components/angular-animate/angular-animate.min.js'></script>
+	<script src='resources/bower_components/angular-messages/angular-messages.min.js'></script>
 	<script src='resources/js/query-builder.js'></script>
+
 	<script src='app.js'></script>
 	<script src='resources/js/JqueryQueryBuilderService.js'></script>
 	<script src='factory/SecurityFactory.js'></script>

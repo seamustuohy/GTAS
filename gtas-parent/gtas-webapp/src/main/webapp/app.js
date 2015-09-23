@@ -1,11 +1,23 @@
 var app = angular.module('myApp', [
-    'ui.router', 'ui.bootstrap', 'ngTable',
-    'spring-security-csrf-token-interceptor', 'ui.grid',
-    'ui.grid.resizeColumns', 'ui.grid.moveColumns', 'ui.grid.pagination',
-    'ui.grid.edit', 'ui.grid.rowEdit', 'ui.grid.cellNav',
-    'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.expandable',
-    'ct.ui.router.extras', 'ngMaterial', 'ngMessages', 'ngAria',
-    'ngAnimate', 'angularSpinners'
+    'ui.router',
+    'ct.ui.router.extras',
+    
+    'ui.grid',
+    'ui.grid.resizeColumns',
+    'ui.grid.moveColumns',
+    'ui.grid.pagination',
+    'ui.grid.edit',
+    'ui.grid.rowEdit',
+    'ui.grid.cellNav',
+    'ui.grid.selection',
+    'ui.grid.exporter',
+    'ui.grid.expandable',
+    
+    'ngMaterial',
+    'ngMessages',
+    'ngAria',
+    'ngAnimate',
+    'angularSpinners'
 ]);
 
 app.controller('NavCtrl', function ($scope, $location) {
