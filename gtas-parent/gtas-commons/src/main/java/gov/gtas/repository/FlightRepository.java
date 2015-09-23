@@ -3,9 +3,11 @@ package gov.gtas.repository;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import gov.gtas.model.Flight;
 
@@ -45,4 +47,13 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
     public List<Flight> getFlightsByDates(@Param("startDate") Date startDate, 
             							  @Param("endDate") Date endDate);
 
+    @Modifying
+    @Transactional
+    @Query("update Flight set ruleHitCount = (select count(distinct passengerId) from HitsSummary where flightId = :flightId and ruleHitCount > 0)")
+    public Integer updateRuleHitCountForFlight(@Param("flightId") Long flightId);
+
+    @Modifying
+    @Transactional
+    @Query("update Flight set listHitCount = (select count(distinct passengerId) from HitsSummary where flightId = :flightId and watchListHitCount > 0)")
+    public Integer updateListHitCountForFlight(@Param("flightId") Long flightId);
 }

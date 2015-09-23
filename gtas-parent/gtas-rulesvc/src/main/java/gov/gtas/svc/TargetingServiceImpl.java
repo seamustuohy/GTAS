@@ -17,6 +17,7 @@ import gov.gtas.model.Message;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Pnr;
 import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.FlightRepository;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PnrRepository;
@@ -27,6 +28,7 @@ import gov.gtas.svc.util.TargetingServiceUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -69,6 +71,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private HitsSummaryRepository hitsSummaryRepository;
+
+    @Autowired
+    private FlightRepository flightRepository;
 
 	@Autowired
 	private EntityManager em;
@@ -277,7 +282,6 @@ public class TargetingServiceImpl implements TargetingService {
 	// @Scheduled(fixedDelay = 4000)
 	@Transactional
 	public void runningRuleEngine() {
-		
 		RuleExecutionContext ruleRunningResult = analyzeLoadedMessages(
 				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
 
@@ -298,12 +302,19 @@ public class TargetingServiceImpl implements TargetingService {
 		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
 				.getRuleServiceResult().getResultList();
 		Iterator<RuleHitDetail> iter = results.iterator();
+        Set<Long> uniqueFlights = new HashSet<>();
 		while (iter.hasNext()) {
 			RuleHitDetail ruleDetail = iter.next();
 			HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
+            uniqueFlights.add(hitsSummary.getFlightId());
 			hitsSummaryList.add(hitsSummary);
 		}
 		hitsSummaryRepository.save(hitsSummaryList);
+		
+		for (Long flightId : uniqueFlights) {
+		    flightRepository.updateRuleHitCountForFlight(flightId);
+	        flightRepository.updateListHitCountForFlight(flightId);
+		}
 	}
 
 	private void deleteExistingHitRecords(
