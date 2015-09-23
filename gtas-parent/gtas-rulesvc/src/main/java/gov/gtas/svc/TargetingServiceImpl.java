@@ -72,8 +72,8 @@ public class TargetingServiceImpl implements TargetingService {
 	@Autowired
 	private HitsSummaryRepository hitsSummaryRepository;
 
-    @Autowired
-    private FlightRepository flightRepository;
+	@Autowired
+	private FlightRepository flightRepository;
 
 	@Autowired
 	private EntityManager em;
@@ -201,6 +201,7 @@ public class TargetingServiceImpl implements TargetingService {
 	public RuleExecutionContext analyzeLoadedMessages(
 			MessageStatus statusToLoad, MessageStatus statusAfterProcesssing,
 			final boolean updateProcesssedMessageStat) {
+
 		Iterator<Message> source = messageRepository.findAll().iterator();
 		List<Message> target = new ArrayList<Message>();
 		source.forEachRemaining(target::add);
@@ -209,7 +210,17 @@ public class TargetingServiceImpl implements TargetingService {
 			logger.info("TargetingServiceImpl.analyzeLoadedMessages() - retrieved  message list size-> "
 					+ target.size());
 		}
+		RuleExecutionContext ctx = executeRules(target);
 
+		if (updateProcesssedMessageStat) {
+			for (Message message : target) {
+				message.setStatus(statusAfterProcesssing);
+			}
+		}
+		return ctx;
+	}
+
+	private RuleExecutionContext executeRules(List<Message> target) {
 		RuleExecutionContext ctx = TargetingServiceUtils
 				.createPnrApisRequestContext(target);
 		// default knowledge Base is the UDR KB
@@ -226,11 +237,7 @@ public class TargetingServiceImpl implements TargetingService {
 							RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
 							(RuleConstants.UDR_KNOWLEDGE_BASE_NAME + "/" + WatchlistConstants.WL_KNOWLEDGE_BASE_NAME));
 		}
-		if (updateProcesssedMessageStat) {
-			for (Message message : target) {
-				message.setStatus(statusAfterProcesssing);
-			}
-		}
+
 		// eliminate duplicates
 		if (udrResult != null) {
 			udrResult = TargetingServiceUtils
@@ -302,18 +309,18 @@ public class TargetingServiceImpl implements TargetingService {
 		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
 				.getRuleServiceResult().getResultList();
 		Iterator<RuleHitDetail> iter = results.iterator();
-        Set<Long> uniqueFlights = new HashSet<>();
+		Set<Long> uniqueFlights = new HashSet<>();
 		while (iter.hasNext()) {
 			RuleHitDetail ruleDetail = iter.next();
 			HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
-            uniqueFlights.add(hitsSummary.getFlightId());
+			uniqueFlights.add(hitsSummary.getFlightId());
 			hitsSummaryList.add(hitsSummary);
 		}
 		hitsSummaryRepository.save(hitsSummaryList);
-		
+
 		for (Long flightId : uniqueFlights) {
-		    flightRepository.updateRuleHitCountForFlight(flightId);
-	        flightRepository.updateListHitCountForFlight(flightId);
+			flightRepository.updateRuleHitCountForFlight(flightId);
+			flightRepository.updateListHitCountForFlight(flightId);
 		}
 	}
 
@@ -329,7 +336,7 @@ public class TargetingServiceImpl implements TargetingService {
 							.getPassenger().getId());
 			if (!CollectionUtils.isEmpty(found)) {
 				found.forEach(obj -> {
-					em.remove(obj);				
+					em.remove(obj);
 				});
 			}
 			if (i % Integer.valueOf(batchSize) == 0) {
@@ -360,18 +367,17 @@ public class TargetingServiceImpl implements TargetingService {
 		hitsSummary.setCreatedDate(new Date());
 		hitsSummary.setHitType(ruleHitDetail.getHitType());
 
-		
 		hitsSummary.setRuleHitCount(ruleHitDetail.getRuleHitCount());
 		hitsSummary.setWatchListHitCount(ruleHitDetail.getHitCount()
 				- ruleHitDetail.getRuleHitCount());
-		HitDetail hitDetail = new HitDetail();		
+		HitDetail hitDetail = new HitDetail();
 		String type = ruleHitDetail.getHitType();
 		if (type.equalsIgnoreCase("R"))
 			hitDetail.setRuleId(ruleHitDetail.getUdrRuleId());
 		else {
 			hitDetail.setRuleId(ruleHitDetail.getRuleId());
 		}
-				
+
 		hitDetail.setRuleConditions(sb.toString());
 		hitDetail.setCreatedDate(new Date());
 		hitDetail.setParent(hitsSummary);
