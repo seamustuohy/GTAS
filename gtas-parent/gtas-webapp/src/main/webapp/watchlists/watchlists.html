@@ -59,17 +59,6 @@
         position: relative;
     }
 
-    .overlay {
-        opacity: .75;
-        background-color: transparent;
-        width: calc(100% + 2px);
-        height: calc(100% + 2px);
-        position: absolute;
-        z-index: 5;
-        margin: -20px -20px;
-        border-radius: 3px;
-    }
-
     .please-wait {
         text-align: center;
         position: absolute;
@@ -89,6 +78,10 @@
     .glyphicon-remove {
         cursor: pointer;
     }
+
+    .ui-grid-icon-ok:before {
+        content: '\c357' !important;
+    }
 </style>
 <section>
     <h2><span class="glyphicon glyphicon-eye-open"></span> Watchlists</h2>
@@ -97,7 +90,7 @@
     </md-tabs>
     <div ng-if="activeTab !== 'create-new'">
         <div ui-grid="gridOpts" ui-grid-edit ui-grid-row-edit ui-grid-cellNav ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
-        <button type="button" class="md-raised md-warn md-button md-default-theme pull-right" ng-click="removeRow()"><span class="glyphicon glyphicon-remove"></span> Remove</button>
+        <button type="button" class="md-raised md-warn md-button md-default-theme pull-right" data-ng-click="removeRow()" ng-disabled="rowSelected !== true"><span class="glyphicon glyphicon-remove"></span> Remove</button>
         <button type="button" class="md-raised md-button md-default-theme pull-right" data-ng-click="Add()"><span class="glyphicon glyphicon-plus"></span> Add New</button>
     </div>
 </section>
@@ -110,5 +103,5 @@
         </div>
         <div class="please-wait">Please Wait...</div>
     </spinner>
-    <button type="button" data-ng-click="updateWatchlistService()" class="md-raised md-primary md-button md-default-theme">Update Watchlist Service</button>
+    <button type="button" data-ng-click="updateWatchlistService()" ng-disabled="updating === true" class="md-raised md-primary md-button md-default-theme">Update Watchlist Service</button>
 </div>

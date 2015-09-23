@@ -85,7 +85,8 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
             terms = [],
             promise = $q.defer(),
             columnType,
-            value;
+            value,
+            ready = true;
 
         watchlistType.columns.forEach(function (column) {
             columnTypeDict[column.name] = column.type;
@@ -96,22 +97,32 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
             if (['$$hashKey', 'id'].indexOf(key) === -1) {
                 columnType = columnTypeDict[key];
                 value = rowEntity[key];
+                if (!value) {
+                    ready = false;
+                }
                 if (columnType === 'date') {
                     value = moment(value).format('YYYY-MM-DD');
                 }
                 terms.push({entity: entity, field: key, type: columnType, value: value});
             }
         });
-
-        watchListService[method]($scope.activeTab, entity, rowEntity.id, terms).then(function (response) {
-            $interval(function () {
-                promise.resolve();
-            }, 300, 1);
-        });
+        if (ready) {
+            watchListService[method]($scope.activeTab, entity, rowEntity.id, terms).then(function (response) {
+                $interval(function () {
+                    promise.resolve();
+                }, 300, 1);
+            });
+        } else {
+            promise.resolve();
+        }
     };
 
     $scope.gridOpts.onRegisterApi = function (gridApi) {
         $scope.gridApi = gridApi;
+        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+            $scope.rowSelected = row.isSelected;
+        });
+
         gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
     };
 
@@ -129,6 +140,7 @@ app.controller('WatchListController', function ($scope, $rootScope, $injector, G
 
     $scope.updateWatchlistService = function () {
         if ($scope.updating) { return false; }
+        $scope.updating = true;
         watchListService.compile().then(function () {
             spinnerService.show('html5spinner');
             $timeout(function () {
