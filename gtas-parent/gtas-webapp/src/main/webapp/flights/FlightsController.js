@@ -47,8 +47,8 @@ app.controller('FlightsController', function ($scope, $http, flightService) {
 
   $scope.gridOptions.columnDefs = [
     { name: 'P', field: 'passengerCount', width: 50, enableFiltering: false },
-    { name: 'H', field: 'ruleHits', width: 50, enableFiltering: false },
-    { name: 'L', field: 'listHits', width: 50, enableFiltering: false },
+    { name: 'H', field: 'ruleHitCount', width: 50, enableFiltering: false },
+    { name: 'L', field: 'listHitCount', width: 50, enableFiltering: false },
     { name: 'Flight', field: 'flightNumber' },
     { name: 'Dir', field: 'direction', width: 50 },    
     { name: 'ETA', displayName: 'ETA', field: 'eta' },

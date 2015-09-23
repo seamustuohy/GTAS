@@ -1,5 +1,22 @@
 package gov.gtas.svc;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
 import gov.gtas.bo.CompositeRuleServiceResult;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
@@ -25,23 +42,6 @@ import gov.gtas.rule.RuleService;
 import gov.gtas.svc.request.builder.PassengerFlightTuple;
 import gov.gtas.svc.util.RuleExecutionContext;
 import gov.gtas.svc.util.TargetingServiceUtils;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of the Targeting Service API.
@@ -286,42 +286,49 @@ public class TargetingServiceImpl implements TargetingService {
 		}
 	}
 
-	// @Scheduled(fixedDelay = 4000)
 	@Transactional
-	public void runningRuleEngine() {
+	public Set<Long> runningRuleEngine() {
 		RuleExecutionContext ruleRunningResult = analyzeLoadedMessages(
 				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
 
 		RuleExecutionStatistics ruleExeStatus = ruleRunningResult
 				.getRuleServiceResult().getExecutionStatistics();
 		if (logger.isInfoEnabled()) {
-			logger.info(("\nTargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> " + ruleExeStatus
-					.getTotalRulesFired()));
+			logger.info("\nTargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> " + ruleExeStatus.getTotalRulesFired());
 		}
 
 		deleteExistingHitRecords(ruleRunningResult.getPaxFlightTuples());
 
-		storeHitsInfo(ruleRunningResult);
+		List<HitsSummary> hitsSummary = storeHitsInfo(ruleRunningResult);
+		Set<Long> uniqueFlights = new HashSet<>();
+        for (HitsSummary s : hitsSummary) {
+            uniqueFlights.add(s.getFlightId());
+        }
+        
+        return uniqueFlights;
+    }
+	
+    @Transactional
+	public void updateFlightHitCounts(Set<Long> flights) {
+        for (Long flightId : flights) {
+            flightRepository.updateRuleHitCountForFlight(flightId);
+            flightRepository.updateListHitCountForFlight(flightId);
+        }
 	}
 
-	private void storeHitsInfo(RuleExecutionContext ruleRunningResult) {
+	private List<HitsSummary> storeHitsInfo(RuleExecutionContext ruleRunningResult) {
 		List<HitsSummary> hitsSummaryList = new ArrayList<HitsSummary>();
 		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
 				.getRuleServiceResult().getResultList();
 		Iterator<RuleHitDetail> iter = results.iterator();
-		Set<Long> uniqueFlights = new HashSet<>();
 		while (iter.hasNext()) {
 			RuleHitDetail ruleDetail = iter.next();
 			HitsSummary hitsSummary = constructHitsInfo(ruleDetail);
-			uniqueFlights.add(hitsSummary.getFlightId());
 			hitsSummaryList.add(hitsSummary);
 		}
 		hitsSummaryRepository.save(hitsSummaryList);
-
-		for (Long flightId : uniqueFlights) {
-			flightRepository.updateRuleHitCountForFlight(flightId);
-			flightRepository.updateListHitCountForFlight(flightId);
-		}
+		
+		return hitsSummaryList;
 	}
 
 	private void deleteExistingHitRecords(
