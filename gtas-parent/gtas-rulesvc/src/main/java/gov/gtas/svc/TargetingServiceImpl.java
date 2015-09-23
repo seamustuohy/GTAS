@@ -277,9 +277,7 @@ public class TargetingServiceImpl implements TargetingService {
 	// @Scheduled(fixedDelay = 4000)
 	@Transactional
 	public void runningRuleEngine() {
-		// logger.info(new Date() + " a fixed delay running");
-		List<HitsSummary> hitsSummaryList = new ArrayList<HitsSummary>();
-
+		
 		RuleExecutionContext ruleRunningResult = analyzeLoadedMessages(
 				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
 
@@ -292,6 +290,11 @@ public class TargetingServiceImpl implements TargetingService {
 
 		deleteExistingHitRecords(ruleRunningResult.getPaxFlightTuples());
 
+		storeHitsInfo(ruleRunningResult);
+	}
+
+	private void storeHitsInfo(RuleExecutionContext ruleRunningResult) {
+		List<HitsSummary> hitsSummaryList = new ArrayList<HitsSummary>();
 		List<RuleHitDetail> results = (List<RuleHitDetail>) ruleRunningResult
 				.getRuleServiceResult().getResultList();
 		Iterator<RuleHitDetail> iter = results.iterator();
@@ -314,7 +317,9 @@ public class TargetingServiceImpl implements TargetingService {
 							.getFlight().getId(), passengerFlightTuple
 							.getPassenger().getId());
 			if (!CollectionUtils.isEmpty(found)) {
-				hitsSummaryRepository.delete(found);
+				found.forEach(obj -> {
+					em.remove(obj);				
+				});
 			}
 			if (i % Integer.valueOf(batchSize) == 0) {
 				em.flush();
