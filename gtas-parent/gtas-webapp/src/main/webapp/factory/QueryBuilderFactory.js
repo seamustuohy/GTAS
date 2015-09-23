@@ -1,54 +1,21 @@
-app.factory('QueryBuilderCtrl', function () {
+app.factory('queryBuilderFactory', function () {
     'use strict';
-    return function ($scope, $timeout) {
-        var setSelectizeValue = function ($selectize, value) {
-                $selectize[0].selectize.setValue(value);
-                $timeout(function () {
-                    if ($selectize[0].selectize.getValue().length === 0) setSelectizeValue($selectize, value);
-                },50);
-            },
-            selectizeValueSetter = function (rule, value) {
-                rule.$el.find(".rule-value-container select").val(value);
-                var $selectize = rule.$el.find(".rule-value-container .selectized");
-
-                if ($selectize.length) setSelectizeValue($selectize, value);
-            },
-            getOptionsFromJSONArray = function (that, property) {
-                //if (localStorage[property] === undefined) {
-                $.getJSON('./data/' + property + '.json', function (data) {
-                    //localStorage[property] = JSON.stringify(data);
-                    try {
-                        data.forEach(function (item) {
-                            that.addOption(item);
-                        });
-                    } catch (exception) {
-                        throw exception;
-                    }
-                });
-                //} else {
-                //    try {
-                //    JSON.parse(localStorage[property]).forEach(function (item) {
-                //    that.addOption(item);
-                //    });
-                //    } catch (exception) {
-                //       throw exception;
-                //    }
-                //}
-            };
-
+    return function ($scope, $timeout, jqueryQueryBuilderService, $interval) {
+        $scope.ruleId = null;
         $scope.clearTables = function () {};
 
         $scope.alerts = [];
-
         $scope.alert = function (type, text) {
             $scope.alerts.push({type: type, msg: text});
             $timeout(function () {
                 $scope.alerts[$scope.alerts.length - 1].expired = true;
-            }, 2000);
+            }, 4000);
             $timeout(function () {
                 $scope.alerts.splice($scope.alerts.length - 1, 1);
-            }, 3000);
+            }, 5000);
         };
+        //TODO remove when query service does not need it
+        $scope.userId = 'adelorie';
 
         $scope.alertSuccess = function (text) {
             $scope.alert('success', text);
@@ -70,8 +37,64 @@ app.factory('QueryBuilderCtrl', function () {
             $scope.alerts.splice(index, 1);
         };
 
+        $scope.updateQueryBuilderOnSave = function (myData) {
+            if (myData.status === 'FAILURE') {
+                $scope.alertError(myData.message);
+                $scope.saving = false;
+                return;
+            }
+            if (typeof myData.errorCode !== "undefined") {
+                $scope.alertError(myData.errorMessage);
+                return;
+            }
+
+            jqueryQueryBuilderService.getList().then(function (myData) {
+                $scope.setData(myData.result);
+                $interval(function () {
+                    var page;
+                    if (!$scope.selectedIndex) {
+                        page = $scope.gridApi.pagination.getTotalPages();
+                        $scope.selectedIndex = $scope.gridOpts.data.length - 1;
+                        $scope.gridApi.pagination.seek(page);
+                    }
+                    $scope.gridApi.selection.clearSelectedRows();
+                    $scope.gridApi.selection.selectRow($scope.gridOpts.data[$scope.selectedIndex]);
+                    $scope.saving = false;
+                }, 0, 1);
+            });
+        };
+
+        $scope.rowSelection = function (gridApi) {
+            $scope.gridApi = gridApi;
+            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                if (row.isSelected) {
+                    $scope.loadRuleOnSelection(row);
+                } else {
+                    $scope.newRule();
+                    $scope.gridApi.selection.clearSelectedRows();
+                }
+            });
+        };
+
+        $scope.delete = function () {
+            if (!$scope.ruleId) {
+                $scope.alertError('No rule loaded to delete');
+                return;
+            }
+
+            var selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
+
+            selectedRowEntities.forEach(function (rowEntity) {
+                var rowIndexToDelete = $scope.gridOpts.data.indexOf(rowEntity);
+
+                jqueryQueryBuilderService.delete($scope.ruleId).then(function (response) {
+                    $scope.gridOpts.data.splice(rowIndexToDelete, 1);
+                    $scope.newRule();
+                });
+            });
+        };
+
         $scope.today = moment().format('YYYY-MM-DD').toString();
-        $scope.authorId = 'adelorie';
         $scope.calendarOptions = {
             format: 'yyyy-mm-dd',
             autoClose: true
@@ -107,89 +130,6 @@ app.factory('QueryBuilderCtrl', function () {
             }, 200);
         };
 
-        $scope.buildAfterEntitiesLoaded = function (options) {
-            var property = 'entities',
-                $builder = $('#builder'),
-                supplement = {
-                    selectize: function (obj) {
-                        obj.plugin_config = {
-                            "valueField": "id",
-                            "labelField": "name",
-                            "searchField": "name",
-                            "sortField": "name",
-                            "create": false,
-                            "plugins": ["remove_button"],
-                            "onInitialize": function () {
-                                getOptionsFromJSONArray(this, obj.dataSource);
-                            }
-                        };
-                        obj.valueSetter = selectizeValueSetter;
-                    },
-                    datepicker: function (obj) {
-                        obj.validation = { "format": "YYYY-MM-DD" };
-                        obj.plugin_config = {
-                            "format": "yyyy-mm-dd",
-                            "autoClose": true
-                        };
-                    }
-                };
-            if ($builder.length === 0) {
-                alert('#builder not found in the DOM!');
-            }
-            // init
-            $builder
-                .on('afterCreateRuleInput.queryBuilder', function (e, rule) {
-                    if (rule.filter !== undefined && rule.filter.plugin === 'selectize') {
-                        rule.$el.find('.rule-value-container').css('min-width', '200px')
-                            .find('.selectize-control').removeClass('form-control');
-                    }
-                });
-
-            try {
-                //if (localStorage[property] === undefined) {
-                $.getJSON('./data/' + property + '.json', function (data) {
-                    //localStorage[property] = JSON.stringify(data);
-                    if (options && options.deleteEntity) {
-                        data[options.deleteEntity] = null;
-                        delete data[options.deleteEntity];
-                    }
-                    $scope.options.entities = data;
-                    $scope.options.filters = [];
-                    Object.keys($scope.options.entities).forEach(function (key){
-                        $scope.options.entities[key].columns.forEach(function (column){
-                            switch (column.plugin) {
-                                case 'selectize':
-                                case 'datepicker':
-                                    supplement[column.plugin](column);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            $scope.options.filters.push(column);
-                        });
-                    });
-                    $builder.queryBuilder($scope.options);
-
-                    $scope.$builder = $builder;
-                    $scope.newRule();
-
-                    $('.datepicker').datepicker({
-                        startDate: $scope.today.toString(),
-                        minDate: $scope.today.toString(),
-                        format: 'yyyy-mm-dd',
-                        autoClose: true
-                    });
-                });
-                //} else {
-                //    $scope.options.entities = JSON.parse(localStorage[property]);
-                //    $builder.queryBuilder($scope.options);
-                //    $scope.$builder = $builder;
-                //}
-            } catch (exception) {
-                throw exception;
-            }
-        };
-
         $scope.isBeingEdited = function () {
             return $scope.ruleId === this.$data[this.$index].id;
         };
@@ -216,7 +156,5 @@ app.factory('QueryBuilderCtrl', function () {
                 $scope.selectedIndex = null;
             }
         };
-
-        $scope.ruleId = null;
     };
 });

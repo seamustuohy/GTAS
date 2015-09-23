@@ -21,51 +21,30 @@
 	</head>
 <body>
 	<header></header>
-	<div>
-		<nav class="navbar navbar-default">
-			<div id="navbar">
-				<ul class="nav navbar-nav navbar-left" ng-controller="NavCtrl">
-					<li ng-class="{active: isActive('')}"><a href="home.action">Dashboard</a></li>
-					<sec:authorize
-						access="hasAnyAuthority('VIEW_FLIGHT_PASSENGERS','ADMIN')">
-						<li ng-class="{active: isActive('/flights')}"><a
-							href="home.action#/flights">Flights</a></li>
-						<li ng-class="{active: isActive('/passengers')}"><a
-							href="home.action#/passengers">Passengers</a></li>
-					</sec:authorize>
-					<sec:authorize access="hasAnyAuthority('MANAGE_QUERIES', 'ADMIN')">
-						<li ng-class="{active: isActive('/query-builder')}"><a
-							href="home.action#/query-builder">Queries</a></li>
-					</sec:authorize>
-					<sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'ADMIN')">
-						<li ng-class="{active: isActive('/risk-criteria')}"><a
-							href="home.action#/risk-criteria">Risk Criteria</a></li>
-					</sec:authorize>
-					<sec:authorize access="hasAnyAuthority('MANAGE_WATCHLIST','ADMIN')">
-						<li ng-class="{active: isActive('/watchlists')}"><a
-							href="home.action#/watchlists">Watchlists</a></li>
-					</sec:authorize>
-					<sec:authorize access="hasAnyAuthority('MANAGE_USERS','ADMIN')">
+	<nav ng-controller="NavCtrl">
+		<ul class="nav navbar-nav navbar-right" style="margin: 0;">
+	<li><a href="logout.action">LOGOUT</a></li>
+	</ul>
+		<md-tabs md-stretch-tabs md-selected="selectedIndex">
+		<md-tab label="Dashboard"></md-tab>
+		<sec:authorize access="hasAnyAuthority('VIEW_FLIGHT_PASSENGERS','ADMIN')">
+			<md-tab label="Flights"></md-tab>
+			<md-tab label="Passengers"></md-tab>
+		</sec:authorize>
+		<sec:authorize access="hasAnyAuthority('MANAGE_QUERIES', 'ADMIN')">
+			<md-tab label="Queries"></md-tab>
+		</sec:authorize>
+		<sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'ADMIN')">
+			<md-tab label="Risk Criteria"></md-tab>
+		</sec:authorize>
+		<sec:authorize access="hasAnyAuthority('MANAGE_WATCHLIST','ADMIN')">
+			<md-tab label="Watchlist"></md-tab>
+		</sec:authorize>
+		<sec:authorize access="hasAnyAuthority('MANAGE_USERS','ADMIN')">
+			<md-tab label="Admin"></md-tab>
+		</sec:authorize>
 
-						<li ng-class="{active: isActive('/admin')}"><a
-							href="home.action#/admin">Admin</a></li>
-					</sec:authorize>
-
-					<li class="dropdown"><a href="" class="dropdown-toggle"
-						data-toggle="dropdown" role="button">Settings <span
-							class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="">User Settings</a></li>
-						</ul></li>
-
-				</ul>
-
-				<ul class="nav navbar-nav navbar-right" style="margin: 0;">
-					<li><a href="logout.action">Logout</a></li>
-				</ul>
-			</div>
-
-			<div></div>
+		</md-tabs>
 		</nav>
 		<!-- end of nav -->
 
@@ -110,12 +89,11 @@
 	<script src='resources/bower_components/angular-messages/angular-messages.min.js'></script>
 	<script src='resources/js/query-builder.js'></script>
 	<script src='app.js'></script>
-	<script src='resources/js/CrudService.js'></script>
+	<script src='resources/js/JqueryQueryBuilderService.js'></script>
 	<script src='factory/GridFactory.js'></script>
 	<script src='factory/ModalGridFactory.js'></script>
 	<script src='factory/QueryBuilderFactory.js'></script>
-	<script src='factory/jQueryBuilderFactory.js'></script>
-	<script src='factory/jQueryBuilderFactory.js'></script>ui-
+	<script src='factory/JqueryQueryBuilderWidget.js'></script>
 	<script src='dashboard/DashboardController.js'></script>
 	<script src='flights/FlightsIIController.js'></script>
 	<script src='flights/FlightsService.js'></script>
@@ -124,8 +102,8 @@
 	<script src='pax/PaxMainController.js'></script>
 	<script src='pax/PaxService.js'></script>
 	<script src='pax/PaxFactory.js'></script>
-	<script src='query-builder/QueryService.js'></script>
-	<script src='query-builder/QueryService.js'></script>
+	<script src='query-builder/QueryBuilderController.js'></script>
+	<script src='query-builder/ExecuteQueryService.js'></script>
 	<script src='risk-criteria/RiskCriteriaController.js'></script>
 	<script src='watchlists/WatchListService.js'></script>
 	<script src='watchlists/WatchListController.js'></script>

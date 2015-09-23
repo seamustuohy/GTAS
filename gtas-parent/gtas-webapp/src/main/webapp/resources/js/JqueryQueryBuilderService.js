@@ -1,4 +1,4 @@
-app.service("crudService", function ($http, $q) {
+app.service("jqueryQueryBuilderService", function ($http, $q) {
     'use strict';
     var baseUrl,
         URLS = {

@@ -40,10 +40,7 @@
     .table tbody tr:nth-child(odd) {
         background: rgba(245,245,255,0.5);
     }
-    /* temporary highlighting the only entity we don't yet support */
-    .entity-name ul li:nth-child(8) {
-        background: rgba(200,30,30, 0.2);
-    }
+
     @keyframes fadeOut
     {
         from { opacity: 1.0; }
@@ -70,7 +67,7 @@
 <div ui-grid="gridOpts" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
 
 <section class="qb-interface">
-    <button data-ng-click="newRule()" class="md-raised md-primary md-button md-default-theme" data-add="rule">New Query</button>
+    <button data-ng-click="newRule()" class="md-raised md-button md-default-theme pull-right" data-add="rule"><span class="glyphicon glyphicon-plus"></span> Add New</button>
 
     <h2>Summary:</h2>
     <label for="title" class="hide">Name:</label>

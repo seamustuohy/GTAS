@@ -1,6 +1,6 @@
 app.controller('FlightsIIController', function ($scope, $rootScope, $injector, Modal, GridControl, uiGridConstants,
-                                                $filter, $q, flightService, paxService, jQueryBuilderFactory,
-                                                crudService, $interval, $timeout) {
+                                                $filter, $q, flightService, paxService, jqueryQueryBuilderWidget,
+                                                jqueryQueryBuilderService, $interval, $timeout) {
     'use strict';
     $injector.invoke(GridControl, this, {$scope: $scope});
     $injector.invoke(Modal, this, {$scope: $scope});
@@ -331,7 +331,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
         displayName: 'Conditions'
     }];
 
-    crudService.init('riskcriteria');
+    jqueryQueryBuilderService.init('riskcriteria');
 
     var entityMapper = {
         'PASSENGER': 'Passenger',
@@ -343,7 +343,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
         $scope.subGridApi = subGridApi;
         subGridApi.selection.on.rowSelectionChanged($scope, function (row) {
             if (row.isSelected) {
-                crudService.loadRuleById(row.entity.ruleId).then(function (myData) {
+                jqueryQueryBuilderService.loadRuleById(row.entity.ruleId).then(function (myData) {
                     //var details = myData.result.details;
                     //details.rules.forEach(function(rule) {
                     //    rule.entity = entityMapper[rule.entity];
@@ -366,7 +366,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     //    $scope.subGridApi = subGridApi;
     //    subGridApi.selection.on.rowSelectionChanged($scope, function (row) {
     //        if (row.isSelected) {
-    //            crudService.loadRuleById(row.entity.ruleId).then(function (myData) {
+    //            jqueryQueryBuilderService.loadRuleById(row.entity.ruleId).then(function (myData) {
     //                $scope.$builder.queryBuilder('readOnlyRules', myData.result.details);
     //                $scope.hitDetailDisplay = myData.result.summary.title;
     //                document.getElementById("QBModal").style.display = "block";
@@ -425,7 +425,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     $scope.hitDetailDisplay = '';
     $scope.ruleHitsRendered = false; // flag to render rule hits only once
 
-    $injector.invoke(jQueryBuilderFactory, self, {$scope: $scope});
+    $injector.invoke(jqueryQueryBuilderWidget, self, {$scope: $scope});
     $scope.loading = true;
 
     $scope.gridOpts.columnDefs = columns.FLIGHTS;
@@ -508,7 +508,7 @@ app.controller('FlightsIIController', function ($scope, $rootScope, $injector, M
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
 
     $scope.getRuleObject = function (ruleID) {
-        crudService.loadRuleById(ruleID).then(function (myData) {
+        jqueryQueryBuilderService.loadRuleById(ruleID).then(function (myData) {
             $scope.$builder.queryBuilder('readOnlyRules', myData.result.details);
             $scope.hitDetailDisplay = myData.result.summary.title;
             document.getElementById("QBModal").style.display = "block";

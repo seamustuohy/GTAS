@@ -64,12 +64,11 @@ var jsFiles = [
     'resources/bower_components/angular-messages/angular-messages.min.js',
     'resources/js/query-builder.js',
     'app.js',
-    'resources/js/CrudService.js',
+    'resources/js/JqueryQueryBuilderService.js',
     'factory/GridFactory.js',
     'factory/ModalGridFactory.js',
     'factory/QueryBuilderFactory.js',
-    'factory/jQueryBuilderFactory.js',
-    'factory/jQueryBuilderFactory.js',
+    'factory/JqueryBuilderWidget.js',
     'dashboard/DashboardController.js',
     'flights/FlightsIIController.js',
     'flights/FlightsService.js',
@@ -78,7 +77,6 @@ var jsFiles = [
     'pax/PaxMainController.js',
     'pax/PaxService.js',
     'pax/PaxFactory.js',
-    'query-builder/QueryBuilderService.js',
     'query-builder/QueryService.js',
     'risk-criteria/RiskCriteriaController.js',
     'watchlists/WatchListService.js',
@@ -112,7 +110,7 @@ gulp.task('pub', function () {
 // Lint Task
 gulp.task('lint', function () {
     'use strict';
-    return gulp.src('./pax/*.js')
+    return gulp.src('./query-builder/QueryBuilderController.js')
         .pipe(jshint())
         .pipe(jshint.reporter('gulp-jshint-html-reporter', {
             filename: __dirname + '/jshint-output.html',

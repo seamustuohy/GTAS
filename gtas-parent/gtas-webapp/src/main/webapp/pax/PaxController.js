@@ -1,8 +1,8 @@
-app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jQueryBuilderFactory, $filter,
+app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jqueryQueryBuilderWidget, $filter,
                                           $q, paxService, sharedPaxData, $stateParams, $state,
                                           $timeout, $interval, uiGridConstants) {
     var self = this;
-    $injector.invoke(jQueryBuilderFactory, this, {$scope: $scope});
+    $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
     $injector.invoke(GridControl, this, {$scope: $scope});
 
     $scope.isExpanded = true;

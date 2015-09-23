@@ -1,5 +1,7 @@
-app.factory('jQueryBuilderFactory', function () {
+app.factory('jqueryQueryBuilderWidget', function () {
     'use strict';
+    /* Note any controller pulling in must have a view template with one element with an id of builder */
+    /* this only handles pulling jQueryBuilder into angular */
     return function ($scope, $timeout) {
         var setSelectizeValue = function ($selectize, value) {
                 $selectize[0].selectize.setValue(value);

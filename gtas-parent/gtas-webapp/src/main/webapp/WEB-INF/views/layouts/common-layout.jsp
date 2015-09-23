@@ -41,7 +41,6 @@
     <script type="text/javascript" src="resources/js/angular.js"></script>
     <script type="text/javascript" src="resources/js/angular-route.js"></script>
     <script type="text/javascript" src="resources/app/app.js"></script>
-    <script type="text/javascript" src="resources/app/controllers/queryBuilderController.js"></script>
     <script type="text/javascript" src="resources/js/moment.js"></script>
 
     <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css">

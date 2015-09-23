@@ -10,10 +10,34 @@ var app = angular.module('myApp', [
 
 app.controller('NavCtrl', function ($scope, $location) {
     'use strict';
-    $scope.isActive = function (route) {
-        $scope.path = $location.path();
-        return $location.path() === route;
-    };
+    $scope.selectedIndex = 0;
+
+    //IF WE MOVE SECURITY check TO HERE and out of .jsp
+    $scope.$watch('selectedIndex', function (current) {
+        switch (current) {
+            case 0:
+                $location.url("/dashboard");
+                return;
+            case 1:
+                $location.url("/flights");
+                return;
+            case 2:
+                $location.url("/passengers");
+                return;
+            case 3:
+                $location.url("/query-builder");
+                return;
+            case 4:
+                $location.url("/risk-criteria");
+                return;
+            case 5:
+                $location.url("/watchlists");
+                return;
+            case 6:
+                $location.url("/admin");
+                return;
+        }
+    });
 });
 
 app.run(function ($rootScope) {
@@ -235,7 +259,7 @@ app.config(function ($stateProvider) {
             }
         }
     }).state('dashboard', {
-        url: '',
+        url: 'dashboard',
         templateUrl: 'dashboard/dashboard.html',
         controller: 'DashboardController'
     }).state('flights', {
