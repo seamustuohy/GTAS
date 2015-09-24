@@ -81,13 +81,10 @@
 
     <h2>Conditions:</h2>
     <div id="builder"></div>
-    <md-radio-group ng-model="viewType">
-        <md-radio-button value="FLIGHT" class="md-primary">Flight</md-radio-button>
-        <md-radio-button value="PASSENGER" class="md-primary">Passenger</md-radio-button>
-    </md-radio-group>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
-    <button type="button" data-ng-click="executeQuery()"  class="md-raised md-primary md-button md-default-theme" >Execute Query</button>
+    <button type="button" data-ng-click="executeQuery('FLIGHT')"  class="md-raised md-primary md-button md-default-theme" >Query Flights</button>
+    <button type="button" data-ng-click="executeQuery('PASSENGER')"  class="md-raised md-primary md-button md-default-theme" >Query Passengers</button>
     <button type="button" data-ng-click="resetQueryBuilder()" class="md-raised md-button md-default-theme">Clear Conditions</button>
-    <button type="button" ng-show="ruleId !== null" data-ng-click="delete()" type="button" class="md-raised md-warn md-button md-default-theme" title="delete">Delete</button>
-    <button type="button" data-ng-click="save()" id="submit" class="md-raised md-primary md-button md-default-theme">Save</button>
+    <button type="button" data-ng-click="save()" data-ng-disabled="saving === true" class="md-raised md-primary md-button md-default-theme pull-right">Save</button>
+    <button type="button" data-ng-click="delete()" data-ng-disabled="ruleId === null" class="md-raised md-warn md-button md-default-theme pull-right">Delete</button>
 </section>

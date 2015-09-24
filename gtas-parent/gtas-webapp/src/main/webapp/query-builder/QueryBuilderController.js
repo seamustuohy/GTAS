@@ -1,4 +1,4 @@
-app.controller('QueryBuilderController', function ($scope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, $location, gridOptionsLookupService, jqueryQueryBuilderService) {
+app.controller('QueryBuilderController', function ($scope, $rootScope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, $location, gridOptionsLookupService, jqueryQueryBuilderService) {
     'use strict';
     $scope.setData = function (myData) {
         var data = [];
@@ -22,9 +22,10 @@ app.controller('QueryBuilderController', function ($scope, $injector, jqueryQuer
 //    $scope.resultsGrid.enableColumnResizing = true;
 
     $scope.gridOpts = gridOptionsLookupService.defaultGridOptions();
-    $scope.gridOpts.columnDefs = gridOptionsLookupService.getLookupColumnDefs('QUERIES');
+    $scope.gridOpts.columnDefs = gridOptionsLookupService.getLookupColumnDefs('queries');
     $scope.gridOpts.exporterCsvFilename = 'MySavedQueries.csv';
     $scope.gridOpts.exporterPdfHeader = { text: "My Saved Queries", style: 'headerStyle' };
+
 
     jqueryQueryBuilderService.getList().then(function (myData) {
         $scope.setData(myData.result);
@@ -86,8 +87,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, jqueryQuer
         jqueryQueryBuilderService.save(queryObject).then($scope.updateQueryBuilderOnSave);
     };
 
-    $scope.viewType = 'FLIGHT';
-    $scope.executeQuery = function () {
+    $scope.executeQuery = function (viewType) {
         var qbData = $scope.$builder.queryBuilder('getDrools');
 
         if (qbData === false) {
@@ -96,7 +96,7 @@ app.controller('QueryBuilderController', function ($scope, $injector, jqueryQuer
         }
         localStorage['qbData'] = JSON.stringify(qbData);
         localStorage['qbTitle'] = $scope.title.trim();
-        localStorage['qbType'] = $scope.viewType;
-        $location.url(['/query/', $scope.viewType.toLocaleLowerCase(), 's'].join(''));
+        localStorage['qbType'] = viewType;
+        $location.url(['/query', viewType].join('/'));
     };
 });
