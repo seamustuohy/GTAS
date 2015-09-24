@@ -9,12 +9,8 @@ var gulp = require('gulp'),
 
 var images = [
     'resources/img/404.png',
-    'resources/img/banner.png',
     'resources/img/circle_arrow_back.png',
-    'resources/img/loading_default_en.gif',
-    'resources/img/logo.jpg',
-    'resources/img/gtas_logo.png',
-    'resources/img/top_banner.jpg'
+    'resources/img/gtas_logo-compressed.jpg',
 ];
 
 var cssFiles = [
@@ -44,7 +40,6 @@ var jsFiles = [
     'resources/bower_components/ui-router-extras/release/ct-ui-router-extras.js',
     'resources/bower_components/angular-bootstrap/ui-bootstrap.js',
     'resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-    'resources/bower_components/ng-table/dist/ng-table.js',
     'resources/bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js',
     'resources/bower_components/moment/min/moment.min.js',
     'resources/bower_components/jquery/dist/jquery.js',

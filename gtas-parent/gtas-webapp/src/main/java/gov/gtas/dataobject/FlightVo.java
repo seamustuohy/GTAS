@@ -27,8 +27,9 @@ public class FlightVo {
     private int listHits;
     private int paxListHit;
     private int docListHit;
-    private Integer passengerCount;
-    
+    private Integer passengerCount = Integer.valueOf(0);
+    private Integer ruleHitCount = Integer.valueOf(0);
+    private Integer listHitCount = Integer.valueOf(0);
     
     public int getPaxListHit() {
 		return paxListHit;
@@ -122,6 +123,18 @@ public class FlightVo {
     }
 	public Integer getPassengerCount() {
         return passengerCount;
+    }
+    public Integer getRuleHitCount() {
+        return ruleHitCount;
+    }
+    public void setRuleHitCount(Integer ruleHitCount) {
+        this.ruleHitCount = ruleHitCount;
+    }
+    public Integer getListHitCount() {
+        return listHitCount;
+    }
+    public void setListHitCount(Integer listHitCount) {
+        this.listHitCount = listHitCount;
     }
     public void setPassengerCount(Integer passengerCount) {
         this.passengerCount = passengerCount;

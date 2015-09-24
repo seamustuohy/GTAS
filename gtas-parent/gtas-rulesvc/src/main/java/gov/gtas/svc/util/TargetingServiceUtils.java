@@ -1,28 +1,15 @@
 package gov.gtas.svc.util;
 
-import gov.gtas.bo.BasicRuleServiceResult;
-import gov.gtas.bo.RuleHitDetail;
-import gov.gtas.bo.RuleServiceResult;
-import gov.gtas.enumtype.HitTypeEnum;
 import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Flight;
 import gov.gtas.model.Message;
 import gov.gtas.model.Pnr;
 import gov.gtas.svc.request.builder.RuleEngineRequestBuilder;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TargetingServiceUtils {
-	private static final Logger logger = LoggerFactory
-			.getLogger(TargetingServiceUtils.class);
-
 	/**
 	 * Creates a request from a API message.
 	 * 
@@ -129,78 +116,5 @@ public class TargetingServiceUtils {
 		context.setPaxFlightTuples(bldr.getPassengerFlightSet());
 		context.setRuleServiceRequest(bldr.build());
 		return context;
-	}
-
-	/**
-	 * Eliminates duplicates and adds flight id, if missing.
-	 * 
-	 * @param result
-	 * @return
-	 */
-	public static RuleServiceResult ruleResultPostProcesssing(
-			RuleServiceResult result) {
-		// get the list of RuleHitDetail objects returned by the Rule Engine
-		List<RuleHitDetail> resultList = result.getResultList();
-
-		// create a Map to eliminate duplicates
-		Map<RuleHitDetail, RuleHitDetail> resultMap = new HashMap<>();
-
-		for (RuleHitDetail rhd : resultList) {
-			//RuleHitDetail hitDetail = rhd;
-			if (rhd.getFlightId() == null) {
-				// get all the flights for the passenger
-				// and replicate the RuleHitDetail object, for each flight id
-				// Note that the RuleHitDetail key is (UdrId, EngineRuleId,
-				// PassengerId, FlightId)
-				Collection<Flight> flights = rhd.getPassenger().getFlights();
-				if (flights != null && flights.size() > 0) {
-					try {
-						for (Flight flight : flights) {
-							RuleHitDetail newrhd = rhd.clone();
-                            processPassengerFlight(newrhd, flight.getId(), resultMap);
-						}
-					} catch (CloneNotSupportedException cnse) {
-						cnse.printStackTrace();
-					}
-				} else {
-					//ERROR we do not have flights for this passenger
-					logger.error("TargetingServiceUtils.ruleResultPostProcesssing() no flight information for passenger  with ID:"+rhd.getPassenger().getId());
-				}
-			} else{
-				rhd.setPassenger(null);
-				processPassengerFlight(rhd, rhd.getFlightId(), resultMap);				
-			}
-		}
-		// Now create the return list from the set, thus eliminating duplicates.
-		RuleServiceResult ret = new BasicRuleServiceResult(
-				new LinkedList<RuleHitDetail>(resultMap.values()),
-				result.getExecutionStatistics());
-		return ret;
-	}
-	
-	private static void processPassengerFlight(RuleHitDetail rhd, Long flightId, Map<RuleHitDetail, RuleHitDetail> resultMap){
-		
-		rhd.setFlightId(flightId);
-
-		// set the passenger object to null
-		// since its only purpose was to provide flight
-		// details.
-		rhd.setPassenger(null);
-		RuleHitDetail resrhd = resultMap.get(rhd);
-		if(resrhd != null && resrhd.getRuleId() != rhd.getRuleId()){
-			resrhd.incrementHitCount();
-			if(resrhd.getUdrRuleId() != null){
-				//this is a rule hit
-				resrhd.incrementRuleHitCount();
-			} else {
-				//this is a watch list hit
-				if(resrhd.getHitType() != rhd.getHitType()){
-					resrhd.setHitType(HitTypeEnum.PD.toString());
-				}
-			}
-		} else if (resrhd == null){
-		    resultMap.put(rhd, rhd);
-		}
-
 	}
 }

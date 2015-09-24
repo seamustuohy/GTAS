@@ -73,6 +73,12 @@ public class Flight extends BaseEntityAudit {
 
     @Column(name = "passenger_count", nullable = false)
     private Integer passengerCount = Integer.valueOf(0);
+
+    @Column(name = "rule_hit_count", nullable = false)
+    private Integer ruleHitCount = Integer.valueOf(0);
+
+    @Column(name = "list_hit_count", nullable = false)
+    private Integer listHitCount = Integer.valueOf(0);
     
     @ManyToMany(
         mappedBy = "flights",
@@ -168,6 +174,18 @@ public class Flight extends BaseEntityAudit {
     }
     public void setPassengerCount(Integer passengerCount) {
         this.passengerCount = passengerCount;
+    }
+    public Integer getRuleHitCount() {
+        return ruleHitCount;
+    }
+    public void setRuleHitCount(Integer ruleHitCount) {
+        this.ruleHitCount = ruleHitCount;
+    }
+    public Integer getListHitCount() {
+        return listHitCount;
+    }
+    public void setListHitCount(Integer listHitCount) {
+        this.listHitCount = listHitCount;
     }
 
     @Override

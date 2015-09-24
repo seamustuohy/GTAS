@@ -6,6 +6,7 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import gov.gtas.validators.Validatable;
 
 public class FlightVo implements Validatable{
@@ -22,7 +23,9 @@ public class FlightVo implements Validatable{
     private Date etd;
     private Date eta;
     private Integer passengerCount = Integer.valueOf(0);
-    
+    private Integer ruleHitCount = Integer.valueOf(0);
+    private Integer listHitCount = Integer.valueOf(0);
+
     /**
      * rules for setting calculated field 'flightDate'
      */
@@ -119,6 +122,18 @@ public class FlightVo implements Validatable{
     }
     public void setPassengerCount(Integer passengerCount) {
         this.passengerCount = passengerCount;
+    }
+    public Integer getRuleHitCount() {
+        return ruleHitCount;
+    }
+    public void setRuleHitCount(Integer ruleHitCount) {
+        this.ruleHitCount = ruleHitCount;
+    }
+    public Integer getListHitCount() {
+        return listHitCount;
+    }
+    public void setListHitCount(Integer listHitCount) {
+        this.listHitCount = listHitCount;
     }
 
     public Date stripTime(Date d) {

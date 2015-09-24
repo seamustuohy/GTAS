@@ -49,5 +49,6 @@ public class UserController {
 	public UserData updateUser(@RequestBody @Valid UserData userData) {
 		return userService.update(userData);
 	}
+	
 
 }
