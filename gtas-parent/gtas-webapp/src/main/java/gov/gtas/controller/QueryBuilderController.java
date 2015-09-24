@@ -101,8 +101,10 @@ public class QueryBuilderController {
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public JsonServiceResponse saveQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
-
-		IUserQueryResult result = queryService.saveQuery(queryRequest);
+		String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.debug("Create query " + queryRequest.getTitle() + " by " + userId);
+		
+		IUserQueryResult result = queryService.saveQuery(userId, queryRequest);
 		
 		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, result.getId());
 	}
@@ -117,8 +119,10 @@ public class QueryBuilderController {
 	 */
 	@RequestMapping(value = Constants.PATH_VARIABLE_ID, method = RequestMethod.PUT)
 	public JsonServiceResponse editQuery(@PathVariable int id, @RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
-			
-		queryService.editQuery(queryRequest);
+		String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.debug("Edit query " + queryRequest.getTitle() + " by " + userId);
+		
+		queryService.editQuery(userId, queryRequest);
 		
 		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, null);
 	}
@@ -133,7 +137,7 @@ public class QueryBuilderController {
 	public JsonServiceResponse listQueryByUser() throws InvalidQueryException {
 		List<IUserQueryResult> resultList = new ArrayList<>();
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
-		logger.debug("******** Received Query Builder List request by user =" + userId);
+		logger.debug("List query by " + userId);
 		
 		resultList = queryService.listQueryByUser(userId);
 		
@@ -149,8 +153,7 @@ public class QueryBuilderController {
 	@RequestMapping(value = Constants.PATH_VARIABLE_ID, method = RequestMethod.DELETE)
 	public JsonServiceResponse deleteQuery(@PathVariable int id) throws QueryDoesNotExistException {
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
-		logger.debug("******** Received Query Builder Delete request by user =" + userId
-				+ " for " + id);
+		logger.debug("Delete query id: " + id + " by " + userId);
 		
 		queryService.deleteQuery(userId, id);
 		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_DELETED_SUCCESS_MSG, null);

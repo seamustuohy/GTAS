@@ -1,3 +1,4 @@
+
 <h3><span class="glyphicon glyphicon-user glyphiconFlightPax img-circle"></span>Passenger Detail</h3>
 
 <div style="padding-top: 15px;"></div>
@@ -57,8 +58,8 @@
 <!--  Exterior Panel  -->    
 <div class="panel panel-default" style="min-height: 1200px; max-height: 1200px;">
     
-    <tabset>
-        <tab heading="Details">
+    <md-tabs md-dynamic-height>
+        <md-tab label="Details">
   <div class="span12" style="background-color: rgb(255, 255, 255, 0.15);">          
     <div class="container" style="height:100%;">
     
@@ -102,9 +103,12 @@
 </table>
    
    </div>         
-        </tab>
+        </md-tab>
 	        
-	        <tab style="color:#fff;" heading="PNR">
+	        <md-tab label="PNR">
+
+				<md-tab-body>
+
    <div style="padding: 10px;"></div>
 		<div class="span12">
 			<div class="container" style="height:100%;">
@@ -125,6 +129,7 @@
 		</div> <!-- END OF DETAIL DIV -->
 
   <div style="padding: 30px;"></div>
+
 
 	<!-- LEFT DIV -->
 
@@ -444,10 +449,15 @@
 	
 	</div>
 
-		</tab> <!-- END OF PNR DIV -->
+					</md-tab-body>
+
+		</md-tab> <!-- END OF PNR DIV -->
 	        
-        
-    </tabset>
+        <md-tab label="Flight History">
+
+		</md-tab>
+
+    </md-tabs>
     
     </div>
     

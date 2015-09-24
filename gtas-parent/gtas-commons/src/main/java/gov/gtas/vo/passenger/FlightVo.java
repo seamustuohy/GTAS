@@ -7,10 +7,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gov.gtas.validators.Validatable;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class FlightVo implements Validatable{
-    private String flightId;
+import gov.gtas.validators.Validatable;
+import gov.gtas.vo.BaseVo;
+
+public class FlightVo extends BaseVo implements Validatable {
+    public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm aaa";
+
     private String carrier;
     private String flightNumber;
     private String origin;
@@ -19,9 +23,14 @@ public class FlightVo implements Validatable{
     private String destinationCountry;
     private boolean isOverFlight;
     private String direction;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
     private Date flightDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
     private Date etd;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
     private Date eta;
+    
     private Integer passengerCount = Integer.valueOf(0);
     private Integer ruleHitCount = Integer.valueOf(0);
     private Integer listHitCount = Integer.valueOf(0);
@@ -51,12 +60,6 @@ public class FlightVo implements Validatable{
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}
-	public String getFlightId() {
-        return flightId;
-    }
-    public void setFlightId(String flightId) {
-        this.flightId = flightId;
-    }
     public String getCarrier() {
         return carrier;
     }

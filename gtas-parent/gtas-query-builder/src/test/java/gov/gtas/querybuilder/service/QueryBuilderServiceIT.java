@@ -77,9 +77,8 @@ public class QueryBuilderServiceIT {
 		request.setTitle(TITLE);
 		request.setDescription(DESCRIPTION);
 		request.setQuery(query);
-		request.setUserId(USER_ID);
 		
-		IUserQueryResult result = queryService.saveQuery(request);
+		IUserQueryResult result = queryService.saveQuery(USER_ID, request);
 		assertNotNull(result.getId());
 		
 		deleteUserQuery(result.getId());
@@ -93,15 +92,14 @@ public class QueryBuilderServiceIT {
 		request.setTitle(TITLE);
 		request.setDescription(DESCRIPTION);
 		request.setQuery(query);
-		request.setUserId(USER_ID);
 		
 		// create a user query
-		IUserQueryResult result = queryService.saveQuery(request);
+		IUserQueryResult result = queryService.saveQuery(USER_ID, request);
 		assertNotNull(result.getId());
 		
 		// try to create a duplicate query
 		// this call should fail and throw exception
-		queryService.saveQuery(request);
+		queryService.saveQuery(USER_ID, request);
 		
 		deleteUserQuery(result.getId());
 	}
@@ -114,10 +112,9 @@ public class QueryBuilderServiceIT {
 		request.setTitle(TITLE);
 		request.setDescription(DESCRIPTION);
 		request.setQuery(null);
-		request.setUserId(USER_ID);
 		
 		// create a user query
-		queryService.saveQuery(request);
+		queryService.saveQuery(USER_ID, request);
 	}
 	
 	@Test
@@ -128,15 +125,14 @@ public class QueryBuilderServiceIT {
 		request.setTitle(TITLE);
 		request.setDescription(DESCRIPTION);
 		request.setQuery(query);
-		request.setUserId(USER_ID);
 		
 		// create a new query
-		IUserQueryResult result = queryService.saveQuery(request);
+		IUserQueryResult result = queryService.saveQuery(USER_ID, request);
 		
 		// update the query
 		request.setId(result.getId());
 		request.setTitle(UPDATED_TITLE);
-		IUserQueryResult updatedResult = queryService.editQuery(request);
+		IUserQueryResult updatedResult = queryService.editQuery(USER_ID, request);
 		
 		assertEquals(result.getId(), updatedResult.getId());
 		assertEquals(UPDATED_TITLE, updatedResult.getTitle());
@@ -152,10 +148,9 @@ public class QueryBuilderServiceIT {
 		request.setTitle(TITLE);
 		request.setDescription(DESCRIPTION);
 		request.setQuery(query);
-		request.setUserId(USER_ID);
 		
 		// create a new query
-		IUserQueryResult result = queryService.saveQuery(request);
+		IUserQueryResult result = queryService.saveQuery(USER_ID, request);
 		
 		// update the query
 		request.setId(result.getId());
@@ -163,7 +158,7 @@ public class QueryBuilderServiceIT {
 		request.setQuery(null);
 		
 		// try updating the query with an invalid user query
-		queryService.editQuery(request);
+		queryService.editQuery(USER_ID, request);
 		
 		deleteUserQuery(result.getId());
 	}
@@ -177,9 +172,8 @@ public class QueryBuilderServiceIT {
 		request.setTitle(TITLE);
 		request.setDescription(DESCRIPTION);
 		request.setQuery(query);
-		request.setUserId(USER_ID);
 		
-		queryService.editQuery(request);
+		queryService.editQuery(USER_ID, request);
 	}
 	
 	@Test(expected = QueryAlreadyExistsException.class)
@@ -190,18 +184,16 @@ public class QueryBuilderServiceIT {
 		request.setTitle(TITLE);
 		request.setDescription(DESCRIPTION);
 		request.setQuery(query);
-		request.setUserId(USER_ID);
 		
 		// create a new query
-		IUserQueryResult result = queryService.saveQuery(request);
+		IUserQueryResult result = queryService.saveQuery(USER_ID, request);
 		
 		// create another query
 		request.setTitle(TITLE + "2");
 		request.setDescription(DESCRIPTION);
 		request.setQuery(query);
-		request.setUserId(USER_ID);
 		
-		IUserQueryResult secondResult = queryService.saveQuery(request);
+		IUserQueryResult secondResult = queryService.saveQuery(USER_ID, request);
 		
 		// try to update the second query using
 		// the same title in the first query
@@ -209,7 +201,6 @@ public class QueryBuilderServiceIT {
 		// for the same user, which is not allowed
 		request.setTitle(TITLE);
 		request.setId(secondResult.getId());
-		queryService.editQuery(request);
 		
 		deleteUserQuery(result.getId());
 		deleteUserQuery(secondResult.getId());
@@ -223,10 +214,9 @@ public class QueryBuilderServiceIT {
 		request.setTitle(TITLE);
 		request.setDescription(DESCRIPTION);
 		request.setQuery(query);
-		request.setUserId(USER_ID);
 		
 		// create a new query
-		IUserQueryResult result = queryService.saveQuery(request);
+		IUserQueryResult result = queryService.saveQuery(USER_ID, request);
 		
 		List<IUserQueryResult> resultList = queryService.listQueryByUser(USER_ID);
 		
@@ -244,10 +234,9 @@ public class QueryBuilderServiceIT {
 		request.setTitle(TITLE);
 		request.setDescription(DESCRIPTION);
 		request.setQuery(query);
-		request.setUserId(USER_ID);
 		
 		// create a new query
-		IUserQueryResult result = queryService.saveQuery(request);
+		IUserQueryResult result = queryService.saveQuery(USER_ID, request);
 		
 		// delete - soft delete
 		queryService.deleteQuery(USER_ID, result.getId());
@@ -256,7 +245,7 @@ public class QueryBuilderServiceIT {
 		// you should get an exception if the query was
 		// successfully deleted
 		request.setId(result.getId());
-		queryService.editQuery(request);
+		queryService.editQuery(USER_ID, request);
 	}
 	
 	@Test

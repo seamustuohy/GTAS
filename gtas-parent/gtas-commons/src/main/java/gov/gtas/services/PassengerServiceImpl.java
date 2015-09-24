@@ -1,5 +1,6 @@
 package gov.gtas.services;
 
+import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.repository.PassengerRepository;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +41,13 @@ public class PassengerServiceImpl implements PassengerService {
 	public List<Passenger> findAll() {
 		return (List<Passenger>)passengerRespository.findAll();
 	}
+	
+    @Override
+    @Transactional
+    public Page<Passenger> findAll(int pageNumber, int pageSize) {
+        int pn = pageNumber > 0 ? pageNumber - 1 : 0;
+        return passengerRespository.findAll(new PageRequest(pn, pageSize));
+    }
 
 	@Override
 	@Transactional
@@ -93,10 +101,17 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     @Transactional
     public List<Passenger> getPassengersByFlightId(Long flightId) {
-        List<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId);
+        return passengerRespository.getPassengersByFlightId(flightId);
+    }
+
+    @Override
+    @Transactional
+    public Page<Passenger> getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize) {
+        int pn = pageNumber > 0 ? pageNumber - 1 : 0;
+        Page<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId, new PageRequest(pn, pageSize));
         return passengerList;
     }
-    
+
     @Override
     @Transactional
     public List<Passenger> getPassengersFromUpcomingFlights(Pageable pageable) {

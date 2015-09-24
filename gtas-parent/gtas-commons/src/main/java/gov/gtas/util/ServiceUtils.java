@@ -3,18 +3,7 @@ package gov.gtas.util;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import org.apache.commons.lang3.StringUtils;
-import gov.gtas.vo.passenger.AddressVo;
-import gov.gtas.vo.passenger.CreditCardVo;
-import gov.gtas.vo.passenger.DocumentVo;
-import gov.gtas.vo.passenger.EmailVo;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.FrequentFlyerVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.PhoneVo;
-import gov.gtas.vo.passenger.AgencyVo;
-import gov.gtas.vo.PnrVo;
-import gov.gtas.vo.PnrMessageVo;
+
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
@@ -25,6 +14,17 @@ import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
+import gov.gtas.vo.PnrMessageVo;
+import gov.gtas.vo.PnrVo;
+import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.AgencyVo;
+import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.DocumentVo;
+import gov.gtas.vo.passenger.EmailVo;
+import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.passenger.FrequentFlyerVo;
+import gov.gtas.vo.passenger.PassengerVo;
+import gov.gtas.vo.passenger.PhoneVo;
 
 public class ServiceUtils {
 	
@@ -38,9 +38,7 @@ public class ServiceUtils {
 		flight.setEta(vo.getEta());
 		flight.setEtd(vo.getEtd());
 		flight.setFlightDate(vo.getFlightDate());
-		if(StringUtils.isNoneBlank(vo.getFlightId())){
-			flight.setId(new Long(vo.getFlightId()));
-		}
+		flight.setId(new Long(vo.getId()));
 		flight.setOrigin(vo.getOrigin());
 		flight.setOriginCountry(vo.getOriginCountry());
 		flight.setDirection(vo.getDirection());
@@ -68,7 +66,7 @@ public class ServiceUtils {
 		vo.setFlightDate(flight.getFlightDate());
 		vo.setFlightNumber(flight.getFlightNumber());
 		if(flight.getId() != null){
-			vo.setFlightId(flight.getId().toString());
+			vo.setId(flight.getId());
 		}
 		vo.setOrigin(flight.getOrigin());
 		vo.setOriginCountry(flight.getOriginCountry());

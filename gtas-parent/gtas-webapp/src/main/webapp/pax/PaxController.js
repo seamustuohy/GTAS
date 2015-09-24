@@ -1,6 +1,8 @@
 app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jqueryQueryBuilderWidget, $filter,
                                           $q, paxService, sharedPaxData, $stateParams, $state,
-                                          $timeout, $interval, uiGridConstants) {
+                                          $timeout, $interval, uiGridConstants,passengers) {
+
+    console.log(passengers);
 
     $scope.selectedFlight=$stateParams.flight;
     $scope.parent=$stateParams.parent;
@@ -18,6 +20,11 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     $scope.getPaxSpecificList = function (index) {
         return $scope.list(index);
     };
+
+    $scope.init=function(index)
+    {
+
+    }
 
     //--------Date functions-----------------------
     $scope.startDate = '';
@@ -258,6 +265,9 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
         exporterPdfHeader: {text: "Passengers", style: 'headerStyle'},
 
         onRegisterApi: function (gridApi) {
+            if($scope.parent=='flights')
+                $scope.gridApi.data = passengers;
+
             $scope.gridApi = gridApi;
 
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
