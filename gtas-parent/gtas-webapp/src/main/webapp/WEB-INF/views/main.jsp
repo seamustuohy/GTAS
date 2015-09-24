@@ -129,6 +129,7 @@
 	<script src='pax/PaxService.js'></script>
 	<script src='pax/PaxFactory.js'></script>
 	<script src='query-builder/QueryBuilderController.js'></script>
+	<script src='query-builder/ExecuteQueryController.js'></script>
 	<script src='query-builder/ExecuteQueryService.js'></script>
 	<script src='risk-criteria/RiskCriteriaController.js'></script>
 	<script src='watchlists/WatchListService.js'></script>
