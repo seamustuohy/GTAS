@@ -1,4 +1,6 @@
-app.controller('FlightsController', function ($scope, $http, flightService,$state) {
+app.controller('FlightsController', function ($scope, $http, flightService,$state,$interval,$stateParams) {
+
+  $scope.selectedFlight=$stateParams.flight;
 
   var paginationOptions = {
     pageNumber: 1,
@@ -56,7 +58,12 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
         paginationOptions.pageSize = pageSize;
         getPage();
       });
-    }    
+
+      gridApi.selection.on.rowSelectionChanged($scope,function(row){
+        $scope.selectedFlight=row.entity;
+        console.log($scope.selectedFlight);
+      })
+    }
   };
 
   $scope.gridOptions.columnDefs = [
@@ -77,7 +84,7 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
   ];
 
     $scope.passengerNav = function(){
-        $state.go('flights.passengers');
+        $state.go('flights.passengers',{ parent: 'flights', flight: $scope.selectedFlight });
     };
 
     var getPage = function() {
@@ -85,6 +92,8 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
     flightService.getFlights(paginationOptions).then(function (page) {
       $scope.gridOptions.totalItems = page.totalFlights;
       $scope.gridOptions.data = page.flights;
+
+      $interval( function() {$scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);}, 0, 1);
     });
   };
   

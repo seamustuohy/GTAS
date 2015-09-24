@@ -4,5 +4,12 @@
         content: "\e105";
     }
 </style>
-<h2><span class="glyphicon glyphicon-user glyphiconFlightPax img-circle"></span> Passengers</h2>
+
+
+<md-content layout-padding>
+    <md-input-container flex  ng-show="parent === 'flights'">
+        <div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="flights.all" ></div>
+    </md-input-container>
+    <h2>
+        <span class="glyphicon glyphicon-user glyphiconFlightPax img-circle"></span> Passengers</h2>
 <div id="grid1" ui-grid="passengerGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter ui-grid-resize-columns ui-grid-move-columns class="grid"></div>
