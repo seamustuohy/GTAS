@@ -1,11 +1,15 @@
 package gov.gtas.model;
 
+import gov.gtas.enumtype.HitTypeEnum;
+
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -27,8 +31,18 @@ public class HitDetail extends BaseEntity {
 	@JoinColumn(name = "hits_summary_id", nullable = false, referencedColumnName = "id")
 	private HitsSummary parent;
 
+	@Column(name = "title", nullable = false)
+	private String Title;
+
+	@Column(name = "description")
+	private String Description;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "hit_type", nullable=false, length=3)
+	private HitTypeEnum hitType;
+
 	/**
-	 * String representation of matched conditions; it can be splitted into
+	 * String representation of matched conditions; it can be split into
 	 * String[]
 	 */
 	@Lob
@@ -73,6 +87,21 @@ public class HitDetail extends BaseEntity {
 
 	public void setRuleId(Long ruleId) {
 		this.ruleId = ruleId;
+	}
+	public String getTitle() {
+		return Title;
+	}
+
+	public void setTitle(String title) {
+		Title = title;
+	}
+
+	public String getDescription() {
+		return Description;
+	}
+
+	public void setDescription(String description) {
+		Description = description;
 	}
 
 }

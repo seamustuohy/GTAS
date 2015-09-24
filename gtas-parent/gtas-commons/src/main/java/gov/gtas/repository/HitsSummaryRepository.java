@@ -18,9 +18,7 @@ public interface HitsSummaryRepository extends
 	@Query("SELECT s FROM HitsSummary s")
 	Iterable<HitsSummary> findAll();
 
-//	HitsSummary findByFlightIdAndPassengerId(Long flightId, Long passengerId);
+	List<HitsSummary> findByFlightIdAndPassengerId(Long flightId,
+			Long passengerId);
 
-
-	@Query("SELECT hits FROM HitsSummary hits WHERE hits.passengerId = :pid and hits.flightId = :fid")
-	List<HitsSummary> findByFlightIdAndPassengerId(@Param("fid") Long flightId, @Param("pid") Long passengerId);
 }

@@ -1,42 +1,33 @@
 var app = angular.module('myApp', [
-    'ui.router', 'ui.bootstrap', 'ngTable',
-    'spring-security-csrf-token-interceptor', 'ui.grid',
-    'ui.grid.resizeColumns', 'ui.grid.moveColumns', 'ui.grid.pagination',
-    'ui.grid.edit', 'ui.grid.rowEdit', 'ui.grid.cellNav',
-    'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.expandable',
-    'ct.ui.router.extras', 'ngMaterial', 'ngMessages', 'ngAria',
-    'ngAnimate', 'angularSpinners'
+    'ui.router',
+    'ct.ui.router.extras',
+    'ui.grid',
+    'ui.grid.resizeColumns',
+    'ui.grid.moveColumns',
+    'ui.grid.pagination',
+    'ui.grid.edit',
+    'ui.grid.rowEdit',
+    'ui.grid.cellNav',
+    'ui.grid.selection',
+    'ui.grid.exporter',
+    'ui.grid.expandable',
+    'ui.bootstrap',
+    'ngMaterial',
+    'ngMessages',
+    'ngAria',
+    'ngAnimate',
+    'angularSpinners'
 ]);
 
 app.controller('NavCtrl', function ($scope, $location) {
     'use strict';
-    $scope.selectedIndex = 0;
-
+    var routes = ['/dashboard', '/flights', '/passengers', '/query-builder', '/risk-criteria', '/watchlists', '/admin'];
+    //DEFAULTS to Flights on SPA reload and initial load
+    $scope.selectedIndex = 1;
+    $location.url(routes[$scope.selectedIndex]);
     //IF WE MOVE SECURITY check TO HERE and out of .jsp
     $scope.$watch('selectedIndex', function (current) {
-        switch (current) {
-            case 0:
-                $location.url("/dashboard");
-                return;
-            case 1:
-                $location.url("/flights");
-                return;
-            case 2:
-                $location.url("/passengers");
-                return;
-            case 3:
-                $location.url("/query-builder");
-                return;
-            case 4:
-                $location.url("/risk-criteria");
-                return;
-            case 5:
-                $location.url("/watchlists");
-                return;
-            case 6:
-                $location.url("/admin");
-                return;
-        }
+        $location.url(routes[current]);
     });
 });
 
@@ -231,7 +222,11 @@ app.run(function ($rootScope) {
 
 app.config(function ($stateProvider) {
     'use strict';
-    $stateProvider.state('admin', {
+    $stateProvider.state('dashboard', {
+        url: '/dashboard',
+        templateUrl: 'dashboard/dashboard.html',
+        controller: 'DashboardController'
+    }).state('admin', {
         url: '/admin',
         templateUrl: 'admin/admin.header.html',
         controller: 'AdminCtrl'
@@ -258,19 +253,39 @@ app.config(function ($stateProvider) {
                 templateUrl: 'admin/user.html'
             }
         }
-    }).state('dashboard', {
-        url: 'dashboard',
-        templateUrl: 'dashboard/dashboard.html',
-        controller: 'DashboardController'
     }).state('flights', {
         url: '/flights',
-        templateUrl: 'flights/flights.html',
+        templateUrl: 'flights/flights.header.html',
         controller: 'FlightsController'
-    }).state('pax', {
+    }).state('flights.all', {
+            url: '/',
+            sticky: true,
+            dsr: true,
+            views: {
+                "content@flights": {
+                    templateUrl: 'flights/flights.html'
+                }
+            }
+        }).state('flights.passengers', {
+            url: '/passengers',
+            params: {
+                parent: null,
+                flight: null
+            },
+            sticky: true,
+            dsr: true,
+            views: {
+                "content@flights": {
+                    controller: 'PaxController',
+                    templateUrl: 'pax/pax.html'
+                }
+            }
+        }).state('pax', {
         url: '/passengers',
         controller: 'PaxMainController',
         templateUrl: 'pax/pax.header.html'
-    }).state('pax.all', {
+        })
+     .state('pax.all', {
         url: '/',
         sticky: true,
         dsr: true,
@@ -300,6 +315,14 @@ app.config(function ($stateProvider) {
         url: '/query-builder',
         templateUrl: 'query-builder/query.html',
         controller: 'QueryBuilderController'
+    }).state('query-flights', {
+        url: '/query/flights',
+        templateUrl: 'flights/flights.html',
+        controller: 'ExecuteQueryController'
+    }).state('query-passengers', {
+        url: '/query/passengers',
+        templateUrl: 'pax/pax.table.html',
+        controller: 'ExecuteQueryController'
     }).state('risk-criteria', {
         url: '/risk-criteria',
         templateUrl: 'risk-criteria/risk-criteria.html',

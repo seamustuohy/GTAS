@@ -1,4 +1,4 @@
-app.controller('PaxDetailController', function ($scope, $filter, $q, ngTableParams, paxService, sharedPaxData, passengers, $location) {
+app.controller('PaxDetailController', function ($scope, $filter, $q, paxService, sharedPaxData, passengers, $location) {
     $scope.passenger = [];
     $scope.passenger = passengers.data;
     $scope.paxTableEnabled = false;

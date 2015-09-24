@@ -1,4 +1,4 @@
-app.controller('QueryBuilderController', function ($scope, $rootScope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, GridControl, $q, jqueryQueryBuilderService, executeQueryService, $timeout, $interval) {
+app.controller('QueryBuilderController', function ($scope, $rootScope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, $location, GridControl, $q, jqueryQueryBuilderService, executeQueryService, $timeout, $interval) {
     'use strict';
     $scope.setData = function (myData) {
         var data = [];
@@ -19,8 +19,8 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
     jqueryQueryBuilderService.init('querybuilder');
 
-    $scope.resultsGrid = $.extend({}, $scope.gridOpts);
-    $scope.resultsGrid.enableColumnResizing = true;
+//    $scope.resultsGrid = $.extend({}, $scope.gridOpts);
+//    $scope.resultsGrid.enableColumnResizing = true;
 
     $scope.gridOpts.columnDefs = $rootScope.columns.QUERIES;
     $scope.gridOpts.exporterCsvFilename = 'MySavedQueries.csv';
@@ -84,40 +84,20 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
             query: query
         };
 
-        jqueryQueryBuilderService.save(queryObject).then($scope.updateQueryBuilderOnSave)};
-
-    $scope.serviceURLs = {
-        FLIGHT: '/gtas/query/queryFlights/',
-        PASSENGER: '/gtas/query/queryPassengers/'
+        jqueryQueryBuilderService.save(queryObject).then($scope.updateQueryBuilderOnSave);
     };
 
     $scope.viewType = 'FLIGHT';
-
-    $scope.resultsGrid.exporterCsvFilename = 'queryResults.csv';
-    $scope.resultsGrid.exporterPdfHeader = { text: "Query [NAME]", style: 'headerStyle' };
-
     $scope.executeQuery = function () {
-        var baseUrl = $scope.serviceURLs[$scope.viewType],
-            qbData = $scope.$builder.queryBuilder('getDrools');
+        var qbData = $scope.$builder.queryBuilder('getDrools');
 
         if (qbData === false) {
             $scope.alertError('Can not execute / invalid query');
             return;
         }
-
-        $scope.hideGrid = true;
-        executeQueryService.executeQuery(baseUrl, qbData).then(function (myData) {
-            if (myData.result === undefined) {
-                $scope.alertError('Error!');
-                return;
-            }
-            $scope.resultsGrid.columnDefs = $rootScope.columns[$scope.viewType];
-            $scope.resultsGrid.exporterPdfHeader.text = $scope.title;
-            $scope.resultsGrid.data = myData.result;
-        });
-
-        $timeout(function () {
-            $scope.hideGrid = false;
-        }, 1000);
+        localStorage['qbData'] = JSON.stringify(qbData);
+        localStorage['qbTitle'] = $scope.title.trim();
+        localStorage['qbType'] = $scope.viewType;
+        $location.url(['/query/', $scope.viewType.toLocaleLowerCase(), 's'].join(''));
     };
 });

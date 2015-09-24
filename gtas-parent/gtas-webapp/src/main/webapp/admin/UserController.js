@@ -1,9 +1,9 @@
 
-app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService',function($state,$scope,$q,$stateParams,userService) {
-	
+app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService','Base64',
+    function($state,$scope,$q,$stateParams,userService,Base64) {
+
 	$scope.user = $stateParams.user;
-	
-    $scope.action=$stateParams.action;  
+    $scope.action=$stateParams.action;
     $scope.persistUser = {
             userId: '',
             firstName: '',
@@ -21,7 +21,6 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
     };
     $scope.rolesLookup=[];
 
-    
     $scope.selectedRoles = [];
     $scope.Init=function () {
     	if($scope.user!=null)
@@ -30,14 +29,12 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
     		 $scope.persistUser=$scope.user;
             angular.forEach($scope.user.roles, function (value) {
                     $scope.selectedRoles.push(value.roleDescription);    		}
-
             )
     	}
         $scope.getRoles();
     };
 
     $scope.getRoles = function () {
-
         userService.getRoles()
             .then(
             function (roles) {
@@ -47,14 +44,12 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
         );
     };
 
-    $scope.radioData = [
-                        { label: 'Enable', value: 1 },
-                        { label: 'Disable', value: 0  }
-    ];
+   $scope.radioData = [ { label: 'Enable', value: 1 },
+                        { label: 'Disable', value: 0  }   ];
 
    $scope.roles = ['ROLE_CUST','VIEW_FLIGHT_PASSENGERS','MANAGE_QUERIES','MANAGE_RULES','MANAGE_WATCHLIST','ROLE_ADMIN', 'ADMIN'];
-    $scope.selectedRoles = [];
-    $scope.toggle = function (item, list) {
+   $scope.selectedRoles = [];
+   $scope.toggle = function (item, list) {
       var idx = list.indexOf(item);
       if (idx > -1) list.splice(idx, 1);
       else list.push(item);
@@ -64,10 +59,8 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
     };
     
     $scope.Init();
-    
     $scope.getRoleFromLookup=function (roleDescription) {
         var i = 0, len = $scope.rolesLookup.length;
-
         if (roleDescription.length <= 0) {
         } else {
             for (i = 0; i < len; i++) {
@@ -87,24 +80,19 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
         $scope.persistUser.roles=[];
         var len=$scope.selectedRoles.length;
         for (i = 0; i < len; i++) {
-        	
         	var role=$scope.getRoleFromLookup($scope.selectedRoles[i] );
-        	
         	$scope.persistUser.roles.push(role);
         }
-       
     };
 
     $scope.saveUser=function()
     {
     	$scope.populateSelectedRoles();
-        console.log($scope.persistUser);
         if ($scope.action == 'modify') {
             userService.updateUser($scope.persistUser)
                 .then(
                 function (user) {
                     $state.go('admin.users',{ action: 'created', user: user });
-
                 });
 
         } else {
@@ -112,18 +100,11 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
                 .then(
                 function (user) {
                     $state.go('admin.users',{ action: 'created', user: user });
-
                 });
         }
-        	
-
     };
 
     $scope.back=function()    {
-
         $state.go('admin.users');
     };
   }]);
-  
- 
- 

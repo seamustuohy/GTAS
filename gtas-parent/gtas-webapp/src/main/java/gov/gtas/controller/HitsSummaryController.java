@@ -58,8 +58,8 @@ public class HitsSummaryController {
 				i = htd.getRuleId().intValue();
 				hdetailVo = new HitDetailVo();
 				hdetailVo.setRuleId(htd.getRuleId());
-				hdetailVo.setRuleTitle(htd.getParent().getTitle());
-				hdetailVo.setRuleDesc(htd.getParent().getDescription());
+				hdetailVo.setRuleTitle(htd.getTitle());
+				hdetailVo.setRuleDesc(htd.getDescription());
 				hdetailVo.getHitsDetailsList().add(htd);
 				hdetailVo.setRuleType(htd.getParent().getHitType());
 				_tempMap.put(Integer.valueOf(i), hdetailVo);

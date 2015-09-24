@@ -1,6 +1,10 @@
 app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jqueryQueryBuilderWidget, $filter,
                                           $q, paxService, sharedPaxData, $stateParams, $state,
                                           $timeout, $interval, uiGridConstants) {
+
+    $scope.selectedFlight=$stateParams.flight;
+    $scope.parent=$stateParams.parent;
+
     var self = this;
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
     $injector.invoke(GridControl, this, {$scope: $scope});

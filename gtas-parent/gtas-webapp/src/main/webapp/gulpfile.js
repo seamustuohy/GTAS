@@ -4,17 +4,12 @@ var gulp = require('gulp'),
     iife = require('gulp-iife'),
     minifyCSS = require('gulp-minify-css'),
     rename = require('gulp-rename'),
-    sass = require('gulp-sass'),
     uglify = require('gulp-uglify');
 
 var images = [
     'resources/img/404.png',
-    'resources/img/banner.png',
     'resources/img/circle_arrow_back.png',
-    'resources/img/loading_default_en.gif',
-    'resources/img/logo.jpg',
-    'resources/img/gtas_logo.png',
-    'resources/img/top_banner.jpg'
+    'resources/img/gtas_logo-compressed.jpg',
 ];
 
 var cssFiles = [
@@ -44,7 +39,6 @@ var jsFiles = [
     'resources/bower_components/ui-router-extras/release/ct-ui-router-extras.js',
     'resources/bower_components/angular-bootstrap/ui-bootstrap.js',
     'resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-    'resources/bower_components/ng-table/dist/ng-table.js',
     'resources/bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js',
     'resources/bower_components/moment/min/moment.min.js',
     'resources/bower_components/jquery/dist/jquery.js',
@@ -118,14 +112,6 @@ gulp.task('lint', function () {
         }));
 });
 
-// Compile Our Sass
-gulp.task('sass', function () {
-    'use strict';
-    return gulp.src('scss/*.scss')
-        .pipe(sass())
-        .pipe(gulp.dest('css'));
-});
-
 // Concatenate & Minify JS
 gulp.task('scripts', function () {
     'use strict';
@@ -168,10 +154,9 @@ gulp.task('deploy', ['deployImages', 'deployCSS', 'deployJS', 'deployFonts']);
 gulp.task('watch', function () {
     'use strict';
     gulp.watch('js/*.js', ['lint', 'scripts']);
-    gulp.watch('scss/*.scss', ['sass']);
 });
 
 
 // Default Task
-//gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
+//gulp.task('default', ['lint', 'scripts', 'watch']);
 gulp.task('default', ['scripts', 'minify-css']);

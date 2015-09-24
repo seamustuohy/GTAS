@@ -1,0 +1,166 @@
+package gov.gtas.bo;
+
+import gov.gtas.enumtype.HitTypeEnum;
+import gov.gtas.model.lookup.PassengerTypeCode;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Objects;
+
+public class TargetSummaryVo implements Serializable, Cloneable {
+	/**
+	 * serial version UID.
+	 */
+	private static final long serialVersionUID = 2946626283174855377L;
+
+	private Long flightId;
+
+	private Long passengerId;
+
+	private String passengerType;
+
+	private String passengerName;
+
+	private HitTypeEnum hitType;
+
+	private int watchlistHitCount;
+
+	private int ruleHitCount;
+
+	private Collection<TargetDetailVo> hitDetails;
+
+	/**
+	 * This constructor is used when creating a hit summary object.
+	 * 
+	 * @param ruleId
+	 *            a numeric rule Id (can be null)
+	 * @param ruleTitle
+	 *            the name of the DRL rule(Rule.getName()).
+	 * @param passenger
+	 *            the Passenger object that matched.
+	 * @param flight
+	 *            the flight object that matched.
+	 * @param cause
+	 *            the reason for the match.
+	 */
+	public TargetSummaryVo(final HitTypeEnum hitType, final Long flightId, final PassengerTypeCode passengerType, 
+			final Long passengerId, final String passengerName) {
+		this.passengerId = passengerId;
+		this.passengerType = decodePassengerTypeName(passengerType.toString());
+		this.passengerName = passengerName;
+	    this.flightId = flightId;
+		this.hitType = hitType;
+		this.hitDetails = new LinkedList<TargetDetailVo>();
+	}
+
+	/**
+	 * Converts the passenger type code to a friendly name.
+	 * 
+	 * @param typ
+	 *            the type code.
+	 * @return the decoded type name.
+	 */
+	private String decodePassengerTypeName(String typ) {
+		String ret = typ;
+		for (PassengerTypeCode typeEnum : PassengerTypeCode.values()) {
+			if (typ.equalsIgnoreCase(typeEnum.name())) {
+				ret = typeEnum.getPassengerTypeName();
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * @return the flightId
+	 */
+	public Long getFlightId() {
+		return flightId;
+	}
+
+	/**
+	 * @return the passengerId
+	 */
+	public long getPassengerId() {
+		return passengerId;
+	}
+
+	/**
+	 * @return the passengerType
+	 */
+	public String getPassengerType() {
+		return passengerType;
+	}
+
+	/**
+	 * @return the passengerName
+	 */
+	public String getPassengerName() {
+		return passengerName;
+	}
+
+	/**
+	 * @return the watchlistHitCount
+	 */
+	public int getWatchlistHitCount() {
+		return watchlistHitCount;
+	}
+
+	/**
+	 * @return the ruleHitCount
+	 */
+	public int getRuleHitCount() {
+		return ruleHitCount;
+	}
+
+	/**
+	 * @return the hitType
+	 */
+	public HitTypeEnum getHitType() {
+		return hitType;
+	}
+
+
+	/**
+	 * @return the hitDetails
+	 */
+	public Collection<TargetDetailVo> getHitDetails() {
+		return hitDetails;
+	}
+
+	public void addHitDetail(TargetDetailVo detail){
+		if(detail.getHitType() == HitTypeEnum.R){
+		    this.ruleHitCount++;
+		} else {
+			this.watchlistHitCount++;
+		}
+		this.hitType = this.hitType.addHitType(detail.getHitType());
+        hitDetails.add(detail);
+	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	public TargetSummaryVo clone() throws CloneNotSupportedException {
+		return (TargetSummaryVo) super.clone();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.passengerId,
+				this.flightId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (getClass() != obj.getClass())
+			return false;
+		final TargetSummaryVo other = (TargetSummaryVo) obj;
+		return Objects.equals(this.passengerId, other.passengerId)
+				&& Objects.equals(this.flightId, other.flightId);
+	}
+}
