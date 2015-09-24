@@ -19,6 +19,7 @@ import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.QueryResponse;
 import gov.gtas.querybuilder.service.QueryBuilderService;
 import gov.gtas.security.service.GtasSecurityUtils;
+import gov.gtas.vo.passenger.FlightVo;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -74,7 +75,7 @@ public class QueryBuilderController {
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.POST)
 	public JsonServiceResponse runFlightQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
 		
-		List<IQueryResult> flights = queryService.runFlightQuery(queryObject);
+		List<FlightVo> flights = queryService.runFlightQuery(queryObject);
 		return new JsonServiceResponse(Status.SUCCESS, flights != null ? flights.size() + " record(s)" : "flight is null" , flights);
 	}
 	

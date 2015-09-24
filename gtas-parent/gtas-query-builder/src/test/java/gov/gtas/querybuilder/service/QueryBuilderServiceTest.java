@@ -19,11 +19,11 @@ import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
 import gov.gtas.querybuilder.model.IQueryResult;
 import gov.gtas.querybuilder.model.IUserQueryResult;
-import gov.gtas.querybuilder.model.QueryFlightResult;
 import gov.gtas.querybuilder.model.QueryPassengerResult;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.repository.QueryBuilderRepository;
+import gov.gtas.vo.passenger.FlightVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,10 +157,9 @@ public class QueryBuilderServiceTest {
 		expected.add(flight);
 		
 		when(queryRepository.getFlightsByDynamicQuery(queryObject)).thenReturn(expected);
-		List<IQueryResult> result = queryService.runFlightQuery(queryObject);
-		QueryFlightResult actual = (QueryFlightResult) result.get(0);
+		List<FlightVo> result = queryService.runFlightQuery(queryObject);
 		
-		assertEquals(expected.get(0).getId(), actual.getId());
+		assertEquals(expected.get(0).getId(), result.get(0).getId());
 	}
 	
 	@Test(expected = InvalidQueryException.class)

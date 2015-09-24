@@ -21,6 +21,7 @@ import gov.gtas.querybuilder.model.IUserQueryResult;
 import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.services.FlightService;
 import gov.gtas.services.PassengerService;
+import gov.gtas.vo.passenger.FlightVo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -293,7 +294,7 @@ public class QueryBuilderServiceIT {
 		Flight newFlight = flightService.create(flight);
 		
 		// execute flight query
-		List<IQueryResult> result = queryService.runFlightQuery(queryObject);
+		List<FlightVo> result = queryService.runFlightQuery(queryObject);
 		
 		assertNotNull(result);
 		assertEquals(1, result.size());
