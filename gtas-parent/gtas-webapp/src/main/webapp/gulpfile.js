@@ -4,7 +4,6 @@ var gulp = require('gulp'),
     iife = require('gulp-iife'),
     minifyCSS = require('gulp-minify-css'),
     rename = require('gulp-rename'),
-    sass = require('gulp-sass'),
     uglify = require('gulp-uglify');
 
 var images = [
@@ -113,14 +112,6 @@ gulp.task('lint', function () {
         }));
 });
 
-// Compile Our Sass
-gulp.task('sass', function () {
-    'use strict';
-    return gulp.src('scss/*.scss')
-        .pipe(sass())
-        .pipe(gulp.dest('css'));
-});
-
 // Concatenate & Minify JS
 gulp.task('scripts', function () {
     'use strict';
@@ -163,10 +154,9 @@ gulp.task('deploy', ['deployImages', 'deployCSS', 'deployJS', 'deployFonts']);
 gulp.task('watch', function () {
     'use strict';
     gulp.watch('js/*.js', ['lint', 'scripts']);
-    gulp.watch('scss/*.scss', ['sass']);
 });
 
 
 // Default Task
-//gulp.task('default', ['lint', 'sass', 'scripts', 'watch']);
+//gulp.task('default', ['lint', 'scripts', 'watch']);
 gulp.task('default', ['scripts', 'minify-css']);
