@@ -15,7 +15,10 @@
         content: '\c357' !important;
     }
 </style>
-<h2><span class="glyphicon glyphicon-flag"></span> Risk Criteria <button data-ng-click="newRule()" class="md-raised md-button md-default-theme" data-add="rule"><span class="glyphicon glyphicon-plus"></span> Add New</button>
+<h2>
+    <span class="glyphicon glyphicon-flag"></span>
+    Risk Criteria
+    <button data-ng-click="newRule()" class="md-raised md-button md-default-theme" data-add="rule"><span class="glyphicon glyphicon-plus"></span> Add New</button>
 </h2>
 <div ui-grid="gridOpts" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
 <section class="qb-interface">
@@ -24,7 +27,7 @@
         <div layout layout-sm="column">
             <md-input-container style="width:20%">
                 <label>Name</label>
-                <input md-maxlength="20" required name="description" ng-model="title" id="title">
+                <input md-maxlength="20" autofocus required name="description" ng-model="title" id="title">
             </md-input-container>
             <md-input-container style="width:40%">
                 <label>Description</label>

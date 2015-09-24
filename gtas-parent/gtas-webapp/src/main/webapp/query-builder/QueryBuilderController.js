@@ -50,8 +50,7 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
     $scope.gridOpts.onRegisterApi = $scope.rowSelection;
 
-    //TODO it's SPRINT 10 adelorie needs to go away but QueryBuilder REST requires even though it gets from spring... Ugh...
-    $scope.summaryDefaults = {description: null, userId: 'adelorie', title: ''};
+    $scope.summaryDefaults = {description: null, title: ''};
     $scope.ruleId = null;
     $scope.saving = false;
 
@@ -75,12 +74,10 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
             return;
         }
 
-        //TODO userId: $scope.userId, SHOULD go away it's sprint 10!
         queryObject = {
             id: $scope.ruleId,
             title: $scope.title,
             description: $scope.description || null,
-            userId: $scope.userId,
             query: query
         };
 

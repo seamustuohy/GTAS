@@ -2,7 +2,6 @@ app.factory('queryBuilderFactory', function () {
     'use strict';
     return function ($scope, $timeout, jqueryQueryBuilderService, $interval) {
         $scope.ruleId = null;
-        $scope.clearTables = function () {};
 
         $scope.alerts = [];
         $scope.alert = function (type, text) {
@@ -14,8 +13,6 @@ app.factory('queryBuilderFactory', function () {
                 $scope.alerts.splice($scope.alerts.length - 1, 1);
             }, 5000);
         };
-        //TODO remove when query service does not need it
-        $scope.userId = 'adelorie';
 
         $scope.alertSuccess = function (text) {
             $scope.alert('success', text);
@@ -117,7 +114,6 @@ app.factory('queryBuilderFactory', function () {
             Object.keys(summary).forEach(function (key) {
                 $scope[key] = summary[key];
             });
-            $scope.clearTables();
         };
 
         $scope.formats = ["YYYY-MM-DD"];
@@ -126,10 +122,13 @@ app.factory('queryBuilderFactory', function () {
             $scope.ruleId = null;
             $scope.$builder.queryBuilder('reset');
             $scope.loadSummary($scope.summaryDefaults);
+            //TODO temp had trouble setting md-datepicker default value to null, default value today
             if (document.querySelector('[ng-model="endDate"] input')) {
                 document.querySelector('[ng-model="endDate"] input').value = null;
             }
-            document.getElementById('title').focus();
+
+            //TODO find angular way to set focus
+            document.querySelector('[autofocus]').focus();
             if ($scope.gridApi !== undefined) {
                 $scope.gridApi.selection.clearSelectedRows();
                 $scope.selectedIndex = null;
