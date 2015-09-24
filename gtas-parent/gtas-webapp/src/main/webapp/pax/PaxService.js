@@ -45,25 +45,12 @@ app.service("paxService", function ($rootScope, $http, $q) {
         $rootScope.$broadcast('ruleIDBroadcast', ruleID);
     }
 
+// temporary hack
     function getAllPax(pax) {
         var request = $http({
             method: "get",
-            url: "/gtas/passengers/all",
+            url: "/gtas/passengers?pageNumber=1&pageSize=10",
             params: pax
-        });
-        return (request.then(handleSuccess, handleError));
-    }
-
-    function getPaxByPage(pax) {
-        var request = $http({
-            method: "get",
-            url: "/gtas/passengers/page/" + pax.pageNumber,
-            params: pax
-//	        {
-//	            action: "get",
-//	            pageNumber: pageNumber,
-//	            name: ""
-//	        }
         });
         return (request.then(handleSuccess, handleError));
     }
@@ -75,7 +62,6 @@ app.service("paxService", function ($rootScope, $http, $q) {
         getRuleHits: getRuleHits,
         broadcastRuleID: broadcastRuleID,
         getAllPax: getAllPax,
-        getPaxByPage: getPaxByPage
     });
 });
 
