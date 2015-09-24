@@ -1,7 +1,7 @@
-app.controller('WatchListController', function ($scope, $rootScope, $injector, GridControl, $filter, $q, watchListService, $interval, spinnerService, $timeout) {
+app.controller('WatchListController', function ($scope, gridOptionsLookupService, $q, watchListService, $interval, spinnerService, $timeout) {
     'use strict';
     var watchlist = {}, tabs = [];
-    $injector.invoke(GridControl, this, {$scope: $scope});
+    $scope.gridOpts = gridOptionsLookupService.defaultGridOptions();
 
     watchlist.types = {
         "Document": {

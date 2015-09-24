@@ -1,4 +1,4 @@
-app.controller('QueryBuilderController', function ($scope, $rootScope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, $location, GridControl, $q, jqueryQueryBuilderService, executeQueryService, $timeout, $interval) {
+app.controller('QueryBuilderController', function ($scope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, $location, gridOptionsLookupService, jqueryQueryBuilderService) {
     'use strict';
     $scope.setData = function (myData) {
         var data = [];
@@ -15,17 +15,16 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope });
     $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
-    $injector.invoke(GridControl, this, {$scope: $scope });
 
     jqueryQueryBuilderService.init('querybuilder');
 
 //    $scope.resultsGrid = $.extend({}, $scope.gridOpts);
 //    $scope.resultsGrid.enableColumnResizing = true;
 
-    $scope.gridOpts.columnDefs = $rootScope.columns.QUERIES;
+    $scope.gridOpts = gridOptionsLookupService.defaultGridOptions();
+    $scope.gridOpts.columnDefs = gridOptionsLookupService.getLookupColumnDefs('QUERIES');
     $scope.gridOpts.exporterCsvFilename = 'MySavedQueries.csv';
     $scope.gridOpts.exporterPdfHeader = { text: "My Saved Queries", style: 'headerStyle' };
-
 
     jqueryQueryBuilderService.getList().then(function (myData) {
         $scope.setData(myData.result);
