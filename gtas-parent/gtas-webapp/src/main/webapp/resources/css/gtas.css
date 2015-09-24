@@ -314,11 +314,12 @@ tbody.collapse.in {
   /*background-color: #F0C425;*/
   padding: 5px;}
 
-header {
+.header {
   height: 84px;
   position: relative;
 }
-header::before {
+
+.header::before {
   content: "";
   display: block;
   height: 84px;
@@ -329,7 +330,8 @@ header::before {
   position: relative;
   top: 0;
 }
-header::after {
+
+.header::after {
   content: "";
   display: block;
   background-color: rgba(167,169,172, 1);

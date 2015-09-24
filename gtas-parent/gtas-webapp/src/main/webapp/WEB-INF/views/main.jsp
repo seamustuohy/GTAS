@@ -22,7 +22,7 @@
 </head>
 
 <body>
-	<header></header>
+	<header class="header" title="GLOBAL TRAVEL ASSESSMENT SYSTEM"></header>
 	<nav ng-controller="NavCtrl">
 		<ul class="nav navbar-nav navbar-right" style="margin: 0;">
 	<li><a href="logout.action">LOGOUT</a></li>
