@@ -16,7 +16,6 @@
     "jquery": "latest",
     "jquery-extendext": "^0.1.1",
     "moment": "^2.6.0",
-    "ng-table": "latest",
     "pdfmake": "~0.1.18",
     "seiyria-bootstrap-slider": "latest",
     "selectize": "latest",
