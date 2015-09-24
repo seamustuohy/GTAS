@@ -277,7 +277,15 @@ app.config(function ($stateProvider) {
             views: {
                 "content@flights": {
                     controller: 'PaxController',
-                    templateUrl: 'pax/pax.html'
+                    templateUrl: 'pax/pax.html',
+                    resolve: {
+                        passengers: function ($http, $stateParams, paxService) {
+                            console.log($stateParams);
+                            var id= $stateParams.flight.id;
+                            console.log(id);
+                            return paxService.getPax(id);
+                        }
+                    }
                 }
             }
         }).state('pax', {
