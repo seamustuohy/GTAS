@@ -1,7 +1,6 @@
 var app = angular.module('myApp', [
     'ui.router',
     'ct.ui.router.extras',
-    
     'ui.grid',
     'ui.grid.resizeColumns',
     'ui.grid.moveColumns',
@@ -12,7 +11,6 @@ var app = angular.module('myApp', [
     'ui.grid.selection',
     'ui.grid.exporter',
     'ui.grid.expandable',
-    
     'ui.bootstrap',
     'ngMaterial',
     'ngMessages',
@@ -225,7 +223,7 @@ app.run(function ($rootScope) {
 app.config(function ($stateProvider) {
     'use strict';
     $stateProvider.state('dashboard', {
-        url: 'dashboard',
+        url: '/dashboard',
         templateUrl: 'dashboard/dashboard.html',
         controller: 'DashboardController'
     }).state('admin', {
