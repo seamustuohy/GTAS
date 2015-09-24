@@ -4,6 +4,7 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 
     console.log(passengers);
 
+
     $scope.selectedFlight = $stateParams.flight;
     $scope.parent = $stateParams.parent;
 
@@ -173,12 +174,7 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 
     }, 100);
     //--------------------------------------------
-    $scope.init = function(){
-       if ($scope.parent == 'flights') {
-           $scope.passengerGrid.data = passengers;
-           $scope.gridApi.data = passengers;
-       }
-    };
+
     $scope.passengerGrid = {
         saveFocus: true,
         saveScroll: true,
@@ -266,11 +262,10 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
         exporterPdfHeader: {text: "Passengers", style: 'headerStyle'},
 
         onRegisterApi: function (gridApi) {
+
             $scope.gridApi = gridApi;
-            if($scope.parent=='flights') {
-                $scope.passengerGrid.data = passengers;
-                $scope.gridApi.data=passengers;
-            }
+            $scope.loading = false;
+            $scope.passengerGrid.data=passengers;
 
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                 var title;
@@ -281,8 +276,6 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
         }
 
     }; // END of Passenger Grid
-
-    $scope.init();
     $scope.refreshListing = function () {
         $scope.loading = true;
         $scope.passengerGrid.data = [];
@@ -299,7 +292,6 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
         });
     };
 
-    //$scope.refreshListing();
 
     //------- Pre-Refactor-------------------
     //Function to get Rule Hits per Passenger

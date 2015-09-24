@@ -88,7 +88,7 @@ app.config(function ($stateProvider) {
             views: {
                 "content@flights": {
                     controller: 'PaxController',
-                    templateUrl: 'pax/pax.html',
+                    templateUrl: 'pax/pax.table.html',
                     resolve: {
                         passengers: function ($http, $stateParams, paxService) {
                             console.log($stateParams);
@@ -112,7 +112,12 @@ app.config(function ($stateProvider) {
             "content@pax": {
                 // controller: 'Paginate',
                 controller: 'PaxController',
-                templateUrl: 'pax/pax.table.html'
+                templateUrl: 'pax/pax.table.html',
+                resolve: {
+                    passengers: function ($http, $stateParams, paxService) {
+                        return paxService.getPax(1);
+                    }
+                }
             }
         }
     }).state('pax.detail', {
