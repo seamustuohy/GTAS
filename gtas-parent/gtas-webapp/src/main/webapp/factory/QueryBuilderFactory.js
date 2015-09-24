@@ -113,27 +113,6 @@ app.factory('queryBuilderFactory', function () {
             filters: []
         };
 
-        $scope.showPencil = function (id) {
-            $timeout(function () {
-                var $pageControls = $('.ng-table-pagination').children();
-                if ($scope.ruleId === null && $pageControls.length >= 4) {
-                    $pageControls.eq($pageControls.length - 2).find('a')[0].click();
-                }
-                $timeout(function () {
-                    var $tableRows = $('table tbody').eq(0).find('tr');
-                    if ($scope.ruleId === null) {
-                        $tableRows.last().click();
-                    }
-                    $scope.ruleId = id;
-                    $scope.saving = false;
-                }, 200);
-            }, 200);
-        };
-
-        $scope.isBeingEdited = function () {
-            return $scope.ruleId === this.$data[this.$index].id;
-        };
-
         $scope.loadSummary = function (summary) {
             Object.keys(summary).forEach(function (key) {
                 $scope[key] = summary[key];
