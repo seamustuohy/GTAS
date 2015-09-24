@@ -79,6 +79,10 @@ app.config(function ($stateProvider) {
             }
         }).state('flights.passengers', {
             url: '/passengers',
+            params: {
+                parent: null,
+                flight: null
+            },
             sticky: true,
             dsr: true,
             views: {
