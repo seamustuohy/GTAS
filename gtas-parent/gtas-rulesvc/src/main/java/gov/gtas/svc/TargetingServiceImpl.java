@@ -397,6 +397,8 @@ public class TargetingServiceImpl implements TargetingService {
 
 		hitDetail.setRuleConditions(sb.toString());
 		hitDetail.setCreatedDate(new Date());
+		hitDetail.setTitle(hitDetailVo.getTitle());
+		hitDetail.setDescription(hitDetailVo.getDescription());
 		hitDetail.setParent(hitsSummary);
 
 		return hitDetail;

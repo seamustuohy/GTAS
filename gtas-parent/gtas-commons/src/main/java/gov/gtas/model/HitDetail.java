@@ -1,15 +1,11 @@
 package gov.gtas.model;
 
-import gov.gtas.enumtype.HitTypeEnum;
-
 import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -23,9 +19,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "hit_detail")
 public class HitDetail extends BaseEntity {
-    private static final long serialVersionUID = 5219262569468670275L;
-    public HitDetail() { }
-    
+	private static final long serialVersionUID = 5219262569468670275L;
+
+	public HitDetail() {
+	}
+
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "hits_summary_id", nullable = false, referencedColumnName = "id")
@@ -36,11 +34,9 @@ public class HitDetail extends BaseEntity {
 
 	@Column(name = "description")
 	private String Description;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "hit_type", nullable=false, length=3)
-	private HitTypeEnum hitType;
 
+	@Column(name = "hit_type", length = 3)
+	private String hitType;
 	/**
 	 * String representation of matched conditions; it can be split into
 	 * String[]
@@ -88,6 +84,7 @@ public class HitDetail extends BaseEntity {
 	public void setRuleId(Long ruleId) {
 		this.ruleId = ruleId;
 	}
+
 	public String getTitle() {
 		return Title;
 	}
@@ -102,6 +99,14 @@ public class HitDetail extends BaseEntity {
 
 	public void setDescription(String description) {
 		Description = description;
+	}
+
+	public String getHitType() {
+		return hitType;
+	}
+
+	public void setHitType(String hitType) {
+		this.hitType = hitType;
 	}
 
 }
