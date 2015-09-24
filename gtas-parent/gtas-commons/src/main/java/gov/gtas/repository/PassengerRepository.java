@@ -21,6 +21,9 @@ public interface PassengerRepository extends PagingAndSortingRepository<Passenge
 	public List<Passenger> getPassengersByLastName(@Param("lastName") String lastName);
 
     @Query("SELECT p FROM Flight f join f.passengers p where f.id = (:flightId)")
+    public List<Passenger> getPassengersByFlightId(@Param("flightId") Long flightId);
+
+    @Query("SELECT p FROM Flight f join f.passengers p where f.id = (:flightId)")
     public Page<Passenger> getPassengersByFlightId(@Param("flightId") Long flightId, Pageable pageable);
     
     @Query("SELECT p FROM Flight f join f.passengers p where f.id = (:flightId) AND UPPER(p.firstName) = UPPER(:firstName) AND UPPER(p.lastName) = UPPER(:lastName)")

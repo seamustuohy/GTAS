@@ -89,7 +89,28 @@ public class FlightPassengerController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/flights/flight/{id}/passengers", method = RequestMethod.GET)
-    public PassengersPage getFlightPassengers(
+    public List<PassengerVo> getFlightPassengers(@PathVariable Long id) {
+        List<Passenger> results = paxService.getPassengersByFlightId(id);
+        
+        List<PassengerVo> passengers = new ArrayList<>();
+        for (Passenger p : results) {
+            PassengerVo vo = new PassengerVo();
+            BeanUtils.copyProperties(p, vo);
+            for (Document d : p.getDocuments()) {
+                DocumentVo docVo = new DocumentVo();
+                BeanUtils.copyProperties(d, docVo);
+                vo.addDocument(docVo);
+            }
+            passengers.add(vo);
+        }
+        
+        return passengers;
+    }
+
+    /**
+     * not sure this is even necessary
+     */
+    public PassengersPage getFlightPassengersPaging(
             @PathVariable Long id,
             @RequestParam(value = "pageNumber", required = true) String pageNumber,
             @RequestParam(value = "pageSize", required = true) String pageSize) {
@@ -97,7 +118,7 @@ public class FlightPassengerController {
         Page<Passenger> results = paxService.getPassengersByFlightId(id, Integer.valueOf(pageNumber), Integer.valueOf(pageSize));
         return createPassengerPage(results);
     }
-    
+
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/passengers", method = RequestMethod.GET)

@@ -100,6 +100,12 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional
+    public List<Passenger> getPassengersByFlightId(Long flightId) {
+        return passengerRespository.getPassengersByFlightId(flightId);
+    }
+
+    @Override
+    @Transactional
     public Page<Passenger> getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize) {
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
         Page<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId, new PageRequest(pn, pageSize));
