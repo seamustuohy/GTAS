@@ -15,6 +15,7 @@ app.controller('ExecuteQueryController', function ($scope, executeQueryService) 
         useExternalPagination: true,
         useExternalSorting: true,
         useExternalFiltering: true,
+        enableColumnResizing: true,
 
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
@@ -60,31 +61,31 @@ app.controller('ExecuteQueryController', function ($scope, executeQueryService) 
         ],
         PASSENGER: []
     }
-    $scope.gridOptions.columnDefs =
 
-    $scope.serviceURLs = {
-        FLIGHT: '/gtas/query/queryFlights/',
-        PASSENGER: '/gtas/query/queryPassengers/'
-    };
-
-    var viewType = localStorage['qbType'] || 'FLIGHT',
+    var serviceURLs = {
+            FLIGHT: '/gtas/query/queryFlights/',
+            PASSENGER: '/gtas/query/queryPassengers/'
+        },
+        viewType = localStorage['qbType'] || 'FLIGHT',
         qbData = localStorage['qbData'] !== undefined ? JSON.parse(localStorage['qbData']) : undefined,
-        qbTitle = localStorage['qbTitle'] || 'unnamed flight query';
+        qbTitle = localStorage['qbTitle'] || 'query results',
+        getPage = function () {
+            $scope.gridOptions.columnDefs = columnDefs[viewType];
+            $scope.gridOptions.exporterPdfHeader.text = qbTitle;
+            if (qbData !== undefined) {
+                executeQueryService.executeQuery(serviceURLs[viewType], qbData).then(function (myData) {
+                    if (myData.result === undefined) {
+                        return;
+                    }
+                    $scope.gridOptions.data = myData.result;
+                });
+            } else {
+                $scope.gridOptions.totalItems = 0;
+                $scope.gridOptions.data = [];
+            }
+        };
 
-    var getPage = function () {
-        $scope.gridOptions.exporterPdfHeader.text = qbTitle;
-        if (qbData !== undefined) {
-            executeQueryService.executeQuery($scope.serviceURLs.FLIGHT, qbData).then(function (myData) {
-                if (myData.result === undefined) {
-                    return;
-                }
-                $scope.gridOptions.data = myData.result;
-            });
-        } else {
-            $scope.gridOptions.totalItems = 0;
-            $scope.gridOptions.data = [];
-        }
-    };
-
+    $scope.gridOptions.exporterCsvFilename = 'queryResults.csv';
+    $scope.gridOptions.exporterPdfHeader = { text: qbTitle, style: 'headerStyle' };
     getPage();
 });

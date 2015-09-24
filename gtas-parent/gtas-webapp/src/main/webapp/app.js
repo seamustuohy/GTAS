@@ -286,7 +286,7 @@ app.config(function ($stateProvider) {
         controller: 'ExecuteQueryController'
     }).state('query-passengers', {
         url: '/query/passengers',
-        templateUrl: 'pax/pax.detail.html',
+        templateUrl: 'pax/pax.table.html',
         controller: 'ExecuteQueryController'
     }).state('risk-criteria', {
         url: '/risk-criteria',
