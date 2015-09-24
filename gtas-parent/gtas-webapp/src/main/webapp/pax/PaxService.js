@@ -12,6 +12,8 @@ app.service("paxService", function ($rootScope, $http, $q) {
     }
 
     function getPax(flightId) {
+        console.log('paxService->getPax');
+        console.log(flightId);
         var request = $http({
             method: "get",
             url: "/gtas/passengers" + (flightId ? "?flightId=" + flightId : ""),
