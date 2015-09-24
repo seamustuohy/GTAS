@@ -1,4 +1,4 @@
-app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, GridControl, $filter, $q, jqueryQueryBuilderService, $timeout, $interval) {
+app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, gridOptionsLookupService, jqueryQueryBuilderService, $timeout, $interval) {
     'use strict';
     jqueryQueryBuilderService.init('riskcriteria');
 
@@ -13,9 +13,9 @@ app.controller('RiskCriteriaController', function ($scope, $rootScope, $injector
 
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope });
     $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
-    $injector.invoke(GridControl, this, {$scope: $scope});
 
-    $scope.gridOpts.columnDefs = $rootScope.columns.RISK_CRITERIA;
+    $scope.gridOpts = gridOptionsLookupService.defaultGridOptions();
+    $scope.gridOpts.columnDefs = gridOptionsLookupService.getLookupColumnDefs('riskCriteria');
     $scope.gridOpts.exporterCsvFilename = 'riskCriteria.csv';
     $scope.gridOpts.exporterPdfHeader = {text: "Risk Criteria", style: 'headerStyle'};
 

@@ -20,7 +20,9 @@ public interface PassengerService {
     public Page<Passenger> findAll(int pageNumber, int pageSize);
     public Passenger getPassengerByName(String firstName,String lastName);
     public List<Passenger> getPassengersByLastName(String lastName);
-    public Page<Passenger> getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize);    
+    public List<Passenger> getPassengersByFlightId(Long flightId);    
+    public Page<Passenger> getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize);
+    
     public List<Passenger> getPassengersFromUpcomingFlights(Pageable pageable) ;
     public List<Passenger> getPaxByLastName(String lastName, Pageable pageable);
     public List<Passenger> getPassengersByFlightDates(Date startDate, Date endDate);

@@ -1,4 +1,4 @@
-app.controller('QueryBuilderController', function ($scope, $rootScope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, $location, GridControl, $q, jqueryQueryBuilderService, executeQueryService, $timeout, $interval) {
+app.controller('QueryBuilderController', function ($scope, $rootScope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, $location, gridOptionsLookupService, jqueryQueryBuilderService) {
     'use strict';
     $scope.setData = function (myData) {
         var data = [];
@@ -15,14 +15,14 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope });
     $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
-    $injector.invoke(GridControl, this, {$scope: $scope });
 
     jqueryQueryBuilderService.init('querybuilder');
 
 //    $scope.resultsGrid = $.extend({}, $scope.gridOpts);
 //    $scope.resultsGrid.enableColumnResizing = true;
 
-    $scope.gridOpts.columnDefs = $rootScope.columns.QUERIES;
+    $scope.gridOpts = gridOptionsLookupService.defaultGridOptions();
+    $scope.gridOpts.columnDefs = gridOptionsLookupService.getLookupColumnDefs('queries');
     $scope.gridOpts.exporterCsvFilename = 'MySavedQueries.csv';
     $scope.gridOpts.exporterPdfHeader = { text: "My Saved Queries", style: 'headerStyle' };
 
@@ -50,8 +50,7 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
     $scope.gridOpts.onRegisterApi = $scope.rowSelection;
 
-    //TODO it's SPRINT 10 adelorie needs to go away but QueryBuilder REST requires even though it gets from spring... Ugh...
-    $scope.summaryDefaults = {description: null, userId: 'adelorie', title: ''};
+    $scope.summaryDefaults = {description: null, title: ''};
     $scope.ruleId = null;
     $scope.saving = false;
 
@@ -75,20 +74,17 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
             return;
         }
 
-        //TODO userId: $scope.userId, SHOULD go away it's sprint 10!
         queryObject = {
             id: $scope.ruleId,
             title: $scope.title,
             description: $scope.description || null,
-            userId: $scope.userId,
             query: query
         };
 
         jqueryQueryBuilderService.save(queryObject).then($scope.updateQueryBuilderOnSave);
     };
 
-    $scope.viewType = 'FLIGHT';
-    $scope.executeQuery = function () {
+    $scope.executeQuery = function (viewType) {
         var qbData = $scope.$builder.queryBuilder('getDrools');
 
         if (qbData === false) {
@@ -97,7 +93,7 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
         }
         localStorage['qbData'] = JSON.stringify(qbData);
         localStorage['qbTitle'] = $scope.title.trim();
-        localStorage['qbType'] = $scope.viewType;
-        $location.url(['/query/', $scope.viewType.toLocaleLowerCase(), 's'].join(''));
+        localStorage['qbType'] = viewType;
+        $location.url(['/query', viewType].join('/'));
     };
 });

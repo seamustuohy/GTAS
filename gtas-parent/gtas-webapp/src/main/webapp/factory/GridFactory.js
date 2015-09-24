@@ -1,3 +1,4 @@
+//FAZING out in favor of GridOptionsService instead of invoking $rootScope
 app.factory('GridControl', function () {
     'use strict';
     return function ($scope) {
