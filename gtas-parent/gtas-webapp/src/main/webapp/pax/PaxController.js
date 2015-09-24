@@ -4,8 +4,8 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 
     console.log(passengers);
 
-    $scope.selectedFlight=$stateParams.flight;
-    $scope.parent=$stateParams.parent;
+    $scope.selectedFlight = $stateParams.flight;
+    $scope.parent = $stateParams.parent;
 
     var self = this;
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
@@ -21,10 +21,6 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
         return $scope.list(index);
     };
 
-    $scope.init=function(index)
-    {
-
-    }
 
     //--------Date functions-----------------------
     $scope.startDate = '';
@@ -177,7 +173,12 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 
     }, 100);
     //--------------------------------------------
-
+    $scope.init = function(){
+       if ($scope.parent == 'flights') {
+           $scope.passengerGrid.data = passengers;
+           $scope.gridApi.data = passengers;
+       }
+    };
     $scope.passengerGrid = {
         saveFocus: true,
         saveScroll: true,
@@ -265,10 +266,11 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
         exporterPdfHeader: {text: "Passengers", style: 'headerStyle'},
 
         onRegisterApi: function (gridApi) {
-            if($scope.parent=='flights')
-                $scope.gridApi.data = passengers;
-
             $scope.gridApi = gridApi;
+            if($scope.parent=='flights') {
+                $scope.passengerGrid.data = passengers;
+                $scope.gridApi.data=passengers;
+            }
 
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                 var title;
@@ -276,13 +278,11 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
                     $state.go('pax.detail', {id: row.entity.paxId, flightId: row.entity.flightId});
                 }
             });
-
-
         }
-
 
     }; // END of Passenger Grid
 
+    $scope.init();
     $scope.refreshListing = function () {
         $scope.loading = true;
         $scope.passengerGrid.data = [];
@@ -299,7 +299,7 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
         });
     };
 
-    $scope.refreshListing();
+    //$scope.refreshListing();
 
     //------- Pre-Refactor-------------------
     //Function to get Rule Hits per Passenger
