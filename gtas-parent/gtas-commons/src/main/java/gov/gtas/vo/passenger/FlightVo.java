@@ -8,9 +8,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.validators.Validatable;
+import gov.gtas.vo.BaseVo;
 
-public class FlightVo implements Validatable{
-    private String flightId;
+public class FlightVo extends BaseVo implements Validatable{
     private String carrier;
     private String flightNumber;
     private String origin;
@@ -51,12 +51,6 @@ public class FlightVo implements Validatable{
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}
-	public String getFlightId() {
-        return flightId;
-    }
-    public void setFlightId(String flightId) {
-        this.flightId = flightId;
-    }
     public String getCarrier() {
         return carrier;
     }

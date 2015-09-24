@@ -29,8 +29,8 @@ public class FlightDelegateIT {
 		System.out.println("#####################testFlightDelegate#############################");
 		FlightVo vo=this.prepareFlightVo();
 		flightDelegate.saveOrUpdate(vo);
-		System.out.println("#####################vo.getId()#############################"+vo.getFlightId());
-		assertNull(vo.getFlightId());
+		System.out.println("#####################vo.getId()#############################"+vo.getId());
+		assertNull(vo.getId());
 	}
 	
 	private FlightVo prepareFlightVo(){

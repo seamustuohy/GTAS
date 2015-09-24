@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import gov.gtas.dataobject.FlightVo;
 import gov.gtas.model.Flight;
 import gov.gtas.services.FlightService;
+import gov.gtas.vo.passenger.FlightVo;
 
 @Controller
 public class FlightController {
