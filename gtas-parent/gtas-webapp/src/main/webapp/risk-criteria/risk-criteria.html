@@ -2,84 +2,39 @@
     @media (min-width: 1200px) {
         .container {
             width: 100%;
+            padding: 0;
+            margin: 0;
         }
     }
-    .table .glyphicon-pencil{
-        left: -1em;
-        transform: scaleX(-1);
-        margin-right: -.75em;
-        top: -.25em;
+
+    .ui-grid-pager-control input {
+        width: 80px;
     }
 
-    input[placeholder="Name:"] {
-        width: 60%;
-    }
-    input[placeholder="Description:"] {
-        width: 100%;
-    }
-
-    input[placeholder="Start Date:"],
-    input[placeholder="End Date:"],
-    label[for="enabled"] {
-        width: 6em;
-    }
-    .udr-add-form label.hide {
-        position: absolute;
-        left: -99999px;
-    }
-    .udr-add-form input {
-        display: inline-block;
-    }
-
-    .table thead th:hover,
-    .table tbody tr:hover {
-        cursor: pointer;
-    }
-
-    .table tbody tr:nth-child(odd) {
-        background: rgba(245,245,255,0.5);
-    }
-
-    /* temporary highlighting the only entity we don't yet support */
-    .entity-name ul li:nth-child(8) {
-        background: rgba(200,30,30, 0.2);
-    }
-
-    @keyframes fadeOut
-    {
-        from { opacity: 1.0; }
-        to { opacity: 0.0; }
-    }
-
-    @-webkit-keyframes fadeOut
-    {
-        from { opacity: 1.0 }
-        to { opacity: 0.0 }
-    }
-
-    .fade-out
-    {
-        animation: fadeOut 2s infinite;
-        -webkit-animation: fadeOut 2s infinite;
-    }
     .ui-grid-icon-ok:before {
         content: '\c357' !important;
     }
 </style>
-<h2><span class="glyphicon glyphicon-flag"></span> Risk Criteria</h2>
+<h2><span class="glyphicon glyphicon-flag"></span> Risk Criteria <button data-ng-click="newRule()" class="md-raised md-button md-default-theme" data-add="rule"><span class="glyphicon glyphicon-plus"></span> Add New</button>
+</h2>
 <div ui-grid="gridOpts" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
 <section class="qb-interface">
-    <button data-ng-click="newRule()" class="md-raised md-button md-default-theme pull-right" data-add="rule"><span class="glyphicon glyphicon-plus"></span> Add New</button>
-
     <h2>Summary:</h2>
-    <label for="title" class="hide">Name:</label>
-    <input title="Name" placeholder="Name:" type="text" ng-model="title" id="title" maxlength="20" />
-    <md-datepicker ng-model="startDate" md-placeholder="Start Date"></md-datepicker>
-    <md-datepicker ng-model="endDate" md-placeholder="End Date"></md-datepicker>
-    <label for="enabled">Enabled:</label>
-    <input type="checkbox" ng-model="enabled" id="enabled" />
-    <label for="description" class="hide">Description:</label>
-    <input title="Description" type="text" ng-model="description" id="description" placeholder="Description:" maxlength="100" />
+    <md-content layout-padding>
+        <div layout layout-sm="column">
+            <md-input-container style="width:20%">
+                <label>Name</label>
+                <input md-maxlength="20" required name="description" ng-model="title" id="title">
+            </md-input-container>
+            <md-input-container style="width:40%">
+                <label>Description</label>
+                <input md-maxlength="100" name="description" ng-model="description">
+            </md-input-container>
+            <md-checkbox class="md-primary" required ng-model="enabled" aria-label="Enabled">Enabled</md-checkbox>
+            <md-datepicker ng-model="startDate" md-placeholder="Start Date"></md-datepicker>
+            <md-datepicker ng-model="endDate" md-placeholder="End Date"></md-datepicker>
+        </div>
+    </md-content>
 
     <h2>Conditions:</h2>
     <div id="builder"></div>

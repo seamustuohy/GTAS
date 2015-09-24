@@ -63,10 +63,10 @@ app.controller('ExecuteQueryController', function ($scope, executeQueryService) 
     }
 
     var serviceURLs = {
-            FLIGHT: '/gtas/query/queryFlights/',
-            PASSENGER: '/gtas/query/queryPassengers/'
+            flights: '/gtas/query/queryFlights/',
+            passengers: '/gtas/query/queryPassengers/'
         },
-        viewType = localStorage['qbType'] || 'FLIGHT',
+        viewType = localStorage['qbType'] || 'flights',
         qbData = localStorage['qbData'] !== undefined ? JSON.parse(localStorage['qbData']) : undefined,
         qbTitle = localStorage['qbTitle'] || 'query results',
         getPage = function () {

@@ -6,58 +6,6 @@
             margin: 0;
         }
     }
-    .table .glyphicon-pencil{
-        left: -1em;
-        transform: scaleX(-1);
-        margin-right: -.75em;
-        top: -.25em;
-    }
-    input[placeholder="Name:"] {
-        width: 60%;
-    }
-    input[placeholder="Description:"] {
-        width: 100%;
-    }
-
-    input[placeholder="Start Date:"],
-    input[placeholder="End Date:"],
-    label[for="enabled"] {
-        width: 6em;
-    }
-    .udr-add-form label.hide {
-        position: absolute;
-        left: -99999px;
-    }
-    .udr-add-form input {
-        display: inline-block;
-    }
-
-    .table thead th:hover,
-    .table tbody tr:hover {
-        cursor: pointer;
-    }
-
-    .table tbody tr:nth-child(odd) {
-        background: rgba(245,245,255,0.5);
-    }
-
-    @keyframes fadeOut
-    {
-        from { opacity: 1.0; }
-        to { opacity: 0.0; }
-    }
-
-    @-webkit-keyframes fadeOut
-    {
-        from { opacity: 1.0 }
-        to { opacity: 0.0 }
-    }
-
-    .fade-out
-    {
-        animation: fadeOut 2s infinite;
-        -webkit-animation: fadeOut 2s infinite;
-    }
 
     .ui-grid-pager-control input {
         width: 80px;
@@ -67,23 +15,33 @@
         content: '\c357' !important;
     }
 </style>
-<h2><span class="glyphicon glyphicon-filter"></span> Query Builder</h2>
+<h2>
+    <span class="glyphicon glyphicon-filter"></span>
+    Query Builder
+    <button data-ng-click="newRule()" class="md-raised md-button md-default-theme pull-right" data-add="rule"><span class="glyphicon glyphicon-plus"></span> Add New</button>
+</h2>
 <div ui-grid="gridOpts" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
 
 <section class="qb-interface">
-    <button data-ng-click="newRule()" class="md-raised md-button md-default-theme pull-right" data-add="rule"><span class="glyphicon glyphicon-plus"></span> Add New</button>
-
     <h2>Summary:</h2>
-    <label for="title" class="hide">Name:</label>
-    <input title="Name" placeholder="Name:" type="text" ng-model="title" id="title" maxlength="20" />
-    <label for="description" class="hide">Description:</label>
-    <input title="Description" type="text" ng-model="description" id="description" placeholder="Description:" maxlength="100" />
+    <md-content layout-padding>
+        <div layout layout-sm="column">
+            <md-input-container style="width:20%">
+                <label>Name</label>
+                <input md-maxlength="20" required name="description" ng-model="title">
+            </md-input-container>
+            <md-input-container flex>
+                <label>Description</label>
+                <input md-maxlength="100" name="description" ng-model="description">
+            </md-input-container>
+        </div>
+    </md-content>
 
     <h2>Conditions:</h2>
     <div id="builder"></div>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
-    <button type="button" data-ng-click="executeQuery('FLIGHT')"  class="md-raised md-primary md-button md-default-theme" >Query Flights</button>
-    <button type="button" data-ng-click="executeQuery('PASSENGER')"  class="md-raised md-primary md-button md-default-theme" >Query Passengers</button>
+    <button type="button" data-ng-click="executeQuery('flights')"  class="md-raised md-primary md-button md-default-theme" >Query Flights</button>
+    <button type="button" data-ng-click="executeQuery('passenger')"  class="md-raised md-primary md-button md-default-theme" >Query Passengers</button>
     <button type="button" data-ng-click="resetQueryBuilder()" class="md-raised md-button md-default-theme">Clear Conditions</button>
     <button type="button" data-ng-click="save()" data-ng-disabled="saving === true" class="md-raised md-primary md-button md-default-theme pull-right">Save</button>
     <button type="button" data-ng-click="delete()" data-ng-disabled="ruleId === null" class="md-raised md-warn md-button md-default-theme pull-right">Delete</button>
