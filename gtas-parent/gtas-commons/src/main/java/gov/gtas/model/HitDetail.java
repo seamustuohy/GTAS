@@ -35,7 +35,7 @@ public class HitDetail extends BaseEntity {
 	@Column(name = "description")
 	private String Description;
 
-	@Column(name = "hit_type", length = 3)
+	@Column(name = "hit_type", nullable = false, length = 3)
 	private String hitType;
 	/**
 	 * String representation of matched conditions; it can be split into
