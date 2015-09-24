@@ -59,7 +59,7 @@ public class PassengerDetailsController {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/passengers/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/passengers/passenger/{id}/details", method = RequestMethod.GET)
     public PassengerVo getPassengerByPaxIdAndFlightId(@PathVariable(value = "id") String paxId, @RequestParam(value = "flightId", required = false) String flightId) {
         List<PassengerVo> rv = new ArrayList<>();
         PassengerVo vo = new PassengerVo();
