@@ -10,33 +10,13 @@ var app = angular.module('myApp', [
 
 app.controller('NavCtrl', function ($scope, $location) {
     'use strict';
-    $scope.selectedIndex = 0;
-
+    var routes = ['/dashboard', '/flights', '/passengers', '/query-builder', '/risk-criteria', '/watchlists', '/admin'];
+    //DEFAULTS to Flights on SPA reload and initial load
+    $scope.selectedIndex = 1;
+    $location.url(routes[$scope.selectedIndex]);
     //IF WE MOVE SECURITY check TO HERE and out of .jsp
     $scope.$watch('selectedIndex', function (current) {
-        switch (current) {
-            case 0:
-                $location.url("/dashboard");
-                return;
-            case 1:
-                $location.url("/flights");
-                return;
-            case 2:
-                $location.url("/passengers");
-                return;
-            case 3:
-                $location.url("/query-builder");
-                return;
-            case 4:
-                $location.url("/risk-criteria");
-                return;
-            case 5:
-                $location.url("/watchlists");
-                return;
-            case 6:
-                $location.url("/admin");
-                return;
-        }
+        $location.url(routes[current]);
     });
 });
 
@@ -300,6 +280,14 @@ app.config(function ($stateProvider) {
         url: '/query-builder',
         templateUrl: 'query-builder/query.html',
         controller: 'QueryBuilderController'
+    }).state('query-flights', {
+        url: '/query/flights',
+        templateUrl: 'flights/flights.html',
+        controller: 'ExecuteQueryController'
+    }).state('query-passengers', {
+        url: '/query/passengers',
+        templateUrl: 'pax/pax.detail.html',
+        controller: 'ExecuteQueryController'
     }).state('risk-criteria', {
         url: '/risk-criteria',
         templateUrl: 'risk-criteria/risk-criteria.html',
