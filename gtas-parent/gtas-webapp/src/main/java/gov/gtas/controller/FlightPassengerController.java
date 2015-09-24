@@ -3,6 +3,7 @@ package gov.gtas.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -96,6 +97,7 @@ public class FlightPassengerController {
         for (Passenger p : results) {
             PassengerVo vo = new PassengerVo();
             BeanUtils.copyProperties(p, vo);
+            vo.setFlightId(id);
             for (Document d : p.getDocuments()) {
                 DocumentVo docVo = new DocumentVo();
                 BeanUtils.copyProperties(d, docVo);

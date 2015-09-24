@@ -50,7 +50,6 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
       
       gridApi.core.on.filterChanged( $scope, function() {
         var grid = this.grid;
-        //alert(grid.columns[4].filters[0].term);
       });
       
       gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {

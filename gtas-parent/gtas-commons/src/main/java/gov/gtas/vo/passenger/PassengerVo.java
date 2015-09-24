@@ -11,13 +11,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class PassengerVo  implements Validatable{
+public class PassengerVo extends BaseVo implements Validatable {
     /**
      * a unique passenger reference identifier (from PNR) used to cross
      * reference passenger information in a PNR
      */
     private String travelerReferenceNumber;
     
+    private Long flightId;
     private String title;    
     private String firstName;
     private String middleName;
@@ -38,14 +39,18 @@ public class PassengerVo  implements Validatable{
     
     private List<DocumentVo> documents = new ArrayList<>();
     
+    public Long getFlightId() {
+        return flightId;
+    }
+    public void setFlightId(Long flightId) {
+        this.flightId = flightId;
+    }
     public void addDocument(DocumentVo d) {
         documents.add(d);
     }
-    
     public List<DocumentVo> getDocuments() {
         return documents;
     }
-
     public String getTravelerReferenceNumber() {
         return travelerReferenceNumber;
     }
