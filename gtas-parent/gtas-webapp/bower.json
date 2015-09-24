@@ -4,12 +4,12 @@
   "description": "GTAS Webapp",
   "dependencies": {
     "angular": "latest",
-    "angular-bootstrap": "latest",
+    "angular-ui-router": "latest",
+    "ui-router-extras": "~0.0.14",
     "angular-material": "~0.11.0",
+    "angular-ui-grid": "3.0.3",
     "angular-messages": "~1.4.6",
     "angular-spinners": "~3.0.2",
-    "angular-ui-grid": "3.0.3",
-    "angular-ui-router": "latest",
     "bootstrap": "latest",
     "bootstrap-datepicker": "latest",
     "bootswatch-dist": "#slate",
@@ -19,8 +19,7 @@
     "pdfmake": "~0.1.18",
     "seiyria-bootstrap-slider": "latest",
     "selectize": "latest",
-    "spring-security-csrf-token-interceptor": "latest",
-    "ui-router-extras": "~0.0.14"
+    "spring-security-csrf-token-interceptor": "latest"
   },
   "devDependencies": {
     "awesome-bootstrap-checkbox": "^0.3.0",

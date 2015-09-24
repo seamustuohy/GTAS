@@ -9,12 +9,8 @@ var gulp = require('gulp'),
 
 var images = [
     'resources/img/404.png',
-    'resources/img/banner.png',
     'resources/img/circle_arrow_back.png',
-    'resources/img/loading_default_en.gif',
-    'resources/img/logo.jpg',
-    'resources/img/gtas_logo.png',
-    'resources/img/top_banner.jpg'
+    'resources/img/gtas_logo-compressed.jpg',
 ];
 
 var cssFiles = [
