@@ -13,6 +13,7 @@ var app = angular.module('myApp', [
     'ui.grid.exporter',
     'ui.grid.expandable',
     
+    'ui.bootstrap',
     'ngMaterial',
     'ngMessages',
     'ngAria',

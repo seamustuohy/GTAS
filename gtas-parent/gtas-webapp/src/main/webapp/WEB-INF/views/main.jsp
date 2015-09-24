@@ -87,6 +87,8 @@
 	<script src='resources/bower_components/angular-animate/angular-animate.min.js'></script>
 	<script src='resources/bower_components/angular-messages/angular-messages.min.js'></script>
 	<script src='resources/js/query-builder.js'></script>
+  <script src='resources/bower_components/angular-bootstrap/ui-bootstrap.js'></script>
+  <script src='resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.js'></script>
 
 	<script src='app.js'></script>
 	<script src='resources/js/JqueryQueryBuilderService.js'></script>
