@@ -93,7 +93,9 @@
 	<script src='app.js'></script>
 	<script src='resources/js/JqueryQueryBuilderService.js'></script>
 	<script src='factory/SecurityFactory.js'></script>
+	<!-- to go away this sprint, required $rootScope, $injector additionally, service better option-->
 	<script src='factory/GridFactory.js'></script>
+	<!-- end //-->
 	<script src='factory/ModalGridFactory.js'></script>
 	<script src='factory/QueryBuilderFactory.js'></script>
 	<script src='factory/JqueryQueryBuilderWidget.js'></script>
@@ -109,6 +111,7 @@
 	<script src='query-builder/ExecuteQueryController.js'></script>
 	<script src='query-builder/ExecuteQueryService.js'></script>
 	<script src='risk-criteria/RiskCriteriaController.js'></script>
+	<script src='services/GridOptionsService.js'></script>
 	<script src='watchlists/WatchListService.js'></script>
 	<script src='watchlists/WatchListController.js'></script>
 	<script src='admin/AdminController.js'></script>
