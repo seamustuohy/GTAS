@@ -47,11 +47,11 @@ public class QueryBuilderService {
 	@Autowired
 	QueryBuilderRepository queryRepository;
 	
-	public IUserQueryResult saveQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, InvalidQueryException {
+	public IUserQueryResult saveQuery(String userId, QueryRequest queryRequest) throws QueryAlreadyExistsException, InvalidQueryException {
 		IUserQueryResult result = new UserQueryResult();
 		
 		try {
-			result = mapToQueryResult(queryRepository.saveQuery(createUserQuery(queryRequest)));
+			result = mapToQueryResult(queryRepository.saveQuery(createUserQuery(userId, queryRequest)));
 		} catch(QueryAlreadyExistsRepositoryException e) {
 			throw new QueryAlreadyExistsException(e.getMessage(), queryRequest);
 		} catch (InvalidQueryException | InvalidQueryRepositoryException | IOException | IllegalArgumentException e) {
@@ -61,11 +61,11 @@ public class QueryBuilderService {
 		return result;
 	}
 
-	public IUserQueryResult editQuery(QueryRequest queryRequest) throws QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
+	public IUserQueryResult editQuery(String userId, QueryRequest queryRequest) throws QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
 		IUserQueryResult result = new UserQueryResult();
 		
 		try {
-			result = mapToQueryResult(queryRepository.editQuery(createUserQuery(queryRequest)));
+			result = mapToQueryResult(queryRepository.editQuery(createUserQuery(userId, queryRequest)));
 		} catch(QueryAlreadyExistsRepositoryException e) {
 			throw new QueryAlreadyExistsException(e.getMessage(), queryRequest);
 		} catch (QueryDoesNotExistRepositoryException e) {
@@ -122,13 +122,13 @@ public class QueryBuilderService {
 		return result;
 	}
 	
-	private UserQuery createUserQuery(QueryRequest req) throws JsonProcessingException {
+	private UserQuery createUserQuery(String userId, QueryRequest req) throws JsonProcessingException {
 		UserQuery query = new UserQuery();
 		ObjectMapper mapper = new ObjectMapper();
 		
 		if(req != null) {
 			User user = new User();
-			user.setUserId(req.getUserId());
+			user.setUserId(userId);
 			
 			query.setId(req.getId());
 			query.setCreatedBy(user);

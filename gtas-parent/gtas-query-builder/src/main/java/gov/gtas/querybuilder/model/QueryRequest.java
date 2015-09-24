@@ -8,8 +8,6 @@ import javax.validation.constraints.Size;
 public class QueryRequest {
 	
 	private int id;
-	@NotNull(message = "User cannot be null")
-	private String userId;
 	@NotNull(message = "Title is required")
 	@Size(max=50)
 	private String title;
@@ -24,14 +22,6 @@ public class QueryRequest {
 	
 	public void setId(int id) {
 		this.id = id;
-	}
-	
-	public String getUserId() {
-		return userId;
-	}
-	
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 	
 	public String getTitle() {
