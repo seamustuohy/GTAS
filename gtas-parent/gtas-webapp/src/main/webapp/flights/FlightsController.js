@@ -8,33 +8,19 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
     sort: null
   };
   
-  function rowTemplate() {
-    return '<div ng-dblclick="grid.appScope.rowDblClick(row)" >' +
-           '  <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }"  ui-grid-cell></div>' +
-           '</div>';
-  }
-
-  $scope.rowDblClick = function( row) {
-    alert(JSON.stringify(row.entity)); 
-  };
-  
   $scope.gridOptions = { 
-    showFooter: true,
-    enableSorting: true,
+    enableSorting: false,
     multiSelect: false,
     enableFiltering: false,     
     enableRowSelection: true, 
     enableSelectAll: false,
     enableRowHeaderSelection: false,
-    selectionRowHeaderWidth: 35,  
-    noUnselect: true,
     enableGridMenu: false,  	
     paginationPageSizes: [10, 25, 50],
     paginationPageSize: 10,
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
-    //rowTemplate: rowTemplate(),
     
     onRegisterApi: function(gridApi) {
       $scope.gridApi = gridApi;
@@ -82,12 +68,12 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
     { name: 'DestCountry', displayName: "Country", field: 'destinationCountry' }
   ];
 
-    $scope.passengerNav = function(row){
-        $scope.selectedFlight=row.entity;
-        $state.go('flights.passengers',{ parent: 'flights', flight: $scope.selectedFlight });
-    };
+  $scope.passengerNav = function(row){
+    $scope.selectedFlight=row.entity;
+    $state.go('flights.passengers',{ parent: 'flights', flight: $scope.selectedFlight });
+  };
 
-    var getPage = function() {
+  var getPage = function() {
     console.log('requesting page #' + paginationOptions.pageNumber);
     flightService.getFlights(paginationOptions).then(function (page) {
       console.log(page);
@@ -95,14 +81,12 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
       $scope.gridOptions.data = page.flights;
 
       $interval( function() {
-        if ($scope.gridApi) {
           $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
-        }
       }, 0, 1);
     });
   };
   
   getPage();
 
-    $state.go('flights.all');
+  $state.go('flights.all');
 });

@@ -46,11 +46,11 @@ app.service("paxService", function ($rootScope, $http, $q) {
     }
 
 // temporary hack
-    function getAllPax(pax) {
+    function getAllPax(paginationOptions) {
         var request = $http({
             method: "get",
-            url: "/gtas/passengers?pageNumber=1&pageSize=10",
-            params: pax
+            url: "/gtas/passengers",
+            params: { pageNumber: paginationOptions.pageNumber, pageSize: paginationOptions.pageSize }
         });
         return (request.then(handleSuccess, handleError));
     }

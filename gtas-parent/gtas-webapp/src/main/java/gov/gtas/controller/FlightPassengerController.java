@@ -87,6 +87,9 @@ public class FlightPassengerController {
 		return new FlightsPage(flights, total);
 	}
 	
+	/**
+	 * TODO: should we bother w/ pagination here?
+	 */
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/flights/flight/{id}/passengers", method = RequestMethod.GET)
@@ -107,18 +110,6 @@ public class FlightPassengerController {
         }
         
         return passengers;
-    }
-
-    /**
-     * not sure this is even necessary
-     */
-    public PassengersPage getFlightPassengersPaging(
-            @PathVariable Long id,
-            @RequestParam(value = "pageNumber", required = true) String pageNumber,
-            @RequestParam(value = "pageSize", required = true) String pageSize) {
-        
-        Page<Passenger> results = paxService.getPassengersByFlightId(id, Integer.valueOf(pageNumber), Integer.valueOf(pageSize));
-        return createPassengerPage(results);
     }
 
     @ResponseBody

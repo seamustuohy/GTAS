@@ -46,7 +46,8 @@ public class PassengerServiceImpl implements PassengerService {
     @Transactional
     public Page<Passenger> findAll(int pageNumber, int pageSize) {
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
-        return passengerRespository.findAll(new PageRequest(pn, pageSize));
+//        return passengerRespository.findAll(new PageRequest(pn, pageSize));
+        return passengerRespository.getAllPassengers(new PageRequest(pn, pageSize));
     }
 
 	@Override
