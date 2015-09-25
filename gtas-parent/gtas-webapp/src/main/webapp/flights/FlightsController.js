@@ -89,10 +89,15 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
     var getPage = function() {
     console.log('requesting page #' + paginationOptions.pageNumber);
     flightService.getFlights(paginationOptions).then(function (page) {
+      console.log(page);
       $scope.gridOptions.totalItems = page.totalFlights;
       $scope.gridOptions.data = page.flights;
 
-      $interval( function() {$scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);}, 0, 1);
+      $interval( function() {
+        if ($scope.gridApi) {
+          $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
+        }
+      }, 0, 1);
     });
   };
   
