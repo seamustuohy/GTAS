@@ -96,7 +96,8 @@ app.config(function ($stateProvider) {
                             console.log($stateParams);
                             var id= $stateParams.flight.id;
                             console.log(id);
-                            return paxService.getPax(id);
+                            //return paxService.getPax(id);
+                            return null;
                         }
                     }
                 }

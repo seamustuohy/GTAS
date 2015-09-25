@@ -42,19 +42,11 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     
     onRegisterApi: function (gridApi) {
       $scope.gridApi = gridApi;
-      $scope.loading = false;
-      if ($scope.parent === 'flights') {
-        $scope.passengerGrid.data = passengers;
-      } else {
-        paxService.getAllPax(paginationOptions).then(function (myData) {
-          $scope.passengerGrid.totalItems = myData.totalPassengers;
-          $scope.passengerGrid.data = myData.passengers;
-        });
-      }   
 
       gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
         paginationOptions.pageNumber = newPage;
         paginationOptions.pageSize = pageSize;
+        getPage();
       });
 
       gridApi.selection.on.rowSelectionChanged($scope, function (row) {
@@ -106,18 +98,23 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
 
   var getPage = function() {
     console.log('requesting pax page #' + paginationOptions.pageNumber);
-    flightService.getFlights(paginationOptions).then(function (page) {
-      console.log(page);
-      $scope.gridOptions.totalItems = page.totalFlights;
-      $scope.gridOptions.data = page.flights;
-
-      $interval( function() {
-          $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
-      }, 0, 1);
-    });
+    if ($scope.parent === 'flights') {
+      //$scope.passengerGrid.data = passengers;
+      paxService.getPax($stateParams.flight.id).then(function (myData) {
+        //$scope.passengerGrid.totalItems = myData.totalPassengers;
+        $scope.passengerGrid.data = myData;
+      });
+      
+    } else {
+      paxService.getAllPax(paginationOptions).then(function (myData) {
+        $scope.passengerGrid.totalItems = myData.totalPassengers;
+        $scope.passengerGrid.data = myData.passengers;
+      });
+    }   
   };
 
 
+  getPage();
 
 
 

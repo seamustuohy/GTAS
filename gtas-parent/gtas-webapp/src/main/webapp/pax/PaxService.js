@@ -1,16 +1,15 @@
 app.service("paxService", function ($rootScope, $http, $q) {
     'use strict';
-    function handleSuccess(response) {
-        return (response.data);
-    }
-
-    function handleError(response) {
-        if (!angular.isObject(response.data) || !response.data.message) {
-            return ($q.reject("An unknown error occurred."));
-        }
-        return ($q.reject(response.data.message) );
-    }
-
+    
+    // Return public API.
+    return ({
+        getPax: getPax,
+        getAllPax: getAllPax,
+        broadcast: broadcast,
+        getRuleHits: getRuleHits,
+        broadcastRuleID: broadcastRuleID
+    });
+    
     function getPax(flightId) {
         console.log('paxService->getPax');
         console.log(flightId);
@@ -22,6 +21,26 @@ app.service("paxService", function ($rootScope, $http, $q) {
             }
         });
         return (request.then(handleSuccess, handleError));
+    }
+
+    function getAllPax(paginationOptions) {
+        var request = $http({
+            method: "get",
+            url: "/gtas/passengers",
+            params: { pageNumber: paginationOptions.pageNumber, pageSize: paginationOptions.pageSize }
+        });
+        return (request.then(handleSuccess, handleError));
+    }
+
+    function handleSuccess(response) {
+        return (response.data);
+    }
+
+    function handleError(response) {
+        if (!angular.isObject(response.data) || !response.data.message) {
+            return ($q.reject("An unknown error occurred."));
+        }
+        return ($q.reject(response.data.message) );
     }
 
     function broadcast(flightId) {
@@ -44,25 +63,6 @@ app.service("paxService", function ($rootScope, $http, $q) {
     function broadcastRuleID(ruleID) {
         $rootScope.$broadcast('ruleIDBroadcast', ruleID);
     }
-
-// temporary hack
-    function getAllPax(paginationOptions) {
-        var request = $http({
-            method: "get",
-            url: "/gtas/passengers",
-            params: { pageNumber: paginationOptions.pageNumber, pageSize: paginationOptions.pageSize }
-        });
-        return (request.then(handleSuccess, handleError));
-    }
-
-    // Return public API.
-    return ({
-        getPax: getPax,
-        broadcast: broadcast,
-        getRuleHits: getRuleHits,
-        broadcastRuleID: broadcastRuleID,
-        getAllPax: getAllPax,
-    });
 });
 
 app.service("paxDetailService", ['$http', '$stateParams', function ($http, $stateParams) {
