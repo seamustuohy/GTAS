@@ -67,7 +67,7 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
 
   $scope.gridOptions.columnDefs = [
     { name: 'P', field: 'passengerCount', width: 50, enableFiltering: false,
-        cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.passengerNav()">{{COL_FIELD}}</button> ' ,
+        cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.passengerNav(row)">{{COL_FIELD}}</button> ' ,
     },
     { name: 'H', field: 'ruleHitCount', width: 50, enableFiltering: false },
     { name: 'L', field: 'listHitCount', width: 50, enableFiltering: false },
@@ -82,7 +82,8 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
     { name: 'DestCountry', displayName: "Country", field: 'destinationCountry' }
   ];
 
-    $scope.passengerNav = function(){
+    $scope.passengerNav = function(row){
+        $scope.selectedFlight=row.entity;
         $state.go('flights.passengers',{ parent: 'flights', flight: $scope.selectedFlight });
     };
 
