@@ -270,7 +270,14 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                 var title;
                 if (row.isSelected) {
-                    $state.go('pax.detail', {id: row.entity.paxId, flightId: row.entity.flightId});
+                    if( $scope.parent==='flights')
+                    {
+                        $stateParams.id=row.entity.id;
+                        $stateParams.flightId= row.entity.flightId;
+                        $state.go('flights.passengers.detail', {id: row.entity.id, flightId: row.entity.flightId,parent:$scope.parent });
+                    }
+                    else
+                    $state.go('pax.detail', {id: row.entity.id, flightId: row.entity.flightId,parent:$scope.parent });
                 }
             });
         }

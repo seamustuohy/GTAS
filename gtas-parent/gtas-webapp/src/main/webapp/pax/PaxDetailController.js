@@ -1,4 +1,4 @@
-app.controller('PaxDetailController', function ($scope, $filter, $q, paxService, sharedPaxData, passengers, $location) {
+app.controller('PaxDetailController', function ($scope, $filter, $q, paxService, sharedPaxData, passengers, $location, $stateParams) {
     $scope.passenger = [];
     $scope.passenger = passengers.data;
     $scope.paxTableEnabled = false;
@@ -6,6 +6,7 @@ app.controller('PaxDetailController', function ($scope, $filter, $q, paxService,
     $scope.passenger.flightETA = new Date($scope.passenger.flightETA);
     $scope.passenger.flightETD = new Date($scope.passenger.flightETD);
     $scope.passenger.dob = new Date($scope.passenger.dob);
+    $scope.parent=$stateParams.parent;
 
-    $location.path("/passengers/");
+  //$location.path("/passengers/");
 });

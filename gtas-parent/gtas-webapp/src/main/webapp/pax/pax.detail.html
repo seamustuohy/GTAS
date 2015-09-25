@@ -3,10 +3,17 @@
 
 <div style="padding-top: 15px;"></div>
     <!-- ui-sref="pax.base"  ng-click="$state.go('^')"-->
-<div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="pax.all" ></div>
 
-<div style="padding: 10px;"></div>
 
+<md-content layout-padding>
+	<md-input-container flex  ng-show="parent === 'flights'">
+		<div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="flights.passengers" ></div>
+	</md-input-container>
+
+	<md-input-container flex  ng-show="parent != 'flights'">
+		<div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref=pax.all" ></div>
+	</md-input-container>
+	</md-content>
 
 <div class="jumbotron" style="min-width:1400px;min-height:1400px; background-color: rgba(238, 238, 238, 0.19);">
     		    

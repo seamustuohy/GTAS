@@ -68,7 +68,7 @@ app.service("paxService", function ($rootScope, $http, $q) {
 app.service("paxDetailService", ['$http', '$stateParams', function ($http, $stateParams) {
     'use strict';
     var getPaxDetail = function ($http, $stateParams) {
-        var url = "/gtas/passengers/passenger/" + $stateParams.passenger.id + "/details?flightId=" + $stateParams.flight.id;
+        var url = "/gtas/passengers/passenger/" + $stateParams.id + "/details?flightId=" + $stateParams.flightId;
         return $http.get(url);
         //.then(function(res){ return res.data; });
     };

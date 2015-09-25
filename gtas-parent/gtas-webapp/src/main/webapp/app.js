@@ -102,6 +102,27 @@ app.config(function ($stateProvider) {
                     }
                 }
             }
+        }).state('flights.passengers.detail', {
+            url: '/detail',
+            params: {
+                parent: null,
+                flight: null,
+                id:null,
+                flightId:null
+            },
+            sticky: true,
+            dsr: true,
+            views: {
+                "content@flights": {
+                    controller: 'PaxDetailController',
+                    templateUrl: 'pax/pax.detail.html',
+                    resolve: {
+                        passengers: function ($http, $stateParams, paxDetailService) {
+                            return paxDetailService.getPaxDetail($http, $stateParams);
+                        }
+                    }
+                }
+            }
         }).state('pax', {
         url: '/passengers',
         controller: 'PaxMainController',
