@@ -71,25 +71,23 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
       }
     },
     {"name": "onWatchList", "displayName": "L", width: 50},
-    {
-      "name": "lastName", "displayName": "Last Name", width: 175,
+    {"name": "passengerType", "displayName": "Type", width: 50},
+    {"name": "lastName", "displayName": "Last Name", width: 175,
       "sort": {
         direction: uiGridConstants.DESC,
         priority: 1
       }
     },
-    {"name": "passengerType", "displayName": "Type", width: 50},
     {"name": "firstName", "displayName": "First Name", width: 150},
     {"name": "middleName", "displayName": "Middle", width: 100},
-    {"name": "flightNumber", "displayName": "Flight", width: 90},
-    {"name": "eta", "displayName": "ETA", width: 175},
-    {"name": "etd", "displayName": "ETD", width: 175},
+    {"name": "flightNumber", "displayName": "Flight", width: 90, visible: ($scope.parent !== 'flights') },
+    {"name": "eta", "displayName": "ETA", width: 175, visible: ($scope.parent !== 'flights') },
+    {"name": "etd", "displayName": "ETD", width: 175, visible: ($scope.parent !== 'flights') },
     {"name": "gender", "displayName": "G", width: 50},
     {"name": "dob", "displayName": "DOB", field: 'dob', cellFilter: 'date', width: 175},
     {"name": "citizenshipCountry", "displayName": "CTZ", width: 75},
     {"name": "passengerType", "displayName": "T", width: 100},
     {"name": "documentType", "displayName": "T", width: 50},
-    {"name": "carrier", "displayName": "Carrier", width: 50},
     {"name": "seat", "displayName": "Seat", width: 75}
   ];
 
