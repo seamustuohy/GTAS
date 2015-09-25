@@ -42,7 +42,7 @@
 		<security:custom-filter position="FORM_LOGIN_FILTER"
 			ref="UserAuthenticationFilter" />
 
-		<!-- <security:form-login login-page='/login.jsp' default-target-url='/home.action' 
+		<!-- <security:form-login login-page='/login.jsp' default-target-url='/home.action'
 			always-use-default-target='true' /> -->
 		<security:logout success-handler-ref="simpleLogoutHandler"
 			logout-url="/logout.action" />

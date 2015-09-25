@@ -1,11 +1,7 @@
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
-<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
-<!-- BEGIN HEAD -->
 <head>
 	<meta charset="utf-8" />
-	<title>GTAS</title>
+	<title>GTAS Login</title>
 	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
@@ -458,25 +454,16 @@
 	<script src="resources/login/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
 	<script src="resources/login/assets/plugins/jquery.blockui.min.js" type="text/javascript"></script>  
 	<script src="resources/login/assets/plugins/jquery.cookie.min.js" type="text/javascript"></script>
-	<!-- <script src="resources/login/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript" ></script> -->
-	<!-- END CORE PLUGINS -->
-	<!-- BEGIN PAGE LEVEL PLUGINS -->
 	<script src="resources/login/assets/plugins/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
 	<script src="resources/login/assets/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
 	<script type="text/javascript" src="resources/login/assets/plugins/select2/select2.min.js"></script>
-	<!-- END PAGE LEVEL PLUGINS -->
-	<!-- BEGIN PAGE LEVEL SCRIPTS -->
 	<script src="resources/login/assets/scripts/app.js" type="text/javascript"></script>
 	<script src="resources/login/assets/scripts/login-soft.js" type="text/javascript"></script>      
-	<!-- END PAGE LEVEL SCRIPTS --> 
 	<script>
 		jQuery(document).ready(function() {     
 		  App.init();
 		  Login.init();
 		});
 	</script>
-	<!-- END JAVASCRIPTS -->
-	
 </body>
-<!-- END BODY -->
 </html>
