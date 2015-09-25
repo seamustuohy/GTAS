@@ -65,6 +65,7 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 		try {
 			KieBase kieBase = RuleUtils.createKieBaseFromDrlString(drlString);
 			byte[] kbBlob = RuleUtils.convertKieBaseToBytes(kieBase);
+			System.out.println("************************** kb_blob="+kbBlob.length);
 			KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
 			if (kb == null) {
 				kb = new KnowledgeBase(kbName);

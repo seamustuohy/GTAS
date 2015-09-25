@@ -27,7 +27,8 @@ public class ErrorHandlerFactory {
 	 * Note: It is expected that different modules will create their own
 	 * specialized error handler by deriving from the BasicErrorHandler class
 	 * and adding error codes and exception processors. This method is expected
-	 * to be called in the @PostConstruct method.
+	 * to be called in the @PostConstruct method of a spring bean. Otherwise
+	 * this method should be called from the static initializer of the calling class.
 	 * @see gov.gtas.controller.UdrManagementController#addErrorHandlerDelegate(gov.gtas.error.GtasErrorHandler) 
 	 * @param errorHandler
 	 *            the handler to register.

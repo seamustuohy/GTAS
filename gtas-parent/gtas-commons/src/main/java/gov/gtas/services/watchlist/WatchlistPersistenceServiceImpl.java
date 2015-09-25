@@ -135,17 +135,6 @@ public class WatchlistPersistenceServiceImpl implements WatchlistPersistenceServ
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see gov.gtas.services.watchlist.WatchlistPersistenceService#
-	 * findUncompiledWatchlists()
-	 */
-	// @Override
-	// public List<Watchlist> findUncompiledWatchlists() {
-	// return watchlistRepository.fetchUncompiledWatchlists();
-	// }
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see
 	 * gov.gtas.services.watchlist.WatchlistPersistenceService#findByName(java
 	 * .lang.String)
@@ -153,11 +142,6 @@ public class WatchlistPersistenceServiceImpl implements WatchlistPersistenceServ
 	@Override
 	public Watchlist findByName(String name) {
 		Watchlist wl = watchlistRepository.getWatchlistByName(name);
-		// if (wl == null) {
-		// throw ErrorHandlerFactory.getErrorHandler().createException(
-		// CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CODE,
-		// "Watchlist", name);
-		// }
 		return wl;
 	}
 
@@ -273,5 +257,4 @@ public class WatchlistPersistenceServiceImpl implements WatchlistPersistenceServ
 		}
 		return user;
 	}
-
 }

@@ -1,5 +1,6 @@
 package gov.gtas.config;
 
+import java.beans.PropertyVetoException;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 
@@ -17,7 +18,6 @@ import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.spring.cache.HazelcastCacheManager;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * The configuration class can be imported into an XML configuration by:<br>
@@ -64,6 +65,12 @@ public class CommonServicesConfig {
 	private static final String PROPERTY_NAME_HIBERNATE_ORDER_UPDATES = "hibernate.order_updates";
 	private static final String PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA = "hibernate.jdbc.batch_versioned_data";
 
+	private static final String PROPERTY_NAME_HIBERNATE_CONNECTION_PROVIDER_CLASS = "hibernate.connection.prover_class";
+
+	private static final String PROPERTY_NAME_C3P0_MIN_SIZE = "c3p0.min_size";
+	private static final String PROPERTY_NAME_C3P0_MAX_SIZE = "c3p0.max_size";
+	private static final String PROPERTY_NAME_C3P0_MAX_IDLETIME = "c3p0.max_idletime";
+	private static final String PROPERTY_NAME_C3P0_MAX_STATEMENTS = "c3p0.max_statements";
 
 	private Properties hibProperties() {
 		Properties properties = new Properties();
@@ -97,6 +104,9 @@ public class CommonServicesConfig {
 		properties.put(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA, env
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA));
 
+		properties.put(PROPERTY_NAME_HIBERNATE_CONNECTION_PROVIDER_CLASS, env
+				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_CONNECTION_PROVIDER_CLASS));
+
 		return properties;
 	}
 
@@ -110,16 +120,30 @@ public class CommonServicesConfig {
 
 	@Bean
 	public DataSource dataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		//DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		ComboPooledDataSource dataSource = new ComboPooledDataSource();
 
-		dataSource.setDriverClassName(env
+		try{
+		     dataSource.setDriverClass(env
 				.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
-		dataSource.setUrl(env.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
-		dataSource.setUsername(env
+		} catch(PropertyVetoException pve){
+			pve.printStackTrace();
+		}
+		dataSource.setJdbcUrl(env.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
+		dataSource.setUser(env
 				.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
 		dataSource.setPassword(env
 				.getRequiredProperty(PROPERTY_NAME_DATABASE_PASSWORD));
 
+		dataSource.setMinPoolSize(Integer.parseInt(env
+				.getRequiredProperty(PROPERTY_NAME_C3P0_MIN_SIZE)));
+		dataSource.setMaxPoolSize(Integer.parseInt(env
+				.getRequiredProperty(PROPERTY_NAME_C3P0_MAX_SIZE)));
+		dataSource.setMaxIdleTime(Integer.parseInt(env
+				.getRequiredProperty(PROPERTY_NAME_C3P0_MAX_IDLETIME)));
+		dataSource.setMaxStatements(Integer.parseInt(env
+				.getRequiredProperty(PROPERTY_NAME_C3P0_MAX_STATEMENTS)));
+		
 		return dataSource;
 	}
 

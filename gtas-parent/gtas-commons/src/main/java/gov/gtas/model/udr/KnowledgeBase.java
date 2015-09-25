@@ -42,11 +42,11 @@ public class KnowledgeBase extends BaseEntity {
 	private String kbName;
 	
 	@Lob @Basic(fetch=FetchType.EAGER)
-	@Column(name="KB_BLOB", columnDefinition="BLOB NOT NULL")
+	@Column(name="KB_BLOB", nullable=false, length=2000000)
 	private byte[] kbBlob;
 	
 	@Lob @Basic(fetch=FetchType.EAGER)
-	@Column(name="RL_BLOB", columnDefinition="BLOB NOT NULL")
+	@Column(name="RL_BLOB", nullable=false, length=1000000)
 	private byte[] rulesBlob;
 	
 	@Temporal(TemporalType.TIMESTAMP)
