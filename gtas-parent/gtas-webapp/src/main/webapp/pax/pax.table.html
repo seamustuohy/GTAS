@@ -1,49 +1,7 @@
-<h3><span class="glyphicon glyphicon-user glyphiconFlightPax img-circle"></span>Passengers</h3>
-
-<div ng-show="loading" class="jumbotron" style="background-color: #FFFFFF">
-	<div class="modal-wrapper">
-		<img class="full" ng-show="loading" src="resources/img/loading_default_en.gif"/>
-	</div>
-</div>
 <md-content layout-padding>
 	<md-input-container flex  ng-show="parent === 'flights'">
 		<div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="flights.all" ></div>
 	</md-input-container>
-
-<div class="container">
-		<div class="row">
-				<div class="col-sm-6 col-md-5 col-md-offset-3 col-lg-6 col-lg-offset-6" style="max-height: 50px;">
-					<div class="col-md-4" style="max-height: 40px;">
-						<span>ETA Start Date:</span>
-
-						<p class="input-group">
-							<input placeholder="Start Date:" type="text" ng-model="startDate" id="start-date" class="datepicker" />
-						</p>
-
-					</div>
-
-					<div class="col-md-4" style="max-height: 40px;">
-						<span>End Date:</span>
-						<p class="input-group">
-							<input placeholder="End Date:" type="text" ng-model="endDate" id="end-date" class="datepicker" />
-						</p>
-					</div>
-
-					<div class="col-md-4" style="max-height: 40px;  padding-top: 17px;">
-						<span></span>
-						<p class="input-group">
-				        		<span class="input-group-btn">
-
-				        		<button type="button" class="btn btn-default start round col-md-8" ng-click="refreshListing()"
-										style="border-radius: 24px;background: linear-gradient(to bottom,  #fff 50%,#d7d2cc 100%);">Refresh</button>
-
-				        		</span>
-						</p>
-					</div>
-				    
-				</div>
-		</div>
-</div>
 
 <div style="padding: 15px;"></div>
 
