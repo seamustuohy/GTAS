@@ -78,12 +78,12 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
         priority: 1
       }
     },
+    {"name": "passengerType", "displayName": "Type", width: 50},
     {"name": "firstName", "displayName": "First Name", width: 150},
     {"name": "middleName", "displayName": "Middle", width: 100},
     {"name": "flightNumber", "displayName": "Flight", width: 90},
-    {"name": "flightETA", "displayName": "ETA", width: 175},
-    {"name": "flightETD", "displayName": "ETD", width: 175},
-    {"name": "passengerType", "displayName": "Type", width: 50},
+    {"name": "eta", "displayName": "ETA", width: 175},
+    {"name": "etd", "displayName": "ETD", width: 175},
     {"name": "gender", "displayName": "G", width: 50},
     {"name": "dob", "displayName": "DOB", field: 'dob', cellFilter: 'date', width: 175},
     {"name": "citizenshipCountry", "displayName": "CTZ", width: 75},

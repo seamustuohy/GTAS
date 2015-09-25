@@ -1,6 +1,7 @@
 package gov.gtas.services;
 
 import gov.gtas.model.Passenger;
+import gov.gtas.vo.passenger.PassengerVo;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,8 @@ public interface PassengerService {
     public Passenger update(Passenger passenger) ;
     public Passenger findById(Long id);
     public Page<Passenger> findAll(int pageNumber, int pageSize);
+    public List<PassengerVo> findAllWithFlightInfo(int pageNumber, int pageSize);
+    
     public Passenger getPassengerByName(String firstName,String lastName);
     public List<Passenger> getPassengersByLastName(String lastName);
     public List<Passenger> getPassengersByFlightId(Long flightId);    

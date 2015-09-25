@@ -1,19 +1,22 @@
 package gov.gtas.services;
 
-import gov.gtas.model.Flight;
-import gov.gtas.model.Passenger;
-import gov.gtas.repository.PassengerRepository;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import gov.gtas.model.Flight;
+import gov.gtas.model.Passenger;
+import gov.gtas.repository.PassengerRepository;
+import gov.gtas.vo.passenger.PassengerVo;
 
 @Service
 public class PassengerServiceImpl implements PassengerService {
@@ -46,8 +49,30 @@ public class PassengerServiceImpl implements PassengerService {
     @Transactional
     public Page<Passenger> findAll(int pageNumber, int pageSize) {
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
-//        return passengerRespository.findAll(new PageRequest(pn, pageSize));
-        return passengerRespository.getAllPassengers(new PageRequest(pn, pageSize));
+        return passengerRespository.findAll(new PageRequest(pn, pageSize));
+    }
+
+    @Override
+    @Transactional
+    public List<PassengerVo> findAllWithFlightInfo(int pageNumber, int pageSize) {
+        int pn = pageNumber > 0 ? pageNumber - 1 : 0;
+        List<Object[]> results = passengerRespository.getAllPassengers2(new PageRequest(pn, pageSize));
+        List<PassengerVo> rv = new ArrayList<>();
+        for (Object[] objs : results) {
+            Passenger p = (Passenger)objs[0];
+            Flight f = (Flight)objs[1];
+            PassengerVo vo = new PassengerVo();
+            BeanUtils.copyProperties(p, vo);
+            
+            // grab flight info
+            vo.setFlightId(f.getId());
+            vo.setFlightNumber(f.getFlightNumber());
+            vo.setCarrier(f.getCarrier());
+            vo.setEtd(f.getEtd());
+            vo.setEta(f.getEta());
+            rv.add(vo);
+        }
+        return rv;
     }
 
 	@Override

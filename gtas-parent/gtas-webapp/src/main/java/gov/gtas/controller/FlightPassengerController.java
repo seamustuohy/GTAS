@@ -120,8 +120,9 @@ public class FlightPassengerController {
             @RequestParam(value = "pageNumber", required = true) String pageNumber,
             @RequestParam(value = "pageSize", required = true) String pageSize) {
             
-        Page<Passenger> results = paxService.findAll(Integer.valueOf(pageNumber), Integer.valueOf(pageSize));
-        return createPassengerPage(results);
+        List<PassengerVo> vos  = paxService.findAllWithFlightInfo(Integer.valueOf(pageNumber), Integer.valueOf(pageSize));
+        PassengersPage page = new PassengersPage(vos, -1);
+        return page;
     }
     
     private PassengersPage createPassengerPage(Page<Passenger> results) {
