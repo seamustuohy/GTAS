@@ -94,7 +94,7 @@ public class PassengerDetailsController {
         vo.setSeat(t.getSeat());
         vo.setEmbarkation(t.getEmbarkation());
         vo.setEmbarkCountry(t.getEmbarkCountry());
-        vo.setGender(t.getGender().toString());
+        vo.setGender(t.getGender() != null ? t.getGender().toString() : "");
         vo.setResidencyCountry(t.getResidencyCountry());
         vo.setSuffix(t.getSuffix());
         vo.setTitle(t.getTitle());
