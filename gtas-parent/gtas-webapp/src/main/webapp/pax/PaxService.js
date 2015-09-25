@@ -10,15 +10,13 @@ app.service("paxService", function ($rootScope, $http, $q) {
         broadcastRuleID: broadcastRuleID
     });
     
-    function getPax(flightId) {
+    function getPax(flightId, paginationOptions) {
         console.log('paxService->getPax');
-        console.log(flightId);
+        console.log('flight id: ' + flightId);
         var request = $http({
             method: "get",
             url: "/gtas/flights/flight/" + flightId + "/passengers",
-            params: {
-                action: "get"
-            }
+            params: { pageNumber: paginationOptions.pageNumber, pageSize: paginationOptions.pageSize }
         });
         return (request.then(handleSuccess, handleError));
     }

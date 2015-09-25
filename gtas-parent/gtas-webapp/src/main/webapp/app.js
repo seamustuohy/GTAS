@@ -95,8 +95,8 @@ app.config(function ($stateProvider) {
                         passengers: function ($http, $stateParams, paxService) {
                             console.log($stateParams);
                             var id= $stateParams.flight.id;
-                            console.log(id);
                             //return paxService.getPax(id);
+                            // compute passenger list in the controller
                             return null;
                         }
                     }
@@ -139,7 +139,7 @@ app.config(function ($stateProvider) {
                 templateUrl: 'pax/pax.table.html',
                 resolve: {
                     passengers: function ($http, $stateParams, paxService) {
-                        return paxService.getPax(1);
+                        return null;  //paxService.getPax(1);
                     }
                 }
             }

@@ -100,9 +100,9 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     console.log('requesting pax page #' + paginationOptions.pageNumber);
     if ($scope.parent === 'flights') {
       //$scope.passengerGrid.data = passengers;
-      paxService.getPax($stateParams.flight.id).then(function (myData) {
-        //$scope.passengerGrid.totalItems = myData.totalPassengers;
-        $scope.passengerGrid.data = myData;
+      paxService.getPax($stateParams.flight.id, paginationOptions).then(function (myData) {
+        $scope.passengerGrid.totalItems = myData.totalPassengers;
+        $scope.passengerGrid.data = myData.passengers;
       });
       
     } else {
@@ -112,7 +112,6 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
       });
     }   
   };
-
 
   getPage();
 
