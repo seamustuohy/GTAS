@@ -86,7 +86,6 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     {"name": "gender", "displayName": "G", width: 50},
     {"name": "dob", "displayName": "DOB", field: 'dob', cellFilter: 'date', width: 175},
     {"name": "citizenshipCountry", "displayName": "CTZ", width: 75},
-    {"name": "passengerType", "displayName": "T", width: 100},
     {"name": "documentType", "displayName": "T", width: 50},
     {"name": "seat", "displayName": "Seat", width: 75}
   ];
