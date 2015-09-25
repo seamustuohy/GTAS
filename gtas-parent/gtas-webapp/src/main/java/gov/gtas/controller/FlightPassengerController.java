@@ -129,6 +129,7 @@ public class FlightPassengerController {
         for (Passenger p : results) {
             PassengerVo vo = new PassengerVo();
             BeanUtils.copyProperties(p, vo);
+            vo.setFlightId(Long.valueOf(1));
             for (Document d : p.getDocuments()) {
                 DocumentVo docVo = new DocumentVo();
                 BeanUtils.copyProperties(d, docVo);
