@@ -8,23 +8,23 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
             temp = $.extend({}, obj.summary, {id: obj.id});
             data.push(temp);
         });
-        $scope.gridOpts.data = data;
+        $scope.riskCriteriaGrid.data = data;
     };
 
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope });
     $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
 
-    $scope.gridOpts = gridOptionsLookupService.defaultGridOptions();
-    $scope.gridOpts.columnDefs = gridOptionsLookupService.getLookupColumnDefs('riskCriteria');
-    $scope.gridOpts.exporterCsvFilename = 'riskCriteria.csv';
-    $scope.gridOpts.exporterPdfHeader = {text: "Risk Criteria", style: 'headerStyle'};
+    $scope.riskCriteriaGrid = gridOptionsLookupService.getGridOptions('riskCriteria');
+    $scope.riskCriteriaGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs('riskCriteria');
+    $scope.riskCriteriaGrid.exporterCsvFilename = 'riskCriteria.csv';
+    $scope.riskCriteriaGrid.exporterPdfHeader = {text: "Risk Criteria", style: 'headerStyle'};
 
     jqueryQueryBuilderService.getList().then(function (myData) {
         $scope.setData(myData.result);
     });
 
     $scope.loadRuleOnSelection = function (row) {
-        $scope.selectedIndex = $scope.gridOpts.data.indexOf(row.entity);
+        $scope.selectedIndex = $scope.riskCriteriaGrid.data.indexOf(row.entity);
         jqueryQueryBuilderService.loadRuleById(row.entity.id).then(function (myData) {
             var result = myData.result;
             $scope.ruleId = result.id;
@@ -33,10 +33,8 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
         });
     };
 
-    $scope.gridOpts.onRegisterApi = $scope.rowSelection;
-
+    $scope.riskCriteriaGrid.onRegisterApi = $scope.rowSelection;
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
-
     $scope.summaryDefaults = {title: '', description: null, enabled: true};
 
 //    $scope.newRule();

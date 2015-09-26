@@ -10,7 +10,7 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
         myData.forEach(function (obj) {
             data.push(obj);
         });
-        $scope.gridOpts.data = data;
+        $scope.queriesGrid.data = data;
     };
 
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope });
@@ -18,13 +18,13 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
     jqueryQueryBuilderService.init('querybuilder');
 
-//    $scope.resultsGrid = $.extend({}, $scope.gridOpts);
+//    $scope.resultsGrid = $.extend({}, $scope.queriesGrid);
 //    $scope.resultsGrid.enableColumnResizing = true;
 
-    $scope.gridOpts = gridOptionsLookupService.defaultGridOptions();
-    $scope.gridOpts.columnDefs = gridOptionsLookupService.getLookupColumnDefs('queries');
-    $scope.gridOpts.exporterCsvFilename = 'MySavedQueries.csv';
-    $scope.gridOpts.exporterPdfHeader = { text: "My Saved Queries", style: 'headerStyle' };
+    $scope.queriesGrid = gridOptionsLookupService.getGridOptions('queries');
+    $scope.queriesGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs('queries');
+    $scope.queriesGrid.exporterCsvFilename = 'MySavedQueries.csv';
+    $scope.queriesGrid.exporterPdfHeader = { text: "My Saved Queries", style: 'headerStyle' };
 
 
     jqueryQueryBuilderService.getList().then(function (myData) {
@@ -34,7 +34,7 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
     $scope.hideGrid = true;
 
     $scope.loadRule = function () {
-        var obj = $scope.gridOpts.data[$scope.selectedIndex];
+        var obj = $scope.queriesGrid.data[$scope.selectedIndex];
         $scope.hideGrid = true;
         $scope.ruleId = obj.id;
         $scope.loadSummary({title: obj.title, description: obj.description });
@@ -44,11 +44,11 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
     $scope.buildAfterEntitiesLoaded();
 
     $scope.loadRuleOnSelection = function (row) {
-        $scope.selectedIndex = $scope.gridOpts.data.indexOf(row.entity);
+        $scope.selectedIndex = $scope.queriesGrid.data.indexOf(row.entity);
         $scope.loadRule();
     };
 
-    $scope.gridOpts.onRegisterApi = $scope.rowSelection;
+    $scope.queriesGrid.onRegisterApi = $scope.rowSelection;
 
     $scope.summaryDefaults = {description: null, title: ''};
     $scope.ruleId = null;
@@ -83,6 +83,17 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
         jqueryQueryBuilderService.save(queryObject).then($scope.updateQueryBuilderOnSave);
     };
+
+    $scope.executeQuery = function (passenger) {
+        selectedPassenger = passenger;
+        $mdDialog.show({
+            controller: PassengerDetailsDialogController,
+            templateUrl: 'pax/pax.detail.html',
+            parent: angular.element(document.body),
+            clickOutsideToClose: true
+        });
+    };
+
 
     $scope.executeQuery = function (viewType) {
         var qbData = $scope.$builder.queryBuilder('getDrools');

@@ -68,67 +68,45 @@ app.config(function ($stateProvider) {
         templateUrl: 'flights/flights.header.html',
         controller: 'FlightsController'
     }).state('flights.all', {
-            url: '/',
-            sticky: true,
-            dsr: true,
-            views: {
-                'header@flights': {
-                    templateUrl: 'partials/flights-all-header.html'
-                },
-                "content@flights": {
-                    templateUrl: 'flights/flights.html'
-                }
-            }
-        }).state('flights.passengers', {
-            url: '/passengers',
-            params: {
-                parent: null,
-                flight: null
+        url: '/',
+        sticky: true,
+        dsr: true,
+        views: {
+            'header@flights': {
+                templateUrl: 'partials/flights-all-header.html'
             },
-            sticky: true,
-            dsr: true,
-            views: {
-                "content@flights": {
-                    controller: 'PaxController',
-                    templateUrl: 'pax/pax.table.html',
-                    resolve: {
-                        passengers: function ($http, $stateParams, paxService) {
-                            console.log($stateParams);
-                            var id= $stateParams.flight.id;
-                            //return paxService.getPax(id);
-                            // compute passenger list in the controller
-                            return null;
-                        }
+            "content@flights": {
+                templateUrl: 'flights/flights.html'
+            }
+        }
+    }).state('flights.passengers', {
+        url: '/passengers',
+        params: {
+            parent: null,
+            flight: null
+        },
+        sticky: true,
+        dsr: true,
+        views: {
+            "content@flights": {
+                controller: 'PaxController',
+                templateUrl: 'pax/pax.table.html',
+                resolve: {
+                    passengers: function ($http, $stateParams, paxService) {
+                        console.log($stateParams);
+                        var id= $stateParams.flight.id;
+                        //return paxService.getPax(id);
+                        // compute passenger list in the controller
+                        return null;
                     }
                 }
             }
-        }).state('flights.passengers.detail', {
-            url: '/detail',
-            params: {
-                parent: null,
-                flight: null,
-                id:null,
-                flightId:null
-            },
-            sticky: true,
-            dsr: true,
-            views: {
-                "content@flights": {
-                    controller: 'PaxDetailController',
-                    templateUrl: 'pax/pax.detail.html',
-                    resolve: {
-                        passengers: function ($http, $stateParams, paxDetailService) {
-                            return paxDetailService.getPaxDetail($http, $stateParams);
-                        }
-                    }
-                }
-            }
-        }).state('pax', {
+        }
+    }).state('pax', {
         url: '/passengers',
         controller: 'PaxMainController',
         templateUrl: 'pax/pax.header.html'
-        })
-     .state('pax.all', {
+    }).state('pax.all', {
         url: '/',
         sticky: true,
         dsr: true,
@@ -140,21 +118,6 @@ app.config(function ($stateProvider) {
                 resolve: {
                     passengers: function ($http, $stateParams, paxService) {
                         return null;  //paxService.getPax(1);
-                    }
-                }
-            }
-        }
-    }).state('pax.detail', {
-        url: '/:id/:flightId',
-        sticky: true,
-        dsr: true,
-        views: {
-            "content@pax": {
-                controller: 'PaxDetailController',
-                templateUrl: 'pax/pax.detail.html',
-                resolve: {
-                    passengers: function ($http, $stateParams, paxDetailService) {
-                        return paxDetailService.getPaxDetail($http, $stateParams);
                     }
                 }
             }

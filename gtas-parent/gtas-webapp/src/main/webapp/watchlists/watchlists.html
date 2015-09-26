@@ -89,9 +89,9 @@
         <md-tab ng-repeat="tab in tabs" label="{{tab.title}}" md-on-select="updateGrid(tab.title)"></md-tab>
     </md-tabs>
     <div ng-if="activeTab !== 'create-new'">
-        <div ui-grid="gridOpts" ui-grid-edit ui-grid-row-edit ui-grid-cellNav ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
-        <button type="button" class="md-raised md-warn md-button md-default-theme pull-right" data-ng-click="removeRow()" ng-disabled="rowSelected !== true"><span class="glyphicon glyphicon-remove"></span> Remove</button>
-        <button type="button" class="md-raised md-button md-default-theme pull-right" data-ng-click="Add()"><span class="glyphicon glyphicon-plus"></span> Add New</button>
+        <div ui-grid="watchlistGrid" ui-grid-edit ui-grid-row-edit ui-grid-cellNav ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
+        <md-button class="md-raised md-warn pull-right" ng-click="removeRow()" ng-disabled="rowSelected !== true"><span class="glyphicon glyphicon-remove"></span> Remove</md-button>
+        <md-button class="md-raised pull-right" ng-click="Add()"><span class="glyphicon glyphicon-plus"></span> Add New</md-button>
     </div>
 </section>
 <div>
@@ -103,5 +103,5 @@
         </div>
         <div class="please-wait">Please Wait...</div>
     </spinner>
-    <button type="button" data-ng-click="updateWatchlistService()" ng-disabled="updating === true" class="md-raised md-primary md-button md-default-theme"><span class="glyphicons glyphicon-cloud"></span> Update Watchlist Service</button>
+    <md-button ng-click="updateWatchlistService()" ng-disabled="updating === true" class="md-raised md-primary"><span class="glyphicons glyphicon-cloud"></span> Update Watchlist Service</md-button>
 </div>

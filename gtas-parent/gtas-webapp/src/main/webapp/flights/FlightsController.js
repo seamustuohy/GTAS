@@ -1,91 +1,55 @@
-app.controller('FlightsController', function ($scope, $http, flightService,$state,$interval,$stateParams) {
+app.controller('FlightsController', function ($scope, flightService, $state, $interval, $stateParams, gridOptionsLookupService) {
+    'use strict';
+    var paginationOptions = gridOptionsLookupService.paginationOptions,
+        getPage = function () {
+            console.log('requesting page #' + paginationOptions.pageNumber);
+            flightService.getFlights(paginationOptions).then(function (page) {
+                $scope.flightsGrid.totalItems = page.totalFlights;
+                $scope.flightsGrid.data = page.flights;
 
-  $scope.selectedFlight=$stateParams.flight;
+                $interval(function () {
+                    $scope.gridApi.selection.selectRow($scope.flightsGrid.data[0]);
+                }, 0, 1);
+            });
+        };
 
-  var paginationOptions = {
-    pageNumber: 1,
-    pageSize: 10,
-    sort: null
-  };
-  
-  $scope.gridOptions = { 
-    enableSorting: false,
-    multiSelect: false,
-    enableFiltering: false,     
-    enableRowSelection: true, 
-    enableSelectAll: false,
-    enableRowHeaderSelection: false,
-    enableGridMenu: false,  	
-    paginationPageSizes: [10, 25, 50],
-    paginationPageSize: 10,
-    useExternalPagination: true,
-    useExternalSorting: true,
-    useExternalFiltering: true,
-    
-    onRegisterApi: function(gridApi) {
-      $scope.gridApi = gridApi;
-      
-      gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
-        if (sortColumns.length == 0) {
-          paginationOptions.sort = null;
-        } else {
-          paginationOptions.sort = sortColumns[0].sort.direction;
-        }
-        getPage();
-      });      
-      
-      gridApi.core.on.filterChanged( $scope, function() {
-        var grid = this.grid;
-      });
-      
-      gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-        paginationOptions.pageNumber = newPage;
-        paginationOptions.pageSize = pageSize;
-        getPage();
-      });
+    $scope.selectedFlight = $stateParams.flight;
+    $scope.flightsGrid = gridOptionsLookupService.getGridOptions('flights');
+    $scope.flightsGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs('flights');
+    $scope.flightsGrid.onRegisterApi = function (gridApi) {
+        $scope.gridApi = gridApi;
 
-      gridApi.selection.on.rowSelectionChanged($scope,function(row){
-        $scope.selectedFlight=row.entity;
-        console.log($scope.selectedFlight);
-      })
-    }
-  };
+        gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
+            if (sortColumns.length === 0) {
+                paginationOptions.sort = null;
+            } else {
+                paginationOptions.sort = sortColumns[0].sort.direction;
+            }
+            getPage();
+        });
 
-  $scope.gridOptions.columnDefs = [
-    { name: 'P', field: 'passengerCount', width: 50, enableFiltering: false,
-        cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.passengerNav(row)">{{COL_FIELD}}</button> ' ,
-    },
-    { name: 'H', field: 'ruleHitCount', width: 50, enableFiltering: false },
-    { name: 'L', field: 'listHitCount', width: 50, enableFiltering: false },
-    { name: 'Carrier', field: 'carrier', width: 75 },
-    { name: 'Flight', field: 'flightNumber', width: 75 },
-    { name: 'Dir', field: 'direction', width: 50 },    
-    { name: 'ETA', displayName: 'ETA', field: 'eta' },
-    { name: 'ETD', displayName: 'ETD', field: 'etd' },    
-    { name: 'Origin', field: 'origin' },
-    { name: 'OriginCountry', displayName: "Country", field: 'originCountry' },
-    { name: 'Dest', field: 'destination' },
-    { name: 'DestCountry', displayName: "Country", field: 'destinationCountry' }
-  ];
+        gridApi.core.on.filterChanged($scope, function () {
+            var grid = this.grid;
+        });
 
-  $scope.passengerNav = function(row){
-    $scope.selectedFlight=row.entity;
-    $state.go('flights.passengers',{ parent: 'flights', flight: $scope.selectedFlight });
-  };
+        gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
+            paginationOptions.pageNumber = newPage;
+            paginationOptions.pageSize = pageSize;
+            getPage();
+        });
 
-  var getPage = function() {
-    console.log('requesting page #' + paginationOptions.pageNumber);
-    flightService.getFlights(paginationOptions).then(function (page) {
-      $scope.gridOptions.totalItems = page.totalFlights;
-      $scope.gridOptions.data = page.flights;
+        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+            $scope.selectedFlight = row.entity;
+            console.log($scope.selectedFlight);
+        });
+    };
 
-      $interval( function() {
-          $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
-      }, 0, 1);
-    });
-  };
-  
-  getPage();
+    $scope.passengerNav = function (row) {
+        $scope.selectedFlight = row.entity;
+        $state.go('flights.passengers', {parent: 'flights', flight: $scope.selectedFlight});
+    };
 
-  $state.go('flights.all');
+    getPage();
+
+    $state.go('flights.all');
 });

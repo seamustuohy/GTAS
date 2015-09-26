@@ -1,7 +1,7 @@
 app.controller('WatchListController', function ($scope, gridOptionsLookupService, $q, watchListService, $interval, spinnerService, $timeout) {
     'use strict';
     var watchlist = {}, tabs = [];
-    $scope.gridOpts = gridOptionsLookupService.defaultGridOptions();
+    $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
 
     watchlist.types = {
         "Document": {
@@ -39,17 +39,17 @@ app.controller('WatchListController', function ($scope, gridOptionsLookupService
         }
     };
 
-    $scope.gridOpts.enableCellEditOnFocus = true;
-    $scope.gridOpts.columnDefs = watchlist.types.Document.columns;
+    $scope.watchlistGrid.enableCellEditOnFocus = true;
+    $scope.watchlistGrid.columnDefs = watchlist.types.Document.columns;
 
     $scope.updateGrid = function (listName) {
         watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
             var obj, data = [], items = response.data.result.watchlistItems;
             $scope.activeTab = listName;
-            $scope.gridOpts.columnDefs = watchlist.types[listName].columns;
-            $scope.gridOpts.exporterCsvFilename = 'watchlist-' + listName + '.csv';
+            $scope.watchlistGrid.columnDefs = watchlist.types[listName].columns;
+            $scope.watchlistGrid.exporterCsvFilename = 'watchlist-' + listName + '.csv';
             if (items === undefined) {
-                $scope.gridOpts.data = [];
+                $scope.watchlistGrid.data = [];
                 return false;
             }
             items.forEach(function (item) {
@@ -59,7 +59,7 @@ app.controller('WatchListController', function ($scope, gridOptionsLookupService
                 });
                 data.push(obj);
             });
-            $scope.gridOpts.data = data;
+            $scope.watchlistGrid.data = data;
         });
     };
 
@@ -71,10 +71,10 @@ app.controller('WatchListController', function ($scope, gridOptionsLookupService
 
     $scope.Add = function () {
         var starterData = {};
-        $scope.gridOpts.columnDefs.forEach(function (field) {
+        $scope.watchlistGrid.columnDefs.forEach(function (field) {
             starterData[field.name] = null;
         });
-        $scope.gridOpts.data.unshift(starterData);
+        $scope.watchlistGrid.data.unshift(starterData);
     };
 
     $scope.saveRow = function (rowEntity) {
@@ -117,7 +117,7 @@ app.controller('WatchListController', function ($scope, gridOptionsLookupService
         }
     };
 
-    $scope.gridOpts.onRegisterApi = function (gridApi) {
+    $scope.watchlistGrid.onRegisterApi = function (gridApi) {
         $scope.gridApi = gridApi;
         gridApi.selection.on.rowSelectionChanged($scope, function (row) {
             $scope.rowSelected = row.isSelected;
@@ -130,10 +130,10 @@ app.controller('WatchListController', function ($scope, gridOptionsLookupService
         var entity = watchlist.types[$scope.activeTab].entity,
             selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
 
-        angular.forEach(selectedRowEntities, function (rowEntity) {
-            var rowIndexToDelete = $scope.gridOpts.data.indexOf(rowEntity);
+        selectedRowEntities.forEach(function (rowEntity) {
+            var rowIndexToDelete = $scope.watchlistGrid.data.indexOf(rowEntity);
             watchListService.deleteItem($scope.activeTab, entity, rowEntity.id).then(function () {
-                $scope.gridOpts.data.splice(rowIndexToDelete, 1);
+                $scope.watchlistGrid.data.splice(rowIndexToDelete, 1);
             });
         });
     };
