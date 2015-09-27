@@ -1,7 +1,6 @@
 package gov.gtas.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,7 +9,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Flight;
@@ -56,7 +54,7 @@ public class PassengerServiceImpl implements PassengerService {
     @Transactional
     public List<PassengerVo> findAllWithFlightInfo(int pageNumber, int pageSize) {
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
-        List<Object[]> results = passengerRespository.getAllPassengers2(new PageRequest(pn, pageSize));
+        List<Object[]> results = passengerRespository.getAllPassengersAndFlights(new PageRequest(pn, pageSize));
         List<PassengerVo> rv = new ArrayList<>();
         for (Object[] objs : results) {
             Passenger p = (Passenger)objs[0];
@@ -109,26 +107,10 @@ public class PassengerServiceImpl implements PassengerService {
 
 	@Override
 	@Transactional
-	public Passenger getPassengerByName(String firstName, String lastName) {
-		Passenger passenger = null;
-		List<Passenger> passengerList = passengerRespository.getPassengerByName(firstName, lastName);
-		if(passengerList != null && passengerList.size() > 0)
-			passenger = passengerList.get(0);
-		return passenger;
-	}
-
-	@Override
-	@Transactional
 	public List<Passenger> getPassengersByLastName(String lastName) {
 		List<Passenger> passengerList = passengerRespository.getPassengersByLastName(lastName);
 		return passengerList;
 	}
-
-    @Override
-    @Transactional
-    public List<Passenger> getPassengersByFlightId(Long flightId) {
-        return passengerRespository.getPassengersByFlightId(flightId);
-    }
 
     @Override
     @Transactional
@@ -137,28 +119,4 @@ public class PassengerServiceImpl implements PassengerService {
         Page<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId, new PageRequest(pn, pageSize));
         return passengerList;
     }
-
-    @Override
-    @Transactional
-    public List<Passenger> getPassengersFromUpcomingFlights(Pageable pageable) {
-        List<Passenger> passengerList = passengerRespository.getPassengersFromUpcomingFlights(pageable).getContent();
-        return passengerList;
-    }
-    
-	@Override
-    @Transactional
-    public List<Passenger> getPassengersByFlightDates(Date startDate, Date endDate) {
-        List<Passenger> passengerList = passengerRespository.getPassengersByFlightDates(startDate, endDate);
-        return passengerList;
-    }
-    
-    
-    @Override
-    @Transactional
-    public List<Passenger> getPaxByLastName(String lastName, Pageable pageable) {
-        List<Passenger> passengerList = passengerRespository.getPaxByLastName(lastName, pageable).getContent();
-        return passengerList;
-    }
-    
-    
 }
