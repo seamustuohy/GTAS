@@ -85,6 +85,14 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
     });
   };
   
+  $scope.getTableHeight = function() {
+     var rowHeight = 30;
+     var headerHeight = 30;
+     return {
+        height: ($scope.gridOptions.data.length * rowHeight + 2 * headerHeight) + "px"
+     };
+  };  
+  
   getPage();
 
   $state.go('flights.all');

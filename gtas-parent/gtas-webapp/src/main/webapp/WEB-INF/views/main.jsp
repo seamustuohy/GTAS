@@ -28,7 +28,6 @@
 	<li><a href="logout.action">LOGOUT</a></li>
 	</ul>
 		<md-tabs md-stretch-tabs md-selected="selectedIndex">
-		<md-tab label="Dashboard"></md-tab>
 		<sec:authorize access="hasAnyAuthority('VIEW_FLIGHT_PASSENGERS','ADMIN')">
 			<md-tab label="Flights"></md-tab>
 			<md-tab label="Passengers"></md-tab>

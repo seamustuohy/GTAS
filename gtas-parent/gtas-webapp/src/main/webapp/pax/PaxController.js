@@ -131,6 +131,14 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     }        
   }
 
+  $scope.getTableHeight = function() {
+     var rowHeight = 30;
+     var headerHeight = 30;
+     return {
+        height: ($scope.passengerGrid.data.length * rowHeight + 2 * headerHeight) + "px"
+     };
+  };  
+
   getPage();
 
   // removed this from grid options for now
