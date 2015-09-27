@@ -1,6 +1,5 @@
-app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jqueryQueryBuilderWidget, $filter,
-                                          $q, paxService, sharedPaxData, $stateParams, $state,
-                                          $timeout, $interval, uiGridConstants,passengers) {
+app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jqueryQueryBuilderWidget,
+                                          paxService, sharedPaxData, $stateParams, $state, uiGridConstants) {
   var paginationOptions = {
     pageNumber: 1,
     pageSize: 10,
@@ -24,11 +23,17 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     return $scope.list(index);
   };
     
+  var ruleGridColumns = [
+    { name: 'ruleId', "width": 60, displayName: 'Id' },
+    { name: 'ruleTitle', displayName: 'Title' },
+    { name: 'ruleConditions', displayName: 'Conditions' }
+  ];
+
   $scope.passengerGrid = {
     enableSorting: false,
     multiSelect: false,
     enableFiltering: false,     
-    enableRowSelection: true, 
+    enableRowSelection: false, 
     enableSelectAll: false,
     enableGridMenu: false,    
     paginationPageSizes: [10, 25, 50],
@@ -36,7 +41,8 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
-    saveGroupingExpandedStates: true,
+    
+    expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>',
     
     onRegisterApi: function (gridApi) {
       $scope.gridApi = gridApi;
@@ -48,7 +54,13 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
       });
 
       gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+        paxService.getRuleHits(row.entity.id).then(function (data) {
+          console.log('get rule hits for pax ' + row.entity.id);
+          row.entity.subGridOptions.data = data;
+        });
+
         // show the detail screen
+        // will go away once anthony implements modal
         var title;
         if (row.isSelected) {
           if( $scope.parent==='flights') {
@@ -84,7 +96,7 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     {"name": "eta", "displayName": "ETA", width: 175, visible: ($scope.parent !== 'flights') },
     {"name": "etd", "displayName": "ETD", width: 175, visible: ($scope.parent !== 'flights') },
     {"name": "gender", "displayName": "G", width: 50},
-    {"name": "dob", "displayName": "DOB", field: 'dob', cellFilter: 'date', width: 175},
+    {"name": "dob", "displayName": "DOB", cellFilter: 'date', width: 175},
     {"name": "citizenshipCountry", "displayName": "CTZ", width: 75},
     {"name": "documentType", "displayName": "T", width: 50},
     {"name": "seat", "displayName": "Seat", width: 75}
@@ -93,19 +105,31 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
   var getPage = function() {
     console.log('requesting pax page #' + paginationOptions.pageNumber);
     if ($scope.parent === 'flights') {
-      //$scope.passengerGrid.data = passengers;
-      paxService.getPax($stateParams.flight.id, paginationOptions).then(function (myData) {
-        $scope.passengerGrid.totalItems = myData.totalPassengers;
-        $scope.passengerGrid.data = myData.passengers;
+      paxService.getPax($stateParams.flight.id, paginationOptions).then(function (data) {
+        setSubGridOptions(data);
+        $scope.passengerGrid.totalItems = data.totalPassengers;
+        $scope.passengerGrid.data = data.passengers;
       });
       
     } else {
-      paxService.getAllPax(paginationOptions).then(function (myData) {
-        $scope.passengerGrid.totalItems = myData.totalPassengers;
-        $scope.passengerGrid.data = myData.passengers;
+      paxService.getAllPax(paginationOptions).then(function (data) {
+        setSubGridOptions(data);
+        $scope.passengerGrid.totalItems = data.totalPassengers;
+        $scope.passengerGrid.data = data.passengers;
       });
     }   
   };
+  
+  var setSubGridOptions = function(data) {
+    for (i = 0; i < data.passengers.length; i++) {
+      var rowScope = data.passengers[i];
+      rowScope.subGridOptions = {
+        appScopeProvider: $scope,
+        columnDefs: ruleGridColumns,
+        data: []
+      }
+    }        
+  }
 
   getPage();
 
@@ -146,39 +170,7 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     exporterCsvFilename: 'Passengers.csv',
     exporterPdfHeader: {text: "Passengers", style: 'headerStyle'},
   };
-  
-  //------- Pre-Refactor-------------------
-  //Function to get Rule Hits per Passenger
-  $scope.getRuleHits = function (passengerId) {
-      var j, i;
-      $scope.isExpanded = !$scope.isExpanded;
-      if (!$scope.isExpanded) {
-          paxService.getRuleHits(passengerId).then(function (myData) { // Begin
-
-              $scope.paxHitList = [];
-              $scope.tempPaxHitDetail = [];
-              $scope.tempPaxHitList = [];
-              var tempObj = [];
-
-              for (j = 0; j < myData.length; j++) {
-                  $scope.tempPaxHitList = myData[j].hitsDetailsList;
-                  for (i = 0; i < $scope.tempPaxHitList.length; i++) {
-                      tempObj = $scope.tempPaxHitList[i];
-                      tempObj.ruleTitle = myData[j].ruleTitle;
-                      tempObj.ruleConditions = tempObj.ruleConditions.substring(0, (tempObj.ruleConditions.length - 3));
-                      $scope.tempPaxHitDetail[i] = tempObj;
-                  }
-
-                  $scope.paxHitList.push($scope.tempPaxHitDetail.pop());
-                  $scope.tempPaxHitDetail = [];
-              }
-          }); // END of paxService getRuleHits
-      }
-  };
 });
-
-
-
 
 
 
