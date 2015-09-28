@@ -1,4 +1,4 @@
-app.controller('FlightsController', function ($scope, $http, flightService,$state,$interval,$stateParams) {
+app.controller('FlightsController', function ($scope, $http, flightService, gridService, $state, $interval, $stateParams) {
 
   $scope.selectedFlight=$stateParams.flight;
 
@@ -7,7 +7,7 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
     pageSize: 10,
     sort: null
   };
-  
+
   $scope.gridOptions = { 
     enableSorting: false,
     multiSelect: false,
@@ -55,8 +55,8 @@ app.controller('FlightsController', function ($scope, $http, flightService,$stat
     { name: 'P', field: 'passengerCount', width: 50, enableFiltering: false,
         cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.passengerNav(row)">{{COL_FIELD}}</button> ' ,
     },
-    { name: 'H', field: 'ruleHitCount', width: 50, enableFiltering: false },
-    { name: 'L', field: 'listHitCount', width: 50, enableFiltering: false },
+    { name: 'H', field: 'ruleHitCount', width: 50, enableFiltering: false, cellClass: gridService.colorHits },
+    { name: 'L', field: 'listHitCount', width: 50, enableFiltering: false, cellClass: gridService.colorHits },
     { name: 'Carrier', field: 'carrier', width: 75 },
     { name: 'Flight', field: 'flightNumber', width: 75 },
     { name: 'Dir', field: 'direction', width: 50 },    

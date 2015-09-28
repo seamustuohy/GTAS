@@ -10,9 +10,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import gov.gtas.enumtype.HitTypeEnum;
 import gov.gtas.model.Flight;
+import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Passenger;
+import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.vo.passenger.PassengerVo;
 
@@ -21,7 +25,10 @@ public class PassengerServiceImpl implements PassengerService {
 
 	@Resource
 	private PassengerRepository passengerRespository;
-	
+
+    @Resource
+    private HitsSummaryRepository hitsSummaryRepository;
+
 	@Override
 	@Transactional
 	public Passenger create(Passenger passenger) {
@@ -61,6 +68,24 @@ public class PassengerServiceImpl implements PassengerService {
             Flight f = (Flight)objs[1];
             PassengerVo vo = new PassengerVo();
             BeanUtils.copyProperties(p, vo);
+            rv.add(vo);
+
+            // grab hits information
+            List<HitsSummary> hitsSummary = hitsSummaryRepository.findByFlightIdAndPassengerId(f.getId(), p.getId());
+            if (!CollectionUtils.isEmpty(hitsSummary)) {
+                for (HitsSummary hs : hitsSummary) {
+                    if (vo.getOnRuleHitList() && vo.getOnWatchList()) {
+                        break;
+                    }
+                    
+                    String hitType = hs.getHitType();
+                    if (hitType.equals(HitTypeEnum.R.toString())) {
+                        vo.setOnRuleHitList(true);
+                    } else {
+                        vo.setOnWatchList(true);
+                    }
+                }
+            }
             
             // grab flight info
             vo.setFlightId(f.getId());
@@ -68,7 +93,6 @@ public class PassengerServiceImpl implements PassengerService {
             vo.setCarrier(f.getCarrier());
             vo.setEtd(f.getEtd());
             vo.setEta(f.getEta());
-            rv.add(vo);
         }
         return rv;
     }

@@ -97,6 +97,8 @@
 	<script src='factory/QueryBuilderFactory.js'></script>
 	<script src='factory/JqueryQueryBuilderWidget.js'></script>
 	<script src='dashboard/DashboardController.js'></script>
+
+  <script src='common/GridService.js'></script>
 	<script src='flights/FlightsController.js'></script>
 	<script src='flights/FlightsService.js'></script>
 	<script src='pax/PaxController.js'></script>

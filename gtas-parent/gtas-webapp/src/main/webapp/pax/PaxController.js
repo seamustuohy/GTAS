@@ -1,5 +1,5 @@
 app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jqueryQueryBuilderWidget,
-                                          paxService, sharedPaxData, $stateParams, $state, uiGridConstants) {
+                                          paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService) {
   var paginationOptions = {
     pageNumber: 1,
     pageSize: 10,
@@ -76,30 +76,35 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
   };
   
   $scope.passengerGrid.columnDefs = [
-    { "name": "ruleHits", "displayName": "H", width: 50,
+    { name: "onRuleHitList", "displayName": "H", width: 50,
+      cellClass: gridService.colorHits,
+      cellTemplate: '<div></div>',
       "sort": {
         direction: uiGridConstants.DESC,
         priority: 0
       }
     },
-    {"name": "onWatchList", "displayName": "L", width: 50},
-    {"name": "passengerType", "displayName": "Type", width: 50},
-    {"name": "lastName", "displayName": "Last Name", width: 175,
+    { name: "onWatchList", "displayName": "L", width: 50, 
+      cellClass: gridService.colorHits,
+      cellTemplate: '<div></div>'
+    },
+    { name: "passengerType", "displayName": "Type", width: 50 },
+    { name: "lastName", "displayName": "Last Name", width: 175,
       "sort": {
         direction: uiGridConstants.DESC,
         priority: 1
       }
     },
-    {"name": "firstName", "displayName": "First Name", width: 150},
-    {"name": "middleName", "displayName": "Middle", width: 100},
-    {"name": "flightNumber", "displayName": "Flight", width: 90, visible: ($scope.parent !== 'flights') },
-    {"name": "eta", "displayName": "ETA", width: 175, visible: ($scope.parent !== 'flights') },
-    {"name": "etd", "displayName": "ETD", width: 175, visible: ($scope.parent !== 'flights') },
-    {"name": "gender", "displayName": "G", width: 50},
-    {"name": "dob", "displayName": "DOB", cellFilter: 'date', width: 175},
-    {"name": "citizenshipCountry", "displayName": "CTZ", width: 75},
-    {"name": "documentType", "displayName": "T", width: 50},
-    {"name": "seat", "displayName": "Seat", width: 75}
+    { name: "firstName", "displayName": "First Name", width: 150 },
+    { name: "middleName", "displayName": "Middle", width: 100 },
+    { name: "flightNumber", "displayName": "Flight", width: 90, visible: ($scope.parent !== 'flights') },
+    { name: "eta", "displayName": "ETA", width: 175, visible: ($scope.parent !== 'flights') },
+    { name: "etd", "displayName": "ETD", width: 175, visible: ($scope.parent !== 'flights') },
+    { name: "gender", "displayName": "G", width: 50 },
+    { name: "dob", "displayName": "DOB", cellFilter: 'date', width: 175 },
+    { name: "citizenshipCountry", "displayName": "CTZ", width: 75 },
+    { name: "documentType", "displayName": "T", width: 50 },
+    { name: "seat", "displayName": "Seat", width: 75 }
   ];
 
   var getPage = function() {

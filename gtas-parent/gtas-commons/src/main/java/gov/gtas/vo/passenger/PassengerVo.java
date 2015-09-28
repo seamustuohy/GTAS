@@ -47,6 +47,10 @@ public class PassengerVo extends BaseVo implements Validatable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)        
     private Date eta;
     
+    // hits info
+    private Boolean onRuleHitList = Boolean.FALSE;
+    private Boolean onWatchList = Boolean.FALSE;
+    
     private List<DocumentVo> documents = new ArrayList<>();
     
     public Long getFlightId() {
@@ -196,7 +200,19 @@ public class PassengerVo extends BaseVo implements Validatable {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
-
+    public Boolean getOnRuleHitList() {
+        return onRuleHitList;
+    }
+    public void setOnRuleHitList(Boolean onRuleHitList) {
+        this.onRuleHitList = onRuleHitList;
+    }
+    public Boolean getOnWatchList() {
+        return onWatchList;
+    }
+    public void setOnWatchList(Boolean onWatchList) {
+        this.onWatchList = onWatchList;
+    }
+    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
