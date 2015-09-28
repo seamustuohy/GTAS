@@ -72,6 +72,8 @@ public class CommonServicesConfig {
 	private static final String PROPERTY_NAME_C3P0_MAX_IDLETIME = "c3p0.max_idletime";
 	private static final String PROPERTY_NAME_C3P0_MAX_STATEMENTS = "c3p0.max_statements";
 
+	private static final String PROPERTY_NAME_HIBERNATE_CONNECTION_CHARSET = "hibernate.connection.charSet";
+
 	private Properties hibProperties() {
 		Properties properties = new Properties();
 		properties.put(PROPERTY_NAME_HIBERNATE_DIALECT,
@@ -97,15 +99,21 @@ public class CommonServicesConfig {
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE));
 		properties.put(PROPERTY_NAME_HIBERNATE_USE_SQL_COMMENTS, env
 				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_USE_SQL_COMMENTS));
-		properties.put(PROPERTY_NAME_HIBERNATE_ORDER_INSERTS, env
-				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_ORDER_INSERTS));
-		properties.put(PROPERTY_NAME_HIBERNATE_ORDER_UPDATES, env
-				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_ORDER_UPDATES));
-		properties.put(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA, env
-				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA));
+		properties.put(PROPERTY_NAME_HIBERNATE_ORDER_INSERTS,
+				env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_ORDER_INSERTS));
+		properties.put(PROPERTY_NAME_HIBERNATE_ORDER_UPDATES,
+				env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_ORDER_UPDATES));
+		properties
+				.put(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA,
+						env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA));
 
-		properties.put(PROPERTY_NAME_HIBERNATE_CONNECTION_PROVIDER_CLASS, env
-				.getRequiredProperty(PROPERTY_NAME_HIBERNATE_CONNECTION_PROVIDER_CLASS));
+		properties
+				.put(PROPERTY_NAME_HIBERNATE_CONNECTION_PROVIDER_CLASS,
+						env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_CONNECTION_PROVIDER_CLASS));
+
+		properties
+				.put(PROPERTY_NAME_HIBERNATE_CONNECTION_CHARSET,
+						env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_CONNECTION_CHARSET));
 
 		return properties;
 	}
@@ -120,16 +128,17 @@ public class CommonServicesConfig {
 
 	@Bean
 	public DataSource dataSource() {
-		//DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		// DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		ComboPooledDataSource dataSource = new ComboPooledDataSource();
 
-		try{
-		     dataSource.setDriverClass(env
-				.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
-		} catch(PropertyVetoException pve){
+		try {
+			dataSource.setDriverClass(env
+					.getRequiredProperty(PROPERTY_NAME_DATABASE_DRIVER));
+		} catch (PropertyVetoException pve) {
 			pve.printStackTrace();
 		}
-		dataSource.setJdbcUrl(env.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
+		dataSource.setJdbcUrl(env
+				.getRequiredProperty(PROPERTY_NAME_DATABASE_URL));
 		dataSource.setUser(env
 				.getRequiredProperty(PROPERTY_NAME_DATABASE_USERNAME));
 		dataSource.setPassword(env
@@ -143,7 +152,7 @@ public class CommonServicesConfig {
 				.getRequiredProperty(PROPERTY_NAME_C3P0_MAX_IDLETIME)));
 		dataSource.setMaxStatements(Integer.parseInt(env
 				.getRequiredProperty(PROPERTY_NAME_C3P0_MAX_STATEMENTS)));
-		
+
 		return dataSource;
 	}
 
