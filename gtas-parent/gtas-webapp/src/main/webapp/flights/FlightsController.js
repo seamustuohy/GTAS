@@ -12,7 +12,7 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
     enableSorting: false,
     multiSelect: false,
     enableFiltering: false,     
-    enableRowSelection: true, 
+    enableRowSelection: false, 
     enableSelectAll: false,
     enableRowHeaderSelection: false,
     enableGridMenu: false,  	
@@ -43,54 +43,40 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
         paginationOptions.pageSize = pageSize;
         getPage();
       });
-
-      gridApi.selection.on.rowSelectionChanged($scope,function(row){
-        $scope.selectedFlight=row.entity;
-        console.log($scope.selectedFlight);
-      })
     }
   };
 
   $scope.gridOptions.columnDefs = [
-    { name: 'P', field: 'passengerCount', width: 50, enableFiltering: false,
+    { name: 'passengerCount', displayName: 'P', width: 50, enableFiltering: false,
         cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.passengerNav(row)">{{COL_FIELD}}</button> ' ,
     },
-    { name: 'H', field: 'ruleHitCount', width: 50, enableFiltering: false, cellClass: gridService.colorHits },
-    { name: 'L', field: 'listHitCount', width: 50, enableFiltering: false, cellClass: gridService.colorHits },
-    { name: 'Carrier', field: 'carrier', width: 75 },
-    { name: 'Flight', field: 'flightNumber', width: 75 },
-    { name: 'Dir', field: 'direction', width: 50 },    
-    { name: 'ETA', displayName: 'ETA', field: 'eta' },
-    { name: 'ETD', displayName: 'ETD', field: 'etd' },    
-    { name: 'Origin', field: 'origin' },
-    { name: 'OriginCountry', displayName: "Country", field: 'originCountry' },
-    { name: 'Dest', field: 'destination' },
-    { name: 'DestCountry', displayName: "Country", field: 'destinationCountry' }
+    { name: 'ruleHitCount', displayName: 'H', width: 50, enableFiltering: false, cellClass: gridService.colorHits },
+    { name: 'listHitCount', displayName: 'L', width: 50, enableFiltering: false, cellClass: gridService.colorHits },
+    { name: 'carrier', width: 75 },
+    { name: 'flightNumber', displayName: 'Flight', width: 75 },
+    { name: 'direction', displayName: 'Dir', width: 50 },    
+    { name: 'eta', displayName: 'ETA' },
+    { name: 'etd', displayName: 'ETD' },    
+    { name: 'origin', displayName: 'Origin' },
+    { name: 'originCountry', displayName: 'Country' },
+    { name: 'destination', displayName: 'Dest' },
+    { name: 'destinationCountry', displayName: 'Country' }
   ];
 
-  $scope.passengerNav = function(row){
+  $scope.passengerNav = function(row) {
     $scope.selectedFlight=row.entity;
-    $state.go('flights.passengers',{ parent: 'flights', flight: $scope.selectedFlight });
+    $state.go('flights.passengers', { parent: 'flights', flight: $scope.selectedFlight });
   };
 
   var getPage = function() {
-    console.log('requesting page #' + paginationOptions.pageNumber);
     flightService.getFlights(paginationOptions).then(function (page) {
       $scope.gridOptions.totalItems = page.totalFlights;
       $scope.gridOptions.data = page.flights;
-
-      $interval( function() {
-          $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
-      }, 0, 1);
     });
   };
   
   $scope.getTableHeight = function() {
-     var rowHeight = 30;
-     var headerHeight = 30;
-     return {
-        height: ($scope.gridOptions.data.length * rowHeight + 2 * headerHeight) + "px"
-     };
+     return gridService.calculateGridHeight($scope.gridOptions.data.length);
   };  
   
   getPage();
