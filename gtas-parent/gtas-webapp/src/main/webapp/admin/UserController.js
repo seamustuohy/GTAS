@@ -11,10 +11,7 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
             active:1,
             roles:[]
         };
-    /**
-     * @return {boolean}
-     * @return {boolean}
-     */
+
     $scope.IsCreateUser=function()
     {
         return $stateParams.action == 'create';
@@ -22,6 +19,11 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
     $scope.rolesLookup=[];
 
     $scope.selectedRoles = [];
+
+        $scope.radioData = [ { label: 'Enable', value: 1 },
+            { label: 'Disable', value: 0  }   ];
+        $scope.roles=[];
+
     $scope.Init=function () {
     	if($scope.user!=null)
     	{
@@ -34,20 +36,19 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
         $scope.getRoles();
     };
 
+
     $scope.getRoles = function () {
         userService.getRoles()
             .then(
             function (roles) {
                 // responses are redirected to confirmation page nothing do here..
                 $scope.rolesLookup=roles;
+                $scope.setRoles();
             }
         );
     };
 
-   $scope.radioData = [ { label: 'Enable', value: 1 },
-                        { label: 'Disable', value: 0  }   ];
-
-   $scope.roles = ['ROLE_CUST','VIEW_FLIGHT_PASSENGERS','MANAGE_QUERIES','MANAGE_RULES','MANAGE_WATCHLIST','ROLE_ADMIN', 'ADMIN'];
+   //$scope.roles = ['VIEW_FLIGHT_PASSENGERS','MANAGE_QUERIES','MANAGE_RULES','MANAGE_WATCHLIST', 'ADMIN'];
    $scope.selectedRoles = [];
    $scope.toggle = function (item, list) {
       var idx = list.indexOf(item);
@@ -73,6 +74,11 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
             }
         }
         return null;
+    };
+
+    $scope.setRoles=function () {
+        var i = 0, len = $scope.rolesLookup.length;
+            for (i = 0; i < len; i++) {  $scope.roles.push($scope.rolesLookup[i].roleDescription)   ;  }
     };
 
     $scope.populateSelectedRoles=function()
