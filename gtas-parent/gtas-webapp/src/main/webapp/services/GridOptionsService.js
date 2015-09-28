@@ -86,7 +86,7 @@ app.service("gridOptionsLookupService", function (uiGridConstants) {
                     field: 'passengerCount',
                     width: 50,
                     enableFiltering: false,
-                    cellTemplate: '<button ng-click="grid.appScope.passengerNav(row)">{{COL_FIELD}}</button>'
+                    cellTemplate: '<md-button class="md-primary" style="min-width: 0; margin: 0 auto; width: 100%;" ng-click="grid.appScope.passengerNav(row)">{{COL_FIELD}}</md-button>'
                 },
                 {
                     name: 'H',
@@ -166,7 +166,7 @@ app.service("gridOptionsLookupService", function (uiGridConstants) {
                     "field": "lastName",
                     "displayName": "Last Name",
                     width: 175,
-                    /*enableFiltering: false,*/
+                    cellTemplate: '<md-button class="md-primary" style="min-width: 0; margin: 0 auto; width: 100%; text-align: left" ng-click="selectButtonClick(row, $event)">{{COL_FIELD}}</md-button>',
                     "sort": {
                         direction: uiGridConstants.DESC,
                         priority: 1

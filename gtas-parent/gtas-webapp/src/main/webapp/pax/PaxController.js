@@ -1,5 +1,5 @@
 app.controller('PaxController', function ($scope, $rootScope, $injector, jqueryQueryBuilderWidget,
-                                          paxService, sharedPaxData, $stateParams, $state,
+                                          paxService, sharedPaxData, $stateParams, $state, uiGridSelectionService,
                                           gridOptionsLookupService, $mdDialog, passengers) {
     'use strict';
     var paginationOptions = gridOptionsLookupService.paginationOptions,
@@ -23,6 +23,20 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, jqueryQ
                 });
             }
         };
+
+    $scope.selectButtonClick(row, evt) {
+        evt.stopPropagation();
+
+        if (evt.shiftKey) {
+            uiGridSelectionService.shiftSelect(self, row, evt, self.options.multiSelect);
+        }
+        else if (evt.ctrlKey || evt.metaKey) {
+            uiGridSelectionService.toggleRowSelection(self, row, evt, self.options.multiSelect, self.options.noUnselect);
+        }
+        else {
+            uiGridSelectionService.toggleRowSelection(self, row, evt, (self.options.multiSelect && !self.options.modifierKeysToMultiSelect), self.options.noUnselect);
+        }
+    };
 
     $scope.showPaxDetailsModal = function (passenger) {
         selectedPassenger = passenger;
