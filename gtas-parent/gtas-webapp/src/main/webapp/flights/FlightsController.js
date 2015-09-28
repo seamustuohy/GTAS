@@ -54,7 +54,6 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
     { name: 'listHitCount', displayName: 'L', width: 50, enableFiltering: false, cellClass: gridService.colorHits },
     { name: 'carrier', width: 75 },
     { name: 'flightNumber', displayName: 'Flight', width: 75 },
-    { name: 'direction', displayName: 'Dir', width: 50 },    
     { name: 'eta', displayName: 'ETA' },
     { name: 'etd', displayName: 'ETD' },    
     { name: 'origin', displayName: 'Origin' },
