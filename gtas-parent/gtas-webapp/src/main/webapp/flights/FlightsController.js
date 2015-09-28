@@ -1,10 +1,10 @@
-app.controller('FlightsController', function ($scope, $http, flightService, gridService, $state, $interval, $stateParams) {
+app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, flightService, gridService) {
 
   $scope.selectedFlight=$stateParams.flight;
 
   var paginationOptions = {
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 15,
     sort: null
   };
 
@@ -16,8 +16,8 @@ app.controller('FlightsController', function ($scope, $http, flightService, grid
     enableSelectAll: false,
     enableRowHeaderSelection: false,
     enableGridMenu: false,  	
-    paginationPageSizes: [10, 25, 50],
-    paginationPageSize: 10,
+    paginationPageSizes: [15, 25, 50],
+    paginationPageSize: 15,
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,

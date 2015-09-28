@@ -16,7 +16,6 @@ app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams', 'uiGrid
   $scope.gridOptions.multiSelect = false;
   $scope.gridOptions.modifierKeysToMultiSelect = false;
   $scope.gridOptions.noUnselect = true;
-  $scope.gridOptions.rowHeight=50;
   $scope.gridOptions.onRegisterApi = function( gridApi) {
         $scope.gridApi = gridApi;
         gridApi.selection.on.rowSelectionChanged($scope,function(row){

@@ -1,8 +1,8 @@
-app.controller('PaxController', function ($scope, $rootScope, $injector, GridControl, jqueryQueryBuilderWidget,
+app.controller('PaxController', function ($scope, $injector, GridControl, jqueryQueryBuilderWidget,
                                           paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService) {
   var paginationOptions = {
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 15,
     sort: null
   };
 
@@ -36,8 +36,8 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, GridCon
     enableRowSelection: false, 
     enableSelectAll: false,
     enableGridMenu: false,    
-    paginationPageSizes: [10, 25, 50],
-    paginationPageSize: 10,
+    paginationPageSizes: [15, 25, 50],
+    paginationPageSize: 15,
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
