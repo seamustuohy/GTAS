@@ -55,13 +55,29 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, jqueryQ
 
         if (evt.shiftKey) {
             uiGridSelectionService.shiftSelect(self, row, evt, self.options.multiSelect);
-        }
-        else if (evt.ctrlKey || evt.metaKey) {
+        } else if (evt.ctrlKey || evt.metaKey) {
             uiGridSelectionService.toggleRowSelection(self, row, evt, self.options.multiSelect, self.options.noUnselect);
-        }
-        else {
+        } else {
             uiGridSelectionService.toggleRowSelection(self, row, evt, (self.options.multiSelect && !self.options.modifierKeysToMultiSelect), self.options.noUnselect);
         }
+    };
+
+    $scope.showPaxDetailsModal = function (passenger) {
+        selectedPassenger = passenger;
+        $mdDialog.show({
+            controller: PassengerDetailsDialogController,
+            templateUrl: 'pax/pax.detail.html',
+            parent: angular.element(document.body),
+            clickOutsideToClose: true
+        });
+    };
+
+    $scope.getTableHeight = function () {
+        var rowHeight = 30,
+            headerHeight = 30;
+        return {
+            height: ($scope.passengerGrid.data.length * rowHeight + 2 * headerHeight) + "px"
+        };
     };
 
     $scope.passengerGrid = gridOptionsLookupService.getGridOptions('passengers');
@@ -91,53 +107,6 @@ app.controller('PaxController', function ($scope, $rootScope, $injector, jqueryQ
                         parent: $scope.parent
                     });
                 }
-                $scope.showPaxDetailsModal(row.entity);
-            }
-        });
-    };
-
-    $scope.getTableHeight = function () {
-        var rowHeight = 30,
-            headerHeight = 30;
-        return {
-            height: ($scope.passengerGrid.data.length * rowHeight + 2 * headerHeight) + "px"
-        };
-    };
-
-    getPage();
-
-    $scope.showPaxDetailsModal = function (passenger) {
-        selectedPassenger = passenger;
-        $mdDialog.show({
-            controller: PassengerDetailsDialogController,
-            templateUrl: 'pax/pax.detail.html',
-            parent: angular.element(document.body),
-            clickOutsideToClose: true
-        });
-    };
-
-    $scope.selectedFlight = $stateParams.flight;
-    $scope.parent = $stateParams.parent;
-    $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
-
-    $scope.passengerGrid = gridOptionsLookupService.getGridOptions('passengers');
-    $scope.passengerGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs('passengers');
-    $scope.passengerGrid.onRegisterApi = function (gridApi) {
-        $scope.gridApi = gridApi;
-        $scope.loading = false;
-        $scope.passengerGrid.data = passengers;
-
-        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-            if (row.isSelected) {
-                //if ($scope.parent === 'flights') {
-                //    $stateParams.id = row.entity.id;
-                //    $stateParams.flightId = row.entity.flightId;
-                //    $state.go('flights.passengers.detail', {
-                //        id: row.entity.id,
-                //        flightId: row.entity.flightId,
-                //        parent: $scope.parent
-                //    });
-                //}
                 $scope.showPaxDetailsModal(row.entity);
             }
         });
