@@ -298,8 +298,6 @@ public class QueryBuilderServiceIT {
 		
 		assertNotNull(result);
 		assertEquals(1, result.size());
-		
-		flightService.delete(newFlight.getId());
 	}
 
 	@Test
@@ -350,8 +348,6 @@ public class QueryBuilderServiceIT {
 		
 		assertNotNull(result);
 		assertEquals(1, result.size());
-		
-		flightService.delete(newFlight.getId());
 	}
 	
 	@Transactional
