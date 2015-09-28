@@ -65,15 +65,15 @@ app.service("gridOptionsLookupService", function (uiGridConstants) {
                 enableSorting: false,
                 multiSelect: false,
                 enableFiltering: false,
-                enableRowSelection: true,
+                enableRowSelection: false,
                 enableSelectAll: false,
                 enableGridMenu: false,
-                paginationPageSizes: [10, 25, 50],
-                paginationPageSize: 10,
+                paginationPageSizes: [15, 25, 50],
+                paginationPageSize: 15,
                 useExternalPagination: true,
                 useExternalSorting: true,
                 useExternalFiltering: true,
-                saveGroupingExpandedStates: true
+                expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>'
             },
             queries : standardOptions,
             riskCriteria: standardOptions,
@@ -145,107 +145,35 @@ app.service("gridOptionsLookupService", function (uiGridConstants) {
                 }
             ],
             passengers: [
-                {
-                    "name": "ruleHits",
-                    "field": "ruleHits",
-                    "displayName": "H",
-                    width: 50,
-                    enableFiltering: false,
+                { name: "onRuleHitList", "displayName": "H", width: 50,
+                    cellClass: gridService.colorHits,
+                    cellTemplate: '<div></div>',
                     "sort": {
                         direction: uiGridConstants.DESC,
                         priority: 0
                     }
-                }, {
-                    "name": "onWatchList",
-                    "field": "onWatchList",
-                    "displayName": "L",
-                    width: 50,
-                    enableFiltering: false
-                }, {
-                    "name": "lastName",
-                    "field": "lastName",
-                    "displayName": "Last Name",
-                    width: 175,
-                    cellTemplate: '<md-button class="md-primary" style="min-width: 0; margin: 0 auto; width: 100%; text-align: left" ng-click="selectButtonClick(row, $event)">{{COL_FIELD}}</md-button>',
+                },
+                { name: "onWatchList", "displayName": "L", width: 50,
+                    cellClass: gridService.colorHits,
+                    cellTemplate: '<div></div>'
+                },
+                { name: "passengerType", "displayName": "Type", width: 50 },
+                { name: "lastName", "displayName": "Last Name", width: 175,
                     "sort": {
                         direction: uiGridConstants.DESC,
                         priority: 1
                     }
-                }, {
-                    "name": "firstName",
-                    "field": "firstName",
-                    "displayName": "First Name",
-                    width: 150/*, enableFiltering: false*/
-                }, {
-                    "name": "middleName",
-                    "field": "middleName",
-                    "displayName": "Middle",
-                    width: 100/*, enableFiltering: false*/
-                }, {
-                    "name": "flightNumber",
-                    "field": "flightNumber",
-                    "displayName": "Flight",
-                    width: 90/*, enableFiltering: false*/
-                }, {
-                    "name": "flightETA",
-                    "field": "flightETA",
-                    "displayName": "ETA",
-                    width: 175,
-                    enableFiltering: false
-                }, {
-                    "name": "flightETD",
-                    "field": "flightETD",
-                    "displayName": "ETD",
-                    width: 175,
-                    enableFiltering: false
-                }, {
-                    "name": "passengerType",
-                    "field": "passengerType",
-                    "displayName": "Type",
-                    width: 50,
-                    enableFiltering: false
-                }, {
-                    "name": "gender",
-                    "field": "gender",
-                    "displayName": "G",
-                    width: 50,
-                    enableFiltering: false
-                }, {
-                    "name": "dob",
-                    "displayName": "DOB",
-                    field: 'dob',
-                    cellFilter: 'date',
-                    width: 175,
-                    enableFiltering: false
-                }, {
-                    "name": "citizenshipCountry",
-                    "field": "citizenshipCountry",
-                    "displayName": "CTZ",
-                    width: 75/*, enableFiltering: false*/
-                }, {
-                    "name": "passengerType",
-                    "field": "passengerType",
-                    "displayName": "T",
-                    width: 100,
-                    enableFiltering: false
-                }, {
-                    "name": "documentType",
-                    "field": "documentType",
-                    "displayName": "T",
-                    width: 50,
-                    enableFiltering: false
-                }, {
-                    "name": "carrier",
-                    "field": "carrier",
-                    "displayName": "Carrier",
-                    width: 50/*, enableFiltering: false*/
-                }, {
-                    "name": "seat",
-                    "field": "seat",
-                    "displayName": "Seat",
-                    width: 75,
-                    enableFiltering: false
-                }
+                },
+                { name: "firstName", "displayName": "First Name", width: 150 },
+                { name: "middleName", "displayName": "Middle", width: 100 },
+                { name: "flightNumber", "displayName": "Flight", width: 90, visible: ($scope.parent !== 'flights') },
+                { name: "eta", "displayName": "ETA", width: 175, visible: ($scope.parent !== 'flights') },
+                { name: "etd", "displayName": "ETD", width: 175, visible: ($scope.parent !== 'flights') },
+                { name: "gender", "displayName": "G", width: 50 },
+                { name: "dob", "displayName": "DOB", cellFilter: 'date', width: 175 },
+                { name: "citizenshipCountry", "displayName": "CTZ", width: 75 },
+                { name: "documentType", "displayName": "T", width: 50 },
+                { name: "seat", "displayName": "Seat", width: 75 }
             ],
             queries: [
                 {

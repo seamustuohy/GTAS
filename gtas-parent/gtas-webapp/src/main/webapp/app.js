@@ -5,6 +5,7 @@ var app = angular.module('myApp', [
     'ui.grid.resizeColumns',
     'ui.grid.moveColumns',
     'ui.grid.pagination',
+    'ui.grid.autoResize',    
     'ui.grid.edit',
     'ui.grid.rowEdit',
     'ui.grid.cellNav',
@@ -20,9 +21,11 @@ var app = angular.module('myApp', [
 
 app.controller('NavCtrl', function ($scope, $location) {
     'use strict';
-    var routes = ['/dashboard', '/flights', '/passengers', '/query-builder', '/risk-criteria', '/watchlists', '/admin'];
-    //DEFAULTS to Flights on SPA reload and initial load
-    $scope.selectedIndex = 1;
+    var routes = ['/flights', '/passengers', '/query-builder', '/risk-criteria', '/watchlists', '/admin'];
+
+    //DEFAULTS to first tab on SPA reload and initial load
+    $scope.selectedIndex = 0;
+
     $location.url(routes[$scope.selectedIndex]);
     //IF WE MOVE SECURITY check TO HERE and out of .jsp
     $scope.$watch('selectedIndex', function (current) {

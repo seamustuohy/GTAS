@@ -1,3 +1,12 @@
+<style>
+.grid .ui-grid-row .green {
+  background-color: palegreen;
+}
+.grid .ui-grid-row .red {
+  background-color: pink;
+}
+</style>
+
 <md-content layout-padding>
 	<md-input-container flex  ng-show="parent === 'flights'">
 		<div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="flights.all" ></div>
@@ -5,5 +14,11 @@
 
 <div style="padding: 15px;"></div>
 
-<div id="grid1" ui-grid="passengerGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter ui-grid-resize-columns ui-grid-move-columns class="grid"></div>
+<div id="grid1" ui-grid="passengerGrid" 
+  ui-grid-pagination 
+  ui-grid-selection 
+  ui-grid-expandable  
+  ui-grid-auto-resize
+  ng-style="getTableHeight()"
+  class="grid"></div>
 

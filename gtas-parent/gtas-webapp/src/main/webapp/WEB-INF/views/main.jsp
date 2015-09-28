@@ -28,7 +28,6 @@
 	<li><a href="logout.action">LOGOUT</a></li>
 	</ul>
 		<md-tabs md-stretch-tabs md-selected="selectedIndex">
-		<md-tab label="Dashboard"></md-tab>
 		<sec:authorize access="hasAnyAuthority('VIEW_FLIGHT_PASSENGERS','ADMIN')">
 			<md-tab label="Flights"></md-tab>
 			<md-tab label="Passengers"></md-tab>
@@ -98,6 +97,8 @@
 	<script src='factory/QueryBuilderFactory.js'></script>
 	<script src='factory/JqueryQueryBuilderWidget.js'></script>
 	<script src='dashboard/DashboardController.js'></script>
+
+  <script src='common/GridService.js'></script>
 	<script src='flights/FlightsController.js'></script>
 	<script src='flights/FlightsService.js'></script>
 	<script src='pax/PaxController.js'></script>

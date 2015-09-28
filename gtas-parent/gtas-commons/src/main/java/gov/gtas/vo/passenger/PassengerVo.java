@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class PassengerVo extends BaseVo implements Validatable {
     /**
      * a unique passenger reference identifier (from PNR) used to cross
@@ -18,7 +20,6 @@ public class PassengerVo extends BaseVo implements Validatable {
      */
     private String travelerReferenceNumber;
     
-    private Long flightId;
     private String title;    
     private String firstName;
     private String middleName;
@@ -37,6 +38,19 @@ public class PassengerVo extends BaseVo implements Validatable {
     private Boolean deleted = Boolean.FALSE;
     private String seat;
     
+    // flight info
+    private Long flightId;
+    private String flightNumber;
+    private String carrier;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)        
+    private Date etd;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)        
+    private Date eta;
+    
+    // hits info
+    private Boolean onRuleHitList = Boolean.FALSE;
+    private Boolean onWatchList = Boolean.FALSE;
+    
     private List<DocumentVo> documents = new ArrayList<>();
     
     public Long getFlightId() {
@@ -44,6 +58,30 @@ public class PassengerVo extends BaseVo implements Validatable {
     }
     public void setFlightId(Long flightId) {
         this.flightId = flightId;
+    }
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
+    }
+    public String getCarrier() {
+        return carrier;
+    }
+    public void setCarrier(String carrier) {
+        this.carrier = carrier;
+    }
+    public Date getEtd() {
+        return etd;
+    }
+    public void setEtd(Date etd) {
+        this.etd = etd;
+    }
+    public Date getEta() {
+        return eta;
+    }
+    public void setEta(Date eta) {
+        this.eta = eta;
     }
     public void addDocument(DocumentVo d) {
         documents.add(d);
@@ -162,7 +200,19 @@ public class PassengerVo extends BaseVo implements Validatable {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
-
+    public Boolean getOnRuleHitList() {
+        return onRuleHitList;
+    }
+    public void setOnRuleHitList(Boolean onRuleHitList) {
+        this.onRuleHitList = onRuleHitList;
+    }
+    public Boolean getOnWatchList() {
+        return onWatchList;
+    }
+    public void setOnWatchList(Boolean onWatchList) {
+        this.onWatchList = onWatchList;
+    }
+    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 

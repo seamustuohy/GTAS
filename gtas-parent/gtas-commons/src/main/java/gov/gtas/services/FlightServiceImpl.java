@@ -1,5 +1,6 @@
 package gov.gtas.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,10 @@ import org.springframework.stereotype.Service;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.repository.FlightRepository;
+import gov.gtas.vo.passenger.FlightVo;
 
 @Service
-public class FlightServiceImpl implements FlightService{
+public class FlightServiceImpl implements FlightService {
 	
 	@Resource
 	private FlightRepository flightRespository;
@@ -27,27 +30,21 @@ public class FlightServiceImpl implements FlightService{
 		return flightRespository.save(flight);
 	}
 
-	@Override
-	@Transactional
-	public Flight delete(Long id) {
-		Flight flightToDelete = this.findById(id);
-		if(flightToDelete != null){
-			flightRespository.delete(flightToDelete);
-		}
-		return flightToDelete;
-	}
-
-	@Override
-	@Transactional
-	public List<Flight> findAll() {
-		return (List<Flight>)flightRespository.findAll();
-	}
-
     @Override
     @Transactional
-    public Page<Flight> findAll(int pageNumber, int pageSize) {
+    public FlightsPage findAll(int pageNumber, int pageSize) {
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
-        return flightRespository.findAll(new PageRequest(pn, pageSize));
+        List<FlightVo> vos = new ArrayList<>();
+
+        Page<Flight> page = flightRespository.findAll(new PageRequest(pn, pageSize));
+        long total = page.getTotalElements();
+        for (Flight f : page) {
+            FlightVo vo = new FlightVo();
+            BeanUtils.copyProperties(f, vo);
+            vos.add(vo);
+        }
+
+        return new FlightsPage(vos, total);
     }
 
 	@Override
@@ -106,7 +103,4 @@ public class FlightServiceImpl implements FlightService{
 	public List<Flight> getFlightsByDates(Date startDate, Date endDate) {
 		return flightRespository.getFlightsByDates(startDate, endDate);
 	}
-	
-	
-	
 }

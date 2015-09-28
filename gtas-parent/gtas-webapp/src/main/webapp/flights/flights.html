@@ -1,6 +1,12 @@
 <header data-ui-view="heading"></header>
 <div layout="column">
   <md-content layout-padding>
-    <div layout="row" ui-grid="flightsGrid" ui-grid-pagination ui-grid-selection class="grid"></div>
+    <div layout="row" 
+      ui-grid="gridOptions"
+      ui-grid-pagination
+      ui-grid-selection
+      ui-grid-auto-resize
+      ng-style="getTableHeight()"
+      class="grid"></div>
   </md-content>
 </div>

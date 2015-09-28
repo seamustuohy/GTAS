@@ -314,23 +314,6 @@ tbody.collapse.in {
   /*background-color: #F0C425;*/
   padding: 5px;}
 
-.header {
-  height: 84px;
-  position: relative;
-}
-
-.header::before {
-  content: "";
-  display: block;
-  height: 84px;
-  background-color: rgb(43,127,184);
-  background-image: url(../img/gtas_logo-compressed.jpg);
-  background-repeat: no-repeat;
-  background-position: top left;
-  position: relative;
-  top: 0;
-}
-
 .header::after {
   content: "";
   display: block;

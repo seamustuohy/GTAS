@@ -45,7 +45,6 @@ app.service("paxService", function ($rootScope, $http, $q) {
         $rootScope.$broadcast('handleBroadcast', flightId);
     }
 
-
     function getRuleHits(passengerId) {
         var request = $http({
             method: "get",
