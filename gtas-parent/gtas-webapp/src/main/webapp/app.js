@@ -93,16 +93,7 @@ app.config(function ($stateProvider) {
             views: {
                 "content@flights": {
                     controller: 'PaxController',
-                    templateUrl: 'pax/pax.table.html',
-                    resolve: {
-                        passengers: function ($http, $stateParams, paxService) {
-                            console.log($stateParams);
-                            var id= $stateParams.flight.id;
-                            //return paxService.getPax(id);
-                            // compute passenger list in the controller
-                            return null;
-                        }
-                    }
+                    templateUrl: 'pax/pax.table.html'
                 }
             }
         }).state('flights.passengers.detail', {
@@ -139,12 +130,7 @@ app.config(function ($stateProvider) {
             "content@pax": {
                 // controller: 'Paginate',
                 controller: 'PaxController',
-                templateUrl: 'pax/pax.table.html',
-                resolve: {
-                    passengers: function ($http, $stateParams, paxService) {
-                        return null;  //paxService.getPax(1);
-                    }
-                }
+                templateUrl: 'pax/pax.table.html'
             }
         }
     }).state('pax.detail', {
