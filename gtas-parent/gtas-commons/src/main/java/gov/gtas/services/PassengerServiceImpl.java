@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import gov.gtas.enumtype.HitTypeEnum;
+import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Passenger;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PassengerRepository;
+import gov.gtas.vo.passenger.DocumentVo;
 import gov.gtas.vo.passenger.PassengerVo;
 
 @Service
@@ -35,31 +37,33 @@ public class PassengerServiceImpl implements PassengerService {
 		return passengerRespository.save(passenger);
 	}
 
-	@Override
-	@Transactional
-	public Passenger delete(Long id) {
-		Passenger passenger = this.findById(id);
-		if(passenger != null)
-			passengerRespository.delete(passenger);
-		return passenger;
-	}
-
-	@Override
-	@Transactional
-	public List<Passenger> findAll() {
-		return (List<Passenger>)passengerRespository.findAll();
-	}
-	
     @Override
     @Transactional
-    public Page<Passenger> findAll(int pageNumber, int pageSize) {
+    public PassengersPage getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize) {
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
-        return passengerRespository.findAll(new PageRequest(pn, pageSize));
+        Page<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId, new PageRequest(pn, pageSize));
+        List<PassengerVo> vos = new ArrayList<>();
+        
+        for (Passenger p : passengerList) {
+            PassengerVo vo = new PassengerVo();
+            BeanUtils.copyProperties(p, vo);
+            vos.add(vo);
+            
+            for (Document d : p.getDocuments()) {
+                DocumentVo docVo = new DocumentVo();
+                BeanUtils.copyProperties(d, docVo);
+                vo.addDocument(docVo);
+            }
+            
+            fillWithHitsInfo(vo,flightId, p.getId());
+        }
+        
+        return new PassengersPage(vos, passengerList.getTotalElements());
     }
 
     @Override
     @Transactional
-    public List<PassengerVo> findAllWithFlightInfo(int pageNumber, int pageSize) {
+    public PassengersPage findAllWithFlightInfo(int pageNumber, int pageSize) {
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
         List<Object[]> results = passengerRespository.getAllPassengersAndFlights(new PageRequest(pn, pageSize));
         List<PassengerVo> rv = new ArrayList<>();
@@ -71,21 +75,7 @@ public class PassengerServiceImpl implements PassengerService {
             rv.add(vo);
 
             // grab hits information
-            List<HitsSummary> hitsSummary = hitsSummaryRepository.findByFlightIdAndPassengerId(f.getId(), p.getId());
-            if (!CollectionUtils.isEmpty(hitsSummary)) {
-                for (HitsSummary hs : hitsSummary) {
-                    if (vo.getOnRuleHitList() && vo.getOnWatchList()) {
-                        break;
-                    }
-                    
-                    String hitType = hs.getHitType();
-                    if (hitType.equals(HitTypeEnum.R.toString())) {
-                        vo.setOnRuleHitList(true);
-                    } else {
-                        vo.setOnWatchList(true);
-                    }
-                }
-            }
+            fillWithHitsInfo(vo, f.getId(), p.getId());
             
             // grab flight info
             vo.setFlightId(f.getId());
@@ -94,7 +84,8 @@ public class PassengerServiceImpl implements PassengerService {
             vo.setEtd(f.getEtd());
             vo.setEta(f.getEta());
         }
-        return rv;
+        
+        return new PassengersPage(rv, -1);
     }
 
 	@Override
@@ -136,11 +127,21 @@ public class PassengerServiceImpl implements PassengerService {
 		return passengerList;
 	}
 
-    @Override
-    @Transactional
-    public Page<Passenger> getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize) {
-        int pn = pageNumber > 0 ? pageNumber - 1 : 0;
-        Page<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId, new PageRequest(pn, pageSize));
-        return passengerList;
+    private void fillWithHitsInfo(PassengerVo vo, Long flightId, Long passengerId) {
+        List<HitsSummary> hitsSummary = hitsSummaryRepository.findByFlightIdAndPassengerId(flightId, passengerId);
+        if (!CollectionUtils.isEmpty(hitsSummary)) {
+            for (HitsSummary hs : hitsSummary) {
+                if (vo.getOnRuleHitList() && vo.getOnWatchList()) {
+                    break;
+                }
+                
+                String hitType = hs.getHitType();
+                if (hitType.equals(HitTypeEnum.R.toString())) {
+                    vo.setOnRuleHitList(true);
+                } else {
+                    vo.setOnWatchList(true);
+                }
+            }
+        }
     }
 }
