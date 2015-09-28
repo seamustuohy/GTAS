@@ -5,7 +5,7 @@ var app = angular.module('myApp', [
     'ui.grid.resizeColumns',
     'ui.grid.moveColumns',
     'ui.grid.pagination',
-    'ui.grid.autoResize',    
+    'ui.grid.autoResize',
     'ui.grid.edit',
     'ui.grid.rowEdit',
     'ui.grid.cellNav',
@@ -71,7 +71,6 @@ app.config(function ($stateProvider) {
         templateUrl: 'flights/flights.header.html',
         controller: 'FlightsController'
     }).state('flights.all', {
-        url: '/',
         sticky: true,
         dsr: true,
         views: {
@@ -93,17 +92,19 @@ app.config(function ($stateProvider) {
         views: {
             "content@flights": {
                 controller: 'PaxController',
-                templateUrl: 'pax/pax.table.html',
-                resolve: {
-                    passengers: function ($http, $stateParams, paxService) {
-                        console.log($stateParams);
-                        var id= $stateParams.flight.id;
-                        //return paxService.getPax(id);
-                        // compute passenger list in the controller
-                        return null;
-                    }
-                }
+                templateUrl: 'pax/pax.table.html'
             }
+        }
+    }).state('flights.passengers.detail', {
+        url: '/detail',
+        params: {
+            parent: null,
+            flight: null,
+            id: null,
+            flightId: null
+        },
+        "content@flights": {
+            templateUrl: 'flights/flights.html'
         }
     }).state('pax', {
         url: '/passengers',

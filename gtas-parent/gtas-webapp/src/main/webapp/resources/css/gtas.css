@@ -362,3 +362,11 @@ tbody.collapse.in {
 h2 {
   font-size: 1.2em;
 }
+
+
+.green {
+  background-color: palegreen;
+}
+.red {
+  background-color: pink;
+}

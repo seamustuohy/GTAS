@@ -1,25 +1,30 @@
-app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderWidget,
-                                          paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService) {
+app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderWidget, $mdDialog,
+                                          paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService
+) {
   var paginationOptions = {
-    pageNumber: 1,
-    pageSize: 15,
-    sort: null
-  };
+        pageNumber: 1,
+        pageSize: 15,
+        sort: null
+      },
+      selectedPassenger,
+      PassengerDetailsDialogController = function ($scope) {
+        $scope.passenger = selectedPassenger;
+      };
 
   $scope.selectedFlight = $stateParams.flight;
   $scope.parent = $stateParams.parent;
 
   $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
 
-    $scope.showPaxDetailsModal = function (passenger) {
-        selectedPassenger = passenger;
-        $mdDialog.show({
-            controller: PassengerDetailsDialogController,
-            templateUrl: 'pax/pax.detail.html',
-            parent: angular.element(document.body),
-            clickOutsideToClose: true
-        });
-    };
+  $scope.showPaxDetailsModal = function (passenger) {
+    selectedPassenger = passenger;
+    $mdDialog.show({
+      controller: PassengerDetailsDialogController,
+      templateUrl: 'pax/pax.detail.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose: true
+    });
+  };
 
   $scope.isExpanded = true;
   $scope.paxHitList = [];
@@ -30,7 +35,7 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
   $scope.getPaxSpecificList = function (index) {
     return $scope.list(index);
   };
-    
+
   var ruleGridColumns = [
     { name: 'ruleId', "width": 60, displayName: 'Id' },
     { name: 'ruleTitle', displayName: 'Title' },
@@ -40,18 +45,18 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
   $scope.passengerGrid = {
     enableSorting: false,
     multiSelect: false,
-    enableFiltering: false,     
-    enableRowSelection: false, 
+    enableFiltering: false,
+    enableRowSelection: false,
     enableSelectAll: false,
-    enableGridMenu: false,    
+    enableGridMenu: false,
     paginationPageSizes: [15, 25, 50],
     paginationPageSize: 15,
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
-    
+
     expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>',
-    
+
     onRegisterApi: function (gridApi) {
       $scope.gridApi = gridApi;
 
@@ -73,7 +78,7 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
       });
     }
   };
-  
+
   $scope.passengerGrid.columnDefs = [
     { name: 'onRuleHitList', displayName: 'H', width: 50,
       cellClass: gridService.colorHits,
@@ -83,7 +88,7 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
         priority: 0
       }
     },
-    { name: 'onWatchList', displayName: 'L', width: 50, 
+    { name: 'onWatchList', displayName: 'L', width: 50,
       cellClass: gridService.colorHits,
       cellTemplate: '<div></div>'
     },
@@ -113,16 +118,16 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
         $scope.passengerGrid.totalItems = data.totalPassengers;
         $scope.passengerGrid.data = data.passengers;
       });
-      
+
     } else {
       paxService.getAllPax(paginationOptions).then(function (data) {
         setSubGridOptions(data);
         $scope.passengerGrid.totalItems = data.totalPassengers;
         $scope.passengerGrid.data = data.passengers;
       });
-    }   
+    }
   };
-  
+
   var setSubGridOptions = function(data) {
     for (i = 0; i < data.passengers.length; i++) {
       var rowScope = data.passengers[i];
@@ -131,12 +136,12 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
         columnDefs: ruleGridColumns,
         data: []
       }
-    }        
+    }
   }
 
   $scope.getTableHeight = function() {
     return gridService.calculateGridHeight($scope.passengerGrid.data.length);
-  };  
+  };
 
   getPage();
 
@@ -184,24 +189,24 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
 // Customs Filters
 
 app.filter('capitalize', function () {
-    return function (input, all) {
-        return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        }) : '';
-    };
+  return function (input, all) {
+    return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    }) : '';
+  };
 });
 
 
 app.filter('orderObjectBy', function () {
-    return function (items, field, reverse) {
-        var filtered = [];
-        angular.forEach(items, function (item) {
-            filtered.push(item);
-        });
-        filtered.sort(function (a, b) {
-            return (a[field] > b[field] ? 1 : -1);
-        });
-        if (reverse) filtered.reverse();
-        return filtered;
-    };
+  return function (items, field, reverse) {
+    var filtered = [];
+    angular.forEach(items, function (item) {
+      filtered.push(item);
+    });
+    filtered.sort(function (a, b) {
+      return (a[field] > b[field] ? 1 : -1);
+    });
+    if (reverse) filtered.reverse();
+    return filtered;
+  };
 });
