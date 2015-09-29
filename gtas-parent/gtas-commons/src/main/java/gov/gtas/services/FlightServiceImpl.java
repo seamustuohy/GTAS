@@ -36,7 +36,7 @@ public class FlightServiceImpl implements FlightService {
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
         List<FlightVo> vos = new ArrayList<>();
 
-        Page<Flight> page = flightRespository.findAll(new PageRequest(pn, pageSize));
+        Page<Flight> page = flightRespository.getAllSorted(new PageRequest(pn, pageSize));
         long total = page.getTotalElements();
         for (Flight f : page) {
             FlightVo vo = new FlightVo();

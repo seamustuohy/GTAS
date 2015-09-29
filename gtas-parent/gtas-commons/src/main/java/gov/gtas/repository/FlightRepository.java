@@ -3,6 +3,8 @@ package gov.gtas.repository;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -40,6 +42,9 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
             @Param("startDate") Date startDate, 
             @Param("endDate") Date endDate);
 
+    @Query("SELECT f FROM Flight f order by ruleHitCount desc, listHitCount desc, eta desc")
+    public Page<Flight> getAllSorted(Pageable pageable);
+    
     @Query("SELECT f FROM Flight f join f.passengers p where p.id = (:paxId)")
     public List<Flight> getFlightByPaxId(@Param("paxId") Long paxId);
 

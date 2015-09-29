@@ -6,11 +6,13 @@ app.service("flightService", function ($http, $q) {
     });
 
     function getFlights(paginationOptions) {
+        console.log('getflights');
         var request = $http({
-            method: "get",
-            url: "/gtas/flights",
-            params: { pageNumber: paginationOptions.pageNumber, pageSize: paginationOptions.pageSize }
+            method: 'post',
+            url: "/gtas/flights/",
+            data: paginationOptions
         });
+        
         return ( request.then(handleSuccess, handleError) );
     }
 
