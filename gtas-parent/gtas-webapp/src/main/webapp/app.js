@@ -74,9 +74,10 @@ app.config(function ($stateProvider) {
         sticky: true,
         dsr: true,
         views: {
+        /*
             'header@flights': {
                 templateUrl: 'partials/flights-all-header.html'
-            },
+            },*/
             "content@flights": {
                 templateUrl: 'flights/flights.html'
             }

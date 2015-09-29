@@ -1,27 +1,7 @@
-app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, flightService, gridService) {
-
-  $scope.selectedFlight=$stateParams.flight;
+app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, flightService, gridService, uiGridConstants) {
+  $scope.flight = flightService;
   
-  var defaultSort = [
-    { column: 'ruleHitCount', dir: 'desc' },
-    { column: 'listHitCount', dir: 'desc' },
-    { column: 'eta', dir: 'desc' }
-  ];
-  
-  /*
-  var defaultFilters = [
-    { name: 'direction', value: 'I' },
-    { name: 'eta
-  ];
-  */
-  
-  var paginationOptions = {
-    pageNumber: 1,
-    pageSize: 15,
-    etaStart: null,
-    etaEnd: null,
-    sort: defaultSort
-  };
+  $scope.selectedFlight = $stateParams.flight;
 
   $scope.flightsGrid = {
     enableSorting: true,
@@ -41,12 +21,13 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
       $scope.gridApi = gridApi;
       
       gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
+        console.log('sort changed');
         if (sortColumns.length === 0) {
-          paginationOptions.sort = null; 
+          $scope.flight.model.sort = null; 
         } else {
-          paginationOptions.sort = [];
+          $scope.flight.model.sort = [];
           for (i = 0; i<sortColumns.length; i++) {
-            paginationOptions.sort.push({ column: sortColumns[i].name, dir: sortColumns[i].sort.direction });
+            $scope.flight.model.sort.push({ column: sortColumns[i].name, dir: sortColumns[i].sort.direction });
           }
         }
         getPage();
@@ -57,8 +38,9 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
       });
 
       gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-        paginationOptions.pageNumber = newPage;
-        paginationOptions.pageSize = pageSize;
+        console.log('page changed');
+        $scope.flight.model.pageNumber = newPage;
+        $scope.flight.model.pageSize = pageSize;
         getPage();
       });
     }
@@ -68,11 +50,26 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
     { name: 'passengerCount', displayName: 'P', width: 50, enableFiltering: false,
         cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.passengerNav(row)">{{COL_FIELD}}</button> ' ,
     },
-    { name: 'ruleHitCount', displayName: 'H', width: 50, enableFiltering: false, cellClass: gridService.colorHits },
-    { name: 'listHitCount', displayName: 'L', width: 50, enableFiltering: false, cellClass: gridService.colorHits },
+    { name: 'ruleHitCount', displayName: 'H', width: 50, enableFiltering: false, cellClass: gridService.colorHits,
+      sort: {
+        direction: uiGridConstants.DESC,
+        priority: 0
+      }
+    },
+    { name: 'listHitCount', displayName: 'L', width: 50, enableFiltering: false, cellClass: gridService.colorHits,
+      sort: {
+        direction: uiGridConstants.DESC,
+        priority: 1
+      }    
+    },
     { name: 'carrier', width: 75 },
     { name: 'flightNumber', displayName: 'Flight', width: 75 },
-    { name: 'eta', displayName: 'ETA' },
+    { name: 'eta', displayName: 'ETA',
+      sort: {
+        direction: uiGridConstants.DESC,
+        priority: 2
+      }    
+    },
     { name: 'etd', displayName: 'ETD' },    
     { name: 'origin', displayName: 'Origin' },
     { name: 'originCountry', displayName: 'Country' },
@@ -86,8 +83,8 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   };
 
   var getPage = function() {
-    console.log(JSON.stringify(paginationOptions));
-    flightService.getFlights(paginationOptions).then(function (page) {
+    console.log(JSON.stringify($scope.flight.model));
+    flightService.getFlights($scope.flight.model).then(function (page) {
       $scope.flightsGrid.totalItems = page.totalFlights;
       $scope.flightsGrid.data = page.flights;
     });
@@ -97,7 +94,6 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
      return gridService.calculateGridHeight($scope.flightsGrid.data.length);
   };  
   
-  getPage();
-
   $state.go('flights.all');
+  getPage();
 });
