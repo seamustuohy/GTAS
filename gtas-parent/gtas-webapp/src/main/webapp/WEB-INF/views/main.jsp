@@ -96,6 +96,7 @@
 	<script src='factory/ModalGridFactory.js'></script>
 	<script src='factory/QueryBuilderFactory.js'></script>
 	<script src='factory/JqueryQueryBuilderWidget.js'></script>
+	<script src='jqb/JQBController.js'></script>
 	<script src='dashboard/DashboardController.js'></script>
 
   <script src='common/GridService.js'></script>
