@@ -1,13 +1,6 @@
 package gov.gtas.controller;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,10 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.gtas.controller.dto.FlightsRequestDto;
 import gov.gtas.services.FlightService;
@@ -36,7 +26,7 @@ public class FlightPassengerController {
 
     @RequestMapping(value = "/flights", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody FlightsPage getAllFlights(@RequestBody FlightsRequestDto request) {
-        System.out.println(request);
+//        System.out.println(request);
         return flightService.findAll(request.getPageNumber(), request.getPageSize());
     }
 
