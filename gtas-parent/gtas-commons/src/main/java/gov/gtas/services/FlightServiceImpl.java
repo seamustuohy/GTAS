@@ -35,16 +35,10 @@ public class FlightServiceImpl implements FlightService {
     @Override
     @Transactional
     public FlightsPageDto findAll(FlightsRequestDto dto) {
-        int pageNumber = dto.getPageNumber();
-        int pageSize = dto.getPageSize();
-        int pn = pageNumber > 0 ? pageNumber - 1 : 0;
         List<FlightVo> vos = new ArrayList<>();
 
-        Page<Flight> page = flightRespository.findAll(new PageRequest(pn, pageSize));
-        long total = page.getTotalElements();
-
-//        long total = -1;
-//        List<Flight> page = flightRespository.getAllSorted(new PageRequest(pn, pageSize));
+        long total = -1;
+        List<Flight> page = flightRespository.getAllSorted(new PageRequest(dto.getPageNumber(), dto.getPageSize()));
         for (Flight f : page) {
             FlightVo vo = new FlightVo();
             BeanUtils.copyProperties(f, vo);

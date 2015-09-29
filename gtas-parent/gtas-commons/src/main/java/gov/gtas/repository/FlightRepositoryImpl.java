@@ -9,7 +9,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -29,8 +28,12 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
         CriteriaQuery<Flight> select = q.select(f);
         q.orderBy(cb.desc(f.get("ruleHitCount")));
         
+        int pageNumber = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+        int firstResultIndex = (pageNumber - 1) * pageSize;
+
         TypedQuery<Flight> typedQuery = em.createQuery(select);
-        typedQuery.setFirstResult(pageable.getPageNumber());
+        typedQuery.setFirstResult(firstResultIndex);
         typedQuery.setMaxResults(pageable.getPageSize());
         List<Flight> results = typedQuery.getResultList();
         
