@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Flight;
@@ -38,7 +39,7 @@ public class FlightServiceImpl implements FlightService {
         List<FlightVo> vos = new ArrayList<>();
 
         long total = -1;
-        List<Flight> page = flightRespository.getAllSorted(new PageRequest(dto.getPageNumber(), dto.getPageSize()));
+        List<Flight> page = flightRespository.getAllSorted(dto);
         for (Flight f : page) {
             FlightVo vo = new FlightVo();
             BeanUtils.copyProperties(f, vo);

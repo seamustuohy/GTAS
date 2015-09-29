@@ -1,5 +1,6 @@
 package gov.gtas.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,12 +8,15 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import gov.gtas.model.Flight;
+import gov.gtas.services.dto.FlightsRequestDto;
+import gov.gtas.services.dto.SortOptionsDto;
 
 @Repository
 public class FlightRepositoryImpl implements FlightRepositoryCustom {
@@ -21,20 +25,35 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
     
     public FlightRepositoryImpl() { }
     
-    public List<Flight> getAllSorted(Pageable pageable) {
+    public List<Flight> getAllSorted(FlightsRequestDto dto) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Flight> q = cb.createQuery(Flight.class);
         Root<Flight> f = q.from(Flight.class);
         CriteriaQuery<Flight> select = q.select(f);
-        q.orderBy(cb.desc(f.get("ruleHitCount")));
-        
-        int pageNumber = pageable.getPageNumber();
-        int pageSize = pageable.getPageSize();
-        int firstResultIndex = (pageNumber - 1) * pageSize;
 
+        // sorting
+        if (dto.getSort() != null) {
+            List<Order> orders = new ArrayList<>();
+            for (SortOptionsDto sort : dto.getSort()) {
+                Expression<?> e = f.get(sort.getColumn());
+                Order order = null;
+                if (sort.getDir().equals("desc")) {
+                    order = cb.desc(e);
+                } else {
+                    order = cb.asc(e);
+                }
+                orders.add(order);
+            }
+            q.orderBy(orders);
+        }
+
+        // pagination
+        int pageNumber = dto.getPageNumber();
+        int pageSize = dto.getPageSize();
+        int firstResultIndex = (pageNumber - 1) * pageSize;
         TypedQuery<Flight> typedQuery = em.createQuery(select);
         typedQuery.setFirstResult(firstResultIndex);
-        typedQuery.setMaxResults(pageable.getPageSize());
+        typedQuery.setMaxResults(dto.getPageSize());
         List<Flight> results = typedQuery.getResultList();
         
         return results;
