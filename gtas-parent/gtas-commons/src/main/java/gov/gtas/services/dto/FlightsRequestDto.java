@@ -1,4 +1,4 @@
-package gov.gtas.controller.dto;
+package gov.gtas.services.dto;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.repository.FlightRepository;
+import gov.gtas.services.dto.FlightsPageDto;
+import gov.gtas.services.dto.FlightsRequestDto;
 import gov.gtas.vo.passenger.FlightVo;
 
 @Service
@@ -32,7 +34,9 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     @Transactional
-    public FlightsPage findAll(int pageNumber, int pageSize) {
+    public FlightsPageDto findAll(FlightsRequestDto dto) {
+        int pageNumber = dto.getPageNumber();
+        int pageSize = dto.getPageSize();
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
         List<FlightVo> vos = new ArrayList<>();
 
@@ -47,7 +51,7 @@ public class FlightServiceImpl implements FlightService {
             vos.add(vo);
         }
 
-        return new FlightsPage(vos, total);
+        return new FlightsPageDto(vos, total);
     }
 
 	@Override

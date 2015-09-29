@@ -1,4 +1,4 @@
-package gov.gtas.controller.dto;
+package gov.gtas.services.dto;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

@@ -19,6 +19,7 @@ import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Passenger;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PassengerRepository;
+import gov.gtas.services.dto.PassengersPageDto;
 import gov.gtas.vo.passenger.DocumentVo;
 import gov.gtas.vo.passenger.PassengerVo;
 
@@ -39,7 +40,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional
-    public PassengersPage getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize) {
+    public PassengersPageDto getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize) {
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
         Page<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId, new PageRequest(pn, pageSize));
         List<PassengerVo> vos = new ArrayList<>();
@@ -58,12 +59,12 @@ public class PassengerServiceImpl implements PassengerService {
             fillWithHitsInfo(vo,flightId, p.getId());
         }
         
-        return new PassengersPage(vos, passengerList.getTotalElements());
+        return new PassengersPageDto(vos, passengerList.getTotalElements());
     }
 
     @Override
     @Transactional
-    public PassengersPage findAllWithFlightInfo(int pageNumber, int pageSize) {
+    public PassengersPageDto findAllWithFlightInfo(int pageNumber, int pageSize) {
         int pn = pageNumber > 0 ? pageNumber - 1 : 0;
         List<Object[]> results = passengerRespository.getAllPassengersAndFlights(new PageRequest(pn, pageSize));
         List<PassengerVo> rv = new ArrayList<>();
@@ -85,7 +86,7 @@ public class PassengerServiceImpl implements PassengerService {
             vo.setEta(f.getEta());
         }
         
-        return new PassengersPage(rv, -1);
+        return new PassengersPageDto(rv, -1);
     }
 
 	@Override
