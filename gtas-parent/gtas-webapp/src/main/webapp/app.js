@@ -126,10 +126,23 @@ app.config(function ($stateProvider) {
                 }
             }
         }
-    }).state('query-builder', {
+    }).state('qb', {
         url: '/query-builder',
-        templateUrl: 'query-builder/query.html',
-        controller: 'QueryBuilderController'
+        views: {
+            "builder@qb": {
+                templateUrl: 'jqb/jqb.html',
+                controller: 'JQBController'
+            },
+            "content@qb": {
+                controller: 'QueryBuilderController',
+                templateUrl: 'query-builder/query.htm'/*,
+                resolve: {
+                    passengers: function ($http, $stateParams, paxService) {
+                        return null;  //paxService.getPax(1);
+                    }
+                }*/
+            }
+        }
     }).state('query-flights', {
         url: '/query/flights',
         templateUrl: 'flights/flights.html',
@@ -140,8 +153,21 @@ app.config(function ($stateProvider) {
         controller: 'ExecuteQueryController'
     }).state('risk-criteria', {
         url: '/risk-criteria',
-        templateUrl: 'risk-criteria/risk-criteria.html',
-        controller: 'RiskCriteriaController'
+        views: {
+            "builder@qb": {
+                templateUrl: 'jqb/jqb.html',
+                controller: 'JQBController'
+            },
+            "content@qb": {
+                controller: 'RiskCriteriaController',
+                templateUrl: 'risk-criteria/risk-criteria.htm'/*,
+                 resolve: {
+                 passengers: function ($http, $stateParams, paxService) {
+                 return null;  //paxService.getPax(1);
+                 }
+                 }*/
+            }
+        }
     }).state('watchlists', {
         url: '/watchlists',
         templateUrl: 'watchlists/watchlists.html',

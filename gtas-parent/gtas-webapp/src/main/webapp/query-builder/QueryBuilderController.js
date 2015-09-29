@@ -41,8 +41,6 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
         $scope.$builder.queryBuilder('loadRules', obj.query);
     };
 
-    $scope.buildAfterEntitiesLoaded();
-
     $scope.loadRuleOnSelection = function (row) {
         $scope.selectedIndex = $scope.queriesGrid.data.indexOf(row.entity);
         $scope.loadRule();
@@ -83,17 +81,6 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
         jqueryQueryBuilderService.save(queryObject).then($scope.updateQueryBuilderOnSave);
     };
-
-    $scope.executeQuery = function (passenger) {
-        selectedPassenger = passenger;
-        $mdDialog.show({
-            controller: PassengerDetailsDialogController,
-            templateUrl: 'pax/pax.detail.html',
-            parent: angular.element(document.body),
-            clickOutsideToClose: true
-        });
-    };
-
 
     $scope.executeQuery = function (viewType) {
         var qbData = $scope.$builder.queryBuilder('getDrools');

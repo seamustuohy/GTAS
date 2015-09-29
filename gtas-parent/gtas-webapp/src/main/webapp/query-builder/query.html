@@ -20,7 +20,7 @@
     </md-content>
 
     <h2>Conditions:</h2>
-    <div id="builder"></div>
+    <div data-ui-view="builder"></div>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
     <md-button type="button" ng-click="executeQuery('flights')"  class="md-raised md-primary md-button md-default-theme" >Query Flights</md-button>
     <md-button type="button" ng-click="executeQuery('passenger')"  class="md-raised md-primary md-button md-default-theme" >Query Passengers</md-button>
