@@ -22,10 +22,10 @@ INSERT INTO `user` VALUES ('adelorie',1, 'Anthony', 'Delorie', '$2a$10$T5xL/wIet
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
-INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('bstygar', 1);
-INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('svempati', 1);
-INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('abandopadhay', 1);
-INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('jtang', 1);
-INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('mcopenhafer', 1);
-INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('ladebiyi', 1);
-INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('adelorie', 1);
+INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('bstygar', 7);
+INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('svempati', 7);
+INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('abandopadhay', 7);
+INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('jtang', 7);
+INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('mcopenhafer', 7);
+INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('ladebiyi', 7);
+INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('adelorie', 7);
