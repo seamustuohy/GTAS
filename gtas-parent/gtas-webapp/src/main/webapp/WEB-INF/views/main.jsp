@@ -28,20 +28,20 @@
 	<li><a href="logout.action">LOGOUT</a></li>
 	</ul>
 		<md-tabs md-stretch-tabs md-selected="selectedIndex">
-		<sec:authorize access="hasAnyAuthority('VIEW_FLIGHT_PASSENGERS','ADMIN')">
+		<sec:authorize access="hasAnyAuthority('View Flight And Passenger','Admin')">
 			<md-tab label="Flights"></md-tab>
 			<md-tab label="Passengers"></md-tab>
 		</sec:authorize>
-		<sec:authorize access="hasAnyAuthority('MANAGE_QUERIES', 'ADMIN')">
+		<sec:authorize access="hasAnyAuthority('Manage Queries', 'Admin')">
 			<md-tab label="Queries"></md-tab>
 		</sec:authorize>
-		<sec:authorize access="hasAnyAuthority('MANAGE_RULES', 'ADMIN')">
+		<sec:authorize access="hasAnyAuthority('Manage Rules', 'Admin')">
 			<md-tab label="Risk Criteria"></md-tab>
 		</sec:authorize>
-		<sec:authorize access="hasAnyAuthority('MANAGE_WATCHLIST','ADMIN')">
+		<sec:authorize access="hasAnyAuthority('Manage Watch List','Admin')">
 			<md-tab label="Watchlist"></md-tab>
 		</sec:authorize>
-		<sec:authorize access="hasAnyAuthority('MANAGE_USERS','ADMIN')">
+		<sec:authorize access="hasAnyAuthority('Admin')">
 			<md-tab label="Admin"></md-tab>
 		</sec:authorize>
 

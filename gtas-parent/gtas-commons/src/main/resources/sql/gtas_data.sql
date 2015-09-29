@@ -1,13 +1,11 @@
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES ('1', 'ROLE_ADMIN');
-INSERT INTO `role` VALUES ('2', 'ROLE_CUST');
-INSERT INTO `role` VALUES ('3', 'VIEW_FLIGHT_PASSENGERS');
-INSERT INTO `role` VALUES ('4', 'MANAGE_QUERIES');
-INSERT INTO `role` VALUES ('5', 'MANAGE_RULES');
-INSERT INTO `role` VALUES ('6', 'MANAGE_WATCHLIST');
-INSERT INTO `role` VALUES ('7', 'ADMIN');
+INSERT INTO `role` VALUES ('1', 'Admin');
+INSERT INTO `role` VALUES ('2', 'Manage Queries');
+INSERT INTO `role` VALUES ('3', 'View Flight And Passenger');
+INSERT INTO `role` VALUES ('4', 'Manage Watch List');
+INSERT INTO `role` VALUES ('5', 'Manage Rules');
 
 -- ----------------------------
 -- Records of user
