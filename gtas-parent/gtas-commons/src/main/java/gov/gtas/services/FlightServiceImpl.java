@@ -11,11 +11,14 @@ import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.repository.FlightRepository;
+import gov.gtas.services.dto.FlightsPageDto;
+import gov.gtas.services.dto.FlightsRequestDto;
 import gov.gtas.vo.passenger.FlightVo;
 
 @Service
@@ -32,19 +35,18 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     @Transactional
-    public FlightsPage findAll(int pageNumber, int pageSize) {
-        int pn = pageNumber > 0 ? pageNumber - 1 : 0;
+    public FlightsPageDto findAll(FlightsRequestDto dto) {
         List<FlightVo> vos = new ArrayList<>();
 
-        Page<Flight> page = flightRespository.findAll(new PageRequest(pn, pageSize));
-        long total = page.getTotalElements();
+        long total = -1;
+        List<Flight> page = flightRespository.getAllSorted(dto);
         for (Flight f : page) {
             FlightVo vo = new FlightVo();
             BeanUtils.copyProperties(f, vo);
             vos.add(vo);
         }
 
-        return new FlightsPage(vos, total);
+        return new FlightsPageDto(vos, total);
     }
 
 	@Override

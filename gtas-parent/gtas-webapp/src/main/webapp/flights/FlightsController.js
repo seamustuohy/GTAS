@@ -1,15 +1,30 @@
 app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, flightService, gridService) {
 
   $scope.selectedFlight=$stateParams.flight;
-
+  
+  var defaultSort = [
+    { column: 'ruleHitCount', dir: 'desc' },
+    { column: 'listHitCount', dir: 'desc' },
+    { column: 'eta', dir: 'desc' }
+  ];
+  
+  /*
+  var defaultFilters = [
+    { name: 'direction', value: 'I' },
+    { name: 'eta
+  ];
+  */
+  
   var paginationOptions = {
     pageNumber: 1,
     pageSize: 15,
-    sort: null
+    etaStart: null,
+    etaEnd: null,
+    sort: defaultSort
   };
 
   $scope.flightsGrid = {
-    enableSorting: false,
+    enableSorting: true,
     multiSelect: false,
     enableFiltering: false,
     enableRowSelection: false,
@@ -27,9 +42,12 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
       
       gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
         if (sortColumns.length === 0) {
-          paginationOptions.sort = null;
+          paginationOptions.sort = null; 
         } else {
-          paginationOptions.sort = sortColumns[0].sort.direction;
+          paginationOptions.sort = [];
+          for (i = 0; i<sortColumns.length; i++) {
+            paginationOptions.sort.push({ column: sortColumns[i].name, dir: sortColumns[i].sort.direction });
+          }
         }
         getPage();
       });
@@ -68,6 +86,7 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   };
 
   var getPage = function() {
+    console.log(JSON.stringify(paginationOptions));
     flightService.getFlights(paginationOptions).then(function (page) {
       $scope.flightsGrid.totalItems = page.totalFlights;
       $scope.flightsGrid.data = page.flights;

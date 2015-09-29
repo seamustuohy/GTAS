@@ -6,6 +6,7 @@ import gov.gtas.model.MessageStatus;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.services.watchlist.WatchlistPersistenceService;
 import gov.gtas.svc.TargetingService;
+import gov.gtas.svc.UdrService;
 import gov.gtas.svc.WatchlistService;
 import gov.gtas.svc.util.RuleExecutionContext;
 
@@ -41,6 +42,9 @@ public class TargetingPerformanceEval {
 	WatchlistService watchlistService;
 
 	@Autowired
+	UdrService udrService;
+
+	@Autowired
 	WatchlistPersistenceService watchlistPersistenceService;
 
 	@Resource
@@ -57,13 +61,14 @@ public class TargetingPerformanceEval {
 	//@Test
 	@Transactional
 	public void genPerformanceData() {
-		WatchlistRuleGenerator.generateWlRules(watchlistService, PASSENGER_WL_NAME, EntityEnum.PASSENGER, 100);
+	    WatchlistRuleGenerator.generateWlRules(watchlistService, PASSENGER_WL_NAME, EntityEnum.PASSENGER, 100);
 		WatchlistRuleGenerator.generateWlRules(watchlistService, DOCUMENT_WL_NAME, EntityEnum.DOCUMENT, 20);
+		//UdrRuleGenerator.generateUdr(udrService, "PerfTestUdr", 200);
 		System.out.println("*****************************************************************");
 		System.out.println("********************   GENERATION COMPLETE  *********************");
 		System.out.println("*****************************************************************");
 	}
-    //@Test
+   // @Test
 	public void activatePerformanceData() {
 		watchlistService.activateAllWatchlists();
 		System.out.println("*****************************************************************");

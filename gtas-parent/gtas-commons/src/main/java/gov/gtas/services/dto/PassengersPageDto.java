@@ -1,13 +1,13 @@
-package gov.gtas.services;
+package gov.gtas.services.dto;
 
 import java.util.List;
 
 import gov.gtas.vo.passenger.PassengerVo;
 
-public class PassengersPage {
+public class PassengersPageDto {
     private List<PassengerVo> passengers;
     private long totalPassengers;
-    public PassengersPage(List<PassengerVo> passengers, long totalPassengers) {
+    public PassengersPageDto(List<PassengerVo> passengers, long totalPassengers) {
         this.passengers = passengers;
         this.totalPassengers = totalPassengers;
     }
