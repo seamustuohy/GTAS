@@ -90,6 +90,10 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
     });
   };
   
+  $scope.refresh = function() {
+    getPage();
+  }
+  
   $scope.getTableHeight = function() {
      return gridService.calculateGridHeight($scope.flightsGrid.data.length);
   };  

@@ -1,6 +1,7 @@
 package gov.gtas.repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,6 +11,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
@@ -28,14 +31,21 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
     public List<Flight> getAllSorted(FlightsRequestDto dto) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Flight> q = cb.createQuery(Flight.class);
-        Root<Flight> f = q.from(Flight.class);
-        CriteriaQuery<Flight> select = q.select(f);
+        Root<Flight> root = q.from(Flight.class);
+
+        // dates
+        Predicate etaCondition = null;
+        if (dto.getEtaStart() != null && dto.getEtaEnd() != null) {
+            Predicate startPredicate = cb.greaterThanOrEqualTo(root.<Date>get("eta"), dto.getEtaStart());
+            Predicate endPredicate = cb.lessThanOrEqualTo(root.<Date>get("eta"), dto.getEtaEnd());
+            etaCondition = cb.and(startPredicate, endPredicate);
+        }
 
         // sorting
         if (dto.getSort() != null) {
             List<Order> orders = new ArrayList<>();
             for (SortOptionsDto sort : dto.getSort()) {
-                Expression<?> e = f.get(sort.getColumn());
+                Expression<?> e = root.get(sort.getColumn());
                 Order order = null;
                 if (sort.getDir().equals("desc")) {
                     order = cb.desc(e);
@@ -46,6 +56,8 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
             }
             q.orderBy(orders);
         }
+        
+        CriteriaQuery<Flight> select = (etaCondition == null) ? q.select(root) : q.select(root).where(etaCondition);
 
         // pagination
         int pageNumber = dto.getPageNumber();
@@ -54,6 +66,7 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
         TypedQuery<Flight> typedQuery = em.createQuery(select);
         typedQuery.setFirstResult(firstResultIndex);
         typedQuery.setMaxResults(dto.getPageSize());
+        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Flight> results = typedQuery.getResultList();
         
         return results;
