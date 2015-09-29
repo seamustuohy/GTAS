@@ -67,13 +67,19 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
       });
 
       gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-        paxService.getRuleHits(row.entity.id).then(function (data) {
-          console.log('get rule hits for pax ' + row.entity.id);
-          row.entity.subGridOptions.data = data;
-        });
 
         if (row.isSelected) {
           $scope.showPaxDetailsModal(row.entity);
+        }
+      });
+
+      gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
+        if (row.isExpanded) {
+          paxService.getRuleHits(row.entity.id).then(function (data) {
+            console.log('get rule hits for pax ' + row.entity.id);
+            row.entity.subGridOptions.data = data;
+          });
+
         }
       });
     }
