@@ -7,13 +7,17 @@ app.service("flightService", function ($http, $q) {
     { column: 'eta', dir: 'desc' }
   ];
 
+  var startDate = new Date();
+  var endDate = new Date();
+  endDate.setDate(endDate.getDate() + 3);
+
   // Return public API.
   return ({
     model: {
       pageNumber: 1,
       pageSize: 15,
-      startDate: new Date(),
-      endDate: new Date(),
+      etaStart: startDate,
+      etaEnd: endDate,
       sort: []      
     },
     getFlights: getFlights

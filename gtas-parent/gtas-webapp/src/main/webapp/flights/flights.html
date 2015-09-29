@@ -7,9 +7,11 @@
 
 <h2 flex><span class="glyphicon glyphicon-plane glyphiconFlightPax"></span>Flights</h2>
 <div flex style="text-align:center; margin-top: -1.8em;">
-    <md-datepicker ng-model="flight.model.startDate" md-placeholder="Start Date"></md-datepicker>
-    <md-datepicker ng-model="flight.model.endDate" md-placeholder="End Date"></md-datepicker>
+  <md-datepicker ng-model="flight.model.etaStart" md-placeholder="Start Date"></md-datepicker>
+  <md-datepicker ng-model="flight.model.etaEnd" md-placeholder="End Date"></md-datepicker>
+  <md-button class="md-raised md-primary" ng-click="refresh()">Refresh</md-button>
 </div>
+
 
 <header data-ui-view="heading"></header>
 <div layout="column">
