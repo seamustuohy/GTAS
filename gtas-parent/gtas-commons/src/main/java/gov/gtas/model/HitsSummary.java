@@ -8,6 +8,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -21,9 +23,6 @@ public class HitsSummary extends BaseEntity {
 	public HitsSummary() {
 	}
 
-	@Column(name = "passenger_id", nullable = false)
-	private Long passengerId;
-
 	@Column(name = "created_date", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
@@ -31,8 +30,13 @@ public class HitsSummary extends BaseEntity {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<HitDetail> hitdetails = new ArrayList<HitDetail>();
 
-	@Column(name = "flight_id")
-	private Long flightId;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = " flight_id", nullable = false)
+	private Flight flight;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = " passenger_id", nullable = false)
+	private Passenger passenger;
 
 	@Column(name = "rule_hit_count")
 	private Integer ruleHitCount;
@@ -51,28 +55,12 @@ public class HitsSummary extends BaseEntity {
 		this.createdDate = createdDate;
 	}
 
-	public Long getPassengerId() {
-		return passengerId;
-	}
-
-	public void setPassengerId(Long passengerId) {
-		this.passengerId = passengerId;
-	}
-
 	public List<HitDetail> getHitdetails() {
 		return hitdetails;
 	}
 
 	public void setHitdetails(List<HitDetail> hitdetails) {
 		this.hitdetails = hitdetails;
-	}
-
-	public Long getFlightId() {
-		return flightId;
-	}
-
-	public void setFlightId(Long flightId) {
-		this.flightId = flightId;
 	}
 
 	public String getHitType() {
@@ -97,5 +85,21 @@ public class HitsSummary extends BaseEntity {
 
 	public void setWatchListHitCount(Integer watchListHitCount) {
 		this.watchListHitCount = watchListHitCount;
+	}
+
+	public Flight getFlight() {
+		return flight;
+	}
+
+	public void setFlight(Flight flight) {
+		this.flight = flight;
+	}
+
+	public Passenger getPassenger() {
+		return passenger;
+	}
+
+	public void setPassenger(Passenger passenger) {
+		this.passenger = passenger;
 	}
 }

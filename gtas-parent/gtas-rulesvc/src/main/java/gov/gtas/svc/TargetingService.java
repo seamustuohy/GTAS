@@ -3,17 +3,16 @@
  */
 package gov.gtas.svc;
 
-import java.util.List;
-import java.util.Set;
-
 import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.model.ApisMessage;
-import gov.gtas.model.HitsSummary;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Pnr;
 import gov.gtas.svc.util.RuleExecutionContext;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * The API for the Targeting Service.
@@ -86,21 +85,24 @@ public interface TargetingService {
 
 	/**
 	 * Running Rule Engine through Scheduler.
+	 * 
 	 * @return list of unique flight id's that were updated
 	 */
 	public Set<Long> runningRuleEngine();
-	
+
 	/**
 	 * Update the rule and watchlist hit counts for a set of flight id's.
 	 * 
-	 * Initially I did not want to create a separate method for this and
-	 * just include the logic in the rule runner, but after some testing on
-	 * large amounts of data, it seems that hibernate should flush the
-	 * hits to the hits_summary table prior to computing the updated hit
-	 * counts; otherwise we get inaccurate results. 
-	 * @param flights set of flight id's to update
+	 * Initially I did not want to create a separate method for this and just
+	 * include the logic in the rule runner, but after some testing on large
+	 * amounts of data, it seems that hibernate should flush the hits to the
+	 * hits_summary table prior to computing the updated hit counts; otherwise
+	 * we get inaccurate results.
+	 * 
+	 * @param flights
+	 *            set of flight id's to update
 	 */
-    public void updateFlightHitCounts(Set<Long> flights);
+	public void updateFlightHitCounts(Set<Long> flights);
 
 	/**
 	 * retrieve ApisMessage from db
@@ -110,7 +112,8 @@ public interface TargetingService {
 	/**
 	 * update ApisMessage with message status
 	 */
-	public void updateApisMessage(ApisMessage message, MessageStatus messageStatus);
+	public void updateApisMessage(ApisMessage message,
+			MessageStatus messageStatus);
 
 	/**
 	 * retrieve ApisMessage from db

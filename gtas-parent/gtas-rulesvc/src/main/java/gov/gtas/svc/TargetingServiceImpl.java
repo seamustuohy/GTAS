@@ -1,5 +1,37 @@
 package gov.gtas.svc;
 
+import gov.gtas.bo.CompositeRuleServiceResult;
+import gov.gtas.bo.RuleExecutionStatistics;
+import gov.gtas.bo.RuleHitDetail;
+import gov.gtas.bo.RuleServiceRequest;
+import gov.gtas.bo.RuleServiceResult;
+import gov.gtas.bo.TargetDetailVo;
+import gov.gtas.bo.TargetSummaryVo;
+import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.RuleConstants;
+import gov.gtas.constant.RuleServiceConstants;
+import gov.gtas.constant.WatchlistConstants;
+import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Flight;
+import gov.gtas.model.HitDetail;
+import gov.gtas.model.HitsSummary;
+import gov.gtas.model.Message;
+import gov.gtas.model.MessageStatus;
+import gov.gtas.model.Passenger;
+import gov.gtas.model.Pnr;
+import gov.gtas.repository.ApisMessageRepository;
+import gov.gtas.repository.FlightRepository;
+import gov.gtas.repository.HitsSummaryRepository;
+import gov.gtas.repository.MessageRepository;
+import gov.gtas.repository.PassengerRepository;
+import gov.gtas.repository.PnrRepository;
+import gov.gtas.rule.RuleService;
+import gov.gtas.svc.request.builder.PassengerFlightTuple;
+import gov.gtas.svc.util.RuleExecutionContext;
+import gov.gtas.svc.util.TargetingResultUtils;
+import gov.gtas.svc.util.TargetingServiceUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -17,35 +49,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
-import gov.gtas.bo.CompositeRuleServiceResult;
-import gov.gtas.bo.TargetDetailVo;
-import gov.gtas.bo.TargetSummaryVo;
-import gov.gtas.bo.RuleExecutionStatistics;
-import gov.gtas.bo.RuleHitDetail;
-import gov.gtas.bo.RuleServiceRequest;
-import gov.gtas.bo.RuleServiceResult;
-import gov.gtas.constant.CommonErrorConstants;
-import gov.gtas.constant.RuleConstants;
-import gov.gtas.constant.RuleServiceConstants;
-import gov.gtas.constant.WatchlistConstants;
-import gov.gtas.error.ErrorHandlerFactory;
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.HitDetail;
-import gov.gtas.model.HitsSummary;
-import gov.gtas.model.Message;
-import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Pnr;
-import gov.gtas.repository.ApisMessageRepository;
-import gov.gtas.repository.FlightRepository;
-import gov.gtas.repository.HitsSummaryRepository;
-import gov.gtas.repository.MessageRepository;
-import gov.gtas.repository.PnrRepository;
-import gov.gtas.rule.RuleService;
-import gov.gtas.svc.request.builder.PassengerFlightTuple;
-import gov.gtas.svc.util.RuleExecutionContext;
-import gov.gtas.svc.util.TargetingResultUtils;
-import gov.gtas.svc.util.TargetingServiceUtils;
 
 /**
  * Implementation of the Targeting Service API.
@@ -78,6 +81,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private FlightRepository flightRepository;
+
+	@Autowired
+	private PassengerRepository passengerRepository;
 
 	@Autowired
 	private EntityManager em;
@@ -248,13 +254,11 @@ public class TargetingServiceImpl implements TargetingService {
 					.ruleResultPostProcesssing(udrResult);
 		}
 		if (wlResult != null) {
-			wlResult = TargetingResultUtils
-					.ruleResultPostProcesssing(wlResult);
+			wlResult = TargetingResultUtils.ruleResultPostProcesssing(wlResult);
 		}
 
-		TargetingResultUtils.
-		updateRuleExecutionContext(ctx, new CompositeRuleServiceResult(udrResult,
-				wlResult));
+		TargetingResultUtils.updateRuleExecutionContext(ctx,
+				new CompositeRuleServiceResult(udrResult, wlResult));
 		return ctx;
 	}
 
@@ -299,32 +303,35 @@ public class TargetingServiceImpl implements TargetingService {
 		RuleExecutionStatistics ruleExeStatus = ruleRunningResult
 				.getRuleExecutionStatistics();
 		if (logger.isInfoEnabled()) {
-			logger.info("\nTargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> " + ruleExeStatus.getTotalRulesFired());
+			logger.info("\nTargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> "
+					+ ruleExeStatus.getTotalRulesFired());
 		}
 
 		deleteExistingHitRecords(ruleRunningResult.getPaxFlightTuples());
 
 		List<HitsSummary> hitsSummary = storeHitsInfo(ruleRunningResult);
 		Set<Long> uniqueFlights = new HashSet<>();
-        for (HitsSummary s : hitsSummary) {
-            uniqueFlights.add(s.getFlightId());
-        }
-        
-        return uniqueFlights;
-    }
-	
-    @Transactional
-	public void updateFlightHitCounts(Set<Long> flights) {
-        for (Long flightId : flights) {
-            flightRepository.updateRuleHitCountForFlight(flightId);
-            flightRepository.updateListHitCountForFlight(flightId);
-        }
+		// for (HitsSummary s : hitsSummary) {
+		// uniqueFlights.add(s.getFlightId());
+		// }
+
+		return null;
 	}
 
-	private List<HitsSummary> storeHitsInfo(RuleExecutionContext ruleRunningResult) {
+	@Transactional
+	public void updateFlightHitCounts(Set<Long> flights) {
+		for (Long flightId : flights) {
+			flightRepository.updateRuleHitCountForFlight(flightId);
+			flightRepository.updateListHitCountForFlight(flightId);
+		}
+	}
+
+	private List<HitsSummary> storeHitsInfo(
+			RuleExecutionContext ruleRunningResult) {
 		List<HitsSummary> hitsSummaryList = new ArrayList<HitsSummary>();
-		Collection<TargetSummaryVo> results = ruleRunningResult.getTargetingResult();
-				
+		Collection<TargetSummaryVo> results = ruleRunningResult
+				.getTargetingResult();
+
 		Iterator<TargetSummaryVo> iter = results.iterator();
 		while (iter.hasNext()) {
 			TargetSummaryVo ruleDetail = iter.next();
@@ -332,7 +339,7 @@ public class TargetingServiceImpl implements TargetingService {
 			hitsSummaryList.add(hitsSummary);
 		}
 		hitsSummaryRepository.save(hitsSummaryList);
-		
+
 		return hitsSummaryList;
 	}
 
@@ -365,22 +372,33 @@ public class TargetingServiceImpl implements TargetingService {
 	private HitsSummary constructHitsInfo(TargetSummaryVo hitSummmaryVo) {
 
 		HitsSummary hitsSummary = new HitsSummary();
-		hitsSummary.setPassengerId(hitSummmaryVo.getPassengerId());
-		hitsSummary.setFlightId(hitSummmaryVo.getFlightId());
+		Passenger foundPassenger = passengerRepository.findOne(hitSummmaryVo
+				.getPassengerId());
+		if (foundPassenger != null) {
+			hitsSummary.setPassenger(foundPassenger);
+		}
+
+		Flight foundFlight = flightRepository.findOne(hitSummmaryVo
+				.getFlightId());
+		if (foundFlight != null) {
+			hitsSummary.setFlight(foundFlight);
+		}
 		hitsSummary.setCreatedDate(new Date());
 		hitsSummary.setHitType(hitSummmaryVo.getHitType().toString());
-		
+
 		hitsSummary.setRuleHitCount(hitSummmaryVo.getRuleHitCount());
 		hitsSummary.setWatchListHitCount(hitSummmaryVo.getWatchlistHitCount());
 		List<HitDetail> detailList = new ArrayList<HitDetail>();
-        for(TargetDetailVo hdv:hitSummmaryVo.getHitDetails()){
-		    detailList.add(createHitDetail(hitsSummary, hdv));
-        }
+		for (TargetDetailVo hdv : hitSummmaryVo.getHitDetails()) {
+			detailList.add(createHitDetail(hitsSummary, hdv));
+		}
 		hitsSummary.setHitdetails(detailList);
 		return hitsSummary;
 	}
-	private HitDetail createHitDetail(HitsSummary hitsSummary, TargetDetailVo hitDetailVo){
-		HitDetail hitDetail = new HitDetail();		
+
+	private HitDetail createHitDetail(HitsSummary hitsSummary,
+			TargetDetailVo hitDetailVo) {
+		HitDetail hitDetail = new HitDetail();
 		if (hitDetailVo.getUdrRuleId() != null)
 			hitDetail.setRuleId(hitDetailVo.getUdrRuleId());
 		else {
