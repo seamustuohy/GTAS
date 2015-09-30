@@ -18,16 +18,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import gov.gtas.dataobject.AddressVo;
-import gov.gtas.dataobject.AgencyVo;
-import gov.gtas.dataobject.CreditCardVo;
-import gov.gtas.dataobject.DocumentVo;
-import gov.gtas.dataobject.EmailVo;
-import gov.gtas.dataobject.FrequentFlyerVo;
-import gov.gtas.dataobject.PassengerVo;
-import gov.gtas.dataobject.PhoneVo;
-import gov.gtas.dataobject.PnrVo;
+import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.AgencyVo;
+import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.DocumentVo;
+import gov.gtas.vo.passenger.EmailVo;
+import gov.gtas.vo.passenger.FrequentFlyerVo;
+import gov.gtas.vo.passenger.PassengerVo;
+import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.PnrVo;
 import gov.gtas.model.Address;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
@@ -79,6 +78,7 @@ public class PassengerDetailsController {
 		    		vo.setFlightETA((_tempFlight.getEta()!=null)?_tempFlight.getEta().toString(): EMPTY_STRING);
 		    		vo.setFlightETD((_tempFlight.getEta()!=null)?_tempFlight.getEta().toString(): EMPTY_STRING);
 		    		vo.setFlightId(_tempFlight.getId().toString());
+		    		//vo.setStrFlightId(_tempFlight.getId().toString());
 	    		}
 			}
         
@@ -193,7 +193,7 @@ public class PassengerDetailsController {
 				FrequentFlyer ff = (FrequentFlyer)it2.next();
 				FrequentFlyerVo fVo = new FrequentFlyerVo();
 				copyModelToVo(ff, fVo);
-				target.getFrequentFlyers().add(fVo);
+				target.getFrequentFlyerDetails().add(fVo);
 			}
 		}
 		
@@ -213,7 +213,7 @@ public class PassengerDetailsController {
 				Phone p = (Phone)it4.next();
 				PhoneVo pVo = new PhoneVo();
 				copyModelToVo(p, pVo);
-				target.getPhones().add(pVo);
+				target.getPhoneNumbers().add(pVo);
 				
 			}
 		}

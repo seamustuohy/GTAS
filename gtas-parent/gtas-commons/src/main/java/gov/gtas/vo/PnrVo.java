@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import gov.gtas.validators.Validatable;
 import gov.gtas.vo.MessageVo;
 import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
 import gov.gtas.vo.passenger.EmailVo;
 import gov.gtas.vo.passenger.FlightVo;
@@ -26,40 +27,117 @@ public class PnrVo extends MessageVo implements Validatable{
     private String carrier;
     private String origin;
     private String originCountry;
-    
     private Date dateBooked;
     private Date dateReceived;
     private Date departureDate;
-
     private Integer passengerCount;
     private Integer bagCount;
     private String formOfPayment;
-
     private String updateMode;
-    
+    private Integer totalDwellTime;
+    private String dwellAirport;
+    private String dwellCountry;
+    private Integer dwellDuration;
+    private String route;
+    private String raw;
+    private List<String> rawList = new ArrayList<String>();
+    private Integer daysBookedBeforeTravel;
+    private AgencyVo agency;
+ 
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
-    
     private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
     private List<AddressVo> addresses = new ArrayList<>();
     private List<PhoneVo> phoneNumbers = new ArrayList<>();
     private List<CreditCardVo> creditCards = new ArrayList<>();
     private List<FrequentFlyerVo> frequentFlyerDetails = new ArrayList<>();
-    //private List<EmailVo> emails = new ArrayList<>();
+    private List<EmailVo> emails = new ArrayList<>();
     
     public PnrVo() {
         this.bagCount = 0;
         this.passengerCount = 0;
     }
      
-/*    public List<EmailVo> getEmails() {
+    public List<EmailVo> getEmails() {
 		return emails;
 	}
 
 	public void setEmails(List<EmailVo> emails) {
 		this.emails = emails;
-	}*/
+	}
 
+
+	public Integer getTotalDwellTime() {
+		return totalDwellTime;
+	}
+
+	public void setTotalDwellTime(Integer totalDwellTime) {
+		this.totalDwellTime = totalDwellTime;
+	}
+
+	public String getDwellAirport() {
+		return dwellAirport;
+	}
+
+	public void setDwellAirport(String dwellAirport) {
+		this.dwellAirport = dwellAirport;
+	}
+
+	public String getDwellCountry() {
+		return dwellCountry;
+	}
+
+	public void setDwellCountry(String dwellCountry) {
+		this.dwellCountry = dwellCountry;
+	}
+
+	public Integer getDwellDuration() {
+		return dwellDuration;
+	}
+
+	public void setDwellDuration(Integer dwellDuration) {
+		this.dwellDuration = dwellDuration;
+	}
+
+	public String getRoute() {
+		return route;
+	}
+
+	public void setRoute(String route) {
+		this.route = route;
+	}
+
+	public String getRaw() {
+		return raw;
+	}
+
+	public void setRaw(String raw) {
+		this.raw = raw;
+	}
+
+	public List<String> getRawList() {
+		return rawList;
+	}
+
+	public void setRawList(List<String> rawList) {
+		this.rawList = rawList;
+	}
+
+	public Integer getDaysBookedBeforeTravel() {
+		return daysBookedBeforeTravel;
+	}
+
+	public void setDaysBookedBeforeTravel(Integer daysBookedBeforeTravel) {
+		this.daysBookedBeforeTravel = daysBookedBeforeTravel;
+	}
+
+	public AgencyVo getAgency() {
+		return agency;
+	}
+
+	public void setAgency(AgencyVo agency) {
+		this.agency = agency;
+	}
 
 	public String getMessageCode() {
         return messageCode;

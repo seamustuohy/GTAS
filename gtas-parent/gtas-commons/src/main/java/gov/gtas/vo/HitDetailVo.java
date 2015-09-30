@@ -1,4 +1,4 @@
-package gov.gtas.dataobject;
+package gov.gtas.vo;
 
 import gov.gtas.model.HitDetail;
 import gov.gtas.model.HitsSummary;
