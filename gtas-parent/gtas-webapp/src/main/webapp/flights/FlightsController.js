@@ -6,7 +6,7 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   $scope.flightDirections = [ 
     { label: 'Inbound', value: 'I' },
     { label: 'Outbound', value: 'O' },
-    { label: 'All', value: '' }
+    { label: 'Any', value: '' }
   ];
 
   $scope.flightsGrid = {
