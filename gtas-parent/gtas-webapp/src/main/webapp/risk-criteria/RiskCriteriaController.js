@@ -34,6 +34,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
     };
 
     $scope.riskCriteriaGrid.onRegisterApi = $scope.rowSelection;
+    $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
     $scope.summaryDefaults = {title: '', description: null, enabled: true};
 
 //    $scope.newRule();

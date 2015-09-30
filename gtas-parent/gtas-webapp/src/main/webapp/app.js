@@ -127,26 +127,17 @@ app.config(function ($stateProvider) {
                 }
             }
         }
-    }).state('qb', {
+    }).state('query-builder', {
         url: '/query-builder',
-        views: {
-            "builder@qb": {
-                templateUrl: 'jqb/jqb.html',
-                controller: 'JQBController'
-            },
-            "content@qb": {
-                controller: 'QueryBuilderController',
-                templateUrl: 'query-builder/query.htm'/*,
-                resolve: {
-                    passengers: function ($http, $stateParams, paxService) {
-                        return null;  //paxService.getPax(1);
-                    }
-                }*/
-            }
-        }
+        templateUrl: 'query-builder/query.html',
+        controller: 'QueryBuilderController'
     }).state('query-flights', {
         url: '/query/flights',
         templateUrl: 'flights/flights.html',
+        controller: 'ExecuteQueryController'
+    }).state('test', {
+        url: '/test',
+        templateUrl: 'test.html',
         controller: 'ExecuteQueryController'
     }).state('query-passengers', {
         url: '/query/passengers',
@@ -154,21 +145,8 @@ app.config(function ($stateProvider) {
         controller: 'ExecuteQueryController'
     }).state('risk-criteria', {
         url: '/risk-criteria',
-        views: {
-            "builder@qb": {
-                templateUrl: 'jqb/jqb.html',
-                controller: 'JQBController'
-            },
-            "content@qb": {
-                controller: 'RiskCriteriaController',
-                templateUrl: 'risk-criteria/risk-criteria.htm'/*,
-                 resolve: {
-                 passengers: function ($http, $stateParams, paxService) {
-                 return null;  //paxService.getPax(1);
-                 }
-                 }*/
-            }
-        }
+        templateUrl: 'risk-criteria/risk-criteria.html',
+        controller: 'RiskCriteriaController'
     }).state('watchlists', {
         url: '/watchlists',
         templateUrl: 'watchlists/watchlists.html',
