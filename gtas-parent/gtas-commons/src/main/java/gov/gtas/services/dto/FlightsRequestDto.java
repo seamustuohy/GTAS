@@ -11,14 +11,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class FlightsRequestDto implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     // e.g. 2015-10-02T18:33:03.412Z
-    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     private int pageNumber;
     private int pageSize;
     
     private String origin;
     private String dest;
+    
+    private String flightNumber;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)        
     private Date etaStart;
@@ -64,6 +67,12 @@ public class FlightsRequestDto implements Serializable {
     }
     public void setDest(String dest) {
         this.dest = dest;
+    }
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
     }
     public List<SortOptionsDto> getSort() {
         return sort;

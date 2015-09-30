@@ -16,6 +16,7 @@ app.service("flightService", function ($http, $q) {
     model: {
       pageNumber: 1,
       pageSize: 15,
+      flightNumber: "",
       etaStart: startDate,
       etaEnd: endDate,
       origin: "",

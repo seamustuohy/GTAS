@@ -16,6 +16,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import gov.gtas.model.Flight;
@@ -24,6 +26,8 @@ import gov.gtas.services.dto.SortOptionsDto;
 
 @Repository
 public class FlightRepositoryImpl implements FlightRepositoryCustom {
+    private static final Logger logger = LoggerFactory.getLogger(FlightRepositoryImpl.class);
+    
     @PersistenceContext
     private EntityManager em;
     
@@ -68,6 +72,10 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
         if (StringUtils.isNotBlank(dto.getDest())) {
             predicates.add(cb.equal(root.<String>get("destination"), dto.getDest()));
         }
+        if (StringUtils.isNotBlank(dto.getFlightNumber())) {
+            String likeString = String.format("%%%s%%", dto.getFlightNumber());
+            predicates.add(cb.like(root.<String>get("fullFlightNumber"), likeString));
+        }
         
         // pagination
         int pageNumber = dto.getPageNumber();
@@ -78,7 +86,7 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
         TypedQuery<Flight> typedQuery = em.createQuery(q);
         typedQuery.setFirstResult(firstResultIndex);
         typedQuery.setMaxResults(dto.getPageSize());
-//        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
+        logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Flight> results = typedQuery.getResultList();
         
         return results;
