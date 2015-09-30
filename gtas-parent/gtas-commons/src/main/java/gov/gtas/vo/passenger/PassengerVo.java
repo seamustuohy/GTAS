@@ -2,6 +2,7 @@ package gov.gtas.vo.passenger;
 
 import gov.gtas.validators.Validatable;
 import gov.gtas.vo.BaseVo;
+import gov.gtas.vo.PnrVo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +31,7 @@ public class PassengerVo extends BaseVo implements Validatable {
     private String residencyCountry;
     private String passengerType;
     private Integer age;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)
     private Date dob;
     private String embarkation;
     private String debarkation;
@@ -37,26 +39,108 @@ public class PassengerVo extends BaseVo implements Validatable {
     private String debarkCountry;
     private Boolean deleted = Boolean.FALSE;
     private String seat;
-    
+    private String paxId;
     // flight info
-    private Long flightId;
+    private String flightId;
+    //private String strFlightId;
     private String flightNumber;
     private String carrier;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)        
     private Date etd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)        
     private Date eta;
-    
     // hits info
     private Boolean onRuleHitList = Boolean.FALSE;
     private Boolean onWatchList = Boolean.FALSE;
-    
     private List<DocumentVo> documents = new ArrayList<>();
+    private String flightOrigin;
+    private String flightDestination;
+    private String flightETD;
+    private String flightETA;
+    private int ruleHits;
+    private int listHits;
+    private int paxListHit;
+    private int docListHit;
+    private List<PassengerVo> passengers;
+    private PnrVo pnrVo;
     
-    public Long getFlightId() {
+    
+ /*   public String getStrFlightId() {
+		return strFlightId;
+	}
+	public void setStrFlightId(String strFlightId) {
+		this.strFlightId = strFlightId;
+	}*/
+	public String getPaxId() {
+		return paxId;
+	}
+	public void setPaxId(String paxId) {
+		this.paxId = paxId;
+	}
+	public String getFlightOrigin() {
+		return flightOrigin;
+	}
+	public void setFlightOrigin(String flightOrigin) {
+		this.flightOrigin = flightOrigin;
+	}
+	public String getFlightDestination() {
+		return flightDestination;
+	}
+	public void setFlightDestination(String flightDestination) {
+		this.flightDestination = flightDestination;
+	}
+	public String getFlightETD() {
+		return flightETD;
+	}
+	public void setFlightETD(String flightETD) {
+		this.flightETD = flightETD;
+	}
+	public String getFlightETA() {
+		return flightETA;
+	}
+	public void setFlightETA(String flightETA) {
+		this.flightETA = flightETA;
+	}
+	public int getRuleHits() {
+		return ruleHits;
+	}
+	public void setRuleHits(int ruleHits) {
+		this.ruleHits = ruleHits;
+	}
+	public int getListHits() {
+		return listHits;
+	}
+	public void setListHits(int listHits) {
+		this.listHits = listHits;
+	}
+	public int getPaxListHit() {
+		return paxListHit;
+	}
+	public void setPaxListHit(int paxListHit) {
+		this.paxListHit = paxListHit;
+	}
+	public int getDocListHit() {
+		return docListHit;
+	}
+	public void setDocListHit(int docListHit) {
+		this.docListHit = docListHit;
+	}
+	public List<PassengerVo> getPassengers() {
+		return passengers;
+	}
+	public void setPassengers(List<PassengerVo> passengers) {
+		this.passengers = passengers;
+	}
+	public PnrVo getPnrVo() {
+		return pnrVo;
+	}
+	public void setPnrVo(PnrVo pnrVo) {
+		this.pnrVo = pnrVo;
+	}
+	public String getFlightId() {
         return flightId;
     }
-    public void setFlightId(Long flightId) {
+    public void setFlightId(String flightId) {
         this.flightId = flightId;
     }
     public String getFlightNumber() {

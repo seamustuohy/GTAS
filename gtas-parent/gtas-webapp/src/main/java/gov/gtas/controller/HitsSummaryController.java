@@ -1,6 +1,6 @@
 package gov.gtas.controller;
 
-import gov.gtas.dataobject.HitDetailVo;
+import gov.gtas.vo.HitDetailVo;
 import gov.gtas.model.HitDetail;
 import gov.gtas.services.HitsSummaryService;
 
