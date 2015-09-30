@@ -111,6 +111,8 @@ public class LoaderUtils {
 
         BeanUtils.copyProperties(vo, f, getNullPropertyNames(vo));
         
+        f.setFullFlightNumber(String.format("%s%s", vo.getCarrier(), vo.getFlightNumber()));
+        
         Airport dest = getAirport(f.getDestination());
         String destCountry = null;
         if (dest != null) {

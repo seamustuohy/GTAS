@@ -62,8 +62,7 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
         priority: 1
       }    
     },
-    { name: 'carrier', width: 75 },
-    { name: 'flightNumber', displayName: 'Flight', width: 75 },
+    { name: 'fullFlightNumber', displayName: 'Flight', width: 75 },
     { name: 'eta', displayName: 'ETA',
       sort: {
         direction: uiGridConstants.DESC,
