@@ -1,6 +1,10 @@
 app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderWidget, $mdDialog,
-                                          paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService
-) {
+                                             paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService,
+                                          queryBuilderFactory,jqueryQueryBuilderService, Modal, GridControl) {
+
+  $injector.invoke(GridControl, this, {$scope: $scope});
+  $injector.invoke(Modal, this, {$scope: $scope});
+
   var paginationOptions = {
         pageNumber: 1,
         pageSize: 15,
@@ -15,6 +19,24 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
   $scope.parent = $stateParams.parent;
 
   $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
+  $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
+  jqueryQueryBuilderService.init('riskcriteria');
+
+  $scope.ruleIdClick = function(row) {
+    $scope.getRuleObject(row.entity.ruleId);
+  };
+
+  $scope.getRuleObject = function (ruleID) {
+    jqueryQueryBuilderService.loadRuleById(ruleID).then(function (myData) {
+      $scope.$builder.queryBuilder('readOnlyRules', myData.result.details);
+      $scope.hitDetailDisplay = myData.result.summary.title;
+      document.getElementById("QBModal").style.display = "block";
+
+      $scope.closeDialog = function () {
+        document.getElementById("QBModal").style.display = "none";
+      };
+    });
+  };
 
   $scope.showPaxDetailsModal = function (passenger) {
     selectedPassenger = passenger;
@@ -37,9 +59,13 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
   };
 
   var ruleGridColumns = [
-    { name: 'ruleId', "width": 60, displayName: 'Id' },
+    { name: 'ruleId', "width": 60, displayName: 'Id',
+
+      cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
+
+    },
     { name: 'ruleTitle', displayName: 'Title' },
-    { name: 'ruleConditions', displayName: 'Conditions' }
+    { name: 'ruleConditions', displayName: 'Conditions',field:'hitsDetailsList[0]',cellFilter: 'hitsConditionDisplayFilter' }
   ];
 
   $scope.passengerGrid = {
@@ -78,6 +104,7 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
           paxService.getRuleHits(row.entity.id).then(function (data) {
             console.log('get rule hits for pax ' + row.entity.id);
             row.entity.subGridOptions.data = data;
+            console.log(data);
           });
 
         }
@@ -144,6 +171,7 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
       }
     }
   }
+
 
   $scope.getTableHeight = function() {
     return gridService.calculateGridHeight($scope.passengerGrid.data.length);
