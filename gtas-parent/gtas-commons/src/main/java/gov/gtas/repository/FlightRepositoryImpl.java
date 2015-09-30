@@ -76,6 +76,13 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
             String likeString = String.format("%%%s%%", dto.getFlightNumber());
             predicates.add(cb.like(root.<String>get("fullFlightNumber"), likeString));
         }
+        /*
+         * hack: javascript sends the empty string represented by the 'all' dropdown
+         * value as '0', so we check for that here to mean 'any direction' 
+         */
+        if (StringUtils.isNotBlank(dto.getDirection()) && !"0".equals(dto.getDirection())) {
+            predicates.add(cb.equal(root.<String>get("direction"), dto.getDirection()));
+        }
         
         // pagination
         int pageNumber = dto.getPageNumber();

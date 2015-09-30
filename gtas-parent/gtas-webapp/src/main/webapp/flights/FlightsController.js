@@ -3,6 +3,12 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   
   $scope.selectedFlight = $stateParams.flight;
 
+  $scope.flightDirections = [ 
+    { label: 'Inbound', value: 'I' },
+    { label: 'Outbound', value: 'O' },
+    { label: 'Any', value: '' }
+  ];
+
   $scope.flightsGrid = {
     enableSorting: true,
     multiSelect: false,
@@ -21,7 +27,6 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
       $scope.gridApi = gridApi;
       
       gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
-        console.log('sort changed');
         if (sortColumns.length === 0) {
           $scope.flight.model.sort = null; 
         } else {
@@ -82,7 +87,6 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   };
 
   var getPage = function() {
-    console.log(JSON.stringify($scope.flight.model));
     flightService.getFlights($scope.flight.model).then(function (page) {
       $scope.flightsGrid.totalItems = page.totalFlights;
       $scope.flightsGrid.data = page.flights;
