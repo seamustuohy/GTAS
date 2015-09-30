@@ -36,8 +36,9 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
         // dates
         Predicate etaCondition = null;
         if (dto.getEtaStart() != null && dto.getEtaEnd() != null) {
-            Predicate startPredicate = cb.greaterThanOrEqualTo(root.<Date>get("eta"), dto.getEtaStart());
-            Predicate endPredicate = cb.lessThanOrEqualTo(root.<Date>get("eta"), dto.getEtaEnd());
+            Path<Date> eta = root.<Date>get("eta");
+            Predicate startPredicate = cb.or(cb.isNull(eta), cb.greaterThanOrEqualTo(root.<Date>get("eta"), dto.getEtaStart()));
+            Predicate endPredicate = cb.or(cb.isNull(eta), cb.lessThanOrEqualTo(eta, dto.getEtaEnd())); 
             etaCondition = cb.and(startPredicate, endPredicate);
         }
 
@@ -66,7 +67,7 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
         TypedQuery<Flight> typedQuery = em.createQuery(select);
         typedQuery.setFirstResult(firstResultIndex);
         typedQuery.setMaxResults(dto.getPageSize());
-        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
+//        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Flight> results = typedQuery.getResultList();
         
         return results;
