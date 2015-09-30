@@ -53,11 +53,11 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
 
     @Modifying
     @Transactional
-    @Query("update Flight set ruleHitCount = (select count(distinct passengerId) from HitsSummary where flightId = :flightId and ruleHitCount > 0) where id = :flightId")
+    @Query("update Flight set ruleHitCount = (select count(distinct passenger) from HitsSummary where flight.id = :flightId and ruleHitCount > 0) where id = :flightId")
     public Integer updateRuleHitCountForFlight(@Param("flightId") Long flightId);
 
     @Modifying
     @Transactional
-    @Query("update Flight set listHitCount = (select count(distinct passengerId) from HitsSummary where flightId = :flightId and watchListHitCount > 0) where id = :flightId")
+    @Query("update Flight set listHitCount = (select count(distinct passenger) from HitsSummary where flight.id = :flightId and watchListHitCount > 0) where id = :flightId")
     public Integer updateListHitCountForFlight(@Param("flightId") Long flightId);
 }

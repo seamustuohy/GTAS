@@ -25,7 +25,7 @@ public class RuleRunner {
 		Set<Long> uniqueFlights = targetingService.runningRuleEngine();
 		System.out.println("updating hit counts for flight ids "
 				+ uniqueFlights);
-		// targetingService.updateFlightHitCounts(uniqueFlights);
+		targetingService.updateFlightHitCounts(uniqueFlights);
 
 		ctx.close();
 		System.exit(0);

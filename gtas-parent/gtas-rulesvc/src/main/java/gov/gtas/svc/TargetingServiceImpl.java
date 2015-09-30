@@ -311,15 +311,19 @@ public class TargetingServiceImpl implements TargetingService {
 
 		List<HitsSummary> hitsSummary = storeHitsInfo(ruleRunningResult);
 		Set<Long> uniqueFlights = new HashSet<>();
-		// for (HitsSummary s : hitsSummary) {
-		// uniqueFlights.add(s.getFlightId());
-		// }
+        for (HitsSummary s : hitsSummary) {
+            uniqueFlights.add(s.getFlight().getId());
+        }
 
-		return null;
+		return uniqueFlights;
 	}
 
 	@Transactional
 	public void updateFlightHitCounts(Set<Long> flights) {
+	    if (CollectionUtils.isEmpty(flights)) {
+	        return;
+	    }
+	    
 		for (Long flightId : flights) {
 			flightRepository.updateRuleHitCountForFlight(flightId);
 			flightRepository.updateListHitCountForFlight(flightId);
