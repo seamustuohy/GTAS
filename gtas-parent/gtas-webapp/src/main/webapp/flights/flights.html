@@ -22,20 +22,30 @@
 
 
 <div layout="row" class="flightInput">
-  <md-input-container style="width:10%">
+  <md-input-container>
     <label>Origin</label>
     <input ng-model="flight.model.origin">
   </md-input-container>
 
-  <md-input-container style="width:10%">
+  <md-input-container>
     <label>Dest</label>
     <input ng-model="flight.model.dest">
   </md-input-container>
   <md-input-container style="width:5%"></md-input-container>
 
-  <md-input-container style="width:10%">
+  <md-input-container>
     <label>Flight</label>
     <input ng-model="flight.model.flightNumber">
+  </md-input-container>
+  <md-input-container style="width:5%"></md-input-container>
+
+  <md-input-container>
+    <label>Dir</label>
+    <md-select ng-model="flight.model.direction">
+      <md-option ng-repeat="item in flightDirections" value="{{item.value}}">
+        {{item.label}}
+      </md-option>
+    </md-select>
   </md-input-container>
   <md-input-container style="width:5%"></md-input-container>
 

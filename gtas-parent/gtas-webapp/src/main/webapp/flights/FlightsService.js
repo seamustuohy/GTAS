@@ -16,11 +16,12 @@ app.service("flightService", function ($http, $q) {
     model: {
       pageNumber: 1,
       pageSize: 15,
-      flightNumber: "",
+      flightNumber: '',
+      origin: '',
+      dest: '',
+      direction: 'I',
       etaStart: startDate,
       etaEnd: endDate,
-      origin: "",
-      dest: "",
       sort: []      
     },
     getFlights: getFlights
