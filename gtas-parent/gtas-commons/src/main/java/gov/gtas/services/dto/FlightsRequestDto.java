@@ -17,6 +17,9 @@ public class FlightsRequestDto implements Serializable {
     private int pageNumber;
     private int pageSize;
     
+    private String origin;
+    private String dest;
+    
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)        
     private Date etaStart;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)        
@@ -50,6 +53,18 @@ public class FlightsRequestDto implements Serializable {
     public void setEtaEnd(Date etaEnd) {
         this.etaEnd = etaEnd;
     }        
+    public String getOrigin() {
+        return origin;
+    }
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+    public String getDest() {
+        return dest;
+    }
+    public void setDest(String dest) {
+        this.dest = dest;
+    }
     public List<SortOptionsDto> getSort() {
         return sort;
     }

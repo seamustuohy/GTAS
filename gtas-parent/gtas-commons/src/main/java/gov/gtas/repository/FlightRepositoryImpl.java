@@ -15,6 +15,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import gov.gtas.model.Flight;
@@ -32,6 +33,7 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Flight> q = cb.createQuery(Flight.class);
         Root<Flight> root = q.from(Flight.class);
+        List<Predicate> predicates = new ArrayList<Predicate>();
 
         // dates
         Predicate etaCondition = null;
@@ -40,6 +42,7 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
             Predicate startPredicate = cb.or(cb.isNull(eta), cb.greaterThanOrEqualTo(root.<Date>get("eta"), dto.getEtaStart()));
             Predicate endPredicate = cb.or(cb.isNull(eta), cb.lessThanOrEqualTo(eta, dto.getEtaEnd())); 
             etaCondition = cb.and(startPredicate, endPredicate);
+            predicates.add(etaCondition);
         }
 
         // sorting
@@ -58,13 +61,21 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
             q.orderBy(orders);
         }
         
-        CriteriaQuery<Flight> select = (etaCondition == null) ? q.select(root) : q.select(root).where(etaCondition);
-
+        // filters
+        if (StringUtils.isNotBlank(dto.getOrigin())) {
+            predicates.add(cb.equal(root.<String>get("origin"), dto.getOrigin()));
+        }
+        if (StringUtils.isNotBlank(dto.getDest())) {
+            predicates.add(cb.equal(root.<String>get("dest"), dto.getDest()));
+        }
+        
         // pagination
         int pageNumber = dto.getPageNumber();
         int pageSize = dto.getPageSize();
         int firstResultIndex = (pageNumber - 1) * pageSize;
-        TypedQuery<Flight> typedQuery = em.createQuery(select);
+        
+        q.select(root).where(predicates.toArray(new Predicate[]{}));
+        TypedQuery<Flight> typedQuery = em.createQuery(q);
         typedQuery.setFirstResult(firstResultIndex);
         typedQuery.setMaxResults(dto.getPageSize());
 //        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());

@@ -18,6 +18,8 @@ app.service("flightService", function ($http, $q) {
       pageSize: 15,
       etaStart: startDate,
       etaEnd: endDate,
+      origin: "",
+      dest: "",
       sort: []      
     },
     getFlights: getFlights

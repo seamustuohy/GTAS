@@ -90,7 +90,7 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
     });
   };
   
-  $scope.refresh = function() {
+  $scope.filter = function() {
     getPage();
   }
   
