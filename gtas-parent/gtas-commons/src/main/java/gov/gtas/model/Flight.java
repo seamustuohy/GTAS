@@ -32,6 +32,10 @@ public class Flight extends BaseEntityAudit {
     @Column(name = "flight_number", length = 4, nullable = false)
     private String flightNumber;
 
+    /** combination of carrier and flight number used for reporting */
+    @Column(name = "full_flight_number")
+    private String fullFlightNumber;   
+    
     @Column(nullable = false)
     private String origin;
     
@@ -102,6 +106,12 @@ public class Flight extends BaseEntityAudit {
     }
     public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
+    }
+    public String getFullFlightNumber() {
+        return fullFlightNumber;
+    }
+    public void setFullFlightNumber(String fullFlightNumber) {
+        this.fullFlightNumber = fullFlightNumber;
     }
     public Date getFlightDate() {
         return flightDate;

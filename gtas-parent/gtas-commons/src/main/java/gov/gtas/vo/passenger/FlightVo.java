@@ -17,6 +17,7 @@ public class FlightVo extends BaseVo implements Validatable {
 
     private String carrier;
     private String flightNumber;
+    private String fullFlightNumber;
     private String origin;
     private String originCountry;
     private String destination;
@@ -71,6 +72,12 @@ public class FlightVo extends BaseVo implements Validatable {
     }
     public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
+    }
+    public String getFullFlightNumber() {
+        return fullFlightNumber;
+    }
+    public void setFullFlightNumber(String fullFlightNumber) {
+        this.fullFlightNumber = fullFlightNumber;
     }
     public String getOrigin() {
         return origin;

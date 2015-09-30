@@ -3,6 +3,12 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   
   $scope.selectedFlight = $stateParams.flight;
 
+  $scope.flightDirections = [ 
+    { label: 'Inbound', value: 'I' },
+    { label: 'Outbound', value: 'O' },
+    { label: 'Any', value: '' }
+  ];
+
   $scope.flightsGrid = {
     enableSorting: true,
     multiSelect: false,
@@ -21,7 +27,6 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
       $scope.gridApi = gridApi;
       
       gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
-        console.log('sort changed');
         if (sortColumns.length === 0) {
           $scope.flight.model.sort = null; 
         } else {
@@ -62,8 +67,7 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
         priority: 1
       }    
     },
-    { name: 'carrier', width: 75 },
-    { name: 'flightNumber', displayName: 'Flight', width: 75 },
+    { name: 'fullFlightNumber', displayName: 'Flight', width: 75 },
     { name: 'eta', displayName: 'ETA',
       sort: {
         direction: uiGridConstants.DESC,
@@ -83,12 +87,15 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   };
 
   var getPage = function() {
-    console.log(JSON.stringify($scope.flight.model));
     flightService.getFlights($scope.flight.model).then(function (page) {
       $scope.flightsGrid.totalItems = page.totalFlights;
       $scope.flightsGrid.data = page.flights;
     });
   };
+  
+  $scope.filter = function() {
+    getPage();
+  }
   
   $scope.getTableHeight = function() {
      return gridService.calculateGridHeight($scope.flightsGrid.data.length);
