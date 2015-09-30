@@ -66,7 +66,7 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
             predicates.add(cb.equal(root.<String>get("origin"), dto.getOrigin()));
         }
         if (StringUtils.isNotBlank(dto.getDest())) {
-            predicates.add(cb.equal(root.<String>get("dest"), dto.getDest()));
+            predicates.add(cb.equal(root.<String>get("destination"), dto.getDest()));
         }
         
         // pagination
