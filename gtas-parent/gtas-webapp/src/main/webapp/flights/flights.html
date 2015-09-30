@@ -15,30 +15,29 @@
   .flightInput .md-datepicker-input-container {
     margin-left: 2px; 
   }
+  .flightInput .md-button {
+    height: 10px;
+  }
 </style>
 
 
-<div layout="column" class="flightInput">
-  <md-content layout-padding="">
-    <div layout="" layout-sm="column">
-      <md-input-container style="width:10%">
-        <label>Origin</label>
-        <input ng-model="flight.model.origin">
-      </md-input-container>
-  
-      <md-input-container style="width:10%">
-        <label>Dest</label>
-        <input ng-model="flight.model.dest">
-      </md-input-container>
-      <md-input-container style="width:5%"></md-input-container>
+<div layout="row" class="flightInput">
+  <md-input-container style="width:10%">
+    <label>Origin</label>
+    <input ng-model="flight.model.origin">
+  </md-input-container>
 
-      <md-datepicker ng-model="flight.model.etaStart" md-placeholder="Start Date"></md-datepicker>
-      <md-datepicker ng-model="flight.model.etaEnd" md-placeholder="End Date"></md-datepicker>
-      <md-input-container style="width:5%"></md-input-container>
+  <md-input-container style="width:10%">
+    <label>Dest</label>
+    <input ng-model="flight.model.dest">
+  </md-input-container>
+  <md-input-container style="width:5%"></md-input-container>
 
-      <md-button class="md-primary" ng-click="filter()">Filter</md-button>
-    </div>
-  </md-content>
+  <md-datepicker ng-model="flight.model.etaStart" md-placeholder="Start Date"></md-datepicker>
+  <md-datepicker ng-model="flight.model.etaEnd" md-placeholder="End Date"></md-datepicker>
+  <md-input-container style="width:5%"></md-input-container>
+
+  <md-button class="md-raised md-primary" ng-click="filter()">Filter</md-button>
 </div>
 
 <header data-ui-view="heading"></header>
