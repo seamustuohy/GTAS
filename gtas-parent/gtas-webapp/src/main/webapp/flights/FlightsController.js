@@ -75,9 +75,9 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
       }    
     },
     { name: 'etd', displayName: 'ETD' },    
-    { name: 'origin', displayName: 'Origin' },
+    { name: 'origin' },
     { name: 'originCountry', displayName: 'Country' },
-    { name: 'destination', displayName: 'Dest' },
+    { name: 'destination' },
     { name: 'destinationCountry', displayName: 'Country' }
   ];
 
