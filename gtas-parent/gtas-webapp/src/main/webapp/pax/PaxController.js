@@ -1,9 +1,9 @@
 app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderWidget, $mdDialog,
                                              paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService,
-                                          queryBuilderFactory,jqueryQueryBuilderService, Modal, GridControl) {
+                                          queryBuilderFactory,jqueryQueryBuilderService) {
 
-  $injector.invoke(GridControl, this, {$scope: $scope});
-  $injector.invoke(Modal, this, {$scope: $scope});
+  $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
+  $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
 
   var paginationOptions = {
         pageNumber: 1,
@@ -18,8 +18,7 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
   $scope.selectedFlight = $stateParams.flight;
   $scope.parent = $stateParams.parent;
 
-  $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
-  $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
+
   jqueryQueryBuilderService.init('riskcriteria');
 
   $scope.ruleIdClick = function(row) {
@@ -61,12 +60,16 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
   var ruleGridColumns = [
     { name: 'ruleId', "width": 60, displayName: 'Id',
 
-      cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
+      cellTemplate: ' <button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
 
     },
     { name: 'ruleTitle', displayName: 'Title' },
     { name: 'ruleConditions', displayName: 'Conditions',field:'hitsDetailsList[0]',cellFilter: 'hitsConditionDisplayFilter' }
   ];
+
+
+  $scope.buildAfterEntitiesLoaded();
+
 
   $scope.passengerGrid = {
     enableSorting: false,
