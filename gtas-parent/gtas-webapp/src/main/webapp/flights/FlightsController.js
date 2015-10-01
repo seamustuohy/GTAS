@@ -10,18 +10,13 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   ];
 
   $scope.flightsGrid = {
-    enableSorting: true,
-    multiSelect: false,
-    enableFiltering: false,
-    enableRowSelection: false,
-    enableSelectAll: false,
-    enableRowHeaderSelection: false,
-    enableGridMenu: false,
-    paginationPageSizes: [15, 25, 50],
-    paginationPageSize: 15,
+    paginationPageSizes: [10, 15, 25],
+    paginationPageSize: $scope.flight.model.pageSize,
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
+    enableHorizontalScrollbar: 0, 
+    enableVerticalScrollbar: 0,
     
     onRegisterApi: function(gridApi) {
       $scope.gridApi = gridApi;
@@ -75,9 +70,9 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
       }    
     },
     { name: 'etd', displayName: 'ETD' },    
-    { name: 'origin', displayName: 'Origin' },
+    { name: 'origin' },
     { name: 'originCountry', displayName: 'Country' },
-    { name: 'destination', displayName: 'Dest' },
+    { name: 'destination' },
     { name: 'destinationCountry', displayName: 'Country' }
   ];
 

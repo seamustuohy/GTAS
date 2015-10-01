@@ -82,7 +82,7 @@ public class JPQLGenerator {
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			else if(queryType == EntityEnum.PASSENGER) {
-				queryPrefix = Constants.SELECT + " " + EntityEnum.PASSENGER.getAlias() + ", " + EntityEnum.FLIGHT.getAlias() + ", " + EntityEnum.DOCUMENT.getAlias() + " " + 
+				queryPrefix = Constants.SELECT + " " + EntityEnum.PASSENGER.getAlias() + ", " + EntityEnum.FLIGHT.getAlias() + " " + 
 						Constants.FROM + " " + EntityEnum.PASSENGER.getEntityName() + " " + EntityEnum.PASSENGER.getAlias() +
 						Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " " + EntityEnum.FLIGHT.getAlias();
 						
@@ -106,12 +106,7 @@ public class JPQLGenerator {
 					
 					join = generateJoinCondition(joinEntities, queryType);
 				}
-				
-				// include a left join on Document if there is no Document condition
-				if(joinEntities != null && !joinEntities.contains(EntityEnum.DOCUMENT)) {
-					queryPrefix = queryPrefix + Constants.LEFT_JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.DOCUMENT.getEntityReference() + " " + EntityEnum.DOCUMENT.getAlias();
-				}
-				
+								
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			

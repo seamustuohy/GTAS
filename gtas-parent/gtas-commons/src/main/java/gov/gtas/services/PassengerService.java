@@ -4,6 +4,7 @@ import java.util.List;
 
 import gov.gtas.model.Passenger;
 import gov.gtas.services.dto.PassengersPageDto;
+import gov.gtas.vo.passenger.PassengerVo;
 
 public interface PassengerService {
 	public Passenger create(Passenger passenger);
@@ -14,4 +15,5 @@ public interface PassengerService {
     
     public PassengersPageDto findAllWithFlightInfo(int pageNumber, int pageSize);
     public PassengersPageDto getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize);
+    public void fillWithHitsInfo(PassengerVo vo, Long flightId, Long passengerId);
 }
