@@ -79,7 +79,7 @@ public class PassengerServiceImpl implements PassengerService {
             fillWithHitsInfo(vo, f.getId(), p.getId());
             
             // grab flight info
-            vo.setFlightId(f.getId());
+            vo.setFlightId(f.getId().toString());
             vo.setFlightNumber(f.getFlightNumber());
             vo.setCarrier(f.getCarrier());
             vo.setEtd(f.getEtd());
@@ -128,6 +128,7 @@ public class PassengerServiceImpl implements PassengerService {
 		return passengerList;
 	}
 
+	@Override
     public void fillWithHitsInfo(PassengerVo vo, Long flightId, Long passengerId) {
         List<HitsSummary> hitsSummary = hitsSummaryRepository.findByFlightIdAndPassengerId(flightId, passengerId);
         if (!CollectionUtils.isEmpty(hitsSummary)) {
@@ -146,4 +147,3 @@ public class PassengerServiceImpl implements PassengerService {
         }
     }
 }
-

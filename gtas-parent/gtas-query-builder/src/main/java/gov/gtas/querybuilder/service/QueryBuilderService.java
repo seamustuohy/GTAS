@@ -157,11 +157,11 @@ public class QueryBuilderService {
 	            passengerService.fillWithHitsInfo(vo, flight.getId(), passenger.getId());
 	            
 	            // flight information
-	            vo.setFlightId(flight.getId());
+	            vo.setFlightId(flight.getId() != null ? String.valueOf(flight.getId()) : "");
 	            vo.setFlightNumber(flight.getFlightNumber());
 	            vo.setCarrier(flight.getCarrier());
-	            vo.setOrigin(flight.getOrigin());
-	            vo.setDestination(flight.getDestination());
+	            vo.setFlightOrigin(flight.getOrigin());
+	            vo.setFlightDestination(flight.getDestination());
 	            vo.setEtd(flight.getEtd());
 	            vo.setEta(flight.getEta());
 	        }
