@@ -22,7 +22,7 @@ app.service("flightService", function ($http, $q) {
       direction: 'I',
       etaStart: startDate,
       etaEnd: endDate,
-      sort: []      
+      sort: defaultSort 
     },
     getFlights: getFlights
   });

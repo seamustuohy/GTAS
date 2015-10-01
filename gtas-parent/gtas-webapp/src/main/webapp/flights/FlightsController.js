@@ -10,18 +10,13 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   ];
 
   $scope.flightsGrid = {
-    enableSorting: true,
-    multiSelect: false,
-    enableFiltering: false,
-    enableRowSelection: false,
-    enableSelectAll: false,
-    enableRowHeaderSelection: false,
-    enableGridMenu: false,
     paginationPageSizes: [10, 15, 25],
     paginationPageSize: $scope.flight.model.pageSize,
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
+    enableHorizontalScrollbar: 0, 
+    enableVerticalScrollbar: 0,
     
     onRegisterApi: function(gridApi) {
       $scope.gridApi = gridApi;
