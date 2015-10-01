@@ -4,29 +4,24 @@ import gov.gtas.constants.Constants;
 import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.Status;
 import gov.gtas.json.JsonServiceResponse;
-import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.exceptions.QueryBuilderException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
 import gov.gtas.querybuilder.mappings.QueryBuilderMapping;
 import gov.gtas.querybuilder.mappings.QueryBuilderMappingFactory;
-import gov.gtas.querybuilder.model.IQueryResponse;
-import gov.gtas.querybuilder.model.IQueryResult;
 import gov.gtas.querybuilder.model.IUserQueryResult;
-import gov.gtas.querybuilder.model.QueryErrorResponse;
 import gov.gtas.querybuilder.model.QueryRequest;
-import gov.gtas.querybuilder.model.QueryResponse;
+import gov.gtas.querybuilder.model.UserQueryRequest;
 import gov.gtas.querybuilder.service.QueryBuilderService;
 import gov.gtas.security.service.GtasSecurityUtils;
-import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.services.dto.FlightsPageDto;
+import gov.gtas.services.dto.PassengersPageDto;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +32,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -73,10 +67,10 @@ public class QueryBuilderController {
 	 * @throws InvalidQueryException
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.POST)
-	public JsonServiceResponse runFlightQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
+	public JsonServiceResponse runFlightQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException {
 		
-		List<FlightVo> flights = queryService.runFlightQuery(queryObject);
-		return new JsonServiceResponse(Status.SUCCESS, flights != null ? flights.size() + " record(s)" : "flight is null" , flights);
+		FlightsPageDto flights = queryService.runFlightQuery(queryRequest);
+		return new JsonServiceResponse(Status.SUCCESS, "flight query" , flights);
 	}
 	
 	/**
@@ -87,10 +81,10 @@ public class QueryBuilderController {
 	 * @throws InvalidQueryException
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_PASSENGER_URI, method = RequestMethod.POST)
-	public JsonServiceResponse runPassengerQuery(@RequestBody QueryObject queryObject) throws InvalidQueryException {
+	public JsonServiceResponse runPassengerQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException {
 		
-		List<IQueryResult> passengers = queryService.runPassengerQuery(queryObject);
-		return new JsonServiceResponse(Status.SUCCESS, passengers != null ? passengers.size() + " record(s)" : "query result is null", passengers);
+		PassengersPageDto passengers = queryService.runPassengerQuery(queryRequest);
+		return new JsonServiceResponse(Status.SUCCESS, "passenger query", passengers);
 	}
 	
 	/**
@@ -101,7 +95,7 @@ public class QueryBuilderController {
 	 * @throws QueryAlreadyExistsException
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public JsonServiceResponse saveQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
+	public JsonServiceResponse saveQuery(@RequestBody UserQueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("Create query " + queryRequest.getTitle() + " by " + userId);
 		
@@ -119,7 +113,7 @@ public class QueryBuilderController {
 	 * @throws QueryDoesNotExistException
 	 */
 	@RequestMapping(value = Constants.PATH_VARIABLE_ID, method = RequestMethod.PUT)
-	public JsonServiceResponse editQuery(@PathVariable int id, @RequestBody QueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
+	public JsonServiceResponse editQuery(@PathVariable int id, @RequestBody UserQueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("Edit query " + queryRequest.getTitle() + " by " + userId);
 		

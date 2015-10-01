@@ -5,7 +5,7 @@ import gov.gtas.model.udr.json.QueryObject;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class QueryRequest {
+public class UserQueryRequest {
 	
 	private int id;
 	@NotNull(message = "Title is required")

@@ -128,7 +128,7 @@ public class PassengerServiceImpl implements PassengerService {
 		return passengerList;
 	}
 
-    private void fillWithHitsInfo(PassengerVo vo, Long flightId, Long passengerId) {
+    public void fillWithHitsInfo(PassengerVo vo, Long flightId, Long passengerId) {
         List<HitsSummary> hitsSummary = hitsSummaryRepository.findByFlightIdAndPassengerId(flightId, passengerId);
         if (!CollectionUtils.isEmpty(hitsSummary)) {
             for (HitsSummary hs : hitsSummary) {

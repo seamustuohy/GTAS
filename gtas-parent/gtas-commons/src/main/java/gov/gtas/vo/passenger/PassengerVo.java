@@ -42,6 +42,8 @@ public class PassengerVo extends BaseVo implements Validatable {
     private Long flightId;
     private String flightNumber;
     private String carrier;
+    private String origin;
+    private String destination;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)        
     private Date etd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)        
@@ -71,7 +73,19 @@ public class PassengerVo extends BaseVo implements Validatable {
     public void setCarrier(String carrier) {
         this.carrier = carrier;
     }
-    public Date getEtd() {
+    public String getOrigin() {
+		return origin;
+	}
+	public void setOrigin(String origin) {
+		this.origin = origin;
+	}
+	public String getDestination() {
+		return destination;
+	}
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+	public Date getEtd() {
         return etd;
     }
     public void setEtd(Date etd) {

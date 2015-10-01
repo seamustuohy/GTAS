@@ -13,6 +13,7 @@ import gov.gtas.querybuilder.constants.Constants;
 import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
+import gov.gtas.querybuilder.model.QueryRequest;
 import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 
@@ -29,6 +30,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -170,66 +172,138 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	}
 	
 	@Override
-	public List<Flight> getFlightsByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException {
+	public List<Flight> getFlightsByDynamicQuery(QueryRequest queryRequest) throws InvalidQueryRepositoryException {
 		List<Flight> flights = new ArrayList<>();
 		
-		if(queryObject != null) {
-			Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
+		if(queryRequest != null && queryRequest.getQuery() != null) {
+			Errors errors = QueryValidationUtils.validateQueryObject(queryRequest.getQuery());
 			
 			if(errors != null && errors.hasErrors()) {
 				String errorMsg = QueryValidationUtils.getErrorString(errors);
-				logger.info(errorMsg, new InvalidQueryRepositoryException(errorMsg, queryObject));
-				throw new InvalidQueryRepositoryException(errorMsg, queryObject);
+				logger.info(errorMsg, new InvalidQueryRepositoryException(errorMsg, queryRequest.getQuery()));
+				throw new InvalidQueryRepositoryException(errorMsg, queryRequest.getQuery());
 			}
-			
+
 			try {
-				String jpqlQuery = JPQLGenerator.generateQuery(queryObject, EntityEnum.FLIGHT);
+				// pagination
+		        int pageNumber = queryRequest.getPageNumber();
+		        int pageSize = queryRequest.getPageSize();
+		        int firstResultIndex = (pageNumber - 1) * pageSize;
+		        
+				String jpqlQuery = JPQLGenerator.generateQuery(queryRequest.getQuery(), EntityEnum.FLIGHT);
 				logger.info("Getting Flights with this query: " + jpqlQuery);
 				TypedQuery<Flight> query = entityManager.createQuery(jpqlQuery, Flight.class);
 				MutableInt positionalParameter = new MutableInt();
-				setJPQLParameters(query, queryObject, positionalParameter);
-				
+				setJPQLParameters(query, queryRequest.getQuery(), positionalParameter);
+				query.setFirstResult(firstResultIndex);
+				query.setMaxResults(pageSize);
 				flights = query.getResultList();
 				
 				logger.info("Number of Flights returned: " + (flights != null ? flights.size() : "Flight result is null"));
 			} catch (InvalidQueryRepositoryException | ParseException e) {
-				throw new InvalidQueryRepositoryException(e.getMessage(), queryObject);
+				throw new InvalidQueryRepositoryException(e.getMessage(), queryRequest.getQuery());
 			}
 		}
 		
 		return flights;
 	}
 
-	@Override
-	@Transactional
-	public List<Object[]> getPassengersByDynamicQuery(QueryObject queryObject) throws InvalidQueryRepositoryException {
-		List<Object[]> result = new ArrayList<>();
+	public long totalFlightsByDynamicQuery(QueryRequest queryRequest) throws InvalidQueryRepositoryException {
+		long totalFlights = 0;
 		
-		if(queryObject != null) {
-			Errors errors = QueryValidationUtils.validateQueryObject(queryObject);
+		if(queryRequest != null && queryRequest.getQuery() != null) {
+			Errors errors = QueryValidationUtils.validateQueryObject(queryRequest.getQuery());
 			
 			if(errors != null && errors.hasErrors()) {
 				String errorMsg = QueryValidationUtils.getErrorString(errors);
-				logger.info(errorMsg, new InvalidQueryRepositoryException(errorMsg, queryObject));
-				throw new InvalidQueryRepositoryException(errorMsg, queryObject);
+				logger.info(errorMsg, new InvalidQueryRepositoryException(errorMsg, queryRequest.getQuery()));
+				throw new InvalidQueryRepositoryException(errorMsg, queryRequest.getQuery());
 			}
 			
 			try {
-				String jpqlQuery = JPQLGenerator.generateQuery(queryObject, EntityEnum.PASSENGER);
+				String jpqlQuery = JPQLGenerator.generateQuery(queryRequest.getQuery(), EntityEnum.FLIGHT);
+				jpqlQuery = jpqlQuery.replace("select distinct f", "select count(distinct f.id)");
+				logger.info("Getting total flight count with this query: " + jpqlQuery);
+				Query query = entityManager.createQuery(jpqlQuery);
+				MutableInt positionalParameter = new MutableInt();
+				setJPQLParameters(query, queryRequest.getQuery(), positionalParameter);
+				totalFlights = (long) query.getSingleResult();
+				
+				logger.info("Total number of flights: " + totalFlights);
+			} catch (InvalidQueryRepositoryException | ParseException e) {
+				throw new InvalidQueryRepositoryException(e.getMessage(), queryRequest.getQuery());
+			}
+		}
+		
+		return totalFlights;
+	}
+	
+	@Override
+	public List<Object[]> getPassengersByDynamicQuery(QueryRequest queryRequest) throws InvalidQueryRepositoryException {
+		List<Object[]> result = new ArrayList<>();
+		
+		if(queryRequest != null && queryRequest.getQuery() != null) {
+			Errors errors = QueryValidationUtils.validateQueryObject(queryRequest.getQuery());
+			
+			if(errors != null && errors.hasErrors()) {
+				String errorMsg = QueryValidationUtils.getErrorString(errors);
+				logger.info(errorMsg, new InvalidQueryRepositoryException(errorMsg, queryRequest.getQuery()));
+				throw new InvalidQueryRepositoryException(errorMsg, queryRequest.getQuery());
+			}
+			
+			try {
+				// pagination
+		        int pageNumber = queryRequest.getPageNumber();
+		        int pageSize = queryRequest.getPageSize();
+		        int firstResultIndex = (pageNumber - 1) * pageSize;
+		        
+				String jpqlQuery = JPQLGenerator.generateQuery(queryRequest.getQuery(), EntityEnum.PASSENGER);
 				logger.info("Getting Passengers with this query: " + jpqlQuery);
 				TypedQuery<Object[]> query = entityManager.createQuery(jpqlQuery, Object[].class);
 				MutableInt positionalParameter = new MutableInt();
-				setJPQLParameters(query, queryObject, positionalParameter);
-				
+				setJPQLParameters(query, queryRequest.getQuery(), positionalParameter);
+				query.setFirstResult(firstResultIndex);
+				query.setMaxResults(pageSize);
 				result = query.getResultList();
 				
 				logger.info("Number of Passengers returned: " + (result != null ? result.size() : "Passenger result is null"));
 			} catch (InvalidQueryRepositoryException | ParseException e) {
-				throw new InvalidQueryRepositoryException(e.getMessage(), queryObject);
+				throw new InvalidQueryRepositoryException(e.getMessage(), queryRequest.getQuery());
 			}
 		}
 		
 		return result;
+	}
+	
+	@Override
+	public long totalPassengersByDynamicQuery(QueryRequest queryRequest) throws InvalidQueryRepositoryException {
+		long totalPassengers = 0;
+		
+		if(queryRequest != null && queryRequest.getQuery() != null) {
+			Errors errors = QueryValidationUtils.validateQueryObject(queryRequest.getQuery());
+			
+			if(errors != null && errors.hasErrors()) {
+				String errorMsg = QueryValidationUtils.getErrorString(errors);
+				logger.info(errorMsg, new InvalidQueryRepositoryException(errorMsg, queryRequest.getQuery()));
+				throw new InvalidQueryRepositoryException(errorMsg, queryRequest.getQuery());
+			}
+			
+			try {
+				String jpqlQuery = JPQLGenerator.generateQuery(queryRequest.getQuery(), EntityEnum.PASSENGER);
+				jpqlQuery = jpqlQuery.replace("select p, f", "select count(p.id)");
+				logger.info("Getting total passenger count with this query: " + jpqlQuery);
+				Query query = entityManager.createQuery(jpqlQuery);
+				MutableInt positionalParameter = new MutableInt();
+				setJPQLParameters(query, queryRequest.getQuery(), positionalParameter);
+				totalPassengers = (long) query.getSingleResult();
+				
+				logger.info("Total number of Passengers: " + totalPassengers);
+			} catch (InvalidQueryRepositoryException | ParseException e) {
+				throw new InvalidQueryRepositoryException(e.getMessage(), queryRequest.getQuery());
+			}
+		}
+		
+		return totalPassengers;
 	}
 	
 	private boolean isUniqueTitle(UserQuery query) {

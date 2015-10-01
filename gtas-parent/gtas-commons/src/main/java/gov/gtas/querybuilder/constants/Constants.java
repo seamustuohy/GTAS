@@ -38,9 +38,9 @@ public final class Constants {
 	public static final String IS_WATCHLIST_HIT = "isWatchListHit";
 	public static final String EXISTS_HITS_PREFIX = "exists (select";
 	public static final String NOT_EXISTS_HITS_PREFIX = "not exists (select";
-	public static final String HITS_FLIGHT_REF = ".flightId";
+	public static final String HITS_FLIGHT_REF = ".flight.id";
 	public static final String ID = ".id";
-	public static final String HITS_PASSENGER_REF = ".passengerId";
+	public static final String HITS_PASSENGER_REF = ".passenger.id";
 	public static final String RULE_HIT_TYPE = "hitType like '%r%'";
 	public static final String PASSENGER_HIT_TYPE = "hitType like '%p%'";
 	public static final String DOCUMENT_HIT_TYPE = "hitType like '%d%'";

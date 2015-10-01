@@ -1,22 +1,22 @@
 package gov.gtas.querybuilder.exceptions;
 
-import gov.gtas.querybuilder.model.QueryRequest;
+import gov.gtas.querybuilder.model.UserQueryRequest;
 
 public class QueryDoesNotExistException extends QueryBuilderException {
 
 	private static final long serialVersionUID = 1L;
-	private QueryRequest queryRequest;
+	private UserQueryRequest queryRequest;
 	
-	public QueryDoesNotExistException(String message, QueryRequest queryRequest) {
+	public QueryDoesNotExistException(String message, UserQueryRequest queryRequest) {
 		super(message, queryRequest);
 		this.queryRequest = queryRequest;
 	}
 
-	public QueryRequest getQueryRequest() {
+	public UserQueryRequest getQueryRequest() {
 		return queryRequest;
 	}
 
-	public void setQueryRequest(QueryRequest queryRequest) {
+	public void setQueryRequest(UserQueryRequest queryRequest) {
 		this.queryRequest = queryRequest;
 	}
 	
