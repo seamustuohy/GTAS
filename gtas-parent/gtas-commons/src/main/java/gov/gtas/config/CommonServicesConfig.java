@@ -65,8 +65,6 @@ public class CommonServicesConfig {
 	private static final String PROPERTY_NAME_HIBERNATE_ORDER_UPDATES = "hibernate.order_updates";
 	private static final String PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA = "hibernate.jdbc.batch_versioned_data";
 
-	private static final String PROPERTY_NAME_HIBERNATE_CONNECTION_PROVIDER_CLASS = "hibernate.connection.prover_class";
-
 	private static final String PROPERTY_NAME_C3P0_MIN_SIZE = "c3p0.min_size";
 	private static final String PROPERTY_NAME_C3P0_MAX_SIZE = "c3p0.max_size";
 	private static final String PROPERTY_NAME_C3P0_MAX_IDLETIME = "c3p0.max_idletime";
@@ -106,10 +104,6 @@ public class CommonServicesConfig {
 		properties
 				.put(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA,
 						env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_VERSION_DATA));
-
-		properties
-				.put(PROPERTY_NAME_HIBERNATE_CONNECTION_PROVIDER_CLASS,
-						env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_CONNECTION_PROVIDER_CLASS));
 
 		properties
 				.put(PROPERTY_NAME_HIBERNATE_CONNECTION_CHARSET,
