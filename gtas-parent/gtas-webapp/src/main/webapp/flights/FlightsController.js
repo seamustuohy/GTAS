@@ -17,6 +17,7 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
     useExternalFiltering: true,
     enableHorizontalScrollbar: 0, 
     enableVerticalScrollbar: 0,
+    enableColumnMenus: false,
     
     onRegisterApi: function(gridApi) {
       $scope.gridApi = gridApi;
@@ -90,6 +91,10 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   
   $scope.filter = function() {
     getPage();
+  }
+
+  $scope.reset = function() {
+    
   }
   
   $scope.getTableHeight = function() {
