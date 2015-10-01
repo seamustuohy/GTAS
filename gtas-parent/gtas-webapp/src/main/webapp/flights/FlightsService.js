@@ -15,13 +15,14 @@ app.service("flightService", function ($http, $q) {
   return ({
     model: {
       pageNumber: 1,
-      pageSize: 15,
-      flightNumber: "",
+      pageSize: 10,
+      flightNumber: '',
+      origin: '',
+      dest: '',
+      direction: 'I',
       etaStart: startDate,
       etaEnd: endDate,
-      origin: "",
-      dest: "",
-      sort: []      
+      sort: defaultSort 
     },
     getFlights: getFlights
   });

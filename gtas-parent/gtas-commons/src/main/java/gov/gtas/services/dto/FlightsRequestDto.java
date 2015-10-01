@@ -23,6 +23,8 @@ public class FlightsRequestDto implements Serializable {
     
     private String flightNumber;
     
+    private String direction;
+    
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)        
     private Date etaStart;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)        
@@ -73,6 +75,12 @@ public class FlightsRequestDto implements Serializable {
     }
     public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
+    }
+    public String getDirection() {
+        return direction;
+    }
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
     public List<SortOptionsDto> getSort() {
         return sort;

@@ -297,3 +297,4 @@ public class PassengerVo extends BaseVo implements Validatable {
         return true;
     }
 }
+

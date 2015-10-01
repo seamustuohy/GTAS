@@ -3,25 +3,25 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   
   $scope.selectedFlight = $stateParams.flight;
 
+  $scope.flightDirections = [ 
+    { label: 'Inbound', value: 'I' },
+    { label: 'Outbound', value: 'O' },
+    { label: 'Any', value: '' }
+  ];
+
   $scope.flightsGrid = {
-    enableSorting: true,
-    multiSelect: false,
-    enableFiltering: false,
-    enableRowSelection: false,
-    enableSelectAll: false,
-    enableRowHeaderSelection: false,
-    enableGridMenu: false,
-    paginationPageSizes: [15, 25, 50],
-    paginationPageSize: 15,
+    paginationPageSizes: [10, 15, 25],
+    paginationPageSize: $scope.flight.model.pageSize,
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
+    enableHorizontalScrollbar: 0, 
+    enableVerticalScrollbar: 0,
     
     onRegisterApi: function(gridApi) {
       $scope.gridApi = gridApi;
       
       gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
-        console.log('sort changed');
         if (sortColumns.length === 0) {
           $scope.flight.model.sort = null; 
         } else {
@@ -70,9 +70,9 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
       }    
     },
     { name: 'etd', displayName: 'ETD' },    
-    { name: 'origin', displayName: 'Origin' },
+    { name: 'origin' },
     { name: 'originCountry', displayName: 'Country' },
-    { name: 'destination', displayName: 'Dest' },
+    { name: 'destination' },
     { name: 'destinationCountry', displayName: 'Country' }
   ];
 
@@ -82,7 +82,6 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   };
 
   var getPage = function() {
-    console.log(JSON.stringify($scope.flight.model));
     flightService.getFlights($scope.flight.model).then(function (page) {
       $scope.flightsGrid.totalItems = page.totalFlights;
       $scope.flightsGrid.data = page.flights;

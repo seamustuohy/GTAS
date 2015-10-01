@@ -2,7 +2,12 @@
 <configuration>
 
 	<property name="LOG_FILE"
-		value="${CATALINA_HOME}/logs/gtas.log" />
+		value="./target/logs/gtas.log" />
+	<if condition='isDefined("CATALINA_HOME")'>
+      <then>
+        <property name="LOG_FILE" value="${CATALINA_HOME}/logs/gtas.log"/>
+      </then>
+    </if>
 	<property name="FILE_LOG_PATTERN"
 		value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } [%t] --- %-40.40logger{39} : %m%n%wex" />
 

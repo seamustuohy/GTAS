@@ -2,19 +2,17 @@ package gov.gtas.vo.passenger;
 
 import java.util.Calendar;
 import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import gov.gtas.validators.Validatable;
 import gov.gtas.vo.BaseVo;
 
 public class FlightVo extends BaseVo implements Validatable {
     public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm aaa";
 
+    private String flightId;
     private String carrier;
     private String flightNumber;
     private String fullFlightNumber;
@@ -24,18 +22,20 @@ public class FlightVo extends BaseVo implements Validatable {
     private String destinationCountry;
     private boolean isOverFlight;
     private String direction;
-    
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
     private Date flightDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
     private Date etd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
     private Date eta;
-    
     private Integer passengerCount = Integer.valueOf(0);
     private Integer ruleHitCount = Integer.valueOf(0);
     private Integer listHitCount = Integer.valueOf(0);
-
+    private int ruleHits;
+    private int listHits;
+    private int paxListHit;
+    private int docListHit;
+    
     /**
      * rules for setting calculated field 'flightDate'
      */
@@ -55,7 +55,58 @@ public class FlightVo extends BaseVo implements Validatable {
         }
     }
     
-    public String getDirection() {
+    
+    public int getRuleHits() {
+		return ruleHits;
+	}
+
+
+	public void setRuleHits(int ruleHits) {
+		this.ruleHits = ruleHits;
+	}
+
+
+	public int getListHits() {
+		return listHits;
+	}
+
+
+	public void setListHits(int listHits) {
+		this.listHits = listHits;
+	}
+
+
+	public int getPaxListHit() {
+		return paxListHit;
+	}
+
+
+	public void setPaxListHit(int paxListHit) {
+		this.paxListHit = paxListHit;
+	}
+
+
+	public int getDocListHit() {
+		return docListHit;
+	}
+
+
+	public void setDocListHit(int docListHit) {
+		this.docListHit = docListHit;
+	}
+
+
+	public String getFlightId() {
+		return flightId;
+	}
+
+
+	public void setFlightId(String flightId) {
+		this.flightId = flightId;
+	}
+
+
+	public String getDirection() {
 		return direction;
 	}
 	public void setDirection(String direction) {
