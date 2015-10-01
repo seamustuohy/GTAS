@@ -13,7 +13,38 @@
 	</md-input-container>
 
 <div style="padding: 15px;"></div>
+  <div class="modal" id="QBModal" tabindex="-1"
+       role="dialog" aria-labelledby="myModalLabel"
+       aria-hidden="true"
+       style="display: none; background: rgba(125, 125, 125, 0.5);">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-label="Close"
+                  ng-click="closeDialog();">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">Rule :
+            {{hitDetailDisplay}}</h4>
 
+        </div>
+        <div class="modal-body">
+
+          <div class="te">
+
+            <div id="builder"></div>
+          </div>
+
+        </div>
+
+      </div>
+      <!-- /.modal-content -->
+    </div>
+  </div>
+
+
+  <div id="builder"></div>
 <div id="grid1" ui-grid="passengerGrid" 
   ui-grid-pagination 
   ui-grid-selection 
@@ -21,4 +52,5 @@
   ui-grid-auto-resize
   ng-style="getTableHeight()"
   class="grid"></div>
+
 
