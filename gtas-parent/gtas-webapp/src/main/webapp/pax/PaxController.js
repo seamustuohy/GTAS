@@ -1,6 +1,6 @@
 app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderWidget, $mdDialog,
                                              paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService,
-                                          queryBuilderFactory,jqueryQueryBuilderService) {
+                                          queryBuilderFactory,jqueryQueryBuilderService, $http) {
 
   $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
   $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
@@ -11,8 +11,8 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
         sort: null
       },
       selectedPassenger,
-      PassengerDetailsDialogController = function ($scope) {
-        $scope.passenger = selectedPassenger;
+      PassengerDetailsDialogController = function ($scope, passengerObj) {
+        $scope.passenger = passengerObj;
       };
 
   $scope.selectedFlight = $stateParams.flight;
@@ -39,11 +39,15 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
 
   $scope.showPaxDetailsModal = function (passenger) {
     selectedPassenger = passenger;
+    $scope.passenger = paxService.getPaxDetail(passenger.id,passenger.flightId);
     $mdDialog.show({
       controller: PassengerDetailsDialogController,
       templateUrl: 'pax/pax.detail.html',
       parent: angular.element(document.body),
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      locals: {
+        passengerObj: $scope.passenger
+              }
     });
   };
 
