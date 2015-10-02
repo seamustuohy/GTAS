@@ -309,4 +309,11 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		return user;
 	}
 
+	/**
+	 * @return the entityManager
+	 */
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
+
 }
