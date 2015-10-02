@@ -30,11 +30,11 @@ public class HitsSummary extends BaseEntity {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<HitDetail> hitdetails = new ArrayList<HitDetail>();
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = " flight_id", nullable = false)
 	private Flight flight;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = " passenger_id", nullable = false)
 	private Passenger passenger;
 
