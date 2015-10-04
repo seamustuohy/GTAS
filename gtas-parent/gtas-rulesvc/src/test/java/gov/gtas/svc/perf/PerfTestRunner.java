@@ -2,18 +2,12 @@ package gov.gtas.svc.perf;
 
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.config.RuleServiceConfig;
-import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.model.MessageStatus;
-import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.services.udr.RulePersistenceService;
-import gov.gtas.svc.TargetingService;
-import gov.gtas.svc.UdrService;
-import gov.gtas.svc.WatchlistService;
+import gov.gtas.svc.perf.test.FetchUdrTest;
+import gov.gtas.svc.perf.test.PerformanceTest;
+import gov.gtas.svc.perf.test.TargetingTestFactory;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -32,57 +26,18 @@ import org.springframework.transaction.support.TransactionTemplate;
  *
  */
 public class PerfTestRunner {
-	public static final String PASSENGER_WL_NAME = "PerfTest Passenger WL";
-	public static final String DOCUMENT_WL_NAME = "PerfTest Document WL";
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext ctx = null;
 		try {
 			ctx = new AnnotationConfigApplicationContext(
 					CommonServicesConfig.class, RuleServiceConfig.class);
-			TargetingService targetingService = (TargetingService) ctx
-					.getBean("targetingServiceImpl");
-			int iterationCount = 0;
 			if (args.length < 1) {
 				System.out
-						.println("The number of iterations must be provided!");
+						.println("The test or command name must be provided! [udrtest,perf, perfall, cleanperf, clean]");
 				System.exit(0);
-			} else {
-				if(args[0].equalsIgnoreCase("clean")){
-					cleanupRuleData(ctx);
-					System.exit(0);
-				}else if(args[0].equalsIgnoreCase("udrtest")){
-					fetchUdrTest(ctx,1000);
-					System.exit(0);
-				}
-
-				iterationCount = Integer.parseInt(args[0]);
 			}
-			if (args.length > 1 && args[1].equalsIgnoreCase("runall")) {
-				WatchlistService watchlistService = (WatchlistService) ctx
-						.getBean("watchlistServiceImpl");
-				UdrService udrService = (UdrService) ctx
-						.getBean("udrServiceImpl");
-				genPerformanceData(udrService, 100, watchlistService, 300, 40);
-				watchlistService.activateAllWatchlists();
-				System.out
-						.println("*****************************************************************");
-				System.out
-						.println("********************   ACTIVATION COMPLETE  *********************");
-				System.out
-						.println("*****************************************************************");
-			}
-			long totalStart = System.currentTimeMillis();
-			long minmax[] = runPerformance(targetingService, iterationCount);
-			long totalElapsed = System.currentTimeMillis() - totalStart;
-			System.out
-					.println("******************************************************************");
-			System.out.println(String.format(
-					"Min Time = %d, Max Time = %d", minmax[0], minmax[1]));
-			System.out.println("Total Time = " + totalElapsed
-					+ ", Average Time = " + (totalElapsed / iterationCount));
-			System.out
-					.println("******************************************************************");
+			runTest(ctx, args);
 			ctx.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -92,37 +47,55 @@ public class PerfTestRunner {
 		}
 		System.exit(0);
 	}
-
-	private static long[] runPerformance(TargetingService targetingService,
-			int count) {
-		long max = 0;
-		long min = Long.MAX_VALUE;
-		for (int i = 0; i < count; ++i) {
-			long start = System.currentTimeMillis();
-			targetingService.analyzeLoadedMessages(
-					MessageStatus.LOADED, MessageStatus.LOADED, false);
-			//Collection<TargetSummaryVo> res = ctx.getTargetingResult();
-			long elapsed = System.currentTimeMillis() - start;
-			if (elapsed > max)
-				max = elapsed;
-			if (elapsed < min)
-				min = elapsed;
+    private static void runTest(ConfigurableApplicationContext ctx, String[] args){
+    	PerformanceTest test = createTest(ctx, args);
+    	if(test != null){
+			List<String> result = test.runTest();
+			System.out.println("******************************************************************");
+			for(String line:result){
+				System.out.println(line);
+			}
+			System.out.println("******************************************************************");	
+    	}
+    }
+	private static PerformanceTest createTest(ConfigurableApplicationContext ctx, String[] args){
+		PerformanceTest test = null;
+		TargetingTestFactory factory = null;
+				
+		switch(args[0]){
+			case "udrtest":
+				int parallelRequestCount = 10;
+				if(args.length > 1){
+					parallelRequestCount = Integer.parseInt(args[1]);					
+				}
+				FetchUdrTest testMaker = new FetchUdrTest(parallelRequestCount, 400);
+				test = testMaker.createTest(ctx);
+				break;
+			case "cleanperf":
+				cleanupRuleData(ctx);
+			case "perfall":
+				factory = new TargetingTestFactory();
+				factory.setGenData(true);
+				factory.setUdrCount(100);
+				factory.setPassengerWlCount(300);
+				factory.setDocumentWlCount(40);
+			case "perf":
+				if(factory == null){
+					factory = new TargetingTestFactory();
+				}
+				if(args.length > 1){
+					factory.setIterationCount(Integer.parseInt(args[1]));
+				}
+				test = factory.createTest(ctx);
+				break;
+			case "clean":
+				cleanupRuleData(ctx);
+				break;
+			default:
+				System.out.println(">>>>> ERROR unknown test name:"+args[0]);
+				break;
 		}
-		return new long[] { min, max};
-	}
-	private static void fetchUdrTest(ConfigurableApplicationContext ctx, int parallelRequestCount){
-		FetchUdrTest testMaker = new FetchUdrTest();
-		testMaker.setPoolTimeoutSeconds(400);
-		testMaker.setParallelRequestCount(parallelRequestCount);
-		PerformanceTest test = testMaker.createTest(ctx);
-		List<String> result = test.runTest();
-		System.out
-				.println("******************************************************************");
-		for(String line:result){
-			System.out.println(line);
-		}
-		System.out
-				.println("******************************************************************");		
+		return test;
 	}
 	private static void cleanupRuleData(ConfigurableApplicationContext ctx){
 		RulePersistenceService rulePersistenceService = (RulePersistenceService) ctx
@@ -153,25 +126,4 @@ public class PerfTestRunner {
 		    });
 	}
 
-	private static void genPerformanceData(UdrService udrService, int udrCount,
-			WatchlistService watchlistService, int passengerWlCount,
-			int documentWlCount) {
-		if (passengerWlCount > 0) {
-			WatchlistRuleGenerator.generateWlRules(watchlistService,
-					PASSENGER_WL_NAME, EntityEnum.PASSENGER, passengerWlCount);
-		}
-		if (documentWlCount > 0) {
-			WatchlistRuleGenerator.generateWlRules(watchlistService,
-					DOCUMENT_WL_NAME, EntityEnum.DOCUMENT, documentWlCount);
-		}
-		if (udrCount > 0) {
-			UdrRuleGenerator.generateUdr(udrService, "PerfTestUdr", udrCount);
-		}
-		System.out
-				.println("*****************************************************************");
-		System.out
-				.println("********************   GENERATION COMPLETE  *********************");
-		System.out
-				.println("*****************************************************************");
-	}
 }

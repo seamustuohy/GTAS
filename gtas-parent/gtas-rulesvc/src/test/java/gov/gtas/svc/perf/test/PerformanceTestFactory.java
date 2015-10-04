@@ -1,4 +1,4 @@
-package gov.gtas.svc.perf;
+package gov.gtas.svc.perf.test;
 
 import org.springframework.context.ConfigurableApplicationContext;
 
