@@ -5,11 +5,16 @@
        It should be included in the logback configuration file.
     -->
     <property name="ROOT_LOG_LEVEL" value="WARN"/>
-    <property name="GTAS_LOG_LEVEL" value="INFO"/>
+    <property name="GTAS_LOG_LEVEL" value="WARN"/>
     
     <if condition='isDefined("OVERRIDE_GTAS_LOG_LEVEL")'>
       <then>
          <property name="GTAS_LOG_LEVEL" value="${OVERRIDE_GTAS_LOG_LEVEL}"/>
+      </then>
+    </if>
+    <if condition='isDefined("OVERRIDE_ROOT_LOG_LEVEL")'>
+      <then>
+         <property name="ROOT_LOG_LEVEL" value="${OVERRIDE_ROOT_LOG_LEVEL}"/>
       </then>
     </if>
 	<if condition='isDefined("CATALINA_HOME")'>
