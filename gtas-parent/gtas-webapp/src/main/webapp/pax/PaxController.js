@@ -1,18 +1,12 @@
-app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderWidget, $mdDialog,
-                                             paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService,
-                                          queryBuilderFactory,jqueryQueryBuilderService, $http) {
-
+app.controller('PaxController', function ($scope, $injector, $mdDialog, $stateParams, $state, 
+                                          paxService, sharedPaxData, uiGridConstants, gridService,
+                                          queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget) {
   $scope.model = paxService.model;
 
   $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
   $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
 
-  var paginationOptions = {
-        pageNumber: 1,
-        pageSize: 15,
-        sort: null
-      },
-      selectedPassenger,
+  var selectedPassenger,
       PassengerDetailsDialogController = function ($scope, passengerObj) {
         $scope.passenger = passengerObj;
       };
@@ -92,8 +86,6 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
       $scope.gridApi = gridApi;
 
       gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-        paginationOptions.pageNumber = newPage;
-        paginationOptions.pageSize = pageSize;
         $scope.model.pageNumber = newPage;
         $scope.model.pageSize = pageSize;
         getPage();
@@ -149,9 +141,9 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
 
   var getPage = function() {
     if ($scope.parent === 'flights') {
-      paxService.getPax($stateParams.flight.id, paginationOptions).then(function (data) {
+      paxService.getPax($stateParams.flight.id, $scope.model).then(function (data) {
         setSubGridOptions(data);
-        $scope.passengerGrid.totalItems = data.totalPassengers;
+        //$scope.passengerGrid.totalItems = data.totalPassengers;
         $scope.passengerGrid.data = data.passengers;
       });
 

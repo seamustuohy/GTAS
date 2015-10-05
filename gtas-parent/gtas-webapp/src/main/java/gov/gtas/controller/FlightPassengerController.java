@@ -33,9 +33,9 @@ public class FlightPassengerController {
 
     @RequestMapping(value = "/flights/flight/{id}/passengers", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody PassengersPageDto getFlightPassengers(@PathVariable(value = "id") String flightId, @RequestBody PassengersRequestDto request) {
+    public @ResponseBody PassengersPageDto getFlightPassengers(@PathVariable(value = "id") Long flightId, @RequestBody PassengersRequestDto request) {
         System.out.println(request);
-        return null;
+        return paxService.getPassengersByFlightId(flightId, request.getPageNumber(), request.getPageSize());
     }
 
     @RequestMapping(value = "/passengers", method = RequestMethod.POST)

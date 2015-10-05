@@ -28,11 +28,11 @@ app.service("paxService", function ($rootScope, $http, $q) {
   
   var model = initialModel();
   
-  function getPax(flightId, paginationOptions) {
+  function getPax(flightId, pageRequest) {
     var request = $http({
-      method: "get",
-      url: "/gtas/flights/flight/" + flightId + "/passengers",
-      params: { pageNumber: paginationOptions.pageNumber, pageSize: paginationOptions.pageSize }
+      method: 'post',
+      url: '/gtas/flights/flight/' + flightId + '/passengers',
+      data: pageRequest
     });
     return (request.then(handleSuccess, handleError));
   }
