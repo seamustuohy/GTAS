@@ -1,7 +1,5 @@
 package gov.gtas.error;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Factory class for creating error handlers.
@@ -11,16 +9,12 @@ import org.slf4j.LoggerFactory;
  */
 public class ErrorHandlerFactory {
 	/*
-	 * The logger for the Error Handler factory.
-	 */
-	private static final Logger logger = LoggerFactory
-			.getLogger(ErrorHandlerFactory.class);
-	/*
 	 * This is the first element in the error handler chain. It is expected that
 	 * different modules will create their own specialized error handler and
 	 * attach it to the chain by calling registerErrorHandler.
 	 */
-	private static final ErrorHandler errorHandler = new BasicErrorHandler();
+	private static ErrorHandler errorHandler = new BasicErrorHandler();
+	private static ErrorHandler errorHandlerDelegateChain;
 
 	/**
 	 * Creates the error handler chain.<br>
@@ -35,9 +29,16 @@ public class ErrorHandlerFactory {
 	 */
 	public static synchronized void registerErrorHandler(
 			ErrorHandler errorHandler) {
-		
-			ErrorHandlerFactory.errorHandler
-					.addErrorHandlerDelegate(errorHandler);
+		    if(ErrorHandlerFactory.errorHandlerDelegateChain ==  null){
+		    	ErrorHandlerFactory.errorHandlerDelegateChain = errorHandler;
+		    } else {
+		    	ErrorHandlerFactory.errorHandlerDelegateChain.addErrorHandlerDelegate(errorHandler);
+		    }
+		    ErrorHandler newErrorHandler = new BasicErrorHandler();
+		    newErrorHandler.addErrorHandlerDelegate(ErrorHandlerFactory.errorHandlerDelegateChain);
+		    
+		    //reference assignment is atomic.
+		    ErrorHandlerFactory.errorHandler = newErrorHandler;
 	}
 
 	/**
@@ -46,11 +47,6 @@ public class ErrorHandlerFactory {
 	 * @return the error handler.
 	 */
 	public static ErrorHandler getErrorHandler() {
-		if (ErrorHandlerFactory.errorHandler != null) {
-			return ErrorHandlerFactory.errorHandler;
-		} else {
-			logger.info("GtasErrorHandlerFactory - no error handler registered.");
-			return new BasicErrorHandler();
-		}
+		return ErrorHandlerFactory.errorHandler;
 	}
 }

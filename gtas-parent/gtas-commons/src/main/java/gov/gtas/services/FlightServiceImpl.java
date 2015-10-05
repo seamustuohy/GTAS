@@ -2,8 +2,13 @@ package gov.gtas.services;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
@@ -14,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.repository.FlightRepository;
@@ -47,6 +53,23 @@ public class FlightServiceImpl implements FlightService {
         }
 
         return new FlightsPageDto(vos, total);
+	}
+ @Override
+    @Transactional
+	public HashMap<Document, List<Flight>> getFlightsByPassengerNameAndDocument(String firstName,
+			String lastName, Set<Document> documents) {
+    	
+    	HashMap<Document, List<Flight>> _tempMap = new HashMap<Document, List<Flight>>();
+    	
+    	try{
+    	for(Document document : documents){
+    		_tempMap.put(document, flightRespository.getFlightsByPassengerNameAndDocument(firstName, lastName, document.getDocumentNumber()));
+    	}
+    	}catch(Exception ex){
+    		ex.printStackTrace();
+    	}
+    	return _tempMap;
+	
     }
 
 	@Override

@@ -18,13 +18,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventListener;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.kie.api.KieBase;
-import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.Globals;
+import org.kie.api.runtime.StatelessKieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,7 +86,7 @@ public class RuleServiceImpl implements RuleService {
 	 */
 	private RuleServiceResult createSessionAndExecuteRules(KieBase kbase,
 			RuleServiceRequest req) {
-		KieSession ksession = kbase.newKieSession();
+		StatelessKieSession ksession = kbase.newStatelessKieSession();
 		ksession.setGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME,
 				new ArrayList<Object>());
 
@@ -95,28 +97,40 @@ public class RuleServiceImpl implements RuleService {
 
 		List<EventListener> listeners = RuleEventListenerUtils
 				.createEventListeners(stats);
-		RuleEventListenerUtils.addEventListenersToKieSEssion(ksession, listeners);
+		RuleEventListenerUtils.addEventListenersToKieSEssion(ksession,
+				listeners);
 
 		Collection<?> requestObjects = req.getRequestObjects();
-		for (Object x : requestObjects) {
-			ksession.insert(x);
+		ksession.execute(requestObjects);
+
+		Globals globals = ksession.getGlobals();
+		Collection<String> keys = globals.getGlobalKeys();
+
+		Iterator<String> iter = keys.iterator();
+		RuleServiceResult res = null;
+
+		while (iter.hasNext()) {
+			if (iter.next().equals(RuleServiceConstants.RULE_RESULT_LIST_NAME)) {
+				@SuppressWarnings("unchecked")
+				List<RuleHitDetail> resList = (List<RuleHitDetail>) globals
+						.get(RuleServiceConstants.RULE_RESULT_LIST_NAME);
+				res = new BasicRuleServiceResult(resList, stats);
+			}
 		}
 
-		// and fire the rules
-		ksession.   fireAllRules();
-
-		// extract the result
-		@SuppressWarnings("unchecked")
-		final List<RuleHitDetail> resList = (List<RuleHitDetail>) ksession
-				.getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
-
-		RuleServiceResult res = new BasicRuleServiceResult(resList, stats);
-
-		// Remove comment if using logging
-		// logger.close();
-
-		// and then dispose the session
-		ksession.dispose();
+		//
+		// // extract the result
+		// @SuppressWarnings("unchecked")
+		// final List<RuleHitDetail> resList = (List<RuleHitDetail>) ksession
+		// .getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
+		//
+		// RuleServiceResult res = new BasicRuleServiceResult(resList, stats);
+		//
+		// // Remove comment if using logging
+		// // logger.close();
+		//
+		// // and then dispose the session
+		// ksession.dispose();
 
 		return res;
 	}

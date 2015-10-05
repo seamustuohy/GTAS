@@ -11,9 +11,27 @@ app.service("flightService", function ($http, $q) {
   var endDate = new Date();
   endDate.setDate(endDate.getDate() + 3);
 
+  var model = initialModel();
+
   // Return public API.
   return ({
-    model: {
+    model: model,
+    getFlights: getFlights,
+    initialModel: initialModel
+  });
+
+  function getFlights(pageRequest) {
+    var request = $http({
+      method: 'post',
+      url: "/gtas/flights/",
+      data: pageRequest
+    });
+    
+    return ( request.then(handleSuccess, handleError) );
+  }
+
+  function initialModel() {
+    return {
       pageNumber: 1,
       pageSize: 10,
       flightNumber: '',
@@ -23,18 +41,7 @@ app.service("flightService", function ($http, $q) {
       etaStart: startDate,
       etaEnd: endDate,
       sort: defaultSort 
-    },
-    getFlights: getFlights
-  });
-
-  function getFlights(paginationOptions) {
-    var request = $http({
-      method: 'post',
-      url: "/gtas/flights/",
-      data: paginationOptions
-    });
-    
-    return ( request.then(handleSuccess, handleError) );
+    };
   }
 
   // I transform the error response, unwrapping the application dta from

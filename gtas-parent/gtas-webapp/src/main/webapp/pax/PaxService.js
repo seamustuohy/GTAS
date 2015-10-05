@@ -7,6 +7,7 @@ app.service("paxService", function ($rootScope, $http, $q) {
         getAllPax: getAllPax,
         broadcast: broadcast,
         getRuleHits: getRuleHits,
+        getPaxDetail: getPaxDetail,
         broadcastRuleID: broadcastRuleID
     });
     
@@ -26,6 +27,11 @@ app.service("paxService", function ($rootScope, $http, $q) {
             params: { pageNumber: paginationOptions.pageNumber, pageSize: paginationOptions.pageSize }
         });
         return (request.then(handleSuccess, handleError));
+    }
+
+    function getPaxDetail(passengerId, flightId) {
+        var url = "/gtas/passengers/passenger/" + passengerId + "/details?flightId=" + flightId;
+        return $http.get(url).then(function(res){ return res.data; });
     }
 
     function handleSuccess(response) {

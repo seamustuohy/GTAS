@@ -7,6 +7,8 @@ import gov.gtas.svc.TargetingService;
 
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -15,18 +17,23 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  *
  */
 public class RuleRunner {
-	public static void main(String[] args) {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(RuleRunner.class);
+
+	public static void main(String[] args) {
+		logger.info("Entering main().");
 		ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(
 				CommonServicesConfig.class, RuleServiceConfig.class,
 				RuleRunnerConfig.class);
 		TargetingService targetingService = (TargetingService) ctx
 				.getBean("targetingServiceImpl");
+
 		Set<Long> uniqueFlights = targetingService.runningRuleEngine();
-		System.out.println("updating hit counts for flight ids "
+		logger.info("updating hit counts for flight ids "
 				+ uniqueFlights);
 		targetingService.updateFlightHitCounts(uniqueFlights);
-
+		logger.info("Exiting main().");
 		ctx.close();
 		System.exit(0);
 	}
