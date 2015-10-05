@@ -33,15 +33,8 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         Join<Passenger, Flight> flights = pax.join("flights"); 
         List<Predicate> predicates = new ArrayList<Predicate>();
 
-        // pagination
-        int pageNumber = dto.getPageNumber();
-        int pageSize = dto.getPageSize();
-        int firstResultIndex = (pageNumber - 1) * pageSize;
-        
         q.multiselect(pax, flights).where(predicates.toArray(new Predicate[]{}));
-        TypedQuery<Object[]> typedQuery = em.createQuery(q);
-        typedQuery.setFirstResult(firstResultIndex);
-        typedQuery.setMaxResults(dto.getPageSize());
+        TypedQuery<Object[]> typedQuery = addPagination(q, dto.getPageNumber(), dto.getPageSize());
         logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         //System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Object[]> results = typedQuery.getResultList();
@@ -59,15 +52,8 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
 
         // filters
         
-        // pagination
-        int pageNumber = dto.getPageNumber();
-        int pageSize = dto.getPageSize();
-        int firstResultIndex = (pageNumber - 1) * pageSize;
-        
         q.select(pax).where(predicates.toArray(new Predicate[]{}));
-        TypedQuery<Passenger> typedQuery = em.createQuery(q);
-        typedQuery.setFirstResult(firstResultIndex);
-        typedQuery.setMaxResults(dto.getPageSize());
+        TypedQuery<Passenger> typedQuery = addPagination(q, dto.getPageNumber(), dto.getPageSize());
         logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         //System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Passenger> results = typedQuery.getResultList();
@@ -75,4 +61,11 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         return results;
     }
     
+    public <T> TypedQuery<T> addPagination(CriteriaQuery<T> q, int pageNumber, int pageSize) {
+        int offset = (pageNumber - 1) * pageSize;
+        TypedQuery<T> typedQuery = em.createQuery(q);
+        typedQuery.setFirstResult(offset);
+        typedQuery.setMaxResults(pageSize);
+        return typedQuery;
+    }
 }
