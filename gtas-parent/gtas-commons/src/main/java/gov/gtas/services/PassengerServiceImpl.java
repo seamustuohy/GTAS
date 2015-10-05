@@ -41,9 +41,8 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional
-    public PassengersPageDto getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize) {
-        int pn = pageNumber > 0 ? pageNumber - 1 : 0;
-        Page<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId, new PageRequest(pn, pageSize));
+    public PassengersPageDto getPassengersByFlightId(Long flightId, PassengersRequestDto request) {
+        List<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId, request);
         List<PassengerVo> vos = new ArrayList<>();
         
         for (Passenger p : passengerList) {
@@ -60,7 +59,7 @@ public class PassengerServiceImpl implements PassengerService {
             fillWithHitsInfo(vo,flightId, p.getId());
         }
         
-        return new PassengersPageDto(vos, passengerList.getTotalElements());
+        return new PassengersPageDto(vos, -1);
     }
 
     @Override

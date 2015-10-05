@@ -16,6 +16,6 @@ public interface PassengerService {
     
     public PassengersPageDto findAllWithFlightInfo(PassengersRequestDto request);
     
-    public PassengersPageDto getPassengersByFlightId(Long flightId, Integer pageNumber, Integer pageSize);
+    public PassengersPageDto getPassengersByFlightId(Long flightId, PassengersRequestDto request);
     public void fillWithHitsInfo(PassengerVo vo, Long flightId, Long passengerId);
 }
