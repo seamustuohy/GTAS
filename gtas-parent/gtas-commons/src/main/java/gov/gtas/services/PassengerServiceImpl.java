@@ -20,6 +20,7 @@ import gov.gtas.model.Passenger;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.services.dto.PassengersPageDto;
+import gov.gtas.services.dto.PassengersRequestDto;
 import gov.gtas.vo.passenger.DocumentVo;
 import gov.gtas.vo.passenger.PassengerVo;
 
@@ -64,10 +65,11 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional
-    public PassengersPageDto findAllWithFlightInfo(int pageNumber, int pageSize) {
-        int pn = pageNumber > 0 ? pageNumber - 1 : 0;
-        List<Object[]> results = passengerRespository.getAllPassengersAndFlights(new PageRequest(pn, pageSize));
+    public PassengersPageDto findAllWithFlightInfo(PassengersRequestDto request) {
+        long total = -1;
+        List<Object[]> results = passengerRespository.getAllPassengersAndFlights(request);
         List<PassengerVo> rv = new ArrayList<>();
+
         for (Object[] objs : results) {
             Passenger p = (Passenger)objs[0];
             Flight f = (Flight)objs[1];
@@ -86,9 +88,9 @@ public class PassengerServiceImpl implements PassengerService {
             vo.setEta(f.getEta());
         }
         
-        return new PassengersPageDto(rv, -1);
-    }
-
+        return new PassengersPageDto(rv, total);
+    }    
+    
 	@Override
 	@Transactional
 	public Passenger update(Passenger passenger) {
