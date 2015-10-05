@@ -20,7 +20,6 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
   $scope.selectedFlight = $stateParams.flight;
   $scope.parent = $stateParams.parent;
 
-
   jqueryQueryBuilderService.init('riskcriteria');
 
   $scope.ruleIdClick = function(row) {
