@@ -1,5 +1,6 @@
 app.controller('QueryBuilderController', function ($scope, $rootScope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, $location, gridOptionsLookupService, jqueryQueryBuilderService) {
     'use strict';
+
     $scope.setData = function (myData) {
         var data = [];
         if (myData === undefined || !Array.isArray(myData)) {

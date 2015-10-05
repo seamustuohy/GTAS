@@ -1,6 +1,6 @@
 app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderWidget, $mdDialog,
                                              paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService,
-                                          queryBuilderFactory,jqueryQueryBuilderService, Modal, GridControl) {
+                                          queryBuilderFactory, jqueryQueryBuilderService, Modal, GridControl) {
 
   $injector.invoke(GridControl, this, {$scope: $scope});
   $injector.invoke(Modal, this, {$scope: $scope});
