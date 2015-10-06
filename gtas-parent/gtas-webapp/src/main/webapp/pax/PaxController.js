@@ -75,17 +75,15 @@ app.controller('PaxController', function ($scope, $injector, $mdDialog, $statePa
   $scope.buildAfterEntitiesLoaded();
 
   $scope.passengerGrid = {
-    enableSorting: false,
-    multiSelect: false,
-    enableFiltering: false,
-    enableRowSelection: false,
-    enableSelectAll: false,
-    enableGridMenu: false,
     paginationPageSizes: [10, 15, 25],
     paginationPageSize: $scope.model.pageSize,
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
+    enableHorizontalScrollbar: 0, 
+    enableVerticalScrollbar: 0,
+    enableColumnMenus: false,  
+    multiSelect: false,
 
     expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>',
 
