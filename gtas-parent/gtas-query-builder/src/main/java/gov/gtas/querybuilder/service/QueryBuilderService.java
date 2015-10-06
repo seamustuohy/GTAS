@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 
- * @author GTAS5
+ * Service class for Query Builder
  *
  */
 @Service
@@ -48,6 +48,14 @@ public class QueryBuilderService {
 	@Autowired
 	private PassengerService passengerService;
 	
+	/**
+	 * Persists a user defined query to the database
+	 * @param userId
+	 * @param queryRequest
+	 * @return
+	 * @throws QueryAlreadyExistsException
+	 * @throws InvalidQueryException
+	 */
 	public IUserQueryResult saveQuery(String userId, UserQueryRequest queryRequest) throws QueryAlreadyExistsException, InvalidQueryException {
 		IUserQueryResult result = new UserQueryResult();
 		
