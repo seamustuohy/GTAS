@@ -107,6 +107,16 @@ app.config(function ($stateProvider) {
         "content@flights": {
             templateUrl: 'flights/flights.html'
         }
+    }).state('passengers.detail', {
+        url: '/detail/{paxId}/{flightId}',
+        "content@flights": {
+            templateUrl: 'pax/pax.detail.html'
+        },
+        resolve:  {
+            passenger: ['paxService', '$stateParams', function (paxService, $stateParams) {
+                return paxService.ggetPaxDetailet($stateParams.paxId, $stateParams.flightId);
+            }]
+        }
     }).state('pax', {
         url: '/passengers',
         controller: 'PaxMainController',

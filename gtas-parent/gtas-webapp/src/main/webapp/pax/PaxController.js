@@ -1,17 +1,49 @@
-app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderWidget, $mdDialog,
+app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderWidget,
                                           paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService,
-                                          queryBuilderFactory, jqueryQueryBuilderService, $http) {
+                                          queryBuilderFactory, jqueryQueryBuilderService) {
+    'use strict';
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
     $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
-    'use strict';
     var paginationOptions = {
             pageNumber: 1,
             pageSize: 15,
             sort: null
         },
-        selectedPassenger,
-        PassengerDetailsDialogController = function ($scope, passengerObj) {
-            $scope.passenger = passengerObj;
+        ruleGridColumns = [{
+            name: 'ruleId', "width": 60, displayName: 'Id',
+            cellTemplate: ' <button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
+        }, {
+            name: 'ruleTitle', displayName: 'Title'
+        }, {
+            name: 'ruleConditions',
+            displayName: 'Conditions',
+            field: 'hitsDetailsList[0]',
+            cellFilter: 'hitsConditionDisplayFilter'
+        }],
+        setSubGridOptions = function (data) {
+            data.passengers.forEach(function(rowScope){
+                rowScope.subGridOptions = {
+                    appScopeProvider: $scope,
+                    columnDefs: ruleGridColumns,
+                    data: []
+                };
+            });
+        },
+        getPage = function () {
+            if ($scope.parent === 'flights') {
+                paxService.getPax($stateParams.flight.id, paginationOptions).then(function (data) {
+                    setSubGridOptions(data);
+                    $scope.passengerGrid.totalItems = data.totalPassengers;
+                    $scope.passengerGrid.data = data.passengers;
+                });
+
+            } else {
+                paxService.getAllPax(paginationOptions).then(function (data) {
+                    setSubGridOptions(data);
+                    $scope.passengerGrid.totalItems = data.totalPassengers;
+                    $scope.passengerGrid.data = data.passengers;
+                });
+            }
         };
 
     $scope.selectedFlight = $stateParams.flight;
@@ -36,20 +68,6 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
         });
     };
 
-    $scope.showPaxDetailsModal = function (passenger) {
-        selectedPassenger = passenger;
-        $scope.passenger = paxService.getPaxDetail(passenger.id, passenger.flightId);
-        $mdDialog.show({
-            controller: PassengerDetailsDialogController,
-            templateUrl: 'pax/pax.detail.html',
-            parent: angular.element(document.body),
-            clickOutsideToClose: true,
-            locals: {
-                passengerObj: $scope.passenger
-            }
-        });
-    };
-
     $scope.isExpanded = true;
     $scope.paxHitList = [];
     $scope.list = sharedPaxData.list;
@@ -59,27 +77,7 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
     $scope.getPaxSpecificList = function (index) {
         return $scope.list(index);
     };
-
-    var ruleGridColumns = [
-        {
-            name: 'ruleId', "width": 60, displayName: 'Id',
-
-            cellTemplate: ' <button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
-
-        },
-        {name: 'ruleTitle', displayName: 'Title'},
-        {
-            name: 'ruleConditions',
-            displayName: 'Conditions',
-            field: 'hitsDetailsList[0]',
-            cellFilter: 'hitsConditionDisplayFilter'
-        }
-    ];
-
-
     $scope.buildAfterEntitiesLoaded();
-
-
     $scope.passengerGrid = {
         enableSorting: false,
         multiSelect: false,
@@ -103,14 +101,6 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
                 paginationOptions.pageSize = pageSize;
                 getPage();
             });
-
-            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-
-                if (row.isSelected) {
-                    $scope.showPaxDetailsModal(row.entity);
-                }
-            });
-
             gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
                 if (row.isExpanded) {
                     paxService.getRuleHits(row.entity.id).then(function (data) {
@@ -126,7 +116,9 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
 
     $scope.passengerGrid.columnDefs = [
         {
-            name: 'onRuleHitList', displayName: 'H', width: 50,
+            name: 'onRuleHitList',
+            displayName: 'H',
+            width: 50,
             cellClass: gridService.colorHits,
             cellTemplate: '<div></div>',
             sort: {
@@ -145,7 +137,8 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
             sort: {
                 direction: uiGridConstants.DESC,
                 priority: 1
-            }
+            },
+            cellTemplate: '<div class="ngCellText"><a ui-sref="detail" target="pax.detail" href="/gtas/passenger-detail.html?paxId={{row.entity.id}}&flightId={{row.entity.flightId}}">{{COL_FIELD}}</a></div>'
         },
         {name: 'firstName', displayName: 'First Name', width: 150},
         {name: 'middleName', displayName: 'Middle', width: 100},
@@ -158,35 +151,6 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
         {name: 'documentType', displayName: 'T', width: 50},
         {name: 'seat', displayName: 'Seat', width: 75}
     ];
-
-    var getPage = function () {
-        if ($scope.parent === 'flights') {
-            paxService.getPax($stateParams.flight.id, paginationOptions).then(function (data) {
-                setSubGridOptions(data);
-                $scope.passengerGrid.totalItems = data.totalPassengers;
-                $scope.passengerGrid.data = data.passengers;
-            });
-
-        } else {
-            paxService.getAllPax(paginationOptions).then(function (data) {
-                setSubGridOptions(data);
-                $scope.passengerGrid.totalItems = data.totalPassengers;
-                $scope.passengerGrid.data = data.passengers;
-            });
-        }
-    };
-
-    var setSubGridOptions = function (data) {
-        for (i = 0; i < data.passengers.length; i++) {
-            var rowScope = data.passengers[i];
-            rowScope.subGridOptions = {
-                appScopeProvider: $scope,
-                columnDefs: ruleGridColumns,
-                data: []
-            }
-        }
-    }
-
 
     $scope.getTableHeight = function () {
         return gridService.calculateGridHeight($scope.passengerGrid.data.length);
