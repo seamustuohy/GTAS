@@ -1,18 +1,62 @@
 <style>
-.grid .ui-grid-row .green {
-  background-color: palegreen;
-}
-.grid .ui-grid-row .red {
-  background-color: pink;
-}
+  .grid .ui-grid-row .green {
+    background-color: palegreen;
+  }
+  .grid .ui-grid-row .red {
+    background-color: pink;
+  } 
+  section {
+    border: 1px solid;
+    border-color: LightGray;
+    border-radius: 10px;
+    padding-bottom: 20px;
+  }
 </style>
+
+<section layout="row"  ng-show="parent !== 'flights'" layout-padding layout-margin layout-align="space-around center">
+  <md-input-container>
+    <label>Last Name</label>
+    <input ng-model="model.origin">
+  </md-input-container>
+  <md-input-container>
+    <label>Origin</label>
+    <input ng-model="model.origin">
+  </md-input-container>
+  <md-input-container>
+    <label>Destination</label>
+    <input ng-model="model.dest">
+  </md-input-container>
+  <md-input-container>
+    <label>Flight</label>
+    <input ng-model="model.flightNumber">
+  </md-input-container>
+  <md-input-container>
+    <label>Direction</label>
+    <md-select ng-model="model.direction">
+      <md-option ng-repeat="item in flightDirections" value="{{item.value}}">
+        {{item.label}}
+      </md-option>
+    </md-select>
+  </md-input-container>
+  <md-datepicker ng-model="model.etaStart" md-placeholder="Start Date"></md-datepicker>
+  <md-datepicker ng-model="model.etaEnd" md-placeholder="End Date"></md-datepicker>
+  
+  <md-icon-button aria-label="filter" ng-click="filter()">
+    <md-tooltip>Filter</md-tooltip>
+    <md-icon md-svg-src="resources/img/ic_filter_list_black_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+  </md-icon-button>
+  <md-icon-button aria-label="reset" ng-click="reset()">
+    <md-tooltip>Reset</md-tooltip>
+    <md-icon md-svg-src="resources/img/ic_cancel_black_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+  </md-icon-button>
+</section>
+
 
 <md-content layout-padding>
 	<md-input-container flex  ng-show="parent === 'flights'">
 		<div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="flights.all" ></div>
 	</md-input-container>
 
-<div style="padding: 15px;"></div>
   <div class="modal" id="QBModal" tabindex="-1"
        role="dialog" aria-labelledby="myModalLabel"
        aria-hidden="true"

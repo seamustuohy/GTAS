@@ -1,6 +1,13 @@
 app.controller('PaxController', function ($scope, $injector, $mdDialog, $stateParams, $state, 
                                           paxService, sharedPaxData, uiGridConstants, gridService,
                                           queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget) {
+
+  $scope.flightDirections = [ 
+    { label: 'Inbound', value: 'I' },
+    { label: 'Outbound', value: 'O' },
+    { label: 'Any', value: '' }
+  ];
+
   $scope.model = paxService.model;
 
   $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
