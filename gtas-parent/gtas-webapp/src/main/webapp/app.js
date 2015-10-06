@@ -73,8 +73,7 @@ app.config(function ($stateProvider) {
     }).state('flights.all', {
         sticky: true,
         dsr: true,
-        views: {
-        /*
+        views: {/*
             'header@flights': {
                 templateUrl: 'partials/flights-all-header.html'
             },*/
@@ -125,16 +124,10 @@ app.config(function ($stateProvider) {
         url: '/',
         sticky: true,
         dsr: true,
-        views: {
+        views: {               
             "content@pax": {
-                // controller: 'Paginate',
                 controller: 'PaxController',
-                templateUrl: 'pax/pax.table.html',
-                resolve: {
-                    passengers: function ($http, $stateParams, paxService) {
-                        return null;  //paxService.getPax(1);
-                    }
-                }
+                templateUrl: 'pax/pax.table.html'
             }
         }
     }).state('query-builder', {

@@ -12,6 +12,8 @@ import javax.transaction.Transactional.TxType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.kie.api.KieBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -39,6 +41,7 @@ import gov.gtas.services.udr.RulePersistenceService;
  */
 @Service
 public class RuleManagementServiceImpl implements RuleManagementService {
+	private static final Logger logger = LoggerFactory.getLogger(RuleManagementServiceImpl.class);
 
 	@Autowired
 	private RulePersistenceService rulePersistenceService;
@@ -65,7 +68,7 @@ public class RuleManagementServiceImpl implements RuleManagementService {
 		try {
 			KieBase kieBase = RuleUtils.createKieBaseFromDrlString(drlString);
 			byte[] kbBlob = RuleUtils.convertKieBaseToBytes(kieBase);
-			System.out.println("************************** kb_blob="+kbBlob.length);
+			logger.info("Size of the compiled Knowledge Base = "+kbBlob.length);
 			KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
 			if (kb == null) {
 				kb = new KnowledgeBase(kbName);

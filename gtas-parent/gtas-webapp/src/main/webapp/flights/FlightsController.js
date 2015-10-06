@@ -1,5 +1,5 @@
 app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, flightService, gridService, uiGridConstants) {
-  $scope.flight = flightService;
+  $scope.model = flightService.model;
   
   $scope.selectedFlight = $stateParams.flight;
 
@@ -11,7 +11,7 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
 
   $scope.flightsGrid = {
     paginationPageSizes: [10, 15, 25],
-    paginationPageSize: $scope.flight.model.pageSize,
+    paginationPageSize: $scope.model.pageSize,
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
@@ -24,11 +24,11 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
       
       gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
         if (sortColumns.length === 0) {
-          $scope.flight.model.sort = null; 
+          $scope.model.sort = null; 
         } else {
-          $scope.flight.model.sort = [];
+          $scope.model.sort = [];
           for (i = 0; i<sortColumns.length; i++) {
-            $scope.flight.model.sort.push({ column: sortColumns[i].name, dir: sortColumns[i].sort.direction });
+            $scope.model.sort.push({ column: sortColumns[i].name, dir: sortColumns[i].sort.direction });
           }
         }
         getPage();
@@ -39,9 +39,9 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
       });
 
       gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-        if ($scope.flight.model.pageNumber !== newPage || $scope.flight.model.pageSize !== pageSize) { 
-          $scope.flight.model.pageNumber = newPage;
-          $scope.flight.model.pageSize = pageSize;
+        if ($scope.model.pageNumber !== newPage || $scope.model.pageSize !== pageSize) { 
+          $scope.model.pageNumber = newPage;
+          $scope.model.pageSize = pageSize;
           getPage();
         }
       });
@@ -84,7 +84,7 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   };
 
   var getPage = function() {
-    flightService.getFlights($scope.flight.model).then(function (page) {
+    flightService.getFlights($scope.model).then(function (page) {
       // the first time we set flightsGrid.totalItems it will trigger a pagination event above
       $scope.flightsGrid.totalItems = page.totalFlights;
       $scope.flightsGrid.data = page.flights;
@@ -96,7 +96,7 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
   }
 
   $scope.reset = function() {
-    $scope.flight.model = flightService.initialModel();
+    $scope.model = flightService.initialModel();
     getPage();
   }
   

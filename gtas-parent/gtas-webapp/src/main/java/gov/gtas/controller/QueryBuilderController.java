@@ -62,29 +62,31 @@ public class QueryBuilderController {
 	/**
 	 * This method makes a call to the method in the service layer to execute the 
 	 * user defined query against Flight data
-	 * @param queryObject
-	 * @return 
+	 * @param queryRequest
+	 * @return
 	 * @throws InvalidQueryException
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_FLIGHT_URI, method=RequestMethod.POST)
 	public JsonServiceResponse runFlightQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException {
 		
+		logger.info("Executing query against flight");
 		FlightsPageDto flights = queryService.runFlightQuery(queryRequest);
-		return new JsonServiceResponse(Status.SUCCESS, "flight query" , flights);
+		return new JsonServiceResponse(Status.SUCCESS, flights.getTotalFlights() + " record(s)" , flights);
 	}
 	
 	/**
 	 * This method makes a call to the method in the service layer to execute the 
 	 * user defined query against Passenger data
-	 * @param queryObject
+	 * @param queryRequest
 	 * @return
 	 * @throws InvalidQueryException
 	 */
 	@RequestMapping(value = Constants.RUN_QUERY_PASSENGER_URI, method = RequestMethod.POST)
 	public JsonServiceResponse runPassengerQuery(@RequestBody QueryRequest queryRequest) throws InvalidQueryException {
 		
+		logger.info("Executing query against passenger");
 		PassengersPageDto passengers = queryService.runPassengerQuery(queryRequest);
-		return new JsonServiceResponse(Status.SUCCESS, "passenger query", passengers);
+		return new JsonServiceResponse(Status.SUCCESS, passengers.getTotalPassengers() + " record(s)", passengers);
 	}
 	
 	/**
@@ -97,10 +99,9 @@ public class QueryBuilderController {
 	@RequestMapping(method = RequestMethod.POST)
 	public JsonServiceResponse saveQuery(@RequestBody UserQueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
-		logger.debug("Create query " + queryRequest.getTitle() + " by " + userId);
 		
+		logger.info("Create query " + queryRequest.getTitle() + " by " + userId);
 		IUserQueryResult result = queryService.saveQuery(userId, queryRequest);
-		
 		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, result.getId());
 	}
 
@@ -115,10 +116,9 @@ public class QueryBuilderController {
 	@RequestMapping(value = Constants.PATH_VARIABLE_ID, method = RequestMethod.PUT)
 	public JsonServiceResponse editQuery(@PathVariable int id, @RequestBody UserQueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
-		logger.debug("Edit query " + queryRequest.getTitle() + " by " + userId);
 		
+		logger.info("Edit query " + queryRequest.getTitle() + " by " + userId);
 		queryService.editQuery(userId, queryRequest);
-		
 		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, null);
 	}
 	
@@ -132,10 +132,9 @@ public class QueryBuilderController {
 	public JsonServiceResponse listQueryByUser() throws InvalidQueryException {
 		List<IUserQueryResult> resultList = new ArrayList<>();
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
-		logger.debug("List query by " + userId);
 		
+		logger.info("List query by " + userId);
 		resultList = queryService.listQueryByUser(userId);
-		
 		return new JsonServiceResponse(Status.SUCCESS, resultList != null ? resultList.size() + " record(s)" : "resultList is null", resultList);
 	}
 	
@@ -148,8 +147,8 @@ public class QueryBuilderController {
 	@RequestMapping(value = Constants.PATH_VARIABLE_ID, method = RequestMethod.DELETE)
 	public JsonServiceResponse deleteQuery(@PathVariable int id) throws QueryDoesNotExistException {
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
-		logger.debug("Delete query id: " + id + " by " + userId);
 		
+		logger.info("Delete query id: " + id + " by " + userId);
 		queryService.deleteQuery(userId, id);
 		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_DELETED_SUCCESS_MSG, null);
 	}
@@ -176,7 +175,6 @@ public class QueryBuilderController {
 		QueryBuilderMappingFactory factory = new QueryBuilderMappingFactory();
 		
 		QueryBuilderMapping model = factory.getQueryBuilderMapping(entityType);
-		
 		return model;
 	}
 	
