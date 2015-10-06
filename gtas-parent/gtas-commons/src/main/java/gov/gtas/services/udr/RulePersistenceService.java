@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 /**
  * The Persistence Layer service for UDR (User Defined Rule). Since an UDR can
  * have complex AND-OR logic in it, it can give rise to multiple rules for the
@@ -148,4 +150,10 @@ public interface RulePersistenceService {
 	 * @return the knowledge base.
 	 */
 	public List<Rule> findRulesByKnowledgeBaseId(Long id);
+	
+	/**
+	 * Used for Testing only.
+	 * @return
+	 */
+	public EntityManager getEntityManager();
 }

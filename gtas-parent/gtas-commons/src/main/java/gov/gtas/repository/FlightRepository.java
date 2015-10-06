@@ -2,7 +2,7 @@ package gov.gtas.repository;
 
 import java.util.Date;
 import java.util.List;
-
+import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,6 +11,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 
 public interface FlightRepository extends PagingAndSortingRepository<Flight, Long>, FlightRepositoryCustom {
@@ -51,6 +52,14 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
     public List<Flight> getFlightsByDates(@Param("startDate") Date startDate, 
             							  @Param("endDate") Date endDate);
 
+    @Query("SELECT f FROM Flight f join f.passengers p join p.documents d where UPPER(p.firstName) = UPPER(:firstName) "
+    														  + "AND UPPER(p.lastName) = UPPER(:lastName)"
+    														 + " AND d.documentNumber = :documentNumber"
+    														 + " GROUP BY d.documentNumber, f.flightNumber")
+    public List<Flight> getFlightsByPassengerNameAndDocument(@Param("firstName") String firstName,
+    														 @Param("lastName") String lastName,
+    														 @Param("documentNumber") String documentNumber);
+    
     @Modifying
     @Transactional
     @Query("update Flight set ruleHitCount = (select count(distinct passenger) from HitsSummary where flight.id = :flightId and ruleHitCount > 0) where id = :flightId")

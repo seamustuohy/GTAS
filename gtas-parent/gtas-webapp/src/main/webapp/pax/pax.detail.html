@@ -1,5 +1,17 @@
+
+<style>
+    #detailSection md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item {
+        width: 1050px;
+    }
+    md-tab-item{
+        max-width:none !important;
+    }
+</style>
+
+<div style="padding-left: 25px; padding-top: 25px; padding-bottom: 25px; padding-right: 25px; min-width: 1680px; min-height: 1500px;">
+
 <h3><span class="glyphicon glyphicon-user glyphiconFlightPax img-circle"></span>Passenger Detail</h3>
-<div class="span12">
+<div class="span12" style="padding-left: 25px; padding-top: 25px; padding-bottom: 25px; padding-right: 25px;">
     <div class="container">
         <div class="row">
             <div class="col-sm-4">Last Name:&nbsp; <strong>{{ passenger.lastName | capitalize }}</strong></div>
@@ -35,13 +47,14 @@
         </div>
     </div>
     <div class="panel panel-default" style="min-height: 1200px; max-height: 1200px;">
-        <md-tabs md-dynamic-height>
-            <md-tab label="Details">
+        <md-tabs id="detailSection"  md-stretch-tabs="always" md-dynamic-height>
+
+            <md-tab label="Details" style="max-width: 150px;">
                 <div class="span12" style="background-color: rgb(255, 255, 255, 0.15);">
                     <div class="container" style="height:100%;">
                         <div style="padding: 10px;"></div>
                         <div class="row">
-                            <div class="col-sm-2"><span style="text-decoration: underline;">Flight:&nbsp; <strong>{{
+                            <div class="col-sm-2">&nbsp;&nbsp;&nbsp;<span style="text-decoration: underline;">Flight:&nbsp; <strong>{{
                                 passenger.flightNumber | capitalize }}</strong></span></div>
                             <div class="col-sm-2">Orig.:&nbsp; <strong>{{ passenger.flightOrigin }}</strong></div>
                             <div class="col-sm-2">Dest.:&nbsp; <strong>{{ passenger.flightDestination }}</strong></div>
@@ -55,16 +68,15 @@
                 </div>
                 <div style="padding: 30px;"></div>
                 <div class="span10">
-                    <table class="table table-hover table-condensed table-striped"
+                    <table class="table table-hover table-condensed table-striped col-lg-offset-1"
                            style="border-collapse: separate; padding-left: 20px; width: 1200px; text-align: center;">
                         <thead>
-                        <tr class="text-center" style="text-align: center">
-                            <th>Doc #</th>
-                            <th></th>
-                            Type</th>
-                            <th>Iss. Country</th>
-                            <th>Iss. Date</th>
-                            <th>Exp. Date</th>
+                        <tr class="text-center">
+                            <th style="text-align: center">Doc #</th>
+                            <th style="text-align: center">Type</th>
+                            <th style="text-align: center">Iss. Country</th>
+                            <th style="text-align: center">Iss. Date</th>
+                            <th style="text-align: center">Exp. Date</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -79,6 +91,8 @@
                     </table>
                 </div>
             </md-tab>
+
+            <!-- PNR Tab -->
             <md-tab label="PNR">
                 <md-tab-body>
                     <div style="padding: 10px;"></div>
@@ -86,7 +100,7 @@
                         <div class="container" style="height:100%;">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <h4> Record Locator:&nbsp; <span style="text-decoration: underline;"><strong>{{
+                                    <h4>&nbsp;&nbsp;&nbsp;&nbsp; Record Locator:&nbsp; <span style="text-decoration: underline;"><strong>{{
                                         passenger.pnrVo.recordLocator }}</strong></span></h4>
                                 </div>
                                 <div class="col-sm-4">
@@ -412,8 +426,58 @@
                     </div>
                 </md-tab-body>
             </md-tab>
+
+            <!-- Flight History Tab -->
             <md-tab label="Flight History">
+
+                <div class="span6" style="background-color: rgb(255, 255, 255, 0.15);">
+                    <div class="container">
+                        <div style="padding: 10px;"></div>
+                        <div class="row">
+
+                            <div class="row" ng-repeat-start="(key, value) in passenger.flightHistoryVo.flightHistoryMap">
+                                <div style="padding: 10px;"></div>
+                            <span class="col-sm-offset-1" style="font-weight: bold;">&nbsp;Document# : {{ key }}</span>
+                                <div style="padding: 15px;"></div>
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr class="text-center" style="text-align: center">
+                                            <th style="text-align: center">Carrier/Flight</th>
+                                            <th style="text-align: center">ETA</th>
+                                            <th style="text-align: center">ETD</th>
+                                            <th style="text-align: center">Origin Country</th>
+                                            <th style="text-align: center">Origin Airport</th>
+											<th style="text-align: center">Destination Country</th>
+											<th style="text-align: center">Destination Airport</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="j in value track by $index">
+                                            <td style="text-align: center">{{j.fullFlightNumber}}</td>
+                                            <td style="text-align: center">{{j.eta | date:'MM/dd/yyyy HH:mm'}}</td>
+                                            <td style="text-align: center">{{j.etd | date:'MM/dd/yyyy HH:mm'}}</td>
+                                            <td style="text-align: center">{{j.originCountry}}</td>
+                                            <td style="text-align: center">{{j.origin}}</td>
+											<td style="text-align: center">{{j.destinationCountry}}</td>
+											<td style="text-align: center">{{j.destination}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                            </div>
+
+                            <span ng-repeat-end></span>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div style="padding: 30px;"></div>
+
+
             </md-tab>
         </md-tabs>
     </div>
 </section>
+
+</div>

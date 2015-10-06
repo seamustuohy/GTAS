@@ -9,6 +9,7 @@ import java.util.List;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.StatelessKieSession;
 /**
  * Rule Engine Event Listener utility functions.
  * @author GTAS3 (AB)
@@ -23,9 +24,9 @@ public class RuleEventListenerUtils {
 	 * @param eventListenerList
 	 *            the list of event listeners.
 	 */
-	public static void addEventListenersToKieSEssion(final KieSession ksession,
+	public static void addEventListenersToKieSEssion(final StatelessKieSession ksession,
 			final List<EventListener> eventListenerList) {
-		
+
 		// iterate thru the list and add the listeners
 		if (eventListenerList != null) {
 			for (EventListener el : eventListenerList) {
@@ -46,7 +47,7 @@ public class RuleEventListenerUtils {
 	 * @param stats
 	 *            the object to collect statistics.
 	 */
-	public static void addEventListenersToKieSEssion(final KieSession ksession,
+	public static void addEventListenersToKieSEssion(final StatelessKieSession ksession,
 			final RuleExecutionStatistics stats) {
 		
 		if (ksession != null && stats != null) {

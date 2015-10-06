@@ -1,23 +1,18 @@
-app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderWidget, $mdDialog,
-                                             paxService, sharedPaxData, $stateParams, $state, uiGridConstants, gridService,
-                                          queryBuilderFactory,jqueryQueryBuilderService) {
+app.controller('PaxController', function ($scope, $injector, $mdDialog, $stateParams, $state, 
+                                          paxService, sharedPaxData, uiGridConstants, gridService,
+                                          queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget) {
+  $scope.model = paxService.model;
 
   $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
   $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
 
-  var paginationOptions = {
-        pageNumber: 1,
-        pageSize: 15,
-        sort: null
-      },
-      selectedPassenger,
-      PassengerDetailsDialogController = function ($scope) {
-        $scope.passenger = selectedPassenger;
+  var selectedPassenger,
+      PassengerDetailsDialogController = function ($scope, passengerObj) {
+        $scope.passenger = passengerObj;
       };
 
   $scope.selectedFlight = $stateParams.flight;
   $scope.parent = $stateParams.parent;
-
 
   jqueryQueryBuilderService.init('riskcriteria');
 
@@ -39,11 +34,15 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
 
   $scope.showPaxDetailsModal = function (passenger) {
     selectedPassenger = passenger;
+    $scope.passenger = paxService.getPaxDetail(passenger.id,passenger.flightId);
     $mdDialog.show({
       controller: PassengerDetailsDialogController,
       templateUrl: 'pax/pax.detail.html',
       parent: angular.element(document.body),
-      clickOutsideToClose: true
+      clickOutsideToClose: true,
+      locals: {
+        passengerObj: $scope.passenger
+              }
     });
   };
 
@@ -59,9 +58,7 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
 
   var ruleGridColumns = [
     { name: 'ruleId', "width": 60, displayName: 'Id',
-
       cellTemplate: ' <button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
-
     },
     { name: 'ruleTitle', displayName: 'Title' },
     { name: 'ruleConditions', displayName: 'Conditions',field:'hitsDetailsList[0]',cellFilter: 'hitsConditionDisplayFilter' }
@@ -70,7 +67,6 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
 
   $scope.buildAfterEntitiesLoaded();
 
-
   $scope.passengerGrid = {
     enableSorting: false,
     multiSelect: false,
@@ -78,8 +74,8 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
     enableRowSelection: false,
     enableSelectAll: false,
     enableGridMenu: false,
-    paginationPageSizes: [15, 25, 50],
-    paginationPageSize: 15,
+    paginationPageSizes: [10, 15, 25],
+    paginationPageSize: $scope.model.pageSize,
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
@@ -90,13 +86,12 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
       $scope.gridApi = gridApi;
 
       gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-        paginationOptions.pageNumber = newPage;
-        paginationOptions.pageSize = pageSize;
+        $scope.model.pageNumber = newPage;
+        $scope.model.pageSize = pageSize;
         getPage();
       });
 
       gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-
         if (row.isSelected) {
           $scope.showPaxDetailsModal(row.entity);
         }
@@ -105,11 +100,8 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
       gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
         if (row.isExpanded) {
           paxService.getRuleHits(row.entity.id).then(function (data) {
-            console.log('get rule hits for pax ' + row.entity.id);
             row.entity.subGridOptions.data = data;
-            console.log(data);
           });
-
         }
       });
     }
@@ -149,16 +141,16 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
 
   var getPage = function() {
     if ($scope.parent === 'flights') {
-      paxService.getPax($stateParams.flight.id, paginationOptions).then(function (data) {
+      paxService.getPax($stateParams.flight.id, $scope.model).then(function (data) {
         setSubGridOptions(data);
-        $scope.passengerGrid.totalItems = data.totalPassengers;
+        //$scope.passengerGrid.totalItems = data.totalPassengers;
         $scope.passengerGrid.data = data.passengers;
       });
 
     } else {
-      paxService.getAllPax(paginationOptions).then(function (data) {
+      paxService.getAllPax($scope.model).then(function (data) {
         setSubGridOptions(data);
-        $scope.passengerGrid.totalItems = data.totalPassengers;
+        //$scope.passengerGrid.totalItems = data.totalPassengers;
         $scope.passengerGrid.data = data.passengers;
       });
     }
@@ -181,47 +173,7 @@ app.controller('PaxController', function ($scope, $injector, jqueryQueryBuilderW
   };
 
   getPage();
-
-  // removed this from grid options for now
-  var pdf_opts = {
-    exporterPdfDefaultStyle: {fontSize: 9},
-    exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
-    exporterPdfTableHeaderStyle: {
-      fontSize: 10,
-      bold: true,
-      italics: true
-    },
-    exporterPdfFooter: function (currentPage, pageCount) {
-      return {
-        text: pageOfPages(currentPage, pageCount),
-        style: 'footerStyle'
-      };
-    },
-    exporterPdfCustomFormatter: function (docDefinition) {
-      docDefinition.pageMargins = [0, 40, 0, 40];
-      docDefinition.styles.headerStyle = {
-        fontSize: 22,
-        bold: true,
-        alignment: 'center',
-        lineHeight: 1.5
-      };
-      docDefinition.styles.footerStyle = {
-        fontSize: 10,
-        italic: true,
-        alignment: 'center'
-      };
-      return docDefinition;
-    },
-    exporterPdfOrientation: 'landscape',
-    exporterPdfPageSize: 'LETTER',
-    exporterPdfMaxGridWidth: 600,
-    exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location")),
-    exporterCsvFilename: 'Passengers.csv',
-    exporterPdfHeader: {text: "Passengers", style: 'headerStyle'},
-  };
 });
-
-
 
 // Customs Filters
 

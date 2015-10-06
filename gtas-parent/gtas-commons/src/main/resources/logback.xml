@@ -1,47 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-
-	<property name="LOG_FILE"
-		value="${user.dir}/logs/spring.log" />
-	<property name="FILE_LOG_PATTERN"
-		value="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } [%t] --- %-40.40logger{39} : %m%n%wex" />
-
-	<appender name="FILE"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<encoder>
-			<pattern>${FILE_LOG_PATTERN}</pattern>
-		</encoder>
-		<file>${LOG_FILE}</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<fileNamePattern>${LOG_FILE}.%i</fileNamePattern>
-		</rollingPolicy>
-		<triggeringPolicy
-			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>10MB</MaxFileSize>
-		</triggeringPolicy>
-	</appender>
-	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-		<layout class="ch.qos.logback.classic.PatternLayout">
-			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
-			</Pattern>
-			<charset>utf8</charset>
-		</layout>
-	</appender>
-	<appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-		<appender-ref ref="FILE" />
-	</appender>
-
-	<logger name="org.springframework.web" level="INFO" />
-	<logger name="org.apache.catalina.startup.DigesterFactory"
-		level="ERROR" />
-	<logger name="org.apache.catalina.util.LifecycleBase" level="ERROR" />
-	<logger name="org.hibernate.validator.internal.util.Version"
-		level="WARN" />	
-		
-
-	<root level="INFO">
-		<appender-ref ref="CONSOLE" />
-		<appender-ref ref="ASYNC" />
-	</root>
-
+    <!--  
+       This is the logback logger configuration file.
+       To use logback use the SLF4J logging facade for logging.
+       (it will pick up the logback jar from classpath.)
+       Logback will pick up only one configuration file from the classpath.
+       Therefore all configuration should be in this file.
+    -->
+    <property name="OVERRIDE_GTAS_LOG_LEVEL" value="INFO"/>   
+    <property name="OVERRIDE_ROOT_LOG_LEVEL" value="INFO"/>   
+    <include resource="gtas_logback.xml"/>
 </configuration>

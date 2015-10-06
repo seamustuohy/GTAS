@@ -1,5 +1,5 @@
 /**
- * performance testing classses.
+ * performance testing classes.
  * @author GTAS3
  *
  */

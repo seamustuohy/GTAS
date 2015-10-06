@@ -52,7 +52,6 @@ public class PassengerVo extends BaseVo implements Validatable {
     // hits info
     private Boolean onRuleHitList = Boolean.FALSE;
     private Boolean onWatchList = Boolean.FALSE;
-    private List<DocumentVo> documents = new ArrayList<>();
     private String flightOrigin;
     private String flightDestination;
     private String flightETD;
@@ -62,6 +61,8 @@ public class PassengerVo extends BaseVo implements Validatable {
     private int paxListHit;
     private int docListHit;
     private List<PassengerVo> passengers;
+	private List<DocumentVo> documents = new ArrayList<>();    
+	private FlightHistoryVo flightHistoryVo;
     private PnrVo pnrVo;
     
     
@@ -149,7 +150,13 @@ public class PassengerVo extends BaseVo implements Validatable {
     public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
     }
-    public String getCarrier() {
+    public FlightHistoryVo getFlightHistoryVo() {
+		return flightHistoryVo;
+	}
+	public void setFlightHistoryVo(FlightHistoryVo flightHistoryVo) {
+		this.flightHistoryVo = flightHistoryVo;
+	}
+	public String getCarrier() {
         return carrier;
     }
     public void setCarrier(String carrier) {

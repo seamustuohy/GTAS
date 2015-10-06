@@ -3,33 +3,49 @@
     color: red;
     font-weight: bold;
   }
+  
+  section {
+    border: 1px solid;
+    border-color: LightGray;
+    border-radius: 10px;
+    padding-bottom: 20px;
+  }
+  
 </style>
 
-<div layout="row" layout-padding layout-margin layout-align="space-around center">
+<section layout="row" layout-padding layout-margin layout-align="space-around center">
   <md-input-container>
     <label>Origin</label>
-    <input ng-model="flight.model.origin">
+    <input ng-model="model.origin">
   </md-input-container>
   <md-input-container>
     <label>Destination</label>
-    <input ng-model="flight.model.dest">
+    <input ng-model="model.dest">
   </md-input-container>
   <md-input-container>
     <label>Flight</label>
-    <input ng-model="flight.model.flightNumber">
+    <input ng-model="model.flightNumber">
   </md-input-container>
   <md-input-container>
     <label>Direction</label>
-    <md-select ng-model="flight.model.direction">
+    <md-select ng-model="model.direction">
       <md-option ng-repeat="item in flightDirections" value="{{item.value}}">
         {{item.label}}
       </md-option>
     </md-select>
   </md-input-container>
-  <md-datepicker ng-model="flight.model.etaStart" md-placeholder="Start Date"></md-datepicker>
-  <md-datepicker ng-model="flight.model.etaEnd" md-placeholder="End Date"></md-datepicker>
-  <md-button class="md-raised md-primary" ng-click="filter()">Filter</md-button>
-</div>
+  <md-datepicker ng-model="model.etaStart" md-placeholder="Start Date"></md-datepicker>
+  <md-datepicker ng-model="model.etaEnd" md-placeholder="End Date"></md-datepicker>
+  
+  <md-icon-button aria-label="filter" ng-click="filter()">
+    <md-tooltip>Filter</md-tooltip>
+    <md-icon md-svg-src="resources/img/ic_filter_list_black_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+  </md-icon-button>
+  <md-icon-button aria-label="reset" ng-click="reset()">
+    <md-tooltip>Reset</md-tooltip>
+    <md-icon md-svg-src="resources/img/ic_cancel_black_24px.svg" style="width: 24px; height: 24px;"></md-icon>
+  </md-icon-button>
+</section>
 
 <div layout-padding layout-margin>
   <md-content>
