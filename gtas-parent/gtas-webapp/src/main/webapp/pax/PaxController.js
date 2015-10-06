@@ -2,7 +2,30 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
                                           paxService, sharedPaxData, uiGridConstants, gridService,
                                           queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget) {
     'use strict';
-    var getPage = function() {
+    var ruleGridColumns = [{
+            name: 'ruleId',
+            "width": 60,
+            displayName: 'Id',
+            cellTemplate: ' <button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
+        }, {
+            name: 'ruleTitle',
+            displayName: 'Title'
+        }, {
+            name: 'ruleConditions',
+            displayName: 'Conditions',
+            field: 'hitsDetailsList[0]',
+            cellFilter: 'hitsConditionDisplayFilter'
+        }],
+        setSubGridOptions = function (data) {
+            data.passengers.forEach(function (rowScope) {
+                rowScope.subGridOptions = {
+                    appScopeProvider: $scope,
+                    columnDefs: ruleGridColumns,
+                    data: []
+                };
+            });
+        },
+        getPage = function () {
             if ($scope.parent === 'flights') {
                 paxService.getPax($stateParams.flight.id, $scope.model).then(function (data) {
                     setSubGridOptions(data);
@@ -17,23 +40,6 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
                     $scope.passengerGrid.data = data.passengers;
                 });
             }
-        },
-        ruleGridColumns = [{
-            name: 'ruleId', "width": 60, displayName: 'Id',
-            cellTemplate: ' <button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
-        }, {
-            name: 'ruleTitle', displayName: 'Title'
-        }, {
-            name: 'ruleConditions', displayName: 'Conditions',field:'hitsDetailsList[0]',cellFilter: 'hitsConditionDisplayFilter'
-        }],
-        setSubGridOptions = function(data) {
-            data.passengers.forEach(function (rowScope) {
-                rowScope.subGridOptions = {
-                    appScopeProvider: $scope,
-                    columnDefs: ruleGridColumns,
-                    data: []
-                };
-            });
         };
 
   $scope.flightDirections = [
