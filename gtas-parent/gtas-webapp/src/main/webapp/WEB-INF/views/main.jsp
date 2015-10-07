@@ -99,19 +99,14 @@
         <script src='factory/ModalGridFactory.js'></script>
         <script src='factory/QueryBuilderFactory.js'></script>
         <script src='factory/JqueryQueryBuilderWidget.js'></script>
-        <script src='jqb/JQBController.js'></script>
         <script src='dashboard/DashboardController.js'></script>
-
         <script src='common/GridService.js'></script>
-
-
         <script src='flights/FlightsController.js'></script>
         <script src='flights/FlightsService.js'></script>
         <script src='pax/PaxController.js'></script>
         <script src='pax/PaxMainController.js'></script>
         <script src='pax/PaxService.js'></script>
         <script src='pax/PaxFactory.js'></script>
-        <script src='pax/PassengerDataFilter.js'></script>
         <script src='query-builder/QueryBuilderController.js'></script>
         <script src='query-builder/ExecuteQueryController.js'></script>
         <script src='query-builder/ExecuteQueryService.js'></script>

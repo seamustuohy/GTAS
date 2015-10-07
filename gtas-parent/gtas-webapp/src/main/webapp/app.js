@@ -3,6 +3,11 @@ var app;
     'use strict';
     function PassengerDetailCtrl($scope, passenger) {
         $scope.passenger = passenger.data;
+        $scope.paxTableEnabled = false;
+        //date modifications ** NOT SURE need to make these date objects no calendar picker will confer with Maneesh reason behind it.
+        $scope.passenger.flightETA = new Date($scope.passenger.flightETA);
+        $scope.passenger.flightETD = new Date($scope.passenger.flightETD);
+        $scope.passenger.dob = new Date($scope.passenger.dob);
     }
 
     function paxDetailService($http, $q) {
