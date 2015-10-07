@@ -93,7 +93,7 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
     useExternalPagination: true,
     useExternalSorting: true,
     useExternalFiltering: true,
-    enableHorizontalScrollbar: 0, 
+    enableHorizontalScrollbar: 1, 
     enableVerticalScrollbar: 0,
     enableColumnMenus: false,  
     multiSelect: false,
@@ -142,7 +142,7 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
     },
     { name: 'firstName', displayName: 'First Name', width: 150 },
     { name: 'middleName', displayName: 'Middle', width: 100 },
-    { name: 'flightNumber', displayName: 'Flight', width: 90, visible: ($scope.parent !== 'flights') },
+    { name: 'fullFlightNumber', displayName: 'Flight', width: 90, visible: ($scope.parent !== 'flights') },
     { name: 'eta', displayName: 'ETA', width: 175, visible: ($scope.parent !== 'flights') },
     { name: 'etd', displayName: 'ETD', width: 175, visible: ($scope.parent !== 'flights') },
     { name: 'gender', displayName: 'G', width: 50 },
@@ -152,6 +152,15 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
     { name: 'seat', displayName: 'Seat', width: 75 }
   ];
 
+  $scope.filter = function() {
+    getPage();
+  }
+
+  $scope.reset = function() {
+    $scope.model = flightService.initialModel();
+    getPage();
+  }
+  
   $scope.getTableHeight = function() {
     return gridService.calculateGridHeight($scope.passengerGrid.data.length);
   };
