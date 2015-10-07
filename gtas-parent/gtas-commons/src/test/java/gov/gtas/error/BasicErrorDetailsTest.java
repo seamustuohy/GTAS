@@ -22,9 +22,10 @@ public class BasicErrorDetailsTest {
 	@Test
 	public void testDetails() {
 		Throwable cause = new NullPointerException();
-		ErrorDetails err = new BasicErrorDetails(new Exception(new Exception("Test Error", cause)));
-		assertNotNull(err.getErrorId());
-		assertEquals(CommonErrorConstants.SYSTEM_ERROR_CODE, err.getFatalErrorCode());
+		ErrorDetails err = ErrorUtils.createErrorDetails(new Exception("Test Error", cause));
+				//new BasicErrorDetails(new Exception(new Exception("Test Error", cause)));
+		//assertNotNull(err.getErrorId());
+		assertEquals(CommonErrorConstants.SYSTEM_ERROR_CODE, err.getErrorCode());
 		String[] det = err.getErrorDetails();
 		assertNotNull(det);
 		assertEquals("Exception class:Exception", det[0]);

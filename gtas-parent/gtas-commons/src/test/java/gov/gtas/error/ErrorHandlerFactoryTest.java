@@ -45,7 +45,13 @@ public class ErrorHandlerFactoryTest {
 		ErrorDetails det = ErrorHandlerFactory.getErrorHandler().processError(new TestException());
 		assertTrue(det instanceof TestErrorDetails);
 	}
-	
+	@Test
+	public void processErrorTest(){
+		ErrorDetails det = ErrorHandlerFactory.getErrorHandler().processError(new NullPointerException());
+		assertNotNull(det);
+		assertNotNull(det.getErrorId());
+		assertEquals(CommonErrorConstants.SYSTEM_ERROR_CODE, det.getErrorCode());
+	}
 	private static class TestHandler extends BasicErrorHandler{
 		public TestHandler(){
 			super.addErrorCodeToHandlerMap("fooCode", "msg:%s");
@@ -56,7 +62,7 @@ public class ErrorHandlerFactoryTest {
 	}
 	private static class TestErrorDetails extends BasicErrorDetails{
 		public TestErrorDetails(Exception ex){
-			super(ex);
+			super(1L, CommonErrorConstants.SYSTEM_ERROR_CODE, ex.getMessage(), null);
 		}
 	}
 	private static class TestException extends Exception{

@@ -113,20 +113,37 @@ public class BasicErrorHandler implements ErrorHandler {
     /* (non-Javadoc)
 	 * @see gov.gtas.error.ErrorHandler#processError(java.lang.Exception)
 	 */
-	@Override
+    @Override
 	public ErrorDetails processError(final Exception exception) {
+    	ErrorDetails ret = null;
 		Function<Exception, ErrorDetails> processor = exceptionProcessorMap.get(exception.getClass().getName());
 		if(processor != null){
-			return processor.apply(exception);
+			ret = processor.apply(exception);
 		} else if(this.delegate != null){
-			return delegate.processError(exception);
+			ret = delegate.processError(exception);
 		} else {
 			logger.error(exception.getMessage());
-			return new BasicErrorDetails(exception);
+			if(exception instanceof CommonServiceException){
+				ret = ErrorUtils.createErrorDetails((CommonServiceException)exception);
+			} else {
+			ret = ErrorUtils.createErrorDetails(exception);
+			}
 		}
+		return ret;
 	}
 
-    /**
+    
+    /* (non-Javadoc)
+	 * @see gov.gtas.error.ErrorHandler#processError(java.lang.String, java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public ErrorDetails processError(String code, String description,
+			String[] details) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
      * Adds a custom exception handler using a lambda.
      * @param exceptionClass the exception class to handle.
      * @param processor the lambda.
@@ -134,7 +151,7 @@ public class BasicErrorHandler implements ErrorHandler {
 	protected void addCustomErrorProcesssor(
 			Class<? extends Exception> exceptionClass,
 			Function<Exception, ErrorDetails> processor) {
-		exceptionProcessorMap.put(exceptionClass.getName(), processor);		
+		this.exceptionProcessorMap.put(exceptionClass.getName(), processor);		
 	}
 
 	/**

@@ -49,4 +49,17 @@ public interface ErrorHandler {
 	 * @return the diagnostics.
 	 */
 	ErrorDetails processError(Exception exception);
+	
+	/**
+	 * Records and logs error.
+	 * 
+	 * @param code
+	 *            the error code.
+	 * @param description
+	 *            the error description.
+	 * @param details
+	 *            the error details.
+	 * @return the diagnostics.
+	 */
+	ErrorDetails processError(String code, String description, String[] details);
 }

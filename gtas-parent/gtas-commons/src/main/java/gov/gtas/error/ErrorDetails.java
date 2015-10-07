@@ -2,8 +2,8 @@ package gov.gtas.error;
 
 
 public interface ErrorDetails {
-	String getErrorId();
-	String getFatalErrorCode();
-    String getFatalErrorMessage();
+	Long getErrorId();
+	String getErrorCode();
+    String getErrorDescription();
     String[] getErrorDetails();
 }

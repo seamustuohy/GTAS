@@ -1,39 +1,26 @@
 package gov.gtas.error;
 
-import gov.gtas.constant.CommonErrorConstants;
-
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.util.CollectionUtils;
 
 public class BasicErrorDetails implements ErrorDetails {
-	private Exception exception;
 	private List<String> errorDetails;
-	private String errorId;
+	private long errorId;
+	private String errorCode;
+	private String errorDescription;
 	
-	public BasicErrorDetails(Exception exception){
-		this.exception = exception;
-		this.errorDetails = new LinkedList<String>();
-		createErrorDetails(exception, this.errorDetails);
-		this.errorId = String.valueOf(System.currentTimeMillis());
+	public BasicErrorDetails(Long id, String code, String description, List<String> details){
+		this.errorDetails = details;
+		this.errorCode = code;
+		this.errorDescription = description;
+		this.errorId = id;
 	}
-    private void createErrorDetails(Throwable ex, List<String> details){
-    	details.add("Exception class:"+ex.getClass().getSimpleName());
-    	details.add("Exception messsage:"+ex.getMessage());
-    	for(StackTraceElement el:ex.getStackTrace()){
-    		details.add(el.toString());
-    	}
-    	if(ex.getCause() != null){
-    		details.add(">>>>>>>> Caused by:");
-    		createErrorDetails(ex.getCause(), details);
-    	}
-    }
 	/* (non-Javadoc)
 	 * @see gov.gtas.error.ErrorDetails#getErrorId()
 	 */
 	@Override
-	public String getErrorId() {
+	public Long getErrorId() {
 		return errorId;
 	}
 	@Override
@@ -47,21 +34,31 @@ public class BasicErrorDetails implements ErrorDetails {
 		}
 	}				
 	@Override
-	public String getFatalErrorMessage() {
-		if(exception instanceof CommonServiceException){
-			return ((CommonServiceException)exception).getMessage();
-		}else{
-		    return String.format(CommonErrorConstants.SYSTEM_ERROR_MESSAGE,
-					System.currentTimeMillis());
-		}
+	public String getErrorDescription() {
+		//return String.format(CommonErrorConstants.SYSTEM_ERROR_MESSAGE,	System.currentTimeMillis());
+		return this.errorDescription;
 	}				
 	@Override
-	public String getFatalErrorCode() {
-		if(exception instanceof CommonServiceException){
-			return ((CommonServiceException)exception).getErrorCode();
-		}else{
-		    return CommonErrorConstants.SYSTEM_ERROR_CODE;
-		}
+	public String getErrorCode() {
+		return this.errorCode;
+	}
+	/**
+	 * @param errorDetails the errorDetails to set
+	 */
+	public void setErrorDetails(List<String> errorDetails) {
+		this.errorDetails = errorDetails;
+	}
+	/**
+	 * @param errorCode the errorCode to set
+	 */
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
+	/**
+	 * @param errorDescription the errorDescription to set
+	 */
+	public void setErrorDescription(String errorDescription) {
+		this.errorDescription = errorDescription;
 	}
 
 }
