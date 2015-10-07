@@ -109,6 +109,18 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
         getPage();
       });
 
+      gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
+        if (sortColumns.length === 0) {
+          $scope.model.sort = null; 
+        } else {
+          $scope.model.sort = [];
+          for (var i = 0; i<sortColumns.length; i++) {
+            $scope.model.sort.push({ column: sortColumns[i].name, dir: sortColumns[i].sort.direction });
+          }
+        }
+        getPage();
+      });
+
       gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
         if (row.isExpanded) {
           paxService.getRuleHits(row.entity.id).then(function (data) {
@@ -122,34 +134,28 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
   $scope.passengerGrid.columnDefs = [
     { name: 'onRuleHitList', displayName: 'H', width: 50,
       cellClass: gridService.colorHits,
-      cellTemplate: '<div></div>',
-      sort: {
-        direction: uiGridConstants.DESC,
-        priority: 0
-      }
+      cellTemplate: '<div></div>'
     },
     { name: 'onWatchList', displayName: 'L', width: 50,
       cellClass: gridService.colorHits,
       cellTemplate: '<div></div>'
     },
     { name: 'passengerType', displayName: 'Type', width: 50 },
-    { name: 'lastName', displayName: 'Last Name', width: 175,
+    { name: 'lastName', displayName: 'Last Name',
       sort: {
         direction: uiGridConstants.DESC,
         priority: 1
       },
         cellTemplate: '<div class="ngCellText"><a ui-sref="detail" target="pax.detail" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}">{{COL_FIELD}}</a></div>'
     },
-    { name: 'firstName', displayName: 'First Name', width: 150 },
-    { name: 'middleName', displayName: 'Middle', width: 100 },
-    { name: 'fullFlightNumber', displayName: 'Flight', width: 90, visible: ($scope.parent !== 'flights') },
-    { name: 'eta', displayName: 'ETA', width: 175, visible: ($scope.parent !== 'flights') },
-    { name: 'etd', displayName: 'ETD', width: 175, visible: ($scope.parent !== 'flights') },
+    { name: 'firstName', displayName: 'First Name' },
+    { name: 'middleName', displayName: 'Middle' },
+    { name: 'fullFlightNumber', displayName: 'Flight', visible: ($scope.parent !== 'flights') },
+    { name: 'eta', displayName: 'ETA', visible: ($scope.parent !== 'flights') },
+    { name: 'etd', displayName: 'ETD', visible: ($scope.parent !== 'flights') },
     { name: 'gender', displayName: 'G', width: 50 },
-    { name: 'dob', displayName: 'DOB', cellFilter: 'date', width: 175 },
-    { name: 'citizenshipCountry', displayName: 'CTZ', width: 75 },
-    { name: 'documentType', displayName: 'T', width: 50 },
-    { name: 'seat', displayName: 'Seat', width: 75 }
+    { name: 'dob', displayName: 'DOB', cellFilter: 'date' },
+    { name: 'citizenshipCountry', displayName: 'CTZ', width: 75 }
   ];
 
   $scope.filter = function() {
@@ -157,7 +163,7 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
   }
 
   $scope.reset = function() {
-    $scope.model = flightService.initialModel();
+    $scope.model = paxService.initialModel();
     getPage();
   }
   

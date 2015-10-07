@@ -27,15 +27,11 @@ app.controller('FlightsController', function ($scope, $state, $interval, $stateP
           $scope.model.sort = null; 
         } else {
           $scope.model.sort = [];
-          for (i = 0; i<sortColumns.length; i++) {
+          for (var i = 0; i<sortColumns.length; i++) {
             $scope.model.sort.push({ column: sortColumns[i].name, dir: sortColumns[i].sort.direction });
           }
         }
         getPage();
-      });
-
-      gridApi.core.on.filterChanged( $scope, function() {
-        var grid = this.grid;
       });
 
       gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {

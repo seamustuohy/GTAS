@@ -84,6 +84,7 @@ app.service("paxService", function ($rootScope, $http, $q) {
   // Return public API.
   return ({
     model: model,
+    initialModel: initialModel,    
     getPax: getPax,
     getAllPax: getAllPax,
     broadcast: broadcast,
