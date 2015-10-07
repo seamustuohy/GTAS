@@ -138,7 +138,7 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
         direction: uiGridConstants.DESC,
         priority: 1
       },
-        cellTemplate: '<div class="ngCellText"><a ui-sref="detail" target="pax.detail" href="/gtas/passenger-detail.html?paxId={{row.entity.id}}&flightId={{row.entity.flightId}}">{{COL_FIELD}}</a></div>'
+        cellTemplate: '<div class="ngCellText"><a ui-sref="detail" target="pax.detail" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}">{{COL_FIELD}}</a></div>'
     },
     { name: 'firstName', displayName: 'First Name', width: 150 },
     { name: 'middleName', displayName: 'Middle', width: 100 },
