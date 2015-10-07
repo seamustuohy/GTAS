@@ -42,8 +42,8 @@ public class PassengerVo extends BaseVo implements Validatable {
     private String paxId;
     // flight info
     private String flightId;
-    //private String strFlightId;
     private String flightNumber;
+    private String fullFlightNumber;
     private String carrier;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)        
     private Date etd;
@@ -66,12 +66,6 @@ public class PassengerVo extends BaseVo implements Validatable {
     private PnrVo pnrVo;
     
     
- /*   public String getStrFlightId() {
-		return strFlightId;
-	}
-	public void setStrFlightId(String strFlightId) {
-		this.strFlightId = strFlightId;
-	}*/
 	public String getPaxId() {
 		return paxId;
 	}
@@ -149,6 +143,12 @@ public class PassengerVo extends BaseVo implements Validatable {
     }
     public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
+    }
+    public String getFullFlightNumber() {
+        return fullFlightNumber;
+    }
+    public void setFullFlightNumber(String fullFlightNumber) {
+        this.fullFlightNumber = fullFlightNumber;
     }
     public FlightHistoryVo getFlightHistoryVo() {
 		return flightHistoryVo;
