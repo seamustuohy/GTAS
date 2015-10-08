@@ -45,7 +45,7 @@ public class BasicErrorHandler implements ErrorHandler {
 	/*
 	 * The map of all exception processors used by this handler.
 	 */
-	private final Map<String, Function<Exception, ErrorDetails>> exceptionProcessorMap;
+	private final Map<String, Function<Exception, ErrorDetailInfo>> exceptionProcessorMap;
 	
 	/*
 	 * The first handler in the delegate chain for this error handler;
@@ -65,7 +65,7 @@ public class BasicErrorHandler implements ErrorHandler {
 		errorMap.put(JSON_INPUT_VALIDATION_ERROR_CODE,
 				JSON_INPUT_VALIDATION_ERROR_MESSAGE);
 		
-		exceptionProcessorMap = new HashMap<String, Function<Exception,ErrorDetails>>();
+		exceptionProcessorMap = new HashMap<String, Function<Exception,ErrorDetailInfo>>();
 	}
 
 	/* (non-Javadoc)
@@ -114,9 +114,9 @@ public class BasicErrorHandler implements ErrorHandler {
 	 * @see gov.gtas.error.ErrorHandler#processError(java.lang.Exception)
 	 */
     @Override
-	public ErrorDetails processError(final Exception exception) {
-    	ErrorDetails ret = null;
-		Function<Exception, ErrorDetails> processor = exceptionProcessorMap.get(exception.getClass().getName());
+	public ErrorDetailInfo processError(final Exception exception) {
+    	ErrorDetailInfo ret = null;
+		Function<Exception, ErrorDetailInfo> processor = exceptionProcessorMap.get(exception.getClass().getName());
 		if(processor != null){
 			ret = processor.apply(exception);
 		} else if(this.delegate != null){
@@ -137,7 +137,7 @@ public class BasicErrorHandler implements ErrorHandler {
 	 * @see gov.gtas.error.ErrorHandler#processError(java.lang.String, java.lang.String, java.lang.String[])
 	 */
 	@Override
-	public ErrorDetails processError(String code, String description,
+	public ErrorDetailInfo processError(String code, String description,
 			String[] details) {
 		// TODO Auto-generated method stub
 		return null;
@@ -150,7 +150,7 @@ public class BasicErrorHandler implements ErrorHandler {
      */
 	protected void addCustomErrorProcesssor(
 			Class<? extends Exception> exceptionClass,
-			Function<Exception, ErrorDetails> processor) {
+			Function<Exception, ErrorDetailInfo> processor) {
 		this.exceptionProcessorMap.put(exceptionClass.getName(), processor);		
 	}
 

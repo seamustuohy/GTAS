@@ -48,7 +48,7 @@ public interface ErrorHandler {
 	 *            the error.
 	 * @return the diagnostics.
 	 */
-	ErrorDetails processError(Exception exception);
+	ErrorDetailInfo processError(Exception exception);
 	
 	/**
 	 * Records and logs error.
@@ -61,5 +61,5 @@ public interface ErrorHandler {
 	 *            the error details.
 	 * @return the diagnostics.
 	 */
-	ErrorDetails processError(String code, String description, String[] details);
+	ErrorDetailInfo processError(String code, String description, String[] details);
 }

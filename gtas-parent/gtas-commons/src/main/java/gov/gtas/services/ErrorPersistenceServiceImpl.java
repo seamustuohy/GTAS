@@ -1,7 +1,7 @@
 package gov.gtas.services;
 
-import gov.gtas.error.BasicErrorDetails;
-import gov.gtas.error.ErrorDetails;
+import gov.gtas.error.BasicErrorDetailInfo;
+import gov.gtas.error.ErrorDetailInfo;
 import gov.gtas.model.ErrorRecord;
 import gov.gtas.repository.ErrorRecordRepository;
 
@@ -19,25 +19,25 @@ public class ErrorPersistenceServiceImpl implements ErrorPersistenceService{
 	 * @see gov.gtas.services.ErrorPersistenceService#create(gov.gtas.error.ErrorDetails)
 	 */
 	@Override
-	public ErrorDetails create(ErrorDetails error) {
+	public ErrorDetailInfo create(ErrorDetailInfo error) {
 		ErrorRecord err =  errorRecordRepository.save(new ErrorRecord(error));
-		return new BasicErrorDetails(err.getId(), err.getCode(), err.getDescription(), err.fetchErrorDetails());
+		return new BasicErrorDetailInfo(err.getId(), err.getCode(), err.getDescription(), err.fetchErrorDetails());
 	}
 
 	/* (non-Javadoc)
 	 * @see gov.gtas.services.ErrorPersistenceService#findById(java.lang.Long)
 	 */
 	@Override
-	public ErrorDetails findById(Long id) {
+	public ErrorDetailInfo findById(Long id) {
 		ErrorRecord err =  errorRecordRepository.findOne(id);
-		return new BasicErrorDetails(err.getId(), err.getCode(), err.getDescription(), err.fetchErrorDetails());
+		return new BasicErrorDetailInfo(err.getId(), err.getCode(), err.getDescription(), err.fetchErrorDetails());
 	}
 
 	/* (non-Javadoc)
 	 * @see gov.gtas.services.ErrorPersistenceService#findByDateRange(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<ErrorDetails> findByDateRange(String jsonDateFrom,
+	public List<ErrorDetailInfo> findByDateRange(String jsonDateFrom,
 			String jsonDateTo) {
 		// TODO Auto-generated method stub
 		return null;
@@ -47,7 +47,7 @@ public class ErrorPersistenceServiceImpl implements ErrorPersistenceService{
 	 * @see gov.gtas.services.ErrorPersistenceService#findByDateFrom(java.lang.String)
 	 */
 	@Override
-	public List<ErrorDetails> findByDateFrom(String jsonDateFrom) {
+	public List<ErrorDetailInfo> findByDateFrom(String jsonDateFrom) {
 		// TODO Auto-generated method stub
 		return null;
 	}

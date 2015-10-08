@@ -1,7 +1,7 @@
 package gov.gtas.error;
 
 
-public interface ErrorDetails {
+public interface ErrorDetailInfo {
 	Long getErrorId();
 	String getErrorCode();
     String getErrorDescription();

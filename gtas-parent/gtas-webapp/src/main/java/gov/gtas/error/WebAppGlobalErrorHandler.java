@@ -29,7 +29,7 @@ public class WebAppGlobalErrorHandler {
 	@ExceptionHandler(CommonServiceException.class)
 	public @ResponseBody JsonServiceResponse handleError(CommonServiceException ex) {
 		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-		ErrorDetails err = errorHandler.processError(ex);
+		ErrorDetailInfo err = errorHandler.processError(ex);
 		return new JsonServiceResponse(err.getErrorCode(),
 				err.getErrorDescription(), null);
 	}
@@ -66,8 +66,13 @@ public class WebAppGlobalErrorHandler {
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody JsonServiceResponse handleError(Exception ex) {
-		ErrorDetails errorDetails = ErrorHandlerFactory.createErrorDetails(ex);
-		errorDetails = errorService.create(errorDetails); //add the saved ID
+		ErrorDetailInfo errorDetails = ErrorHandlerFactory.createErrorDetails(ex);
+		try{
+		    errorDetails = errorService.create(errorDetails); //add the saved ID
+		} catch (Exception exception){
+			//possibly DB is down
+			exception.printStackTrace();
+		}
 		return new JsonServiceResponse(errorDetails);			
 	}
 }

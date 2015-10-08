@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import javax.transaction.Transactional;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.error.ErrorDetails;
+import gov.gtas.error.ErrorDetailInfo;
 import gov.gtas.error.ErrorUtils;
 import gov.gtas.services.ErrorPersistenceService;
 
@@ -41,7 +41,7 @@ public class ErrorPersistenceServiceIT {
     @Test
     @Transactional
     public void createErrorTest(){
-    	ErrorDetails err = ErrorUtils.createErrorDetails(new NullPointerException("Test Error"));
+    	ErrorDetailInfo err = ErrorUtils.createErrorDetails(new NullPointerException("Test Error"));
     	err = testTarget.create(err);
     	assertNotNull(err);
     	assertNotNull(err.getErrorId());
@@ -51,9 +51,9 @@ public class ErrorPersistenceServiceIT {
     @Test
     @Transactional
     public void findErrorTest(){
-    	ErrorDetails err = ErrorUtils.createErrorDetails(new NullPointerException("Test Error"));
+    	ErrorDetailInfo err = ErrorUtils.createErrorDetails(new NullPointerException("Test Error"));
     	err = testTarget.create(err);
-    	ErrorDetails err2 = testTarget.findById(err.getErrorId());
+    	ErrorDetailInfo err2 = testTarget.findById(err.getErrorId());
     	assertNotNull(err2);
     	assertNotNull(err2.getErrorId());
     	assertEquals("Test Error",err2.getErrorDescription());
