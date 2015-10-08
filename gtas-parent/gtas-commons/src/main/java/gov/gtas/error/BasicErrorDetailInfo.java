@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.springframework.util.CollectionUtils;
 
-public class BasicErrorDetails implements ErrorDetails {
+public class BasicErrorDetailInfo implements ErrorDetailInfo {
 	private List<String> errorDetails;
 	private Long errorId;
 	private String errorCode;
 	private String errorDescription;
 	
-	public BasicErrorDetails(Long id, String code, String description, List<String> details){
+	public BasicErrorDetailInfo(Long id, String code, String description, List<String> details){
 		this.errorDetails = details;
 		this.errorCode = code;
 		this.errorDescription = description;

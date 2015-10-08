@@ -14,7 +14,7 @@
 <div style="padding-left: 25px; padding-top: 25px; padding-bottom: 25px; padding-right: 25px; min-width: 1680px; min-height: 1500px;">
     <h3><span class="glyphicon glyphicon-user glyphiconFlightPax img-circle"></span>Passenger Detail</h3>
 
-    <div class="span12" style="padding-left: 25px; padding-top: 25px; padding-bottom: 25px; padding-right: 25px;">
+    <div class="span12 col-sm-offset-1" style="padding-left: 25px; padding-top: 25px; padding-bottom: 25px; padding-right: 25px;">
         <div class="container">
             <div class="row">
                 <div class="col-sm-4 capitalize">Last Name:&nbsp; <strong>{{ passenger.lastName }}</strong></div>
@@ -27,8 +27,8 @@
                 <div class="col-sm-4">Pax Type:&nbsp; <strong> {{ passenger.passengerType }}</strong></div>
             </div>
             <div class="row">
-                <div class="col-sm-4">Embarkation:&nbsp; <strong> {{ passenger.embarkation }}</strong></div>
-                <div class="col-sm-4">Debarkation:&nbsp; <strong> {{ passenger.debarkation }}</strong></div>
+                <div class="col-sm-4">Embarkation:&nbsp; <strong> {{ passenger.flightOrigin }}</strong></div>
+                <div class="col-sm-4">Debarkation:&nbsp; <strong> {{ passenger.flightDestination }}</strong></div>
                 <div class="col-sm-4">Citizenship:&nbsp; <strong> {{ passenger.citizenshipCountry }}</strong></div>
             </div>
         </div>
@@ -56,7 +56,7 @@
                     <div class="span12" style="background-color: rgb(255, 255, 255, 0.15);">
                         <div class="container" style="height:100%;">
                             <div style="padding: 10px;"></div>
-                            <div class="row">
+                            <div class="row col-md-offset-1">
                                 <div class="col-sm-2 capitalize">&nbsp;&nbsp;&nbsp;<span style="text-decoration: underline;">Flight:&nbsp; <strong>{{
                                     passenger.flightNumber }}</strong></span></div>
                                 <div class="col-sm-2">Orig.:&nbsp; <strong>{{ passenger.flightOrigin }}</strong></div>
@@ -453,7 +453,7 @@
                                      ng-repeat-start="(key, value) in passenger.flightHistoryVo.flightHistoryMap">
                                     <div style="padding: 10px;"></div>
                                     <span class="col-sm-offset-1"
-                                          style="font-weight: bold;">&nbsp;Document# : {{ key }}</span>
+                                          style="margin-left:3.5%; font-weight: bold;">&nbsp;Document# : {{ key }}</span>
 
                                     <div style="padding: 15px;"></div>
                                     <table class="table table-striped">

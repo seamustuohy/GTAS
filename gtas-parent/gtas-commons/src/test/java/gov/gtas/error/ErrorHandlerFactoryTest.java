@@ -42,12 +42,12 @@ public class ErrorHandlerFactoryTest {
 		assertEquals("msg:bar",ex.getMessage());
 		
 		//test for exception processor
-		ErrorDetails det = ErrorHandlerFactory.getErrorHandler().processError(new TestException());
+		ErrorDetailInfo det = ErrorHandlerFactory.getErrorHandler().processError(new TestException());
 		assertTrue(det instanceof TestErrorDetails);
 	}
 	@Test
 	public void processErrorTest(){
-		ErrorDetails det = ErrorHandlerFactory.getErrorHandler().processError(new NullPointerException());
+		ErrorDetailInfo det = ErrorHandlerFactory.getErrorHandler().processError(new NullPointerException());
 		assertNotNull(det);
 		assertNull(det.getErrorId());
 		assertEquals(CommonErrorConstants.SYSTEM_ERROR_CODE, det.getErrorCode());
@@ -60,7 +60,7 @@ public class ErrorHandlerFactoryTest {
 					);
 		}
 	}
-	private static class TestErrorDetails extends BasicErrorDetails{
+	private static class TestErrorDetails extends BasicErrorDetailInfo{
 		public TestErrorDetails(Exception ex){
 			super(1L, CommonErrorConstants.SYSTEM_ERROR_CODE, ex.getMessage(), null);
 		}

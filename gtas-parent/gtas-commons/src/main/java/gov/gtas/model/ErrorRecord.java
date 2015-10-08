@@ -1,6 +1,6 @@
 package gov.gtas.model;
 
-import gov.gtas.error.ErrorDetails;
+import gov.gtas.error.ErrorDetailInfo;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -21,7 +21,7 @@ public class ErrorRecord extends BaseEntity{
     private static final long serialVersionUID = 19997L; 
     private static final String DETAIL_SEPARATOR = "$$$";
     public ErrorRecord() { }
-    public ErrorRecord(ErrorDetails det){
+    public ErrorRecord(ErrorDetailInfo det){
     	this.code = det.getErrorCode();
     	this.description = det.getErrorDescription();
     	this.timestamp = new Date();

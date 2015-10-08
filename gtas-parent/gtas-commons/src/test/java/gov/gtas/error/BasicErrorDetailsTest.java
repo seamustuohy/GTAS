@@ -22,7 +22,7 @@ public class BasicErrorDetailsTest {
 	@Test
 	public void testDetails() {
 		Throwable cause = new NullPointerException();
-		ErrorDetails err = ErrorUtils.createErrorDetails(new Exception("Test Error", cause));
+		ErrorDetailInfo err = ErrorUtils.createErrorDetails(new Exception("Test Error", cause));
 		assertEquals(CommonErrorConstants.SYSTEM_ERROR_CODE, err.getErrorCode());
 		String[] det = err.getErrorDetails();
 		assertNotNull(det);

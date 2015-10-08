@@ -32,8 +32,14 @@ public class GlobalErrorHandlerHelper {
  							+ ex.getMessage(), null);
  		}
  		
- 		ErrorDetails err = ErrorUtils.createErrorDetails(ex);
- 		err = errorService.create(err);
+ 		ErrorDetailInfo err = ErrorUtils.createErrorDetails(ex);
+ 		try{
+ 		   err = errorService.create(err);
+		} catch (Exception exception){
+			//possibly DB is down
+			exception.printStackTrace();
+		}
+
  		JsonServiceResponse resp = new JsonServiceResponse(ErrorConstants.FATAL_DB_ERROR_CODE,
  				"There was a backend DB error:"
  						+ ex.getMessage(), null);

@@ -4,7 +4,7 @@ import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_CODE;
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_DETAIL;
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_ID;
 import gov.gtas.enumtype.Status;
-import gov.gtas.error.ErrorDetails;
+import gov.gtas.error.ErrorDetailInfo;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -53,7 +53,7 @@ public class JsonServiceResponse implements Serializable {
 	 * @param error  the error details object.
 	 * 
 	 */
-	public JsonServiceResponse(ErrorDetails error){
+	public JsonServiceResponse(ErrorDetailInfo error){
 		this.status = Status.FAILURE;
 		this.message = error.getErrorDescription();
 		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();

@@ -1,14 +1,14 @@
 package gov.gtas.services;
 
-import gov.gtas.error.ErrorDetails;
+import gov.gtas.error.ErrorDetailInfo;
 
 import java.util.List;
 
 public interface ErrorPersistenceService {
-	public ErrorDetails create(ErrorDetails error);
-    public ErrorDetails findById(Long id);
+	public ErrorDetailInfo create(ErrorDetailInfo error);
+    public ErrorDetailInfo findById(Long id);
 
-    public List<ErrorDetails> findByDateRange(String jsonDateFrom, String jsonDateTo);
-    public List<ErrorDetails> findByDateFrom(String jsonDateFrom);
+    public List<ErrorDetailInfo> findByDateRange(String jsonDateFrom, String jsonDateTo);
+    public List<ErrorDetailInfo> findByDateFrom(String jsonDateFrom);
 
 }

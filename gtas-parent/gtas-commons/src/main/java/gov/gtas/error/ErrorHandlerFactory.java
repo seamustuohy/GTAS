@@ -55,7 +55,7 @@ public class ErrorHandlerFactory {
 	 * @param exception exception.
 	 * @return the error details.
 	 */
-	public static ErrorDetails createErrorDetails(Exception exception) {
+	public static ErrorDetailInfo createErrorDetails(Exception exception) {
 		return ErrorHandlerFactory.errorHandler.processError(exception);
 	}
 }
