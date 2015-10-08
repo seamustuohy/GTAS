@@ -14,10 +14,10 @@
             field: 'hitsDetailsList[0]',
             cellFilter: 'hitsConditionDisplayFilter'
         }],
-        setSubGridOptions = function (data) {
+        setSubGridOptions = function (data, appScopeProvider) {
             data.passengers.forEach(function (rowScope) {
                 rowScope.subGridOptions = {
-                    appScopeProvider: $scope,
+                    appScopeProvider: appScopeProvider,
                     columnDefs: ruleGridColumns,
                     data: []
                 };
@@ -39,12 +39,12 @@
             var getPage = function () {
                 if ($stateParams.parent === 'flights') {
                     paxService.getPax($stateParams.flight.id, $scope.model).then(function (data) {
-                        setSubGridOptions(data);
+                        setSubGridOptions(data, $scope);
                         setPassengersGrid($scope.passengerGrid, data);
                     });
                 } else {
                     paxService.getAllPax($scope.model).then(function (data) {
-                        setSubGridOptions(data);
+                        setSubGridOptions(data, $scope);
                         setPassengersGrid($scope.passengerGrid, data);
                     });
                 }
@@ -185,7 +185,7 @@
             var getPage = function () {
                 var data = $scope.queryResults ? $scope.queryResults.result : { passengers: [], totalPassengers: 0 };
                 //, qbTitle = localStorage['qbTitle'] || 'query results';
-                setSubGridOptions(data);
+                setSubGridOptions(data, $scope);
                 setPassengersGrid($scope.passengerGrid, data);
                 //$scope.passengerGrid.exporterPdfHeader.text = qbTitle;
                 //$scope.passengerGrid.exporterCsvFilename = 'queryResults.csv';
