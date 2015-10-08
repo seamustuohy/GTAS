@@ -1,0 +1,13 @@
+<style>
+    .grid .ui-grid-row .red {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+
+<div
+        ui-grid="flightsGrid"
+        ui-grid-pagination
+        ui-grid-auto-resize
+        ng-style="getTableHeight()"
+        class="grid"></div>
