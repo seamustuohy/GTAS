@@ -87,8 +87,8 @@ public class PassengerDetailsController {
 				vo.setFlightDestination(_tempFlight.getDestination());
 				vo.setFlightETA((_tempFlight.getEta() != null) ? _tempFlight
 						.getEta().toString() : EMPTY_STRING);
-				vo.setFlightETD((_tempFlight.getEta() != null) ? _tempFlight
-						.getEta().toString() : EMPTY_STRING);
+				vo.setFlightETD((_tempFlight.getEtd() != null) ? _tempFlight
+						.getEtd().toString() : EMPTY_STRING);
 				vo.setFlightId(_tempFlight.getId().toString());
 				// vo.setStrFlightId(_tempFlight.getId().toString());
 			}
