@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 public interface ErrorRecordRepository extends CrudRepository<ErrorRecord, Long>{
 	public List<ErrorRecord> findByCode(String code);
 	
-	@Query("SELECT er FROM ErrorRecord er WHERE er.timestamp >= :fromDate and  er.timestamp >= :toDate")
+	@Query("SELECT er FROM ErrorRecord er WHERE er.timestamp >= :fromDate and  er.timestamp <= :toDate")
     public List<ErrorRecord> findByTimestampRange(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);  
 	
 	@Query("SELECT er FROM ErrorRecord er WHERE er.timestamp >= :fromDate")
