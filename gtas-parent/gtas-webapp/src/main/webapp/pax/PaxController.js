@@ -183,7 +183,7 @@
                                                     paxService, sharedPaxData, uiGridConstants, gridService,
                                                     queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, queryResults) {
             var getPage = function () {
-                var data = queryResults ? queryResults.result : { passengers: [], totalPassengers: 0 };
+                var data = $scope.queryResults ? $scope.queryResults.result : { passengers: [], totalPassengers: 0 };
                 //, qbTitle = localStorage['qbTitle'] || 'query results';
                 setSubGridOptions(data);
                 setPassengersGrid($scope.passengerGrid, data);
@@ -191,6 +191,8 @@
                 //$scope.passengerGrid.exporterCsvFilename = 'queryResults.csv';
                 //$scope.passengerGrid.exporterPdfHeader = { text: qbTitle, style: 'headerStyle' };
             };
+
+            $scope.queryResults = queryResults.data;
 
             $scope.flightDirections = flightDirections;
 
