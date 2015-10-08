@@ -33,6 +33,9 @@
             grid.data = data.passengers;
         }
     app
+        .controller('PassengerDetailCtrl', function ($scope, passenger) {
+            $scope.passenger = passenger.data;
+        })
         .controller('PaxController', function ($scope, $injector, $stateParams, $state,
                                                paxService, sharedPaxData, uiGridConstants, gridService,
                                                queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget) {

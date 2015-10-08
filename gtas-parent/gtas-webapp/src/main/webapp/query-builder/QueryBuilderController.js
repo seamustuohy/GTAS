@@ -86,12 +86,17 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
     };
 
     $scope.executeQuery = function (viewType) {
-        var qbData = $scope.$builder.queryBuilder('getDrools');
-
-        if (qbData === false) {
+        var qbData, query = $scope.$builder.queryBuilder('getDrools');
+        if (query === false) {
             $scope.alertError('Can not execute / invalid query');
             return;
         }
+        qbData = {
+            pageNumber: "1",
+            pageSize: "10",
+            query: query
+        };
+
         // because new window using local storage vs state params
         localStorage['qbData'] = JSON.stringify(qbData);
         localStorage['qbTitle'] = $scope.title.length ? $scope.title.trim() : '';

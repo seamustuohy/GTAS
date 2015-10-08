@@ -63,45 +63,16 @@
 
 
         </div>
-        <!-- main container -->
-        <!--
-        <script src="dist/js/all.min.js"></script>
-        //-->
-        <!-- for Debug purposes -->
-        <script src='resources/bower_components/angular/angular.js'></script>
-        <script src='resources/bower_components/angular-ui-router/release/angular-ui-router.js'></script>
-        <script src='resources/bower_components/ui-router-extras/release/ct-ui-router-extras.js'></script>
-        <script src='resources/bower_components/moment/min/moment.min.js'></script>
-        <script src='resources/bower_components/jquery/dist/jquery.js'></script>
-        <script src='resources/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
-        <script src='resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js'></script>
-        <script src='resources/bower_components/bootbox/bootbox.js'></script>
-        <script src='resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js'></script>
-        <script src='resources/bower_components/selectize/dist/js/standalone/selectize.min.js'></script>
-        <script src='resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
-        <script src='resources/bower_components/jquery-extendext/jQuery.extendext.min.js'></script>
-        <script src='resources/bower_components/pdfmake/build/pdfmake.min.js'></script>
-        <script src='resources/bower_components/pdfmake/build/vfs_fonts.js'></script>
-        <script src='resources/bower_components/angular-ui-grid/ui-grid.js'></script>
-        <script src='resources/bower_components/angular-material/angular-material.min.js'></script>
-        <script src='resources/bower_components/angular-aria/angular-aria.min.js'></script>
-        <script src='resources/bower_components/angular-spinners/dist/angular-spinners.min.js'></script>
-        <script src='resources/bower_components/angular-animate/angular-animate.min.js'></script>
-        <script src='resources/bower_components/angular-messages/angular-messages.min.js'></script>
+        <script src='dist/js/bower.components.min.js'></script>
         <script src='resources/js/query-builder.js'></script>
 
         <script src='app.js'></script>
         <script src='common/filters.js'></script>
-        <script src='resources/js/JqueryQueryBuilderService.js'></script>
-        <script src='factory/SecurityFactory.js'></script>
-        <!-- to go away this sprint, required $rootScope, $injector additionally, service better option-->
-        <script src='factory/GridFactory.js'></script>
-        <!-- end //-->
+        <script src='common/services.js'></script>
         <script src='factory/ModalGridFactory.js'></script>
         <script src='factory/QueryBuilderFactory.js'></script>
         <script src='factory/JqueryQueryBuilderWidget.js'></script>
         <script src='dashboard/DashboardController.js'></script>
-        <script src='common/GridService.js'></script>
         <script src='flights/FlightsController.js'></script>
         <script src='flights/FlightsService.js'></script>
         <script src='nav/NavController.js'></script>
@@ -111,14 +82,9 @@
         <script src='pax/PaxFactory.js'></script>
         <script src="pax/PassengerDetail.js"></script>
         <script src='query-builder/QueryBuilderController.js'></script>
-        <script src='query-builder/ExecuteQueryController.js'></script>
-        <script src='query-builder/ExecuteQueryService.js'></script>
         <script src='risk-criteria/RiskCriteriaController.js'></script>
-        <script src='services/GridOptionsService.js'></script>
-        <script src='watchlists/WatchListService.js'></script>
         <script src='watchlists/WatchListController.js'></script>
         <script src='admin/AdminController.js'></script>
         <script src='admin/UserController.js'></script>
-        <script src='admin/UserService.js'></script>
         </body>
         </html>

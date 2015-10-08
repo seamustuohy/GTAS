@@ -33,7 +33,7 @@ var fontFiles = [
     'resources/fonts/icomoon.eot'
 ];
 
-var jsFiles = [
+var bowerFiles = [
     'resources/bower_components/angular/angular.js',
     'resources/bower_components/angular-ui-router/release/angular-ui-router.js',
     'resources/bower_components/ui-router-extras/release/ct-ui-router-extras.js',
@@ -53,28 +53,31 @@ var jsFiles = [
     'resources/bower_components/angular-material/angular-material.min.js',
     'resources/bower_components/angular-aria/angular-aria.min.js',
     'resources/bower_components/angular-animate/angular-animate.min.js',
-    'resources/bower_components/angular-messages/angular-messages.min.js',
+    'resources/bower_components/angular-messages/angular-messages.min.js'
+];
+
+var jsFiles = [
     'resources/js/query-builder.js',
     'app.js',
-    'resources/js/JqueryQueryBuilderService.js',
-    'factory/GridFactory.js',
+    'common/filters.js',
+    'common/services.js',
     'factory/ModalGridFactory.js',
     'factory/QueryBuilderFactory.js',
-    'factory/JqueryBuilderWidget.js',
+    'factory/JqueryQueryBuilderWidget.js',
     'dashboard/DashboardController.js',
+    'flights/FlightsController.js',
     'flights/FlightsService.js',
+    'nav/NavController.js',
     'pax/PaxController.js',
-    'pax/PaxDetailController.js',
     'pax/PaxMainController.js',
     'pax/PaxService.js',
     'pax/PaxFactory.js',
-    'query-builder/QueryService.js',
+    'pax/PassengerDetail.js',
+    'query-builder/QueryBuilderController.js',
     'risk-criteria/RiskCriteriaController.js',
-    'watchlists/WatchListService.js',
     'watchlists/WatchListController.js',
     'admin/AdminController.js',
-    'admin/UserController.js',
-    'admin/UserService.js'
+    'admin/UserController.js'
 ];
 
 //will concat and minify CSS
@@ -123,7 +126,12 @@ gulp.task('scripts', function () {
 
 gulp.task('deployJS', function () {
     'use strict';
-    return gulp.src(jsFiles)
+    return gulp.src(bowerFiles)
+        .pipe(iife())
+        .pipe(concat('bower.components.js'))
+        .pipe(gulp.dest('dist/js'))
+        .pipe(rename('bower.components.min.js'))
+        .pipe(uglify())
         .pipe(gulp.dest('dist/js'));
 });
 
