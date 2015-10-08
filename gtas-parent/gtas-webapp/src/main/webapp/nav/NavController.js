@@ -1,7 +1,8 @@
 app.controller('NavCtrl', function ($scope, $location, $state) {
     'use strict';
     var routes = ['/flights', '/passengers/', '/query-builder', '/risk-criteria', '/watchlists', '/admin'],
-        route = window.location.hash.split('?')[0].replace('#', '');
+        route = window.location.hash.split('?')[0].replace('#', ''),
+        $nav = $('nav');
 
     if (!route.length) {
         route = '/flights';
@@ -11,8 +12,13 @@ app.controller('NavCtrl', function ($scope, $location, $state) {
 
     if (route.indexOf('/paxdetail') >= 0) {
         $state.go('detail');
-        route = window.location.hash.replace('#', '');
-        $('nav').remove();
+        $nav.remove();
+    }
+    if (route.indexOf('/query/flights') >= 0) {
+        $nav.remove();
+    }
+    if (route.indexOf('/query/passengers') >= 0) {
+        $nav.remove();
     }
 
     $location.url(route);

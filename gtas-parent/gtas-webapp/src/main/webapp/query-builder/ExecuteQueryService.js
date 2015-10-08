@@ -1,25 +1,28 @@
 app.service("executeQueryService", function ($rootScope, $http, $q) {
     'use strict';
-    var handleError = function (response) {
-            if (!angular.isObject(response.data) || !response.data.message) {
-                return ($q.reject("An unknown error occurred."));
-            }
-            return ($q.reject(response.data.message));
+    var serviceURLs = {
+            flights: '/gtas/query/queryFlights/',
+            passengers: '/gtas/query/queryPassengers/'
         },
-        handleSuccess = function (response) {
-            $rootScope.$broadcast('aFactory:keyChanged', response.data);
-            return (response.data);
+        executeQuery = function (baseUrl, qbData) {
+            var dfd = $q.defer(),
+                request = $http({
+                    method: 'post',
+                    url: baseUrl,
+                    data: qbData
+                });
+            dfd.resolve(request);
+            return dfd.promise;
         },
-        executeQuery = function (baseUrl, data) {
-            var request = $http({
-                method: 'post',
-                url: baseUrl,
-                data: data
-            });
-            return (request.then(handleSuccess, handleError));
+        queryFlights = function (qbData) {
+            executeQuery(serviceURLs.flights, qbData);
+        },
+        queryPassengers = function (qbData) {
+            executeQuery(serviceURLs.passengers, qbData);
         };
     // Return public API.
     return ({
-        executeQuery: executeQuery
+        queryFlights: queryFlights,
+        queryPassengers: queryPassengers
     });
 });

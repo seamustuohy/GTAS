@@ -11,10 +11,10 @@ var app;
                 //}
             });
             $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-                //console.log('toState:' + toState.name);
-                //console.log(toParams);
-                //console.log('fromState: ' + fromState.name);
-                //console.log(fromParams);
+                console.log('toState:' + toState.name);
+                console.log(toParams);
+                console.log('fromState: ' + fromState.name);
+                console.log(fromParams);
             });
         },
         router = function ($stateProvider) {
@@ -86,6 +86,34 @@ var app;
                         }
                     }
                 })
+                .state('queryFlights', {
+                    url: '/query/flights',
+                    params: {
+                        parent: 'query'
+                    },
+                    controller: 'FlightsController',
+                    templateUrl: 'flights/flights.html',
+                    resolve: {
+                        queryResults: function (executeQueryService) {
+                            var qbData = JSON.parse(localStorage['qbData']);
+                            return executeQueryService.queryFlights(qbData);
+                        }
+                    }
+                })
+                .state('queryPassengers', {
+                    url: '/query/passengers',
+                    params: {
+                        parent: 'query'
+                    },
+                    controller: 'PaxController',
+                    templateUrl: 'pax/pax.table.html',
+                    resolve: {
+                        queryResults: function (executeQueryService) {
+                            var qbData = JSON.parse(localStorage['qbData']);
+                            return executeQueryService.queryPassengers(qbData);
+                        }
+                    }
+                })
                 .state('flights.passengers.detail', {
                     url: '/detail',
                     params: {
@@ -128,21 +156,6 @@ var app;
                     url: '/query-builder',
                     templateUrl: 'query-builder/query.html',
                     controller: 'QueryBuilderController'
-                })
-                .state('query-flights', {
-                    url: '/query/flights',
-                    templateUrl: 'flights/flights.html',
-                    controller: 'ExecuteQueryController'
-                })
-                .state('test', {
-                    url: '/test',
-                    templateUrl: 'test.html',
-                    controller: 'ExecuteQueryController'
-                })
-                .state('query-passengers', {
-                    url: '/query/passengers',
-                    templateUrl: 'pax/pax.table.html',
-                    controller: 'ExecuteQueryController'
                 })
                 .state('risk-criteria', {
                     url: '/risk-criteria',

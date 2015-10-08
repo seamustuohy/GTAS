@@ -85,17 +85,6 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
         jqueryQueryBuilderService.save(queryObject).then($scope.updateQueryBuilderOnSave);
     };
 
-    $scope.executeQuery = function (passenger) {
-        selectedPassenger = passenger;
-        $mdDialog.show({
-            controller: PassengerDetailsDialogController,
-            templateUrl: 'pax/pax.detail.html',
-            parent: angular.element(document.body),
-            clickOutsideToClose: true
-        });
-    };
-
-
     $scope.executeQuery = function (viewType) {
         var qbData = $scope.$builder.queryBuilder('getDrools');
 
@@ -103,9 +92,9 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
             $scope.alertError('Can not execute / invalid query');
             return;
         }
+        // because new window using local storage vs state params
         localStorage['qbData'] = JSON.stringify(qbData);
-        localStorage['qbTitle'] = $scope.title.trim();
-        localStorage['qbType'] = viewType;
+        localStorage['qbTitle'] = $scope.title.length ? $scope.title.trim() : '';
         $location.url(['/query', viewType].join('/'));
     };
 });

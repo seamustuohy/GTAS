@@ -1,6 +1,6 @@
 app.controller('PaxController', function ($scope, $injector, $stateParams, $state,
                                           paxService, sharedPaxData, uiGridConstants, gridService,
-                                          queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget) {
+                                          queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, queryResults) {
     'use strict';
     var ruleGridColumns = [{
             name: 'ruleId',
@@ -26,150 +26,163 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
             });
         },
         getPage = function () {
-            if ($scope.parent === 'flights') {
-                paxService.getPax($stateParams.flight.id, $scope.model).then(function (data) {
+            switch ($scope.parent) {
+                case 'flights':
+                    paxService.getPax($stateParams.flight.id, $scope.model).then(function (data) {
+                        setSubGridOptions(data);
+                        //$scope.passengerGrid.totalItems = data.totalPassengers;
+                        $scope.passengerGrid.data = data.passengers;
+                    });
+                    return;
+                case 'query':
+                    var data = queryResults ? queryResults.result : { passengers: [], totalPassengers: 0 };
+                    //, qbTitle = localStorage['qbTitle'] || 'query results';
                     setSubGridOptions(data);
-                    //$scope.passengerGrid.totalItems = data.totalPassengers;
+                    $scope.passengerGrid.totalItems = data.totalPassengers;
                     $scope.passengerGrid.data = data.passengers;
-                });
-
-            } else {
-                paxService.getAllPax($scope.model).then(function (data) {
-                    setSubGridOptions(data);
-                    //$scope.passengerGrid.totalItems = data.totalPassengers;
-                    $scope.passengerGrid.data = data.passengers;
-                });
+                    //$scope.passengerGrid.exporterPdfHeader.text = qbTitle;
+                    //$scope.passengerGrid.exporterCsvFilename = 'queryResults.csv';
+                    //$scope.passengerGrid.exporterPdfHeader = { text: qbTitle, style: 'headerStyle' };
+                    return;
+                default:
+                    paxService.getAllPax($scope.model).then(function (data) {
+                        setSubGridOptions(data);
+                        //$scope.passengerGrid.totalItems = data.totalPassengers;
+                        $scope.passengerGrid.data = data.passengers;
+                    });
             }
         };
 
-  $scope.flightDirections = [
-    { label: 'Inbound', value: 'I' },
-    { label: 'Outbound', value: 'O' },
-    { label: 'Any', value: '' }
-  ];
+    $scope.flightDirections = [
+        {label: 'Inbound', value: 'I'},
+        {label: 'Outbound', value: 'O'},
+        {label: 'Any', value: ''}
+    ];
 
-  $scope.model = paxService.model;
+    $scope.model = paxService.model;
 
-  $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
-  $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
+    $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
+    $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
 
+    $scope.selectedFlight = $stateParams.flight;
+    $scope.parent = $stateParams.parent;
 
-  $scope.selectedFlight = $stateParams.flight;
-  $scope.parent = $stateParams.parent;
+    jqueryQueryBuilderService.init('riskcriteria');
 
-  jqueryQueryBuilderService.init('riskcriteria');
+    $scope.ruleIdClick = function (row) {
+        $scope.getRuleObject(row.entity.ruleId);
+    };
 
-  $scope.ruleIdClick = function(row) {
-    $scope.getRuleObject(row.entity.ruleId);
-  };
+    $scope.getRuleObject = function (ruleID) {
+        jqueryQueryBuilderService.loadRuleById(ruleID).then(function (myData) {
+            $scope.$builder.queryBuilder('readOnlyRules', myData.result.details);
+            $scope.hitDetailDisplay = myData.result.summary.title;
+            document.getElementById("QBModal").style.display = "block";
 
-  $scope.getRuleObject = function (ruleID) {
-    jqueryQueryBuilderService.loadRuleById(ruleID).then(function (myData) {
-      $scope.$builder.queryBuilder('readOnlyRules', myData.result.details);
-      $scope.hitDetailDisplay = myData.result.summary.title;
-      document.getElementById("QBModal").style.display = "block";
+            $scope.closeDialog = function () {
+                document.getElementById("QBModal").style.display = "none";
+            };
+        });
+    };
 
-      $scope.closeDialog = function () {
-        document.getElementById("QBModal").style.display = "none";
-      };
-    });
-  };
+    $scope.isExpanded = true;
+    $scope.paxHitList = [];
+    $scope.list = sharedPaxData.list;
+    $scope.add = sharedPaxData.add;
+    $scope.getAll = sharedPaxData.getAll;
 
-  $scope.isExpanded = true;
-  $scope.paxHitList = [];
-  $scope.list = sharedPaxData.list;
-  $scope.add = sharedPaxData.add;
-  $scope.getAll = sharedPaxData.getAll;
+    $scope.getPaxSpecificList = function (index) {
+        return $scope.list(index);
+    };
 
-  $scope.getPaxSpecificList = function (index) {
-    return $scope.list(index);
-  };
+    $scope.buildAfterEntitiesLoaded();
 
-  $scope.buildAfterEntitiesLoaded();
+    $scope.passengerGrid = {
+        paginationPageSizes: [10, 15, 25],
+        paginationPageSize: $scope.model.pageSize,
+        useExternalPagination: true,
+        useExternalSorting: true,
+        useExternalFiltering: true,
+        enableHorizontalScrollbar: 1,
+        enableVerticalScrollbar: 0,
+        enableColumnMenus: false,
+        multiSelect: false,
 
-  $scope.passengerGrid = {
-    paginationPageSizes: [10, 15, 25],
-    paginationPageSize: $scope.model.pageSize,
-    useExternalPagination: true,
-    useExternalSorting: true,
-    useExternalFiltering: true,
-    enableHorizontalScrollbar: 1, 
-    enableVerticalScrollbar: 0,
-    enableColumnMenus: false,  
-    multiSelect: false,
+        expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>',
 
-    expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>',
+        onRegisterApi: function (gridApi) {
+            $scope.gridApi = gridApi;
 
-    onRegisterApi: function (gridApi) {
-      $scope.gridApi = gridApi;
+            gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
+                $scope.model.pageNumber = newPage;
+                $scope.model.pageSize = pageSize;
+                getPage();
+            });
 
-      gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-        $scope.model.pageNumber = newPage;
-        $scope.model.pageSize = pageSize;
-        getPage();
-      });
+            gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
+                if (sortColumns.length === 0) {
+                    $scope.model.sort = null;
+                } else {
+                    $scope.model.sort = [];
+                    for (var i = 0; i < sortColumns.length; i++) {
+                        $scope.model.sort.push({column: sortColumns[i].name, dir: sortColumns[i].sort.direction});
+                    }
+                }
+                getPage();
+            });
 
-      gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
-        if (sortColumns.length === 0) {
-          $scope.model.sort = null; 
-        } else {
-          $scope.model.sort = [];
-          for (var i = 0; i<sortColumns.length; i++) {
-            $scope.model.sort.push({ column: sortColumns[i].name, dir: sortColumns[i].sort.direction });
-          }
+            gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
+                if (row.isExpanded) {
+                    paxService.getRuleHits(row.entity.id).then(function (data) {
+                        row.entity.subGridOptions.data = data;
+                    });
+                }
+            });
         }
-        getPage();
-      });
+    };
 
-      gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
-        if (row.isExpanded) {
-          paxService.getRuleHits(row.entity.id).then(function (data) {
-            row.entity.subGridOptions.data = data;
-          });
-        }
-      });
+    $scope.passengerGrid.columnDefs = [
+        {
+            name: 'onRuleHitList', displayName: 'H', width: 50,
+            cellClass: gridService.colorHits,
+            cellTemplate: '<div></div>'
+        },
+        {
+            name: 'onWatchList', displayName: 'L', width: 50,
+            cellClass: gridService.colorHits,
+            cellTemplate: '<div></div>'
+        },
+        {name: 'passengerType', displayName: 'Type', width: 50},
+        {
+            name: 'lastName', displayName: 'Last Name',
+            sort: {
+                direction: uiGridConstants.DESC,
+                priority: 1
+            },
+            cellTemplate: '<div class="ngCellText"><a ui-sref="detail" target="pax.detail" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}">{{COL_FIELD}}</a></div>'
+        },
+        {name: 'firstName', displayName: 'First Name'},
+        {name: 'middleName', displayName: 'Middle'},
+        {name: 'fullFlightNumber', displayName: 'Flight', visible: ($scope.parent !== 'flights')},
+        {name: 'eta', displayName: 'ETA', visible: ($scope.parent !== 'flights')},
+        {name: 'etd', displayName: 'ETD', visible: ($scope.parent !== 'flights')},
+        {name: 'gender', displayName: 'G', width: 50},
+        {name: 'dob', displayName: 'DOB', cellFilter: 'date'},
+        {name: 'citizenshipCountry', displayName: 'CTZ', width: 75}
+    ];
+
+    $scope.filter = function () {
+        getPage();
     }
-  };
 
-  $scope.passengerGrid.columnDefs = [
-    { name: 'onRuleHitList', displayName: 'H', width: 50,
-      cellClass: gridService.colorHits,
-      cellTemplate: '<div></div>'
-    },
-    { name: 'onWatchList', displayName: 'L', width: 50,
-      cellClass: gridService.colorHits,
-      cellTemplate: '<div></div>'
-    },
-    { name: 'passengerType', displayName: 'Type', width: 50 },
-    { name: 'lastName', displayName: 'Last Name',
-      sort: {
-        direction: uiGridConstants.DESC,
-        priority: 1
-      },
-        cellTemplate: '<div class="ngCellText"><a ui-sref="detail" target="pax.detail" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}">{{COL_FIELD}}</a></div>'
-    },
-    { name: 'firstName', displayName: 'First Name' },
-    { name: 'middleName', displayName: 'Middle' },
-    { name: 'fullFlightNumber', displayName: 'Flight', visible: ($scope.parent !== 'flights') },
-    { name: 'eta', displayName: 'ETA', visible: ($scope.parent !== 'flights') },
-    { name: 'etd', displayName: 'ETD', visible: ($scope.parent !== 'flights') },
-    { name: 'gender', displayName: 'G', width: 50 },
-    { name: 'dob', displayName: 'DOB', cellFilter: 'date' },
-    { name: 'citizenshipCountry', displayName: 'CTZ', width: 75 }
-  ];
+    $scope.reset = function () {
+        $scope.model = paxService.initialModel();
+        getPage();
+    }
 
-  $scope.filter = function() {
+    $scope.getTableHeight = function () {
+        return gridService.calculateGridHeight($scope.passengerGrid.data.length);
+    };
+
     getPage();
-  }
-
-  $scope.reset = function() {
-    $scope.model = paxService.initialModel();
-    getPage();
-  }
-  
-  $scope.getTableHeight = function() {
-    return gridService.calculateGridHeight($scope.passengerGrid.data.length);
-  };
-
-  getPage();
 });
