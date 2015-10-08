@@ -40,7 +40,7 @@ public class FlightPassengerController {
 
     @RequestMapping(value = "/passengers", method = RequestMethod.POST)
     public @ResponseBody PassengersPageDto getAllPassengers(@RequestBody PassengersRequestDto request) {
-//        System.out.println(request);
+        System.out.println(request);
         return paxService.findAllWithFlightInfo(request);
     }
 }

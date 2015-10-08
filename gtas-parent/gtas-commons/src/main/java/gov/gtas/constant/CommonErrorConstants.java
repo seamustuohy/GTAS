@@ -88,7 +88,7 @@ public class CommonErrorConstants {
 	/*
 	 * This error message indicates that an input JSON failed validation.
 	 */
-	public static final String JSON_INPUT_VALIDATION_ERROR_MESSAGE = "The JSON UDR specification is invalid.";
+	public static final String JSON_INPUT_VALIDATION_ERROR_MESSAGE = "The JSON input is invalid.";
 	
 	/*
 	 * This is the error message indicating that the record to be updated does

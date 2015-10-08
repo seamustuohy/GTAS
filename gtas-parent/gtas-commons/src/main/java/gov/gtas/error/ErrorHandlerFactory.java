@@ -49,4 +49,13 @@ public class ErrorHandlerFactory {
 	public static ErrorHandler getErrorHandler() {
 		return ErrorHandlerFactory.errorHandler;
 	}
+	/**
+	 * Processes the exception provided and returns the resulting error detail object.
+	 * 
+	 * @param exception exception.
+	 * @return the error details.
+	 */
+	public static ErrorDetails createErrorDetails(Exception exception) {
+		return ErrorHandlerFactory.errorHandler.processError(exception);
+	}
 }

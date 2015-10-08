@@ -1,8 +1,11 @@
 package gov.gtas.repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,22 +52,26 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         }
 
         // sorting
-        if (dto.getSort() != null) {
-            List<Order> orders = new ArrayList<>();
-            for (SortOptionsDto sort : dto.getSort()) {
-                Expression<?> e = flights.get(sort.getColumn());
-                Order order = null;
-                if (sort.getDir().equals("desc")) {
-                    order = cb.desc(e);
-                } else {
-                    order = cb.asc(e);
-                }
-                orders.add(order);
-            }
-            q.orderBy(orders);
-        }
+//        if (dto.getSort() != null) {
+//            List<Order> orders = new ArrayList<>();
+//            for (SortOptionsDto sort : dto.getSort()) {
+//                String column = sort.getColumn();
+//                Expression<?> e = isFlightColumn(column) ? flights.get(column) : pax.get(column);
+//                Order order = null;
+//                if (sort.getDir().equals("desc")) {
+//                    order = cb.desc(e);
+//                } else {
+//                    order = cb.asc(e);
+//                }
+//                orders.add(order);
+//            }
+//            q.orderBy(orders);
+//        }
         
         // filters
+        if (StringUtils.isNotBlank(dto.getLastName())) {
+            predicates.add(cb.equal(pax.<String>get("lastName"), dto.getLastName()));
+        }
         if (StringUtils.isNotBlank(dto.getOrigin())) {
             predicates.add(cb.equal(flights.<String>get("origin"), dto.getOrigin()));
         }
@@ -86,7 +93,7 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         q.multiselect(pax, flights).where(predicates.toArray(new Predicate[]{}));
         TypedQuery<Object[]> typedQuery = addPagination(q, dto.getPageNumber(), dto.getPageSize());
         logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
-        //System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
+        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Object[]> results = typedQuery.getResultList();
         
         return results;
@@ -117,5 +124,10 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         typedQuery.setFirstResult(offset);
         typedQuery.setMaxResults(pageSize);
         return typedQuery;
+    }
+    
+    private Set<String> flightColumns = new HashSet<String>(Arrays.asList("fullFlightNumber", "eta", "etd"));
+    private boolean isFlightColumn(String c) {
+        return flightColumns.contains(c);
     }
 }

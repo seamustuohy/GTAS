@@ -2,7 +2,9 @@ package gov.gtas.json;
 
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_CODE;
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_DETAIL;
+import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_ID;
 import gov.gtas.enumtype.Status;
+import gov.gtas.error.ErrorDetails;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -48,12 +50,31 @@ public class JsonServiceResponse implements Serializable {
 	}
 	/**
 	 * Constructor for error response.
-	 * @param request
-	 * @param message
+	 * @param error  the error details object.
+	 * 
 	 */
-	public JsonServiceResponse(String errorCode, String message, String[] errorDetail){
+	public JsonServiceResponse(ErrorDetails error){
 		this.status = Status.FAILURE;
-		this.message = message;
+		this.message = error.getErrorDescription();
+		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();
+		responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_CODE, error.getErrorCode()));
+		if(error.getErrorId() != null){
+			responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_ID, error.getErrorId()));
+		}
+		String[] errorDetail = error.getErrorDetails();
+		if(errorDetail != null && errorDetail.length > 0){
+		    responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_DETAIL, errorDetail));
+		}
+	}
+	/**
+	 * Constructor for error response.
+	 * @param errorCode
+	 * @param description
+	 * @param errorDetail
+	 */
+	public JsonServiceResponse(String errorCode, String description, String[] errorDetail){
+		this.status = Status.FAILURE;
+		this.message = description;
 		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();
 		responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_CODE, errorCode));
 		if(errorDetail != null && errorDetail.length > 0){
@@ -111,7 +132,6 @@ public class JsonServiceResponse implements Serializable {
 	 */
 	public List<ServiceResponseDetailAttribute> getResponseDetails() {
 		return Collections.unmodifiableList(responseDetails);
-//		return responseDetails;
 	}
 	/**
 	 * @param responseDetail the responseDetail to add.

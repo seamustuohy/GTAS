@@ -1,5 +1,10 @@
 package gov.gtas.error;
 
+import gov.gtas.constant.CommonErrorConstants;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -62,6 +67,34 @@ public class ErrorUtils {
 		}
 		return ret;
 	}
+    public static ErrorDetails createErrorDetails(CommonServiceException exception){
+    	BasicErrorDetails ret = createErrorDetails(exception.getErrorCode(), exception, false);
+     	return ret;
+    }
+    public static BasicErrorDetails createErrorDetails(Exception exception){
+    	return createErrorDetails(CommonErrorConstants.SYSTEM_ERROR_CODE, exception, true);
+    }
+    public static BasicErrorDetails createErrorDetails(String errorCode, Exception exception, boolean addStackTrace){
+    	//Long id = System.currentTimeMillis();
+     	BasicErrorDetails ret = new BasicErrorDetails(null, errorCode, exception.getMessage(), null);
+     	if(addStackTrace){
+     		List<String> details = new LinkedList<String>();
+     		constructDetails(exception, details);
+     		ret.setErrorDetails(details);
+     	}
+    	return ret;
+    }
+    private static void constructDetails(Throwable exception, List<String> details){
+    	details.add("Exception class:"+exception.getClass().getSimpleName());
+    	details.add("Exception messsage:"+exception.getMessage());
+    	for(StackTraceElement el:exception.getStackTrace()){
+    		details.add(el.toString());
+    	}
+    	if(exception.getCause() != null){
+    		details.add(">>>>>>>> Caused by:");
+    		constructDetails(exception.getCause(), details);
+    	}
+    }
 
 	private static final int MAX_ERROR_LENG = 4000;
 
@@ -72,4 +105,5 @@ public class ErrorUtils {
 		}
 		return stacktrace;
 	}
+	
 }
