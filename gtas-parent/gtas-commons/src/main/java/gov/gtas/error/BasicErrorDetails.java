@@ -6,7 +6,7 @@ import org.springframework.util.CollectionUtils;
 
 public class BasicErrorDetails implements ErrorDetails {
 	private List<String> errorDetails;
-	private long errorId;
+	private Long errorId;
 	private String errorCode;
 	private String errorDescription;
 	

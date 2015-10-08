@@ -49,7 +49,7 @@ public class ErrorHandlerFactoryTest {
 	public void processErrorTest(){
 		ErrorDetails det = ErrorHandlerFactory.getErrorHandler().processError(new NullPointerException());
 		assertNotNull(det);
-		assertNotNull(det.getErrorId());
+		assertNull(det.getErrorId());
 		assertEquals(CommonErrorConstants.SYSTEM_ERROR_CODE, det.getErrorCode());
 	}
 	private static class TestHandler extends BasicErrorHandler{

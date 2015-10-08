@@ -23,15 +23,13 @@ public class BasicErrorDetailsTest {
 	public void testDetails() {
 		Throwable cause = new NullPointerException();
 		ErrorDetails err = ErrorUtils.createErrorDetails(new Exception("Test Error", cause));
-				//new BasicErrorDetails(new Exception(new Exception("Test Error", cause)));
-		//assertNotNull(err.getErrorId());
 		assertEquals(CommonErrorConstants.SYSTEM_ERROR_CODE, err.getErrorCode());
 		String[] det = err.getErrorDetails();
 		assertNotNull(det);
 		assertEquals("Exception class:Exception", det[0]);
 		assertTrue(det[1].endsWith("Test Error"));
 		assertTrue(det.length > 0);
-		System.out.println(String.join("\n", det));
+		//System.out.println(String.join("\n", det));
 	}
 
 }

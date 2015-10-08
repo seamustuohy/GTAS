@@ -1,13 +1,15 @@
 package gov.gtas.error;
 
 import static gov.gtas.constant.DomainModelConstants.UDR_UNIQUE_CONSTRAINT_NAME;
+import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_ID;
+import gov.gtas.constants.ErrorConstants;
+import gov.gtas.json.JsonServiceResponse;
+import gov.gtas.json.JsonServiceResponse.ServiceResponseDetailAttribute;
+import gov.gtas.services.ErrorPersistenceService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.jpa.JpaSystemException;
-
-import gov.gtas.constants.ErrorConstants;
-import gov.gtas.json.JsonServiceResponse;
 
 public class GlobalErrorHandlerHelper {
 	/*
@@ -16,7 +18,7 @@ public class GlobalErrorHandlerHelper {
 	private static final Logger logger = LoggerFactory
 			.getLogger(GlobalErrorHandlerHelper.class);
 
-	public static JsonServiceResponse createDbErrorResponse(JpaSystemException ex){
+	public static JsonServiceResponse createDbErrorResponse(ErrorPersistenceService errorService, JpaSystemException ex){
  		if(ErrorUtils.isExceptionOfType(ex, "SQLGrammarException")){
  		   logger.error("GTAS Webapp:SQLGrammarException - "+ex.getMessage());
  			return new JsonServiceResponse(ErrorConstants.INVALID_SQL_ERROR_CODE,
@@ -30,10 +32,12 @@ public class GlobalErrorHandlerHelper {
  							+ ex.getMessage(), null);
  		}
  		
- 		ex.printStackTrace();
- 		return new JsonServiceResponse(ErrorConstants.FATAL_DB_ERROR_CODE,
+ 		ErrorDetails err = ErrorUtils.createErrorDetails(ex);
+ 		err = errorService.create(err);
+ 		JsonServiceResponse resp = new JsonServiceResponse(ErrorConstants.FATAL_DB_ERROR_CODE,
  				"There was a backend DB error:"
  						+ ex.getMessage(), null);
-   	 
+ 		resp.getResponseDetails().add(0, new ServiceResponseDetailAttribute(ATTR_ERROR_ID, err.getErrorId()));
+   	    return resp;
      }
 }

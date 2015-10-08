@@ -2,6 +2,7 @@ package gov.gtas.json;
 
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_CODE;
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_DETAIL;
+import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_ID;
 import gov.gtas.enumtype.Status;
 import gov.gtas.error.ErrorDetails;
 
@@ -57,6 +58,9 @@ public class JsonServiceResponse implements Serializable {
 		this.message = error.getErrorDescription();
 		this.responseDetails = new LinkedList<JsonServiceResponse.ServiceResponseDetailAttribute>();
 		responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_CODE, error.getErrorCode()));
+		if(error.getErrorId() != null){
+			responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_ID, error.getErrorId()));
+		}
 		String[] errorDetail = error.getErrorDetails();
 		if(errorDetail != null && errorDetail.length > 0){
 		    responseDetails.add(new ServiceResponseDetailAttribute(ATTR_ERROR_DETAIL, errorDetail));
@@ -128,7 +132,6 @@ public class JsonServiceResponse implements Serializable {
 	 */
 	public List<ServiceResponseDetailAttribute> getResponseDetails() {
 		return Collections.unmodifiableList(responseDetails);
-//		return responseDetails;
 	}
 	/**
 	 * @param responseDetail the responseDetail to add.

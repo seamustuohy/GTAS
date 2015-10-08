@@ -2,8 +2,10 @@ package gov.gtas.error;
 
 import gov.gtas.constants.ErrorConstants;
 import gov.gtas.json.JsonServiceResponse;
+import gov.gtas.services.ErrorPersistenceService;
 
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.jpa.JpaSystemException;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class WebAppGlobalErrorHandler {
+	@Autowired
+	ErrorPersistenceService errorService;
 	/*
 	 * The logger for the Webapp Global Error Handler
 	 */
@@ -39,7 +43,8 @@ public class WebAppGlobalErrorHandler {
 	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(JpaSystemException.class)
 	public @ResponseBody JsonServiceResponse handleError(JpaSystemException ex) {
-			return GlobalErrorHandlerHelper.createDbErrorResponse(ex);
+		JsonServiceResponse resp = GlobalErrorHandlerHelper.createDbErrorResponse(errorService, ex);
+			return resp;
 	}
 	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
     @ExceptionHandler(TypeMismatchException.class)
@@ -61,7 +66,8 @@ public class WebAppGlobalErrorHandler {
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody JsonServiceResponse handleError(Exception ex) {
-		ex.printStackTrace();
-		return new JsonServiceResponse(ErrorHandlerFactory.createErrorDetails(ex));			
+		ErrorDetails errorDetails = ErrorHandlerFactory.createErrorDetails(ex);
+		errorDetails = errorService.create(errorDetails); //add the saved ID
+		return new JsonServiceResponse(errorDetails);			
 	}
 }
