@@ -91,8 +91,8 @@ var app;
                     params: {
                         parent: 'query'
                     },
-                    controller: 'FlightsController',
-                    templateUrl: 'flights/flights.html',
+                    controller: 'QueryFlightsController',
+                    templateUrl: 'flights/query-flights.html',
                     resolve: {
                         queryResults: function (executeQueryService) {
                             var qbData = JSON.parse(localStorage['qbData']);
@@ -105,8 +105,8 @@ var app;
                     params: {
                         parent: 'query'
                     },
-                    controller: 'PaxController',
-                    templateUrl: 'pax/pax.table.html',
+                    controller: 'QueryPaxController',
+                    templateUrl: 'pax/query.pax.table.html',
                     resolve: {
                         queryResults: function (executeQueryService) {
                             var qbData = JSON.parse(localStorage['qbData']);

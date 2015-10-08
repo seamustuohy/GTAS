@@ -95,6 +95,5 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
         // because new window using local storage vs state params
         localStorage['qbData'] = JSON.stringify(qbData);
         localStorage['qbTitle'] = $scope.title.length ? $scope.title.trim() : '';
-        $location.url(['/query', viewType].join('/'));
     };
 });
