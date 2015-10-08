@@ -1,8 +1,13 @@
 package gov.gtas.rule;
 
+import static gov.gtas.constant.CommonErrorConstants.RULE_ENGINE_RUNNER_ERROR_CODE;
+import static gov.gtas.constant.CommonErrorConstants.RULE_ENGINE_RUNNER_ERROR_MESSAGE;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.config.RuleRunnerConfig;
 import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.error.ErrorDetailInfo;
+import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.services.ErrorPersistenceService;
 import gov.gtas.svc.TargetingService;
 
 import java.util.Set;
@@ -29,12 +34,22 @@ public class RuleRunner {
 		TargetingService targetingService = (TargetingService) ctx
 				.getBean("targetingServiceImpl");
 
-		Set<Long> uniqueFlights = targetingService.runningRuleEngine();
-		logger.info("updating hit counts for flight ids "
-				+ uniqueFlights);
-		targetingService.updateFlightHitCounts(uniqueFlights);
-		logger.info("Exiting main().");
-		ctx.close();
+		try {
+			Set<Long> uniqueFlights = targetingService.runningRuleEngine();
+			logger.info("updating hit counts for flight ids " + uniqueFlights);
+			targetingService.updateFlightHitCounts(uniqueFlights);
+			logger.info("Exiting main().");
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			ErrorDetailInfo errInfo = ErrorHandlerFactory.createErrorDetails(
+					RULE_ENGINE_RUNNER_ERROR_CODE,
+					RULE_ENGINE_RUNNER_ERROR_MESSAGE, exception);
+			ErrorPersistenceService errorService = (ErrorPersistenceService) ctx
+					.getBean("errorPersistenceServiceImpl");
+			errorService.create(errInfo);
+		} finally {
+			ctx.close();
+		}
 		System.exit(0);
 	}
 }

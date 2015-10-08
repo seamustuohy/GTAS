@@ -1,5 +1,7 @@
 package gov.gtas.error;
 
+import java.util.List;
+
 /**
  * The error Handler
  * 
@@ -61,5 +63,5 @@ public interface ErrorHandler {
 	 *            the error details.
 	 * @return the diagnostics.
 	 */
-	ErrorDetailInfo processError(String code, String description, String[] details);
+	ErrorDetailInfo processError(String code, String description, List<String> details);
 }
