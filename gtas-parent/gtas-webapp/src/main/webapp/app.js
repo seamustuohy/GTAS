@@ -1,97 +1,23 @@
 var app;
 (function () {
     'use strict';
-    function PassengerDetailCtrl($scope, passenger) {
-        $scope.passenger = passenger.data;
-        $scope.paxTableEnabled = false;
-        //date modifications ** NOT SURE need to make these date objects no calendar picker will confer with Maneesh reason behind it.
-        $scope.passenger.flightETA = new Date($scope.passenger.flightETA);
-        $scope.passenger.flightETD = new Date($scope.passenger.flightETD);
-        $scope.passenger.dob = new Date($scope.passenger.dob);
-    }
-
-    function paxDetailService($http, $q) {
-        function getPaxDetail(paxId, flightId) {
-            var dfd = $q.defer();
-            dfd.resolve($http.get("/gtas/passengers/passenger/" + paxId + "/details?flightId=" + flightId));
-            return dfd.promise;
-        }
-        return ({getPaxDetail: getPaxDetail});
-    }
-    function initialize($rootScope, $location) {
-        $rootScope.$on('$stateChangeStart',
-            function (event, toState, toParams, fromState, fromParams) {
-                console.log('stateChangeStart');
-                console.log(toState.name);
+    var initialize = function ($rootScope) {
+            //these two are for learning router state
+            $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                 // LOGIC TO PROMPT LOGIN AUTOMATICALLY
                 //if (toState.name !== 'login' && !UsersService.getCurrentUser()) {
                 //    event.preventDefault();
                 //    $state.go('login');
                 //}
             });
-    }
-
-    function resolvePassenger(paxDetailService, $stateParams) {
-        //var regex = /[?&]([^=#]+)=([^&#]*)/g,
-        //    url = window.location.href,
-        //    params = {},
-        //    match;
-        //while (match = regex.exec(url)) {
-        //    params[match[1]] = match[2];
-        //}
-        //return paxDetailService.getPaxDetail(params.paxId, params.flightId);
-        console.log('$stateParams');
-        console.log($stateParams);
-        return paxDetailService.getPaxDetail($stateParams.paxId, $stateParams.flightId);
-    }
-    function NavCtrl($scope, $location, $state) {
-        var routes = ['/flights', '/passengers/', '/query-builder', '/risk-criteria', '/watchlists', '/admin'],
-            route = window.location.hash.split('?')[0].replace('#', '');
-
-        if (!route.length) {
-            route = '/flights';
-        }
-
-        $scope.selectedIndex = routes.indexOf(route) >= 0 ? routes.indexOf(route) : null;
-
-        if (route.indexOf('/paxdetail') >= 0) {
-            $state.go('detail');
-            route = window.location.hash.replace('#', '');
-            $('nav').remove();
-        }
-
-        $location.url(route);
-
-        if ($scope.selectedIndex !== null) {
-            $scope.$watch('selectedIndex', function (current) {
-                $location.url(routes[current]);
+            $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+                //console.log('toState:' + toState.name);
+                //console.log(toParams);
+                //console.log('fromState: ' + fromState.name);
+                //console.log(fromParams);
             });
-        }
-    }
-    app = angular.module('myApp', [
-        'ui.router',
-        'ct.ui.router.extras',
-        'ui.grid',
-        'ui.grid.resizeColumns',
-        'ui.grid.moveColumns',
-        'ui.grid.pagination',
-        'ui.grid.autoResize',
-        'ui.grid.edit',
-        'ui.grid.rowEdit',
-        'ui.grid.cellNav',
-        'ui.grid.selection',
-        'ui.grid.exporter',
-        'ui.grid.expandable',
-        'ngMaterial',
-        'ngMessages',
-        'ngAria',
-        'ngAnimate',
-        'angularSpinners'
-    ])
-        .service('paxDetailService', paxDetailService)
-        .controller('NavCtrl', NavCtrl)
-        .controller('PassengerDetailCtrl', PassengerDetailCtrl)
-        .config(function ($stateProvider) {
+        },
+        router = function ($stateProvider) {
             $stateProvider
                 .state('dashboard', {
                     url: '/dashboard',
@@ -177,7 +103,9 @@ var app;
                     templateUrl: 'pax/pax.detail.html',
                     controller: 'PassengerDetailCtrl',
                     resolve: {
-                        passenger: resolvePassenger
+                        passenger: function (paxDetailService, $stateParams) {
+                            return paxDetailService.getPaxDetail($stateParams.paxId, $stateParams.flightId);
+                        }
                     }
                 })
                 .state('pax', {
@@ -226,6 +154,28 @@ var app;
                     templateUrl: 'watchlists/watchlists.html',
                     controller: 'WatchListController'
                 });
-        })
+        };
+
+    app = angular.module('myApp', [
+        'ui.router',
+        'ct.ui.router.extras',
+        'ui.grid',
+        'ui.grid.resizeColumns',
+        'ui.grid.moveColumns',
+        'ui.grid.pagination',
+        'ui.grid.autoResize',
+        'ui.grid.edit',
+        'ui.grid.rowEdit',
+        'ui.grid.cellNav',
+        'ui.grid.selection',
+        'ui.grid.exporter',
+        'ui.grid.expandable',
+        'ngMaterial',
+        'ngMessages',
+        'ngAria',
+        'ngAnimate',
+        'angularSpinners'
+    ])
+        .config(router)
         .run(initialize);
-})();
+}());

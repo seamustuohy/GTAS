@@ -167,28 +167,3 @@ app.controller('PaxController', function ($scope, $injector, $stateParams, $stat
 
   getPage();
 });
-
-// Customs Filters
-
-app.filter('capitalize', function () {
-    return function (input, all) {
-        return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        }) : '';
-    };
-});
-
-
-app.filter('orderObjectBy', function () {
-    return function (items, field, reverse) {
-        var filtered = [];
-        angular.forEach(items, function (item) {
-            filtered.push(item);
-        });
-        filtered.sort(function (a, b) {
-            return (a[field] > b[field] ? 1 : -1);
-        });
-        if (reverse) filtered.reverse();
-        return filtered;
-    };
-});

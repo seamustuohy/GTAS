@@ -91,6 +91,7 @@
         <script src='resources/js/query-builder.js'></script>
 
         <script src='app.js'></script>
+        <script src='common/filters.js'></script>
         <script src='resources/js/JqueryQueryBuilderService.js'></script>
         <script src='factory/SecurityFactory.js'></script>
         <!-- to go away this sprint, required $rootScope, $injector additionally, service better option-->
@@ -103,10 +104,12 @@
         <script src='common/GridService.js'></script>
         <script src='flights/FlightsController.js'></script>
         <script src='flights/FlightsService.js'></script>
+        <script src='nav/NavController.js'></script>
         <script src='pax/PaxController.js'></script>
         <script src='pax/PaxMainController.js'></script>
         <script src='pax/PaxService.js'></script>
         <script src='pax/PaxFactory.js'></script>
+        <script src="pax/PassengerDetail.js"></script>
         <script src='query-builder/QueryBuilderController.js'></script>
         <script src='query-builder/ExecuteQueryController.js'></script>
         <script src='query-builder/ExecuteQueryService.js'></script>
@@ -117,6 +120,5 @@
         <script src='admin/AdminController.js'></script>
         <script src='admin/UserController.js'></script>
         <script src='admin/UserService.js'></script>
-        <script src='admin/UserDataFilter.js'></script>
         </body>
         </html>
