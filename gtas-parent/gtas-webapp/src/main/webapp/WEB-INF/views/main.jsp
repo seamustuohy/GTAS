@@ -63,7 +63,27 @@
 
 
         </div>
-        <script src='dist/js/bower.components.min.js'></script>
+        <script src='resources/bower_components/angular/angular.js'></script>
+        <script src='resources/bower_components/angular-ui-router/release/angular-ui-router.min.js'></script>
+        <script src='resources/bower_components/ui-router-extras/release/ct-ui-router-extras.min.js'></script>
+        <script src='resources/bower_components/moment/min/moment.min.js'></script>
+        <script src='resources/bower_components/jquery/dist/jquery.js'></script>
+        <script src='resources/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+        <script src='resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js'></script>
+        <script src='resources/bower_components/bootbox/bootbox.js'></script>
+        <script src='resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js'></script>
+        <script src='resources/bower_components/selectize/dist/js/standalone/selectize.min.js'></script>
+        <script src='resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
+        <script src='resources/bower_components/jquery-extendext/jQuery.extendext.min.js'></script>
+        <script src='resources/bower_components/pdfmake/build/pdfmake.min.js'></script>
+        <script src='resources/bower_components/pdfmake/build/vfs_fonts.js'></script>
+        <script src='resources/bower_components/angular-ui-grid/ui-grid.js'></script>
+        <script src='resources/bower_components/angular-material/angular-material.min.js'></script>
+        <script src='resources/bower_components/angular-aria/angular-aria.min.js'></script>
+        <script src='resources/bower_components/angular-spinners/dist/angular-spinners.min.js'></script>
+        <script src='resources/bower_components/angular-animate/angular-animate.min.js'></script>
+        <script src='resources/bower_components/angular-messages/angular-messages.min.js'></script>
+
         <script src='resources/js/query-builder.js'></script>
 
         <script src='app.js'></script>
@@ -80,7 +100,6 @@
         <script src='pax/PaxMainController.js'></script>
         <script src='pax/PaxService.js'></script>
         <script src='pax/PaxFactory.js'></script>
-        <script src="pax/PassengerDetail.js"></script>
         <script src='query-builder/QueryBuilderController.js'></script>
         <script src='risk-criteria/RiskCriteriaController.js'></script>
         <script src='watchlists/WatchListController.js'></script>

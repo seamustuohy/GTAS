@@ -181,7 +181,7 @@
                 getRoles: getRoles,
                 updateUser: updateUser,
                 createUser: createUser
-            );
+            };
         })
         .service("gridOptionsLookupService", function (uiGridConstants) {
             var today = moment().format('YYYY-MM-DD'),
@@ -635,21 +635,23 @@
                     flights: '/gtas/query/queryFlights/',
                     passengers: '/gtas/query/queryPassengers/'
                 },
-                executeQuery = function (baseUrl, qbData) {
-                    var dfd = $q.defer(),
-                        request = $http({
-                            method: 'post',
-                            url: baseUrl,
-                            data: qbData
-                        });
-                    dfd.resolve(request);
+                queryFlights = function (qbData) {
+                    var dfd = $q.defer();
+                    dfd.resolve($http({
+                        method: 'post',
+                        url: serviceURLs.flights,
+                        data: qbData
+                    }));
                     return dfd.promise;
                 },
-                queryFlights = function (qbData) {
-                    executeQuery(serviceURLs.flights, qbData);
-                },
                 queryPassengers = function (qbData) {
-                    executeQuery(serviceURLs.passengers, qbData);
+                    var dfd = $q.defer();
+                    dfd.resolve($http({
+                        method: 'post',
+                        url: serviceURLs.passengers,
+                        data: qbData
+                    }));
+                    return dfd.promise;
                 };
             // Return public API.
             return ({
