@@ -86,7 +86,7 @@ var app;
                     controller: 'FlightsController',
                     resolve: {
                         flights: function (flightService) {
-                            return flightService.getFlights(flightService.initialModel());
+                            return flightService.getFlights(flightService.model);
                         }
                     }
                 })
@@ -96,7 +96,7 @@ var app;
                     controller: 'PaxController',
                     resolve: {
                         passengers: function (paxService, $stateParams) {
-                            return paxService.getPax($stateParams.id, paxService.initialModel());
+                            return paxService.getPax($stateParams.id, paxService.model);
                         }
                     }
                 })
@@ -148,7 +148,7 @@ var app;
                     controller: 'PaxController',
                     resolve: {
                         passengers: function (paxService) {
-                            return paxService.getAllPax(paxService.initialModel());
+                            return paxService.getAllPax(paxService.model);
                         }
                     }
                 })

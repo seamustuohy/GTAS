@@ -137,6 +137,6 @@
         $scope.getTableHeight = function () {
             return gridService.calculateGridHeight($scope.flightsGrid.data.length);
         };
-        getPage();
+        resolvePage();
     });
 }());

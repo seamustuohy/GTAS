@@ -210,6 +210,6 @@
             return gridService.calculateGridHeight($scope.passengerGrid.data.length);
         };
 
-        getPage();
+        resolvePage();
     });
 }());
