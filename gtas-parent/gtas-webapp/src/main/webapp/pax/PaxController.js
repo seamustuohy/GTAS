@@ -158,11 +158,19 @@
             {
                 name: 'onRuleHitList', displayName: 'H', width: 50,
                 cellClass: gridService.colorHits,
+                sort: {
+                    direction: uiGridConstants.DESC,
+                    priority: 0
+                },                
                 cellTemplate: '<div></div>'
             },
             {
                 name: 'onWatchList', displayName: 'L', width: 50,
                 cellClass: gridService.colorHits,
+                sort: {
+                    direction: uiGridConstants.DESC,
+                    priority: 1
+                },                
                 cellTemplate: '<div></div>'
             },
             {name: 'passengerType', displayName: 'Type', width: 50},
@@ -177,7 +185,15 @@
             {name: 'firstName', displayName: 'First Name'},
             {name: 'middleName', displayName: 'Middle'},
             {name: 'fullFlightNumber', displayName: 'Flight', visible: (stateName === 'paxAll')},
-            {name: 'eta', displayName: 'ETA', visible: (stateName === 'paxAll')},
+            {
+                name: 'eta', 
+                sort: {
+                    direction: uiGridConstants.DESC,
+                    priority: 2
+                },                                
+                displayName: 'ETA', 
+                visible: (stateName === 'paxAll')
+            },
             {name: 'etd', displayName: 'ETD', visible: (stateName === 'paxAll')},
             {name: 'gender', displayName: 'G', width: 50},
             {name: 'dob', displayName: 'DOB', cellFilter: 'date'},
