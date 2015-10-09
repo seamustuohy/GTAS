@@ -21,8 +21,11 @@
                 cellFilter: 'hitsConditionDisplayFilter'
             }],
             setSubGridOptions = function (data, appScopeProvider) {
-                data.passengers.forEach(function (rowScope) {
-                    rowScope.subGridOptions = {
+                data.passengers.forEach(function (entity_row) {
+                    if (!entity_row.flightId) {
+                        entity_row.flightId = $stateParams.id;
+                    }
+                    entity_row.subGridOptions = {
                         appScopeProvider: appScopeProvider,
                         columnDefs: ruleGridColumns,
                         data: []
@@ -54,7 +57,7 @@
                     executeQueryService.queryPassengers(postData).then(update);
                 },
                 'flightsPassengers': function () {
-                    paxService.getPax($stateParams.flight.id, $scope.model).then(update);
+                    paxService.getPax($stateParams.id, $scope.model).then(update);
                 },
                 'paxAll': function () {
                     paxService.getAllPax($scope.model).then(update);
@@ -169,7 +172,7 @@
                     direction: uiGridConstants.DESC,
                     priority: 1
                 },
-                cellTemplate: '<div class="ngCellText"><a ui-sref="detail" target="pax.detail" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}">{{COL_FIELD}}</a></div>'
+                cellTemplate: '<md-button href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
             },
             {name: 'firstName', displayName: 'First Name'},
             {name: 'middleName', displayName: 'Middle'},

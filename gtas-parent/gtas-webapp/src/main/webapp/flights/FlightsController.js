@@ -85,9 +85,9 @@
                 name: 'passengerCount',
                 field: 'passengerCount',
                 displayName: 'P',
-                width: 50,
+                width: 100,
                 enableFiltering: false,
-                cellTemplate: '<div class="ngCellText"><a ui-sref="flightsPassengers" target="flights.passenger" href="#/flights/{{row.entity.id}}/passengers">{{COL_FIELD}}</a></div>'
+                cellTemplate: '<md-button href="#/flights/{{row.entity.id}}/passengers" title="Launch Flight Passengers in new window" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
             },
             {
                 name: 'ruleHitCount',

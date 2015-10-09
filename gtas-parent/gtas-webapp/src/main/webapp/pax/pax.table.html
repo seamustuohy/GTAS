@@ -4,7 +4,15 @@
   }
   .grid .ui-grid-row .red {
     background-color: pink;
-  } 
+  }
+
+  .md-button {
+    margin: 0 1%;
+    font-weight: bold;
+    width: 98%;
+    text-align: left;
+  }
+
   section {
     border: 1px solid;
     border-color: LightGray;
@@ -40,7 +48,7 @@
   </md-input-container>
   <md-datepicker ng-model="model.etaStart" md-placeholder="Start Date"></md-datepicker>
   <md-datepicker ng-model="model.etaEnd" md-placeholder="End Date"></md-datepicker>
-  
+
   <md-icon-button aria-label="filter" ng-click="filter()">
     <md-tooltip>Filter</md-tooltip>
     <md-icon md-svg-src="resources/img/ic_filter_list_black_24px.svg" style="width: 24px; height: 24px;"></md-icon>
@@ -53,9 +61,9 @@
 
 
 <md-content layout-padding>
-	<md-input-container flex  ng-show="parent === 'flights'">
-		<div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="flights.all" ></div>
-	</md-input-container>
+  <md-input-container flex  ng-show="parent === 'flights'">
+    <div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="flights.all" ></div>
+  </md-input-container>
 
   <div class="modal" id="QBModal" tabindex="-1"
        role="dialog" aria-labelledby="myModalLabel"
@@ -87,9 +95,9 @@
 
   <div id="builder"></div>
   <div id="grid1" ui-grid="passengerGrid"
-    ui-grid-pagination
-    ui-grid-expandable
-    ui-grid-auto-resize
-    ng-style="getTableHeight()"
-    class="grid"></div>
+       ui-grid-pagination
+       ui-grid-expandable
+       ui-grid-auto-resize
+       ng-style="getTableHeight()"
+       class="grid"></div>
 </md-content>
