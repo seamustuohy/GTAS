@@ -87,7 +87,7 @@
                 displayName: 'P',
                 width: 50,
                 enableFiltering: false,
-                cellTemplate: '<div class="ngCellText"><a ui-sref="flightsPassengers" href="#/flights/{{row.entity.id}}/passengers">{{COL_FIELD}}</a></div>'
+                cellTemplate: '<div class="ngCellText"><a ui-sref="flightsPassengers" target="flights.passenger" href="#/flights/{{row.entity.id}}/passengers">{{COL_FIELD}}</a></div>'
             },
             {
                 name: 'ruleHitCount',
