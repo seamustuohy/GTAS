@@ -7,13 +7,9 @@
                                               queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers) {
         var stateName = $state.$current.self.name,
             ruleGridColumns = [{
-                name: 'ruleId',
-                "width": 60,
-                displayName: 'Id',
-                cellTemplate: ' <button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
-            }, {
                 name: 'ruleTitle',
-                displayName: 'Title'
+                displayName: 'Title',
+                cellTemplate: '<md-button class="md-primary md-button md-default-theme" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</md-button>'
             }, {
                 name: 'ruleConditions',
                 displayName: 'Conditions',
