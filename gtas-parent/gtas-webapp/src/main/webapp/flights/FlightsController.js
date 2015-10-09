@@ -1,10 +1,10 @@
 (function () {
     'use strict';
     app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, flightService, gridService, uiGridConstants, executeQueryService, flights) {
-        var stateName = $state.$current.self.name,
-            setFlightsGrid = function (grid, flights) {
+        var stateName = $state ? $state.$current.self.name : 'flights',
+            setFlightsGrid = function (grid, response) {
                 //NEEDED because java services responses not standardize should have Lola change and Amit revert to what he had;
-                var data = stateName === 'queryFlights' ? flights.data.result : flights.data;
+                var data = stateName === 'queryFlights' ? response.data.result : response.data;
                 grid.totalItems = data.totalFlights === -1 ? 0 : data.totalFlights;
                 grid.data = data.flights;
             },
@@ -82,8 +82,12 @@
 
         $scope.flightsGrid.columnDefs = [
             {
-                name: 'passengerCount', displayName: 'P', width: 50, enableFiltering: false,
-                cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.passengerNav(row)">{{COL_FIELD}}</button> ',
+                name: 'passengerCount',
+                field: 'passengerCount',
+                displayName: 'P',
+                width: 50,
+                enableFiltering: false,
+                cellTemplate: '<div class="ngCellText"><a ui-sref="flights.passengers" href="#/flights/{{row.entity.id}}/passengers">{{COL_FIELD}}</a></div>'
             },
             {
                 name: 'ruleHitCount',
@@ -121,11 +125,6 @@
             {name: 'destination'},
             {name: 'destinationCountry', displayName: 'Country'}
         ];
-
-        $scope.passengerNav = function (row) {
-            $scope.selectedFlight = row.entity;
-            $state.go('flights.passengers', {parent: 'flights', flight: $scope.selectedFlight});
-        };
 
         $scope.filter = function () {
             resolvePage();

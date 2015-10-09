@@ -86,23 +86,19 @@ var app;
                     controller: 'FlightsController',
                     resolve: {
                         flights: function (flightService) {
-                            var model = flightService.model;
-                            return flightService.getFlights(model);
+                            return flightService.getFlights(flightService.initialModel());
                         }
                     }
                 })
                 .state('flights.passengers', {
-                    url: '/passengers',
-                    params: {
-                        parent: null,
-                        flight: null
-                    },
+                    url: '/flights/{id}/passengers',
                     sticky: true,
                     dsr: true,
-                    views: {
-                        "content@flights": {
-                            controller: 'PaxController',
-                            templateUrl: 'pax/pax.table.html'
+                    controller: 'PaxController',
+                    templateUrl: 'pax/pax.table.html',
+                    resolve: {
+                        passengers: function (paxService, $stateParams) {
+                            return paxService.getPax($stateParams.id, paxService.initialModel());
                         }
                     }
                 })
@@ -130,10 +126,10 @@ var app;
                     params: {
                         parent: 'query'
                     },
-                    controller: 'QueryPaxController',
+                    controller: 'PaxController',
                     templateUrl: 'pax/query.pax.table.html',
                     resolve: {
-                        queryResults: function (executeQueryService, $stateParams) {
+                        passengers: function (executeQueryService, $stateParams) {
                             var postData, query = JSON.parse(localStorage['query']);
                             postData = {
                                 pageNumber: $stateParams.pageNumber || pageDefaults.pageNumber,
@@ -142,18 +138,6 @@ var app;
                             };
                             return executeQueryService.queryPassengers(postData);
                         }
-                    }
-                })
-                .state('flights.passengers.detail', {
-                    url: '/detail',
-                    params: {
-                        parent: null,
-                        flight: null,
-                        id: null,
-                        flightId: null
-                    },
-                    "content@flights": {
-                        templateUrl: 'flights/flights.html'
                     }
                 })
                 .state('detail', {
@@ -166,19 +150,15 @@ var app;
                         }
                     }
                 })
-                .state('pax', {
-                    url: '/passengers',
-                    controller: 'PaxMainController',
-                    templateUrl: 'pax/pax.header.html'
-                })
                 .state('pax.all', {
-                    url: '/',
+                    url: '/passengers',
                     sticky: true,
                     dsr: true,
-                    views: {
-                        "content@pax": {
-                            controller: 'PaxController',
-                            templateUrl: 'pax/pax.table.html'
+                    controller: 'PaxController',
+                    templateUrl: 'pax/pax.table.html',
+                    resolve: {
+                        passengers: function (paxService) {
+                            return paxService.getAllPax(paxService.initialModel());
                         }
                     }
                 })

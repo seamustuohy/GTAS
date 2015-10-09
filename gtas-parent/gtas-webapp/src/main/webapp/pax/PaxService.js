@@ -11,14 +11,15 @@
             return ({getPaxDetail: getPaxDetail});
         })
         .service("paxService", function ($rootScope, $http, $q) {
-            var defaultSort = [
-                {column: 'ruleHitCount', dir: 'desc'},
-                {column: 'listHitCount', dir: 'desc'},
-                {column: 'eta', dir: 'desc'}
-            ];
+            var model,
+                defaultSort = [
+                    {column: 'ruleHitCount', dir: 'desc'},
+                    {column: 'listHitCount', dir: 'desc'},
+                    {column: 'eta', dir: 'desc'}
+                ],
+                startDate = new Date(),
+                endDate = new Date();
 
-            var startDate = new Date();
-            var endDate = new Date();
             endDate.setDate(endDate.getDate() + 3);
 
             function initialModel() {
@@ -36,24 +37,26 @@
                 };
             }
 
-            var model = initialModel();
+            model = initialModel();
 
             function getPax(flightId, pageRequest) {
-                var request = $http({
+                var dfd = $q.defer();
+                dfd.resolve($http({
                     method: 'post',
                     url: '/gtas/flights/flight/' + flightId + '/passengers',
                     data: pageRequest
-                });
-                return (request.then(handleSuccess, handleError));
+                }));
+                return dfd.promise;
             }
 
             function getAllPax(pageRequest) {
-                var request = $http({
+                var dfd = $q.defer();
+                dfd.resolve($http({
                     method: 'post',
                     url: '/gtas/passengers/',
                     data: pageRequest
-                });
-                return (request.then(handleSuccess, handleError));
+                }));
+                return dfd.promise;
             }
 
             function getPaxDetail(passengerId, flightId) {
@@ -106,4 +109,3 @@
             });
         });
 }())
-

@@ -34,9 +34,9 @@ var fontFiles = [
 ];
 
 var bowerFiles = [
-    'resources/bower_components/angular/angular.js',
-    'resources/bower_components/angular-ui-router/release/angular-ui-router.js',
-    'resources/bower_components/ui-router-extras/release/ct-ui-router-extras.js',
+//    'resources/bower_components/angular/angular.min.js',
+//    'resources/bower_components/angular-ui-router/release/angular-ui-router.min.js',
+//    'resources/bower_components/ui-router-extras/release/ct-ui-router-extras.min.js',
     'resources/bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js',
     'resources/bower_components/moment/min/moment.min.js',
     'resources/bower_components/jquery/dist/jquery.js',
@@ -124,14 +124,15 @@ gulp.task('scripts', function () {
         .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('deployJS', function () {
+gulp.task('deployBowerJS', function () {
     'use strict';
     return gulp.src(bowerFiles)
-        .pipe(iife())
+//        .pipe(iife())
         .pipe(concat('bower.components.js'))
+        //        .pipe(rename('bower.components.min.js'))
         .pipe(gulp.dest('dist/js'))
-        .pipe(rename('bower.components.min.js'))
-        .pipe(uglify())
+//        .pipe(rename('bower.components.min.js'))
+//        .pipe(uglify())
         .pipe(gulp.dest('dist/js'));
 });
 
