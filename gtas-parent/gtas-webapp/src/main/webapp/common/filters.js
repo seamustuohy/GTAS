@@ -95,4 +95,5 @@
                 } // glyphiconWLPaxDocs
                 return '';
             };
-        }())
+        });
+}())
