@@ -173,9 +173,9 @@
             },
             {name: 'firstName', displayName: 'First Name'},
             {name: 'middleName', displayName: 'Middle'},
-            {name: 'fullFlightNumber', displayName: 'Flight', visible: (stateName === 'flights.passengers')},
-            {name: 'eta', displayName: 'ETA', visible: (stateName === 'flights.passengers')},
-            {name: 'etd', displayName: 'ETD', visible: (stateName === 'flights.passengers')},
+            {name: 'fullFlightNumber', displayName: 'Flight', visible: (stateName === 'paxAll')},
+            {name: 'eta', displayName: 'ETA', visible: (stateName === 'paxAll')},
+            {name: 'etd', displayName: 'ETD', visible: (stateName === 'paxAll')},
             {name: 'gender', displayName: 'G', width: 50},
             {name: 'dob', displayName: 'DOB', cellFilter: 'date'},
             {name: 'citizenshipCountry', displayName: 'CTZ', width: 75}
