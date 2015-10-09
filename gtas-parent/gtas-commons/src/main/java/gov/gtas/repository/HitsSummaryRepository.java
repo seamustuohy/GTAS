@@ -9,16 +9,25 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface HitsSummaryRepository extends
-		CrudRepository<HitsSummary, Long> {
+public interface HitsSummaryRepository extends CrudRepository<HitsSummary, Long> {
 
+    /**
+     * @param id pax id
+     * @return all hit types
+     */
 	@Query("SELECT hits.hitdetails FROM HitsSummary hits WHERE hits.passenger.id = (:id)")
 	public List<HitDetail> findByPassengerId(@Param("id") Long id);
 
+	/**
+	 * @param id pax id
+	 * @return RULE hits only
+	 */
+    @Query("SELECT d FROM HitsSummary h join h.hitdetails d WHERE h.passenger.id = (:id) and d.hitType = 'R'")
+    public List<HitDetail> findRuleHitsByPassengerId(@Param("id") Long id);
+	
 	@Query("SELECT s FROM HitsSummary s")
 	public Iterable<HitsSummary> findAll();
 
 	@Query("SELECT hits FROM HitsSummary hits WHERE hits.passenger.id = :pid and hits.flight.id = :fid")
-	List<HitsSummary> findByFlightIdAndPassengerId(@Param("fid") Long flightId,
-			@Param("pid") Long passengerId);
+	List<HitsSummary> findByFlightIdAndPassengerId(@Param("fid") Long flightId, @Param("pid") Long passengerId);
 }

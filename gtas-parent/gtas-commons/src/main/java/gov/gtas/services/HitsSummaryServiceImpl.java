@@ -21,7 +21,7 @@ public class HitsSummaryServiceImpl implements HitsSummaryService {
 	
 	@Override
 	public List<HitDetail> findByPassengerId(Long id) {
-		return hitsSummaryRepository.findByPassengerId(id);
+		return hitsSummaryRepository.findRuleHitsByPassengerId(id);
 	}
 
 	@Override
