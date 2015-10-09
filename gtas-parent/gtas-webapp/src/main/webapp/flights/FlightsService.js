@@ -11,19 +11,6 @@ app.service("flightService", function ($http, $q) {
 
     endDate.setDate(endDate.getDate() + 3);
 
-    model = initialModel();
-
-
-    function getFlights(pageRequest) {
-        var dfd = $q.defer();
-        dfd.resolve($http({
-            method: 'post',
-            url: "/gtas/flights/",
-            data: pageRequest
-        }));
-        return dfd.promise;
-    }
-
     function initialModel() {
         return {
             pageNumber: 1,
@@ -38,9 +25,21 @@ app.service("flightService", function ($http, $q) {
         };
     }
 
+    model = initialModel();
+
+    function getFlights(pageRequest) {
+        var dfd = $q.defer();
+        dfd.resolve($http({
+            method: 'post',
+            url: "/gtas/flights/",
+            data: pageRequest
+        }));
+        return dfd.promise;
+    }
+
     // I transform the error response, unwrapping the application dta from
     // the API response payload.
-    function handleError(response) {
+    function handleError (response) {
         // The API response from the server should be returned in a
         // nomralized format. However, if the request was not handled by the
         // server (or what not handles properly - ex. server error), then we
@@ -48,7 +47,6 @@ app.service("flightService", function ($http, $q) {
         if (!angular.isObject(response.data) || !response.data.message) {
             return ( $q.reject("An unknown error occurred.") );
         }
-
         // Otherwise, use expected error message.
         return ( $q.reject(response.data.message) );
     }
@@ -65,5 +63,4 @@ app.service("flightService", function ($http, $q) {
         getFlights: getFlights,
         initialModel: initialModel
     });
-
 });

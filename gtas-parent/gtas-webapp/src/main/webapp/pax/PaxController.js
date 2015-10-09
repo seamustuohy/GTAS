@@ -6,6 +6,20 @@
     app.controller('PaxController', function ($scope, $injector, $stateParams, $state, paxService, sharedPaxData, uiGridConstants, gridService,
                                               queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers) {
         var stateName = $state.$current.self.name,
+            ruleGridColumns = [{
+                name: 'ruleId',
+                "width": 60,
+                displayName: 'Id',
+                cellTemplate: ' <button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
+            }, {
+                name: 'ruleTitle',
+                displayName: 'Title'
+            }, {
+                name: 'ruleConditions',
+                displayName: 'Conditions',
+                field: 'hitsDetailsList[0]',
+                cellFilter: 'hitsConditionDisplayFilter'
+            }],
             setSubGridOptions = function (data, appScopeProvider) {
                 data.passengers.forEach(function (rowScope) {
                     rowScope.subGridOptions = {
@@ -39,10 +53,10 @@
                     };
                     executeQueryService.queryPassengers(postData).then(update);
                 },
-                'flights.passengers': function () {
+                'flightsPassengers': function () {
                     paxService.getPax($stateParams.flight.id, $scope.model).then(update);
                 },
-                'pax.all': function () {
+                'paxAll': function () {
                     paxService.getAllPax($scope.model).then(update);
                 }
             },
@@ -53,22 +67,7 @@
                 {label: 'Inbound', value: 'I'},
                 {label: 'Outbound', value: 'O'},
                 {label: 'Any', value: ''}
-            ],
-            ruleGridColumns = [{
-                name: 'ruleId',
-                "width": 60,
-                displayName: 'Id',
-                cellTemplate: ' <button id="editBtn" type="button" class="btn-small" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</button>'
-            }, {
-                name: 'ruleTitle',
-                displayName: 'Title'
-            }, {
-                name: 'ruleConditions',
-                displayName: 'Conditions',
-                field: 'hitsDetailsList[0]',
-                cellFilter: 'hitsConditionDisplayFilter'
-            }];
-
+            ];
         $scope.flightDirections = flightDirections;
 
         $scope.model = paxService.model;

@@ -1,6 +1,6 @@
 app.controller('NavCtrl', function ($scope, $location, $state) {
     'use strict';
-    var routes = ['/flights', '/passengers/', '/query-builder', '/risk-criteria', '/watchlists', '/admin'],
+    var routes = ['/flights', '/passengers', '/query-builder', '/risk-criteria', '/watchlists', '/admin'],
         route = window.location.hash.split('?')[0].replace('#', ''),
         $nav = $('nav');
 

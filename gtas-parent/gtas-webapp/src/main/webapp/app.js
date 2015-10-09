@@ -90,10 +90,8 @@ var app;
                         }
                     }
                 })
-                .state('flights.passengers', {
+                .state('flightsPassengers', {
                     url: '/flights/{id}/passengers',
-                    sticky: true,
-                    dsr: true,
                     controller: 'PaxController',
                     templateUrl: 'pax/pax.table.html',
                     resolve: {
@@ -104,9 +102,6 @@ var app;
                 })
                 .state('queryFlights', {
                     url: '/query/flights',
-                    params: {
-                        parent: 'query'
-                    },
                     controller: 'FlightsController',
                     templateUrl: 'flights/query-flights.html',
                     resolve: {
@@ -150,10 +145,8 @@ var app;
                         }
                     }
                 })
-                .state('pax.all', {
+                .state('paxAll', {
                     url: '/passengers',
-                    sticky: true,
-                    dsr: true,
                     controller: 'PaxController',
                     templateUrl: 'pax/pax.table.html',
                     resolve: {
