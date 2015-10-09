@@ -8,9 +8,11 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -75,6 +77,9 @@ public class Flight extends BaseEntityAudit {
     )    
     private Set<Passenger> passengers = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flight", fetch = FetchType.EAGER)
+    private Set<HitsSummary> hits = new HashSet<>();
+    
     @Column(name = "passenger_count", nullable = false)
     private Integer passengerCount = Integer.valueOf(0);
 

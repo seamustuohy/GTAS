@@ -52,19 +52,15 @@ public class PassengerVo extends BaseVo implements Validatable {
     // hits info
     private Boolean onRuleHitList = Boolean.FALSE;
     private Boolean onWatchList = Boolean.FALSE;
+    private Boolean onWatchListDoc = Boolean.FALSE;
     private String flightOrigin;
     private String flightDestination;
     private String flightETD;
     private String flightETA;
-    private int ruleHits;
-    private int listHits;
-    private int paxListHit;
-    private int docListHit;
     private List<PassengerVo> passengers;
 	private List<DocumentVo> documents = new ArrayList<>();    
 	private FlightHistoryVo flightHistoryVo;
     private PnrVo pnrVo;
-    
     
 	public String getPaxId() {
 		return paxId;
@@ -95,30 +91,6 @@ public class PassengerVo extends BaseVo implements Validatable {
 	}
 	public void setFlightETA(String flightETA) {
 		this.flightETA = flightETA;
-	}
-	public int getRuleHits() {
-		return ruleHits;
-	}
-	public void setRuleHits(int ruleHits) {
-		this.ruleHits = ruleHits;
-	}
-	public int getListHits() {
-		return listHits;
-	}
-	public void setListHits(int listHits) {
-		this.listHits = listHits;
-	}
-	public int getPaxListHit() {
-		return paxListHit;
-	}
-	public void setPaxListHit(int paxListHit) {
-		this.paxListHit = paxListHit;
-	}
-	public int getDocListHit() {
-		return docListHit;
-	}
-	public void setDocListHit(int docListHit) {
-		this.docListHit = docListHit;
 	}
 	public List<PassengerVo> getPassengers() {
 		return passengers;
@@ -303,7 +275,13 @@ public class PassengerVo extends BaseVo implements Validatable {
     public void setOnWatchList(Boolean onWatchList) {
         this.onWatchList = onWatchList;
     }
-    
+    public Boolean getOnWatchListDoc() {
+        return onWatchListDoc;
+    }
+    public void setOnWatchListDoc(Boolean onWatchListDoc) {
+        this.onWatchListDoc = onWatchListDoc;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
