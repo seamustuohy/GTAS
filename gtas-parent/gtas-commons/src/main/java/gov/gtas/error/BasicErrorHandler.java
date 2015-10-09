@@ -17,6 +17,7 @@ import static gov.gtas.constant.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR
 import gov.gtas.constant.CommonErrorConstants;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -138,9 +139,21 @@ public class BasicErrorHandler implements ErrorHandler {
 	 */
 	@Override
 	public ErrorDetailInfo processError(String code, String description,
-			String[] details) {
-		// TODO Auto-generated method stub
-		return null;
+			List<String> details) {
+    	ErrorDetailInfo ret = null;
+		CommonServiceException exception = null;
+		final String errorMessage = errorMap.get(code);
+		if (errorMessage != null) {
+			exception = createExceptionAndLog(code, null, errorMessage, details.toArray());
+		} else if (this.delegate != null){
+			exception = this.delegate.createException(code, null, details.toArray());
+		}
+		if (exception != null) {
+			ret = processError(exception);
+		} else {
+			ret = new BasicErrorDetailInfo(null, code, description, details);
+		}
+		return ret;
 	}
 
 	/**

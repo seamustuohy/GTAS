@@ -1,5 +1,10 @@
 package gov.gtas.error;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 
 /**
  * Factory class for creating error handlers.
@@ -48,6 +53,21 @@ public class ErrorHandlerFactory {
 	 */
 	public static ErrorHandler getErrorHandler() {
 		return ErrorHandlerFactory.errorHandler;
+	}
+	/**
+	 * Processes the exception provided and returns the resulting error detail object.
+	 * 
+	 * @param exception exception.
+	 * @return the error details.
+	 */
+	public static ErrorDetailInfo createErrorDetails(String errorCode, String description, Exception exception) {
+		if(StringUtils.isEmpty(errorCode)){
+			return ErrorHandlerFactory.errorHandler.processError(exception);
+		} else {
+			List<String> details = new LinkedList<String>();
+			ErrorUtils.constructExceptionDetails(exception, details);
+		    return ErrorHandlerFactory.errorHandler.processError(errorCode, description, details);
+		}
 	}
 	/**
 	 * Processes the exception provided and returns the resulting error detail object.

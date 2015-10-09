@@ -79,12 +79,12 @@ public class ErrorUtils {
      	BasicErrorDetailInfo ret = new BasicErrorDetailInfo(null, errorCode, exception.getMessage(), null);
      	if(addStackTrace){
      		List<String> details = new LinkedList<String>();
-     		constructDetails(exception, details);
+     		constructExceptionDetails(exception, details);
      		ret.setErrorDetails(details);
      	}
     	return ret;
     }
-    private static void constructDetails(Throwable exception, List<String> details){
+    public static void constructExceptionDetails(Throwable exception, List<String> details){
     	details.add("Exception class:"+exception.getClass().getSimpleName());
     	details.add("Exception messsage:"+exception.getMessage());
     	for(StackTraceElement el:exception.getStackTrace()){
@@ -92,7 +92,7 @@ public class ErrorUtils {
     	}
     	if(exception.getCause() != null){
     		details.add(">>>>>>>> Caused by:");
-    		constructDetails(exception.getCause(), details);
+    		constructExceptionDetails(exception.getCause(), details);
     	}
     }
 
