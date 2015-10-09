@@ -72,13 +72,25 @@ public class PassengerServiceImpl implements PassengerService {
         for (Object[] objs : results) {
             Passenger p = (Passenger)objs[0];
             Flight f = (Flight)objs[1];
+            HitsSummary hits = (HitsSummary)objs[2];
+
             PassengerVo vo = new PassengerVo();
             BeanUtils.copyProperties(p, vo);
             rv.add(vo);
 
-            // grab hits information
-            fillWithHitsInfo(vo, f.getId(), p.getId());
-            
+            if (hits != null) {
+                String hitType = hits.getHitType();
+                if (hitType.contains(HitTypeEnum.R.toString())) {
+                    vo.setOnRuleHitList(true);
+                }
+                if (hitType.contains(HitTypeEnum.P.toString())) {
+                    vo.setOnWatchList(true);
+                }
+                if (hitType.contains(HitTypeEnum.D.toString())) {
+                    vo.setOnWatchListDoc(true);
+                }
+            }
+
             // grab flight info
             vo.setFlightId(f.getId().toString());
             vo.setFlightNumber(f.getFlightNumber());
