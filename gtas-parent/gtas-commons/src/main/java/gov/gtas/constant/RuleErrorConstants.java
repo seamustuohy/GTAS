@@ -25,7 +25,7 @@ public class RuleErrorConstants {
 	 */
 	public static final String INVALID_START_DATE_ERROR_CODE = "INVALID_START_DATE";
 	public static final String PAST_START_DATE_ERROR_CODE = "PAST_START_DATE";
-	public static final String END_LESS_START_DATE_ERROR_CODE = "INVALID_START_DATE";
+	public static final String END_LESS_START_DATE_ERROR_CODE = "END_LESS_THAN_START_DATE";
 
 	/*
 	 * The Input JSON Query Specification from UI has an invalid rule detail structure.
