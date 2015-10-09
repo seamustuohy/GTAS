@@ -12,8 +12,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -26,6 +28,7 @@ import gov.gtas.model.Flight;
 import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Passenger;
 import gov.gtas.services.dto.PassengersRequestDto;
+import gov.gtas.services.dto.SortOptionsDto;
 
 public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
     private static final Logger logger = LoggerFactory.getLogger(PassengerRepositoryImpl.class);
@@ -72,21 +75,30 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         }
 
         // sorting
-//        if (dto.getSort() != null) {
-//            List<Order> orders = new ArrayList<>();
-//            for (SortOptionsDto sort : dto.getSort()) {
-//                String column = sort.getColumn();
-//                Expression<?> e = isFlightColumn(column) ? flights.get(column) : pax.get(column);
-//                Order order = null;
-//                if (sort.getDir().equals("desc")) {
-//                    order = cb.desc(e);
-//                } else {
-//                    order = cb.asc(e);
-//                }
-//                orders.add(order);
-//            }
-//            q.orderBy(orders);
-//        }
+        if (dto.getSort() != null) {
+            List<Order> orders = new ArrayList<>();
+            for (SortOptionsDto sort : dto.getSort()) {
+                String column = sort.getColumn();
+                Expression<?> e = null;
+                if (isFlightColumn(column)) {
+                    e = flight.get(column); 
+                } else if (column.equals("onRuleHitList")) { 
+                    e = hits.get("ruleHitCount");
+                } else if (column.equals("onWatchList")) {
+                    e = hits.get("watchListHitCount");
+                } else {
+                    e = pax.get(column);
+                }
+                Order order = null;
+                if (sort.getDir().equals("desc")) {
+                    order = cb.desc(e);
+                } else {
+                    order = cb.asc(e);
+                }
+                orders.add(order);
+            }
+            q.orderBy(orders);
+        }
         
         // filters
         if (StringUtils.isNotBlank(dto.getLastName())) {

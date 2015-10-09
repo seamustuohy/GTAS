@@ -13,8 +13,8 @@
         .service("paxService", function ($rootScope, $http, $q) {
             var model,
                 defaultSort = [
-                    {column: 'ruleHitCount', dir: 'desc'},
-                    {column: 'listHitCount', dir: 'desc'},
+                    {column: 'onRuleHitList', dir: 'desc'},
+                    {column: 'onWatchList', dir: 'desc'},
                     {column: 'eta', dir: 'desc'}
                 ],
                 startDate = new Date(),
