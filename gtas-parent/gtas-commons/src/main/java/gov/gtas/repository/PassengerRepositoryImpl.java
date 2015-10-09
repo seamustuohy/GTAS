@@ -48,13 +48,17 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
      * is to create the required condition as a predicate and add it to the 
      * where clause.
      */
-    public List<Object[]> getAllPassengersAndFlights(PassengersRequestDto dto) {
+    public List<Object[]> getPassengersByCriteria(Long flightId, PassengersRequestDto dto) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Object[]> q = cb.createQuery(Object[].class);
         Root<Passenger> pax = q.from(Passenger.class);
         Join<Passenger, Flight> flight = pax.join("flights"); 
         Join<Passenger, HitsSummary> hits = pax.join("hits", JoinType.LEFT);
+        
         List<Predicate> predicates = new ArrayList<Predicate>();
+        if (flightId != null) {
+            predicates.add(cb.equal(flight.<Long>get("id"), flightId));            
+        }
 
         predicates.add(
             cb.or(
@@ -125,27 +129,8 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         q.multiselect(pax, flight, hits).where(predicates.toArray(new Predicate[]{}));
         TypedQuery<Object[]> typedQuery = addPagination(q, dto.getPageNumber(), dto.getPageSize());
         logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
-        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
+//        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Object[]> results = typedQuery.getResultList();
-        
-        return results;
-    }
-    
-    public List<Passenger> getPassengersByFlightId(Long flightId, PassengersRequestDto dto) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Passenger> q = cb.createQuery(Passenger.class);
-        Root<Passenger> pax = q.from(Passenger.class);
-        Join<Passenger, Flight> flights = pax.join("flights"); 
-        List<Predicate> predicates = new ArrayList<Predicate>();
-        predicates.add(cb.equal(flights.<Long>get("id"), flightId));
-
-        // filters
-        
-        q.select(pax).where(predicates.toArray(new Predicate[]{}));
-        TypedQuery<Passenger> typedQuery = addPagination(q, dto.getPageNumber(), dto.getPageSize());
-        logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
-        //System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
-        List<Passenger> results = typedQuery.getResultList();
         
         return results;
     }

@@ -79,6 +79,7 @@
         $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
 
         $scope.selectedFlight = $stateParams.flight;
+        $scope.myState = $state.$current.self.name;
 
         jqueryQueryBuilderService.init('riskcriteria');
 

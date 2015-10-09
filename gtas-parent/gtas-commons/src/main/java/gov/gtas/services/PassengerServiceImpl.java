@@ -7,13 +7,10 @@ import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import gov.gtas.enumtype.HitTypeEnum;
-import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Passenger;
@@ -21,7 +18,6 @@ import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.services.dto.PassengersPageDto;
 import gov.gtas.services.dto.PassengersRequestDto;
-import gov.gtas.vo.passenger.DocumentVo;
 import gov.gtas.vo.passenger.PassengerVo;
 
 @Service
@@ -41,32 +37,8 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     @Transactional
-    public PassengersPageDto getPassengersByFlightId(Long flightId, PassengersRequestDto request) {
-        List<Passenger> passengerList = passengerRespository.getPassengersByFlightId(flightId, request);
-        List<PassengerVo> vos = new ArrayList<>();
-        
-        for (Passenger p : passengerList) {
-            PassengerVo vo = new PassengerVo();
-            BeanUtils.copyProperties(p, vo);
-            vos.add(vo);
-            
-            for (Document d : p.getDocuments()) {
-                DocumentVo docVo = new DocumentVo();
-                BeanUtils.copyProperties(d, docVo);
-                vo.addDocument(docVo);
-            }
-            
-            fillWithHitsInfo(vo,flightId, p.getId());
-        }
-        
-        return new PassengersPageDto(vos, -1);
-    }
-
-    @Override
-    @Transactional
-    public PassengersPageDto findAllWithFlightInfo(PassengersRequestDto request) {
-        long total = -1;
-        List<Object[]> results = passengerRespository.getAllPassengersAndFlights(request);
+    public PassengersPageDto getPassengersByCriteria(Long flightId, PassengersRequestDto request) {
+        List<Object[]> results = passengerRespository.getPassengersByCriteria(flightId, request);
         List<PassengerVo> rv = new ArrayList<>();
 
         for (Object[] objs : results) {
@@ -98,8 +70,21 @@ public class PassengerServiceImpl implements PassengerService {
             vo.setCarrier(f.getCarrier());
             vo.setEtd(f.getEtd());
             vo.setEta(f.getEta());
+            
+            // documents?
+//            for (Document d : p.getDocuments()) {
+//                DocumentVo docVo = new DocumentVo();
+//                BeanUtils.copyProperties(d, docVo);
+//                vo.addDocument(docVo);
+//            }            
         }
         
+        /*
+         * we're not currently caluclating total # of results, which is
+         * expensive.  Return -1 because ui-grid on the front-end will
+         * interpret this by not showing total # results.
+         */
+        long total = -1;
         return new PassengersPageDto(rv, total);
     }    
     
