@@ -14,8 +14,14 @@ public interface PassengerService {
     public Passenger findById(Long id);
     public List<Passenger> getPassengersByLastName(String lastName);
     
-    public PassengersPageDto findAllWithFlightInfo(PassengersRequestDto request);
-    
-    public PassengersPageDto getPassengersByFlightId(Long flightId, PassengersRequestDto request);
+    /**
+     * 
+     * @param flightId optional
+     * @param request
+     * @return
+     */
+    public PassengersPageDto getPassengersByCriteria(Long flightId, PassengersRequestDto request);
+
+    @Deprecated
     public void fillWithHitsInfo(PassengerVo vo, Long flightId, Long passengerId);
 }

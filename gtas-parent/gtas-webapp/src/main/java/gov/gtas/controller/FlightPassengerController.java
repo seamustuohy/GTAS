@@ -35,12 +35,12 @@ public class FlightPassengerController {
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody PassengersPageDto getFlightPassengers(@PathVariable(value = "id") Long flightId, @RequestBody PassengersRequestDto request) {
 //        System.out.println(request);
-        return paxService.getPassengersByFlightId(flightId, request);
+        return paxService.getPassengersByCriteria(flightId, request);
     }
 
     @RequestMapping(value = "/passengers", method = RequestMethod.POST)
     public @ResponseBody PassengersPageDto getAllPassengers(@RequestBody PassengersRequestDto request) {
-        System.out.println(request);
-        return paxService.findAllWithFlightInfo(request);
+//        System.out.println(request);
+        return paxService.getPassengersByCriteria(null, request);
     }
 }
