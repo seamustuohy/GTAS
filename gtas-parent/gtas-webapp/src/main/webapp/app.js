@@ -1,7 +1,31 @@
 var app;
 (function () {
     'use strict';
-    var initialize = function ($rootScope) {
+    var pageDefaults = {
+            pageNumber: 1,
+            pageSize: 10
+        },
+        appDependencies = [
+            'ui.router',
+            'ct.ui.router.extras',
+            'ui.grid',
+            'ui.grid.resizeColumns',
+            'ui.grid.moveColumns',
+            'ui.grid.pagination',
+            'ui.grid.autoResize',
+            'ui.grid.edit',
+            'ui.grid.rowEdit',
+            'ui.grid.cellNav',
+            'ui.grid.selection',
+            'ui.grid.exporter',
+            'ui.grid.expandable',
+            'ngMaterial',
+            'ngMessages',
+            'ngAria',
+            'ngAnimate',
+            'angularSpinners'
+        ],
+        initialize = function ($rootScope) {
             //these two are for learning router state
             $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                 // LOGIC TO PROMPT LOGIN AUTOMATICALLY
@@ -56,18 +80,14 @@ var app;
                 })
                 .state('flights', {
                     url: '/flights',
-                    templateUrl: 'flights/flights.header.html',
-                    controller: 'FlightsController'
-                })
-                .state('flights.all', {
                     sticky: true,
                     dsr: true,
-                    views: {/*
-                     'header@flights': {
-                     templateUrl: 'partials/flights-all-header.html'
-                     },*/
-                        "content@flights": {
-                            templateUrl: 'flights/flights.html'
+                    templateUrl: 'flights/flights.html',
+                    controller: 'FlightsController',
+                    resolve: {
+                        flights: function (flightService) {
+                            var model = flightService.model;
+                            return flightService.getFlights(model);
                         }
                     }
                 })
@@ -91,12 +111,17 @@ var app;
                     params: {
                         parent: 'query'
                     },
-                    controller: 'QueryFlightsController',
+                    controller: 'FlightsController',
                     templateUrl: 'flights/query-flights.html',
                     resolve: {
-                        queryResults: function (executeQueryService) {
-                            var qbData = JSON.parse(localStorage['qbData']);
-                            return executeQueryService.queryFlights(qbData);
+                        flights: function (executeQueryService, $stateParams) {
+                            var postData, query = JSON.parse(localStorage['query']);
+                            postData = {
+                                pageNumber: $stateParams.pageNumber || pageDefaults.pageNumber,
+                                pageSize: $stateParams.pageSize || pageDefaults.pageSize,
+                                query: query
+                            };
+                            return executeQueryService.queryFlights(postData);
                         }
                     }
                 })
@@ -108,9 +133,14 @@ var app;
                     controller: 'QueryPaxController',
                     templateUrl: 'pax/query.pax.table.html',
                     resolve: {
-                        queryResults: function (executeQueryService) {
-                            var qbData = JSON.parse(localStorage['qbData']);
-                            return executeQueryService.queryPassengers(qbData);
+                        queryResults: function (executeQueryService, $stateParams) {
+                            var postData, query = JSON.parse(localStorage['query']);
+                            postData = {
+                                pageNumber: $stateParams.pageNumber || pageDefaults.pageNumber,
+                                pageSize: $stateParams.pageSize || pageDefaults.pageSize,
+                                query: query
+                            };
+                            return executeQueryService.queryPassengers(postData);
                         }
                     }
                 })
@@ -169,26 +199,8 @@ var app;
                 });
         };
 
-    app = angular.module('myApp', [
-        'ui.router',
-        'ct.ui.router.extras',
-        'ui.grid',
-        'ui.grid.resizeColumns',
-        'ui.grid.moveColumns',
-        'ui.grid.pagination',
-        'ui.grid.autoResize',
-        'ui.grid.edit',
-        'ui.grid.rowEdit',
-        'ui.grid.cellNav',
-        'ui.grid.selection',
-        'ui.grid.exporter',
-        'ui.grid.expandable',
-        'ngMaterial',
-        'ngMessages',
-        'ngAria',
-        'ngAnimate',
-        'angularSpinners'
-    ])
+    app = angular
+        .module('myApp', appDependencies)
         .config(router)
         .run(initialize);
 }());

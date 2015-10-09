@@ -10,18 +10,15 @@
 
         <link rel="stylesheet" href="resources/css/style-icomoon.css" />
         <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="resources/css/gtas.css" />
         <link rel="stylesheet" href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css" />
-        <link rel="stylesheet"
-        href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
-        <link rel="stylesheet"
-        href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
+        <link rel="stylesheet" href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+        <link rel="stylesheet" href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
         <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
-        <link rel="stylesheet"
-        href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
-        <link rel="stylesheet" href="resources/bower_components/angular-ui-grid/ui-grid.css" />
+        <link rel="stylesheet" href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+        <link rel="stylesheet" href="resources/bower_components/angular-ui-grid/ui-grid.min.css" />
         <link rel="stylesheet" href="resources/css/query-builder.default.css" />
         <link rel="stylesheet" href="resources/bower_components/angular-material/angular-material.min.css" />
+        <link rel="stylesheet" href="resources/css/gtas.css" />
         </head>
 
         <body>
