@@ -44,7 +44,13 @@ public class PassengerServiceImpl implements PassengerService {
         for (Object[] objs : results) {
             Passenger p = (Passenger)objs[0];
             Flight f = (Flight)objs[1];
+            Long currentFlightId = f.getId();
             HitsSummary hits = (HitsSummary)objs[2];
+            
+            // hack: until we figure out how to properly left join in query
+            if (hits != null && currentFlightId != hits.getFlight().getId()) {
+                continue;
+            }
 
             PassengerVo vo = new PassengerVo();
             BeanUtils.copyProperties(p, vo);
