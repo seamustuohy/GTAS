@@ -31,7 +31,8 @@ var app;
                 $rootScope.$broadcast('stateChanged', toState.name);
             });
         },
-        router = function ($stateProvider) {
+        router = function ($stateProvider, $urlRouterProvider) {
+            $urlRouterProvider.otherwise("/flights");
             $stateProvider
                 .state('dashboard', {
                     url: '/dashboard',
@@ -80,16 +81,6 @@ var app;
                         }
                     }
                 })
-                .state('flightsPassengers', {
-                    url: '/passengers/:id/:flightNumber/:origin/:destination',
-                    templateUrl: 'pax/pax.table.html',
-                    controller: 'PaxController',
-                    resolve: {
-                        passengers: function (paxService, $stateParams) {
-                            return paxService.getPax($stateParams.id, paxService.fromFlightModel($stateParams));
-                        }
-                    }
-                })
                 .state('queryFlights', {
                     url: '/query/flights',
                     controller: 'FlightsController',
@@ -103,6 +94,26 @@ var app;
                                 query: query
                             };
                             return executeQueryService.queryFlights(postData);
+                        }
+                    }
+                })
+                .state('paxAll', {
+                    url: '/passengers',
+                    templateUrl: 'pax/pax.table.html',
+                    controller: 'PaxController',
+                    resolve: {
+                        passengers: function (paxService) {
+                            return paxService.getAllPax(paxService.model);
+                        }
+                    }
+                })
+                .state('flightsPassengers', {
+                    url: '/flight_pax/{id}/{flightNumber}/{origin}/{destination}/{direction}',
+                    templateUrl: 'pax/pax.table.html',
+                    controller: 'PaxController',
+                    resolve: {
+                        passengers: function (paxService, $stateParams) {
+                            return paxService.getPax($stateParams.id, paxService.initial($stateParams));
                         }
                     }
                 })
@@ -129,16 +140,6 @@ var app;
                     resolve: {
                         passenger: function (paxDetailService, $stateParams) {
                             return paxDetailService.getPaxDetail($stateParams.paxId, $stateParams.flightId);
-                        }
-                    }
-                })
-                .state('paxAll', {
-                    url: '/passengers',
-                    templateUrl: 'pax/pax.table.html',
-                    controller: 'PaxController',
-                    resolve: {
-                        passengers: function (paxService) {
-                            return paxService.getAllPax(paxService.model);
                         }
                     }
                 })
