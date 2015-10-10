@@ -1,31 +1,24 @@
-app.controller('NavCtrl', function ($scope, $location, $state) {
+app.controller('NavCtrl', function ($scope) {
     'use strict';
-    var routes = ['/flights', '/passengers', '/query-builder', '/risk-criteria', '/watchlists', '/admin'],
-        route = window.location.hash.split('?')[0].replace('#', ''),
-        $nav = $('nav');
+    var lookup = {
+        admin: ['admin', 'admin.users', 'admin.addUser'],
+        dashboard: ['dashboard'],
+        flights: ['flights'],
+        passengers: ['paxAll', 'flightsPassengers'],
+        queries: ['query-builder'],
+        risks: ['risk-criteria'],
+        watchlists: ['watchlists']
+    };
 
-    if (!route.length) {
-        route = '/flights';
-    }
+    $scope.onRoute = function (stateName) {
+        return lookup[stateName].indexOf($scope.stateName) >= 0;
+    };
 
-    $scope.selectedIndex = routes.indexOf(route) >= 0 ? routes.indexOf(route) : null;
+    $scope.showNav = function () {
+        return ['queryFlights', 'queryPassengers'].indexOf($scope.stateName) === -1;
+    };
 
-    if (route.indexOf('/paxdetail') >= 0) {
-        $state.go('detail');
-        $nav.remove();
-    }
-    if (route.indexOf('/query/flights') >= 0) {
-        $nav.remove();
-    }
-    if (route.indexOf('/query/passengers') >= 0) {
-        $nav.remove();
-    }
-
-    $location.url(route);
-
-    if ($scope.selectedIndex !== null) {
-        $scope.$watch('selectedIndex', function (current) {
-            $location.url(routes[current]);
-        });
-    }
+    $scope.$on('stateChanged', function (e, stateName) {
+        $scope.stateName = stateName;
+    });
 });

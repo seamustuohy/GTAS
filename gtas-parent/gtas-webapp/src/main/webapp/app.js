@@ -27,18 +27,8 @@ var app;
         ],
         initialize = function ($rootScope) {
             //these two are for learning router state
-            $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-                // LOGIC TO PROMPT LOGIN AUTOMATICALLY
-                //if (toState.name !== 'login' && !UsersService.getCurrentUser()) {
-                //    event.preventDefault();
-                //    $state.go('login');
-                //}
-            });
-            $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-                console.log('toState:' + toState.name);
-                console.log(toParams);
-                console.log('fromState: ' + fromState.name);
-                console.log(fromParams);
+            $rootScope.$on('$stateChangeStart', function (e, toState) {
+                $rootScope.$broadcast('stateChanged', toState.name);
             });
         },
         router = function ($stateProvider) {
@@ -91,12 +81,12 @@ var app;
                     }
                 })
                 .state('flightsPassengers', {
-                    url: '/flights/{id}/passengers',
+                    url: '/passengers/:id/:flightNumber/:origin/:destination',
                     templateUrl: 'pax/pax.table.html',
                     controller: 'PaxController',
                     resolve: {
                         passengers: function (paxService, $stateParams) {
-                            return paxService.getPax($stateParams.id, paxService.model);
+                            return paxService.getPax($stateParams.id, paxService.fromFlightModel($stateParams));
                         }
                     }
                 })
