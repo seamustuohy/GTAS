@@ -38,7 +38,7 @@ public class RuleServiceConstants {
 	 * This is the error code for an internal system error indicating that the
 	 * UDR generated rule could not be compiled.
 	 */
-	public static final String RULE_COMPILE_ERROR_CODE = "RULE_COMPILE_ERROR_CODE";
+	public static final String RULE_COMPILE_ERROR_CODE = "RULE_COMPILE_ERROR";
 
 	/*
 	 * This is the error code for an internal system error indicating that the
@@ -61,7 +61,7 @@ public class RuleServiceConstants {
 	 */
 	public static final String KB_DESERIALIZATION_ERROR_CODE = "KB_DESERIALIZATION_ERROR";
 
-	public static final String INCOMPLETE_TREE_ERROR_CODE = "INCOMPLETE_TREE_ERROR_CODE";
+	public static final String INCOMPLETE_TREE_ERROR_CODE = "INCOMPLETE_TREE_ERROR";
 	
 	// //////////////////////////////////////////////////////////////////////////////////////
 	// ERROR Messages

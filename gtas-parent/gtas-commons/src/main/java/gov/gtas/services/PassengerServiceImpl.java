@@ -45,7 +45,7 @@ public class PassengerServiceImpl implements PassengerService {
             Passenger p = (Passenger)objs[0];
             Flight f = (Flight)objs[1];
             HitsSummary hits = (HitsSummary)objs[2];
-
+            
             PassengerVo vo = new PassengerVo();
             BeanUtils.copyProperties(p, vo);
             rv.add(vo);

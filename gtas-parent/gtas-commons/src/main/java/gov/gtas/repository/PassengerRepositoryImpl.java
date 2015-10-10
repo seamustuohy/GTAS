@@ -36,6 +36,29 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
     
+    public List<Object[]> getPassengersByCriteria_(Long flightId, PassengersRequestDto dto) {
+        String q = "select p, f, h"
+                + " from Passenger p"
+                + " join p.flights f"
+                + " left join p.hits h"
+                + " with h.flight.id = :flightId"
+                + " where 1=1";
+        
+        if (flightId != null) {
+            q += " and f.id = :flightId";            
+        }
+        
+        TypedQuery<Object[]> typedQuery = em.createQuery(q, Object[].class);
+        typedQuery.setParameter("flightId", flightId);
+        int offset = (dto.getPageNumber() - 1) * dto.getPageSize();
+        typedQuery.setFirstResult(offset);
+        typedQuery.setMaxResults(dto.getPageSize());
+        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
+        List<Object[]> results = typedQuery.getResultList();
+        System.out.println(results.size());
+        return results;
+    }
+    
     /**
      * This was an especially difficult query to construct mainly because of a
      * bug in hibernate. See https://hibernate.atlassian.net/browse/HHH-7321.
@@ -54,28 +77,11 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         Root<Passenger> pax = q.from(Passenger.class);
         Join<Passenger, Flight> flight = pax.join("flights"); 
         Join<Passenger, HitsSummary> hits = pax.join("hits", JoinType.LEFT);
+        hits.on(cb.equal(hits.get("flight").get("id"), cb.parameter(Long.class, "flightId")));
         
         List<Predicate> predicates = new ArrayList<Predicate>();
         if (flightId != null) {
             predicates.add(cb.equal(flight.<Long>get("id"), flightId));            
-        }
-
-        predicates.add(
-            cb.or(
-                cb.isNull(hits), 
-                cb.and(cb.equal(hits.get("passenger").get("id"), pax.get("id")),
-                       cb.equal(hits.get("flight").get("id"), flight.get("id")))
-            )
-        );
-
-        // dates
-        Predicate etaCondition = null;
-        if (dto.getEtaStart() != null && dto.getEtaEnd() != null) {
-            Path<Date> eta = flight.<Date>get("eta");
-            Predicate startPredicate = cb.or(cb.isNull(eta), cb.greaterThanOrEqualTo(flight.<Date>get("eta"), dto.getEtaStart()));
-            Predicate endPredicate = cb.or(cb.isNull(eta), cb.lessThanOrEqualTo(eta, dto.getEtaEnd())); 
-            etaCondition = cb.and(startPredicate, endPredicate);
-            predicates.add(etaCondition);
         }
 
         // sorting
@@ -103,35 +109,47 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
             }
             q.orderBy(orders);
         }
-        
-        // filters
-        if (StringUtils.isNotBlank(dto.getLastName())) {
-            predicates.add(cb.equal(cb.upper(pax.<String>get("lastName")), dto.getLastName()));
-        }
-        if (StringUtils.isNotBlank(dto.getOrigin())) {
-            predicates.add(cb.equal(flight.<String>get("origin"), dto.getOrigin()));
-        }
-        if (StringUtils.isNotBlank(dto.getDest())) {
-            predicates.add(cb.equal(flight.<String>get("destination"), dto.getDest()));
-        }
-        if (StringUtils.isNotBlank(dto.getFlightNumber())) {
-            String likeString = String.format("%%%s%%", dto.getFlightNumber());
-            predicates.add(cb.like(flight.<String>get("fullFlightNumber"), likeString));
-        }
-        /*
-         * hack: javascript sends the empty string represented by the 'all' dropdown
-         * value as '0', so we check for that here to mean 'any direction' 
-         */
-        if (StringUtils.isNotBlank(dto.getDirection()) && !"0".equals(dto.getDirection())) {
-            predicates.add(cb.equal(flight.<String>get("direction"), dto.getDirection()));
+
+        if (flightId == null) {
+            // dates
+            Predicate etaCondition = null;
+            if (dto.getEtaStart() != null && dto.getEtaEnd() != null) {
+                Path<Date> eta = flight.<Date>get("eta");
+                Predicate startPredicate = cb.or(cb.isNull(eta), cb.greaterThanOrEqualTo(flight.<Date>get("eta"), dto.getEtaStart()));
+                Predicate endPredicate = cb.or(cb.isNull(eta), cb.lessThanOrEqualTo(eta, dto.getEtaEnd())); 
+                etaCondition = cb.and(startPredicate, endPredicate);
+                predicates.add(etaCondition);
+            }
+    
+            // filters
+            if (StringUtils.isNotBlank(dto.getLastName())) {
+                predicates.add(cb.equal(cb.upper(pax.<String>get("lastName")), dto.getLastName()));
+            }
+            if (StringUtils.isNotBlank(dto.getOrigin())) {
+                predicates.add(cb.equal(flight.<String>get("origin"), dto.getOrigin()));
+            }
+            if (StringUtils.isNotBlank(dto.getDest())) {
+                predicates.add(cb.equal(flight.<String>get("destination"), dto.getDest()));
+            }
+            if (StringUtils.isNotBlank(dto.getFlightNumber())) {
+                String likeString = String.format("%%%s%%", dto.getFlightNumber());
+                predicates.add(cb.like(flight.<String>get("fullFlightNumber"), likeString));
+            }
+            /*
+             * hack: javascript sends the empty string represented by the 'all' dropdown
+             * value as '0', so we check for that here to mean 'any direction' 
+             */
+            if (StringUtils.isNotBlank(dto.getDirection()) && !"0".equals(dto.getDirection())) {
+                predicates.add(cb.equal(flight.<String>get("direction"), dto.getDirection()));
+            }
         }
         
         q.multiselect(pax, flight, hits).where(predicates.toArray(new Predicate[]{}));
         TypedQuery<Object[]> typedQuery = addPagination(q, dto.getPageNumber(), dto.getPageSize());
+        typedQuery.setParameter("flightId", flightId);
         logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
 //        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Object[]> results = typedQuery.getResultList();
-        
         return results;
     }
     

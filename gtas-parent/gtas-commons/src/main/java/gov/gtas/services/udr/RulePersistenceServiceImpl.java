@@ -1,5 +1,6 @@
 package gov.gtas.services.udr;
 
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
@@ -46,7 +47,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	/*
 	 * The logger for the RulePersistenceService.
 	 */
-	private static final Logger logger = LoggerFactory.getLogger(RulePersistenceServiceImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(RulePersistenceServiceImpl.class);
 
 	private static final int UPDATE_BATCH_SIZE = 100;
 
@@ -75,8 +77,9 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 
 		if (savedMeta == null) {
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "UDR metatdata",
-					"RulePersistenceServiceImpl.create()");
+			throw errorHandler.createException(
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
+					"UDR metatdata", "RulePersistenceServiceImpl.create()");
 		}
 
 		// set the audit fields
@@ -122,8 +125,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 			udrRuleRepository.save(ruleToDelete);
 		} else {
 			ruleToDelete = null; // in case delete flag was Y
-			logger.warn(
-					"RulePersistenceServiceImpl.delete() - object does not exist or has already been deleted:" + id);
+			logger.warn("RulePersistenceServiceImpl.delete() - object does not exist or has already been deleted:"
+					+ id);
 		}
 		return ruleToDelete;
 	}
@@ -141,7 +144,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 * gov.gtas.services.udr.RulePersistenceService#batchUpdate(java.util.List)
 	 */
 	@Override
-	public Collection<? extends BaseEntity> batchUpdate(Collection<? extends BaseEntity> entities) {
+	public Collection<? extends BaseEntity> batchUpdate(
+			Collection<? extends BaseEntity> entities) {
 		List<BaseEntity> ret = new LinkedList<BaseEntity>();
 		int count = 0;
 		for (BaseEntity ent : entities) {
@@ -163,7 +167,9 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 
 		if (rule.getId() == null) {
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "id", "Update UDR");
+			throw errorHandler.createException(
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "id",
+					"Update UDR");
 		}
 
 		rule.setEditDt(new Date());
@@ -188,7 +194,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	@Override
 	@Transactional(TxType.SUPPORTS)
 	public UdrRule findByTitleAndAuthor(String title, String authorUserId) {
-		return udrRuleRepository.getUdrRuleByTitleAndAuthor(title, authorUserId);
+		return udrRuleRepository
+				.getUdrRuleByTitleAndAuthor(title, authorUserId);
 	}
 
 	/*
@@ -202,18 +209,26 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		return udrRuleRepository.getUdrRuleByAuthor(authorUserId);
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.udr.RulePersistenceService#findValidUdrOnDate(java.util.Date)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.udr.RulePersistenceService#findValidUdrOnDate(java.
+	 * util.Date)
 	 */
 	@Override
 	public List<UdrRule> findValidUdrOnDate(Date targetDate) {
 		List<UdrRule> ret = null;
-		try{
-			//remove the time portion of the date
-		     Date tDate = DateCalendarUtils.parseJsonDate(DateCalendarUtils.formatJsonDate(targetDate));
-		     ret = udrRuleRepository.findValidUdrRuleByDate(tDate);
-		} catch(Exception ex){
-			throw ErrorHandlerFactory.getErrorHandler().createException(CommonErrorConstants.SYSTEM_ERROR_CODE, ex);
+		try {
+			// remove the time portion of the date
+			Date tDate = DateCalendarUtils.parseJsonDate(DateCalendarUtils
+					.formatJsonDate(targetDate));
+			ret = udrRuleRepository.findValidUdrRuleByDate(tDate);
+		} catch (ParseException ex) {
+			throw ErrorHandlerFactory.getErrorHandler().createException(
+					CommonErrorConstants.INVALID_ARGUMENT_ERROR_CODE, ex,
+					"targetDate",
+					"RulePersistenceServiceImpl.findValidUdrOnDate");
 		}
 		return ret;
 	}
@@ -304,7 +319,8 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		final User user = userServiceUtil.mapUserEntityFromUserData(userData);
 		if (user.getUserId() == null) {
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-			throw errorHandler.createException(CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
+			throw errorHandler.createException(
+					CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
 		return user;
 	}

@@ -47,7 +47,7 @@ public class CommonErrorConstants {
 	/*
 	 * This error code indicates that an input JSON failed validation.
 	 */
-	public static final String JSON_INPUT_VALIDATION_ERROR_CODE = "JSON_INPUT_VALIDATION_ERROR";
+	public static final String JSON_INPUT_VALIDATION_ERROR_CODE = "JSON_VALIDATION_ERROR";
 	
 	/*
 	 * This is the error code indicating that the a query returned no result.
