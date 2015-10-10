@@ -158,7 +158,7 @@
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 0
-                },                
+                },
                 cellTemplate: '<div></div>'
             },
             {
@@ -167,7 +167,7 @@
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 1
-                },                
+                },
                 cellTemplate: '<div></div>'
             },
             {name: 'passengerType', displayName: 'Type', width: 50},
@@ -183,12 +183,12 @@
             {name: 'middleName', displayName: 'Middle'},
             {name: 'fullFlightNumber', displayName: 'Flight', visible: (stateName === 'paxAll')},
             {
-                name: 'eta', 
+                name: 'eta',
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 2
-                },                                
-                displayName: 'ETA', 
+                },
+                displayName: 'ETA',
                 visible: (stateName === 'paxAll')
             },
             {name: 'etd', displayName: 'ETD', visible: (stateName === 'paxAll')},
@@ -210,6 +210,6 @@
             return gridService.calculateGridHeight($scope.passengerGrid.data.length);
         };
 
-        resolvePage();
+        getPage();
     });
 }());

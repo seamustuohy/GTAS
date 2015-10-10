@@ -87,7 +87,7 @@
                 displayName: 'P',
                 width: 100,
                 enableFiltering: false,
-                cellTemplate: '<md-button href="#/flights/{{row.entity.id}}/passengers" title="Launch Flight Passengers in new window" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
+                cellTemplate: '<md-button href="#/flightpax/{{row.entity.id}}/{{row.entity.flightNumber}}/{{row.entity.origin}}/{{row.entity.destination}}/{{row.entity.direction}}" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
             },
             {
                 name: 'ruleHitCount',
@@ -126,9 +126,16 @@
             {name: 'destinationCountry', displayName: 'Country'}
         ];
 
+        $scope.queryPassengersOnSelectedFlight = function (row_entity) {
+            $state.go('passengers', {
+                flightNumber: row_entity.flightNumber,
+                origin: row_entity.origin,
+                dest: row_entity.dest
+            });
+        };
+
         $scope.filter = function () {
             resolvePage();
-
         };
         $scope.reset = function () {
             $scope.model = flightService.initialModel();

@@ -21,7 +21,7 @@
   }
 </style>
 
-<section layout="row"  ng-show="myState !== 'flightsPassengers'" layout-padding layout-margin layout-align="space-around center">
+<section layout="row"  ng-show="parent !== 'flights'" layout-padding layout-margin layout-align="space-around center">
   <md-input-container>
     <label>Last Name</label>
     <input ng-model="model.lastName">
@@ -59,9 +59,10 @@
   </md-icon-button>
 </section>
 
+
 <md-content layout-padding>
-  <md-input-container flex  ng-show="myState === 'flightsPassengers'">
-    <div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="flights" ></div>
+  <md-input-container flex  ng-show="parent === 'flights'">
+    <div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="flights.all" ></div>
   </md-input-container>
 
   <div class="modal" id="QBModal" tabindex="-1"

@@ -22,17 +22,17 @@
 
             endDate.setDate(endDate.getDate() + 3);
 
-            function initialModel() {
+            function initialModel(params) {
                 return {
                     pageNumber: 1,
                     pageSize: 10,
                     lastName: '',
-                    flightNumber: '',
-                    origin: '',
-                    dest: '',
-                    direction: 'I',
-                    etaStart: startDate,
-                    etaEnd: endDate,
+                    flightNumber: params && params.flightNumber ? params.flightNumber : '',
+                    origin: params && params.origin ? params.origin : '',
+                    dest: params && params.destination ? params.destination : '',
+                    direction: params && params.direction ? params.direction : 'I',
+                    etaStart: params ? null : startDate,
+                    etaEnd: params ? null : endDate,
                     sort: defaultSort
                 };
             }
@@ -108,4 +108,4 @@
                 broadcastRuleID: broadcastRuleID
             });
         });
-}())
+}());
