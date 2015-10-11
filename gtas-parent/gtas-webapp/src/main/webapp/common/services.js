@@ -409,7 +409,7 @@
                 var headerHeight = 30;
                 var n = numRows >= MIN_NUM_ROWS ? numRows : MIN_NUM_ROWS;
                 return {
-                    height: (n * rowHeight + 2 * headerHeight) + "px"
+                    height: (n * rowHeight + 3 * headerHeight) + "px"
                 };
             }
 
