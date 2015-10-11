@@ -4,7 +4,7 @@
         $scope.passenger = passenger.data;
     });
     app.controller('PaxController', function ($scope, $injector, $stateParams, $state, paxService, sharedPaxData, uiGridConstants, gridService,
-                                              queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers) {
+                                              queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers, $timeout) {
         var stateName = $state.$current.self.name,
             ruleGridColumns = [{
                 name: 'ruleTitle',
@@ -53,7 +53,7 @@
                     executeQueryService.queryPassengers(postData).then(update);
                 },
                 'flightpax': function () {
-                    paxService.getPax($stateParams.id, $scope.initialModel($stateParams)).then(update);
+                    paxService.getPax($stateParams.id, $scope.model).then(update);
                 },
                 'paxAll': function () {
                     paxService.getAllPax($scope.model).then(update);

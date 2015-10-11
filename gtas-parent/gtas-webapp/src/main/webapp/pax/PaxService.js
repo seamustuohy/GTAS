@@ -31,8 +31,8 @@
                     origin: params && params.origin ? params.origin : '',
                     dest: params && params.destination ? params.destination : '',
                     direction: params && params.direction ? params.direction : 'I',
-                    etaStart: params ? null : startDate,
-                    etaEnd: params ? null : endDate,
+                    etaStart: params && params.etaStart ? new Date(params.etaStart) : startDate,
+                    etaEnd: params && params.etaEnd ? new Date(params.etaEnd) : endDate,
                     sort: defaultSort
                 };
             }

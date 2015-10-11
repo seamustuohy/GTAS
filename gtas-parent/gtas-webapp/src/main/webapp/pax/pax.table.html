@@ -21,6 +21,9 @@
 
   [ui-grid="passengerGrid"] .red:before {
     content: "\e034";
+    top: .2em;
+    position: absolute;
+    right: .6em;
   }
 
   section {
@@ -31,7 +34,7 @@
   }
 </style>
 
-<section layout="row" data-ng-if="stateName !== 'queryPassengers'" layout-padding layout-margin layout-align="space-around center">
+<section layout="row" data-ng-if="stateName === 'paxAll'" layout-padding layout-margin layout-align="space-around center">
   <md-input-container>
     <label>Last Name</label>
     <input ng-model="model.lastName">
@@ -56,9 +59,8 @@
       </md-option>
     </md-select>
   </md-input-container>
-  <md-datepicker ng-model="model.etaStart" md-placeholder="Start Date"></md-datepicker>
+  <md-datepicker ng-model="model.etaStart" md-placeholder="Start Date" ></md-datepicker>
   <md-datepicker ng-model="model.etaEnd" md-placeholder="End Date"></md-datepicker>
-
   <md-icon-button aria-label="filter" ng-click="filter()">
     <md-tooltip>Filter</md-tooltip>
     <md-icon md-svg-src="resources/img/ic_filter_list_black_24px.svg" style="width: 24px; height: 24px;"></md-icon>
@@ -69,6 +71,31 @@
   </md-icon-button>
 </section>
 
+
+<section layout="row" data-ng-if="stateName === 'flightpax'" layout-padding layout-margin layout-align="space-around center">
+  <md-input-container>
+    <label>Origin</label>
+    <input ng-model="model.origin" disabled>
+  </md-input-container>
+  <md-input-container>
+    <label>Destination</label>
+    <input ng-model="model.dest" disabled>
+  </md-input-container>
+  <md-input-container>
+    <label>Flight</label>
+    <input ng-model="model.flightNumber" disabled>
+  </md-input-container>
+  <md-input-container>
+    <label>Direction</label>
+    <md-select ng-model="model.direction" disabled>
+      <md-option ng-repeat="item in flightDirections" value="{{item.value}}">
+        {{item.label}}
+      </md-option>
+    </md-select>
+  </md-input-container>
+  <md-datepicker ng-model="model.etaStart" md-placeholder="Start Date" disabled></md-datepicker>
+  <md-datepicker ng-model="model.etaEnd" md-placeholder="End Date" disabled></md-datepicker>
+</section>
 
 <md-content layout-padding>
   <div class="modal" id="QBModal" tabindex="-1"

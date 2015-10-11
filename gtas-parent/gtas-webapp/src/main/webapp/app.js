@@ -107,13 +107,15 @@ var app;
                     }
                 })
                 .state('flightpax', {
-                    url: '/flightpax/:id/:flightNumber/:origin/:destination/:direction',
+                    url: '/flightpax/:id/:flightNumber/:origin/:destination/:direction/:eta/:etd',
                     templateUrl: 'pax/pax.table.html',
                     controller: 'PaxController',
                     resolve: {
                         passengers: function (paxService, $stateParams) {
                             //because of field/model not standard
                             $stateParams.dest = $stateParams.destination;
+                            $stateParams.etaStart = $stateParams.eta;
+                            $stateParams.etaEnd = $stateParams.etd;
                             return paxService.getPax($stateParams.id, paxService.initialModel($stateParams));
                         }
                     }
