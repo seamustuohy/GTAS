@@ -168,13 +168,14 @@
                 },
                 cellTemplate: '<div></div>'
             },
+            {
+                name: 'onWatchListDoc', displayName: 'D', width: 50,
+                cellClass: gridService.colorHits,
+                cellTemplate: '<div></div>'
+            },
             {name: 'passengerType', displayName: 'Type', width: 50},
             {
                 name: 'lastName', displayName: 'Last Name',
-                sort: {
-                    direction: uiGridConstants.DESC,
-                    priority: 1
-                },
                 cellTemplate: '<md-button href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
             },
             {name: 'firstName', displayName: 'First Name'},
