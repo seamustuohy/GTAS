@@ -26,7 +26,6 @@ var app;
             'angularSpinners'
         ],
         initialize = function ($rootScope) {
-            //these two are for learning router state
             $rootScope.$on('$stateChangeStart', function (e, toState) {
                 $rootScope.$broadcast('stateChanged', toState.name);
             });
@@ -158,10 +157,31 @@ var app;
                     templateUrl: 'watchlists/watchlists.html',
                     controller: 'WatchListController'
                 });
+        },
+        NavCtrl = function ($scope) {
+            var lookup = {
+                admin: ['admin', 'admin.users', 'admin.addUser'],
+                dashboard: ['dashboard'],
+                flights: ['flights'],
+                passengers: ['paxAll', 'flightsPassengers'],
+                queries: ['query-builder'],
+                risks: ['risk-criteria'],
+                watchlists: ['watchlists']
+            };
+            $scope.onRoute = function (stateName) {
+                return lookup[stateName].indexOf($scope.stateName) >= 0;
+            };
+            $scope.showNav = function () {
+                return ['queryFlights', 'queryPassengers', 'detail'].indexOf($scope.stateName) === -1;
+            };
+            $scope.$on('stateChanged', function (e, stateName) {
+                $scope.stateName = stateName;
+            });
         };
 
     app = angular
         .module('myApp', appDependencies)
         .config(router)
-        .run(initialize);
+        .run(initialize)
+        .controller('NavCtrl', NavCtrl);
 }());
