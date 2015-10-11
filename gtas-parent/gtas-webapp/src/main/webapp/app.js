@@ -118,7 +118,7 @@ var app;
                 })
                 .state('queryPassengers', {
                     url: '/query/passengers',
-                    templateUrl: 'pax/query.pax.table.html',
+                    templateUrl: 'pax/pax.table.html',
                     controller: 'PaxController',
                     resolve: {
                         passengers: function (executeQueryService, $stateParams) {
