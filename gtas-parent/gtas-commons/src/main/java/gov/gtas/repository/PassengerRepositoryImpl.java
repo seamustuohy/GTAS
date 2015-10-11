@@ -121,7 +121,8 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
     
             // filters
             if (StringUtils.isNotBlank(dto.getLastName())) {
-                predicates.add(cb.equal(cb.upper(pax.<String>get("lastName")), dto.getLastName()));
+                String likeString = String.format("%%%s%%", dto.getLastName().toUpperCase());
+                predicates.add(cb.like(pax.<String>get("lastName"), likeString));
             }
             if (StringUtils.isNotBlank(dto.getOrigin())) {
                 predicates.add(cb.equal(flight.<String>get("origin"), dto.getOrigin()));
@@ -130,7 +131,7 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
                 predicates.add(cb.equal(flight.<String>get("destination"), dto.getDest()));
             }
             if (StringUtils.isNotBlank(dto.getFlightNumber())) {
-                String likeString = String.format("%%%s%%", dto.getFlightNumber());
+                String likeString = String.format("%%%s%%", dto.getFlightNumber().toUpperCase());
                 predicates.add(cb.like(flight.<String>get("fullFlightNumber"), likeString));
             }
             /*
