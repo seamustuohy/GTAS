@@ -66,10 +66,8 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
      * (hits.pax_id = pax.id and hits.flight_id = flight.id). Constructing this
      * in JPA seems perfectly valid, and Hibernate converts this into a 'with'
      * statement with multiple conditions. I get the exception
-     * "org.hibernate.hql.internal.ast.QuerySyntaxException: with-clause 
-     * referenced two different from-clause elements."  The current workaround
-     * is to create the required condition as a predicate and add it to the 
-     * where clause.
+     * "org.hibernate.hql.internal.ast.QuerySyntaxException: with-clause
+     * referenced two different from-clause elements."
      */
     public List<Object[]> getPassengersByCriteria(Long flightId, PassengersRequestDto dto) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -77,10 +75,10 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         Root<Passenger> pax = q.from(Passenger.class);
         Join<Passenger, Flight> flight = pax.join("flights"); 
         Join<Passenger, HitsSummary> hits = pax.join("hits", JoinType.LEFT);
-        hits.on(cb.equal(hits.get("flight").get("id"), cb.parameter(Long.class, "flightId")));
-        
         List<Predicate> predicates = new ArrayList<Predicate>();
+
         if (flightId != null) {
+            hits.on(cb.equal(hits.get("flight").get("id"), cb.parameter(Long.class, "flightId")));
             predicates.add(cb.equal(flight.<Long>get("id"), flightId));            
         }
 
@@ -144,9 +142,13 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
             }
         }
         
-        q.multiselect(pax, flight, hits).where(predicates.toArray(new Predicate[]{}));
+        q.multiselect(pax, flight, hits.get("hitType")).where(predicates.toArray(new Predicate[]{})).distinct(true);
         TypedQuery<Object[]> typedQuery = addPagination(q, dto.getPageNumber(), dto.getPageSize());
-        typedQuery.setParameter("flightId", flightId);
+        
+        if (flightId != null) {
+            typedQuery.setParameter("flightId", flightId);
+        }
+        
         logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
 //        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Object[]> results = typedQuery.getResultList();

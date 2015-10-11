@@ -44,14 +44,14 @@ public class PassengerServiceImpl implements PassengerService {
         for (Object[] objs : results) {
             Passenger p = (Passenger)objs[0];
             Flight f = (Flight)objs[1];
-            HitsSummary hits = (HitsSummary)objs[2];
+            String hitType = (String)objs[2];
             
             PassengerVo vo = new PassengerVo();
             BeanUtils.copyProperties(p, vo);
             rv.add(vo);
 
-            if (hits != null) {
-                String hitType = hits.getHitType();
+            if (hitType != null) {
+//                System.out.println("MAC " + p.getId() + " " + f.getId() + " " + hitType);
                 if (hitType.contains(HitTypeEnum.R.toString())) {
                     vo.setOnRuleHitList(true);
                 }
