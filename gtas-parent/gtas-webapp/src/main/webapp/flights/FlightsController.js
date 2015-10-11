@@ -87,7 +87,7 @@
                 displayName: 'P',
                 width: 100,
                 enableFiltering: false,
-                cellTemplate: '<md-button href="#/flightpax/{{row.entity.id}}/{{row.entity.flightNumber}}/{{row.entity.origin}}/{{row.entity.destination}}/{{row.entity.direction}}" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
+                cellTemplate: '<a ui-sref="flightpax({id: row.entity.id, flightNumber: row.entity.flightNumber, origin: row.entity.origin, destination: row.entity.destination, direction: row.entity.direction})" href="#/flights/{{row.entity.id}}/{{row.entity.flightNumber}}/{{row.entity.origin}}/{{row.entity.destination}}/{{row.entity.direction}}" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</a>'
             },
             {
                 name: 'ruleHitCount',

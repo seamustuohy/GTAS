@@ -11,10 +11,13 @@
         <link rel="stylesheet" href="resources/css/style-icomoon.css" />
         <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css" />
-        <link rel="stylesheet" href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
-        <link rel="stylesheet" href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
+        <link rel="stylesheet"
+        href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+        <link rel="stylesheet"
+        href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
         <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
-        <link rel="stylesheet" href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+        <link rel="stylesheet"
+        href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
         <link rel="stylesheet" href="resources/bower_components/angular-ui-grid/ui-grid.min.css" />
         <link rel="stylesheet" href="resources/css/query-builder.default.css" />
         <link rel="stylesheet" href="resources/bower_components/angular-material/angular-material.min.css" />
@@ -29,36 +32,32 @@
         </div>
         <span data-ng-model="stateName" data-ng-if="showNav()">
         <sec:authorize access="hasAnyAuthority('View Flight And Passenger','Admin')">
-            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('flights')}" ng-disabled="onRoute('flights')" href="#/flights">Flights</md-button>
-            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('passengers')}" ng-disabled="onRoute('passengers')" href="#/passengers">Passengers</md-button>
+            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('flights')}"
+            ng-disabled="onRoute('flights')" href="#/flights">Flights</md-button>
+            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('passengers')}"
+            ng-disabled="onRoute('passengers')" href="#/passengers">Passengers</md-button>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Manage Queries', 'Admin')">
-            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('queries')}" ng-disabled="onRoute('queries')" href="#/query-builder">Queries</md-button>
+            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('queries')}"
+            ng-disabled="onRoute('queries')" href="#/query-builder">Queries</md-button>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Manage Rules', 'Admin')">
-            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('risks')}" ng-disabled="onRoute('risks')" href="#/risk-criteria">Risk Criteria</md-button>
+            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('risks')}"
+            ng-disabled="onRoute('risks')" href="#/risk-criteria">Risk Criteria</md-button>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Manage Watch List','Admin')">
-            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('watchlists')}" ng-disabled="onRoute('watchlists')" href="#/watchlists">Watchlist</md-button>
+            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('watchlists')}"
+            ng-disabled="onRoute('watchlists')" href="#/watchlists">Watchlist</md-button>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Admin')">
-            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('admin')}" ng-disabled="onRoute('admin')" href="#/admin">Admin</md-button>
+            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('admin')}"
+            ng-disabled="onRoute('admin')" href="#/admin">Admin</md-button>
         </sec:authorize>
         </span>
         </nav>
         <!-- end of nav -->
-
-        <div class="container">
-        <div class="row">
-        <div class="col-md-12">
         <div ui-view></div>
-        </div>
-        </div>
 
-        </div>
-
-
-        </div>
         <script src='resources/bower_components/angular/angular.js'></script>
         <script src='resources/bower_components/angular-ui-router/release/angular-ui-router.min.js'></script>
         <script src='resources/bower_components/ui-router-extras/release/ct-ui-router-extras.min.js'></script>

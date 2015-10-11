@@ -52,8 +52,8 @@
                     };
                     executeQueryService.queryPassengers(postData).then(update);
                 },
-                'flightsPassengers': function () {
-                    paxService.getPax($stateParams.id, $scope.model).then(update);
+                'flightpax': function () {
+                    paxService.getPax($stateParams.id, $scope.initialModel($stateParams)).then(update);
                 },
                 'paxAll': function () {
                     paxService.getAllPax($scope.model).then(update);
@@ -69,7 +69,7 @@
             ];
         $scope.flightDirections = flightDirections;
 
-        $scope.model = paxService.model;
+        $scope.model = stateName === 'flightpax' ? paxService.initialModel($stateParams) : paxService.model;
 
         $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
         $injector.invoke(queryBuilderFactory, this, {$scope: $scope});

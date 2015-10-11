@@ -106,12 +106,14 @@ var app;
                         }
                     }
                 })
-                .state('flightsPassengers', {
+                .state('flightpax', {
                     url: '/flightpax/:id/:flightNumber/:origin/:destination/:direction',
                     templateUrl: 'pax/pax.table.html',
                     controller: 'PaxController',
                     resolve: {
                         passengers: function (paxService, $stateParams) {
+                            //because of field/model not standard
+                            $stateParams.dest = $stateParams.destination;
                             return paxService.getPax($stateParams.id, paxService.initialModel($stateParams));
                         }
                     }
@@ -163,7 +165,7 @@ var app;
                 admin: ['admin', 'admin.users', 'admin.addUser'],
                 dashboard: ['dashboard'],
                 flights: ['flights'],
-                passengers: ['paxAll', 'flightsPassengers'],
+                passengers: ['paxAll', 'flightpax'],
                 queries: ['query-builder'],
                 risks: ['risk-criteria'],
                 watchlists: ['watchlists']

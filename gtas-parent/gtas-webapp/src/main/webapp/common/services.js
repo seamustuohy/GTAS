@@ -419,7 +419,7 @@
              */
             function colorHits(grid, row, col, rowRenderIndex, colRenderIndex) {
                 if (grid.getCellValue(row ,col) > 0) {
-                    return 'glyphicon glyphicon-flag red';
+                    return 'red';
                 }
             }
         })
@@ -659,4 +659,4 @@
                 queryPassengers: queryPassengers
             });
         });
-}())
+}());

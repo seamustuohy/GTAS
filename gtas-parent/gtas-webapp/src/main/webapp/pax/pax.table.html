@@ -3,11 +3,24 @@
     background-color: palegreen;
   }
 
-  .grid .ui-grid-row .red {
+  [ui-grid="passengerGrid"] .red {
     text-align: center;
     font-size: 1.5em;
     color: rgba(255,0,0,1);
     text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  [ui-grid="passengerGrid"] .red:before {
+    content: "\e034";
   }
 
   section {
