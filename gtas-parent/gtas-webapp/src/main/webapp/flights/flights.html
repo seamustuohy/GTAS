@@ -4,13 +4,6 @@
     font-weight: bold;
   }
 
-  .md-button {
-    margin: 0 1%;
-    font-weight: bold;
-    width: 98%;
-    text-align: left;
-  }
-  
   section {
     border: 1px solid;
     border-color: LightGray;
@@ -19,7 +12,7 @@
   }
 </style>
 
-<section layout="row" layout-padding layout-margin layout-align="space-around center">
+<section layout="row" ng-show="stateName !== 'queryFlights'" layout-padding layout-margin layout-align="space-around center">
   <md-input-container>
     <label>Origin</label>
     <input ng-model="model.origin">

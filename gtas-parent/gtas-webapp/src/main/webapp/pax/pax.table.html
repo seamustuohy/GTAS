@@ -6,13 +6,6 @@
     background-color: pink;
   }
 
-  .md-button {
-    margin: 0 1%;
-    font-weight: bold;
-    width: 98%;
-    text-align: left;
-  }
-
   section {
     border: 1px solid;
     border-color: LightGray;
@@ -21,7 +14,7 @@
   }
 </style>
 
-<section layout="row"  ng-show="parent !== 'flights'" layout-padding layout-margin layout-align="space-around center">
+<section layout="row" data-ng-if="stateName !== 'queryPassengers'" layout-padding layout-margin layout-align="space-around center">
   <md-input-container>
     <label>Last Name</label>
     <input ng-model="model.lastName">
@@ -61,10 +54,6 @@
 
 
 <md-content layout-padding>
-  <md-input-container flex  ng-show="parent === 'flights'">
-    <div><img style="width: 40px;" class="logo" src="resources/img/circle_arrow_back.png" ui-sref="flights.all" ></div>
-  </md-input-container>
-
   <div class="modal" id="QBModal" tabindex="-1"
        role="dialog" aria-labelledby="myModalLabel"
        aria-hidden="true"
