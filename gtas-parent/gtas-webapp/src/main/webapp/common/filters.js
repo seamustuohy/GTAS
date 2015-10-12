@@ -42,17 +42,6 @@
                 return filtered;
             };
         })
-        .filter('flagImageFilter', function () {
-            return function (hits) {
-                if (hits === '0') {
-                    return 'padding: 1.5px; color: #007500;';
-                }
-                if (hits != '0') {
-                    return 'padding: 1.5px; color: #d9534f;';
-                }
-                return 'color: #007500;';
-            };
-        })
         .filter('watchListImageFilter', function () {
             return function (hits) {
                 if (hits === 1) {
@@ -82,18 +71,14 @@
             };
 
         })
-        .filter('watchListImageColorFilter', function () {
-            return function (hits) {
-                if (hits === 1) {
-                    return 'padding: 7.5px; color: #d9534f;';
-                } // glyphiconWLPax
-                if (hits === 2) {
-                    return 'padding: 7.5px; color: #d9534f;';
-                } // glyphiconWLDocs
-                if (hits === 3) {
-                    return 'padding: 7.5px; color: #d9534f;';
-                } // glyphiconWLPaxDocs
-                return '';
+        .filter('watchListDocHit', function () {
+            return function (hit) {
+                return hit ? 'glyphicon glyphicon-icon-file' : '';
+            };
+        })
+        .filter('watchListHit', function () {
+            return function (hit) {
+                return hit ? 'glyphicon glyphicon-user' : '';
             };
         });
-}())
+}());

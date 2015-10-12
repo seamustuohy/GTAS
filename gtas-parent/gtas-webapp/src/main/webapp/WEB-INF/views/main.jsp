@@ -27,31 +27,34 @@
         <body>
         <header class="header" title="GLOBAL TRAVEL ASSESSMENT SYSTEM"></header>
         <nav data-ng-controller="NavCtrl">
-        <div class="nav navbar-nav navbar-right" style="margin: 0;">
+        <div class="nav navbar-nav navbar-right" ng-if="showNav()" style="margin: 0;">
         <md-button class="md-button" href="logout.action">Logout</md-button>
         </div>
-        <span data-ng-model="stateName" data-ng-if="showNav()">
+        <div class="nav navbar-nav navbar-right" ng-if="showNav() == false" style="margin: 0;">
+        <md-button class="md-button" onclick="window.close()">X</md-button>
+        </div>
+        <span data-ng-if="showNav()">
         <sec:authorize access="hasAnyAuthority('View Flight And Passenger','Admin')">
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('flights')}"
-            ng-disabled="onRoute('flights')" href="#/flights">Flights</md-button>
+            ng-disabled="onRoute('flights')" href="#/flights"><i class="glyphicon glyphicon-plane"></i>  Flights</md-button>
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('passengers')}"
-            ng-disabled="onRoute('passengers')" href="#/passengers">Passengers</md-button>
+            ng-disabled="onRoute('passengers')" href="#/passengers"><i class="glyphicon glyphicon-user"></i>  Passengers</md-button>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Manage Queries', 'Admin')">
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('queries')}"
-            ng-disabled="onRoute('queries')" href="#/query-builder">Queries</md-button>
+            ng-disabled="onRoute('queries')" href="#/query-builder"><i class="glyphicon glyphicon-filter"></i>  Queries</md-button>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Manage Rules', 'Admin')">
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('risks')}"
-            ng-disabled="onRoute('risks')" href="#/risk-criteria">Risk Criteria</md-button>
+            ng-disabled="onRoute('risks')" href="#/risk-criteria"><i class="glyphicon glyphicon-flag"></i>  Risk Criteria</md-button>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Manage Watch List','Admin')">
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('watchlists')}"
-            ng-disabled="onRoute('watchlists')" href="#/watchlists">Watchlist</md-button>
+            ng-disabled="onRoute('watchlists')" href="#/watchlists"><i class="glyphicon glyphicon-eye-open"></i>  Watchlist</md-button>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Admin')">
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('admin')}"
-            ng-disabled="onRoute('admin')" href="#/admin">Admin</md-button>
+            ng-disabled="onRoute('admin')" href="#/admin"><i class="glyphicon glyphicon-edit"></i>  Admin</md-button>
         </sec:authorize>
         </span>
         </nav>

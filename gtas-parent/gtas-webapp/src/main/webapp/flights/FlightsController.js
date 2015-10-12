@@ -41,7 +41,7 @@
         $scope.model = flightService.model;
         $scope.selectedFlight = $stateParams.flight;
         $scope.flightDirections = flightDirections;
-
+        $scope.stateName = stateName;
         $scope.flightsGrid = {
             paginationPageSizes: [10, 15, 25],
             paginationPageSize: $scope.model.pageSize,

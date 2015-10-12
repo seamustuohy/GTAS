@@ -152,27 +152,28 @@
         $scope.passengerGrid.columnDefs = [
             {
                 name: 'onRuleHitList', displayName: 'H', width: 50,
-                cellClass: gridService.colorHits,
+                cellClass: gridService.ruleHit,
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 0
                 },
-                cellTemplate: '<div></div>'
+                cellTemplate: '<md-button ng-click="grid.api.expandable.toggleRowExpansion(row.entity)"><i class="glyphicon glyphicon-flag"></i></md-button>'
             },
             {
-                name: 'onWatchList', displayName: 'L', width: 50,
-                cellClass: gridService.colorHits,
+                name: 'onWatchList', displayName: 'L', width: 70,
+                cellClass: gridService.anyWatchlistHit,
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 1
                 },
-                cellTemplate: '<div></div>'
+                cellTemplate: '<div><i class="{{row.entity.onWatchList|watchListHit}}"></i><i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
             },
-            {
-                name: 'onWatchListDoc', displayName: 'D', width: 50,
-                cellClass: gridService.colorHits,
-                cellTemplate: '<div></div>'
-            },
+            // MIKE I AM COMMENTING THIS OUT BECAUSE I AM PRETTY SURE BRYAN WANTS THIS IN ONE COLUMN... had this conversation before with him
+            //{
+            //    name: 'onWatchListDoc', displayName: 'D', width: 50,
+            //    cellClass: gridService.anyWatchlistHit,
+            //    cellTemplate: '<div><i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
+            //},
             {name: 'passengerType', displayName: 'Type', width: 50},
             {
                 name: 'lastName', displayName: 'Last Name',

@@ -6,8 +6,8 @@
   [ui-grid="passengerGrid"] .red {
     text-align: center;
     font-size: 1.5em;
-    color: rgba(255,0,0,1);
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    color: rgba(255, 0, 0, 1);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
     position: relative;
     top: 1px;
     display: inline-block;
@@ -26,15 +26,57 @@
     right: .6em;
   }
 
+  [ui-grid="passengerGrid"] .ui-grid-icon-plus-squared,
+  [ui-grid="passengerGrid"] .ui-grid-icon-minus-squared {
+    visibility: hidden;
+  }
+
+  [ui-grid="passengerGrid"] .rule-hit button {
+    font-size: 1.5em;
+    padding-left: .5em;
+    color: rgba(255, 0, 0, 1);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    width: 50px;
+    box-sizing: border-box;
+  }
+
   section {
     border: 1px solid;
     border-color: LightGray;
     border-radius: 10px;
     padding-bottom: 20px;
   }
-</style>
 
-<section layout="row" data-ng-if="stateName === 'paxAll'" layout-padding layout-margin layout-align="space-around center">
+  .invisible button {
+    visibility: hidden;
+  }
+
+  .watchlist-hit {
+    font-size: 1.25em;
+    color: rgba(255, 0, 0, 1);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    width: 100%;
+    padding: .3em .5em;
+    text-align: center;
+  }
+
+  h3 {
+    font-size: 1.5em;
+    margin: .5em;
+  }
+
+</style>
+<h3 data-ng-if="stateName === 'queryPassengers'"><i class="glyphicon glyphicon-user"></i><i
+        class="glyphicon glyphicon-filter"></i> Passengers Query</h3>
+<section layout="row" data-ng-if="stateName === 'paxAll'" layout-padding layout-margin
+         layout-align="space-around center">
   <md-input-container>
     <label>Last Name</label>
     <input ng-model="model.lastName">
@@ -59,7 +101,7 @@
       </md-option>
     </md-select>
   </md-input-container>
-  <md-datepicker ng-model="model.etaStart" md-placeholder="Start Date" ></md-datepicker>
+  <md-datepicker ng-model="model.etaStart" md-placeholder="Start Date"></md-datepicker>
   <md-datepicker ng-model="model.etaEnd" md-placeholder="End Date"></md-datepicker>
   <md-icon-button aria-label="filter" ng-click="filter()">
     <md-tooltip>Filter</md-tooltip>
@@ -71,8 +113,8 @@
   </md-icon-button>
 </section>
 
-
-<section layout="row" data-ng-if="stateName === 'flightpax'" layout-padding layout-margin layout-align="space-around center">
+<section layout="row" data-ng-if="stateName === 'flightpax'" layout-padding layout-margin
+         layout-align="space-around center">
   <md-input-container>
     <label>Origin</label>
     <input ng-model="model.origin" disabled>
