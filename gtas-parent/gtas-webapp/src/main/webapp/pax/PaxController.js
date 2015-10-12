@@ -166,14 +166,8 @@
                     direction: uiGridConstants.DESC,
                     priority: 1
                 },
-                cellTemplate: '<div><i class="{{row.entity.onWatchList|watchListHit}}"></i><i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
+                cellTemplate: '<div><i class="{{row.entity.onWatchList|watchListHit}}"></i> <i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
             },
-            // MIKE I AM COMMENTING THIS OUT BECAUSE I AM PRETTY SURE BRYAN WANTS THIS IN ONE COLUMN... had this conversation before with him
-            //{
-            //    name: 'onWatchListDoc', displayName: 'D', width: 50,
-            //    cellClass: gridService.anyWatchlistHit,
-            //    cellTemplate: '<div><i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
-            //},
             {name: 'passengerType', displayName: 'Type', width: 50},
             {
                 name: 'lastName', displayName: 'Last Name',
