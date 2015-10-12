@@ -1,8 +1,3 @@
-<h2>
-    <span class="glyphicon glyphicon-flag"></span>
-    Risk Criteria
-    <md-button ng-click="newRule()" class="md-raised"><span class="glyphicon glyphicon-plus"></span> Add New</md-button>
-</h2>
 <div ui-grid="riskCriteriaGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
 <section class="qb-interface">
     <h2>Summary:</h2>
@@ -25,7 +20,10 @@
     <h2>Conditions:</h2>
     <div id="builder"></div>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
-    <md-button ng-click="resetQueryBuilder()" class="md-raised">Clear Conditions</md-button>
-    <md-button ng-click="save()" ng-disabled="saving === true" class="md-raised md-primary pull-right">Save</md-button>
-    <md-button ng-click="delete()" ng-disabled="ruleId === null" class="md-raised md-warn pull-right">Delete</md-button>
+    <div class="actions">
+        <md-button ng-click="newRule()" class="md-raised pull-left"><i class="glyphicon glyphicon-plus"></i> Add New</md-button>
+        <md-button ng-click="resetQueryBuilder()" class="md-raised pull-left"><i class="glyphicon glyphicon-minus"></i> Clear Conditions</md-button>
+        <md-button ng-click="save()" ng-disabled="saving === true" class="md-raised md-primary pull-right">Save</md-button>
+        <md-button ng-click="delete()" ng-disabled="ruleId === null" class="md-raised md-warn pull-right">Delete</md-button>
+    </div>
 </section>
