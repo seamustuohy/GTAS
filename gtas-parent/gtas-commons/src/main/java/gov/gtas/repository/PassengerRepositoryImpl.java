@@ -143,7 +143,7 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
             }
         }
         
-        q.multiselect(pax, flight, hits.get("hitType")).where(predicates.toArray(new Predicate[]{})).distinct(true);
+        q.multiselect(pax, flight, hits).where(predicates.toArray(new Predicate[]{}));
         TypedQuery<Object[]> typedQuery = addPagination(q, dto.getPageNumber(), dto.getPageSize());
         
         if (flightId != null) {
@@ -160,7 +160,15 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         int offset = (pageNumber - 1) * pageSize;
         TypedQuery<T> typedQuery = em.createQuery(q);
         typedQuery.setFirstResult(offset);
-        typedQuery.setMaxResults(pageSize);
+        
+        /*
+         * complete hack: we're returning more results than the 
+         * pagesize b/c the service will potentially throw some of
+         * them away.  This is all b/c the left join on hitssummary
+         * will not work correctly if we have to check both flight id
+         * and passenger id.
+         */
+        typedQuery.setMaxResults(pageSize * 3);
         return typedQuery;
     }
     
