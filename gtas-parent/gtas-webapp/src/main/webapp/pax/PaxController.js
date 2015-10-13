@@ -181,7 +181,7 @@
             },
             {name: 'firstName', displayName: 'First Name'},
             {name: 'middleName', displayName: 'Middle'},
-            {name: 'fullFlightNumber', displayName: 'Flight', visible: (stateName === 'paxAll')},
+            {name: 'fullFlightNumber', displayName: 'Flight' },
             {
                 name: 'eta',
                 sort: {
