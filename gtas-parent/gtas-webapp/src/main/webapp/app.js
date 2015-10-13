@@ -75,8 +75,9 @@ var app;
                     templateUrl: 'flights/flights.html',
                     controller: 'FlightsController',
                     resolve: {
-                        flights: function (flightService) {
-                            return flightService.getFlights(flightService.model);
+                        flights: function (flightService, flightsModel) {
+                        console.log('resolve');
+                            return flightService.getFlights(flightsModel);
                         }
                     }
                 })
