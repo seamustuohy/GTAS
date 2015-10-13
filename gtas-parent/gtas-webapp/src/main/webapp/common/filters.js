@@ -73,7 +73,7 @@
         })
         .filter('watchListDocHit', function () {
             return function (hit) {
-                return hit ? 'glyphicon glyphicon-icon-file' : '';
+                return hit ? 'glyphicon glyphicon-file' : '';
             };
         })
         .filter('watchListHit', function () {

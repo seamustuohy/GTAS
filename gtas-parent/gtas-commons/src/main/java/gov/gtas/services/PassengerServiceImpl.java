@@ -41,17 +41,27 @@ public class PassengerServiceImpl implements PassengerService {
         List<Object[]> results = passengerRespository.getPassengersByCriteria(flightId, request);
         List<PassengerVo> rv = new ArrayList<>();
 
+        int count = 0;
         for (Object[] objs : results) {
+            if (count == request.getPageSize()) {
+                break;
+            }
+            
             Passenger p = (Passenger)objs[0];
             Flight f = (Flight)objs[1];
-            String hitType = (String)objs[2];
+            HitsSummary hit = (HitsSummary)objs[2];
+            
+            if (hit != null && f.getId() != hit.getFlight().getId()) {
+                continue;
+            }
             
             PassengerVo vo = new PassengerVo();
             BeanUtils.copyProperties(p, vo);
             rv.add(vo);
+            count++;
 
-            if (hitType != null) {
-//                System.out.println("MAC " + p.getId() + " " + f.getId() + " " + hitType);
+            if (hit != null) {
+                String hitType = hit.getHitType();
                 if (hitType.contains(HitTypeEnum.R.toString())) {
                     vo.setOnRuleHitList(true);
                 }
@@ -69,16 +79,9 @@ public class PassengerServiceImpl implements PassengerService {
             vo.setFullFlightNumber(f.getFullFlightNumber());
             vo.setCarrier(f.getCarrier());
             vo.setEtd(f.getEtd());
-            vo.setEta(f.getEta());
-            
-            // documents?
-//            for (Document d : p.getDocuments()) {
-//                DocumentVo docVo = new DocumentVo();
-//                BeanUtils.copyProperties(d, docVo);
-//                vo.addDocument(docVo);
-//            }            
+            vo.setEta(f.getEta());            
         }
-        
+
         /*
          * we're not currently caluclating total # of results, which is
          * expensive.  Return -1 because ui-grid on the front-end will
