@@ -76,7 +76,6 @@ var app;
                     controller: 'FlightsController',
                     resolve: {
                         flights: function (flightService, flightsModel) {
-                        console.log('resolve');
                             return flightService.getFlights(flightsModel);
                         }
                     }
