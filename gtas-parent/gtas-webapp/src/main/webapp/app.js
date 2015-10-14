@@ -101,8 +101,8 @@ var app;
                     templateUrl: 'pax/pax.table.html',
                     controller: 'PaxController',
                     resolve: {
-                        passengers: function (paxService) {
-                            return paxService.getAllPax(paxService.model);
+                        passengers: function (paxService, paxModel) {
+                            return paxService.getAllPax(paxModel);
                         }
                     }
                 })
@@ -111,12 +111,14 @@ var app;
                     templateUrl: 'pax/pax.table.html',
                     controller: 'PaxController',
                     resolve: {
-                        passengers: function (paxService, $stateParams) {
+                        passengers: function (paxService, $stateParams, paxModel) {
                             //because of field/model not standard
                             $stateParams.dest = $stateParams.destination;
                             $stateParams.etaStart = $stateParams.eta;
                             $stateParams.etaEnd = $stateParams.etd;
-                            return paxService.getPax($stateParams.id, paxService.initialModel($stateParams));
+                            var model = paxModel;
+                            model.reset($stateParams);
+                            return paxService.getPax($stateParams.id, model);
                         }
                     }
                 })
