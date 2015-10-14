@@ -116,9 +116,9 @@ var app;
                             $stateParams.dest = $stateParams.destination;
                             $stateParams.etaStart = $stateParams.eta;
                             $stateParams.etaEnd = $stateParams.etd;
-                            var model = paxModel;
-                            model.reset($stateParams);
-                            return paxService.getPax($stateParams.id, model);
+                            //var model = paxModel;
+                            paxModel.reset($stateParams);
+                            return paxService.getPax($stateParams.id, paxModel);
                         }
                     }
                 })

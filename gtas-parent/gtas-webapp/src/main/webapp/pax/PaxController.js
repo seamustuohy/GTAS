@@ -6,6 +6,8 @@
     app.controller('PaxController', function ($scope, $injector, $stateParams, $state, paxService, sharedPaxData, uiGridConstants, gridService,
                                               queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers, 
                                               $timeout, paxModel) {
+        $scope.model = paxModel;
+
         var stateName = $state.$current.self.name,
             ruleGridColumns = [{
                 name: 'ruleTitle',
@@ -69,11 +71,6 @@
                 {label: 'Any', value: ''}
             ];
         $scope.flightDirections = flightDirections;
-
-        $scope.model = paxModel;
-        if (stateName === 'flightpax') {
-            $scope.model.reset($stateParams);
-        }
 
         $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
         $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
@@ -201,6 +198,9 @@
 
         $scope.reset = function () {
             $scope.model.reset();
+            if (stateName !== 'paxAll') {
+                $state.go('paxAll');
+            }
             resolvePage();
         };
 

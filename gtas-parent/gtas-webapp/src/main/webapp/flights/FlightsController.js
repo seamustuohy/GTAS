@@ -1,7 +1,6 @@
 (function () {
     'use strict';
     app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel) {
-        var self = this;
         $scope.model = flightsModel;
         
         var stateName = $state ? $state.$current.self.name : 'flights',

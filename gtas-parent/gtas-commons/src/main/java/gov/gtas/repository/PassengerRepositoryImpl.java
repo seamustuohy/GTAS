@@ -79,6 +79,13 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         Join<Passenger, HitsSummary> hits = pax.join("hits", JoinType.LEFT);
         List<Predicate> predicates = new ArrayList<Predicate>();
 
+        System.out.println(flightId);
+        System.out.println(dto);
+        if (StringUtils.isNotBlank(dto.getLastName())) {
+            String likeString = String.format("%%%s%%", dto.getLastName().toUpperCase());
+            predicates.add(cb.like(pax.<String>get("lastName"), likeString));
+        }
+        
         if (flightId == null) {
             predicates.addAll(createPredicates(cb, dto, pax, flight));
         } else {
@@ -153,10 +160,6 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         }
 
         // filters
-        if (StringUtils.isNotBlank(dto.getLastName())) {
-            String likeString = String.format("%%%s%%", dto.getLastName().toUpperCase());
-            predicates.add(cb.like(pax.<String>get("lastName"), likeString));
-        }
         if (StringUtils.isNotBlank(dto.getOrigin())) {
             predicates.add(cb.equal(flight.<String>get("origin"), dto.getOrigin()));
         }
