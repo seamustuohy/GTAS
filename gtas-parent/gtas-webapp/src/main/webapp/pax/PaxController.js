@@ -73,8 +73,6 @@
         $scope.model = paxModel;
         if (stateName === 'flightpax') {
             $scope.model.reset($stateParams);
-        } else {
-            $scope.model.reset();
         }
 
         $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
