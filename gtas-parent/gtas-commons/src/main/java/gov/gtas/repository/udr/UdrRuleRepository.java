@@ -21,7 +21,16 @@ public interface UdrRuleRepository extends CrudRepository<UdrRule, Long>, JpaSpe
     public List<UdrRule> findByDeleted(YesNoEnum deleted);
     
 	@Query("SELECT udr FROM UdrRule udr WHERE udr.deleted = 'N' and udr.author.userId = :authorUserId")
-    public List<UdrRule> getUdrRuleByAuthor(@Param("authorUserId") String authorUserId);
+    public List<UdrRule> findUdrRuleByAuthor(@Param("authorUserId") String authorUserId);
+    
+	@Query("SELECT udr.id, udr.editedBy.userId, udr.editDt, udr.metaData.title, udr.metaData.description, "
+	        +"udr.metaData.startDt, udr.metaData.enabled, udr.metaData.endDt FROM UdrRule udr "
+			+"WHERE udr.deleted = 'N' and udr.author.userId = :authorUserId")
+    public List<Object[]> findAllUdrRuleSummaryByAuthor(@Param("authorUserId") String authorUserId);
+	
+	@Query("SELECT udr.id, udr.editedBy.userId, udr.editDt, udr.metaData.title, udr.metaData.description, "
+	        +"udr.metaData.startDt, udr.metaData.enabled, udr.metaData.endDt FROM UdrRule udr WHERE udr.deleted = 'N'")
+    public List<Object[]> findAllUdrRuleSummary();
     
 	@Query("SELECT udr FROM UdrRule udr WHERE udr.metaData.title = :title and udr.author.userId = :authorUserId")
 	public UdrRule getUdrRuleByTitleAndAuthor(@Param("title") String title, @Param("authorUserId") String authorUserId);

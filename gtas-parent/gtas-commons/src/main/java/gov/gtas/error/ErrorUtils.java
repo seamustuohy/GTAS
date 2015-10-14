@@ -75,7 +75,6 @@ public class ErrorUtils {
     	return createErrorDetails(CommonErrorConstants.SYSTEM_ERROR_CODE, exception, true);
     }
     public static BasicErrorDetailInfo createErrorDetails(String errorCode, Exception exception, boolean addStackTrace){
-    	//Long id = System.currentTimeMillis();
      	BasicErrorDetailInfo ret = new BasicErrorDetailInfo(null, errorCode, exception.getMessage(), null);
      	if(addStackTrace){
      		List<String> details = new LinkedList<String>();

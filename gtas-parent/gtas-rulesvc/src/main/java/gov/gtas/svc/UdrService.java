@@ -28,11 +28,16 @@ public interface UdrService {
 	 */
   UdrSpecification fetchUdr(Long id);
 	/**
-	 * Retrieves a list of UDR summary JSON objects.
+	 * Retrieves a list of UDR summary JSON objects authored by the specified user.
 	 * @param userId the userId of the author.
 	 * @return the list of JSON UDR summary objects.
 	 */
   List<JsonUdrListElement> fetchUdrSummaryList(String userId);
+	/**
+	 * Retrieves a list of UDR summary JSON objects.
+	 * @return the list of JSON UDR summary objects.
+	 */
+  List<JsonUdrListElement> fetchUdrSummaryList();
   /**
    * Creates a new UDR object in the database and returns it in JSON object format.
    * @param userId the userId of the author.

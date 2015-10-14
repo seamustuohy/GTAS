@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,6 +138,18 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		return (List<UdrRule>) udrRuleRepository.findByDeleted(YesNoEnum.N);
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.udr.RulePersistenceService#findAllSummary()
+	 */
+	@Override
+	public List<Object[]> findAllUdrSummary(String userId) {
+		if(StringUtils.isEmpty(userId)){
+		    return udrRuleRepository.findAllUdrRuleSummary();
+		} else {
+			return udrRuleRepository.findAllUdrRuleSummaryByAuthor(userId);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -206,7 +219,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	 */
 	@Override
 	public List<UdrRule> findByAuthor(String authorUserId) {
-		return udrRuleRepository.getUdrRuleByAuthor(authorUserId);
+		return udrRuleRepository.findUdrRuleByAuthor(authorUserId);
 	}
 
 	/*

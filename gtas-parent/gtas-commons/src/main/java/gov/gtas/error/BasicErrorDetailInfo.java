@@ -2,6 +2,7 @@ package gov.gtas.error;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 public class BasicErrorDetailInfo implements ErrorDetailInfo {
@@ -13,7 +14,7 @@ public class BasicErrorDetailInfo implements ErrorDetailInfo {
 	public BasicErrorDetailInfo(Long id, String code, String description, List<String> details){
 		this.errorDetails = details;
 		this.errorCode = code;
-		this.errorDescription = description;
+		this.errorDescription = description != null?description:StringUtils.EMPTY;
 		this.errorId = id;
 	}
 	/* (non-Javadoc)
