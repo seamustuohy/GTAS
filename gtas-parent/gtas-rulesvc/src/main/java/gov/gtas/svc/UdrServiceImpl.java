@@ -128,7 +128,9 @@ public class UdrServiceImpl implements UdrService {
 		List<JsonUdrListElement> ret = new LinkedList<JsonUdrListElement>();
 		if (fetchedRuleList != null && !fetchedRuleList.isEmpty()) {
 				for (Object[] data : fetchedRuleList) {
-					String authorUserId = (String)data[1];
+					String editedBy = (String)data[1];
+					Date editedOn = (Date)data[2];
+					String authorUserId = (String)data[8];
 					final MetaData meta = new MetaData((String)data[3],
 							(String)data[4], (Date)data[5], authorUserId);
 
@@ -136,8 +138,8 @@ public class UdrServiceImpl implements UdrService {
 					meta.setEndDate((Date)data[7]);
 					
 						ret.add(new JsonUdrListElement((Long)data[0],
-								authorUserId,
-								(Date)data[2],
+								editedBy,
+								editedOn,
 								meta));
 				}
 		}
@@ -250,8 +252,10 @@ public class UdrServiceImpl implements UdrService {
 		/*
 		 * check if the user has permission to update the UDR
 		 */
-		if (!ruleToUpdate.getAuthor().getUserId().equals(authorUserId)) {
-			// TODO throw exception here
+		User author = ruleToUpdate.getAuthor();
+		if (!author.getUserId().equals(userId)) {
+			// TODO check if the user is admin
+			// else throw exception
 			logger.error(String.format("UdrServiceImpl.updateUdr() - %s trying to update rule by different author %s!",
 					authorUserId, ruleToUpdate.getAuthor().getUserId()));
 		}
