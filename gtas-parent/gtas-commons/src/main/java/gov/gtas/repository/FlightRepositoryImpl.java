@@ -16,6 +16,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -33,7 +35,7 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
     
     public FlightRepositoryImpl() { }
     
-    public List<Flight> getAllSorted(FlightsRequestDto dto) {
+    public Pair<Long, List<Flight>> findByCriteria(FlightsRequestDto dto) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Flight> q = cb.createQuery(Flight.class);
         Root<Flight> root = q.from(Flight.class);
@@ -84,18 +86,23 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
             predicates.add(cb.equal(root.<String>get("direction"), dto.getDirection()));
         }
         
+        q.select(root).where(predicates.toArray(new Predicate[]{}));
+        TypedQuery<Flight> typedQuery = em.createQuery(q);
+
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        countQuery.select(cb.count(countQuery.from(Flight.class))).where(predicates.toArray(new Predicate[]{}));
+        Long count = em.createQuery(countQuery).getSingleResult();
+
         // pagination
         int pageNumber = dto.getPageNumber();
         int pageSize = dto.getPageSize();
         int firstResultIndex = (pageNumber - 1) * pageSize;
-        
-        q.select(root).where(predicates.toArray(new Predicate[]{}));
-        TypedQuery<Flight> typedQuery = em.createQuery(q);
         typedQuery.setFirstResult(firstResultIndex);
         typedQuery.setMaxResults(dto.getPageSize());
+        
         logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Flight> results = typedQuery.getResultList();
         
-        return results;
+        return new ImmutablePair<Long, List<Flight>>(count, results);
     }
 }

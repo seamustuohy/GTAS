@@ -2,6 +2,8 @@ package gov.gtas.repository;
 
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import gov.gtas.services.dto.PassengersRequestDto;
 
 public interface PassengerRepositoryCustom {
@@ -11,5 +13,5 @@ public interface PassengerRepositoryCustom {
      * for the given flight.  When null, return passengers on all flights.
      * @param request query criteria.
      */
-    public List<Object[]> getPassengersByCriteria(Long flightId, PassengersRequestDto request);
+    public Pair<Long, List<Object[]>> findByCriteria(Long flightId, PassengersRequestDto request);
 }

@@ -21,6 +21,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +71,7 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
      * "org.hibernate.hql.internal.ast.QuerySyntaxException: with-clause
      * referenced two different from-clause elements."
      */
-    public List<Object[]> getPassengersByCriteria(Long flightId, PassengersRequestDto dto) {
+    public Pair<Long, List<Object[]>> findByCriteria(Long flightId, PassengersRequestDto dto) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Object[]> q = cb.createQuery(Object[].class);
         Root<Passenger> pax = q.from(Passenger.class);
@@ -146,6 +148,13 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         q.multiselect(pax, flight, hits).where(predicates.toArray(new Predicate[]{}));
         TypedQuery<Object[]> typedQuery = addPagination(q, dto.getPageNumber(), dto.getPageSize());
         
+//        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+//        Join<Passenger, Flight> flight = pax.join("flights"); 
+//        Join<Passenger, HitsSummary> hits = pax.join("hits", JoinType.LEFT);
+//
+//        countQuery.select(cb.count(countQuery.from(Passenger.class))).where(predicates.toArray(new Predicate[]{}));
+//        Long count = em.createQuery(countQuery).getSingleResult();
+        
         if (flightId != null) {
             typedQuery.setParameter("flightId", flightId);
         }
@@ -153,7 +162,8 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
 //        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Object[]> results = typedQuery.getResultList();
-        return results;
+        
+        return new ImmutablePair<Long, List<Object[]>>(-1L, results);
     }
     
     public <T> TypedQuery<T> addPagination(CriteriaQuery<T> q, int pageNumber, int pageSize) {
