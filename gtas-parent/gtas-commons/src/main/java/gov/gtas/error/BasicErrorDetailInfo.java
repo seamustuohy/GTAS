@@ -36,7 +36,6 @@ public class BasicErrorDetailInfo implements ErrorDetailInfo {
 	}				
 	@Override
 	public String getErrorDescription() {
-		//return String.format(CommonErrorConstants.SYSTEM_ERROR_MESSAGE,	System.currentTimeMillis());
 		return this.errorDescription;
 	}				
 	@Override

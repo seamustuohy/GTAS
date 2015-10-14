@@ -148,7 +148,6 @@ public class UdrServiceImpl implements UdrService {
 	 */
 	@Override
 	public List<JsonUdrListElement> fetchUdrSummaryList() {
-		if(true) throw new NullPointerException();
 		return convertSummaryList(rulePersistenceService.findAllUdrSummary(null));
 	}
 

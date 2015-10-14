@@ -68,7 +68,7 @@ public class UdrManagementController {
         String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** user =" + userId);
 		List<JsonUdrListElement> resp = udrService.fetchUdrSummaryList(userId);
-		return new JsonServiceResponse(Status.SUCCESS, "GET all UDR was successful", resp);
+		return new JsonServiceResponse(Status.SUCCESS, "GET all UDR By author was successful", resp);
 	}
 
 	@RequestMapping(value = Constants.UDR_GETALL, method = RequestMethod.GET)
