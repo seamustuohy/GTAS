@@ -89,6 +89,7 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
         q.select(root).where(predicates.toArray(new Predicate[]{}));
         TypedQuery<Flight> typedQuery = em.createQuery(q);
 
+        // total count
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         countQuery.select(cb.count(countQuery.from(Flight.class))).where(predicates.toArray(new Predicate[]{}));
         Long count = em.createQuery(countQuery).getSingleResult();

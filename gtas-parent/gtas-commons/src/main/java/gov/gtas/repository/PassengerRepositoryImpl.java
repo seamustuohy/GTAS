@@ -79,7 +79,9 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         Join<Passenger, HitsSummary> hits = pax.join("hits", JoinType.LEFT);
         List<Predicate> predicates = new ArrayList<Predicate>();
 
-        if (flightId != null) {
+        if (flightId == null) {
+            predicates.addAll(createPredicates(cb, dto, pax, flight));
+        } else {
             hits.on(cb.equal(hits.get("flight").get("id"), cb.parameter(Long.class, "flightId")));
             predicates.add(cb.equal(flight.<Long>get("id"), flightId));            
         }
@@ -110,50 +112,21 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
             q.orderBy(orders);
         }
 
-        if (flightId == null) {
-            // dates
-            Predicate etaCondition = null;
-            if (dto.getEtaStart() != null && dto.getEtaEnd() != null) {
-                Path<Date> eta = flight.<Date>get("eta");
-                Predicate startPredicate = cb.or(cb.isNull(eta), cb.greaterThanOrEqualTo(flight.<Date>get("eta"), dto.getEtaStart()));
-                Predicate endPredicate = cb.or(cb.isNull(eta), cb.lessThanOrEqualTo(eta, dto.getEtaEnd())); 
-                etaCondition = cb.and(startPredicate, endPredicate);
-                predicates.add(etaCondition);
-            }
-    
-            // filters
-            if (StringUtils.isNotBlank(dto.getLastName())) {
-                String likeString = String.format("%%%s%%", dto.getLastName().toUpperCase());
-                predicates.add(cb.like(pax.<String>get("lastName"), likeString));
-            }
-            if (StringUtils.isNotBlank(dto.getOrigin())) {
-                predicates.add(cb.equal(flight.<String>get("origin"), dto.getOrigin()));
-            }
-            if (StringUtils.isNotBlank(dto.getDest())) {
-                predicates.add(cb.equal(flight.<String>get("destination"), dto.getDest()));
-            }
-            if (StringUtils.isNotBlank(dto.getFlightNumber())) {
-                String likeString = String.format("%%%s%%", dto.getFlightNumber().toUpperCase());
-                predicates.add(cb.like(flight.<String>get("fullFlightNumber"), likeString));
-            }
-            /*
-             * hack: javascript sends the empty string represented by the 'all' dropdown
-             * value as '0', so we check for that here to mean 'any direction' 
-             */
-            if (StringUtils.isNotBlank(dto.getDirection()) && !"0".equals(dto.getDirection())) {
-                predicates.add(cb.equal(flight.<String>get("direction"), dto.getDirection()));
-            }
-        }
-        
         q.multiselect(pax, flight, hits).where(predicates.toArray(new Predicate[]{}));
         TypedQuery<Object[]> typedQuery = addPagination(q, dto.getPageNumber(), dto.getPageSize());
         
-//        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-//        Join<Passenger, Flight> flight = pax.join("flights"); 
-//        Join<Passenger, HitsSummary> hits = pax.join("hits", JoinType.LEFT);
-//
-//        countQuery.select(cb.count(countQuery.from(Passenger.class))).where(predicates.toArray(new Predicate[]{}));
-//        Long count = em.createQuery(countQuery).getSingleResult();
+        // total count: does not require joining on hitssummary
+        CriteriaQuery<Long> cnt = cb.createQuery(Long.class);
+        Root<Passenger> cntPax = cnt.from(Passenger.class);
+        Join<Passenger, Flight> cntFlight = cntPax.join("flights");
+        List<Predicate> cntPred = new ArrayList<Predicate>();
+        if (flightId == null) {
+            cntPred.addAll(createPredicates(cb, dto, cntPax, cntFlight));
+        } else {
+            cntPred.add(cb.equal(cntFlight.<Long>get("id"), flightId));            
+        }
+        cnt.select(cb.count(cntFlight)).where(cntPred.toArray(new Predicate[]{}));
+        Long count = em.createQuery(cnt).getSingleResult();
         
         if (flightId != null) {
             typedQuery.setParameter("flightId", flightId);
@@ -163,10 +136,49 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
 //        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Object[]> results = typedQuery.getResultList();
         
-        return new ImmutablePair<Long, List<Object[]>>(-1L, results);
+        return new ImmutablePair<Long, List<Object[]>>(count, results);
     }
     
-    public <T> TypedQuery<T> addPagination(CriteriaQuery<T> q, int pageNumber, int pageSize) {
+    private List<Predicate> createPredicates(CriteriaBuilder cb, PassengersRequestDto dto, Root<Passenger> pax, Join<Passenger, Flight> flight) {
+        List<Predicate> predicates = new ArrayList<Predicate>();
+
+        // dates
+        Predicate etaCondition = null;
+        if (dto.getEtaStart() != null && dto.getEtaEnd() != null) {
+            Path<Date> eta = flight.<Date>get("eta");
+            Predicate startPredicate = cb.or(cb.isNull(eta), cb.greaterThanOrEqualTo(flight.<Date>get("eta"), dto.getEtaStart()));
+            Predicate endPredicate = cb.or(cb.isNull(eta), cb.lessThanOrEqualTo(eta, dto.getEtaEnd())); 
+            etaCondition = cb.and(startPredicate, endPredicate);
+            predicates.add(etaCondition);
+        }
+
+        // filters
+        if (StringUtils.isNotBlank(dto.getLastName())) {
+            String likeString = String.format("%%%s%%", dto.getLastName().toUpperCase());
+            predicates.add(cb.like(pax.<String>get("lastName"), likeString));
+        }
+        if (StringUtils.isNotBlank(dto.getOrigin())) {
+            predicates.add(cb.equal(flight.<String>get("origin"), dto.getOrigin()));
+        }
+        if (StringUtils.isNotBlank(dto.getDest())) {
+            predicates.add(cb.equal(flight.<String>get("destination"), dto.getDest()));
+        }
+        if (StringUtils.isNotBlank(dto.getFlightNumber())) {
+            String likeString = String.format("%%%s%%", dto.getFlightNumber().toUpperCase());
+            predicates.add(cb.like(flight.<String>get("fullFlightNumber"), likeString));
+        }
+        /*
+         * hack: javascript sends the empty string represented by the 'all' dropdown
+         * value as '0', so we check for that here to mean 'any direction' 
+         */
+        if (StringUtils.isNotBlank(dto.getDirection()) && !"0".equals(dto.getDirection())) {
+            predicates.add(cb.equal(flight.<String>get("direction"), dto.getDirection()));
+        }
+        
+        return predicates;
+    }
+    
+    private <T> TypedQuery<T> addPagination(CriteriaQuery<T> q, int pageNumber, int pageSize) {
         int offset = (pageNumber - 1) * pageSize;
         TypedQuery<T> typedQuery = em.createQuery(q);
         typedQuery.setFirstResult(offset);
