@@ -55,7 +55,6 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         int offset = (dto.getPageNumber() - 1) * dto.getPageSize();
         typedQuery.setFirstResult(offset);
         typedQuery.setMaxResults(dto.getPageSize());
-        System.out.println(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
         List<Object[]> results = typedQuery.getResultList();
         System.out.println(results.size());
         return results;
@@ -79,8 +78,6 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         Join<Passenger, HitsSummary> hits = pax.join("hits", JoinType.LEFT);
         List<Predicate> predicates = new ArrayList<Predicate>();
 
-        System.out.println(flightId);
-        System.out.println(dto);
         if (StringUtils.isNotBlank(dto.getLastName())) {
             String likeString = String.format("%%%s%%", dto.getLastName().toUpperCase());
             predicates.add(cb.like(pax.<String>get("lastName"), likeString));
