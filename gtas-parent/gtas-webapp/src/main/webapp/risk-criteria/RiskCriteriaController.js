@@ -56,7 +56,10 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
         startDate = moment($scope.startDate, $scope.formats, true);
         endDate = moment($scope.endDate, $scope.formats, true);
 
-        $scope.title = $scope.title.trim();
+        if ($scope.title.length) {
+            $scope.title = $scope.title.trim();
+        }
+
         if (!$scope.title.length) {
             $scope.alertError('Title summary can not be blank!');
             $scope.saving = false;

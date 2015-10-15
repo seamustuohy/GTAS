@@ -102,12 +102,12 @@ app.factory('jqueryQueryBuilderWidget', function () {
                     Object.keys($scope.options.entities).forEach(function (key){
                         $scope.options.entities[key].columns.forEach(function (column){
                             switch (column.plugin) {
-                            case 'selectize':
-                            case 'datepicker':
-                                supplement[column.plugin](column);
-                                break;
-                            default:
-                                break;
+                                case 'selectize':
+                                case 'datepicker':
+                                    supplement[column.plugin](column);
+                                    break;
+                                default:
+                                    break;
                             }
                             $scope.options.filters.push(column);
                         });
@@ -124,6 +124,9 @@ app.factory('jqueryQueryBuilderWidget', function () {
             } catch (exception) {
                 throw exception;
             }
+        };
+        $scope.resetQueryBuilder = function () {
+            $scope.$builder.queryBuilder('reset');
         };
     };
 });
