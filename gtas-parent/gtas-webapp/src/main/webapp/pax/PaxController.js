@@ -152,12 +152,12 @@
         $scope.passengerGrid.columnDefs = [
             {
                 name: 'onRuleHitList', displayName: 'H', width: 50,
-                cellClass: gridService.ruleHit,
+                cellClass: "rule-hit",
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 0
                 },
-                cellTemplate: '<md-button ng-click="grid.api.expandable.toggleRowExpansion(row.entity)"><i class="glyphicon glyphicon-flag"></i></md-button>'
+                cellTemplate: '<md-button ng-click="grid.api.expandable.toggleRowExpansion(row.entity)" disabled="{{row.entity.onRuleHitList|ruleHitButton}}"><i class="{{row.entity.onRuleHitList|ruleHitIcon}}"></i></md-button>'
             },
             {
                 name: 'onWatchList', displayName: 'L', width: 70,

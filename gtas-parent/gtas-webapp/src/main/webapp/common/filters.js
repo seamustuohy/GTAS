@@ -13,6 +13,16 @@
                 }).join(', ');
             };
         })
+        .filter('ruleHitButton', function () {
+            return function (ruleHit) {
+                return ruleHit ? "" : "disabled";
+            };
+        })
+        .filter('ruleHitIcon', function () {
+            return function (ruleHit) {
+                return ruleHit ? "glyphicon glyphicon-flag" : "";
+            };
+        })
         .filter('userStatusFilter', function () {
             return function (value) {
                 return !!value;
