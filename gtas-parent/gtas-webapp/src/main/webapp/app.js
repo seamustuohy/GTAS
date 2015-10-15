@@ -7,7 +7,6 @@ var app;
         },
         appDependencies = [
             'ui.router',
-            'ct.ui.router.extras',
             'ui.grid',
             'ui.grid.resizeColumns',
             'ui.grid.moveColumns',
@@ -53,8 +52,6 @@ var app;
                 })
                 .state('admin.users', {
                     url: '/',
-                    sticky: true,
-                    dsr: true,
                     views: {
                         "content@admin": {
                             templateUrl: 'admin/admin.html'
@@ -67,8 +64,6 @@ var app;
                         action: null,
                         user: null
                     },
-                    sticky: true,
-                    dsr: true,
                     views: {
                         "content@admin": {
                             controller: 'UserCtrl',
@@ -78,8 +73,6 @@ var app;
                 })
                 .state('flights', {
                     url: '/flights',
-                    sticky: true,
-                    dsr: true,
                     views: {
                         '@': {
                             controller: 'FlightsController',

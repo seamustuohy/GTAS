@@ -66,7 +66,6 @@
 
         <script src='resources/bower_components/angular/angular.js'></script>
         <script src='resources/bower_components/angular-ui-router/release/angular-ui-router.min.js'></script>
-        <script src='resources/bower_components/ui-router-extras/release/ct-ui-router-extras.min.js'></script>
         <script src='resources/bower_components/moment/min/moment.min.js'></script>
         <script src='resources/bower_components/jquery/dist/jquery.js'></script>
         <script src='resources/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
