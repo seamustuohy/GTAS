@@ -4,7 +4,10 @@
         $scope.passenger = passenger.data;
     });
     app.controller('PaxController', function ($scope, $injector, $stateParams, $state, paxService, sharedPaxData, uiGridConstants, gridService,
-                                              queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers, $timeout) {
+                                              queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers, 
+                                              $timeout, paxModel) {
+        $scope.model = paxModel;
+
         var stateName = $state.$current.self.name,
             ruleGridColumns = [{
                 name: 'ruleTitle',
@@ -68,8 +71,6 @@
                 {label: 'Any', value: ''}
             ];
         $scope.flightDirections = flightDirections;
-
-        $scope.model = stateName === 'flightpax' ? paxService.initialModel($stateParams) : paxService.model;
 
         $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
         $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
@@ -196,7 +197,10 @@
         };
 
         $scope.reset = function () {
-            $scope.model = paxService.initialModel();
+            $scope.model.reset();
+            if (stateName !== 'paxAll') {
+                $state.go('paxAll');
+            }
             resolvePage();
         };
 

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -38,11 +39,10 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     @Transactional
     public PassengersPageDto getPassengersByCriteria(Long flightId, PassengersRequestDto request) {
-        List<Object[]> results = passengerRespository.getPassengersByCriteria(flightId, request);
         List<PassengerVo> rv = new ArrayList<>();
-
+        Pair<Long, List<Object[]>> tuple = passengerRespository.findByCriteria(flightId, request);
         int count = 0;
-        for (Object[] objs : results) {
+        for (Object[] objs : tuple.getRight()) {
             if (count == request.getPageSize()) {
                 break;
             }
@@ -82,13 +82,7 @@ public class PassengerServiceImpl implements PassengerService {
             vo.setEta(f.getEta());            
         }
 
-        /*
-         * we're not currently caluclating total # of results, which is
-         * expensive.  Return -1 because ui-grid on the front-end will
-         * interpret this by not showing total # results.
-         */
-        long total = -1;
-        return new PassengersPageDto(rv, total);
+        return new PassengersPageDto(rv, tuple.getLeft());
     }    
     
 	@Override

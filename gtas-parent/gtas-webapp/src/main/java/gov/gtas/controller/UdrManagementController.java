@@ -63,11 +63,19 @@ public class UdrManagementController {
 		return new JsonServiceResponse(Status.SUCCESS, "GET UDR by ID was successful", resp);
 	}
 
-	@RequestMapping(value = Constants.UDR_GETALL, method = RequestMethod.GET)
+	@RequestMapping(value = Constants.UDR_GETALL_BY_USER, method = RequestMethod.GET)
 	public JsonServiceResponse getUDRList() {
         String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.debug("******** user =" + userId);
 		List<JsonUdrListElement> resp = udrService.fetchUdrSummaryList(userId);
+		return new JsonServiceResponse(Status.SUCCESS, "GET all UDR By author was successful", resp);
+	}
+
+	@RequestMapping(value = Constants.UDR_GETALL, method = RequestMethod.GET)
+	public JsonServiceResponse getAllUDRList() {
+        String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.debug("******** user =" + userId);
+		List<JsonUdrListElement> resp = udrService.fetchUdrSummaryList();
 		return new JsonServiceResponse(Status.SUCCESS, "GET all UDR was successful", resp);
 	}
 

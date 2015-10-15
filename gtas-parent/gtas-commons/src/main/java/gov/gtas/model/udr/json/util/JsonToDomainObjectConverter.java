@@ -100,7 +100,7 @@ public class JsonToDomainObjectConverter {
 	public static UdrSpecification getJsonFromUdrRule(UdrRule rule)
 			throws IOException, ClassNotFoundException {
 		QueryObject qObj = null;
-		MetaData meta = createMetadataFromUdrRule(rule);
+		MetaData meta = createMetadataJson(rule.getAuthor().getUserId(), rule.getMetaData());
 		if (rule.getUdrConditionObject() != null) {
 			final ByteArrayInputStream bis = new ByteArrayInputStream(
 					rule.getUdrConditionObject());
@@ -123,9 +123,10 @@ public class JsonToDomainObjectConverter {
 	 *            the domain UDR rule object.
 	 * @return JSON meta data object (i.e., the summary item)
 	 */
-	private static MetaData createMetadataFromUdrRule(UdrRule uRule) {
-		RuleMeta ruleMeta = uRule.getMetaData();
-		String authorUserId = uRule.getAuthor().getUserId();
+	private static MetaData createMetadataJson(String authorUserId, RuleMeta ruleMeta) {
+		
+		//String authorUserId = uRule.getAuthor().getUserId();
+		
 		final MetaData ret = new MetaData(ruleMeta.getTitle(),
 				ruleMeta.getDescription(), ruleMeta.getStartDt(), authorUserId);
 

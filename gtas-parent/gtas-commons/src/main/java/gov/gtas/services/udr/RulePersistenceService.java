@@ -53,6 +53,17 @@ public interface RulePersistenceService {
 	public List<UdrRule> findAll();
 
 	/**
+	 * Find and return the list of all UDR that have the "delete flag" set to
+	 * "N".
+	 * If the userId  is not null or empty, then the list is filtered by UDRs authored by userId.
+	 * 
+	 * @param userId
+	 *            the user Id of the person who authored the UDR,
+	 * @return list of all non-deleted rules.
+	 */
+	public List<Object[]> findAllUdrSummary(String userId);
+
+	/**
 	 * Updates a list of entities.
 	 * 
 	 * @param entities

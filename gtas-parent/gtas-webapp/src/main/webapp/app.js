@@ -87,8 +87,8 @@ var app;
                         }
                     },
                     resolve: {
-                        flights: function (flightService) {
-                            return flightService.getFlights(flightService.model);
+                        flights: function (flightService, flightsModel) {
+                            return flightService.getFlights(flightsModel);
                         }
                     }
                 })
@@ -121,8 +121,8 @@ var app;
                         }
                     },
                     resolve: {
-                        passengers: function (paxService) {
-                            return paxService.getAllPax(paxService.model);
+                        passengers: function (paxService, paxModel) {
+                            return paxService.getAllPax(paxModel);
                         }
                     }
                 })
@@ -135,12 +135,14 @@ var app;
                         }
                     },
                     resolve: {
-                        passengers: function (paxService, $stateParams) {
+                        passengers: function (paxService, $stateParams, paxModel) {
                             //because of field/model not standard
                             $stateParams.dest = $stateParams.destination;
                             $stateParams.etaStart = $stateParams.eta;
                             $stateParams.etaEnd = $stateParams.etd;
-                            return paxService.getPax($stateParams.id, paxService.initialModel($stateParams));
+                            //var model = paxModel;
+                            paxModel.reset($stateParams);
+                            return paxService.getPax($stateParams.id, paxModel);
                         }
                     }
                 })

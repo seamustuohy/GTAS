@@ -1,31 +1,5 @@
 app.service("flightService", function ($http, $q) {
     'use strict';
-    var model,
-        defaultSort = [
-            {column: 'ruleHitCount', dir: 'desc'},
-            {column: 'listHitCount', dir: 'desc'},
-            {column: 'eta', dir: 'desc'}
-        ],
-        startDate = new Date(),
-        endDate = new Date();
-
-    endDate.setDate(endDate.getDate() + 3);
-
-    function initialModel() {
-        return {
-            pageNumber: 1,
-            pageSize: 10,
-            flightNumber: '',
-            origin: '',
-            dest: '',
-            direction: 'I',
-            etaStart: startDate,
-            etaEnd: endDate,
-            sort: defaultSort
-        };
-    }
-
-    model = initialModel();
 
     function getFlights(pageRequest) {
         var dfd = $q.defer();
@@ -59,8 +33,6 @@ app.service("flightService", function ($http, $q) {
 
     // Return public API.
     return ({
-        model: model,
-        getFlights: getFlights,
-        initialModel: initialModel
+        getFlights: getFlights
     });
 });

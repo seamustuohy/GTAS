@@ -2,6 +2,7 @@ package gov.gtas.svc;
 
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.RuleConstants;
+import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.UdrServiceErrorHandler;
@@ -23,6 +24,7 @@ import gov.gtas.svc.util.UdrServiceHelper;
 import gov.gtas.svc.util.UdrServiceJsonResponseHelper;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -115,22 +117,40 @@ public class UdrServiceImpl implements UdrService {
 	 */
 	@Override
 	public List<JsonUdrListElement> fetchUdrSummaryList(String userId) {
-		List<UdrRule> fetchedRuleList = rulePersistenceService.findByAuthor(userId);
-		if (fetchedRuleList == null || fetchedRuleList.isEmpty()) {
-			return new LinkedList<JsonUdrListElement>();
-		}
+		return convertSummaryList(rulePersistenceService.findAllUdrSummary(userId));
+	}
+	/**
+	 * Converts the UDR query data into a summary list.
+	 * @param fetchedRuleList the query data.
+	 * @return summary list.
+	 */
+    private List<JsonUdrListElement> convertSummaryList(List<Object[]> fetchedRuleList){
 		List<JsonUdrListElement> ret = new LinkedList<JsonUdrListElement>();
-		try {
-			for (UdrRule rule : fetchedRuleList) {
-				if (rule.getUdrConditionObject() != null) {
-					ret.add(new JsonUdrListElement(rule.getId(),
-							JsonToDomainObjectConverter.getJsonFromUdrRule(rule).getSummary()));
+		if (fetchedRuleList != null && !fetchedRuleList.isEmpty()) {
+				for (Object[] data : fetchedRuleList) {
+					String editedBy = (String)data[1];
+					Date editedOn = (Date)data[2];
+					String authorUserId = (String)data[8];
+					final MetaData meta = new MetaData((String)data[3],
+							(String)data[4], (Date)data[5], authorUserId);
+
+					meta.setEnabled((YesNoEnum)data[6] == YesNoEnum.Y ? true : false);
+					meta.setEndDate((Date)data[7]);
+					
+						ret.add(new JsonUdrListElement((Long)data[0],
+								editedBy,
+								editedOn,
+								meta));
 				}
-			}
-		} catch (ClassNotFoundException | IOException ex) {
-			throw new RuntimeException("Error in getUdrList", ex);
 		}
-		return ret;
+		return ret;    	
+    }
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.UdrService#fetchUdrSummaryList()
+	 */
+	@Override
+	public List<JsonUdrListElement> fetchUdrSummaryList() {
+		return convertSummaryList(rulePersistenceService.findAllUdrSummary(null));
 	}
 
 	/*
@@ -232,8 +252,10 @@ public class UdrServiceImpl implements UdrService {
 		/*
 		 * check if the user has permission to update the UDR
 		 */
-		if (!ruleToUpdate.getAuthor().getUserId().equals(authorUserId)) {
-			// TODO throw exception here
+		User author = ruleToUpdate.getAuthor();
+		if (!author.getUserId().equals(userId)) {
+			// TODO check if the user is admin
+			// else throw exception
 			logger.error(String.format("UdrServiceImpl.updateUdr() - %s trying to update rule by different author %s!",
 					authorUserId, ruleToUpdate.getAuthor().getUserId()));
 		}

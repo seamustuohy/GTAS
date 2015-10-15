@@ -11,34 +11,6 @@
             return ({getPaxDetail: getPaxDetail});
         })
         .service("paxService", function ($rootScope, $http, $q) {
-            var model,
-                defaultSort = [
-                    {column: 'onRuleHitList', dir: 'desc'},
-                    {column: 'onWatchList', dir: 'desc'},
-                    {column: 'eta', dir: 'desc'}
-                ],
-                startDate = new Date(),
-                endDate = new Date();
-
-            endDate.setDate(endDate.getDate() + 3);
-
-            function initialModel(params) {
-                return {
-                    pageNumber: 1,
-                    pageSize: 10,
-                    lastName: '',
-                    flightNumber: params && params.flightNumber ? params.flightNumber : '',
-                    origin: params && params.origin ? params.origin : '',
-                    dest: params && params.destination ? params.destination : '',
-                    direction: params && params.direction ? params.direction : 'I',
-                    etaStart: params && params.etaStart ? new Date(params.etaStart) : startDate,
-                    etaEnd: params && params.etaEnd ? new Date(params.etaEnd) : endDate,
-                    sort: defaultSort
-                };
-            }
-
-            model = initialModel();
-
             function getPax(flightId, pageRequest) {
                 var dfd = $q.defer();
                 dfd.resolve($http({
@@ -98,8 +70,6 @@
 
             // Return public API.
             return ({
-                model: model,
-                initialModel: initialModel,
                 getPax: getPax,
                 getAllPax: getAllPax,
                 broadcast: broadcast,

@@ -1,8 +1,4 @@
 <style>
-  .grid .ui-grid-row .green {
-    background-color: palegreen;
-  }
-
   [ui-grid="passengerGrid"] .red {
     text-align: center;
     font-size: 1.5em;
@@ -64,8 +60,8 @@
     font-size: 1.5em;
     margin: .5em;
   }
-
 </style>
+
 <h3 data-ng-if="stateName === 'queryPassengers'"><i class="glyphicon glyphicon-user"></i><i
         class="glyphicon glyphicon-filter"></i> Passengers Query</h3>
 <section layout="row" data-ng-if="stateName === 'paxAll'" layout-padding layout-margin
@@ -138,7 +134,7 @@
     <md-tooltip>Filter</md-tooltip>
     <md-icon md-svg-src="resources/img/ic_filter_list_black_24px.svg" style="width: 24px; height: 24px;"></md-icon>
   </md-icon-button>
-  <md-button aria-label="reset" href="#/passengers">
+  <md-button aria-label="reset" ng-click="reset()">
     <md-tooltip>Reset</md-tooltip>
     <md-icon md-svg-src="resources/img/ic_cancel_black_24px.svg" style="width: 24px; height: 24px;"></md-icon>
   </md-button>

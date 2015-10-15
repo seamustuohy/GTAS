@@ -94,8 +94,10 @@
         <script src='factory/QueryBuilderFactory.js'></script>
         <script src='factory/JqueryQueryBuilderWidget.js'></script>
         <script src='dashboard/DashboardController.js'></script>
+        <script src='flights/FlightsModel.js'></script>       
         <script src='flights/FlightsController.js'></script>
         <script src='flights/FlightsService.js'></script>
+        <script src='pax/PaxModel.js'></script>
         <script src='pax/PaxController.js'></script>
         <script src='pax/PaxService.js'></script>
         <script src='pax/PaxFactory.js'></script>
