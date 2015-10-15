@@ -11,14 +11,14 @@ INSERT INTO `role` VALUES ('5', 'Manage Rules');
 -- Records of user
 -- ----------------------------
 -- password is 'password'
-INSERT INTO `user` VALUES ('nsamha', 1,'Nael', 'Samha', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
-INSERT INTO `user` VALUES ('bstygar', 1,'Brian', 'Stygar', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
-INSERT INTO `user` VALUES ('svempati', 1,'Srinivas', 'Vempati', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
-INSERT INTO `user` VALUES ('abandopadhay',1, 'Amit', 'Bandopadhay', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
-INSERT INTO `user` VALUES ('jtang', 1,'Jeen', 'Tang', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
-INSERT INTO `user` VALUES ('mcopenhafer',1, 'Mike', 'Copenhafer', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
-INSERT INTO `user` VALUES ('ladebiyi',1, 'Lola', 'Adebiyi', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
-INSERT INTO `user` VALUES ('adelorie',1, 'Anthony', 'Delorie', '$2a$10$T5xL/wIet8ev/RhqM5iDTOrqRwIbO7IkQ/DWkDe592zaBaZy8RAxu');
+INSERT INTO `user` VALUES ('nsamha', 1,'Nael', 'Samha', 'cGFzc3dvcmQ=');
+INSERT INTO `user` VALUES ('bstygar', 1,'Brian', 'Stygar', 'cGFzc3dvcmQ=');
+INSERT INTO `user` VALUES ('svempati', 1,'Srinivas', 'Vempati', 'cGFzc3dvcmQ=');
+INSERT INTO `user` VALUES ('abandopadhay',1, 'Amit', 'Bandopadhay', 'cGFzc3dvcmQ=');
+INSERT INTO `user` VALUES ('jtang', 1,'Jeen', 'Tang', 'cGFzc3dvcmQ=');
+INSERT INTO `user` VALUES ('mcopenhafer',1, 'Mike', 'Copenhafer', 'cGFzc3dvcmQ=');
+INSERT INTO `user` VALUES ('ladebiyi',1, 'Lola', 'Adebiyi', 'cGFzc3dvcmQ=');
+INSERT INTO `user` VALUES ('adelorie',1, 'Anthony', 'Delorie', 'cGFzc3dvcmQ=');
 
 -- ----------------------------
 -- Records of user_role
