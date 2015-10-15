@@ -12,7 +12,7 @@
             ruleGridColumns = [{
                 name: 'ruleTitle',
                 displayName: 'Title',
-                cellTemplate: '<md-button class="md-primary md-button md-default-theme" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</md-button>'
+                cellTemplate: '<md-button aria-label="title" class="md-primary md-button md-default-theme" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</md-button>'
             }, {
                 name: 'ruleConditions',
                 displayName: 'Conditions',
@@ -158,7 +158,7 @@
                     direction: uiGridConstants.DESC,
                     priority: 0
                 },
-                cellTemplate: '<md-button ng-click="grid.api.expandable.toggleRowExpansion(row.entity)" disabled="{{row.entity.onRuleHitList|ruleHitButton}}"><i class="{{row.entity.onRuleHitList|ruleHitIcon}}"></i></md-button>'
+                cellTemplate: '<md-button aria-label="hits" ng-click="grid.api.expandable.toggleRowExpansion(row.entity)" disabled="{{row.entity.onRuleHitList|ruleHitButton}}"><i class="{{row.entity.onRuleHitList|ruleHitIcon}}"></i></md-button>'
             },
             {
                 name: 'onWatchList', displayName: 'L', width: 70,
@@ -172,7 +172,7 @@
             {name: 'passengerType', displayName: 'Type', width: 50},
             {
                 name: 'lastName', displayName: 'Last Name',
-                cellTemplate: '<md-button href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
+                cellTemplate: '<md-button aria-label="type" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
             },
             {name: 'firstName', displayName: 'First Name'},
             {name: 'middleName', displayName: 'Middle'},
