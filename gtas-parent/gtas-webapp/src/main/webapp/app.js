@@ -56,7 +56,7 @@ var app;
                     sticky: true,
                     dsr: true,
                     views: {
-                        "@admin": {
+                        "content@admin": {
                             templateUrl: 'admin/admin.html'
                         }
                     }
@@ -70,7 +70,7 @@ var app;
                     sticky: true,
                     dsr: true,
                     views: {
-                        "@admin": {
+                        "content@admin": {
                             controller: 'UserCtrl',
                             templateUrl: 'admin/user.html'
                         }
