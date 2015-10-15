@@ -1,4 +1,4 @@
-app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, gridOptionsLookupService, jqueryQueryBuilderService, $timeout, $interval) {
+app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, gridOptionsLookupService, jqueryQueryBuilderService, $timeout) {
     'use strict';
     jqueryQueryBuilderService.init('riskcriteria');
 
@@ -35,7 +35,13 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
 
     $scope.riskCriteriaGrid.onRegisterApi = $scope.rowSelection;
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
-    $scope.summaryDefaults = {title: '', description: null, enabled: true};
+    $scope.summaryDefaults = {
+        title: '',
+        description: null,
+        enabled: true,
+        startDate: $scope.today,
+        endDate: null
+    };
 
 //    $scope.newRule();
     $scope.saving = false;
@@ -105,7 +111,18 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
         jqueryQueryBuilderService.save(ruleObject).then($scope.updateQueryBuilderOnSave);
     };
 
+    $scope.enabled = true;
     $scope.$scope = $scope;
+
+    $scope.$watch("endDate", function (newValue) {
+        var datepicker;
+        if (newValue === null || newValue === undefined) {
+            $timeout(function () {
+                datepicker = document.querySelectorAll('.md-datepicker-input')[1];
+                datepicker.value = '';
+            }, 5);
+        }
+    });
 }).config(function ($mdDateLocaleProvider) {
     'use strict';
     $mdDateLocaleProvider.formatDate = function (date) {
