@@ -59,7 +59,10 @@
         </span>
         </nav>
         <!-- end of nav -->
-        <div ui-view></div>
+        <div ui-view="nav"></div>
+        <div ui-view="header"></div>
+        <div class="content" ui-view=""></div>
+        <div ui-view="footer"></div>
 
         <script src='resources/bower_components/angular/angular.js'></script>
         <script src='resources/bower_components/angular-ui-router/release/angular-ui-router.min.js'></script>
