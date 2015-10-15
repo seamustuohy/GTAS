@@ -189,16 +189,30 @@ public class RulePersistenceServiceIT {
 			assertNotNull(data[0]);//id
 			String editedBy = (String)data[1];
 			assertNotNull(editedBy);
-			if(editedBy.equals(RuleServiceDataGenUtils.TEST_USER1_ID)){
+			if(editedBy.equals(RuleServiceDataGenUtils.TEST_USER1_ID) && RULE_DESCRIPTION.equals(data[4])){
 				Date udrStartDate = (Date)data[5];
 				assertNotNull(startDate);
 				assertEquals(startDate, udrStartDate);
-				assertEquals(RULE_DESCRIPTION, data[4]);
 				assertEquals(RuleServiceDataGenUtils.TEST_USER1_ID, data[8]);
 				count++;
 			}
 		}
 		assertEquals(3, count);
+	}
+	@Transactional
+	@Test()
+	public void testUdrUpdateByAdmin() throws Exception{
+		Date startDate = DateCalendarUtils.parseJsonDate("1990-01-01");
+		final String RULE_DESCRIPTION = "This is a Simple Rule";
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(2);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
+				YesNoEnum.Y, startDate, null);
+		r = testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		
+		testTarget.update(r, RuleServiceDataGenUtils.TEST_USER3_ID);
+		r = testTarget.findByTitleAndAuthor(testRuleTitle, RuleServiceDataGenUtils.TEST_USER1_ID);
+		assertNotNull(r);
+		assertEquals(RuleServiceDataGenUtils.TEST_USER3_ID, r.getEditedBy().getUserId());
 	}
 /**
 	 * The update pattern tested here is:
