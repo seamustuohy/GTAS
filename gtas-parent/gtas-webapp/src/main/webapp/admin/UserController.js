@@ -99,8 +99,8 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
     $scope.saveUser=function()
     {
         if($scope.userPasswordChanged){
-            $scope.persistUser.password = btoa($scope.persistUser.password);
-            $scope.userPasswordChanged=false;
+            //$scope.persistUser.password = btoa($scope.persistUser.password);
+            //$scope.userPasswordChanged=false;
         }
 
     	$scope.populateSelectedRoles();

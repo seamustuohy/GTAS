@@ -55,7 +55,7 @@
 					<div class="input-icon left">
 						<i class="icon-lock"></i>
 						<input class="m-wrap placeholder-no-fix" type="password" autocomplete="off" placeholder="Password"  name="j_password" id="j_password"
-						onchange="encode(this);"/>
+						/> <!-- onchange="encode(this);" -->
 					</div>
 				</div>
 			</div>
