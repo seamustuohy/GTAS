@@ -4,6 +4,7 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
 
 	$scope.user = $stateParams.user;
     $scope.action=$stateParams.action;
+    $scope.userPasswordChanged = false;
     $scope.persistUser = {
             userId: '',
             firstName: '',
@@ -91,8 +92,17 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
         }
     };
 
+    $scope.encodePassword = function(){
+        $scope.userPasswordChanged=true;
+    };
+
     $scope.saveUser=function()
     {
+        if($scope.userPasswordChanged){
+            $scope.persistUser.password = btoa($scope.persistUser.password);
+            $scope.userPasswordChanged=false;
+        }
+
     	$scope.populateSelectedRoles();
         if ($scope.action == 'modify') {
             userService.updateUser($scope.persistUser)
@@ -102,6 +112,7 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService'
                 });
 
         } else {
+
             userService.createUser($scope.persistUser)
                 .then(
                 function (user) {
