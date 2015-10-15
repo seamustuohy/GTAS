@@ -137,7 +137,8 @@ var app;
                     resolve: {
                         paxModel: function ($stateParams, paxModel) {
                             return {
-                                model: paxModel.initial($stateParams)
+                                model: paxModel.initial($stateParams),
+                                reset: function() { this.model.lastName = ''; }
                             };
                         },
                         passengers: function (paxService, $stateParams, paxModel) {

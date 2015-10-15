@@ -198,9 +198,6 @@
 
         $scope.reset = function () {
             paxModel.reset();
-            if (stateName !== 'paxAll') {
-                $state.go('paxAll');
-            }
             resolvePage();
         };
 
