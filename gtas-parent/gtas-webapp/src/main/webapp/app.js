@@ -122,7 +122,7 @@ var app;
                     },
                     resolve: {
                         passengers: function (paxService, paxModel) {
-                            return paxService.getAllPax(paxModel);
+                            return paxService.getAllPax(paxModel.model);
                         }
                     }
                 })
@@ -135,14 +135,17 @@ var app;
                         }
                     },
                     resolve: {
+                        paxModel: function ($stateParams, paxModel) {
+                            return {
+                                model: paxModel.initial($stateParams)
+                            };
+                        },
                         passengers: function (paxService, $stateParams, paxModel) {
                             //because of field/model not standard
                             $stateParams.dest = $stateParams.destination;
                             $stateParams.etaStart = $stateParams.eta;
                             $stateParams.etaEnd = $stateParams.etd;
-                            //var model = paxModel;
-                            paxModel.reset($stateParams);
-                            return paxService.getPax($stateParams.id, paxModel);
+                            return paxService.getPax($stateParams.id, paxModel.model);
                         }
                     }
                 })

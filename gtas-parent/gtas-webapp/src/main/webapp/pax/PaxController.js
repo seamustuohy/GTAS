@@ -6,7 +6,7 @@
     app.controller('PaxController', function ($scope, $injector, $stateParams, $state, paxService, sharedPaxData, uiGridConstants, gridService,
                                               queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers, 
                                               $timeout, paxModel) {
-        $scope.model = paxModel;
+        $scope.model = paxModel.model;
 
         var stateName = $state.$current.self.name,
             ruleGridColumns = [{
@@ -197,7 +197,7 @@
         };
 
         $scope.reset = function () {
-            $scope.model.reset();
+            paxModel.reset();
             if (stateName !== 'paxAll') {
                 $state.go('paxAll');
             }
