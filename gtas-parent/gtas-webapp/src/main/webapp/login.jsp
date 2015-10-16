@@ -54,7 +54,8 @@
 				<div class="controls">
 					<div class="input-icon left">
 						<i class="icon-lock"></i>
-						<input class="m-wrap placeholder-no-fix" type="password" autocomplete="off" placeholder="Password"  name="j_password" id="j_password"/>
+						<input class="m-wrap placeholder-no-fix" type="password" autocomplete="off" placeholder="Password"  name="j_password" id="j_password"
+						/> <!-- onchange="encode(this);" -->
 					</div>
 				</div>
 			</div>
@@ -62,7 +63,7 @@
 				<label class="checkbox">
 				<input type="checkbox" name="remember" value="1"/> Remember me
 				</label>
-				<button type="submit" class="btn blue pull-right">
+				<button type="submit" class="btn blue pull-right" onclick="j_password=">
 				Login <i class="m-icon-swapright m-icon-white"></i>
 				</button>            
 			</div>
@@ -460,6 +461,12 @@
 	<script src="resources/login/assets/scripts/app.js" type="text/javascript"></script>
 	<script src="resources/login/assets/scripts/login-soft.js" type="text/javascript"></script>      
 	<script>
+	
+		function encode(val){
+			document.getElementById('j_password').value = btoa(val.value);
+			};
+
+	
 		jQuery(document).ready(function() {     
 		  App.init();
 		  Login.init();

@@ -4,12 +4,15 @@
         $scope.passenger = passenger.data;
     });
     app.controller('PaxController', function ($scope, $injector, $stateParams, $state, paxService, sharedPaxData, uiGridConstants, gridService,
-                                              queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers, $timeout) {
+                                              queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers, 
+                                              $timeout, paxModel) {
+        $scope.model = paxModel.model;
+
         var stateName = $state.$current.self.name,
             ruleGridColumns = [{
                 name: 'ruleTitle',
                 displayName: 'Title',
-                cellTemplate: '<md-button class="md-primary md-button md-default-theme" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</md-button>'
+                cellTemplate: '<md-button aria-label="title" class="md-primary md-button md-default-theme" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</md-button>'
             }, {
                 name: 'ruleConditions',
                 displayName: 'Conditions',
@@ -68,8 +71,6 @@
                 {label: 'Any', value: ''}
             ];
         $scope.flightDirections = flightDirections;
-
-        $scope.model = stateName === 'flightpax' ? paxService.initialModel($stateParams) : paxService.model;
 
         $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
         $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
@@ -152,12 +153,12 @@
         $scope.passengerGrid.columnDefs = [
             {
                 name: 'onRuleHitList', displayName: 'H', width: 50,
-                cellClass: gridService.ruleHit,
+                cellClass: "rule-hit",
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 0
                 },
-                cellTemplate: '<md-button ng-click="grid.api.expandable.toggleRowExpansion(row.entity)"><i class="glyphicon glyphicon-flag"></i></md-button>'
+                cellTemplate: '<md-button aria-label="hits" ng-click="grid.api.expandable.toggleRowExpansion(row.entity)" disabled="{{row.entity.onRuleHitList|ruleHitButton}}"><i class="{{row.entity.onRuleHitList|ruleHitIcon}}"></i></md-button>'
             },
             {
                 name: 'onWatchList', displayName: 'L', width: 70,
@@ -171,7 +172,7 @@
             {name: 'passengerType', displayName: 'Type', width: 50},
             {
                 name: 'lastName', displayName: 'Last Name',
-                cellTemplate: '<md-button href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
+                cellTemplate: '<md-button aria-label="type" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
             },
             {name: 'firstName', displayName: 'First Name'},
             {name: 'middleName', displayName: 'Middle'},
@@ -196,7 +197,7 @@
         };
 
         $scope.reset = function () {
-            $scope.model = paxService.initialModel();
+            paxModel.reset();
             resolvePage();
         };
 

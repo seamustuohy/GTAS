@@ -7,7 +7,6 @@ var app;
         },
         appDependencies = [
             'ui.router',
-            'ct.ui.router.extras',
             'ui.grid',
             'ui.grid.resizeColumns',
             'ui.grid.moveColumns',
@@ -35,18 +34,24 @@ var app;
             $stateProvider
                 .state('dashboard', {
                     url: '/dashboard',
-                    templateUrl: 'dashboard/dashboard.html',
-                    controller: 'DashboardController'
+                    views: {
+                        '@': {
+                            controller: 'DashboardController',
+                            templateUrl: 'dashboard/dashboard.html'
+                        }
+                    }
                 })
                 .state('admin', {
                     url: '/admin',
-                    templateUrl: 'admin/admin.header.html',
-                    controller: 'AdminCtrl'
+                    views: {
+                        '@': {
+                            controller: 'AdminCtrl',
+                            templateUrl: 'admin/admin.header.html'
+                        }
+                    }
                 })
                 .state('admin.users', {
                     url: '/',
-                    sticky: true,
-                    dsr: true,
                     views: {
                         "content@admin": {
                             templateUrl: 'admin/admin.html'
@@ -59,8 +64,6 @@ var app;
                         action: null,
                         user: null
                     },
-                    sticky: true,
-                    dsr: true,
                     views: {
                         "content@admin": {
                             controller: 'UserCtrl',
@@ -70,20 +73,26 @@ var app;
                 })
                 .state('flights', {
                     url: '/flights',
-                    sticky: true,
-                    dsr: true,
-                    templateUrl: 'flights/flights.html',
-                    controller: 'FlightsController',
+                    views: {
+                        '@': {
+                            controller: 'FlightsController',
+                            templateUrl: 'flights/flights.html'
+                        }
+                    },
                     resolve: {
-                        flights: function (flightService) {
-                            return flightService.getFlights(flightService.model);
+                        flights: function (flightService, flightsModel) {
+                            return flightService.getFlights(flightsModel);
                         }
                     }
                 })
                 .state('queryFlights', {
                     url: '/query/flights',
-                    controller: 'FlightsController',
-                    templateUrl: 'flights/query-flights.html',
+                    views: {
+                        '@': {
+                            controller: 'FlightsController',
+                            templateUrl: 'flights/query-flights.html'
+                        }
+                    },
                     resolve: {
                         flights: function (executeQueryService, $stateParams) {
                             var postData, query = JSON.parse(localStorage['query']);
@@ -98,32 +107,50 @@ var app;
                 })
                 .state('paxAll', {
                     url: '/passengers',
-                    templateUrl: 'pax/pax.table.html',
-                    controller: 'PaxController',
+                    views: {
+                        '@': {
+                            controller: 'PaxController',
+                            templateUrl: 'pax/pax.table.html'
+                        }
+                    },
                     resolve: {
-                        passengers: function (paxService) {
-                            return paxService.getAllPax(paxService.model);
+                        passengers: function (paxService, paxModel) {
+                            return paxService.getAllPax(paxModel.model);
                         }
                     }
                 })
                 .state('flightpax', {
                     url: '/flightpax/:id/:flightNumber/:origin/:destination/:direction/:eta/:etd',
-                    templateUrl: 'pax/pax.table.html',
-                    controller: 'PaxController',
+                    views: {
+                        '@': {
+                            controller: 'PaxController',
+                            templateUrl: 'pax/pax.table.html'
+                        }
+                    },
                     resolve: {
-                        passengers: function (paxService, $stateParams) {
+                        paxModel: function ($stateParams, paxModel) {
+                            return {
+                                model: paxModel.initial($stateParams),
+                                reset: function() { this.model.lastName = ''; }
+                            };
+                        },
+                        passengers: function (paxService, $stateParams, paxModel) {
                             //because of field/model not standard
                             $stateParams.dest = $stateParams.destination;
                             $stateParams.etaStart = $stateParams.eta;
                             $stateParams.etaEnd = $stateParams.etd;
-                            return paxService.getPax($stateParams.id, paxService.initialModel($stateParams));
+                            return paxService.getPax($stateParams.id, paxModel.model);
                         }
                     }
                 })
                 .state('queryPassengers', {
                     url: '/query/passengers',
-                    templateUrl: 'pax/pax.table.html',
-                    controller: 'PaxController',
+                    views: {
+                        '@': {
+                            controller: 'PaxController',
+                            templateUrl: 'pax/pax.table.html'
+                        }
+                    },
                     resolve: {
                         passengers: function (executeQueryService, $stateParams) {
                             var postData, query = JSON.parse(localStorage['query']);
@@ -138,8 +165,12 @@ var app;
                 })
                 .state('detail', {
                     url: '/paxdetail/{paxId}/{flightId}',
-                    templateUrl: 'pax/pax.detail.html',
-                    controller: 'PassengerDetailCtrl',
+                    views: {
+                        '@': {
+                            controller: 'PassengerDetailCtrl',
+                            templateUrl: 'pax/pax.detail.html',
+                        }
+                    },
                     resolve: {
                         passenger: function (paxDetailService, $stateParams) {
                             return paxDetailService.getPaxDetail($stateParams.paxId, $stateParams.flightId);
@@ -148,18 +179,30 @@ var app;
                 })
                 .state('query-builder', {
                     url: '/query-builder',
-                    templateUrl: 'query-builder/query.html',
-                    controller: 'QueryBuilderController'
+                    views: {
+                        '@': {
+                            controller: 'QueryBuilderController',
+                            templateUrl: 'query-builder/query.html'
+                        }
+                    }
                 })
                 .state('risk-criteria', {
                     url: '/risk-criteria',
-                    templateUrl: 'risk-criteria/risk-criteria.html',
-                    controller: 'RiskCriteriaController'
+                    views: {
+                        '@': {
+                            controller: 'RiskCriteriaController',
+                            templateUrl: 'risk-criteria/risk-criteria.html'
+                        }
+                    }
                 })
                 .state('watchlists', {
                     url: '/watchlists',
-                    templateUrl: 'watchlists/watchlists.html',
-                    controller: 'WatchListController'
+                    views: {
+                        '@': {
+                            controller: 'WatchListController',
+                            templateUrl: 'watchlists/watchlists.html'
+                        }
+                    }
                 });
         },
         NavCtrl = function ($scope) {

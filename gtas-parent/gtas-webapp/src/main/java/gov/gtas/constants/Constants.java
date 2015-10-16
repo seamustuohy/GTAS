@@ -13,7 +13,8 @@ public final class Constants {
 	public static final String UDR_ROOT = "/udr";
 	public static final String UDR_GET_BY_AUTHOR_TITLE = "/udr/{authorId}/{title}";
 	public static final String UDR_GET_BY_ID = "/udr/{id}";
-	public static final String UDR_GETALL = "/udr";
+	public static final String UDR_GETALL_BY_USER = "/udr";
+	public static final String UDR_GETALL = "/all_udr";
 	public static final String UDR_GETDRL = "/udr_drl";
 	public static final String UDR_GETDRL_BY_NAME = "/udr_drl/{kbName}";
 	public static final String UDR_POST = "/udr";

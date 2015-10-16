@@ -1,5 +1,6 @@
 package gov.gtas.rule;
 
+import static gov.gtas.rule.listener.RuleEventListenerUtils.createEventListeners;
 import gov.gtas.bo.BasicRuleServiceResult;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
@@ -27,6 +28,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.kie.api.KieBase;
 import org.kie.api.runtime.Globals;
 import org.kie.api.runtime.StatelessKieSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +41,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RuleServiceImpl implements RuleService {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(RuleServiceImpl.class);
+
 	@Autowired
 	private RulePersistenceService rulePersistenceService;
 
@@ -86,6 +93,8 @@ public class RuleServiceImpl implements RuleService {
 	 */
 	private RuleServiceResult createSessionAndExecuteRules(KieBase kbase,
 			RuleServiceRequest req) {
+		logger.info("Entering createSessionAndExecuteRules() and creating Stateless session.");
+
 		StatelessKieSession ksession = kbase.newStatelessKieSession();
 		ksession.setGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME,
 				new ArrayList<Object>());
@@ -95,11 +104,11 @@ public class RuleServiceImpl implements RuleService {
 		 */
 		final RuleExecutionStatistics stats = new RuleExecutionStatistics();
 
-		List<EventListener> listeners = RuleEventListenerUtils
-				.createEventListeners(stats);
+		List<EventListener> listeners = createEventListeners(stats);
 		RuleEventListenerUtils.addEventListenersToKieSEssion(ksession,
 				listeners);
 
+		logger.info("Retrieved Rule input objects and executed the rules.");
 		Collection<?> requestObjects = req.getRequestObjects();
 		ksession.execute(requestObjects);
 
@@ -109,6 +118,7 @@ public class RuleServiceImpl implements RuleService {
 		Iterator<String> iter = keys.iterator();
 		RuleServiceResult res = null;
 
+		logger.info("Retrieved Rule execution statistics objects.");
 		while (iter.hasNext()) {
 			if (iter.next().equals(RuleServiceConstants.RULE_RESULT_LIST_NAME)) {
 				@SuppressWarnings("unchecked")
@@ -117,21 +127,7 @@ public class RuleServiceImpl implements RuleService {
 				res = new BasicRuleServiceResult(resList, stats);
 			}
 		}
-
-		//
-		// // extract the result
-		// @SuppressWarnings("unchecked")
-		// final List<RuleHitDetail> resList = (List<RuleHitDetail>) ksession
-		// .getGlobal(RuleServiceConstants.RULE_RESULT_LIST_NAME);
-		//
-		// RuleServiceResult res = new BasicRuleServiceResult(resList, stats);
-		//
-		// // Remove comment if using logging
-		// // logger.close();
-		//
-		// // and then dispose the session
-		// ksession.dispose();
-
+		logger.info("Retrieved Rule execution result objects and exit createSessionAndExecuteRules().");
 		return res;
 	}
 
@@ -147,11 +143,14 @@ public class RuleServiceImpl implements RuleService {
 			String kbName) {
 		KnowledgeBase kbRecord = null;
 		if (StringUtils.isEmpty(kbName)) {
+			logger.info("Default rule knowledge base is loaded.");
 			kbRecord = rulePersistenceService.findUdrKnowledgeBase();
 		} else {
+			logger.info("Custom knowledge base is loaded.");
 			kbRecord = rulePersistenceService.findUdrKnowledgeBase(kbName);
 		}
 		if (kbRecord == null) {
+			logger.debug("Knowledge based is null.");
 			return null;
 		}
 		try {

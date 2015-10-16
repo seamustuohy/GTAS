@@ -62,6 +62,14 @@ public class UdrServiceIT {
 	private static final String RULE_DESCRIPTION1 = "This is a test";
 	private static final String RULE_TITLE2 = "Hello Rule 2";
 	private static final String RULE_DESCRIPTION2 = "This is a test2";
+	
+	private static final String USERID_1 = "phenry";
+	private static final String USER1_FIRST_NAME = "Patrick";
+	private static final String USER1_LAST_NAME = "Henry";
+
+	private static final String USERID_2 = "jpjones";
+	private static final String USER2_FIRST_NAME = "John";
+	private static final String USER2_LAST_NAME = "Jones";
 
 	@Autowired
 	UdrService udrService;
@@ -279,6 +287,29 @@ public class UdrServiceIT {
 
 	@Test
 	@Transactional
+	public void testUpdateByNonAuthor() {
+		User user = createUser();
+		User user2 = createUser(USERID_2, USER2_FIRST_NAME, USER2_LAST_NAME);
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1,
+				RULE_DESCRIPTION1);
+		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
+		assertEquals(Status.SUCCESS, resp.getStatus());
+		assertNotNull(resp.getResponseDetails());
+		String title = (String) resp.getResponseDetails().get(1).getAttributeValue();
+		assertEquals(RULE_TITLE1, title);
+		UdrSpecification specFetched = udrService.fetchUdr(user.getUserId(), title);
+		UdrSpecification updatedSpec = UdrSpecificationBuilder.createSampleSpec2(user.getUserId(), RULE_TITLE1,
+				RULE_DESCRIPTION2);
+		updatedSpec.setId(specFetched.getId());
+		udrService.updateUdr(user2.getUserId(), updatedSpec);
+		specFetched = udrService.fetchUdr(user.getUserId(), title);
+		assertNotNull(specFetched);
+		assertEquals(RULE_DESCRIPTION2, specFetched.getSummary().getDescription());
+		assertEquals(user.getUserId(), specFetched.getSummary().getAuthor());
+	}
+
+	@Test
+	@Transactional
 	public void testDelete() {
 		User user = createUser();
 		UdrSpecification spec1 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1,
@@ -356,12 +387,14 @@ public class UdrServiceIT {
 		assertNull(rule.getEngineRules().get(1).getKnowledgeBase());
 		assertNull(rule.getEngineRules().get(2).getKnowledgeBase());
 	}
-
 	private User createUser() {
+		return createUser(USERID_1, USER1_FIRST_NAME, USER1_LAST_NAME);
+	}
+	private User createUser(String userId, String firstName, String lastName) {
 		String ROLE_NAME = "user";
-		String USER_FNAME = "Patrick";
-		String USER_LASTNAME = "Henry";
-		String USER_ID = "phenry";
+		String USER_FNAME = firstName;
+		String USER_LASTNAME = lastName;
+		String USER_ID = userId;
 		Set<RoleData> roles = new HashSet<RoleData>();
 		roles.add(new RoleData(1, "ADMIN"));
 

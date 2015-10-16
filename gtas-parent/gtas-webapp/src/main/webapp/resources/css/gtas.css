@@ -1,3 +1,26 @@
+body {
+    padding-top: 50px
+}
+
+nav {
+    background-color:rgba(255,255,255,1);
+    box-sizing:border-box;
+    color:rgb(37, 37, 37);
+    cursor:auto;
+    display:block;
+    font-family:Lato, Helvetica, sans-serif;font-size: 2em;
+    font-style: normal;
+    font-weight: normal;
+    height:50px;
+    line-height:16px;
+    position:fixed;
+    top: 0;
+    width: 100%;
+    word-wrap:break-word;
+    z-index: 999;
+    -webkit-font-smoothing: antialiased
+}
+
 .navbar-custom {
     background-color: #0088cc;
     border-color: #0072ab;
@@ -351,15 +374,15 @@ tbody.collapse.in {
     padding: 5px;
 }
 
-.header::after {
-    content: "";
-    display: block;
-    background-color: rgba(167, 169, 172, 1);
-    height: 10px;
-    position: relative;
-    bottom: 10px;
-    margin-left: 1170px;
-}
+/*.header::after {*/
+    /*content: "";*/
+    /*display: block;*/
+    /*background-color: rgba(167, 169, 172, 1);*/
+    /*height: 10px;*/
+    /*position: relative;*/
+    /*bottom: 10px;*/
+    /*margin-left: 1170px;*/
+/*}*/
 
 .glyphiconFlightPax:hover, .glyphiconFlightPax:focus {
     color: #222;

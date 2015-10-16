@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
 @Table(name = "error_detail")
 public class ErrorRecord extends BaseEntity{
     private static final long serialVersionUID = 19997L; 
-    private static final String DETAIL_SEPARATOR = "$$$";
+    private static final String DETAIL_SEPARATOR = "%%%";
     public ErrorRecord() { }
     public ErrorRecord(ErrorDetailInfo det){
     	this.code = det.getErrorCode();

@@ -1,16 +1,27 @@
+<style>
+    .actions {
+        text-align: center;
+    }
+</style>
 <div ui-grid="riskCriteriaGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
 <section class="qb-interface">
     <h2>Summary:</h2>
-    <md-content layout-padding>
+    <md-content layout-padding style="display: inline-block;
+    overflow: hidden;">
         <div layout layout-sm="column">
-            <md-input-container style="width:20%">
+            <md-input-container style="width:12em">
                 <label>Name</label>
                 <input md-maxlength="20" autofocus required name="description" ng-model="title" id="title">
             </md-input-container>
-            <md-input-container style="width:40%">
+            <md-input-container style="width:50em">
                 <label>Description</label>
                 <input md-maxlength="100" name="description" ng-model="description">
             </md-input-container>
+        </div>
+    </md-content>
+    <md-content layout-padding style="display: inline-block;
+    overflow: hidden;">
+        <div layout layout-sm="column">
             <md-checkbox class="md-primary" required ng-model="enabled" aria-label="Enabled">Enabled</md-checkbox>
             <md-datepicker ng-model="startDate" md-placeholder="Start Date"></md-datepicker>
             <md-datepicker ng-model="endDate" md-placeholder="End Date"></md-datepicker>
@@ -21,9 +32,48 @@
     <div id="builder"></div>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
     <div class="actions">
-        <md-button ng-click="newRule()" class="md-raised pull-left"><i class="glyphicon glyphicon-plus"></i> Add New</md-button>
-        <md-button ng-click="resetQueryBuilder()" class="md-raised pull-left"><i class="glyphicon glyphicon-minus"></i> Clear Conditions</md-button>
-        <md-button ng-click="save()" ng-disabled="saving === true" class="md-raised md-primary pull-right">Save</md-button>
-        <md-button ng-click="delete()" ng-disabled="ruleId === null" class="md-raised md-warn pull-right">Delete</md-button>
+        <md-button href="#/query/flights"
+                   title="Launch Flight Query Results in new window"
+                   ng-disabled="ruleId === null || saving === true"
+                   target="queryFlights" ng-click="executeQuery('flights')"
+                   class="md-raised">
+            <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-plane"></i> Query Flights
+        </md-button>
+        <md-button href="#/query/passengers"
+                   ng-disabled="ruleId === null || saving === true"
+                   title="Launch Passengers Query Results in new window"
+                   target="queryPassengers" ng-click="executeQuery('flights')"
+                   class="md-raised">
+            <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-user"></i>  Query Passengers
+        </md-button>
+        <md-button ng-click="save()"
+                   ng-disabled="ruleId === null || saving === true"
+                   href="#/query-builder" class="md-raised">
+            <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i>  Save As Query
+        </md-button>
+
+        <md-button ng-click="newRule()"
+                   class="md-raised pull-left">
+            <i class="glyphicon glyphicon-plus"></i> Add New
+        </md-button>
+        <md-button ng-click="resetQueryBuilder()"
+                   class="md-raised pull-left">
+            <i class="glyphicon glyphicon-minus"></i> Clear Conditions
+        </md-button>
+        <md-button ng-click="save()"
+                   ng-disabled="saving === true"
+                   class="md-raised md-primary pull-right">
+            <i class="glyphicon glyphicon-save"></i> Save
+        </md-button>
+        <md-button ng-click="copy()"
+                   ng-disabled="ruleId === null || saving === true"
+                   class="md-raised pull-right">
+            <i class="glyphicon glyphicon-duplicate"></i> Copy
+        </md-button>
+        <md-button ng-click="delete()"
+                   ng-disabled="ruleId === null"
+                   class="md-raised md-warn pull-right">
+            <i class="glyphicon glyphicon-erase"></i> Delete
+        </md-button>
     </div>
 </section>

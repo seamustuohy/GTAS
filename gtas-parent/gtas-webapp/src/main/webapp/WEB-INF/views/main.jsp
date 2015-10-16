@@ -59,11 +59,13 @@
         </span>
         </nav>
         <!-- end of nav -->
-        <div ui-view></div>
+        <div ui-view="nav"></div>
+        <div ui-view="header"></div>
+        <div class="content" ui-view=""></div>
+        <div ui-view="footer"></div>
 
         <script src='resources/bower_components/angular/angular.js'></script>
         <script src='resources/bower_components/angular-ui-router/release/angular-ui-router.min.js'></script>
-        <script src='resources/bower_components/ui-router-extras/release/ct-ui-router-extras.min.js'></script>
         <script src='resources/bower_components/moment/min/moment.min.js'></script>
         <script src='resources/bower_components/jquery/dist/jquery.js'></script>
         <script src='resources/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
@@ -91,8 +93,10 @@
         <script src='factory/QueryBuilderFactory.js'></script>
         <script src='factory/JqueryQueryBuilderWidget.js'></script>
         <script src='dashboard/DashboardController.js'></script>
+        <script src='flights/FlightsModel.js'></script>       
         <script src='flights/FlightsController.js'></script>
         <script src='flights/FlightsService.js'></script>
+        <script src='pax/PaxModel.js'></script>
         <script src='pax/PaxController.js'></script>
         <script src='pax/PaxService.js'></script>
         <script src='pax/PaxFactory.js'></script>

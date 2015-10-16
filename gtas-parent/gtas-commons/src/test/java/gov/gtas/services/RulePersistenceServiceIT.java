@@ -119,9 +119,9 @@ public class RulePersistenceServiceIT {
 		r = testGenUtils.createUdrRule(testRuleTitle+"3", RULE_DESCRIPTION,
 				YesNoEnum.Y, testDate, testDate);
 		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
-		List<UdrRule> udrList = testTarget.findByAuthor(RuleServiceDataGenUtils.TEST_USER1_ID);
-		assertTrue(udrList.size() >= 3);
-		udrList = testTarget.findValidUdrOnDate(testDate);
+		List<Object[]> udrSummaryList = testTarget.findAllUdrSummary(RuleServiceDataGenUtils.TEST_USER1_ID);
+		assertTrue(udrSummaryList.size() >= 3);
+		List<UdrRule>udrList = testTarget.findValidUdrOnDate(testDate);
 		assertNotNull(udrList);
 		for(UdrRule rl:udrList){
 			Date endDate = rl.getMetaData().getEndDt();
@@ -150,9 +150,9 @@ public class RulePersistenceServiceIT {
 		r = testGenUtils.createUdrRule(testRuleTitle+"4", RULE_DESCRIPTION,
 				YesNoEnum.N, startDate, testDate);
 		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
-		List<UdrRule> udrList = testTarget.findByAuthor(RuleServiceDataGenUtils.TEST_USER1_ID);
-		assertTrue(udrList.size() >= 3);
-		udrList = testTarget.findValidUdrOnDate(testDate);
+		List<Object[]> udrSummaryList = testTarget.findAllUdrSummary(RuleServiceDataGenUtils.TEST_USER1_ID);
+		assertTrue(udrSummaryList.size() >= 3);
+		List<UdrRule> udrList = testTarget.findValidUdrOnDate(testDate);
 		assertNotNull(udrList);
 		for(UdrRule rl:udrList){
 			Date endDt = rl.getMetaData().getEndDt();
@@ -161,7 +161,60 @@ public class RulePersistenceServiceIT {
 			}
 		}
 	}
-    /**
+
+	@Transactional
+	@Test()
+	public void testFetchAllUDR() throws Exception{
+		Date testDate = DateCalendarUtils.parseJsonDate("2015-01-30");
+		Date startDate = DateCalendarUtils.parseJsonDate("1990-01-01");
+		Date endDate = DateCalendarUtils.parseJsonDate("1990-01-29");
+		final String RULE_DESCRIPTION = "This is a Simple Rule";
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(2);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
+				YesNoEnum.Y, startDate, null);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		r = testGenUtils.createUdrRule(testRuleTitle+"2", RULE_DESCRIPTION,
+				YesNoEnum.Y, startDate, endDate);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		r = testGenUtils.createUdrRule(testRuleTitle+"3", RULE_DESCRIPTION,
+				YesNoEnum.Y, startDate, testDate);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		r = testGenUtils.createUdrRule(testRuleTitle+"4", RULE_DESCRIPTION,
+				YesNoEnum.N, startDate, testDate);
+		testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		List<Object[]> udrSummaryList = testTarget.findAllUdrSummary(RuleServiceDataGenUtils.TEST_USER1_ID);
+		assertTrue(udrSummaryList.size() >= 3);
+		int count = 0;
+		for(Object[] data:udrSummaryList){
+			assertNotNull(data[0]);//id
+			String editedBy = (String)data[1];
+			assertNotNull(editedBy);
+			if(editedBy.equals(RuleServiceDataGenUtils.TEST_USER1_ID) && RULE_DESCRIPTION.equals(data[4])){
+				Date udrStartDate = (Date)data[5];
+				assertNotNull(startDate);
+				assertEquals(startDate, udrStartDate);
+				assertEquals(RuleServiceDataGenUtils.TEST_USER1_ID, data[8]);
+				count++;
+			}
+		}
+		assertEquals(3, count);
+	}
+	@Transactional
+	@Test()
+	public void testUdrUpdateByAdmin() throws Exception{
+		Date startDate = DateCalendarUtils.parseJsonDate("1990-01-01");
+		final String RULE_DESCRIPTION = "This is a Simple Rule";
+		String testRuleTitle = testGenUtils.generateTestRuleTitle(2);
+		UdrRule r = testGenUtils.createUdrRule(testRuleTitle, RULE_DESCRIPTION,
+				YesNoEnum.Y, startDate, null);
+		r = testTarget.create(r, RuleServiceDataGenUtils.TEST_USER1_ID);
+		
+		testTarget.update(r, RuleServiceDataGenUtils.TEST_USER3_ID);
+		r = testTarget.findByTitleAndAuthor(testRuleTitle, RuleServiceDataGenUtils.TEST_USER1_ID);
+		assertNotNull(r);
+		assertEquals(RuleServiceDataGenUtils.TEST_USER3_ID, r.getEditedBy().getUserId());
+	}
+/**
 	 * The update pattern tested here is:
 	 * 1. Fetch a UdrRule from the persistence service.
 	 * 2. Modify some of UdrRule attributes.

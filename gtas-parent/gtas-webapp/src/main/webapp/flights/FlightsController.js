@@ -1,6 +1,8 @@
 (function () {
     'use strict';
-    app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, flightService, gridService, uiGridConstants, executeQueryService, flights) {
+    app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel) {
+        $scope.model = flightsModel;
+        
         var stateName = $state ? $state.$current.self.name : 'flights',
             setFlightsGrid = function (grid, response) {
                 //NEEDED because java services responses not standardize should have Lola change and Amit revert to what he had;
@@ -38,7 +40,6 @@
                 fetchMethods[stateName]();
             };
 
-        $scope.model = flightService.model;
         $scope.selectedFlight = $stateParams.flight;
         $scope.flightDirections = flightDirections;
         $scope.stateName = stateName;
@@ -138,8 +139,8 @@
             resolvePage();
         };
         $scope.reset = function () {
-            $scope.model = flightService.initialModel();
-            getPage();
+            $scope.model.reset();
+            resolvePage();
         };
         $scope.getTableHeight = function () {
             return gridService.calculateGridHeight($scope.flightsGrid.data.length);

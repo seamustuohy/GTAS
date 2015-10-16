@@ -3,20 +3,15 @@ package gov.gtas.services;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Document;
@@ -43,18 +38,17 @@ public class FlightServiceImpl implements FlightService {
     @Transactional
     public FlightsPageDto findAll(FlightsRequestDto dto) {
         List<FlightVo> vos = new ArrayList<>();
-
-        long total = -1;
-        List<Flight> page = flightRespository.getAllSorted(dto);
-        for (Flight f : page) {
+        Pair<Long, List<Flight>> tuple = flightRespository.findByCriteria(dto);
+        for (Flight f : tuple.getRight()) {
             FlightVo vo = new FlightVo();
             BeanUtils.copyProperties(f, vo);
             vos.add(vo);
         }
 
-        return new FlightsPageDto(vos, total);
+        return new FlightsPageDto(vos, tuple.getLeft());
 	}
- @Override
+    
+    @Override
     @Transactional
 	public HashMap<Document, List<Flight>> getFlightsByPassengerNameAndDocument(String firstName,
 			String lastName, Set<Document> documents) {
