@@ -116,7 +116,7 @@
             enableVerticalScrollbar: 0,
             enableColumnMenus: false,
             multiSelect: false,
-
+            enableExpandableRowHeader: false,
             expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>',
 
             onRegisterApi: function (gridApi) {
