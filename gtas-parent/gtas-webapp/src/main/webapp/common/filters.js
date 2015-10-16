@@ -25,7 +25,7 @@
         })
         .filter('userStatusFilter', function () {
             return function (value) {
-                return !!value;
+                return !!value ? "Yes":"No";
             };
         })
         /* NOT USED */
