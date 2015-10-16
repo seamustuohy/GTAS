@@ -216,7 +216,7 @@ public class TargetingServiceImpl implements TargetingService {
 			MessageStatus statusToLoad, MessageStatus statusAfterProcesssing,
 			final boolean updateProcesssedMessageStat) {
 		logger.info("Entering analyzeLoadedMessages()");
-		Iterator<Message> source = messageRepository.findAll().iterator();
+		Iterator<Message> source = messageRepository.findByStatus(statusToLoad).iterator();
 		List<Message> target = new ArrayList<Message>();
 		source.forEachRemaining(target::add);
 
