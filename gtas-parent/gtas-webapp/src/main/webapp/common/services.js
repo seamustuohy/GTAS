@@ -336,11 +336,13 @@
                             name: "title",
                             displayName: "Name",
                             field: "title",
+                            cellTemplate: '<md-button aria-label="title" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }, {
                             name: "description",
                             field: "description",
+                            cellTemplate: '<md-button aria-label="description" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }
@@ -350,35 +352,40 @@
                             name: "title",
                             displayName: "Name",
                             field: "title",
+                            cellTemplate: '<md-button aria-label="title" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }, {
                             name: "description",
                             field: "description",
+                            cellTemplate: '<md-button aria-label="description" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }, {
                             name: "startDate",
                             field: "startDate",
+                            cellTemplate: '<md-button aria-label="start date" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }, {
                             name: "endDate",
                             field: "endDate",
+                            cellTemplate: '<md-button aria-label="end date" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }, {
                             name: "enabled",
                             field: "enabled",
+                            cellTemplate: '<md-button aria-label="enabled" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         },
                         {
                             name: "modifiedOn",
                             field: "modifiedOn",
+                            cellTemplate: '<md-button aria-label="modified" ng-click="grid.api.selection.selectRow(row.entity)">{{row.entity.modifiedBy}} {{row.entity.modifiedOn}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false,
-                            cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.modifiedBy}} {{row.entity.modifiedOn}}</div>'
                         }
                     ]
                 };

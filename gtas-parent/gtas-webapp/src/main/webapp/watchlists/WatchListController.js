@@ -10,11 +10,18 @@ app.controller('WatchListController', function ($scope, gridOptionsLookupService
                 name: "documentType",
                 displayName: "Type",
                 enableCellEdit: true,
+                editableCellTemplate: 'ui-grid/dropdownEditor',
+                width: '20%',
+                cellFilter: 'mapDocType',
+                editDropdownValueLabel: 'docType',
+                editDropdownOptionsArray: [
+                    { id: "P", docType: "PASSPORT" },
+                    { id: "V", docType: "VISA" }
+                ],
                 "type": "string"
             }, {
                 name: "documentNumber",
                 displayName: "Number",
-                enableCellEdit: true,
                 "type": "string"
             }]
         },
@@ -151,4 +158,17 @@ app.controller('WatchListController', function ($scope, gridOptionsLookupService
     };
 
     $scope.$scope = $scope;
-});
+})
+    .filter('mapDocType', function() {
+        var docHash = {
+            'P': 'PASSENGER',
+            'V': 'VISA'
+        };
+        return function (input) {
+            if (!input) {
+                return '';
+            } else {
+                return docHash[input];
+            }
+        };
+    })
