@@ -3,6 +3,8 @@ package gov.gtas.repository;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Flight;
 import gov.gtas.model.HitDetail;
@@ -56,17 +58,21 @@ public class HitsSummaryRepositoryIT {
 	public void testFindHitDetailByUdr() {
 		long udrId1 = 999954L;
 		long udrId2 = 888854L;
+		long wlId = 777767L;
 		
 		Object[] ids = createPassengerFlight();
 		assertEquals(2, ids.length);
 		assertTrue(((Passenger)ids[0]).getId() >0);
 		assertTrue(((Flight)ids[1]).getId() >0);
 		
-		createHitsSummary(udrId1,(Passenger)ids[0], (Flight)ids[1]);
-		createHitsSummary(udrId1,(Passenger)ids[0], (Flight)ids[1]);
+		createUdrHitsSummary(udrId1,(Passenger)ids[0], (Flight)ids[1]);
+		createUdrHitsSummary(udrId1,(Passenger)ids[0], (Flight)ids[1]);
 		
-		createHitsSummary(udrId2,(Passenger)ids[0], (Flight)ids[1]);
-		createHitsSummary(udrId2,(Passenger)ids[0], (Flight)ids[1]);
+		createUdrHitsSummary(udrId2,(Passenger)ids[0], (Flight)ids[1]);
+		createUdrHitsSummary(udrId2,(Passenger)ids[0], (Flight)ids[1]);
+		
+		createWlHitsSummary(wlId,(Passenger)ids[0], (Flight)ids[1]);
+		createWlHitsSummary(udrId2,(Passenger)ids[0], (Flight)ids[1]);
 		
 		List<Object[]> udrSummaryList = testTarget.findDetailsByUdr();
 		assertNotNull(udrSummaryList);
@@ -80,10 +86,11 @@ public class HitsSummaryRepositoryIT {
 			if(udrId.equals(udrId1)){
 				count1++;
 				assertEquals(2, rlcount.intValue());
-			}
-			if(udrId.equals(udrId2)){
+			}else if(udrId.equals(udrId2)){
 				count2++;
 				assertEquals(2, rlcount.intValue());
+			} else if(udrId.equals(wlId)){
+				fail("Not Expecting Watch Lists to be counted!");
 			}
 		}
 		assertEquals(1, count1);
@@ -109,12 +116,18 @@ public class HitsSummaryRepositoryIT {
 
 		return new Object[]{p, f};
 	}
-	private HitsSummary createHitsSummary(Long udrId, Passenger p, Flight f){
+	private HitsSummary createUdrHitsSummary(Long udrId, Passenger p, Flight f){
+		return createHitsSummary(udrId, "R", p, f);
+	}
+	private HitsSummary createWlHitsSummary(Long wlId, Passenger p, Flight f){
+		return createHitsSummary(wlId, "D", p, f);
+	}
+	private HitsSummary createHitsSummary(Long ruleId, String hitType, Passenger p, Flight f){
 		HitsSummary ret = new HitsSummary();
 		ret.setCreatedDate(new Date());
 		ret.setFlight(f);
 		ret.setPassenger(p);
-		ret.setHitType("R");
+		ret.setHitType(hitType);
 		ret.setRuleHitCount(1);
 		ret.setWatchListHitCount(0);
 		
@@ -122,8 +135,8 @@ public class HitsSummaryRepositoryIT {
 		HitDetail det = new HitDetail();
 		det.setCreatedDate(new Date());
 		det.setDescription("jkkjhg");
-		det.setHitType("R");
-		det.setRuleId(udrId);
+		det.setHitType(hitType);
+		det.setRuleId(ruleId);
 		det.setTitle("Hello");
 		det.setParent(ret);
 		detList.add(det);
