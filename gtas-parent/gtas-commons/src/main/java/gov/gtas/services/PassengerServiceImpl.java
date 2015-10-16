@@ -135,15 +135,18 @@ public class PassengerServiceImpl implements PassengerService {
         List<HitsSummary> hitsSummary = hitsSummaryRepository.findByFlightIdAndPassengerId(flightId, passengerId);
         if (!CollectionUtils.isEmpty(hitsSummary)) {
             for (HitsSummary hs : hitsSummary) {
-                if (vo.getOnRuleHitList() && vo.getOnWatchList()) {
-                    break;
-                }
-                
+//                if (vo.getOnRuleHitList() && vo.getOnWatchList()) {
+//                    break;
+//                }
                 String hitType = hs.getHitType();
-                if (hitType.equals(HitTypeEnum.R.toString())) {
+                if (hitType.contains(HitTypeEnum.R.toString())) {
                     vo.setOnRuleHitList(true);
-                } else {
+                }
+                if (hitType.contains(HitTypeEnum.P.toString())) {
                     vo.setOnWatchList(true);
+                }
+                if (hitType.contains(HitTypeEnum.D.toString())) {
+                    vo.setOnWatchListDoc(true);
                 }
             }
         }

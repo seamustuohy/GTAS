@@ -1,10 +1,12 @@
 package gov.gtas.querybuilder.model;
 
 import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.services.dto.SortOptionsDto;
 
 public class QueryRequest {
 	private int pageNumber;
 	private int pageSize;
+	private SortOptionsDto sort;
 	private QueryObject query;
 	
 	public int getPageNumber() {
@@ -23,6 +25,14 @@ public class QueryRequest {
 		this.pageSize = pageSize;
 	}
 	
+	public SortOptionsDto getSort() {
+		return sort;
+	}
+
+	public void setSort(SortOptionsDto sort) {
+		this.sort = sort;
+	}
+
 	public QueryObject getQuery() {
 		return query;
 	}

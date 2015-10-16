@@ -22,6 +22,5 @@ public interface PassengerService {
      */
     public PassengersPageDto getPassengersByCriteria(Long flightId, PassengersRequestDto request);
 
-    @Deprecated
     public void fillWithHitsInfo(PassengerVo vo, Long flightId, Long passengerId);
 }

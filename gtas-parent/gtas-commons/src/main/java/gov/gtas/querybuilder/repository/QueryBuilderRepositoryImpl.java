@@ -30,7 +30,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -185,21 +184,30 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			}
 
 			try {
-				// pagination
-		        int pageNumber = queryRequest.getPageNumber();
-		        int pageSize = queryRequest.getPageSize();
-		        int firstResultIndex = (pageNumber - 1) * pageSize;
-		        
 				String jpqlQuery = JPQLGenerator.generateQuery(queryRequest.getQuery(), EntityEnum.FLIGHT);
-				logger.info("Getting Flights with this query: " + jpqlQuery);
 				TypedQuery<Flight> query = entityManager.createQuery(jpqlQuery, Flight.class);
 				MutableInt positionalParameter = new MutableInt();
 				setJPQLParameters(query, queryRequest.getQuery(), positionalParameter);
-				query.setFirstResult(firstResultIndex);
-				query.setMaxResults(pageSize);
-				flights = query.getResultList();
 				
-				logger.info("Number of Flights returned: " + (flights != null ? flights.size() : "Flight result is null"));
+				// if page size is less than zero, return all flight result
+				if(queryRequest.getPageSize() < 0) {
+					logger.info("Getting all flights with this query: " + jpqlQuery);
+					flights = query.getResultList();
+					
+					logger.info("Number of Flights returned: " + (flights != null ? flights.size() : "Flight result is null"));
+				} else {
+					// paginate results
+			        int pageNumber = queryRequest.getPageNumber();
+			        int pageSize = queryRequest.getPageSize();
+			        int firstResultIndex = (pageNumber - 1) * pageSize;
+			        
+					logger.info("Getting " + pageSize + " flights with this query: " + jpqlQuery);
+					query.setFirstResult(firstResultIndex);
+					query.setMaxResults(pageSize);
+					flights = query.getResultList();
+					
+					logger.info("Number of Flights returned: " + (flights != null ? flights.size() : "Flight result is null"));
+				}
 			} catch (InvalidQueryRepositoryException | ParseException e) {
 				throw new InvalidQueryRepositoryException(e.getMessage(), queryRequest.getQuery());
 			}
@@ -252,21 +260,30 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			}
 			
 			try {
-				// pagination
-		        int pageNumber = queryRequest.getPageNumber();
-		        int pageSize = queryRequest.getPageSize();
-		        int firstResultIndex = (pageNumber - 1) * pageSize;
-		        
 				String jpqlQuery = JPQLGenerator.generateQuery(queryRequest.getQuery(), EntityEnum.PASSENGER);
-				logger.info("Getting Passengers with this query: " + jpqlQuery);
 				TypedQuery<Object[]> query = entityManager.createQuery(jpqlQuery, Object[].class);
 				MutableInt positionalParameter = new MutableInt();
 				setJPQLParameters(query, queryRequest.getQuery(), positionalParameter);
-				query.setFirstResult(firstResultIndex);
-				query.setMaxResults(pageSize);
-				result = query.getResultList();
 				
-				logger.info("Number of Passengers returned: " + (result != null ? result.size() : "Passenger result is null"));
+				if(queryRequest.getPageSize() < 0) {
+					logger.info("Getting all passengers with this query: " + jpqlQuery);
+					result = query.getResultList();
+					
+					logger.info("Number of Passengers returned: " + (result != null ? result.size() : "Passenger result is null"));
+				}
+				else {
+					// pagination
+			        int pageNumber = queryRequest.getPageNumber();
+			        int pageSize = queryRequest.getPageSize();
+			        int firstResultIndex = (pageNumber - 1) * pageSize;
+			        
+					logger.info("Getting " + pageSize + " passengers with this query: " + jpqlQuery);
+					query.setFirstResult(firstResultIndex);
+					query.setMaxResults(pageSize);
+					result = query.getResultList();
+					
+					logger.info("Number of Passengers returned: " + (result != null ? result.size() : "Passenger result is null"));
+				}
 			} catch (InvalidQueryRepositoryException | ParseException e) {
 				throw new InvalidQueryRepositoryException(e.getMessage(), queryRequest.getQuery());
 			}

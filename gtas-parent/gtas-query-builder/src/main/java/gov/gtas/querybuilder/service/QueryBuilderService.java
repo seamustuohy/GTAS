@@ -122,7 +122,11 @@ public class QueryBuilderService {
 				return new FlightsPageDto(flightList, totalCount);
 			}
 			
-			totalCount = queryRepository.totalFlightsByDynamicQuery(queryRequest);
+			if(queryRequest.getPageSize() < 0) {
+				totalCount = flights.size();
+			} else {
+				totalCount = queryRepository.totalFlightsByDynamicQuery(queryRequest);
+			}
 			
 			for(Flight flight : flights) {
 				if(flight != null && flight.getId() > 0) {
@@ -150,7 +154,11 @@ public class QueryBuilderService {
 				return new PassengersPageDto(passengerList, totalCount);
 			}
 			
-			totalCount = queryRepository.totalPassengersByDynamicQuery(queryRequest);
+			if(queryRequest.getPageSize() < 0) {
+				totalCount = resultList.size();
+			} else {
+				totalCount = queryRepository.totalPassengersByDynamicQuery(queryRequest);
+			}
 			
 	        for (Object[] result : resultList) {
 	        	Passenger passenger = (Passenger) result[0];
