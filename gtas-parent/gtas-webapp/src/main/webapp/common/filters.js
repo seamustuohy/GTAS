@@ -81,6 +81,15 @@
             };
 
         })
+        .filter('mapDocType', function() {
+            var DOCUMENT_TYPES = {
+                'P': 'PASSENGER',
+                'V': 'VISA'
+            };
+            return function (input) {
+                return !input ? '' : DOCUMENT_TYPES[input];
+            };
+        })
         .filter('watchListDocHit', function () {
             return function (hit) {
                 return hit ? 'glyphicon glyphicon-file' : '';

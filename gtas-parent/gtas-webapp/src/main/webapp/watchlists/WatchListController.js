@@ -39,7 +39,8 @@ app.controller('WatchListController', function ($scope, gridOptionsLookupService
                 "type": "string"
             }, {
                 name: "dob",
-                displayName:"DOB",
+                displayName: "DOB",
+                cellFilter: 'date:"yyyy-MM-dd"',
                 enableCellEdit: true,
                 "type": "date"
             }]
@@ -158,17 +159,4 @@ app.controller('WatchListController', function ($scope, gridOptionsLookupService
     };
 
     $scope.$scope = $scope;
-})
-    .filter('mapDocType', function() {
-        var docHash = {
-            'P': 'PASSENGER',
-            'V': 'VISA'
-        };
-        return function (input) {
-            if (!input) {
-                return '';
-            } else {
-                return docHash[input];
-            }
-        };
-    })
+});
