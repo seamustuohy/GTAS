@@ -5,13 +5,16 @@ app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams', 'uiGrid
 
   $scope.selectedUser=$stateParams.user;
   $scope.gridOptions.columnDefs = [
-    { name: 'userId' ,field: 'userId', width:'15%'},
-    { name: 'firstName',field:'firstName',width:'15%'},
-    { name: 'lastName',field:'lastName',width:'20%'} ,
-    { name: 'active' ,field:'active',cellFilter: 'userStatusFilter',width:'10%'},
-    {name: 'roles', field:'roles' ,cellFilter: 'roleDescriptionFilter',width:'40%',
-        cellTooltip: function(row){ return row.entity.roles; },
-        cellTemplate: '<div class="ui-grid-cell-contents wrap" style="white-space: normal" title="TOOLTIP">{{COL_FIELD CUSTOM_FILTERS}}</div>'}
+      { name: 'active' ,field:'active',cellFilter: 'userStatusFilter',width:'10%', sort: {
+          direction: uiGridConstants.DESC,
+          priority: 1
+      }},
+      { name: 'userId' ,field: 'userId', width:'15%'},
+      { name: 'firstName',field:'firstName',width:'15%'},
+      { name: 'lastName',field:'lastName',width:'20%'} ,
+      { name: 'roles', field:'roles' ,cellFilter: 'roleDescriptionFilter',width:'40%',
+          cellTooltip: function(row){ return row.entity.roles; },
+          cellTemplate: '<div class="ui-grid-cell-contents wrap" style="white-space: normal" title="TOOLTIP">{{COL_FIELD CUSTOM_FILTERS}}</div>'}
   ];
   $scope.gridOptions.multiSelect = false;
   $scope.gridOptions.modifierKeysToMultiSelect = false;
