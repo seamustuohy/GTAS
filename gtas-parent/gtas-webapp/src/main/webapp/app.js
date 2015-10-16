@@ -7,7 +7,6 @@ var app;
         },
         appDependencies = [
             'ui.router',
-            'ct.ui.router.extras',
             'ui.grid',
             'ui.grid.resizeColumns',
             'ui.grid.moveColumns',
@@ -53,8 +52,6 @@ var app;
                 })
                 .state('admin.users', {
                     url: '/',
-                    sticky: true,
-                    dsr: true,
                     views: {
                         "content@admin": {
                             templateUrl: 'admin/admin.html'
@@ -67,8 +64,6 @@ var app;
                         action: null,
                         user: null
                     },
-                    sticky: true,
-                    dsr: true,
                     views: {
                         "content@admin": {
                             controller: 'UserCtrl',
@@ -78,8 +73,6 @@ var app;
                 })
                 .state('flights', {
                     url: '/flights',
-                    sticky: true,
-                    dsr: true,
                     views: {
                         '@': {
                             controller: 'FlightsController',
@@ -122,7 +115,7 @@ var app;
                     },
                     resolve: {
                         passengers: function (paxService, paxModel) {
-                            return paxService.getAllPax(paxModel);
+                            return paxService.getAllPax(paxModel.model);
                         }
                     }
                 })
@@ -135,14 +128,18 @@ var app;
                         }
                     },
                     resolve: {
+                        paxModel: function ($stateParams, paxModel) {
+                            return {
+                                model: paxModel.initial($stateParams),
+                                reset: function() { this.model.lastName = ''; }
+                            };
+                        },
                         passengers: function (paxService, $stateParams, paxModel) {
                             //because of field/model not standard
                             $stateParams.dest = $stateParams.destination;
                             $stateParams.etaStart = $stateParams.eta;
                             $stateParams.etaEnd = $stateParams.etd;
-                            //var model = paxModel;
-                            paxModel.reset($stateParams);
-                            return paxService.getPax($stateParams.id, paxModel);
+                            return paxService.getPax($stateParams.id, paxModel.model);
                         }
                     }
                 })

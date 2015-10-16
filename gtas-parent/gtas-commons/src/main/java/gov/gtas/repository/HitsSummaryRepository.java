@@ -18,6 +18,10 @@ public interface HitsSummaryRepository extends CrudRepository<HitsSummary, Long>
 	@Query("SELECT hits.hitdetails FROM HitsSummary hits WHERE hits.passenger.id = (:id)")
 	public List<HitDetail> findByPassengerId(@Param("id") Long id);
 
+	@Query("SELECT det.ruleId, count(*) FROM HitsSummary h join h.hitdetails det WHERE det.hitType = 'R'"
+	      +" group by det.ruleId")
+	public List<Object[]> findDetailsByUdr();
+	
 	/**
 	 * @param id pax id
 	 * @return RULE hits only

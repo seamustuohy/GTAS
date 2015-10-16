@@ -7,18 +7,26 @@ app.service("paxModel", [function() {
     startDate = new Date(),
     endDate = new Date();
     endDate.setDate(endDate.getDate() + 3);
+  
+  this.initial = function(params) {
+    return {
+      pageNumber: 1,
+      pageSize: 10,
+      lastName: '',
+      flightNumber: params && params.flightNumber ? params.flightNumber : '',
+      origin: params && params.origin ? params.origin : '',
+      dest: params && params.destination ? params.destination : '',
+      direction: params && params.direction ? params.direction : 'I',
+      etaStart: params && params.etaStart ? new Date(params.etaStart) : startDate,
+      etaEnd: params && params.etaEnd ? new Date(params.etaEnd) : endDate,
+      sort: defaultSort
+    };
+  };
+  
+  this.model = {};
 
   this.reset = function(params) {
-    this.pageNumber = 1;
-    this.pageSize = 10;
-    this.lastName = '';
-    this.flightNumber = params && params.flightNumber ? params.flightNumber : '';
-    this.origin = params && params.origin ? params.origin : '';
-    this.dest = params && params.destination ? params.destination : '';
-    this.direction = params && params.direction ? params.direction : 'I';
-    this.etaStart = params && params.etaStart ? new Date(params.etaStart) : startDate;
-    this.etaEnd = params && params.etaEnd ? new Date(params.etaEnd) : endDate;
-    this.sort = defaultSort
+    angular.copy(this.initial(params), this.model);
   }
   
   this.reset();
