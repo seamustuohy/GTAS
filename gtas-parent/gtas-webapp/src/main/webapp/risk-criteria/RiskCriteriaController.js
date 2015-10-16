@@ -5,26 +5,26 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
     $scope.setData = function (myData) {
         var temp, data = [];
         myData.forEach(function (obj) {
-            temp = $.extend({}, obj.summary, {id: obj.id});
+            temp = $.extend({}, obj.summary, {id: obj.id, modifiedOn: obj.modifiedOn, modifiedBy: obj.modifiedBy});
             data.push(temp);
         });
-        $scope.riskCriteriaGrid.data = data;
+        $scope.qbGrid.data = data;
     };
 
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope });
     $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
 
-    $scope.riskCriteriaGrid = gridOptionsLookupService.getGridOptions('riskCriteria');
-    $scope.riskCriteriaGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs('riskCriteria');
-    $scope.riskCriteriaGrid.exporterCsvFilename = 'riskCriteria.csv';
-    $scope.riskCriteriaGrid.exporterPdfHeader = {text: "Risk Criteria", style: 'headerStyle'};
+    $scope.qbGrid = gridOptionsLookupService.getGridOptions('riskCriteria');
+    $scope.qbGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs('riskCriteria');
+    $scope.qbGrid.exporterCsvFilename = 'riskCriteria.csv';
+    $scope.qbGrid.exporterPdfHeader = {text: "Risk Criteria", style: 'headerStyle'};
 
     jqueryQueryBuilderService.getList().then(function (myData) {
         $scope.setData(myData.result);
     });
 
     $scope.loadRuleOnSelection = function (row) {
-        $scope.selectedIndex = $scope.riskCriteriaGrid.data.indexOf(row.entity);
+        $scope.selectedIndex = $scope.qbGrid.data.indexOf(row.entity);
         jqueryQueryBuilderService.loadRuleById(row.entity.id).then(function (myData) {
             var result = myData.result;
             $scope.ruleId = result.id;
@@ -33,7 +33,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
         });
     };
 
-    $scope.riskCriteriaGrid.onRegisterApi = $scope.rowSelection;
+    $scope.qbGrid.onRegisterApi = $scope.rowSelection;
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
     $scope.summaryDefaults = {
         title: '',

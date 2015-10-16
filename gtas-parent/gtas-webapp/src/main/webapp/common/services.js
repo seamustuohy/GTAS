@@ -372,6 +372,13 @@
                             field: "enabled",
                             enableCellEdit: false,
                             enableColumnMenu: false
+                        },
+                        {
+                            name: "modifiedOn",
+                            field: "modifiedOn",
+                            enableCellEdit: false,
+                            enableColumnMenu: false,
+                            cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.modifiedBy}} {{row.entity.modifiedOn}}</div>'
                         }
                     ]
                 };

@@ -11,7 +11,7 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
         myData.forEach(function (obj) {
             data.push(obj);
         });
-        $scope.queriesGrid.data = data;
+        $scope.qbGrid.data = data;
     };
 
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope });
@@ -19,13 +19,13 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
     jqueryQueryBuilderService.init('querybuilder');
 
-//    $scope.resultsGrid = $.extend({}, $scope.queriesGrid);
+//    $scope.resultsGrid = $.extend({}, $scope.qbGrid);
 //    $scope.resultsGrid.enableColumnResizing = true;
 
-    $scope.queriesGrid = gridOptionsLookupService.getGridOptions('queries');
-    $scope.queriesGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs('queries');
-    $scope.queriesGrid.exporterCsvFilename = 'MySavedQueries.csv';
-    $scope.queriesGrid.exporterPdfHeader = { text: "My Saved Queries", style: 'headerStyle' };
+    $scope.qbGrid = gridOptionsLookupService.getGridOptions('queries');
+    $scope.qbGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs('queries');
+    $scope.qbGrid.exporterCsvFilename = 'MySavedQueries.csv';
+    $scope.qbGrid.exporterPdfHeader = { text: "My Saved Queries", style: 'headerStyle' };
 
 
     jqueryQueryBuilderService.getList().then(function (myData) {
@@ -35,7 +35,7 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
     $scope.hideGrid = true;
 
     $scope.loadRule = function () {
-        var obj = $scope.queriesGrid.data[$scope.selectedIndex];
+        var obj = $scope.qbGrid.data[$scope.selectedIndex];
         $scope.hideGrid = true;
         $scope.ruleId = obj.id;
         $scope.loadSummary({title: obj.title, description: obj.description });
@@ -45,11 +45,11 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
     $scope.buildAfterEntitiesLoaded();
 
     $scope.loadRuleOnSelection = function (row) {
-        $scope.selectedIndex = $scope.queriesGrid.data.indexOf(row.entity);
+        $scope.selectedIndex = $scope.qbGrid.data.indexOf(row.entity);
         $scope.loadRule();
     };
 
-    $scope.queriesGrid.onRegisterApi = $scope.rowSelection;
+    $scope.qbGrid.onRegisterApi = $scope.rowSelection;
 
     $scope.summaryDefaults = {description: null, title: ''};
     $scope.ruleId = null;

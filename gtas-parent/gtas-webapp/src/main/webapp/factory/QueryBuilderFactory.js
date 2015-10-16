@@ -51,11 +51,11 @@ app.factory('queryBuilderFactory', function () {
                     var page;
                     if (!$scope.selectedIndex) {
                         page = $scope.gridApi.pagination.getTotalPages();
-                        $scope.selectedIndex = $scope.gridOpts.data.length - 1;
+                        $scope.selectedIndex = $scope.qbGrid.data.length - 1;
                         $scope.gridApi.pagination.seek(page);
                     }
                     $scope.gridApi.selection.clearSelectedRows();
-                    $scope.gridApi.selection.selectRow($scope.gridOpts.data[$scope.selectedIndex]);
+                    $scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
                     $scope.saving = false;
                 }, 0, 1);
             });
@@ -82,10 +82,10 @@ app.factory('queryBuilderFactory', function () {
             var selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
 
             selectedRowEntities.forEach(function (rowEntity) {
-                var rowIndexToDelete = $scope.gridOpts.data.indexOf(rowEntity);
+                var rowIndexToDelete = $scope.qbGrid.data.indexOf(rowEntity);
 
                 jqueryQueryBuilderService.delete($scope.ruleId).then(function (response) {
-                    $scope.gridOpts.data.splice(rowIndexToDelete, 1);
+                    $scope.qbGrid.data.splice(rowIndexToDelete, 1);
                     $scope.newRule();
                 });
             });
@@ -119,6 +119,7 @@ app.factory('queryBuilderFactory', function () {
         $scope.formats = ["YYYY-MM-DD"];
 
         $scope.newRule = function () {
+            $scope.showSummaryClass = 'show';
             $scope.ruleId = null;
             $scope.$builder.queryBuilder('reset');
             $scope.loadSummary($scope.summaryDefaults);
