@@ -63,6 +63,9 @@ nav a[disabled] {
     width: 98%;
     text-align: left;
 }
+.ui-grid-icon-ok:before {
+    content: '\c357' !important;
+}
 
 /* icons */
 .glyphiconFlightPax {
@@ -75,4 +78,6 @@ nav a[disabled] {
     color: #222;
     padding: 5px;
 }
-
+.glyphicon-remove {
+    cursor: pointer;
+}
