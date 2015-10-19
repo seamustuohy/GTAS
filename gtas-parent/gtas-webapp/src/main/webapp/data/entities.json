@@ -368,18 +368,6 @@
           "NOT_ENDS_WITH",
           "NOT_BEGINS_WITH"
         ]
-      },
-      {
-        "id": "Flight.thru",
-        "label": "Thru",
-        "type": "string",
-        "operators": [
-          "EQUAL",
-          "BEGINS_WITH",
-          "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
-        ]
       }
     ]
   },
@@ -768,114 +756,8 @@
         ]
       },
       {
-        "id": "Pnr.dwellAirport",
-        "label": "Dwell - Airport",
-        "type": "string",
-        "operators": [
-          "EQUAL",
-          "NOT_EQUAL",
-          "IN",
-          "NOT_IN"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize",
-        "create": true,
-        "dataSource": "airports"
-      },
-      {
-        "id": "Pnr.dwellCountry",
-        "label": "Dwell - Country",
-        "type": "string",
-        "operators": [
-          "EQUAL",
-          "NOT_EQUAL",
-          "IN",
-          "NOT_IN"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize",
-        "create": true,
-        "dataSource": "countries"
-      },
-      {
-        "id": "Pnr.dwellDuration",
-        "label": "Dwell - Duration",
-        "type": "integer",
-        "operators": [
-          "EQUAL",
-          "NOT_EQUAL",
-          "IN",
-          "NOT_IN",
-          "LESS",
-          "LESS_OR_EQUAL",
-          "GREATER",
-          "GREATER_OR_EQUAL",
-          "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
-        ]
-      },
-      {
-        "id": "Pnr.totalDwellTime",
-        "label": "Dwell - Total Duration",
-        "type": "integer",
-        "operators": [
-          "EQUAL",
-          "NOT_EQUAL",
-          "IN",
-          "NOT_IN",
-          "LESS",
-          "LESS_OR_EQUAL",
-          "GREATER",
-          "GREATER_OR_EQUAL",
-          "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
-        ]
-      },
-      {
         "id": "Pnr.formOfPayment",
         "label": "Form of Payment",
-        "type": "string",
-        "operators": [
-          "EQUAL",
-          "BEGINS_WITH",
-          "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
-        ]
-      },
-      {
-        "id": "Pnr.firstName",
-        "label": "Name - First",
-        "type": "string",
-        "operators": [
-          "EQUAL",
-          "BEGINS_WITH",
-          "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
-        ]
-      },
-      {
-        "id": "Pnr.lastName",
-        "label": "Name - Last",
-        "type": "string",
-        "operators": [
-          "EQUAL",
-          "BEGINS_WITH",
-          "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
-        ]
-      },
-      {
-        "id": "Pnr.middleName",
-        "label": "Name - Middle",
         "type": "string",
         "operators": [
           "EQUAL",
@@ -939,18 +821,6 @@
       {
         "id": "Pnr.recordLocator",
         "label": "Record Locator",
-        "type": "string",
-        "operators": [
-          "EQUAL",
-          "BEGINS_WITH",
-          "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
-        ]
-      },
-      {
-        "id": "Pnr.route",
-        "label": "Route",
         "type": "string",
         "operators": [
           "EQUAL",

@@ -64,8 +64,6 @@ public class Flight extends BaseEntityAudit {
     @Column(length = 3, nullable = false)
     private String direction;
     
-    private Boolean thru;
-    
     @ManyToMany(
         targetEntity=Passenger.class,
         cascade={CascadeType.ALL}
@@ -171,12 +169,6 @@ public class Flight extends BaseEntityAudit {
     }
     public void setDestinationCountry(String destinationCountry) {
         this.destinationCountry = destinationCountry;
-    }
-    public Boolean getThru() {
-        return thru;
-    }
-    public void setThru(Boolean thru) {
-        this.thru = thru;
     }
     public Set<Pnr> getPnrs() {
 		return pnrs;

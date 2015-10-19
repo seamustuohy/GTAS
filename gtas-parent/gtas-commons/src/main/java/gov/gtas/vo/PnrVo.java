@@ -34,11 +34,6 @@ public class PnrVo extends MessageVo implements Validatable{
     private Integer bagCount;
     private String formOfPayment;
     private String updateMode;
-    private Integer totalDwellTime;
-    private String dwellAirport;
-    private String dwellCountry;
-    private Integer dwellDuration;
-    private String route;
     private String raw;
     private List<String> rawList = new ArrayList<String>();
     private Integer daysBookedBeforeTravel;
@@ -64,47 +59,6 @@ public class PnrVo extends MessageVo implements Validatable{
 
 	public void setEmails(List<EmailVo> emails) {
 		this.emails = emails;
-	}
-
-
-	public Integer getTotalDwellTime() {
-		return totalDwellTime;
-	}
-
-	public void setTotalDwellTime(Integer totalDwellTime) {
-		this.totalDwellTime = totalDwellTime;
-	}
-
-	public String getDwellAirport() {
-		return dwellAirport;
-	}
-
-	public void setDwellAirport(String dwellAirport) {
-		this.dwellAirport = dwellAirport;
-	}
-
-	public String getDwellCountry() {
-		return dwellCountry;
-	}
-
-	public void setDwellCountry(String dwellCountry) {
-		this.dwellCountry = dwellCountry;
-	}
-
-	public Integer getDwellDuration() {
-		return dwellDuration;
-	}
-
-	public void setDwellDuration(Integer dwellDuration) {
-		this.dwellDuration = dwellDuration;
-	}
-
-	public String getRoute() {
-		return route;
-	}
-
-	public void setRoute(String route) {
-		this.route = route;
 	}
 
 	public String getRaw() {

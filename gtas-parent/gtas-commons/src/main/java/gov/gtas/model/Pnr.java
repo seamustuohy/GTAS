@@ -64,14 +64,6 @@ public class Pnr extends Message {
     @Column(name = "form_of_payment")
     private String formOfPayment;
     
-    @Column(name = "total_dwell_time")
-    private Integer totalDwellTime;
-    
-    private String dwellAirport;
-    private String dwellCountry;
-    private Integer dwellDuration;
-    private String route;
-    
     @ManyToMany(
         targetEntity=Flight.class,
         cascade={CascadeType.ALL}
@@ -374,14 +366,6 @@ public class Pnr extends Message {
 		this.formOfPayment = formOfPayment;
 	}
 
-	public Integer getTotalDwellTime() {
-		return totalDwellTime;
-	}
-
-	public void setTotalDwellTime(Integer totalDwellTime) {
-		this.totalDwellTime = totalDwellTime;
-	}
- 
     public Set<Flight> getFlights() {
 		return flights;
 	}
