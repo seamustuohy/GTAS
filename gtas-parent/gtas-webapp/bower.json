@@ -3,11 +3,11 @@
   "version": "1.0",
   "description": "GTAS Webapp",
   "dependencies": {
-    "angular": "latest",
-    "angular-ui-router": "latest",
+    "angular": "~1.4.7",
+    "angular-messages": "~1.4.7",
+    "angular-ui-router": "*",
     "angular-material": "~0.11.0",
     "angular-ui-grid": "3.0.3",
-    "angular-messages": "~1.4.6",
     "angular-spinners": "~3.0.2",
     "bootstrap": "latest",
     "bootstrap-datepicker": "latest",
@@ -36,6 +36,6 @@
     "filter"
   ],
   "resolutions": {
-    "angular": "1.4.6"
+    "angular": "~1.4.7"
   }
 }
