@@ -113,7 +113,7 @@
             useExternalSorting: true,
             useExternalFiltering: true,
             enableHorizontalScrollbar: 0,
-            enableVerticalScrollbar: 2,
+            enableVerticalScrollbar: 0,
             enableColumnMenus: false,
             multiSelect: false,
             enableExpandableRowHeader: false,

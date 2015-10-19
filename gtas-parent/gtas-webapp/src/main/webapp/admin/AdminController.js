@@ -17,7 +17,7 @@ app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams', 'uiGrid
           cellTemplate: '<div class="ui-grid-cell-contents wrap" style="white-space: normal" title="TOOLTIP">{{COL_FIELD CUSTOM_FILTERS}}</div>'}
   ];
   $scope.gridOptions.enableHorizontalScrollbar = 0;
-  $scope.gridOptions.enableVerticalScrollbar = 2;
+  $scope.gridOptions.enableVerticalScrollbar = 0;
   $scope.gridOptions.multiSelect = false;
   $scope.gridOptions.modifierKeysToMultiSelect = false;
   $scope.gridOptions.noUnselect = true;

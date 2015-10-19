@@ -48,6 +48,8 @@ app.controller('WatchListController', function ($scope, gridOptionsLookupService
     };
 
     $scope.watchlistGrid.enableCellEditOnFocus = true;
+    $scope.watchlistGrid.enableHorizontalScrollbar = 0;
+    $scope.watchlistGrid.enableVerticalScrollbar = 0;
     $scope.watchlistGrid.columnDefs = watchlist.types.Document.columns;
 
     $scope.updateGrid = function (listName) {

@@ -191,6 +191,8 @@
                 standardOptions = {
                     paginationPageSize: 10,
                     paginationPageSizes: [],
+                    enableHorizontalScrollbar: 0,
+                    enableVerticalScrollbar: 0,                    
                     enableFiltering: true,
                     enableCellEditOnFocus: false,
                     showGridFooter: true,
