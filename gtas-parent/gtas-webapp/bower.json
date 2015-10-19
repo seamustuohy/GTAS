@@ -6,7 +6,7 @@
     "angular": "~1.4.7",
     "angular-messages": "~1.4.7",
     "angular-ui-router": "*",
-    "angular-material": "~0.11.0",
+    "angular-material": "~0.12.0",
     "angular-ui-grid": "3.0.3",
     "angular-spinners": "~3.0.2",
     "bootstrap": "latest",
