@@ -56,7 +56,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
         startDate = moment($scope.startDate, $scope.formats, true);
         endDate = moment($scope.endDate, $scope.formats, true);
 
-        if ($scope.title.length) {
+        if ($scope.title && $scope.title.length) {
             $scope.title = $scope.title.trim();
         }
 
