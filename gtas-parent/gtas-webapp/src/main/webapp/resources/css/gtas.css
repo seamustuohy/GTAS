@@ -31,7 +31,7 @@ nav a[disabled] {
 /* ui grid */
 .ui-grid-pager-control input {
     width: 80px;
-    height: 25px;
+    height: 30px;
 }
 .ui-grid-icon-ok:before {
     content: '\c357' !important;
@@ -42,7 +42,7 @@ nav a[disabled] {
 .ui-grid-pager-row-count-picker select {
     display: inline-block;
     width: 100px;
-    height: 25px;
+    height: 30px;
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.5;
