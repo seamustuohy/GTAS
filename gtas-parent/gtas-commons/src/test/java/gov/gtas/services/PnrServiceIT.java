@@ -95,7 +95,6 @@ public class PnrServiceIT {
 		pnr.setOrigin(a);
 		pnr.setOriginCountry(c);
 		pnr.setPassengerCount(1);
-		pnr.setTotalDwellTime(120);
 		CreditCard cc = new CreditCard();
 		cc.setExpiration(new Date("4/17/2015"));
 		cc.setAccountHolder("Srinivasarao Vempati");

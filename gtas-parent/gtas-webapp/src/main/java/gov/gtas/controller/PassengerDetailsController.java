@@ -172,7 +172,6 @@ public class PassengerDetailsController {
 		target.setBagCount(source.getBagCount());
 		target.setDateBooked(source.getDateBooked());
 		target.setCarrier(source.getCarrier());
-		// target.setChangeDate();
 		target.setDaysBookedBeforeTravel(source.getDaysBookedBeforeTravel());
 		target.setDepartureDate(source.getDepartureDate());
 		target.setFormOfPayment(source.getFormOfPayment());
@@ -180,7 +179,6 @@ public class PassengerDetailsController {
 		target.setOriginCountry(source.getOriginCountry());
 		target.setPassengerCount(source.getPassengerCount());
 		target.setDateReceived(source.getDateReceived());
-		target.setTotalDwellTime(source.getTotalDwellTime());
 		target.setRaw(LobUtils.convertClobToString(source.getRaw()));
 		parseRawMessageToList(target);
 

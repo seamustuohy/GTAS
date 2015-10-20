@@ -141,6 +141,7 @@ public class RuleServiceImpl implements RuleService {
 	@Override
 	public RuleServiceResult invokeRuleEngine(RuleServiceRequest req,
 			String kbName) {
+		logger.info("Entering invokeRuleEngine().");
 		KnowledgeBase kbRecord = null;
 		if (StringUtils.isEmpty(kbName)) {
 			logger.info("Default rule knowledge base is loaded.");
@@ -154,6 +155,7 @@ public class RuleServiceImpl implements RuleService {
 			return null;
 		}
 		try {
+			//create KieBase object from compressed binary data read from db
 			KieBase kb = RuleUtils
 					.convertKieBasefromBytes(kbRecord.getKbBlob());
 			return createSessionAndExecuteRules(kb, req);

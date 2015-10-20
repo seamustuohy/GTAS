@@ -1,0 +1,17 @@
+package gov.gtas.enumtype;
+
+public enum AuditActionType {
+	CREATE_UDR, 
+	UPDATE_UDR, 
+	DELETE_UDR, 
+	CREATE_WL, 
+	UPDATE_WL, 
+	DELETE_WL, 
+	LOAD_APIS, 
+	LOAD_PNR, 
+	CREATE_USER, 
+	UPDATE_USER, 
+	SUSPEND_USER, 
+	DELETE_USER,
+	TARGETING_RUN
+}

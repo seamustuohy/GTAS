@@ -98,7 +98,6 @@ public class PnrServiceImpl implements PnrService {
 		target.setOriginCountry(source.getOriginCountry());	
 		target.setPassengerCount(source.getPassengerCount());
 		target.setDateReceived(source.getDateReceived());
-		target.setTotalDwellTime(source.getTotalDwellTime());
         target.setRaw(source.getRaw());
         	
 		if(source.getAddresses() != null && source.getAddresses().size() >0){

@@ -3,13 +3,21 @@ package gov.gtas.svc.util;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Message;
 import gov.gtas.model.Pnr;
+import gov.gtas.svc.TargetingServiceImpl;
 import gov.gtas.svc.request.builder.RuleEngineRequestBuilder;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TargetingServiceUtils {
+	
+	private static final Logger logger = LoggerFactory
+			.getLogger(TargetingServiceUtils.class);
+	
 	/**
 	 * Creates a request from a API message.
 	 * 
@@ -101,9 +109,11 @@ public class TargetingServiceUtils {
 	 */
 	public static RuleExecutionContext createPnrApisRequestContext(
 			final List<Message> loadedMessages) {
+		logger.info("Entering createPnrApisRequestContext().");
 		RuleEngineRequestBuilder bldr = new RuleEngineRequestBuilder();
 
 		if (loadedMessages != null) {
+			logger.info("Loaded messages size -->" + loadedMessages.size());
 			for (Message message : loadedMessages) {
 				if (message instanceof ApisMessage) {
 					bldr.addApisMessage((ApisMessage) message);

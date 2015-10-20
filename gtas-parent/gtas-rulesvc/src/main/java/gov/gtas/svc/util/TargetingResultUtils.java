@@ -29,12 +29,16 @@ public class TargetingResultUtils {
 	 */
 	public static RuleServiceResult ruleResultPostProcesssing(
 			RuleServiceResult result) {
+		logger.info("Entering ruleResultPostProcesssing().");
 		// get the list of RuleHitDetail objects returned by the Rule Engine
 		List<RuleHitDetail> resultList = result.getResultList();
 
 		// create a Map to eliminate duplicates
 		Map<RuleHitDetail, RuleHitDetail> resultMap = new HashMap<>();
 
+		if (logger.isInfoEnabled()) {
+			logger.info("Number of rule hits --> " + resultList.size());
+		}
 		for (RuleHitDetail rhd : resultList) {
 			if (rhd.getFlightId() == null) {
 				// get all the flights for the passenger
@@ -66,12 +70,13 @@ public class TargetingResultUtils {
 		RuleServiceResult ret = new BasicRuleServiceResult(
 				new LinkedList<RuleHitDetail>(resultMap.values()),
 				result.getExecutionStatistics());
+		logger.info("Exiting ruleResultPostProcesssing().");
 		return ret;
 	}
 
 	private static void processPassengerFlight(RuleHitDetail rhd,
 			Long flightId, Map<RuleHitDetail, RuleHitDetail> resultMap) {
-
+		logger.info("Entering processPassengerFlight().");
 		rhd.setFlightId(flightId);
 
 		// set the passenger object to null
@@ -82,9 +87,11 @@ public class TargetingResultUtils {
 		if (resrhd != null && resrhd.getRuleId() != rhd.getRuleId()) {
 			resrhd.incrementHitCount();
 			if (resrhd.getUdrRuleId() != null) {
+				logger.info("This is a rule hit so increment the rule hit count.");
 				// this is a rule hit
 				resrhd.incrementRuleHitCount();
 			} else {
+				logger.info("This is a watch list hit.");
 				// this is a watch list hit
 				if (resrhd.getHitType() != rhd.getHitType()) {
 					resrhd.setHitType(HitTypeEnum.PD);
@@ -93,11 +100,12 @@ public class TargetingResultUtils {
 		} else if (resrhd == null) {
 			resultMap.put(rhd, rhd);
 		}
-
+		logger.info("Exiting processPassengerFlight().");
 	}
 
 	public static void updateRuleExecutionContext(RuleExecutionContext ctx,
 			RuleServiceResult res) {
+		logger.info("Entering updateRuleExecutionContext().");
 		ctx.setRuleExecutionStatistics(res.getExecutionStatistics());
 		final Map<String, TargetSummaryVo> hitSummaryMap = new HashMap<>();
 		for (RuleHitDetail rhd : res.getResultList()) {
@@ -114,6 +122,6 @@ public class TargetingResultUtils {
 					.getHitReasons()));
 		}
 		ctx.setTargetingResult(hitSummaryMap.values());
+		logger.info("Exiting updateRuleExecutionContext().");
 	}
-
 }

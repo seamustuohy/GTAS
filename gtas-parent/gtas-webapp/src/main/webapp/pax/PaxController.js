@@ -109,10 +109,11 @@
         $scope.passengerGrid = {
             paginationPageSizes: [10, 15, 25],
             paginationPageSize: $scope.model.pageSize,
+            paginationCurrentPage: $scope.model.pageNumber,
             useExternalPagination: true,
             useExternalSorting: true,
             useExternalFiltering: true,
-            enableHorizontalScrollbar: 1,
+            enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 0,
             enableColumnMenus: false,
             multiSelect: false,

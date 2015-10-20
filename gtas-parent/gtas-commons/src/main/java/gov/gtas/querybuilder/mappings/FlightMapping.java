@@ -13,8 +13,7 @@ public enum FlightMapping implements IEntityMapping {
 	ETA ("eta", "ETA", TypeEnum.DATE.getType()),
 	ETD ("etd", "ETD", TypeEnum.DATE.getType()),
 	FLIGHT_DATE ("flightDate", "Flight Date", TypeEnum.DATE.getType(), false),	
-	FLIGHT_NUMBER ("flightNumber", "Number", TypeEnum.STRING.getType()),
-	THRU ("thru", "Thru", TypeEnum.STRING.getType()); 
+	FLIGHT_NUMBER ("flightNumber", "Number", TypeEnum.STRING.getType());
 	
 	private String fieldName;
 	private String friendlyName;

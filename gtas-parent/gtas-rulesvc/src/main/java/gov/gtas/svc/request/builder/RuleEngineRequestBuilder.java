@@ -1,11 +1,5 @@
 package gov.gtas.svc.request.builder;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import gov.gtas.bo.BasicRuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
@@ -28,6 +22,16 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import org.mvel2.ast.IsDef;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Rule Engine Request Builder constructs Rule Engine execution requests from
  * APIS and PNR messages. The constructed request contains all entities (e.g.,
@@ -38,6 +42,10 @@ import gov.gtas.model.Pnr;
  *
  */
 public class RuleEngineRequestBuilder {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(RuleEngineRequestBuilder.class);
+
 	private final List<Object> requestObjectList;
 	private final Set<Long> passengerIdSet;
 	private final Set<PnrPassengerLink> passengerLinkSet;
@@ -48,7 +56,7 @@ public class RuleEngineRequestBuilder {
 	private final Set<Long> creditCardIdSet;
 	private final Set<Long> frequentFlyerIdSet;
 	private final Set<Long> travelAgencyIdSet;
-	
+
 	private final Set<PassengerFlightTuple> passengerFlightSet;
 
 	private RuleServiceRequestType requestType;
@@ -64,15 +72,16 @@ public class RuleEngineRequestBuilder {
 		this.passengerLinkSet = new HashSet<PnrPassengerLink>();
 		this.phoneIdSet = new HashSet<Long>();
 		this.travelAgencyIdSet = new HashSet<Long>();
-        this.passengerFlightSet = new HashSet<PassengerFlightTuple>();
-        
+		this.passengerFlightSet = new HashSet<PassengerFlightTuple>();
+
 		this.requestType = null;
 	}
-	
-    /**
-     * Builds and returns the request object.
-     * @return the request object.
-     */
+
+	/**
+	 * Builds and returns the request object.
+	 * 
+	 * @return the request object.
+	 */
 	public RuleServiceRequest build() {
 		return new BasicRuleServiceRequest(requestObjectList, this.requestType);
 	}
@@ -111,6 +120,9 @@ public class RuleEngineRequestBuilder {
 	public void addPnr(Pnr pnr) {
 		// add PNR objects
 		if (pnr != null) {
+			if (logger.isDebugEnabled()) {
+				
+			}
 			// add all the PNR related objects
 			requestObjectList.add(pnr);
 			addFlights(pnr.getFlights(), false);// false means do not add
@@ -123,12 +135,13 @@ public class RuleEngineRequestBuilder {
 			addPassengerObjects(pnr, pnr.getPassengers());
 
 			addTravelAgencyObject(pnr, pnr.getAgency());
-			
+
 			// add the passenger flight tuples
-			if(pnr.getFlights() != null && pnr.getPassengers() != null){
-				for(Flight flight:pnr.getFlights()){
-					for(Passenger passenger:pnr.getPassengers()){
-						passengerFlightSet.add(new PassengerFlightTuple(passenger, flight));
+			if (pnr.getFlights() != null && pnr.getPassengers() != null) {
+				for (Flight flight : pnr.getFlights()) {
+					for (Passenger passenger : pnr.getPassengers()) {
+						passengerFlightSet.add(new PassengerFlightTuple(
+								passenger, flight));
 					}
 				}
 			}
@@ -162,9 +175,10 @@ public class RuleEngineRequestBuilder {
 				if (addAssociatedPassengers) {
 					addPassengerObjects(null, flight.getPassengers());
 					// add the passenger flight tuples
-					if(flight.getPassengers() != null){
-						for(Passenger passenger:flight.getPassengers()){
-							passengerFlightSet.add(new PassengerFlightTuple(passenger, flight));
+					if (flight.getPassengers() != null) {
+						for (Passenger passenger : flight.getPassengers()) {
+							passengerFlightSet.add(new PassengerFlightTuple(
+									passenger, flight));
 						}
 					}
 				}
@@ -191,6 +205,7 @@ public class RuleEngineRequestBuilder {
 
 	private void addPhoneObjects(final Pnr pnr, final Collection<Phone> phones) {
 		if (phones == null || phones.isEmpty()) {
+			logger.info("No phones info.");
 			return;
 		}
 		for (Phone phone : phones) {
