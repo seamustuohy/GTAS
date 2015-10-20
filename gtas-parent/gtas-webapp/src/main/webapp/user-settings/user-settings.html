@@ -1,0 +1,34 @@
+<style>
+section {
+border: 1px solid;
+border-color: LightGray;
+border-radius: 10px;
+padding-bottom: 20px;
+}
+</style>
+<form name="userSettings">
+<section layout="row" layout-padding layout-margin layout-align="space-around center">
+    <md-input-container>
+        <label>First Name</label>
+        <input ng-model="userCredentials.firstName">
+    </md-input-container>
+    <md-input-container>
+        <label>Last Name</label>
+        <input ng-model="userCredentials.lastName">
+    </md-input-container>
+    <md-input-container>
+        <label>New Password</label>
+        <input ng-model="userCredentials.newPassword" type="password" name="newPassword" >
+    </md-input-container>
+    <md-input-container>
+        <label>Confirm Password</label>
+        <input ng-model="userCredentials.confirmPassword" type="password" name="confirmPassword" compare-to="userCredentials.newPassword" >
+         <div ng-messages="userSettings.confirmPassword.$error">
+            <div ng-messages-include="user-settings/messages.html"></div>
+        </div>
+    </md-input-container>
+    <div class="actions">
+        <md-button class="md-raised md-primary" ng-click="updateCredentials()" ng-disabled="userSettings.$invalid">Update</md-button>
+        </div>
+</section>
+</form>
