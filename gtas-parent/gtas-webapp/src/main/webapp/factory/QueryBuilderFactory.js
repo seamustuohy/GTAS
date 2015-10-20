@@ -18,6 +18,11 @@ app.factory('queryBuilderFactory', function () {
                 }
             };
 
+        $scope.prompt = {
+            rule: false,
+            query: false
+        };
+
         $scope.setData = {
             query: function (myData) {
                 var data = [];
@@ -173,117 +178,137 @@ app.factory('queryBuilderFactory', function () {
         $scope.formats = ["YYYY-MM-DD"];
 
         $scope.newRule = function () {
-            $scope.showSummaryClass = 'show';
             $scope.ruleId = null;
             $scope.$builder.queryBuilder('reset');
-            $scope.loadSummary(new model[$scope.mode]());
-            //TODO temp had trouble setting md-datepicker default value to null, default value today
-            if (document.querySelector('[ng-model="endDate"] input')) {
-                document.querySelector('[ng-model="endDate"] input').value = null;
-            }
-
-            //TODO find angular way to set focus
-            document.querySelector('[autofocus]').focus();
-            if ($scope.gridApi !== undefined) {
-                $scope.gridApi.selection.clearSelectedRows();
-                $scope.selectedIndex = null;
-            }
+            ////TODO temp had trouble setting md-datepicker default value to null, default value today
+            //if (document.querySelector('[ng-model="endDate"] input')) {
+            //    document.querySelector('[ng-model="endDate"] input').value = null;
+            //}
+            //
+            ////TODO find angular way to set focus
+            //document.querySelector('[autofocus]').focus();
+            //if ($scope.gridApi !== undefined) {
+            //    $scope.gridApi.selection.clearSelectedRows();
+            //    $scope.selectedIndex = null;
+            //}
         };
         $scope.ruleId = null;
         $scope.saving = false;
 
         $scope.save = {
-            query: function () {
-                var queryObject, query;
-                if ($scope.saving) {
-                    return;
+            query: {
+                cancel: function () {
+                    $scope.prompt.query = false;
+                },
+                prompt: function () {
+                    if ($scope.ruleId === null) {
+                        $scope.loadSummary(new model.summary.query());
+                    }
+                    $scope.prompt.query = true;
+                },
+                confirm: function () {
+                    var queryObject, query;
+                    if ($scope.saving) {
+                        return;
+                    }
+
+//                    $scope.saving = true;
+
+                    if ($scope.title && $scope.title.length) {
+                        $scope.title = $scope.title.trim();
+                    }
+
+                    if (!$scope.title.length) {
+                        $scope.alertError('Title summary can not be blank!');
+                        $scope.saving = false;
+                        return;
+                    }
+                    query = $scope.$builder.queryBuilder('getDrools');
+
+                    if (query === false) {
+                        $scope.saving = false;
+                        return;
+                    }
+
+                    queryObject = {
+                        id: $scope.ruleId,
+                        title: $scope.title,
+                        description: $scope.description || null,
+                        query: query
+                    };
+
+                    jqueryQueryBuilderService.save(queryObject).then($scope.updateQueryBuilderOnSave);
                 }
-
-                $scope.saving = true;
-
-                if ($scope.title && $scope.title.length) {
-                    $scope.title = $scope.title.trim();
-                }
-
-                if (!$scope.title.length) {
-                    $scope.alertError('Title summary can not be blank!');
-                    $scope.saving = false;
-                    return;
-                }
-                query = $scope.$builder.queryBuilder('getDrools');
-
-                if (query === false) {
-                    $scope.saving = false;
-                    return;
-                }
-
-                queryObject = {
-                    id: $scope.ruleId,
-                    title: $scope.title,
-                    description: $scope.description || null,
-                    query: query
-                };
-
-                jqueryQueryBuilderService.save(queryObject).then($scope.updateQueryBuilderOnSave);
             },
-            rule: function () {
-                var ruleObject, details;
+            rule: {
+                cancel: function () {
+                    $scope.prompt.rule = false;
+                },
+                prompt: function () {
+                    if ($scope.ruleId === null) {
+                        $scope.loadSummary(new model.summary.rule());
+                    }
+                    $scope.prompt.rule = true;
+                },
+                confirm: function () {
+                    var ruleObject, details;
 
-                if ($scope.saving) {
-                    return;
+                    if ($scope.saving) {
+                        return;
+                    }
+
+//                    $scope.saving = true;
+
+                    if ($scope.title && $scope.title.length) {
+                        $scope.title = $scope.title.trim();
+                    }
+
+                    if (!$scope.title.length) {
+                        $scope.alertError('Title summary can not be blank!');
+                        $scope.saving = false;
+                        return;
+                    }
+
+                    if ($scope.ruleId === null) {
+                        //if (!startDate.isValid()) {
+                        //    $scope.alertError('Dates must be in this format: ' + $scope.formats.toString());
+                        //    $scope.saving = false;
+                        //    return;
+                        //}
+                        //if (startDate < $scope.today) {
+                        //    $scope.alertError('Start date must be today or later when created new.');
+                        //    $scope.saving = false;
+                        //    return;
+                        //}
+                    }
+
+                    if ($scope.endDate) {
+                        //if (!endDate.isValid()) {
+                        //    $scope.alertError('End Date must be empty/open or in this format: ' + $scope.formats.toString());
+                        //    $scope.saving = false;
+                        //    return;
+                        //}
+                        //if (endDate < startDate) {
+                        //    $scope.alertError('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
+                        //    $scope.saving = false;
+                        //    return;
+                        //}
+                    }
+
+                    details = $scope.$builder.queryBuilder('getDrools');
+
+                    if (details === false) {
+                        $scope.saving = false;
+                        return;
+                    }
+                    ruleObject = {
+                        id: $scope.ruleId,
+                        details: details,
+                        summary: new model.summary[$scope.mode]($scope)
+                    };
+
+                    jqueryQueryBuilderService.save(ruleObject).then($scope.updateQueryBuilderOnSave);
                 }
-
-                $scope.saving = true;
-
-                if ($scope.title && $scope.title.length) {
-                    $scope.title = $scope.title.trim();
-                }
-
-                if (!$scope.title.length) {
-                    $scope.alertError('Title summary can not be blank!');
-                    $scope.saving = false;
-                    return;
-                }
-
-                if ($scope.ruleId === null) {
-                    //if (!startDate.isValid()) {
-                    //    $scope.alertError('Dates must be in this format: ' + $scope.formats.toString());
-                    //    $scope.saving = false;
-                    //    return;
-                    //}
-                    //if (startDate < $scope.today) {
-                    //    $scope.alertError('Start date must be today or later when created new.');
-                    //    $scope.saving = false;
-                    //    return;
-                    //}
-                }
-
-                if ($scope.endDate) {
-                    //if (!endDate.isValid()) {
-                    //    $scope.alertError('End Date must be empty/open or in this format: ' + $scope.formats.toString());
-                    //    $scope.saving = false;
-                    //    return;
-                    //}
-                    //if (endDate < startDate) {
-                    //    $scope.alertError('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
-                    //    $scope.saving = false;
-                    //    return;
-                    //}
-                }
-
-                details = $scope.$builder.queryBuilder('getDrools');
-
-                if (details === false) {
-                    $scope.saving = false;
-                    return;
-                }
-                ruleObject = {
-                    id: $scope.ruleId,
-                    details: details,
-                    summary: new model[$scope.mode]($scope)
-                };
-
-                jqueryQueryBuilderService.save(ruleObject).then($scope.updateQueryBuilderOnSave);
             }
         };
     };

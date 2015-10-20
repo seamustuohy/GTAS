@@ -2,31 +2,28 @@
     .actions {
         text-align: center;
     }
+
+    form {
+        display: inline-block;
+        position: fixed;
+        width: 75em;
+        left: 0;
+        right: 0;
+        top: 0;
+        margin: 0 auto;
+        padding: 2em 10em 5em;
+        background: rgba(255,255,2555,1);
+        border: solid 10em rgba(0,0,0,.3);
+    }
+
+    form h2 {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
 </style>
 <div ui-grid="qbGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
 <section class="qb-interface">
-    <md-content layout-padding style="display: inline-block;
-    overflow: hidden;">
-        <div layout layout-sm="column">
-            <md-input-container style="width:12em">
-                <label>Name</label>
-                <input md-maxlength="20" autofocus required name="description" ng-model="title" id="title">
-            </md-input-container>
-            <md-input-container style="width:50em">
-                <label>Description</label>
-                <input md-maxlength="100" name="description" ng-model="description">
-            </md-input-container>
-        </div>
-    </md-content>
-    <md-content layout-padding style="display: inline-block;
-    overflow: hidden;">
-        <div layout layout-sm="column">
-            <md-checkbox class="md-primary" required ng-model="enabled" aria-label="Enabled">Enabled</md-checkbox>
-            <md-datepicker ng-model="startDate" md-placeholder="Start Date"></md-datepicker>
-            <md-datepicker ng-model="endDate" md-placeholder="End Date"></md-datepicker>
-        </div>
-    </md-content>
-
     <h2>Conditions:</h2>
     <div id="builder"></div>
     <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
@@ -44,30 +41,29 @@
                    target="queryPassengers" ng-click="executeQuery('flights')"
                    class="md-raised">
             <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-user"></i>  Query Passengers
-        </md-button>
-        <md-button ng-click="save.rule()"
-                   ng-disabled="ruleId === null || saving === true"
-                   href="#/query-builder" class="md-raised">
-            <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i>  Save As Query
-        </md-button>
+        </md-button><md-button ng-click="save.query.prompt()"
+                               ng-disabled="saving === true"
+                               class="md-raised md-primary">
+        <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i>  Save As Query
+    </md-button>
 
         <md-button ng-click="newRule()"
                    class="md-raised pull-left">
-            <i class="glyphicon glyphicon-plus"></i> Add New
+            <i class="glyphicon glyphicon-plus"></i> Add New {{mode}}
         </md-button>
         <md-button ng-click="resetQueryBuilder()"
                    class="md-raised pull-left">
             <i class="glyphicon glyphicon-minus"></i> Clear Conditions
         </md-button>
-        <md-button ng-click="save()"
+        <md-button ng-click="save.rule.prompt()"
                    ng-disabled="saving === true"
                    class="md-raised md-primary pull-right">
-            <i class="glyphicon glyphicon-save"></i> Save
+            <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Save As Rule
         </md-button>
         <md-button ng-click="copy()"
                    ng-disabled="ruleId === null || saving === true"
                    class="md-raised pull-right">
-            <i class="glyphicon glyphicon-duplicate"></i> Copy
+            <i class="glyphicon glyphicon-duplicate"></i> Copy {{mode}}
         </md-button>
         <md-button ng-click="delete()"
                    ng-disabled="ruleId === null"
@@ -76,3 +72,66 @@
         </md-button>
     </div>
 </section>
+<form ng-if="prompt.rule == true">
+    <h2>Review | Confirm Rule Metadata:</h2>
+    <md-content layout-padding style="display: inline-block;
+    overflow: hidden;">
+        <div layout layout-sm="column">
+            <md-input-container>
+                <label>Name</label>
+                <input md-maxlength="20" autofocus required name="description" ng-model="title" id="title">
+            </md-input-container>
+            <md-input-container>
+                <label>Description</label>
+                <input md-maxlength="100" name="description" ng-model="description">
+            </md-input-container>
+        </div>
+    </md-content>
+    <md-content layout-padding style="display: inline-block;
+    overflow: hidden;">
+        <div layout layout-sm="column">
+            <md-checkbox class="md-primary" required ng-model="enabled" aria-label="Enabled">Enabled</md-checkbox>
+            <md-datepicker ng-model="startDate" md-placeholder="Start Date"></md-datepicker>
+            <md-datepicker ng-model="endDate" md-placeholder="End Date"></md-datepicker>
+        </div>
+    </md-content>
+    <div class="actions">
+        <md-button ng-click="save.rule.cancel()"
+                   ng-disabled="saving === true"
+                   class="md-raised pull-left">
+            <i class="glyphicon glyphicon-cancel"></i> Cancel
+        </md-button>
+        <md-button ng-click="save.rule.confirm()"
+                   ng-disabled="saving === true"
+                   class="md-raised md-primary pull-right">
+            <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Confirm Save
+        </md-button>
+    </div>
+</form>
+<form ng-if="prompt.query == true">
+    <h2>Review | Confirm Query Metadata:</h2>
+    <md-content layout-padding>
+        <div layout layout-sm="column">
+            <md-input-container style="width:20%">
+                <label>Name</label>
+                <input md-maxlength="20" required name="description" ng-model="title" id="title">
+            </md-input-container>
+            <md-input-container flex>
+                <label>Description</label>
+                <input md-maxlength="100" name="description" ng-model="description">
+            </md-input-container>
+        </div>
+    </md-content>
+    <div class="actions">
+        <md-button ng-click="save.query.cancel()"
+                   ng-disabled="saving === true"
+                   class="md-raised pull-left">
+            <i class="glyphicon glyphicon-cancel"></i> Cancel
+        </md-button>
+        <md-button ng-click="save.query.confirm()"
+                   ng-disabled="saving === true"
+                   class="md-raised md-primary pull-right">
+            <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i> Confirm Save
+        </md-button>
+    </div>
+</form>
