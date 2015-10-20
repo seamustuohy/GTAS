@@ -36,7 +36,9 @@ public class RuleRunner {
 
 		try {
 			Set<Long> uniqueFlights = targetingService.runningRuleEngine();
-			logger.info("updating hit counts for flight ids " + uniqueFlights);
+			if (logger.isInfoEnabled()) {
+				logger.info("updating hit counts for flight ids " + uniqueFlights);
+			}		
 			targetingService.updateFlightHitCounts(uniqueFlights);
 			logger.info("Exiting main().");
 		} catch (Exception exception) {

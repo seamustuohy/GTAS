@@ -25,8 +25,8 @@ import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.Message;
 import org.kie.api.builder.Results;
 import org.kie.api.conf.EventProcessingOption;
-import org.kie.api.event.rule.AgendaEventListener;
-import org.kie.api.event.rule.RuleRuntimeEventListener;
+import org.kie.api.event.rule.DefaultAgendaEventListener;
+import org.kie.api.event.rule.DefaultRuleRuntimeEventListener;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
@@ -208,10 +208,10 @@ public class RuleUtils {
 		// The application can also setup listeners
 		if (eventListenerList != null) {
 			for (EventListener el : eventListenerList) {
-				if (el instanceof AgendaEventListener) {
-					ksession.addEventListener((AgendaEventListener) el);
-				} else if (el instanceof RuleRuntimeEventListener) {
-					ksession.addEventListener((RuleRuntimeEventListener) el);
+				if (el instanceof DefaultAgendaEventListener) {
+					ksession.addEventListener((DefaultAgendaEventListener) el);
+				} else if (el instanceof DefaultRuleRuntimeEventListener) {
+					ksession.addEventListener((DefaultRuleRuntimeEventListener) el);
 				}
 			}
 		}
