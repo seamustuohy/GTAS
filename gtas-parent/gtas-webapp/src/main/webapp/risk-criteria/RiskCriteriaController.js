@@ -1,15 +1,23 @@
 app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, gridOptionsLookupService, jqueryQueryBuilderService, $timeout) {
     'use strict';
-    jqueryQueryBuilderService.init('riskcriteria');
-
-    $scope.setData = function (myData) {
-        var temp, data = [];
-        myData.forEach(function (obj) {
-            temp = $.extend({}, obj.summary, {id: obj.id, modifiedOn: obj.modifiedOn, modifiedBy: obj.modifiedBy});
-            data.push(temp);
-        });
-        $scope.qbGrid.data = data;
+    var model = {
+        summary: {
+            query: function (obj) {
+                this.title = obj ? obj.title : '';
+                this.description = obj ? obj.description : null;
+            },
+            rule: function (obj) {
+                this.title = obj ? obj.title : '';
+                this.description = obj ? obj.description : null;
+                this.startDate = obj ? obj.startDate : today;
+                this.endDate = obj ? obj.endDate : null;
+                this.enabled = obj ? obj.enabled : true;
+            }
+        }
     };
+
+    jqueryQueryBuilderService.init('riskcriteria');
+    $scope.mode = "rule";
 
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope });
     $injector.invoke(queryBuilderFactory, this, {$scope: $scope });
@@ -20,7 +28,7 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
     $scope.qbGrid.exporterPdfHeader = {text: "Risk Criteria", style: 'headerStyle'};
 
     jqueryQueryBuilderService.getList().then(function (myData) {
-        $scope.setData(myData.result);
+        $scope.setData[$scope.mode](myData.result);
     });
 
     $scope.loadRuleOnSelection = function (row) {
@@ -35,100 +43,18 @@ app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQuer
 
     $scope.qbGrid.onRegisterApi = $scope.rowSelection;
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
-    $scope.summaryDefaults = {
-        title: '',
-        description: null,
-        enabled: true,
-        startDate: $scope.today,
-        endDate: null
-    };
 
-//    $scope.newRule();
-    $scope.saving = false;
-    $scope.save = function () {
-        var ruleObject, startDate, endDate, details;
-
-        if ($scope.saving) {
-            return;
-        }
-
-        $scope.saving = true;
-        startDate = moment($scope.startDate, $scope.formats, true);
-        endDate = moment($scope.endDate, $scope.formats, true);
-
-        if ($scope.title && $scope.title.length) {
-            $scope.title = $scope.title.trim();
-        }
-
-        if (!$scope.title.length) {
-            $scope.alertError('Title summary can not be blank!');
-            $scope.saving = false;
-            return;
-        }
-
-        /* was told startDate ignored on updates so only matters on new rules */
-        if ($scope.ruleId === null) {
-            //if (!startDate.isValid()) {
-            //    $scope.alertError('Dates must be in this format: ' + $scope.formats.toString());
-            //    $scope.saving = false;
-            //    return;
-            //}
-            //if (startDate < $scope.today) {
-            //    $scope.alertError('Start date must be today or later when created new.');
-            //    $scope.saving = false;
-            //    return;
-            //}
-        }
-
-        if ($scope.endDate) {
-            //if (!endDate.isValid()) {
-            //    $scope.alertError('End Date must be empty/open or in this format: ' + $scope.formats.toString());
-            //    $scope.saving = false;
-            //    return;
-            //}
-            //if (endDate < startDate) {
-            //    $scope.alertError('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
-            //    $scope.saving = false;
-            //    return;
-            //}
-        }
-
-        details = $scope.$builder.queryBuilder('getDrools');
-
-        if (details === false) {
-            $scope.saving = false;
-            return;
-        }
-        ruleObject = {
-            id: $scope.ruleId,
-            details: details,
-            summary: {
-                title: $scope.title,
-                description: $scope.description || null,
-                startDate: $scope.startDate || $scope.today,
-                endDate: $scope.endDate || null,
-                enabled: $scope.enabled
-            }
-        };
-
-        jqueryQueryBuilderService.save(ruleObject).then($scope.updateQueryBuilderOnSave);
-    };
 
     $scope.enabled = true;
     $scope.$scope = $scope;
 
-    $scope.$watch("endDate", function (newValue) {
-        var datepicker;
-        if (newValue === null || newValue === undefined) {
-            $timeout(function () {
-                datepicker = document.querySelectorAll('.md-datepicker-input')[1];
-                datepicker.value = '';
-            }, 5);
-        }
-    });
-}).config(function ($mdDateLocaleProvider) {
-    'use strict';
-    $mdDateLocaleProvider.formatDate = function (date) {
-        return moment(date).format('YYYY-MM-DD');
-    };
+    //$scope.$watch("endDate", function (newValue) {
+    //    var datepicker;
+    //    if (newValue === null || newValue === undefined) {
+    //        $timeout(function () {
+    //            datepicker = document.querySelectorAll('.md-datepicker-input')[1];
+    //            datepicker.value = '';
+    //        }, 5);
+    //    }
+    //});
 });

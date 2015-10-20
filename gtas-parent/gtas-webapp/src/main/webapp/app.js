@@ -24,6 +24,11 @@ var app;
             'ngAnimate',
             'angularSpinners'
         ],
+        localDateMomentFormat = function ($mdDateLocaleProvider) {
+            $mdDateLocaleProvider.formatDate = function (date) {
+                return moment(date).format('YYYY-MM-DD');
+            };
+        },
         initialize = function ($rootScope) {
             $rootScope.$on('$stateChangeStart', function (e, toState) {
                 $rootScope.$broadcast('stateChanged', toState.name);
@@ -229,6 +234,7 @@ var app;
     app = angular
         .module('myApp', appDependencies)
         .config(router)
+        .config(localDateMomentFormat)
         .run(initialize)
         .controller('NavCtrl', NavCtrl);
 }());
