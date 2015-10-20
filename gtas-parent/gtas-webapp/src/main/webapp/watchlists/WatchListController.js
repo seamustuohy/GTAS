@@ -27,8 +27,6 @@
             { id: "V", label: "VISA" }
         ];
 
-        $scope.Passenger = new model.Document();
-
         watchlist.types = {
             "Document": {
                 entity: "DOCUMENT",
