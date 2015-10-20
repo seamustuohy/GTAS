@@ -87,15 +87,59 @@
     .ui-grid-icon-ok:before {
         content: '\c357' !important;
     }
+    md-input-container {
+        display: inline-block;
+        width: 300px;
+    }
+
+    form {
+        padding: 2em 2em 0;
+    }
 </style>
+<script type="text/ng-template" id="Document">
+    <form name="newDocument" ng-submit="Add()">
+        <md-input-container>
+            <label>Document Type:</label>
+            <md-select ng-model="Document.documentType" required>
+                <md-option ng-repeat="docType in documentTypes" value="{{docType.id}}">
+                    {{docType.label}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container>
+            <label>Document Number:</label>
+            <input ng-model="Document.documentNumber" type="string" required>
+        </md-input-container>
+        <md-button class="md-raised pull-right"><span class="glyphicon glyphicon-plus"></span> Add Document</md-button>
+    </form></script>
+<script type="text/ng-template" id="Passenger">
+    <form name="newPassenger" ng-submit="Add()">
+        <md-input-container>
+            <label>First Name:</label>
+            <input ng-model="Passenger.firstName" type="string" required>
+        </md-input-container>
+        <md-input-container>
+            <label>Last Name:</label>
+            <input ng-model="Passenger.lastName" type="string" required>
+        </md-input-container>
+        <md-input-container>
+            <md-datepicker name="dob" ng-model="Passenger.dob" md-placeholder="Date of Birth" required></md-datepicker>
+            <div class="validation-messages" ng-messages="newPassenger.dob.$error">
+                <div ng-message="required">This date is required!</div>
+                <div ng-message="invalid">Date is invalid!</div>
+            </div>
+        </md-input-container>
+        <md-button class="md-raised pull-right"><span class="glyphicon glyphicon-plus"></span> Add Passenger</md-button>
+    </form>
+</script>
 <section>
     <md-tabs>
         <md-tab ng-repeat="tab in tabs" label="{{tab.title}}" md-on-select="updateGrid(tab.title)"></md-tab>
     </md-tabs>
     <div ng-if="activeTab !== 'create-new'">
-        <div ui-grid="watchlistGrid" ui-grid-edit ui-grid-row-edit ui-grid-cellNav ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
+        <ng-include src="template"></ng-include>
+        <div ui-grid="watchlistGrid" ui-grid-edit ui-grid-row-edit ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
         <md-button class="md-raised md-warn pull-right" ng-click="removeRow()" ng-disabled="rowSelected !== true"><span class="glyphicon glyphicon-remove"></span> Remove</md-button>
-        <md-button class="md-raised pull-right" ng-click="Add()"><span class="glyphicon glyphicon-plus"></span> Add New</md-button>
     </div>
 </section>
 <div>
