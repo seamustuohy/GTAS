@@ -1,6 +1,5 @@
 (function () {
     'use strict';
-<<<<<<< HEAD
     app.controller('WatchListController', function ($scope, gridOptionsLookupService, $q, watchListService, $interval, spinnerService, $timeout) {
         var watchlist = {},
             tabs = [],
