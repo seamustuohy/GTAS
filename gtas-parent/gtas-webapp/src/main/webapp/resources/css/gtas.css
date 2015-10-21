@@ -2,6 +2,13 @@ h2 {
     font-size: 1.2em;
 }
 
+/* fixes big page numbers from not being seen */
+.ui-grid-pager-max-pages-number {
+    display: inline-block;
+    width: 4em;
+}
+
+
 @media (min-width: 768px) {
     .modal-dialog {
         width: 1000px;
