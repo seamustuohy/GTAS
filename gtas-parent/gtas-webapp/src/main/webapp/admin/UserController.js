@@ -1,5 +1,5 @@
 
-app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'UserService','Base64',
+app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'userService','Base64',
     function($state,$scope,$q,$stateParams,userService,Base64) {
 
 	$scope.user = $stateParams.user;

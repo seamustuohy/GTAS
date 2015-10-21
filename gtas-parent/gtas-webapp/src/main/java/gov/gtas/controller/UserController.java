@@ -1,5 +1,6 @@
 package gov.gtas.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -50,5 +51,10 @@ public class UserController {
 		return userService.update(userData);
 	}
 	
+	@RequestMapping("/user")
+	public UserData user(Principal principal) {
+				
+		return userService.findById(principal.getName());
+	}	
 
 }

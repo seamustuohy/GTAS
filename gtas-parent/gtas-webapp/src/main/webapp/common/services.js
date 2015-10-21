@@ -131,7 +131,7 @@
                 }
             };
         })
-        .service('UserService', function ($http, $q) {
+        .service('userService', function ($http, $q) {
             function handleError( response ) {
                 if (! angular.isObject( response.data ) || ! response.data.message) {
                     return( $q.reject( "An unknown error occurred." ) );
@@ -177,10 +177,22 @@
                 return( request.then( handleSuccess, handleError ) );
             }
 
+
+            function getUserData() {
+                var dfd = $q.defer();
+                dfd.resolve($http({
+                    method: 'get',
+                    url: "/gtas/user"
+                }));
+                return dfd.promise;
+            }
+          
+
             return {
                 getRoles: getRoles,
                 updateUser: updateUser,
-                createUser: createUser
+                createUser: createUser,
+                getUserData: getUserData
             };
         })
         .service("gridOptionsLookupService", function (uiGridConstants) {

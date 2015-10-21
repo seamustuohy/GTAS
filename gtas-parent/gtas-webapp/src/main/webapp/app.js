@@ -206,6 +206,11 @@ var app;
                             controller: 'UserSettingsController',
                             templateUrl: 'user-settings/user-settings.html'
                         }
+                    },
+                    resolve: {
+                        user: function (userService) {
+                            return userService.getUserData();
+                        }
                     }
                 });
         },
