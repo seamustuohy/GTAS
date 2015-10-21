@@ -97,7 +97,7 @@ public class AuditRecord extends BaseEntity{
 	/**
 	 * @return the summary
 	 */
-	public String getSummary() {
+	public String getMessage() {
 		return message;
 	}
 	/**

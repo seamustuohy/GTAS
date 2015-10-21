@@ -208,6 +208,14 @@ var app;
                             templateUrl: 'watchlists/watchlists.html'
                         }
                     }
+                }).state('user-settings', {
+                    url: '/user-settings',
+                    views: {
+                        '@': {
+                            controller: 'UserSettingsController',
+                            templateUrl: 'user-settings/user-settings.html'
+                        }
+                    }
                 });
         },
         NavCtrl = function ($scope) {
@@ -218,7 +226,8 @@ var app;
                 passengers: ['paxAll', 'flightpax'],
                 queries: ['query-builder'],
                 risks: ['risk-criteria'],
-                watchlists: ['watchlists']
+                watchlists: ['watchlists'],
+                usersettings:['user-settings']
             };
             $scope.onRoute = function (stateName) {
                 return lookup[stateName].indexOf($scope.stateName) >= 0;

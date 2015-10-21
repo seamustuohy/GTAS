@@ -56,6 +56,11 @@
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('admin')}"
             ng-disabled="onRoute('admin')" href="#/admin"><i class="glyphicon glyphicon-edit"></i>  Admin</md-button>
         </sec:authorize>
+
+        <sec:authorize access="hasAnyAuthority('Manage Queries','Manage Rules','Manage Watch List','View Flight And Passenger','Admin')">
+            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('usersettings')}"
+            ng-disabled="onRoute('usersettings')" href="#/user-settings"><i class="glyphicon glyphicon-edit"></i>  User</md-button>
+        </sec:authorize> 
         </span>
         </nav>
         <!-- end of nav -->
@@ -86,7 +91,8 @@
 
         <script src='resources/js/query-builder.js'></script>
 
-        <script src='app.js'></script>
+        <script src='app.js'></script>        
+        <script src='common/directives.js'></script>
         <script src='common/filters.js'></script>
         <script src='common/services.js'></script>
         <script src='factory/ModalGridFactory.js'></script>
@@ -104,6 +110,7 @@
         <script src='risk-criteria/RiskCriteriaController.js'></script>
         <script src='watchlists/WatchListController.js'></script>
         <script src='admin/AdminController.js'></script>
-        <script src='admin/UserController.js'></script>
+        <script src='admin/UserController.js'></script>        
+        <script src='user-settings/UserSettingsController.js'></script>
         </body>
         </html>

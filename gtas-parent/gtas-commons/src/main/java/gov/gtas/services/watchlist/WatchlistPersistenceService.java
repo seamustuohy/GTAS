@@ -1,8 +1,8 @@
 package gov.gtas.services.watchlist;
 
 import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.model.AuditRecord;
 import gov.gtas.model.watchlist.Watchlist;
-import gov.gtas.model.watchlist.WatchlistEditLog;
 import gov.gtas.model.watchlist.WatchlistItem;
 
 import java.util.List;
@@ -91,5 +91,5 @@ public interface WatchlistPersistenceService {
 	 *            the name of the watch list.
 	 * @return the fetched watch list log entries.
 	 */
-	public List<WatchlistEditLog> findLogEntriesForWatchlist(String watchlistName);
+	public List<AuditRecord> findLogEntriesForWatchlist(String watchlistName);
 }

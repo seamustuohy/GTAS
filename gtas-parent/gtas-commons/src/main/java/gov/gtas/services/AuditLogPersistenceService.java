@@ -15,4 +15,6 @@ public interface AuditLogPersistenceService {
     public List<AuditRecord> findByUser(String userId);
     public List<AuditRecord> findByActionType(AuditActionType type);
     public List<AuditRecord> findByUserAndActionType(AuditActionType type, String user);
+    public List<AuditRecord> findByUserAndTarget(String user, String target);
+    public List<AuditRecord> findByTarget(String target);
 }

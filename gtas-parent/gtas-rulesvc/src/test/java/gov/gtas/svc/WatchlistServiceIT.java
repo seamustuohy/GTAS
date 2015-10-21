@@ -1,9 +1,34 @@
 package gov.gtas.svc;
 
+import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_TARGET_PREFIX;
+import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_TARGET_SUFFIX;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.constant.WatchlistConstants;
+import gov.gtas.enumtype.AuditActionType;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.Status;
+import gov.gtas.enumtype.WatchlistEditEnum;
+import gov.gtas.error.CommonServiceException;
+import gov.gtas.json.JsonServiceResponse;
+import gov.gtas.json.JsonServiceResponse.ServiceResponseDetailAttribute;
+import gov.gtas.model.AuditRecord;
+import gov.gtas.model.Role;
+import gov.gtas.model.User;
+import gov.gtas.model.watchlist.Watchlist;
+import gov.gtas.model.watchlist.WatchlistItem;
+import gov.gtas.model.watchlist.json.WatchlistItemSpec;
+import gov.gtas.model.watchlist.json.WatchlistSpec;
+import gov.gtas.services.security.RoleData;
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
+import gov.gtas.services.security.UserServiceUtil;
+import gov.gtas.services.watchlist.WatchlistPersistenceService;
+import gov.gtas.util.DateCalendarUtils;
+import gov.gtas.util.SampleDataGenerator;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -22,29 +47,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-
-import gov.gtas.config.RuleServiceConfig;
-import gov.gtas.constant.WatchlistConstants;
-import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.enumtype.Status;
-import gov.gtas.enumtype.WatchlistEditEnum;
-import gov.gtas.error.CommonServiceException;
-import gov.gtas.json.JsonServiceResponse;
-import gov.gtas.json.JsonServiceResponse.ServiceResponseDetailAttribute;
-import gov.gtas.model.Role;
-import gov.gtas.model.User;
-import gov.gtas.model.watchlist.Watchlist;
-import gov.gtas.model.watchlist.WatchlistEditLog;
-import gov.gtas.model.watchlist.WatchlistItem;
-import gov.gtas.model.watchlist.json.WatchlistItemSpec;
-import gov.gtas.model.watchlist.json.WatchlistSpec;
-import gov.gtas.services.security.RoleData;
-import gov.gtas.services.security.UserData;
-import gov.gtas.services.security.UserService;
-import gov.gtas.services.security.UserServiceUtil;
-import gov.gtas.services.watchlist.WatchlistPersistenceService;
-import gov.gtas.util.DateCalendarUtils;
-import gov.gtas.util.SampleDataGenerator;
 
 /**
  * Integration tests for the UDR management service.
@@ -107,19 +109,20 @@ public class WatchlistServiceIT {
 			assertTrue(!StringUtils.isEmpty(itmData));
 			assertTrue(itmData.matches("\\{.*\\}"));
 		}
-
-		List<WatchlistEditLog> logs = wlPersistenceService.findLogEntriesForWatchlist(WL_NAME1);
+		
+		List<AuditRecord> logs = wlPersistenceService.findLogEntriesForWatchlist(WL_NAME1);
 		assertNotNull(logs);
 		assertEquals(2, logs.size());
-		for (WatchlistEditLog lg : logs) {
+		for (AuditRecord lg : logs) {
 			assertNotNull(lg.getId());
-			assertTrue(DateCalendarUtils.dateRoundedEquals(new Date(), lg.getEditTimestamp(), Calendar.HOUR));
-			assertEquals(WL_NAME1, lg.getEditedWatchlist());
-			assertEquals(WatchlistEditEnum.C, lg.getEditType());
-			String itmData = lg.getEditData();
+			assertTrue(DateCalendarUtils.dateRoundedEquals(new Date(), lg.getTimestamp(), Calendar.HOUR));
+			assertEquals(WATCHLIST_LOG_TARGET_PREFIX+WL_NAME1+WATCHLIST_LOG_TARGET_SUFFIX, lg.getTarget());
+			assertEquals(AuditActionType.CREATE_WL, lg.getActionType());
+			String itmData = lg.getActionData();
 			assertTrue(!StringUtils.isEmpty(itmData));
 			assertTrue(itmData.matches("\\{.*\\}"));
 		}
+		
 	}
 
 	@Test
@@ -149,28 +152,30 @@ public class WatchlistServiceIT {
 		assertTrue(!StringUtils.isEmpty(itmData));
 		assertTrue(itmData.matches("\\{.*\\}"));
 
-		List<WatchlistEditLog> logs = wlPersistenceService.findLogEntriesForWatchlist(WL_NAME1);
+		List<AuditRecord> logs = wlPersistenceService.findLogEntriesForWatchlist(WL_NAME1);
 		assertNotNull(logs);
 		assertEquals(4, logs.size());
 		int createCount = 0;
 		int updateCount = 0;
 		int deleteCount = 0;
-		for (WatchlistEditLog lg : logs) {
+		for (AuditRecord lg : logs) {
 			assertNotNull(lg.getId());
-			assertTrue(DateCalendarUtils.dateRoundedEquals(new Date(), lg.getEditTimestamp(), Calendar.HOUR));
-			assertEquals(WL_NAME1, lg.getEditedWatchlist());
-			switch (lg.getEditType()) {
-			case C:
-				createCount++;
-				break;
-			case U:
-				updateCount++;
-				break;
-			case D:
-				deleteCount++;
-				break;
+			assertTrue(DateCalendarUtils.dateRoundedEquals(new Date(), lg.getTimestamp(), Calendar.HOUR));
+			assertEquals(WATCHLIST_LOG_TARGET_PREFIX+WL_NAME1+WATCHLIST_LOG_TARGET_SUFFIX, lg.getTarget());
+			switch (lg.getActionType()) {
+				case CREATE_WL:
+					createCount++;
+					break;
+				case UPDATE_WL:
+					updateCount++;
+					break;
+				case DELETE_WL:
+					deleteCount++;
+					break;
+				default:
+					break;
 			}
-			String itmLogData = lg.getEditData();
+			String itmLogData = lg.getActionData();
 			assertTrue(!StringUtils.isEmpty(itmLogData));
 			assertTrue(itmLogData.matches("\\{.*\\}"));
 		}

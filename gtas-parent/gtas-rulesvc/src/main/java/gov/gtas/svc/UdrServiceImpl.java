@@ -1,12 +1,21 @@
 package gov.gtas.svc;
 
+import static gov.gtas.constant.AuditLogConstants.UDR_LOG_CREATE_MESSAGE;
+import static gov.gtas.constant.AuditLogConstants.UDR_LOG_TARGET_PREFIX;
+import static gov.gtas.constant.AuditLogConstants.UDR_LOG_TARGET_SUFFIX;
+import static gov.gtas.constant.AuditLogConstants.UDR_LOG_UPDATE_MESSAGE;
+import static gov.gtas.constant.AuditLogConstants.UDR_LOG_UPDATE_META_MESSAGE;
+import gov.gtas.constant.AuditLogConstants;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.RuleConstants;
+import gov.gtas.enumtype.AuditActionType;
+import gov.gtas.enumtype.Status;
 import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.UdrServiceErrorHandler;
 import gov.gtas.json.JsonServiceResponse;
+import gov.gtas.model.AuditRecord;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleMeta;
@@ -16,6 +25,7 @@ import gov.gtas.model.udr.json.MetaData;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
+import gov.gtas.repository.AuditRecordRepository;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.services.security.UserData;
 import gov.gtas.services.security.UserService;
@@ -42,6 +52,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Implementation of the UDR Service API.
  * 
@@ -58,6 +70,9 @@ public class UdrServiceImpl implements UdrService {
 
 	@Resource
 	private HitsSummaryRepository hitSummaryRepository;
+	
+	@Resource
+	private AuditRecordRepository auditRecordRepository;
 
 	@Autowired
 	private UserService userService;
@@ -232,6 +247,7 @@ public class UdrServiceImpl implements UdrService {
 
 		UdrRule savedRule = rulePersistenceService.create(ruleToSave, userId);
 		recompileRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, userId);
+		writeAuditLog(AuditActionType.CREATE_UDR, savedRule, udrToCreate, userId, author);
 		return UdrServiceJsonResponseHelper.createResponse(true,
 				RuleConstants.UDR_CREATE_OP_NAME, savedRule);
 	}
@@ -259,10 +275,13 @@ public class UdrServiceImpl implements UdrService {
 		if (StringUtils.isEmpty(authorId)) {
 			authorId = userId;
 		}
-		UserData user = userService.findById(authorId);
+		return fetchUser(authorId);
+	}
+	private User fetchUser(final String userId) {
+		UserData user = userService.findById(userId);
 		if (user == null) {
 			throw ErrorHandlerFactory.getErrorHandler().createException(
-					CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, authorId);
+					CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
 		}
 		return userServiceUtil.mapUserEntityFromUserData(user);
 	}
@@ -343,11 +362,15 @@ public class UdrServiceImpl implements UdrService {
 			}
 
 			updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
+
 			recompileRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, userId);
+			
+			writeAuditLog(AuditActionType.UPDATE_UDR, updatedRule, udrToUpdate, userId, author);
 		} else {
 			// simple update - meta data only
 			// no need to re-generate the Knowledge Base.
 			updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
+			writeAuditLog(AuditActionType.UPDATE_UDR_META, ruleToUpdate, udrToUpdate, userId, author);
 		}
 
 		return UdrServiceJsonResponseHelper.createResponse(true,
@@ -365,6 +388,7 @@ public class UdrServiceImpl implements UdrService {
 		UdrRule deletedRule = rulePersistenceService.delete(id, userId);
 		if (deletedRule != null) {
 			recompileRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, userId);
+			writeAuditLog(AuditActionType.DELETE_UDR, deletedRule, null, userId, null);
 			return UdrServiceJsonResponseHelper.createResponse(true,
 					RuleConstants.UDR_DELETE_OP_NAME, deletedRule);
 		} else {
@@ -373,5 +397,70 @@ public class UdrServiceImpl implements UdrService {
 					"since it does not exist or has been deleted previously");
 		}
 	}
-
+    
+	private void writeAuditLog(AuditActionType actionType, UdrRule udr, UdrSpecification udrspec, String userId, User author){
+		User user = author;
+		if(author == null || !author.getUserId().equals(userId)){
+			user = fetchUser(userId);
+		}
+		ObjectMapper mapper = new ObjectMapper();
+		String actionData = null;
+		
+		AuditRecord log = null;
+		switch(actionType){
+			case UPDATE_UDR:
+				    if(udrspec != null){
+				    	try{
+				    		actionData = mapper.writeValueAsString(udrspec);
+				    	}catch(Exception ex){}
+				    }
+					log = new AuditRecord(AuditActionType.UPDATE_UDR, 
+							UDR_LOG_TARGET_PREFIX + udr.getTitle() + UDR_LOG_TARGET_SUFFIX, 
+							Status.SUCCESS, 
+							UDR_LOG_UPDATE_MESSAGE, 
+							actionData, 
+							user);
+					break;
+			case UPDATE_UDR_META:
+			    if(udrspec != null){
+			    	try{
+			    		actionData = mapper.writeValueAsString(udrspec.getSummary());
+			    	}catch(Exception ex){}
+			    }
+				log = new AuditRecord(AuditActionType.UPDATE_UDR_META, 
+						UDR_LOG_TARGET_PREFIX + udr.getTitle() + UDR_LOG_TARGET_SUFFIX, 
+						Status.SUCCESS, 
+						UDR_LOG_UPDATE_META_MESSAGE, 
+						actionData, 
+						user);
+				break;
+			case CREATE_UDR:
+			    if(udrspec != null){
+			    	try{
+			    		actionData = mapper.writeValueAsString(udrspec);
+			    	}catch(Exception ex){}
+			    }
+				log = new AuditRecord(AuditActionType.CREATE_UDR, 
+						UDR_LOG_TARGET_PREFIX + udr.getTitle() + UDR_LOG_TARGET_SUFFIX, 
+						Status.SUCCESS, 
+						UDR_LOG_CREATE_MESSAGE, 
+						actionData, 
+						user);
+				break;
+			case DELETE_UDR:
+				log = new AuditRecord(AuditActionType.DELETE_UDR, 
+						UDR_LOG_TARGET_PREFIX + udr.getTitle() + UDR_LOG_TARGET_SUFFIX, 
+						Status.SUCCESS, 
+						AuditLogConstants.UDR_LOG_DELETE_MESSAGE, 
+						null, 
+						user);
+				break;
+			default:
+				break;
+			
+		}
+		if(log != null){
+		    auditRecordRepository.save(log);
+		}
+	}
 }

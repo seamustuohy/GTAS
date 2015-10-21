@@ -19,7 +19,15 @@ public class MessageLoader {
         }
         
         System.out.println("processing file " + filePath);
-        List<String> messages = svc.preprocess(filePath);
+        
+        List<String> messages = null;
+        try {
+            messages = svc.preprocess(filePath);
+        } catch (Exception e) {
+            System.out.println("error preprocessing " + filePath);
+            return;
+        }
+        
         for (String msg : messages) {
             MessageVo m = svc.parse(msg);
             if (m == null) {

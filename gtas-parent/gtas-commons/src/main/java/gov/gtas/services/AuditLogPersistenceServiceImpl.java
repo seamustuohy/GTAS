@@ -69,6 +69,24 @@ public class AuditLogPersistenceServiceImpl implements
 		User user = fetchUser(userId);
 		return auditLogRepository.findByUserAndActionType(user, actionType);
 	}
+	
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.AuditLogPersistenceService#findByUserAndTarget(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<AuditRecord> findByUserAndTarget(String userId, String target) {
+		User user = fetchUser(userId);
+		return auditLogRepository.findByUserAndTarget(user, target);
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.AuditLogPersistenceService#findByTarget(java.lang.String)
+	 */
+	@Override
+	public List<AuditRecord> findByTarget(String target) {
+		return auditLogRepository.findByTarget(target);
+	}
+
 	/**
 	 * Fetches the user object and throws an unchecked exception if the user
 	 * cannot be found.
