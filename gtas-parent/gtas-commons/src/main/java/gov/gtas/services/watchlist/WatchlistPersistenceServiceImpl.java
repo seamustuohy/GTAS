@@ -1,5 +1,28 @@
 package gov.gtas.services.watchlist;
 
+import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_CREATE_MESSAGE;
+import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_DELETE_MESSAGE;
+import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_TARGET_PREFIX;
+import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_TARGET_SUFFIX;
+import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_UPDATE_MESSAGE;
+import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.WatchlistConstants;
+import gov.gtas.enumtype.AuditActionType;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.enumtype.Status;
+import gov.gtas.error.ErrorHandler;
+import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.model.AuditRecord;
+import gov.gtas.model.User;
+import gov.gtas.model.watchlist.Watchlist;
+import gov.gtas.model.watchlist.WatchlistItem;
+import gov.gtas.repository.AuditRecordRepository;
+import gov.gtas.repository.watchlist.WatchlistItemRepository;
+import gov.gtas.repository.watchlist.WatchlistRepository;
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
+import gov.gtas.services.security.UserServiceUtil;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,23 +42,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import gov.gtas.constant.CommonErrorConstants;
-import gov.gtas.constant.WatchlistConstants;
-import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.enumtype.WatchlistEditEnum;
-import gov.gtas.error.ErrorHandler;
-import gov.gtas.error.ErrorHandlerFactory;
-import gov.gtas.model.User;
-import gov.gtas.model.watchlist.Watchlist;
-import gov.gtas.model.watchlist.WatchlistEditLog;
-import gov.gtas.model.watchlist.WatchlistItem;
-import gov.gtas.repository.watchlist.WatchlistItemRepository;
-import gov.gtas.repository.watchlist.WatchlistLogRepository;
-import gov.gtas.repository.watchlist.WatchlistRepository;
-import gov.gtas.services.security.UserData;
-import gov.gtas.services.security.UserService;
-import gov.gtas.services.security.UserServiceUtil;
-
 /**
  * The back-end service for persisting watch lists.
  * 
@@ -44,7 +50,6 @@ import gov.gtas.services.security.UserServiceUtil;
  */
 @Service
 public class WatchlistPersistenceServiceImpl implements WatchlistPersistenceService {
-
 	/*
 	 * The logger for the WatchlistPersistenceServiceImpl.
 	 */
@@ -62,7 +67,7 @@ public class WatchlistPersistenceServiceImpl implements WatchlistPersistenceServ
 	private WatchlistItemRepository watchlistItemRepository;
 
 	@Resource
-	private WatchlistLogRepository watchlistLogRepository;
+	private AuditRecordRepository auditRecordRepository;
 
 	@Autowired
 	private UserService userService;
@@ -180,22 +185,34 @@ public class WatchlistPersistenceServiceImpl implements WatchlistPersistenceServ
 	 * findLogEntriesForWatchlist(java.lang.String)
 	 */
 	@Override
-	public List<WatchlistEditLog> findLogEntriesForWatchlist(String watchlistName) {
-		return watchlistLogRepository.getLogByWatchlistName(watchlistName);
+	public List<AuditRecord> findLogEntriesForWatchlist(String watchlistName) {
+		return auditRecordRepository.findByTarget(WATCHLIST_LOG_TARGET_PREFIX+watchlistName+WATCHLIST_LOG_TARGET_SUFFIX);
 	}
 
-	private Collection<WatchlistEditLog> doCrudWithLogging(Watchlist watchlist, User editUser,
+	private Collection<AuditRecord> doCrudWithLogging(Watchlist watchlist, User editUser,
 			Collection<WatchlistItem> createUpdateItems, Collection<WatchlistItem> deleteItems) {
-		List<WatchlistEditLog> ret = new LinkedList<WatchlistEditLog>();
+		List<AuditRecord> ret = new LinkedList<AuditRecord>();
 		Map<Long, WatchlistItem> updateDeleteItemMap = null;
 		if (createUpdateItems != null && createUpdateItems.size() > 0) {
 			List<WatchlistItem> updList = new LinkedList<WatchlistItem>();
 			for (WatchlistItem item : createUpdateItems) {
 				if (item.getId() != null) {
-					ret.add(new WatchlistEditLog(editUser, watchlist, WatchlistEditEnum.U, item.getItemData()));
+					ret.add(
+							new AuditRecord(AuditActionType.UPDATE_WL, 
+									WATCHLIST_LOG_TARGET_PREFIX + watchlist.getWatchlistName() + WATCHLIST_LOG_TARGET_SUFFIX, 
+									Status.SUCCESS, 
+									WATCHLIST_LOG_UPDATE_MESSAGE, 
+									item.getItemData(), 
+									editUser));
 					updList.add(item);
 				} else {
-					ret.add(new WatchlistEditLog(editUser, watchlist, WatchlistEditEnum.C, item.getItemData()));
+					ret.add(
+							new AuditRecord(AuditActionType.CREATE_WL, 
+									WATCHLIST_LOG_TARGET_PREFIX + watchlist.getWatchlistName() + WATCHLIST_LOG_TARGET_SUFFIX, 
+									Status.SUCCESS, 
+									WATCHLIST_LOG_CREATE_MESSAGE, 
+									item.getItemData(), 
+									editUser));
 				}
 				item.setWatchlist(watchlist);
 			}
@@ -211,12 +228,18 @@ public class WatchlistPersistenceServiceImpl implements WatchlistPersistenceServ
 		if (deleteItems != null && deleteItems.size() > 0) {
 			for (WatchlistItem item : deleteItems) {
 				WatchlistItem itemToDelete = updateDeleteItemMap.get(item.getId());
-				ret.add(new WatchlistEditLog(editUser, watchlist, WatchlistEditEnum.D, itemToDelete.getItemData()));
+				ret.add(
+				    new AuditRecord(AuditActionType.DELETE_WL, 
+						WATCHLIST_LOG_TARGET_PREFIX + watchlist.getWatchlistName() + WATCHLIST_LOG_TARGET_SUFFIX, 
+						Status.SUCCESS, 
+						WATCHLIST_LOG_DELETE_MESSAGE, 
+						itemToDelete.getItemData(), 
+						editUser));
 			}
 			watchlistItemRepository.delete(deleteItems);
 		}
 		if (ret.size() > 0) {
-			watchlistLogRepository.save(ret);
+			auditRecordRepository.save(ret);
 		}
 		return ret;
 	}

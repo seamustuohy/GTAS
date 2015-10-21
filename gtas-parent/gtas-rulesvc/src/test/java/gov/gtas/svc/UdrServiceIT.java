@@ -1,5 +1,7 @@
 package gov.gtas.svc;
 
+import static gov.gtas.constant.AuditLogConstants.UDR_LOG_TARGET_PREFIX;
+import static gov.gtas.constant.AuditLogConstants.UDR_LOG_TARGET_SUFFIX;
 import static gov.gtas.constant.DomainModelConstants.UDR_UNIQUE_CONSTRAINT_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -7,6 +9,31 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.constant.RuleConstants;
+import gov.gtas.enumtype.AuditActionType;
+import gov.gtas.enumtype.ConditionEnum;
+import gov.gtas.enumtype.Status;
+import gov.gtas.error.ErrorUtils;
+import gov.gtas.json.JsonServiceResponse;
+import gov.gtas.model.AuditRecord;
+import gov.gtas.model.Role;
+import gov.gtas.model.User;
+import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.UdrRule;
+import gov.gtas.model.udr.json.JsonUdrListElement;
+import gov.gtas.model.udr.json.MetaData;
+import gov.gtas.model.udr.json.QueryEntity;
+import gov.gtas.model.udr.json.QueryObject;
+import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
+import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
+import gov.gtas.services.AuditLogPersistenceService;
+import gov.gtas.services.security.RoleData;
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
+import gov.gtas.services.security.UserServiceUtil;
+import gov.gtas.services.udr.RulePersistenceService;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -26,27 +53,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import gov.gtas.config.RuleServiceConfig;
-import gov.gtas.constant.RuleConstants;
-import gov.gtas.enumtype.ConditionEnum;
-import gov.gtas.enumtype.Status;
-import gov.gtas.error.ErrorUtils;
-import gov.gtas.json.JsonServiceResponse;
-import gov.gtas.model.Role;
-import gov.gtas.model.User;
-import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.json.JsonUdrListElement;
-import gov.gtas.model.udr.json.QueryEntity;
-import gov.gtas.model.udr.json.QueryObject;
-import gov.gtas.model.udr.json.UdrSpecification;
-import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
-import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
-import gov.gtas.services.security.RoleData;
-import gov.gtas.services.security.UserData;
-import gov.gtas.services.security.UserService;
-import gov.gtas.services.security.UserServiceUtil;
-import gov.gtas.services.udr.RulePersistenceService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Integration tests for the UDR management service.
@@ -82,6 +89,9 @@ public class UdrServiceIT {
 
 	@Autowired
 	UserServiceUtil userServiceUtil;
+	
+	@Autowired
+	private AuditLogPersistenceService auditLogPersistenceService;
 
 	@Before
 	public void setUp() throws Exception {
@@ -157,7 +167,9 @@ public class UdrServiceIT {
 		List<QueryEntity> newterms = new LinkedList<QueryEntity>();
 		newterms.add(terms.get(0));
 		details.setRules(newterms);
+		
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
+		
 		assertEquals(Status.SUCCESS, resp.getStatus());
 		Long id = Long.valueOf(resp.findResponseDetailValue(RuleConstants.UDR_ID_ATTRIBUTE_NAME));
 		assertNotNull("The saved ID is null", id);
@@ -172,6 +184,10 @@ public class UdrServiceIT {
 		assertNotNull(criteria);
 		assertEquals(1, criteria.length);
 		assertNotNull("Engine Rule has a null Knowledge Base reference", engineRules.get(0).getKnowledgeBase());
+		
+		//verify the audit log
+		verifyAuditLog(AuditActionType.CREATE_UDR, RULE_TITLE1, spec, false);
+
 	}
 
 	@Test
@@ -258,12 +274,16 @@ public class UdrServiceIT {
 		assertNotNull(specFetched);
 		specFetched.getSummary().setDescription(RULE_DESCRIPTION2);
 		specFetched.setDetails(null);
+		
 		udrService.updateUdr(user.getUserId(), specFetched);
+		
 		specFetched = udrService.fetchUdr(user.getUserId(), title);
 		assertNotNull(specFetched);
 		assertEquals(RULE_DESCRIPTION2, specFetched.getSummary().getDescription());
+		
+		//verify the audit log
+		verifyAuditLog(AuditActionType.UPDATE_UDR_META, RULE_TITLE1, specFetched, true);		
 	}
-
 	@Test
 	@Transactional
 	public void testUpdateAll() {
@@ -279,10 +299,16 @@ public class UdrServiceIT {
 		UdrSpecification updatedSpec = UdrSpecificationBuilder.createSampleSpec2(user.getUserId(), RULE_TITLE1,
 				RULE_DESCRIPTION2);
 		updatedSpec.setId(specFetched.getId());
+		
 		udrService.updateUdr(user.getUserId(), updatedSpec);
+		
 		specFetched = udrService.fetchUdr(user.getUserId(), title);
 		assertNotNull(specFetched);
 		assertEquals(RULE_DESCRIPTION2, specFetched.getSummary().getDescription());
+		
+		//verify the audit log
+		verifyAuditLog(AuditActionType.UPDATE_UDR, RULE_TITLE1, updatedSpec, false);
+
 	}
 
 	@Test
@@ -366,7 +392,7 @@ public class UdrServiceIT {
 	@Test
 	@Transactional
 	public void testKnowledgeBaseReferences() {
-		User user = createUser();
+		User user = createUser(USERID_1, USER1_FIRST_NAME, USER1_LAST_NAME);
 		UdrSpecification spec1 = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1,
 				RULE_DESCRIPTION1);
 		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec1);
@@ -406,4 +432,32 @@ public class UdrServiceIT {
 
 		return user;
 	}
+	
+    private void verifyAuditLog(AuditActionType type, String title, UdrSpecification spec, boolean metaOnly){
+    	List<AuditRecord> logList = auditLogPersistenceService.findByTarget(UDR_LOG_TARGET_PREFIX + title + UDR_LOG_TARGET_SUFFIX);
+    	AuditRecord log = null;
+    	assertTrue(logList.size() >= 1);
+    	for(AuditRecord r:logList){
+    		if(r.getActionType() == type){
+    			log = r;
+    			break;
+    		}
+    	}
+    	assertNotNull(log);
+    	ObjectMapper mapper = new ObjectMapper();
+    	try{
+    	   if(metaOnly){
+    		   MetaData meta = mapper.readValue(log.getActionData(), MetaData.class);
+    		   assertEquals(spec.getSummary().getDescription(), meta.getDescription());
+    	   } else {
+    		   UdrSpecification dataSpec=  mapper.readValue(log.getActionData(), UdrSpecification.class);
+    		   assertEquals(spec.getSummary().getDescription(), dataSpec.getSummary().getDescription());    		   
+    	   }
+    	} catch(Exception ex){
+    		ex.printStackTrace();
+    		fail("Not Expecting Exception");
+    	}
+    	
+    }
+
 }

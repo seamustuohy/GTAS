@@ -159,6 +159,10 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	@Override
 	public Collection<? extends BaseEntity> batchUpdate(
 			Collection<? extends BaseEntity> entities) {
+		/*
+		 * Note: this method is only used for Knowledge base maintenance.
+		 * Hence there is no need for logging the updates in this method.
+		 */
 		List<BaseEntity> ret = new LinkedList<BaseEntity>();
 		int count = 0;
 		for (BaseEntity ent : entities) {

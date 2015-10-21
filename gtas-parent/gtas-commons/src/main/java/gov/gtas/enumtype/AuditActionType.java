@@ -3,6 +3,7 @@ package gov.gtas.enumtype;
 public enum AuditActionType {
 	CREATE_UDR, 
 	UPDATE_UDR, 
+	UPDATE_UDR_META, 
 	DELETE_UDR, 
 	CREATE_WL, 
 	UPDATE_WL, 
