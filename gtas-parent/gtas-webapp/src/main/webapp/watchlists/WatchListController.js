@@ -116,7 +116,7 @@
                 $scope.gridApi.selection.selectRow(row);
                 $scope[$scope.activeTab] = new model[$scope.activeTab]();
             }
-            $scope.saveRow(data);
+//            $scope.saveRow(data);
         };
 
         $scope.saveRow = function (rowEntity) {
@@ -125,7 +125,6 @@
                 entity = watchlistType.entity,
                 method = !rowEntity.id ? 'addItem' : 'updateItem',
                 terms = [],
-                promise = $q.defer(),
                 columnType,
                 value,
                 ready = true;
@@ -133,7 +132,6 @@
             watchlistType.columns.forEach(function (column) {
                 columnTypeDict[column.name] = column.type;
             });
-            $scope.gridApi.rowEdit.setSavePromise(rowEntity, promise.promise);
 
             Object.keys(rowEntity).forEach(function (key) {
                 if (['$$hashKey', 'id'].indexOf(key) === -1) {
@@ -150,13 +148,8 @@
             });
             if (ready) {
                 watchListService[method]($scope.activeTab, entity, rowEntity.id, terms).then(function (response) {
-                    console.log('saved')
-                    $interval(function () {
-                        promise.resolve();
-                    }, 300, 1);
+                    console.log('saved');
                 });
-            } else {
-                promise.resolve();
             }
         };
 
@@ -164,6 +157,7 @@
             $scope.gridApi = gridApi;
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                 $scope[$scope.activeTab] = row.entity;
+                $scope.rowSelected = true;
             });
             gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
             gridApi.rowEdit.flushDirtyRows($scope.watchlistGrid);
