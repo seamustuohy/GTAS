@@ -4,7 +4,7 @@
         $scope.passenger = passenger.data;
     });
     app.controller('PaxController', function ($scope, $injector, $stateParams, $state, paxService, sharedPaxData, uiGridConstants, gridService,
-                                              queryBuilderFactory, jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers, 
+                                              jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers,
                                               $timeout, paxModel) {
         $scope.model = paxModel.model;
 
@@ -73,10 +73,10 @@
         $scope.flightDirections = flightDirections;
 
         $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
-        $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
+//        $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
         $scope.stateName = $state.$current.self.name;
 
-        jqueryQueryBuilderService.init('riskcriteria');
+        jqueryQueryBuilderService.init('rule');
 
         $scope.ruleIdClick = function (row) {
             $scope.getRuleObject(row.entity.ruleId);
