@@ -7,6 +7,14 @@ padding-bottom: 20px;
 }
 </style>
 <form name="userSettings">
+    <div class="alert alert-danger" ng-show="error">
+        <button class="close" data-dismiss="alert">x</button>
+        <strong>Error!</strong> An error occured while trying to send message.
+    </div>
+    <div class="alert alert-success" ng-show="success">
+        <button class="close" data-dismiss="alert">x</button>
+        <strong>Success! </strong> {{successMessage}}
+    </div>
 <section layout="row" layout-padding layout-margin layout-align="space-around center">
     <md-input-container>
         <label>First Name</label>
@@ -29,6 +37,6 @@ padding-bottom: 20px;
     </md-input-container>
     <div class="actions">
         <md-button class="md-raised md-primary" ng-click="updateCredentials()" ng-disabled="userSettings.$invalid">Update</md-button>
-        </div>
+    </div>
 </section>
 </form>
