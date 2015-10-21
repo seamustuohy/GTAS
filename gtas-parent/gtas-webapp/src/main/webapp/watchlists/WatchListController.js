@@ -89,7 +89,7 @@
         };
 
         $scope.updateGrid = function (listName) {
-            $scope.template = listName;
+//            $scope.template = listName;
             if ($scope.data[listName]) {
                 $scope.activeTab = listName;
                 $scope.watchlistGrid.columnDefs = watchlist.types[listName].columns;
@@ -107,16 +107,10 @@
 
         $scope.tabs = tabs;
         $scope.activeTab = tabs[0].title;
+        $scope.rowSelected = false;
 
         $scope.Add = function () {
-            var data = $scope[$scope.activeTab], row;
-            if (!data.id) {
-                $scope.watchlistGrid.data.unshift(data);
-                row = $scope.watchlistGrid.data[0];
-                $scope.gridApi.selection.selectRow(row);
-                $scope[$scope.activeTab] = new model[$scope.activeTab]();
-            }
-//            $scope.saveRow(data);
+            $scope[$scope.activeTab] = new model[$scope.activeTab]();
         };
 
         $scope.saveRow = function (rowEntity) {
@@ -149,6 +143,11 @@
             if (ready) {
                 watchListService[method]($scope.activeTab, entity, rowEntity.id, terms).then(function (response) {
                     console.log('saved');
+                    $scope[$scope.activeTab].id = response.data.result;
+                    $scope.watchlistGrid.data.unshift($scope[$scope.activeTab]);
+                    $scope.gridApi.selection.clearSelectedRows();
+                    $scope.rowSelected = false;
+                    $scope.Add();
                 });
             }
         };
@@ -156,11 +155,17 @@
         $scope.watchlistGrid.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                $scope[$scope.activeTab] = row.entity;
-                $scope.rowSelected = true;
+                if (row.isSelected) {
+                    $scope[$scope.activeTab] = row.entity;
+                    $scope.rowSelected = true;
+                } else {
+                    $scope.rowSelected = false;
+                    $scope.gridApi.selection.clearSelectedRows();
+                    $scope.Add();
+                }
             });
-            gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
-            gridApi.rowEdit.flushDirtyRows($scope.watchlistGrid);
+            //           gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
+            //           gridApi.rowEdit.flushDirtyRows($scope.watchlistGrid);
         };
 
         $scope.removeRow = function () {
