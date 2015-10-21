@@ -1,21 +1,5 @@
-app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, gridOptionsLookupService, jqueryQueryBuilderService, $timeout) {
+app.controller('RiskCriteriaController', function ($scope, $injector, jqueryQueryBuilderWidget, queryBuilderFactory, gridOptionsLookupService, jqueryQueryBuilderService, $mdSidenav, $mdUtil) {
     'use strict';
-    var model = {
-        summary: {
-            query: function (obj) {
-                this.title = obj ? obj.title : '';
-                this.description = obj ? obj.description : null;
-            },
-            rule: function (obj) {
-                this.title = obj ? obj.title : '';
-                this.description = obj ? obj.description : null;
-                this.startDate = obj ? obj.startDate : today;
-                this.endDate = obj ? obj.endDate : null;
-                this.enabled = obj ? obj.enabled : true;
-            }
-        }
-    };
-
     jqueryQueryBuilderService.init('riskcriteria');
     $scope.mode = "rule";
 

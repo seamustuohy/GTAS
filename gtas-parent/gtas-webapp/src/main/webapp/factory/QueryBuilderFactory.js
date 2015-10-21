@@ -1,6 +1,6 @@
 app.factory('queryBuilderFactory', function () {
     'use strict';
-    return function ($scope, $timeout, jqueryQueryBuilderService, $interval) {
+    return function ($scope, $timeout, jqueryQueryBuilderService, $interval, $mdSidenav) {
         var today = moment().format('YYYY-MM-DD').toString(),
             model = {
                 summary: {
@@ -19,8 +19,25 @@ app.factory('queryBuilderFactory', function () {
             };
 
         $scope.prompt = {
-            rule: false,
-            query: false
+            open: function (mode) {
+                if ($scope.ruleId === null) {
+                    $scope.loadSummary(new model.summary[mode]());
+                }
+                $scope.selectedMode = mode;
+                $mdSidenav(mode)
+                    .open()
+                    .then(function () {
+                        console.log("toggle sidenav is done");
+                    });
+            },
+            cancel: function (mode) {
+                this[mode] = false;
+                $mdSidenav(mode)
+                    .close()
+                    .then(function () {
+                        console.log("toggle sidenav is done");
+                    });
+            }
         };
 
         $scope.setData = {
@@ -194,17 +211,13 @@ app.factory('queryBuilderFactory', function () {
         };
         $scope.ruleId = null;
         $scope.saving = false;
-
         $scope.save = {
             query: {
                 cancel: function () {
-                    $scope.prompt.query = false;
+                    $scope.prompt.cancel('query');
                 },
                 prompt: function () {
-                    if ($scope.ruleId === null) {
-                        $scope.loadSummary(new model.summary.query());
-                    }
-                    $scope.prompt.query = true;
+                    $scope.prompt.open('query');
                 },
                 confirm: function () {
                     var queryObject, query;
@@ -242,13 +255,10 @@ app.factory('queryBuilderFactory', function () {
             },
             rule: {
                 cancel: function () {
-                    $scope.prompt.rule = false;
+                    $scope.prompt.cancel('rule');
                 },
                 prompt: function () {
-                    if ($scope.ruleId === null) {
-                        $scope.loadSummary(new model.summary.rule());
-                    }
-                    $scope.prompt.rule = true;
+                    $scope.prompt.open('rule');
                 },
                 confirm: function () {
                     var ruleObject, details;

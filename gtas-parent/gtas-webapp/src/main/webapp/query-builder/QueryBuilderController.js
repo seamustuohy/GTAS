@@ -32,7 +32,7 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
 
     jqueryQueryBuilderService.getList().then(function (myData) {
-        $scope.setData(myData.result);
+        $scope.setData.query(myData.result);
     });
 
     $scope.hideGrid = true;
