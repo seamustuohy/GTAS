@@ -30,8 +30,8 @@ var app;
             };
         },
         initialize = function ($rootScope) {
-            $rootScope.$on('$stateChangeStart', function (e, toState) {
-                $rootScope.$broadcast('stateChanged', toState.name);
+            $rootScope.$on('$stateChangeStart', function (e, toState, toParams) {
+                $rootScope.$broadcast('stateChanged', toState, toParams);
             });
         },
         router = function ($stateProvider, $urlRouterProvider) {
@@ -182,21 +182,12 @@ var app;
                         }
                     }
                 })
-                .state('query-builder', {
-                    url: '/query-builder',
+                .state('build', {
+                    url: '/build/:mode',
                     views: {
                         '@': {
-                            controller: 'QueryBuilderController',
-                            templateUrl: 'query-builder/query.html'
-                        }
-                    }
-                })
-                .state('risk-criteria', {
-                    url: '/risk-criteria',
-                    views: {
-                        '@': {
-                            controller: 'RiskCriteriaController',
-                            templateUrl: 'risk-criteria/risk-criteria.html'
+                            controller: 'BuildController',
+                            templateUrl: 'build/build.html'
                         }
                     }
                 })
@@ -220,23 +211,24 @@ var app;
         },
         NavCtrl = function ($scope) {
             var lookup = {
-                admin: ['admin', 'admin.users', 'admin.addUser'],
-                dashboard: ['dashboard'],
-                flights: ['flights'],
-                passengers: ['paxAll', 'flightpax'],
-                queries: ['query-builder'],
-                risks: ['risk-criteria'],
-                watchlists: ['watchlists'],
-                usersettings:['user-settings']
+                admin: { name: ['admin', 'admin.users', 'admin.addUser'] },
+                dashboard: { name: ['dashboard'] },
+                flights: { name: ['flights'] },
+                passengers: { name: ['paxAll', 'flightpax'] },
+                queries: { mode: ['query'] },
+                risks: { mode: ['rule'] },
+                watchlists: { name: ['watchlists'] },
+                usersettings: { name: ['user-settings'] }
             };
-            $scope.onRoute = function (stateName) {
-                return lookup[stateName].indexOf($scope.stateName) >= 0;
+            $scope.onRoute = function (key) {
+                return (lookup[key].name && lookup[key].name.indexOf($scope.stateName) >= 0) || (lookup[key].mode && lookup[key].mode.indexOf($scope.mode) >= 0);
             };
             $scope.showNav = function () {
                 return ['queryFlights', 'queryPassengers', 'detail'].indexOf($scope.stateName) === -1;
             };
-            $scope.$on('stateChanged', function (e, stateName) {
-                $scope.stateName = stateName;
+            $scope.$on('stateChanged', function (e, state, toParams) {
+                $scope.stateName = state.name;
+                $scope.mode = toParams.mode;
             });
         };
 

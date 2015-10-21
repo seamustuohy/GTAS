@@ -261,8 +261,8 @@
                         useExternalFiltering: true,
                         expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>'
                     },
-                    queries : standardOptions,
-                    riskCriteria: standardOptions,
+                    query : standardOptions,
+                    rule: standardOptions,
                     watchlist: standardOptions
                 },
                 columns = {
@@ -333,7 +333,7 @@
                     passengers: [
                         //needs gridService reference
                     ],
-                    queries: [
+                    query: [
                         {
                             name: "title",
                             displayName: "Name",
@@ -349,7 +349,7 @@
                             enableColumnMenu: false
                         }
                     ],
-                    riskCriteria: [
+                    rule: [
                         {
                             name: "title",
                             displayName: "Name",
@@ -573,8 +573,8 @@
         .service("jqueryQueryBuilderService", function ($http, $q) {
             var baseUrl,
                 URLS = {
-                    querybuilder: '/gtas/query/',
-                    riskcriteria: '/gtas/udr/'
+                    query: '/gtas/query/',
+                    rule: '/gtas/udr/'
                 },
                 handleError = function (response) {
                     if (!angular.isObject(response.data) || !response.data.message) {
@@ -586,8 +586,8 @@
                     return (response.data);
                 },
                 services = {
-                    init: function (url) {
-                        baseUrl = URLS[url];
+                    init: function (mode) {
+                        baseUrl = URLS[mode];
                     },
                     loadRuleById: function (ruleId) {
                         var request;

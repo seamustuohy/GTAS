@@ -42,11 +42,11 @@
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Manage Queries', 'Admin')">
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('queries')}"
-            ng-disabled="onRoute('queries')" href="#/query-builder"><i class="glyphicon glyphicon-filter"></i>  Queries</md-button>
+            ng-disabled="onRoute('queries')" href="#/build/query"><i class="glyphicon glyphicon-filter"></i>  Queries</md-button>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Manage Rules', 'Admin')">
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('risks')}"
-            ng-disabled="onRoute('risks')" href="#/risk-criteria"><i class="glyphicon glyphicon-flag"></i>  Risk Criteria</md-button>
+            ng-disabled="onRoute('risks')" href="#/build/rule"><i class="glyphicon glyphicon-flag"></i>  Risk Criteria</md-button>
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Manage Watch List','Admin')">
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('watchlists')}"
@@ -96,7 +96,6 @@
         <script src='common/filters.js'></script>
         <script src='common/services.js'></script>
         <script src='factory/ModalGridFactory.js'></script>
-        <script src='factory/QueryBuilderFactory.js'></script>
         <script src='factory/JqueryQueryBuilderWidget.js'></script>
         <script src='dashboard/DashboardController.js'></script>
         <script src='flights/FlightsModel.js'></script>       
@@ -106,8 +105,7 @@
         <script src='pax/PaxController.js'></script>
         <script src='pax/PaxService.js'></script>
         <script src='pax/PaxFactory.js'></script>
-        <script src='query-builder/QueryBuilderController.js'></script>
-        <script src='risk-criteria/RiskCriteriaController.js'></script>
+        <script src='build/BuildController.js'></script>
         <script src='watchlists/WatchListController.js'></script>
         <script src='admin/AdminController.js'></script>
         <script src='admin/UserController.js'></script>        
