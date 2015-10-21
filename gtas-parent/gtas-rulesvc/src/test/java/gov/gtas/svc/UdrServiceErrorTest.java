@@ -32,6 +32,7 @@ import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
 import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
+import gov.gtas.repository.AuditRecordRepository;
 import gov.gtas.services.security.UserData;
 import gov.gtas.services.security.UserService;
 import gov.gtas.services.security.UserServiceUtil;
@@ -61,6 +62,9 @@ public class UdrServiceErrorTest {
 	private UserServiceUtil mockUserServiceUtil;
 
 	@Mock
+	private AuditRecordRepository mockAuditRecordRepository;
+
+	@Mock
 	private RuleManagementService mockRuleManagementService;
 
 	@Before
@@ -71,6 +75,7 @@ public class UdrServiceErrorTest {
 		ReflectionTestUtils.setField(udrService, "userService", mockUserService);
 		ReflectionTestUtils.setField(udrService, "userServiceUtil", mockUserServiceUtil);
 		ReflectionTestUtils.setField(udrService, "ruleManagementService", mockRuleManagementService);
+		ReflectionTestUtils.setField(udrService, "auditRecordRepository", mockAuditRecordRepository);
 	}
 
 	@After
