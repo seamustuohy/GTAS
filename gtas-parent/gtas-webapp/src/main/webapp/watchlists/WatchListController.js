@@ -88,6 +88,10 @@
             });
         };
 
+        $scope.getSaveStateText = function (activeTab) {
+            return $scope[activeTab].id === null ? 'Save ' + activeTab : 'Update ' + activeTab;
+        }
+
         $scope.updateGrid = function (listName) {
 //            $scope.template = listName;
             if ($scope.data[listName]) {
@@ -113,11 +117,12 @@
             $scope[$scope.activeTab] = new model[$scope.activeTab]();
         };
 
-        $scope.saveRow = function (rowEntity) {
-            var watchlistType = watchlist.types[$scope.activeTab],
+        $scope.saveRow = function () {
+            var objectType = $scope.activeTab,
+                watchlistType = watchlist.types[objectType],
                 columnTypeDict = {},
                 entity = watchlistType.entity,
-                method = !rowEntity.id ? 'addItem' : 'updateItem',
+                method = !$scope[objectType].id ? 'addItem' : 'updateItem',
                 terms = [],
                 columnType,
                 value,
@@ -127,10 +132,10 @@
                 columnTypeDict[column.name] = column.type;
             });
 
-            Object.keys(rowEntity).forEach(function (key) {
+            Object.keys($scope[objectType]).forEach(function (key) {
                 if (['$$hashKey', 'id'].indexOf(key) === -1) {
                     columnType = columnTypeDict[key];
-                    value = rowEntity[key];
+                    value = $scope[objectType][key];
                     if (!value) {
                         ready = false;
                     }
@@ -141,10 +146,12 @@
                 }
             });
             if (ready) {
-                watchListService[method]($scope.activeTab, entity, rowEntity.id, terms).then(function (response) {
+                watchListService[method](objectType, entity, $scope[objectType].id, terms).then(function (response) {
                     console.log('saved');
-                    $scope[$scope.activeTab].id = response.data.result;
-                    $scope.watchlistGrid.data.unshift($scope[$scope.activeTab]);
+                    if ($scope[$scope.activeTab].id === null) {
+                        $scope[$scope.activeTab].id = response.data.result;
+                        $scope.watchlistGrid.data.unshift($scope[$scope.activeTab]);
+                    }
                     $scope.gridApi.selection.clearSelectedRows();
                     $scope.rowSelected = false;
                     $scope.Add();
