@@ -116,15 +116,15 @@
         </md-input-container>
         <md-input-container ng-if="activeTab == 'Document'">
             <label>Document Number:</label>
-            <input ng-model="Document.documentNumber" type="string" required>
+            <input ng-model="Document.documentNumber" required>
         </md-input-container>
         <md-input-container ng-if="activeTab == 'Passenger'">
             <label>First Name:</label>
-            <input ng-model="Passenger.firstName" type="string" required>
+            <input ng-model="Passenger.firstName" required>
         </md-input-container>
         <md-input-container ng-if="activeTab == 'Passenger'">
             <label>Last Name:</label>
-            <input ng-model="Passenger.lastName" type="string" required>
+            <input ng-model="Passenger.lastName" required>
         </md-input-container>
         <md-datepicker ng-if="activeTab == 'Passenger'" name="dob" ng-model="Passenger.dob"
                        md-placeholder="Date of Birth" required></md-datepicker>
