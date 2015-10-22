@@ -426,7 +426,7 @@ public class TargetingServiceImpl implements TargetingService {
 		Passenger foundPassenger = passengerRepository.findOne(hitSummmaryVo
 				.getPassengerId());
 		if (foundPassenger != null) {
-			logger.info("Found passenger --> " + foundPassenger);
+			logger.info("Found passenger.");
 			hitsSummary.setPassenger(foundPassenger);
 		} else {
 			logger.debug("No passenger found. --> ");
@@ -435,7 +435,7 @@ public class TargetingServiceImpl implements TargetingService {
 		Flight foundFlight = flightRepository.findOne(hitSummmaryVo
 				.getFlightId());
 		if (foundFlight != null) {
-			logger.info("Found flight --> " + foundFlight);
+			logger.info("Found flight.");
 			hitsSummary.setFlight(foundFlight);
 		} else {
 			logger.debug("No flight found. --> ");
