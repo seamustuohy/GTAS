@@ -17,7 +17,7 @@
 </style>
 <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="query">
     <md-toolbar class="md-theme-light">
-        <h2 class="md-toolbar-tools">Review | Confirm {{selectedMode}} Metadata:</h2>
+        <h2 class="md-toolbar-tools">{{getToolbarText(selectedMode)}}</h2>
     </md-toolbar>
     <form name="queryForm">
         <md-content layout-padding>
@@ -50,7 +50,7 @@
 </md-sidenav>
 <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="rule">
     <md-toolbar class="md-theme-light">
-        <h2 class="md-toolbar-tools">Review | Confirm {{selectedMode}} Metadata:</h2>
+        <h2 class="md-toolbar-tools">{{getToolbarText(selectedMode)}}</h2>
     </md-toolbar>
     <form name="ruleForm">
         <md-content layout-padding>
@@ -111,13 +111,11 @@
                 </md-button>
                 <md-button href="#/query/flights"
                            title="Launch Flight Query Results in new window"
-                           ng-disabled="ruleId === null || saving === true"
                            target="queryFlights" ng-click="executeQuery('flights')"
                            class="md-raised">
                     <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-plane"></i> Query Flights
                 </md-button>
                 <md-button href="#/query/passengers"
-                           ng-disabled="ruleId === null || saving === true"
                            title="Launch Passengers Query Results in new window"
                            target="queryPassengers" ng-click="executeQuery('flights')"
                            class="md-raised">

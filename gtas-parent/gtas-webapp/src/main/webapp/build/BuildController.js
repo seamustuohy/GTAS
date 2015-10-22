@@ -1,4 +1,4 @@
-app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, $mdSidenav, $stateParams, $interval) {
+app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, $mdSidenav, $stateParams, $interval, $timeout) {
     'use strict';
     var today = moment().format('YYYY-MM-DD').toString(),
         model = {
@@ -37,8 +37,9 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.prompt = {
         open: function (mode) {
-            if ($scope.ruleId === null) {
-                $scope.loadSummary(mode, new model.summary[mode]());
+            $scope.selectedMode = mode;
+            if (mode !== $scope.mode) {
+                $scope.ruleId === null;
             }
             //$scope.selectedMode = mode;
             $mdSidenav(mode)
@@ -83,6 +84,16 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         }
     };
 
+    $scope.getToolbarText = function (selectedMode) {
+        switch (selectedMode) {
+            case 'query':
+                return $scope.mode === 'query' && $scope.ruleId !== null ? 'Update Query' : 'Save Query';
+            case 'rule':
+                return $scope.mode === 'rule' && $scope.ruleId !== null ? 'Update Rule' : 'Save Rule';
+        }
+    };
+
+    //TODO move out to a service
     $scope.executeQuery = function () {
         var query = $scope.$builder.queryBuilder('getDrools');
         if (query === false) {
@@ -389,13 +400,13 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
     $scope.$scope = $scope;
 
-    //$scope.$watch("endDate", function (newValue) {
-    //    var datepicker;
-    //    if (newValue === null || newValue === undefined) {
-    //        $timeout(function () {
-    //            datepicker = document.querySelectorAll('.md-datepicker-input')[1];
-    //            datepicker.value = '';
-    //        }, 5);
-    //    }
-    //});
+    $scope.$watch("rule.endDate", function (newValue) {
+        var datepicker;
+        if (newValue === null || newValue === undefined) {
+            $timeout(function () {
+                datepicker = document.querySelectorAll('.md-datepicker-input')[1];
+                datepicker.value = '';
+            }, 5);
+        }
+    });
 });
