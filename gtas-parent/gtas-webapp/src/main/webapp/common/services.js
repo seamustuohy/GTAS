@@ -363,6 +363,14 @@
                     ],
                     rule: [
                         {
+                            name: "hitCount",
+                            displayName: "Hits",
+                            field: "hitCount",
+                            cellTemplate: '<md-button aria-label="title" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
+                            enableCellEdit: false,
+                            enableColumnMenu: false
+                        },
+                        {
                             name: "title",
                             displayName: "Name",
                             field: "title",
