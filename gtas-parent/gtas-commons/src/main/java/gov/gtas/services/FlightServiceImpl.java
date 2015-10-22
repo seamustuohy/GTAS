@@ -88,7 +88,6 @@ public class FlightServiceImpl implements FlightService {
 			if(flight.getPassengers() != null && flight.getPassengers().size() >0){
 				Iterator it = flight.getPassengers().iterator();
 				while(it.hasNext()){
-					System.out.println("XXXXXXXXXXX");
 					Passenger p = (Passenger) it.next();
 					flightToUpdate.addPassenger(p);
 				}

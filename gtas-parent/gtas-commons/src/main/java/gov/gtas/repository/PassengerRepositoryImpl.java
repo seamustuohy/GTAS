@@ -56,7 +56,6 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         typedQuery.setFirstResult(offset);
         typedQuery.setMaxResults(dto.getPageSize());
         List<Object[]> results = typedQuery.getResultList();
-        System.out.println(results.size());
         return results;
     }
     
