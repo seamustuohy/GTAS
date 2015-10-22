@@ -34,11 +34,13 @@
                     field: "documentType",
                     name: "documentType",
                     displayName: "Type",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                     "type": "string"
                 }, {
                     field: "documentNumber",
                     name: "documentNumber",
                     displayName: "Number",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                     "type": "string"
                 }]
             },
@@ -48,23 +50,26 @@
                     field: "firstName",
                     name: "firstName",
                     displayName: "First Name",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                     "type": "string"
                 }, {
                     field: "lastName",
                     name: "lastName",
                     displayName: "Last Name",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                     "type": "string"
                 }, {
                     cellFilter: "date:\'yyyy-MM-dd\'",
                     field: "dob",
                     name: "dob",
                     displayName: "DOB",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                     "type": "date"
                 }]
             }
         };
         $scope.data = {};
-        $scope.watchlistGrid.enableCellEditOnFocus = true;
+        $scope.watchlistGrid.enableRowHeaderSelection = false;
         $scope.watchlistGrid.columnDefs = watchlist.types.Document.columns;
         $scope.getListItemsFor = function (listName) {
             watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
@@ -90,7 +95,7 @@
 
         $scope.getSaveStateText = function (activeTab) {
             return $scope[activeTab].id === null ? 'Save ' : 'Update ';
-        }
+        };
 
         $scope.updateGrid = function (listName) {
 //            $scope.template = listName;
@@ -165,21 +170,21 @@
             }
         };
 
+        $scope.editRecord = function (row) {
+            $scope.gridApi.selection.clearSelectedRows();
+            $scope.gridApi.selection.selectRow(row);
+            $scope[$scope.activeTab] = row.entity;
+            $scope.rowSelected = true;
+            $mdSidenav('save')
+                .open()
+                .then(function () {
+                    console.log("toggle sidenav is done");
+                });
+        };
+
         $scope.watchlistGrid.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
-            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                if (row.isSelected) {
-                    $scope[$scope.activeTab] = row.entity;
-                    $scope.rowSelected = true;
-                    $mdSidenav('save')
-                        .open()
-                        .then(function () {
-                            console.log("toggle sidenav is done");
-                        });
-                } else {
-                    $scope.rowSelected = false;
-                }
-            });
+//            gridApi.selection.on.rowSelectionChanged($scope.editRecord);
             //           gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
             //           gridApi.rowEdit.flushDirtyRows($scope.watchlistGrid);
         };
