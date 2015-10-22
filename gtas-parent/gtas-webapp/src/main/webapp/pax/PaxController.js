@@ -75,15 +75,12 @@
         $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
 //        $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
         $scope.stateName = $state.$current.self.name;
-
-        jqueryQueryBuilderService.init('rule');
-
         $scope.ruleIdClick = function (row) {
             $scope.getRuleObject(row.entity.ruleId);
         };
 
         $scope.getRuleObject = function (ruleID) {
-            jqueryQueryBuilderService.loadRuleById(ruleID).then(function (myData) {
+            jqueryQueryBuilderService.loadRuleById('rule', ruleID).then(function (myData) {
                 $scope.$builder.queryBuilder('readOnlyRules', myData.result.details);
                 $scope.hitDetailDisplay = myData.result.summary.title;
                 document.getElementById("QBModal").style.display = "block";

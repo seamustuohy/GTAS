@@ -27,7 +27,8 @@
     "bootstrap-select": "^1.6.0",
     "material-date-picker": "~1.2.1",
     "qunit": "^1.17.0",
-    "sql-parser": "^1.0.0"
+    "sql-parser": "^1.0.0",
+    "angular-material": "master"
   },
   "keywords": [
     "jquery",

@@ -24,7 +24,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             },
             rule: function (row) {
                 $scope.selectedIndex = $scope.qbGrid.data.indexOf(row.entity);
-                jqueryQueryBuilderService.loadRuleById(row.entity.id).then(function (myData) {
+                jqueryQueryBuilderService.loadRuleById('rule', row.entity.id).then(function (myData) {
                     var result = myData.result;
                     $scope.ruleId = result.id;
                     $scope.loadSummary('rule', result.summary);
@@ -34,14 +34,13 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         };
 
     $scope.mode = mode;
-    jqueryQueryBuilderService.init(mode);
 
     $scope.prompt = {
         open: function (mode) {
             if ($scope.ruleId === null) {
                 $scope.loadSummary(mode, new model.summary[mode]());
             }
-            $scope.selectedMode = mode;
+            //$scope.selectedMode = mode;
             $mdSidenav(mode)
                 .open()
                 .then(function () {
@@ -49,7 +48,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 });
         },
         cancel: function (mode) {
-            this[mode] = false;
             $mdSidenav(mode)
                 .close()
                 .then(function () {
@@ -92,7 +90,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             return;
         }
         localStorage['query'] = JSON.stringify(query);
-        localStorage['qbTitle'] = $scope.title.length ? $scope.title.trim() : '';
+        localStorage['qbTitle'] = $scope[$scope.mode].title.length ? $scope[$scope.mode].title.trim() : '';
     };
 
     $scope.ruleId = null;
@@ -129,31 +127,28 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     };
 
     $scope.allRules = false;
-    $scope.getRuleText = "Rules: Mine";
 
     $scope.updateGrid = function (value) {
-        console.log(value);
-        var mode = value ? 'all' : 'rule';
-        console.log(mode);
-        $scope.getRuleText = value ? "Rules: All" : "Rules: Mine";
-        jqueryQueryBuilderService.init(mode);
-        jqueryQueryBuilderService.getList().then(function (myData) {
+        $scope.selectedMode = value ? 'all' : 'rule';
+        jqueryQueryBuilderService.getList($scope.selectedMode).then(function (myData) {
             $scope.setData[$scope.mode](myData.result);
             $interval(function () {
-                var page;
-                if (!$scope.selectedIndex) {
-                    page = $scope.gridApi.pagination.getTotalPages();
-                    $scope.selectedIndex = $scope.qbGrid.data.length - 1;
-                    $scope.gridApi.pagination.seek(page);
-                }
+                //var page;
+                //if (!$scope.selectedIndex) {
+                //    page = $scope.gridApi.pagination.getTotalPages();
+                //    $scope.selectedIndex = $scope.qbGrid.data.length - 1;
+                //    $scope.gridApi.pagination.seek(page);
+                //}
                 $scope.gridApi.selection.clearSelectedRows();
-                $scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
+                $mdSidenav('rule').close();
+                //$scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
                 $scope.saving = false;
             }, 0, 1);
         });
     };
 
     $scope.updateQueryBuilderOnSave = function (myData) {
+        var mode = $scope.mode === "query" ? "query" : $scope.allRules ? "all" : "rule";
         if (myData.status === 'FAILURE') {
             $scope.alertError(myData.message);
             $scope.saving = false;
@@ -164,17 +159,19 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             return;
         }
 
-        jqueryQueryBuilderService.getList().then(function (myData) {
+        jqueryQueryBuilderService.getList(mode).then(function (myData) {
             $scope.setData[$scope.mode](myData.result);
+            $mdSidenav('rule').close();
+            $mdSidenav('query').close();
             $interval(function () {
-                var page;
-                if (!$scope.selectedIndex) {
-                    page = $scope.gridApi.pagination.getTotalPages();
-                    $scope.selectedIndex = $scope.qbGrid.data.length - 1;
-                    $scope.gridApi.pagination.seek(page);
-                }
+                //var page;
+                //if (!$scope.selectedIndex) {
+                //    page = $scope.gridApi.pagination.getTotalPages();
+                //    $scope.selectedIndex = $scope.qbGrid.data.length - 1;
+                //    $scope.gridApi.pagination.seek(page);
+                //}
                 $scope.gridApi.selection.clearSelectedRows();
-                $scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
+                //$scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
                 $scope.saving = false;
             }, 0, 1);
         });
@@ -184,7 +181,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         $scope.gridApi = gridApi;
         gridApi.selection.on.rowSelectionChanged($scope, function (row) {
             if (row.isSelected) {
-                loadOnSelection[mode](row);
+                loadOnSelection[$scope.mode](row);
             } else {
                 $scope.newRule();
                 $scope.gridApi.selection.clearSelectedRows();
@@ -203,7 +200,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         selectedRowEntities.forEach(function (rowEntity) {
             var rowIndexToDelete = $scope.qbGrid.data.indexOf(rowEntity);
 
-            jqueryQueryBuilderService.delete($scope.ruleId).then(function (response) {
+            jqueryQueryBuilderService.delete(mode, $scope.ruleId).then(function (response) {
                 $scope.qbGrid.data.splice(rowIndexToDelete, 1);
                 $scope.newRule();
             });
@@ -293,7 +290,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     query: query
                 };
 
-                jqueryQueryBuilderService.save(queryObject).then($scope.updateQueryBuilderOnSave);
+                jqueryQueryBuilderService.save('query', queryObject).then($scope.updateQueryBuilderOnSave);
             }
         },
         rule: {
@@ -316,7 +313,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     $scope.rule.title = $scope.rule.title.trim();
                 }
 
-                if (!$scope.rule.title.length) {
+                if ($scope.rule.title.length === 0) {
                     $scope.alertError('Title summary can not be blank!');
                     $scope.saving = false;
                     return;
@@ -360,7 +357,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     summary: $scope.rule
                 };
 
-                jqueryQueryBuilderService.save(ruleObject).then($scope.updateQueryBuilderOnSave);
+                jqueryQueryBuilderService.save('rule', ruleObject).then($scope.updateQueryBuilderOnSave);
             }
         }
     };
@@ -373,7 +370,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.qbGrid.exporterPdfHeader = {text: mode, style: 'headerStyle'};
     $scope.qbGrid.onRegisterApi = $scope.rowSelection;
 
-    jqueryQueryBuilderService.getList().then(function (myData) {
+    jqueryQueryBuilderService.getList(mode).then(function (myData) {
         $scope.setData[$scope.mode](myData.result);
     });
 

@@ -19,7 +19,7 @@
     <md-toolbar class="md-theme-light">
         <h2 class="md-toolbar-tools">Review | Confirm {{selectedMode}} Metadata:</h2>
     </md-toolbar>
-    <form ng-if="selectedMode == 'query'" name="queryForm">
+    <form name="queryForm">
         <md-content layout-padding>
             <div layout="row" layout-wrap>
                 <md-input-container flex>
@@ -52,7 +52,7 @@
     <md-toolbar class="md-theme-light">
         <h2 class="md-toolbar-tools">Review | Confirm {{selectedMode}} Metadata:</h2>
     </md-toolbar>
-    <form ng-if="selectedMode == 'rule'" name="ruleForm">
+    <form name="ruleForm">
         <md-content layout-padding>
             <div layout="row" layout-wrap>
                 <md-input-container flex>
@@ -92,9 +92,11 @@
 </md-sidenav>
 <md-content flex="" layout-padding="" class="">
     <div layout="column" layout-fill="" layout-align="top center">
-        <md-switch class="md-primary" ng-if="mode = 'rule'" aria-label="Rules:" ng-true-value="true" ng-false-value="false" ng-model="allRules" ng-change="updateGrid(allRules)">
-            {{getRuleText}}
-        </md-switch>
+        <div ng-if="mode == 'rule'">
+            <md-switch class="md-primary" aria-label="Rules:" ng-model="allRules" ng-change="updateGrid(allRules)">
+                {{allRules ? "Rules: All" : "Rules: Mine"}}
+            </md-switch>
+        </div>
         <div ui-grid="qbGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
         <section>
             <h2>Conditions:</h2>

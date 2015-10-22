@@ -186,7 +186,7 @@
                 }));
                 return dfd.promise;
             }
-          
+
 
             return {
                 getRoles: getRoles,
@@ -204,7 +204,7 @@
                     paginationPageSize: 10,
                     paginationPageSizes: [],
                     enableHorizontalScrollbar: 0,
-                    enableVerticalScrollbar: 0,                    
+                    enableVerticalScrollbar: 0,
                     enableFiltering: true,
                     enableCellEditOnFocus: false,
                     showGridFooter: true,
@@ -396,8 +396,9 @@
                         },
                         {
                             name: "modifiedOn",
+                            displayName: "Modidified On | By",
                             field: "modifiedOn",
-                            cellTemplate: '<md-button aria-label="modified" ng-click="grid.api.selection.selectRow(row.entity)">{{row.entity.modifiedBy}} {{row.entity.modifiedOn}}</md-button>',
+                            cellTemplate: '<md-button aria-label="modified" ng-click="grid.api.selection.selectRow(row.entity)">{{row.entity.modifiedOn}} | {{row.entity.modifiedBy}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false,
                         }
@@ -583,8 +584,7 @@
             };
         })
         .service("jqueryQueryBuilderService", function ($http, $q) {
-            var baseUrl,
-                URLS = {
+            var URLS = {
                     query: '/gtas/query/',
                     rule: '/gtas/udr/',
                     all: '/gtas/all_udr/'
@@ -599,11 +599,8 @@
                     return (response.data);
                 },
                 services = {
-                    init: function (mode) {
-                        baseUrl = URLS[mode];
-                    },
-                    loadRuleById: function (ruleId) {
-                        var request;
+                    loadRuleById: function (mode, ruleId) {
+                        var request, baseUrl = URLS[mode];
 
                         if (!ruleId) { return false; }
 
@@ -614,8 +611,8 @@
 
                         return (request.then(handleSuccess, handleError));
                     },
-                    delete: function (ruleId) {
-                        var request;
+                    delete: function (mode, ruleId) {
+                        var request, baseUrl = URLS[mode];
 
                         if (!ruleId) { return false; }
 
@@ -626,8 +623,8 @@
 
                         return (request.then(handleSuccess, handleError));
                     },
-                    save: function (data) {
-                        var method, request, url;
+                    save: function (mode, data) {
+                        var method, request, url, baseUrl = URLS[mode];
 
                         if (data.id === null) {
                             method = 'post';
@@ -645,8 +642,8 @@
 
                         return (request.then(handleSuccess, handleError));
                     },
-                    getList: function () {
-                        var request;
+                    getList: function (mode) {
+                        var request, baseUrl = URLS[mode];
 
                         request = $http({
                             method: "get",
@@ -659,7 +656,6 @@
 
             // Return public API.
             return ({
-                init: services.init,
                 getList: services.getList,
                 loadRuleById: services.loadRuleById,
                 delete: services.delete,
