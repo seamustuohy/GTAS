@@ -27,7 +27,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 jqueryQueryBuilderService.loadRuleById(row.entity.id).then(function (myData) {
                     var result = myData.result;
                     $scope.ruleId = result.id;
-                    $scope.loadSummary(result.summary);
+                    $scope.loadSummary('rule', result.summary);
                     $scope.$builder.queryBuilder('loadRules', result.details);
                 });
             }
@@ -39,7 +39,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.prompt = {
         open: function (mode) {
             if ($scope.ruleId === null) {
-                $scope.loadSummary(new model.summary[mode]());
+                $scope.loadSummary(mode, new model.summary[mode]());
             }
             $scope.selectedMode = mode;
             $mdSidenav(mode)
@@ -229,9 +229,9 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         filters: []
     };
 
-    $scope.loadSummary = function (summary) {
+    $scope.loadSummary = function (obj, summary) {
         Object.keys(summary).forEach(function (key) {
-            $scope[key] = summary[key];
+            $scope[obj][key] = summary[key];
         });
     };
 
@@ -270,11 +270,11 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
 //                    $scope.saving = true;
 
-                if ($scope.title && $scope.title.length) {
-                    $scope.title = $scope.title.trim();
+                if ($scope.query.title && $scope.query.title.length) {
+                    $scope.query.title = $scope.query.title.trim();
                 }
 
-                if (!$scope.title.length) {
+                if (!$scope.query.title.length) {
                     $scope.alertError('Title summary can not be blank!');
                     $scope.saving = false;
                     return;
@@ -288,8 +288,8 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
                 queryObject = {
                     id: $scope.ruleId,
-                    title: $scope.title,
-                    description: $scope.description || null,
+                    title: $scope.query.title,
+                    description: $scope.query.description || null,
                     query: query
                 };
 
@@ -312,11 +312,11 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
 //                    $scope.saving = true;
 
-                if ($scope.title && $scope.title.length) {
-                    $scope.title = $scope.title.trim();
+                if ($scope.rule.title && $scope.rule.title.length) {
+                    $scope.rule.title = $scope.rule.title.trim();
                 }
 
-                if (!$scope.title.length) {
+                if (!$scope.rule.title.length) {
                     $scope.alertError('Title summary can not be blank!');
                     $scope.saving = false;
                     return;
@@ -335,7 +335,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     //}
                 }
 
-                if ($scope.endDate) {
+                if ($scope.rule.endDate) {
                     //if (!endDate.isValid()) {
                     //    $scope.alertError('End Date must be empty/open or in this format: ' + $scope.formats.toString());
                     //    $scope.saving = false;
@@ -357,7 +357,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 ruleObject = {
                     id: $scope.ruleId,
                     details: details,
-                    summary: new model.summary[$scope.mode]($scope)
+                    summary: $scope.rule
                 };
 
                 jqueryQueryBuilderService.save(ruleObject).then($scope.updateQueryBuilderOnSave);
@@ -381,9 +381,12 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.loadQuery = function () {
         var obj = $scope.qbGrid.data[$scope.selectedIndex];
         $scope.ruleId = obj.id;
-        $scope.loadSummary(new model[$scope.mode](obj));
+        $scope.loadSummary('query', new model.summary.query(obj));
         $scope.$builder.queryBuilder('loadRules', obj.query);
     };
+
+    $scope.query = new model.summary.query();
+    $scope.rule = new model.summary.rule();
 
     //if mode query     $scope.buildAfterEntitiesLoaded();
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
