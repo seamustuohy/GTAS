@@ -1,5 +1,6 @@
 package gov.gtas.svc;
 
+import static gov.gtas.constant.GtasSecurityConstants.GTAS_APPLICATION_USERID;
 import gov.gtas.bo.CompositeRuleServiceResult;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
@@ -11,6 +12,7 @@ import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.RuleConstants;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.constant.WatchlistConstants;
+import gov.gtas.enumtype.AuditActionType;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
@@ -27,6 +29,7 @@ import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.repository.PnrRepository;
 import gov.gtas.rule.RuleService;
+import gov.gtas.services.AuditLogPersistenceService;
 import gov.gtas.svc.request.builder.PassengerFlightTuple;
 import gov.gtas.svc.util.RuleExecutionContext;
 import gov.gtas.svc.util.TargetingResultUtils;
@@ -87,6 +90,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private EntityManager em;
+
+	@Autowired
+	private AuditLogPersistenceService auditLogPersistenceService;
 
 	@Value("${hibernate.jdbc.batch_size}")
 	private String batchSize;
@@ -332,8 +338,21 @@ public class TargetingServiceImpl implements TargetingService {
 		for (HitsSummary s : hitsSummary) {
 			uniqueFlights.add(s.getFlight().getId());
 		}
+		writeAuditLogForTargetingRun(ruleRunningResult);
 		logger.info("Exiting runningRuleEngine().");
 		return uniqueFlights;
+	}
+
+	private void writeAuditLogForTargetingRun(
+			RuleExecutionContext targetingResult) {
+		try {
+			String message = "Targeting run on " + new Date();
+			auditLogPersistenceService.create(AuditActionType.TARGETING_RUN,
+					"Targeting Run", targetingResult.getTargetingResult(),
+					message, GTAS_APPLICATION_USERID);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Transactional

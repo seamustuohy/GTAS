@@ -1,7 +1,9 @@
 package gov.gtas.services;
 
+import static gov.gtas.constant.AuditLogConstants.AUDIT_LOG_WARNING_CANNOT_CONVERT_JSON_TO_STRING;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.enumtype.AuditActionType;
+import gov.gtas.enumtype.Status;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.model.AuditRecord;
@@ -16,22 +18,28 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class AuditLogPersistenceServiceImpl implements
 		AuditLogPersistenceService {
 
+	private static Logger logger = LoggerFactory
+			.getLogger(AuditLogPersistenceServiceImpl.class);
+
 	@Resource
 	private AuditRecordRepository auditLogRepository;
-	
+
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private UserServiceUtil userServiceUtil;
 
-	
 	@Override
 	public AuditRecord create(AuditRecord aRec) {
 		return auditLogRepository.save(aRec);
@@ -64,14 +72,18 @@ public class AuditLogPersistenceServiceImpl implements
 	}
 
 	@Override
-	public List<AuditRecord> findByUserAndActionType(AuditActionType actionType,
-			String userId) {
+	public List<AuditRecord> findByUserAndActionType(
+			AuditActionType actionType, String userId) {
 		User user = fetchUser(userId);
 		return auditLogRepository.findByUserAndActionType(user, actionType);
 	}
-	
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.AuditLogPersistenceService#findByUserAndTarget(java.lang.String, java.lang.String)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.AuditLogPersistenceService#findByUserAndTarget(java
+	 * .lang.String, java.lang.String)
 	 */
 	@Override
 	public List<AuditRecord> findByUserAndTarget(String userId, String target) {
@@ -79,12 +91,53 @@ public class AuditLogPersistenceServiceImpl implements
 		return auditLogRepository.findByUserAndTarget(user, target);
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.services.AuditLogPersistenceService#findByTarget(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.AuditLogPersistenceService#findByTarget(java.lang.String
+	 * )
 	 */
 	@Override
 	public List<AuditRecord> findByTarget(String target) {
 		return auditLogRepository.findByTarget(target);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.services.AuditLogPersistenceService#create(gov.gtas.enumtype
+	 * .AuditActionType, java.lang.String, java.lang.Object, java.lang.String,
+	 * gov.gtas.model.User)
+	 */
+	@Override
+	public AuditRecord create(AuditActionType actionType, String target,
+			Object actionData, String message, User user) {
+		ObjectMapper mapper = new ObjectMapper();
+		String actionDataString = null;
+		if (actionData != null) {
+			try {
+				actionDataString = mapper.writeValueAsString(actionData);
+			} catch (Exception ex) {
+				logger.warn(String.format(
+						AUDIT_LOG_WARNING_CANNOT_CONVERT_JSON_TO_STRING,
+						actionType, target, message));
+			}
+		}
+		AuditRecord ret = auditLogRepository.save(new AuditRecord(actionType,
+				target, Status.SUCCESS, message, actionDataString, user));
+		return ret;
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.AuditLogPersistenceService#create(gov.gtas.enumtype.AuditActionType, java.lang.String, java.lang.Object, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public AuditRecord create(AuditActionType actionType, String target,
+			Object actionData, String message, String userId) {
+		User user = fetchUser(userId);
+		return create(actionType, target, actionData, message, user);
 	}
 
 	/**

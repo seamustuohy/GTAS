@@ -2,12 +2,15 @@ package gov.gtas.services;
 
 import gov.gtas.enumtype.AuditActionType;
 import gov.gtas.model.AuditRecord;
+import gov.gtas.model.User;
 
 import java.util.Date;
 import java.util.List;
 
 public interface AuditLogPersistenceService {
 	public AuditRecord create(AuditRecord aRec);
+	public AuditRecord create(AuditActionType actionType, String target, Object actionData, String message, User user);
+	public AuditRecord create(AuditActionType actionType, String target, Object actionData, String message, String userId);
     public AuditRecord findById(Long id);
 
     public List<AuditRecord> findByDateRange(Date dateFrom, Date dateTo);
