@@ -16,6 +16,9 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 }
             }
         },
+        setId = function () {
+            return $scope.selectedMode === $scope.mode ? $scope.ruleId : null;
+        },
         mode = $stateParams.mode,
         loadOnSelection = {
             query: function (row) {
@@ -38,9 +41,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.prompt = {
         open: function (mode) {
             $scope.selectedMode = mode;
-            if (mode !== $scope.mode) {
-                $scope.ruleId === null;
-            }
             //$scope.selectedMode = mode;
             $mdSidenav(mode)
                 .open()
@@ -294,9 +294,8 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     $scope.saving = false;
                     return;
                 }
-
                 queryObject = {
-                    id: $scope.ruleId,
+                    id: setId(),
                     title: $scope.query.title,
                     description: $scope.query.description || null,
                     query: query
