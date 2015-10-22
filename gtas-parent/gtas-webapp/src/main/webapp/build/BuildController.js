@@ -75,6 +75,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             myData.forEach(function (obj) {
                 temp = $.extend({}, obj.summary, {
                     id: obj.id,
+                    hitCount: obj.hitCount,
                     modifiedOn: obj.modifiedOn,
                     modifiedBy: obj.modifiedBy
                 });
