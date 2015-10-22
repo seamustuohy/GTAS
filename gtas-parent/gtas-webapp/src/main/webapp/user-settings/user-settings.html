@@ -36,7 +36,7 @@ padding-bottom: 20px;
         </div>
     </md-input-container>
     <div class="actions">
-        <md-button class="md-raised md-primary" ng-click="updateCredentials()" ng-disabled="userSettings.$invalid">Update</md-button>
+        <md-button class="md-raised md-primary" ng-click="updateCredentials()" ng-disabled="userSettings.$invalid || ! userCredentials.firstName || ! userCredentials.lastName">Update</md-button>
     </div>
 </section>
 </form>
