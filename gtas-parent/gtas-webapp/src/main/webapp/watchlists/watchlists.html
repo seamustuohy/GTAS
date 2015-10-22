@@ -101,56 +101,55 @@
         padding: 2em 2em 0;
     }
 </style>
+<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="save">
+    <md-toolbar class="md-theme-light">
+        <h2 class="md-toolbar-tools">{{getSaveStateText(activeTab)}} {{activeTab}}</h2>
+    </md-toolbar>
+    <form name="watchlist" ng-submit="saveRow()">
+        <md-input-container ng-if="activeTab == 'Document'">
+            <label>Document Type:</label>
+            <md-select ng-model="Document.documentType" required>
+                <md-option ng-repeat="docType in documentTypes" value="{{docType.id}}">
+                    {{docType.label}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container ng-if="activeTab == 'Document'">
+            <label>Document Number:</label>
+            <input ng-model="Document.documentNumber" type="string" required>
+        </md-input-container>
+        <md-input-container ng-if="activeTab == 'Passenger'">
+            <label>First Name:</label>
+            <input ng-model="Passenger.firstName" type="string" required>
+        </md-input-container>
+        <md-input-container ng-if="activeTab == 'Passenger'">
+            <label>Last Name:</label>
+            <input ng-model="Passenger.lastName" type="string" required>
+        </md-input-container>
+        <md-datepicker ng-if="activeTab == 'Passenger'" name="dob" ng-model="Passenger.dob"
+                       md-placeholder="Date of Birth" required></md-datepicker>
+        <div class="actions">
+            <md-button ng-if="$scope[$scope.activeTab].id !== null" class="md-raised md-warn pull-left" ng-click="removeRow()" ng-disabled="rowSelected !== true"><span
+                    class="glyphicon glyphicon-remove"></span> Remove
+            </md-button>
+            <md-button class="md-raised md-primary pull-right">
+                <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-eye-open"></i> {{getSaveStateText(activeTab)}}
+            </md-button>
+        </div>
+    </form>
+</md-sidenav>
 <md-button ng-click="updateWatchlistService()" ng-disabled="updating === true" class="md-raised md-primary pull-right">
     <i class="glyphicon glyphicon-cloud-upload"></i> <i class="glyphicon glyphicon-cloud-download"></i> Update Watchlist
     Service
 </md-button>
 <md-button ng-click="Add()"
-           ng-disabled="(activeTab == 'Passenger' && Passenger.id == null) || (activeTab == 'Document' && Document.id == null)"
            class="md-raised pull-right">
     <i class="glyphicon glyphicon-plus"></i> Add New {{activeTab}}
 </md-button>
 <md-tabs>
     <md-tab ng-repeat="tab in tabs" label="{{tab.title}}" md-on-select="updateGrid(tab.title)"></md-tab>
 </md-tabs>
-
-<div ng-if="activeTab !== 'create-new'">
-    <div ui-grid="watchlistGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
-    <section class="actions">
-        <md-button class="md-raised md-warn pull-right" ng-click="removeRow()" ng-disabled="rowSelected !== true"><span
-                class="glyphicon glyphicon-remove"></span> Remove {{activeTab}}
-        </md-button>
-        <form name="watchlist" ng-submit="saveRow()">
-            <md-input-container ng-if="activeTab == 'Document'">
-                <label>Document Type:</label>
-                <md-select ng-model="Document.documentType" required>
-                    <md-option ng-repeat="docType in documentTypes" value="{{docType.id}}">
-                        {{docType.label}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-            <md-input-container ng-if="activeTab == 'Document'">
-                <label>Document Number:</label>
-                <input ng-model="Document.documentNumber" type="string" required>
-            </md-input-container>
-            <!--</form>-->
-            <!--<form name="newPassenger" ng-submit="Add()" ng-if="">-->
-            <md-input-container ng-if="activeTab == 'Passenger'">
-                <label>First Name:</label>
-                <input ng-model="Passenger.firstName" type="string" required>
-            </md-input-container>
-            <md-input-container ng-if="activeTab == 'Passenger'">
-                <label>Last Name:</label>
-                <input ng-model="Passenger.lastName" type="string" required>
-            </md-input-container>
-            <md-datepicker ng-if="activeTab == 'Passenger'" name="dob" ng-model="Passenger.dob"
-                           md-placeholder="Date of Birth" required></md-datepicker>
-            <md-button class="md-raised md-primary pull-right">
-                <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-eye-open"></i> {{getSaveStateText(activeTab)}}
-            </md-button>
-        </form>
-    </section>
-</div>
+<div ui-grid="watchlistGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
 <div>
     <spinner name="html5spinner" ng-cloak="">
         <div class="overlay"></div>

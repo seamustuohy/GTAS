@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    app.controller('WatchListController', function ($scope, gridOptionsLookupService, $q, watchListService, $interval, spinnerService, $timeout) {
+    app.controller('WatchListController', function ($scope, gridOptionsLookupService, $q, watchListService, $mdSidenav, $interval, spinnerService, $timeout) {
         var watchlist = {},
             tabs = [],
             model = {
@@ -17,8 +17,8 @@
                 }
             };
 
-        $scope.Document = new model.Document();
-        $scope.Passenger = new model.Passenger();
+//        $scope.Document = new model.Document();
+//        $scope.Passenger = new model.Passenger();
 
         $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
 
@@ -89,7 +89,7 @@
         };
 
         $scope.getSaveStateText = function (activeTab) {
-            return $scope[activeTab].id === null ? 'Save ' + activeTab : 'Update ' + activeTab;
+            return $scope[activeTab].id === null ? 'Save ' : 'Update ';
         }
 
         $scope.updateGrid = function (listName) {
@@ -114,7 +114,13 @@
         $scope.rowSelected = false;
 
         $scope.Add = function () {
-            $scope[$scope.activeTab] = new model[$scope.activeTab]();
+            var mode = $scope.activeTab;
+            $scope[mode] = new model[mode]();
+            $mdSidenav('save')
+                .open()
+                .then(function () {
+                    console.log("toggle sidenav is done");
+                });
         };
 
         $scope.saveRow = function () {
@@ -154,7 +160,7 @@
                     }
                     $scope.gridApi.selection.clearSelectedRows();
                     $scope.rowSelected = false;
-                    $scope.Add();
+                    $mdSidenav('save').close();
                 });
             }
         };
@@ -165,10 +171,13 @@
                 if (row.isSelected) {
                     $scope[$scope.activeTab] = row.entity;
                     $scope.rowSelected = true;
+                    $mdSidenav('save')
+                        .open()
+                        .then(function () {
+                            console.log("toggle sidenav is done");
+                        });
                 } else {
                     $scope.rowSelected = false;
-                    $scope.gridApi.selection.clearSelectedRows();
-                    $scope.Add();
                 }
             });
             //           gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
@@ -183,6 +192,7 @@
                 var rowIndexToDelete = $scope.watchlistGrid.data.indexOf(rowEntity);
                 watchListService.deleteItem($scope.activeTab, entity, rowEntity.id).then(function () {
                     $scope.watchlistGrid.data.splice(rowIndexToDelete, 1);
+                    $mdSidenav('save').close();
                 });
             });
         };
