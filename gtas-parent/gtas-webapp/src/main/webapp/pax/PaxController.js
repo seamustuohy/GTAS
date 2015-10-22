@@ -148,47 +148,138 @@
             }
         };
 
-        $scope.passengerGrid.columnDefs = [
-            {
-                name: 'onRuleHitList', displayName: 'H', width: 50,
-                cellClass: "rule-hit",
-                sort: {
-                    direction: uiGridConstants.DESC,
-                    priority: 0
+        if (stateName === 'queryPassengers') {
+            $scope.passengerGrid.columnDefs = [
+                {
+                    field: 'onRuleHitList',
+                    name: 'onRuleHitList',
+                    displayName: 'H',
+                    width: 50,
+                    cellClass: "rule-hit",
+                    sort: {
+                        direction: uiGridConstants.DESC,
+                        priority: 0
+                    },
+                    cellTemplate: '<md-button aria-label="hits" ng-click="grid.api.expandable.toggleRowExpansion(row.entity)" disabled="{{row.entity.onRuleHitList|ruleHitButton}}"><i class="{{row.entity.onRuleHitList|ruleHitIcon}}"></i></md-button>'
                 },
-                cellTemplate: '<md-button aria-label="hits" ng-click="grid.api.expandable.toggleRowExpansion(row.entity)" disabled="{{row.entity.onRuleHitList|ruleHitButton}}"><i class="{{row.entity.onRuleHitList|ruleHitIcon}}"></i></md-button>'
-            },
-            {
-                name: 'onWatchList', displayName: 'L', width: 70,
-                cellClass: gridService.anyWatchlistHit,
-                sort: {
-                    direction: uiGridConstants.DESC,
-                    priority: 1
+                {
+                    name: 'onWatchList', displayName: 'L', width: 70,
+                    cellClass: gridService.anyWatchlistHit,
+                    sort: {
+                        direction: uiGridConstants.DESC,
+                        priority: 1
+                    },
+                    cellTemplate: '<div><i class="{{row.entity.onWatchList|watchListHit}}"></i> <i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
                 },
-                cellTemplate: '<div><i class="{{row.entity.onWatchList|watchListHit}}"></i> <i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
-            },
-            {name: 'passengerType', displayName: 'Type', width: 50},
-            {
-                name: 'lastName', displayName: 'Last Name',
-                cellTemplate: '<md-button aria-label="type" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
-            },
-            {name: 'firstName', displayName: 'First Name'},
-            {name: 'middleName', displayName: 'Middle'},
-            {name: 'fullFlightNumber', displayName: 'Flight' },
-            {
-                name: 'eta',
-                sort: {
-                    direction: uiGridConstants.DESC,
-                    priority: 2
+                {
+                    field: 'passengerType',
+                    name: 'passengerType',
+                    displayName: 'Type',
+                    width: 50},
+                {
+                    field: 'lastName',
+                    name: 'lastName',
+                    displayName: 'Last Name',
+                    cellTemplate: '<md-button aria-label="type" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
                 },
-                displayName: 'ETA',
-                visible: (stateName === 'paxAll')
-            },
-            {name: 'etd', displayName: 'ETD', visible: (stateName === 'paxAll')},
-            {name: 'gender', displayName: 'G', width: 50},
-            {name: 'dob', displayName: 'DOB', cellFilter: 'date'},
-            {name: 'citizenshipCountry', displayName: 'CTZ', width: 75}
-        ];
+                {
+                    field: 'firstName',
+                    name: 'firstName',
+                    displayName: 'First Name'},
+                {
+                    field: 'firstName',
+                    name: 'middleName',
+                    displayName: 'Middle'
+                },
+                {
+                    field: 'flightNumber',
+                    name: 'flightNumber',
+                    displayName: 'Flight',
+                    cellTemplate: '<div>{{row.entity.carrier}}{{COL_FIELD}}</div>'
+                },
+                {
+                    field: 'flightOrigin',
+                    name: 'flightOrigin',
+                    displayName: 'Origin'
+                },
+                {
+                    field: 'flightDestination',
+                    name: 'flightDestination',
+                    displayName: 'Destination'
+                },
+                {
+                    field: 'eta',
+                    name: 'eta',
+                    sort: {
+                        direction: uiGridConstants.DESC,
+                        priority: 2
+                    },
+                    displayName: 'ETA'
+                },
+                {
+                    field: 'etd',
+                    name: 'etd',
+                    displayName: 'ETD'
+                },
+                {
+                    field: 'gender',
+                    name: 'gender',
+                    displayName: 'G',
+                    width: 50},
+                {
+                    name: 'dob',
+                    displayName: 'DOB',
+                    cellFilter: 'date'
+                },
+                {
+                    name: 'citizenshipCountry',
+                    displayName: 'CTZ',
+                    width: 75
+                }
+            ];
+        } else {
+            $scope.passengerGrid.columnDefs = [
+                {
+                    name: 'onRuleHitList', displayName: 'H', width: 50,
+                    cellClass: "rule-hit",
+                    sort: {
+                        direction: uiGridConstants.DESC,
+                        priority: 0
+                    },
+                    cellTemplate: '<md-button aria-label="hits" ng-click="grid.api.expandable.toggleRowExpansion(row.entity)" disabled="{{row.entity.onRuleHitList|ruleHitButton}}"><i class="{{row.entity.onRuleHitList|ruleHitIcon}}"></i></md-button>'
+                },
+                {
+                    name: 'onWatchList', displayName: 'L', width: 70,
+                    cellClass: gridService.anyWatchlistHit,
+                    sort: {
+                        direction: uiGridConstants.DESC,
+                        priority: 1
+                    },
+                    cellTemplate: '<div><i class="{{row.entity.onWatchList|watchListHit}}"></i> <i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
+                },
+                {name: 'passengerType', displayName: 'Type', width: 50},
+                {
+                    name: 'lastName', displayName: 'Last Name',
+                    cellTemplate: '<md-button aria-label="type" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
+                },
+                {name: 'firstName', displayName: 'First Name'},
+                {name: 'middleName', displayName: 'Middle'},
+                {name: 'fullFlightNumber', displayName: 'Flight' },
+                {
+                    name: 'eta',
+                    sort: {
+                        direction: uiGridConstants.DESC,
+                        priority: 2
+                    },
+                    displayName: 'ETA',
+                    visible: (stateName === 'paxAll')
+                },
+                {name: 'etd', displayName: 'ETD', visible: (stateName === 'paxAll')},
+                {name: 'gender', displayName: 'G', width: 50},
+                {name: 'dob', displayName: 'DOB', cellFilter: 'date'},
+                {name: 'citizenshipCountry', displayName: 'CTZ', width: 75}
+            ];
+        }
 
         $scope.filter = function () {
             resolvePage();
