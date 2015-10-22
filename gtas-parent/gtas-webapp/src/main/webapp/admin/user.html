@@ -11,7 +11,7 @@
 			</md-input-container>
 			<md-input-container flex  ng-show="action === 'create'"> <label>User Id</label>
 
-				<input ng-model="persistUser.userId"  required>
+				<input ng-model="persistUser.userId"  required placeholder="title">
 
 			</md-input-container>
 
@@ -28,36 +28,41 @@
 		<div layout="row" >
 			<fieldset class="standard" flex>
 				
-					<code>Status</code>
-				<!-- <md-radio-group ng-model="data.group1"> <md-radio-button
-					value=1 class="md-primary">Enable</md-radio-button> <md-radio-button
-					value=0> Disable </md-radio-button> </md-radio-group> -->
-					
-					<md-radio-group ng-model="persistUser.active" class="md-primary">
-        <md-radio-button ng-repeat="d in radioData"
-                         ng-value="d.value"
-                         ng-class="{'md-align-top-left': $index==1}" >
-            {{ d.label }}<br/> <br/>
-        </md-radio-button>
-    </md-radio-group>
+					<code style="font-weight: bold; font-size: 17px;">Status</code>
+
+				<md-switch ng-model="userStatus.enabled"
+						   class="md-primary" aria-label="userStatus" ng-change="enableDisableUser(userStatus.enabled)">
+					User is {{ userStatus.enabled ? 'Enabled' : 'Disabled' }}
+				</md-switch>
+
 			</fieldset>
 			</div>
 
 		<div layout="row" >
 			<div flex="100" flex-md="100" layout="column">
 				<fieldset class="standard" flex >
-						<code>Roles</code>
+						<code style="font-weight: bold; font-size: 17px;">Roles</code>
+
+
 					<div layout="row" layout-wrap>
-						<div flex="25" ng-repeat="role in roles">
-							<md-checkbox class="md-primary" required
-								ng-checked="exists(role, selectedRoles)"
-								ng-click="toggle(role, selectedRoles)"> {{ role }} <span
-								ng-if="exists(role, selectedRoles)"></span> </md-checkbox>
+						<div flex="20"  ng-repeat="role in rolesLookup | orderBy:'roleDescription'">
+
+							<md-switch ng-model="roles[role.roleDescription].selected"  ng-disabled="roles[role.roleDescription].disabled"
+									   class="md-primary" aria-label="Roles" ng-change="toggleRole(role.roleDescription)">
+									{{ role.roleDescription }}
+							</md-switch>
+
+
+
 						</div>
 					</div>
+
+
+
 				</fieldset>
 			</div>			
 		</div>
+		<div style="padding-top: 15px;"></div>
 		<div layout="row">
 		</div>
 		<div class="md-actions" layout="row">
