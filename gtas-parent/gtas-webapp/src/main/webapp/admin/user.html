@@ -1,3 +1,5 @@
+
+<div style="padding-top: 15px;"></div>
 <div  layout="column">
 
 	<md-content layout-padding>
@@ -6,26 +8,27 @@
 
 			<md-input-container flex  ng-show="action === 'modify'"> <label>User Id</label>
 
-			<input ng-model="persistUser.userId"  disabled>
+			<input ng-model="persistUser.userId"  disabled style="width: 300px;">
 
 			</md-input-container>
-			<md-input-container flex  ng-show="action === 'create'"> <label>User Id</label>
+			<md-input-container flex  ng-show="action === 'create'"> <label>Assign ID</label>
 
-				<input ng-model="persistUser.userId"  required placeholder="title">
+				<input ng-model="persistUser.activeName"  required style="width: 300px;">
 
 			</md-input-container>
 
 			<md-input-container flex> <label>Password</label>
-			<input ng-model="persistUser.password"  type="password" ng-change="encodePassword()"> </md-input-container>
+			<input ng-model="persistUser.activeWord"  type="password" ng-change="encodePassword()" style="width: 300px;"> </md-input-container>
 		</div>
 		<div layout layout-sm="column">
 			<md-input-container flex> <label>First
-				name</label> <input ng-model="persistUser.firstName" required> </md-input-container>
+				name</label> <input ng-model="persistUser.firstName" required style="width: 300px;"> </md-input-container>
 			<md-input-container flex> <label>Last
-				Name</label> <input ng-model="persistUser.lastName" required> </md-input-container>
+				Name</label> <input ng-model="persistUser.lastName" required style="width: 300px;"> </md-input-container>
 		</div>
 
-		<div layout="row" >
+		<div>
+		<div layout="column" >
 			<fieldset class="standard" flex>
 				
 					<code style="font-weight: bold; font-size: 17px;">Status</code>
@@ -38,13 +41,13 @@
 			</fieldset>
 			</div>
 
-		<div layout="row" >
+		<div layout="column" >
 			<div flex="100" flex-md="100" layout="column">
 				<fieldset class="standard" flex >
 						<code style="font-weight: bold; font-size: 17px;">Roles</code>
 
 
-					<div layout="row" layout-wrap>
+					<div layout="column" layout-wrap>
 						<div flex="20"  ng-repeat="role in rolesLookup | orderBy:'roleDescription'">
 
 							<md-switch ng-model="roles[role.roleDescription].selected"  ng-disabled="roles[role.roleDescription].disabled"
@@ -62,6 +65,8 @@
 				</fieldset>
 			</div>			
 		</div>
+</div>
+
 		<div style="padding-top: 15px;"></div>
 		<div layout="row">
 		</div>

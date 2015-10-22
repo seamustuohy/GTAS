@@ -1,26 +1,4 @@
 
-app.directive('formAutofillFix', function() {
-    return function(scope, elem, attrs, ngModel) {
-        // Fixes Chrome bug: https://groups.google.com/forum/#!topic/angular/6NlucSskQjY
-        elem.prop('method', 'POST');
-        // Fix autofill issues where Angular doesn't know about autofilled inputs
-            setTimeout(function() {
-            }, 0);
-
-    };
-});
-app.directive('autoFillSync', function($timeout) {
-    return {
-        require: 'ngModel',
-        link: function(scope, elem, attrs, ngModel) {
-            var origVal = elem.val();
-            $timeout(function () {
-                var newVal = elem.val();
-            }, 500);
-        }
-    }
-});
-
 app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'userService','Base64','$mdToast',
     function($state,$scope,$q,$stateParams,userService,Base64, $mdToast) {
 
@@ -28,6 +6,8 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'userService'
     $scope.action=$stateParams.action;
     $scope.userPasswordChanged = false;
     $scope.persistUser = {
+            activeName:'  ',
+            activeWord:'',
             userId: '',
             firstName: '',
             lastName: '',
@@ -74,6 +54,9 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'userService'
             $scope.IsCreateUser=true;
 
             $scope.persistUser=$scope.user;
+			
+			$scope.persistUser.activeName = $scope.persistUser.userId;
+            $scope.persistUser.activeWord = $scope.persistUser.password;
 
             if($scope.user.active === 1) {
                 $scope.userStatus.enabled = true;
@@ -258,6 +241,11 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'userService'
                 //$scope.userPasswordChanged=false;
             }
 
+            if($scope.persistUser.activeName!=undefined && $scope.persistUser.activeName!=null && $scope.persistUser.activeWord!=undefined && $scope.persistUser.activeWord!=null) {
+                $scope.persistUser.userId = $scope.persistUser.activeName.replace(/\s+/g, '');
+                $scope.persistUser.password = $scope.persistUser.activeWord.replace(/\s+/g, '');
+            }
+
             $scope.populateSelectedRoles();
             if ($scope.persistUser.roles.length === 0) {
                 $scope.showRoleToast();
@@ -293,7 +281,5 @@ app.controller('UserCtrl', ['$state','$scope','$q','$stateParams', 'userService'
         $state.go('admin.users');
     };
 
-        if($scope.action != 'modify') {
-            $scope.$broadcast("autofill:update");
-        }
+
   }]);

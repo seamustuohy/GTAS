@@ -27,6 +27,14 @@ app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams', 'uiGrid
         $scope.selectedUser=row.entity;
         });
 
+      $http.get('/gtas/users/')
+          .success(function(data) {
+              $scope.gridOptions.data = data;
+              $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.ALL);
+              // $interval whilst we wait for the grid to digest the data we just gave it
+              $interval( function() {$scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);}, 0, 1);
+          });
+
         if($scope.selectedUser!=null && $scope.selectedUser.userId.length>0 ) {
           var selectedRowIndex=$scope. getSelectedRowIndexOnUserId($scope.selectedUser.userId);
           if(selectedRowIndex!=null) {
@@ -39,6 +47,7 @@ app.controller('AdminCtrl', ['$scope', '$http', '$state','$stateParams', 'uiGrid
               $http.get('/gtas/users/')
                   .success(function(data) {
                       $scope.gridOptions.data = data;
+                      $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.ALL);
                       // $interval whilst we wait for the grid to digest the data we just gave it
                       $interval( function() {$scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);}, 0, 1);
                   });
