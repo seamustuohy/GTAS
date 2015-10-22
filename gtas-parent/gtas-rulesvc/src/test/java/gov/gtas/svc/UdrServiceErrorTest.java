@@ -7,6 +7,24 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.RuleErrorConstants;
+import gov.gtas.enumtype.EntityEnum;
+import gov.gtas.error.CommonServiceException;
+import gov.gtas.error.CommonValidationException;
+import gov.gtas.model.User;
+import gov.gtas.model.udr.UdrRule;
+import gov.gtas.model.udr.json.UdrSpecification;
+import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
+import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
+import gov.gtas.querybuilder.mappings.PassengerMapping;
+import gov.gtas.services.AuditLogPersistenceService;
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
+import gov.gtas.services.security.UserServiceUtil;
+import gov.gtas.services.udr.RulePersistenceService;
+import gov.gtas.svc.util.UdrServiceHelper;
+import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -20,25 +38,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import gov.gtas.constant.CommonErrorConstants;
-import gov.gtas.constant.RuleErrorConstants;
-import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.error.CommonServiceException;
-import gov.gtas.error.CommonValidationException;
-import gov.gtas.model.User;
-import gov.gtas.model.udr.UdrRule;
-import gov.gtas.model.udr.json.UdrSpecification;
-import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
-import gov.gtas.model.udr.json.util.UdrSpecificationBuilder;
-import gov.gtas.querybuilder.mappings.PassengerMapping;
-import gov.gtas.repository.AuditRecordRepository;
-import gov.gtas.services.security.UserData;
-import gov.gtas.services.security.UserService;
-import gov.gtas.services.security.UserServiceUtil;
-import gov.gtas.services.udr.RulePersistenceService;
-import gov.gtas.svc.util.UdrServiceHelper;
-import gov.gtas.util.DateCalendarUtils;
 
 public class UdrServiceErrorTest {
 	private static final String TEST_JSON = "{ \"details\": {"
@@ -62,7 +61,7 @@ public class UdrServiceErrorTest {
 	private UserServiceUtil mockUserServiceUtil;
 
 	@Mock
-	private AuditRecordRepository mockAuditRecordRepository;
+	private AuditLogPersistenceService mockAuditLogPersistenceService;
 
 	@Mock
 	private RuleManagementService mockRuleManagementService;
@@ -75,7 +74,7 @@ public class UdrServiceErrorTest {
 		ReflectionTestUtils.setField(udrService, "userService", mockUserService);
 		ReflectionTestUtils.setField(udrService, "userServiceUtil", mockUserServiceUtil);
 		ReflectionTestUtils.setField(udrService, "ruleManagementService", mockRuleManagementService);
-		ReflectionTestUtils.setField(udrService, "auditRecordRepository", mockAuditRecordRepository);
+		ReflectionTestUtils.setField(udrService, "auditLogPersistenceService", mockAuditLogPersistenceService);
 	}
 
 	@After

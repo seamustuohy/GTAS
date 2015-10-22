@@ -37,7 +37,6 @@ public class ServiceUtils {
 		vo.setFlightDate(flight.getFlightDate());
 		vo.setFlightNumber(flight.getFlightNumber());
 		if(flight.getId() != null){
-			System.out.println("############FLIGHT ID###########"+flight.getId());
 			vo.setId(flight.getId());
 		}
 		vo.setOrigin(flight.getOrigin());

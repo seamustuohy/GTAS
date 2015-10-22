@@ -27,20 +27,17 @@ public class FlightPassengerController {
     @RequestMapping(value = "/flights", method = RequestMethod.POST, 
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody FlightsPageDto getAllFlights(@RequestBody FlightsRequestDto request) {
-//        System.out.println(request);
         return flightService.findAll(request);
     }
 
     @RequestMapping(value = "/flights/flight/{id}/passengers", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody PassengersPageDto getFlightPassengers(@PathVariable(value = "id") Long flightId, @RequestBody PassengersRequestDto request) {
-//        System.out.println(request);
         return paxService.getPassengersByCriteria(flightId, request);
     }
 
     @RequestMapping(value = "/passengers", method = RequestMethod.POST)
     public @ResponseBody PassengersPageDto getAllPassengers(@RequestBody PassengersRequestDto request) {
-//        System.out.println(request);
         return paxService.getPassengersByCriteria(null, request);
     }
 }

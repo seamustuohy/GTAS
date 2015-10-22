@@ -17,4 +17,11 @@ public class AuditLogConstants {
     public static final String UDR_LOG_UPDATE_MESSAGE = "UDR updated";
     public static final String UDR_LOG_UPDATE_META_MESSAGE = "UDR meta data updated";
     public static final String UDR_LOG_DELETE_MESSAGE = "UDR deleted";
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////////
+    // WARNING/ERROR MESSAGES
+    ////////////////////////////////////////////////////////////////////////////////////
+    public static final String AUDIT_LOG_WARNING_CANNOT_CONVERT_JSON_TO_STRING =
+    		"Action Data Object supplied for logging cannot be serialized (actionType=%s, Target=%s, message=%s)";
 }
