@@ -2,7 +2,6 @@ package gov.gtas.config;
 
 import java.beans.PropertyVetoException;
 import java.util.Properties;
-import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -13,8 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.event.ApplicationEventMulticaster;
-import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -23,7 +20,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.spring.cache.HazelcastCacheManager;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -175,20 +171,7 @@ public class CommonServicesConfig {
 
 	@Bean(name = "cacheManager")
 	HazelcastCacheManager hazelcastcacheManager() throws Exception {
-		return new HazelcastCacheManager(hazelcastInstance());
-	}
-
-	@Bean
-	HazelcastInstance hazelcastInstance() throws Exception {
-		return Hazelcast.newHazelcastInstance();
-	}
-
-	@Bean(name = "applicationEventMulticaster")
-	public ApplicationEventMulticaster applicationEventMulticaster() {
-		SimpleApplicationEventMulticaster applicationEventMulticaster = new SimpleApplicationEventMulticaster();
-		applicationEventMulticaster.setTaskExecutor(Executors
-				.newFixedThreadPool(10));
-		return applicationEventMulticaster;
+		return new HazelcastCacheManager(Hazelcast.newHazelcastInstance());
 	}
 
 }

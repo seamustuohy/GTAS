@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.annotation.PreDestroy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -35,5 +37,18 @@ public class HomeController {
 		
 		return "main";
 	}
-	
+    @PreDestroy
+    public void destroy() {
+        System.out.println("**************************************************************************");
+        System.out.println("GTAS HOME CONTROLLER SHUTTING DOWN!!!!!!!");
+        System.out.println("**************************************************************************");
+        try{
+            /*
+             * shutdown all the Hazelcast non-daemon threads.
+             */
+			com.hazelcast.core.Hazelcast.shutdownAll();        	
+        } catch (Exception ex){
+        	ex.printStackTrace();
+        }
+    }	
 }
