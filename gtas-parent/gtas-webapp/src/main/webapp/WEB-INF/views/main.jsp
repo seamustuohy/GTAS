@@ -59,7 +59,7 @@
 
         <sec:authorize access="hasAnyAuthority('Manage Queries','Manage Rules','Manage Watch List','View Flight And Passenger','Admin')">
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('usersettings')}"
-            ng-disabled="onRoute('usersettings')" href="#/user-settings"><i class="glyphicon glyphicon-edit"></i>  User</md-button>
+            ng-disabled="onRoute('usersettings')" href="#/user-settings"><i class="glyphicon glyphicon-edit"></i>Settings</md-button>
         </sec:authorize> 
         </span>
         </nav>
