@@ -1,4 +1,4 @@
-app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, $mdSidenav, $stateParams) {
+app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, $mdSidenav, $stateParams, $interval) {
     'use strict';
     var today = moment().format('YYYY-MM-DD').toString(),
         model = {
@@ -34,6 +34,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         };
 
     $scope.mode = mode;
+    jqueryQueryBuilderService.init(mode);
 
     $scope.prompt = {
         open: function (mode) {
@@ -125,6 +126,31 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);
+    };
+
+    $scope.allRules = false;
+    $scope.getRuleText = "Rules: Mine";
+
+    $scope.updateGrid = function (value) {
+        console.log(value);
+        var mode = value ? 'all' : 'rule';
+        console.log(mode);
+        $scope.getRuleText = value ? "Rules: All" : "Rules: Mine";
+        jqueryQueryBuilderService.init(mode);
+        jqueryQueryBuilderService.getList().then(function (myData) {
+            $scope.setData[$scope.mode](myData.result);
+            $interval(function () {
+                var page;
+                if (!$scope.selectedIndex) {
+                    page = $scope.gridApi.pagination.getTotalPages();
+                    $scope.selectedIndex = $scope.qbGrid.data.length - 1;
+                    $scope.gridApi.pagination.seek(page);
+                }
+                $scope.gridApi.selection.clearSelectedRows();
+                $scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
+                $scope.saving = false;
+            }, 0, 1);
+        });
     };
 
     $scope.updateQueryBuilderOnSave = function (myData) {
@@ -338,7 +364,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             }
         }
     };
-    jqueryQueryBuilderService.init(mode);
 
     $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope });
 

@@ -92,6 +92,9 @@
 </md-sidenav>
 <md-content flex="" layout-padding="" class="">
     <div layout="column" layout-fill="" layout-align="top center">
+        <md-switch class="md-primary" ng-if="mode = 'rule'" aria-label="Rules:" ng-true-value="true" ng-false-value="false" ng-model="allRules" ng-change="updateGrid(allRules)">
+            {{getRuleText}}
+        </md-switch>
         <div ui-grid="qbGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
         <section>
             <h2>Conditions:</h2>
@@ -120,6 +123,7 @@
                 </md-button>
 
                 <md-button ng-click="newRule()"
+                           ng-disabled="ruleId === null"
                            class="md-raised pull-left">
                     <i class="glyphicon glyphicon-plus"></i> Add New {{mode}}
                 </md-button>
@@ -133,8 +137,7 @@
                     <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Save As Rule
                 </md-button>
                 <md-button ng-click="copy()"
-                           ng-if="mode == 'rule'"
-                           ng-disabled="ruleId === null || saving === true"
+                           ng-disabled="ruleId === null || saving === true || allRules == false"
                            class="md-raised pull-right">
                     <i class="glyphicon glyphicon-duplicate"></i> Copy {{mode}}
                 </md-button>

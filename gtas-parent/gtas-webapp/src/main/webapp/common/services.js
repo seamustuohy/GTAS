@@ -586,7 +586,8 @@
             var baseUrl,
                 URLS = {
                     query: '/gtas/query/',
-                    rule: '/gtas/udr/'
+                    rule: '/gtas/udr/',
+                    all: '/gtas/all_udr/'
                 },
                 handleError = function (response) {
                     if (!angular.isObject(response.data) || !response.data.message) {
