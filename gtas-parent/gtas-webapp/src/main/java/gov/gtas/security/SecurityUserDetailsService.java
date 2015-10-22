@@ -33,7 +33,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserData user = userService.findById(username);
 
-		if (user == null) {
+		if (user == null || user.getActive()==0) {
 			String message = "Username not found: " + username;
 			logger.info(message);
 			throw new UsernameNotFoundException(message);
