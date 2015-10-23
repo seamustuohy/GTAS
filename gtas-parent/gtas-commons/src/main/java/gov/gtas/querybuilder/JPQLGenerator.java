@@ -82,7 +82,7 @@ public class JPQLGenerator {
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			else if(queryType == EntityEnum.PASSENGER) {
-				queryPrefix = Constants.SELECT + " " + EntityEnum.PASSENGER.getAlias() + ", " + EntityEnum.FLIGHT.getAlias() + " " + 
+				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.PASSENGER.getAlias() + ", " + EntityEnum.FLIGHT.getAlias() + " " + 
 						Constants.FROM + " " + EntityEnum.PASSENGER.getEntityName() + " " + EntityEnum.PASSENGER.getAlias() +
 						Constants.JOIN + EntityEnum.PASSENGER.getAlias() + EntityEnum.FLIGHT.getEntityReference() + " " + EntityEnum.FLIGHT.getAlias();
 						

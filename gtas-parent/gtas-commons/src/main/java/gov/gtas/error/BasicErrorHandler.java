@@ -14,6 +14,8 @@ import static gov.gtas.constant.CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_CO
 import static gov.gtas.constant.CommonErrorConstants.QUERY_RESULT_EMPTY_ERROR_MESSAGE;
 import static gov.gtas.constant.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_CODE;
 import static gov.gtas.constant.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_MESSAGE;
+import static gov.gtas.constant.GtasSecurityConstants.UNAUTHORIZED_ERROR_CODE;
+import static gov.gtas.constant.GtasSecurityConstants.UNAUTHORIZED_ERROR_MESSAGE;
 import gov.gtas.constant.CommonErrorConstants;
 
 import java.util.HashMap;
@@ -64,8 +66,9 @@ public class BasicErrorHandler implements ErrorHandler {
 		errorMap.put(QUERY_RESULT_EMPTY_ERROR_CODE,
 				QUERY_RESULT_EMPTY_ERROR_MESSAGE);
 		errorMap.put(JSON_INPUT_VALIDATION_ERROR_CODE,
-				JSON_INPUT_VALIDATION_ERROR_MESSAGE);
-		
+				JSON_INPUT_VALIDATION_ERROR_MESSAGE);		
+		errorMap.put(UNAUTHORIZED_ERROR_CODE,
+				UNAUTHORIZED_ERROR_MESSAGE);
 		exceptionProcessorMap = new HashMap<String, Function<Exception,ErrorDetailInfo>>();
 	}
 
