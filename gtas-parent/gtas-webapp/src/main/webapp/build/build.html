@@ -17,7 +17,7 @@
 </style>
 <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="query">
     <md-toolbar class="md-theme-light">
-        <h2 class="md-toolbar-tools">{{getToolbarText(selectedMode)}}</h2>
+        <h2 class="md-toolbar-tools">{{getToolbarText()}}</h2>
     </md-toolbar>
     <form name="queryForm">
         <md-content layout-padding>
@@ -50,7 +50,7 @@
 </md-sidenav>
 <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="rule">
     <md-toolbar class="md-theme-light">
-        <h2 class="md-toolbar-tools">{{getToolbarText(selectedMode)}}</h2>
+        <h2 class="md-toolbar-tools">{{getToolbarText()}}</h2>
     </md-toolbar>
     <form name="ruleForm">
         <md-content layout-padding>
@@ -93,8 +93,20 @@
 <md-content flex="" layout-padding="" class="">
     <div layout="column" layout-fill="" layout-align="top center">
         <div ng-if="mode == 'rule'">
-            <md-switch class="md-primary" aria-label="Rules:" ng-model="allRules" ng-change="updateGrid(allRules)">
-                {{allRules ? "Rules: All" : "Rules: Mine"}}
+            <!--<md-input-container>-->
+            <!--<label>Show</label>-->
+            <!--<md-select ng-model="$scope.selectedMode">-->
+            <!--<md-option value="rule">My Rules</md-option>-->
+            <!--<md-option value="all">All Rules</md-option>-->
+            <!--</md-select>-->
+            <!--</md-input-container>-->
+
+            <!--<md-radio-group ng-model="$scope.selectedMode">-->
+            <!--<md-radio-button value="rule" class="md-primary">My Rules</md-radio-button>-->
+            <!--<md-radio-button value="all" class="md-primary"">All Rules</md-radio-button>-->
+            <!--</md-radio-group>-->
+            <md-switch class="md-primary" aria-label="Rules:" ng-model="$scope.selectedMode" ng-true-value="'all'" ng-false-value="'rule'">
+                {{selectedMode === "rule" ? "My Rules" : "All Rules"}}
             </md-switch>
         </div>
         <div ui-grid="qbGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
@@ -122,7 +134,7 @@
                     <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-user"></i>  Query Passengers
                 </md-button>
 
-                <md-button ng-click="newRule()"
+                <md-button ng-click="addNew()"
                            ng-disabled="ruleId === null"
                            class="md-raised pull-left">
                     <i class="glyphicon glyphicon-plus"></i> Add New {{mode}}
