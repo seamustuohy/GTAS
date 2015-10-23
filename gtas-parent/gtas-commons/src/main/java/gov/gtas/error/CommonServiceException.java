@@ -13,10 +13,28 @@ public class CommonServiceException extends RuntimeException {
     /* The rule engine error code. */
 	private String errorCode;
 	
+	/* If set to true then this error is logged in the database. */
+	private boolean logable;
+	
 	public String getErrorCode() {
 		return errorCode;
 	}
+	
     /**
+	 * @return the writeErrorLog
+	 */
+	public boolean isLogable() {
+		return logable;
+	}
+
+	/**
+	 * @param writeErrorLog the writeErrorLog to set
+	 */
+	public void setLogable(boolean writeErrorLog) {
+		this.logable = writeErrorLog;
+	}
+
+	/**
      * Constructor taking underlying exception as argument.
      * @param errCode the rule engine error code.
      * @param msg additional context dependent error message.
