@@ -28,8 +28,12 @@ public class WebAppGlobalErrorHandler {
 	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(CommonServiceException.class)
 	public @ResponseBody JsonServiceResponse handleError(CommonServiceException ex) {
-		ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
-		ErrorDetailInfo err = errorHandler.processError(ex);
+		ErrorDetailInfo err = null;
+		if(ex.isLogable()){
+			err = generateErrorInfoAndLogError(ex);
+		} else{
+		    err= ErrorHandlerFactory.getErrorHandler().processError(ex);
+		}
 		return new JsonServiceResponse(err.getErrorCode(),
 				err.getErrorDescription(), null);
 	}
@@ -66,6 +70,10 @@ public class WebAppGlobalErrorHandler {
 	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public @ResponseBody JsonServiceResponse handleError(Exception ex) {
+		return new JsonServiceResponse(generateErrorInfoAndLogError(ex));			
+	}
+	
+	private ErrorDetailInfo generateErrorInfoAndLogError(Exception ex){
 		ErrorDetailInfo errorDetails = ErrorHandlerFactory.createErrorDetails(ex);
 		try{
 		    errorDetails = errorService.create(errorDetails); //add the saved ID
@@ -73,6 +81,6 @@ public class WebAppGlobalErrorHandler {
 			//possibly DB is down
 			exception.printStackTrace();
 		}
-		return new JsonServiceResponse(errorDetails);			
+        return 	errorDetails;	
 	}
 }
