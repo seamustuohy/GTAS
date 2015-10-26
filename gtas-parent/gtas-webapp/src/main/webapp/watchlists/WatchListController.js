@@ -15,10 +15,12 @@
                     this.lastName = entity ? entity.lastName : null;
                     this.dob = entity ? entity.dob : null;
                 }
+            },
+            resetModels = function (m) {
+                //resets all models
+                m.Document = new model.Document();
+                m.Passenger = new model.Passenger();
             };
-
-//        $scope.Document = new model.Document();
-//        $scope.Passenger = new model.Passenger();
 
         $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
 
@@ -59,11 +61,10 @@
                     cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                     "type": "string"
                 }, {
-                    cellFilter: "date:\'yyyy-MM-dd\'",
                     field: "dob",
                     name: "dob",
                     displayName: "DOB",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD | date:'yyyy-MM-dd'}}</md-button>",
                     "type": "date"
                 }]
             }
@@ -84,7 +85,11 @@
                 items.forEach(function (item) {
                     obj = {id: item.id };
                     item.terms.forEach(function (term) {
-                        obj[term.field] = term.type === 'date' ? moment(term.value).format('YYYY-MM-DD') : term.value;
+                        if (term.type === 'date') {
+                            obj[term.field] =  new Date(term.value);
+                        } else {
+                            obj[term.field] = term.value;
+                        }
                     });
                     data.push(obj);
                 });
@@ -94,7 +99,9 @@
         };
 
         $scope.getSaveStateText = function (activeTab) {
-            return $scope[activeTab].id === null ? 'Save ' : 'Update ';
+            return 'Save ';
+            // todo listen to broadcast, and return save or update
+//            return $scope[activeTab].id === null ? 'Save ' : 'Update ';
         };
 
         $scope.updateGrid = function (listName) {
@@ -120,12 +127,9 @@
 
         $scope.Add = function () {
             var mode = $scope.activeTab;
+            resetModels($scope);
             $scope[mode] = new model[mode]();
-            $mdSidenav('save')
-                .open()
-                .then(function () {
-                    console.log("toggle sidenav is done");
-                });
+            $mdSidenav('save').open();
         };
 
         $scope.saveRow = function () {
@@ -151,14 +155,15 @@
                         ready = false;
                     }
                     if (columnType === 'date') {
-                        value = moment(value).format('YYYY-MM-DD');
+                        value = moment(value).format('YYYY-MM-DD').toString();
+//                        value = moment(value).toString();
                     }
                     terms.push({entity: entity, field: key, type: columnType, value: value});
                 }
             });
             if (ready) {
                 watchListService[method](objectType, entity, $scope[objectType].id, terms).then(function (response) {
-                    console.log('saved');
+
                     if ($scope[$scope.activeTab].id === null) {
                         $scope[$scope.activeTab].id = response.data.result;
                         $scope.watchlistGrid.data.unshift($scope[$scope.activeTab]);
@@ -174,19 +179,14 @@
             $scope.gridApi.selection.clearSelectedRows();
             $scope.gridApi.selection.selectRow(row);
             $scope[$scope.activeTab] = row.entity;
+            //broadcast save or update
             $scope.rowSelected = true;
-            $mdSidenav('save')
-                .open()
-                .then(function () {
-                    console.log("toggle sidenav is done");
-                });
+            $mdSidenav('save').open();
         };
 
         $scope.watchlistGrid.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
 //            gridApi.selection.on.rowSelectionChanged($scope.editRecord);
-            //           gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
-            //           gridApi.rowEdit.flushDirtyRows($scope.watchlistGrid);
         };
 
         $scope.removeRow = function () {
