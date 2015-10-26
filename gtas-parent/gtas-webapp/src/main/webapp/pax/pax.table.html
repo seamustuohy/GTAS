@@ -35,7 +35,7 @@
     box-sizing: border-box;
   }
 
-  section {
+  form {
     border: 1px solid;
     border-color: LightGray;
     border-radius: 10px;
@@ -64,8 +64,8 @@
 
 <h3 data-ng-if="stateName === 'queryPassengers'"><i class="glyphicon glyphicon-user"></i><i
         class="glyphicon glyphicon-filter"></i> Passengers Query</h3>
-<section layout="row" data-ng-if="stateName === 'paxAll'" layout-padding layout-margin
-         layout-align="space-around center">
+<form ng-submit="filter()" layout="row" data-ng-if="stateName === 'paxAll'" layout-padding layout-margin
+      layout-align="space-around center">
   <md-input-container>
     <label>Last Name</label>
     <input ng-model="model.lastName">
@@ -92,15 +92,15 @@
   </md-input-container>
   <md-datepicker ng-model="model.etaStart" md-placeholder="Start Date"></md-datepicker>
   <md-datepicker ng-model="model.etaEnd" md-placeholder="End Date"></md-datepicker>
-  <md-icon-button aria-label="filter" ng-click="filter()">
+  <md-button class="md-primary md-raised" type="submit">
     <md-tooltip>Filter</md-tooltip>
-    <md-icon md-svg-src="resources/img/ic_filter_list_black_24px.svg" style="width: 24px; height: 24px;"></md-icon>
-  </md-icon-button>
-  <md-icon-button aria-label="reset" ng-click="reset()">
+    <i class="glyphicon glyphicon-filter"></i> Filter
+  </md-button>
+  <md-icon-button aria-label="reset" type="button" ng-click="reset()">
     <md-tooltip>Reset</md-tooltip>
     <md-icon md-svg-src="resources/img/ic_cancel_black_24px.svg" style="width: 24px; height: 24px;"></md-icon>
   </md-icon-button>
-</section>
+</form>
 
 <section layout="row" data-ng-if="stateName === 'flightpax'" layout-padding layout-margin
          layout-align="space-around center">
