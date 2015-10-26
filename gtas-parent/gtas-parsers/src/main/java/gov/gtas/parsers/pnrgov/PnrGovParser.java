@@ -1,5 +1,6 @@
 package gov.gtas.parsers.pnrgov;
 
+import java.util.Date;
 import java.util.List;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
@@ -300,7 +301,11 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         f.setEta(tvl.getEta());
         f.setEtd(tvl.getEtd());
         f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tvl.getFlightNumber()));
-        f.setFlightDate(tvl.getEtd(), tvl.getEta(), parsedMessage.getTransmissionDate());
+        Date flightDate = ParseUtils.determineFlightDate(tvl.getEtd(), tvl.getEta(), parsedMessage.getTransmissionDate());
+        if (flightDate == null) {
+            throw new ParseException("Could not determine flight date");
+        }
+        f.setFlightDate(flightDate);
         parsedMessage.getFlights().add(f);
         
         TRA tra = getConditionalSegment(TRA.class);
