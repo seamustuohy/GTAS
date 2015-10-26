@@ -29,7 +29,7 @@
 
 		<div>
 		<div layout="column" >
-			<fieldset class="standard" flex>
+			<!--<fieldset class="standard" flex>-->
 				
 					<code style="font-weight: bold; font-size: 17px;">Status</code>
 
@@ -38,23 +38,26 @@
 					User is {{ userStatus.enabled ? 'Enabled' : 'Disabled' }}
 				</md-switch>
 
-			</fieldset>
+			<!--</fieldset>-->
 			</div>
+		</div>
 
+
+		<div>
 		<div layout="column" >
-			<div flex="100" flex-md="100" layout="column">
-				<fieldset class="standard" flex >
-						<code style="font-weight: bold; font-size: 17px;">Roles</code>
+			<div layout="column">
+				<!--<fieldset class="standard" flex >-->
+				<code style="font-weight: bold; font-size: 17px;">Roles</code>
 
 
-					<div layout="column" layout-wrap>
+					<div layout="column" layout-wrap class="clearfix" style="min-height: 200px;">
 						<div flex="20"  ng-repeat="role in rolesLookup | orderBy:'roleDescription'">
-
-							<md-switch ng-model="roles[role.roleDescription].selected"  ng-disabled="roles[role.roleDescription].disabled"
-									   class="md-primary" aria-label="Roles" ng-change="toggleRole(role.roleDescription)">
-									{{ role.roleDescription }}
-							</md-switch>
-
+							<div>
+								<md-switch ng-model="roles[role.roleDescription].selected"  ng-disabled="roles[role.roleDescription].disabled"
+										   class="md-primary" aria-label="Roles" ng-change="toggleRole(role.roleDescription)">
+										{{ role.roleDescription }}
+								</md-switch>
+							</div>
 
 
 						</div>
@@ -62,7 +65,7 @@
 
 
 
-				</fieldset>
+				<!--</fieldset>-->
 			</div>			
 		</div>
 </div>

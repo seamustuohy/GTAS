@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.Period;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +16,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.util.DateCalendarUtils;
 
 public class ParseUtils {
     /**
@@ -205,15 +205,26 @@ public class ParseUtils {
             return null;
         }
     }
-    
-    public static Date stripTime(Date d) {
-        Calendar cal = Calendar.getInstance(); // locale-specific
-        cal.setTime(d);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
+
+    /**
+     * rules for setting calculated field 'flightDate'
+     */
+    public static Date determineFlightDate(Date etd, Date eta, Date transmissionDate) {
+        Date d = null;
+        if (etd != null) {
+            d = etd;
+        } else if (eta != null) {
+            d = eta;
+        } else {
+            // TODO: verify this case
+            d = transmissionDate;
+        }
+
+        if (d != null) {
+            return DateCalendarUtils.stripTime(d);
+        }
+        
+        return null;
     }
     
     public static String padFlightNumberWithZeroes(String fn) {

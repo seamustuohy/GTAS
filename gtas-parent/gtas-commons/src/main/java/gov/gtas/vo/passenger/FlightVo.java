@@ -1,11 +1,13 @@
 package gov.gtas.vo.passenger;
 
-import java.util.Calendar;
 import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import gov.gtas.validators.Validatable;
 import gov.gtas.vo.BaseVo;
 
@@ -36,76 +38,36 @@ public class FlightVo extends BaseVo implements Validatable {
     private int paxListHit;
     private int docListHit;
     
-    /**
-     * rules for setting calculated field 'flightDate'
-     */
-    public void setFlightDate(Date etd, Date eta, Date transmissionDate) {
-        Date d = null;
-        if (etd != null) {
-            d = etd;
-        } else if (eta != null) {
-            d = eta;
-        } else {
-            // TODO: verify this case
-            d = transmissionDate;
-        }
-
-        if (d != null) {
-            this.flightDate = stripTime(d);
-        }
-    }
-    
-    
     public int getRuleHits() {
 		return ruleHits;
 	}
-
-
 	public void setRuleHits(int ruleHits) {
 		this.ruleHits = ruleHits;
 	}
-
-
 	public int getListHits() {
 		return listHits;
 	}
-
-
 	public void setListHits(int listHits) {
 		this.listHits = listHits;
 	}
-
-
 	public int getPaxListHit() {
 		return paxListHit;
 	}
-
-
 	public void setPaxListHit(int paxListHit) {
 		this.paxListHit = paxListHit;
 	}
-
-
 	public int getDocListHit() {
 		return docListHit;
 	}
-
-
 	public void setDocListHit(int docListHit) {
 		this.docListHit = docListHit;
 	}
-
-
 	public String getFlightId() {
 		return flightId;
 	}
-
-
 	public void setFlightId(String flightId) {
 		this.flightId = flightId;
 	}
-
-
 	public String getDirection() {
 		return direction;
 	}
@@ -197,16 +159,6 @@ public class FlightVo extends BaseVo implements Validatable {
         this.listHitCount = listHitCount;
     }
 
-    public Date stripTime(Date d) {
-        Calendar cal = Calendar.getInstance(); // locale-specific
-        cal.setTime(d);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
-    }
-    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 

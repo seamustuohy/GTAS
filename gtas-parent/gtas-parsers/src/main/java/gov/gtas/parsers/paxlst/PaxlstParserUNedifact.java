@@ -187,7 +187,11 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
                 f.setDestination(dest);
                 f.setEta(eta);
                 f.setEtd(etd);
-                f.setFlightDate(etd, eta, parsedMessage.getTransmissionDate());
+                Date flightDate = ParseUtils.determineFlightDate(etd, eta, parsedMessage.getTransmissionDate());
+                if (flightDate == null) {
+                    throw new ParseException("Could not determine flight date");
+                }
+                f.setFlightDate(flightDate);
 
                 dest = null;
                 origin = null;
