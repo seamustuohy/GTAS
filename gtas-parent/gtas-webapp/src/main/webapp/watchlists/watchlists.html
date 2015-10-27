@@ -3,17 +3,11 @@
         text-align: center;
     }
 
-    .ui-grid-row-dirty {
-        font-weight: bold;
-        background-color: rgba(200, 40, 100, .2);
-    }
-
     .ui-grid-viewport {
         min-height: 330px !important;
     }
 
-    .ui-grid-cell,
-    .ui-grid-cell input {
+    .ui-grid-cell {
         text-transform: uppercase;
     }
 
@@ -87,10 +81,6 @@
         cursor: pointer;
     }
 
-    .ui-grid-icon-ok:before {
-        content: '\c357' !important;
-    }
-
     md-input-container {
         display: inline-block;
         text-align: left;
@@ -138,18 +128,24 @@
         </div>
     </form>
 </md-sidenav>
-<md-button ng-click="updateWatchlistService()" ng-disabled="updating === true" class="md-raised md-primary pull-right">
-    <i class="glyphicon glyphicon-cloud-upload"></i> <i class="glyphicon glyphicon-cloud-download"></i> Update Watchlist
-    Service
-</md-button>
-<md-button ng-click="Add()"
-           class="md-raised pull-right">
-    <i class="glyphicon glyphicon-plus"></i> Add New {{activeTab}}
-</md-button>
 <md-tabs>
     <md-tab ng-repeat="tab in tabs" label="{{tab.title}}" md-on-select="updateGrid(tab.title)"></md-tab>
 </md-tabs>
 <div ui-grid="watchlistGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
+<div class="actions">
+    <md-button ng-click="removeRow()" ng-disabled="disableTrash" class="md-raised md-warn pull-left">
+        <md-tooltip>Selected {{activeTab}}(s)</md-tooltip>
+        <i class="glyphicon glyphicon-trash"></i><i class="glyphicon glyphicon-{{icon}}"></i>
+    </md-button>
+    <md-button ng-click="updateWatchlistService()" ng-disabled="updating === true" class="md-raised md-primary pull-right">
+        <md-tooltip>Watchlist Service</md-tooltip>
+        <i class="glyphicon glyphicon-cloud-upload"></i> <i class="glyphicon glyphicon-cloud-download"></i> Sync
+    </md-button>
+    <md-button ng-click="Add()" class="md-raised pull-right">
+        <md-tooltip>Add {{activeTab}}</md-tooltip>
+        <i class="glyphicon glyphicon-plus"></i><i class="glyphicon glyphicon-{{icon}}"></i>
+    </md-button>
+</div>
 <div>
     <spinner name="html5spinner" ng-cloak="">
         <div class="overlay"></div>

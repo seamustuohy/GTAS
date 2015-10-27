@@ -2,6 +2,15 @@ h2 {
     font-size: 1.2em;
 }
 
+.md-sidenav-left,
+.md-sidenav-right {
+    min-width: 400px;
+    left: 100%;
+    top: 0;
+    -webkit-transform: translate3d(-100%,0,0);
+    transform: translate3d(-100%,0,0);
+}
+
 nav {
     background-image: linear-gradient(rgb(255, 255, 255), rgb(242, 242, 242));
     border-bottom-color: rgb(229, 229, 229);
@@ -66,7 +75,7 @@ nav a {
     content: "";
     display: block;
     height: 80px;
-    width: 440px;
+    width: 565px;
     background-repeat: no-repeat;
     background-image: url(../img/header-title.png);
 }
@@ -96,9 +105,7 @@ nav a[disabled] {
     width: 80px;
     height: 30px;
 }
-.ui-grid-icon-ok:before {
-    content: '\c357' !important;
-}
+
 .ui-grid-pager-panel {
     background: rgb(238, 238, 238) none repeat scroll 0% 0%;
 }
@@ -126,8 +133,15 @@ nav a[disabled] {
     width: 98%;
     text-align: left;
 }
-.ui-grid-icon-ok:before {
-    content: '\c357' !important;
+
+.ui-grid-icon-ok::before {
+    content: "\e157";
+    font-family: 'Glyphicons Halflings';
+}
+
+.ui-grid-all-selected .ui-grid-icon-ok::before
+.ui-grid-row-selected .ui-grid-icon-ok::before {
+    content: "\e067";
 }
 
 .glyphicon-remove {

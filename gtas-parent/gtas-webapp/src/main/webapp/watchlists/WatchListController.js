@@ -32,6 +32,7 @@
         watchlist.types = {
             "Document": {
                 entity: "DOCUMENT",
+                icon: "file",
                 columns: [{
                     field: "documentType",
                     name: "documentType",
@@ -48,6 +49,7 @@
             },
             "Passenger": {
                 entity: "PASSENGER",
+                icon: "user",
                 columns: [{
                     field: "firstName",
                     name: "firstName",
@@ -70,12 +72,15 @@
             }
         };
         $scope.data = {};
-        $scope.watchlistGrid.enableRowHeaderSelection = false;
+        $scope.watchlistGrid.enableRowHeaderSelection = true;
+        $scope.watchlistGrid.enableSelectAll = true;
+        $scope.watchlistGrid.multiSelect = true;
         $scope.watchlistGrid.columnDefs = watchlist.types.Document.columns;
         $scope.getListItemsFor = function (listName) {
             watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
                 var obj, data = [], items = response.data.result.watchlistItems;
                 $scope.activeTab = listName;
+                $scope.icon = watchlist.types[listName].icon;
                 $scope.watchlistGrid.columnDefs = watchlist.types[listName].columns;
                 $scope.watchlistGrid.exporterCsvFilename = 'watchlist-' + listName + '.csv';
                 if (items === undefined) {
@@ -123,6 +128,7 @@
 
         $scope.tabs = tabs;
         $scope.activeTab = tabs[0].title;
+        $scope.icon = tabs[0].icon;
         $scope.rowSelected = false;
 
         $scope.Add = function () {
@@ -184,9 +190,16 @@
             $mdSidenav('save').open();
         };
 
+        $scope.disableTrash = true;
+
+        var isItTrashTime = function () {
+            var rowSelectedCount = $scope.gridApi.selection.getSelectedGridRows().length;
+            $scope.disableTrash = rowSelectedCount === 0;
+        };
+
         $scope.watchlistGrid.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
-//            gridApi.selection.on.rowSelectionChanged($scope.editRecord);
+            gridApi.selection.on.rowSelectionChanged($scope, isItTrashTime);
         };
 
         $scope.removeRow = function () {
