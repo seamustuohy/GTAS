@@ -24,6 +24,7 @@ import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.model.udr.json.UdrSpecification;
 import gov.gtas.model.udr.json.util.JsonToDomainObjectConverter;
 import gov.gtas.repository.HitsSummaryRepository;
+import gov.gtas.repository.udr.UdrRuleRepository;
 import gov.gtas.services.AuditLogPersistenceService;
 import gov.gtas.services.security.UserData;
 import gov.gtas.services.security.UserService;
@@ -35,9 +36,11 @@ import gov.gtas.svc.util.UdrServiceJsonResponseHelper;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -63,6 +66,9 @@ public class UdrServiceImpl implements UdrService {
 
 	@Autowired
 	private RulePersistenceService rulePersistenceService;
+
+	@Resource
+	private UdrRuleRepository udrRuleRepository;
 
 	@Resource
 	private HitsSummaryRepository hitSummaryRepository;
@@ -205,6 +211,62 @@ public class UdrServiceImpl implements UdrService {
 				.findAllUdrSummary(null));
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.UdrService#copyUdr(java.lang.String, java.lang.Long)
+	 */
+	@Override
+	@Transactional
+	public JsonServiceResponse copyUdr(String userId, Long udrId) {
+		// fetch the UDR
+		UdrSpecification udrToCopy = fetchUdr(udrId);
+		
+		//create new UDR
+		udrToCopy.setId(null);
+		udrToCopy.getSummary().setTitle(makeTitleForCopy(userId, udrToCopy));
+		udrToCopy.getSummary().setAuthor(userId);
+		udrToCopy.getSummary().setStartDate(new Date());
+		udrToCopy.getSummary().setEndDate(null);
+		//save		
+		return createUdr(userId, udrToCopy);
+	}
+	private String makeTitleForCopy(String userId, UdrSpecification udrToCopy){
+		String ret = null;
+		//fetch UDR with the same title
+		String oldTitle = udrToCopy.getSummary().getTitle();
+		/*
+		 * if the title contains a generated suffix
+		 * then remove it.
+		 */
+		int indx = oldTitle.indexOf("##");
+		if(indx >= 0){
+			oldTitle = oldTitle.substring(0, indx);
+		}
+		
+		List<String> titleList = udrRuleRepository.getUdrTitleByTitlePrefixAndAuthor(oldTitle+"%", userId);
+		if(CollectionUtils.isEmpty(titleList)){
+			ret = oldTitle;
+		} else {
+			Set<String> titleSet = new HashSet<>(titleList);
+			int titleSuffix = 1;
+			while(titleSuffix < RuleConstants.UDR_MAX_NUMBER_COPIES){
+				String newTitle = oldTitle+"##"+titleSuffix;
+				titleSuffix++;
+				int tl = newTitle.length();
+				if(tl > RuleConstants.UDR_TITLE_LENGTH){
+					newTitle = newTitle.substring(tl - RuleConstants.UDR_TITLE_LENGTH);
+				}
+				if(!titleSet.contains(newTitle)){
+					ret = newTitle;
+					break;
+				}
+			}
+			if(ret == null){
+				throw new IllegalArgumentException("Too many copies requested for:"+oldTitle);
+			}
+		}
+		
+		return ret;
+	}
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -22,4 +22,7 @@ public class RuleConstants {
 	public static final String UDR_UPDATE_OP_NAME = "Update UDR";
 	public static final String UDR_DELETE_OP_NAME = "Delete UDR";
 	
+	public static final int UDR_TITLE_LENGTH = 20;
+	public static final int UDR_MAX_NUMBER_COPIES = 100;
+	
 }
