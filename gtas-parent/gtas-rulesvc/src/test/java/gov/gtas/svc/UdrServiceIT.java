@@ -113,6 +113,57 @@ public class UdrServiceIT {
 
 	@Test
 	@Transactional
+	public void testCopyUdrWithLongTitle() {
+		User user = createUser();
+		String title ="12345678901234567890";//max length title (20 characters)
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), 
+				title,
+				RULE_DESCRIPTION1);
+		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
+		assertEquals(Status.SUCCESS, resp.getStatus());
+		
+		assertTrue(resp.getResult() instanceof Long);
+		Long id = (Long)resp.getResult();
+		
+		resp = udrService.copyUdr(user.getUserId(), id);
+		assertEquals(Status.SUCCESS, resp.getStatus());
+		id = (Long)resp.getResult();
+		UdrSpecification newspec = udrService.fetchUdr(id);
+		assertNotNull(newspec);
+		assertEquals(title.substring(3)+"##1", newspec.getSummary().getTitle());
+	}
+
+	@Test
+	@Transactional
+	public void testCopyUdr() {
+		User user = createUser();
+		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1,
+				RULE_DESCRIPTION1);
+		JsonServiceResponse resp = udrService.createUdr(user.getUserId(), spec);
+		assertEquals(Status.SUCCESS, resp.getStatus());
+		
+		assertTrue(resp.getResult() instanceof Long);
+		Long id = (Long)resp.getResult();
+		
+		resp = udrService.copyUdr(user.getUserId(), id);
+		assertEquals(Status.SUCCESS, resp.getStatus());
+		id = (Long)resp.getResult();
+		UdrSpecification newspec = udrService.fetchUdr(id);
+		assertNotNull(newspec);
+		assertEquals(spec.getSummary().getTitle()+"##1", newspec.getSummary().getTitle());
+		
+		//second copy
+		resp = udrService.copyUdr(user.getUserId(), id);
+		assertEquals(Status.SUCCESS, resp.getStatus());
+		id = (Long)resp.getResult();
+		newspec = udrService.fetchUdr(id);
+		assertNotNull(newspec);
+		assertEquals(spec.getSummary().getTitle()+"##2", newspec.getSummary().getTitle());
+
+	}
+	
+	@Test
+	@Transactional
 	public void testCreateDuplicateUdr() {
 		User user = createUser();
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec(user.getUserId(), RULE_TITLE1,

@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.util.DateCalendarUtils;
+import gov.gtas.vo.passenger.FlightVo;
 
 public class ParseUtils {
     /**
@@ -225,6 +226,22 @@ public class ParseUtils {
         }
         
         return null;
+    }
+    /**
+     * Initializes the etaDate and etdDate attributes in thhe supplied flight VO
+     * by stripping off the time portion of eta and 
+     * etd respectively.
+     * @param f the flight VO
+     */
+    public static void initEtaEtdDate(FlightVo f){
+    	Date eta = f.getEta();
+    	Date etd = f.getEtd();
+    	if(eta != null){
+    		f.setEtaDate(DateCalendarUtils.stripTime(eta));
+    	}
+    	if(etd != null){
+    		f.setEtdDate(DateCalendarUtils.stripTime(etd));
+    	}
     }
     
     public static String padFlightNumberWithZeroes(String fn) {

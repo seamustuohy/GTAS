@@ -315,6 +315,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         f.setEta(tvl.getEta());
         f.setEtd(tvl.getEtd());
         f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tvl.getFlightNumber()));
+        ParseUtils.initEtaEtdDate(f);
         Date flightDate = ParseUtils.determineFlightDate(tvl.getEtd(), tvl.getEta(), parsedMessage.getTransmissionDate());
         if (flightDate == null) {
             throw new ParseException("Could not determine flight date");

@@ -246,6 +246,10 @@ public class UdrServiceImpl implements UdrService {
 		if(CollectionUtils.isEmpty(titleList)){
 			ret = oldTitle;
 		} else {
+			/*
+			 * This user has already authored UDR with the same title.
+			 * Create a new title by append a numbered suffix.
+			 */
 			Set<String> titleSet = new HashSet<>(titleList);
 			int titleSuffix = 1;
 			while(titleSuffix < RuleConstants.UDR_MAX_NUMBER_COPIES){
