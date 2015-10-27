@@ -119,7 +119,7 @@ public class PnrMessageService implements MessageService {
         pnr.setFlightLegs(null);
         pnr.setCreditCards(null);
         pnr.setAddresses(null);
-        pnr.setAgency(null);
+        pnr.setAgencies(null);
         pnr.setEmails(null);
         pnr.setFrequentFlyers(null);
         pnr.setPhones(null);

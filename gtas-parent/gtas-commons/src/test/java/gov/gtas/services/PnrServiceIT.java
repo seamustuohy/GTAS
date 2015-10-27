@@ -129,7 +129,6 @@ public class PnrServiceIT {
 		ag.setName("Some Test Agency");
 		ag.setCreatedAt(new Date());
 		ag.setState("VA");
-		pnr.setAgency(ag);
 		FrequentFlyer ff = new FrequentFlyer();
 		ff.setNumber("7777");
 		ff.setCarrier("AA");

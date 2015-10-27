@@ -39,7 +39,7 @@ public class PnrMessageValidator {
 		}else{
 			String messageKey=messageVo.getHashCode();
 			PnrVo pnrVo = messageVo.getPnr();
-			List<PnrReportingAgentVo> reportingParties = checkReportingValueObjects(pnrVo,messageKey);
+			List<AgencyVo> reportingParties = checkReportingValueObjects(pnrVo,messageKey);
 			List<AddressVo> addresses = checkAddressValueObjects(pnrVo,messageKey);
 			List<PhoneVo> phoneNumbers = checkPhoneNumberValueObject(pnrVo,messageKey);
 			List<CreditCardVo> creditCards = checkCreditCardValueObjects(pnrVo,messageKey);
@@ -117,12 +117,12 @@ public class PnrMessageValidator {
 		}
 		return modifiedList;
 	}
-	private List<PnrReportingAgentVo> checkReportingValueObjects(PnrVo pnrVo,String key){
-		List<PnrReportingAgentVo> reportingParties = pnrVo.getReportingParties();
-		List<PnrReportingAgentVo> modifiedList = new ArrayList<>();
+	private List<AgencyVo> checkReportingValueObjects(PnrVo pnrVo,String key){
+		List<AgencyVo> reportingParties = pnrVo.getAgencies();
+		List<AgencyVo> modifiedList = new ArrayList<>();
 		if(reportingParties != null && reportingParties.size() > 0){
 			for(int i = 0; i < reportingParties.size();i++){
-				PnrReportingAgentVo vo = reportingParties.get(i);
+				AgencyVo vo = reportingParties.get(i);
 				if(!vo.validate()){
 					populateInvalidObjectList(vo, key);
 					vo=null;

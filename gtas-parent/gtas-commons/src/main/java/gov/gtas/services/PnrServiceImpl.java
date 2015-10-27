@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import gov.gtas.model.Address;
 import gov.gtas.model.CreditCard;
@@ -112,8 +113,8 @@ public class PnrServiceImpl implements PnrService {
 				}
 			}
 		}
-		if(source.getAgency() != null && target.getAgency() == null){
-			target.setAgency(source.getAgency());
+		if(!CollectionUtils.isEmpty(source.getAgencies())) {
+			target.setAgencies(source.getAgencies());
 		}
 		
 		if(source.getCreditCards()!= null && source.getCreditCards().size() >0){

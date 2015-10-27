@@ -24,15 +24,6 @@ import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.vo.PnrVo;
-import gov.gtas.vo.passenger.AddressVo;
-import gov.gtas.vo.passenger.CreditCardVo;
-import gov.gtas.vo.passenger.DocumentVo;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.FrequentFlyerVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.PhoneVo;
-import gov.gtas.vo.passenger.ReportingPartyVo;
 import gov.gtas.repository.AddressRepository;
 import gov.gtas.repository.CreditCardRepository;
 import gov.gtas.repository.DocumentRepository;
@@ -42,6 +33,16 @@ import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.repository.PhoneRepository;
 import gov.gtas.repository.ReportingPartyRepository;
+import gov.gtas.vo.PnrVo;
+import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.AgencyVo;
+import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.DocumentVo;
+import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.passenger.FrequentFlyerVo;
+import gov.gtas.vo.passenger.PassengerVo;
+import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.ReportingPartyVo;
 
 @Repository
 public class LoaderRepository {
@@ -140,6 +141,10 @@ public class LoaderRepository {
             } else {
                 pnr.addFrequentFlyer(existingFf);
             }
+        }
+        
+        for (AgencyVo avo : vo.getAgencies()) {
+            System.out.println("MAC " + utils.convertAgencyVo(avo));
         }
     }
 

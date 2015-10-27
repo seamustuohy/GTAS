@@ -158,7 +158,7 @@ public class PnrDataGenerator {
             agency.setName(params[2].toUpperCase());
             agency.setIdentifier(params[3]);
             agency.setId(1L);
-            pnr.setAgency(agency);
+            pnr.addAgency(agency);
             break;
         case 2:
             agency = new Agency();
@@ -168,7 +168,7 @@ public class PnrDataGenerator {
             agency.setName(params[2].toUpperCase());
             agency.setIdentifier(params[3]);
             agency.setId(2L);
-            pnr.setAgency(agency);
+            pnr.addAgency(agency);
             break;
         }
     }

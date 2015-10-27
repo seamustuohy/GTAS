@@ -1,5 +1,15 @@
 package gov.gtas.svc.request.builder;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
+
 import gov.gtas.bo.BasicRuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
@@ -21,16 +31,6 @@ import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import org.mvel2.ast.IsDef;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Rule Engine Request Builder constructs Rule Engine execution requests from
@@ -133,8 +133,7 @@ public class RuleEngineRequestBuilder {
 			addCreditCardObjects(pnr, pnr.getCreditCards());
 			addFrequentFlyerObjects(pnr, pnr.getFrequentFlyers());
 			addPassengerObjects(pnr, pnr.getPassengers());
-
-			addTravelAgencyObject(pnr, pnr.getAgency());
+			addTravelAgencyObjects(pnr, pnr.getAgencies());
 
 			// add the passenger flight tuples
 			if (pnr.getFlights() != null && pnr.getPassengers() != null) {
@@ -266,13 +265,15 @@ public class RuleEngineRequestBuilder {
 		}
 	}
 
-	private void addTravelAgencyObject(final Pnr pnr, final Agency agency) {
-		if (agency != null) {
-			Long id = agency.getId();
+	private void addTravelAgencyObjects(final Pnr pnr, final Collection<Agency> agencies) {
+		if (CollectionUtils.isEmpty(agencies)) {
+		    return;
+		}
+		for (Agency a : agencies) {
+		    Long id = a.getId();
 			if (!this.travelAgencyIdSet.contains(id)) {
-				requestObjectList.add(agency);
-				requestObjectList.add(new PnrTravelAgencyLink(pnr.getId(),
-						agency.getId()));
+				requestObjectList.add(a);
+                requestObjectList.add(new PnrTravelAgencyLink(pnr.getId(), a.getId()));
 				this.travelAgencyIdSet.add(id);
 			}
 		}

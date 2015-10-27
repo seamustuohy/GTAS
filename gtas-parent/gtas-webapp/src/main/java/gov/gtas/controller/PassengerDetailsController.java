@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -206,10 +207,10 @@ public class PassengerDetailsController {
 
 		}
 
-		if (source.getAgency() != null && target.getAgency() == null) {
+		if (CollectionUtils.isNotEmpty(source.getAgencies())) {
 			AgencyVo aVo = new AgencyVo();
-			copyModelToVo(source.getAgency(), aVo);
-			target.setAgency(aVo);
+//			copyModelToVo(source.getAgency(), aVo);
+//			target.setAgency(aVo);
 		}
 
 		if (source.getCreditCards() != null

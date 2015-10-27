@@ -1,65 +1,69 @@
 package gov.gtas.vo.passenger;
 
-import gov.gtas.validators.Validatable;
-
-import gov.gtas.vo.BaseVo;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import gov.gtas.validators.Validatable;
+
 public class AgencyVo implements Validatable  {
+	private String name;
+	private String identifier;
+	private String city;
+	private String state;
+	private String country;
+    private String phone;
 	
-	private String agencyName;
-	private String agencyIdentifier;
-	private String agencyCity;
-	private String agencyState;
-	private String agencyCountry;
+	public AgencyVo() { }
 	
-	public AgencyVo(){
-		
-	}
-	
-	public AgencyVo(String aName,String identifier,String city,String state,String country){
-		this.agencyName=aName;
-		this.agencyIdentifier=identifier;
-		this.agencyCity=city;
-		this.agencyState=state;
-		this.agencyCountry=country;
-		
-	}
-	
-	public String getAgencyName() {
-		return agencyName;
-	}
-	public void setAgencyName(String agencyName) {
-		this.agencyName = agencyName;
-	}
-	public String getAgencyIdentifier() {
-		return agencyIdentifier;
-	}
-	public void setAgencyIdentifier(String agencyIdentifier) {
-		this.agencyIdentifier = agencyIdentifier;
-	}
-	public String getAgencyCity() {
-		return agencyCity;
-	}
-	public void setAgencyCity(String agencyCity) {
-		this.agencyCity = agencyCity;
-	}
-	public String getAgencyState() {
-		return agencyState;
-	}
-	public void setAgencyState(String agencyState) {
-		this.agencyState = agencyState;
-	}
-	public String getAgencyCountry() {
-		return agencyCountry;
-	}
-	public void setAgencyCountry(String agencyCountry) {
-		this.agencyCountry = agencyCountry;
-	}
-	
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
@@ -67,10 +71,9 @@ public class AgencyVo implements Validatable  {
     
 	@Override
 	public boolean validate() {
-		if(StringUtils.isBlank(this.agencyIdentifier) ){
+		if(StringUtils.isBlank(this.identifier) ){
 			return false;
 		}
 		return true;
 	}
-	
 }

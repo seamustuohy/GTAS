@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.springframework.beans.BeanUtils;
+
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
@@ -260,12 +262,7 @@ public class ServiceUtils {
 	}
 	
 	public static Agency mapAgencyFromAgencyVo(AgencyVo vo,Agency a){
-		//BeanUtils.copyProperties(vo, a);
-		a.setCity(vo.getAgencyCity());
-		a.setCountry(vo.getAgencyCountry());
-		a.setIdentifier(vo.getAgencyIdentifier());
-		a.setName(vo.getAgencyName());
-		a.setState(vo.getAgencyState());
+		BeanUtils.copyProperties(vo, a);
 		a.setCreatedAt(new Date());
 		a.setCreatedBy("SYSTEM");
 		return a;

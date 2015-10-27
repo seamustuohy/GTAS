@@ -45,12 +45,12 @@ import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.vo.PnrVo;
 import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
 import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FrequentFlyerVo;
 import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
-import gov.gtas.vo.passenger.PnrReportingAgentVo;
 
 
 public final class PnrGovParser extends EdifactParser<PnrVo> {
@@ -109,13 +109,12 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         }
 
         ORG org = getMandatorySegment(ORG.class);
-        PnrReportingAgentVo agentVo = new PnrReportingAgentVo();
-        agentVo.setAirlineCode(org.getAirlineCode());
-        agentVo.setCountryCode(org.getOriginatorCountryCode());
-        agentVo.setCurrencyCode(org.getOriginatorCurrencyCode());
-        agentVo.setIdentificationCode(org.getCompanyIdentification());
-        agentVo.setLocationCode(org.getLocationCode());
-        parsedMessage.getReportingParties().add(agentVo);
+        AgencyVo agencyVo = new AgencyVo();
+        agencyVo.setName(org.getCompanyIdentification());
+        agencyVo.setCity(org.getLocationCode());
+        agencyVo.setIdentifier(org.getAirlineCode());
+        agencyVo.setCountry(org.getOriginatorCountryCode());
+        parsedMessage.getAgencies().add(agencyVo);
 
         for (;;) {
             ADD add = getConditionalSegment(ADD.class);

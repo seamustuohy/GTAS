@@ -9,7 +9,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.validators.Validatable;
-import gov.gtas.vo.MessageVo;
 import gov.gtas.vo.passenger.AddressVo;
 import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
@@ -18,7 +17,6 @@ import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FrequentFlyerVo;
 import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
-import gov.gtas.vo.passenger.PnrReportingAgentVo;
 
 public class PnrVo extends MessageVo implements Validatable{
     private String messageCode;
@@ -37,16 +35,16 @@ public class PnrVo extends MessageVo implements Validatable{
     private String raw;
     private List<String> rawList = new ArrayList<String>();
     private Integer daysBookedBeforeTravel;
-    private AgencyVo agency;
  
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
-    private List<PnrReportingAgentVo> reportingParties = new ArrayList<>();
+
     private List<AddressVo> addresses = new ArrayList<>();
     private List<PhoneVo> phoneNumbers = new ArrayList<>();
     private List<CreditCardVo> creditCards = new ArrayList<>();
     private List<FrequentFlyerVo> frequentFlyerDetails = new ArrayList<>();
     private List<EmailVo> emails = new ArrayList<>();
+    private List<AgencyVo> agencies = new ArrayList<>();
     
     public PnrVo() {
         this.bagCount = 0;
@@ -84,25 +82,15 @@ public class PnrVo extends MessageVo implements Validatable{
 	public void setDaysBookedBeforeTravel(Integer daysBookedBeforeTravel) {
 		this.daysBookedBeforeTravel = daysBookedBeforeTravel;
 	}
-
-	public AgencyVo getAgency() {
-		return agency;
-	}
-
-	public void setAgency(AgencyVo agency) {
-		this.agency = agency;
-	}
-
+	
 	public String getMessageCode() {
         return messageCode;
     }
-
-
-    public void setMessageCode(String messageCode) {
+    
+	public void setMessageCode(String messageCode) {
         this.messageCode = messageCode;
     }
-
-
+    
     public String getRecordLocator() {
         return recordLocator;
     }
@@ -207,12 +195,12 @@ public class PnrVo extends MessageVo implements Validatable{
         this.passengers = passengers;
     }
 
-    public List<PnrReportingAgentVo> getReportingParties() {
-        return reportingParties;
+    public List<AgencyVo> getAgencies() {
+        return agencies;
     }
 
-    public void setReportingParties(List<PnrReportingAgentVo> reportingParties) {
-        this.reportingParties = reportingParties;
+    public void setAgencies(List<AgencyVo> agencies) {
+        this.agencies = agencies;
     }
 
     public List<AddressVo> getAddresses() {

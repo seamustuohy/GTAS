@@ -2,12 +2,12 @@ package gov.gtas.util;
 
 import java.util.Iterator;
 
-import gov.gtas.vo.PnrVo;
 import gov.gtas.model.Address;
 import gov.gtas.model.Email;
 import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
+import gov.gtas.vo.PnrVo;
 
 public class PnrServiceDelegateUtils {
 
@@ -36,7 +36,7 @@ public class PnrServiceDelegateUtils {
 			Phone p = (Phone) it3.next();
 			target.addPhone(p);
 		}
-		target.setAgency(source.getAgency());
+		target.setAgencies(source.getAgencies());
 		target.setBagCount(source.getBagCount());
 		target.setDateBooked(source.getDateBooked());
 		target.setDateReceived(source.getDateReceived());

@@ -4,9 +4,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -27,17 +26,12 @@ public class Agency extends BaseEntityAudit {
 
 	private String phone;
 	
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "agency")
+    @ManyToMany(
+        mappedBy = "agencies",
+        targetEntity = Pnr.class
+    )
     private Set<Pnr> pnrs = new HashSet<>();
     
-    public void addPnr(Pnr pnr) {
-        if (this.pnrs == null) {
-            this.pnrs = new HashSet<>();
-        }
-        this.pnrs.add(pnr);
-        pnr.setAgency(this);
-    }
-   
 	public Set<Pnr> getPnrs() {
 		return pnrs;
 	}
@@ -45,7 +39,6 @@ public class Agency extends BaseEntityAudit {
 	public void setPnrs(Set<Pnr> pnrs) {
 		this.pnrs = pnrs;
 	}
-
 
 	public String getPhone() {
 		return phone;
