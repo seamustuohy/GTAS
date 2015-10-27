@@ -32,6 +32,7 @@ import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FlightHistoryVo;
 import gov.gtas.vo.PnrVo;
 import gov.gtas.model.Address;
+import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Email;
@@ -209,8 +210,10 @@ public class PassengerDetailsController {
 
 		if (CollectionUtils.isNotEmpty(source.getAgencies())) {
 			AgencyVo aVo = new AgencyVo();
-//			copyModelToVo(source.getAgency(), aVo);
-//			target.setAgency(aVo);
+			for (Agency agency : source.getAgencies()) {
+	            copyModelToVo(agency, aVo);
+	            target.getAgencies().add(aVo);
+			}
 		}
 
 		if (source.getCreditCards() != null
@@ -251,7 +254,6 @@ public class PassengerDetailsController {
 				PhoneVo pVo = new PhoneVo();
 				copyModelToVo(p, pVo);
 				target.getPhoneNumbers().add(pVo);
-
 			}
 		}
 
