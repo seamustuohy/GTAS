@@ -53,7 +53,7 @@ public class DocumentVo implements Validatable{
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }
 	@Override
-	public boolean validate() {
+	public boolean isValid() {
 		if(StringUtils.isBlank(this.documentNumber) || StringUtils.isBlank(this.documentType) 
 				|| StringUtils.isBlank(this.issuanceCountry) || this.expirationDate == null
 				|| this.issuanceDate == null){

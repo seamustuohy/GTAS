@@ -28,7 +28,7 @@ public class ApisMessageValidator {
 	private List<InvalidObjectInfoVo> invalidObjects = new ArrayList<>();
 	
 	public ApisMessageVo getValidMessageVo(ApisMessageVo messageVo){
-		if(messageVo == null || (!messageVo.validate())){
+		if(messageVo == null || (!messageVo.isValid())){
 			InvalidObjectInfoVo error = new InvalidObjectInfoVo();
 			error.setCreatedBy("ApisMessageValidator");
 			error.setCreatedDate(new Date());
@@ -76,7 +76,7 @@ public class ApisMessageValidator {
 			Iterator<FlightVo> it = flights.iterator();
 			while(it.hasNext()){
 				FlightVo vo = (FlightVo) it.next();
-				if(!vo.validate()){
+				if(!vo.isValid()){
 					populateInvalidObjectList(vo, messageVo);
 					vo=null;
 				}
@@ -94,7 +94,7 @@ public class ApisMessageValidator {
 			Iterator<PassengerVo> it = passengers.iterator();
 			while(it.hasNext()){
 				PassengerVo vo = (PassengerVo) it.next();
-				if(!vo.validate()){
+				if(!vo.isValid()){
 					populateInvalidObjectList(vo, messageVo);
 					vo=null;
 				}
@@ -104,7 +104,7 @@ public class ApisMessageValidator {
 						Iterator docSet = vo.getDocuments().iterator();
 						while(docSet.hasNext()){
 							DocumentVo dvo = (DocumentVo) docSet.next();
-							if(!dvo.validate()){
+							if(!dvo.isValid()){
 								populateInvalidObjectList(dvo, messageVo);
 								dvo=null;
 							}

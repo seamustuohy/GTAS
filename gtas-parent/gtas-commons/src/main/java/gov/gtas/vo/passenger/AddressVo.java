@@ -76,7 +76,7 @@ public class AddressVo implements Validatable{
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 	@Override
-	public boolean validate() {
+	public boolean isValid() {
 		if(StringUtils.isBlank(this.postalCode) || StringUtils.isBlank(this.state) 
 				|| StringUtils.isBlank(this.city) || StringUtils.isBlank(this.country)
 				|| StringUtils.isBlank(this.line1)){

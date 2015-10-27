@@ -223,7 +223,7 @@ public class PassengerDetailsController {
 				CreditCard cc = (CreditCard) it1.next();
 				CreditCardVo cVo = new CreditCardVo();
 				copyModelToVo(cc, cVo);
-				target.getCreditCards().add(cVo);
+				target.addCreditCard(cVo);
 			}
 		}
 		if (source.getFrequentFlyers() != null

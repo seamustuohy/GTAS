@@ -51,7 +51,7 @@ public class AgencyVo implements Validatable  {
     }
     
 	@Override
-	public boolean validate() {
+	public boolean isValid() {
 		if(StringUtils.isBlank(this.identifier) ){
 			return false;
 		}

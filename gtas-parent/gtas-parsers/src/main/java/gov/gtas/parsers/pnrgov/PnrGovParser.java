@@ -1,7 +1,10 @@
 package gov.gtas.parsers.pnrgov;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.util.CollectionUtils;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
@@ -16,6 +19,7 @@ import gov.gtas.parsers.pnrgov.segment.EBD;
 import gov.gtas.parsers.pnrgov.segment.EQN;
 import gov.gtas.parsers.pnrgov.segment.FAR;
 import gov.gtas.parsers.pnrgov.segment.FOP;
+import gov.gtas.parsers.pnrgov.segment.FOP.Payment;
 import gov.gtas.parsers.pnrgov.segment.FTI;
 import gov.gtas.parsers.pnrgov.segment.FTI.FrequentFlierDetails;
 import gov.gtas.parsers.pnrgov.segment.IFT;
@@ -258,28 +262,39 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
      * Form of payment info: get credit card if exists
      */
     private void processGroup4(FOP fop) throws ParseException {
-        boolean ccCreated = false;
-        CreditCardVo cc = new CreditCardVo();
+        List<CreditCardVo> newCreditCards = new ArrayList<>();
 
         if (fop != null) {
-            parsedMessage.setFormOfPayment(fop.getPaymentType());
-            if (fop.isCreditCard()) {
-                cc.setCardType(fop.getVendorCode());
-                cc.setExpiration(fop.getExpirationDate());
-                cc.setNumber(fop.getAccountNumber());
-                parsedMessage.getCreditCards().add(cc);
-                ccCreated = true;
+            List<Payment> payments = fop.getPayments();
+            if (!CollectionUtils.isEmpty(payments)) {
+                // arbitrarily select first payment type
+                parsedMessage.setFormOfPayment(payments.get(0).getPaymentType());
+                for (Payment p : payments) {
+                    if (p.isCreditCard()) {
+                        CreditCardVo cc = new CreditCardVo();
+                        cc.setCardType(p.getVendorCode());
+                        cc.setExpiration(p.getExpirationDate());
+                        cc.setNumber(p.getAccountNumber());
+                        newCreditCards.add(cc);
+                    }                    
+                }
             }
         }
         
         IFT ift = getConditionalSegment(IFT.class);
         if (ift != null) {
-            if (ccCreated && ift.isSponsorInfo()) {
+            if (newCreditCards.size() > 0 && ift.isSponsorInfo()) {
                 List<String> msgs = ift.getMessages();
                 if (msgs.size() >= 1) {
-                    cc.setAccountHolder(msgs.get(0));                
+                    for (CreditCardVo cc : newCreditCards) {
+                        cc.setAccountHolder(msgs.get(0));
+                    }
                 }
             }
+        }
+
+        for (CreditCardVo cc : newCreditCards) {
+            parsedMessage.addCreditCard(cc);
         }
         
         ADD add = getConditionalSegment(ADD.class);

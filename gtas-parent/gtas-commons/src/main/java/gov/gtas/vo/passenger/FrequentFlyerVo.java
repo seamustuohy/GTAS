@@ -29,7 +29,7 @@ public class FrequentFlyerVo implements Validatable{
     }
 
 	@Override
-	public boolean validate() {
+	public boolean isValid() {
 		if(StringUtils.isBlank(this.carrier) || StringUtils.isBlank(this.number) 
 				){
 			return false;

@@ -29,7 +29,7 @@ public class EmailVo implements Validatable{
     }
     
 	@Override
-	public boolean validate() {
+	public boolean isValid() {
 		if(StringUtils.isBlank(this.address) ){
 			return false;
 		}

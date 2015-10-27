@@ -66,7 +66,7 @@ public class ApisMessageVo extends MessageVo implements Validatable{
     }
 
 	@Override
-	public boolean validate() {
+	public boolean isValid() {
 		if(StringUtils.isBlank(this.getHashCode()) ){
 			return false;
 		}

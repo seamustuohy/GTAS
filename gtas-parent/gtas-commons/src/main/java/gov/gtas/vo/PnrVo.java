@@ -18,7 +18,7 @@ import gov.gtas.vo.passenger.FrequentFlyerVo;
 import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
 
-public class PnrVo extends MessageVo implements Validatable{
+public class PnrVo extends MessageVo implements Validatable {
     private String messageCode;
     
     private String recordLocator;
@@ -219,12 +219,14 @@ public class PnrVo extends MessageVo implements Validatable{
         this.phoneNumbers = phoneNumbers;
     }
 
+    public void addCreditCard(CreditCardVo vo) {
+        if (vo.isValid()) {
+            this.creditCards.add(vo);
+        }
+    }
+    
     public List<CreditCardVo> getCreditCards() {
         return creditCards;
-    }
-
-    public void setCreditCards(List<CreditCardVo> creditCards) {
-        this.creditCards = creditCards;
     }
 
     public List<FrequentFlyerVo> getFrequentFlyerDetails() {
@@ -241,7 +243,7 @@ public class PnrVo extends MessageVo implements Validatable{
     }
 
 	@Override
-	public boolean validate() {
+	public boolean isValid() {
 		if(StringUtils.isBlank(this.recordLocator) || StringUtils.isBlank(this.carrier)){
 			return false;
 		}

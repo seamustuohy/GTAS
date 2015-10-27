@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class CreditCardVo implements Validatable{
+public class CreditCardVo implements Validatable {
     private String cardType;
     private String number;
     private Date expiration;
@@ -36,10 +36,10 @@ public class CreditCardVo implements Validatable{
     public void setAccountHolder(String accountHolder) {
         this.accountHolder = accountHolder;
     }
+    
 	@Override
-	public boolean validate() {
-		if(StringUtils.isBlank(this.number) || StringUtils.isBlank(this.accountHolder) 
-				|| StringUtils.isBlank(this.cardType) || this.expiration == null){
+	public boolean isValid() {
+		if (StringUtils.isBlank(this.number)) {
 			return false;
 		}
 		return true;
