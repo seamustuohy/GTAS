@@ -110,9 +110,9 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
 
         ORG org = getMandatorySegment(ORG.class);
         AgencyVo agencyVo = new AgencyVo();
-        agencyVo.setName(org.getCompanyIdentification());
-        agencyVo.setCity(org.getLocationCode());
-        agencyVo.setIdentifier(org.getAirlineCode());
+        agencyVo.setName(org.getAirlineCode());
+        agencyVo.setLocation(org.getLocationCode());
+        agencyVo.setIdentifier(org.getTravelAgentIdentifier());
         agencyVo.setCountry(org.getOriginatorCountryCode());
         parsedMessage.getAgencies().add(agencyVo);
 

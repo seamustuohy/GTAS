@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import gov.gtas.model.Address;
+import gov.gtas.model.Agency;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
@@ -25,6 +26,7 @@ import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.repository.AddressRepository;
+import gov.gtas.repository.AgencyRepository;
 import gov.gtas.repository.CreditCardRepository;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.repository.FlightRepository;
@@ -70,6 +72,9 @@ public class LoaderRepository {
     @Autowired
     private AddressRepository addressDao;
 
+    @Autowired
+    private AgencyRepository agencyDao;
+    
     @Autowired
     private MessageRepository<Message> messageDao;
 
@@ -144,7 +149,13 @@ public class LoaderRepository {
         }
         
         for (AgencyVo avo : vo.getAgencies()) {
-            System.out.println("MAC " + utils.convertAgencyVo(avo));
+            Agency existingAgency = agencyDao.findByNameAndLocation(avo.getName(), avo.getLocation());
+            if (existingAgency == null) {
+                Agency newAgency = utils.convertAgencyVo(avo);
+                pnr.addAgency(newAgency);
+            } else {
+                pnr.addAgency(existingAgency);
+            }
         }
     }
 

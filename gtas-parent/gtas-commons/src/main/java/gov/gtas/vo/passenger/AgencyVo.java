@@ -8,62 +8,43 @@ import gov.gtas.validators.Validatable;
 
 public class AgencyVo implements Validatable  {
 	private String name;
+    private String location;
 	private String identifier;
-	private String city;
-	private String state;
 	private String country;
     private String phone;
 	
 	public AgencyVo() { }
-	
-    public String getName() {
+
+	public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
+    public String getLocation() {
+        return location;
+    }
+    public void setLocation(String location) {
+        this.location = location;
+    }
     public String getIdentifier() {
         return identifier;
     }
-
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
     public String getCountry() {
         return country;
     }
-
     public void setCountry(String country) {
         this.country = country;
     }
-
     public String getPhone() {
         return phone;
     }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
