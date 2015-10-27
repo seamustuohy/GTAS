@@ -2,6 +2,10 @@ h2 {
     font-size: 1.2em;
 }
 
+nav a {
+    border-radius: 0 !important;
+}
+
 /* fixes big page numbers from not being seen */
 .ui-grid-pager-max-pages-number {
     display: inline-block;
@@ -13,6 +17,20 @@ h2 {
     .modal-dialog {
         width: 1000px;
     }
+}
+
+.header {
+    height: 80px;
+    background-image: url(../img/header-tile.png);
+    background-repeat: repeat-x;
+}
+.header::before {
+    content: "";
+    display: block;
+    height: 80px;
+    width: 440px;
+    background-repeat: no-repeat;
+    background-image: url(../img/header-title.png);
 }
 
 @media (min-width: 1200px) {
@@ -74,17 +92,6 @@ nav a[disabled] {
     content: '\c357' !important;
 }
 
-/* icons */
-.glyphiconFlightPax {
-    margin: 1px 0px 5px 1px;
-    font-size: 26px;
-    color: #222;
-    padding: 5px;
-}
-.glyphiconFlightPax:hover, .glyphiconFlightPax:focus {
-    color: #222;
-    padding: 5px;
-}
 .glyphicon-remove {
     cursor: pointer;
 }

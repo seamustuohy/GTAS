@@ -11,6 +11,11 @@
     padding-bottom: 20px;
   }
 
+  form [disabled],
+  form [disabled] span {
+    color: #000 !important;
+  }
+
   .md-button {
     min-width: 30px
   }
@@ -53,10 +58,10 @@
 </form>
 
 <md-content layout-padding>
-  <div layout="row" 
-    ui-grid="flightsGrid"
-    ui-grid-pagination
-    ui-grid-auto-resize
-    ng-style="getTableHeight()"
-    class="grid"></div>
+  <div layout="row"
+       ui-grid="flightsGrid"
+       ui-grid-pagination
+       ui-grid-auto-resize
+       ng-style="getTableHeight()"
+       class="grid"></div>
 </md-content>
