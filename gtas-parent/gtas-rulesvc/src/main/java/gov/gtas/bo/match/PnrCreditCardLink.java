@@ -1,10 +1,6 @@
 package gov.gtas.bo.match;
 
 public class PnrCreditCardLink extends PnrAttributeLink {
-
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = -1157351677154533276L;
 	public PnrCreditCardLink(final long pnrId, final long creditCardId){
 		   super(pnrId, creditCardId);

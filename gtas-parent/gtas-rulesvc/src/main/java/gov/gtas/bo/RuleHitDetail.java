@@ -12,9 +12,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RuleHitDetail implements Serializable, Cloneable {
 	public static final String HIT_REASON_SEPARATOR = "///";
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = 2946626283174855377L;
 
 	private String hitRule;
