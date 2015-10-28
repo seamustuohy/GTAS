@@ -2,7 +2,6 @@ package gov.gtas.vo.passenger;
 
 import gov.gtas.validators.Validatable;
 import gov.gtas.vo.BaseVo;
-import gov.gtas.vo.PnrVo;
 
 import java.util.ArrayList;
 import java.util.Date;

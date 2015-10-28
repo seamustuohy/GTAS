@@ -2,8 +2,10 @@ package gov.gtas.vo;
 
 import java.util.Date;
 
-public class BaseVo  {
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
+public class BaseVo  {
 	protected Long id; 
     private Date createdAt;  
     private String createdBy;  
@@ -40,4 +42,9 @@ public class BaseVo  {
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
 	}
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
 }

@@ -47,7 +47,6 @@ import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.vo.PnrVo;
 import gov.gtas.vo.passenger.AddressVo;
 import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
@@ -55,6 +54,7 @@ import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FrequentFlyerVo;
 import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.PnrVo;
 
 
 public final class PnrGovParser extends EdifactParser<PnrVo> {
@@ -118,7 +118,9 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         agencyVo.setLocation(org.getLocationCode());
         agencyVo.setIdentifier(org.getTravelAgentIdentifier());
         agencyVo.setCountry(org.getOriginatorCountryCode());
-        parsedMessage.getAgencies().add(agencyVo);
+        if (agencyVo.isValid()) {
+            parsedMessage.getAgencies().add(agencyVo);
+        }
 
         for (;;) {
             ADD add = getConditionalSegment(ADD.class);
@@ -126,10 +128,14 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                 break;
             }
             AddressVo address = PnrUtils.createAddress(add);
-            parsedMessage.getAddresses().add(address);
+            if (address.isValid()) {
+                parsedMessage.getAddresses().add(address);
+            }
             if (address.getPhoneNumber() != null) {
                 PhoneVo p = PnrUtils.createPhone(address.getPhoneNumber());
-                parsedMessage.getPhoneNumbers().add(p);
+                if (p.isValid()) {
+                    parsedMessage.getPhoneNumbers().add(p);
+                }
             }
         }
 
@@ -171,7 +177,9 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             FrequentFlierDetails ffdetails = fti.getFrequentFlierInfo().get(0);
             ffvo.setCarrier(ffdetails.getAirlineCode());
             ffvo.setNumber(ffdetails.getFreqTravelerNumber());
-            parsedMessage.getFrequentFlyerDetails().add(ffvo);
+            if (ffvo.isValid()) {
+                parsedMessage.getFrequentFlyerDetails().add(ffvo);
+            }
         }
         
         for (;;) {
@@ -294,7 +302,9 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         }
 
         for (CreditCardVo cc : newCreditCards) {
-            parsedMessage.addCreditCard(cc);
+            if (cc.isValid()) {
+                parsedMessage.getCreditCards().add(cc);
+            }
         }
         
         ADD add = getConditionalSegment(ADD.class);

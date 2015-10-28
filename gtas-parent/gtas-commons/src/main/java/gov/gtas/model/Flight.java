@@ -56,12 +56,12 @@ public class Flight extends BaseEntityAudit {
     private Date flightDate;
     
     /** calculated field */
-    @Column(name = "etd_date", nullable = false)
+    @Column(name = "etd_date")
     @Temporal(TemporalType.DATE)
     private Date etdDate;
     
     /** calculated field */
-    @Column(name = "eta_date", nullable = false)
+    @Column(name = "eta_date")
     @Temporal(TemporalType.DATE)
     private Date etaDate;
 

@@ -1,12 +1,11 @@
 package gov.gtas.vo.passenger;
 
-import gov.gtas.validators.Validatable;
-
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class PhoneVo implements Validatable{
+import gov.gtas.validators.Validatable;
+import gov.gtas.vo.BaseVo;
+
+public class PhoneVo extends BaseVo implements Validatable {
     private String number;
     private String city;
     
@@ -22,12 +21,6 @@ public class PhoneVo implements Validatable{
     public void setCity(String city) {
         this.city = city;
     }
-    
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-
     @Override
 	public boolean isValid() {
 		return StringUtils.isNotBlank(this.number);

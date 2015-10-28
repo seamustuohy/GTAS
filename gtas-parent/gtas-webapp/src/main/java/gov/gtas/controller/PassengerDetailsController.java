@@ -28,9 +28,9 @@ import gov.gtas.vo.passenger.EmailVo;
 import gov.gtas.vo.passenger.FrequentFlyerVo;
 import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.PnrVo;
 import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FlightHistoryVo;
-import gov.gtas.vo.PnrVo;
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
@@ -223,7 +223,7 @@ public class PassengerDetailsController {
 				CreditCard cc = (CreditCard) it1.next();
 				CreditCardVo cVo = new CreditCardVo();
 				copyModelToVo(cc, cVo);
-				target.addCreditCard(cVo);
+				target.getCreditCards().add(cVo);
 			}
 		}
 		if (source.getFrequentFlyers() != null

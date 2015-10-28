@@ -1,9 +1,11 @@
 package gov.gtas.vo.passenger;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.StringUtils;
 
-public class ReportingPartyVo {
+import gov.gtas.validators.Validatable;
+import gov.gtas.vo.BaseVo;
+
+public class ReportingPartyVo extends BaseVo implements Validatable {
     private String partyName;
     private String telephone;
     private String fax;
@@ -26,9 +28,8 @@ public class ReportingPartyVo {
     public void setFax(String fax) {
         this.fax = fax;
     }
-    
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+    public boolean isValid() {
+        return StringUtils.isNotBlank(this.partyName);
     }    
 }

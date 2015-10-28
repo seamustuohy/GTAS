@@ -1,20 +1,17 @@
 package gov.gtas.vo.passenger;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.validators.Validatable;
+import gov.gtas.vo.BaseVo;
 
-public class AgencyVo implements Validatable {
+public class AgencyVo extends BaseVo implements Validatable {
 	private String name;
     private String location;
 	private String identifier;
 	private String country;
     private String phone;
 	
-	public AgencyVo() { }
-
 	public String getName() {
         return name;
     }
@@ -45,11 +42,6 @@ public class AgencyVo implements Validatable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
-    
 	@Override
 	public boolean isValid() {
 		return StringUtils.isNotBlank(this.name);
