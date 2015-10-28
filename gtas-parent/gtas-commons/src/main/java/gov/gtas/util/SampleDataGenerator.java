@@ -24,29 +24,23 @@ public class SampleDataGenerator {
 				EntityEnum.PASSENGER.getEntityName().toUpperCase());
 		ret.addWatchlistItem(new WatchlistItemSpec(null, WatchlistEditEnum.C
 				.getOperationName(), new WatchlistTerm[] {
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.FIRST_NAME
+				new WatchlistTerm(PassengerMapping.FIRST_NAME
 						.getFieldName(), PassengerMapping.FIRST_NAME
 						.getFieldType(), "John"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.LAST_NAME
+				new WatchlistTerm(PassengerMapping.LAST_NAME
 						.getFieldName(), PassengerMapping.LAST_NAME
 						.getFieldType(), "Jones"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.DOB.getFieldName(),
+				new WatchlistTerm(PassengerMapping.DOB.getFieldName(),
 						PassengerMapping.DOB.getFieldType(), "1747-07-06") }));
 		ret.addWatchlistItem(new WatchlistItemSpec(32L, WatchlistEditEnum.U
 				.getOperationName(), new WatchlistTerm[] {
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.FIRST_NAME
+				new WatchlistTerm(PassengerMapping.FIRST_NAME
 						.getFieldName(), PassengerMapping.FIRST_NAME
 						.getFieldType(), "Julius"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.LAST_NAME
+				new WatchlistTerm(PassengerMapping.LAST_NAME
 						.getFieldName(), PassengerMapping.LAST_NAME
 						.getFieldType(), "Seizure"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.DOB.getFieldName(),
+				new WatchlistTerm(PassengerMapping.DOB.getFieldName(),
 						PassengerMapping.DOB.getFieldType(), "1966-09-13") }));
 		ret.addWatchlistItem(new WatchlistItemSpec(25L, WatchlistEditEnum.D
 				.getOperationName(), null));
@@ -57,29 +51,23 @@ public class SampleDataGenerator {
 				EntityEnum.PASSENGER.getEntityName().toUpperCase());
 		ret.addWatchlistItem(new WatchlistItemSpec(null, WatchlistEditEnum.C
 				.getOperationName(), new WatchlistTerm[] {
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.FIRST_NAME
+				new WatchlistTerm(PassengerMapping.FIRST_NAME
 						.getFieldName(), PassengerMapping.FIRST_NAME
 						.getFieldType(), "John"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.LAST_NAME
+				new WatchlistTerm(PassengerMapping.LAST_NAME
 						.getFieldName(), PassengerMapping.LAST_NAME
 						.getFieldType(), "Jones"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.DOB.getFieldName(),
+				new WatchlistTerm(PassengerMapping.DOB.getFieldName(),
 						PassengerMapping.DOB.getFieldType(), "1747-07-06") }));
 		ret.addWatchlistItem(new WatchlistItemSpec(null, WatchlistEditEnum.C
 				.getOperationName(), new WatchlistTerm[] {
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.FIRST_NAME
+				new WatchlistTerm(PassengerMapping.FIRST_NAME
 						.getFieldName(), PassengerMapping.FIRST_NAME
 						.getFieldType(), "Julius"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.LAST_NAME
+				new WatchlistTerm(PassengerMapping.LAST_NAME
 						.getFieldName(), PassengerMapping.LAST_NAME
 						.getFieldType(), "Seizure"),
-				new WatchlistTerm(EntityEnum.PASSENGER.getEntityName()
-						.toUpperCase(), PassengerMapping.DOB.getFieldName(),
+				new WatchlistTerm(PassengerMapping.DOB.getFieldName(),
 						PassengerMapping.DOB.getFieldType(), "1966-09-13") }));
 		return ret;
 	}

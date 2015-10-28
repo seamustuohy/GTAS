@@ -17,33 +17,18 @@ public class WatchlistTerm implements Serializable{
 	 */
 	private static final long serialVersionUID = -1079730850782449251L;
 
-	 private String entity;
      private String field;
      private String type;
      private String value;
      
      public WatchlistTerm(){   	 
      }
-     public WatchlistTerm(String entity, String field, String type, String val){
-    	 this.entity = entity;
+     public WatchlistTerm(String field, String type, String val){
     	 this.field = field;
     	 this.type = type;
     	 this.value = val;
      }
       	
-	/**
-	 * @return the entity
-	 */
-	public String getEntity() {
-		return entity;
-	}
-	/**
-	 * @param entity the entity to set
-	 */
-	public void setEntity(String entity) {
-		this.entity = entity;
-	}
-
 	/**
 	 * @return the field
 	 */

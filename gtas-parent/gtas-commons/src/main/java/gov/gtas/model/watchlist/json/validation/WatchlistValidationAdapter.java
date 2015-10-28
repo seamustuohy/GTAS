@@ -67,7 +67,7 @@ public class WatchlistValidationAdapter {
 				wlObj.setCondition(ConditionEnum.AND.toString());
 				List<QueryEntity> terms = new LinkedList<QueryEntity>();
 				for (WatchlistTerm trm : itm.getTerms()) {
-					QueryTerm t = new QueryTerm(trm.getEntity(), trm.getField(),
+					QueryTerm t = new QueryTerm(wljson.getEntity(), trm.getField(),
 							trm.getType(), CriteriaOperatorEnum.EQUAL.toString(),
 							new String[] { trm.getValue() });
 					terms.add(t);
