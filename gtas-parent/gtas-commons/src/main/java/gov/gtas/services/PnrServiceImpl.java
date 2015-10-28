@@ -15,10 +15,13 @@ import org.springframework.util.CollectionUtils;
 import gov.gtas.model.Address;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Email;
+import gov.gtas.model.FlightLeg;
 import gov.gtas.model.FrequentFlyer;
+import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.repository.PnrRepository;
+import gov.gtas.vo.passenger.FlightLegVo;
 
 @Service
 public class PnrServiceImpl implements PnrService {
@@ -106,7 +109,7 @@ public class PnrServiceImpl implements PnrService {
 			while(it.hasNext()){
 				Address a= (Address)it.next();
 				
-				//TODO equals contract is not working for address.work around/compare mannually
+				//TODO equals contract is not working for address.work around/compare manually
 				Address chkAddress = getExistingAddress(a,target.getAddresses());
 				if(chkAddress == null){
 					target.addAddress(a);
@@ -151,6 +154,27 @@ public class PnrServiceImpl implements PnrService {
 				if(!target.getPhones().contains(p)){
 					target.addPhone(p);
 				}
+			}
+		}
+		if(source.getFlightLegs() != null && source.getFlightLegs().size() > 0){
+			List<FlightLeg> _tempFL = source.getFlightLegs();
+			for(FlightLeg fl : _tempFL){
+				
+				if(!target.getFlightLegs().contains(fl)){
+					target.getFlightLegs().add(fl);
+				}
+				
+			}
+		}
+		
+		if(source.getPassengers() != null && source.getPassengers().size() > 0){
+			Iterator it6 = source.getPassengers().iterator();
+			while(it6.hasNext()){
+				Passenger passenger = (Passenger)it6.next();
+				if(!target.getPassengers().contains(passenger)){
+					target.addPassenger(passenger);
+				}
+				
 			}
 		}
 		

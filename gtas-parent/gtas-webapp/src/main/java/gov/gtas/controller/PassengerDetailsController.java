@@ -30,6 +30,7 @@ import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
 import gov.gtas.vo.passenger.PnrVo;
 import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.passenger.FlightLegVo;
 import gov.gtas.vo.passenger.FlightHistoryVo;
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
@@ -37,6 +38,7 @@ import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Email;
 import gov.gtas.model.Flight;
+import gov.gtas.model.FlightLeg;
 import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
@@ -170,6 +172,8 @@ public class PassengerDetailsController {
 	public PnrVo mapPnrToPnrVo(Pnr source) {
 		PnrVo target = new PnrVo();
 
+		if(source.getRecordLocator() == null || source.getRecordLocator().isEmpty()){target.setPnrRecordExists(false); return target;}
+		target.setPnrRecordExists(true);
 		target.setRecordLocator(source.getRecordLocator());
 		target.setBagCount(source.getBagCount());
 		target.setDateBooked(source.getDateBooked());
@@ -256,7 +260,38 @@ public class PassengerDetailsController {
 				target.getPhoneNumbers().add(pVo);
 			}
 		}
+		
+		if(source.getFlightLegs() != null && source.getFlightLegs().size() > 0){
+			List<FlightLeg> _tempFL = source.getFlightLegs();
+			for(FlightLeg fl : _tempFL){
+				FlightLegVo flVo = new FlightLegVo();
+				flVo.setLegNumber(fl.getLegNumber().toString());
+				flVo.setFlightNumber(fl.getFlight().getFlightNumber());
+				flVo.setOriginAirport(fl.getFlight().getOrigin());
+				flVo.setDestinationAirport(fl.getFlight().getDestination());
+				flVo.setFlightDate(fl.getFlight().getFlightDate().toString());
+				flVo.setEtd(fl.getFlight().getEtd().toString());
+				target.getFlightLegVo().add(flVo);
+			}
+		}
+		
+		if(source.getPassengers() != null && source.getPassengers().size() > 0){
+			Iterator it4 = source.getPassengers().iterator();
+			while (it4.hasNext()) {
+				Passenger p = (Passenger) it4.next();
+				PassengerVo pVo = new PassengerVo();
+				pVo.setLastName(p.getLastName());
+				pVo.setFirstName(p.getFirstName());
+				pVo.setMiddleName(p.getMiddleName());
+				
+				target.getPassengers().add(pVo);
 
+			}
+		}
+		
+		
+		
+		
 		return target;
 	}
 
