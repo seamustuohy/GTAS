@@ -26,7 +26,7 @@ public class WatchlistRuleCreationUtil {
 		ruleOutput.append("rule \"").append(title).append(":%d\"")
 				.append(NEW_LINE).append("when\n");
 		for (WatchlistTerm wlterm : wlData) {
-			QueryTerm trm = new QueryTerm(wlterm.getEntity(),
+			QueryTerm trm = new QueryTerm(entity.getEntityName(),
 					wlterm.getField(), wlterm.getType(),
 					CriteriaOperatorEnum.EQUAL.toString(), new String[]{wlterm.getValue()});
 			ruleConditionBuilder.addRuleCondition(trm);

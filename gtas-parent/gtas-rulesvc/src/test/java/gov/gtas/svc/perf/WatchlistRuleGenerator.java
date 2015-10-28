@@ -52,20 +52,16 @@ public class WatchlistRuleGenerator {
 		switch (entity) {
 		case PASSENGER:
 			terms = new WatchlistTerm[3];
-			terms[0] = new WatchlistTerm(entity.getEntityName(),
-					PassengerMapping.FIRST_NAME.getFieldName(),
+			terms[0] = new WatchlistTerm(PassengerMapping.FIRST_NAME.getFieldName(),
 					PassengerMapping.FIRST_NAME.getFieldType(), data[0]);
-			terms[1] = new WatchlistTerm(entity.getEntityName(),
-					PassengerMapping.LAST_NAME.getFieldName(),
+			terms[1] = new WatchlistTerm(PassengerMapping.LAST_NAME.getFieldName(),
 					PassengerMapping.LAST_NAME.getFieldType(), data[1]);
-			terms[2] = new WatchlistTerm(entity.getEntityName(),
-					PassengerMapping.DOB.getFieldName(),
+			terms[2] = new WatchlistTerm(PassengerMapping.DOB.getFieldName(),
 					PassengerMapping.DOB.getFieldType(), data[2]);
 			break;
 		case DOCUMENT:
 			terms = new WatchlistTerm[1];
-			terms[0] = new WatchlistTerm(entity.getEntityName(),
-					DocumentMapping.DOCUMENT_NUMBER.getFieldName(),
+			terms[0] = new WatchlistTerm(DocumentMapping.DOCUMENT_NUMBER.getFieldName(),
 					DocumentMapping.DOCUMENT_NUMBER.getFieldType(), data[3]);
 		default:
 			break;
