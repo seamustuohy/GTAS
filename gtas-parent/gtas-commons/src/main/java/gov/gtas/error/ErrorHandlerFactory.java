@@ -78,4 +78,9 @@ public class ErrorHandlerFactory {
 	public static ErrorDetailInfo createErrorDetails(Exception exception) {
 		return ErrorHandlerFactory.errorHandler.processError(exception);
 	}
+	
+	public static void createAndThrowException(final String errorCode,
+			final Object... args){
+		throw ErrorHandlerFactory.errorHandler.createException(errorCode, args);
+	}
 }
