@@ -370,6 +370,14 @@ public class RuleConditionBuilderTest {
 				CriteriaOperatorEnum.EQUAL, "DBY", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
 		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
+				FlightMapping.ETA,
+				CriteriaOperatorEnum.EQUAL, "2015-01-01", TypeEnum.DATE);
+		testTarget.addRuleCondition(cond);
+		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
+				FlightMapping.ETD,
+				CriteriaOperatorEnum.EQUAL, "2015-01-01", TypeEnum.DATE);
+		testTarget.addRuleCondition(cond);
+		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
 				FlightMapping.FLIGHT_NUMBER,
 				CriteriaOperatorEnum.EQUAL, "2231", TypeEnum.INTEGER);
 		testTarget.addRuleCondition(cond);
@@ -382,7 +390,6 @@ public class RuleConditionBuilderTest {
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		System.out.println(result.toString());
 		assertEquals(
 				"$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 		            +DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
@@ -393,6 +400,8 @@ public class RuleConditionBuilderTest {
 					+"id == $d.passenger.id)\n"
 
 		        + "$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" == \"DBY\", "
+		           +FlightMapping.ETA.getFieldName()+" == \"01-Jan-2015\", "
+		           +FlightMapping.ETD.getFieldName()+" == \"01-Jan-2015\", "
 		           +FlightMapping.FLIGHT_NUMBER.getFieldName()+" == 2231)\n"
 		        +"Passenger(id == $p.id) from $f.passengers",
 		result.toString().trim());
