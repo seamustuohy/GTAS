@@ -3,9 +3,7 @@ package gov.gtas.services;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -20,14 +18,14 @@ import gov.gtas.model.EdifactMessage;
 import gov.gtas.model.FlightLeg;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.parsers.edifact.EdifactParser;
-import gov.gtas.vo.MessageVo;
-import gov.gtas.vo.ApisMessageVo;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.util.LobUtils;
+import gov.gtas.vo.ApisMessageVo;
+import gov.gtas.vo.MessageVo;
 
 @Service
 public class ApisMessageService implements MessageService {
@@ -42,26 +40,29 @@ public class ApisMessageService implements MessageService {
     private ApisMessage apisMessage;
     private String filePath;
 
-    public List<String> preprocess(String filePath) {
+    @Override
+    public void processMessage(String filePath) {
         this.filePath = filePath;
         byte[] raw = null;
         try {
             raw = FileUtils.readSmallFile(filePath);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ArrayList<>();
         }
         
         String tmp = new String(raw, StandardCharsets.US_ASCII);        
         String message = ParseUtils.stripStxEtxHeaderAndFooter(tmp);
-        return Arrays.asList(message);
+        MessageVo rawMessage = parse(message);
+        if (rawMessage != null) {
+            load(rawMessage);
+        }
     }
     
-    public MessageVo parse(String message) {
-        this.apisMessage = new ApisMessage();
-        this.apisMessage.setCreateDate(new Date());
-        this.apisMessage.setStatus(MessageStatus.RECEIVED);
-        this.apisMessage.setFilePath(filePath);
+    private MessageVo parse(String message) {
+        apisMessage = new ApisMessage();
+        apisMessage.setCreateDate(new Date());
+        apisMessage.setStatus(MessageStatus.RECEIVED);
+        apisMessage.setFilePath(filePath);
         
         MessageVo vo = null;
         try {            
@@ -74,16 +75,16 @@ public class ApisMessageService implements MessageService {
     
             vo = parser.parse(message);
             loaderRepo.checkHashCode(vo.getHashCode());
-            this.apisMessage.setRaw(LobUtils.createClob(vo.getRaw()));
+            apisMessage.setRaw(LobUtils.createClob(vo.getRaw()));
 
-            this.apisMessage.setStatus(MessageStatus.PARSED);
-            this.apisMessage.setHashCode(vo.getHashCode());
+            apisMessage.setStatus(MessageStatus.PARSED);
+            apisMessage.setHashCode(vo.getHashCode());
             EdifactMessage em = new EdifactMessage();
             em.setTransmissionDate(vo.getTransmissionDate());
             em.setTransmissionSource(vo.getTransmissionSource());
             em.setMessageType(vo.getMessageType());
             em.setVersion(vo.getVersion());
-            this.apisMessage.setEdifactMessage(em);
+            apisMessage.setEdifactMessage(em);
 
         } catch (Exception e) {
             handleException(e, MessageStatus.FAILED_PARSING);
@@ -95,13 +96,13 @@ public class ApisMessageService implements MessageService {
         return vo;
     }
 
-    public void load(MessageVo messageVo) {
+    private void load(MessageVo messageVo) {
         try {
             ApisMessageVo m = (ApisMessageVo)messageVo;
-            loaderRepo.processReportingParties(this.apisMessage, m.getReportingParties());
+            loaderRepo.processReportingParties(apisMessage, m.getReportingParties());
             loaderRepo.processFlightsAndPassengers(m.getFlights(), m.getPassengers(), 
-                    this.apisMessage.getFlights(), this.apisMessage.getPassengers(), new ArrayList<FlightLeg>());
-            this.apisMessage.setStatus(MessageStatus.LOADED);
+                    apisMessage.getFlights(), apisMessage.getPassengers(), new ArrayList<FlightLeg>());
+            apisMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
             handleException(e, MessageStatus.FAILED_LOADING);
@@ -111,10 +112,10 @@ public class ApisMessageService implements MessageService {
     }  
 
     private void handleException(Exception e, MessageStatus status) {
-        this.apisMessage.setFlights(null);
-        this.apisMessage.setStatus(status);
+        apisMessage.setFlights(null);
+        apisMessage.setStatus(status);
         String stacktrace = ErrorUtils.getStacktrace(e);
-        this.apisMessage.setError(stacktrace);
+        apisMessage.setError(stacktrace);
         logger.error(stacktrace);
     }
 

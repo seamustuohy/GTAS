@@ -1,13 +1,11 @@
 package gov.gtas.services;
 
 import java.io.File;
-import java.util.List;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.vo.MessageVo;
 
 public class MessageLoader {
 	public static void processSingleFile(MessageService svc, File f) {
@@ -18,35 +16,11 @@ public class MessageLoader {
 		}
 
 		System.out.println("processing file " + filePath);
-
-		List<String> messages = null;
-		try {
-			messages = svc.preprocess(filePath);
-		} catch (Exception e) {
-			System.out.println("error preprocessing " + filePath);
-			return;
-		}
-
-		for (String msg : messages) {
-			MessageVo m = svc.parse(msg);
-			if (m == null) {
-				System.out.println("error parsing " + filePath);
-				return;
-			}
-
-			svc.load(m);
-		}
+        svc.processMessage(filePath);
 	}
 
-	/**
-	 * For APIS messages, Type â€œBâ€� messages are no longer limited to a
-	 * length of 3840 bytes. SITA and ARInc now support Type â€œBâ€� message
-	 * lengths up to 64,000 bytes.
-	 * 
-	 * TODO: what about pnr?
-	 */
 	public static boolean exceedsMaxSize(File f) {
-		final int MAX_SIZE = 64000;
+		final int MAX_SIZE = 64000;  // bytes
 		double numBytes = f.length();
 		return numBytes > MAX_SIZE;
 	}
@@ -78,6 +52,7 @@ public class MessageLoader {
 				System.out.println("************************************************************");
 				exitStatus = -1;
 			}
+			
             /*
              * shutdown all the Hazelcast non-daemon threads.
              */

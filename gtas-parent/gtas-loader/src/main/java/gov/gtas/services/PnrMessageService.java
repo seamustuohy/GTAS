@@ -2,7 +2,6 @@ package gov.gtas.services;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,14 +18,14 @@ import gov.gtas.model.FlightLeg;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Pnr;
 import gov.gtas.parsers.edifact.EdifactParser;
-import gov.gtas.vo.MessageVo;
-import gov.gtas.vo.passenger.PnrVo;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrUtils;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.PnrRepository;
 import gov.gtas.util.LobUtils;
+import gov.gtas.vo.MessageVo;
+import gov.gtas.vo.passenger.PnrVo;
 
 @Service
 public class PnrMessageService implements MessageService {
@@ -42,45 +41,51 @@ public class PnrMessageService implements MessageService {
     private PnrRepository msgDao;
     
     private Pnr pnr;
-    private EdifactParser<PnrVo> parser;
     private String filePath;
 
-    public List<String> preprocess(String filePath) {
+    @Override
+    public void processMessage(String filePath) {
         this.filePath = filePath;
         byte[] raw = null;
         try {
             raw = FileUtils.readSmallFile(filePath);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ArrayList<>();
         }
         
         String tmp = new String(raw, StandardCharsets.US_ASCII);        
         String message = ParseUtils.stripStxEtxHeaderAndFooter(tmp);
-        return PnrUtils.getPnrs(message);
+        List<String> pnrMessages =  PnrUtils.getPnrs(message);
+        
+        for (String rawMessage : pnrMessages) {
+            MessageVo parsedMessage = parse(rawMessage);
+            if (parsedMessage != null) {
+                load(parsedMessage);
+            }
+        }
     }
     
-    public MessageVo parse(String message) {
-        this.pnr = new Pnr();
-        this.pnr.setCreateDate(new Date());
-        this.pnr.setStatus(MessageStatus.RECEIVED);
-        this.pnr.setFilePath(this.filePath);
+    private MessageVo parse(String message) {
+        pnr = new Pnr();
+        pnr.setCreateDate(new Date());
+        pnr.setStatus(MessageStatus.RECEIVED);
+        pnr.setFilePath(filePath);
         
         MessageVo vo = null;
         try {
-            parser = new PnrGovParser();
+            EdifactParser<PnrVo> parser = new PnrGovParser();
             vo = parser.parse(message);
             loaderRepo.checkHashCode(vo.getHashCode());
-            this.pnr.setRaw(LobUtils.createClob(vo.getRaw()));
+            pnr.setRaw(LobUtils.createClob(vo.getRaw()));
 
-            this.pnr.setStatus(MessageStatus.PARSED);
-            this.pnr.setHashCode(vo.getHashCode());            
+            pnr.setStatus(MessageStatus.PARSED);
+            pnr.setHashCode(vo.getHashCode());            
             EdifactMessage em = new EdifactMessage();
             em.setTransmissionDate(vo.getTransmissionDate());
             em.setTransmissionSource(vo.getTransmissionSource());
             em.setMessageType(vo.getMessageType());
             em.setVersion(vo.getVersion());
-            this.pnr.setEdifactMessage(em);
+            pnr.setEdifactMessage(em);
             
         } catch (Exception e) {
             handleException(e, MessageStatus.FAILED_PARSING);
@@ -92,18 +97,18 @@ public class PnrMessageService implements MessageService {
         return vo;
     }
     
-    public void load(MessageVo messageVo) {
+    private void load(MessageVo messageVo) {
         try {
             PnrVo vo = (PnrVo)messageVo;
             // TODO: fix this, combine methods
-            utils.convertPnrVo(this.pnr, vo);
-            loaderRepo.processPnr(this.pnr, vo);
+            utils.convertPnrVo(pnr, vo);
+            loaderRepo.processPnr(pnr, vo);
             loaderRepo.processFlightsAndPassengers(vo.getFlights(), vo.getPassengers(), 
-                    this.pnr.getFlights(), this.pnr.getPassengers(), pnr.getFlightLegs());
+                    pnr.getFlights(), pnr.getPassengers(), pnr.getFlightLegs());
             for (FlightLeg leg : pnr.getFlightLegs()) {
-                leg.setPnr(this.pnr);
+                leg.setPnr(pnr);
             }
-            this.pnr.setStatus(MessageStatus.LOADED);
+            pnr.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
             handleException(e, MessageStatus.FAILED_LOADING);
