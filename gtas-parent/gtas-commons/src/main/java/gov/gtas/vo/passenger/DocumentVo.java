@@ -7,9 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import gov.gtas.validators.Validatable;
-import gov.gtas.vo.BaseVo;
 
-public class DocumentVo extends BaseVo implements Validatable {
+public class DocumentVo implements Validatable {
     private String documentType;
     private String documentNumber;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)

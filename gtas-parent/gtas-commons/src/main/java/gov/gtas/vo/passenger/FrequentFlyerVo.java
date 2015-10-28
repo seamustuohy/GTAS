@@ -3,9 +3,8 @@ package gov.gtas.vo.passenger;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.validators.Validatable;
-import gov.gtas.vo.BaseVo;
 
-public class FrequentFlyerVo extends BaseVo implements Validatable {
+public class FrequentFlyerVo implements Validatable {
     private String carrier;
     private String number;
 

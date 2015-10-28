@@ -1,13 +1,12 @@
 package gov.gtas.vo.passenger;
 
-import gov.gtas.validators.Validatable;
-import gov.gtas.vo.BaseVo;
-
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class CreditCardVo extends BaseVo implements Validatable {
+import gov.gtas.validators.Validatable;
+
+public class CreditCardVo implements Validatable {
     private String cardType;
     private String number;
     private Date expiration;

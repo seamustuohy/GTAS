@@ -3,9 +3,8 @@ package gov.gtas.vo.passenger;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.validators.Validatable;
-import gov.gtas.vo.BaseVo;
 
-public class AddressVo extends BaseVo implements Validatable {
+public class AddressVo implements Validatable {
 	private String type;
 	private String line1;
 	private String line2;
