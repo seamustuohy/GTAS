@@ -1,4 +1,6 @@
 {
+  "main": [],
+  "ignore": [],
   "name": "gtas",
   "version": "1.0",
   "description": "GTAS Webapp",
