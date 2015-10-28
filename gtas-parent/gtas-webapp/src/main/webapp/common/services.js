@@ -507,12 +507,11 @@
 
                     return (request.then(handleSuccess, handleError));
                 },
-                deleteItem: function (listTypeName, entity, id, terms) {
+                deleteItems: function (listTypeName, watchlistItems) {
                     var request,
-                        url = baseUrl + 'adelorie',
-                        action = !id ? 'Create' : !terms ? 'Delete' : 'Update';
+                        url = baseUrl + listTypeName;
 
-                    if (!listTypeName || !entity || !id) {
+                    if (!listTypeName || !watchlistItems || !watchlistItems.length) {
                         return false;
                     }
 
@@ -522,12 +521,8 @@
                         data: {
                             "@class": "gov.gtas.model.watchlist.json.WatchlistSpec",
                             "name": listTypeName,
-                            "entity": entity,
-                            "watchlistItems": [{
-                                "id": id,
-                                "action": action,
-                                "terms": null
-                            }]
+                            "entity": listTypeName,
+                            "watchlistItems": watchlistItems
                         }
                     });
 

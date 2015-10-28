@@ -49,13 +49,13 @@
                     field: "documentType",
                     name: "documentType",
                     displayName: "Type",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                     "type": "string"
                 }, {
                     field: "documentNumber",
                     name: "documentNumber",
                     displayName: "Number",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                     "type": "string"
                 }]
             },
@@ -66,19 +66,19 @@
                     field: "firstName",
                     name: "firstName",
                     displayName: "First Name",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                     "type": "string"
                 }, {
                     field: "lastName",
                     name: "lastName",
                     displayName: "Last Name",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                     "type": "string"
                 }, {
                     field: "dob",
                     name: "dob",
                     displayName: "DOB",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD | date:'yyyy-MM-dd'}}</md-button>",
+                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD | date:'yyyy-MM-dd'}}</md-button>",
                     "type": "date"
                 }]
             }
@@ -144,7 +144,7 @@
         $scope.tabs = tabs;
         $scope.activeTab = tabs[0].title;
         $scope.icon = tabs[0].icon;
-        $scope.rowSelected = false;
+        $scope.rowSelected = null;
 
         $scope.Add = function () {
             var mode = $scope.activeTab;
@@ -190,7 +190,7 @@
                         $scope.watchlistGrid.data.unshift($scope[$scope.activeTab]);
                     }
                     $scope.gridApi.selection.clearSelectedRows();
-                    $scope.rowSelected = false;
+                    $scope.rowSelected = null;
                     $mdSidenav('save').close();
                 });
             }
@@ -199,19 +199,35 @@
         $scope.editRecord = function (row) {
             $scope.gridApi.selection.clearSelectedRows();
             $scope.gridApi.selection.selectRow(row);
-            $scope[$scope.activeTab] = row.entity;
+            $scope[$scope.activeTab] = row;
             //broadcast save or update
-            $scope.rowSelected = true;
+            $scope.rowSelected = row;
             $mdSidenav('save').open();
         };
 
         $scope.removeRow = function () {
+            var rowIndexToDelete,
+                watchlistItems = [{id: $scope.rowSelected.id, action: 'Delete', terms: null}];
+
+            watchListService.deleteItems($scope.activeTab, watchlistItems).then(function () {
+                rowIndexToDelete = $scope.watchlistGrid.data.indexOf($scope.rowSelected);
+                $scope.watchlistGrid.data.splice(rowIndexToDelete, 1);
+                $scope.rowSelected = null;
+                $mdSidenav('save').close();
+            });
+        };
+
+        $scope.removeRows = function () {
             var selectedRowEntities = $scope.gridApi.selection.getSelectedRows(),
-                rowIndexToDelete;
-            $mdSidenav('save').close();
-            selectedRowEntities.forEach(function (rowEntity) {
-                rowIndexToDelete = $scope.watchlistGrid.data.indexOf(rowEntity);
-                watchListService.deleteItem($scope.activeTab, rowEntity, rowEntity.id).then(function () {
+                constructItem = function (rowEntity) {
+                    return {id: rowEntity.id, action: 'Delete', terms: null};
+                },
+                watchlistItems = selectedRowEntities.map(constructItem);
+
+            watchListService.deleteItems($scope.activeTab, watchlistItems).then(function () {
+                var rowIndexToDelete;
+                selectedRowEntities.forEach(function (rowEntity) {
+                    rowIndexToDelete = $scope.watchlistGrid.data.indexOf(rowEntity);
                     $scope.watchlistGrid.data.splice(rowIndexToDelete, 1);
                 });
             });

@@ -119,7 +119,7 @@
         <md-datepicker ng-if="activeTab == 'Passenger'" name="dob" ng-model="Passenger.dob"
                        md-placeholder="Date of Birth" required></md-datepicker>
         <div class="actions">
-            <md-button ng-if="$scope[$scope.activeTab].id !== null" class="md-raised md-warn pull-left" ng-click="removeRow()" ng-disabled="rowSelected !== true"><span
+            <md-button ng-if="$scope[$scope.activeTab].id !== null" class="md-raised md-warn pull-left" ng-click="removeRow()" ng-disabled="rowSelected === null"><span
                     class="glyphicon glyphicon-remove"></span> Remove
             </md-button>
             <md-button class="md-raised md-primary pull-right">
@@ -133,7 +133,7 @@
 </md-tabs>
 <div ui-grid="watchlistGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
 <div class="actions">
-    <md-button ng-click="removeRow()" ng-disabled="disableTrash" class="md-raised md-warn pull-left">
+    <md-button ng-click="removeRows()" ng-disabled="disableTrash" class="md-raised md-warn pull-left">
         <md-tooltip>Selected {{activeTab}}(s)</md-tooltip>
         <i class="glyphicon glyphicon-trash"></i><i class="glyphicon glyphicon-{{icon}}"></i>
     </md-button>
