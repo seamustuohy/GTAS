@@ -212,14 +212,12 @@ public class PnrVo extends MessageVo implements Validatable {
         this.phoneNumbers = phoneNumbers;
     }
 
-    public void addCreditCard(CreditCardVo vo) {
-        if (vo.isValid()) {
-            this.creditCards.add(vo);
-        }
-    }
-    
     public List<CreditCardVo> getCreditCards() {
         return creditCards;
+    }
+
+    public void setCreditCards(List<CreditCardVo> creditCards) {
+        this.creditCards = creditCards;
     }
 
     public List<FrequentFlyerVo> getFrequentFlyerDetails() {

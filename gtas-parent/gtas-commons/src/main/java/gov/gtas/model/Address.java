@@ -15,7 +15,7 @@ public class Address extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;
     public Address() { }
     
-	@Column(name = "line1")
+	@Column(name = "line1", nullable = false)
 	private String line1;
 	
 	@Column(name = "line2")
