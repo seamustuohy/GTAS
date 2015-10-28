@@ -39,6 +39,7 @@ public class RuleBuilderTestUtils {
 	public static final int PNR_PASSENGER_RULE_INDX=5;
 	public static final int ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX=6;
 	public static final int AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX=7;
+	public static final int FLIGHT_ETA_ETD_RULE_INDX=8;
 	
 	public static UdrRule createSimpleUdrRule(String userId, int indx) throws ParseException{
 		return createSimpleUdrRule(userId, indx, new Date(), null);
@@ -231,6 +232,19 @@ public class RuleBuilderTestUtils {
 				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
+			case FLIGHT_ETA_ETD_RULE_INDX:
+				cond = createQueryTerm(EntityEnum.FLIGHT,
+						FlightMapping.ETA,
+						CriteriaOperatorEnum.EQUAL, "2015-01-01", TypeEnum.DATE);				
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.FLIGHT,
+						FlightMapping.ETD,
+						CriteriaOperatorEnum.EQUAL, "2015-01-01", TypeEnum.DATE);				
+				ruleMinTerm.add(cond);
+				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule.setId(ENGINE_RULE_ID);
+				break;
+				
 		}
 		return engineRule;
 	}

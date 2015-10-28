@@ -1,5 +1,6 @@
 package gov.gtas.rule.builder;
 
+import static gov.gtas.rule.builder.RuleBuilderTestUtils.FLIGHT_ETA_ETD_RULE_INDX;
 import static gov.gtas.rule.builder.RuleBuilderTestUtils.UDR_RULE_TITLE;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -28,6 +29,20 @@ public class DrlRuleFileBuilderTest {
 	public void tearDown() throws Exception {
 	}
 
+	@Test
+	public void testEtaEtdCompilation() {
+		try{
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, FLIGHT_ETA_ETD_RULE_INDX);
+		testTarget.addRule(udrRule);
+		String result = testTarget.build();
+		System.out.println(result);
+		verifyDrl(result, FLIGHT_ETA_ETD_RULE_INDX);
+		testKnowledgeBaseTest(result);
+		}catch (Exception ex){
+			ex.printStackTrace();
+			fail("Not expecting exception.");
+		}
+	}
 	@Test
 	public void testSimpleRuleGenerationAndCompilation1() {
 		try{
