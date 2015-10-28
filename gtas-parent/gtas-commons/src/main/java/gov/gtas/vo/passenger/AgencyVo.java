@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.validators.Validatable;
 
-public class AgencyVo implements Validatable  {
+public class AgencyVo implements Validatable {
 	private String name;
     private String location;
 	private String identifier;
@@ -52,9 +52,6 @@ public class AgencyVo implements Validatable  {
     
 	@Override
 	public boolean isValid() {
-		if(StringUtils.isBlank(this.identifier) ){
-			return false;
-		}
-		return true;
+		return StringUtils.isNotBlank(this.name);
 	}
 }

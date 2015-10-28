@@ -39,9 +39,6 @@ public class CreditCardVo implements Validatable {
     
 	@Override
 	public boolean isValid() {
-		if (StringUtils.isBlank(this.number)) {
-			return false;
-		}
-		return true;
+		return StringUtils.isNotBlank(this.number);
 	}
 }

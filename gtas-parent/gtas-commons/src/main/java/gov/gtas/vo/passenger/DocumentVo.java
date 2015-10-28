@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class DocumentVo implements Validatable{
+public class DocumentVo implements Validatable {
     private String documentType;
     private String documentNumber;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)
@@ -50,15 +50,12 @@ public class DocumentVo implements Validatable{
     
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE); 
     }
+    
 	@Override
 	public boolean isValid() {
-		if(StringUtils.isBlank(this.documentNumber) || StringUtils.isBlank(this.documentType) 
-				|| StringUtils.isBlank(this.issuanceCountry) || this.expirationDate == null
-				|| this.issuanceDate == null){
-			return false;
-		}
-		return true;
+		return StringUtils.isNotBlank(this.documentNumber) 
+		       && StringUtils.isNotBlank(this.documentType);
 	}    
 }

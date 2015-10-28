@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import gov.gtas.validators.Validatable;
 
-public class EmailVo implements Validatable{
+public class EmailVo implements Validatable {
 
 	private String address;
 	private String domain;
@@ -30,10 +30,7 @@ public class EmailVo implements Validatable{
     
 	@Override
 	public boolean isValid() {
-		if(StringUtils.isBlank(this.address) ){
-			return false;
-		}
-		return true;
+		return StringUtils.isNotBlank(this.address);
 	}
 	
 }

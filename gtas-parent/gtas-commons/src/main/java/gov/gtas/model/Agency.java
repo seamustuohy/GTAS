@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -21,6 +22,7 @@ public class Agency extends BaseEntityAudit {
      * Company identification: could be an airline code or
      * the name of the agency.
      */
+    @Column(nullable = false)    
 	private String name;
 	
 	/** IATA airport/city code of the delivering system */
