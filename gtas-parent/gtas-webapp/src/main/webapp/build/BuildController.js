@@ -41,9 +41,15 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             }
         };
 
-    $scope.$watch('selectedMode', function() {
+    $scope.$watch('selectedMode', function () {
         $scope.updateGrid();
     });
+
+    $scope.copyRule = function () {
+        jqueryQueryBuilderService.copyRule($scope.ruleId).then(function (response) {
+            console.log(response);
+        });
+    };
 
     $scope.mode = mode;
     $scope.selectedMode = mode;
@@ -51,18 +57,10 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.prompt = {
         open: function (mode) {
             $scope.buttonMode = mode;
-            $mdSidenav(mode)
-                .open()
-                .then(function () {
-                    console.log("toggle sidenav is done");
-                });
+            $mdSidenav(mode).open();
         },
-        cancel: function (mode) {
-            $mdSidenav(mode)
-                .close()
-                .then(function () {
-                    console.log("toggle sidenav is done");
-                });
+        cancel: function () {
+            $mdSidenav($scope.mode).close();
         }
     };
 
@@ -283,9 +281,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.saving = false;
     $scope.save = {
         query: {
-            cancel: function () {
-                $scope.prompt.cancel('query');
-            },
             prompt: function () {
                 $scope.prompt.open('query');
             },
@@ -323,9 +318,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             }
         },
         rule: {
-            cancel: function () {
-                $scope.prompt.cancel('rule');
-            },
             prompt: function () {
                 $scope.prompt.open('rule');
             },

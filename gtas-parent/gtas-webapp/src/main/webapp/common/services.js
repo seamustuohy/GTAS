@@ -681,6 +681,7 @@
 
             // Return public API.
             return ({
+                copyRule: services.copyRule,
                 getList: services.getList,
                 loadRuleById: services.loadRuleById,
                 delete: services.delete,
