@@ -5,9 +5,6 @@ import gov.gtas.enumtype.HitTypeEnum;
 import java.io.Serializable;
 
 public class TargetDetailVo implements Serializable, Cloneable {
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = 2946626283174855377L;
 
 	private String title;

@@ -19,9 +19,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class QueryObject implements QueryEntity {
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = -1825443604051080662L;
 
 	private String condition;

@@ -5,9 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CompositeRuleServiceResult implements RuleServiceResult, Serializable {
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = 6373119898883595702L;
 	
 	private List<RuleHitDetail> resultList;

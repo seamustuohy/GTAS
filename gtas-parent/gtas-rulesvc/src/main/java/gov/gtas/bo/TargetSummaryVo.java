@@ -9,9 +9,6 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 public class TargetSummaryVo implements Serializable, Cloneable {
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = 2946626283174855377L;
 
 	private Long flightId;

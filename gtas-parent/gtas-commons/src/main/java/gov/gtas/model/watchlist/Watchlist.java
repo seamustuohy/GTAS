@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "WATCH_LIST",
+@Table(name = "watch_list",
             uniqueConstraints= {@UniqueConstraint(name = WL_UNIQUE_CONSTRAINT_NAME, columnNames={"WL_NAME"})})
 public class Watchlist extends BaseEntity {
     private static final long serialVersionUID = 345L;  

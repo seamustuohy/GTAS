@@ -11,10 +11,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  */
 public class WatchlistItemSpec implements Serializable{
-	
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = -10797308502449251L;
 
 	 private Long id;

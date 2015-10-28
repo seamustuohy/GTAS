@@ -9,9 +9,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
 public class CommonValidationException extends CommonServiceException {
-     /**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = 4913437813095082766L;
 
 	private Errors validationErrors;

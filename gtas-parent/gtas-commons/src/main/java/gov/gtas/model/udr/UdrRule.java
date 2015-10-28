@@ -32,11 +32,8 @@ import javax.persistence.Version;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-/**
- * Rule
- */
 @Entity
-@Table(name = "UDR_RULE",
+@Table(name = "udr_rule",
        uniqueConstraints= {@UniqueConstraint(name=UDR_UNIQUE_CONSTRAINT_NAME, columnNames={"AUTHOR","TITLE","DEL_ID"})})
 public class UdrRule extends BaseEntity {
 
@@ -52,7 +49,7 @@ public class UdrRule extends BaseEntity {
 	@Column(name = "DEL_FLAG", nullable = false, length = 1)
 	private YesNoEnum deleted;
 	
-    /*
+    /**
      * A transaction Id number in case this object has been deleted.
      * Otherwise, for non-deleted objects this field is 0L.
      */

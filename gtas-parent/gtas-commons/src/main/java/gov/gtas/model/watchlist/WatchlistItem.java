@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "WL_ITEM")
+@Table(name = "wl_item")
 public class WatchlistItem extends BaseEntity {
     private static final long serialVersionUID = 3593L;  
     

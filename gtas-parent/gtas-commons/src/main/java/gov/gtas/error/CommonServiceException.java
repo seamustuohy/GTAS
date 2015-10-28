@@ -5,15 +5,12 @@ package gov.gtas.error;
  *
  */
 public class CommonServiceException extends RuntimeException {
-
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = -4115507029260625072L;
-    /* The rule engine error code. */
+
+	/** The rule engine error code. */
 	private String errorCode;
 	
-	/* If set to true then this error is logged in the database. */
+	/** If set to true then this error is logged in the database. */
 	private boolean logable;
 	
 	public String getErrorCode() {
