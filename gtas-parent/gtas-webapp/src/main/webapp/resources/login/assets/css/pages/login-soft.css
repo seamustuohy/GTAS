@@ -4,7 +4,8 @@ Login page
 
 /* logo page */
 .login {
-  background-color: #666 !important;
+  background: url(/gtas/resources/img/login-bg.png) no-repeat center center fixed;
+  background-size: cover;
 }
 
 .login .logo {

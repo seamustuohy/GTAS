@@ -395,6 +395,8 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.qbGrid = gridOptionsLookupService.getGridOptions(mode);
     $scope.qbGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs(mode);
+    $scope.qbGrid.enableRowHeaderSelection = false;
+    $scope.qbGrid.enableSelectAll = false;
     $scope.qbGrid.exporterCsvFilename = mode + '.csv';
     $scope.qbGrid.exporterPdfHeader = {text: mode, style: 'headerStyle'};
     $scope.qbGrid.onRegisterApi = $scope.rowSelection;

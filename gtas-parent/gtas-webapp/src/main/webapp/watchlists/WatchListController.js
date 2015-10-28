@@ -20,13 +20,25 @@
                 //resets all models
                 m.Document = new model.Document();
                 m.Passenger = new model.Passenger();
+            },
+            isItTrashTime = function (rows) {
+                console.log(rows);
+//                $scope.disableTrash = $scope.gridApi.selection.selectedCount === 0;
+                $scope.disableTrash = $scope.gridApi.selection.getSelectedRows($scope.watchlistGrid).length === 0;
             };
 
         $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
 
+        $scope.watchlistGrid.onRegisterApi = function (gridApi) {
+            $scope.gridApi = gridApi;
+            gridApi.selection.on.rowSelectionChanged($scope, isItTrashTime);
+            gridApi.selection.on.rowSelectionChangedBatch($scope, isItTrashTime);
+//            $scope.$watch($scope.gridApi.selection.selectedCount, isItTrashTime);
+        };
+
         $scope.documentTypes = [
-            { id: "P", label: "PASSPORT" },
-            { id: "V", label: "VISA" }
+            {id: "P", label: "PASSPORT"},
+            {id: "V", label: "VISA"}
         ];
 
         watchlist.types = {
@@ -76,22 +88,30 @@
         $scope.watchlistGrid.enableSelectAll = true;
         $scope.watchlistGrid.multiSelect = true;
         $scope.watchlistGrid.columnDefs = watchlist.types.Document.columns;
+
+        $scope.updateGridIfData = function (listName) {
+            $scope.gridApi.selection.clearSelectedRows();
+            $scope.allSelected = false;
+            isItTrashTime();
+            $scope.icon = watchlist.types[listName].icon;
+            $scope.activeTab = listName;
+            $scope.watchlistGrid.columnDefs = watchlist.types[listName].columns;
+            $scope.watchlistGrid.exporterCsvFilename = 'watchlist-' + listName + '.csv';
+            $scope.watchlistGrid.data = $scope.data[listName];
+        };
+
         $scope.getListItemsFor = function (listName) {
             watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
                 var obj, data = [], items = response.data.result.watchlistItems;
-                $scope.activeTab = listName;
-                $scope.icon = watchlist.types[listName].icon;
-                $scope.watchlistGrid.columnDefs = watchlist.types[listName].columns;
-                $scope.watchlistGrid.exporterCsvFilename = 'watchlist-' + listName + '.csv';
                 if (items === undefined) {
                     $scope.watchlistGrid.data = [];
                     return false;
                 }
                 items.forEach(function (item) {
-                    obj = {id: item.id };
+                    obj = {id: item.id};
                     item.terms.forEach(function (term) {
                         if (term.type === 'date') {
-                            obj[term.field] =  new Date(term.value);
+                            obj[term.field] = new Date(term.value);
                         } else {
                             obj[term.field] = term.value;
                         }
@@ -99,7 +119,7 @@
                     data.push(obj);
                 });
                 $scope.data[listName] = data;
-                $scope.watchlistGrid.data = data;
+                $scope.updateGridIfData(listName);
             });
         };
 
@@ -110,15 +130,10 @@
         };
 
         $scope.updateGrid = function (listName) {
-//            $scope.template = listName;
             if ($scope.data[listName]) {
-                $scope.activeTab = listName;
-                $scope.watchlistGrid.columnDefs = watchlist.types[listName].columns;
-                $scope.watchlistGrid.exporterCsvFilename = 'watchlist-' + listName + '.csv';
-                $scope.watchlistGrid.data = $scope.data[listName];
+                $scope.updateGridIfData(listName);
                 return;
             }
-
             $scope.getListItemsFor(listName);
         };
 
@@ -190,33 +205,22 @@
             $mdSidenav('save').open();
         };
 
-        $scope.disableTrash = true;
-
-        var isItTrashTime = function () {
-            var rowSelectedCount = $scope.gridApi.selection.getSelectedGridRows().length;
-            $scope.disableTrash = rowSelectedCount === 0;
-        };
-
-        $scope.watchlistGrid.onRegisterApi = function (gridApi) {
-            $scope.gridApi = gridApi;
-            gridApi.selection.on.rowSelectionChanged($scope, isItTrashTime);
-        };
-
         $scope.removeRow = function () {
-            var entity = watchlist.types[$scope.activeTab].entity,
-                selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
-
+            var selectedRowEntities = $scope.gridApi.selection.getSelectedRows(),
+                rowIndexToDelete;
+            $mdSidenav('save').close();
             selectedRowEntities.forEach(function (rowEntity) {
-                var rowIndexToDelete = $scope.watchlistGrid.data.indexOf(rowEntity);
-                watchListService.deleteItem($scope.activeTab, entity, rowEntity.id).then(function () {
+                rowIndexToDelete = $scope.watchlistGrid.data.indexOf(rowEntity);
+                watchListService.deleteItem($scope.activeTab, rowEntity, rowEntity.id).then(function () {
                     $scope.watchlistGrid.data.splice(rowIndexToDelete, 1);
-                    $mdSidenav('save').close();
                 });
             });
         };
 
         $scope.updateWatchlistService = function () {
-            if ($scope.updating) { return false; }
+            if ($scope.updating) {
+                return false;
+            }
             $scope.updating = true;
             watchListService.compile().then(function () {
                 spinnerService.show('html5spinner');
