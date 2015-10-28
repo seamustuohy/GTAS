@@ -97,7 +97,7 @@ public class ApisDirectoryReader implements Runnable{
     }
     private void processNewFile(Path p,MessageService svc){
 
-    	MessageLoader.processSingleFile(svc, p.toFile());
+//    	MessageLoader.processSingleFile(svc, p.toFile());
     	System.out.println("*****************processing file"+p.toFile().getAbsolutePath());
     }
 }
