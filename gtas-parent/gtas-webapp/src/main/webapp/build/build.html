@@ -115,12 +115,6 @@
             <div id="builder"></div>
             <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)" ng-class="{'fade-out': alert.expired}">{{alert.msg}}</alert>
             <div class="actions">
-                <md-button href="javascript:function(){}();"
-                           ng-click="save.query.prompt()"
-                           ng-disabled="saving === true"
-                           class="md-raised md-primary">
-                    <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i>  Save As Query
-                </md-button>
                 <md-button href="#/query/flights"
                            title="Launch Flight Query Results in new window"
                            target="queryFlights" ng-click="executeQuery('flights')"
@@ -158,6 +152,12 @@
                            class="md-raised md-warn pull-right">
                     <i class="glyphicon glyphicon-erase"></i> Delete
                 </md-button>
+                <md-button ng-click="save.query.prompt()"
+                           ng-disabled="saving === true"
+                           class="md-raised md-primary pull-right">
+                    <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i>  Save As Query
+                </md-button>
+
             </div>
         </section>
     </div>
