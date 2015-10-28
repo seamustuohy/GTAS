@@ -1,4 +1,4 @@
-package gov.gtas.vo;
+package gov.gtas.vo.passenger;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,14 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.validators.Validatable;
-import gov.gtas.vo.passenger.AddressVo;
-import gov.gtas.vo.passenger.AgencyVo;
-import gov.gtas.vo.passenger.CreditCardVo;
-import gov.gtas.vo.passenger.EmailVo;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.FrequentFlyerVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.MessageVo;
 
 public class PnrVo extends MessageVo implements Validatable {
     private String messageCode;

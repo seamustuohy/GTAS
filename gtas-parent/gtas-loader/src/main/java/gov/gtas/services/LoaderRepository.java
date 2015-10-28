@@ -35,7 +35,6 @@ import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.repository.PhoneRepository;
 import gov.gtas.repository.ReportingPartyRepository;
-import gov.gtas.vo.PnrVo;
 import gov.gtas.vo.passenger.AddressVo;
 import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
@@ -44,6 +43,7 @@ import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FrequentFlyerVo;
 import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.PnrVo;
 import gov.gtas.vo.passenger.ReportingPartyVo;
 
 @Repository

@@ -47,7 +47,6 @@ import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.vo.PnrVo;
 import gov.gtas.vo.passenger.AddressVo;
 import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
@@ -55,6 +54,7 @@ import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FrequentFlyerVo;
 import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.PnrVo;
 
 
 public final class PnrGovParser extends EdifactParser<PnrVo> {
