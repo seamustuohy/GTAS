@@ -39,6 +39,5 @@ public class BaseVo  {
 	}
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
-	}  
- 
+	}
 }

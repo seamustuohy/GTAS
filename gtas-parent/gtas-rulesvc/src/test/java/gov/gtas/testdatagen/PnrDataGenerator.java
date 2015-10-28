@@ -154,21 +154,21 @@ public class PnrDataGenerator {
             Agency agency = new Agency();
             String[] params = PNR_AGENCY1.split(",");
             agency.setCountry(params[0].toUpperCase());
-            agency.setCity(params[1].toUpperCase());
+            agency.setLocation(params[1].toUpperCase());
             agency.setName(params[2].toUpperCase());
             agency.setIdentifier(params[3]);
             agency.setId(1L);
-            pnr.setAgency(agency);
+            pnr.addAgency(agency);
             break;
         case 2:
             agency = new Agency();
             params = PNR_AGENCY2.split(",");
             agency.setCountry(params[0].toUpperCase());
-            agency.setCity(params[1].toUpperCase());
+            agency.setLocation(params[1].toUpperCase());
             agency.setName(params[2].toUpperCase());
             agency.setIdentifier(params[3]);
             agency.setId(2L);
-            pnr.setAgency(agency);
+            pnr.addAgency(agency);
             break;
         }
     }

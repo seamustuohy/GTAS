@@ -32,7 +32,7 @@ public interface UdrRuleRepository extends CrudRepository<UdrRule, Long>, JpaSpe
 	        +"udr.metaData.startDt, udr.metaData.enabled, udr.metaData.endDt, udr.author.userId FROM UdrRule udr WHERE udr.deleted = 'N'")
     public List<Object[]> findAllUdrRuleSummary();
     
-	@Query("SELECT udr FROM UdrRule udr WHERE udr.metaData.title = :title and udr.author.userId = :authorUserId")
+	@Query("SELECT udr FROM UdrRule udr WHERE udr.deleted = 'N' and udr.metaData.title = :title and udr.author.userId = :authorUserId")
 	public UdrRule getUdrRuleByTitleAndAuthor(@Param("title") String title, @Param("authorUserId") String authorUserId);
 
 	@Query("SELECT kb FROM KnowledgeBase kb WHERE kb.kbName = :name")
@@ -43,4 +43,7 @@ public interface UdrRuleRepository extends CrudRepository<UdrRule, Long>, JpaSpe
 
 	@Query("SELECT udr FROM UdrRule udr WHERE  udr.deleted = 'N' and (udr.metaData.endDt is null or udr.metaData.endDt >= :targetDate)")
 	public List<UdrRule>findValidUdrRuleByDate(@Param("targetDate") Date targetDate);
+
+	@Query("SELECT udr.title FROM UdrRule udr WHERE udr.deleted = 'N' and udr.title like :titlePrefix and udr.author.userId = :authorUserId")
+	public List<String> getUdrTitleByTitlePrefixAndAuthor(@Param("titlePrefix") String title, @Param("authorUserId") String authorUserId);
 }

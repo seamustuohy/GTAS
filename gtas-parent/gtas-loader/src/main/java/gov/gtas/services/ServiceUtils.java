@@ -18,6 +18,8 @@ public class ServiceUtils {
 		flight.setDestinationCountry(vo.getDestinationCountry());
 		flight.setEta(vo.getEta());
 		flight.setEtd(vo.getEtd());
+		flight.setEtaDate(vo.getEtaDate());
+		flight.setEtdDate(vo.getEtdDate());
 		flight.setFlightDate(vo.getFlightDate());
 		flight.setId(new Long(vo.getId()));
 		flight.setOrigin(vo.getOrigin());
@@ -35,6 +37,8 @@ public class ServiceUtils {
 		vo.setEta(flight.getEta());
 		vo.setEtd(flight.getEtd());
 		vo.setFlightDate(flight.getFlightDate());
+		vo.setEtaDate(flight.getEtaDate());
+		vo.setEtdDate(flight.getEtdDate());
 		vo.setFlightNumber(flight.getFlightNumber());
 		if(flight.getId() != null){
 			vo.setId(flight.getId());

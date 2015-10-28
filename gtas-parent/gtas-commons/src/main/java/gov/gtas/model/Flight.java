@@ -55,6 +55,16 @@ public class Flight extends BaseEntityAudit {
     @Temporal(TemporalType.DATE)
     private Date flightDate;
     
+    /** calculated field */
+    @Column(name = "etd_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date etdDate;
+    
+    /** calculated field */
+    @Column(name = "eta_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date etaDate;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date etd;
     
@@ -195,7 +205,35 @@ public class Flight extends BaseEntityAudit {
         this.listHitCount = listHitCount;
     }
 
-    @Override
+    /**
+	 * @return the etdDate
+	 */
+	public Date getEtdDate() {
+		return etdDate;
+	}
+
+	/**
+	 * @param etdDate the etdDate to set
+	 */
+	public void setEtdDate(Date etdDate) {
+		this.etdDate = etdDate;
+	}
+
+	/**
+	 * @return the etaDate
+	 */
+	public Date getEtaDate() {
+		return etaDate;
+	}
+
+	/**
+	 * @param etaDate the etaDate to set
+	 */
+	public void setEtaDate(Date etaDate) {
+		this.etaDate = etaDate;
+	}
+
+	@Override
     public int hashCode() {
        return Objects.hash(this.carrier, this.flightNumber, this.flightDate, this.origin, this.destination);
     }

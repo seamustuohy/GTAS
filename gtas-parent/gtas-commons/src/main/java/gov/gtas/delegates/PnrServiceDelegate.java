@@ -124,7 +124,7 @@ public class PnrServiceDelegate {
 	        for (CreditCard entity : pnr.getCreditCards()) {
 	            CreditCardVo vo = new CreditCardVo();
 	            BeanUtils.copyProperties(entity, vo);
-	            rv.getCreditCards().add(vo);
+	            rv.addCreditCard(vo);
 	        }
             for (FrequentFlyer entity : pnr.getFrequentFlyers()) {
                 FrequentFlyerVo vo = new FrequentFlyerVo();

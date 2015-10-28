@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gov.gtas.model.Address;
+import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
@@ -28,6 +29,7 @@ import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.vo.PnrVo;
 import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
 import gov.gtas.vo.passenger.DocumentVo;
 import gov.gtas.vo.passenger.FlightVo;
@@ -185,6 +187,13 @@ public class LoaderUtils {
         ff.setCreatedBy(LOADER_USER);
         BeanUtils.copyProperties(vo, ff);
         return ff;
+    }
+    
+    public Agency convertAgencyVo(AgencyVo vo) {
+        Agency a = new Agency();
+        a.setCreatedBy(LOADER_USER);
+        BeanUtils.copyProperties(vo, a);
+        return a;
     }
     
     /**

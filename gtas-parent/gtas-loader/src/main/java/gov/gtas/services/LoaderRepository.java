@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import gov.gtas.model.Address;
+import gov.gtas.model.Agency;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
@@ -24,16 +25,8 @@ import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.vo.PnrVo;
-import gov.gtas.vo.passenger.AddressVo;
-import gov.gtas.vo.passenger.CreditCardVo;
-import gov.gtas.vo.passenger.DocumentVo;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.FrequentFlyerVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.PhoneVo;
-import gov.gtas.vo.passenger.ReportingPartyVo;
 import gov.gtas.repository.AddressRepository;
+import gov.gtas.repository.AgencyRepository;
 import gov.gtas.repository.CreditCardRepository;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.repository.FlightRepository;
@@ -42,6 +35,16 @@ import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.repository.PhoneRepository;
 import gov.gtas.repository.ReportingPartyRepository;
+import gov.gtas.vo.PnrVo;
+import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.AgencyVo;
+import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.DocumentVo;
+import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.passenger.FrequentFlyerVo;
+import gov.gtas.vo.passenger.PassengerVo;
+import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.ReportingPartyVo;
 
 @Repository
 public class LoaderRepository {
@@ -69,6 +72,9 @@ public class LoaderRepository {
     @Autowired
     private AddressRepository addressDao;
 
+    @Autowired
+    private AgencyRepository agencyDao;
+    
     @Autowired
     private MessageRepository<Message> messageDao;
 
@@ -139,6 +145,16 @@ public class LoaderRepository {
                 pnr.addFrequentFlyer(newFf);
             } else {
                 pnr.addFrequentFlyer(existingFf);
+            }
+        }
+        
+        for (AgencyVo avo : vo.getAgencies()) {
+            Agency existingAgency = agencyDao.findByNameAndLocation(avo.getName(), avo.getLocation());
+            if (existingAgency == null) {
+                Agency newAgency = utils.convertAgencyVo(avo);
+                pnr.addAgency(newAgency);
+            } else {
+                pnr.addAgency(existingAgency);
             }
         }
     }

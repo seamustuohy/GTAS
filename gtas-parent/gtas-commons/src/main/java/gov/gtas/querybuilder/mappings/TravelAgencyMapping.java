@@ -4,7 +4,7 @@ import gov.gtas.enumtype.TypeEnum;
 
 public enum TravelAgencyMapping implements IEntityMapping {
 
-	CITY ("city", "City", TypeEnum.STRING.getType()),
+	LOCATION ("location", "Location", TypeEnum.STRING.getType()),
 	NAME ("name", "Name", TypeEnum.STRING.getType()),
 	PHONE ("phone", "Phone", TypeEnum.STRING.getType()); 
 	
@@ -36,9 +36,6 @@ public enum TravelAgencyMapping implements IEntityMapping {
 		return fieldType;
 	}
 	
-	/**
-	 * @return the displayField
-	 */
 	public boolean isDisplayField() {
 		return displayField;
 	}

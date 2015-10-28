@@ -7,7 +7,6 @@ import gov.gtas.enumtype.Status;
 import gov.gtas.error.ErrorDetailInfo;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 /**
@@ -131,7 +130,7 @@ public class JsonServiceResponse implements Serializable {
 	 * @return the responseDetails
 	 */
 	public List<ServiceResponseDetailAttribute> getResponseDetails() {
-		return Collections.unmodifiableList(responseDetails);
+		return responseDetails;
 	}
 	/**
 	 * @param responseDetail the responseDetail to add.

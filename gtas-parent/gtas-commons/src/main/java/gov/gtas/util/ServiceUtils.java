@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.springframework.beans.BeanUtils;
+
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
@@ -37,6 +39,8 @@ public class ServiceUtils {
 		flight.setDestinationCountry(vo.getDestinationCountry());
 		flight.setEta(vo.getEta());
 		flight.setEtd(vo.getEtd());
+		flight.setEtaDate(vo.getEtaDate());
+		flight.setEtdDate(vo.getEtdDate());
 		flight.setFlightDate(vo.getFlightDate());
 		flight.setId(new Long(vo.getId()));
 		flight.setOrigin(vo.getOrigin());
@@ -63,6 +67,8 @@ public class ServiceUtils {
 		vo.setDestinationCountry(flight.getDestinationCountry());
 		vo.setEta(flight.getEta());
 		vo.setEtd(flight.getEtd());
+		vo.setEtaDate(flight.getEtaDate());
+		vo.setEtdDate(flight.getEtdDate());
 		vo.setFlightDate(flight.getFlightDate());
 		vo.setFlightNumber(flight.getFlightNumber());
 		if(flight.getId() != null){
@@ -260,12 +266,7 @@ public class ServiceUtils {
 	}
 	
 	public static Agency mapAgencyFromAgencyVo(AgencyVo vo,Agency a){
-		//BeanUtils.copyProperties(vo, a);
-		a.setCity(vo.getAgencyCity());
-		a.setCountry(vo.getAgencyCountry());
-		a.setIdentifier(vo.getAgencyIdentifier());
-		a.setName(vo.getAgencyName());
-		a.setState(vo.getAgencyState());
+		BeanUtils.copyProperties(vo, a);
 		a.setCreatedAt(new Date());
 		a.setCreatedBy("SYSTEM");
 		return a;

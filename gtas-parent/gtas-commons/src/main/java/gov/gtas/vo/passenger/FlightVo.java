@@ -30,6 +30,10 @@ public class FlightVo extends BaseVo implements Validatable {
     private Date etd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
     private Date eta;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
+    private Date etdDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
+    private Date etaDate;
     private Integer passengerCount = Integer.valueOf(0);
     private Integer ruleHitCount = Integer.valueOf(0);
     private Integer listHitCount = Integer.valueOf(0);
@@ -158,14 +162,39 @@ public class FlightVo extends BaseVo implements Validatable {
     public void setListHitCount(Integer listHitCount) {
         this.listHitCount = listHitCount;
     }
-
-    @Override
+    
+    /**
+	 * @return the etdDate
+	 */
+	public Date getEtdDate() {
+		return etdDate;
+	}
+	/**
+	 * @param etdDate the etdDate to set
+	 */
+	public void setEtdDate(Date etdDate) {
+		this.etdDate = etdDate;
+	}
+	/**
+	 * @return the etaDate
+	 */
+	public Date getEtaDate() {
+		return etaDate;
+	}
+	/**
+	 * @param etaDate the etaDate to set
+	 */
+	public void setEtaDate(Date etaDate) {
+		this.etaDate = etaDate;
+	}
+	
+	@Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }
 
 	@Override
-	public boolean validate() {
+	public boolean isValid() {
 		if(StringUtils.isBlank(this.destination) || StringUtils.isBlank(this.origin) 
 				|| StringUtils.isBlank(this.flightNumber) || this.flightDate == null 
 				|| StringUtils.isBlank(this.carrier)){

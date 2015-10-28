@@ -1,5 +1,6 @@
 package gov.gtas.parsers.pnrgov.segment;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,48 +31,74 @@ import gov.gtas.parsers.util.ParseUtils;
 public class FOP extends Segment {
     private static final String CREDIT_CARD_TYPE = "CC";
     
-    private String paymentType;
-    private String paymentAmount;
-    private String vendorCode;
-    private String accountNumber;
-    private Date expirationDate;
-    private boolean isCreditCard;
+    public class Payment {
+        private String paymentType;
+        private String paymentAmount;
+        private String vendorCode;
+        private String accountNumber;
+        private Date expirationDate;
+        private boolean isCreditCard;
+        public String getPaymentType() {
+            return paymentType;
+        }
+        public void setPaymentType(String paymentType) {
+            this.paymentType = paymentType;
+        }
+        public String getPaymentAmount() {
+            return paymentAmount;
+        }
+        public void setPaymentAmount(String paymentAmount) {
+            this.paymentAmount = paymentAmount;
+        }
+        public String getVendorCode() {
+            return vendorCode;
+        }
+        public void setVendorCode(String vendorCode) {
+            this.vendorCode = vendorCode;
+        }
+        public String getAccountNumber() {
+            return accountNumber;
+        }
+        public void setAccountNumber(String accountNumber) {
+            this.accountNumber = accountNumber;
+        }
+        public Date getExpirationDate() {
+            return expirationDate;
+        }
+        public void setExpirationDate(Date expirationDate) {
+            this.expirationDate = expirationDate;
+        }
+        public boolean isCreditCard() {
+            return isCreditCard;
+        }
+        public void setCreditCard(boolean isCreditCard) {
+            this.isCreditCard = isCreditCard;
+        }
+    }
+    
+    private List<Payment> payments;
 
     public FOP(List<Composite> composites) throws ParseException {
         super(FOP.class.getSimpleName(), composites);
-        Composite c = getComposite(0);
-        this.paymentType = c.getElement(0);
-        this.isCreditCard = CREDIT_CARD_TYPE.equals(this.paymentType);
-        this.paymentAmount = c.getElement(2);
-        this.vendorCode = c.getElement(3);
-        this.accountNumber = c.getElement(4);
-        String d = c.getElement(5);
-        if (d != null) {
-            this.expirationDate = ParseUtils.parseDateTime(d, "mmyy"); 
+        this.payments = new ArrayList<>();
+        
+        for (Composite c : composites) {
+            Payment p = new Payment();
+            this.payments.add(p);
+            
+            p.paymentType = c.getElement(0);
+            p.isCreditCard = CREDIT_CARD_TYPE.equals(p.paymentType);
+            p.paymentAmount = c.getElement(2);
+            p.vendorCode = c.getElement(3);
+            p.accountNumber = c.getElement(4);
+            String d = c.getElement(5);
+            if (d != null) {
+                p.expirationDate = ParseUtils.parseDateTime(d, "mmyy"); 
+            }
         }
     }
 
-    public String getPaymentType() {
-        return paymentType;
-    }
-
-    public String getPaymentAmount() {
-        return paymentAmount;
-    }
-
-    public String getVendorCode() {
-        return vendorCode;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public Date getExpirationDate() {
-        return expirationDate;
-    }
-
-    public boolean isCreditCard() {
-        return isCreditCard;
+    public List<Payment> getPayments() {
+        return payments;
     }
 }

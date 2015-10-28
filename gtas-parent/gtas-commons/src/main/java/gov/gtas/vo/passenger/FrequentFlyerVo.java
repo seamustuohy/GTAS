@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class FrequentFlyerVo implements Validatable{
+public class FrequentFlyerVo implements Validatable {
     private String carrier;
     private String number;
 
@@ -25,15 +25,12 @@ public class FrequentFlyerVo implements Validatable{
     
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE); 
     }
 
 	@Override
-	public boolean validate() {
-		if(StringUtils.isBlank(this.carrier) || StringUtils.isBlank(this.number) 
-				){
-			return false;
-		}
-		return true;
+	public boolean isValid() {
+		return StringUtils.isNotBlank(this.carrier) 
+		       && StringUtils.isNotBlank(this.number);
 	}
 }

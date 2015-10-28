@@ -46,6 +46,13 @@ public interface UdrService {
    */
   JsonServiceResponse createUdr(String userId, UdrSpecification udrToCreate);
   /**
+   * Creates a new UDR object by copying a UDR specified by ID.
+   * @param userId the userId of the author.
+   * @param udrId the id of the UDR object to be copied.
+   * @return the service response JSON format.
+   */
+  JsonServiceResponse copyUdr(String userId, Long udrId);
+  /**
    * Updates the UDR by replacing the UDR object in the DB with the same ID.
    * @param userId the userId of the author.
    * @param udrToUpdate the updated object image to use for replacing the DB object.

@@ -60,7 +60,7 @@ public class PnrMessageVo implements Validatable{
     }
 
 	@Override
-	public boolean validate() {
+	public boolean isValid() {
 		if(StringUtils.isBlank(this.hashCode) ){
 			return false;
 		}

@@ -146,6 +146,21 @@ public class UdrManagementController {
 		return resp;
 	}
 
+	@RequestMapping(value = Constants.UDR_COPY, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public JsonServiceResponse copyUDR(@PathVariable Long id) {
+		String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.debug("******** Received UDR Create request by user =" + userId);
+		if (id == null) {
+			throw new CommonServiceException(
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
+					String.format(
+							CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE,
+							"Copy UDR", "id"));
+		}
+		JsonServiceResponse resp = udrService.copyUdr(userId, id);
+
+		return resp;
+	}
 	/**
 	 * Subtracts the offset to reverse the interpretation at GMT time.
 	 * 

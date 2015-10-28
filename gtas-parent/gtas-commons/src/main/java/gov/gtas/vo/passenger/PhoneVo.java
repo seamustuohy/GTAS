@@ -27,11 +27,9 @@ public class PhoneVo implements Validatable{
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
-	@Override
-	public boolean validate() {
-		if(StringUtils.isBlank(this.number) ){
-			return false;
-		}
-		return true;
+
+    @Override
+	public boolean isValid() {
+		return StringUtils.isNotBlank(this.number);
 	}
 }

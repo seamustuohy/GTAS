@@ -11,11 +11,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -86,10 +84,6 @@ public class Pnr extends Message {
     )   
     private Set<Passenger> passengers = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "agency_id")
-    private Agency agency;
-    
     @ManyToMany(
         targetEntity=CreditCard.class,
         cascade={CascadeType.ALL}
@@ -168,7 +162,6 @@ public class Pnr extends Message {
             this.passengers = new HashSet<>();
         }
         this.passengers.add(p);
-        
     }
     
     public void addFlight(Flight f) {
@@ -176,7 +169,6 @@ public class Pnr extends Message {
             this.flights = new HashSet<>();
         }
         this.flights.add(f);
-        
     }
     
     public void addCreditCard(CreditCard cc) {
@@ -214,6 +206,10 @@ public class Pnr extends Message {
         this.emails.add(email);
     }
 
+    public void addAgency(Agency agency) {
+       this.agencies.add(agency);
+    }
+
 	public EdifactMessage getEdifactMessage() {
         return edifactMessage;
     }
@@ -221,14 +217,6 @@ public class Pnr extends Message {
     public void setEdifactMessage(EdifactMessage edifactMessage) {
         this.edifactMessage = edifactMessage;
     }
-
-    public Agency getAgency() {
-		return agency;
-	}
-
-	public void setAgency(Agency agency) {
-		this.agency = agency;
-	}
 
 	public Set<Passenger> getPassengers() {
 		return passengers;
@@ -373,6 +361,14 @@ public class Pnr extends Message {
 	public void setFlights(Set<Flight> flights) {
 		this.flights = flights;
 	}
+
+    public Set<Agency> getAgencies() {
+        return agencies;
+    }
+
+    public void setAgencies(Set<Agency> agencies) {
+        this.agencies = agencies;
+    }
 
     public List<FlightLeg> getFlightLegs() {
         return flightLegs;

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FlightHistoryVo;
 import gov.gtas.vo.PnrVo;
 import gov.gtas.model.Address;
+import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
 import gov.gtas.model.Document;
 import gov.gtas.model.Email;
@@ -206,10 +208,12 @@ public class PassengerDetailsController {
 
 		}
 
-		if (source.getAgency() != null && target.getAgency() == null) {
+		if (CollectionUtils.isNotEmpty(source.getAgencies())) {
 			AgencyVo aVo = new AgencyVo();
-			copyModelToVo(source.getAgency(), aVo);
-			target.setAgency(aVo);
+			for (Agency agency : source.getAgencies()) {
+	            copyModelToVo(agency, aVo);
+	            target.getAgencies().add(aVo);
+			}
 		}
 
 		if (source.getCreditCards() != null
@@ -219,7 +223,7 @@ public class PassengerDetailsController {
 				CreditCard cc = (CreditCard) it1.next();
 				CreditCardVo cVo = new CreditCardVo();
 				copyModelToVo(cc, cVo);
-				target.getCreditCards().add(cVo);
+				target.addCreditCard(cVo);
 			}
 		}
 		if (source.getFrequentFlyers() != null
@@ -250,7 +254,6 @@ public class PassengerDetailsController {
 				PhoneVo pVo = new PhoneVo();
 				copyModelToVo(p, pVo);
 				target.getPhoneNumbers().add(pVo);
-
 			}
 		}
 

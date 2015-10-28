@@ -123,13 +123,11 @@ public class PnrServiceIT {
 		phones.add(p);
 		pnr.setPhones(phones);
 		Agency ag = new Agency();
-		ag.setCity("STERLING");
+		ag.setLocation("STERLING");
 		ag.setCountry("USA");
 		ag.setIdentifier("123456C");
 		ag.setName("Some Test Agency");
 		ag.setCreatedAt(new Date());
-		ag.setState("VA");
-		pnr.setAgency(ag);
 		FrequentFlyer ff = new FrequentFlyer();
 		ff.setNumber("7777");
 		ff.setCarrier("AA");
