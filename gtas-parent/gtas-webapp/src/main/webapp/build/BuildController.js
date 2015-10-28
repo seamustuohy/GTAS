@@ -46,8 +46,20 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     });
 
     $scope.copyRule = function () {
+        var originalObj = $scope[$scope.mode];
         jqueryQueryBuilderService.copyRule($scope.ruleId).then(function (response) {
-            console.log(response);
+            //this makes me cringe... hope result becomes object and this goes away.
+            var paritalCopyObj = {
+                id: response.result,
+                title: response.responseDetails[1]['attributeValue'],
+                startDate: today,
+                endDate: null,
+                modifiedOn: today,
+                modifiedBy: 'me'
+            };
+            $scope.qbGrid.data.unshift($.extend({}, originalObj, paritalCopyObj));
+            $scope.addNew();
+            $scope.gridApi.selection.clearSelectedRows();
         });
     };
 
@@ -387,7 +399,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.qbGrid = gridOptionsLookupService.getGridOptions(mode);
     $scope.qbGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs(mode);
-    $scope.qbGrid.enableRowHeaderSelection = false;
+    $scope.qbGrid.enableRowHeaderSelection = true;
     $scope.qbGrid.enableSelectAll = false;
     $scope.qbGrid.exporterCsvFilename = mode + '.csv';
     $scope.qbGrid.exporterPdfHeader = {text: mode, style: 'headerStyle'};
