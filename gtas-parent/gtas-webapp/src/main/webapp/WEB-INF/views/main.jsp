@@ -60,6 +60,10 @@
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('admin')}"
             ng-disabled="onRoute('admin')" href="#/admin"><i class="glyphicon glyphicon-edit"></i>  Admin</md-button>
         </sec:authorize>
+        <sec:authorize access="hasAnyAuthority('Admin')">
+            <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('upload')}"
+            ng-disabled="onRoute('upload')" href="#/upload"><i class="glyphicon glyphicon-edit"></i>  Upload</md-button>
+        </sec:authorize>
 
 
         </span>
@@ -70,25 +74,27 @@
         <div class="content" ui-view=""></div>
         <div ui-view="footer"></div>
 
-        <script src='resources/bower_components/angular/angular.js'></script>
-        <script src='resources/bower_components/angular-ui-router/release/angular-ui-router.min.js'></script>
-        <script src='resources/bower_components/moment/min/moment.min.js'></script>
-        <script src='resources/bower_components/jquery/dist/jquery.js'></script>
-        <script src='resources/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
-        <script src='resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js'></script>
-        <script src='resources/bower_components/bootbox/bootbox.js'></script>
-        <script src='resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js'></script>
-        <script src='resources/bower_components/selectize/dist/js/standalone/selectize.min.js'></script>
-        <script src='resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
-        <script src='resources/bower_components/jquery-extendext/jQuery.extendext.min.js'></script>
-        <script src='resources/bower_components/pdfmake/build/pdfmake.min.js'></script>
-        <script src='resources/bower_components/pdfmake/build/vfs_fonts.js'></script>
-        <script src='resources/bower_components/angular-ui-grid/ui-grid.js'></script>
-        <script src='resources/bower_components/angular-material/angular-material.min.js'></script>
-        <script src='resources/bower_components/angular-aria/angular-aria.min.js'></script>
-        <script src='resources/bower_components/angular-spinners/dist/angular-spinners.min.js'></script>
-        <script src='resources/bower_components/angular-animate/angular-animate.min.js'></script>
-        <script src='resources/bower_components/angular-messages/angular-messages.min.js'></script>
+        <script src="resources/bower_components/angular/angular.js"></script>
+        <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+        <script src="resources/bower_components/moment/min/moment.min.js"></script>
+        <script src="resources/bower_components/jquery/dist/jquery.js"></script>
+        <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="resources/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+        <script src="resources/bower_components/bootbox/bootbox.js"></script>
+        <script src="resources/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+        <script src="resources/bower_components/selectize/dist/js/standalone/selectize.min.js"></script>
+        <script src="resources/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+        <script src="resources/bower_components/jquery-extendext/jQuery.extendext.min.js"></script>
+        <script src="resources/bower_components/pdfmake/build/pdfmake.min.js"></script>
+        <script src="resources/bower_components/pdfmake/build/vfs_fonts.js"></script>
+        <script src="resources/bower_components/angular-ui-grid/ui-grid.js"></script>
+        <script src="resources/bower_components/angular-material/angular-material.min.js"></script>
+        <script src="resources/bower_components/angular-aria/angular-aria.min.js"></script>
+        <script src="resources/bower_components/angular-spinners/dist/angular-spinners.min.js"></script>
+        <script src="resources/bower_components/angular-animate/angular-animate.min.js"></script>
+        <script src="resources/bower_components/angular-messages/angular-messages.min.js"></script>
+        <script src="resources/bower_components/ng-file-upload/ng-file-upload-shim.min.js"></script>
+        <script src="resources/bower_components/ng-file-upload/ng-file-upload.min.js"></script>
 
         <script src='resources/js/query-builder.js'></script>
 
@@ -110,6 +116,7 @@
         <script src='watchlists/WatchListController.js'></script>
         <script src='admin/AdminController.js'></script>
         <script src='admin/UserController.js'></script>
+        <script src='admin/UploadController.js'></script>
         <script src='user-settings/UserSettingsController.js'></script>
         </body>
         </html>

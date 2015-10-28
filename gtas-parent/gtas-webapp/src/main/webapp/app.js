@@ -22,7 +22,8 @@ var app;
             'ngMessages',
             'ngAria',
             'ngAnimate',
-            'angularSpinners'
+            'angularSpinners',
+            'ngFileUpload'
         ],
         localDateMomentFormat = function ($mdDateLocaleProvider) {
             $mdDateLocaleProvider.formatDate = function (date) {
@@ -76,6 +77,16 @@ var app;
                         }
                     }
                 })
+                .state('upload', {
+                    url: '/upload',
+                    views: {
+                        '@': {
+                            controller: 'UploadCtrl',
+                            templateUrl: 'admin/upload.html'
+                        }
+                    }
+                })
+                
                 .state('flights', {
                     url: '/flights',
                     views: {
@@ -223,7 +234,8 @@ var app;
                 queries: { mode: ['query'] },
                 risks: { mode: ['rule'] },
                 watchlists: { name: ['watchlists'] },
-                usersettings: { name: ['user-settings'] }
+                usersettings: { name: ['user-settings'] },
+                upload: { name: ['upload'] }
             };
             $scope.onRoute = function (key) {
                 return (lookup[key].name && lookup[key].name.indexOf($scope.stateName) >= 0) || (lookup[key].mode && lookup[key].mode.indexOf($scope.mode) >= 0);
