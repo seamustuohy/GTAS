@@ -218,18 +218,19 @@
         };
 
         $scope.removeRows = function () {
-            var selectedRowEntities = $scope.gridApi.selection.getSelectedRows(),
+            var selectedRowEntities = $scope.gridApi.selection.getSelectedRows().reverse(),
                 constructItem = function (rowEntity) {
                     return {id: rowEntity.id, action: 'Delete', terms: null};
                 },
                 watchlistItems = selectedRowEntities.map(constructItem);
-
+            spinnerService.show('html5spinner');
             watchListService.deleteItems($scope.activeTab, $scope.activeTab, watchlistItems).then(function () {
                 var rowIndexToDelete;
                 selectedRowEntities.forEach(function (rowEntity) {
                     rowIndexToDelete = $scope.watchlistGrid.data.indexOf(rowEntity);
                     $scope.watchlistGrid.data.splice(rowIndexToDelete, 1);
                 });
+                spinnerService.hide('html5spinner');
             });
         };
 
@@ -238,12 +239,10 @@
                 return false;
             }
             $scope.updating = true;
+            spinnerService.show('html5spinner');
             watchListService.compile().then(function () {
-                spinnerService.show('html5spinner');
-                $timeout(function () {
-                    spinnerService.hide('html5spinner');
-                    $scope.updating = false;
-                }, 2500);
+                spinnerService.hide('html5spinner');
+                $scope.updating = false;
             });
         };
 
