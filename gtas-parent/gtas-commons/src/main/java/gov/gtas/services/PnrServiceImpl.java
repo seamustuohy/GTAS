@@ -85,8 +85,10 @@ public class PnrServiceImpl implements PnrService {
 		for(Pnr _tempPnr : _tempPnrList ){
 			rv = new Pnr();
 			rv.setRecordLocator(_tempPnr.getRecordLocator());
-			mapPnr(_tempPnr,rv);
-			_retList.add(rv);
+			if(checkPassengerAndFlightOnPNR(_tempPnr, passengerId, flightId)){
+				mapPnr(_tempPnr,rv);
+				_retList.add(rv);
+			}
 		}
     	return _retList;
 	}
@@ -196,4 +198,38 @@ public class PnrServiceImpl implements PnrService {
 		return chk;
 		
 	}
+	
+	private boolean checkPassengerAndFlightOnPNR(Pnr source, Long passengerId, Long flightId){
+		
+		boolean flightCheck = false, passengerCheck = false;
+		
+		if(source.getFlightLegs() != null && source.getFlightLegs().size() > 0){
+			List<FlightLeg> _tempFL = source.getFlightLegs();
+			for(FlightLeg fl : _tempFL){
+				
+				if(fl.getFlight().getId().equals(flightId)){
+					flightCheck = true;
+					break;
+				}
+				
+			}
+		}
+		
+		if(source.getPassengers() != null && source.getPassengers().size() > 0){
+			Iterator it6 = source.getPassengers().iterator();
+			while(it6.hasNext()){
+				Passenger passenger = (Passenger)it6.next();
+				if(passenger.getId().equals(passengerId)){
+					passengerCheck = true;
+					break;
+				}
+				
+			}
+		}
+		
+		if(flightCheck && passengerCheck) return true;
+		else return false;
+		
+	}
+	
 }
