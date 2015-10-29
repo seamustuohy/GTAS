@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -36,6 +37,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -269,15 +271,26 @@ public class WatchlistPersistenceServiceImpl implements
 				++itemCount;
 			}
 			if (targetItems.size() != itemCount) {
-				throw ErrorHandlerFactory
-						.getErrorHandler()
-						.createException(
-								WatchlistConstants.MISSING_DELETE_OR_UPDATE_ITEM_ERROR_CODE);
+				handleMissingWlItemError(targetItems, ret.keySet());
 			}
 		}
 		return ret;
 	}
-
+    private void handleMissingWlItemError(Collection<WatchlistItem> targetItems, Set<Long> foundKeys){
+    	final StringBuilder bldr = new StringBuilder();
+    	targetItems.forEach(itm->bldr.append(itm.getId()).append(','));
+    	String targets = bldr.substring(0, bldr.length()-1).toString();
+    	String found =  StringUtils.EMPTY;
+    	if(!CollectionUtils.isEmpty(foundKeys)){
+        	final StringBuilder bldr2 = new StringBuilder();
+        	foundKeys.forEach(itm->bldr2.append(itm).append(','));  
+        	found = bldr2.substring(0, bldr2.length()-1).toString();
+    	}
+    	
+		ErrorHandlerFactory.createAndThrowException(
+				WatchlistConstants.MISSING_DELETE_OR_UPDATE_ITEM_ERROR_CODE, targets, found);
+    	
+    }
 	/**
 	 * Fetches the user object and throws an unchecked exception if the user
 	 * cannot be found.
