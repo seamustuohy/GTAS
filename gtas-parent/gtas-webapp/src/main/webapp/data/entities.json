@@ -8,10 +8,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -20,10 +25,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -32,10 +42,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -44,10 +59,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -56,10 +76,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -68,10 +93,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -80,10 +110,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       }
     ]
@@ -97,10 +132,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       }
     ]
@@ -116,7 +156,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -138,9 +184,7 @@
           "GREATER",
           "GREATER_OR_EQUAL",
           "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
+          "NOT_BETWEEN"
         ],
         "plugin": "datepicker"
       },
@@ -158,9 +202,7 @@
           "GREATER",
           "GREATER_OR_EQUAL",
           "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
+          "NOT_BETWEEN"
         ],
         "plugin": "datepicker"
       },
@@ -170,10 +212,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -203,10 +250,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -215,10 +267,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       }
     ]
@@ -234,7 +291,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -250,7 +313,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -266,7 +335,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -282,7 +357,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -298,7 +379,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -331,9 +418,7 @@
           "GREATER",
           "GREATER_OR_EQUAL",
           "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
+          "NOT_BETWEEN"
         ],
         "plugin": "datepicker"
       },
@@ -351,9 +436,7 @@
           "GREATER",
           "GREATER_OR_EQUAL",
           "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
+          "NOT_BETWEEN"
         ],
         "plugin": "datepicker"
       },
@@ -363,10 +446,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       }
     ]
@@ -380,10 +468,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -392,10 +485,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       }
     ]
@@ -439,10 +537,9 @@
         "type": "integer",
         "operators": [
           "EQUAL",
-          "BEGINS_WITH",
-          "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
         ]
       }
     ]
@@ -464,9 +561,7 @@
           "GREATER",
           "GREATER_OR_EQUAL",
           "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
+          "NOT_BETWEEN"
         ]
       },
       {
@@ -477,7 +572,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -493,7 +594,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -509,7 +616,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -531,9 +644,7 @@
           "GREATER",
           "GREATER_OR_EQUAL",
           "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
+          "NOT_BETWEEN"
         ],
         "plugin": "datepicker"
       },
@@ -545,7 +656,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -561,7 +678,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -577,7 +700,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -590,10 +719,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -602,10 +736,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -614,10 +753,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -628,7 +772,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -644,7 +794,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -653,10 +809,9 @@
         "type": "string",
         "operators": [
           "EQUAL",
-          "BEGINS_WITH",
-          "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN"
         ],
         "input": "select",
         "multiple": true,
@@ -674,10 +829,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       }
     ]
@@ -699,9 +859,7 @@
           "GREATER",
           "GREATER_OR_EQUAL",
           "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
+          "NOT_BETWEEN"
         ]
       },
       {
@@ -718,9 +876,7 @@
           "GREATER",
           "GREATER_OR_EQUAL",
           "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
+          "NOT_BETWEEN"
         ],
         "plugin": "datepicker"
       },
@@ -730,10 +886,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -750,9 +911,7 @@
           "GREATER",
           "GREATER_OR_EQUAL",
           "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
+          "NOT_BETWEEN"
         ]
       },
       {
@@ -761,11 +920,11 @@
         "type": "string",
         "operators": [
           "EQUAL",
-          "BEGINS_WITH",
-          "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
-        ]
+          "NOT_EQUAL"
+        ],
+        "input": "text",
+        "plugin": "selectize",
+        "dataSource": "form_of_payment_types"
       },
       {
         "id": "Pnr.origin",
@@ -775,7 +934,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -791,7 +956,13 @@
           "EQUAL",
           "NOT_EQUAL",
           "IN",
-          "NOT_IN"
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
         ],
         "input": "select",
         "multiple": true,
@@ -813,9 +984,7 @@
           "GREATER",
           "GREATER_OR_EQUAL",
           "BETWEEN",
-          "NOT_BETWEEN",
-          "IS_NULL",
-          "IS_NOT_NULL"
+          "NOT_BETWEEN"
         ]
       },
       {
@@ -824,10 +993,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       }
     ]
@@ -841,10 +1015,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -853,10 +1032,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       },
       {
@@ -865,10 +1049,15 @@
         "type": "string",
         "operators": [
           "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
           "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
           "ENDS_WITH",
-          "NOT_ENDS_WITH",
-          "NOT_BEGINS_WITH"
+          "NOT_ENDS_WITH"
         ]
       }
     ]
