@@ -1,5 +1,6 @@
 package gov.gtas.vo.passenger;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,16 +25,18 @@ public class FlightVo extends BaseVo implements Validatable {
     private String destinationCountry;
     private boolean isOverFlight;
     private String direction;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date flightDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date etd;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date eta;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date etdDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date etaDate;
+    private String etdString;
+    private String etaString;
     private Integer passengerCount = Integer.valueOf(0);
     private Integer ruleHitCount = Integer.valueOf(0);
     private Integer listHitCount = Integer.valueOf(0);
@@ -41,6 +44,7 @@ public class FlightVo extends BaseVo implements Validatable {
     private int listHits;
     private int paxListHit;
     private int docListHit;
+    private static final SimpleDateFormat dtFormat = new SimpleDateFormat(DATE_FORMAT);
     
     public int getRuleHits() {
 		return ruleHits;
@@ -131,12 +135,20 @@ public class FlightVo extends BaseVo implements Validatable {
     }
     public void setEtd(Date etd) {
         this.etd = etd;
+        
+        if(etd != null) {
+        	this.etdString = dtFormat.format(etd);
+        }
     }
     public Date getEta() {
         return eta;
     }
     public void setEta(Date eta) {
         this.eta = eta;
+        
+        if(eta != null) {
+        	this.etaString = dtFormat.format(eta);
+        }
     }
     public boolean isOverFlight() {
         return isOverFlight;
@@ -186,6 +198,14 @@ public class FlightVo extends BaseVo implements Validatable {
 	 */
 	public void setEtaDate(Date etaDate) {
 		this.etaDate = etaDate;
+	}
+	
+	public String getEtdString() {
+		return etdString;
+	}
+	
+	public String getEtaString() {
+		return etaString;
 	}
 	
 	@Override
