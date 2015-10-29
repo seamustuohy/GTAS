@@ -1,4 +1,4 @@
-app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, $mdSidenav, $stateParams, $interval, $timeout) {
+app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, spinnerService, $mdSidenav, $stateParams, $interval, $timeout) {
     'use strict';
     var today = moment().format('YYYY-MM-DD').toString(),
         model = {
@@ -46,10 +46,14 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     });
 
     $scope.copyRule = function () {
-        var originalObj = $scope[$scope.mode];
-        jqueryQueryBuilderService.copyRule($scope.ruleId).then(function (response) {
+        spinnerService.show('html5spinner');
+        var originalObj = $scope[$scope.mode], ruleId = $scope.ruleId;
+        console.log(originalObj);
+        $scope.addNew();
+        $scope.gridApi.selection.clearSelectedRows();
+        jqueryQueryBuilderService.copyRule(ruleId).then(function (response) {
             //this makes me cringe... hope result becomes object and this goes away.
-            var paritalCopyObj = {
+            var partialCopyObj = {
                 id: response.result,
                 title: response.responseDetails[1]['attributeValue'],
                 startDate: today,
@@ -57,9 +61,8 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 modifiedOn: today,
                 modifiedBy: 'me'
             };
-            $scope.qbGrid.data.unshift($.extend({}, originalObj, paritalCopyObj));
-            $scope.addNew();
-            $scope.gridApi.selection.clearSelectedRows();
+            $scope.qbGrid.data.unshift($.extend({}, originalObj, partialCopyObj));
+            spinnerService.hide('html5spinner');
         });
     };
 
@@ -229,19 +232,21 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     };
 
     $scope.delete = function () {
+        var selectedRowEntities = $scope.gridApi.selection.getSelectedRows().reverse(),
+            rowIndexToDelete;
+
         if (!$scope.ruleId) {
             $scope.alertError('No rule loaded to delete');
             return;
         }
-
-        var selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
-
+        $scope.addNew();
+        spinnerService.show('html5spinner');
         selectedRowEntities.forEach(function (rowEntity) {
-            var rowIndexToDelete = $scope.qbGrid.data.indexOf(rowEntity);
+            rowIndexToDelete = $scope.qbGrid.data.indexOf(rowEntity);
 
-            jqueryQueryBuilderService.delete(mode, $scope.ruleId).then(function (response) {
+            jqueryQueryBuilderService.delete(mode, rowEntity.id).then(function () {
                 $scope.qbGrid.data.splice(rowIndexToDelete, 1);
-                $scope.addNew();
+                spinnerService.hide('html5spinner');
             });
         });
     };
