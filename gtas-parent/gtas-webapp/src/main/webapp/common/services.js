@@ -56,10 +56,15 @@
             var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
             return {
                 encode: function (input) {
-                    var output = "";
-                    var chr1, chr2, chr3 = "";
-                    var enc1, enc2, enc3, enc4 = "";
-                    var i = 0;
+                    var output = "",
+                        chr1,
+                        chr2,
+                        chr3 = "",
+                        enc1,
+                        enc2,
+                        enc3,
+                        enc4 = "",
+                        i = 0;
 
                     do {
                         chr1 = input.charCodeAt(i++);
@@ -89,10 +94,15 @@
                     return output;
                 },
                 decode: function (input) {
-                    var output = "";
-                    var chr1, chr2, chr3 = "";
-                    var enc1, enc2, enc3, enc4 = "";
-                    var i = 0;
+                    var output = "",
+                        chr1,
+                        chr2,
+                        chr3 = "",
+                        enc1,
+                        enc2,
+                        enc3,
+                        enc4 = "",
+                        i = 0;
 
                     // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
                     var base64test = /[^A-Za-z0-9\+\/\=]/g;
@@ -115,10 +125,10 @@
 
                         output = output + String.fromCharCode(chr1);
 
-                        if (enc3 != 64) {
+                        if (enc3 !== 64) {
                             output = output + String.fromCharCode(chr2);
                         }
-                        if (enc4 != 64) {
+                        if (enc4 !== 64) {
                             output = output + String.fromCharCode(chr3);
                         }
 
@@ -186,7 +196,6 @@
                 }));
                 return dfd.promise;
             }
-
 
             return {
                 getRoles: getRoles,
@@ -507,9 +516,9 @@
 
                     return (request.then(handleSuccess, handleError));
                 },
-                deleteItems: function (listTypeName, watchlistItems) {
+                deleteItems: function (listTypeName, entity, watchlistItems) {
                     var request,
-                        url = baseUrl + listTypeName;
+                        url = baseUrl + entity;
 
                     if (!listTypeName || !watchlistItems || !watchlistItems.length) {
                         return false;
@@ -521,7 +530,7 @@
                         data: {
                             "@class": "gov.gtas.model.watchlist.json.WatchlistSpec",
                             "name": listTypeName,
-                            "entity": listTypeName,
+                            "entity": entity,
                             "watchlistItems": watchlistItems
                         }
                     });
@@ -530,8 +539,8 @@
                 },
                 addItem: function (listTypeName, entity, id, terms) {
                     var request,
-                        url = baseUrl + 'adelorie',
-                        action = !id ? 'Create' : !terms ? 'Delete' : 'Update';
+                        url = baseUrl + entity,
+                        action = 'Create';
 
                     if (!listTypeName || !entity || !terms) {
                         return false;
@@ -556,8 +565,8 @@
                 },
                 updateItem: function (listTypeName, entity, id, terms) {
                     var request,
-                        url = baseUrl + 'adelorie',
-                        action = !id ? 'Create' : !terms ? 'Delete' : 'Update';
+                        url = baseUrl + entity,
+                        action = 'Update';
 
                     if (!listTypeName || !entity || !id || !terms) {
                         return false;
@@ -590,7 +599,8 @@
             var URLS = {
                     query: '/gtas/query/',
                     rule: '/gtas/udr/',
-                    all: '/gtas/all_udr/'
+                    all: '/gtas/all_udr/',
+                    copy: '/gtas/copy_udr/'
                 },
                 handleError = function (response) {
                     if (!angular.isObject(response.data) || !response.data.message) {
@@ -609,6 +619,18 @@
 
                         request = $http({
                             method: "get",
+                            url: [baseUrl, ruleId].join('')
+                        });
+
+                        return (request.then(handleSuccess, handleError));
+                    },
+                    copyRule: function (ruleId) {
+                        var request, baseUrl = URLS.copy;
+
+                        if (!ruleId) { return false; }
+
+                        request = $http({
+                            method: 'post',
                             url: [baseUrl, ruleId].join('')
                         });
 
@@ -659,6 +681,7 @@
 
             // Return public API.
             return ({
+                copyRule: services.copyRule,
                 getList: services.getList,
                 loadRuleById: services.loadRuleById,
                 delete: services.delete,

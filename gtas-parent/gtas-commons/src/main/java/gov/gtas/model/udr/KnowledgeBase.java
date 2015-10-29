@@ -28,10 +28,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @Table(name = "knowledge_base",
        uniqueConstraints= {@UniqueConstraint(name=KB_UNIQUE_CONSTRAINT_NAME, columnNames={"KB_NAME"})})
 public class KnowledgeBase extends BaseEntity {
-
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = 5027457099159173590L;
 	
 	@Version

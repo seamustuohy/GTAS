@@ -1,4 +1,4 @@
-app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, $mdSidenav, $stateParams, $interval, $timeout) {
+app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, spinnerService, $mdSidenav, $stateParams, $interval, $timeout) {
     'use strict';
     var today = moment().format('YYYY-MM-DD').toString(),
         model = {
@@ -41,9 +41,30 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             }
         };
 
-    $scope.$watch('selectedMode', function() {
+    $scope.$watch('selectedMode', function () {
         $scope.updateGrid();
     });
+
+    $scope.copyRule = function () {
+        spinnerService.show('html5spinner');
+        var originalObj = $scope[$scope.mode], ruleId = $scope.ruleId;
+        console.log(originalObj);
+        $scope.addNew();
+        $scope.gridApi.selection.clearSelectedRows();
+        jqueryQueryBuilderService.copyRule(ruleId).then(function (response) {
+            //this makes me cringe... hope result becomes object and this goes away.
+            var partialCopyObj = {
+                id: response.result,
+                title: response.responseDetails[1]['attributeValue'],
+                startDate: today,
+                endDate: null,
+                modifiedOn: today,
+                modifiedBy: 'me'
+            };
+            $scope.qbGrid.data.unshift($.extend({}, originalObj, partialCopyObj));
+            spinnerService.hide('html5spinner');
+        });
+    };
 
     $scope.mode = mode;
     $scope.selectedMode = mode;
@@ -51,18 +72,10 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.prompt = {
         open: function (mode) {
             $scope.buttonMode = mode;
-            $mdSidenav(mode)
-                .open()
-                .then(function () {
-                    console.log("toggle sidenav is done");
-                });
+            $mdSidenav(mode).open();
         },
-        cancel: function (mode) {
-            $mdSidenav(mode)
-                .close()
-                .then(function () {
-                    console.log("toggle sidenav is done");
-                });
+        cancel: function () {
+            $mdSidenav($scope.mode).close();
         }
     };
 
@@ -219,19 +232,21 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     };
 
     $scope.delete = function () {
+        var selectedRowEntities = $scope.gridApi.selection.getSelectedRows().reverse(),
+            rowIndexToDelete;
+
         if (!$scope.ruleId) {
             $scope.alertError('No rule loaded to delete');
             return;
         }
-
-        var selectedRowEntities = $scope.gridApi.selection.getSelectedRows();
-
+        $scope.addNew();
+        spinnerService.show('html5spinner');
         selectedRowEntities.forEach(function (rowEntity) {
-            var rowIndexToDelete = $scope.qbGrid.data.indexOf(rowEntity);
+            rowIndexToDelete = $scope.qbGrid.data.indexOf(rowEntity);
 
-            jqueryQueryBuilderService.delete(mode, $scope.ruleId).then(function (response) {
+            jqueryQueryBuilderService.delete(mode, rowEntity.id).then(function () {
                 $scope.qbGrid.data.splice(rowIndexToDelete, 1);
-                $scope.addNew();
+                spinnerService.hide('html5spinner');
             });
         });
     };
@@ -283,9 +298,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.saving = false;
     $scope.save = {
         query: {
-            cancel: function () {
-                $scope.prompt.cancel('query');
-            },
             prompt: function () {
                 $scope.prompt.open('query');
             },
@@ -323,9 +335,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             }
         },
         rule: {
-            cancel: function () {
-                $scope.prompt.cancel('rule');
-            },
             prompt: function () {
                 $scope.prompt.open('rule');
             },
@@ -395,7 +404,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.qbGrid = gridOptionsLookupService.getGridOptions(mode);
     $scope.qbGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs(mode);
-    $scope.qbGrid.enableRowHeaderSelection = false;
+    $scope.qbGrid.enableRowHeaderSelection = true;
     $scope.qbGrid.enableSelectAll = false;
     $scope.qbGrid.exporterCsvFilename = mode + '.csv';
     $scope.qbGrid.exporterPdfHeader = {text: mode, style: 'headerStyle'};

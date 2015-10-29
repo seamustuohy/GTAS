@@ -11,30 +11,28 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  */
 public class WatchlistTerm implements Serializable{
-	
-	/**
-	 * serial version UID.
-	 */
-	private static final long serialVersionUID = -1079730850782449251L;
+    private static final long serialVersionUID = -1079730850782449251L;
 
-     private String field;
-     private String type;
-     private String value;
-     
-     public WatchlistTerm(){   	 
-     }
-     public WatchlistTerm(String field, String type, String val){
-    	 this.field = field;
-    	 this.type = type;
-    	 this.value = val;
-     }
-      	
-	/**
-	 * @return the field
-	 */
-	public String getField() {
-		return field;
-	}
+    private String field;
+    private String type;
+    private String value;
+
+    public WatchlistTerm() {
+    }
+
+    public WatchlistTerm(String field, String type, String val) {
+        this.field = field;
+        this.type = type;
+        this.value = val;
+    }
+
+    /**
+     * @return the field
+     */
+    public String getField() {
+        return field;
+    }
+
 	/**
 	 * @param field the field to set
 	 */

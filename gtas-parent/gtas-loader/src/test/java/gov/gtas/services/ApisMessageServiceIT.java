@@ -1,10 +1,6 @@
 package gov.gtas.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.File;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.vo.MessageVo;
 import gov.gtas.parsers.exception.ParseException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -41,9 +36,6 @@ public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringConte
 
     @Test()
     public void testRunService() throws ParseException {
-        List<String> messages = svc.preprocess(this.filePath);
-        assertEquals(1, messages.size());
-        MessageVo msg = svc.parse(messages.get(0));
-        assertNotNull(msg);
+        svc.processMessage(this.filePath);
     }
 }

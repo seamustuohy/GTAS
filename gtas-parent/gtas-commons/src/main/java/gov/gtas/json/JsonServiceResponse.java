@@ -15,10 +15,6 @@ import java.util.List;
  *
  */
 public class JsonServiceResponse implements Serializable {
-
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = -1376823917772400644L;
 	private Status status;
 	private String message;

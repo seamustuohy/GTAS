@@ -113,12 +113,6 @@ public class PnrMessageServiceIT extends AbstractTransactionalJUnit4SpringContex
 
     @Test()
     public void testRunService() throws ParseException {
-        List<String> messages = svc.preprocess(this.filePath);
-        assertEquals(2, messages.size());
-        for (String m : messages) {
-            MessageVo vo = svc.parse(m);
-            assertNotNull(vo);
-            svc.load(vo);
-        }
+        svc.processMessage(this.filePath);
     }
 }

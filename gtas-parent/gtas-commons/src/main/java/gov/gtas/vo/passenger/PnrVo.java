@@ -28,7 +28,7 @@ public class PnrVo extends MessageVo implements Validatable {
     private String raw;
     private List<String> rawList = new ArrayList<String>();
     private Integer daysBookedBeforeTravel;
- 
+	private boolean pnrRecordExists = false; 
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
 
@@ -38,7 +38,8 @@ public class PnrVo extends MessageVo implements Validatable {
     private List<FrequentFlyerVo> frequentFlyerDetails = new ArrayList<>();
     private List<EmailVo> emails = new ArrayList<>();
     private List<AgencyVo> agencies = new ArrayList<>();
-    
+    private List<FlightLegVo> flightLegVo = new ArrayList<>();
+	
     public PnrVo() {
         this.bagCount = 0;
         this.passengerCount = 0;
@@ -66,6 +67,14 @@ public class PnrVo extends MessageVo implements Validatable {
 
 	public void setRawList(List<String> rawList) {
 		this.rawList = rawList;
+	}
+
+	public boolean isPnrRecordExists() {
+		return pnrRecordExists;
+	}
+
+	public void setPnrRecordExists(boolean pnrRecordExists) {
+		this.pnrRecordExists = pnrRecordExists;
 	}
 
 	public Integer getDaysBookedBeforeTravel() {
@@ -123,6 +132,14 @@ public class PnrVo extends MessageVo implements Validatable {
     public void setDateBooked(Date dateBooked) {
         this.dateBooked = dateBooked;
     }
+
+    public List<FlightLegVo> getFlightLegVo() {
+		return flightLegVo;
+	}
+
+	public void setFlightLegVo(List<FlightLegVo> flightLegVo) {
+		this.flightLegVo = flightLegVo;
+	}
 
     public Date getDateReceived() {
         return dateReceived;

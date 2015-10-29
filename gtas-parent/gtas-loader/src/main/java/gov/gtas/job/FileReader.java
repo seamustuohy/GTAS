@@ -74,7 +74,8 @@ public class FileReader {
 						Path moveTo = FileSystems.getDefault().getPath(processedFolder.getPath() +File.separator+ fileEntry.getName());
 						if(fileEntry.isFile()){
 							logger.info("Reading file from : "+moveFrom);
-							MessageLoader.processSingleFile(pnrService, fileEntry);
+							//MessageLoader.processSingleFile(pnrService, fileEntry);
+							pnrService.processMessage(moveFrom.toString());
 							logger.info("Moving file after processing to : "+moveTo);
 							fileEntry.renameTo(moveTo.toFile());
 						}
@@ -108,7 +109,8 @@ public class FileReader {
 						Path moveTo = FileSystems.getDefault().getPath(processedFolder.getPath() +File.separator+ fileEntry.getName());
 						if(fileEntry.isFile()){
 							logger.info("Reading file from : "+moveFrom);
-							MessageLoader.processSingleFile(apisService, fileEntry);
+//							MessageLoader.processSingleFile(apisService, fileEntry);
+							apisService.processMessage(moveFrom.toString());
 							logger.info("Moving file after processing to : "+moveTo);
 							fileEntry.renameTo(moveTo.toFile());
 						}

@@ -32,3 +32,8 @@ INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('jtang', 1);
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('mcopenhafer', 1);
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('ladebiyi', 1);
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('adelorie', 1);
+
+-- ----------------------------
+-- Records of app_configuration
+-- ----------------------------
+insert into app_configuration (option, value) values('HOME_COUNTRY', 'USA');

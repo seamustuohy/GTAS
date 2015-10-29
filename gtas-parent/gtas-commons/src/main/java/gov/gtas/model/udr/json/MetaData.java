@@ -12,10 +12,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  *
  */
 public class MetaData implements Serializable {
-
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = -1376823917772400633L;
 	
 	private String title;

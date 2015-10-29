@@ -3,10 +3,6 @@ package gov.gtas.bo.match;
 import java.io.Serializable;
 
 public abstract class PnrAttributeLink implements Serializable {
-
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = -7317834427317049240L;
 	
 	private long pnrId;

@@ -7,9 +7,6 @@ import java.util.LinkedList;
 public class BasicRuleServiceRequest implements RuleServiceRequest,
 		Serializable {
 
-	/**
-	 * serial version UID.
-	 */
 	private static final long serialVersionUID = 8527612411998852833L;
 
 	private Collection<Object> requestObjects;

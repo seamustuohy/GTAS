@@ -31,8 +31,8 @@
                 <div class="col-sm-4">Pax Type:&nbsp; <strong> {{ passenger.passengerType }}</strong></div>
             </div>
             <div class="row">
-                <div class="col-sm-4">Embarkation:&nbsp; <strong> {{ passenger.flightOrigin }}</strong></div>
-                <div class="col-sm-4">Debarkation:&nbsp; <strong> {{ passenger.flightDestination }}</strong></div>
+                <div class="col-sm-4">Origin Country:&nbsp; <strong> {{ passenger.embarkCountry }}</strong></div>
+                <div class="col-sm-4">Destination Country:&nbsp; <strong> {{ passenger.debarkCountry }}</strong></div>
                 <div class="col-sm-4">Citizenship:&nbsp; <strong> {{ passenger.citizenshipCountry }}</strong></div>
             </div>
         </div>
@@ -54,7 +54,7 @@
                 <div class="col-md-4"></div>
             </div>
         </div>
-        <div class="panel panel-default" style="min-height: 1200px; max-height: 1200px;">
+        <div class="panel panel-default" style="min-height: 1200px; max-height: 1600px;">
             <md-tabs id="detailSection" md-stretch-tabs="always" md-dynamic-height>
                 <md-tab label="Details" style="max-width: 150px;">
                     <div class="span12" style="background-color: rgb(255, 255, 255, 0.15);">
@@ -63,8 +63,8 @@
                             <div class="row col-md-offset-1">
                                 <div class="col-sm-2 capitalize">&nbsp;&nbsp;&nbsp;<span style="text-decoration: underline;">Flight:&nbsp; <strong>{{
                                     passenger.flightNumber }}</strong></span></div>
-                                <div class="col-sm-2">Orig.:&nbsp; <strong>{{ passenger.flightOrigin }}</strong></div>
-                                <div class="col-sm-2">Dest.:&nbsp; <strong>{{ passenger.flightDestination }}</strong>
+                                <div class="col-sm-2">Origin Airport:&nbsp; <strong>{{ passenger.flightOrigin }}</strong></div>
+                                <div class="col-sm-2">Destination Airport:&nbsp; <strong>{{ passenger.flightDestination }}</strong>
                                 </div>
                                 <div class="col-sm-3">ETD:&nbsp; <strong>{{ passenger.flightETD | date:"MM/dd/yyyy
                                     HH:mm"
@@ -102,25 +102,26 @@
                     </div>
                 </md-tab>
                 <!-- PNR Tab -->
-                <md-tab label="PNR">
+               
+                <md-tab label="PNR" ng-if="passenger.pnrVo.pnrRecordExists">
                     <md-tab-body>
                         <div style="padding: 10px;"></div>
                         <div class="span12">
                             <div class="container" style="height:100%;">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <h4>&nbsp;&nbsp;&nbsp;&nbsp; Record Locator:&nbsp; <span
+                                        &nbsp;&nbsp;&nbsp;&nbsp; Record Locator:&nbsp; <span
                                                 style="text-decoration: underline;"><strong>{{
-                                            passenger.pnrVo.recordLocator }}</strong></span></h4>
+                                            passenger.pnrVo.recordLocator }}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
-                                        <h4> Booking Date:&nbsp; <strong>{{ passenger.pnrVo.dateBooked | date
+                                        Booking Date:&nbsp; <strong>{{ passenger.pnrVo.dateBooked | date
                                             }}</strong>
-                                        </h4>
+                                        
                                     </div>
                                     <div class="col-sm-4">
-                                        <h4> Received:&nbsp; <strong>{{ passenger.pnrVo.dateReceived | date }}</strong>
-                                        </h4>
+                                         Received:&nbsp; <strong>{{ passenger.pnrVo.dateReceived | date }}</strong>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +137,7 @@
                                             <tbody>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Itinerary ({{ }})</strong></td>
+                                                <td><strong>Itinerary ({{ passenger.pnrVo.flightLegVo.length }})</strong></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -147,20 +148,22 @@
                                                                style="border-collapse: separate; text-align: center;">
                                                             <thead>
                                                             <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center"></th>
-                                                                <th style="text-align: center"></th>
-                                                                <th style="text-align: center"></th>
-                                                                <th style="text-align: center"></th>
-                                                                <th style="text-align: center"></th>
+                                                                <th style="text-align: center">Leg</th>
+                                                                <th style="text-align: center">Flight#</th>
+                                                                <th style="text-align: center">Origin</th>
+                                                                <th style="text-align: center">Destination</th>
+                                                                <th style="text-align: center">Flight Date</th>
+                                                                <th style="text-align: center">ETD</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <tr ng-repeat="doc in passenger.documents">
-                                                                <td style="text-align: center"></td>
-                                                                <td style="text-align: center"></td>
-                                                                <td style="text-align: center"></td>
-                                                                <td style="text-align: center"></td>
-                                                                <td style="text-align: center"></td>
+                                                            <tr ng-repeat="doc in passenger.pnrVo.flightLegVo">
+                                                                <td style="text-align: center">{{ doc.legNumber }}</td>
+                                                                <td style="text-align: center">{{ doc.flightNumber }}</td>
+                                                                <td style="text-align: center">{{ doc.originAirport }}</td>
+                                                                <td style="text-align: center">{{ doc.destinationAirport }}</td>
+                                                                <td style="text-align: center">{{ doc.flightDate }}</td>
+                                                                <td style="text-align: center">{{ doc.etd }}</td>
                                                             </tr>
                                                             </tbody>
                                                         </table>
@@ -169,7 +172,7 @@
                                             </tr>
                                             <tr id="package2" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails2">
-                                                <td><strong>PNR Names ({{}})</strong></td>
+                                                <td><strong>PNR Names ({{ passenger.pnrVo.passengers.length }})</strong></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -185,7 +188,11 @@
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-
+															<tr ng-repeat="pass in passenger.pnrVo.passengers">
+                                                                <td style="text-align: center">{{ pass.firstName }}</td>
+                                                                <td style="text-align: center">{{ pass.middleName }}</td>
+                                                                <td style="text-align: center">{{ pass.lastName }}</td>
+                                                            </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -193,7 +200,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Documents</strong></td>
+                                                <td><strong>Documents ({{ passenger.documents.length }})</strong></td>
                                                 <td></td>
                                                 <td>
                                                 </td>
@@ -205,12 +212,12 @@
                                                                style="border-collapse: separate; text-align: center;">
                                                             <thead>
                                                             <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center">Type</th>
-                                                                <th style="text-align: center">Name</th>
-                                                                <th style="text-align: center">Country</th>
-                                                                <th style="text-align: center">Number</th>
-                                                                <th style="text-align: center">Gender</th>
-                                                                <th style="text-align: center">DOB</th>
+                                                                <td style="text-align: center">Type</td>
+                                                                <td style="text-align: center">Name</td>
+                                                                <td style="text-align: center">Country</td>
+                                                                <td style="text-align: center">Number</td>
+                                                                <td style="text-align: center">Gender</td>
+                                                                <td style="text-align: center">DOB</td>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -261,7 +268,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Phone Numbers ({{ passenger.pnrVo.phones.length }})</strong>
+                                                <td><strong>Phone Numbers ({{ passenger.pnrVo.phoneNumbers.length }})</strong>
                                                 </td>
                                                 <td></td>
                                                 <td>
@@ -271,10 +278,16 @@
                                                 <td colspan="6">
                                                     <div class="accordion-body packageDetails1" id="accordion1">
                                                         <table class="table table-condensed">
-                                                            <tbody ng-repeat="phn in passenger.pnrVo.phones track by $index">
-                                                            <tr>
-                                                                <td>{{ phn.number }}</td>
-                                                            </tr>
+                                                       	 	<thead>
+		                                                            <tr class="text-center" style="text-align: center">
+		                                                                <th style="text-align: center">Phone Number</th>
+		                                                                
+		                                                            </tr>
+                                                            	</thead>
+                                                            <tbody ng-repeat="phn in passenger.pnrVo.phoneNumbers track by $index">
+	                                                            <tr>
+	                                                                <td style="text-align: center">{{ phn.number }}</td>
+	                                                            </tr>
                                                             </tbody>
 
                                                         </table>
@@ -302,7 +315,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr id="package1" class="accordion-toggle" data-toggle="collapse"
+                                            <tr id="package1" class="accordion-toggle"
                                                 data-parent="#OrderPackages" data-target=".packageDetails1">
                                                 <td><strong>Credit Cards ({{ passenger.pnrVo.creditCards.length
                                                     }})</strong>
@@ -340,7 +353,7 @@
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
                                                 <td><strong>Frequent Flyer Numbers ({{
-                                                    passenger.pnrVo.frequentFlyers.length
+                                                    passenger.pnrVo.frequentFlyerDetails.length
                                                     }})</strong></td>
                                                 <td></td>
                                                 <td>
@@ -357,8 +370,8 @@
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <tr ng-repeat="ff in passenger.pnrVo.frequentFlyers track by $index">
-                                                                <td style="text-align: center">{{ff.airline}}</td>
+                                                            <tr ng-repeat="ff in passenger.pnrVo.frequentFlyerDetails track by $index">
+                                                                <td style="text-align: center">{{ff.carrier}}</td>
                                                                 <td style="text-align: center">{{ff.number}}</td>
                                                             </tr>
                                                             </tbody>
@@ -368,7 +381,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Travel Agencies ({{ passenger.pnrVo.agency.length
+                                                <td><strong>Travel Agencies ({{ passenger.pnrVo.agencies.length
                                                     }})</strong>
                                                 </td>
                                                 <td></td>
@@ -379,10 +392,24 @@
                                                 <td colspan="6">
                                                     <div class="accordion-body packageDetails1" id="accordion1">
                                                         <table class="table table-condensed">
-                                                            <tr>
-
-                                                            </tr>
-
+                                                         <thead>
+                                                            <tr class="text-center" style="text-align: center">
+                                                                <th style="text-align: center">Country</th>
+                                                                <th style="text-align: center">ID</th>
+                                                                <th style="text-align: center">Location</th>
+                                                                <th style="text-align: center">Name</th>
+                                                                <th style="text-align: center">Phone</th>
+                                                              </tr>
+                                                            </thead>
+                                                        <tbody>
+	                                                            <tr ng-repeat="agency in passenger.pnrVo.agencies">
+																		<td style="text-align: center">{{agency.country}}</td>
+                                                               			<td style="text-align: center">{{agency.identifier}}</td>
+                                                               			<td style="text-align: center">{{agency.location}}</td>
+                                                               			<td style="text-align: center">{{agency.name}}</td>
+                                                               			<td style="text-align: center">{{agency.phone}}</td>
+	                                                            </tr>
+                                                            </tbody>
                                                         </table>
                                                     </div>
                                                 </td>
@@ -417,9 +444,16 @@
                                                 <td colspan="6">
                                                     <div class="accordion-body packageDetails1" id="accordion1">
                                                         <table class="table table-condensed">
-                                                            <tr>
-
-                                                            </tr>
+                                                         <thead>
+                                                            <tr class="text-center" style="text-align: center">
+                                                                <th style="text-align: center">Seat</th>
+                                                              </tr>
+                                                            </thead>
+                                                        <tbody>
+	                                                            <tr>
+																		<td style="text-align: center">{{ passenger.seat }}</td>
+	                                                            </tr>
+                                                            </tbody>
                                                         </table>
                                                     </div>
                                                 </td>
@@ -434,7 +468,7 @@
                         </div>
                         <!-- RIGHT DIV -->
                         <div class="col-md-offset-2 col-lg-6 col-lg-offset-0"
-                             style="min-height: 200px; min-width: 40px;  max-height: 1000px; overflow: scroll;">
+                             style="min-height: 200px; min-width: 40px;  max-height: 1300px; overflow: scroll;">
                             <table class="table table-striped">
                                 <tbody>
                                 <tr ng-repeat="i in passenger.pnrVo.rawList track by $index">

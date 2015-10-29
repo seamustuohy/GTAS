@@ -405,7 +405,7 @@
         }
       },
       {
-        "id": "Flight.eta",
+        "id": "Flight.etaDate",
         "label": "ETA",
         "type": "date",
         "operators": [
@@ -423,7 +423,7 @@
         "plugin": "datepicker"
       },
       {
-        "id": "Flight.etd",
+        "id": "Flight.etdDate",
         "label": "ETD",
         "type": "date",
         "operators": [

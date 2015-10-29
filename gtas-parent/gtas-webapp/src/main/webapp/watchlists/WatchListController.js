@@ -209,7 +209,7 @@
             var rowIndexToDelete,
                 watchlistItems = [{id: $scope.rowSelected.id, action: 'Delete', terms: null}];
 
-            watchListService.deleteItems($scope.activeTab, watchlistItems).then(function () {
+            watchListService.deleteItems($scope.activeTab, $scope.activeTab, watchlistItems).then(function () {
                 rowIndexToDelete = $scope.watchlistGrid.data.indexOf($scope.rowSelected);
                 $scope.watchlistGrid.data.splice(rowIndexToDelete, 1);
                 $scope.rowSelected = null;
@@ -224,7 +224,7 @@
                 },
                 watchlistItems = selectedRowEntities.map(constructItem);
 
-            watchListService.deleteItems($scope.activeTab, watchlistItems).then(function () {
+            watchListService.deleteItems($scope.activeTab, $scope.activeTab, watchlistItems).then(function () {
                 var rowIndexToDelete;
                 selectedRowEntities.forEach(function (rowEntity) {
                     rowIndexToDelete = $scope.watchlistGrid.data.indexOf(rowEntity);
