@@ -4,27 +4,37 @@ Login page
 
 /* logo page */
 .login {
-  background: url(/gtas/resources/img/login-bg.png) no-repeat center center fixed;
-  background-size: cover;
+  background: #369 url(/gtas/resources/img/GTAS-Splash-Page-1680x335.png) no-repeat bottom center fixed;
+  /*background-size: cover;*/
 }
 
-.login .logo {
-  width: 247px;
-  margin: 0 auto;   
-  margin-top:60px;
-  padding: 15px;
-  text-align: center;
-}  
+/* logo page */
+.login::before {
+  content: "";
+  display: block;
+  background: transparent url(/gtas/resources/img/GTAS-Title-Text-Only-650x41.png) no-repeat fixed;
+  height: 50px;
+  width: 650px;
+  /*background-size: cover;*/
+}
+
+/*.login .logo {*/
+/*width: 247px;*/
+/*margin: 0 auto;   */
+/*margin-top:60px;*/
+/*padding: 15px;*/
+/*text-align: center;*/
+/*}  */
 
 
 .login .content {
-  background: url(../../img/bg-white-lock.png) repeat;
+  background: rgba(55,55,55,0.3);
   width: 291px;
-  margin: 0 auto; 
+  margin: 0 auto;
   margin-bottom: 0px;
-  padding: 30px;  
-  padding-top: 20px;  
-  padding-bottom: 15px;  
+  padding: 30px;
+  padding-top: 20px;
+  padding-bottom: 15px;
 }
 
 .login .content h3 {
@@ -41,8 +51,8 @@ Login page
 
 .login .content .login-form,
 .login .content .forget-form {
-    padding: 0px;
-    margin: 0px;
+  padding: 0px;
+  margin: 0px;
 }
 
 .login .content .m-wrap {
@@ -55,7 +65,7 @@ Login page
   margin-bottom: 20px !important;
 }
 
-.login .content .input-icon .m-wrap {  
+.login .content .input-icon .m-wrap {
   margin: 0px !important;
 }
 
@@ -86,7 +96,7 @@ Login page
   border: 0;
   margin-bottom: 0;
   padding-bottom: 20px;
-}  
+}
 
 .login .content .register-form .form-actions {
   border: 0;
@@ -123,11 +133,11 @@ Login page
   display: inline-block;
   color: #ccc;
   z-index: 1;
-  margin: 2px 4px 4px 3px; 
+  margin: 2px 4px 4px 3px;
   width: 16px;
   height: 16px;
   font-size: 16px;
-  text-align: center; 
+  text-align: center;
 }
 
 .login .content .select2-container a span {
@@ -142,7 +152,7 @@ Login page
 .login .copyright {
   text-align: center;
   width: 270px;
-  margin: 0 auto; 
+  margin: 0 auto;
   padding: 10px 10px 0 10px;
   color: #eee;
   font-size: 12px;
@@ -157,7 +167,7 @@ Login page
   }
 
   .login .content {
-    padding: 30px; 
+    padding: 30px;
     width: 222px;
   }
 
@@ -166,7 +176,7 @@ Login page
   }
 
   .login .content .m-wrap {
-      width: 180px;
+    width: 180px;
   }
 
   .login .checkbox {
