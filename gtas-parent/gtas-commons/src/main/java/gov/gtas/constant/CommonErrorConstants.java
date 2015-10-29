@@ -13,11 +13,6 @@ public class CommonErrorConstants {
 	// ERROR CODES
 	// //////////////////////////////////////////////////////////////////////////////////////
 	/*
-	 * This error code indicates that the Rule Engine Runner failed due to an unexpected exception.
-	 * 
-	 */
-	public static final String RULE_ENGINE_RUNNER_ERROR_CODE = "RE_ERROR";
-	/*
 	 * The error handler uses this to indicate that the error code passed to it
 	 * is Unknown.
 	 */
@@ -114,9 +109,4 @@ public class CommonErrorConstants {
 	 * is Unknown.
 	 */
 	public static final String UNKNOWN_ERROR_CODE_MESSAGE = "The system generated an unknown error code '%s'.";
-	/*
-	 * This error message indicates that the Rule Engine Runner failed due to an unexpected exception.
-	 * 
-	 */
-	public static final String RULE_ENGINE_RUNNER_ERROR_MESSAGE = "The Rule Engine Runner failed to process APIS/PNR messages due to an unexpected exception.";
 }

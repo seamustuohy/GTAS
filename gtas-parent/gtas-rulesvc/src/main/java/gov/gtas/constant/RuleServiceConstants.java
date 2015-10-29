@@ -30,6 +30,11 @@ public class RuleServiceConstants {
 	// ERROR CODES
 	// //////////////////////////////////////////////////////////////////////////////////////
 	/*
+	 * This error code indicates that the Rule Engine Runner failed due to an unexpected exception.
+	 * 
+	 */
+	public static final String RULE_ENGINE_RUNNER_ERROR_CODE = "RE_ERROR";
+	/*
 	 * This is the error code for an internal system error indicating IO error
 	 * during the creation of the Knowledge Base.
 	 */
@@ -101,4 +106,9 @@ public class RuleServiceConstants {
 
 	public static final String INCOMPLETE_TREE_ERROR_MESSAGE = "The query tree is incomplete at level %d.";
 	
+	/*
+	 * This error message indicates that the Rule Engine Runner failed due to an unexpected exception.
+	 * 
+	 */
+	public static final String RULE_ENGINE_RUNNER_ERROR_MESSAGE = "The Rule Engine Runner failed to process APIS/PNR messages due to an unexpected exception.";
 }

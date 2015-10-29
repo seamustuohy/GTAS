@@ -346,9 +346,23 @@ public class TargetingServiceImpl implements TargetingService {
 	private void writeAuditLogForTargetingRun(
 			RuleExecutionContext targetingResult) {
 		try {
+			Set<Long> passengerHits = new HashSet();
+			int ruleHits = 0;
+			int wlHits = 0;
+			for(TargetSummaryVo hit: targetingResult.getTargetingResult()){
+				ruleHits += hit.getRuleHitCount();
+				wlHits += hit.getWatchlistHitCount();
+				passengerHits.add(hit.getPassengerId());
+			}
+			StringBuilder bldr = new StringBuilder("{");
+			bldr.append("totalRuleHits:").append(ruleHits)
+			    .append(", watchlistHits:").append(wlHits)
+			    .append(", totalPassengerHits:").append(passengerHits.size())
+			    .append("}");
+			
 			String message = "Targeting run on " + new Date();
 			auditLogPersistenceService.create(AuditActionType.TARGETING_RUN,
-					"Targeting Run", targetingResult.getTargetingResult(),
+					"Targeting Run", bldr.toString(),
 					message, GTAS_APPLICATION_USERID);
 		} catch (Exception ex) {
 			ex.printStackTrace();
