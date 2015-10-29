@@ -29,7 +29,7 @@
     </dependency>
     <dependency>
       <groupId>gov.gtas</groupId>
-      <artifactId>gtasrulesvc</artifactId>
+      <artifactId>gtas-rulesvc</artifactId>
       <version>${ruleservice.version}</version>
     </dependency>
     <dependency>
@@ -187,7 +187,6 @@
   </dependencies>
   <build>
     <finalName>gtas</finalName>
-
     <plugins>
       <plugin>
         <artifactId>maven-eclipse-plugin</artifactId>

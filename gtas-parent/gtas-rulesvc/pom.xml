@@ -8,10 +8,10 @@
 	</parent>
 
 	<!-- <groupId>gov.gtas</groupId> -->
-	<artifactId>gtasrulesvc</artifactId>
+	<artifactId>gtas-rulesvc</artifactId>
 	<version>0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>gtasrulesvc</name>
+	<name>GTAS rule runner</name>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -94,6 +94,7 @@
 							<mainClass>gov.gtas.rule.RuleRunner</mainClass>
 						</manifest>
 					</archive>
+          <finalName>gtas-rulesvc</finalName>
 				</configuration>
 				<executions>
 					<execution>
@@ -107,13 +108,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<!-- <build> -->
-	<!-- <plugins> -->
-	<!-- Enable generation of Javadoc for source -->
-	<!-- <plugin> -->
-	<!-- <groupId>org.apache.maven.plugins</groupId> -->
-	<!-- <artifactId>maven-javadoc-plugin</artifactId> -->
-	<!-- </plugin> -->
-	<!-- </plugins> -->
-	<!-- </build> -->
 </project>
