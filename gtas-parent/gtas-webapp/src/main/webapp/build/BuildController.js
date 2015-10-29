@@ -75,7 +75,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             $mdSidenav(mode).open();
         },
         cancel: function () {
-            $mdSidenav($scope.mode).close();
+            $mdSidenav($scope.buttonMode).close();
         }
     };
 
