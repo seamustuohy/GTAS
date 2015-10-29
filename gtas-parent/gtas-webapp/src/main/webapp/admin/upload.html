@@ -13,14 +13,13 @@
 }
 </style>
 
-<h2>Upload APIS</h2>
-
+<h2>File Drop</h2>
 <div ngf-drop ngf-select ng-model="files" class="drop-box" 
     ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
-    accept="image/*,application/pdf" 
-    ngf-pattern="'image/*,application/pdf'">Drop APIS files here or click to upload</div>
+    accept="text/plain" 
+    ngf-pattern="'.edi,.txt,.pnr,.apis'">Drop APIS and PNR files here or click to upload</div>
 <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
-Files:
+<h2>Upload Progress</h2>
 <ul>
     <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}</li>
 </ul>
