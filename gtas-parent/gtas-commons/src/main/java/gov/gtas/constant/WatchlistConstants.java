@@ -36,7 +36,7 @@ public class WatchlistConstants {
 	/*
 	 * This is the error message indicating that one or more watch list items to be deleted or updated cannot be found in the data base.
 	 */
-	public static final String MISSING_DELETE_OR_UPDATE_ITEM_ERROR_MESSAGE = "One or more watch list items to be deleted or updated cannot be found in the data base";
+	public static final String MISSING_DELETE_OR_UPDATE_ITEM_ERROR_MESSAGE = "Missing watch list items for delete/update, expected id's [%s] but found [%s]";
 	/*
 	 * This is the error message indicating that an id was specified for a create item operation.
 	 */

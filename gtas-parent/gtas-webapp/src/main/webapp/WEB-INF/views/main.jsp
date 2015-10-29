@@ -62,7 +62,7 @@
         </sec:authorize>
         <sec:authorize access="hasAnyAuthority('Admin')">
             <md-button class="md-button" ng-class="{'md-raised md-primary': onRoute('upload')}"
-            ng-disabled="onRoute('upload')" href="#/upload"><i class="glyphicon glyphicon-edit"></i>  Upload</md-button>
+            ng-disabled="onRoute('upload')" href="#/upload"><i class="glyphicon glyphicon-upload"></i>  Upload</md-button>
         </sec:authorize>
 
 
