@@ -78,13 +78,13 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         TVL_L0 tvl = getMandatorySegment(TVL_L0.class, "TVL");
         getMandatorySegment(EQN.class);
         getMandatorySegment(SRC.class);       
-        processGroup1(tvl);
+        processGroup1_PnrStart(tvl);
     }
 
     /**
      * start of a new PNR
      */
-    private void processGroup1(TVL_L0 tvl_l0) throws ParseException {
+    private void processGroup1_PnrStart(TVL_L0 tvl_l0) throws ParseException {
         parsedMessage.setCarrier(tvl_l0.getCarrier());
         parsedMessage.setOrigin(tvl_l0.getOrigin());
         parsedMessage.setDepartureDate(tvl_l0.getEtd());
@@ -113,14 +113,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         }
 
         ORG org = getMandatorySegment(ORG.class);
-        AgencyVo agencyVo = new AgencyVo();
-        agencyVo.setName(org.getAirlineCode());
-        agencyVo.setLocation(org.getLocationCode());
-        agencyVo.setIdentifier(org.getTravelAgentIdentifier());
-        agencyVo.setCountry(org.getOriginatorCountryCode());
-        if (agencyVo.isValid()) {
-            parsedMessage.getAgencies().add(agencyVo);
-        }
+        processAgencyInfo(org);
 
         for (;;) {
             ADD add = getConditionalSegment(ADD.class);
@@ -149,13 +142,13 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         }
         
         TIF tif = getMandatorySegment(TIF.class);
-        processGroup2(tif);
+        processGroup2_Passenger(tif);
         for (;;) {
             tif = getConditionalSegment(TIF.class);
             if (tif == null) {
                 break;
             }
-            processGroup2(tif);
+            processGroup2_Passenger(tif);
         }
 
         for (;;) {
@@ -163,14 +156,14 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (tvl == null) {
                 break;
             }
-            processGroup5(tvl);
+            processGroup5_Flight(tvl);
         }
     }
 
     /**
      * Passenger
      */
-    private void processGroup2(TIF tif) throws ParseException {
+    private void processGroup2_Passenger(TIF tif) throws ParseException {
         FTI fti = getConditionalSegment(FTI.class);
         if (fti != null) {
             FrequentFlyerVo ffvo = new FrequentFlyerVo();
@@ -215,7 +208,10 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                     parsedMessage.setPassengerCount(parsedMessage.getPassengerCount() + 1);
                 }
             } else if (SSR.DOCA.equals(code)) {
-                parsedMessage.getAddresses().add(PnrUtils.createAddress(ssr));
+                AddressVo addr = PnrUtils.createAddress(ssr);
+                if (addr.isValid()) {
+                    parsedMessage.getAddresses().add(addr);
+                }
             }
         }
 
@@ -233,7 +229,10 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (add == null) {
                 break;
             }
-            parsedMessage.getAddresses().add(PnrUtils.createAddress(add));
+            AddressVo addr = PnrUtils.createAddress(add);
+            if (addr.isValid()) {
+                parsedMessage.getAddresses().add(addr);
+            }
         }
 
         for (;;) {
@@ -241,7 +240,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (tkt == null) {
                 break;
             }
-            processGroup3(tkt);
+            processGroup3_TicketCost(tkt);
         }
     }
 
@@ -249,7 +248,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
      * Ticket cost info. Repeats for each ticket associated with a passenger.
      * Not currently using this.
      */
-    private void processGroup3(TKT tkt) throws ParseException {
+    private void processGroup3_TicketCost(TKT tkt) throws ParseException {
         getConditionalSegment(MON.class);
         getConditionalSegment(PTK.class);
 
@@ -263,13 +262,13 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         getConditionalSegment(DAT_G1.class, "DAT");
 
         FOP fop = getConditionalSegment(FOP.class);
-        processGroup4(fop);
+        processGroup4_FormOfPayment(fop);
     }
 
     /**
      * Form of payment info: get credit card if exists
      */
-    private void processGroup4(FOP fop) throws ParseException {
+    private void processGroup4_FormOfPayment(FOP fop) throws ParseException {
         List<CreditCardVo> newCreditCards = new ArrayList<>();
 
         if (fop != null) {
@@ -283,7 +282,9 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                         cc.setCardType(p.getVendorCode());
                         cc.setExpiration(p.getExpirationDate());
                         cc.setNumber(p.getAccountNumber());
-                        newCreditCards.add(cc);
+                        if (cc.isValid()) {
+                            newCreditCards.add(cc);
+                        }
                     }                    
                 }
             }
@@ -309,7 +310,10 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         
         ADD add = getConditionalSegment(ADD.class);
         if (add != null) {
-            parsedMessage.getAddresses().add(PnrUtils.createAddress(add));
+            AddressVo addr = PnrUtils.createAddress(add);
+            if (addr.isValid()) {
+                parsedMessage.getAddresses().add(addr);
+            }
         }
     }
 
@@ -317,7 +321,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
      * Flight info: repeats for each flight segment in the passenger record’s
      * itinerary.
      */
-    private void processGroup5(TVL tvl) throws ParseException {
+    private void processGroup5_Flight(TVL tvl) throws ParseException {
         FlightVo f = new FlightVo();
         f.setCarrier(tvl.getCarrier());
         f.setDestination(tvl.getDestination());
@@ -358,7 +362,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (dat == null) {
                 break;
             }
-            processGroup6(dat);
+            processGroup6_Agent(dat);
         }
         
         for (;;) {
@@ -366,7 +370,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (eqn == null) {
                 break;
             }
-            processGroup8(eqn);
+            processGroup8_SplitPassenger(eqn);
         }
 
         for (;;) {
@@ -374,7 +378,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (msg == null) {
                 break;
             }
-            processGroup9(msg);
+            processGroup9_NonAir(msg);
         }
 
         for (;;) {
@@ -382,7 +386,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (abi == null) {
                 break;
             }
-            processGroup10(abi);
+            processGroup10_History(abi);
         }
 
         for (;;) {
@@ -396,24 +400,25 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     /**
      * the agent info that checked-in the passenger
      */
-    private void processGroup6(DAT_G6 dat) throws ParseException {
+    private void processGroup6_Agent(DAT_G6 dat) throws ParseException {
         ORG org = getConditionalSegment(ORG.class, "ORG");
+        processAgencyInfo(org);
 
         TRI tri = getMandatorySegment(TRI.class);
-        processGroup7(tri);
+        processGroup7_SeatInfo(tri);
         for (;;) {
             tri = getConditionalSegment(TRI.class);
             if (tri == null) {
                 break;
             }
-            processGroup7(tri);
+            processGroup7_SeatInfo(tri);
         }        
     }
     
     /**
      * boarding, seat number and checked bag info
      */
-    private void processGroup7(TRI tri) throws ParseException {
+    private void processGroup7_SeatInfo(TRI tri) throws ParseException {
         PassengerVo thePax = null;
         String refNumber = tri.getTravelerReferenceNumber();
         if (refNumber != null) {
@@ -462,14 +467,14 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         }
     }
     
-    private void processGroup8(EQN eqn) throws ParseException {
+    private void processGroup8_SplitPassenger(EQN eqn) throws ParseException {
         getMandatorySegment(RCI.class);
     }
 
     /**
      * non-air segments: car, hotel, rail.  Not used.
      */
-    private void processGroup9(MSG msg) throws ParseException {
+    private void processGroup9_NonAir(MSG msg) throws ParseException {
         for (;;) {
             TVL tvl = getConditionalSegment(TVL.class);
             if (tvl == null) {
@@ -478,21 +483,18 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         }
     }
 
-    private void processGroup10(ABI abi) throws ParseException {
+    private void processGroup10_History(ABI abi) throws ParseException {
         DAT_G10 dat = getConditionalSegment(DAT_G10.class, "DAT");
         for (;;) {
             SAC sac = getConditionalSegment(SAC.class);
             if (sac == null) {
                 break;
             }
-            processGroup11(sac);
+            processGroup11_HistoryCredit(sac);
         }        
     }
 
-    /**
-     * history information
-     */
-    private void processGroup11(SAC sac) throws ParseException {
+    private void processGroup11_HistoryCredit(SAC sac) throws ParseException {
         TIF tif = getConditionalSegment(TIF.class);
         SSR ssr = getConditionalSegment(SSR.class);
         IFT ift = getConditionalSegment(IFT.class);
@@ -502,12 +504,12 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (tvl == null) {
                 break;
             }
-            processGroup12(tvl);
+            processGroup12_HistoryFlightInfo(tvl);
         }        
 
     }
 
-    private void processGroup12(TVL tvl) throws ParseException {
+    private void processGroup12_HistoryFlightInfo(TVL tvl) throws ParseException {
         RPI rpi = getConditionalSegment(RPI.class);
     }
     
@@ -517,6 +519,21 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (n != null) {
                 parsedMessage.setBagCount(parsedMessage.getBagCount() + n);
             }
+        }
+    }
+    
+    private void processAgencyInfo(ORG org) {
+        if (org == null) {
+            return;
+        }
+        
+        AgencyVo agencyVo = new AgencyVo();
+        agencyVo.setName(org.getAirlineCode());
+        agencyVo.setLocation(org.getLocationCode());
+        agencyVo.setIdentifier(org.getTravelAgentIdentifier());
+        agencyVo.setCountry(org.getOriginatorCountryCode());
+        if (agencyVo.isValid()) {
+            parsedMessage.getAgencies().add(agencyVo);
         }
     }
 }

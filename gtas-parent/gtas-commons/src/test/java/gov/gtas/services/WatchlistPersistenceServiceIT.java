@@ -72,11 +72,11 @@ public class WatchlistPersistenceServiceIT {
 	@Test()
 	public void testCreateWatchlist() {
 		List<WatchlistItem> createList = testGenUtils.createWatchlistItems(TEST_WL_ITEMS1);
-		Watchlist wl = testTarget.createOrUpdate(TEST_WL_NAME, TEST_WL_ENTITY, createList, null, WatchlistDataGenUtils.TEST_USER1_ID);
-		assertNotNull(wl);
-		assertNotNull(wl.getId());
+		List<Long> idList = testTarget.createUpdateDelete(TEST_WL_NAME, TEST_WL_ENTITY, createList, null, WatchlistDataGenUtils.TEST_USER1_ID);
+		assertNotNull(idList);
+		assertEquals(5, idList.size());
+		Watchlist wl = testTarget.findByName(TEST_WL_NAME);
 		assertNotNull(wl.getEditTimestamp());
-		assertEquals(TEST_WL_NAME, wl.getWatchlistName());
 		assertEquals(TEST_WL_ENTITY, wl.getWatchlistEntity());
 		User editor = wl.getWatchListEditor();
 		assertEquals(WatchlistDataGenUtils.TEST_USER1_ID, editor.getUserId());
@@ -93,23 +93,36 @@ public class WatchlistPersistenceServiceIT {
 	
 	@Transactional
 	@Test()
-	public void testUpdateWatchlist() {
+	public void testUpdateDeleteWatchlist() {
 		List<WatchlistItem> createList = testGenUtils.createWatchlistItems(TEST_WL_ITEMS1);
 		List<WatchlistItem> addList = testGenUtils.createWatchlistItems(TEST_WL_ITEMS2);
-		Watchlist wl = testTarget.createOrUpdate(TEST_WL_NAME, TEST_WL_ENTITY, createList, null, WatchlistDataGenUtils.TEST_USER1_ID);
-		assertNotNull(wl);
-		List<WatchlistItem> items = testTarget.findWatchlistItems(wl.getWatchlistName());
+		List<Long> idList = testTarget.createUpdateDelete(TEST_WL_NAME, TEST_WL_ENTITY, createList, null, WatchlistDataGenUtils.TEST_USER1_ID);
+		assertNotNull(idList);
+		assertEquals(5, idList.size());//wl id + 4 inserted item ids
+		List<WatchlistItem> items = testTarget.findWatchlistItems(TEST_WL_NAME);
+		assertEquals(4, items.size());
 		Map<String, Long> jsonMap = new HashMap<>();
-		for(WatchlistItem item:items){
+		
+		//delete item 1
+		List<WatchlistItem> deleteItems = new LinkedList<WatchlistItem>();
+		deleteItems.add(items.get(0));
+		
+		//update items 2,3,4
+		List<WatchlistItem> updateItems = new LinkedList<WatchlistItem>();
+		for(int i = 1; i < items.size(); i++){
+			WatchlistItem item = items.get(i);
 			String update = item.getItemData() + "-update";
 			item.setItemData(update);
+			updateItems.add(item);
 			jsonMap.put(update, item.getId());			
 		}
-		items.addAll(addList);
-		testTarget.createOrUpdate(wl.getWatchlistName(), wl.getWatchlistEntity(), items, null, WatchlistDataGenUtils.TEST_USER1_ID);
-		items = testTarget.findWatchlistItems(wl.getWatchlistName());
+		//insert two more items
+		updateItems.addAll(addList);
+		
+		testTarget.createUpdateDelete(TEST_WL_NAME, TEST_WL_ENTITY, updateItems, deleteItems, WatchlistDataGenUtils.TEST_USER1_ID);
+		items = testTarget.findWatchlistItems(TEST_WL_NAME);
 		assertNotNull(items);
-		assertEquals(6, items.size());
+		assertEquals(5, items.size());
 		int updateCount = 0;
 		for(WatchlistItem item:items){
 			Long id = item.getId();
@@ -123,20 +136,21 @@ public class WatchlistPersistenceServiceIT {
 				++updateCount;
 			}
 		}
-		assertEquals(4, updateCount);	
+		assertEquals(3, updateCount);	
 	}
 	@Transactional
 	@Test()
 	public void testDeleteWatchlist() {
 		List<WatchlistItem> createList = testGenUtils.createWatchlistItems(TEST_WL_ITEMS1);
-		Watchlist wl = testTarget.createOrUpdate(TEST_WL_NAME, TEST_WL_ENTITY, createList, null, WatchlistDataGenUtils.TEST_USER1_ID);
-		assertNotNull(wl);
+		testTarget.createUpdateDelete(TEST_WL_NAME, TEST_WL_ENTITY, createList, null, WatchlistDataGenUtils.TEST_USER1_ID);
+		Watchlist wl = testTarget.findByName(TEST_WL_NAME);
+		assertNotNull(wl);		
 		List<WatchlistItem> items = testTarget.findWatchlistItems(wl.getWatchlistName());
 		assertEquals(4, items.size());
 		List<WatchlistItem> deleteItems = new LinkedList<WatchlistItem>();
 		String deldata1 = addDeleteItem(deleteItems, items.get(0));
 		String deldata2 = addDeleteItem(deleteItems, items.get(3));
-		testTarget.createOrUpdate(wl.getWatchlistName(), wl.getWatchlistEntity(), null, deleteItems, WatchlistDataGenUtils.TEST_USER1_ID);
+		testTarget.createUpdateDelete(wl.getWatchlistName(), wl.getWatchlistEntity(), null, deleteItems, WatchlistDataGenUtils.TEST_USER1_ID);
 		items = testTarget.findWatchlistItems(wl.getWatchlistName());
 		assertNotNull(items);
 		assertEquals(2, items.size());
@@ -150,7 +164,8 @@ public class WatchlistPersistenceServiceIT {
 	@Test()
 	public void testWatchlistSummary() {
 		List<WatchlistItem> createList = testGenUtils.createWatchlistItems(TEST_WL_ITEMS1);
-		Watchlist wl = testTarget.createOrUpdate(TEST_WL_NAME, TEST_WL_ENTITY, createList, null, WatchlistDataGenUtils.TEST_USER1_ID);
+		testTarget.createUpdateDelete(TEST_WL_NAME, TEST_WL_ENTITY, createList, null, WatchlistDataGenUtils.TEST_USER1_ID);
+		Watchlist wl = testTarget.findByName(TEST_WL_NAME);
 		assertNotNull(wl);
 		List<Watchlist> summaryList = testTarget.findAllSummary();
 		assertTrue(summaryList.size() >= 1);//there may be existing Watch lists

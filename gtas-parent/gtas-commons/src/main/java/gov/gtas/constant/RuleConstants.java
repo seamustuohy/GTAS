@@ -16,6 +16,9 @@ public class RuleConstants {
 	public static final String RULE_ENGINE_DATETIME_FORMAT = "dd-MMM-yyyy HH:mm:ss";  
 	
 	public static final String UDR_ID_ATTRIBUTE_NAME = "id";
+	public static final String WL_ID_ATTRIBUTE_NAME = "id";
+	public static final String WL_ITEM_IDS_ATTRIBUTE_NAME = "itemIds";
+	public static final String WL_TITLE_ATTRIBUTE_NAME = "title";
 	public static final String UDR_TITLE_ATTRIBUTE_NAME = "title";
 	
 	public static final String UDR_CREATE_OP_NAME = "Create UDR";

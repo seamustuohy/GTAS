@@ -25,18 +25,29 @@ public interface WatchlistService {
 	WatchlistSpec fetchWatchlist(String wlName);
 
 	/**
-	 * Creates a new UDR object in the database and returns it in JSON object
-	 * format.
+	 * Creates/Updates/Deletes watchlist items from the specified watchlist.
 	 * 
 	 * @param userId
 	 *            the userId of the author.
-	 * @param udrToCreate
-	 *            the JSON UDR object to be inserted into tte DB.
+	 * @param wlToCreateUpdateDelete
+	 *            the JSON Watchlist object with items to be inserted/updated/deleted.
 	 * @return the service response JSON format.
 	 */
-	JsonServiceResponse createOrUpdateWatchlist(String userId,
-			WatchlistSpec wlToCreateUpdate);
+	JsonServiceResponse createUpdateDeleteWatchlistItems(String userId,
+			WatchlistSpec wlToCreateUpdateDelete);
 
+	/**
+	 * Creates/Updates watch list items from the specified watch list.
+	 * 
+	 * @param userId
+	 *            the userId of the author.
+	 * @param wlToCreateUpdate
+	 *            the JSON Watch list object with items to be inserted/updated/deleted.
+	 * @return the service response JSON format.
+	 */
+	JsonServiceResponse createUpdateWatchlistItems(String userId,
+			WatchlistSpec wlToCreateUpdate);
+	
 	/**
 	 * Fetches all watch lists
 	 * 

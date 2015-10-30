@@ -208,8 +208,8 @@
                     displayName: 'Destination'
                 },
                 {
-                    field: 'eta',
-                    name: 'eta',
+                    field: 'etaLocalTZ',
+                    name: 'etaLocalTZ',
                     sort: {
                         direction: uiGridConstants.DESC,
                         priority: 2
@@ -217,8 +217,8 @@
                     displayName: 'ETA'
                 },
                 {
-                    field: 'etd',
-                    name: 'etd',
+                    field: 'etdLocalTZ',
+                    name: 'etdLocalTZ',
                     displayName: 'ETD'
                 },
                 {

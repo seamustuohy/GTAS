@@ -6,6 +6,7 @@ import gov.gtas.constants.Constants;
 import gov.gtas.enumtype.Status;
 import gov.gtas.error.CommonServiceException;
 import gov.gtas.json.JsonServiceResponse;
+import gov.gtas.model.watchlist.json.WatchlistItemSpec;
 import gov.gtas.model.watchlist.json.WatchlistSpec;
 import gov.gtas.security.service.GtasSecurityUtils;
 import gov.gtas.svc.RuleManagementService;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,19 +41,21 @@ public class WatchlistManagementController {
 			.getLogger(WatchlistManagementController.class);
 
 	@Autowired
-    private WatchlistService watchlistService;
-	
+	private WatchlistService watchlistService;
+
 	@Autowired
 	private RuleManagementService ruleManagementService;
 
 	@RequestMapping(value = Constants.WL_GET_BY_NAME, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonServiceResponse getWatchlist(@PathVariable String entity, @PathVariable String name) {
+	public JsonServiceResponse getWatchlist(@PathVariable String entity,
+			@PathVariable String name) {
 		logger.debug("******** name =" + name);
 		WatchlistSpec resp = watchlistService.fetchWatchlist(name);
-		if(resp == null){
-			resp = 	new WatchlistSpec(name, entity);
+		if (resp == null) {
+			resp = new WatchlistSpec(name, entity);
 		}
-		return new JsonServiceResponse(Status.SUCCESS, "GET Watchlist By Name was successful", resp);
+		return new JsonServiceResponse(Status.SUCCESS,
+				"GET Watchlist By Name was successful", resp);
 	}
 
 	@RequestMapping(value = Constants.WL_GETALL, method = RequestMethod.GET)
@@ -61,73 +65,74 @@ public class WatchlistManagementController {
 
 	@RequestMapping(value = Constants.WL_GETDRL, method = RequestMethod.GET)
 	public JsonServiceResponse getDrl() {
-		String rules = ruleManagementService.fetchDrlRulesFromKnowledgeBase(WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
+		String rules = ruleManagementService
+				.fetchDrlRulesFromKnowledgeBase(WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
 		return createDrlRulesResponse(rules);
 	}
-	
+
 	/**
 	 * Creates the DRL rule response JSON object.
-	 * @param rules the DRL rules.
+	 * 
+	 * @param rules
+	 *            the DRL rules.
 	 * @return the JSON response object containing the rules.
 	 */
-	private JsonServiceResponse createDrlRulesResponse(String rules){
-		JsonServiceResponse resp = new JsonServiceResponse(Status.SUCCESS, "Drools rules fetched successfully");
+	private JsonServiceResponse createDrlRulesResponse(String rules) {
+		JsonServiceResponse resp = new JsonServiceResponse(Status.SUCCESS,
+				"Drools rules fetched successfully");
 		String[] lines = rules.split("\n");
-		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute("DRL Rules", lines));
+		resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
+				"DRL Rules", lines));
 		return resp;
 	}
-	//@RequestMapping(value = Constants.WL_POST, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@RequestMapping(value = Constants.WL_POST, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonServiceResponse createWatchlist(
-			@PathVariable String entity, @RequestBody WatchlistSpec inputSpec) {
+
+	@RequestMapping(value = Constants.WL_CREATE_UPDATE_DELETE_ITEMS, method = {RequestMethod.POST, RequestMethod.PUT }, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public JsonServiceResponse createWatchlist(@PathVariable String entity,
+			@RequestBody WatchlistSpec inputSpec) {
 
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		logger.info("******** Received UDR Create request by user =" + userId);
-		if (inputSpec == null) {
+		validateInput(inputSpec);
+		JsonServiceResponse resp = watchlistService
+				.createUpdateDeleteWatchlistItems(userId, inputSpec);
+
+		return resp;
+	}
+
+	private void validateInput(WatchlistSpec inputSpec) {
+		List<WatchlistItemSpec> items = inputSpec != null ? inputSpec
+				.getWatchlistItems() : null;
+		if (inputSpec == null || CollectionUtils.isEmpty(items)) {
 			throw new CommonServiceException(
 					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE,
 					String.format(
 							CommonErrorConstants.NULL_ARGUMENT_ERROR_MESSAGE,
 							"Create Query For Rule", "inputSpec"));
 		}
-		
-		JsonServiceResponse resp = watchlistService.createOrUpdateWatchlist(userId, inputSpec);
-
-		return resp;
-	}
-
-	//@RequestMapping(value = Constants.WL_PUT, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@RequestMapping(value = Constants.WL_PUT, method = RequestMethod.PUT,  produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonServiceResponse updateUDR(
-			@PathVariable String entity, @RequestBody WatchlistSpec inputSpec) {
-
-		String userId = GtasSecurityUtils.fetchLoggedInUserId();
-        logger.info("******** Received UDR Update request by user =" + userId);
-						
-		JsonServiceResponse resp = watchlistService.createOrUpdateWatchlist(userId, inputSpec);
-
-		return resp;
 	}
 
 	@RequestMapping(value = Constants.WL_DELETE, method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse deleteUDR(@PathVariable String name) {
-		logger.info("******** Received UDR Delete requestfor watch list =" + name);
+		logger.info("******** Received UDR Delete requestfor watch list ="
+				+ name);
 		JsonServiceResponse resp = watchlistService.deleteWatchlist(name);
 		return resp;
 	}
 
 	@RequestMapping(value = Constants.WL_COMPILE, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonServiceResponse compileWatchlists(){
+	public JsonServiceResponse compileWatchlists() {
 		return watchlistService.activateAllWatchlists();
 	}
 
-    /**
-     * 
-     * @return
-     */
+	/**
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = Constants.WL_TEST, method = RequestMethod.GET)
 	public WatchlistSpec getTestWatchlist() {
-		WatchlistSpec resp = SampleDataGenerator.createSampleWatchlist("TestWatchlist");
+		WatchlistSpec resp = SampleDataGenerator
+				.createSampleWatchlist("TestWatchlist");
 		return resp;
 	}
 

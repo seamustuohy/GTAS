@@ -119,13 +119,13 @@
                 width: 70
             },
             {
-                name: 'eta', displayName: 'ETA',
+                name: 'etaLocalTZ', displayName: 'ETA',
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 2
                 }
             },
-            {name: 'etd', displayName: 'ETD'},
+            {name: 'etdLocalTZ', displayName: 'ETD'},
             {name: 'origin'},
             {name: 'originCountry', displayName: 'Country'},
             {name: 'destination'},

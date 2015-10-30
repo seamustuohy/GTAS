@@ -46,11 +46,6 @@ public class Watchlist extends BaseEntity {
 	@Column(name = "WL_EDIT_DTTM", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date editTimestamp;
-
-//    @Column(name = "WL_COMPILE_DTTM", nullable = true)
-//	@Temporal(TemporalType.TIMESTAMP)
-//    private Date compileTimestamp;
-    
     
     /**
 	 * @return the watchListEditor
