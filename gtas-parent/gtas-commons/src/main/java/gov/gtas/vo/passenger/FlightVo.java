@@ -14,7 +14,8 @@ import gov.gtas.vo.BaseVo;
 
 public class FlightVo extends BaseVo implements Validatable {
     public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm aaa";
-
+    private static final SimpleDateFormat dtFormat = new SimpleDateFormat(DATE_FORMAT);
+    
     private String flightId;
     private String carrier;
     private String flightNumber;
@@ -35,8 +36,8 @@ public class FlightVo extends BaseVo implements Validatable {
     private Date etdDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date etaDate;
-    private String etdString;
-    private String etaString;
+    private String etdLocalTZ;
+    private String etaLocalTZ;
     private Integer passengerCount = Integer.valueOf(0);
     private Integer ruleHitCount = Integer.valueOf(0);
     private Integer listHitCount = Integer.valueOf(0);
@@ -44,7 +45,6 @@ public class FlightVo extends BaseVo implements Validatable {
     private int listHits;
     private int paxListHit;
     private int docListHit;
-    private static final SimpleDateFormat dtFormat = new SimpleDateFormat(DATE_FORMAT);
     
     public int getRuleHits() {
 		return ruleHits;
@@ -137,7 +137,7 @@ public class FlightVo extends BaseVo implements Validatable {
         this.etd = etd;
         
         if(etd != null) {
-        	this.etdString = dtFormat.format(etd);
+        	this.etdLocalTZ = dtFormat.format(etd);
         }
     }
     public Date getEta() {
@@ -147,7 +147,7 @@ public class FlightVo extends BaseVo implements Validatable {
         this.eta = eta;
         
         if(eta != null) {
-        	this.etaString = dtFormat.format(eta);
+        	this.etaLocalTZ = dtFormat.format(eta);
         }
     }
     public boolean isOverFlight() {
@@ -200,12 +200,12 @@ public class FlightVo extends BaseVo implements Validatable {
 		this.etaDate = etaDate;
 	}
 	
-	public String getEtdString() {
-		return etdString;
+	public String getEtdLocalTZ() {
+		return etdLocalTZ;
 	}
 	
-	public String getEtaString() {
-		return etaString;
+	public String getEtaLocalTZ() {
+		return etaLocalTZ;
 	}
 	
 	@Override

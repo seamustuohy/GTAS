@@ -3,6 +3,7 @@ package gov.gtas.vo.passenger;
 import gov.gtas.validators.Validatable;
 import gov.gtas.vo.BaseVo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PassengerVo extends BaseVo implements Validatable {
+	private static final SimpleDateFormat dtFormat = new SimpleDateFormat(FlightVo.DATE_FORMAT);
+	
     /**
      * a unique passenger reference identifier (from PNR) used to cross
      * reference passenger information in a PNR
@@ -48,6 +51,8 @@ public class PassengerVo extends BaseVo implements Validatable {
     private Date etd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)        
     private Date eta;
+    private String etdLocalTZ;
+    private String etaLocalTZ;
     // hits info
     private Boolean onRuleHitList = Boolean.FALSE;
     private Boolean onWatchList = Boolean.FALSE;
@@ -138,12 +143,20 @@ public class PassengerVo extends BaseVo implements Validatable {
     }
     public void setEtd(Date etd) {
         this.etd = etd;
+        
+        if(etd != null) {
+        	this.etdLocalTZ = dtFormat.format(etd);
+        }
     }
     public Date getEta() {
         return eta;
     }
     public void setEta(Date eta) {
         this.eta = eta;
+        
+        if(eta != null) {
+        	this.etaLocalTZ = dtFormat.format(eta);
+        }
     }
     public void addDocument(DocumentVo d) {
         documents.add(d);
@@ -281,7 +294,13 @@ public class PassengerVo extends BaseVo implements Validatable {
         this.onWatchListDoc = onWatchListDoc;
     }
 
-    @Override
+    public String getEtdLocalTZ() {
+		return etdLocalTZ;
+	}
+	public String getEtaLocalTZ() {
+		return etaLocalTZ;
+	}
+	@Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }
