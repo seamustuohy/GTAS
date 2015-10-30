@@ -30,15 +30,13 @@ public final class Constants {
 	public static final String TARGET_ALL_MSG = "/target";
 	
 	//WATCH LIST URI
-//	public static final String WL_ROOT = "/wl";
 	public static final String WL_GET_BY_NAME = "/wl/{entity}/{name}";
 	public static final String WL_GETALL = "/wl";
-	public static final String WL_GETDRL = "/wl/drl";
-	public static final String WL_POST = "/wl/{entity}";
-	public static final String WL_PUT = "/wl/{entity}";
+	public static final String WL_GETDRL = "/wl_drl";
+	public static final String WL_CREATE_UPDATE_DELETE_ITEMS = "/wl/{entity}";//POST/PUT
 	public static final String WL_DELETE = "/wl/{entity}/{name}";
-	public static final String WL_COMPILE = "/wl/compile";
-	public static final String WL_TEST = "/wl/testwl";
+	public static final String WL_COMPILE = "/wl/compile";//GET
+	public static final String WL_TEST = "/testwl";//GET
 
 	
 	// Query Messages

@@ -76,7 +76,7 @@ public class WatchlistManagementControllerIT {
 	@Test
 	@Transactional
 	public void testGetWl() throws Exception {
-		watchlistService.createOrUpdateWatchlist("adelorie",
+		watchlistService.createUpdateDeleteWatchlistItems("adelorie",
 				SampleDataGenerator.newWlWith2Items(WL_NAME));
 
 		mockMvc.perform(get("/gtas/wl/PASSENGER/" + WL_NAME))
@@ -123,7 +123,7 @@ public class WatchlistManagementControllerIT {
 				.andExpect(
 						jsonPath("$.status",
 								is(Status.SUCCESS.toString())))
-				.andExpect(jsonPath("$.responseDetails", hasSize(2)))
+				.andExpect(jsonPath("$.responseDetails", hasSize(3)))
 				.andExpect(
 						jsonPath("$.responseDetails[0].attributeName", is("id")))
 				.andExpect(
@@ -136,7 +136,7 @@ public class WatchlistManagementControllerIT {
 	@Transactional
 	@WithUserDetails(TEST_USER)
 	public void testUpdateDeleteWl() throws Exception {
-		watchlistService.createOrUpdateWatchlist(TEST_USER,
+		watchlistService.createUpdateDeleteWatchlistItems(TEST_USER,
 				SampleDataGenerator.newWlWith2Items(WL_NAME));
 		WatchlistSpec wlSpec = watchlistService.fetchWatchlist(WL_NAME);
 		assertNotNull(wlSpec);

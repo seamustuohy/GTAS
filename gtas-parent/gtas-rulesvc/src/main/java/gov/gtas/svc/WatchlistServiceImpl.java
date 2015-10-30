@@ -62,7 +62,7 @@ public class WatchlistServiceImpl implements WatchlistService {
 	 * @see gov.gtas.svc.WatchlistService#createOrUpdateWatchlist(java.lang.String, gov.gtas.model.watchlist.json.Watchlist)
 	 */
 	@Override
-	public JsonServiceResponse createOrUpdateWatchlist(String userId,
+	public JsonServiceResponse createUpdateDeleteWatchlistItems(String userId,
 			WatchlistSpec wlToCreateUpdate) {
 		WatchlistValidationAdapter.validateWatchlistSpec(wlToCreateUpdate);
 		WatchlistBuilder bldr = new WatchlistBuilder(wlToCreateUpdate);
@@ -71,8 +71,26 @@ public class WatchlistServiceImpl implements WatchlistService {
 		final EntityEnum entity = bldr.getEntity();
 		List<WatchlistItem> createUpdateList = bldr.getCreateUpdateList();
 		List<WatchlistItem> deleteList = bldr.getDeleteList();
-		Watchlist wl = watchlistPersistenceService.createOrUpdate(wlName, entity, createUpdateList, deleteList, userId);
-		return WatchlistServiceJsonResponseHelper.createResponse(true, "Create/Update", wl);
+		List<Long> idList = watchlistPersistenceService.createUpdateDelete(wlName, entity, createUpdateList, deleteList, userId);
+		List<Long> itemIdList = null;
+		Long wlId = idList.get(0);
+		if(idList.size() > 1){
+			itemIdList = new LinkedList<Long>();
+			for(int i = 1; i < idList.size(); i++){
+				itemIdList.add(idList.get(i));
+			}
+		}
+		return WatchlistServiceJsonResponseHelper.createResponse(true, "Create/Update", wlId, wlName, itemIdList, StringUtils.EMPTY);
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.gtas.svc.WatchlistService#createUpdateWatchlistItems(java.lang.String, gov.gtas.model.watchlist.json.WatchlistSpec)
+	 */
+	@Override
+	public JsonServiceResponse createUpdateWatchlistItems(String userId,
+			WatchlistSpec wlToCreateUpdate) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/* (non-Javadoc)
@@ -119,10 +137,10 @@ public class WatchlistServiceImpl implements WatchlistService {
 		Watchlist wl = watchlistPersistenceService.deleteWatchlist(wlName);
 		if(wl != null){
 			return WatchlistServiceJsonResponseHelper.createResponse(true, WatchlistConstants.DELETE_OP_NAME,
-					wl);
+					wl.getId(), wl.getWatchlistName());
 		} else {
 			return WatchlistServiceJsonResponseHelper.createResponse(false, WatchlistConstants.DELETE_OP_NAME,
-					wl, "since it does not exist or has been deleted previously");
+					null, null, "since it does not exist or has been deleted previously");
 		}
 	}
 

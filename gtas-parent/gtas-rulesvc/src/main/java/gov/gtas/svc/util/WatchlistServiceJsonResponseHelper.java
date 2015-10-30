@@ -4,9 +4,12 @@ import gov.gtas.constant.RuleConstants;
 import gov.gtas.enumtype.Status;
 import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.udr.KnowledgeBase;
-import gov.gtas.model.watchlist.Watchlist;
+
+import java.io.Serializable;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 /** 
  * Helper class for the UDR service response generation.
@@ -16,11 +19,15 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class WatchlistServiceJsonResponseHelper {
 	public static JsonServiceResponse createResponse(boolean success,
-			String op, Watchlist wl) {
-		return createResponse(success, op, wl, null);
+			String op, Long wlId, String wlName) {
+		return createResponse(success, op, wlId, wlName, null);
 	}
 	public static JsonServiceResponse createResponse(boolean success,
-			String op, Watchlist wl, String failureReason) {
+			String op, Long wlId, String wlName, String failureReason) {
+		return createResponse(success, op, wlId, wlName,  null, failureReason);
+	}
+	public static JsonServiceResponse createResponse(boolean success,
+			String op, Long wlId, String wlName, List<Long> itemIds, String failureReason) {
 		JsonServiceResponse resp = null;
 		if (success) {
 			resp = new JsonServiceResponse(
@@ -28,22 +35,24 @@ public class WatchlistServiceJsonResponseHelper {
 					String.format(
 							op
 									+ " on Watch list with name='%s' and ID='%s' was successful.",
-							wl.getWatchlistName(), wl.getId()));
-			resp.setResult(wl.getId());
+							wlName,wlId));
+			resp.setResult(wlId);
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					RuleConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(wl
-							.getId())));
+					RuleConstants.WL_ID_ATTRIBUTE_NAME, String.valueOf(wlId)));
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					RuleConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(wl
-							.getWatchlistName())));
+					RuleConstants.WL_TITLE_ATTRIBUTE_NAME, String.valueOf(wlName)));
+			if(!CollectionUtils.isEmpty(itemIds)){
+				resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
+						RuleConstants.WL_ITEM_IDS_ATTRIBUTE_NAME, (Serializable)itemIds));				
+			}
 		} else {
-			if (wl != null) {
+			if (wlId != null) {
 				resp = new JsonServiceResponse(
-						Status.SUCCESS,
+						Status.FAILURE,
 						String.format(
 								op
 										+ " on Watch List with name='%s' and ID='%s' failed.",
-								wl.getWatchlistName(), wl.getId()));
+								wlName, wlId));
 			} else {
 				String msg =null;
 				if(StringUtils.isEmpty(failureReason)){
@@ -52,7 +61,7 @@ public class WatchlistServiceJsonResponseHelper {
 					msg = op + " failed " + failureReason + ".";
 				}
 				resp = new JsonServiceResponse(
-						Status.SUCCESS, msg);
+						Status.FAILURE, msg);
 			}
 
 		}

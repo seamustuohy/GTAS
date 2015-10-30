@@ -23,15 +23,13 @@ public interface WatchlistPersistenceService {
 	 *            the entity (e.g., PASSENGER) for the watch list.
 	 * @param createUpdateList
 	 *            the list of watch list items to be added or updated.
-	 * @param updateList
-	 *            the list of watch list items to be updated.
 	 * @param deleteList
 	 *            the list of watch list items to be deleted.
 	 * @param user
 	 *            the user persisting the rule (usually also the WL author.)
-	 * @return the persisted watch list.
+	 * @return the id's of the watch list and the updated items.
 	 */
-	public Watchlist createOrUpdate(String wlName, EntityEnum entity,
+	public List<Long> createUpdateDelete(String wlName, EntityEnum entity,
 			List<WatchlistItem> createUpdateList, List<WatchlistItem> deleteList,
 			String userId);
 
