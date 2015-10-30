@@ -208,7 +208,10 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                     parsedMessage.setPassengerCount(parsedMessage.getPassengerCount() + 1);
                 }
             } else if (SSR.DOCA.equals(code)) {
-                parsedMessage.getAddresses().add(PnrUtils.createAddress(ssr));
+                AddressVo addr = PnrUtils.createAddress(ssr);
+                if (addr.isValid()) {
+                    parsedMessage.getAddresses().add(addr);
+                }
             }
         }
 
@@ -226,7 +229,10 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (add == null) {
                 break;
             }
-            parsedMessage.getAddresses().add(PnrUtils.createAddress(add));
+            AddressVo addr = PnrUtils.createAddress(add);
+            if (addr.isValid()) {
+                parsedMessage.getAddresses().add(addr);
+            }
         }
 
         for (;;) {
@@ -276,7 +282,9 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                         cc.setCardType(p.getVendorCode());
                         cc.setExpiration(p.getExpirationDate());
                         cc.setNumber(p.getAccountNumber());
-                        newCreditCards.add(cc);
+                        if (cc.isValid()) {
+                            newCreditCards.add(cc);
+                        }
                     }                    
                 }
             }
@@ -302,7 +310,10 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         
         ADD add = getConditionalSegment(ADD.class);
         if (add != null) {
-            parsedMessage.getAddresses().add(PnrUtils.createAddress(add));
+            AddressVo addr = PnrUtils.createAddress(add);
+            if (addr.isValid()) {
+                parsedMessage.getAddresses().add(addr);
+            }
         }
     }
 
