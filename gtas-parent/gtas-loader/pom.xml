@@ -69,7 +69,7 @@
               <appendAssemblyId>false</appendAssemblyId>
               <archive>
                 <manifest>
-                  <mainClass>gov.gtas.services.MessageLoader</mainClass>
+                  <mainClass>gov.gtas.services.LoaderMain</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>

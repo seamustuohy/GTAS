@@ -24,20 +24,19 @@ import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Flight;
 import gov.gtas.model.FlightLeg;
 import gov.gtas.model.Passenger;
-import gov.gtas.vo.MessageVo;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.repository.FlightRepository;
 import gov.gtas.repository.PassengerRepository;
+import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.passenger.PassengerVo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
 public class PnrMessageServiceIT extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
-    private PnrMessageService svc;
+    private Loader svc;
 
-    private String filePath;
+    private File message;
     
     @Autowired
     private FlightRepository flightDao;
@@ -51,9 +50,7 @@ public class PnrMessageServiceIT extends AbstractTransactionalJUnit4SpringContex
     @Before
     public void setUp() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("pnr-messages/2_pnrs_basic.edi").getFile());
-        this.filePath = file.getAbsolutePath();
-        
+        this.message = new File(classLoader.getResource("pnr-messages/2_pnrs_basic.edi").getFile());
     }
 
     @After
@@ -113,6 +110,6 @@ public class PnrMessageServiceIT extends AbstractTransactionalJUnit4SpringContex
 
     @Test()
     public void testRunService() throws ParseException {
-        svc.processMessage(this.filePath);
+        svc.processMessage(this.message);
     }
 }

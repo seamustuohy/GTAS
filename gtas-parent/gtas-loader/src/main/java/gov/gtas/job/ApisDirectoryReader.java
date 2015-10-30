@@ -4,7 +4,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.services.ApisMessageService;
-import gov.gtas.services.MessageLoader;
+import gov.gtas.services.LoaderMain;
 import gov.gtas.services.MessageService;
 
 import java.nio.file.StandardCopyOption;

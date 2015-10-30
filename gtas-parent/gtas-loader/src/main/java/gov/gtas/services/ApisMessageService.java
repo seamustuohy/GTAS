@@ -1,9 +1,9 @@
 package gov.gtas.services;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -20,45 +20,27 @@ import gov.gtas.model.MessageStatus;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
-import gov.gtas.parsers.util.FileUtils;
-import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.util.LobUtils;
 import gov.gtas.vo.ApisMessageVo;
 import gov.gtas.vo.MessageVo;
 
 @Service
-public class ApisMessageService implements MessageService {
+public class ApisMessageService extends MessageService {
     private static final Logger logger = LoggerFactory.getLogger(ApisMessageService.class);
 
     @Autowired
     private ApisMessageRepository msgDao;
 
-    @Autowired
-    private LoaderRepository loaderRepo;
-
     private ApisMessage apisMessage;
-    private String filePath;
 
     @Override
-    public void processMessage(String filePath) {
-        this.filePath = filePath;
-        byte[] raw = null;
-        try {
-            raw = FileUtils.readSmallFile(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        String tmp = new String(raw, StandardCharsets.US_ASCII);        
-        String message = ParseUtils.stripStxEtxHeaderAndFooter(tmp);
-        MessageVo rawMessage = parse(message);
-        if (rawMessage != null) {
-            load(rawMessage);
-        }
+    public List<String> preprocess(String message) {
+        return Arrays.asList(message);
     }
     
-    private MessageVo parse(String message) {
+    @Override
+    public MessageVo parse(String message) {
         apisMessage = new ApisMessage();
         apisMessage.setCreateDate(new Date());
         apisMessage.setStatus(MessageStatus.RECEIVED);
@@ -96,7 +78,8 @@ public class ApisMessageService implements MessageService {
         return vo;
     }
 
-    private void load(MessageVo messageVo) {
+    @Override
+    public void load(MessageVo messageVo) {
         try {
             ApisMessageVo m = (ApisMessageVo)messageVo;
             loaderRepo.processReportingParties(apisMessage, m.getReportingParties());
