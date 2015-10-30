@@ -113,7 +113,11 @@
                     priority: 1
                 }
             },
-            {name: 'fullFlightNumber', displayName: 'Flight', width: 75},
+            {
+                name: 'fullFlightNumber',
+                displayName: 'Flight',
+                width: 70
+            },
             {
                 name: 'eta', displayName: 'ETA',
                 sort: {
