@@ -20,14 +20,14 @@ import gov.gtas.parsers.exception.ParseException;
 @Transactional
 public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
-    private ApisMessageService svc;
+    private Loader svc;
 
-    private String filePath;
+    private File message;
+    
     @Before
     public void setUp() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("apis-messages/airline2.edi").getFile());
-        this.filePath = file.getAbsolutePath();
+        this.message = new File(classLoader.getResource("apis-messages/airline2.edi").getFile());
     }
 
     @After
@@ -36,6 +36,6 @@ public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringConte
 
     @Test()
     public void testRunService() throws ParseException {
-        svc.processMessage(this.filePath);
+        svc.processMessage(this.message);
     }
 }

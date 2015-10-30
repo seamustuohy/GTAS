@@ -13,7 +13,7 @@ import java.util.Properties;
 import gov.gtas.services.ApisMessageService;
 import gov.gtas.services.ErrorPersistenceService;
 import gov.gtas.services.PnrMessageService;
-import gov.gtas.services.MessageLoader;
+import gov.gtas.services.LoaderMain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +75,7 @@ public class FileReader {
 						if(fileEntry.isFile()){
 							logger.info("Reading file from : "+moveFrom);
 							//MessageLoader.processSingleFile(pnrService, fileEntry);
-							pnrService.processMessage(moveFrom.toString());
+//							pnrService.processMessage(moveFrom.toString());
 							logger.info("Moving file after processing to : "+moveTo);
 							fileEntry.renameTo(moveTo.toFile());
 						}
@@ -110,7 +110,7 @@ public class FileReader {
 						if(fileEntry.isFile()){
 							logger.info("Reading file from : "+moveFrom);
 //							MessageLoader.processSingleFile(apisService, fileEntry);
-							apisService.processMessage(moveFrom.toString());
+//							apisService.processMessage(moveFrom.toString());
 							logger.info("Moving file after processing to : "+moveTo);
 							fileEntry.renameTo(moveTo.toFile());
 						}

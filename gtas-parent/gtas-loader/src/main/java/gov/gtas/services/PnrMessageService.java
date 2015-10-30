@@ -1,7 +1,5 @@
 package gov.gtas.services;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 
@@ -20,52 +18,27 @@ import gov.gtas.model.Pnr;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrUtils;
-import gov.gtas.parsers.util.FileUtils;
-import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.repository.PnrRepository;
 import gov.gtas.util.LobUtils;
 import gov.gtas.vo.MessageVo;
 import gov.gtas.vo.passenger.PnrVo;
 
 @Service
-public class PnrMessageService implements MessageService {
+public class PnrMessageService extends MessageService {
     private static final Logger logger = LoggerFactory.getLogger(PnrMessageService.class);
    
-    @Autowired
-    private LoaderUtils utils;
-
-    @Autowired
-    private LoaderRepository loaderRepo;
-
     @Autowired
     private PnrRepository msgDao;
     
     private Pnr pnr;
-    private String filePath;
 
     @Override
-    public void processMessage(String filePath) {
-        this.filePath = filePath;
-        byte[] raw = null;
-        try {
-            raw = FileUtils.readSmallFile(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        String tmp = new String(raw, StandardCharsets.US_ASCII);        
-        String message = ParseUtils.stripStxEtxHeaderAndFooter(tmp);
-        List<String> pnrMessages =  PnrUtils.getPnrs(message);
-        
-        for (String rawMessage : pnrMessages) {
-            MessageVo parsedMessage = parse(rawMessage);
-            if (parsedMessage != null) {
-                load(parsedMessage);
-            }
-        }
+    public List<String> preprocess(String message) {
+        return PnrUtils.getPnrs(message);
     }
     
-    private MessageVo parse(String message) {
+    @Override
+    public MessageVo parse(String message) {
         pnr = new Pnr();
         pnr.setCreateDate(new Date());
         pnr.setStatus(MessageStatus.RECEIVED);
@@ -97,7 +70,8 @@ public class PnrMessageService implements MessageService {
         return vo;
     }
     
-    private void load(MessageVo messageVo) {
+    @Override
+    public void load(MessageVo messageVo) {
         try {
             PnrVo vo = (PnrVo)messageVo;
             // TODO: fix this, combine methods

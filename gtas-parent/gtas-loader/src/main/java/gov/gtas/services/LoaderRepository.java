@@ -84,10 +84,10 @@ public class LoaderRepository {
     @Autowired
     private LoaderUtils utils;
 
-    public void checkHashCode(String hash) throws ParseException {
+    public void checkHashCode(String hash) throws LoaderException {
         Message m = messageDao.findByHashCode(hash);
         if (m != null) {
-            throw new ParseException("duplicate message hashcode: " + hash);
+            throw new LoaderException("duplicate message hashcode: " + hash);
         }
     }
 

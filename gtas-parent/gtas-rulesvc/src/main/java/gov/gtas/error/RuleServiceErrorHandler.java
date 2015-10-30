@@ -36,5 +36,8 @@ public class RuleServiceErrorHandler extends BasicErrorHandler {
 		super.addErrorCodeToHandlerMap(
 				RuleServiceConstants.MESSAGE_NOT_FOUND_ERROR_CODE,
 				RuleServiceConstants.MESSAGE_NOT_FOUND_ERROR_MESSAGE);
+		super.addErrorCodeToHandlerMap(
+				RuleServiceConstants.RULE_ENGINE_RUNNER_ERROR_CODE,
+				RuleServiceConstants.RULE_ENGINE_RUNNER_ERROR_MESSAGE);
 	}
 }

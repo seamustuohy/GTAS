@@ -1,10 +1,9 @@
 package gov.gtas.rule;
 
-import static gov.gtas.constant.CommonErrorConstants.RULE_ENGINE_RUNNER_ERROR_CODE;
-import static gov.gtas.constant.CommonErrorConstants.RULE_ENGINE_RUNNER_ERROR_MESSAGE;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.config.RuleRunnerConfig;
 import gov.gtas.config.RuleServiceConfig;
+import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.ErrorDetailInfo;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.services.ErrorPersistenceService;
@@ -45,8 +44,8 @@ public class RuleRunner {
 		} catch (Exception exception) {
 			exception.printStackTrace();
 			ErrorDetailInfo errInfo = ErrorHandlerFactory.createErrorDetails(
-					RULE_ENGINE_RUNNER_ERROR_CODE,
-					RULE_ENGINE_RUNNER_ERROR_MESSAGE, exception);
+					RuleServiceConstants.RULE_ENGINE_RUNNER_ERROR_CODE,
+					RuleServiceConstants.RULE_ENGINE_RUNNER_ERROR_MESSAGE, exception);
 			ErrorPersistenceService errorService = (ErrorPersistenceService) ctx
 					.getBean("errorPersistenceServiceImpl");
 			errorService.create(errInfo);
