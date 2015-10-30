@@ -101,6 +101,7 @@
         };
 
         $scope.getListItemsFor = function (listName) {
+            spinnerService.show('html5spinner');
             watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
                 var obj, data = [], items = response.data.result.watchlistItems;
                 if (items === undefined) {
@@ -120,6 +121,7 @@
                 });
                 $scope.data[listName] = data;
                 $scope.updateGridIfData(listName);
+                spinnerService.hide('html5spinner');
             });
         };
 
@@ -208,17 +210,18 @@
         $scope.removeRow = function () {
             var rowIndexToDelete,
                 watchlistItems = [{id: $scope.rowSelected.id, action: 'Delete', terms: null}];
-
+            spinnerService.show('html5spinner');
             watchListService.deleteItems($scope.activeTab, $scope.activeTab, watchlistItems).then(function () {
                 rowIndexToDelete = $scope.watchlistGrid.data.indexOf($scope.rowSelected);
                 $scope.watchlistGrid.data.splice(rowIndexToDelete, 1);
                 $scope.rowSelected = null;
+                spinnerService.hide('html5spinner');
                 $mdSidenav('save').close();
             });
         };
 
         $scope.removeRows = function () {
-            var selectedRowEntities = $scope.gridApi.selection.getSelectedRows().reverse(),
+            var selectedRowEntities = $scope.gridApi.selection.getSelectedRows(),
                 constructItem = function (rowEntity) {
                     return {id: rowEntity.id, action: 'Delete', terms: null};
                 },
@@ -226,10 +229,12 @@
             spinnerService.show('html5spinner');
             watchListService.deleteItems($scope.activeTab, $scope.activeTab, watchlistItems).then(function () {
                 var rowIndexToDelete;
+                selectedRowEntities.reverse();
                 selectedRowEntities.forEach(function (rowEntity) {
                     rowIndexToDelete = $scope.watchlistGrid.data.indexOf(rowEntity);
                     $scope.watchlistGrid.data.splice(rowIndexToDelete, 1);
                 });
+                $scope.gridApi.selection.clearSelectedRows();
                 spinnerService.hide('html5spinner');
             });
         };

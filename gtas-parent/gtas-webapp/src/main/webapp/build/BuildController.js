@@ -174,19 +174,13 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     };
 
     $scope.updateGrid = function () {
+        spinnerService.show('html5spinner');
         jqueryQueryBuilderService.getList($scope.selectedMode).then(function (myData) {
             $scope.setData[$scope.mode](myData.result);
-            $interval(function () {
-                //var page;
-                //if (!$scope.selectedIndex) {
-                //    page = $scope.gridApi.pagination.getTotalPages();
-                //    $scope.selectedIndex = $scope.qbGrid.data.length - 1;
-                //    $scope.gridApi.pagination.seek(page);
-                //}
-                $scope.gridApi.selection.clearSelectedRows();
-                //$scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
-                $scope.saving = false;
-            }, 0, 1);
+            $scope.gridApi.selection.clearSelectedRows();
+            //$scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
+            $scope.saving = false;
+            spinnerService.hide('html5spinner');
         });
     };
 
@@ -215,6 +209,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 $scope.gridApi.selection.clearSelectedRows();
                 //$scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
                 $scope.saving = false;
+                spinnerService.hide('html5spinner');
             }, 0, 1);
         });
     };
@@ -330,7 +325,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     description: $scope.query.description || null,
                     query: query
                 };
-
+                spinnerService.show('html5spinner');
                 jqueryQueryBuilderService.save('query', queryObject).then($scope.updateQueryBuilderOnSave);
             }
         },
@@ -394,7 +389,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     details: details,
                     summary: $scope.rule
                 };
-
+                spinnerService.show('html5spinner');
                 jqueryQueryBuilderService.save('rule', ruleObject).then($scope.updateQueryBuilderOnSave);
             }
         }
@@ -406,12 +401,15 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.qbGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs(mode);
     $scope.qbGrid.enableRowHeaderSelection = true;
     $scope.qbGrid.enableSelectAll = false;
+    $scope.qbGrid.multiSelect = false;
     $scope.qbGrid.exporterCsvFilename = mode + '.csv';
     $scope.qbGrid.exporterPdfHeader = {text: mode, style: 'headerStyle'};
     $scope.qbGrid.onRegisterApi = $scope.rowSelection;
 
+    //spinnerService.show('html5spinner');
     jqueryQueryBuilderService.getList($scope.selectedMode).then(function (myData) {
         $scope.setData[$scope.mode](myData.result);
+        //spinnerService.hide('html5spinner');
     });
 
     //query specific
