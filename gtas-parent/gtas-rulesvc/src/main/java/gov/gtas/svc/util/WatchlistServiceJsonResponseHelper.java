@@ -42,8 +42,11 @@ public class WatchlistServiceJsonResponseHelper {
 			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
 					RuleConstants.WL_TITLE_ATTRIBUTE_NAME, String.valueOf(wlName)));
 			if(!CollectionUtils.isEmpty(itemIds)){
+				resp.setResult(itemIds);
 				resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
 						RuleConstants.WL_ITEM_IDS_ATTRIBUTE_NAME, (Serializable)itemIds));				
+			} else {
+				resp.setResult(null);
 			}
 		} else {
 			if (wlId != null) {
