@@ -186,9 +186,8 @@
             });
             if (ready) {
                 watchListService[method](objectType, entity, $scope[objectType].id, terms).then(function (response) {
-
                     if ($scope[$scope.activeTab].id === null) {
-                        $scope[$scope.activeTab].id = response.data.result;
+                        $scope[$scope.activeTab].id = response.data.result[0];
                         $scope.watchlistGrid.data.unshift($scope[$scope.activeTab]);
                     }
                     $scope.gridApi.selection.clearSelectedRows();
