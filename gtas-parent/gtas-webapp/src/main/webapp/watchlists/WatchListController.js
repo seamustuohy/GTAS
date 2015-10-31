@@ -45,42 +45,12 @@
             "Document": {
                 entity: "DOCUMENT",
                 icon: "file",
-                columns: [{
-                    field: "documentType",
-                    name: "documentType",
-                    displayName: "Type",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
-                    "type": "string"
-                }, {
-                    field: "documentNumber",
-                    name: "documentNumber",
-                    displayName: "Number",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
-                    "type": "string"
-                }]
+                columns: gridOptionsLookupService.getLookupColumnDefs('watchlist').DOCUMENT
             },
             "Passenger": {
                 entity: "PASSENGER",
                 icon: "user",
-                columns: [{
-                    field: "firstName",
-                    name: "firstName",
-                    displayName: "First Name",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
-                    "type": "string"
-                }, {
-                    field: "lastName",
-                    name: "lastName",
-                    displayName: "Last Name",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
-                    "type": "string"
-                }, {
-                    field: "dob",
-                    name: "dob",
-                    displayName: "DOB",
-                    cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD | date:'yyyy-MM-dd'}}</md-button>",
-                    "type": "date"
-                }]
+                columns: gridOptionsLookupService.getLookupColumnDefs('watchlist').PASSENGER
             }
         };
         $scope.data = {};
