@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <head>
 	<meta charset="utf-8" />
 	<title>GTAS Login</title>
@@ -19,7 +19,11 @@
 	<!-- BEGIN PAGE LEVEL STYLES -->
 	<link href="resources/login/assets/css/pages/login-soft.css" rel="stylesheet" type="text/css"/>
 	<!-- END PAGE LEVEL STYLES -->
-	
+	<style>
+	.backstretch {
+		opacity: 0;
+	}
+	</style>
 </head>
 <!-- END HEAD -->
 
