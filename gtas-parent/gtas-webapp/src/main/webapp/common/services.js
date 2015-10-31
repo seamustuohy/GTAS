@@ -302,7 +302,7 @@
                             name: 'userId',
                             field: 'userId',
                             width: '15%',
-                            cellTemplate: '<div><md-button class="md-primary md-button md-default-theme" href="#/modify/{{COL_FIELD}}">{{COL_FIELD}}</md-button></div>'
+                            cellTemplate: '<div><md-button class="md-primary md-button md-default-theme" href="#/user/{{COL_FIELD}}">{{COL_FIELD}}</md-button></div>'
                         }, {
                             name: 'firstName',
                             field: 'firstName',

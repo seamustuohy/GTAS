@@ -50,28 +50,33 @@ var app;
                 .state('admin', {
                     url: '/admin',
                     views: {
-                        '@': {
+                        "@": {
                             controller: 'AdminCtrl',
-                            templateUrl: 'admin/admin.header.html'
-                        }
-                    }
-                })
-                .state('admin.users', {
-                    url: '/',
-                    views: {
-                        "content@admin": {
                             templateUrl: 'admin/admin.html'
                         }
                     }
                 })
-                .state('admin.addUser', {
-                    url: '/user',
+                .state('modifyUser', {
+                    url: '/user/:userId',
                     params: {
-                        action: null,
+                        action: 'modify',
                         user: null
                     },
                     views: {
-                        "content@admin": {
+                        '@': {
+                            controller: 'UserCtrl',
+                            templateUrl: 'admin/user.html'
+                        }
+                    }
+                })
+                .state('addUser', {
+                    url: '/user/new',
+                    params: {
+                        action: 'create',
+                        user: null
+                    },
+                    views: {
+                        "@": {
                             controller: 'UserCtrl',
                             templateUrl: 'admin/user.html'
                         }
@@ -86,7 +91,6 @@ var app;
                         }
                     }
                 })
-                
                 .state('flights', {
                     url: '/flights',
                     views: {
@@ -227,7 +231,7 @@ var app;
         },
         NavCtrl = function ($scope) {
             var lookup = {
-                admin: { name: ['admin', 'admin.users', 'admin.addUser'] },
+                admin: { name: ['admin', 'addUser', 'modifyUser'] },
                 dashboard: { name: ['dashboard'] },
                 flights: { name: ['flights'] },
                 passengers: { name: ['paxAll', 'flightpax'] },
