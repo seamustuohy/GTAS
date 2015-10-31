@@ -254,6 +254,7 @@
                     exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
                 },
                 gridOptions = {
+                    admin : standardOptions,
                     flights: {
                         enableSorting: false,
                         multiSelect: false,
@@ -287,6 +288,40 @@
                     watchlist: standardOptions
                 },
                 columns = {
+                    admin: [
+                        {
+                            name: 'active',
+                            field: 'active',
+                            cellFilter: 'userStatusFilter',
+                            width: '10%',
+                            sort: {
+                                direction: uiGridConstants.DESC,
+                                priority: 1
+                            }
+                        }, {
+                            name: 'userId',
+                            field: 'userId',
+                            width: '15%',
+                            cellTemplate: '<div><md-button class="md-primary md-button md-default-theme" href="#/modify/{{COL_FIELD}}">{{COL_FIELD}}</md-button></div>'
+                        }, {
+                            name: 'firstName',
+                            field: 'firstName',
+                            width: '15%'
+                        }, {
+                            name: 'lastName',
+                            field: 'lastName',
+                            width: '20%'
+                        }, {
+                            name: 'roles',
+                            field: 'roles',
+                            cellFilter: 'roleDescriptionFilter',
+                            width: '40%',
+                            cellTooltip: function (row) {
+                                return row.entity.roles;
+                            },
+                            cellTemplate: '<div class="ui-grid-cell-contents wrap" style="white-space: normal" title="TOOLTIP">{{COL_FIELD CUSTOM_FILTERS}}</div>'
+                        }
+                    ],
                     flights: [
                         {
                             name: 'P',
@@ -419,7 +454,45 @@
                             enableCellEdit: false,
                             enableColumnMenu: false,
                         }
-                    ]
+                    ],
+                    watchlist: {
+                        DOCUMENT: [
+                            {
+                                field: "documentType",
+                                name: "documentType",
+                                displayName: "Type",
+                                cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
+                                "type": "string"
+                            }, {
+                                field: "documentNumber",
+                                name: "documentNumber",
+                                displayName: "Number",
+                                cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
+                                "type": "string"
+                            }
+                        ],
+                        PASSENGER: [
+                            {
+                                field: "firstName",
+                                name: "firstName",
+                                displayName: "First Name",
+                                cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
+                                "type": "string"
+                            }, {
+                                field: "lastName",
+                                name: "lastName",
+                                displayName: "Last Name",
+                                cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
+                                "type": "string"
+                            }, {
+                                field: "dob",
+                                name: "dob",
+                                displayName: "DOB",
+                                cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD | date:'yyyy-MM-dd'}}</md-button>",
+                                "type": "date"
+                            }
+                        ]
+                    }
                 };
             return {
                 paginationOptions: {
