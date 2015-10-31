@@ -139,7 +139,7 @@
                            class="md-raised pull-left">
                     <i class="glyphicon glyphicon-minus"></i> Clear Conditions
                 </md-button>
-                <md-button ng-click="save.rule.prompt()"
+                <md-button ng-click="prompt.save('rule')"
                            ng-disabled="saving === true"
                            ng-class="{'md-primary': mode === 'rule'}"
                            class="md-raised pull-right">
@@ -155,7 +155,7 @@
                            class="md-raised md-warn pull-right">
                     <i class="glyphicon glyphicon-erase"></i> Delete
                 </md-button>
-                <md-button ng-click="save.query.prompt()"
+                <md-button ng-click="prompt.save('query')"
                            ng-disabled="saving === true"
                            ng-class="{'md-primary': mode === 'query'}"
                            class="md-raised pull-right">

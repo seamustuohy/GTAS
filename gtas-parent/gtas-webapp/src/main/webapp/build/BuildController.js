@@ -1,6 +1,7 @@
 app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, spinnerService, $mdSidenav, $stateParams, $interval, $timeout) {
     'use strict';
     var today = moment().format('YYYY-MM-DD').toString(),
+        conditions,
         model = {
             summary: {
                 query: function (obj) {
@@ -70,7 +71,12 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.selectedMode = mode;
 
     $scope.prompt = {
-        open: function (mode) {
+        save: function (mode) {
+            conditions = $scope.$builder.queryBuilder('getDrools');
+
+            if (conditions === false) {
+                return;
+            }
             $scope.buttonMode = mode;
             $mdSidenav(mode).open();
         },
@@ -293,9 +299,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.saving = false;
     $scope.save = {
         query: {
-            prompt: function () {
-                $scope.prompt.open('query');
-            },
             confirm: function () {
                 var queryObject, query;
                 if ($scope.saving) {
@@ -313,28 +316,20 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     $scope.saving = false;
                     return;
                 }
-                query = $scope.$builder.queryBuilder('getDrools');
 
-                if (query === false) {
-                    $scope.saving = false;
-                    return;
-                }
                 queryObject = {
                     id: setId(),
                     title: $scope.query.title,
                     description: $scope.query.description || null,
-                    query: query
+                    query: conditions
                 };
                 spinnerService.show('html5spinner');
                 jqueryQueryBuilderService.save('query', queryObject).then($scope.updateQueryBuilderOnSave);
             }
         },
         rule: {
-            prompt: function () {
-                $scope.prompt.open('rule');
-            },
             confirm: function () {
-                var ruleObject, details;
+                var ruleObject;
 
                 if ($scope.saving) {
                     return;
@@ -378,15 +373,9 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     //}
                 }
 
-                details = $scope.$builder.queryBuilder('getDrools');
-
-                if (details === false) {
-                    $scope.saving = false;
-                    return;
-                }
                 ruleObject = {
                     id: setId(),
-                    details: details,
+                    details: conditions,
                     summary: $scope.rule
                 };
                 spinnerService.show('html5spinner');
