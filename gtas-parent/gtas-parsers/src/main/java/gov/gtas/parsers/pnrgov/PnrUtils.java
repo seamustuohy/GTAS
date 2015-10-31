@@ -36,6 +36,11 @@ public class PnrUtils {
     }
     
     /**
+     * We use the SSR (DOCS) segment to grab the majority of the information
+     * about the passenger -- name, document number, etc.  The TIF segment
+     * is only used to record the traveler reference number and any 
+     * suffix or title in the name.
+     * 
      * TODO: was not handling the 2nd example below b/c of extra field.
      * check whether it's an error in the message or not.
      * 
@@ -76,22 +81,14 @@ public class PnrUtils {
         if (tif.getTravelerDetails().size() > 0) {
             TravelerDetails td = tif.getTravelerDetails().get(0);
             p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());            
+
+            PassengerVo tmp = new PassengerVo();
+            processNames(tmp, tif.getTravelerSurname(), td.getTravelerGivenName(), null);
+            p.setTitle(tmp.getTitle());
+            p.setSuffix(tmp.getSuffix());
         }
         
         return p;
-    }
-    
-    public static PassengerVo createPassenger(TIF tif) throws ParseException {
-        if (tif.getTravelerDetails().size() > 0) {
-            PassengerVo p = new PassengerVo();
-            p.setPassengerType("P");
-            TravelerDetails td = tif.getTravelerDetails().get(0);
-            processNames(p, tif.getTravelerSurname(), td.getTravelerGivenName(), null);
-            p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());
-            return p;
-        }
-        
-        return null;
     }
     
     public static AddressVo createAddress(ADD add) {

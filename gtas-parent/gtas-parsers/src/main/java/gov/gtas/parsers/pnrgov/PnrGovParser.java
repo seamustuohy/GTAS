@@ -193,7 +193,6 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         }
 
         // SSR’s in GR.2 apply to the specific passenger.
-        boolean paxCreated = false;
         for (;;) {
             SSR ssr = getConditionalSegment(SSR.class);
             if (ssr == null) {
@@ -204,7 +203,6 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                 PassengerVo p = PnrUtils.createPassenger(ssr, tif);
                 if (p != null) {
                     parsedMessage.getPassengers().add(p);
-                    paxCreated = true;
                     parsedMessage.setPassengerCount(parsedMessage.getPassengerCount() + 1);
                 }
             } else if (SSR.DOCA.equals(code)) {
@@ -215,15 +213,6 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             }
         }
 
-        if (!paxCreated) {
-            // all we can do is create the passenger from the TIF segment
-            PassengerVo p = PnrUtils.createPassenger(tif);
-            if (p != null) {
-                parsedMessage.getPassengers().add(p);
-                parsedMessage.setPassengerCount(parsedMessage.getPassengerCount() + 1);
-            }
-        }
-        
         for (;;) {
             ADD add = getConditionalSegment(ADD.class);
             if (add == null) {
