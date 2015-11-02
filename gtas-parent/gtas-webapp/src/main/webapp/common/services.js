@@ -210,7 +210,7 @@
                 getAllUsers: function () {
                     var request = $http({
                         method: "get",
-                        url: USER_URL
+                        url: USERS_URL
                     });
 
                     return (request.then(handleSuccess, handleError));
