@@ -212,9 +212,11 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
 
         if (!CollectionUtils.isEmpty(ssrDocs)) {
             PassengerVo p = PnrUtils.createPassenger(ssrDocs, tif);
-            if (p != null) {
+            if (p != null && p.isValid()) {
                 parsedMessage.getPassengers().add(p);
                 parsedMessage.setPassengerCount(parsedMessage.getPassengerCount() + 1);
+            } else {
+                throw new ParseException("Invalid passenger: " + p);
             }
         }
         
@@ -325,15 +327,16 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tvl.getFlightNumber()));
         ParseUtils.initEtaEtdDate(f);
         Date flightDate = ParseUtils.determineFlightDate(tvl.getEtd(), tvl.getEta(), parsedMessage.getTransmissionDate());
-        if (flightDate == null) {
-            throw new ParseException("Could not determine flight date");
-        }
         f.setFlightDate(flightDate);
-        parsedMessage.getFlights().add(f);
+        if (f.isValid()) {
+            parsedMessage.getFlights().add(f);
+        } else {
+            throw new ParseException("Invalid flight: " + f);
+        }
         
-        TRA tra = getConditionalSegment(TRA.class);
-        RPI rpi = getConditionalSegment(RPI.class);
-        APD apd = getConditionalSegment(APD.class);
+        getConditionalSegment(TRA.class);
+        getConditionalSegment(RPI.class);
+        getConditionalSegment(APD.class);
         
         for (;;) {
             SSR ssr = getConditionalSegment(SSR.class);
@@ -342,7 +345,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             }
         }
 
-        RCI rci = getConditionalSegment(RCI.class);
+        getConditionalSegment(RCI.class);
 
         for (;;) {
             IFT ift = getConditionalSegment(IFT.class);

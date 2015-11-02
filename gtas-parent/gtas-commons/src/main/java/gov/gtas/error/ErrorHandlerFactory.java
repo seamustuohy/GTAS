@@ -1,8 +1,5 @@
 package gov.gtas.error;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -60,13 +57,12 @@ public class ErrorHandlerFactory {
 	 * @param exception exception.
 	 * @return the error details.
 	 */
-	public static ErrorDetailInfo createErrorDetails(String errorCode, String description, Exception exception) {
+	public static ErrorDetailInfo createErrorDetails(String errorCode, Exception cause, Object...args) {
 		if(StringUtils.isEmpty(errorCode)){
-			return ErrorHandlerFactory.errorHandler.processError(exception);
+			return ErrorHandlerFactory.errorHandler.processError(cause);
 		} else {
-			List<String> details = new LinkedList<String>();
-			ErrorUtils.constructExceptionDetails(exception, details);
-		    return ErrorHandlerFactory.errorHandler.processError(errorCode, description, details);
+			Exception ex = ErrorHandlerFactory.errorHandler.createException(errorCode, cause, args);
+			return ErrorHandlerFactory.createErrorDetails(ex);
 		}
 	}
 	/**
