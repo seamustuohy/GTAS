@@ -22,7 +22,7 @@ import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
 
 public class PnrUtils {
-    public static Date parseDateTime(String dt) throws ParseException {
+    public static Date parseDateTime(String dt) {
         final String DATE_ONLY_FORMAT = "ddMMyy";
         final String DATE_TIME_FORMAT = "ddMMyyhhmm";
 

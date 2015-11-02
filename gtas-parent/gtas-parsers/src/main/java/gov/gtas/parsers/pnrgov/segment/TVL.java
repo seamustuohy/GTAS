@@ -3,6 +3,8 @@ package gov.gtas.parsers.pnrgov.segment;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
@@ -75,25 +77,30 @@ public class TVL extends Segment {
      */
     public static Date[] getEtdEta(Composite c) throws ParseException {
         Date[] rv = new Date[2];
-        String departureDt = null;
-        String arrivalDt = null;
         
-        departureDt = c.getElement(0);
-        String time = c.getElement(1);
-        if (time != null) {
-            departureDt += time;
+        String departureDate = c.getElement(0);
+        String departureTime = c.getElement(1);
+        if (departureTime != null) {
+            departureDate += departureTime;
         }
-        arrivalDt = c.getElement(2);
-        time = c.getElement(3);
-        if (time != null) {
-            arrivalDt += time;
+
+        String arrivalDate = c.getElement(2);
+        String arrivalTime = c.getElement(3);
+        if (arrivalTime != null) {
+            // As a shorthand some TVL segments leave out the
+            // arrival date if it's the same as the departure date
+            // e.g. TVL+121210:0915::1230
+            if (StringUtils.isBlank(arrivalDate)) {
+                arrivalDate = c.getElement(0);
+            }
+            arrivalDate += arrivalTime;
         }
         
-        if (departureDt != null) {
-            rv[0] = PnrUtils.parseDateTime(departureDt);
+        if (departureDate != null) {
+            rv[0] = PnrUtils.parseDateTime(departureDate);
         }
-        if (arrivalDt != null) {
-            rv[1] = PnrUtils.parseDateTime(arrivalDt);
+        if (arrivalDate != null) {
+            rv[1] = PnrUtils.parseDateTime(arrivalDate);
         }
         
         return rv;
