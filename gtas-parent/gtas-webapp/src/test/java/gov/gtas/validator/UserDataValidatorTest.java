@@ -54,7 +54,7 @@ public class UserDataValidatorTest {
 		Set<RoleData> roles=new HashSet<RoleData>();
 		
 		roles.add(new RoleData(ROLE_ID,ROLE_DESCRIPTION));		
-		UserData testUserData = new UserData(null,PASSWORD,FIRST_NAME,LAST_NAME,ACTIVE, roles);
+		UserData testUserData = new UserData(null,PASSWORD,FIRST_NAME,LAST_NAME,ACTIVE, roles,null);
 
 		Errors errors = new BeanPropertyBindingResult(testUserData, TEST_OBJECT_NAME);
 		userDataValidator.validate(testUserData, errors);
@@ -69,7 +69,7 @@ public class UserDataValidatorTest {
 		Set<RoleData> roles=new HashSet<RoleData>();
 		
 		roles.add(new RoleData(ROLE_ID,ROLE_DESCRIPTION));		
-		UserData testUserData = new UserData(FIRST_NAME,PASSWORD,FIRST_NAME,LAST_NAME,ACTIVE, roles);
+		UserData testUserData = new UserData(FIRST_NAME,PASSWORD,FIRST_NAME,LAST_NAME,ACTIVE, roles,null);
 
 		Errors errors = new BeanPropertyBindingResult(testUserData, TEST_OBJECT_NAME);
 		userDataValidator.validate(testUserData, errors);

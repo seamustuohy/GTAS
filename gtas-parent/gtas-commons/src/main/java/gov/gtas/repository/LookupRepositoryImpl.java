@@ -1,9 +1,5 @@
 package gov.gtas.repository;
 
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
-import gov.gtas.model.lookup.Country;
-
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -12,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
+
+import gov.gtas.model.FlightDirection;
+import gov.gtas.model.lookup.Airport;
+import gov.gtas.model.lookup.Carrier;
+import gov.gtas.model.lookup.Country;
 
 /**
  * 
@@ -31,6 +32,15 @@ public class LookupRepositoryImpl implements LookUpRepository {
 
 	@Autowired
 	private CarrierRepository carrierRepository;
+
+	@Autowired
+	private FlightDirectionRepository flightDirectionRepository;
+
+	@Override
+	@Cacheable("flightDirection")
+	public List<FlightDirection> getFlightDirections() {
+		return (List<FlightDirection>) flightDirectionRepository.findAll();
+	}
 
 	@Override
 	@Cacheable("country")

@@ -37,7 +37,7 @@ public class WatchlistDataGenUtils {
 		try {
 			Set<RoleData> roles = new HashSet<RoleData>();
 			roles.add(new RoleData(1, "ADMIN"));
-			UserData userData = new UserData("jJone", "password", "JP", "Jones", 1, roles);
+			UserData userData = new UserData("jJone", "password", "JP", "Jones", 1, roles,null);
 			userService.create(userData);
 		} catch (Exception e) {
 			e.printStackTrace();
