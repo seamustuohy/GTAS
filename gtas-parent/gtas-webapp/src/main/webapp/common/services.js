@@ -142,66 +142,78 @@
             };
         })
         .service('userService', function ($http, $q) {
-            function handleError( response ) {
-                if (! angular.isObject( response.data ) || ! response.data.message) {
-                    return( $q.reject( "An unknown error occurred." ) );
+            var baseRolesURL = "/gtas/roles/",
+                baseUsersURL = "/gtas/users/";
+            function handleError(response) {
+                if (response.data.message !== undefined) {
+                    return $q.reject("An unknown error occurred.");
                 }
-                return( $q.reject( response.data.message ) );
+                return $q.reject(response.data.message);
             }
 
-            function handleSuccess( response ) {
-                return( response.data );
+            function handleSuccess(response) {
+                return response.data;
             }
 
             function getRoles() {
                 var request = $http({
                     method: "get",
-                    url: "/gtas/roles/" ,
+                    url: baseRolesURL,
                     params: {
                         action: "get"
                     }
                 });
-                return(request.then(handleSuccess, handleError) );
+                return (request.then(handleSuccess, handleError));
             }
 
+            //function saveUser(user, method) {
+            //    return request = $http({
+            //        method: method,
+            //        url: baseUsersURL + user.userId,
+            //        data: user
+            //    });
+            //}
             function updateUser(user) {
-
-                var PUT_USER_URL = '/gtas/users/' + user.userId;
                 var request = $http({
                     method: "put",
-                    url: PUT_USER_URL ,
-                    data:user
+                    url: baseUsersURL + user.userId,
+                    data: user
                 });
-                return( request.then( handleSuccess, handleError ) );
+                return (request.then(handleSuccess, handleError));
             }
 
             function createUser(user) {
-
-                var POST_USER_URL = '/gtas/users/' + user.userId;
                 var request = $http({
                     method: "post",
-                    url:POST_USER_URL ,
+                    url: baseUsersURL + user.userId,
                     data:user
 
                 });
-                return( request.then( handleSuccess, handleError ) );
+                return (request.then(handleSuccess, handleError));
             }
-
 
             function getUserData() {
                 var dfd = $q.defer();
                 dfd.resolve($http({
                     method: 'get',
-                    url: "/gtas/user"
+                    url: baseUsersURL
                 }));
                 return dfd.promise;
             }
 
             return {
                 getRoles: getRoles,
-                updateUser: updateUser,
                 createUser: createUser,
-                getUserData: getUserData
+                updateUser: updateUser,
+                getUserData: getUserData,
+                getAllUsers: function () {
+                    var request = $http({
+                        method: "get",
+                        url: baseUsersURL
+                    });
+
+                    return (request.then(handleSuccess, handleError));
+                }
             };
         })
         .service("gridOptionsLookupService", function (uiGridConstants) {

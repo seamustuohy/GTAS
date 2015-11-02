@@ -58,25 +58,8 @@ var app;
                 })
                 .state('modifyUser', {
                     url: '/user/:userId',
-                    params: {
-                        action: 'modify',
-                        user: null
-                    },
                     views: {
                         '@': {
-                            controller: 'UserCtrl',
-                            templateUrl: 'admin/user.html'
-                        }
-                    }
-                })
-                .state('addUser', {
-                    url: '/user/new',
-                    params: {
-                        action: 'create',
-                        user: null
-                    },
-                    views: {
-                        "@": {
                             controller: 'UserCtrl',
                             templateUrl: 'admin/user.html'
                         }
