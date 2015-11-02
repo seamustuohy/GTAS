@@ -142,8 +142,9 @@
             };
         })
         .service('userService', function ($http, $q) {
-            var baseRolesURL = "/gtas/roles/",
-                baseUsersURL = "/gtas/users/";
+            var USER_ROLES_URL = "/gtas/roles/",
+                USERS_URL = "/gtas/users/",
+                USER_URL = "/gtas/user/";
             function handleError(response) {
                 if (response.data.message !== undefined) {
                     return $q.reject("An unknown error occurred.");
@@ -158,7 +159,7 @@
             function getRoles() {
                 var request = $http({
                     method: "get",
-                    url: baseRolesURL,
+                    url: USER_ROLES_URL,
                     params: {
                         action: "get"
                     }
@@ -176,7 +177,7 @@
             function updateUser(user) {
                 var request = $http({
                     method: "put",
-                    url: baseUsersURL + user.userId,
+                    url: USERS_URL + user.userId,
                     data: user
                 });
                 return (request.then(handleSuccess, handleError));
@@ -185,8 +186,8 @@
             function createUser(user) {
                 var request = $http({
                     method: "post",
-                    url: baseUsersURL + user.userId,
-                    data:user
+                    url: USERS_URL + user.userId,
+                    data: user
 
                 });
                 return (request.then(handleSuccess, handleError));
@@ -196,7 +197,7 @@
                 var dfd = $q.defer();
                 dfd.resolve($http({
                     method: 'get',
-                    url: baseUsersURL
+                    url: USER_URL
                 }));
                 return dfd.promise;
             }
@@ -209,7 +210,7 @@
                 getAllUsers: function () {
                     var request = $http({
                         method: "get",
-                        url: baseUsersURL
+                        url: USER_URL
                     });
 
                     return (request.then(handleSuccess, handleError));
