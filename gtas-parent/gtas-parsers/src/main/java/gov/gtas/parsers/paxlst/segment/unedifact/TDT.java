@@ -50,6 +50,11 @@ public class TDT extends Segment {
 
                 break;
             case 1:
+                /*
+                 * TSA Regulations require a special flight number format for
+                 * Master Crew Lists (MCLs): Format is "ccxxMCL" which "cc"
+                 * is carrier, "xx" is a sequence number.
+                 */
                 this.isMasterCrewList = c.getElement(0).endsWith("MCL");
                 this.c_journeyIdentifier = c.getElement(0).replace("MCL", "");
                 break;

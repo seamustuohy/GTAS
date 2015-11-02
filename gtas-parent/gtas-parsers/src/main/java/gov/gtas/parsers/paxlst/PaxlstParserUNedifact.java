@@ -114,6 +114,12 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
      * Segment group 2: flight details
      */
     private void processFlight(TDT tdt) throws ParseException {
+        if (tdt.isMasterCrewList()) {
+            // Master crew lists (MCLs) are part of TSA regulations
+            // and not something we handle.
+            throw new ParseException("Master crew lists (MCLs) not handled at this time");
+        }
+        
         String dest = null;
         String origin = null;
         Date eta = null;
