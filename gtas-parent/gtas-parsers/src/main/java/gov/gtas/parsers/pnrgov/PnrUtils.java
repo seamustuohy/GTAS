@@ -36,16 +36,45 @@ public class PnrUtils {
     }
     
     /**
-     * TODO: was not handling the 2nd example below b/c of extra field.
-     * check whether it's an error in the message or not.
+     * <p>
+     * We use the SSR (DOCS) segment to grab the majority of the information
+     * about the passenger -- name, document number, etc. The TIF segment is
+     * only used to record the traveler reference number and any suffix or title
+     * in the name.
+     * <p>
+     * Group 2 in a PNR (which begins with a TIF segment) may contain multiple
+     * SSR DOCS segments.  Merging information might be ideal, but in many 
+     * instances, the different SSR segments contain conflicting info (birthdate
+     * for example), so we simply choose the SSR DOCS with the greatest length
+     * and hope that's the best one.
+     * <p>
+     * TODO: was not handling the 2nd example below b/c of extra field. check
+     * whether it's an error in the message or not.
      * 
-     * example:
+     * <pre>
+     * Examples:
      * /P/GBR/123456789/GBR/12JUL64/M/23AUG19/SMITHJR/JONATHON/ROBERT
      * / /   /         /   /GBR/12JUL64/M//JONES/WILLIAMNEVELL
+     * </pre>
      */
-    public static PassengerVo createPassenger(SSR ssr, TIF tif) throws ParseException {
+    public static PassengerVo createPassenger(List<SSR> ssrDocs, TIF tif) throws ParseException {
         final String dateFormat = "ddMMMyy";
-        List<String> strs = splitSsrFreeText(ssr);
+        
+        SSR bestSsr = null;
+        for (SSR ssr : ssrDocs) {
+            String ssrText = ssr.getFreeText();
+            if (ssrText == null) {
+                continue;
+            } else if (bestSsr == null || ssrText.length() > bestSsr.getFreeText().length()) {
+                bestSsr = ssr;
+            }
+        }
+        
+        if (bestSsr == null) {
+            return null;
+        }
+        
+        List<String> strs = splitSsrFreeText(bestSsr);
         if (strs == null) {
             return null;
         }
@@ -76,22 +105,14 @@ public class PnrUtils {
         if (tif.getTravelerDetails().size() > 0) {
             TravelerDetails td = tif.getTravelerDetails().get(0);
             p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());            
+
+            PassengerVo tmp = new PassengerVo();
+            processNames(tmp, tif.getTravelerSurname(), td.getTravelerGivenName(), null);
+            p.setTitle(tmp.getTitle());
+            p.setSuffix(tmp.getSuffix());
         }
         
         return p;
-    }
-    
-    public static PassengerVo createPassenger(TIF tif) throws ParseException {
-        if (tif.getTravelerDetails().size() > 0) {
-            PassengerVo p = new PassengerVo();
-            p.setPassengerType("P");
-            TravelerDetails td = tif.getTravelerDetails().get(0);
-            processNames(p, tif.getTravelerSurname(), td.getTravelerGivenName(), null);
-            p.setTravelerReferenceNumber(td.getTravelerReferenceNumber());
-            return p;
-        }
-        
-        return null;
     }
     
     public static AddressVo createAddress(ADD add) {
