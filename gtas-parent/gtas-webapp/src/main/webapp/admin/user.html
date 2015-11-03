@@ -2,18 +2,18 @@
 	<form name="userForm" ng-submit="saveUser()">
 		<div layout layout-sm="column">
 			<md-input-container flex><label>User Id</label>
-				<input ng-model="persistUser.userId" ng-disabled="action === 'modify'" style="width: 300px;">
+				<input ng-model="persistUser.userId" id="userId" ng-disabled="action === 'modify'" autocomplete="off" required style="width: 300px;">
 			</md-input-container>
 			<md-input-container flex><label>Password</label>
-				<input ng-model="persistUser.password" type="password" required style="width: 300px;">
+				<input ng-model="persistUser.password" id="password" type="password" type="search"  autocomplete="off" required style="width: 300px;">
 			</md-input-container>
 		</div>
 		<div layout layout-sm="column">
 			<md-input-container flex><label>First
-				name</label> <input ng-model="persistUser.firstName" required style="width: 300px;">
+				name</label> <input id="firstName" ng-model="persistUser.firstName" autocomplete="off" required style="width: 300px;">
 			</md-input-container>
 			<md-input-container flex><label>Last
-				Name</label> <input ng-model="persistUser.lastName" required style="width: 300px;">
+				Name</label> <input id="lastName" ng-model="persistUser.lastName" autocomplete="off" required style="width: 300px;">
 			</md-input-container>
 		</div>
 

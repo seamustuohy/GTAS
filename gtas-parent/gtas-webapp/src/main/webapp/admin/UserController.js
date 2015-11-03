@@ -1,4 +1,4 @@
-app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast, $location) {
+app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast, $location, $timeout) {
     'use strict';
     var backToAdmin = function () { $location.path('/admin'); },
         adminIndex,
@@ -28,6 +28,8 @@ app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast
             $scope.action = $scope.user === undefined ? 'create' : 'modify';
             if ($scope.action === 'modify') {
                 $scope.persistUser = $scope.user;
+            } else if (/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())) {
+                $timeout(function () { $('#userId, #password').each(function () { this.value = ''; }, 100); });
             }
         },
         getSelectedRoles = function () {
@@ -64,9 +66,7 @@ app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast
 
     $scope.persistUser = { password: '', userId: '', firstName: '', lastName: '', active: 1 };
     $scope.roles = [];
-    $scope.Init = function () {
-        userService.getRoles().then(scopeRoles);
-    };
+    $scope.Init = function () { userService.getRoles().then(scopeRoles); };
 
     $scope.toggleRole = function (role) {
         if (role.roleDescription === 'Admin') {
@@ -75,15 +75,13 @@ app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast
     };
 
     $scope.saveUser = function () {
-        if ($scope.persistUser.userId !== null && $scope.persistUser.password !== null) {
-            $scope.persistUser.userId = $scope.persistUser.userId.trim();
-            $scope.persistUser.password = $scope.persistUser.password.trim();
-        }
-        $scope.persistUser.roles = getSelectedRoles();
+        $scope.persistUser.userId = $scope.persistUser.userId.trim();
+        $scope.persistUser.password = $scope.persistUser.password.trim();
         if ($scope.persistUser.userId.length === 0 || $scope.persistUser.password.length === 0) {
             alertUser('userId and | or password cannot be blank space(s)');
             return;
         }
+        $scope.persistUser.roles = getSelectedRoles();
         if ($scope.persistUser.roles.length === 0) {
             alertUser('One or More User Roles Have To Be Selected');
             return;
