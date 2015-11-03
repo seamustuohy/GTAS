@@ -1,6 +1,7 @@
 app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast, $location) {
     'use strict';
     var backToAdmin = function () { $location.path('/admin'); },
+        adminIndex,
         setNonAdminRoles = function (adminSelectedState) {
             $scope.roles.forEach(function (role) {
                 if (role.roleDescription !== 'Admin') {
@@ -14,15 +15,14 @@ app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast
         setUser = function (users) {
             users.forEach(function (user) {
                 if (user.userId === $stateParams.userId) {
-                    var userSelectedRoles = user.roles.map(function (role) { return role.roleDescription; }),
-                        admin = $scope.roles[3]; //not sure why this is 4th...
+                    var userSelectedRoles = user.roles.map(function (role) { return role.roleDescription; });
                     $scope.user = user;
                     $scope.roles.forEach(function (role) {
                         if (userSelectedRoles.indexOf(role.roleDescription) >= 0) {
                             role.selected = true;
                         }
                     });
-                    setNonAdminRoles(admin.selected);
+                    setNonAdminRoles($scope.roles[adminIndex].selected);
                 }
             });
             $scope.action = $scope.user === undefined ? 'create' : 'modify';
@@ -45,29 +45,27 @@ app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast
         },
         alertUser = function (content) {
             $mdToast.show(
-                $mdToast.simple()
-                    .content(content)
-                    .position("top right")
-                    .hideDelay(3000)
+                $mdToast.simple().content(content).position("top right").hideDelay(3000)
             );
         },
         scopeRoles = function (roles) {
             $scope.roles = [];
-            roles.forEach(function (obj) {
+            roles.forEach(function (role, index) {
+                if (role.roleDescription === 'Admin') { adminIndex = index; }
                 $scope.roles.push({
-                    roleDescription: obj.roleDescription,
-                    roleId: obj.roleId,
+                    roleDescription: role.roleDescription,
+                    roleId: role.roleId,
                     selected: false,
                     disabled: false
                 });
             });
+            userService.getAllUsers().then(setUser);
         };
 
     $scope.persistUser = { password: '', userId: '', firstName: '', lastName: '', active: 1 };
     $scope.roles = [];
     $scope.Init = function () {
         userService.getRoles().then(scopeRoles);
-        userService.getAllUsers().then(setUser);
     };
 
     $scope.toggleRole = function (role) {
