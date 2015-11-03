@@ -1,15 +1,11 @@
 <md-content layout-padding>
 	<form name="userForm" ng-submit="saveUser()">
 		<div layout layout-sm="column">
-			<md-input-container flex ng-show="action === 'modify'"><label>User Id</label>
-				<input ng-model="persistUser.userId" disabled style="width: 300px;">
-			</md-input-container>
-			<md-input-container flex ng-show="action === 'create'"><label>Assign ID</label>
-				<input ng-model="persistUser.activeName" required style="width: 300px;">
+			<md-input-container flex><label>User Id</label>
+				<input ng-model="persistUser.userId" ng-disabled="action === 'modify'" style="width: 300px;">
 			</md-input-container>
 			<md-input-container flex><label>Password</label>
-				<input ng-model="persistUser.activeWord" type="password" required ng-change="encodePassword()"
-					   style="width: 300px;">
+				<input ng-model="persistUser.password" type="password" required style="width: 300px;">
 			</md-input-container>
 		</div>
 		<div layout layout-sm="column">
@@ -31,11 +27,11 @@
 		<div layout="column">
 			<code style="font-weight: bold; font-size: 17px;">Roles</code>
 			<span layout="column" layout-wrap class="clearfix" style="min-height: 200px;">
-				<span flex="20" ng-repeat="role in rolesLookup | orderBy:'roleDescription'">
-						<md-switch ng-model="roles[role.roleDescription].selected"
-								   ng-disabled="roles[role.roleDescription].disabled"
+				<span flex="20" ng-repeat="role in roles | orderBy:'roleDescription'">
+						<md-switch ng-model="role.selected"
+								   ng-disabled="role.disabled"
 								   class="md-primary" aria-label="Roles"
-								   ng-change="toggleRole(role.roleDescription)">
+								   ng-change="toggleRole(role)">
 							{{ role.roleDescription }}
 						</md-switch>
 				</span>
