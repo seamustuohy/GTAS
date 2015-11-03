@@ -215,11 +215,10 @@ public class FlightVo extends BaseVo implements Validatable {
 
 	@Override
 	public boolean isValid() {
-		if(StringUtils.isBlank(this.destination) || StringUtils.isBlank(this.origin) 
-				|| StringUtils.isBlank(this.flightNumber) || this.flightDate == null 
-				|| StringUtils.isBlank(this.carrier)){
-			return false;
-		}
-		return true;
+		 return StringUtils.isNotBlank(this.destination) 
+		        && StringUtils.isNotBlank(this.origin) 
+				&& StringUtils.isNotBlank(this.flightNumber)
+				&& this.flightDate != null 
+				&& StringUtils.isNotBlank(this.carrier);
 	}  
 }

@@ -2,6 +2,7 @@ package gov.gtas.model;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,7 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 import gov.gtas.constant.DomainModelConstants;
 
@@ -24,7 +28,8 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(String userId, String password, String firstName, String lastName, int active, Set<Role> roles) {
+	public User(String userId, String password, String firstName, String lastName, int active, Set<Role> roles,
+			Filter filter) {
 
 		this.userId = userId;
 		this.password = password;
@@ -32,7 +37,11 @@ public class User implements Serializable {
 		this.lastName = lastName;
 		this.active = active;
 		this.roles = roles;
+		this.filter=filter;
 	}
+	@OneToOne(mappedBy = "user", targetEntity = Filter.class,cascade = { CascadeType.MERGE }, fetch = FetchType.EAGER)
+    private Filter filter;
+
 
 	@Id
 	@Column(name = "user_id", length = DomainModelConstants.GTAS_USERID_COLUMN_SIZE)
@@ -103,56 +112,42 @@ public class User implements Serializable {
 		this.lastName = lastName;
 	}
 
+	public Filter getFilter() {
+		return filter;
+	}
+
+	public void setFilter(Filter filter) {
+		this.filter = filter;
+	}
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + active;
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
-		return result;
+		return Objects.hash(this.userId, this.password, this.firstName, this.lastName, this.active);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object target) {
+		if (this == target) {
 			return true;
-		if (obj == null)
+		}
+
+		if (!(target instanceof User)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (active != other.active)
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (roles == null) {
-			if (other.roles != null)
-				return false;
-		} else if (!roles.equals(other.roles))
-			return false;
-		if (userId == null) {
-			if (other.userId != null)
-				return false;
-		} else if (!userId.equals(other.userId))
-			return false;
-		return true;
+		}
+
+		User dataTarget = ((User) target);
+
+		return new EqualsBuilder().append(this.userId, dataTarget.getUserId())
+				.append(this.firstName, dataTarget.getFirstName()).append(this.lastName, dataTarget.getLastName())
+				.append(this.password, dataTarget.getPassword()).append(this.active, dataTarget.getActive())
+				.append(this.roles, dataTarget.getRoles())
+				.append(this.filter, dataTarget.getFilter()).isEquals();
+	}
+	
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", password=" + password + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", active=" + active + ", roles=" + roles + ", filter=" + filter+"]";
 	}
 
 }

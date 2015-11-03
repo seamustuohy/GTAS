@@ -14,12 +14,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.util.DateCalendarUtils;
 import gov.gtas.vo.passenger.FlightVo;
 
 public class ParseUtils {
+    private static final Logger logger = LoggerFactory.getLogger(ParseUtils.class);
+
     /**
      * Some telecommunications transmission protocols require various
      * communication type headers and trailers to facilitate addressing,
@@ -49,13 +53,15 @@ public class ParseUtils {
         return rv;
     }
     
-    public static Date parseDateTime(String dt, String format) throws ParseException {
+    public static Date parseDateTime(String dt, String format) {
         try {
             DateFormat timeFormat = new SimpleDateFormat(format, Locale.ENGLISH);
             return timeFormat.parse(dt);
         } catch (java.text.ParseException pe) {
-            throw new ParseException(pe.getMessage());
+            logger.warn(String.format("Could not parse date %s using format %s", dt, format));
         }
+        
+        return null;
     }
     
     /**

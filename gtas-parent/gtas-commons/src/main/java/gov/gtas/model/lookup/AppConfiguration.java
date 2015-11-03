@@ -11,9 +11,11 @@ import gov.gtas.model.BaseEntity;
 @Entity
 @Table(name = "app_configuration")
 public class AppConfiguration extends BaseEntity {
+    private static final long serialVersionUID = 1L;
     public AppConfiguration() { }
     private String option;
     private String value;
+    private String description;
     public String getOption() {
         return option;
     }
@@ -25,5 +27,11 @@ public class AppConfiguration extends BaseEntity {
     }
     public void setValue(String value) {
         this.value = value;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

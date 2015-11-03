@@ -12,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import gov.gtas.model.Filter;
 import gov.gtas.model.User;
+import gov.gtas.repository.FilterRepository;
 import gov.gtas.repository.UserRepository;
+import gov.gtas.services.Filter.FilterServiceUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,17 +27,25 @@ public class UserServiceImpl implements UserService {
 	@Resource
 	private UserRepository userRepository;
 
+	@Resource
+	private FilterRepository filterRepository;
+	@Autowired
+	private FilterServiceUtil filterServiceUtil;
+
 	@Autowired
 	private UserServiceUtil userServiceUtil;
-	
-	private Pattern BCRYPT_PATTERN = Pattern
-			.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
+
+	private Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
 
 	@Override
 	@Transactional
 	public UserData create(UserData userData) {
 		User userEntity = userServiceUtil.mapUserEntityFromUserData(userData);
 		userEntity.setPassword((new BCryptPasswordEncoder()).encode(userEntity.getPassword()));
+		if (userData.getFilter() != null) {
+			Filter filterEntity = filterServiceUtil.mapFilterEntityFromFilterData(userData.getFilter());
+			userEntity.setFilter(filterEntity);
+		}
 		User newUserEntity = userRepository.save(userEntity);
 		UserData newUser = userServiceUtil.mapUserDataFromEntity(newUserEntity);
 		return newUser;
@@ -65,15 +76,28 @@ public class UserServiceImpl implements UserService {
 		if (entity != null) {
 			entity.setFirstName(mappedEnity.getFirstName());
 			entity.setLastName(mappedEnity.getLastName());
-			if(!BCRYPT_PATTERN.matcher(mappedEnity.getPassword()).matches())
-			{
+			if (!BCRYPT_PATTERN.matcher(mappedEnity.getPassword()).matches()) {
 				entity.setPassword(passwordEncoder.encode(mappedEnity.getPassword()));
-			}else {
+			} else {
 				entity.setPassword(mappedEnity.getPassword());
 			}
-			
+
 			entity.setActive(mappedEnity.getActive());
 			entity.setRoles(mappedEnity.getRoles());
+			if (data.getFilter() != null) {
+				Filter filterEntity = filterRepository.getFilterByUserId(data.getFilter().getUserId());
+				Filter mappedEntity = filterServiceUtil.mapFilterEntityFromFilterData(data.getFilter());
+
+				filterEntity.setUser(mappedEntity.getUser());
+				filterEntity.setOriginAirports(mappedEntity.getOriginAirports());
+				filterEntity.setDestinationAirports(mappedEntity.getDestinationAirports());
+				filterEntity.setEtaStart(mappedEntity.getEtaStart());
+				filterEntity.setEtaEnd(mappedEntity.getEtaEnd());
+				filterEntity.setEtdStart(mappedEntity.getEtdStart());
+				filterEntity.setEtdEnd(mappedEntity.getEtdEnd());
+				filterEntity.setFlightDirection(mappedEntity.getFlightDirection());
+				entity.setFilter(filterEntity);
+			}
 			User savedEntity = userRepository.save(entity);
 			UserData updatedUser = userServiceUtil.mapUserDataFromEntity(savedEntity);
 			return updatedUser;

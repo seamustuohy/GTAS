@@ -307,12 +307,8 @@ public class PassengerVo extends BaseVo implements Validatable {
 
 	@Override
 	public boolean isValid() {
-		if(StringUtils.isBlank(this.firstName) || StringUtils.isBlank(this.lastName) 
-				|| StringUtils.isBlank(this.gender) || this.age == null || this.dob == null 
-				|| StringUtils.isBlank(this.citizenshipCountry)){
-			return false;
-		}
-		return true;
+		return StringUtils.isNotBlank(this.firstName)
+		       && StringUtils.isNotBlank(this.lastName);
 	}
 
     @Override

@@ -31,9 +31,18 @@ INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('abandopadhay', 1);
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('jtang', 1);
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('mcopenhafer', 1);
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('ladebiyi', 1);
-INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('adelorie', 1);
+INSERT INTO `user_role` (`user_id`, `role_id`) VALUES ('adelorie',
+
+
+-- ----------------------------
+-- Records of flight_direction
+-- ----------------------------
+
+INSERT INTO `flight_direction` VALUES (1,'I', 'Inbound');
+INSERT INTO `flight_direction` VALUES (2,'O', 'Outbound');
+INSERT INTO `flight_direction` VALUES (3,'A', 'Any');
 
 -- ----------------------------
 -- Records of app_configuration
 -- ----------------------------
-insert into app_configuration (option, value) values('HOME_COUNTRY', 'USA');
+insert into app_configuration (option, value, description) values('HOME_COUNTRY', 'USA', 'home country for the loader to determine incoming/outgoing flights');

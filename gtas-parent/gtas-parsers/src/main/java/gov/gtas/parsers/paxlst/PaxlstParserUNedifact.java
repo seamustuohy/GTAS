@@ -114,6 +114,12 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
      * Segment group 2: flight details
      */
     private void processFlight(TDT tdt) throws ParseException {
+        if (tdt.isMasterCrewList()) {
+            // Master crew lists (MCLs) are part of TSA regulations
+            // and not something we handle.
+            throw new ParseException("Master crew lists (MCLs) not handled at this time");
+        }
+        
         String dest = null;
         String origin = null;
         Date eta = null;
@@ -178,7 +184,6 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
 
             if (origin != null && dest != null) {
                 FlightVo f = new FlightVo();
-                parsedMessage.addFlight(f);
                 TdtType flightType = tdt.getTransportStageQualifier();
                 f.setOverFlight(flightType.equals(TdtType.OVER_FLIGHT));
                 f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tdt.getFlightNumber()));
@@ -188,11 +193,13 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
                 f.setEta(eta);
                 f.setEtd(etd);
                 ParseUtils.initEtaEtdDate(f);
-                Date flightDate = ParseUtils.determineFlightDate(etd, eta, parsedMessage.getTransmissionDate());
-                if (flightDate == null) {
-                    throw new ParseException("Could not determine flight date");
+                f.setFlightDate(ParseUtils.determineFlightDate(etd, eta, parsedMessage.getTransmissionDate()));
+
+                if (f.isValid()) {
+                    parsedMessage.addFlight(f);
+                } else {
+                    throw new ParseException("Invalid flight: " + f); 
                 }
-                f.setFlightDate(flightDate);
 
                 dest = null;
                 origin = null;
@@ -208,8 +215,6 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
      */
     private void processPax(NAD nad) throws ParseException {
         PassengerVo p = new PassengerVo();
-        parsedMessage.addPax(p);
-
         p.setFirstName(nad.getFirstName());
         p.setLastName(nad.getLastName());
         p.setMiddleName(nad.getMiddleName());
@@ -232,6 +237,12 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
         }
         p.setPassengerType(paxType);
 
+        if (p.isValid()) {
+            parsedMessage.addPax(p);
+        } else {
+            throw new ParseException("Invalid passenger: " + nad);
+        }
+        
         for (;;) {
             ATT att = getConditionalSegment(ATT.class);
             if (att == null) {

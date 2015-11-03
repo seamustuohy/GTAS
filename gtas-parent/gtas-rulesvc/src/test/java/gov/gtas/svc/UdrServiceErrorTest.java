@@ -7,6 +7,20 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.RuleErrorConstants;
 import gov.gtas.enumtype.EntityEnum;
@@ -25,19 +39,6 @@ import gov.gtas.services.security.UserServiceUtil;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.svc.util.UdrServiceHelper;
 import gov.gtas.util.DateCalendarUtils;
-
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UdrServiceErrorTest {
 	private static final String TEST_JSON = "{ \"details\": {"
@@ -102,7 +103,7 @@ public class UdrServiceErrorTest {
 		spec.setDetails(null);
 		String authorId = spec.getSummary().getAuthor();
 		User author = new User();
-		UserData authorData = new UserData(authorId, null, null, null, 0, null);
+		UserData authorData = new UserData(authorId, null, null, null, 0, null,null);
 		author.setUserId(authorId);
 		when(mockUserService.findById(authorId)).thenReturn(authorData);
 		when(mockUserServiceUtil.mapUserEntityFromUserData(authorData)).thenReturn(author);
@@ -135,7 +136,7 @@ public class UdrServiceErrorTest {
 	public void testCreateBadJsonCondition() {
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec();
 		String authorId = spec.getSummary().getAuthor();
-		UserData authorData = new UserData(authorId, null, null, null, 0, null);
+		UserData authorData = new UserData(authorId, null, null, null, 0, null,null);
 		User author = new User();
 		author.setUserId(authorId);
 		spec.getDetails().setCondition("foo");
@@ -155,7 +156,7 @@ public class UdrServiceErrorTest {
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec();
 		String authorId = spec.getSummary().getAuthor();
 
-		UserData authorData = new UserData(authorId, null, null, null, 0, null);
+		UserData authorData = new UserData(authorId, null, null, null, 0, null,null);
 		User author = new User();
 		author.setUserId(authorId);
 		spec.getDetails().setRules(null);
@@ -174,7 +175,7 @@ public class UdrServiceErrorTest {
 	public void testCreateTodayDateOk() {
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec();
 		String authorId = spec.getSummary().getAuthor();
-		UserData authorData = new UserData(authorId, null, null, null, 0, null);
+		UserData authorData = new UserData(authorId, null, null, null, 0, null,null);
 		User author = new User();
 		author.setUserId(authorId);
 		try {
@@ -208,7 +209,7 @@ public class UdrServiceErrorTest {
 		UdrSpecification spec = UdrSpecificationBuilder.createSampleSpec();
 		String authorId = spec.getSummary().getAuthor();
 
-		UserData authorData = new UserData(authorId, null, null, null, 0, null);
+		UserData authorData = new UserData(authorId, null, null, null, 0, null,null);
 		User author = new User();
 		author.setUserId(authorId);
 		try {
@@ -243,7 +244,7 @@ public class UdrServiceErrorTest {
 					UdrSpecification.class);
 			assertNotNull(testObj);
 			authorId = testObj.getSummary().getAuthor();
-			UserData authorData = new UserData(authorId, null, null, null, 0, null);
+			UserData authorData = new UserData(authorId, null, null, null, 0, null,null);
 			User author = new User();
 			author.setUserId(authorId);
 			UdrRule rule = JsonToDomainObjectConverter.createUdrRuleFromJson(testObj, author);
@@ -277,7 +278,7 @@ public class UdrServiceErrorTest {
 					UdrSpecification.class);
 			assertNotNull(testObj);
 			authorId = testObj.getSummary().getAuthor();
-			UserData authorData = new UserData(authorId, null, null, null, 0, null);
+			UserData authorData = new UserData(authorId, null, null, null, 0, null,null);
 			User author = new User();
 			author.setUserId(authorId);
 			UdrRule rule = JsonToDomainObjectConverter.createUdrRuleFromJson(testObj, author);
@@ -310,7 +311,7 @@ public class UdrServiceErrorTest {
 					PassengerMapping.DEBARKATION.getFieldName(), "equal", startDate), UdrSpecification.class);
 			assertNotNull(testObj);
 			authorId = testObj.getSummary().getAuthor();
-			UserData authorData = new UserData(authorId, null, null, null, 0, null);
+			UserData authorData = new UserData(authorId, null, null, null, 0, null,null);
 
 			User author = new User();
 			author.setUserId(authorId);

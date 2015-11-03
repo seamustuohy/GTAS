@@ -1,17 +1,23 @@
 package gov.gtas.repository;
 
+import java.util.List;
+
+import gov.gtas.model.FlightDirection;
 import gov.gtas.model.lookup.Airport;
+import gov.gtas.model.lookup.AppConfiguration;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
 
-import java.util.List;
-
 public interface LookUpRepository {
-	List<Country> getAllCountries();
+    public List<Country> getAllCountries();
 
-	List<Carrier> getAllCarriers();
+	public List<Carrier> getAllCarriers();
 
-	List<Airport> getAllAirports();
+	public List<Airport> getAllAirports();
+	
+	public List<FlightDirection> getFlightDirections();
+
+    public List<AppConfiguration> getAllAppConfiguration();
 
 	public void clearAllEntitiesCache();
 
@@ -21,8 +27,9 @@ public interface LookUpRepository {
 
 	public Country getCountry(String countryName);
 
+    public String getAppConfigOption(String option);
+
 	public void removeCountryCache(String countryName);
 
 	public void deleteCountryDb(Country country);
-
 }

@@ -45,7 +45,7 @@ public class RuleRunner {
 			exception.printStackTrace();
 			ErrorDetailInfo errInfo = ErrorHandlerFactory.createErrorDetails(
 					RuleServiceConstants.RULE_ENGINE_RUNNER_ERROR_CODE,
-					RuleServiceConstants.RULE_ENGINE_RUNNER_ERROR_MESSAGE, exception);
+					exception);
 			ErrorPersistenceService errorService = (ErrorPersistenceService) ctx
 					.getBean("errorPersistenceServiceImpl");
 			errorService.create(errInfo);

@@ -25,7 +25,7 @@ public class TestUtils {
 			Set<RoleData> roles = new HashSet<RoleData>();
 			roles.add(new RoleData(1, "ADMIN"));
 			UserData userData = new UserData(userId, password, firstName,
-					lastName, 1, roles);
+					lastName, 1, roles,null);
 
 			userService.create(userData);
 	}
