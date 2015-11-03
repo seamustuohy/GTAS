@@ -104,6 +104,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         DAT_G1 dat = getConditionalSegment(DAT_G1.class, "DAT");
         if (dat != null) {
             parsedMessage.setDateBooked(dat.getTicketIssueDate());
+            parsedMessage.setDateReceived(dat.getPnrTransactionDate());
         }
 
         for (;;) {
@@ -256,7 +257,15 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             }
         }
 
-        getConditionalSegment(DAT_G1.class, "DAT");
+        DAT_G1 dat = getConditionalSegment(DAT_G1.class, "DAT");
+        if (dat != null) {
+            if (parsedMessage.getDateBooked() == null) {
+                parsedMessage.setDateBooked(dat.getTicketIssueDate());
+            }
+            if (parsedMessage.getDateReceived() == null) {
+                parsedMessage.setDateReceived(dat.getPnrTransactionDate());
+            }
+        }
 
         FOP fop = getConditionalSegment(FOP.class);
         processGroup4_FormOfPayment(fop);
