@@ -155,8 +155,7 @@ public class LoaderUtils {
         
         pnr.setPassengerCount(vo.getPassengers().size());
         if (vo.getDateBooked() != null && vo.getDepartureDate() != null) {
-//            LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            // TODO: won't work for leap years
+            // NB: won't work for leap years
             long diff = vo.getDepartureDate().getTime() - vo.getDateBooked().getTime(); 
             int days = (int)TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
             pnr.setDaysBookedBeforeTravel(days);
