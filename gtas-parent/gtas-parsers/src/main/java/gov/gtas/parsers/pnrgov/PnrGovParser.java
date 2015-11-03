@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
@@ -334,6 +335,32 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             throw new ParseException("Invalid flight: " + f);
         }
         
+        processTvlConditionalSegments();
+        
+        if (StringUtils.isNotBlank(tvl.getOperatingCarrier())) {
+            // codeshare flight: create a separate flight with the same
+            // details except use the codeshare carrier and flight number.
+            TVL cs_tvl = getMandatorySegment(TVL.class);
+            
+            FlightVo csFlight = new FlightVo();
+            csFlight.setCarrier(tvl.getOperatingCarrier());
+            csFlight.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(cs_tvl.getFlightNumber()));
+            csFlight.setDestination(tvl.getDestination());
+            csFlight.setOrigin(tvl.getOrigin());
+            csFlight.setEta(tvl.getEta());
+            csFlight.setEtd(tvl.getEtd());
+            csFlight.setFlightDate(flightDate);
+            if (csFlight.isValid()) {
+                parsedMessage.getFlights().add(csFlight);
+            } else {
+                throw new ParseException("Invalid flight: " + csFlight);
+            }
+            
+            processTvlConditionalSegments();
+        }
+    }
+    
+    private void processTvlConditionalSegments() throws ParseException {
         getConditionalSegment(TRA.class);
         getConditionalSegment(RPI.class);
         getConditionalSegment(APD.class);
@@ -391,7 +418,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (lts == null) {
                 break;
             }
-        }        
+        }
     }
     
     /**
@@ -481,7 +508,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     }
 
     private void processGroup10_History(ABI abi) throws ParseException {
-        DAT_G10 dat = getConditionalSegment(DAT_G10.class, "DAT");
+        getConditionalSegment(DAT_G10.class, "DAT");
         for (;;) {
             SAC sac = getConditionalSegment(SAC.class);
             if (sac == null) {
@@ -492,10 +519,10 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     }
 
     private void processGroup11_HistoryCredit(SAC sac) throws ParseException {
-        TIF tif = getConditionalSegment(TIF.class);
-        SSR ssr = getConditionalSegment(SSR.class);
-        IFT ift = getConditionalSegment(IFT.class);
-        TBD tbd = getConditionalSegment(TBD.class);
+        getConditionalSegment(TIF.class);
+        getConditionalSegment(SSR.class);
+        getConditionalSegment(IFT.class);
+        getConditionalSegment(TBD.class);
         for (;;) {
             TVL tvl = getConditionalSegment(TVL.class);
             if (tvl == null) {
@@ -507,7 +534,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     }
 
     private void processGroup12_HistoryFlightInfo(TVL tvl) throws ParseException {
-        RPI rpi = getConditionalSegment(RPI.class);
+        getConditionalSegment(RPI.class);
     }
     
     private void processExcessBaggage(EBD ebd) {
