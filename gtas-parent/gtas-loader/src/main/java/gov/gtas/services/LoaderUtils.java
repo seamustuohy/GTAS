@@ -27,6 +27,8 @@ import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Country;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.repository.AppConfigurationRepository;
+import gov.gtas.repository.LookUpRepository;
 import gov.gtas.vo.passenger.AddressVo;
 import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
@@ -49,6 +51,9 @@ public class LoaderUtils {
 
     @Autowired
     private CountryService countryService;
+    
+    @Autowired
+    private LookUpRepository lookupRepo;
 
     public Passenger createNewPassenger(PassengerVo vo) throws ParseException {
         Passenger p = new Passenger();
@@ -107,12 +112,10 @@ public class LoaderUtils {
     }
     
     public void updateFlight(FlightVo vo, Flight f) throws ParseException {
-        // TODO: hardcoded for now
-        String homeCountry = "USA";
         f.setUpdatedBy(LOADER_USER);
+        String homeCountry = lookupRepo.getAppConfigOption(AppConfigurationRepository.HOME_COUNTRY);
 
         BeanUtils.copyProperties(vo, f, getNullPropertyNames(vo));
-        
         f.setFullFlightNumber(String.format("%s%s", vo.getCarrier(), vo.getFlightNumber()));
         
         Airport dest = getAirport(f.getDestination());

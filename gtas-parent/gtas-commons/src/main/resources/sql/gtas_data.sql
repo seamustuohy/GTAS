@@ -45,4 +45,4 @@ INSERT INTO `flight_direction` VALUES (3,'A', 'Any');
 -- ----------------------------
 -- Records of app_configuration
 -- ----------------------------
-insert into app_configuration (option, value) values('HOME_COUNTRY', 'USA');
+insert into app_configuration (option, value, description) values('HOME_COUNTRY', 'USA', 'home country for the loader to determine incoming/outgoing flights');

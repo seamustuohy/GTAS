@@ -24,9 +24,11 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
+import gov.gtas.model.lookup.AppConfiguration;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.repository.AddressRepository;
 import gov.gtas.repository.AgencyRepository;
+import gov.gtas.repository.AppConfigurationRepository;
 import gov.gtas.repository.CreditCardRepository;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.repository.FlightRepository;
@@ -83,7 +85,7 @@ public class LoaderRepository {
     
     @Autowired
     private LoaderUtils utils;
-
+    
     public void checkHashCode(String hash) throws LoaderException {
         Message m = messageDao.findByHashCode(hash);
         if (m != null) {

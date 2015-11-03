@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import gov.gtas.model.FlightDirection;
 import gov.gtas.model.lookup.Airport;
+import gov.gtas.model.lookup.AppConfiguration;
 import gov.gtas.model.lookup.Carrier;
 import gov.gtas.model.lookup.Country;
 
@@ -35,6 +36,15 @@ public class LookupRepositoryImpl implements LookUpRepository {
 
 	@Autowired
 	private FlightDirectionRepository flightDirectionRepository;
+	
+	@Autowired
+	private AppConfigurationRepository appConfigRepository;
+
+    @Override
+    @Cacheable("app_configuration")
+    public List<AppConfiguration> getAllAppConfiguration() {
+        return (List<AppConfiguration>) appConfigRepository.findAll();
+    }
 
 	@Override
 	@Cacheable("flightDirection")
@@ -92,6 +102,13 @@ public class LookupRepositoryImpl implements LookUpRepository {
 	public void removeCountryCache(String countryName) {
 		// remove entity from cache only
 	}
+
+    @Override
+    @Transactional
+    @Cacheable(value = "app_configuration", key = "#option")
+    public String getAppConfigOption(String option) {
+        return appConfigRepository.findByOption(option).getValue();
+    }
 
 	@Transactional
 	public void deleteCountryDb(Country country) {
