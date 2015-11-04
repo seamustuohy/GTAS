@@ -89,7 +89,7 @@ public class PnrMessageService extends MessageService {
         	success = false;
             handleException(e, MessageStatus.FAILED_LOADING);
         } finally {
-            createMessage(pnr);            
+            success &= createMessage(pnr);            
         }
         return success;
     }
@@ -113,12 +113,15 @@ public class PnrMessageService extends MessageService {
     }
 
     @Transactional
-    private void createMessage(Pnr m) {
+    private boolean createMessage(Pnr m) {
+    	boolean ret = true;
         try {
             msgDao.save(m);
         } catch (Exception e) {
+        	ret = false;
             handleException(e, MessageStatus.FAILED_LOADING);
             msgDao.save(m);
         }
+        return ret;
     }
 }
