@@ -51,7 +51,11 @@ public class ADD extends Segment {
             // not recorded
             this.countryCode = c.getElement(5);
             this.postalCode = c.getElement(6);
-            this.telephone = c.getElement(7);
+            
+            String freeText = c.getElement(7);
+            if (freeText.contains("CTC")) {
+                this.telephone = freeText;
+            }
         }
     }
 

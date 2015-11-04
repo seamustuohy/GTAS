@@ -43,14 +43,20 @@ public class PnrUtils {
      * in the name.
      * <p>
      * Group 2 in a PNR (which begins with a TIF segment) may contain multiple
-     * SSR DOCS segments.  Merging information might be ideal, but in many 
-     * instances, the different SSR segments contain conflicting info (birthdate
-     * for example), so we simply choose the SSR DOCS with the greatest length
-     * and hope that's the best one.
+     * SSR DOCS segments. This can occur for several reasons:
+     * <ol>
+     * <li>For a passenger holding a passport plus an alien card and traveling 
+     * with an infant it will be necessary to provide multiple DOCS, 
+     * all associated to the same passenger.
+     * <li>One of the lines exceeds the max character limit of 69 chars.
+     * </ol>  
      * <p>
      * TODO: was not handling the 2nd example below b/c of extra field. check
      * whether it's an error in the message or not.
      * 
+     * <p>
+     * Refer to Section "3.13.1 API — Passenger Travel Document Information"
+     * in "Reservations Interline Message Procedures — Passenger (AIRIMP)"
      * <pre>
      * Examples:
      * /P/GBR/123456789/GBR/12JUL64/M/23AUG19/SMITHJR/JONATHON/ROBERT
