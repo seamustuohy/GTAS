@@ -1,5 +1,6 @@
 package gov.gtas.model.lookup;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -13,7 +14,11 @@ import gov.gtas.model.BaseEntity;
 public class AppConfiguration extends BaseEntity {
     private static final long serialVersionUID = 1L;
     public AppConfiguration() { }
+    
+    // mysql (not mariadb) reserves the word 'option'
+    @Column(name = "opt")
     private String option;
+    @Column(name = "val")
     private String value;
     private String description;
     public String getOption() {
