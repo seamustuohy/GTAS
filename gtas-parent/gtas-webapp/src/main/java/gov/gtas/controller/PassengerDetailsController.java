@@ -133,7 +133,7 @@ public class PassengerDetailsController {
 		_tempPnrList = pnrService.findPnrByPassengerIdAndFlightId(t.getId(),
 				new Long(flightId));
 
-		if (_tempPnrList.size() == 1)
+		if (_tempPnrList.size() >= 1)
 			vo.setPnrVo(mapPnrToPnrVo((Pnr) _tempPnrList.get(0)));
 
 		// Gather Flight History Details
