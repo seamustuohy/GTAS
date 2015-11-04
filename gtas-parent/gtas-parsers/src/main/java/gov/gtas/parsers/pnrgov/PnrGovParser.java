@@ -498,8 +498,15 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             parsedMessage.setBagCount(parsedMessage.getBagCount() + n);
         } else {
             for (BagDetails bd : tbd.getBagDetails()) {
-                int tmp = bd.getNumConsecutiveTags();
-                parsedMessage.setBagCount(parsedMessage.getBagCount() + tmp);                
+            	Integer tmp = bd.getNumConsecutiveTags();
+                if(tmp != null){
+                   Integer curCount = parsedMessage.getBagCount();
+                   if(curCount != null){
+                      parsedMessage.setBagCount(curCount + tmp);
+                   } else {
+                	   parsedMessage.setBagCount(tmp);
+                   }
+                }
             }
         }
     }
