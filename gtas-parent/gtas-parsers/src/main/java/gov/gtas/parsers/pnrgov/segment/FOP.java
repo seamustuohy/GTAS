@@ -76,11 +76,10 @@ public class FOP extends Segment {
         }
     }
     
-    private List<Payment> payments;
+    private List<Payment> payments = new ArrayList<>();
 
     public FOP(List<Composite> composites) throws ParseException {
         super(FOP.class.getSimpleName(), composites);
-        this.payments = new ArrayList<>();
         
         for (Composite c : composites) {
             Payment p = new Payment();

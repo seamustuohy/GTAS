@@ -19,7 +19,10 @@ public class LTS extends Segment {
 
     public LTS(List<Composite> composites) {
         super(LTS.class.getSimpleName(), composites);
-        this.text = getComposite(0).getElement(0);
+        Composite c = getComposite(0);
+        if (c != null) {
+            this.text = c.getElement(0);
+        }
     }
 
     public String getText() {

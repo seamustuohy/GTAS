@@ -55,12 +55,15 @@ public class DTM extends Segment {
     public DTM(List<Composite> composites) throws ParseException {
         super(DTM.class.getSimpleName(), composites);
         Composite c = getComposite(0);
-        
-        this.dtmCode = DtmCode.forCode(c.getElement(0));
+        if (c != null) {
+            this.dtmCode = DtmCode.forCode(c.getElement(0));
 
-        String d = c.getElement(1);
-        String dateFormat = (d.length() == DATE_TIME_FORMAT.length()) ? DATE_TIME_FORMAT : DATE_ONLY_FORMAT;
-        this.dtmValue = ParseUtils.parseDateTime(d, dateFormat);
+            String d = c.getElement(1);
+            if (d != null) {
+                String dateFormat = (d.length() == DATE_TIME_FORMAT.length()) ? DATE_TIME_FORMAT : DATE_ONLY_FORMAT;
+                this.dtmValue = ParseUtils.parseDateTime(d, dateFormat);
+            }
+        }
     }
 
     public DtmCode getDtmCode() {

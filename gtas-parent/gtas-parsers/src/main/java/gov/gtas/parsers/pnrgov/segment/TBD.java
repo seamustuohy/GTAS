@@ -67,7 +67,7 @@ public class TBD extends Segment {
         this.bagDetails = new ArrayList<>();
         for (int i=3; i<numComposites(); i++) {
             c = getComposite(i);
-            if (c.numElements() > 0) {
+            if (c != null && c.numElements() > 0) {
                 BagDetails bag = new BagDetails();
                 bag.setAirline(c.getElement(0));
                 bag.setTagNumber(c.getElement(1));

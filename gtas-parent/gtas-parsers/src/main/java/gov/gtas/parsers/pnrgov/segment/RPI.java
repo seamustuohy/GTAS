@@ -13,10 +13,6 @@ import gov.gtas.parsers.edifact.Segment;
  *Example:Flight booking status is holds confirmed for 3 passengers(RPI+3+HK')
  */
 public class RPI extends Segment{
-
-	private String numberOfPassengersToTVL;
-	private String statusCode;
-	
 	public RPI(List<Composite> composites) {
 		super(RPI.class.getSimpleName(), composites);
 	}

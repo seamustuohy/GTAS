@@ -42,15 +42,17 @@ public class ADD extends Segment {
         super(ADD.class.getSimpleName(), composites);
         
         Composite c = getComposite(1);
-        this.addressType = c.getElement(0);
-        this.streetNumberAndName = c.getElement(1);
-        this.city = c.getElement(2);
-        this.stateOrProvinceCode = c.getElement(3);
-        // Country sub-entity name
-        // not recorded
-        this.countryCode = c.getElement(5);
-        this.postalCode = c.getElement(6);
-        this.telephone = c.getElement(7);
+        if (c != null) {
+            this.addressType = c.getElement(0);
+            this.streetNumberAndName = c.getElement(1);
+            this.city = c.getElement(2);
+            this.stateOrProvinceCode = c.getElement(3);
+            // Country sub-entity name
+            // not recorded
+            this.countryCode = c.getElement(5);
+            this.postalCode = c.getElement(6);
+            this.telephone = c.getElement(7);
+        }
     }
 
     public String getAddressType() {

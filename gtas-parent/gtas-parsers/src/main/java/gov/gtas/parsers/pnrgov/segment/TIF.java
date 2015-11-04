@@ -78,16 +78,17 @@ public class TIF extends Segment {
         }        
     }
     
-    private List<TravelerDetails> travelerDetails;
+    private List<TravelerDetails> travelerDetails = new ArrayList<>();
 
     public TIF(List<Composite> composites) {
         super(TIF.class.getSimpleName(), composites);
 
-        this.travelerDetails = new ArrayList<>();
         Composite c = getComposite(0);
-        this.travelerSurname = c.getElement(0);
-        this.travelerNameQualifier = c.getElement(1);
-
+        if (c != null) {
+            this.travelerSurname = c.getElement(0);
+            this.travelerNameQualifier = c.getElement(1);
+        }
+        
         for (int i = 1; i < numComposites(); i++) {
             c = getComposite(i);
             TravelerDetails d = new TravelerDetails();

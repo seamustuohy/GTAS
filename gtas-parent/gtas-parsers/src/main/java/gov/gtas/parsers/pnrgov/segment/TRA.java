@@ -25,7 +25,10 @@ public class TRA extends Segment {
         super(TRA.class.getSimpleName(), composites);
         
         Composite c = getComposite(0);
-        this.airline = c.getElement(0);
+        if (c != null) {
+            this.airline = c.getElement(0);
+        }
+        
         c = getComposite(1);
         if (c != null) {
             this.flightNumber = c.getElement(0);

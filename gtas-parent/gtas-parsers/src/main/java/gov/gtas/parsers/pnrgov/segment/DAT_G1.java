@@ -32,9 +32,9 @@ public class DAT_G1 extends DAT {
 		
         for (DatDetails d : getDateTimes()) {
 		    String code = d.getType();
-		    if (code.equals(LAST_PNR_TRANS)) {
+		    if (LAST_PNR_TRANS.equals(code)) {
 		        this.pnrTransactionDate = d.getDateTime();
-		    } else if (code.equals(TICKET_ISSUE_DATE)) {
+		    } else if (TICKET_ISSUE_DATE.equals(code)) {
 		        this.ticketIssueDate = d.getDateTime();
 		    }
 		}

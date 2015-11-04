@@ -26,10 +26,12 @@ public class TKT extends Segment {
     public TKT(List<Composite> composites) {
         super(TKT.class.getSimpleName(), composites);
         Composite c = getComposite(0);
-        this.ticketNumber = c.getElement(0);
-        this.ticketType = c.getElement(1);
-        this.ticketless = TICKETLESS_CODE.equals(this.ticketType);
-        this.numberOfBooklets = c.getElement(2);
+        if (c != null) {
+            this.ticketNumber = c.getElement(0);
+            this.ticketType = c.getElement(1);
+            this.ticketless = TICKETLESS_CODE.equals(this.ticketType);
+            this.numberOfBooklets = c.getElement(2);
+        }
     }
 
     public String getTicketNumber() {

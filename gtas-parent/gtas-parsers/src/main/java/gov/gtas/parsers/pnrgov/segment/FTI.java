@@ -43,12 +43,11 @@ public class FTI extends Segment {
         }
     }
     
-    private List<FrequentFlierDetails> frequentFlierInfo; 
+    private List<FrequentFlierDetails> frequentFlierInfo = new ArrayList<>(); 
     
     public FTI(List<Composite> composites) {
         super(FTI.class.getSimpleName(), composites);
         
-        frequentFlierInfo = new ArrayList<>();
         for (Composite c : getComposites()) {
             FrequentFlierDetails d = new FrequentFlierDetails();
             d.setAirlineCode(c.getElement(0));

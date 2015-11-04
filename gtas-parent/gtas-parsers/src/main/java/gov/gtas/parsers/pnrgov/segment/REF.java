@@ -20,7 +20,10 @@ public class REF extends Segment {
         super(REF.class.getSimpleName(), composites);
         this.referenceIds = new ArrayList<>();
         for (Composite c : getComposites()) {
-            this.referenceIds.add(c.getElement(1));
+            String refId = c.getElement(1);
+            if (refId != null) {
+                this.referenceIds.add(refId);
+            }
         }
     }
 

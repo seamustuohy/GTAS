@@ -92,7 +92,7 @@ public class ApisMessageService extends MessageService {
         	success = false;
             handleException(e, MessageStatus.FAILED_LOADING);
         } finally {
-            createMessage(apisMessage);            
+            success &= createMessage(apisMessage);            
         }
         return success;
     }  
@@ -106,13 +106,16 @@ public class ApisMessageService extends MessageService {
     }
 
     @Transactional
-    private void createMessage(ApisMessage m) {
+    private boolean createMessage(ApisMessage m) {
+    	boolean ret = true;
         try {
             msgDao.save(m);
         } catch (Exception e) {
+        	ret = false;
             handleException(e, MessageStatus.FAILED_LOADING);
             msgDao.save(m);
         }
+        return ret;
     }
 
     private boolean isUSEdifactFile(String msg) {

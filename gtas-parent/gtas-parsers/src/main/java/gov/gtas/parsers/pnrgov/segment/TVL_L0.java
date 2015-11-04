@@ -39,7 +39,6 @@ public class TVL_L0 extends Segment {
         super("TVL", composites);
         for (int i = 0; i < numComposites(); i++) {
             Composite c = getComposite(i);
-
             switch (i) {
             case 0:
                 Date[] tmp = TVL.getEtdEta(c);
