@@ -51,6 +51,7 @@ import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.vo.passenger.AddressVo;
 import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.EmailVo;
 import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FrequentFlyerVo;
 import gov.gtas.vo.passenger.PassengerVo;
@@ -112,6 +113,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (ift == null) {
                 break;
             }
+            processIft(ift);
         }
 
         ORG org = getMandatorySegment(ORG.class);
@@ -182,6 +184,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (ift == null) {
                 break;
             }
+            processIft(ift);
         }
 
         getConditionalSegment(REF.class);
@@ -388,6 +391,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (ift == null) {
                 break;
             }
+            processIft(ift);
         }
 
         for (;;) {
@@ -553,6 +557,41 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                 parsedMessage.setBagCount(parsedMessage.getBagCount() + n);
             }
         }
+    }
+    
+    private void processIft(IFT ift) {
+        if (ift.isOtherServiceInfo()) {
+            List<String> msgs = ift.getMessages();
+            for (String m : msgs) {
+                if (m.contains(IFT.CONTACT_EMAIL)) {
+                    String tmp = getContactInfo(IFT.CONTACT_EMAIL, m);
+                    if (StringUtils.isNotBlank(tmp)) {
+                        EmailVo email = new EmailVo();
+                        email.setAddress(tmp);
+                        parsedMessage.getEmails().add(email);
+                    }
+                } else if (m.contains(IFT.CONTACT_ADDR)) {
+                    String tmp = getContactInfo(IFT.CONTACT_ADDR, m);
+                    if (StringUtils.isNotBlank(tmp)) {
+                        AddressVo addr = new AddressVo();
+                        addr.setLine1(tmp);
+                        parsedMessage.getAddresses().add(addr);
+                    }
+                } else if (m.contains(IFT.CONTACT)) {
+                    // The remaining contact types are telephone numbers
+                    String tmp = ParseUtils.prepTelephoneNumber(m);
+                    if (StringUtils.isNotBlank(tmp)) {
+                        PhoneVo phone = new PhoneVo();
+                        phone.setNumber(tmp);
+                        parsedMessage.getPhoneNumbers().add(phone);
+                    }                    
+                }
+            }
+        }
+    }
+    
+    private String getContactInfo(String ctcCode, String text) {
+        return text.replace(ctcCode, "").replace("\\s+", "");
     }
     
     private void processAgencyInfo(ORG org) {
