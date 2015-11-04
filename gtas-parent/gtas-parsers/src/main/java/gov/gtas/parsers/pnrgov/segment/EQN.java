@@ -26,7 +26,9 @@ public class EQN extends Segment {
     public EQN(List<Composite> composites) {
         super(EQN.class.getSimpleName(), composites);
         Composite c = getComposite(0);
-        this.value = Integer.valueOf(c.getElement(0));
+        if (c != null) {
+            this.value = Integer.valueOf(c.getElement(0));
+        }
     }
 
     public Integer getValue() {

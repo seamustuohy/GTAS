@@ -41,22 +41,24 @@ public class IFT extends Segment {
     private String freeTextLanguageCode;
     
     /** Free text message */
-    private List<String> messages;
+    private List<String> messages = new ArrayList<>();
 
     public IFT(List<Composite> composites) {
         super(IFT.class.getSimpleName(), composites);
-        this.messages = new ArrayList<>();
+
         Composite c = getComposite(0);
-        this.iftCode = c.getElement(0);
-        this.freetextType = c.getElement(1);
-        this.pricingIndicator = c.getElement(2);
-        this.airline = c.getElement(3);
-        this.freeTextLanguageCode = c.getElement(4);
-        
-        for (int i=1; i<numComposites(); i++) {
-            c = getComposite(i);
-            if (c != null) {
-                messages.add(c.getElement(0));
+        if (c != null) {
+            this.iftCode = c.getElement(0);
+            this.freetextType = c.getElement(1);
+            this.pricingIndicator = c.getElement(2);
+            this.airline = c.getElement(3);
+            this.freeTextLanguageCode = c.getElement(4);
+            
+            for (int i=1; i<numComposites(); i++) {
+                c = getComposite(i);
+                if (c != null) {
+                    messages.add(c.getElement(0));
+                }
             }
         }
     }

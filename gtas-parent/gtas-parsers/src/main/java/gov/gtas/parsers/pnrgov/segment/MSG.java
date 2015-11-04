@@ -49,15 +49,16 @@ public class MSG extends Segment {
 		
 		String code = null;
         Composite c = getComposite(0);
-
-		if (c.getElement(0) != null) {
-		    code = c.getElement(0);
-		} else {
-            if (c.getElement(1) != null) {
-                code = c.getElement(1);
-            }
-		}
-        this.messageTypeCode = MsgCode.forCode(code);
+        if (c != null) {
+    		if (c.getElement(0) != null) {
+    		    code = c.getElement(0);
+    		} else {
+                if (c.getElement(1) != null) {
+                    code = c.getElement(1);
+                }
+    		}
+            this.messageTypeCode = MsgCode.forCode(code);
+        }
 	}
 
 

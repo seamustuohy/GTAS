@@ -77,20 +77,22 @@ public class SSR extends Segment {
 		super(SSR.class.getSimpleName(), composites);
 		
 		Composite c = getComposite(0);
-		this.typeOfRequest = c.getElement(0);
-		this.action = c.getElement(1);
-		this.quantity = c.getElement(2);
-		this.carrier = c.getElement(3);
-		// indices 4, 5 processing indicators
-		this.boardCity = c.getElement(6);
-		this.offCity = c.getElement(7);
-
-		StringBuffer b = new StringBuffer();
-		for (int i=8; i<c.getElements().size(); i++) {
-		    b.append(c.getElement(i));
-		}
-		if (b.length() != 0) {
-		    this.freeText = b.toString();
+		if (c != null) {
+    		this.typeOfRequest = c.getElement(0);
+    		this.action = c.getElement(1);
+    		this.quantity = c.getElement(2);
+    		this.carrier = c.getElement(3);
+    		// indices 4, 5 processing indicators
+    		this.boardCity = c.getElement(6);
+    		this.offCity = c.getElement(7);
+    
+    		StringBuffer b = new StringBuffer();
+    		for (int i=8; i<c.getElements().size(); i++) {
+    		    b.append(c.getElement(i));
+    		}
+    		if (b.length() != 0) {
+    		    this.freeText = b.toString();
+    		}
 		}
 		
 		for (int i=1; i<getComposites().size(); i++) {

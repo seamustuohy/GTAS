@@ -25,14 +25,18 @@ public class SAC extends Segment {
 
     public SAC(List<Composite> composites) {
         super(SAC.class.getSimpleName(), composites);
-        String code = getComposite(2).getElement(0);
-        switch (code) {
-        case "A":
-            this.action = SacCode.ADDED;
-            break;
-        case "X":
-            this.action = SacCode.CANCELLED;
-            break;
+        
+        Composite c = getComposite(2);
+        if (c != null) {
+            String code = c.getElement(0);
+            switch (code) {
+            case "A":
+                this.action = SacCode.ADDED;
+                break;
+            case "X":
+                this.action = SacCode.CANCELLED;
+                break;
+            }
         }
     }
 
