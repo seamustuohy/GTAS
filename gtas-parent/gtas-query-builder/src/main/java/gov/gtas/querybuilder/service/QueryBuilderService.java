@@ -161,8 +161,8 @@ public class QueryBuilderService {
 			}
 			
 	        for (Object[] result : resultList) {
-	        	Passenger passenger = (Passenger) result[0];
-				Flight flight = (Flight) result[1];
+	        	Passenger passenger = (Passenger) result[1];
+				Flight flight = (Flight) result[2];
 	            PassengerVo vo = new PassengerVo();
 	            
 	            // passenger information

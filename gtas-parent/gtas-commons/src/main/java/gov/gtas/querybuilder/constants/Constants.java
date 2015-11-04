@@ -38,6 +38,7 @@ public final class Constants {
 	public static final String IS_WATCHLIST_HIT = "isWatchListHit";
 	public static final String EXISTS_HITS_PREFIX = "exists (select";
 	public static final String NOT_EXISTS_HITS_PREFIX = "not exists (select";
+	public static final String SELECT_COUNT_DISTINCT = "select count(distinct";
 	public static final String HITS_FLIGHT_REF = ".flight.id";
 	public static final String ID = ".id";
 	public static final String HITS_PASSENGER_REF = ".passenger.id";

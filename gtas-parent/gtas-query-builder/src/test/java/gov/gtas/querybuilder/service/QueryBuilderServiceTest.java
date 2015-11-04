@@ -181,10 +181,10 @@ public class QueryBuilderServiceTest {
 		passenger.setId(1L);
 		Flight flight = new Flight();
 		flight.setFlightNumber("123");
-		expected.add(new Object[]{passenger, flight});
+		expected.add(new Object[]{1L, passenger, flight});
 		
-		Passenger expectedPassenger = (Passenger) expected.get(0)[0];
-		Flight expectedFlight = (Flight) expected.get(0)[1];
+		Passenger expectedPassenger = (Passenger) expected.get(0)[1];
+		Flight expectedFlight = (Flight) expected.get(0)[2];
 		
 		when(queryRepository.getPassengersByDynamicQuery(queryRequest)).thenReturn(expected);
 		doNothing().when(passengerService).fillWithHitsInfo(any(PassengerVo.class), anyLong(), anyLong());

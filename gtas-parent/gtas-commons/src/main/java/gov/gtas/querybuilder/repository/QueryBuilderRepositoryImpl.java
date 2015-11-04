@@ -230,7 +230,8 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			
 			try {
 				String jpqlQuery = JPQLGenerator.generateQuery(queryRequest.getQuery(), EntityEnum.FLIGHT);
-				jpqlQuery = jpqlQuery.replace("select distinct f", "select count(distinct f.id)");
+				jpqlQuery = jpqlQuery.replace(Constants.SELECT_DISTINCT + " " + EntityEnum.FLIGHT.getAlias(), 
+						Constants.SELECT_COUNT_DISTINCT + " " + EntityEnum.FLIGHT.getAlias() + Constants.ID + ")");
 				logger.info("Getting total flight count with this query: " + jpqlQuery);
 				Query query = entityManager.createQuery(jpqlQuery);
 				MutableInt positionalParameter = new MutableInt();
@@ -306,13 +307,17 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 			}
 			
 			try {
+				/**
+				 * JPA doesn't allow count over multiple columns.
+				 * Also doesn't allow a subquery in the from clause
+				 * hence using resultList.size() to get the total number of passengers
+				 */ 
 				String jpqlQuery = JPQLGenerator.generateQuery(queryRequest.getQuery(), EntityEnum.PASSENGER);
-				jpqlQuery = jpqlQuery.replace("select p, f", "select count(p.id)");
-				logger.info("Getting total passenger count with this query: " + jpqlQuery);
+				logger.info("Getting total passenger count with this query: " + jpqlQuery); 
 				Query query = entityManager.createQuery(jpqlQuery);
 				MutableInt positionalParameter = new MutableInt();
 				setJPQLParameters(query, queryRequest.getQuery(), positionalParameter);
-				totalPassengers = (long) query.getSingleResult();
+				totalPassengers = query.getResultList().size();
 				
 				logger.info("Total number of Passengers: " + totalPassengers);
 			} catch (InvalidQueryRepositoryException | ParseException e) {
