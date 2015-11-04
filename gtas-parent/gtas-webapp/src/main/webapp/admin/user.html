@@ -2,26 +2,26 @@
 	<form name="userForm" ng-submit="saveUser()">
 		<div layout layout-sm="column">
 			<md-input-container flex><label>User Id</label>
-				<input ng-model="persistUser.userId" id="userId" ng-disabled="action === 'modify'" autocomplete="off" required style="width: 300px;">
+				<input ng-model="user.userId" id="userId" ng-disabled="action === 'updateUser'" autocomplete="off" style="width: 300px;">
 			</md-input-container>
 			<md-input-container flex><label>Password</label>
-				<input ng-model="persistUser.password" id="password" type="password" type="search"  autocomplete="off" required style="width: 300px;">
+				<input ng-model="user.password" id="password" type="password" type="search"  autocomplete="off" required style="width: 300px;">
 			</md-input-container>
 		</div>
 		<div layout layout-sm="column">
 			<md-input-container flex><label>First
-				name</label> <input id="firstName" ng-model="persistUser.firstName" autocomplete="off" required style="width: 300px;">
+				name</label> <input ng-model="user.firstName" autocomplete="off" required style="width: 300px;">
 			</md-input-container>
 			<md-input-container flex><label>Last
-				Name</label> <input id="lastName" ng-model="persistUser.lastName" autocomplete="off" required style="width: 300px;">
+				Name</label> <input ng-model="user.lastName" required style="width: 300px;">
 			</md-input-container>
 		</div>
 
 		<div layout="column">
 			<code style="font-weight: bold; font-size: 17px;">Status</code>
-			<md-switch ng-model="persistUser.active" ng-true-value="1" ng-false-value="0"
+			<md-switch ng-model="user.active" ng-true-value="1" ng-false-value="0"
 					   class="md-primary" aria-label="userStatus">
-				User is {{ persistUser.active ? 'Enabled' : 'Disabled' }}
+				User is {{ user.active ? 'Enabled' : 'Disabled' }}
 			</md-switch>
 		</div>
 		<div layout="column">
@@ -31,7 +31,7 @@
 						<md-switch ng-model="role.selected"
 								   ng-disabled="role.disabled"
 								   class="md-primary" aria-label="Roles"
-								   ng-change="toggleRole(role)">
+								   ng-change="setNonAdminRoles(role)">
 							{{ role.roleDescription }}
 						</md-switch>
 				</span>

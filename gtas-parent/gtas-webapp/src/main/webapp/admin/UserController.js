@@ -1,35 +1,24 @@
 app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast, $location, $timeout) {
     'use strict';
     var backToAdmin = function () { $location.path('/admin'); },
+        newUser = { password: '', userId: '', firstName: '', lastName: '', active: 1},
         adminIndex,
-        setNonAdminRoles = function (adminSelectedState) {
-            $scope.roles.forEach(function (role) {
-                if (role.roleDescription !== 'Admin') {
-                    role.disabled = adminSelectedState;
-                    if (adminSelectedState) {
-                        role.selected = false;
-                    }
+        ADMIN = 'Admin',
+        setUser = function () {
+            var setRole, userSelectedRoles, selectedUser = JSON.parse(localStorage['lastSelectedUser']);
+            if (selectedUser !== undefined && selectedUser.userId === $stateParams.userId) {
+                userSelectedRoles = selectedUser.roles.map(function (role) { return role.roleDescription; });
+                setRole = function (role) { role.selected = userSelectedRoles.indexOf(role.roleDescription) >= 0; };
+                $scope.user = selectedUser;
+                $scope.roles.forEach(setRole);
+                $scope.setNonAdminRoles($scope.roles[adminIndex]);
+                $scope.action = 'updateUser';
+            } else {
+                $scope.user = newUser;
+                $scope.action = 'createUser';
+                if (/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())) { $timeout(function () {
+                    $('#userId, #password').each(function () { this.value = ''; }); }, 100);
                 }
-            });
-        },
-        setUser = function (users) {
-            users.forEach(function (user) {
-                if (user.userId === $stateParams.userId) {
-                    var userSelectedRoles = user.roles.map(function (role) { return role.roleDescription; });
-                    $scope.user = user;
-                    $scope.roles.forEach(function (role) {
-                        if (userSelectedRoles.indexOf(role.roleDescription) >= 0) {
-                            role.selected = true;
-                        }
-                    });
-                    setNonAdminRoles($scope.roles[adminIndex].selected);
-                }
-            });
-            $scope.action = $scope.user === undefined ? 'create' : 'modify';
-            if ($scope.action === 'modify') {
-                $scope.persistUser = $scope.user;
-            } else if (/chrom(e|ium)/.test(navigator.userAgent.toLowerCase())) {
-                $timeout(function () { $('#userId, #password').each(function () { this.value = ''; }, 100); });
             }
         },
         getSelectedRoles = function () {
@@ -53,7 +42,7 @@ app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast
         scopeRoles = function (roles) {
             $scope.roles = [];
             roles.forEach(function (role, index) {
-                if (role.roleDescription === 'Admin') { adminIndex = index; }
+                if (role.roleDescription === ADMIN) { adminIndex = index; }
                 $scope.roles.push({
                     roleDescription: role.roleDescription,
                     roleId: role.roleId,
@@ -61,32 +50,39 @@ app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast
                     disabled: false
                 });
             });
-            userService.getAllUsers().then(setUser);
+            setUser();
         };
 
-    $scope.persistUser = { password: '', userId: '', firstName: '', lastName: '', active: 1 };
-    $scope.roles = [];
-    $scope.Init = function () { userService.getRoles().then(scopeRoles); };
-
-    $scope.toggleRole = function (role) {
-        if (role.roleDescription === 'Admin') {
-            setNonAdminRoles(role.selected);
+    $scope.setNonAdminRoles = function (roleToggled) {
+        if (roleToggled.roleDescription === ADMIN) {
+            $scope.roles.forEach(function (role) {
+                if (role.roleDescription !== ADMIN) {
+                    role.disabled = roleToggled.selected;
+                    if (roleToggled.selected) {
+                        role.selected = false;
+                    }
+                }
+            });
         }
     };
 
+    $scope.Init = function () {
+        userService.getRoles().then(scopeRoles);
+    };
+
     $scope.saveUser = function () {
-        $scope.persistUser.userId = $scope.persistUser.userId.trim();
-        $scope.persistUser.password = $scope.persistUser.password.trim();
-        if ($scope.persistUser.userId.length === 0 || $scope.persistUser.password.length === 0) {
+        $scope.user.userId = $scope.user.userId.trim();
+        $scope.user.password = $scope.user.password.trim();
+        if ($scope.user.userId.length === 0 || $scope.user.password.length === 0) {
             alertUser('userId and | or password cannot be blank space(s)');
             return;
         }
-        $scope.persistUser.roles = getSelectedRoles();
-        if ($scope.persistUser.roles.length === 0) {
+        $scope.user.roles = getSelectedRoles();
+        if ($scope.user.roles.length === 0) {
             alertUser('One or More User Roles Have To Be Selected');
             return;
         }
-        userService[$scope.action === 'modify' ? 'updateUser' : 'createUser']($scope.persistUser).then(backToAdmin);
+        userService[$scope.action]($scope.user).then(backToAdmin);
     };
 
     $scope.Init();
