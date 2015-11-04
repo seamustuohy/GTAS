@@ -3,10 +3,10 @@ package gov.gtas.parsers.edifact;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.gtas.error.ErrorUtils;
 import gov.gtas.parsers.exception.ParseException;
 
 public class SegmentFactory {
@@ -20,12 +20,12 @@ public class SegmentFactory {
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
             if (t != null) {
-                throw new ParseException(ExceptionUtils.getStackTrace(t));
+                throw new ParseException(ErrorUtils.getStacktrace(t));
             }
-            throw new ParseException(ExceptionUtils.getStackTrace(e));
+            throw new ParseException(ErrorUtils.getStacktrace(e));
             
         } catch (Exception e) {
-            throw new ParseException(ExceptionUtils.getStackTrace(e));
+            throw new ParseException(ErrorUtils.getStacktrace(e));
         }
     }
 }

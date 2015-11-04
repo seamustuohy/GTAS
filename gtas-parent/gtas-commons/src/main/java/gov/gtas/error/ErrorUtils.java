@@ -97,7 +97,7 @@ public class ErrorUtils {
 
 	private static final int MAX_ERROR_LENG = 4000;
 
-	public static String getStacktrace(Exception e) {
+	public static String getStacktrace(Throwable e) {
 		String stacktrace = ExceptionUtils.getStackTrace(e);
 		if (stacktrace.length() > MAX_ERROR_LENG) {
 			stacktrace = stacktrace.substring(0, MAX_ERROR_LENG);
