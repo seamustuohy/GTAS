@@ -187,7 +187,7 @@
                     name: 'firstName',
                     displayName: 'First Name'},
                 {
-                    field: 'firstName',
+                    field: 'middleName',
                     name: 'middleName',
                     displayName: 'Middle'
                 },
