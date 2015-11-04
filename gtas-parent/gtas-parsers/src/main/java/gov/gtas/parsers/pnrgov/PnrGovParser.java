@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
@@ -50,6 +51,7 @@ import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.vo.passenger.AddressVo;
 import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.EmailVo;
 import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FrequentFlyerVo;
 import gov.gtas.vo.passenger.PassengerVo;
@@ -103,6 +105,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         DAT_G1 dat = getConditionalSegment(DAT_G1.class, "DAT");
         if (dat != null) {
             parsedMessage.setDateBooked(dat.getTicketIssueDate());
+            parsedMessage.setDateReceived(dat.getPnrTransactionDate());
         }
 
         for (;;) {
@@ -110,6 +113,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (ift == null) {
                 break;
             }
+            processIft(ift);
         }
 
         ORG org = getMandatorySegment(ORG.class);
@@ -180,6 +184,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (ift == null) {
                 break;
             }
+            processIft(ift);
         }
 
         getConditionalSegment(REF.class);
@@ -255,7 +260,15 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             }
         }
 
-        getConditionalSegment(DAT_G1.class, "DAT");
+        DAT_G1 dat = getConditionalSegment(DAT_G1.class, "DAT");
+        if (dat != null) {
+            if (parsedMessage.getDateBooked() == null) {
+                parsedMessage.setDateBooked(dat.getTicketIssueDate());
+            }
+            if (parsedMessage.getDateReceived() == null) {
+                parsedMessage.setDateReceived(dat.getPnrTransactionDate());
+            }
+        }
 
         FOP fop = getConditionalSegment(FOP.class);
         processGroup4_FormOfPayment(fop);
@@ -334,6 +347,32 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             throw new ParseException("Invalid flight: " + f);
         }
         
+        processTvlConditionalSegments();
+        
+        if (StringUtils.isNotBlank(tvl.getOperatingCarrier())) {
+            // codeshare flight: create a separate flight with the same
+            // details except use the codeshare carrier and flight number.
+            TVL cs_tvl = getMandatorySegment(TVL.class);
+            
+            FlightVo csFlight = new FlightVo();
+            csFlight.setCarrier(tvl.getOperatingCarrier());
+            csFlight.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(cs_tvl.getFlightNumber()));
+            csFlight.setDestination(tvl.getDestination());
+            csFlight.setOrigin(tvl.getOrigin());
+            csFlight.setEta(tvl.getEta());
+            csFlight.setEtd(tvl.getEtd());
+            csFlight.setFlightDate(flightDate);
+            if (csFlight.isValid()) {
+                parsedMessage.getFlights().add(csFlight);
+            } else {
+                throw new ParseException("Invalid flight: " + csFlight);
+            }
+            
+            processTvlConditionalSegments();
+        }
+    }
+    
+    private void processTvlConditionalSegments() throws ParseException {
         getConditionalSegment(TRA.class);
         getConditionalSegment(RPI.class);
         getConditionalSegment(APD.class);
@@ -352,6 +391,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (ift == null) {
                 break;
             }
+            processIft(ift);
         }
 
         for (;;) {
@@ -391,7 +431,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (lts == null) {
                 break;
             }
-        }        
+        }
     }
     
     /**
@@ -481,7 +521,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     }
 
     private void processGroup10_History(ABI abi) throws ParseException {
-        DAT_G10 dat = getConditionalSegment(DAT_G10.class, "DAT");
+        getConditionalSegment(DAT_G10.class, "DAT");
         for (;;) {
             SAC sac = getConditionalSegment(SAC.class);
             if (sac == null) {
@@ -492,10 +532,10 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     }
 
     private void processGroup11_HistoryCredit(SAC sac) throws ParseException {
-        TIF tif = getConditionalSegment(TIF.class);
-        SSR ssr = getConditionalSegment(SSR.class);
-        IFT ift = getConditionalSegment(IFT.class);
-        TBD tbd = getConditionalSegment(TBD.class);
+        getConditionalSegment(TIF.class);
+        getConditionalSegment(SSR.class);
+        getConditionalSegment(IFT.class);
+        getConditionalSegment(TBD.class);
         for (;;) {
             TVL tvl = getConditionalSegment(TVL.class);
             if (tvl == null) {
@@ -507,7 +547,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     }
 
     private void processGroup12_HistoryFlightInfo(TVL tvl) throws ParseException {
-        RPI rpi = getConditionalSegment(RPI.class);
+        getConditionalSegment(RPI.class);
     }
     
     private void processExcessBaggage(EBD ebd) {
@@ -517,6 +557,41 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                 parsedMessage.setBagCount(parsedMessage.getBagCount() + n);
             }
         }
+    }
+    
+    private void processIft(IFT ift) {
+        if (ift.isOtherServiceInfo()) {
+            List<String> msgs = ift.getMessages();
+            for (String m : msgs) {
+                if (m.contains(IFT.CONTACT_EMAIL)) {
+                    String tmp = getContactInfo(IFT.CONTACT_EMAIL, m);
+                    if (StringUtils.isNotBlank(tmp)) {
+                        EmailVo email = new EmailVo();
+                        email.setAddress(tmp);
+                        parsedMessage.getEmails().add(email);
+                    }
+                } else if (m.contains(IFT.CONTACT_ADDR)) {
+                    String tmp = getContactInfo(IFT.CONTACT_ADDR, m);
+                    if (StringUtils.isNotBlank(tmp)) {
+                        AddressVo addr = new AddressVo();
+                        addr.setLine1(tmp);
+                        parsedMessage.getAddresses().add(addr);
+                    }
+                } else if (m.contains(IFT.CONTACT)) {
+                    // The remaining contact types are telephone numbers
+                    String tmp = ParseUtils.prepTelephoneNumber(m);
+                    if (StringUtils.isNotBlank(tmp)) {
+                        PhoneVo phone = new PhoneVo();
+                        phone.setNumber(tmp);
+                        parsedMessage.getPhoneNumbers().add(phone);
+                    }                    
+                }
+            }
+        }
+    }
+    
+    private String getContactInfo(String ctcCode, String text) {
+        return text.replace(ctcCode, "").replace("\\s+", "");
     }
     
     private void processAgencyInfo(ORG org) {

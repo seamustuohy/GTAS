@@ -79,7 +79,8 @@ public class ApisMessageService extends MessageService {
     }
 
     @Override
-    public void load(MessageVo messageVo) {
+    public boolean load(MessageVo messageVo) {
+    	boolean success = true;
         try {
             ApisMessageVo m = (ApisMessageVo)messageVo;
             loaderRepo.processReportingParties(apisMessage, m.getReportingParties());
@@ -88,10 +89,12 @@ public class ApisMessageService extends MessageService {
             apisMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
+        	success = false;
             handleException(e, MessageStatus.FAILED_LOADING);
         } finally {
             createMessage(apisMessage);            
         }
+        return success;
     }  
 
     private void handleException(Exception e, MessageStatus status) {

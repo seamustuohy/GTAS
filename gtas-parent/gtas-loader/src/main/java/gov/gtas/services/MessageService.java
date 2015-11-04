@@ -17,7 +17,7 @@ public abstract class MessageService {
 
     public abstract List<String> preprocess(String message);
     public abstract MessageVo parse(String message);
-    public abstract void load(MessageVo parsedMessage);
+    public abstract boolean load(MessageVo parsedMessage);
 
     protected String filePath = null;
     public String getFilePath() {

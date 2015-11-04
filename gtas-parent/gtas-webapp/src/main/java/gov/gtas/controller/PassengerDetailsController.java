@@ -266,7 +266,7 @@ public class PassengerDetailsController {
 			for(FlightLeg fl : _tempFL){
 				FlightLegVo flVo = new FlightLegVo();
 				flVo.setLegNumber(fl.getLegNumber().toString());
-				flVo.setFlightNumber(fl.getFlight().getFlightNumber());
+				flVo.setFlightNumber(fl.getFlight().getFullFlightNumber());
 				flVo.setOriginAirport(fl.getFlight().getOrigin());
 				flVo.setDestinationAirport(fl.getFlight().getDestination());
 				flVo.setFlightDate(fl.getFlight().getFlightDate().toString());

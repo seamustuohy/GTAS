@@ -71,7 +71,8 @@ public class PnrMessageService extends MessageService {
     }
     
     @Override
-    public void load(MessageVo messageVo) {
+    public boolean load(MessageVo messageVo) {
+    	boolean success = true;
         try {
             PnrVo vo = (PnrVo)messageVo;
             // TODO: fix this, combine methods
@@ -85,10 +86,12 @@ public class PnrMessageService extends MessageService {
             pnr.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
+        	success = false;
             handleException(e, MessageStatus.FAILED_LOADING);
         } finally {
             createMessage(pnr);            
         }
+        return success;
     }
 
     private void handleException(Exception e, MessageStatus status) {
