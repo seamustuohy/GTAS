@@ -124,16 +124,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (add == null) {
                 break;
             }
-            AddressVo address = PnrUtils.createAddress(add);
-            if (address.isValid()) {
-                parsedMessage.getAddresses().add(address);
-            }
-            if (address.getPhoneNumber() != null) {
-                PhoneVo p = PnrUtils.createPhone(address.getPhoneNumber());
-                if (p.isValid()) {
-                    parsedMessage.getPhoneNumbers().add(p);
-                }
-            }
+            processAddress(add);
         }
 
         for (;;) {
@@ -230,10 +221,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (add == null) {
                 break;
             }
-            AddressVo addr = PnrUtils.createAddress(add);
-            if (addr.isValid()) {
-                parsedMessage.getAddresses().add(addr);
-            }
+            processAddress(add);
         }
 
         for (;;) {
@@ -319,10 +307,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         
         ADD add = getConditionalSegment(ADD.class);
         if (add != null) {
-            AddressVo addr = PnrUtils.createAddress(add);
-            if (addr.isValid()) {
-                parsedMessage.getAddresses().add(addr);
-            }
+            processAddress(add);
         }
     }
 
@@ -431,6 +416,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (lts == null) {
                 break;
             }
+            extractContactInfo(lts.getText());
         }
     }
     
@@ -569,31 +555,39 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     private void processIft(IFT ift) {
         if (ift.isOtherServiceInfo()) {
             List<String> msgs = ift.getMessages();
-            for (String m : msgs) {
-                if (m.contains(IFT.CONTACT_EMAIL)) {
-                    String tmp = getContactInfo(IFT.CONTACT_EMAIL, m);
-                    if (StringUtils.isNotBlank(tmp)) {
-                        EmailVo email = new EmailVo();
-                        email.setAddress(tmp);
-                        parsedMessage.getEmails().add(email);
-                    }
-                } else if (m.contains(IFT.CONTACT_ADDR)) {
-                    String tmp = getContactInfo(IFT.CONTACT_ADDR, m);
-                    if (StringUtils.isNotBlank(tmp)) {
-                        AddressVo addr = new AddressVo();
-                        addr.setLine1(tmp);
-                        parsedMessage.getAddresses().add(addr);
-                    }
-                } else if (m.contains(IFT.CONTACT)) {
-                    // The remaining contact types are telephone numbers
-                    String tmp = ParseUtils.prepTelephoneNumber(m);
-                    if (StringUtils.isNotBlank(tmp)) {
-                        PhoneVo phone = new PhoneVo();
-                        phone.setNumber(tmp);
-                        parsedMessage.getPhoneNumbers().add(phone);
-                    }                    
-                }
+            for (String txt : msgs) {
+                extractContactInfo(txt);
             }
+        }
+    }
+    
+    private void extractContactInfo(String txt) {
+        if (StringUtils.isBlank(txt)) {
+            return;
+        }
+        
+        if (txt.contains(IFT.CONTACT_EMAIL)) {
+            String tmp = getContactInfo(IFT.CONTACT_EMAIL, txt);
+            if (StringUtils.isNotBlank(tmp)) {
+                EmailVo email = new EmailVo();
+                email.setAddress(tmp);
+                parsedMessage.getEmails().add(email);
+            }
+        } else if (txt.contains(IFT.CONTACT_ADDR)) {
+            String tmp = getContactInfo(IFT.CONTACT_ADDR, txt);
+            if (StringUtils.isNotBlank(tmp)) {
+                AddressVo addr = new AddressVo();
+                addr.setLine1(tmp);
+                parsedMessage.getAddresses().add(addr);
+            }
+        } else if (txt.contains(IFT.CONTACT)) {
+            // The remaining contact types are telephone numbers
+            String tmp = ParseUtils.prepTelephoneNumber(txt);
+            if (StringUtils.isNotBlank(tmp)) {
+                PhoneVo phone = new PhoneVo();
+                phone.setNumber(tmp);
+                parsedMessage.getPhoneNumbers().add(phone);
+            }                    
         }
     }
     
@@ -614,5 +608,18 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         if (agencyVo.isValid()) {
             parsedMessage.getAgencies().add(agencyVo);
         }
+    }
+    
+    private void processAddress(ADD add) {
+        AddressVo address = PnrUtils.createAddress(add);
+        if (address.isValid()) {
+            parsedMessage.getAddresses().add(address);
+        }
+        if (address.getPhoneNumber() != null) {
+            PhoneVo p = PnrUtils.createPhone(address.getPhoneNumber());
+            if (p.isValid()) {
+                parsedMessage.getPhoneNumbers().add(p);
+            }
+        }        
     }
 }
