@@ -1024,6 +1024,12 @@
                     return;
                 }
 
+                if (that.mode === "rule" && rule.entity === 'HitsSummary') {
+                    that.triggerValidationError(rule, 'hits_summary', null);
+                    errors++;
+                    return;
+                }
+
                 if (rule.operator.nb_inputs !== 0) {
                     var valid = that.validateValue(rule, rule.value);
 
@@ -1276,12 +1282,14 @@
 //    debugger;
         return data;
     }
-
-
+    /* Set Mode */
+    QueryBuilder.prototype.setMode = function (mode) {
+        this.mode = mode;
+    };
     /**
      * SAVE rules from object
      */
-    QueryBuilder.prototype.getDrools = function() {
+    QueryBuilder.prototype.getDrools = function () {
         var rules = JSON.stringify(this.getRules());
         if (rules === "{}") {
             console.log('rules can not be empty');
@@ -1294,6 +1302,7 @@
 
         return rules;
     };
+
 
     /**
      * DELETE rules from object
@@ -3550,6 +3559,7 @@
             /* end DROOLS extension */
         },
         "errors": {
+            "hits_summary": "Only a query can reference Hits",
             "no_filter": "No filter selected",
             "empty_group": "The group is empty",
             "radio_empty": "No value selected",
