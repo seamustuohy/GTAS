@@ -53,7 +53,7 @@ public class ADD extends Segment {
             this.postalCode = c.getElement(6);
             
             String freeText = c.getElement(7);
-            if (freeText.contains("CTC")) {
+            if (freeText != null && freeText.contains("CTC")) {
                 this.telephone = freeText;
             }
         }
