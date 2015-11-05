@@ -26,6 +26,8 @@ import gov.gtas.parsers.edifact.Segment;
 public class SSR extends Segment {
     public static final String DOCS = "DOCS";
     public static final String DOCA = "DOCA";
+    public static final String DOCO = "DOCO";
+    public static final String SEAT = "SEAT";
     
 	private String typeOfRequest;
 	private String action;

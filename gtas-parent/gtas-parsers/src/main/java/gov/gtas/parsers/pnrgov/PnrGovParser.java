@@ -31,6 +31,7 @@ import gov.gtas.parsers.pnrgov.segment.ORG;
 import gov.gtas.parsers.pnrgov.segment.PTK;
 import gov.gtas.parsers.pnrgov.segment.RCI;
 import gov.gtas.parsers.pnrgov.segment.RCI.ReservationControlInfo;
+import gov.gtas.parsers.pnrgov.segment.SSR.SpecialRequirementDetails;
 import gov.gtas.parsers.pnrgov.segment.REF;
 import gov.gtas.parsers.pnrgov.segment.RPI;
 import gov.gtas.parsers.pnrgov.segment.SAC;
@@ -203,6 +204,8 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                 if (addr.isValid()) {
                     parsedMessage.getAddresses().add(addr);
                 }
+            } else if (SSR.DOCO.equals(code)) {
+                // TODO: visa
             }
         }
 
@@ -366,6 +369,12 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             SSR ssr = getConditionalSegment(SSR.class);
             if (ssr == null) {
                 break;
+            }
+            String code = ssr.getTypeOfRequest();
+            if (SSR.SEAT.equals(code)) {
+                for (SpecialRequirementDetails details : ssr.getDetails()) {
+                    // TODO: assign seat #s
+                }
             }
         }
 
