@@ -52,6 +52,7 @@ import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.vo.passenger.AddressVo;
 import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.DocumentVo;
 import gov.gtas.vo.passenger.EmailVo;
 import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.FrequentFlyerVo;
@@ -191,6 +192,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
 
         // SSR’s in GR.2 apply to the specific passenger.
         List<SSR> ssrDocs = new ArrayList<>();
+        List<DocumentVo> visas = new ArrayList<>();
         for (;;) {
             SSR ssr = getConditionalSegment(SSR.class);
             if (ssr == null) {
@@ -205,13 +207,17 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                     parsedMessage.getAddresses().add(addr);
                 }
             } else if (SSR.DOCO.equals(code)) {
-                // TODO: visa
+                DocumentVo visa = PnrUtils.createVisa(ssr);
+                if (visa != null && visa.isValid()) {
+                    visas.add(visa);
+                }
             }
         }
 
         if (!CollectionUtils.isEmpty(ssrDocs)) {
             PassengerVo p = PnrUtils.createPassenger(ssrDocs, tif);
             if (p != null && p.isValid()) {
+                p.getDocuments().addAll(visas);
                 parsedMessage.getPassengers().add(p);
                 parsedMessage.setPassengerCount(parsedMessage.getPassengerCount() + 1);
             } else {
@@ -302,11 +308,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             }
         }
 
-        for (CreditCardVo cc : newCreditCards) {
-            if (cc.isValid()) {
-                parsedMessage.getCreditCards().add(cc);
-            }
-        }
+        parsedMessage.getCreditCards().addAll(newCreditCards);
         
         ADD add = getConditionalSegment(ADD.class);
         if (add != null) {

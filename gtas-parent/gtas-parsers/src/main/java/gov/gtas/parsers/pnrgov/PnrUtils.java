@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.segment.UNA;
@@ -34,6 +35,9 @@ public class PnrUtils {
 
         return null;
     }
+    
+    /** date format used for passport/visa expiration, issuance date */
+    private static final String DOC_DATE_FORMAT = "ddMMMyy";
     
     /**
      * <p>
@@ -64,8 +68,6 @@ public class PnrUtils {
      * </pre>
      */
     public static PassengerVo createPassenger(List<SSR> ssrDocs, TIF tif) throws ParseException {
-        final String dateFormat = "ddMMMyy";
-        
         SSR bestSsr = null;
         for (SSR ssr : ssrDocs) {
             String ssrText = ssr.getFreeText();
@@ -81,7 +83,7 @@ public class PnrUtils {
         }
         
         List<String> strs = splitSsrFreeText(bestSsr);
-        if (strs == null) {
+        if (CollectionUtils.isEmpty(strs)) {
             return null;
         }
         
@@ -96,14 +98,14 @@ public class PnrUtils {
         p.setCitizenshipCountry(safeGet(strs, 4));
         String d = safeGet(strs, 5);
         if (StringUtils.isNotBlank(d)) {
-            Date dob = ParseUtils.parseDateTime(d, dateFormat);
+            Date dob = ParseUtils.parseDateTime(d, DOC_DATE_FORMAT);
             p.setDob(dob);
             p.setAge(ParseUtils.calculateAge(dob));
         }
         p.setGender(safeGet(strs, 6));
         d = safeGet(strs, 7);
         if (StringUtils.isNotBlank(d)) {
-            doc.setExpirationDate(ParseUtils.parseDateTime(d, dateFormat));
+            doc.setExpirationDate(ParseUtils.parseDateTime(d, DOC_DATE_FORMAT));
         }
         
         processNames(p, safeGet(strs, 8), safeGet(strs, 9), safeGet(strs, 10));
@@ -119,6 +121,27 @@ public class PnrUtils {
         }
         
         return p;
+    }
+    
+    public static DocumentVo createVisa(SSR ssr) {
+        List<String> strs = splitSsrFreeText(ssr);
+        if (CollectionUtils.isEmpty(strs)) {
+            return null;
+        }
+
+        DocumentVo visa = new DocumentVo();
+        // index 1 place of birth
+        visa.setDocumentType(safeGet(strs, 2));
+        visa.setDocumentNumber(safeGet(strs, 3));
+        // index 4 city of issue
+        String d = safeGet(strs, 5);
+        if (StringUtils.isNotBlank(d)) {
+            Date issuanceDate = ParseUtils.parseDateTime(d, DOC_DATE_FORMAT);
+            visa.setIssuanceDate(issuanceDate);
+        }
+        visa.setIssuanceCountry(safeGet(strs, 6));
+        
+        return visa;
     }
     
     public static AddressVo createAddress(ADD add) {
