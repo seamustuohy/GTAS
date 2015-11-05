@@ -71,18 +71,15 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.selectedMode = mode;
 
     $scope.prompt = {
-        save: function (mode) {
+        save: function (buttonMode) {
+            $scope.$builder.queryBuilder('setMode', buttonMode);
             conditions = $scope.$builder.queryBuilder('getDrools');
 
-            if (conditions === false) {
-                return;
-            }
-            $scope.buttonMode = mode;
-            $mdSidenav(mode).open();
+            if (conditions === false) { return; }
+            $scope.buttonMode = buttonMode;
+            $mdSidenav(buttonMode).open();
         },
-        cancel: function () {
-            $mdSidenav($scope.buttonMode).close();
-        }
+        cancel: function () { $mdSidenav($scope.buttonMode).close(); }
     };
 
     $scope.setData = {
@@ -300,11 +297,9 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.save = {
         query: {
             confirm: function () {
-                var queryObject, query;
-                if ($scope.saving) {
-                    return;
-                }
+                var queryObject;
 
+                if ($scope.saving) { return; }
 //                    $scope.saving = true;
 
                 if ($scope.query.title && $scope.query.title.length) {

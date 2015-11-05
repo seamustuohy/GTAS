@@ -23,11 +23,11 @@ app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast
         },
         getSelectedRoles = function () {
             var selectedRoles = [];
-            $scope.roles.forEach(function (roleObject) {
-                if (roleObject.selected && !(roleObject.disabled)) {
+            $scope.roles.forEach(function (role) {
+                if (role.selected && !(role.disabled)) {
                     selectedRoles.push({
-                        roleId: roleObject.roleId,
-                        roleDescription: roleObject.roleDescription
+                        roleId: role.roleId,
+                        roleDescription: role.roleDescription
                     });
                 }
             });
@@ -58,23 +58,17 @@ app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast
             $scope.roles.forEach(function (role) {
                 if (role.roleDescription !== ADMIN) {
                     role.disabled = roleToggled.selected;
-                    if (roleToggled.selected) {
-                        role.selected = false;
-                    }
+                    role.selected = false;
                 }
             });
         }
-    };
-
-    $scope.Init = function () {
-        userService.getRoles().then(scopeRoles);
     };
 
     $scope.saveUser = function () {
         $scope.user.userId = $scope.user.userId.trim();
         $scope.user.password = $scope.user.password.trim();
         if ($scope.user.userId.length === 0 || $scope.user.password.length === 0) {
-            alertUser('userId and | or password cannot be blank space(s)');
+            alertUser('userId or password cannot be blank space(s)');
             return;
         }
         $scope.user.roles = getSelectedRoles();
@@ -85,5 +79,5 @@ app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast
         userService[$scope.action]($scope.user).then(backToAdmin);
     };
 
-    $scope.Init();
+    userService.getRoles().then(scopeRoles); // <- Init()
 });

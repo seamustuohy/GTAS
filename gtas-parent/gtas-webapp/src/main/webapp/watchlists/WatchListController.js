@@ -73,20 +73,15 @@
         $scope.getListItemsFor = function (listName) {
             spinnerService.show('html5spinner');
             watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
-                var obj, data = [], items = response.data.result.watchlistItems;
+                var obj, data = [], items = response.data.result.watchlistItems,
+                    setTerm = function (term) { obj[term.field] = term.type === 'date' ?  moment(term.value).toDate() : term.value; };
                 if (items === undefined) {
                     $scope.watchlistGrid.data = [];
                     return false;
                 }
                 items.forEach(function (item) {
                     obj = {id: item.id};
-                    item.terms.forEach(function (term) {
-                        if (term.type === 'date') {
-                            obj[term.field] = new Date(term.value);
-                        } else {
-                            obj[term.field] = term.value;
-                        }
-                    });
+                    item.terms.forEach(setTerm);
                     data.push(obj);
                 });
                 $scope.data[listName] = data;
@@ -148,8 +143,7 @@
                         ready = false;
                     }
                     if (columnType === 'date') {
-                        value = moment(value).format('YYYY-MM-DD').toString();
-//                        value = moment(value).toString();
+                        value = moment(value).format('YYYY-MM-DD');
                     }
                     terms.push({entity: entity, field: key, type: columnType, value: value});
                 }

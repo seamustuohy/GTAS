@@ -95,18 +95,6 @@
 <md-content flex="" layout-padding="" class="">
     <div layout="column" layout-fill="" layout-align="top center">
         <div ng-if="mode == 'rule'">
-            <!--<md-input-container>-->
-            <!--<label>Show</label>-->
-            <!--<md-select ng-model="$scope.selectedMode">-->
-            <!--<md-option value="rule">My Rules</md-option>-->
-            <!--<md-option value="all">All Rules</md-option>-->
-            <!--</md-select>-->
-            <!--</md-input-container>-->
-
-            <!--<md-radio-group ng-model="$scope.selectedMode">-->
-            <!--<md-radio-button value="rule" class="md-primary">My Rules</md-radio-button>-->
-            <!--<md-radio-button value="all" class="md-primary"">All Rules</md-radio-button>-->
-            <!--</md-radio-group>-->
             <md-switch class="md-primary" aria-label="Rules:" ng-model="$scope.selectedMode" ng-true-value="'all'" ng-false-value="'rule'">
                 {{selectedMode === "rule" ? "My Rules" : "All Rules"}}
             </md-switch>
@@ -129,7 +117,6 @@
                            class="md-raised">
                     <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-user"></i>  Query Passengers
                 </md-button>
-
                 <md-button ng-click="addNew()"
                            ng-disabled="ruleId === null"
                            class="md-raised pull-left">
@@ -146,7 +133,7 @@
                     <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Save As Rule
                 </md-button>
                 <md-button ng-click="copyRule()"
-                           ng-disabled="ruleId === null || saving === true"
+                           ng-disabled="mode === 'query' || ruleId === null || saving === true"
                            class="md-raised pull-right">
                     <i class="glyphicon glyphicon-duplicate"></i> Copy {{mode}}
                 </md-button>
