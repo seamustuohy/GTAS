@@ -2,9 +2,20 @@ h2 {
     font-size: 1.2em;
 }
 
+/* applies same font across different plugins */
 * {
     font-family: 'Open Sans', sans-serif;
 }
+
+/* BEGIN IE css patches */
+md-input-container .md-input { flex: none !important; }
+
+.md-select-label :first-child{
+    flex-basis: auto;
+    max-width: 100%;
+    overflow: hidden;
+}
+/* END IE css patches */
 
 .spinner {
     width: 100px;
