@@ -183,6 +183,7 @@ public class LoaderRepository {
                 
             } else {
                 currentFlight = utils.createNewFlight(fvo);
+                flightDao.save(currentFlight);
             }
             
             messageFlights.add(currentFlight);

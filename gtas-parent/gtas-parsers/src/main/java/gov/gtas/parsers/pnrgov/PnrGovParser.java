@@ -266,6 +266,16 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                 parsedMessage.setDateReceived(dat.getPnrTransactionDate());
             }
         }
+        
+        // NB: IFT here is not part of the spec, but I've noticed a lot
+        // of messages in production that stick IFTs in this location.
+        for (;;) {
+            IFT ift = getConditionalSegment(IFT.class);
+            if (ift == null) {
+                break;
+            }
+            processIft(ift);
+        }
 
         FOP fop = getConditionalSegment(FOP.class);
         processGroup4_FormOfPayment(fop);
