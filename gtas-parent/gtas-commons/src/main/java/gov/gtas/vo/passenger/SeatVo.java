@@ -8,9 +8,14 @@ import gov.gtas.validators.Validatable;
 
 public class SeatVo implements Validatable {
     private String number;
+    
+    /** unique id to reference back to a passenger */
     private String travelerReferenceNumber;
-    // flight details
-    private String carrier;
+    
+    /*
+     * flight details: origin and dest should be sufficient
+     * to uniquely identify a flight within a pnr itinerary.
+     */
     private String origin;
     private String destination;
     
@@ -26,12 +31,6 @@ public class SeatVo implements Validatable {
     public void setTravelerReferenceNumber(String travelerReferenceNumber) {
         this.travelerReferenceNumber = travelerReferenceNumber;
     }
-    public String getCarrier() {
-        return carrier;
-    }
-    public void setCarrier(String carrier) {
-        this.carrier = carrier;
-    }
     public String getOrigin() {
         return origin;
     }
@@ -45,7 +44,6 @@ public class SeatVo implements Validatable {
         this.destination = destination;
     }
     
-    // should be able to get away without carrier
     @Override
 	public boolean isValid() {
 		return StringUtils.isNotBlank(this.number)

@@ -386,14 +386,22 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             String code = ssr.getTypeOfRequest();
             if (SSR.SEAT.equals(code)) {
                 for (SpecialRequirementDetails details : ssr.getDetails()) {
+                    String refNumber = details.getTravelerReferenceNumber();
+                    if (refNumber == null) {
+                        continue;
+                    }
+                    PassengerVo thePax = findPaxByReferenceNumber(refNumber);
+                    if (thePax == null) {
+                        continue;
+                    }
+
                     SeatVo seat = new SeatVo();
-                    seat.setTravelerReferenceNumber(details.getTravelerReferenceNumber());
+                    seat.setTravelerReferenceNumber(refNumber);
                     seat.setNumber(details.getSpecialRequirementData());
-                    seat.setCarrier(ssr.getCarrier());
                     seat.setOrigin(ssr.getBoardCity());
                     seat.setDestination(ssr.getOffCity());
                     if (seat.isValid()) {
-                        parsedMessage.getSeats().add(seat);
+                        thePax.getSeatAssignments().add(seat);
                     }
                 }
             }
@@ -475,12 +483,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         PassengerVo thePax = null;
         String refNumber = tri.getTravelerReferenceNumber();
         if (refNumber != null) {
-            for (PassengerVo pax : parsedMessage.getPassengers()) {
-                if (refNumber.equals(pax.getTravelerReferenceNumber())) {
-                    thePax = pax;
-                    break;
-                }
-            }
+            thePax = findPaxByReferenceNumber(refNumber);
         }
         
         TIF tif = getConditionalSegment(TIF.class);
@@ -652,5 +655,14 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                 parsedMessage.getPhoneNumbers().add(p);
             }
         }        
+    }
+    
+    private PassengerVo findPaxByReferenceNumber(String refNumber) {
+        for (PassengerVo pax : parsedMessage.getPassengers()) {
+            if (refNumber.equals(pax.getTravelerReferenceNumber())) {
+                return pax;
+            }
+        }
+        return null;
     }
 }
