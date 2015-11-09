@@ -69,10 +69,6 @@ public class JPQLGenerator {
 						if(hasPNREntity(joinEntities)) {
 							joinEntities.remove(EntityEnum.PNR);
 							joinEntities.add(0, EntityEnum.PNR);
-							
-							// remove join to Agency entity because it has
-							// a ManyToOne relationship with PNR
-							joinEntities.remove(EntityEnum.TRAVEL_AGENCY);
 						}
 					}
 					
@@ -98,10 +94,6 @@ public class JPQLGenerator {
 					if(hasPNREntity(joinEntities)) {
 						joinEntities.remove(EntityEnum.PNR);
 						joinEntities.add(0, EntityEnum.PNR);
-						
-						// remove join to Agency entity because it has
-						// a OneToMany relationship with PNR
-						joinEntities.remove(EntityEnum.TRAVEL_AGENCY);
 					}
 					
 					join = generateJoinCondition(joinEntities, queryType);
@@ -291,6 +283,9 @@ public class JPQLGenerator {
 		switch (entity.getEntityName().toUpperCase()) {
 			case Constants.ADDRESS:
 				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.ADDRESS.getEntityReference() + " " + EntityEnum.ADDRESS.getAlias();
+				break;
+			case Constants.AGENCY:
+				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.TRAVEL_AGENCY.getEntityReference() + " " + EntityEnum.TRAVEL_AGENCY.getAlias();
 				break;
 			case Constants.CREDITCARD:
 				joinCondition = Constants.JOIN + EntityEnum.PNR.getAlias() + EntityEnum.CREDIT_CARD.getEntityReference() + " " + EntityEnum.CREDIT_CARD.getAlias();
