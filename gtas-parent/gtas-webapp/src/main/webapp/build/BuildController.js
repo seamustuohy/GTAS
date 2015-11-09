@@ -1,6 +1,6 @@
 app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, spinnerService, $mdSidenav, $stateParams, $interval, $timeout) {
     'use strict';
-    var todayDate = moment().format('YYYY-MM-DD').toDate(),
+    var todayDate = moment().toDate(),
         todayText = moment().format('YYYY-MM-DD').toString(),
         conditions,
         model = {
