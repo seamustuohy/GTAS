@@ -61,9 +61,9 @@ app.factory('jqueryQueryBuilderWidget', function () {
                             "labelField": "name",
                             "searchField": "name",
                             "sortField": "name",
-                            "create": false,
+                            "create": true,
                             "persist": false,
-                            "plugins": ["remove_button"],
+                            "plugins": ["restore_on_backspace", "remove_button"],
                             "onInitialize": function () {
                                 getOptionsFromJSONArray(this, obj.dataSource);
                             }
