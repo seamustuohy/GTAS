@@ -385,24 +385,28 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             }
             String code = ssr.getTypeOfRequest();
             if (SSR.SEAT.equals(code)) {
-                for (SpecialRequirementDetails details : ssr.getDetails()) {
-                    String refNumber = details.getTravelerReferenceNumber();
-                    if (refNumber == null) {
-                        continue;
+                if (!CollectionUtils.isEmpty(ssr.getDetails())) {
+                    for (SpecialRequirementDetails details : ssr.getDetails()) {
+                        String refNumber = details.getTravelerReferenceNumber();
+                        if (refNumber == null) {
+                            continue;
+                        }
+                        PassengerVo thePax = findPaxByReferenceNumber(refNumber);
+                        if (thePax == null) {
+                            continue;
+                        }
+    
+                        SeatVo seat = new SeatVo();
+                        seat.setTravelerReferenceNumber(refNumber);
+                        seat.setNumber(details.getSpecialRequirementData());
+                        seat.setOrigin(ssr.getBoardCity());
+                        seat.setDestination(ssr.getOffCity());
+                        if (seat.isValid()) {
+                            thePax.getSeatAssignments().add(seat);
+                        }
                     }
-                    PassengerVo thePax = findPaxByReferenceNumber(refNumber);
-                    if (thePax == null) {
-                        continue;
-                    }
-
-                    SeatVo seat = new SeatVo();
-                    seat.setTravelerReferenceNumber(refNumber);
-                    seat.setNumber(details.getSpecialRequirementData());
-                    seat.setOrigin(ssr.getBoardCity());
-                    seat.setDestination(ssr.getOffCity());
-                    if (seat.isValid()) {
-                        thePax.getSeatAssignments().add(seat);
-                    }
+                } else if (StringUtils.isNotBlank(ssr.getFreeText())) {
+                    // TODO: figure out seats
                 }
             }
         }
