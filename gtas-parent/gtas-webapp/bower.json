@@ -6,7 +6,7 @@
   "description": "GTAS Webapp",
   "dependencies": {
     "angular": "~1.4.7",
-    "angular-material": "~0.12.0",
+    "angular-material": "latest",
     "angular-messages": "~1.4.7",
     "angular-spinners": "~3.0.2",
     "angular-ui-grid": "3.0.3",
