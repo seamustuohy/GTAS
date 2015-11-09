@@ -1,6 +1,7 @@
 app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, spinnerService, $mdSidenav, $stateParams, $interval, $timeout) {
     'use strict';
-    var today = moment().format('YYYY-MM-DD').toString(),
+    var todayDate = moment().format('YYYY-MM-DD').toDate(),
+        todayText = moment().format('YYYY-MM-DD').toString(),
         conditions,
         model = {
             summary: {
@@ -11,7 +12,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 rule: function (obj) {
                     this.title = obj ? obj.title : '';
                     this.description = obj ? obj.description : null;
-                    this.startDate = obj ? obj.startDate : today;
+                    this.startDate = obj ? obj.startDate : todayDate;
                     this.endDate = obj ? obj.endDate : null;
                     this.enabled = obj ? obj.enabled : true;
                 }
@@ -57,9 +58,9 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             var partialCopyObj = {
                 id: response.result,
                 title: response.responseDetails[1]['attributeValue'],
-                startDate: today,
+                startDate: todayText,
                 endDate: null,
-                modifiedOn: today,
+                modifiedOn: todayText,
                 modifiedBy: 'me'
             };
             $scope.qbGrid.data.unshift($.extend({}, originalObj, partialCopyObj));
@@ -133,10 +134,11 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     };
 
     //TODO move out to a service
-    $scope.executeQuery = function () {
+    $scope.executeQuery = function (e) {
         var query = $scope.$builder.queryBuilder('getDrools');
         if (query === false) {
-            $scope.alertError('Can not execute / invalid query');
+            alert('Can not execute / invalid query');
+            e.preventDefault();
             return;
         }
         localStorage['query'] = JSON.stringify(query);
@@ -144,37 +146,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     };
 
     $scope.ruleId = null;
-
-    $scope.alerts = [];
-    $scope.alert = function (type, text) {
-        $scope.alerts.push({type: type, msg: text});
-        $timeout(function () {
-            $scope.alerts[$scope.alerts.length - 1].expired = true;
-        }, 4000);
-        $timeout(function () {
-            $scope.alerts.splice($scope.alerts.length - 1, 1);
-        }, 5000);
-    };
-
-    $scope.alertSuccess = function (text) {
-        $scope.alert('success', text);
-    };
-
-    $scope.alertError = function (text) {
-        $scope.alert('danger', text);
-    };
-
-    $scope.alertInfo = function (text) {
-        $scope.alert('info', text);
-    };
-
-    $scope.alertWarn = function (text) {
-        $scope.alert('warning', text);
-    };
-
-    $scope.closeAlert = function (index) {
-        $scope.alerts.splice(index, 1);
-    };
 
     $scope.updateGrid = function () {
         spinnerService.show('html5spinner');
@@ -189,12 +160,12 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.updateQueryBuilderOnSave = function (myData) {
         if (myData.status === 'FAILURE') {
-            $scope.alertError(myData.message);
+            alert(myData.message);
             $scope.saving = false;
             return;
         }
         if (typeof myData.errorCode !== "undefined") {
-            $scope.alertError(myData.errorMessage);
+            alert(myData.errorMessage);
             return;
         }
 
@@ -234,7 +205,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             rowIndexToDelete;
 
         if (!$scope.ruleId) {
-            $scope.alertError('No rule loaded to delete');
+            alert('No rule loaded to delete');
             return;
         }
         $scope.addNew();
@@ -249,7 +220,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         });
     };
 
-    $scope.today = today;
     $scope.calendarOptions = {
         format: 'yyyy-mm-dd',
         autoClose: true
@@ -307,7 +277,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 }
 
                 if (!$scope.query.title.length) {
-                    $scope.alertError('Title summary can not be blank!');
+                    alert('Title summary can not be blank!');
                     $scope.saving = false;
                     return;
                 }
@@ -337,19 +307,19 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 }
 
                 if ($scope.rule.title.length === 0) {
-                    $scope.alertError('Title summary can not be blank!');
+                    alert('Title summary can not be blank!');
                     $scope.saving = false;
                     return;
                 }
 
                 if ($scope.ruleId === null) {
                     //if (!startDate.isValid()) {
-                    //    $scope.alertError('Dates must be in this format: ' + $scope.formats.toString());
+                    //    alert('Dates must be in this format: ' + $scope.formats.toString());
                     //    $scope.saving = false;
                     //    return;
                     //}
                     //if (startDate < $scope.today) {
-                    //    $scope.alertError('Start date must be today or later when created new.');
+                    //    alert('Start date must be today or later when created new.');
                     //    $scope.saving = false;
                     //    return;
                     //}
@@ -357,12 +327,12 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
                 if ($scope.rule.endDate) {
                     //if (!endDate.isValid()) {
-                    //    $scope.alertError('End Date must be empty/open or in this format: ' + $scope.formats.toString());
+                    //    alert('End Date must be empty/open or in this format: ' + $scope.formats.toString());
                     //    $scope.saving = false;
                     //    return;
                     //}
                     //if (endDate < startDate) {
-                    //    $scope.alertError('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
+                    //    alert('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
                     //    $scope.saving = false;
                     //    return;
                     //}
