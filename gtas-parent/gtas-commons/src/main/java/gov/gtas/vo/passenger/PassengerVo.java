@@ -62,9 +62,11 @@ public class PassengerVo extends BaseVo implements Validatable {
     private String flightETD;
     private String flightETA;
     private List<PassengerVo> passengers;
-	private List<DocumentVo> documents = new ArrayList<>();    
+	private List<DocumentVo> documents = new ArrayList<>();
 	private FlightHistoryVo flightHistoryVo;
     private PnrVo pnrVo;
+    
+    private List<SeatVo> seatAssignments = new ArrayList<>();
     
 	public String getPaxId() {
 		return paxId;
@@ -293,14 +295,20 @@ public class PassengerVo extends BaseVo implements Validatable {
     public void setOnWatchListDoc(Boolean onWatchListDoc) {
         this.onWatchListDoc = onWatchListDoc;
     }
-
     public String getEtdLocalTZ() {
 		return etdLocalTZ;
 	}
 	public String getEtaLocalTZ() {
 		return etaLocalTZ;
 	}
-	@Override
+	public List<SeatVo> getSeatAssignments() {
+        return seatAssignments;
+    }
+    public void setSeatAssignments(List<SeatVo> seatAssignments) {
+        this.seatAssignments = seatAssignments;
+    }
+    
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }

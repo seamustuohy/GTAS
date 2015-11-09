@@ -100,7 +100,7 @@ public class QueryBuilderController {
 	public JsonServiceResponse saveQuery(@RequestBody UserQueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException {
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		
-		logger.info("Create query " + queryRequest.getTitle() + " by " + userId);
+		logger.info("Create query '" + queryRequest.getTitle() + "' by " + userId);
 		IUserQueryResult result = queryService.saveQuery(userId, queryRequest);
 		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_SAVED_SUCCESS_MSG, result.getId());
 	}
@@ -117,7 +117,7 @@ public class QueryBuilderController {
 	public JsonServiceResponse editQuery(@PathVariable int id, @RequestBody UserQueryRequest queryRequest) throws InvalidQueryException, QueryAlreadyExistsException, QueryDoesNotExistException  {
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
 		
-		logger.info("Edit query " + queryRequest.getTitle() + " by " + userId);
+		logger.info("Edit query '" + queryRequest.getTitle() + "' by " + userId);
 		queryService.editQuery(userId, queryRequest);
 		return new JsonServiceResponse(Status.SUCCESS, Constants.QUERY_EDITED_SUCCESS_MSG, null);
 	}
@@ -181,6 +181,8 @@ public class QueryBuilderController {
 	@ExceptionHandler(QueryBuilderException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public JsonServiceResponse handleExceptions(QueryBuilderException exception) {
+		
+		logger.info("QueryBuilderException: " + exception.getMessage());
 		
 		return new JsonServiceResponse(Status.FAILURE, exception.getMessage(), exception.getObject());
     }

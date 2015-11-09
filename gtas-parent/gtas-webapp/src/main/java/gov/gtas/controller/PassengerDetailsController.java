@@ -271,7 +271,7 @@ public class PassengerDetailsController {
 				flVo.setDestinationAirport(fl.getFlight().getDestination());
 				flVo.setFlightDate(fl.getFlight().getFlightDate().toString());
 				flVo.setEtd(fl.getFlight().getEtd().toString());
-				target.getFlightLegVo().add(flVo);
+				target.getFlightLegs().add(flVo);
 			}
 		}
 		

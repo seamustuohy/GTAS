@@ -31,13 +31,13 @@ import gov.gtas.parsers.pnrgov.segment.ORG;
 import gov.gtas.parsers.pnrgov.segment.PTK;
 import gov.gtas.parsers.pnrgov.segment.RCI;
 import gov.gtas.parsers.pnrgov.segment.RCI.ReservationControlInfo;
-import gov.gtas.parsers.pnrgov.segment.SSR.SpecialRequirementDetails;
 import gov.gtas.parsers.pnrgov.segment.REF;
 import gov.gtas.parsers.pnrgov.segment.RPI;
 import gov.gtas.parsers.pnrgov.segment.SAC;
 import gov.gtas.parsers.pnrgov.segment.SRC;
 import gov.gtas.parsers.pnrgov.segment.SSD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
+import gov.gtas.parsers.pnrgov.segment.SSR.SpecialRequirementDetails;
 import gov.gtas.parsers.pnrgov.segment.TBD;
 import gov.gtas.parsers.pnrgov.segment.TBD.BagDetails;
 import gov.gtas.parsers.pnrgov.segment.TIF;
@@ -59,6 +59,7 @@ import gov.gtas.vo.passenger.FrequentFlyerVo;
 import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
 import gov.gtas.vo.passenger.PnrVo;
+import gov.gtas.vo.passenger.SeatVo;
 
 
 public final class PnrGovParser extends EdifactParser<PnrVo> {
@@ -266,6 +267,16 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                 parsedMessage.setDateReceived(dat.getPnrTransactionDate());
             }
         }
+        
+        // NB: IFT here is not part of the spec, but I've noticed a lot
+        // of messages in production that stick IFTs in this location.
+        for (;;) {
+            IFT ift = getConditionalSegment(IFT.class);
+            if (ift == null) {
+                break;
+            }
+            processIft(ift);
+        }
 
         FOP fop = getConditionalSegment(FOP.class);
         processGroup4_FormOfPayment(fop);
@@ -375,7 +386,23 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             String code = ssr.getTypeOfRequest();
             if (SSR.SEAT.equals(code)) {
                 for (SpecialRequirementDetails details : ssr.getDetails()) {
-                    // TODO: assign seat #s
+                    String refNumber = details.getTravelerReferenceNumber();
+                    if (refNumber == null) {
+                        continue;
+                    }
+                    PassengerVo thePax = findPaxByReferenceNumber(refNumber);
+                    if (thePax == null) {
+                        continue;
+                    }
+
+                    SeatVo seat = new SeatVo();
+                    seat.setTravelerReferenceNumber(refNumber);
+                    seat.setNumber(details.getSpecialRequirementData());
+                    seat.setOrigin(ssr.getBoardCity());
+                    seat.setDestination(ssr.getOffCity());
+                    if (seat.isValid()) {
+                        thePax.getSeatAssignments().add(seat);
+                    }
                 }
             }
         }
@@ -456,12 +483,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         PassengerVo thePax = null;
         String refNumber = tri.getTravelerReferenceNumber();
         if (refNumber != null) {
-            for (PassengerVo pax : parsedMessage.getPassengers()) {
-                if (refNumber.equals(pax.getTravelerReferenceNumber())) {
-                    thePax = pax;
-                    break;
-                }
-            }
+            thePax = findPaxByReferenceNumber(refNumber);
         }
         
         TIF tif = getConditionalSegment(TIF.class);
@@ -480,6 +502,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             }
         }
         
+        // TODO: how does this relate to ssr:seat?
         SSD ssd = getConditionalSegment(SSD.class);
         if (thePax != null && ssd != null) {
             thePax.setSeat(ssd.getSeatNumber());
@@ -632,5 +655,14 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                 parsedMessage.getPhoneNumbers().add(p);
             }
         }        
+    }
+    
+    private PassengerVo findPaxByReferenceNumber(String refNumber) {
+        for (PassengerVo pax : parsedMessage.getPassengers()) {
+            if (refNumber.equals(pax.getTravelerReferenceNumber())) {
+                return pax;
+            }
+        }
+        return null;
     }
 }

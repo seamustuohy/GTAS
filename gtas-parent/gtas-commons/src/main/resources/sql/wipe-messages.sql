@@ -9,6 +9,7 @@ delete from flight_passenger;
 delete from pnr_flight;
 delete from apis_message_flight;
 delete from flight_leg;
+delete from seat;
 delete from flight;
 delete from pnr_agency;
 delete from pnr_credit_card;

@@ -86,6 +86,9 @@ public class Passenger extends BaseEntityAudit {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger", fetch = FetchType.EAGER)
     private Set<Document> documents = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger", fetch = FetchType.EAGER)
+    private Set<Seat> seatAssignments = new HashSet<>();
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger", fetch = FetchType.EAGER)
     private Set<HitsSummary> hits = new HashSet<>();
@@ -214,6 +217,12 @@ public class Passenger extends BaseEntityAudit {
     }
     public void setSeat(String seat) {
         this.seat = seat;
+    }
+    public Set<Seat> getSeatAssignments() {
+        return seatAssignments;
+    }
+    public void setSeatAssignments(Set<Seat> seatAssignments) {
+        this.seatAssignments = seatAssignments;
     }
 
     @Override

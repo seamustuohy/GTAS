@@ -24,11 +24,10 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
-import gov.gtas.model.lookup.AppConfiguration;
+import gov.gtas.model.Seat;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.repository.AddressRepository;
 import gov.gtas.repository.AgencyRepository;
-import gov.gtas.repository.AppConfigurationRepository;
 import gov.gtas.repository.CreditCardRepository;
 import gov.gtas.repository.DocumentRepository;
 import gov.gtas.repository.FlightRepository;
@@ -47,6 +46,7 @@ import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.PhoneVo;
 import gov.gtas.vo.passenger.PnrVo;
 import gov.gtas.vo.passenger.ReportingPartyVo;
+import gov.gtas.vo.passenger.SeatVo;
 
 @Repository
 public class LoaderRepository {
@@ -178,11 +178,13 @@ public class LoaderRepository {
                         updatePassenger(existingPassenger, pvo);
                         messagePassengers.add(existingPassenger);
                         existingPassengers.add(pvo);
+                        createSeatAssignment(pvo.getSeatAssignments(), existingPassenger, existingFlight);
                     }
                 }
                 
             } else {
                 currentFlight = utils.createNewFlight(fvo);
+                flightDao.save(currentFlight);
             }
             
             messageFlights.add(currentFlight);
@@ -199,12 +201,17 @@ public class LoaderRepository {
                 continue;
             }
             
-            Passenger p = utils.createNewPassenger(pvo);
+            Passenger newPassenger = utils.createNewPassenger(pvo);
             for (DocumentVo dvo : pvo.getDocuments()) {
-                p.addDocument(utils.createNewDocument(dvo));
+                newPassenger.addDocument(utils.createNewDocument(dvo));
             }
-            passengerDao.save(p);
-            messagePassengers.add(p);
+            passengerDao.save(newPassenger);
+            messagePassengers.add(newPassenger);
+            
+            for (Flight f : messageFlights) {
+                createSeatAssignment(pvo.getSeatAssignments(), newPassenger, f);
+            }
+            
             newPax++;
         }
         
@@ -221,6 +228,29 @@ public class LoaderRepository {
              * logic eventually.
              */
             f.setPassengerCount(f.getPassengerCount() + newPax);
+        }
+    }
+    
+    /**
+     * Create a single seat assignment for the given passenger, flight
+     * combination. TODO: Inefficient to have to pass in the entire list of seat
+     * assignments from the paxVo.
+     * 
+     * @param seatAssignments
+     * @param p
+     * @param f
+     */
+    public void createSeatAssignment(List<SeatVo> seatAssignments, Passenger p, Flight f) {
+        for (SeatVo seat : seatAssignments) {
+            if (seat.getDestination().equals(f.getDestination())
+                && seat.getOrigin().equals(f.getOrigin())) {
+                Seat s = new Seat();
+                s.setPassenger(p);
+                s.setFlight(f);
+                s.setNumber(seat.getNumber());
+                p.getSeatAssignments().add(s);
+                return;
+            }
         }
     }
 
