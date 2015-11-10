@@ -1,4 +1,4 @@
-app.controller('UploadCtrl', ['$scope', '$timeout', 'Upload', function ($scope, $timeout, Upload) {
+app.controller('UploadCtrl', ['$scope', '$timeout', '$http', 'Upload', function ($scope, $timeout, $http, Upload) {
     $scope.$watch('files', function () {
         $scope.upload($scope.files);
     });
@@ -18,7 +18,7 @@ app.controller('UploadCtrl', ['$scope', '$timeout', 'Upload', function ($scope, 
                 Upload.upload({
                     url: '/gtas/upload',
                     data: {
-                      username: 'mcopenhafer',
+                      username: 'gtas',
                       file: file  
                     }
                 }).progress(function (evt) {
@@ -33,6 +33,14 @@ app.controller('UploadCtrl', ['$scope', '$timeout', 'Upload', function ($scope, 
               }
             }
         }
-    };  
-  
+    };
+    
+    $scope.deleteall = function() {
+        var r = confirm("This will delete all messages and associated data (flights, pax, etc).\n\nYou sure?");
+        if (r == true) {
+            return $http.get('/gtas/deleteall').then(function (res) {
+                alert('Successfully deleted all messages.');
+            });
+        }
+    };
 }]);

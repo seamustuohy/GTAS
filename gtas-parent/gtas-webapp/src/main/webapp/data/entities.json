@@ -1010,7 +1010,7 @@
     "label": "TRAVEL AGENCY",
     "columns": [
       {
-        "id": "Agency.agencyCity",
+        "id": "Agency.location",
         "label": "City",
         "type": "string",
         "operators": [
@@ -1027,7 +1027,7 @@
         ]
       },
       {
-        "id": "Agency.agencyName",
+        "id": "Agency.name",
         "label": "Name",
         "type": "string",
         "operators": [
@@ -1044,7 +1044,7 @@
         ]
       },
       {
-        "id": "Agency.phoneNumber",
+        "id": "Agency.phone",
         "label": "Phone",
         "type": "string",
         "operators": [

@@ -348,7 +348,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             throw new ParseException("Invalid flight: " + f);
         }
         
-        processTvlConditionalSegments();
+        processFlightSegments(tvl);
         
         if (StringUtils.isNotBlank(tvl.getOperatingCarrier())) {
             // codeshare flight: create a separate flight with the same
@@ -369,11 +369,11 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
                 throw new ParseException("Invalid flight: " + csFlight);
             }
             
-            processTvlConditionalSegments();
+            processFlightSegments(tvl);
         }
     }
     
-    private void processTvlConditionalSegments() throws ParseException {
+    private void processFlightSegments(TVL tvl) throws ParseException {
         getConditionalSegment(TRA.class);
         getConditionalSegment(RPI.class);
         getConditionalSegment(APD.class);
@@ -385,24 +385,28 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             }
             String code = ssr.getTypeOfRequest();
             if (SSR.SEAT.equals(code)) {
-                for (SpecialRequirementDetails details : ssr.getDetails()) {
-                    String refNumber = details.getTravelerReferenceNumber();
-                    if (refNumber == null) {
-                        continue;
+                if (!CollectionUtils.isEmpty(ssr.getDetails())) {
+                    for (SpecialRequirementDetails details : ssr.getDetails()) {
+                        String refNumber = details.getTravelerReferenceNumber();
+                        if (refNumber == null) {
+                            continue;
+                        }
+                        PassengerVo thePax = findPaxByReferenceNumber(refNumber);
+                        if (thePax == null) {
+                            continue;
+                        }
+    
+                        SeatVo seat = new SeatVo();
+                        seat.setTravelerReferenceNumber(refNumber);
+                        seat.setNumber(details.getSpecialRequirementData());
+                        seat.setOrigin(ssr.getBoardCity());
+                        seat.setDestination(ssr.getOffCity());
+                        if (seat.isValid()) {
+                            thePax.getSeatAssignments().add(seat);
+                        }
                     }
-                    PassengerVo thePax = findPaxByReferenceNumber(refNumber);
-                    if (thePax == null) {
-                        continue;
-                    }
-
-                    SeatVo seat = new SeatVo();
-                    seat.setTravelerReferenceNumber(refNumber);
-                    seat.setNumber(details.getSpecialRequirementData());
-                    seat.setOrigin(ssr.getBoardCity());
-                    seat.setDestination(ssr.getOffCity());
-                    if (seat.isValid()) {
-                        thePax.getSeatAssignments().add(seat);
-                    }
+                } else if (StringUtils.isNotBlank(ssr.getFreeText())) {
+                    // TODO: figure out seats
                 }
             }
         }
@@ -422,7 +426,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             if (dat == null) {
                 break;
             }
-            processGroup6_Agent(dat);
+            processGroup6_Agent(dat, tvl);
         }
         
         for (;;) {
@@ -461,25 +465,25 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     /**
      * the agent info that checked-in the passenger
      */
-    private void processGroup6_Agent(DAT_G6 dat) throws ParseException {
+    private void processGroup6_Agent(DAT_G6 dat, TVL tvl) throws ParseException {
         ORG org = getConditionalSegment(ORG.class, "ORG");
         processAgencyInfo(org);
-
+        
         TRI tri = getMandatorySegment(TRI.class);
-        processGroup7_SeatInfo(tri);
+        processGroup7_SeatInfo(tri, tvl);
         for (;;) {
             tri = getConditionalSegment(TRI.class);
             if (tri == null) {
                 break;
             }
-            processGroup7_SeatInfo(tri);
+            processGroup7_SeatInfo(tri, tvl);
         }        
     }
     
     /**
      * boarding, seat number and checked bag info
      */
-    private void processGroup7_SeatInfo(TRI tri) throws ParseException {
+    private void processGroup7_SeatInfo(TRI tri, TVL tvl) throws ParseException {
         PassengerVo thePax = null;
         String refNumber = tri.getTravelerReferenceNumber();
         if (refNumber != null) {
@@ -506,6 +510,15 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         SSD ssd = getConditionalSegment(SSD.class);
         if (thePax != null && ssd != null) {
             thePax.setSeat(ssd.getSeatNumber());
+            
+            SeatVo seat = new SeatVo();
+            seat.setTravelerReferenceNumber(thePax.getTravelerReferenceNumber());
+            seat.setNumber(ssd.getSeatNumber());
+            seat.setOrigin(tvl.getOrigin());
+            seat.setDestination(tvl.getDestination());
+            if (seat.isValid()) {
+                thePax.getSeatAssignments().add(seat);
+            }
         }
         
         TBD tbd = getConditionalSegment(TBD.class);
