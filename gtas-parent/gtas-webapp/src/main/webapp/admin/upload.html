@@ -19,9 +19,11 @@
     accept="text/plain" 
     ngf-pattern="'.edi,.txt,.pnr,.apis'">Drop APIS and PNR files here or click to upload</div>
 <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+
+<md-button class="md-raised md-warn" ng-click="deleteall()" type="button">DELETE ALL MESSAGES</md-button>
+
 <h2>Upload Progress</h2>
 <ul>
     <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}</li>
 </ul>
-
 <pre>{{log}}</pre>

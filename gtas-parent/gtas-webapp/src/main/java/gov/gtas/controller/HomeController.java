@@ -30,25 +30,22 @@ public class HomeController {
 		
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
 		String formattedDate = dateFormat.format(date);
-		
 		model.addAttribute("serverTime", formattedDate );
 		
 		return "main";
 	}
+	
     @PreDestroy
     public void destroy() {
-        System.out.println("**************************************************************************");
-        System.out.println("GTAS HOME CONTROLLER SHUTTING DOWN!!!!!!!");
-        System.out.println("**************************************************************************");
-        try{
-            /*
-             * shutdown all the Hazelcast non-daemon threads.
-             */
-			com.hazelcast.core.Hazelcast.shutdownAll();        	
-        } catch (Exception ex){
-        	ex.printStackTrace();
+        logger.info("**************************************************************************");
+        logger.info("GTAS HOME CONTROLLER SHUTTING DOWN!!!!!!!");
+        logger.info("**************************************************************************");
+        
+        try {
+            com.hazelcast.core.Hazelcast.shutdownAll();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }	
 }
