@@ -1011,7 +1011,7 @@
     "columns": [
       {
         "id": "Agency.location",
-        "label": "City",
+        "label": "Location",
         "type": "string",
         "operators": [
           "EQUAL",
