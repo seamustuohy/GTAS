@@ -14,6 +14,7 @@ import gov.gtas.services.security.UserService;
 import gov.gtas.services.security.UserServiceUtil;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -101,6 +102,14 @@ public class AuditLogPersistenceServiceImpl implements
 	@Override
 	public List<AuditRecord> findByTarget(String target) {
 		return auditLogRepository.findByTarget(target);
+	}
+
+	@Override
+	public List<AuditRecord> findAll() {
+		Iterable<AuditRecord> res = auditLogRepository.findAll();
+		List<AuditRecord> ret = new LinkedList<AuditRecord>();
+		res.forEach(ret::add);		
+		return ret;
 	}
 
 	/*
