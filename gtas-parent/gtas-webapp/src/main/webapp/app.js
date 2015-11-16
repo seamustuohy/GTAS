@@ -210,6 +210,14 @@ var app;
                             return userService.getUserData();
                         }
                     }
+                }).state('setFilter', {
+                    url: '/set/filter',
+                    views: {
+                        '@': {
+                            controller: 'FilterCtrl',
+                            templateUrl: 'user-settings/filter.html'
+                        }
+                    }
                 });
         },
         NavCtrl = function ($scope) {
@@ -221,7 +229,7 @@ var app;
                 queries: { mode: ['query'] },
                 risks: { mode: ['rule'] },
                 watchlists: { name: ['watchlists'] },
-                usersettings: { name: ['user-settings'] },
+                usersettings: { name: ['user-settings','setFilter'] },
                 upload: { name: ['upload'] }
             };
             $scope.onRoute = function (key) {

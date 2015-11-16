@@ -1,4 +1,4 @@
-app.controller('UserSettingsController', function ($scope, $state, $interval, $stateParams,user,userService) {
+app.controller('UserSettingsController', function ($scope, $state, $interval, $stateParams,user,userService, $location) {
 
     $scope.userCredentials = {
         firstName: '',
@@ -29,4 +29,12 @@ app.controller('UserSettingsController', function ($scope, $state, $interval, $s
         $scope.error=false;
     };
     init();
+
+
+    $scope.setFilter = function () {
+
+        /*	$scope.partialView="setFilter";
+         $state.go('user-settings.setFilter');*/
+        $location.path('/set/filter');
+    };
 });

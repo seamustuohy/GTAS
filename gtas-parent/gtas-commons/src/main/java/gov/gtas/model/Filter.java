@@ -1,6 +1,5 @@
 package gov.gtas.model;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -15,8 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 
@@ -78,58 +75,35 @@ public class Filter extends BaseEntity {
 		this.originAirports = originAirports;
 	}
 
-	@Column(name = "eta_start", columnDefinition = "DATETIME")
-	@Temporal(TemporalType.DATE)
-	private Date etaStart;
 
-	public Date getEtaStart() {
+	
+	  @Column(name = "etas_start", nullable = true)
+	  private Integer etaStart = Integer.valueOf(0);
+	  
+	  @Column(name = "etas_end", nullable = true)
+	  private Integer etaEnd = Integer.valueOf(0);
+
+
+
+	public Integer getEtaStart() {
 		return etaStart;
 	}
 
-	public void setEtaStart(Date etaStart) {
+	public void setEtaStart(Integer etaStart) {
 		this.etaStart = etaStart;
 	}
 
-	@Column(name = "eta_end", columnDefinition = "DATETIME")
-	@Temporal(TemporalType.DATE)
-	private Date etaEnd;
-
-	public Date getEtaEnd() {
+	public Integer getEtaEnd() {
 		return etaEnd;
 	}
 
-	public void setEtaEnd(Date etaEnd) {
+	public void setEtaEnd(Integer etaEnd) {
 		this.etaEnd = etaEnd;
 	}
-	
-	@Column(name = "etd_start", columnDefinition = "DATETIME")
-	@Temporal(TemporalType.DATE)
-	private Date etdStart;
-
-	public Date getEtdStart() {
-		return etdStart;
-	}
-
-	public void setEtdStart(Date etdStart) {
-		this.etdStart = etdStart;
-	}
-
-	@Column(name = "etd_end", columnDefinition = "DATETIME")
-	@Temporal(TemporalType.DATE)
-	private Date etdEnd;
-
-	public Date getEtdEnd() {
-		return etaEnd;
-	}
-
-	public void setEtdEnd(Date etaEnd) {
-		this.etaEnd = etaEnd;
-	}
-
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.flightDirection, this.etaEnd,this.etaStart,this.etdStart,this.etdEnd,this.user.getUserId());
+		return Objects.hash(this.flightDirection, this.etaEnd,this.etaStart,this.user.getUserId());
 	}
 
 	@Override
@@ -147,20 +121,17 @@ public class Filter extends BaseEntity {
 
 		return new EqualsBuilder().append(this.etaStart, dataTarget.getEtaStart())
 				.append(this.etaEnd, dataTarget.getEtaEnd())
-				.append(this.etdStart, dataTarget.getEtdStart())
-				.append(this.etdEnd, dataTarget.getEtdEnd())
 				.append(this.originAirports, dataTarget.getOriginAirports())
 				.append(this.flightDirection, dataTarget.getFlightDirection())
 				.append(this.destinationAirports, dataTarget.getDestinationAirports())
 				.append(this.user, dataTarget.getUser()).isEquals();
 	}
-
+	
+	
 	@Override
 	public String toString() {
 		return "Filter [id=" + user.getUserId() + ", eta Start=" + etaStart
 				+ ", eta End=" + etaEnd
-				+", etd Start=" + etdStart
-				+", etd End=" + etdEnd
 				+ ", Origin Airports=" + originAirports
 				+ ", Desitnation Airports=" + destinationAirports + ", User =" + user + ", Flight Direction="
 				+ flightDirection + "]";

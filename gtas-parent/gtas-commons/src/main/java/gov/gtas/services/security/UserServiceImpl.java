@@ -93,8 +93,6 @@ public class UserServiceImpl implements UserService {
 				filterEntity.setDestinationAirports(mappedEntity.getDestinationAirports());
 				filterEntity.setEtaStart(mappedEntity.getEtaStart());
 				filterEntity.setEtaEnd(mappedEntity.getEtaEnd());
-				filterEntity.setEtdStart(mappedEntity.getEtdStart());
-				filterEntity.setEtdEnd(mappedEntity.getEtdEnd());
 				filterEntity.setFlightDirection(mappedEntity.getFlightDirection());
 				entity.setFilter(filterEntity);
 			}

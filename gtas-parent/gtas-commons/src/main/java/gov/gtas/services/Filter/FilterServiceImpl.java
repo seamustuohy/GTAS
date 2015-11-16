@@ -58,8 +58,6 @@ public class FilterServiceImpl implements FilterService {
 			entity.setDestinationAirports(mappedEntity.getDestinationAirports());
 			entity.setEtaStart(mappedEntity.getEtaStart());
 			entity.setEtaEnd(mappedEntity.getEtaEnd());
-			entity.setEtdStart(mappedEntity.getEtdStart());
-			entity.setEtdEnd(mappedEntity.getEtdEnd());
 			entity.setFlightDirection(mappedEntity.getFlightDirection());
 
 			Filter savedEntity = filterRepository.save(entity);

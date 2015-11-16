@@ -893,5 +893,44 @@
                 queryFlights: queryFlights,
                 queryPassengers: queryPassengers
             });
+        })
+        .service("filterService",function($http,$q) {
+            var filterURLS={
+                    filter:'/gtas/filter/',
+                },
+                getFilter = function (userId) {
+                    var dfd = $q.defer();
+                    dfd.resolve($http({
+                        method: 'get',
+                        url: serviceURLs.filter+userId
+                    }));
+                    return dfd.promise;
+                },
+                setFilter = function (filter,userId) {
+
+                    var dfd = $q.defer();
+                    dfd.resolve($http({
+                        method: 'post',
+                        url: filterURLS.filter+userId,
+                        data: filter
+                    }));
+                    return dfd.promise;
+                },
+
+                updateFilter = function (filter,userId) {
+                    var dfd = $q.defer();
+                    dfd.resolve($http({
+                        method: 'put',
+                        url: filterURLS.filter+userId,
+                        data: filter
+                    }));
+                    return dfd.promise;
+                };
+            // Return public API.
+            return ({
+                getFilter: getFilter,
+                setFilter: setFilter,
+                updateFilter:updateFilter
+            });
         });
 }());

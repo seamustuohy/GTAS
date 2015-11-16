@@ -16,6 +16,7 @@
         <link rel="stylesheet"
         href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
         <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
+        <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.default.css" />
         <link rel="stylesheet"
         href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
         <link rel="stylesheet" href="resources/bower_components/angular-ui-grid/ui-grid.min.css" />
@@ -117,6 +118,7 @@
         <script src='admin/AdminController.js'></script>
         <script src='admin/UserController.js'></script>
         <script src='admin/UploadController.js'></script>
-        <script src='user-settings/UserSettingsController.js'></script>
+        <script src='user-settings/UserSettingsController.js'></script>        
+        <script src='user-settings/FilterCtrl.js'></script>
         </body>
         </html>
