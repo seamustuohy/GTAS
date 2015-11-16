@@ -38,7 +38,7 @@ padding-bottom: 20px;
     </md-input-container>
     <md-input-container >
         <label>ETA Start</label>
-        <md-select ng-init="filter.etaStart = etaStartDays[0]" ng-model="filter.etaStart">
+        <md-select ng-model="filter.etaStart">
             <md-option ng-repeat="item in etaStartDays" value="{{item.value}}">
                 {{item.label}}
             </md-option>

@@ -18,7 +18,7 @@ app.service("flightsModel", [function() {
     this.direction = 'I';
     this.etaStart = startDate;
     this.etaEnd = endDate;
-    this.sort = defaultSort;    
+    this.sort = defaultSort;
   }
   
   this.reset();
