@@ -97,14 +97,8 @@ var app;
                         }
                     },
                     resolve: {
-                        flights: function (executeQueryService, $stateParams) {
-                            var postData, query = JSON.parse(localStorage['query']);
-                            postData = {
-                                pageNumber: $stateParams.pageNumber || pageDefaults.pageNumber,
-                                pageSize: $stateParams.pageSize || pageDefaults.pageSize,
-                                query: query
-                            };
-                            return executeQueryService.queryFlights(postData);
+                        flights: function (executeQueryService) {
+                            return executeQueryService.queryFlights();
                         }
                     }
                 })

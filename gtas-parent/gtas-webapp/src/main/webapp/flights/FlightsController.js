@@ -24,12 +24,6 @@
             },
             fetchMethods = {
                 queryFlights: function () {
-                    var postData, query = JSON.parse(localStorage['query']);
-                    postData = {
-                        pageNumber: $scope.model.pageNumber,
-                        pageSize: $scope.model.pageSize,
-                        query: query
-                    };
                     executeQueryService.queryFlights(postData).then(update);
                 },
                 flights: function () {
@@ -53,6 +47,7 @@
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 0,
             enableColumnMenus: false,
+            exporterCsvFilename: 'Flights.csv',
 
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;

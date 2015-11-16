@@ -1,57 +1,6 @@
 (function () {
     'use strict';
     app
-        .factory('GridControl', function () {
-            return function ($scope) {
-                var today = moment().format('YYYY-MM-DD'),
-                    pageOfPages = function (currentPage, pageCount) {
-                        return today + (pageCount === 1 ? '' : '\t' + currentPage.toString() + ' of ' + pageCount.toString());
-                    };
-                $scope.gridOpts = {
-                    paginationPageSize: 10,
-                    paginationPageSizes: [],
-                    enableFiltering: true,
-                    enableCellEditOnFocus: false,
-                    showGridFooter: true,
-                    multiSelect: false,
-                    enableGridMenu: true,
-                    enableSelectAll: false,
-                    exporterPdfDefaultStyle: {fontSize: 9},
-                    exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
-                    exporterPdfTableHeaderStyle: {
-                        fontSize: 10,
-                        bold: true,
-                        italics: true
-                    },
-                    exporterPdfFooter: function (currentPage, pageCount) {
-                        return {
-                            text: pageOfPages(currentPage, pageCount),
-                            style: 'footerStyle'
-                        };
-                    },
-                    exporterPdfCustomFormatter: function (docDefinition) {
-                        docDefinition.pageMargins = [0, 40, 0, 40];
-                        docDefinition.styles.headerStyle = {
-                            fontSize: 22,
-                            bold: true,
-                            alignment: 'center',
-                            lineHeight: 1.5
-                        };
-                        docDefinition.styles.footerStyle = {
-                            fontSize: 10,
-                            italic: true,
-                            alignment: 'center'
-                        };
-                        return docDefinition;
-                    },
-                    exporterPdfOrientation: 'landscape',
-                    exporterPdfPageSize: 'LETTER',
-                    exporterPdfMaxGridWidth: 600,
-                    exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
-                };
-
-            };
-        })
         .factory('Base64', function () {
             var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
             return {
@@ -232,7 +181,9 @@
                     showGridFooter: true,
                     multiSelect: false,
                     enableGridMenu: true,
-                    enableSelectAll: false,
+                    enableSelectAll: false
+                },
+                exporterOptions = {
                     exporterPdfDefaultStyle: {fontSize: 9},
                     exporterPdfTableStyle: {margin: [10, 10, 10, 10]},
                     exporterPdfTableHeaderStyle: {
@@ -266,8 +217,9 @@
                     exporterPdfMaxGridWidth: 600,
                     exporterCsvLinkElement: angular.element(document.querySelectorAll(".custom-csv-link-location"))
                 },
+                defaultOptions = $.extend({}, standardOptions, exporterOptions),
                 gridOptions = {
-                    admin : standardOptions,
+                    admin : defaultOptions,
                     flights: {
                         enableSorting: false,
                         multiSelect: false,
@@ -296,9 +248,9 @@
                         useExternalFiltering: true,
                         expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>'
                     },
-                    query : standardOptions,
-                    rule: standardOptions,
-                    watchlist: standardOptions
+                    query : defaultOptions,
+                    rule: defaultOptions,
+                    watchlist: defaultOptions
                 },
                 columns = {
                     admin: [
@@ -329,9 +281,7 @@
                             field: 'roles',
                             cellFilter: 'roleDescriptionFilter',
                             width: '40%',
-                            cellTooltip: function (row) {
-                                return row.entity.roles;
-                            },
+                            cellTooltip: function (row) { return row.entity.roles; },
                             cellTemplate: '<div class="ui-grid-cell-contents wrap" style="white-space: normal" title="TOOLTIP">{{COL_FIELD CUSTOM_FILTERS}}</div>'
                         }
                     ],
@@ -779,13 +729,20 @@
                     flights: '/gtas/query/queryFlights/',
                     passengers: '/gtas/query/queryPassengers/'
                 },
-                queryFlights = function (qbData) {
-                    var dfd = $q.defer();
+                queryFlights = function () {
+                    var query = JSON.parse(localStorage['query']),
+                        dfd = $q.defer();
+
                     dfd.resolve($http({
                         method: 'post',
                         url: serviceURLs.flights,
-                        data: qbData
+                        data: {
+                            pageNumber: 1,
+                            pageSize: -1,
+                            query: query
+                        }
                     }));
+
                     return dfd.promise;
                 },
                 queryPassengers = function (qbData) {

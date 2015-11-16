@@ -22,9 +22,7 @@
                 m.Passenger = new model.Passenger();
             },
             isItTrashTime = function (rows) {
-                console.log(rows);
-//                $scope.disableTrash = $scope.gridApi.selection.selectedCount === 0;
-                $scope.disableTrash = $scope.gridApi.selection.getSelectedRows($scope.watchlistGrid).length === 0;
+                $scope.disableTrash = $scope.gridApi.selection.getSelectedRows(rows).length === 0;
             };
 
         $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
@@ -33,7 +31,6 @@
             $scope.gridApi = gridApi;
             gridApi.selection.on.rowSelectionChanged($scope, isItTrashTime);
             gridApi.selection.on.rowSelectionChangedBatch($scope, isItTrashTime);
-//            $scope.$watch($scope.gridApi.selection.selectedCount, isItTrashTime);
         };
 
         $scope.documentTypes = [
@@ -62,7 +59,7 @@
         $scope.updateGridIfData = function (listName) {
             $scope.gridApi.selection.clearSelectedRows();
             $scope.allSelected = false;
-            isItTrashTime();
+            $scope.disableTrash = true;
             $scope.icon = watchlist.types[listName].icon;
             $scope.activeTab = listName;
             $scope.watchlistGrid.columnDefs = watchlist.types[listName].columns;
