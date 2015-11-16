@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WatchlistManagementController {
 	/*
-	 * The logger for the UdrManagementController
+	 * The logger for the WatchlistManagementController
 	 */
 	private static final Logger logger = LoggerFactory
 			.getLogger(WatchlistManagementController.class);
@@ -92,7 +92,7 @@ public class WatchlistManagementController {
 			@RequestBody WatchlistSpec inputSpec) {
 
 		String userId = GtasSecurityUtils.fetchLoggedInUserId();
-		logger.info("******** Received UDR Create request by user =" + userId);
+		logger.info("******** Received Watchlist Create/Update request by user =" + userId);
 		validateInput(inputSpec);
 		JsonServiceResponse resp = watchlistService
 				.createUpdateDeleteWatchlistItems(userId, inputSpec);
@@ -114,7 +114,7 @@ public class WatchlistManagementController {
 
 	@RequestMapping(value = Constants.WL_DELETE, method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JsonServiceResponse deleteUDR(@PathVariable String name) {
-		logger.info("******** Received UDR Delete requestfor watch list ="
+		logger.info("******** Received Watchlist Delete requestfor watch list ="
 				+ name);
 		JsonServiceResponse resp = watchlistService.deleteWatchlist(name);
 		return resp;

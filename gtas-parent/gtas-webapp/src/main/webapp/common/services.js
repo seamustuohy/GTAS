@@ -90,6 +90,69 @@
                 }
             };
         })
+        /* audit log viewer service */
+        .service('auditService', function($http, $q){
+        	var GET_AUDIT_RECORDS_URL = "/gtas/auditlog";
+            function handleError(response) {
+                if (response.data.message !== undefined) {
+                    return $q.reject("An unknown error occurred.");
+                }
+                return $q.reject(response.data.message);
+            }
+
+            function handleSuccess(response) {
+                return response.data;
+            }
+        	return{
+                getAuditData: function (action, user, commence, fin) {
+                	var st = commence != null ? moment(commence).format('YYYY-MM-DD'):null;
+                	var nd = commence != null ? moment(fin).format('YYYY-MM-DD'):null;
+                	var urlString = GET_AUDIT_RECORDS_URL;
+                	if(action != null || user != null || st != null || nd != null){
+                		urlString += '?';
+                	}
+                	var sep = '';
+                	if (user != null){
+                		urlString += sep.concat('user=',user);
+                		sep = '&';
+                	}
+                	if (action != null){
+                		urlString += sep.concat('action=',action);
+                		sep = '&';
+                	}
+                	if (st != null){
+                		urlString += sep.concat('startDate=',st);
+                		sep = '&';
+                	}
+                	if (nd != null){
+                		urlString += sep.concat('endDate=',nd);
+                	}
+                    var request = $http({
+                        method: "get",
+                        url: urlString
+                    });
+
+                    return (request.then(handleSuccess, handleError));
+                },
+        		auditActions: [
+                              	'CREATE_UDR', 
+                            	'UPDATE_UDR', 
+                            	'UPDATE_UDR_META', 
+                            	'DELETE_UDR', 
+                            	'CREATE_WL', 
+                            	'UPDATE_WL', 
+                            	'DELETE_WL', 
+                            	'LOAD_APIS', 
+                            	'LOAD_PNR', 
+                            	'CREATE_USER', 
+                            	'UPDATE_USER', 
+                            	'SUSPEND_USER', 
+                            	'DELETE_USER',
+                            	'TARGETING_RUN',
+                            	'LOADER_RUN'
+                                   ]
+        	};
+        })
         .service('userService', function ($http, $q) {
             var USER_ROLES_URL = "/gtas/roles/",
                 USERS_URL = "/gtas/users/",
@@ -253,6 +316,34 @@
                     watchlist: defaultOptions
                 },
                 columns = {
+                        audit: [
+                                {
+                                    name: 'action',
+                                    field: 'actionType',
+                                    width: '10%',
+                                    sort: {
+                                        direction: uiGridConstants.DESC,
+                                        priority: 1
+                                    }
+                                }, {
+                                    name: 'user',
+                                    field: 'user',
+                                    width: '15%'
+                                }, {
+                                    name: 'status',
+                                    field: 'status',
+                                    width: '10%'
+                                }, {
+                                    name: 'message',
+                                    field: 'message',
+                                    width: '20%'
+                                }, {
+                                    name: 'timestamp',
+                                    field: 'timestamp',
+                                    width: '45%'
+                                }
+                            ],
+
                     admin: [
                         {
                             name: 'active',

@@ -1,12 +1,15 @@
 <md-content>
-    <md-tabs md-dynamic-height md-border-bottom>
+    <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTabIndex">
         <md-tab label="Modify Users">
             <md-content class="md-padding">
-                <div ui-grid="usersGrid" ui-grid-pagination ui-grid-exporter class="grid" ></div>
+                <div ui-grid="adminGrid" ui-grid-pagination ui-grid-exporter class="grid" ></div>
             </md-content>
         </md-tab>
         <md-tab label="Add User" ng-click="createUser()">
             <md-content class="md-padding"></md-content>
+        </md-tab>
+        <md-tab label = "Audit View">
+            <ng-include src="'admin/auditlog.html'"/>
         </md-tab>
     </md-tabs>
 </md-content>

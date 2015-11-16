@@ -27,11 +27,11 @@ import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT.TdtType;
 import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.vo.ApisMessageVo;
 import gov.gtas.vo.passenger.DocumentVo;
 import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.ReportingPartyVo;
-import gov.gtas.vo.ApisMessageVo;
 
 public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {   
     public PaxlstParserUNedifact() {
@@ -113,6 +113,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
     /**
      * Segment group 2: flight details
      */
+    @SuppressWarnings("incomplete-switch")
     private void processFlight(TDT tdt) throws ParseException {
         if (tdt.isMasterCrewList()) {
             // Master crew lists (MCLs) are part of TSA regulations
@@ -213,6 +214,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
     /**
      * Segment group 4: passenger details
      */
+    @SuppressWarnings("incomplete-switch")
     private void processPax(NAD nad) throws ParseException {
         PassengerVo p = new PassengerVo();
         p.setFirstName(nad.getFirstName());
@@ -339,6 +341,14 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
             if (rff == null) {
                 break;
             }
+            switch (rff.getReferenceCodeQualifier()) {
+            case ASSIGNED_SEAT:
+                // seat info
+                break;
+            case CUSTOMER_REF_NUMBER:
+                // freq flyer info
+                break;
+            }
         }
 
         for (;;) {
@@ -348,9 +358,6 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
             }
             processDocument(p, doc);
         }
-        
-        // TODO: implement segment group 6
-        // TODO: implement segment group 7
     }
 
     /**
