@@ -7,6 +7,7 @@ app.service("flightsModel", [function() {
     startDate = new Date(),
     endDate = new Date();
     endDate.setDate(endDate.getDate() + 3);
+   
 
   this.reset = function() {
     this.pageNumber = 1;

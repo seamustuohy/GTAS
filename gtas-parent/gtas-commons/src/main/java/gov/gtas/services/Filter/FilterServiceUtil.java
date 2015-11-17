@@ -17,7 +17,7 @@ public class FilterServiceUtil {
 
 	@Autowired
 	private LookUpRepository lookupRepository;
-	
+
 	public FilterData mapFilterDataFromEntity(Filter entity) {
 
 		FilterData filterData = null;
@@ -29,8 +29,7 @@ public class FilterServiceUtil {
 					.collect(Collectors.toSet());
 
 			filterData = new FilterData(entity.getUser().getUserId(), entity.getFlightDirection().getcode(),
-					originAirports, destinationAirports, entity.getEtaStart(), entity.getEtaEnd(), entity.getEtaStart(),
-					entity.getEtdEnd());
+					originAirports, destinationAirports, entity.getEtaStart(), entity.getEtaEnd());
 		}
 
 		return filterData;
@@ -64,9 +63,6 @@ public class FilterServiceUtil {
 
 			filter.setEtaStart(filterData.getEtaStart());
 			filter.setEtaEnd(filterData.getEtaEnd());
-
-			filter.setEtdStart(filterData.getEtdStart());
-			filter.setEtdEnd(filterData.getEtdEnd());
 
 		}
 

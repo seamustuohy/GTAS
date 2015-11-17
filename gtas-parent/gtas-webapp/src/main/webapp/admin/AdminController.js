@@ -1,4 +1,4 @@
-app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userService, auditService, $location) {
+app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userService, auditService, $location, $mdToast) {
     'use strict';
     
     var setData = function (data) { 
@@ -11,16 +11,12 @@ app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userServ
     }
     $scope.selectedTabIndex = 0;
     
-    setupGrid('admin', 'admin');
-    //$scope.adminGrid.data = [];
-    userService.getAllUsers().then(setData);       		
-    //$scope.adminGrid = {columnDefs:{}, data:[]};
+    $scope.adminGrid = {columnDefs:{}, data:[]};
     
     $scope.$watch('selectedTabIndex', function(current, old){       
         switch ( current){
            case 0:
-        	    $scope.adminGrid = gridOptionsLookupService.getGridOptions('admin');
-        	    $scope.adminGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs('admin');
+        	    setupGrid('admin', 'admin');
         	    userService.getAllUsers().then(setData);       		
         	    break;
            case 2:
@@ -38,6 +34,14 @@ app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userServ
     $scope.auditModel = {action:null, user:null, timestampStart:today, timestampEnd:today};
     $scope.refreshAudit = function(){
     	var model = $scope.auditModel;
-    	auditService.getAuditData(model.action, model.user, model.timestampStart, model.timestampEnd).then(setData);
+    	auditService.getAuditData(model.action, model.user, model.timestampStart, model.timestampEnd).then(setData, $scope.errorToast);
+    };
+    $scope.errorToast = function(error){
+    	$mdToast.show($mdToast.simple()
+    	  .content(error)
+    	  .action('OK')
+    	  .highlightAction(true)
+    	  .position('top right')
+    	  .hideDelay(0));
     };
 });

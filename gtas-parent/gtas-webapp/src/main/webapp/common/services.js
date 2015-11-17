@@ -94,7 +94,7 @@
         .service('auditService', function($http, $q){
         	var GET_AUDIT_RECORDS_URL = "/gtas/auditlog";
             function handleError(response) {
-                if (response.data.message !== undefined) {
+                if (response.data.message === undefined) {
                     return $q.reject("An unknown error occurred.");
                 }
                 return $q.reject(response.data.message);
@@ -134,7 +134,7 @@
 
                     return (request.then(handleSuccess, handleError));
                 },
-        		auditActions: [
+        		auditActions: [ 'ALL_ACTIONS',
                               	'CREATE_UDR', 
                             	'UPDATE_UDR', 
                             	'UPDATE_UDR_META', 
@@ -849,6 +849,45 @@
             return ({
                 queryFlights: queryFlights,
                 queryPassengers: queryPassengers
+            });
+        })
+        .service("filterService",function($http,$q) {
+            var filterURLS={
+                    filter:'/gtas/filter/',
+                },
+                getFilter = function (userId) {
+                    var dfd = $q.defer();
+                    dfd.resolve($http({
+                        method: 'get',
+                        url: serviceURLs.filter+userId
+                    }));
+                    return dfd.promise;
+                },
+                setFilter = function (filter,userId) {
+
+                    var dfd = $q.defer();
+                    dfd.resolve($http({
+                        method: 'post',
+                        url: filterURLS.filter+userId,
+                        data: filter
+                    }));
+                    return dfd.promise;
+                },
+
+                updateFilter = function (filter,userId) {
+                    var dfd = $q.defer();
+                    dfd.resolve($http({
+                        method: 'put',
+                        url: filterURLS.filter+userId,
+                        data: filter
+                    }));
+                    return dfd.promise;
+                };
+            // Return public API.
+            return ({
+                getFilter: getFilter,
+                setFilter: setFilter,
+                updateFilter:updateFilter
             });
         });
 }());

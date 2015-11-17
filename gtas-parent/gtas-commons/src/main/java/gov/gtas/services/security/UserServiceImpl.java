@@ -93,8 +93,6 @@ public class UserServiceImpl implements UserService {
 				filterEntity.setDestinationAirports(mappedEntity.getDestinationAirports());
 				filterEntity.setEtaStart(mappedEntity.getEtaStart());
 				filterEntity.setEtaEnd(mappedEntity.getEtaEnd());
-				filterEntity.setEtdStart(mappedEntity.getEtdStart());
-				filterEntity.setEtdEnd(mappedEntity.getEtdEnd());
 				filterEntity.setFlightDirection(mappedEntity.getFlightDirection());
 				entity.setFilter(filterEntity);
 			}
@@ -109,7 +107,10 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public UserData findById(String id) {
 		User userEntity = userRepository.findOne(id);
-		UserData userData = userServiceUtil.mapUserDataFromEntity(userEntity);
+		UserData userData = null;
+		if(userEntity != null){
+		    userData = userServiceUtil.mapUserDataFromEntity(userEntity);
+		}
 		return userData;
 
 	}

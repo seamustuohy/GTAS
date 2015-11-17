@@ -4,14 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -122,13 +120,10 @@ public class UserServiceIT {
 		destinationAirports.add("KEF");
 		destinationAirports.add("PFJ");
 		destinationAirports.add("RKV");
-		Date etaStart = new Date();
-		Date etaEnd = DateUtils.addDays(etaStart, 30);
-		Date etdStart = DateUtils.addDays(etaStart, 0);
-		Date etdEnd = DateUtils.addDays(etaStart, 15);
+		int etaStart=-2;
+		int etaEnd=2;
 
-		FilterData filter = new FilterData("iTest99", "I", originAirports, destinationAirports, etaStart, etaEnd,
-				etdStart, etdEnd);
+		FilterData filter = new FilterData("iTest99", "I", originAirports, destinationAirports, etaStart, etaEnd);
 
 		UserData expectedUser = new UserData("iTest99", PASSWORD, "test", "99", 1, authRoles, filter);
 
@@ -189,13 +184,10 @@ public class UserServiceIT {
 
 		Set<String> destinationAirports = new HashSet<String>();
 		destinationAirports.add("LAE");
-		Date etaStart = new Date();
-		Date etaEnd = DateUtils.addDays(etaStart, 3);
-		Date etdStart = new Date();
-		Date etdEnd = DateUtils.addDays(etaStart, 13);
+		int etaStart=-3;
+		int etaEnd=3;
 
-		FilterData filterData = new FilterData("iTest99", "O", originAirports, destinationAirports, etaStart, etaEnd,
-				etdStart, etdEnd);
+		FilterData filterData = new FilterData("iTest99", "O", originAirports, destinationAirports, etaStart, etaEnd);
 
 		System.out.println(authRoles);
 		UserData expectedUser = new UserData(USER_ID, PASSWORD, "test", "99", 1, authRoles, filterData);

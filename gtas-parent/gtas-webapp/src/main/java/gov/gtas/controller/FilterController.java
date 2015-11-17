@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,19 +33,19 @@ public class FilterController {
         binder.addValidators(filterDataValidator);
     }
 
-	@RequestMapping( method = RequestMethod.GET,value = "/filter/{userId}/"
+	@RequestMapping( method = RequestMethod.GET,value = "/filter/{userId}"
 			,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody  FilterData getUserFilter(@RequestBody FilterData filterData) {
-		return filterService.findById(filterData.getUserId());
+	public @ResponseBody  FilterData getUserFilter(@PathVariable(value = "id") String userId) {
+		return filterService.findById(userId);
 	}
 	
-	@RequestMapping( method = RequestMethod.POST,value = "/filter/{userId}/"
+	@RequestMapping( method = RequestMethod.POST,value = "/filter/{userId}"
 			,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody  FilterData createUserFilter(@RequestBody FilterData filterData) {
 		return filterService.create(filterData);
 	}
 	
-	@RequestMapping( method = RequestMethod.PUT,value = "/filter/{userId}/"
+	@RequestMapping( method = RequestMethod.PUT,value = "/filter/{userId}"
 			,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody  FilterData updateUserFilter(@RequestBody FilterData filterData) {
 		return filterService.update(filterData);

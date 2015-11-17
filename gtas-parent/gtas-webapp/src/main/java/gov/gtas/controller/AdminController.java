@@ -1,5 +1,7 @@
 package gov.gtas.controller;
 
+import gov.gtas.constant.AuditLogConstants;
+import gov.gtas.enumtype.AuditActionType;
 import gov.gtas.model.AuditRecord;
 import gov.gtas.services.AuditLogPersistenceService;
 import gov.gtas.util.DateCalendarUtils;
@@ -51,7 +53,15 @@ public class AdminController {
 			nd = DateCalendarUtils.parseJsonDate(endDate);
 			nd = DateCalendarUtils.addOneDayToDate(nd);
 		}
-		return fetchAuditLogData(st, nd);
+		AuditActionType actionType = null;
+		if(action != null && !action.equals(AuditLogConstants.SHOW_ALL_ACTION)){
+			try{
+				actionType = AuditActionType.valueOf(action);
+			} catch (Exception ex){
+				logger.error("AdminController.getAuditlog - invalid action type:"+action);
+			}
+		}
+		return fetchAuditLogData(user, actionType, st, nd);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/auditlog/{startDate}/{endDate}")
@@ -60,22 +70,22 @@ public class AdminController {
 		Date endt = StringUtils.isEmpty(endDate) ? null:DateCalendarUtils.parseJsonDate(endDate);
 		return fetchAuditLogData(stdt, endt);
 	}
-
 	private List<AuditRecordVo> fetchAuditLogData(Date startDate, Date endDate) {
-		Date from = null;
-		if (startDate != null) {
-			from = startDate;
-		} else {
+		return fetchAuditLogData(null, null, startDate, endDate);
+	}
+	private List<AuditRecordVo> fetchAuditLogData(String userId, AuditActionType action, Date startDate, Date endDate) {
+		Date from = startDate;
+		Date to = endDate;
+		if (from == null && StringUtils.isEmpty(userId) && action == null) {
 			logger.debug("AdminController: fetchAuditLogData - start date is null, using current date.");
 			from = DateCalendarUtils.stripTime(new Date());
 		}
 
-		List<AuditRecord> res = null;
-		if (endDate == null) {
-			res = auditService.findByDateFrom(from);
-		} else {
-			res = auditService.findByDateRange(from, endDate);
+		if (from != null && to == null) {
+			logger.debug("AdminController: fetchAuditLogData - end date is null, using current date.");
+			to = DateCalendarUtils.addOneDayToDate(DateCalendarUtils.stripTime(new Date()));
 		}
+		List<AuditRecord> res = auditService.findByUserActionDateRange(userId, action, from, to);
 		List<AuditRecordVo> ret = new LinkedList<AuditRecordVo>();
 		if (res != null) {
 			res.forEach(ar -> ret.add(new AuditRecordVo(ar)));

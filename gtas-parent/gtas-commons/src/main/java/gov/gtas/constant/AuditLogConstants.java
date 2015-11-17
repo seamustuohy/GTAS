@@ -2,6 +2,9 @@ package gov.gtas.constant;
 
 public class AuditLogConstants {
     private AuditLogConstants(){}
+    
+    //UI dropdown for audit action
+    public static final String SHOW_ALL_ACTION = "ALL_ACTIONS";
 
     // Watchlist logging constants
     public static final String WATCHLIST_LOG_TARGET_PREFIX = "{WLname:";
