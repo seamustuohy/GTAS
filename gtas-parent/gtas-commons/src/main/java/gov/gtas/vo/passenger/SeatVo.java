@@ -8,6 +8,7 @@ import gov.gtas.validators.Validatable;
 
 public class SeatVo implements Validatable {
     private String number;
+    private Boolean apis = Boolean.valueOf(false);
     
     /** unique id to reference back to a passenger */
     private String travelerReferenceNumber;
@@ -21,6 +22,12 @@ public class SeatVo implements Validatable {
     
 	public String getNumber() {
         return number;
+    }
+    public Boolean getApis() {
+        return apis;
+    }
+    public void setApis(Boolean apis) {
+        this.apis = apis;
     }
     public void setNumber(String number) {
         this.number = number;
@@ -47,7 +54,6 @@ public class SeatVo implements Validatable {
     @Override
 	public boolean isValid() {
 		return StringUtils.isNotBlank(this.number)
-		       && StringUtils.isNotBlank(this.travelerReferenceNumber)
 		       && StringUtils.isNotBlank(this.origin)
 		       && StringUtils.isNotBlank(this.destination);
 	}

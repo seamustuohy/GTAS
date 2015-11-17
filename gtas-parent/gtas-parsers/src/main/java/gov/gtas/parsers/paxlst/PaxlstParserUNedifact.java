@@ -2,6 +2,8 @@ package gov.gtas.parsers.paxlst;
 
 import java.util.Date;
 
+import org.springframework.util.CollectionUtils;
+
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
@@ -32,6 +34,7 @@ import gov.gtas.vo.passenger.DocumentVo;
 import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.PassengerVo;
 import gov.gtas.vo.passenger.ReportingPartyVo;
+import gov.gtas.vo.passenger.SeatVo;
 
 public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {   
     public PaxlstParserUNedifact() {
@@ -293,6 +296,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
             }
         }
 
+        String birthCountry = null;
         for (;;) {
             LOC loc = getConditionalSegment(LOC.class);
             if (loc == null) {
@@ -307,14 +311,11 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
             case PORT_OF_EMBARKATION:
                 p.setEmbarkation(val);
                 break;
-            case AIRPORT_OF_FIRST_US_ARRIVAL:
-                // TODO: not sure how to handle this.
-                break;
             case COUNTRY_OF_RESIDENCE:
                 p.setResidencyCountry(val);
                 break;
             case PLACE_OF_BIRTH:
-                // TODO: we don't have a field for this
+                birthCountry = val;
                 break;
             }
         }
@@ -331,6 +332,9 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
         for (;;) {
             NAT nat = getConditionalSegment(NAT.class);
             if (nat == null) {
+                if (p.getCitizenshipCountry() == null && birthCountry != null) {
+                    p.setCitizenshipCountry(birthCountry);
+                }
                 break;
             }
             p.setCitizenshipCountry(nat.getNationalityCode());
@@ -343,10 +347,23 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
             }
             switch (rff.getReferenceCodeQualifier()) {
             case ASSIGNED_SEAT:
-                // seat info
+                if (CollectionUtils.isEmpty(parsedMessage.getFlights())) {
+                    break;
+                }
+                SeatVo seat = new SeatVo();
+                seat.setApis(Boolean.valueOf(true));
+                seat.setNumber(rff.getReferenceIdentifier());
+                FlightVo firstFlight = parsedMessage.getFlights().get(0);
+                seat.setOrigin(firstFlight.getOrigin());
+                seat.setDestination(firstFlight.getDestination());
+                if (seat.isValid()) {
+                    p.getSeatAssignments().add(seat);
+                }
+                
                 break;
+
             case CUSTOMER_REF_NUMBER:
-                // freq flyer info
+                // possibly freq flyer # 
                 break;
             }
         }
