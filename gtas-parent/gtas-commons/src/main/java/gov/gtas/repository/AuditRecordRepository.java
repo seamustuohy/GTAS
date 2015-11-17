@@ -20,7 +20,16 @@ public interface AuditRecordRepository extends CrudRepository<AuditRecord, Long>
 	
 	@Query("SELECT ar FROM AuditRecord ar WHERE ar.timestamp >= :fromDate and  ar.timestamp <= :toDate")
     public List<AuditRecord> findByTimestampRange(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);  
+
+	@Query("SELECT ar FROM AuditRecord ar WHERE ar.user = :user and ar.timestamp >= :fromDate and  ar.timestamp <= :toDate")
+    public List<AuditRecord> findByUserTimestampRange(@Param("user") User user, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate); 
 	
+	@Query("SELECT ar FROM AuditRecord ar WHERE ar.actionType = :action and ar.timestamp >= :fromDate and  ar.timestamp <= :toDate")
+    public List<AuditRecord> findByActionTimestampRange(@Param("action") AuditActionType action, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate); 
+	
+	@Query("SELECT ar FROM AuditRecord ar WHERE ar.user = :user and ar.actionType = :action and ar.timestamp >= :fromDate and  ar.timestamp <= :toDate")
+    public List<AuditRecord> findByUserActionTimestampRange(@Param("user") User user, @Param("action") AuditActionType action, @Param("fromDate") Date fromDate, @Param("toDate") Date toDate);  
+
 	@Query("SELECT ar FROM AuditRecord ar WHERE ar.timestamp >= :fromDate")
     public List<AuditRecord> findByTimestampFrom(@Param("fromDate") Date fromDate);   
 }

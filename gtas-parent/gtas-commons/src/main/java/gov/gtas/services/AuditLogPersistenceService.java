@@ -13,6 +13,7 @@ public interface AuditLogPersistenceService {
 	public AuditRecord create(AuditActionType actionType, String target, Object actionData, String message, String userId);
     public AuditRecord findById(Long id);
 
+    public List<AuditRecord> findByUserActionDateRange(String userId, AuditActionType action,  Date dateFrom, Date dateTo);
     public List<AuditRecord> findByDateRange(Date dateFrom, Date dateTo);
     public List<AuditRecord> findByDateFrom(Date dateFrom);
     public List<AuditRecord> findByUser(String userId);

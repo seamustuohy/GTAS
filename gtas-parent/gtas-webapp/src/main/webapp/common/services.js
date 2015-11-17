@@ -145,7 +145,7 @@
         .service('auditService', function($http, $q){
         	var GET_AUDIT_RECORDS_URL = "/gtas/auditlog";
             function handleError(response) {
-                if (response.data.message !== undefined) {
+                if (response.data.message === undefined) {
                     return $q.reject("An unknown error occurred.");
                 }
                 return $q.reject(response.data.message);
@@ -185,7 +185,7 @@
 
                     return (request.then(handleSuccess, handleError));
                 },
-        		auditActions: [
+        		auditActions: [ 'ALL_ACTIONS',
                               	'CREATE_UDR', 
                             	'UPDATE_UDR', 
                             	'UPDATE_UDR_META', 

@@ -107,7 +107,10 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public UserData findById(String id) {
 		User userEntity = userRepository.findOne(id);
-		UserData userData = userServiceUtil.mapUserDataFromEntity(userEntity);
+		UserData userData = null;
+		if(userEntity != null){
+		    userData = userServiceUtil.mapUserDataFromEntity(userEntity);
+		}
 		return userData;
 
 	}

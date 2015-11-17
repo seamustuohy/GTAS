@@ -19,6 +19,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,6 +150,38 @@ public class AuditLogPersistenceServiceImpl implements
 		return create(actionType, target, actionData, message, user);
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.AuditLogPersistenceService#findByUserActionDateRange(java.lang.String, gov.gtas.enumtype.AuditActionType, java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<AuditRecord> findByUserActionDateRange(String userId,
+			AuditActionType action, Date dateFrom, Date dateTo) {
+		
+		List<AuditRecord> ret = new LinkedList<AuditRecord>();
+		boolean byUser = !StringUtils.isEmpty(userId);
+		Date today = new Date();
+		if(dateFrom != null && byUser && action != null){
+			User user = fetchUser(userId);
+			ret = auditLogRepository.findByUserActionTimestampRange(user, action, dateFrom, dateTo!=null?dateTo:today);
+		} else if(dateFrom != null && byUser){
+			User user = fetchUser(userId);
+			ret = auditLogRepository.findByUserTimestampRange(user, dateFrom, dateTo!=null?dateTo:today);
+		} else if(dateFrom != null && action != null){
+			ret = auditLogRepository.findByActionTimestampRange(action, dateFrom, dateTo!=null?dateTo:today);
+		} else if(dateFrom != null){
+			ret = auditLogRepository.findByTimestampRange(dateFrom, dateTo!=null?dateTo:today);
+		} else if(byUser && action != null){
+			User user = fetchUser(userId);
+			ret = auditLogRepository.findByUserAndActionType(user, action);
+		} else if(byUser){
+			User user = fetchUser(userId);
+			ret = auditLogRepository.findByUser(user);			
+		} else if(action != null){
+			ret = auditLogRepository.findByActionType(action);
+		}
+		return ret;
+	}
+
 	/**
 	 * Fetches the user object and throws an unchecked exception if the user
 	 * cannot be found.
@@ -159,8 +192,11 @@ public class AuditLogPersistenceServiceImpl implements
 	 */
 	private User fetchUser(final String userId) {
 		UserData userData = userService.findById(userId);
-		final User user = userServiceUtil.mapUserEntityFromUserData(userData);
-		if (user.getUserId() == null) {
+		User user = null;
+		if(userData != null){
+		   user = userServiceUtil.mapUserEntityFromUserData(userData);
+	    }
+		if (user == null || user.getUserId() == null) {
 			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
 			throw errorHandler.createException(
 					CommonErrorConstants.INVALID_USER_ID_ERROR_CODE, userId);
