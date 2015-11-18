@@ -42,6 +42,7 @@ public class PassengerVo extends BaseVo implements Validatable {
     private Boolean deleted = Boolean.FALSE;
     private String seat;
     private String paxId;
+    
     // flight info
     private String flightId;
     private String flightNumber;
@@ -53,14 +54,17 @@ public class PassengerVo extends BaseVo implements Validatable {
     private Date eta;
     private String etdLocalTZ;
     private String etaLocalTZ;
-    // hits info
-    private Boolean onRuleHitList = Boolean.FALSE;
-    private Boolean onWatchList = Boolean.FALSE;
-    private Boolean onWatchListDoc = Boolean.FALSE;
     private String flightOrigin;
     private String flightDestination;
     private String flightETD;
     private String flightETA;
+
+    // hits info
+    private Boolean onRuleHitList = Boolean.FALSE;
+    private Boolean onWatchList = Boolean.FALSE;
+    private Boolean onWatchListDoc = Boolean.FALSE;
+    
+    // co-pax?
     private List<PassengerVo> passengers;
 	private List<DocumentVo> documents = new ArrayList<>();
 	private FlightHistoryVo flightHistoryVo;

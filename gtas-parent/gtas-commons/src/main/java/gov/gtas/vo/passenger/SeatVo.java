@@ -20,6 +20,13 @@ public class SeatVo implements Validatable {
     private String origin;
     private String destination;
     
+    /*
+     * for display purposes only.
+     */
+    private String flightNumber;
+    private String firstName;
+    private String lastName;
+    
 	public String getNumber() {
         return number;
     }
@@ -50,7 +57,24 @@ public class SeatVo implements Validatable {
     public void setDestination(String destination) {
         this.destination = destination;
     }
-    
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
     @Override
 	public boolean isValid() {
 		return StringUtils.isNotBlank(this.number)

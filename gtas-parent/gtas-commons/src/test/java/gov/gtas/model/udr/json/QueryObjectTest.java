@@ -106,8 +106,8 @@ public class QueryObjectTest {
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.FIRST_NAME.getFieldName(), 
 				TypeEnum.STRING, CriteriaOperatorEnum.NOT_EQUAL, new String[]{"John"});
 		builder.addNestedQueryObject(QueryConditionEnum.OR);
-		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.SEAT.getFieldName(), 
-				TypeEnum.STRING, CriteriaOperatorEnum.EQUAL, new String[]{"12345"});
+		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.EMBARKATION_COUNTRY.getFieldName(), 
+				TypeEnum.STRING, CriteriaOperatorEnum.EQUAL, new String[]{"GBR"});
 		builder.addTerm(EntityEnum.PASSENGER, PassengerMapping.DEBARKATION.getFieldName(), 
 				TypeEnum.STRING, CriteriaOperatorEnum.NOT_EQUAL, new String[]{"Timbuktu"});
 
@@ -133,7 +133,7 @@ public class QueryObjectTest {
 		verifyTerm(mintermList.get(1), EntityEnum.PASSENGER, PassengerMapping.DOB.getFieldName(), CriteriaOperatorEnum.LESS, new String[]{"1978-12-24"} );
 		verifyTerm(mintermList.get(2), EntityEnum.PASSENGER, PassengerMapping.MIDDLE_NAME.getFieldName(), CriteriaOperatorEnum.EQUAL, new String[]{"Paul"} );
 		verifyTerm(mintermList.get(3), EntityEnum.PASSENGER, PassengerMapping.FIRST_NAME.getFieldName(), CriteriaOperatorEnum.NOT_EQUAL, new String[]{"John"} );
-		verifyTerm(mintermList.get(4), EntityEnum.PASSENGER, PassengerMapping.SEAT.getFieldName(), CriteriaOperatorEnum.EQUAL, new String[]{"12345"} );
+		verifyTerm(mintermList.get(4), EntityEnum.PASSENGER, PassengerMapping.EMBARKATION_COUNTRY.getFieldName(), CriteriaOperatorEnum.EQUAL, new String[]{"GBR"} );
 
 		mintermList = flatList.get(3);
 		assertEquals(5,mintermList.size());
