@@ -6,6 +6,7 @@ import gov.gtas.model.ErrorRecord;
 import gov.gtas.repository.ErrorRecordRepository;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ public class ErrorPersistenceServiceImpl implements ErrorPersistenceService{
 	@Override
 	public ErrorDetailInfo create(ErrorDetailInfo error) {
 		ErrorRecord err =  errorRecordRepository.save(new ErrorRecord(error));
-		return new BasicErrorDetailInfo(err.getId(), err.getCode(), err.getDescription(), err.fetchErrorDetails());
+		return new BasicErrorDetailInfo(err.getId(), err.getCode(), err.getTimestamp(), err.getDescription(), err.fetchErrorDetails());
 	}
 
 	/* (non-Javadoc)
@@ -33,7 +34,7 @@ public class ErrorPersistenceServiceImpl implements ErrorPersistenceService{
 	@Override
 	public ErrorDetailInfo findById(Long id) {
 		ErrorRecord err =  errorRecordRepository.findOne(id);
-		return new BasicErrorDetailInfo(err.getId(), err.getCode(), err.getDescription(), err.fetchErrorDetails());
+		return new BasicErrorDetailInfo(err.getId(), err.getCode(), err.getTimestamp(), err.getDescription(), err.fetchErrorDetails());
 	}
 
 	/* (non-Javadoc)
@@ -62,12 +63,14 @@ public class ErrorPersistenceServiceImpl implements ErrorPersistenceService{
 	}
 
 	private List<ErrorDetailInfo> convert(List<ErrorRecord> lst){
-		List<ErrorDetailInfo> ret = null;
+		List<ErrorDetailInfo> ret;
 		if(!CollectionUtils.isEmpty(lst)){
 			ret = lst.stream().map(
 					               (ErrorRecord e)->
-					                    new BasicErrorDetailInfo(e.getId(), e.getCode(), e.getDescription(), e.fetchErrorDetails()))
+					                    new BasicErrorDetailInfo(e.getId(), e.getCode(), e.getTimestamp(), e.getDescription(), e.fetchErrorDetails()))
 					          .collect(Collectors.toList());
+		} else {
+			ret = new LinkedList<ErrorDetailInfo>();
 		}
 		return ret;
 		

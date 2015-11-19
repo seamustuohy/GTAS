@@ -1,19 +1,24 @@
 package gov.gtas.error;
 
+import gov.gtas.util.DateCalendarUtils;
+
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 public class BasicErrorDetailInfo implements ErrorDetailInfo {
-	private List<String> errorDetails;
 	private Long errorId;
 	private String errorCode;
+	private String timestamp;
 	private String errorDescription;
+	private List<String> errorDetails;
 	
-	public BasicErrorDetailInfo(Long id, String code, String description, List<String> details){
+	public BasicErrorDetailInfo(Long id, String code, Date timestamp, String description, List<String> details){
 		this.errorDetails = details;
 		this.errorCode = code;
+		this.timestamp = DateCalendarUtils.formatRuleEngineDateTime(timestamp);
 		this.errorDescription = description != null?description:StringUtils.EMPTY;
 		this.errorId = id;
 	}
@@ -59,6 +64,13 @@ public class BasicErrorDetailInfo implements ErrorDetailInfo {
 	 */
 	public void setErrorDescription(String errorDescription) {
 		this.errorDescription = errorDescription;
+	}
+	/* (non-Javadoc)
+	 * @see gov.gtas.error.ErrorDetailInfo#getErrorTimestamp()
+	 */
+	@Override
+	public String getErrorTimestamp() {
+		return this.timestamp;
 	}
 
 }

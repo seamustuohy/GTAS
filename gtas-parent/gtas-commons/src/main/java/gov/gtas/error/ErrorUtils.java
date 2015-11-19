@@ -2,6 +2,7 @@ package gov.gtas.error;
 
 import gov.gtas.constant.CommonErrorConstants;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class ErrorUtils {
     	return createErrorDetails(CommonErrorConstants.SYSTEM_ERROR_CODE, exception, true);
     }
     public static BasicErrorDetailInfo createErrorDetails(String errorCode, Exception exception, boolean addStackTrace){
-     	BasicErrorDetailInfo ret = new BasicErrorDetailInfo(null, errorCode, exception.getMessage(), null);
+     	BasicErrorDetailInfo ret = new BasicErrorDetailInfo(null, errorCode, new Date(), exception.getMessage(), null);
      	if(addStackTrace){
      		List<String> details = new LinkedList<String>();
      		constructExceptionDetails(exception, details);

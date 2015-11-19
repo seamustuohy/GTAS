@@ -18,6 +18,7 @@ import static gov.gtas.constant.GtasSecurityConstants.UNAUTHORIZED_ERROR_CODE;
 import static gov.gtas.constant.GtasSecurityConstants.UNAUTHORIZED_ERROR_MESSAGE;
 import gov.gtas.constant.CommonErrorConstants;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,7 +155,7 @@ public class BasicErrorHandler implements ErrorHandler {
 		if (exception != null) {
 			ret = processError(exception);
 		} else {
-			ret = new BasicErrorDetailInfo(null, code, description, details);
+			ret = new BasicErrorDetailInfo(null, code, new Date(), description, details);
 		}
 		return ret;
 	}

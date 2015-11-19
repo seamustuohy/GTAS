@@ -2,8 +2,10 @@ package gov.gtas.controller;
 
 import gov.gtas.constant.AuditLogConstants;
 import gov.gtas.enumtype.AuditActionType;
+import gov.gtas.error.ErrorDetailInfo;
 import gov.gtas.model.AuditRecord;
 import gov.gtas.services.AuditLogPersistenceService;
+import gov.gtas.services.ErrorPersistenceService;
 import gov.gtas.util.DateCalendarUtils;
 import gov.gtas.vo.AuditRecordVo;
 
@@ -37,6 +39,9 @@ public class AdminController {
 
 	@Autowired
 	private AuditLogPersistenceService auditService;
+	
+	@Autowired
+	private ErrorPersistenceService errorService;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/auditlog")
 	public List<AuditRecordVo> getAuditlog(
@@ -62,6 +67,23 @@ public class AdminController {
 			}
 		}
 		return fetchAuditLogData(user, actionType, st, nd);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/errorlog")
+	public List<ErrorDetailInfo> getErrorlog(
+			@RequestParam(value="code", required=false) String code,
+			@RequestParam(value="startDate", required=false) String startDate,
+			@RequestParam(value="endDate", required=false) String endDate) throws ParseException{
+		Date st = null;
+		Date nd = null;
+		if(startDate != null){
+			st = DateCalendarUtils.parseJsonDate(startDate);
+		}
+		if(endDate != null){
+			nd = DateCalendarUtils.parseJsonDate(endDate);
+			nd = DateCalendarUtils.addOneDayToDate(nd);
+		}
+		return fetchErrorLogData(code, st, nd);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/auditlog/{startDate}/{endDate}")
@@ -91,6 +113,27 @@ public class AdminController {
 			res.forEach(ar -> ret.add(new AuditRecordVo(ar)));
 		}
 		return ret;
+	}
+
+	private List<ErrorDetailInfo> fetchErrorLogData(String code, Date startDate, Date endDate) {
+		Date from = startDate;
+		Date to = endDate;
+		if (from == null && StringUtils.isEmpty(code)) {
+			logger.debug("AdminController: fetchErrorLogData - start date is null, using current date.");
+			from = DateCalendarUtils.stripTime(new Date());
+		}
+
+		if (from != null && to == null) {
+			logger.debug("AdminController: fetchErrorLogData - end date is null, using current date.");
+			to = DateCalendarUtils.addOneDayToDate(DateCalendarUtils.stripTime(new Date()));
+		}
+		List<ErrorDetailInfo> res = null;
+		if(StringUtils.isEmpty(code)){
+		 res = errorService.findByDateRange(from, to);
+		} else {
+			res = errorService.findByCode(code);
+		}
+		return res;
 	}
 
 }

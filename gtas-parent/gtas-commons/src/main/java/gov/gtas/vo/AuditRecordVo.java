@@ -1,6 +1,7 @@
 package gov.gtas.vo;
 
 import gov.gtas.model.AuditRecord;
+import gov.gtas.model.User;
 import gov.gtas.util.DateCalendarUtils;
 
 public class AuditRecordVo {
@@ -8,8 +9,10 @@ public class AuditRecordVo {
 	private String status;
 	private String message;
 	private String user;
-	//private String userName;
+	private String userName;
 	private String timestamp;
+	private String target;
+	private String actionData;
 	
 	public AuditRecordVo(){}
 	
@@ -17,8 +20,12 @@ public class AuditRecordVo {
 		this.actionType = auditRecord.getActionType().toString();
 		this.status = auditRecord.getActionStatus().toString();
 		this.message = auditRecord.getMessage();
-		this.user = auditRecord.getUser().getUserId();
-		this.timestamp = DateCalendarUtils.formatRuleEngineDateTime(auditRecord.getTimestamp());		
+		final User usr = auditRecord.getUser();
+		this.user = usr.getUserId();
+		this.userName = usr.getFirstName()+" "+usr.getLastName();
+		this.timestamp = DateCalendarUtils.formatRuleEngineDateTime(auditRecord.getTimestamp());
+		this.target = auditRecord.getTarget();
+		this.actionData = auditRecord.getActionData();
 	}
 
 	public String getActionType() {
@@ -59,6 +66,48 @@ public class AuditRecordVo {
 
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+	/**
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+	 * @return the target
+	 */
+	public String getTarget() {
+		return target;
+	}
+
+	/**
+	 * @param target the target to set
+	 */
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
+	/**
+	 * @return the actionData
+	 */
+	public String getActionData() {
+		return actionData;
+	}
+
+	/**
+	 * @param actionData the actionData to set
+	 */
+	public void setActionData(String actionData) {
+		this.actionData = actionData;
 	}
 	
 }
