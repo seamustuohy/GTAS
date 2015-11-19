@@ -40,6 +40,9 @@ public class PnrVo extends MessageVo implements Validatable {
     private List<AgencyVo> agencies = new ArrayList<>();
     private List<FlightLegVo> flightLegs = new ArrayList<>();
 	
+    /** seat assignments in this pnr.  for display purposes only */
+    private List<SeatVo> seatAssignments = new ArrayList<>();
+    
     public PnrVo() {
         this.bagCount = 0;
         this.passengerCount = 0;
@@ -243,6 +246,14 @@ public class PnrVo extends MessageVo implements Validatable {
 
     public void setFrequentFlyerDetails(List<FrequentFlyerVo> frequentFlyerDetails) {
         this.frequentFlyerDetails = frequentFlyerDetails;
+    }
+
+    public List<SeatVo> getSeatAssignments() {
+        return seatAssignments;
+    }
+
+    public void setSeatAssignments(List<SeatVo> seatAssignments) {
+        this.seatAssignments = seatAssignments;
     }
 
     @Override

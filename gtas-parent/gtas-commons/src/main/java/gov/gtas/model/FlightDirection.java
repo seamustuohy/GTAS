@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -16,10 +15,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 @Entity
 @Table(name = "flight_direction")
 public class FlightDirection extends BaseEntity {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "code", length = 1, nullable = false)

@@ -8,6 +8,7 @@ import gov.gtas.validators.Validatable;
 
 public class SeatVo implements Validatable {
     private String number;
+    private Boolean apis = Boolean.valueOf(false);
     
     /** unique id to reference back to a passenger */
     private String travelerReferenceNumber;
@@ -19,8 +20,21 @@ public class SeatVo implements Validatable {
     private String origin;
     private String destination;
     
+    /*
+     * for display purposes only.
+     */
+    private String flightNumber;
+    private String firstName;
+    private String lastName;
+    
 	public String getNumber() {
         return number;
+    }
+    public Boolean getApis() {
+        return apis;
+    }
+    public void setApis(Boolean apis) {
+        this.apis = apis;
     }
     public void setNumber(String number) {
         this.number = number;
@@ -43,11 +57,27 @@ public class SeatVo implements Validatable {
     public void setDestination(String destination) {
         this.destination = destination;
     }
-    
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
     @Override
 	public boolean isValid() {
 		return StringUtils.isNotBlank(this.number)
-		       && StringUtils.isNotBlank(this.travelerReferenceNumber)
 		       && StringUtils.isNotBlank(this.origin)
 		       && StringUtils.isNotBlank(this.destination);
 	}

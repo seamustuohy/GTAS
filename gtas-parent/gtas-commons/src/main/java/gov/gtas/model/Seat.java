@@ -2,6 +2,7 @@ package gov.gtas.model;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -9,13 +10,18 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "seat",
-    uniqueConstraints={@UniqueConstraint(columnNames={"number", "passenger_id", "flight_id"})}
+    uniqueConstraints={@UniqueConstraint(columnNames={"number", "apis", "passenger_id", "flight_id"})}
 )
 public class Seat extends BaseEntity {
     private static final long serialVersionUID = 1L;
     public Seat() { }
     
+    @Column(nullable = false)
     private String number;
+    
+    /** true if the seat number was derived from APIS data */
+    @Column(nullable = false)
+    private Boolean apis = Boolean.valueOf(false);
     
     @ManyToOne
     private Passenger passenger;
@@ -29,6 +35,14 @@ public class Seat extends BaseEntity {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public Boolean getApis() {
+        return apis;
+    }
+
+    public void setApis(Boolean apis) {
+        this.apis = apis;
     }
 
     public Passenger getPassenger() {
@@ -49,7 +63,7 @@ public class Seat extends BaseEntity {
     
     @Override
     public int hashCode() {
-       return Objects.hash(this.number, this.passenger, this.flight);
+       return Objects.hash(this.number, this.apis, this.passenger, this.flight);
     }
     
     @Override
@@ -60,6 +74,7 @@ public class Seat extends BaseEntity {
             return false;
         final Seat other = (Seat)obj;
         return Objects.equals(this.number, other.number)
+                && Objects.equals(this.apis, other.apis)
                 && Objects.equals(this.passenger, other.passenger)
                 && Objects.equals(this.flight, other.flight);
     }

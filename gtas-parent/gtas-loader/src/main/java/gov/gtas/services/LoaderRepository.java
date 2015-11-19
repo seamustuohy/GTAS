@@ -248,6 +248,7 @@ public class LoaderRepository {
                 s.setPassenger(p);
                 s.setFlight(f);
                 s.setNumber(seat.getNumber());
+                s.setApis(seat.getApis());
                 p.getSeatAssignments().add(s);
                 return;
             }

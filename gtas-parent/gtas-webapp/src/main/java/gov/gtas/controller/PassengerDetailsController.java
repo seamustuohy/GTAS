@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -20,18 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import gov.gtas.vo.passenger.AddressVo;
-import gov.gtas.vo.passenger.AgencyVo;
-import gov.gtas.vo.passenger.CreditCardVo;
-import gov.gtas.vo.passenger.DocumentVo;
-import gov.gtas.vo.passenger.EmailVo;
-import gov.gtas.vo.passenger.FrequentFlyerVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.PhoneVo;
-import gov.gtas.vo.passenger.PnrVo;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.FlightLegVo;
-import gov.gtas.vo.passenger.FlightHistoryVo;
+
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
@@ -43,10 +33,24 @@ import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
+import gov.gtas.model.Seat;
 import gov.gtas.services.FlightService;
 import gov.gtas.services.PassengerService;
 import gov.gtas.services.PnrService;
 import gov.gtas.util.LobUtils;
+import gov.gtas.vo.passenger.AddressVo;
+import gov.gtas.vo.passenger.AgencyVo;
+import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.DocumentVo;
+import gov.gtas.vo.passenger.EmailVo;
+import gov.gtas.vo.passenger.FlightHistoryVo;
+import gov.gtas.vo.passenger.FlightLegVo;
+import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.vo.passenger.FrequentFlyerVo;
+import gov.gtas.vo.passenger.PassengerVo;
+import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.vo.passenger.PnrVo;
+import gov.gtas.vo.passenger.SeatVo;
 
 @Controller
 public class PassengerDetailsController {
@@ -82,9 +86,9 @@ public class PassengerDetailsController {
 		Long id = Long.valueOf(paxId);
 		Passenger t = pService.findById(id);
 		List<Flight> flightList = fService.getFlightByPaxId(t.getId());
+		Flight theFlight = null;
 		for (Flight _tempFlight : flightList) {
-			if (flightId != null
-					&& _tempFlight.getId().toString().equals(flightId)) {
+			if (flightId != null && _tempFlight.getId().toString().equals(flightId)) {
 				vo.setFlightNumber(_tempFlight.getFlightNumber());
 				vo.setCarrier(_tempFlight.getCarrier());
 				vo.setFlightOrigin(_tempFlight.getOrigin());
@@ -94,7 +98,7 @@ public class PassengerDetailsController {
 				vo.setFlightETD((_tempFlight.getEtd() != null) ? _tempFlight
 						.getEtd().toString() : EMPTY_STRING);
 				vo.setFlightId(_tempFlight.getId().toString());
-				// vo.setStrFlightId(_tempFlight.getId().toString());
+				theFlight = _tempFlight;
 			}
 		}
 
@@ -107,19 +111,36 @@ public class PassengerDetailsController {
 		vo.setDebarkation(t.getDebarkation());
 		vo.setDebarkCountry(t.getDebarkCountry());
 		vo.setDob(t.getDob());
-		vo.setSeat(t.getSeat());
 		vo.setEmbarkation(t.getEmbarkation());
 		vo.setEmbarkCountry(t.getEmbarkCountry());
 		vo.setGender(t.getGender() != null ? t.getGender().toString() : "");
 		vo.setResidencyCountry(t.getResidencyCountry());
 		vo.setSuffix(t.getSuffix());
 		vo.setTitle(t.getTitle());
-		// List<Document> docs = docDao.getPassengerDocuments(t.getId());
+		
+		/*
+		 * get the passenger's seat: if the APIS-derived seat is
+		 * available, we use that; otherwise use the pnr-derived
+		 * seat.
+		 */
+		String pnrSeat = null;
+        for (Seat s : t.getSeatAssignments()) {
+            if (s.getFlight().getId() == theFlight.getId()) {
+                if (s.getApis()) {
+                    vo.setSeat(s.getNumber());
+                    break;
+                } else {
+                    pnrSeat = s.getNumber();
+                }
+            }
+        }
+        if (vo.getSeat() == null && pnrSeat != null) {
+            vo.setSeat(pnrSeat);
+        }
+		
 		_tempIter = t.getDocuments().iterator();
-
 		while (_tempIter.hasNext()) {
 			Document d = (Document) _tempIter.next();
-			// for (Document d : docs) {
 			DocumentVo docVo = new DocumentVo();
 			docVo.setDocumentNumber(d.getDocumentNumber());
 			docVo.setDocumentType(d.getDocumentType());
@@ -283,14 +304,21 @@ public class PassengerDetailsController {
 				pVo.setLastName(p.getLastName());
 				pVo.setFirstName(p.getFirstName());
 				pVo.setMiddleName(p.getMiddleName());
-				
 				target.getPassengers().add(pVo);
-
+				
+				Set<Seat> seats = p.getSeatAssignments();
+				for (Seat s : seats) {
+				    if (!s.getApis()) {
+    				    SeatVo seatVo = new SeatVo();
+    				    seatVo.setFirstName(s.getPassenger().getFirstName());
+    				    seatVo.setLastName(s.getPassenger().getLastName());
+    				    seatVo.setNumber(s.getNumber());
+    				    seatVo.setFlightNumber(s.getFlight().getFlightNumber());
+    				    target.getSeatAssignments().add(seatVo);
+				    }
+				}
 			}
 		}
-		
-		
-		
 		
 		return target;
 	}

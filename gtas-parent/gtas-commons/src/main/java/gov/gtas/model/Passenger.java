@@ -81,9 +81,7 @@ public class Passenger extends BaseEntityAudit {
     
     @Column(nullable = false)
     private Boolean deleted = Boolean.FALSE;
-    
-    private String seat;
-    
+        
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger", fetch = FetchType.EAGER)
     private Set<Document> documents = new HashSet<>();
 
@@ -211,12 +209,6 @@ public class Passenger extends BaseEntityAudit {
     }
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
-    }
-    public String getSeat() {
-        return seat;
-    }
-    public void setSeat(String seat) {
-        this.seat = seat;
     }
     public Set<Seat> getSeatAssignments() {
         return seatAssignments;
