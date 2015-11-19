@@ -4,7 +4,10 @@ import gov.gtas.enumtype.TypeEnum;
 
 public enum CreditCardMapping implements IEntityMapping {
 
-	CREDIT_CARD_NUMBER ("number", "Number", TypeEnum.STRING.getType());
+	ACCOUNT_HOLDER ("accountHolder", "Account Holder", TypeEnum.STRING.getType()),
+	EXPIRATION_DATE ("expiration", "Expiration Date", TypeEnum.DATE.getType()),
+	CREDIT_CARD_NUMBER ("number", "Number", TypeEnum.STRING.getType()),
+	CREDIT_CARD_TYPE ("cardType", "Type", TypeEnum.STRING.getType());
 	
 	private String fieldName;
 	private String friendlyName;

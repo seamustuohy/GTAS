@@ -127,8 +127,60 @@
     "label": "CREDIT CARD",
     "columns": [
       {
+        "id": "CreditCard.accountHolder",
+        "label": "Account Holder",
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
+        ]
+      },
+      {
+        "id": "CreditCard.expiration",
+        "label": "Expiration Date",
+        "type": "date",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN"
+        ],
+        "plugin": "datepicker"
+      },
+      {
         "id": "CreditCard.number",
         "label": "Number",
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
+        ]
+      },
+      {
+        "id": "CreditCard.cardType",
+        "label": "Type",
         "type": "string",
         "operators": [
           "EQUAL",
@@ -898,6 +950,24 @@
         ]
       },
       {
+        "id": "Pnr.dateReceived",
+        "label": "Date Received",
+        "type": "date",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN"
+        ],
+        "plugin": "datepicker"
+      },
+      {
         "id": "Pnr.daysBookedBeforeTravel",
         "label": "Days Booked Before Travel",
         "type": "integer",
@@ -913,6 +983,24 @@
           "BETWEEN",
           "NOT_BETWEEN"
         ]
+      },
+      {
+        "id": "Pnr.departureDate",
+        "label": "Departure Date",
+        "type": "date",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "LESS",
+          "LESS_OR_EQUAL",
+          "GREATER",
+          "GREATER_OR_EQUAL",
+          "BETWEEN",
+          "NOT_BETWEEN"
+        ],
+        "plugin": "datepicker"
       },
       {
         "id": "Pnr.formOfPayment",
@@ -1009,6 +1097,40 @@
   "Agency": {
     "label": "TRAVEL AGENCY",
     "columns": [
+      {
+        "id": "Agency.country",
+        "label": "Country",
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
+        ]
+      },
+      {
+        "id": "Agency.identifier",
+        "label": "Identifier",
+        "type": "string",
+        "operators": [
+          "EQUAL",
+          "NOT_EQUAL",
+          "IN",
+          "NOT_IN",
+          "BEGINS_WITH",
+          "NOT_BEGINS_WITH",
+          "CONTAINS",
+          "NOT_CONTAINS",
+          "ENDS_WITH",
+          "NOT_ENDS_WITH"
+        ]
+      },
       {
         "id": "Agency.location",
         "label": "Location",
