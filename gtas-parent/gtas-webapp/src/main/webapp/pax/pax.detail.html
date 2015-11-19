@@ -137,7 +137,7 @@
                                             <tbody>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Itinerary ({{ passenger.pnrVo.flightLegVo.length }})</strong></td>
+                                                <td><strong>Itinerary ({{ passenger.pnrVo.flightLegs.length }})</strong></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -157,7 +157,7 @@
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <tr ng-repeat="doc in passenger.pnrVo.flightLegVo">
+                                                            <tr ng-repeat="doc in passenger.pnrVo.flightLegs">
                                                                 <td style="text-align: center">{{ doc.legNumber }}</td>
                                                                 <td style="text-align: center">{{ doc.flightNumber }}</td>
                                                                 <td style="text-align: center">{{ doc.originAirport }}</td>
