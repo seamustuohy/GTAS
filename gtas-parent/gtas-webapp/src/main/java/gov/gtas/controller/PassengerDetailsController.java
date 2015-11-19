@@ -313,7 +313,7 @@ public class PassengerDetailsController {
     				    seatVo.setFirstName(s.getPassenger().getFirstName());
     				    seatVo.setLastName(s.getPassenger().getLastName());
     				    seatVo.setNumber(s.getNumber());
-    				    seatVo.setFlightNumber(s.getFlight().getFlightNumber());
+    				    seatVo.setFlightNumber(s.getFlight().getFullFlightNumber());
     				    target.getSeatAssignments().add(seatVo);
 				    }
 				}
