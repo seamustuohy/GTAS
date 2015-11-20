@@ -3,7 +3,12 @@
     color: red;
     font-weight: bold;
   }
-
+  .audit-detail {
+    border: 1px solid;
+    border-color: LightGray;
+    border-radius: 10px;
+    padding-bottom: 20px;
+  }
   form {
     border: 1px solid;
     border-color: LightGray;
@@ -42,8 +47,22 @@
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 18h4v-2h-4v2z"></path><path d="M3 6v2h18V6H3z"></path><path d="M6 13h12v-2H6v2z"></path></svg>
   </md-button>
 </form>
+	<div class="audit-detail" ng-show = "showAuditDetails" layout-padding layout-margin layout-align="space-around center">
+<!-- 	  <md-whiteframe class="md-whiteframe-2dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="25" layout="" layout-align="center center"> -->
+	   <table border="1px" width="100%" margin-top="2px">
+	       <tr>
+		       <td>User Name: {{selectedItem.userName}}</td>
+		       <td>Audit Message: {{selectedItem.message}}</td>
+		       <td>Action Target: {{selectedItem.target}}</td>
+	       </tr>
+	       <tr>
+		       <td  colspan="3">Action Data: {{selectedItem.actionData}}</td>
+	       </tr>
+	   </table>
+<!-- 	  </md-whiteframe> -->
+	</div>
 
 <md-content class="md-padding">
-	<div ui-grid="adminGrid" ui-grid-pagination ui-grid-auto-resize class="grid" />
+	<div ui-grid="auditGrid" ui-grid-pagination ui-grid-selection ui-grid-auto-resize class="grid" />
 </md-content>
 

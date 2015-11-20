@@ -90,6 +90,48 @@
                 }
             };
         })
+        /* error log viewer service */
+        .service('errorService', function($http, $q){
+        	var GET_ERROR_RECORDS_URL = "/gtas/errorlog";
+            function handleError(response) {
+                if (response.data.message === undefined) {
+                    return $q.reject("An unknown error occurred.");
+                }
+                return $q.reject(response.data.message);
+            }
+
+            function handleSuccess(response) {
+                return response.data;
+            }
+        	return{
+                getErrorData: function (code, commence, fin) {
+                	var st = commence != null ? moment(commence).format('YYYY-MM-DD'):null;
+                	var nd = fin != null ? moment(fin).format('YYYY-MM-DD'):null;
+                	var urlString = GET_ERROR_RECORDS_URL;
+                	if(code != null || st != null || nd != null){
+                		urlString += '?';
+                	}
+                	var sep = '';
+                	if (code != null){
+                		urlString += sep.concat('code=',code);
+                		sep = '&';
+                	}
+                	if (st != null){
+                		urlString += sep.concat('startDate=',st);
+                		sep = '&';
+                	}
+                	if (nd != null){
+                		urlString += sep.concat('endDate=',nd);
+                	}
+                    var request = $http({
+                        method: "get",
+                        url: urlString
+                    });
+
+                    return (request.then(handleSuccess, handleError));
+                }
+        	}
+        })       
         /* audit log viewer service */
         .service('auditService', function($http, $q){
         	var GET_AUDIT_RECORDS_URL = "/gtas/auditlog";
@@ -106,7 +148,7 @@
         	return{
                 getAuditData: function (action, user, commence, fin) {
                 	var st = commence != null ? moment(commence).format('YYYY-MM-DD'):null;
-                	var nd = commence != null ? moment(fin).format('YYYY-MM-DD'):null;
+                	var nd = fin != null ? moment(fin).format('YYYY-MM-DD'):null;
                 	var urlString = GET_AUDIT_RECORDS_URL;
                 	if(action != null || user != null || st != null || nd != null){
                 		urlString += '?';
@@ -283,6 +325,36 @@
                 defaultOptions = $.extend({}, standardOptions, exporterOptions),
                 gridOptions = {
                     admin : defaultOptions,
+                    audit : {
+                	    enableRowSelection: true,
+                	    enableRowHeaderSelection: false,
+                	    enableFullRowSelection: true,
+                        paginationPageSize: 10,
+                        paginationPageSizes: [],
+                        enableHorizontalScrollbar: 0,
+                        enableVerticalScrollbar: 0,
+                        enableFiltering: true,
+                        enableCellEditOnFocus: false,
+                        showGridFooter: true,
+                        multiSelect: false,
+                        enableGridMenu: true,
+                        enableSelectAll: true
+                        },
+                     error : {
+                	    enableRowSelection: true,
+                	    enableRowHeaderSelection: false,
+                	    enableFullRowSelection: true,
+                        paginationPageSize: 10,
+                        paginationPageSizes: [],
+                        enableHorizontalScrollbar: 0,
+                        enableVerticalScrollbar: 0,
+                        enableFiltering: true,
+                        enableCellEditOnFocus: false,
+                        showGridFooter: true,
+                        multiSelect: false,
+                        enableGridMenu: true,
+                        enableSelectAll: true
+                        },
                     flights: {
                         enableSorting: false,
                         multiSelect: false,
@@ -343,6 +415,29 @@
                                     width: '45%'
                                 }
                             ],
+                            error: [
+                                    {
+                                        name: 'Error ID',
+                                        field: 'errorId',
+                                        width: '15%',
+                                        sort: {
+                                            direction: uiGridConstants.DESC,
+                                            priority: 1
+                                        }
+                                    }, {
+                                        name: 'Error Code',
+                                        field: 'errorCode',
+                                        width: '15%'
+                                    }, {
+                                        name: 'DateTime',
+                                        field: 'errorTimestamp',
+                                        width: '15%'
+                                    }, {
+                                        name: 'Error Description',
+                                        field: 'errorDescription',
+                                        width: '55%'
+                                    }
+                                ],
 
                     admin: [
                         {

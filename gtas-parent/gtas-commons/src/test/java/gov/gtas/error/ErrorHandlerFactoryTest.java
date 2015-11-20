@@ -1,6 +1,9 @@
 package gov.gtas.error;
 
 import static org.junit.Assert.*;
+
+import java.util.Date;
+
 import gov.gtas.constant.CommonErrorConstants;
 
 import org.junit.After;
@@ -62,7 +65,7 @@ public class ErrorHandlerFactoryTest {
 	}
 	private static class TestErrorDetails extends BasicErrorDetailInfo{
 		public TestErrorDetails(Exception ex){
-			super(1L, CommonErrorConstants.SYSTEM_ERROR_CODE, ex.getMessage(), null);
+			super(1L, CommonErrorConstants.SYSTEM_ERROR_CODE, new Date(), ex.getMessage(), null);
 		}
 	}
 	private static class TestException extends Exception{
