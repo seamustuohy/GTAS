@@ -24,9 +24,14 @@
   .md-button {
     min-width: 30px
   }
+  
+  .fixed-panel {
+        height: 200px;
+        overflow-y: scroll;
+  }
 </style>
 
-<form layout="row" layout-padding layout-margin layout-align="space-around center" ng-submit="refreshError()">
+<form id = "ErrorFilterPanel" layout="row" layout-padding layout-margin layout-align="space-around center" ng-submit="refreshError()">
   <md-input-container style="min-width: 6em">
     <label>Error Code</label>
     <input ng-model="errorModel.code">
@@ -39,13 +44,14 @@
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 18h4v-2h-4v2z"></path><path d="M3 6v2h18V6H3z"></path><path d="M6 13h12v-2H6v2z"></path></svg>
   </md-button>
 </form>
-<div class="error-detail" ng-show = "selectedErrorItem" layout-padding layout-margin layout-align="space-around center">
+
+<md-content class="error-detail fixed-panel" ng-show = "selectedErrorItem" layout-padding layout-margin layout-align="space-around center">
    <table border="1px" width="100%" margin-top="2px">
-       <tr ng-repeat="line in selectedErrorItem.errorDetails|limitTo:10">
+       <tr ng-repeat="line in selectedErrorItem.errorDetails track by $index">
 	       <td>{{line}}</td>
        </tr>
    </table>
-</div>
+</md-content>
 
 <md-content class="md-padding">
 	<div ui-grid="errorGrid" ui-grid-pagination ui-grid-selection ui-grid-auto-resize class="grid" />
