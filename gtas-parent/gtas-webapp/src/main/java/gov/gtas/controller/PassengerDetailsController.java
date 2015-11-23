@@ -118,24 +118,13 @@ public class PassengerDetailsController {
 		vo.setSuffix(t.getSuffix());
 		vo.setTitle(t.getTitle());
 		
-		/*
-		 * get the passenger's seat: if the APIS-derived seat is
-		 * available, we use that; otherwise use the pnr-derived
-		 * seat.
-		 */
-		String pnrSeat = null;
         for (Seat s : t.getSeatAssignments()) {
             if (s.getFlight().getId() == theFlight.getId()) {
                 if (s.getApis()) {
                     vo.setSeat(s.getNumber());
                     break;
-                } else {
-                    pnrSeat = s.getNumber();
                 }
             }
-        }
-        if (vo.getSeat() == null && pnrSeat != null) {
-            vo.setSeat(pnrSeat);
         }
 		
 		_tempIter = t.getDocuments().iterator();
