@@ -22,15 +22,15 @@
 </style>
 
 <form layout="row" layout-padding layout-margin layout-align="space-around center" ng-submit="filter()">
-  <md-input-container style="min-width: 5em">
+  <md-input-container style="min-width: 8em; max-width: 28em; width: 100%">
     <label>Origin</label>
     <input ng-model="model.origin">
   </md-input-container>
-  <md-input-container style="min-width: 6em">
+  <md-input-container style="min-width: 8em; max-width: 28em; width: 100%">
     <label>Destination</label>
     <input ng-model="model.dest">
   </md-input-container>
-  <md-input-container style="min-width: 5em">
+  <md-input-container style="min-width: 5em; max-width: 5em; width: 100%">
     <label>Flight</label>
     <input ng-model="model.flightNumber">
   </md-input-container>
@@ -48,12 +48,13 @@
   <md-button class="md-primary" type="submit">
     <md-tooltip>Filter</md-tooltip>
     <!--<i class="glyphicon glyphicon-filter"></i>-->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M10 18h4v-2h-4v2z"></path><path d="M3 6v2h18V6H3z"></path><path d="M6 13h12v-2H6v2z"></path></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30"><path d="M10 18h4v-2h-4v2z"></path><path d="M3 6v2h18V6H3z"></path><path d="M6 13h12v-2H6v2z"></path></svg>
   </md-button>
   <md-button class="md-primary" aria-label="reset" ng-click="reset()" type="button">
     <md-tooltip>Reset</md-tooltip>
     <!--<i class="glyphicon glyphicon-remove-sign"></i>-->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30"><path d="M14 12c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2z"></path><path d="M12 3c-4.97 0-9 4.03-9 9H0l4 4 4-4H5c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.51 0-2.91-.49-4.06-1.3l-1.42 1.44C8.04 20.3 9.94 21 12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"></path></svg>
+    <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path></svg>-->
   </md-button>
 </form>
 
