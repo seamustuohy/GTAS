@@ -1,8 +1,9 @@
 (function () {
     'use strict';
     app
-        .service('errorService', function($http, $q){
-        	var GET_ERROR_RECORDS_URL = "/gtas/errorlog";
+        .service('errorService', function ($http, $q) {
+            var GET_ERROR_RECORDS_URL = "/gtas/errorlog";
+
             function handleError(response) {
                 if (response.data.message === undefined) {
                     return $q.reject("An unknown error occurred.");
@@ -13,26 +14,27 @@
             function handleSuccess(response) {
                 return response.data;
             }
-        	return{
+
+            return {
                 getErrorData: function (code, commence, fin) {
-                	var st = commence != null ? moment(commence).format('YYYY-MM-DD'):null;
-                	var nd = fin != null ? moment(fin).format('YYYY-MM-DD'):null;
-                	var urlString = GET_ERROR_RECORDS_URL;
-                	if(code != null || st != null || nd != null){
-                		urlString += '?';
-                	}
-                	var sep = '';
-                	if (code != null){
-                		urlString += sep.concat('code=',code);
-                		sep = '&';
-                	}
-                	if (st != null){
-                		urlString += sep.concat('startDate=',st);
-                		sep = '&';
-                	}
-                	if (nd != null){
-                		urlString += sep.concat('endDate=',nd);
-                	}
+                    var st = commence != null ? moment(commence).format('YYYY-MM-DD') : null;
+                    var nd = fin != null ? moment(fin).format('YYYY-MM-DD') : null;
+                    var urlString = GET_ERROR_RECORDS_URL;
+                    if (code != null || st != null || nd != null) {
+                        urlString += '?';
+                    }
+                    var sep = '';
+                    if (code != null) {
+                        urlString += sep.concat('code=', code);
+                        sep = '&';
+                    }
+                    if (st != null) {
+                        urlString += sep.concat('startDate=', st);
+                        sep = '&';
+                    }
+                    if (nd != null) {
+                        urlString += sep.concat('endDate=', nd);
+                    }
                     var request = $http({
                         method: "get",
                         url: urlString
@@ -40,11 +42,12 @@
 
                     return (request.then(handleSuccess, handleError));
                 }
-        	}
-        })       
+            };
+        })
         /* audit log viewer service */
-        .service('auditService', function($http, $q){
-        	var GET_AUDIT_RECORDS_URL = "/gtas/auditlog";
+        .service('auditService', function ($http, $q) {
+            var GET_AUDIT_RECORDS_URL = "/gtas/auditlog";
+
             function handleError(response) {
                 if (response.data.message === undefined) {
                     return $q.reject("An unknown error occurred.");
@@ -55,30 +58,31 @@
             function handleSuccess(response) {
                 return response.data;
             }
-        	return{
+
+            return {
                 getAuditData: function (action, user, commence, fin) {
-                	var st = commence != null ? moment(commence).format('YYYY-MM-DD'):null;
-                	var nd = fin != null ? moment(fin).format('YYYY-MM-DD'):null;
-                	var urlString = GET_AUDIT_RECORDS_URL;
-                	if(action != null || user != null || st != null || nd != null){
-                		urlString += '?';
-                	}
-                	var sep = '';
-                	if (user != null){
-                		urlString += sep.concat('user=',user);
-                		sep = '&';
-                	}
-                	if (action != null){
-                		urlString += sep.concat('action=',action);
-                		sep = '&';
-                	}
-                	if (st != null){
-                		urlString += sep.concat('startDate=',st);
-                		sep = '&';
-                	}
-                	if (nd != null){
-                		urlString += sep.concat('endDate=',nd);
-                	}
+                    var st = commence != null ? moment(commence).format('YYYY-MM-DD') : null;
+                    var nd = fin != null ? moment(fin).format('YYYY-MM-DD') : null;
+                    var urlString = GET_AUDIT_RECORDS_URL;
+                    if (action != null || user != null || st != null || nd != null) {
+                        urlString += '?';
+                    }
+                    var sep = '';
+                    if (user != null) {
+                        urlString += sep.concat('user=', user);
+                        sep = '&';
+                    }
+                    if (action != null) {
+                        urlString += sep.concat('action=', action);
+                        sep = '&';
+                    }
+                    if (st != null) {
+                        urlString += sep.concat('startDate=', st);
+                        sep = '&';
+                    }
+                    if (nd != null) {
+                        urlString += sep.concat('endDate=', nd);
+                    }
                     var request = $http({
                         method: "get",
                         url: urlString
@@ -86,29 +90,31 @@
 
                     return (request.then(handleSuccess, handleError));
                 },
-        		auditActions: [ 'ALL_ACTIONS',
-                              	'CREATE_UDR', 
-                            	'UPDATE_UDR', 
-                            	'UPDATE_UDR_META', 
-                            	'DELETE_UDR', 
-                            	'CREATE_WL', 
-                            	'UPDATE_WL', 
-                            	'DELETE_WL', 
-                            	'LOAD_APIS', 
-                            	'LOAD_PNR', 
-                            	'CREATE_USER', 
-                            	'UPDATE_USER', 
-                            	'SUSPEND_USER', 
-                            	'DELETE_USER',
-                            	'TARGETING_RUN',
-                            	'LOADER_RUN'
-                                   ]
-        	};
+                auditActions: [
+                    'ALL_ACTIONS',
+                    'CREATE_UDR',
+                    'UPDATE_UDR',
+                    'UPDATE_UDR_META',
+                    'DELETE_UDR',
+                    'CREATE_WL',
+                    'UPDATE_WL',
+                    'DELETE_WL',
+                    'LOAD_APIS',
+                    'LOAD_PNR',
+                    'CREATE_USER',
+                    'UPDATE_USER',
+                    'SUSPEND_USER',
+                    'DELETE_USER',
+                    'TARGETING_RUN',
+                    'LOADER_RUN'
+                ]
+            };
         })
         .service('userService', function ($http, $q) {
             var USER_ROLES_URL = "/gtas/roles/",
                 USERS_URL = "/gtas/users/",
                 USER_URL = "/gtas/user/";
+
             function handleError(response) {
                 if (response.data.message !== undefined) {
                     return $q.reject("An unknown error occurred.");
@@ -234,11 +240,11 @@
                 },
                 defaultOptions = $.extend({}, standardOptions, exporterOptions),
                 gridOptions = {
-                    admin : defaultOptions,
-                    audit : {
-                	    enableRowSelection: true,
-                	    enableRowHeaderSelection: false,
-                	    enableFullRowSelection: true,
+                    admin: defaultOptions,
+                    audit: {
+                        enableRowSelection: true,
+                        enableRowHeaderSelection: false,
+                        enableFullRowSelection: true,
                         paginationPageSize: 10,
                         paginationPageSizes: [],
                         enableHorizontalScrollbar: 0,
@@ -249,11 +255,11 @@
                         multiSelect: false,
                         enableGridMenu: true,
                         enableSelectAll: true
-                        },
-                     error : {
-                	    enableRowSelection: true,
-                	    enableRowHeaderSelection: false,
-                	    enableFullRowSelection: true,
+                    },
+                    error: {
+                        enableRowSelection: true,
+                        enableRowHeaderSelection: false,
+                        enableFullRowSelection: true,
                         paginationPageSize: 10,
                         paginationPageSizes: [],
                         enableHorizontalScrollbar: 0,
@@ -264,7 +270,7 @@
                         multiSelect: false,
                         enableGridMenu: true,
                         enableSelectAll: true
-                        },
+                    },
                     flights: {
                         enableSorting: false,
                         multiSelect: false,
@@ -293,61 +299,61 @@
                         useExternalFiltering: true,
                         expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>'
                     },
-                    query : defaultOptions,
+                    query: defaultOptions,
                     rule: defaultOptions,
                     watchlist: defaultOptions
                 },
                 columns = {
-                        audit: [
-                                {
-                                    name: 'action',
-                                    field: 'actionType',
-                                    width: '10%',
-                                    sort: {
-                                        direction: uiGridConstants.DESC,
-                                        priority: 1
-                                    }
-                                }, {
-                                    name: 'user',
-                                    field: 'user',
-                                    width: '15%'
-                                }, {
-                                    name: 'status',
-                                    field: 'status',
-                                    width: '10%'
-                                }, {
-                                    name: 'message',
-                                    field: 'message',
-                                    width: '20%'
-                                }, {
-                                    name: 'timestamp',
-                                    field: 'timestamp',
-                                    width: '45%'
-                                }
-                            ],
-                            error: [
-                                    {
-                                        name: 'Error ID',
-                                        field: 'errorId',
-                                        width: '15%',
-                                        sort: {
-                                            direction: uiGridConstants.DESC,
-                                            priority: 1
-                                        }
-                                    }, {
-                                        name: 'Error Code',
-                                        field: 'errorCode',
-                                        width: '15%'
-                                    }, {
-                                        name: 'DateTime',
-                                        field: 'errorTimestamp',
-                                        width: '15%'
-                                    }, {
-                                        name: 'Error Description',
-                                        field: 'errorDescription',
-                                        width: '55%'
-                                    }
-                                ],
+                    audit: [
+                        {
+                            name: 'action',
+                            field: 'actionType',
+                            width: '10%',
+                            sort: {
+                                direction: uiGridConstants.DESC,
+                                priority: 1
+                            }
+                        }, {
+                            name: 'user',
+                            field: 'user',
+                            width: '15%'
+                        }, {
+                            name: 'status',
+                            field: 'status',
+                            width: '10%'
+                        }, {
+                            name: 'message',
+                            field: 'message',
+                            width: '20%'
+                        }, {
+                            name: 'timestamp',
+                            field: 'timestamp',
+                            width: '45%'
+                        }
+                    ],
+                    error: [
+                        {
+                            name: 'Error ID',
+                            field: 'errorId',
+                            width: '15%',
+                            sort: {
+                                direction: uiGridConstants.DESC,
+                                priority: 1
+                            }
+                        }, {
+                            name: 'Error Code',
+                            field: 'errorCode',
+                            width: '15%'
+                        }, {
+                            name: 'DateTime',
+                            field: 'errorTimestamp',
+                            width: '15%'
+                        }, {
+                            name: 'Error Description',
+                            field: 'errorDescription',
+                            width: '55%'
+                        }
+                    ],
 
                     admin: [
                         {
@@ -377,7 +383,9 @@
                             field: 'roles',
                             cellFilter: 'roleDescriptionFilter',
                             width: '40%',
-                            cellTooltip: function (row) { return row.entity.roles; },
+                            cellTooltip: function (row) {
+                                return row.entity.roles;
+                            },
                             cellTemplate: '<div class="ui-grid-cell-contents wrap" style="white-space: normal" title="TOOLTIP">{{COL_FIELD CUSTOM_FILTERS}}</div>'
                         }
                     ],
@@ -588,14 +596,14 @@
                  * columns.  cellValue can either be a count or a boolean value.
                  */
                 colorHits = function (grid, row, col) {
-                    if (grid.getCellValue(row ,col) > 0) {
+                    if (grid.getCellValue(row, col) > 0) {
                         return 'red';
                     }
                 },
-                ruleHit = function(grid, row, col) {
-                    return grid.getCellValue(row ,col) ? 'rule-hit' : 'invisible';
+                ruleHit = function (grid, row, col) {
+                    return grid.getCellValue(row, col) ? 'rule-hit' : 'invisible';
                 },
-                anyWatchlistHit = function(grid, row) {
+                anyWatchlistHit = function (grid, row) {
                     if (row.entity.onWatchList || row.entity.onWatchListDoc) {
                         return 'watchlist-hit';
                     }
@@ -747,7 +755,9 @@
                     loadRuleById: function (mode, ruleId) {
                         var request, baseUrl = URLS[mode];
 
-                        if (!ruleId) { return false; }
+                        if (!ruleId) {
+                            return false;
+                        }
 
                         request = $http({
                             method: "get",
@@ -759,7 +769,9 @@
                     copyRule: function (ruleId) {
                         var request, baseUrl = URLS.copy;
 
-                        if (!ruleId) { return false; }
+                        if (!ruleId) {
+                            return false;
+                        }
 
                         request = $http({
                             method: 'post',
@@ -771,7 +783,9 @@
                     delete: function (mode, ruleId) {
                         var request, baseUrl = URLS[mode];
 
-                        if (!ruleId) { return false; }
+                        if (!ruleId) {
+                            return false;
+                        }
 
                         request = $http({
                             method: 'delete',
@@ -856,34 +870,34 @@
                 queryPassengers: queryPassengers
             });
         })
-        .service("filterService",function($http,$q) {
-            var filterURLS={
-                    filter:'/gtas/filter/',
+        .service("filterService", function ($http, $q) {
+            var filterURLS = {
+                    filter: '/gtas/filter/',
                 },
                 getFilter = function (userId) {
                     var dfd = $q.defer();
                     dfd.resolve($http({
                         method: 'get',
-                        url: serviceURLs.filter+userId
+                        url: serviceURLs.filter + userId
                     }));
                     return dfd.promise;
                 },
-                setFilter = function (filter,userId) {
+                setFilter = function (filter, userId) {
 
                     var dfd = $q.defer();
                     dfd.resolve($http({
                         method: 'post',
-                        url: filterURLS.filter+userId,
+                        url: filterURLS.filter + userId,
                         data: filter
                     }));
                     return dfd.promise;
                 },
 
-                updateFilter = function (filter,userId) {
+                updateFilter = function (filter, userId) {
                     var dfd = $q.defer();
                     dfd.resolve($http({
                         method: 'put',
-                        url: filterURLS.filter+userId,
+                        url: filterURLS.filter + userId,
                         data: filter
                     }));
                     return dfd.promise;
@@ -892,7 +906,7 @@
             return ({
                 getFilter: getFilter,
                 setFilter: setFilter,
-                updateFilter:updateFilter
+                updateFilter: updateFilter
             });
         });
 }());
