@@ -3,6 +3,7 @@ package gov.gtas.services.dto;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,13 +18,14 @@ public class FlightsRequestDto implements Serializable {
 
     private int pageNumber;
     private int pageSize;
-    
-    private String origin;
-    private String dest;
-    
+        
     private String flightNumber;
     
     private String direction;
+    
+    private Set<String> originAirports ;
+    
+    private Set<String> destinationAirports;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)        
     private Date etaStart;
@@ -58,18 +60,7 @@ public class FlightsRequestDto implements Serializable {
     public void setEtaEnd(Date etaEnd) {
         this.etaEnd = etaEnd;
     }        
-    public String getOrigin() {
-        return origin;
-    }
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-    public String getDest() {
-        return dest;
-    }
-    public void setDest(String dest) {
-        this.dest = dest;
-    }
+   
     public String getFlightNumber() {
         return flightNumber;
     }
@@ -89,7 +80,23 @@ public class FlightsRequestDto implements Serializable {
         this.sort = sort;
     }
 
-    @Override
+	public Set<String> getOriginAirports() {
+		return originAirports;
+	}
+
+	public void setOriginAirports(Set<String> originAirports) {
+		this.originAirports = originAirports;
+	}
+
+	public Set<String> getDestinationAirports() {
+		return destinationAirports;
+	}
+
+	public void setDestinationAirports(Set<String> destinationAirports) {
+		this.destinationAirports = destinationAirports;
+	}
+	
+	@Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }

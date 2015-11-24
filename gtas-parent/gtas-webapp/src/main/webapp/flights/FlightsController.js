@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel) {
+    app.controller('FlightsController', function ($scope, $state, $interval, $stateParams, passengersBasedOnUserFilter,flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel) {
         $scope.model = flightsModel;
 
         var self = this, contacts;
@@ -8573,7 +8573,7 @@
             {"id": "ILZ", "name": "Žilina Airport (ILZ)"}
         ];
         self.origin = [];
-        self.destination = [];
+        self.destination =[];
         self.allContacts = contacts.map(function (contact) {
             contact.lowerCasedName = contact.name.toLowerCase();
             return contact;
@@ -8610,8 +8610,8 @@
             },
             resolvePage = function () {
                 // @Venu when service updated can refactor to populate chips based on array of ids
-                self.origin = querySearch($scope.model.origin);
-                self.destination = querySearch($scope.model.dest);
+                self.origin = querySearch($scope.model.origins);
+                self.destination = querySearch($scope.model.dests);
                 fetchMethods[stateName]();
             };
 

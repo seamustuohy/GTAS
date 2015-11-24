@@ -15,6 +15,8 @@ app.service("flightsModel", [function () {
         this.pageSize = 10;
         this.flightNumber = '';
         this.origin = '';
+        this.origins=[];
+        this.destinations=[];
         this.dest = '';
         this.direction = 'I';
         this.etaStart = startDate;

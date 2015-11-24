@@ -25,6 +25,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import gov.gtas.model.Flight;
 import gov.gtas.model.HitsSummary;
@@ -154,14 +155,20 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
             etaCondition = cb.and(startPredicate, endPredicate);
             predicates.add(etaCondition);
         }
-
         // filters
-        if (StringUtils.isNotBlank(dto.getOrigin())) {
-            predicates.add(cb.equal(flight.<String>get("origin"), dto.getOrigin()));
-        }
-        if (StringUtils.isNotBlank(dto.getDest())) {
-            predicates.add(cb.equal(flight.<String>get("destination"), dto.getDest()));
-        }
+        
+        if (!CollectionUtils.isEmpty(dto.getOriginAirports())) {
+			Expression<String> originExp = flight.<String> get("origin");
+			Predicate originPredicate = originExp.in(dto.getDestinationAirports());
+			predicates.add(originPredicate);
+		}
+
+		if (!CollectionUtils.isEmpty(dto.getDestinationAirports())) {
+			Expression<String> destExp = flight.<String> get("origin");
+			Predicate destPredicate = destExp.in(dto.getDestinationAirports());
+			predicates.add(destPredicate);
+		}
+       
         if (StringUtils.isNotBlank(dto.getFlightNumber())) {
             String likeString = String.format("%%%s%%", dto.getFlightNumber().toUpperCase());
             predicates.add(cb.like(flight.<String>get("fullFlightNumber"), likeString));

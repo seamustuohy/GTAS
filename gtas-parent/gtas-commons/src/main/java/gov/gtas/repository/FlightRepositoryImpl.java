@@ -21,6 +21,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import gov.gtas.model.Flight;
 import gov.gtas.services.dto.FlightsRequestDto;
@@ -28,82 +29,92 @@ import gov.gtas.services.dto.SortOptionsDto;
 
 @Repository
 public class FlightRepositoryImpl implements FlightRepositoryCustom {
-    private static final Logger logger = LoggerFactory.getLogger(FlightRepositoryImpl.class);
-    
-    @PersistenceContext
-    private EntityManager em;
-    
-    public FlightRepositoryImpl() { }
-    
-    public Pair<Long, List<Flight>> findByCriteria(FlightsRequestDto dto) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Flight> q = cb.createQuery(Flight.class);
-        Root<Flight> root = q.from(Flight.class);
-        List<Predicate> predicates = new ArrayList<Predicate>();
+	private static final Logger logger = LoggerFactory.getLogger(FlightRepositoryImpl.class);
 
-        // dates
-        Predicate etaCondition = null;
-        if (dto.getEtaStart() != null && dto.getEtaEnd() != null) {
-            Path<Date> eta = root.<Date>get("eta");
-            Predicate startPredicate = cb.or(cb.isNull(eta), cb.greaterThanOrEqualTo(root.<Date>get("eta"), dto.getEtaStart()));
-            Predicate endPredicate = cb.or(cb.isNull(eta), cb.lessThanOrEqualTo(eta, dto.getEtaEnd())); 
-            etaCondition = cb.and(startPredicate, endPredicate);
-            predicates.add(etaCondition);
-        }
+	@PersistenceContext
+	private EntityManager em;
 
-        // sorting
-        if (dto.getSort() != null) {
-            List<Order> orders = new ArrayList<>();
-            for (SortOptionsDto sort : dto.getSort()) {
-                Expression<?> e = root.get(sort.getColumn());
-                Order order = null;
-                if (sort.getDir().equals("desc")) {
-                    order = cb.desc(e);
-                } else {
-                    order = cb.asc(e);
-                }
-                orders.add(order);
-            }
-            q.orderBy(orders);
-        }
-        
-        // filters
-        if (StringUtils.isNotBlank(dto.getOrigin())) {
-            predicates.add(cb.equal(root.<String>get("origin"), dto.getOrigin()));
-        }
-        if (StringUtils.isNotBlank(dto.getDest())) {
-            predicates.add(cb.equal(root.<String>get("destination"), dto.getDest()));
-        }
-        if (StringUtils.isNotBlank(dto.getFlightNumber())) {
-            String likeString = String.format("%%%s%%", dto.getFlightNumber());
-            predicates.add(cb.like(root.<String>get("fullFlightNumber"), likeString));
-        }
-        /*
-         * hack: javascript sends the empty string represented by the 'all' dropdown
-         * value as '0', so we check for that here to mean 'any direction' 
-         */
-        if (StringUtils.isNotBlank(dto.getDirection()) && !"0".equals(dto.getDirection())) {
-            predicates.add(cb.equal(root.<String>get("direction"), dto.getDirection()));
-        }
-        
-        q.select(root).where(predicates.toArray(new Predicate[]{}));
-        TypedQuery<Flight> typedQuery = em.createQuery(q);
+	public FlightRepositoryImpl() {
+	}
 
-        // total count
-        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-        countQuery.select(cb.count(countQuery.from(Flight.class))).where(predicates.toArray(new Predicate[]{}));
-        Long count = em.createQuery(countQuery).getSingleResult();
+	public Pair<Long, List<Flight>> findByCriteria(FlightsRequestDto dto) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Flight> q = cb.createQuery(Flight.class);
+		Root<Flight> root = q.from(Flight.class);
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
-        // pagination
-        int pageNumber = dto.getPageNumber();
-        int pageSize = dto.getPageSize();
-        int firstResultIndex = (pageNumber - 1) * pageSize;
-        typedQuery.setFirstResult(firstResultIndex);
-        typedQuery.setMaxResults(dto.getPageSize());
-        
-        logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
-        List<Flight> results = typedQuery.getResultList();
-        
-        return new ImmutablePair<Long, List<Flight>>(count, results);
-    }
+		// dates
+		Predicate etaCondition = null;
+		if (dto.getEtaStart() != null && dto.getEtaEnd() != null) {
+			Path<Date> eta = root.<Date> get("eta");
+			Predicate startPredicate = cb.or(cb.isNull(eta),
+					cb.greaterThanOrEqualTo(root.<Date> get("eta"), dto.getEtaStart()));
+			Predicate endPredicate = cb.or(cb.isNull(eta), cb.lessThanOrEqualTo(eta, dto.getEtaEnd()));
+			etaCondition = cb.and(startPredicate, endPredicate);
+			predicates.add(etaCondition);
+		}
+
+		// sorting
+		if (dto.getSort() != null) {
+			List<Order> orders = new ArrayList<>();
+			for (SortOptionsDto sort : dto.getSort()) {
+				Expression<?> e = root.get(sort.getColumn());
+				Order order = null;
+				if (sort.getDir().equals("desc")) {
+					order = cb.desc(e);
+				} else {
+					order = cb.asc(e);
+				}
+				orders.add(order);
+			}
+			q.orderBy(orders);
+		}
+
+		// filters
+		if (!CollectionUtils.isEmpty(dto.getOriginAirports())) {
+			Expression<String> originExp = root.<String> get("origin");
+			Predicate originPredicate = originExp.in(dto.getDestinationAirports());
+			predicates.add(originPredicate);
+		}
+
+		if (!CollectionUtils.isEmpty(dto.getDestinationAirports())) {
+			Expression<String> destExp = root.<String> get("origin");
+			Predicate destPredicate = destExp.in(dto.getDestinationAirports());
+			predicates.add(destPredicate);
+		}
+
+		
+		if (StringUtils.isNotBlank(dto.getFlightNumber())) {
+			String likeString = String.format("%%%s%%", dto.getFlightNumber());
+			predicates.add(cb.like(root.<String> get("fullFlightNumber"), likeString));
+		}
+		/*
+		 * hack: javascript sends the empty string represented by the 'all'
+		 * dropdown value as '0', so we check for that here to mean 'any
+		 * direction'
+		 */
+		if (StringUtils.isNotBlank(dto.getDirection()) && !"0".equals(dto.getDirection())) {
+			predicates.add(cb.equal(root.<String> get("direction"), dto.getDirection()));
+		}
+
+		q.select(root).where(predicates.toArray(new Predicate[] {}));
+		TypedQuery<Flight> typedQuery = em.createQuery(q);
+
+		// total count
+		CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+		countQuery.select(cb.count(countQuery.from(Flight.class))).where(predicates.toArray(new Predicate[] {}));
+		Long count = em.createQuery(countQuery).getSingleResult();
+
+		// pagination
+		int pageNumber = dto.getPageNumber();
+		int pageSize = dto.getPageSize();
+		int firstResultIndex = (pageNumber - 1) * pageSize;
+		typedQuery.setFirstResult(firstResultIndex);
+		typedQuery.setMaxResults(dto.getPageSize());
+
+		logger.debug(typedQuery.unwrap(org.hibernate.Query.class).getQueryString());
+		List<Flight> results = typedQuery.getResultList();
+
+		return new ImmutablePair<Long, List<Flight>>(count, results);
+	}
 }

@@ -47,13 +47,13 @@
 <form layout="row" layout-padding layout-margin layout-align="space-around center" ng-submit="filter()"
       class="chipsdemoContactChips">
   <md-content class="md-padding autocomplete" layout="column" style="min-width: 8em; max-width: 28em; padding: 0">
-    <md-contact-chips ng-model="flights.origin" md-contacts="flights.querySearch($query)" md-contact-name="id"
+    <md-contact-chips ng-model="flights.origins" md-contacts="flights.querySearch($query)" md-contact-name="id"
                       md-contact-email="name" md-require-match="true" md-highlight-flags="i"
                       filter-selected="flights.filterSelected" placeholder="Origin" secondary-placeholder="Origin">
     </md-contact-chips>
   </md-content>
   <md-content class="md-padding autocomplete" layout="column" style="min-width: 8em; max-width: 28em; padding: 0">
-    <md-contact-chips ng-model="flights.destination" md-contacts="flights.querySearch($query)" md-contact-name="id"
+    <md-contact-chips ng-model="flights.destinations" md-contacts="flights.querySearch($query)" md-contact-name="id"
                       md-contact-email="name" md-require-match="true" md-highlight-flags="i"
                       filter-selected="flights.filterSelected" placeholder="Destination"
                       secondary-placeholder="Destination">

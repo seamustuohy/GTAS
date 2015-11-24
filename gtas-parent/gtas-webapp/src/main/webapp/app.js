@@ -83,8 +83,8 @@ var app;
                         }
                     },
                     resolve: {
-                        flights: function (flightService, flightsModel) {
-                            return flightService.getFlights(flightsModel);
+                        flights: function (passengersBasedOnUserFilter,flightsModel) {
+                            return passengersBasedOnUserFilter.load();
                         }
                     }
                 })

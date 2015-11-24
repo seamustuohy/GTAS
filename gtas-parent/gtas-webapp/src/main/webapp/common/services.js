@@ -908,5 +908,40 @@
                 setFilter: setFilter,
                 updateFilter: updateFilter
             });
+        })
+    .service("passengersBasedOnUserFilter", function(userService, flightService, flightsModel, $q) {
+
+        var today = new Date(),
+            loadUser = function()
+            {
+                return userService
+                    .getUserData(  )                     // Request #1
+                    .then( function( user )
+                    {
+                        flightsModel.destinations=user.data.filter.destinationAirports;
+                        flightsModel.direction=user.data.filter.flightDirection;
+                        flightsModel.starteeDate=new Date();
+                        flightsModel.etaStart.setDate(today.getDate()+user.data.filter.etaStart);
+                        flightsModel.endDate=new Date();
+                        flightsModel.etaEnd.setDate(today.getDate()+user.data.filter.etaEnd);              // Response Handler #1
+                        flightsModel.origins=user.data.filter.originAirports;
+                        flightsModel.destinations=user.data.filter.destinationAirports;
+                        return flightsModel;
+                    });
+            },
+            loadPassenger = function( flightsModel)
+            {
+                var dfd = $q.defer();
+                dfd.resolve(flightService.getFlights(flightsModel));
+                return dfd.promise;
+            },
+            load = function ()
+            {
+                return loadUser().then(loadPassenger );
+            };
+        // Return public API.
+        return ({
+            load: load,
         });
+    });
 }());
