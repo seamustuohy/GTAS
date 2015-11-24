@@ -1,15 +1,32 @@
-app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userService, auditService, errorService, $location, $mdToast, uiGridConstants) {
+app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userService, auditService, errorService, $location, $mdToast, $document) {
     'use strict';
     
+    function successToast(msg){
+    	$mdToast.show($mdToast.simple()
+    	    	  .content(msg)
+    	    	  .position('top right')
+    	    	  .hideDelay(2000)
+    	    	  .parent($scope.toastParent));
+    }
     var setUserData = function (data) { 
     	$scope.userGrid.data = data; 
     	};
 
     var setAuditData = function (data) { 
     	$scope.auditGrid.data = data; 
+    	if(data && data.length > 0){
+    	    successToast('Audit Log Data Loaded.');
+        } else {
+        	successToast('Filter conditions did not return any Audit Log Data.');
+        }
     	};
     var setErrorData = function (data) { 
-    	$scope.errorGrid.data = data; 
+	    	$scope.errorGrid.data = data; 
+	    	if(data && data.length > 0){
+	    	   successToast('Error Log Data Loaded.')
+	    	} else {
+	    	   successToast('Filter conditions did not return any Error Log Data.');
+	    	}
     	};
     var setupUserGrid = function(){
         $scope.userGrid = gridOptionsLookupService.getGridOptions('admin');
@@ -65,10 +82,12 @@ app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userServ
            case 0:        	    
         	    userService.getAllUsers().then(setUserData);       		
         	    break;
-           case 2:       	    
+           case 2:
+        	    $scope.toastParent = $document[0].getElementById('AuditFilterPanel');
         	    $scope.refreshAudit();
         	    break;
            case 3:       	    
+       	        $scope.toastParent = $document[0].getElementById('ErrorFilterPanel');
 	       	    $scope.refreshError();
 	       	    break;
         }
@@ -99,7 +118,8 @@ app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userServ
     	  .action('OK')
     	  .highlightAction(true)
     	  .position('top right')
-    	  .hideDelay(0));
+    	  .hideDelay(0)
+    	  .parent($scope.toastParent));
     };
     
 });

@@ -64,15 +64,10 @@
                                 <div class="col-sm-2 capitalize">&nbsp;&nbsp;&nbsp;<span style="text-decoration: underline;">Flight:&nbsp; <strong>{{
                                     passenger.flightNumber }}</strong></span></div>
                                 <div class="col-sm-2">Origin Airport:&nbsp; <strong>{{ passenger.flightOrigin }}</strong></div>
-                                <div class="col-sm-2">Destination Airport:&nbsp; <strong>{{ passenger.flightDestination }}</strong>
-                                </div>
-                                <div class="col-sm-3">ETD:&nbsp; <strong>{{ passenger.flightETD | date:"MM/dd/yyyy
-                                    HH:mm"
-                                    }}</strong></div>
-                                <div class="col-sm-3">ETA:&nbsp; <strong>{{ passenger.flightETA | date:'MM/dd/yyyy
-                                    HH:mm'
-                                    }}</strong></div>
-                                <!-- <div class="col-sm-1">SEAT:&nbsp; <strong>{{ passenger.seat}}</strong></div> -->
+                                <div class="col-sm-2">Destination Airport:&nbsp; <strong>{{ passenger.flightDestination }}</strong></div>
+                                <div class="col-sm-2">ETD:&nbsp; <strong>{{ passenger.flightETD | date:"MM/dd/yyyy HH:mm" }}</strong></div>
+                                <div class="col-sm-2">ETA:&nbsp; <strong>{{ passenger.flightETA | date:'MM/dd/yyyy HH:mm' }}</strong></div>
+                                <div class="col-sm-1">Seat:&nbsp; <strong>{{ passenger.seat }}</strong></div>
                             </div>
                         </div>
                     </div>
