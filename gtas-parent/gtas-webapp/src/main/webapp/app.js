@@ -78,7 +78,7 @@ var app;
                     url: '/flights',
                     views: {
                         '@': {
-                            controller: 'FlightsController',
+                            controller: 'FlightsController as flights',
                             templateUrl: 'flights/flights.html'
                         }
                     },
