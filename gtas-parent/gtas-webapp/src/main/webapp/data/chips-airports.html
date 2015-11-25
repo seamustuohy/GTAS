@@ -8657,8 +8657,7 @@
              * Search for contacts.
              */
             function querySearch (query) {
-                var results = query ?
-                        self.allContacts.filter(createFilterFor(query)) : [];
+                var results = query && query.length ? self.allContacts.filter(createFilterFor(query)) : [];
                 return results;
             }
 

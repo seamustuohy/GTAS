@@ -15,7 +15,7 @@
         }
         /* Search for contacts. */
         function querySearch(query) {
-            return query ? self.allContacts.filter(createFilterFor(query)) : [];
+            return query && query.length ? self.allContacts.filter(createFilterFor(query)) : [];
         }
         self.querySearch = querySearch;
         contacts = [
