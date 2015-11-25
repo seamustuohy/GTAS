@@ -916,16 +916,23 @@
             {
                 return userService
                     .getUserData(  )                     // Request #1
-                    .then( function( user )
-                    {
-                        flightsModel.destinations=user.data.filter.destinationAirports;
-                        flightsModel.direction=user.data.filter.flightDirection;
-                        flightsModel.starteeDate=new Date();
-                        flightsModel.etaStart.setDate(today.getDate()+user.data.filter.etaStart);
-                        flightsModel.endDate=new Date();
-                        flightsModel.etaEnd.setDate(today.getDate()+user.data.filter.etaEnd);              // Response Handler #1
-                        flightsModel.origins=user.data.filter.originAirports;
-                        flightsModel.destinations=user.data.filter.destinationAirports;
+                    .then( function( user ) {
+                        if(user.data.filter!=null) {
+                            if (user.data.filter.flighDirection)
+                                flightsModel.direction = user.data.filter.flightDirection;
+                            if (user.data.filter.etaStart) {
+                                flightsModel.starteeDate = new Date();
+                                flightsModel.etaStart.setDate(today.getDate() + user.data.filter.etaStart);
+                            }
+                            if (user.data.filter.etaEnd) {
+                                flightsModel.endDate = new Date();
+                                flightsModel.etaEnd.setDate(today.getDate() + user.data.filter.etaEnd);
+                            }// Response Handler #1
+                            if (user.data.filter.originAirports != null)
+                                flightsModel.origins = user.data.filter.originAirports;
+                            if (user.data.filter.destinationAirports != null)
+                                flightsModel.destinations = user.data.filter.destinationAirports;
+                        }
                         return flightsModel;
                     });
             },
