@@ -28,8 +28,10 @@ module.exports = function(config) {
      'src/main/webapp/resources/bower_components/jquery/dist/jquery.js',
      'src/main/webapp/resources/bower_components/angular-mocks/angular-mocks.js',
      'src/main/webapp/app.js',
+     'src/main/webapp/factory/JqueryQueryBuilderWidget.js',
      'src/main/webapp/common/services.js',    
      'src/main/webapp/admin/AdminController.js',
+     'src/main/webapp/build/BuildController.js',
      'src/main/webapp/test/unit/**/*.js'],
 
 

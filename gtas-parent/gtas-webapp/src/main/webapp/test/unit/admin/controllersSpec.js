@@ -16,7 +16,7 @@ describe('Admin controller:', function() {
       ctrl = $controller('AdminCtrl', {$scope: scope});
     }));
 
-    it('should set the default tab index to be 0', function() {
+    it('should set the default scope elements - e.g., tab index to be 0', function() {
       expect(scope.showAuditDetails).toBe(false);
       expect(scope.selectedItem).toBeUndefined();
       expect(scope.selectedTabIndex).toBe(0);
