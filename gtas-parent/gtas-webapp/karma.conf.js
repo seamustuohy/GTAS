@@ -32,6 +32,7 @@ module.exports = function(config) {
      'src/main/webapp/common/services.js',    
      'src/main/webapp/admin/AdminController.js',
      'src/main/webapp/build/BuildController.js',
+     'src/main/webapp/watchlists/WatchListController.js',
      'src/main/webapp/test/unit/**/*.js'],
 
 
