@@ -31,10 +31,7 @@ public class PassengerVo implements Validatable {
     private Date dob;
     private String embarkation;
     private String debarkation;
-    private String embarkCountry;
-    private String debarkCountry;
     private Boolean deleted = Boolean.FALSE;
-    private String seat;
 
     private List<DocumentVo> documents = new ArrayList<>();
     private List<SeatVo> seatAssignments = new ArrayList<>();
@@ -128,24 +125,6 @@ public class PassengerVo implements Validatable {
     }
     public void setDebarkation(String debarkation) {
         this.debarkation = debarkation;
-    }
-    public String getEmbarkCountry() {
-        return embarkCountry;
-    }
-    public void setEmbarkCountry(String embarkCountry) {
-        this.embarkCountry = embarkCountry;
-    }
-    public String getDebarkCountry() {
-        return debarkCountry;
-    }
-    public void setDebarkCountry(String debarkCountry) {
-        this.debarkCountry = debarkCountry;
-    }
-    public String getSeat() {
-        return seat;
-    }
-    public void setSeat(String seat) {
-        this.seat = seat;
     }
     public void setDocuments(List<DocumentVo> documents) {
         this.documents = documents;

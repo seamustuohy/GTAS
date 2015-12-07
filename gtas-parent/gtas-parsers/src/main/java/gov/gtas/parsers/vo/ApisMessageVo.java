@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.validators.Validatable;
 
-public class ApisMessageVo extends MessageVo implements Validatable{
+public class ApisMessageVo extends MessageVo implements Validatable {
     /** type of message: new pax, update, delete, etc */
     private String messageCode;
 

@@ -508,8 +508,6 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         // TODO: how does this relate to ssr:seat?
         SSD ssd = getConditionalSegment(SSD.class);
         if (thePax != null && ssd != null) {
-            thePax.setSeat(ssd.getSeatNumber());
-            
             SeatVo seat = new SeatVo();
             seat.setTravelerReferenceNumber(thePax.getTravelerReferenceNumber());
             seat.setNumber(ssd.getSeatNumber());

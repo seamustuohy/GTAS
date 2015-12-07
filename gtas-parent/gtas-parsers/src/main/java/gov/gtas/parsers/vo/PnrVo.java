@@ -24,10 +24,7 @@ public class PnrVo extends MessageVo implements Validatable {
     private Integer bagCount;
     private String formOfPayment;
     private String updateMode;
-    private String raw;
-    private List<String> rawList = new ArrayList<String>();
     private Integer daysBookedBeforeTravel;
-	private boolean pnrRecordExists = false; 
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
 
@@ -39,9 +36,6 @@ public class PnrVo extends MessageVo implements Validatable {
     private List<AgencyVo> agencies = new ArrayList<>();
     private List<FlightLegVo> flightLegs = new ArrayList<>();
 	
-    /** seat assignments in this pnr.  for display purposes only */
-    private List<SeatVo> seatAssignments = new ArrayList<>();
-    
     public PnrVo() {
         this.bagCount = 0;
         this.passengerCount = 0;
@@ -53,30 +47,6 @@ public class PnrVo extends MessageVo implements Validatable {
 
 	public void setEmails(List<EmailVo> emails) {
 		this.emails = emails;
-	}
-
-	public String getRaw() {
-		return raw;
-	}
-
-	public void setRaw(String raw) {
-		this.raw = raw;
-	}
-
-	public List<String> getRawList() {
-		return rawList;
-	}
-
-	public void setRawList(List<String> rawList) {
-		this.rawList = rawList;
-	}
-
-	public boolean isPnrRecordExists() {
-		return pnrRecordExists;
-	}
-
-	public void setPnrRecordExists(boolean pnrRecordExists) {
-		this.pnrRecordExists = pnrRecordExists;
 	}
 
 	public Integer getDaysBookedBeforeTravel() {
@@ -245,14 +215,6 @@ public class PnrVo extends MessageVo implements Validatable {
 
     public void setFrequentFlyerDetails(List<FrequentFlyerVo> frequentFlyerDetails) {
         this.frequentFlyerDetails = frequentFlyerDetails;
-    }
-
-    public List<SeatVo> getSeatAssignments() {
-        return seatAssignments;
-    }
-
-    public void setSeatAssignments(List<SeatVo> seatAssignments) {
-        this.seatAssignments = seatAssignments;
     }
 
     @Override
