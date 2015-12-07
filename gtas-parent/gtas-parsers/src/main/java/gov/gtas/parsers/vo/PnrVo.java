@@ -23,8 +23,8 @@ public class PnrVo extends MessageVo implements Validatable {
     private Integer passengerCount;
     private Integer bagCount;
     private String formOfPayment;
-    private String updateMode;
     private Integer daysBookedBeforeTravel;
+    
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
 
@@ -142,14 +142,6 @@ public class PnrVo extends MessageVo implements Validatable {
 
     public void setFormOfPayment(String formOfPayment) {
         this.formOfPayment = formOfPayment;
-    }
-
-    public String getUpdateMode() {
-        return updateMode;
-    }
-
-    public void setUpdateMode(String updateMode) {
-        this.updateMode = updateMode;
     }
 
     public List<FlightVo> getFlights() {
