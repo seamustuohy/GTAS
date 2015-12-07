@@ -1,15 +1,15 @@
-package gov.gtas.vo.passenger;
+package gov.gtas.parsers.vo;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang3.StringUtils;
 
-public class DocumentVo {
+import gov.gtas.validators.Validatable;
+
+public class DocumentVo implements Validatable {
     private String documentType;
     private String documentNumber;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)
     private Date expirationDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = FlightVo.DATE_FORMAT)
     private Date issuanceDate;
     private String issuanceCountry;
 
@@ -43,4 +43,9 @@ public class DocumentVo {
     public void setIssuanceCountry(String issuanceCountry) {
         this.issuanceCountry = issuanceCountry;
     }
+	@Override
+	public boolean isValid() {
+		return StringUtils.isNotBlank(this.documentNumber) 
+		       && StringUtils.isNotBlank(this.documentType);
+	}    
 }

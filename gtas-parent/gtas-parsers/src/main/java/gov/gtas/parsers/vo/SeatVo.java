@@ -1,9 +1,12 @@
-package gov.gtas.vo.passenger;
+package gov.gtas.parsers.vo;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class SeatVo {
+import gov.gtas.validators.Validatable;
+
+public class SeatVo implements Validatable {
     private String number;
     private Boolean apis = Boolean.valueOf(false);
     
@@ -72,6 +75,13 @@ public class SeatVo {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    @Override
+	public boolean isValid() {
+		return StringUtils.isNotBlank(this.number)
+		       && StringUtils.isNotBlank(this.origin)
+		       && StringUtils.isNotBlank(this.destination);
+	}
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE); 

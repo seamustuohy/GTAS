@@ -1,15 +1,16 @@
-package gov.gtas.vo.passenger;
+package gov.gtas.parsers.vo;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import gov.gtas.vo.MessageVo;
+import gov.gtas.validators.Validatable;
 
-public class PnrVo extends MessageVo {
+public class PnrVo extends MessageVo implements Validatable {
     private String messageCode;
     
     private String recordLocator;
@@ -258,4 +259,12 @@ public class PnrVo extends MessageVo {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+
+	@Override
+	public boolean isValid() {
+		if(StringUtils.isBlank(this.recordLocator) || StringUtils.isBlank(this.carrier)){
+			return false;
+		}
+		return true;
+	}
 }

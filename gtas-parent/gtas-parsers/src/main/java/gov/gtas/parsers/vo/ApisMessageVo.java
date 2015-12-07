@@ -1,4 +1,4 @@
-package gov.gtas.vo;
+package gov.gtas.parsers.vo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +8,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.gtas.validators.Validatable;
-import gov.gtas.vo.MessageVo;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.ReportingPartyVo;
 
 public class ApisMessageVo extends MessageVo implements Validatable{
     /** type of message: new pax, update, delete, etc */

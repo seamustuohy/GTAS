@@ -17,9 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.util.DateCalendarUtils;
-import gov.gtas.vo.passenger.FlightVo;
+import gov.gtas.parsers.vo.FlightVo;
 
 public class ParseUtils {
     private static final Logger logger = LoggerFactory.getLogger(ParseUtils.class);

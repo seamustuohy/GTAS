@@ -13,8 +13,8 @@ import gov.gtas.model.Message;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.parsers.util.FileUtils;
 import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.vo.MessageVo;
 import gov.gtas.repository.MessageRepository;
-import gov.gtas.vo.MessageVo;
 
 @Service
 public class Loader {

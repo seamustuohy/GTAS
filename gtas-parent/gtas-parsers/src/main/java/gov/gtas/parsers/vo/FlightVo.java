@@ -1,16 +1,15 @@
-package gov.gtas.vo.passenger;
+package gov.gtas.parsers.vo;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import gov.gtas.validators.Validatable;
 
-import gov.gtas.vo.BaseVo;
-
-public class FlightVo extends BaseVo {
+public class FlightVo implements Validatable {
     public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm aaa";
     private static final SimpleDateFormat dtFormat = new SimpleDateFormat(DATE_FORMAT);
     
@@ -24,15 +23,10 @@ public class FlightVo extends BaseVo {
     private String destinationCountry;
     private boolean isOverFlight;
     private String direction;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date flightDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date etd;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date eta;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date etdDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)  
     private Date etaDate;
     private String etdLocalTZ;
     private String etaLocalTZ;
@@ -210,4 +204,13 @@ public class FlightVo extends BaseVo {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }
+
+	@Override
+	public boolean isValid() {
+		 return StringUtils.isNotBlank(this.destination) 
+		        && StringUtils.isNotBlank(this.origin) 
+				&& StringUtils.isNotBlank(this.flightNumber)
+				&& this.flightDate != null 
+				&& StringUtils.isNotBlank(this.carrier);
+	}  
 }

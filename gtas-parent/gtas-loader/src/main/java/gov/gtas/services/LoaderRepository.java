@@ -26,6 +26,17 @@ import gov.gtas.model.Pnr;
 import gov.gtas.model.ReportingParty;
 import gov.gtas.model.Seat;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.vo.AddressVo;
+import gov.gtas.parsers.vo.AgencyVo;
+import gov.gtas.parsers.vo.CreditCardVo;
+import gov.gtas.parsers.vo.DocumentVo;
+import gov.gtas.parsers.vo.FlightVo;
+import gov.gtas.parsers.vo.FrequentFlyerVo;
+import gov.gtas.parsers.vo.PassengerVo;
+import gov.gtas.parsers.vo.PhoneVo;
+import gov.gtas.parsers.vo.PnrVo;
+import gov.gtas.parsers.vo.ReportingPartyVo;
+import gov.gtas.parsers.vo.SeatVo;
 import gov.gtas.repository.AddressRepository;
 import gov.gtas.repository.AgencyRepository;
 import gov.gtas.repository.CreditCardRepository;
@@ -36,17 +47,7 @@ import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.repository.PhoneRepository;
 import gov.gtas.repository.ReportingPartyRepository;
-import gov.gtas.vo.passenger.AddressVo;
-import gov.gtas.vo.passenger.AgencyVo;
-import gov.gtas.vo.passenger.CreditCardVo;
-import gov.gtas.vo.passenger.DocumentVo;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.FrequentFlyerVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.PhoneVo;
-import gov.gtas.vo.passenger.PnrVo;
-import gov.gtas.vo.passenger.ReportingPartyVo;
-import gov.gtas.vo.passenger.SeatVo;
+
 
 @Repository
 public class LoaderRepository {

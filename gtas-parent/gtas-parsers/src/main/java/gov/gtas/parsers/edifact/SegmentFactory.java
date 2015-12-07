@@ -6,8 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.gtas.error.ErrorUtils;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.util.ErrorUtils;
 
 public class SegmentFactory {
     private static final Logger logger = LoggerFactory.getLogger(SegmentFactory.class);

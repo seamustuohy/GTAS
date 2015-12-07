@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
@@ -49,17 +49,17 @@ import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.vo.passenger.AddressVo;
-import gov.gtas.vo.passenger.AgencyVo;
-import gov.gtas.vo.passenger.CreditCardVo;
-import gov.gtas.vo.passenger.DocumentVo;
-import gov.gtas.vo.passenger.EmailVo;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.FrequentFlyerVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.PhoneVo;
-import gov.gtas.vo.passenger.PnrVo;
-import gov.gtas.vo.passenger.SeatVo;
+import gov.gtas.parsers.vo.AddressVo;
+import gov.gtas.parsers.vo.AgencyVo;
+import gov.gtas.parsers.vo.CreditCardVo;
+import gov.gtas.parsers.vo.DocumentVo;
+import gov.gtas.parsers.vo.EmailVo;
+import gov.gtas.parsers.vo.FlightVo;
+import gov.gtas.parsers.vo.FrequentFlyerVo;
+import gov.gtas.parsers.vo.PassengerVo;
+import gov.gtas.parsers.vo.PhoneVo;
+import gov.gtas.parsers.vo.PnrVo;
+import gov.gtas.parsers.vo.SeatVo;
 
 
 public final class PnrGovParser extends EdifactParser<PnrVo> {
