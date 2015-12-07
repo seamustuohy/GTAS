@@ -34,7 +34,6 @@ public class PnrVo extends MessageVo implements Validatable {
     private List<FrequentFlyerVo> frequentFlyerDetails = new ArrayList<>();
     private List<EmailVo> emails = new ArrayList<>();
     private List<AgencyVo> agencies = new ArrayList<>();
-    private List<FlightLegVo> flightLegs = new ArrayList<>();
 	
     public PnrVo() {
         this.bagCount = 0;
@@ -104,15 +103,7 @@ public class PnrVo extends MessageVo implements Validatable {
     public void setDateBooked(Date dateBooked) {
         this.dateBooked = dateBooked;
     }
-
-    public List<FlightLegVo> getFlightLegs() {
-		return flightLegs;
-	}
-
-	public void setFlightLegs(List<FlightLegVo> flightLegs) {
-		this.flightLegs = flightLegs;
-	}
-
+    
     public Date getDateReceived() {
         return dateReceived;
     }
