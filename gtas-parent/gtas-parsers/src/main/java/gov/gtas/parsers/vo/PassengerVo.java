@@ -1,6 +1,5 @@
 package gov.gtas.parsers.vo;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +11,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import gov.gtas.validators.Validatable;
 
 public class PassengerVo implements Validatable {
-	private static final SimpleDateFormat dtFormat = new SimpleDateFormat(FlightVo.DATE_FORMAT);
 	
     /**
      * a unique passenger reference identifier (from PNR) used to cross
@@ -37,127 +35,10 @@ public class PassengerVo implements Validatable {
     private String debarkCountry;
     private Boolean deleted = Boolean.FALSE;
     private String seat;
-    private String paxId;
-    
-    // flight info
-    private String flightId;
-    private String flightNumber;
-    private String fullFlightNumber;
-    private String carrier;
-    private Date etd;
-    private Date eta;
-    private String etdLocalTZ;
-    private String etaLocalTZ;
-    private String flightOrigin;
-    private String flightDestination;
-    private String flightETD;
-    private String flightETA;
 
-    // hits info
-    private Boolean onRuleHitList = Boolean.FALSE;
-    private Boolean onWatchList = Boolean.FALSE;
-    private Boolean onWatchListDoc = Boolean.FALSE;
-    
-    // co-pax?
-    private List<PassengerVo> passengers;
-	private List<DocumentVo> documents = new ArrayList<>();
-	private FlightHistoryVo flightHistoryVo;
-    private PnrVo pnrVo;
-    
+    private List<DocumentVo> documents = new ArrayList<>();
     private List<SeatVo> seatAssignments = new ArrayList<>();
     
-	public String getPaxId() {
-		return paxId;
-	}
-	public void setPaxId(String paxId) {
-		this.paxId = paxId;
-	}
-	public String getFlightOrigin() {
-		return flightOrigin;
-	}
-	public void setFlightOrigin(String flightOrigin) {
-		this.flightOrigin = flightOrigin;
-	}
-	public String getFlightDestination() {
-		return flightDestination;
-	}
-	public void setFlightDestination(String flightDestination) {
-		this.flightDestination = flightDestination;
-	}
-	public String getFlightETD() {
-		return flightETD;
-	}
-	public void setFlightETD(String flightETD) {
-		this.flightETD = flightETD;
-	}
-	public String getFlightETA() {
-		return flightETA;
-	}
-	public void setFlightETA(String flightETA) {
-		this.flightETA = flightETA;
-	}
-	public List<PassengerVo> getPassengers() {
-		return passengers;
-	}
-	public void setPassengers(List<PassengerVo> passengers) {
-		this.passengers = passengers;
-	}
-	public PnrVo getPnrVo() {
-		return pnrVo;
-	}
-	public void setPnrVo(PnrVo pnrVo) {
-		this.pnrVo = pnrVo;
-	}
-	public String getFlightId() {
-        return flightId;
-    }
-    public void setFlightId(String flightId) {
-        this.flightId = flightId;
-    }
-    public String getFlightNumber() {
-        return flightNumber;
-    }
-    public void setFlightNumber(String flightNumber) {
-        this.flightNumber = flightNumber;
-    }
-    public String getFullFlightNumber() {
-        return fullFlightNumber;
-    }
-    public void setFullFlightNumber(String fullFlightNumber) {
-        this.fullFlightNumber = fullFlightNumber;
-    }
-    public FlightHistoryVo getFlightHistoryVo() {
-		return flightHistoryVo;
-	}
-	public void setFlightHistoryVo(FlightHistoryVo flightHistoryVo) {
-		this.flightHistoryVo = flightHistoryVo;
-	}
-	public String getCarrier() {
-        return carrier;
-    }
-    public void setCarrier(String carrier) {
-        this.carrier = carrier;
-    }
-    public Date getEtd() {
-        return etd;
-    }
-    public void setEtd(Date etd) {
-        this.etd = etd;
-        
-        if(etd != null) {
-        	this.etdLocalTZ = dtFormat.format(etd);
-        }
-    }
-    public Date getEta() {
-        return eta;
-    }
-    public void setEta(Date eta) {
-        this.eta = eta;
-        
-        if(eta != null) {
-        	this.etaLocalTZ = dtFormat.format(eta);
-        }
-    }
     public void addDocument(DocumentVo d) {
         documents.add(d);
     }
@@ -275,30 +156,6 @@ public class PassengerVo implements Validatable {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
-    public Boolean getOnRuleHitList() {
-        return onRuleHitList;
-    }
-    public void setOnRuleHitList(Boolean onRuleHitList) {
-        this.onRuleHitList = onRuleHitList;
-    }
-    public Boolean getOnWatchList() {
-        return onWatchList;
-    }
-    public void setOnWatchList(Boolean onWatchList) {
-        this.onWatchList = onWatchList;
-    }
-    public Boolean getOnWatchListDoc() {
-        return onWatchListDoc;
-    }
-    public void setOnWatchListDoc(Boolean onWatchListDoc) {
-        this.onWatchListDoc = onWatchListDoc;
-    }
-    public String getEtdLocalTZ() {
-		return etdLocalTZ;
-	}
-	public String getEtaLocalTZ() {
-		return etaLocalTZ;
-	}
 	public List<SeatVo> getSeatAssignments() {
         return seatAssignments;
     }
