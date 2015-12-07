@@ -27,7 +27,6 @@ import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.QTY;
 import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
-import gov.gtas.parsers.paxlst.segment.unedifact.TDT.TdtType;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.ApisMessageVo;
 import gov.gtas.parsers.vo.DocumentVo;
@@ -188,15 +187,12 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
 
             if (origin != null && dest != null) {
                 FlightVo f = new FlightVo();
-                TdtType flightType = tdt.getTransportStageQualifier();
-                f.setOverFlight(flightType.equals(TdtType.OVER_FLIGHT));
                 f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tdt.getFlightNumber()));
                 f.setCarrier(tdt.getC_carrierIdentifier());
                 f.setOrigin(origin);
                 f.setDestination(dest);
                 f.setEta(eta);
                 f.setEtd(etd);
-                ParseUtils.initEtaEtdDate(f);
                 f.setFlightDate(ParseUtils.determineFlightDate(etd, eta, parsedMessage.getTransmissionDate()));
 
                 if (f.isValid()) {

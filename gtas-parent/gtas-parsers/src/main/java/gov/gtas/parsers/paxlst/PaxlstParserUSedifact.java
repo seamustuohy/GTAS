@@ -117,10 +117,10 @@ public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
                 String country = loc.getIataCountryCode();
                 String  airport = loc.getIataAirportCode();
                 if (locCode == LocCode.DEPARTURE) {
-                    f.setOriginCountry(country);
+//                    f.setOriginCountry(country);
                     f.setOrigin(airport);
                 } else if (locCode == LocCode.ARRIVAL) {
-                    f.setDestinationCountry(country);
+//                    f.setDestinationCountry(country);
                     f.setDestination(airport);
                 }
                 break;

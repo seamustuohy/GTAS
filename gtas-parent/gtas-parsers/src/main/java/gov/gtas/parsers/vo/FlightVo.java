@@ -12,15 +12,10 @@ public class FlightVo implements Validatable {
     private String carrier;
     private String flightNumber;
     private String origin;
-    private String originCountry;
     private String destination;
-    private String destinationCountry;
-    private boolean isOverFlight;
     private Date flightDate;
     private Date etd;
     private Date eta;
-    private Date etdDate;
-    private Date etaDate;
     
     public String getCarrier() {
         return carrier;
@@ -40,23 +35,11 @@ public class FlightVo implements Validatable {
     public void setOrigin(String origin) {
         this.origin = origin;
     }
-    public String getOriginCountry() {
-        return originCountry;
-    }
-    public void setOriginCountry(String originCountry) {
-        this.originCountry = originCountry;
-    }
     public String getDestination() {
         return destination;
     }
     public void setDestination(String destination) {
         this.destination = destination;
-    }
-    public String getDestinationCountry() {
-        return destinationCountry;
-    }
-    public void setDestinationCountry(String destinationCountry) {
-        this.destinationCountry = destinationCountry;
     }
     public Date getFlightDate() {
         return flightDate;
@@ -76,24 +59,6 @@ public class FlightVo implements Validatable {
     public void setEta(Date eta) {
         this.eta = eta;
     }
-    public boolean isOverFlight() {
-        return isOverFlight;
-    }
-    public void setOverFlight(boolean isOverFlight) {
-        this.isOverFlight = isOverFlight;
-    }
-	public Date getEtdDate() {
-		return etdDate;
-	}
-	public void setEtdDate(Date etdDate) {
-		this.etdDate = etdDate;
-	}
-	public Date getEtaDate() {
-		return etaDate;
-	}
-	public void setEtaDate(Date etaDate) {
-		this.etaDate = etaDate;
-	}
 	
 	@Override
     public String toString() {
