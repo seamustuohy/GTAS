@@ -15,12 +15,6 @@ import gov.gtas.vo.BaseVo;
 public class PassengerVo extends BaseVo {
 	private static final SimpleDateFormat dtFormat = new SimpleDateFormat(FlightVo.DATE_FORMAT);
 	
-    /**
-     * a unique passenger reference identifier (from PNR) used to cross
-     * reference passenger information in a PNR
-     */
-    private String travelerReferenceNumber;
-    
     private String title;    
     private String firstName;
     private String middleName;
@@ -67,8 +61,6 @@ public class PassengerVo extends BaseVo {
 	private List<DocumentVo> documents = new ArrayList<>();
 	private FlightHistoryVo flightHistoryVo;
     private PnrVo pnrVo;
-    
-    private List<SeatVo> seatAssignments = new ArrayList<>();
     
 	public String getPaxId() {
 		return paxId;
@@ -167,12 +159,6 @@ public class PassengerVo extends BaseVo {
     }
     public List<DocumentVo> getDocuments() {
         return documents;
-    }
-    public String getTravelerReferenceNumber() {
-        return travelerReferenceNumber;
-    }
-    public void setTravelerReferenceNumber(String travelerReferenceNumber) {
-        this.travelerReferenceNumber = travelerReferenceNumber;
     }
     public String getTitle() {
         return title;
@@ -303,12 +289,6 @@ public class PassengerVo extends BaseVo {
 	public String getEtaLocalTZ() {
 		return etaLocalTZ;
 	}
-	public List<SeatVo> getSeatAssignments() {
-        return seatAssignments;
-    }
-    public void setSeatAssignments(List<SeatVo> seatAssignments) {
-        this.seatAssignments = seatAssignments;
-    }
     
     @Override
     public String toString() {
