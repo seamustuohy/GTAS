@@ -46,6 +46,8 @@ public final class Constants {
 	public static final String PASSENGER_HIT_TYPE = "hitType like '%p%'";
 	public static final String DOCUMENT_HIT_TYPE = "hitType like '%d%'";
 	
+	public static final String SEAT = "SEAT";
+	
 	public static final String QUERY_EXISTS_ERROR_MSG = "A query with the same title already exists. Please rename this query or edit the existing one.";
 	public static final String QUERY_DOES_NOT_EXIST_ERROR_MSG = "Query cannot be found.";
 }
