@@ -8695,13 +8695,13 @@
                 width: 70
             },
             {
-                name: 'etaLocalTZ', displayName: 'ETA',
+                name: 'eta', displayName: 'ETA',
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 2
                 }
             },
-            {name: 'etdLocalTZ', displayName: 'ETD'},
+            {name: 'etd', displayName: 'ETD'},
             {name: 'origin'},
             {name: 'originCountry', displayName: 'Country'},
             {name: 'destination'},
