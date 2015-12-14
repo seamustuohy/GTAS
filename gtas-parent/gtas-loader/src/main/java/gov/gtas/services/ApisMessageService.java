@@ -20,10 +20,10 @@ import gov.gtas.model.MessageStatus;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.paxlst.PaxlstParserUNedifact;
 import gov.gtas.parsers.paxlst.PaxlstParserUSedifact;
+import gov.gtas.parsers.vo.ApisMessageVo;
+import gov.gtas.parsers.vo.MessageVo;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.util.LobUtils;
-import gov.gtas.vo.ApisMessageVo;
-import gov.gtas.vo.MessageVo;
 
 @Service
 public class ApisMessageService extends MessageService {

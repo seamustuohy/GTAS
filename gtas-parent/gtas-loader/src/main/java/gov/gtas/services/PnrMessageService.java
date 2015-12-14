@@ -18,10 +18,10 @@ import gov.gtas.model.Pnr;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.pnrgov.PnrGovParser;
 import gov.gtas.parsers.pnrgov.PnrUtils;
+import gov.gtas.parsers.vo.MessageVo;
+import gov.gtas.parsers.vo.PnrVo;
 import gov.gtas.repository.PnrRepository;
 import gov.gtas.util.LobUtils;
-import gov.gtas.vo.MessageVo;
-import gov.gtas.vo.passenger.PnrVo;
 
 @Service
 public class PnrMessageService extends MessageService {

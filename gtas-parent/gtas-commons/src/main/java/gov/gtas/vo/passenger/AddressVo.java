@@ -1,10 +1,6 @@
 package gov.gtas.vo.passenger;
 
-import org.apache.commons.lang3.StringUtils;
-
-import gov.gtas.validators.Validatable;
-
-public class AddressVo implements Validatable {
+public class AddressVo {
 	private String type;
 	private String line1;
 	private String line2;
@@ -69,8 +65,4 @@ public class AddressVo implements Validatable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-	@Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.line1);
-	}
 }

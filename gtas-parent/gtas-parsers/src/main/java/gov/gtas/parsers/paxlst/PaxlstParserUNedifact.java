@@ -2,7 +2,7 @@ package gov.gtas.parsers.paxlst;
 
 import java.util.Date;
 
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
@@ -27,14 +27,13 @@ import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.QTY;
 import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
-import gov.gtas.parsers.paxlst.segment.unedifact.TDT.TdtType;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.vo.ApisMessageVo;
-import gov.gtas.vo.passenger.DocumentVo;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.ReportingPartyVo;
-import gov.gtas.vo.passenger.SeatVo;
+import gov.gtas.parsers.vo.ApisMessageVo;
+import gov.gtas.parsers.vo.DocumentVo;
+import gov.gtas.parsers.vo.FlightVo;
+import gov.gtas.parsers.vo.PassengerVo;
+import gov.gtas.parsers.vo.ReportingPartyVo;
+import gov.gtas.parsers.vo.SeatVo;
 
 public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {   
     public PaxlstParserUNedifact() {
@@ -188,15 +187,12 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
 
             if (origin != null && dest != null) {
                 FlightVo f = new FlightVo();
-                TdtType flightType = tdt.getTransportStageQualifier();
-                f.setOverFlight(flightType.equals(TdtType.OVER_FLIGHT));
                 f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tdt.getFlightNumber()));
                 f.setCarrier(tdt.getC_carrierIdentifier());
                 f.setOrigin(origin);
                 f.setDestination(dest);
                 f.setEta(eta);
                 f.setEtd(etd);
-                ParseUtils.initEtaEtdDate(f);
                 f.setFlightDate(ParseUtils.determineFlightDate(etd, eta, parsedMessage.getTransmissionDate()));
 
                 if (f.isValid()) {

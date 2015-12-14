@@ -1,10 +1,6 @@
 package gov.gtas.vo.passenger;
 
-import org.apache.commons.lang3.StringUtils;
-
-import gov.gtas.validators.Validatable;
-
-public class EmailVo implements Validatable {
+public class EmailVo {
 	private String address;
 	private String domain;
 
@@ -19,9 +15,5 @@ public class EmailVo implements Validatable {
 	}
 	public void setDomain(String domain) {
 		this.domain = domain;
-	}
-	@Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.address);
 	}
 }

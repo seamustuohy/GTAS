@@ -17,10 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.util.DateCalendarUtils;
-import gov.gtas.vo.passenger.FlightVo;
-
 public class ParseUtils {
     private static final Logger logger = LoggerFactory.getLogger(ParseUtils.class);
 
@@ -223,7 +219,6 @@ public class ParseUtils {
         } else if (eta != null) {
             d = eta;
         } else {
-            // TODO: verify this case
             d = transmissionDate;
         }
 
@@ -232,22 +227,6 @@ public class ParseUtils {
         }
         
         return null;
-    }
-    /**
-     * Initializes the etaDate and etdDate attributes in thhe supplied flight VO
-     * by stripping off the time portion of eta and 
-     * etd respectively.
-     * @param f the flight VO
-     */
-    public static void initEtaEtdDate(FlightVo f){
-    	Date eta = f.getEta();
-    	Date etd = f.getEtd();
-    	if(eta != null){
-    		f.setEtaDate(DateCalendarUtils.stripTime(eta));
-    	}
-    	if(etd != null){
-    		f.setEtdDate(DateCalendarUtils.stripTime(etd));
-    	}
     }
     
     public static String padFlightNumberWithZeroes(String fn) {

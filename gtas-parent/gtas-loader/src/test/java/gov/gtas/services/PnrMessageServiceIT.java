@@ -25,10 +25,10 @@ import gov.gtas.model.Flight;
 import gov.gtas.model.FlightLeg;
 import gov.gtas.model.Passenger;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.vo.FlightVo;
+import gov.gtas.parsers.vo.PassengerVo;
 import gov.gtas.repository.FlightRepository;
 import gov.gtas.repository.PassengerRepository;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.PassengerVo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)

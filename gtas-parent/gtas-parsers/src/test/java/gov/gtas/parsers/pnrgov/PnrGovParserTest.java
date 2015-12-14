@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.vo.passenger.PnrVo;
+import gov.gtas.parsers.vo.PnrVo;
 
 public class PnrGovParserTest {
     EdifactParser<PnrVo> parser; 

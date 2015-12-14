@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.segment.UNA;
@@ -17,10 +17,10 @@ import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TIF;
 import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.vo.passenger.AddressVo;
-import gov.gtas.vo.passenger.DocumentVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.PhoneVo;
+import gov.gtas.parsers.vo.AddressVo;
+import gov.gtas.parsers.vo.DocumentVo;
+import gov.gtas.parsers.vo.PassengerVo;
+import gov.gtas.parsers.vo.PhoneVo;
 
 public class PnrUtils {
     public static Date parseDateTime(String dt) {

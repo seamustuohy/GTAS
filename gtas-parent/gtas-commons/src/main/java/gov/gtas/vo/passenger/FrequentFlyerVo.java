@@ -1,10 +1,6 @@
 package gov.gtas.vo.passenger;
 
-import org.apache.commons.lang3.StringUtils;
-
-import gov.gtas.validators.Validatable;
-
-public class FrequentFlyerVo implements Validatable {
+public class FrequentFlyerVo {
     private String carrier;
     private String number;
 
@@ -20,9 +16,4 @@ public class FrequentFlyerVo implements Validatable {
     public void setNumber(String number) {
         this.number = number;
     }
-	@Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.carrier) 
-		       && StringUtils.isNotBlank(this.number);
-	}
 }

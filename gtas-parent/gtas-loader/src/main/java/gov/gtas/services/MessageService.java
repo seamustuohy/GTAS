@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import gov.gtas.vo.MessageVo;
+import gov.gtas.parsers.vo.MessageVo;
 
 @Service
 public abstract class MessageService {

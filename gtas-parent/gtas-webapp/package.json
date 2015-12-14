@@ -13,7 +13,14 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node node_modules/karma/bin/karma start karma.conf.js",
     "build": "gulp --gulpfile ./src/main/webapp/gulpfile.js"
+  },
+  "devDependencies": {
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.15",
+    "karma-chrome-launcher": "^0.2.1",
+    "karma-ie-launcher": "^0.2.0",
+    "karma-jasmine": "^0.3.6"
   }
 }

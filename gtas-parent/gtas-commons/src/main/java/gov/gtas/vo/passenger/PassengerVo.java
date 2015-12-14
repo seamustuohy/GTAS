@@ -1,28 +1,20 @@
 package gov.gtas.vo.passenger;
 
-import gov.gtas.validators.Validatable;
-import gov.gtas.vo.BaseVo;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class PassengerVo extends BaseVo implements Validatable {
+import gov.gtas.vo.BaseVo;
+
+public class PassengerVo extends BaseVo {
 	private static final SimpleDateFormat dtFormat = new SimpleDateFormat(FlightVo.DATE_FORMAT);
 	
-    /**
-     * a unique passenger reference identifier (from PNR) used to cross
-     * reference passenger information in a PNR
-     */
-    private String travelerReferenceNumber;
-    
     private String title;    
     private String firstName;
     private String middleName;
@@ -69,8 +61,6 @@ public class PassengerVo extends BaseVo implements Validatable {
 	private List<DocumentVo> documents = new ArrayList<>();
 	private FlightHistoryVo flightHistoryVo;
     private PnrVo pnrVo;
-    
-    private List<SeatVo> seatAssignments = new ArrayList<>();
     
 	public String getPaxId() {
 		return paxId;
@@ -169,12 +159,6 @@ public class PassengerVo extends BaseVo implements Validatable {
     }
     public List<DocumentVo> getDocuments() {
         return documents;
-    }
-    public String getTravelerReferenceNumber() {
-        return travelerReferenceNumber;
-    }
-    public void setTravelerReferenceNumber(String travelerReferenceNumber) {
-        this.travelerReferenceNumber = travelerReferenceNumber;
     }
     public String getTitle() {
         return title;
@@ -305,23 +289,11 @@ public class PassengerVo extends BaseVo implements Validatable {
 	public String getEtaLocalTZ() {
 		return etaLocalTZ;
 	}
-	public List<SeatVo> getSeatAssignments() {
-        return seatAssignments;
-    }
-    public void setSeatAssignments(List<SeatVo> seatAssignments) {
-        this.seatAssignments = seatAssignments;
-    }
     
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }
-
-	@Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.firstName)
-		       && StringUtils.isNotBlank(this.lastName);
-	}
 
     @Override
     public int hashCode() {

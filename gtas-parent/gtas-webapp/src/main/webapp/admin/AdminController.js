@@ -1,7 +1,7 @@
 app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userService, auditService, errorService, $location, $mdToast, $document) {
     'use strict';
-    
-    function successToast(msg){
+    var that = this;
+    this.successToast = function(msg){
     	$mdToast.show($mdToast.simple()
     	    	  .content(msg)
     	    	  .position('top right')
@@ -15,17 +15,17 @@ app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userServ
     var setAuditData = function (data) { 
     	$scope.auditGrid.data = data; 
     	if(data && data.length > 0){
-    	    successToast('Audit Log Data Loaded.');
+    	    that.successToast('Audit Log Data Loaded.');
         } else {
-        	successToast('Filter conditions did not return any Audit Log Data.');
+        	that.successToast('Filter conditions did not return any Audit Log Data.');
         }
     	};
     var setErrorData = function (data) { 
 	    	$scope.errorGrid.data = data; 
 	    	if(data && data.length > 0){
-	    	   successToast('Error Log Data Loaded.')
+	    	   that.successToast('Error Log Data Loaded.')
 	    	} else {
-	    	   successToast('Filter conditions did not return any Error Log Data.');
+	    	   that.successToast('Filter conditions did not return any Error Log Data.');
 	    	}
     	};
     var setupUserGrid = function(){

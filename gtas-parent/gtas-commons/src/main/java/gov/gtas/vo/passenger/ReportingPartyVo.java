@@ -1,10 +1,6 @@
 package gov.gtas.vo.passenger;
 
-import org.apache.commons.lang3.StringUtils;
-
-import gov.gtas.validators.Validatable;
-
-public class ReportingPartyVo implements Validatable {
+public class ReportingPartyVo {
     private String partyName;
     private String telephone;
     private String fax;
@@ -27,8 +23,4 @@ public class ReportingPartyVo implements Validatable {
     public void setFax(String fax) {
         this.fax = fax;
     }
-    @Override
-    public boolean isValid() {
-        return StringUtils.isNotBlank(this.partyName);
-    }    
 }

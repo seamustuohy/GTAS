@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,17 +40,22 @@ public class JPQLGenerator {
 			List<EntityEnum> joinEntities = new ArrayList<>();
 			StringBuilder where = new StringBuilder();
 			String join = "";
+			MutableBoolean seatCondition = new MutableBoolean();
 			MutableInt positionalParameter = new MutableInt();
 			MutableInt level = new MutableInt();
 			
 			logger.debug("Parsing QueryObject...");
 			
-			generateWhereCondition(queryEntity, queryType, joinEntities, where, positionalParameter, level);
+			generateWhereCondition(queryEntity, queryType, joinEntities, where, seatCondition, positionalParameter, level);
 			
 			if(queryType == EntityEnum.FLIGHT) {
 				queryPrefix = Constants.SELECT_DISTINCT + " " + EntityEnum.FLIGHT.getAlias() + 
 						" " + Constants.FROM + " " + EntityEnum.FLIGHT.getEntityName() + " " + EntityEnum.FLIGHT.getAlias();
 				
+				if(seatCondition.isTrue()) {
+					joinEntities.add(EntityEnum.PASSENGER);
+				}
+					
 				if(!joinEntities.isEmpty()) {
 					
 					// remove Flight from the List because it is already
@@ -75,6 +81,10 @@ public class JPQLGenerator {
 					join = generateJoinCondition(joinEntities, queryType);
 				}
 				
+				if(seatCondition.isTrue()) {
+					join += " join p.seatAssignments s";
+				}
+				
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			else if(queryType == EntityEnum.PASSENGER) {
@@ -98,7 +108,11 @@ public class JPQLGenerator {
 					
 					join = generateJoinCondition(joinEntities, queryType);
 				}
-								
+					
+				if(seatCondition.isTrue()) {
+					join += " join p.seatAssignments s";
+				}
+				
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
 			}
 			
@@ -119,7 +133,7 @@ public class JPQLGenerator {
 	 * @throws InvalidQueryRepositoryException
 	 */
 	private static void generateWhereCondition(QueryEntity queryEntity, EntityEnum queryType, List<EntityEnum> joinEntities, StringBuilder where, 
-		MutableInt positionalParameter, MutableInt level) throws InvalidQueryRepositoryException {
+		MutableBoolean seatCondition, MutableInt positionalParameter, MutableInt level) throws InvalidQueryRepositoryException {
 		QueryObject queryObject = null;
 		QueryTerm queryTerm = null;
 		String condition = null;
@@ -141,7 +155,7 @@ public class JPQLGenerator {
 				if(index > 0) {
 					where.append(" " + condition + " ");
 				}
-				generateWhereCondition(rule, queryType, joinEntities, where, positionalParameter, level);
+				generateWhereCondition(rule, queryType, joinEntities, where, seatCondition, positionalParameter, level);
 				index++;
 			}
 						
@@ -159,8 +173,12 @@ public class JPQLGenerator {
 			
 			// add entity to data structure if not already present
 			// will be used later for generating the join condition
-			if(!joinEntities.contains(entityEnum)) {
+			if(!(entityEnum == EntityEnum.PNR && field.equalsIgnoreCase(Constants.SEAT)) && !joinEntities.contains(entityEnum)) {
 				joinEntities.add(entityEnum);
+			}
+			
+			if(seatCondition.isFalse() && field.equalsIgnoreCase(Constants.SEAT)) {
+				seatCondition.setTrue();
 			}
 			
 			if(entityEnum == EntityEnum.HITS) {
@@ -228,7 +246,18 @@ public class JPQLGenerator {
 						OperatorEnum.IS_NOT_EMPTY.toString().equalsIgnoreCase(operator) ||
 						OperatorEnum.IS_NULL.toString().equalsIgnoreCase(operator) ||
 						OperatorEnum.IS_NOT_NULL.toString().equalsIgnoreCase(operator)) {
-					where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator());
+					
+					if(field.equalsIgnoreCase(Constants.SEAT)) {
+						if(entityEnum == EntityEnum.PASSENGER) {
+							where.append("(s.apis = true");
+						}
+						else if(entityEnum == EntityEnum.PNR) {
+							where.append("(s.apis = false");
+						}
+						where.append(" and s.number " + opEnum.getOperator() + ")");
+					}else {
+						where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator());
+					}
 				}
 				else if(OperatorEnum.BETWEEN.toString().equalsIgnoreCase(operator) ) {
 					List<String> values = null;
@@ -248,11 +277,33 @@ public class JPQLGenerator {
 				else if(OperatorEnum.IN.toString().equalsIgnoreCase(operator) || 
 						OperatorEnum.NOT_IN.toString().equalsIgnoreCase(operator)) {
 					positionalParameter.increment(); // parameter position in the query
-					where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator() + " (?" + positionalParameter + ")");
+					
+					if(field.equalsIgnoreCase(Constants.SEAT)) {
+						if(entityEnum == EntityEnum.PASSENGER) {
+							where.append("(s.apis = true");
+						}
+						else if(entityEnum == EntityEnum.PNR) {
+							where.append("(s.apis = false");
+						}
+						where.append(" and s.number " + opEnum.getOperator() + " (?" + positionalParameter + "))");
+					} else {
+						where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator() + " (?" + positionalParameter + ")");
+					}
 				}
 				else {
 					positionalParameter.increment(); // parameter position in the query
-					where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator() + " ?" + positionalParameter);
+					
+					if(field.equalsIgnoreCase(Constants.SEAT)) {
+						if(entityEnum == EntityEnum.PASSENGER) {
+							where.append("(s.apis = true");
+						}
+						else if(entityEnum == EntityEnum.PNR) {
+							where.append("(s.apis = false");
+						}
+						where.append(" and s.number " + opEnum.getOperator() + " ?" + positionalParameter + ")");
+					} else {
+						where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator() + " ?" + positionalParameter);
+					}
 				}
 			}
 		}

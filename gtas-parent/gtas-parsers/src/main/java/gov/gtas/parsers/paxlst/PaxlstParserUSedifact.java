@@ -19,11 +19,11 @@ import gov.gtas.parsers.paxlst.segment.usedifact.PDT.DocType;
 import gov.gtas.parsers.paxlst.segment.usedifact.PDT.PersonStatus;
 import gov.gtas.parsers.paxlst.segment.usedifact.TDT;
 import gov.gtas.parsers.util.ParseUtils;
-import gov.gtas.vo.passenger.DocumentVo;
-import gov.gtas.vo.passenger.FlightVo;
-import gov.gtas.vo.passenger.PassengerVo;
-import gov.gtas.vo.passenger.ReportingPartyVo;
-import gov.gtas.vo.ApisMessageVo;
+import gov.gtas.parsers.vo.ApisMessageVo;
+import gov.gtas.parsers.vo.DocumentVo;
+import gov.gtas.parsers.vo.FlightVo;
+import gov.gtas.parsers.vo.PassengerVo;
+import gov.gtas.parsers.vo.ReportingPartyVo;
 
 public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
     private static final Logger logger = LoggerFactory.getLogger(PaxlstParserUSedifact.class);
@@ -117,10 +117,10 @@ public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
                 String country = loc.getIataCountryCode();
                 String  airport = loc.getIataAirportCode();
                 if (locCode == LocCode.DEPARTURE) {
-                    f.setOriginCountry(country);
+//                    f.setOriginCountry(country);
                     f.setOrigin(airport);
                 } else if (locCode == LocCode.ARRIVAL) {
-                    f.setDestinationCountry(country);
+//                    f.setDestinationCountry(country);
                     f.setDestination(airport);
                 }
                 break;
