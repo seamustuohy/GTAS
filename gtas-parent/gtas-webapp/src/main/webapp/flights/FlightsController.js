@@ -53,10 +53,10 @@
             };
 
         self.querySearch = querySearch;
-        $http.get('todos.json')
-            .then(function (res) {
-                airports = res.data;
-                self.allAirports = airports.map(function (contact) {
+        $http.get('data/airports.json')
+            .then(function (allAirports) {
+                airports = allAirports.data;
+                self.allAirports = allAirports.data.map(function (contact) {
                     contact.lowerCasedName = contact.name.toLowerCase();
                     return contact;
                 });
@@ -145,13 +145,13 @@
                 width: 70
             },
             {
-                name: 'eta', displayName: 'ETA',
+                name: 'etaLocalTZ', displayName: 'ETA',
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 2
                 }
             },
-            {name: 'etd', displayName: 'ETD'},
+            {name: 'etdLocalTZ', displayName: 'ETD'},
             {name: 'origin'},
             {name: 'originCountry', displayName: 'Country'},
             {name: 'destination'},
