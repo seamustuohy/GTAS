@@ -26,9 +26,34 @@ var app;
             'ngFileUpload'
         ],
         localDateMomentFormat = function ($mdDateLocaleProvider) {
-            $mdDateLocaleProvider.formatDate = function (date) {
+            // Example of a French localization.
+            //$mdDateLocaleProvider.months = ['janvier', 'février', 'mars', ...];
+            //$mdDateLocaleProvider.shortMonths = ['janv', 'févr', 'mars', ...];
+            //$mdDateLocaleProvider.days = ['dimanche', 'lundi', 'mardi', ...];
+            //$mdDateLocaleProvider.shortDays = ['Di', 'Lu', 'Ma', ...];
+            // Can change week display to start on Monday.
+            //$mdDateLocaleProvider.firstDayOfWeek = 1;
+            // Optional.
+            //$mdDateLocaleProvider.dates = [1, 2, 3, 4, 5, 6, ...];
+            // Example uses moment.js to parse and format dates.
+            $mdDateLocaleProvider.parseDate = function(dateString) {
+                var m = moment(dateString, 'L', true);
+                return m.isValid() ? m.toDate() : new Date(NaN);
+            };
+            $mdDateLocaleProvider.formatDate = function(date) {
+                console.log('converting date');
                 return moment(date).format('YYYY-MM-DD');
             };
+            //$mdDateLocaleProvider.monthHeaderFormatter = function(date) {
+            //    return myShortMonths[date.getMonth()] + ' ' + date.getFullYear();
+            //};
+            // In addition to date display, date components also need localized messages
+            // for aria-labels for screen-reader users.
+            //$mdDateLocaleProvider.weekNumberFormatter = function(weekNumber) {
+            //    return 'Semaine ' + weekNumber;
+            //};
+            //$mdDateLocaleProvider.msgCalendar = 'Calendrier';
+            //$mdDateLocaleProvider.msgOpenCalendar = 'Ouvrir le calendrier';
         },
         initialize = function ($rootScope) {
             $rootScope.$on('$stateChangeStart', function (e, toState, toParams) {
