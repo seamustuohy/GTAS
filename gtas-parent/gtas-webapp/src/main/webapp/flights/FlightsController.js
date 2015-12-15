@@ -39,6 +39,12 @@
             },
             fetchMethods = {
                 queryFlights: function () {
+                    var postData, query = JSON.parse(localStorage['query']);
+                    postData = {
+                        pageNumber: $scope.model.pageNumber,
+                        pageSize: $scope.model.pageSize,
+                        query: query
+                    };
                     executeQueryService.queryFlights(postData).then(update);
                 },
                 flights: function () {
