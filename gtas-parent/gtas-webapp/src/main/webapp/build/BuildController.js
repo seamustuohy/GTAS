@@ -1,6 +1,8 @@
 app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, spinnerService, $mdSidenav, $stateParams, $interval, $timeout) {
     'use strict';
     var todayDate = moment().toDate(),
+        queryFlightsLink = document.querySelector('a[href="#/query/flights"]'),
+        queryPassengersLink = document.querySelector('a[href="#/query/passengers"]'),
         todayText = moment().format('YYYY-MM-DD').toString(),
         conditions,
         model = {
@@ -135,7 +137,9 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     //TODO move out to a service
     $scope.executeQuery = function (e) {
-        var query = $scope.$builder.queryBuilder('getDrools');
+        var m = moment(),
+            timestamp = m.day() + '|' + m.hours() + '|' + m.minutes() + '|' + m.seconds(),
+            query = $scope.$builder.queryBuilder('getDrools');
         if (query === false) {
             alert('Can not execute / invalid query');
             e.preventDefault();
@@ -143,6 +147,8 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         }
         localStorage['query'] = JSON.stringify(query);
         localStorage['qbTitle'] = $scope[$scope.mode].title.length ? $scope[$scope.mode].title.trim() : '';
+        queryFlightsLink.setAttribute('target', 'qf|' + timestamp);
+        queryPassengersLink.setAttribute('target', 'qp|' + timestamp);
     };
 
     $scope.ruleId = null;
