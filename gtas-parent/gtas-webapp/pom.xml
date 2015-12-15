@@ -19,6 +19,7 @@
     <spring-security-test.version>4.0.1.RELEASE</spring-security-test.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <rest-assured.version>2.4.0</rest-assured.version>
+    <spring-csrf-token-filter>1.1</spring-csrf-token-filter>
   </properties>
 
   <dependencies>
@@ -27,6 +28,13 @@
       <artifactId>gtas-query-builder</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
+    
+    <dependency>
+                <groupId>com.allanditzel</groupId>
+                <artifactId>spring-security-csrf-token-filter</artifactId>
+                <version>${spring-csrf-token-filter}</version>
+            </dependency>
+    
     <dependency>
       <groupId>gov.gtas</groupId>
       <artifactId>gtas-rulesvc</artifactId>

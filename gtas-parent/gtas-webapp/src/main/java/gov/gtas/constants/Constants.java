@@ -60,7 +60,7 @@ public final class Constants {
 	public static final String ADMIN_ROLE = "ADMIN";
 	
 	//Security URL Paths
-	public static final String LOGIN_PAGE = "/login.jsp";
+	public static final String LOGIN_PAGE = "/login.html";
 	public static final String HOME_PAGE = "/home.action";
 	public static final String LOGOUT_MAPPING = "/logout.action";
 	
