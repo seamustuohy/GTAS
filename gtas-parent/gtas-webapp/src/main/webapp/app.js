@@ -36,11 +36,17 @@ var app;
             // Optional.
             //$mdDateLocaleProvider.dates = [1, 2, 3, 4, 5, 6, ...];
             // Example uses moment.js to parse and format dates.
-            $mdDateLocaleProvider.parseDate = function(dateString) {
-                var m = moment(dateString, 'L', true);
+            $mdDateLocaleProvider.parseDate = function (dateString) {
+                var manipulated, year, m;
+
+                manipulated = dateString.split('-');
+                year = manipulated.shift();
+                manipulated.push(year);
+                m = moment(manipulated.join('/'), 'L', true);
+
                 return m.isValid() ? m.toDate() : new Date(NaN);
             };
-            $mdDateLocaleProvider.formatDate = function(date) {
+            $mdDateLocaleProvider.formatDate = function (date) {
                 console.log('converting date');
                 return moment(date).format('YYYY-MM-DD');
             };
@@ -108,7 +114,7 @@ var app;
                         }
                     },
                     resolve: {
-                        flights: function (passengersBasedOnUserFilter,flightsModel) {
+                        flights: function (passengersBasedOnUserFilter, flightsModel) {
                             return passengersBasedOnUserFilter.load();
                         }
                     }
@@ -153,7 +159,9 @@ var app;
                         paxModel: function ($stateParams, paxModel) {
                             return {
                                 model: paxModel.initial($stateParams),
-                                reset: function() { this.model.lastName = ''; }
+                                reset: function () {
+                                    this.model.lastName = '';
+                                }
                             };
                         },
                         passengers: function (paxService, $stateParams, paxModel) {
@@ -217,39 +225,39 @@ var app;
                         }
                     }
                 }).state('user-settings', {
-                    url: '/user-settings',
-                    views: {
-                        '@': {
-                            controller: 'UserSettingsController',
-                            templateUrl: 'user-settings/user-settings.html'
-                        }
-                    },
-                    resolve: {
-                        user: function (userService) {
-                            return userService.getUserData();
-                        }
+                url: '/user-settings',
+                views: {
+                    '@': {
+                        controller: 'UserSettingsController',
+                        templateUrl: 'user-settings/user-settings.html'
                     }
-                }).state('setFilter', {
-                    url: '/set/filter',
-                    views: {
-                        '@': {
-                            controller: 'FilterCtrl',
-                            templateUrl: 'user-settings/filter.html'
-                        }
+                },
+                resolve: {
+                    user: function (userService) {
+                        return userService.getUserData();
                     }
-                });
+                }
+            }).state('setFilter', {
+                url: '/set/filter',
+                views: {
+                    '@': {
+                        controller: 'FilterCtrl',
+                        templateUrl: 'user-settings/filter.html'
+                    }
+                }
+            });
         },
         NavCtrl = function ($scope) {
             var lookup = {
-                admin: { name: ['admin', 'addUser', 'modifyUser'] },
-                dashboard: { name: ['dashboard'] },
-                flights: { name: ['flights'] },
-                passengers: { name: ['paxAll', 'flightpax'] },
-                queries: { mode: ['query'] },
-                risks: { mode: ['rule'] },
-                watchlists: { name: ['watchlists'] },
-                usersettings: { name: ['user-settings','setFilter'] },
-                upload: { name: ['upload'] }
+                admin: {name: ['admin', 'addUser', 'modifyUser']},
+                dashboard: {name: ['dashboard']},
+                flights: {name: ['flights']},
+                passengers: {name: ['paxAll', 'flightpax']},
+                queries: {mode: ['query']},
+                risks: {mode: ['rule']},
+                watchlists: {name: ['watchlists']},
+                usersettings: {name: ['user-settings', 'setFilter']},
+                upload: {name: ['upload']}
             };
             $scope.onRoute = function (key) {
                 return (lookup[key].name && lookup[key].name.indexOf($scope.stateName) >= 0) || (lookup[key].mode && lookup[key].mode.indexOf($scope.mode) >= 0);
