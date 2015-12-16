@@ -32,7 +32,10 @@
     "material-date-picker": "~1.2.1",
     "qunit": "^1.17.0",
     "sql-parser": "^1.0.0",
-    "angular-material": "master"
+    "angular-material": "master",
+    "spring-security-csrf-token-interceptor": "~0.1.5",
+	"angular-swx-session-storage": "latest"
+
   },
   "keywords": [
     "jquery",

@@ -19,13 +19,13 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 @EnableJpaRepositories("gov.gtas")
 @EnableSpringDataWebSupport
 public class WebAppConfig {
-    @Bean
-    public UrlBasedViewResolver setupViewResolver() {
-        UrlBasedViewResolver resolver = new UrlBasedViewResolver();
-        resolver.setPrefix("/WEB-INF/views/");
-        resolver.setSuffix(".jsp");
-        resolver.setViewClass(JstlView.class);
-        
-        return resolver;
-    }
+//    @Bean
+//    public UrlBasedViewResolver setupViewResolver() {
+//        UrlBasedViewResolver resolver = new UrlBasedViewResolver();
+//        resolver.setPrefix("/WEB-INF/views/");
+//        resolver.setSuffix(".jsp");
+//        resolver.setViewClass(JstlView.class);
+//        
+//        return resolver;
+//    }
 }
