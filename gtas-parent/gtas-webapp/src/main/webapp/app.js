@@ -47,7 +47,6 @@ var app;
                 return m.isValid() ? m.toDate() : new Date(NaN);
             };
             $mdDateLocaleProvider.formatDate = function (date) {
-                console.log('converting date');
                 return moment(date).format('YYYY-MM-DD');
             };
             //$mdDateLocaleProvider.monthHeaderFormatter = function(date) {
