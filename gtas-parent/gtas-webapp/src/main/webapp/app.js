@@ -364,7 +364,7 @@ var app;
     app = angular
         .module('myApp', appDependencies)
         .config(router)
-q        .config(localDateMomentFormat)
+        .config(localDateMomentFormat)
         .constant('USER_ROLES', {
             ADMIN: 'Admin',
             VIEW_FLIGHT_PASSENGERS: 'View Flight And Passenger',
