@@ -110,7 +110,7 @@ public class JPQLGenerator {
 				}
 					
 				if(seatCondition.isTrue()) {
-					join += " join p.seatAssignments s";
+					join += " left join p.seatAssignments s";
 				}
 				
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
