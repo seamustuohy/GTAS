@@ -245,12 +245,12 @@ public class TargetingServiceImpl implements TargetingService {
 	}
 
 	private RuleExecutionContext executeRules(List<Message> target) {
-		logger.info("Entering executeRules().");
+		logger.debug("Entering executeRules().");
 
 		RuleExecutionContext ctx = TargetingServiceUtils
 				.createPnrApisRequestContext(target);
 
-		logger.info("Running Rule set.");
+		logger.debug("Running Rule set.");
 		// default knowledge Base is the UDR KB
 		RuleServiceResult udrResult = ruleService.invokeRuleEngine(ctx
 				.getRuleServiceRequest());
@@ -268,19 +268,19 @@ public class TargetingServiceImpl implements TargetingService {
 
 		// eliminate duplicates
 		if (udrResult != null) {
-			logger.info("Eliminate duplicates from UDR rule running.");
+			logger.debug("Eliminate duplicates from UDR rule running.");
 			udrResult = TargetingResultUtils
 					.ruleResultPostProcesssing(udrResult);
 		}
 		if (wlResult != null) {
-			logger.info("Eliminate duplicates from watchlist rule running.");
+			logger.debug("Eliminate duplicates from watchlist rule running.");
 			wlResult = TargetingResultUtils.ruleResultPostProcesssing(wlResult);
 		}
 
 		TargetingResultUtils.updateRuleExecutionContext(ctx,
 				new CompositeRuleServiceResult(udrResult, wlResult));
 
-		logger.info("Exiting executeRules().");
+		logger.debug("Exiting executeRules().");
 		return ctx;
 	}
 
@@ -346,7 +346,7 @@ public class TargetingServiceImpl implements TargetingService {
 	private void writeAuditLogForTargetingRun(
 			RuleExecutionContext targetingResult) {
 		try {
-			Set<Long> passengerHits = new HashSet();
+			Set<Long> passengerHits = new HashSet<Long>();
 			int ruleHits = 0;
 			int wlHits = 0;
 			for(TargetSummaryVo hit: targetingResult.getTargetingResult()){
@@ -365,6 +365,7 @@ public class TargetingServiceImpl implements TargetingService {
 					"Targeting Run", bldr.toString(),
 					message, GTAS_APPLICATION_USERID);
 		} catch (Exception ex) {
+			//audit log writing errors will not be propagated!
 			ex.printStackTrace();
 		}
 	}

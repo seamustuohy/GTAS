@@ -42,6 +42,12 @@ public abstract class EntityConditionBuilder {
 
 	private Set<String> attributesWithNotEmptyCondition;
 
+	/*
+	 * If this flag is true then an empty DRL condition is generated
+	 * even if the condition list is empty.
+	 * For example: $p:Passenger()
+	 */
+	private boolean generateEmptyClause;
 	/**
 	 * The protected constructor to be invoked by derived classes.
 	 * 
@@ -89,6 +95,9 @@ public abstract class EntityConditionBuilder {
 			}
 			bldr.append(")\n");
 			addSpecialConditions(bldr);
+		} else if(generateEmptyClause){
+			bldr.append(drlVariableName).append(":").append(entityClassName)
+			.append("()\n");
 		}
 		return bldr.toString();
 	}
@@ -256,6 +265,13 @@ public abstract class EntityConditionBuilder {
 	 */
 	public String getDrlVariableName() {
 		return drlVariableName;
+	}
+
+	/**
+	 * @param generateEmptyClause the generateEmptyClause to set
+	 */
+	public void setGenerateEmptyClause(boolean generateEmptyClause) {
+		this.generateEmptyClause = generateEmptyClause;
 	}
 
 }

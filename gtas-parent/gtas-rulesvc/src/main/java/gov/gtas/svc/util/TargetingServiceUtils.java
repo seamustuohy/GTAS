@@ -3,7 +3,6 @@ package gov.gtas.svc.util;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Message;
 import gov.gtas.model.Pnr;
-import gov.gtas.svc.TargetingServiceImpl;
 import gov.gtas.svc.request.builder.RuleEngineRequestBuilder;
 
 import java.util.Collection;

@@ -11,6 +11,7 @@ import gov.gtas.enumtype.TypeEnum;
 import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.mappings.DocumentMapping;
 import gov.gtas.querybuilder.mappings.FlightMapping;
+import gov.gtas.querybuilder.mappings.PNRMapping;
 import gov.gtas.querybuilder.mappings.PassengerMapping;
 
 import java.text.ParseException;
@@ -34,6 +35,42 @@ public class RuleConditionBuilderTest {
 	public void tearDown() throws Exception {
 	}
 
+	@Test
+	public void testSingleConditionApisSeat() throws ParseException {
+		/*
+		 * just one Seat condition.
+		 * also test IN operator.
+		 */
+		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
+				PassengerMapping.SEAT,
+				CriteriaOperatorEnum.IN, new String[]{"A7865","H76"}, TypeEnum.STRING);
+		testTarget.addRuleCondition(cond);
+		StringBuilder result = new StringBuilder();
+		testTarget.buildConditionsAndApppend(result);
+		assertTrue(result.length() > 0);
+		assertEquals(
+				"$p:Passenger()\n"
+				+ "$seat2:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" in (\"A7865\", \"H76\"), passenger.id == $p.id, apis == true)",
+		 result.toString().trim());
+	}
+	@Test
+	public void testSingleConditionPnrSeat() throws ParseException {
+		/*
+		 * just one Seat condition.
+		 * also test IN operator.
+		 */
+		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PNR,
+				PassengerMapping.SEAT,
+				CriteriaOperatorEnum.IN, new String[]{"A7865","H76"}, TypeEnum.STRING);
+		testTarget.addRuleCondition(cond);
+		StringBuilder result = new StringBuilder();
+		testTarget.buildConditionsAndApppend(result);
+		assertTrue(result.length() > 0);
+		assertEquals(
+				"$p:Passenger()\n"
+				+ "$seat:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" in (\"A7865\", \"H76\"), passenger.id == $p.id, apis == false)",
+		 result.toString().trim());
+	}
 	@Test
 	public void testSingleConditionPassenger() throws ParseException {
 		/*
@@ -68,6 +105,58 @@ public class RuleConditionBuilderTest {
 				result.toString().trim());
 	}
 
+	@Test
+	public void testSeatAndFlight() throws ParseException {
+		/*
+		 * just one flight.
+		 * also test ENDS_WITH operator.
+		 */
+		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.FLIGHT,
+				FlightMapping.AIRPORT_DESTINATION,
+				CriteriaOperatorEnum.IN, new String[]{"DBY","XYZ","PQR"}, TypeEnum.STRING);
+		testTarget.addRuleCondition(cond);
+
+		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PASSENGER,
+				PassengerMapping.SEAT,
+				CriteriaOperatorEnum.ENDS_WITH, new String[]{"31"}, TypeEnum.STRING);
+		testTarget.addRuleCondition(cond);
+
+		StringBuilder result = new StringBuilder();
+		testTarget.buildConditionsAndApppend(result);
+		assertTrue(result.length() > 0);
+		System.out.println(result.toString().trim());
+		assertEquals("$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" in (\"DBY\", \"XYZ\", \"PQR\"))\n"
+				+"$p:Passenger() from $f.passengers\n"
+				+ "$seat2:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" != null, "
+			     + RuleTemplateConstants.SEAT_ATTRIBUTE_NAME + " str[endsWith] \"31\", passenger.id == $p.id, flight.id == $f.id, apis == true)",
+				result.toString().trim());
+	}
+
+	@Test
+	public void testSeatAndDocument() throws ParseException {
+		/*
+		 * test just one document condition.
+		 * also test BEGINS_WITH operator.
+		 */
+		QueryTerm cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.DOCUMENT,
+				DocumentMapping.ISSUANCE_COUNTRY,
+				CriteriaOperatorEnum.NOT_EQUAL, "US", TypeEnum.STRING);
+		testTarget.addRuleCondition(cond);
+
+		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PNR,
+				PNRMapping.SEAT,
+				CriteriaOperatorEnum.BEGINS_WITH, "29D", TypeEnum.STRING);
+		testTarget.addRuleCondition(cond);
+
+		StringBuilder result = new StringBuilder();
+		testTarget.buildConditionsAndApppend(result);
+		assertTrue(result.length() > 0);
+		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\")\n"
+				+"$p:Passenger(id == $d.passenger.id)\n"
+				+ "$seat:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" != null, "
+				     + RuleTemplateConstants.SEAT_ATTRIBUTE_NAME + " str[startsWith] \"29D\", passenger.id == $p.id, apis == false)",
+				result.toString().trim());
+	}
 
 	@Test
 	public void testSingleConditionDocument() throws ParseException {
@@ -386,7 +475,12 @@ public class RuleConditionBuilderTest {
 				PassengerMapping.LAST_NAME,
 				CriteriaOperatorEnum.EQUAL, "Jones", TypeEnum.STRING);
 		testTarget.addRuleCondition(cond);
-				
+
+		cond = RuleBuilderTestUtils.createQueryTerm(EntityEnum.PNR,
+				PassengerMapping.SEAT,
+				CriteriaOperatorEnum.EQUAL, new String[]{"A7865"}, TypeEnum.STRING);
+		testTarget.addRuleCondition(cond);
+		
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
@@ -403,7 +497,8 @@ public class RuleConditionBuilderTest {
 		           +FlightMapping.ETA.getFieldName()+" == \"01-Jan-2015\", "
 		           +FlightMapping.ETD.getFieldName()+" == \"01-Jan-2015\", "
 		           +FlightMapping.FLIGHT_NUMBER.getFieldName()+" == 2231)\n"
-		        +"Passenger(id == $p.id) from $f.passengers",
+		        +"Passenger(id == $p.id) from $f.passengers\n"		           
+				+ "$seat:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" == \"A7865\", passenger.id == $p.id, flight.id == $f.id, apis == false)",
 		result.toString().trim());
 	}
 }
