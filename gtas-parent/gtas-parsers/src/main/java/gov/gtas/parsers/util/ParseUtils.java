@@ -5,9 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -87,20 +84,15 @@ public class ParseUtils {
     }
     
     /**
+     * Eliminate all line terminators as well as any whitespace immediately
+     * following those line terminators.
+     * 
      * @param str input string
-     * @return a concatenation of all the lines in 'str'.  Trim each line of
-     * leading and trailing whitespace.  Empty lines get clobbered.
+     * @return a concatenation of all the lines in 'str' excluding any leading
+     * or trailing whitespace.
      */
     public static String convertToSingleLine(String str) {
-        if (str == null) {
-            return null;
-        }
-        String[] lines = str.split("[\r\n]+");
-        StringBuilder sb = new StringBuilder();
-        for (String s : lines) {
-            sb.append(s.trim());
-        }
-        return sb.toString();
+        return str.replaceAll("\\s*[\r\n]+\\s*", "").trim();
     }
     
     /**
@@ -182,20 +174,7 @@ public class ParseUtils {
         }
         return number.replaceAll("[^0-9]", "");
     }
-    
-    public static Integer calculateAge(Date dob) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(dob);
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-         
-        LocalDate today = LocalDate.now();
-        LocalDate birthday = LocalDate.of(year, month + 1, day);  // cal is 0-based. yuck
-        Period p = Period.between(birthday, today);
-        return p.getYears();
-    }
-    
+       
     public static Integer returnNumberOrNull(String s) {
         if (StringUtils.isBlank(s)) {
             return null;
@@ -223,7 +202,7 @@ public class ParseUtils {
         }
 
         if (d != null) {
-            return DateCalendarUtils.stripTime(d);
+            return DateUtils.stripTime(d);
         }
         
         return null;

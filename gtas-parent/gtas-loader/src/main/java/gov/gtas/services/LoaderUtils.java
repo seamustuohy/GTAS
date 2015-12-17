@@ -27,7 +27,7 @@ import gov.gtas.model.lookup.Airport;
 import gov.gtas.model.lookup.Country;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.util.DateCalendarUtils;
+import gov.gtas.parsers.util.DateUtils;
 import gov.gtas.parsers.vo.AddressVo;
 import gov.gtas.parsers.vo.AgencyVo;
 import gov.gtas.parsers.vo.CreditCardVo;
@@ -120,10 +120,10 @@ public class LoaderUtils {
 
         f.setFullFlightNumber(String.format("%s%s", vo.getCarrier(), vo.getFlightNumber()));
         if (vo.getEta() != null) {
-            f.setEtaDate(DateCalendarUtils.stripTime(vo.getEta()));
+            f.setEtaDate(DateUtils.stripTime(vo.getEta()));
         }
         if (vo.getEtd() != null) {
-            f.setEtdDate(DateCalendarUtils.stripTime(vo.getEtd()));
+            f.setEtdDate(DateUtils.stripTime(vo.getEtd()));
         }
 
         Airport dest = getAirport(f.getDestination());

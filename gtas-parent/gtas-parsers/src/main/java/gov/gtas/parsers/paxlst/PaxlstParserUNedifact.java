@@ -27,6 +27,7 @@ import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.QTY;
 import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
+import gov.gtas.parsers.util.DateUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.ApisMessageVo;
 import gov.gtas.parsers.vo.DocumentVo;
@@ -266,7 +267,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
                 Date dob = dtm.getDtmValue();
                 if (dob != null) {
                     p.setDob(dob);
-                    p.setAge(ParseUtils.calculateAge(dob));
+                    p.setAge(DateUtils.calculateAge(dob));
                 }
             }
         }

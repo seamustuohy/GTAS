@@ -16,6 +16,7 @@ import gov.gtas.parsers.pnrgov.segment.ADD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TIF;
 import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
+import gov.gtas.parsers.util.DateUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.AddressVo;
 import gov.gtas.parsers.vo.DocumentVo;
@@ -100,7 +101,7 @@ public class PnrUtils {
         if (StringUtils.isNotBlank(d)) {
             Date dob = ParseUtils.parseDateTime(d, DOC_DATE_FORMAT);
             p.setDob(dob);
-            p.setAge(ParseUtils.calculateAge(dob));
+            p.setAge(DateUtils.calculateAge(dob));
         }
         p.setGender(safeGet(strs, 6));
         d = safeGet(strs, 7);

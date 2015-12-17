@@ -15,7 +15,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public final class Composite {
     private final List<String> elements;
 
-    public Composite(List<String> elements) {
+    public Composite(final List<String> elements) {
         if (CollectionUtils.isNotEmpty(elements)) {
             this.elements = elements;
         } else {
@@ -23,7 +23,7 @@ public final class Composite {
         }
     }
     
-    public String getElement(int index) {
+    public String getElement(final int index) {
         if (index < 0) {
             throw new IndexOutOfBoundsException();
         } else if (index >= numElements()) {

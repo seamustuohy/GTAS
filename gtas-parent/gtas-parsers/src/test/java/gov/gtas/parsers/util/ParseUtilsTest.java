@@ -60,17 +60,21 @@ public class ParseUtilsTest {
     
     @Test
     public void testMd5() {
-        String str1 = "unoshriram";
-        String expected = "95E5F0B6988EC703E832172F70CE7DC7";
+        String str1 = "gtas";
+        String expected = "2F005A6B1EA39FAA5D75C6CCCF59E63A";
         String actual = ParseUtils.getMd5Hash(str1, StandardCharsets.US_ASCII);
         assertEquals(expected, actual);
     }
     
     @Test
     public void testConvertToSingleLine() {
-        String input = "   hello    \r\n\r\n  there\r   gtas team\n";
+        String input = "   hello    \r\n\r\n  there\r   gtas team\n   ";
         String actual = ParseUtils.convertToSingleLine(input);
         assertEquals("hellotheregtas team", actual);
+    }
+    @Test
+    public void testConvertToSingleLineWhitespace() {
+        assertEquals("", ParseUtils.convertToSingleLine("      "));
     }
     
     @Test
@@ -90,7 +94,7 @@ public class ParseUtilsTest {
     @Test
     public void testCalculateAge() throws ParseException {
         Date d = ParseUtils.parseDateTime("03051980", "MMddyyyy");
-        int age = ParseUtils.calculateAge(d);
+        int age = DateUtils.calculateAge(d);
         System.out.println(d + " " + age);
     }
 }
