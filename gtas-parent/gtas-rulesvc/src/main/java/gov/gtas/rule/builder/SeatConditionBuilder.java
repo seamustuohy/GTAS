@@ -16,19 +16,12 @@ public class SeatConditionBuilder extends EntityConditionBuilder {
 		super(drlVariableName, RuleTemplateConstants.SEAT_ENTITY_NAME);
 		this.apis = apis;
 	}
-	public void addPassengerFlightLinkConditions(final String defaultPassengerVarName, final String defaultFlightVarName){
-		super.addConditionAsString("passenger.id == " + defaultPassengerVarName + ".id");
-		if(defaultFlightVarName != null) {
-		   super.addConditionAsString("flight.id == " + defaultFlightVarName + ".id");
-		}
+	public void addApisCondition(){
 		if(isApis()){
 		    super.addConditionAsString("apis == true");
 		} else {
 		    super.addConditionAsString("apis == false");			
 		}
-	}
-	public void addPassengerLinkCondition(final String defaultPassengerVarName){
-		addPassengerFlightLinkConditions(defaultPassengerVarName, null);
 	}
 	/* (non-Javadoc)
 	 * @see gov.gtas.rule.builder.EntityConditionBuilder#addSpecialConditions(java.lang.StringBuilder)

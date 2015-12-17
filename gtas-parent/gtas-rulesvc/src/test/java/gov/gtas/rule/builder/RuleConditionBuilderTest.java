@@ -48,9 +48,12 @@ public class RuleConditionBuilderTest {
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
+		System.out.println(result.toString().trim());
 		assertEquals(
-				"$p:Passenger()\n"
-				+ "$seat2:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" in (\"A7865\", \"H76\"), passenger.id == $p.id, apis == true)",
+				"$seat2:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" in (\"A7865\", \"H76\"), apis == true)\n"
+				+ "$p:Passenger(id == $seat2.passenger.id)\n"
+				+ "$f:Flight(id == $seat2.flight.id)\n"
+				+ "Passenger(id == $p.id) from $f.passengers",
 		 result.toString().trim());
 	}
 	@Test
@@ -67,8 +70,10 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		assertEquals(
-				"$p:Passenger()\n"
-				+ "$seat:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" in (\"A7865\", \"H76\"), passenger.id == $p.id, apis == false)",
+				"$seat:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" in (\"A7865\", \"H76\"), apis == false)\n"
+						+ "$p:Passenger(id == $seat.passenger.id)\n"
+						+ "$f:Flight(id == $seat.flight.id)\n"
+						+ "Passenger(id == $p.id) from $f.passengers",
 		 result.toString().trim());
 	}
 	@Test
@@ -125,10 +130,12 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		System.out.println(result.toString().trim());
-		assertEquals("$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" in (\"DBY\", \"XYZ\", \"PQR\"))\n"
-				+"$p:Passenger() from $f.passengers\n"
-				+ "$seat2:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" != null, "
-			     + RuleTemplateConstants.SEAT_ATTRIBUTE_NAME + " str[endsWith] \"31\", passenger.id == $p.id, flight.id == $f.id, apis == true)",
+		assertEquals(
+				"$seat2:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" != null, "
+					     + RuleTemplateConstants.SEAT_ATTRIBUTE_NAME + " str[endsWith] \"31\", apis == true)\n"
+				+ "$p:Passenger(id == $seat2.passenger.id)\n"
+				+ "$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" in (\"DBY\", \"XYZ\", \"PQR\"), id == $seat2.flight.id)\n"
+				+"Passenger(id == $p.id) from $f.passengers",
 				result.toString().trim());
 	}
 
@@ -151,10 +158,13 @@ public class RuleConditionBuilderTest {
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
-		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\")\n"
-				+"$p:Passenger(id == $d.passenger.id)\n"
-				+ "$seat:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" != null, "
-				     + RuleTemplateConstants.SEAT_ATTRIBUTE_NAME + " str[startsWith] \"29D\", passenger.id == $p.id, apis == false)",
+		assertEquals(
+				"$seat:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" != null, "
+			     + RuleTemplateConstants.SEAT_ATTRIBUTE_NAME + " str[startsWith] \"29D\", apis == false)\n"
+			     +"$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\")\n"
+				+"$p:Passenger(id == $seat.passenger.id, id == $d.passenger.id)\n"
+				+ "$f:Flight(id == $seat.flight.id)\n"
+				+"Passenger(id == $p.id) from $f.passengers",
 				result.toString().trim());
 	}
 
@@ -352,7 +362,6 @@ public class RuleConditionBuilderTest {
 		testTarget.addRuleCondition(cond);
 		StringBuilder result = new StringBuilder();
 		testTarget.buildConditionsAndApppend(result);
-		System.out.println(result);
 		assertTrue(result.length() > 0);
 		assertEquals("$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 		+DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
@@ -485,20 +494,21 @@ public class RuleConditionBuilderTest {
 		testTarget.buildConditionsAndApppend(result);
 		assertTrue(result.length() > 0);
 		assertEquals(
-				"$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
+				"$seat:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" == \"A7865\", apis == false)\n"
+				+"$d:Document("+DocumentMapping.ISSUANCE_COUNTRY.getFieldName()+" != \"US\", "
 		            +DocumentMapping.ISSUANCE_DATE.getFieldName()+" >= \"01-Jan-2010\")\n"
    				+"$p:Passenger("
 					+PassengerMapping.DOB.getFieldName()+" >= \"01-Jan-1990\", "
 					+PassengerMapping.DOB.getFieldName()+" <= \"31-Dec-1998\", "
 					+PassengerMapping.LAST_NAME.getFieldName()+" == \"JONES\", "
-					+"id == $d.passenger.id)\n"
+					+"id == $seat.passenger.id, id == $d.passenger.id)\n"
 
 		        + "$f:Flight("+FlightMapping.AIRPORT_DESTINATION.getFieldName()+" == \"DBY\", "
 		           +FlightMapping.ETA.getFieldName()+" == \"01-Jan-2015\", "
 		           +FlightMapping.ETD.getFieldName()+" == \"01-Jan-2015\", "
-		           +FlightMapping.FLIGHT_NUMBER.getFieldName()+" == 2231)\n"
-		        +"Passenger(id == $p.id) from $f.passengers\n"		           
-				+ "$seat:Seat("+RuleTemplateConstants.SEAT_ATTRIBUTE_NAME+" == \"A7865\", passenger.id == $p.id, flight.id == $f.id, apis == false)",
+		           +FlightMapping.FLIGHT_NUMBER.getFieldName()+" == 2231, "
+		           + "id == $seat.flight.id)\n"
+		        +"Passenger(id == $p.id) from $f.passengers",		           
 		result.toString().trim());
 	}
 }

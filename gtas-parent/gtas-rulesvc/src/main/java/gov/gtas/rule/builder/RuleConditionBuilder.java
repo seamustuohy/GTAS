@@ -98,12 +98,12 @@ public class RuleConditionBuilder {
 
 		generateLinkConditions();
 
+		parentStringBuilder.append(apisSeatConditionBuilder.build());
+		parentStringBuilder.append(pnrSeatConditionBuilder.build());
+
 		parentStringBuilder.append(documentConditionBuilder.build());
 		parentStringBuilder.append(passengerConditionBuilder.build());
 		parentStringBuilder.append(flightConditionBuilder.build());
-
-		parentStringBuilder.append(apisSeatConditionBuilder.build());
-		parentStringBuilder.append(pnrSeatConditionBuilder.build());
 		
 		boolean isPassengerConditionCreated = !passengerConditionBuilder
 				.isEmpty() | !flightConditionBuilder.isEmpty();
@@ -119,24 +119,22 @@ public class RuleConditionBuilder {
 	}
 
 	/**
-	 * Creates linking passenger criteria for documents and flights.
+	 * Creates linking passenger criteria for documents and flights,
+	 * and also seats, passengers and flights.
 	 * 
 	 */
 	private void generateLinkConditions() {
-		boolean seatFlag = false;
-		if(!pnrSeatConditionBuilder.isEmpty() && !flightConditionBuilder.isEmpty()){
-			pnrSeatConditionBuilder.addPassengerFlightLinkConditions(passengerVariableName, flightVariableName);
-			seatFlag = true;
-		} else if (!pnrSeatConditionBuilder.isEmpty() && flightConditionBuilder.isEmpty()) {
-			pnrSeatConditionBuilder.addPassengerLinkCondition(passengerVariableName);
-			seatFlag = true;
+		if(!pnrSeatConditionBuilder.isEmpty()) {
+			pnrSeatConditionBuilder.addApisCondition();
+			passengerConditionBuilder.addConditionAsString("id == "+RuleTemplateConstants.SEAT_VARIABLE_NAME+".passenger.id");
+			flightConditionBuilder.addConditionAsString("id == "+RuleTemplateConstants.SEAT_VARIABLE_NAME+".flight.id");
+			this.flightCriteriaPresent = true;
 		}
-		if(!apisSeatConditionBuilder.isEmpty() && !flightConditionBuilder.isEmpty()){
-			apisSeatConditionBuilder.addPassengerFlightLinkConditions(passengerVariableName, flightVariableName);
-			seatFlag = true;
-		} else if (!apisSeatConditionBuilder.isEmpty() && flightConditionBuilder.isEmpty()) {
-			apisSeatConditionBuilder.addPassengerLinkCondition(passengerVariableName);
-			seatFlag = true;
+		if(!apisSeatConditionBuilder.isEmpty()) {
+			apisSeatConditionBuilder.addApisCondition();
+			passengerConditionBuilder.addConditionAsString("id == "+RuleTemplateConstants.SEAT_VARIABLE_NAME+"2.passenger.id");
+			flightConditionBuilder.addConditionAsString("id == "+RuleTemplateConstants.SEAT_VARIABLE_NAME+"2.flight.id");
+			this.flightCriteriaPresent = true;
 		}
 
 		if (!documentConditionBuilder.isEmpty()) {
@@ -151,10 +149,7 @@ public class RuleConditionBuilder {
 		if (!passengerConditionBuilder.isEmpty()) {
 			flightConditionBuilder
 					.addLinkedPassenger(this.passengerVariableName);
-		} else if(seatFlag && flightConditionBuilder.isEmpty()){
-			//force an empty passenger condition to be generated
-			passengerConditionBuilder.setGenerateEmptyClause(true);
-		}
+		} 		
 	}
 
 	/**
