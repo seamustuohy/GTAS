@@ -13,10 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @see Segment
  */
 public final class Composite {
-    private List<String> elements;
-
-    @SuppressWarnings("unused")
-    private Composite() { }
+    private final List<String> elements;
 
     public Composite(List<String> elements) {
         if (CollectionUtils.isNotEmpty(elements)) {
