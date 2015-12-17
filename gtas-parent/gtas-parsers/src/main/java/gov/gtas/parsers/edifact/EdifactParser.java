@@ -11,7 +11,7 @@ import gov.gtas.parsers.edifact.segment.UNH;
 import gov.gtas.parsers.edifact.segment.UNT;
 import gov.gtas.parsers.edifact.segment.UNZ;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.util.TextUtils;
 import gov.gtas.parsers.vo.MessageVo;
 /**
  * The parser takes the output from the Edifact lexer and starts the process of
@@ -71,7 +71,7 @@ public abstract class EdifactParser <T extends MessageVo> {
         if (payload == null) {
             throw new ParseException("Could not extract message payload");
         }
-        String md5 = ParseUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
+        String md5 = TextUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
         this.parsedMessage.setHashCode(md5);
         this.parsedMessage.setRaw(EdifactLexer.prettyPrint(this.segments));
         

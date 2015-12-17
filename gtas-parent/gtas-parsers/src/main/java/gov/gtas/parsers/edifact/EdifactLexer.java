@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.util.TextUtils;
 
 /**
  * The class takes as input any Edifact file
@@ -25,7 +25,7 @@ public class EdifactLexer {
     
     public static UNA getUnaSegment(String msg) {
         String regex = String.format("UNA.{%d}\\s*UNB", UNA.NUM_UNA_CHARS);
-        int unaIndex = ParseUtils.indexOfRegex(regex, msg);
+        int unaIndex = TextUtils.indexOfRegex(regex, msg);
 
         if (unaIndex != -1) {
             int endIndex = unaIndex + "UNA".length() + UNA.NUM_UNA_CHARS;
@@ -42,13 +42,13 @@ public class EdifactLexer {
     public static int getStartOfSegment(String segmentName, String msg, UNA una) {
         String format = "%s\\s*\\%c";
         String regex = String.format(format, segmentName, una.getDataElementSeparator());
-        int i = ParseUtils.indexOfRegex(regex, msg);
+        int i = TextUtils.indexOfRegex(regex, msg);
         if (i != -1) {
             return i;
         }
 
         regex = String.format(format, segmentName, una.getSegmentTerminator());
-        return ParseUtils.indexOfRegex(regex, msg);
+        return TextUtils.indexOfRegex(regex, msg);
     }
     
     /**
@@ -82,7 +82,7 @@ public class EdifactLexer {
         if (StringUtils.isEmpty(msg)) {
             return null;
         }
-        msg = ParseUtils.convertToSingleLine(msg).toUpperCase();
+        msg = TextUtils.convertToSingleLine(msg).toUpperCase();
         
         UNA una = getUnaSegment(msg);
         SegmentTokenizer segmentTokenizer = new SegmentTokenizer(una);
@@ -96,7 +96,7 @@ public class EdifactLexer {
         
         LinkedList<Segment> segments = new LinkedList<>();
         
-        String[] stringSegments = ParseUtils.splitWithEscapeChar(msg, 
+        String[] stringSegments = TextUtils.splitWithEscapeChar(msg, 
                 una.getSegmentTerminator(), 
                 una.getReleaseCharacter());
 

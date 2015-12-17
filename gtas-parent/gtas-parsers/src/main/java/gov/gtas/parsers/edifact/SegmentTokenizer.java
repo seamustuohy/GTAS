@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
-import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.util.TextUtils;
 
 /**
  * Parses a segment text into composites and elements.
@@ -29,7 +29,7 @@ public class SegmentTokenizer {
             return null;
         }
         
-        String[] tokens = ParseUtils.splitWithEscapeChar(
+        String[] tokens = TextUtils.splitWithEscapeChar(
                 segmentText, 
                 una.getDataElementSeparator(), 
                 una.getReleaseCharacter()); 
@@ -46,7 +46,7 @@ public class SegmentTokenizer {
         List<Composite> composites = new ArrayList<>(tokens.length - 1);
         for (int i=1; i<tokens.length; i++) {
             String cText = tokens[i];
-            String[] elements = ParseUtils.splitWithEscapeChar(
+            String[] elements = TextUtils.splitWithEscapeChar(
                     cText, 
                     una.getComponentDataElementSeparator(),
                     una.getReleaseCharacter());

@@ -6,11 +6,10 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
  * Error processing utility functions.
- * 
- * @author GTAS3 (AB)
- *
  */
-public class ErrorUtils {
+public final class ErrorUtils {
+    private ErrorUtils() { }
+    
     public static void constructExceptionDetails(Throwable exception, List<String> details){
     	details.add("Exception class:"+exception.getClass().getSimpleName());
     	details.add("Exception messsage:"+exception.getMessage());
@@ -32,5 +31,4 @@ public class ErrorUtils {
 		}
 		return stacktrace;
 	}
-	
 }
