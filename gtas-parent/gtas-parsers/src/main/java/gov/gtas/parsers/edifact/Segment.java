@@ -3,36 +3,45 @@ package gov.gtas.parsers.edifact;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Top-level segment class contains the segment name (NAD, UNC, CNT, etc.) and
- * an array of Composites. 
+ * Parent Edifact segment class. An Edifact segment consists of a segment name
+ * followed by zero or more {@code Composites}. If the constructor receives an
+ * empty list of composites, it indicates that the segment is used as a 'marker'
+ * segment.
+ * 
+ * @see Composite
  */
 public class Segment {
     protected static final Logger logger = LoggerFactory.getLogger(Segment.class);
 
-    private String name;
+    /** the segment name (NAD, UNC, CNT, etc.) */
+    private final String name;
+
+    /** original segment text, including any composites. Optional field. */
     private String text;
-    private List<Composite> composites;
 
-    @SuppressWarnings("unused")
-    private Segment() { }
+    /**list of segment fields/composites */
+    private final List<Composite> composites;
 
-    /**
-     * If the array of Composites is null, the segment is acting as just a
-     * "marker" segment, and doesn't contain any data.
-     */
-    public Segment(String name, List<Composite> composites) {
-        if (name == null) {
-            throw new IllegalArgumentException("name cannot be null");
+    public Segment(final String name, final List<Composite> composites) {
+        this(name, "", composites);
+    }
+    
+    public Segment(final String name, final String text, final List<Composite> composites) {
+        if (StringUtils.isBlank(name)) {
+            throw new IllegalArgumentException("name cannot be null or empty");
         }
         
         this.name = name;
-        if (composites != null) {
+        this.text = text;
+        if (CollectionUtils.isNotEmpty(composites)) {
             this.composites = composites;            
         } else {
             this.composites = new ArrayList<>();
@@ -43,23 +52,27 @@ public class Segment {
         return this.name;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public String getText() {
-        return text;
+        return this.text;
     }
 
     public List<Composite> getComposites() {
         return this.composites;
     }
 
-    public Composite getComposite(int index) {
-        if (index < 0 || index >= this.composites.size()) {
+    /**
+     * A "safe" getter for retrieving a composite by index.
+     * @param index 0-based index of composite to retrieve
+     * @return the composite given by the index; null if it does not exist.
+     */
+    public Composite getComposite(final int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("index cannot be < 0");
+        } else if (index >= this.composites.size()) {
             return null;
+        } else {
+            return this.composites.get(index);
         }
-        return this.composites.get(index);
     }
     
     public int numComposites() {

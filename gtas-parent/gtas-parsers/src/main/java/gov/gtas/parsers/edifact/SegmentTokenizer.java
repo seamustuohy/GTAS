@@ -53,8 +53,6 @@ public class SegmentTokenizer {
             composites.add(new Composite(Arrays.asList(elements)));
         }
 
-        Segment rv = new Segment(segmentName, composites);
-        rv.setText(segmentText);
-        return rv;
+        return new Segment(segmentName, segmentText, composites);
     }
 }
