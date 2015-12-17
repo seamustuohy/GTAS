@@ -17,10 +17,6 @@ public final class TextUtils {
      * characters are removed from the final output.
      */
     public static String[] splitWithEscapeChar(String s, char delimiter, char escape) {
-        if (s == null) {
-            return null;
-        }
-        
         String escapedDelimiter = String.format("\\%c\\%c", escape, delimiter);
         final String sentinel = "~XYZ~";
         String tmp = s.replaceAll(escapedDelimiter, sentinel);

@@ -14,17 +14,14 @@ import gov.gtas.parsers.util.TextUtils;
 /**
  * Parses a segment text into composites and elements.
  */
-public class SegmentTokenizer {
-    private UNA una;
-    
-    @SuppressWarnings("unused")
-    private SegmentTokenizer() { }
+public final class SegmentTokenizer {
+    private final UNA una;
     
     public SegmentTokenizer(UNA una) {
         this.una = una;
     }
     
-    public Segment buildSegment(String segmentText) throws ParseException {
+    public Segment buildSegment(final String segmentText) throws ParseException {
         if (StringUtils.isBlank(segmentText)) {
             return null;
         }

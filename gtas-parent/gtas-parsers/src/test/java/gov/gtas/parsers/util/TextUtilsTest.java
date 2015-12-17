@@ -3,10 +3,19 @@ package gov.gtas.parsers.util;
 import static org.junit.Assert.assertEquals;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import org.junit.Test;
 
 public class TextUtilsTest {
+    @Test
+    public void testSplit() {
+        String[] strs = TextUtils.splitWithEscapeChar("mc?'foo'bar", '\'', '?');
+        System.out.println(Arrays.toString(strs));
+        assertEquals("mc'foo", strs[0]);
+        assertEquals("bar", strs[1]);
+    }
+    
     @Test
     public void testSplitHappyPath() {
         String segmentText = "DTM*36:10109$LOC*31*USA$NAD*FL***ANDREWS:TIFFANY:PAGE$ATT*2**F$";
@@ -68,8 +77,17 @@ public class TextUtilsTest {
         String actual = TextUtils.convertToSingleLine(input);
         assertEquals("hellotheregtas team", actual);
     }
+    
     @Test
     public void testConvertToSingleLineWhitespace() {
         assertEquals("", TextUtils.convertToSingleLine("      "));
+    }
+    
+    @Test
+    public void testIndexOfRegex() {
+        String input = "aaaABCbbb";
+        String regex = "[A-Z]+";
+        int i = TextUtils.indexOfRegex(regex, input);
+        assertEquals(input.indexOf('A'), i);
     }
 }
