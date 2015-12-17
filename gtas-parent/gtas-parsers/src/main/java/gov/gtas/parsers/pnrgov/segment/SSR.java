@@ -89,7 +89,7 @@ public class SSR extends Segment {
     		this.offCity = c.getElement(7);
     
     		StringBuffer b = new StringBuffer();
-    		for (int i=8; i<c.getElements().size(); i++) {
+    		for (int i=8; i<c.numElements(); i++) {
     		    b.append(c.getElement(i));
     		}
     		if (b.length() != 0) {

@@ -67,8 +67,8 @@ public class Segment {
      */
     public Composite getComposite(final int index) {
         if (index < 0) {
-            throw new IllegalArgumentException("index cannot be < 0");
-        } else if (index >= this.composites.size()) {
+            throw new IndexOutOfBoundsException();
+        } else if (index >= numComposites()) {
             return null;
         } else {
             return this.composites.get(index);
