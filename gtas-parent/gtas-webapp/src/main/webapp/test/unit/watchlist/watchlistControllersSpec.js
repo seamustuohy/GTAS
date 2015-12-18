@@ -34,14 +34,16 @@ describe('Watchlist controller:', function() {
 
 /* was expecting a document fetch call ??!! */
     
-//    it('should fetch two documents from xhr', function() {
-//      $httpBackend.expectGET('/gtas/wl/Document/Document').
-//          respond([{documentType: 'P', documentNumber: '12345'}, {documentType: 'V', documentNumber: 'V7657'}]);
-//
-//      $httpBackend.flush();
-//      expect(scope.watchlistGrid.data).toEqual([{documentType: 'P', documentNumber: '12345'}, {documentType: 'V', documentNumber: 'V7657'}]);
-//    });
-//
+    it('should fetch two documents from xhr', function() {
+      $httpBackend.expectGET('/gtas/wl/Document/Document').
+          respond([{documentType: 'P', documentNumber: '12345'}, {documentType: 'V', documentNumber: 'V7657'}]);
+
+      scope.getListItemsFor('Document');
+      
+      $httpBackend.flush();
+      expect(scope.watchlistGrid.data).toEqual([{documentType: 'P', documentNumber: '12345'}, {documentType: 'V', documentNumber: 'V7657'}]);
+    });
+
   });
 
 });

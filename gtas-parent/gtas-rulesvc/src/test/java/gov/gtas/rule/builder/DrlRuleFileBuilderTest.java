@@ -1,6 +1,8 @@
 package gov.gtas.rule.builder;
 
 import static gov.gtas.rule.builder.RuleBuilderTestUtils.FLIGHT_ETA_ETD_RULE_INDX;
+import static gov.gtas.rule.builder.RuleBuilderTestUtils.PASSENGER_SEAT_RULE_INDX;
+import static gov.gtas.rule.builder.RuleBuilderTestUtils.PNR_SEAT_RULE_INDX;
 import static gov.gtas.rule.builder.RuleBuilderTestUtils.UDR_RULE_TITLE;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -35,7 +37,6 @@ public class DrlRuleFileBuilderTest {
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, FLIGHT_ETA_ETD_RULE_INDX);
 		testTarget.addRule(udrRule);
 		String result = testTarget.build();
-		System.out.println(result);
 		verifyDrl(result, FLIGHT_ETA_ETD_RULE_INDX);
 		testKnowledgeBaseTest(result);
 		}catch (Exception ex){
@@ -49,7 +50,6 @@ public class DrlRuleFileBuilderTest {
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, 1);
 		testTarget.addRule(udrRule);
 		String result = testTarget.build();
-		System.out.println(result);
 		verifyDrl(result, 1);
 		testKnowledgeBaseTest(result);
 		}catch (Exception ex){
@@ -63,7 +63,6 @@ public class DrlRuleFileBuilderTest {
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, 2);
 		testTarget.addRule(udrRule);
 		String result = testTarget.build();
-		System.out.println(result);
 		verifyDrl(result, 2);
 		testKnowledgeBaseTest(result);
 		}catch (Exception ex){
@@ -77,8 +76,33 @@ public class DrlRuleFileBuilderTest {
 		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, 4);
 		testTarget.addRule(udrRule);
 		String result = testTarget.build();
-		System.out.println(result);
 		verifyDrl(result, 4);
+		testKnowledgeBaseTest(result);
+		}catch (Exception ex){
+			ex.printStackTrace();
+			fail("Not expecting exception.");
+		}
+	}
+	@Test
+	public void testSimpleRuleGenerationAndCompilation5() {
+		try{
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, PASSENGER_SEAT_RULE_INDX);
+		testTarget.addRule(udrRule);
+		String result = testTarget.build();
+		verifyDrl(result, PASSENGER_SEAT_RULE_INDX);
+		testKnowledgeBaseTest(result);
+		}catch (Exception ex){
+			ex.printStackTrace();
+			fail("Not expecting exception.");
+		}
+	}
+	@Test
+	public void testSimpleRuleGenerationAndCompilation6() {
+		try{
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, PNR_SEAT_RULE_INDX);
+		testTarget.addRule(udrRule);
+		String result = testTarget.build();
+		verifyDrl(result, PNR_SEAT_RULE_INDX);
 		testKnowledgeBaseTest(result);
 		}catch (Exception ex){
 			ex.printStackTrace();

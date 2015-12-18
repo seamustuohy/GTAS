@@ -56,6 +56,11 @@
             }
 
             function handleSuccess(response) {
+            	//TODO 400 errors are going to success
+            	//for now manually calling handleError
+            	if(response.status == 400){
+            		return handleError(response);
+            	}
                 return response.data;
             }
 
