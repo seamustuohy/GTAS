@@ -11,7 +11,6 @@ public class TextUtilsTest {
     @Test
     public void testSplit() {
         List<String> segs = TextUtils.splitWithEscapeChar("mc?'foo'bar", '\'', '?');
-        System.out.println(segs);
         assertEquals("mc'foo", segs.get(0));
         assertEquals("bar", segs.get(1));
     }
@@ -56,7 +55,7 @@ public class TextUtilsTest {
 
     @Test
     public void testSplitElementsWithExtraneousWhitespace() {
-        String segmentText = " ANDREWS:    TIFFANY : PAGE ";
+        String segmentText = " ANDREWS:  \r\n  TIFFANY : PAGE ";
         List<String> elements = TextUtils.splitWithEscapeChar(segmentText, ':', '?');
         assertEquals("ANDREWS", elements.get(0));
         assertEquals("TIFFANY", elements.get(1));

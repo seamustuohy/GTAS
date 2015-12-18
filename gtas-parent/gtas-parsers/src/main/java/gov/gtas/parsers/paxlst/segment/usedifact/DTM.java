@@ -6,6 +6,7 @@ import java.util.List;
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.util.DateUtils;
 import gov.gtas.parsers.util.ParseUtils;
 
 public class DTM extends Segment {
@@ -51,7 +52,7 @@ public class DTM extends Segment {
         }
         
         String tmp = this.date + this.time;
-        this.c_dateTime = ParseUtils.parseDateTime(tmp, "yyMMddhhmm");
+        this.c_dateTime = ParseUtils.parseDateTime(tmp, DateUtils.DT_FORMAT_YEAR_FIRST);
     }
 
     public DtmCode getDtmCode() {

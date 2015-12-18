@@ -8,6 +8,16 @@ import java.util.Date;
 /**
  */
 public final class DateUtils {
+    public static final String TWENTY_FOUR_HOUR_TIME_FORMAT = "HHmm";
+
+    public static final String DATE_FORMAT_DAY_FIRST = "ddMMyy";
+    public static final String DATE_FORMAT_YEAR_FIRST = "yyMMdd";
+    
+    public static final String DT_FORMAT_YEAR_FIRST = DATE_FORMAT_YEAR_FIRST + TWENTY_FOUR_HOUR_TIME_FORMAT;
+    public static final String DT_FORMAT_DAY_FIRST = DATE_FORMAT_DAY_FIRST + TWENTY_FOUR_HOUR_TIME_FORMAT;
+    
+    public static final String DT_FORMAT_MONTH_GMT = "ddMMM" + TWENTY_FOUR_HOUR_TIME_FORMAT + "Z";
+    
     private DateUtils() { }
     
 	/**

@@ -6,6 +6,7 @@ import java.util.List;
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.util.DateUtils;
 import gov.gtas.parsers.util.ParseUtils;
 
 /**
@@ -24,7 +25,7 @@ import gov.gtas.parsers.util.ParseUtils;
  * </ul>
  */
 public class UNB extends Segment {
-    private static final String DATE_TIME_FORMAT = "yyMMddhhmm";
+    private static final String DATE_TIME_FORMAT = DateUtils.DT_FORMAT_YEAR_FIRST; 
 
     private String sender;
     private String recipient;

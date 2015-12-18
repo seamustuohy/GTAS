@@ -25,8 +25,8 @@ import gov.gtas.parsers.vo.PhoneVo;
 
 public class PnrUtils {
     public static Date parseDateTime(String dt) {
-        final String DATE_ONLY_FORMAT = "ddMMyy";
-        final String DATE_TIME_FORMAT = "ddMMyyhhmm";
+        final String DATE_ONLY_FORMAT = DateUtils.DATE_FORMAT_DAY_FIRST;
+        final String DATE_TIME_FORMAT = DateUtils.DT_FORMAT_DAY_FIRST;
 
         if (dt.length() == DATE_ONLY_FORMAT.length()) {
             return ParseUtils.parseDateTime(dt, DATE_ONLY_FORMAT);

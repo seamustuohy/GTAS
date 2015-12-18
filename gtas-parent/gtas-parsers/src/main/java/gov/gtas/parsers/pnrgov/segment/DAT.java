@@ -11,6 +11,7 @@ import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.PnrUtils;
+import gov.gtas.parsers.util.DateUtils;
 import gov.gtas.parsers.util.ParseUtils;
 
 /**
@@ -88,7 +89,7 @@ public class DAT extends Segment {
     public static Date processFreeTextDt(Composite c) throws ParseException {
         String text = c.getElement(1);
         String dt = text.split("\\s+")[4];
-        return ParseUtils.parseDateTime(dt, "ddMMMhhmmZ");
+        return ParseUtils.parseDateTime(dt, DateUtils.DT_FORMAT_MONTH_GMT);
     }
     
     public List<DatDetails> getDateTimes() {

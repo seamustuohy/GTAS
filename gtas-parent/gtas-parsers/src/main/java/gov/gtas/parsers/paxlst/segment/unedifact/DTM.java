@@ -8,6 +8,7 @@ import java.util.Map;
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.util.DateUtils;
 import gov.gtas.parsers.util.ParseUtils;
 
 /**
@@ -22,8 +23,8 @@ import gov.gtas.parsers.util.ParseUtils;
  * crew member (i.e. February 17, 1964.)
  */
 public class DTM extends Segment {
-    private static final String DATE_ONLY_FORMAT = "yyMMdd";
-    private static final String DATE_TIME_FORMAT = "yyMMddhhmm";
+    private static final String DATE_ONLY_FORMAT = DateUtils.DATE_FORMAT_YEAR_FIRST;
+    private static final String DATE_TIME_FORMAT = DateUtils.DT_FORMAT_YEAR_FIRST;
 
     public enum DtmCode {
         DEPARTURE("189"), 
