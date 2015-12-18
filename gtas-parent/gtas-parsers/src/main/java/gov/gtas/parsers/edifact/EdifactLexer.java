@@ -96,7 +96,8 @@ public class EdifactLexer {
         
         LinkedList<Segment> segments = new LinkedList<>();
         
-        String[] stringSegments = TextUtils.splitWithEscapeChar(msg, 
+        List<String> stringSegments = TextUtils.splitWithEscapeChar(
+                msg, 
                 una.getSegmentTerminator(), 
                 una.getReleaseCharacter());
 

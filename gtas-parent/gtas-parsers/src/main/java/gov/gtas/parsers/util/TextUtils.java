@@ -3,6 +3,8 @@ package gov.gtas.parsers.util;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,16 +18,16 @@ public final class TextUtils {
      * should return ["mc'foo", "bar"].  Note as a side-effect, the escape
      * characters are removed from the final output.
      */
-    public static String[] splitWithEscapeChar(String s, char delimiter, char escape) {
+    public static List<String> splitWithEscapeChar(String s, char delimiter, char escape) {
         String escapedDelimiter = String.format("\\%c\\%c", escape, delimiter);
         final String sentinel = "~XYZ~";
         String tmp = s.replaceAll(escapedDelimiter, sentinel);
         
         String regex = String.format("\\%c", delimiter);
         String[] tmpSplit = tmp.split(regex);
-        String[] rv = new String[tmpSplit.length];
-        for (int i=0; i<tmpSplit.length; i++) {
-            rv[i] = tmpSplit[i].replaceAll(sentinel, "\\" + delimiter).trim();
+        List<String> rv = new ArrayList<>(tmpSplit.length);
+        for (String myString : tmpSplit) {
+            rv.add(myString.replaceAll(sentinel, "\\" + delimiter).trim());
         }
         
         return rv;
@@ -33,7 +35,7 @@ public final class TextUtils {
         
     /**
      * Eliminate all line terminators as well as any whitespace immediately
-     * following those line terminators.
+     * following line terminators.
      * 
      * @param str input string
      * @return a concatenation of all the lines in 'str' excluding any leading

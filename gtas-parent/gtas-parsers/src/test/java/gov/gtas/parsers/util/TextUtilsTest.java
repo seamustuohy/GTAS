@@ -3,64 +3,64 @@ package gov.gtas.parsers.util;
 import static org.junit.Assert.assertEquals;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
 public class TextUtilsTest {
     @Test
     public void testSplit() {
-        String[] strs = TextUtils.splitWithEscapeChar("mc?'foo'bar", '\'', '?');
-        System.out.println(Arrays.toString(strs));
-        assertEquals("mc'foo", strs[0]);
-        assertEquals("bar", strs[1]);
+        List<String> segs = TextUtils.splitWithEscapeChar("mc?'foo'bar", '\'', '?');
+        System.out.println(segs);
+        assertEquals("mc'foo", segs.get(0));
+        assertEquals("bar", segs.get(1));
     }
     
     @Test
     public void testSplitHappyPath() {
         String segmentText = "DTM*36:10109$LOC*31*USA$NAD*FL***ANDREWS:TIFFANY:PAGE$ATT*2**F$";
-        String segs[] = TextUtils.splitWithEscapeChar(segmentText, '$', '?');
-        assertEquals(4, segs.length);
-        assertEquals("DTM*36:10109", segs[0]);
-        assertEquals("LOC*31*USA", segs[1]);
-        assertEquals("NAD*FL***ANDREWS:TIFFANY:PAGE", segs[2]);
-        assertEquals("ATT*2**F", segs[3]);
+        List<String> segs = TextUtils.splitWithEscapeChar(segmentText, '$', '?');
+        assertEquals(4, segs.size());
+        assertEquals("DTM*36:10109", segs.get(0));
+        assertEquals("LOC*31*USA", segs.get(1));
+        assertEquals("NAD*FL***ANDREWS:TIFFANY:PAGE", segs.get(2));
+        assertEquals("ATT*2**F", segs.get(3));
     }
 
     @Test
     public void testSplitWithEscaped() {
         String segmentText = "DTM*36:10109'LOC*31*USA'NAD*FL***MC?'ANDREWS:TIFFANY:PAGE'ATT*2**F'";
-        String segs[] = TextUtils.splitWithEscapeChar(segmentText, '\'', '?');
-        assertEquals(4, segs.length);
-        assertEquals("NAD*FL***MC'ANDREWS:TIFFANY:PAGE", segs[2]);
+        List<String> segs = TextUtils.splitWithEscapeChar(segmentText, '\'', '?');
+        assertEquals(4, segs.size());
+        assertEquals("NAD*FL***MC'ANDREWS:TIFFANY:PAGE", segs.get(2));
     }
     
     @Test
     public void testEscapedEscaped() {
         String segmentText = "DTM*36:10109'LOC*31*USA'NAD*FL***MC?'ANDREWS?:TIFF??ANY:PAGE'ATT*2**F'";
-        String segs[] = TextUtils.splitWithEscapeChar(segmentText, '\'', '?');
-        assertEquals(4, segs.length);
-        assertEquals("NAD*FL***MC'ANDREWS?:TIFF??ANY:PAGE", segs[2]);
+        List<String> segs = TextUtils.splitWithEscapeChar(segmentText, '\'', '?');
+        assertEquals(4, segs.size());
+        assertEquals("NAD*FL***MC'ANDREWS?:TIFF??ANY:PAGE", segs.get(2));
     }
 
     @Test
     public void testSplitSegmentsWithExtraneousWhitespace() {
         String segmentText = "DTM*36:10109  $   LOC*31*USA  $NAD*FL***ANDREWS:TIFFANY:PAGE\r\n $\n\n\n\n ATT*2**F$";
-        String segs[] = TextUtils.splitWithEscapeChar(segmentText, '$', '?');
-        assertEquals(4, segs.length, 4);
-        assertEquals("DTM*36:10109", segs[0]);
-        assertEquals("LOC*31*USA", segs[1]);
-        assertEquals("NAD*FL***ANDREWS:TIFFANY:PAGE", segs[2]);
-        assertEquals("ATT*2**F", segs[3]);
+        List<String> segs = TextUtils.splitWithEscapeChar(segmentText, '$', '?');
+        assertEquals(4, segs.size());
+        assertEquals("DTM*36:10109", segs.get(0));
+        assertEquals("LOC*31*USA", segs.get(1));
+        assertEquals("NAD*FL***ANDREWS:TIFFANY:PAGE", segs.get(2));
+        assertEquals("ATT*2**F", segs.get(3));
     }
 
     @Test
     public void testSplitElementsWithExtraneousWhitespace() {
         String segmentText = " ANDREWS:    TIFFANY : PAGE ";
-        String elements[] = TextUtils.splitWithEscapeChar(segmentText, ':', '?');
-        assertEquals("ANDREWS", elements[0]);
-        assertEquals("TIFFANY", elements[1]);
-        assertEquals("PAGE", elements[2]);
+        List<String> elements = TextUtils.splitWithEscapeChar(segmentText, ':', '?');
+        assertEquals("ANDREWS", elements.get(0));
+        assertEquals("TIFFANY", elements.get(1));
+        assertEquals("PAGE", elements.get(2));
     }
         
     @Test
