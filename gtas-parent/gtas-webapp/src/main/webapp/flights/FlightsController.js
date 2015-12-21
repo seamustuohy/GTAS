@@ -11,9 +11,13 @@
             };
         }
         /* Search for airports. */
-        function querySearch(query) {
-            return query && query.length ? self.allAirports.filter(createFilterFor(query)) : [];
+        function querySearch (query) {
+            var results = query && query.length ? self.allAirports.filter(createFilterFor(query)) : [];
+            return results;
         }
+        //function querySearch(query) {
+        //    return query && query.length ? self.allAirports.filter(createFilterFor(query)) : [];
+        //}
 
         $scope.model = flightsModel;
 
@@ -52,9 +56,6 @@
                 }
             },
             resolvePage = function () {
-                // @Venu when service updated can refactor to populate chips based on array of ids
-                self.origin = querySearch($scope.model.origins);
-                self.destination = querySearch($scope.model.dests);
                 fetchMethods[stateName]();
             };
 
@@ -66,11 +67,8 @@
                     contact.lowerCasedName = contact.name.toLowerCase();
                     return contact;
                 });
+                self.filterSelected = true;
             });
-        self.origin = [];
-        self.destination = [];
-
-        self.filterSelected = true;
         $scope.selectedFlight = $stateParams.flight;
         $scope.flightDirections = flightDirections;
         $scope.stateName = stateName;
@@ -174,8 +172,8 @@
 
         $scope.filter = function () {
             //temporary as flightService doesn't support multiple values yet
-            $scope.model.origin = self.origin.length ? self.origin.map(returnObjectId)[0] : '';
-            $scope.model.dest = self.destination ? self.destination.map(returnObjectId)[0] : '';
+            //$scope.model.origin = self.origin.length ? self.origin.map(returnObjectId)[0] : '';
+            //$scope.model.dest = self.destination ? self.destination.map(returnObjectId)[0] : '';
             resolvePage();
         };
 
