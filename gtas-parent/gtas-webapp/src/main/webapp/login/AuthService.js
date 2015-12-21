@@ -36,11 +36,13 @@
                         $rootScope.authenticated = true;
                     }
                     else{
+                        var toastPosition = angular.element(document.getElementById('loginForm'));
                         $mdToast.show(
                             $mdToast.simple()
                                 .content(APP_CONSTANTS.LOGIN_ERROR_MSG)
                                 .position('top right')
                                 .hideDelay(4000)
+                                .parent(toastPosition)
                         );
 
                     }
