@@ -48,6 +48,7 @@ import gov.gtas.parsers.pnrgov.segment.TRI;
 import gov.gtas.parsers.pnrgov.segment.TVL;
 import gov.gtas.parsers.pnrgov.segment.TVL_L0;
 import gov.gtas.parsers.pnrgov.segment.TXD;
+import gov.gtas.parsers.util.FlightUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.AddressVo;
 import gov.gtas.parsers.vo.AgencyVo;
@@ -338,8 +339,8 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         f.setOrigin(tvl.getOrigin());
         f.setEta(tvl.getEta());
         f.setEtd(tvl.getEtd());
-        f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tvl.getFlightNumber()));
-        Date flightDate = ParseUtils.determineFlightDate(tvl.getEtd(), tvl.getEta(), parsedMessage.getTransmissionDate());
+        f.setFlightNumber(FlightUtils.padFlightNumberWithZeroes(tvl.getFlightNumber()));
+        Date flightDate = FlightUtils.determineFlightDate(tvl.getEtd(), tvl.getEta(), parsedMessage.getTransmissionDate());
         f.setFlightDate(flightDate);
         if (f.isValid()) {
             parsedMessage.getFlights().add(f);
@@ -356,7 +357,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             
             FlightVo csFlight = new FlightVo();
             csFlight.setCarrier(tvl.getOperatingCarrier());
-            csFlight.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(cs_tvl.getFlightNumber()));
+            csFlight.setFlightNumber(FlightUtils.padFlightNumberWithZeroes(cs_tvl.getFlightNumber()));
             csFlight.setDestination(tvl.getDestination());
             csFlight.setOrigin(tvl.getOrigin());
             csFlight.setEta(tvl.getEta());
