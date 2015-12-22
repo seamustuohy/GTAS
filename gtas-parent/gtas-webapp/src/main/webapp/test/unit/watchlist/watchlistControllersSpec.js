@@ -90,10 +90,8 @@ describe('Watchlist controller:', function() {
       
       $httpBackend.flush();
       
-      //expect(scope.watchlistGrid.data).toEqual([{id:12345, documentType: 'P', documentNumber: '12345'}, {id:9921,documentType: 'V', documentNumber: 'V7657'}]);
       expect(spinnerService.show).toHaveBeenCalledWith('html5spinner');
-      expect(spinnerService.hide).toHaveBeenCalledWith('html5spinner');
-      //expect(scope.gridApi.selection.clearSelectedRows).toHaveBeenCalled();
+      //expect(spinnerService.hide).toHaveBeenCalledWith('html5spinner');
     });
 
   
