@@ -3,34 +3,34 @@ package gov.gtas.parsers.edifact;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
+ * Edifact Composite class. Consists of zero or more string elements.
+ * 
+ * @see Segment
  */
 public final class Composite {
-    private List<String> elements;
+    private final List<String> elements;
 
-    @SuppressWarnings("unused")
-    private Composite() { }
-
-    public Composite(List<String> elements) {
-        if (elements != null) {
+    public Composite(final List<String> elements) {
+        if (CollectionUtils.isNotEmpty(elements)) {
             this.elements = elements;
         } else {
             this.elements = new ArrayList<>();
         }
     }
     
-    public List<String> getElements() {
-        return this.elements;
-    }
-    
-    public String getElement(int index) {
-        if (index < 0 || index >= elements.size()) {
+    public String getElement(final int index) {
+        if (index < 0) {
+            throw new IndexOutOfBoundsException();
+        } else if (index >= numElements()) {
             return null;
+        } else {
+            return this.elements.get(index);
         }
-        return this.elements.get(index);
     }
     
     public int numElements() {

@@ -31,6 +31,7 @@ import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
+import gov.gtas.model.Seat;
 
 /**
  * Rule Engine Request Builder constructs Rule Engine execution requests from
@@ -297,12 +298,7 @@ public class RuleEngineRequestBuilder {
 		for (Passenger passenger : passengers) {
 			Long id = passenger.getId();
 			if (!this.passengerIdSet.contains(id)) {
-				requestObjectList.add(passenger);
-				if (passenger.getDocuments() != null) {
-					for (Document doc : passenger.getDocuments()) {
-						this.requestObjectList.add(doc);
-					}
-				}
+				addPassengerAndDependdencies(passenger);
 				this.passengerIdSet.add(id);
 			}
 			if (pnr != null) {
@@ -310,7 +306,19 @@ public class RuleEngineRequestBuilder {
 			}
 		}
 	}
-
+    private void addPassengerAndDependdencies(Passenger passenger){
+		requestObjectList.add(passenger);
+		if (passenger.getDocuments() != null) {
+			for (Document doc : passenger.getDocuments()) {
+				this.requestObjectList.add(doc);
+			}
+		}    	
+		if (passenger.getSeatAssignments() != null) {
+			for (Seat seat : passenger.getSeatAssignments()) {
+				this.requestObjectList.add(seat);
+			}
+		}    	
+    }
 	private void addPnrPassengerLink(final Pnr pnr, final Passenger passenger) {
 		PnrPassengerLink link = new PnrPassengerLink(pnr.getId(),
 				passenger.getId());

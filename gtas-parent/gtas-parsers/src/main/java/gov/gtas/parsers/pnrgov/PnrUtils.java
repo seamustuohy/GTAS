@@ -16,6 +16,7 @@ import gov.gtas.parsers.pnrgov.segment.ADD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
 import gov.gtas.parsers.pnrgov.segment.TIF;
 import gov.gtas.parsers.pnrgov.segment.TIF.TravelerDetails;
+import gov.gtas.parsers.util.DateUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.AddressVo;
 import gov.gtas.parsers.vo.DocumentVo;
@@ -24,8 +25,8 @@ import gov.gtas.parsers.vo.PhoneVo;
 
 public class PnrUtils {
     public static Date parseDateTime(String dt) {
-        final String DATE_ONLY_FORMAT = "ddMMyy";
-        final String DATE_TIME_FORMAT = "ddMMyyhhmm";
+        final String DATE_ONLY_FORMAT = DateUtils.DATE_FORMAT_DAY_FIRST;
+        final String DATE_TIME_FORMAT = DateUtils.DT_FORMAT_DAY_FIRST;
 
         if (dt.length() == DATE_ONLY_FORMAT.length()) {
             return ParseUtils.parseDateTime(dt, DATE_ONLY_FORMAT);
@@ -100,7 +101,7 @@ public class PnrUtils {
         if (StringUtils.isNotBlank(d)) {
             Date dob = ParseUtils.parseDateTime(d, DOC_DATE_FORMAT);
             p.setDob(dob);
-            p.setAge(ParseUtils.calculateAge(dob));
+            p.setAge(DateUtils.calculateAge(dob));
         }
         p.setGender(safeGet(strs, 6));
         d = safeGet(strs, 7);

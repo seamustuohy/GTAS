@@ -7,10 +7,11 @@ describe('Watchlist controller:', function() {
 
   /* Test1: Invoke the controller on the default Document Tab */
   describe('Activation of Default(Document) Tab:', function(){
-    var scope, ctrl, $httpBackend, gridOptionsLookupService;
+    var scope, ctrl, $httpBackend, gridOptionsLookupService, spinnerService;
 
     beforeEach(module('myApp'));
-    beforeEach(inject(function(_$httpBackend_, $rootScope, $controller, _gridOptionsLookupService_) {
+    beforeEach(inject(function(_$httpBackend_, $rootScope, $controller, _gridOptionsLookupService_, _spinnerService_) {
+      spinnerService = _spinnerService_;
       $httpBackend = _$httpBackend_;
       scope = $rootScope.$new();
       gridOptionsLookupService = _gridOptionsLookupService_;
@@ -32,16 +33,70 @@ describe('Watchlist controller:', function() {
       expect(scope.rowSelected).toBe(null);
     });
 
-/* was expecting a document fetch call ??!! */
-    
-//    it('should fetch two documents from xhr', function() {
-//      $httpBackend.expectGET('/gtas//wl/Document/Document').
-//          respond([{documentType: 'P', documentNumber: '12345'}, {documentType: 'V', documentNumber: 'V7657'}]);
-//
-//      $httpBackend.flush();
-//      expect(scope.watchlistGrid.data).toEqual([{documentType: 'P', documentNumber: '12345'}, {documentType: 'V', documentNumber: 'V7657'}]);
-//    });
+    /* Test2: Invoke the controller for the Document tab */    
+    it('should fetch two documents from xhr', function() {
+      $httpBackend.expectGET('/gtas/wl/DOCUMENT/Document').
+          respond({
+        	  status:'SUCCESS',
+        	  message:'Operation was successful',
+        	  result:{
+        		  name:'Document',
+        		  entity:'DOCUMENT',
+        		  watchlistItems:
+        	       [
+                     {
+                    	 id:12345,
+                    	 action:'',
+                    	 terms:[
+                    	        {field:'documentType', type:'string', value:'P'},
+                    	        {field:'documentNumber', type:'string', value:'12345'},                    	        
+                    	        ]
+                     },
+                     {
+                    	 id:9921,
+                    	 action:'',
+                    	 terms:[
+                    	        {field:'documentType', type:'string', value:'V'},
+                    	        {field:'documentNumber', type:'string', value:'V7657'},                    	        
+                    	        ]
+                     }
+                   ]
+          }});
+      spyOn(spinnerService, 'show');
+      spyOn(spinnerService, 'hide');
+      
+      //set up a dummy gridApi
+      scope.gridApi = {selection:{clearSelectedRows:function(){}}}
+      spyOn(scope.gridApi.selection, 'clearSelectedRows');
+      
+      scope.getListItemsFor('Document');
+      
+      $httpBackend.flush();
+      
+      expect(scope.watchlistGrid.data).toEqual([{id:12345, documentType: 'P', documentNumber: '12345'}, {id:9921,documentType: 'V', documentNumber: 'V7657'}]);
+      expect(spinnerService.show).toHaveBeenCalledWith('html5spinner');
+      expect(spinnerService.hide).toHaveBeenCalledWith('html5spinner');
+      expect(scope.gridApi.selection.clearSelectedRows).toHaveBeenCalled();
+    });
 
+    /* Test3: Handle Error from the back-end */    
+    it('should invoke the global error handler', function() {
+      $httpBackend.expectGET('/gtas/wl/DOCUMENT/Document').
+          respond(500, {status:'FAILURE', message:'There was an error', result:{}});
+      spyOn(spinnerService, 'show');
+      spyOn(spinnerService, 'hide');
+            
+      scope.getListItemsFor('Document');
+      
+      $httpBackend.flush();
+      
+      //expect(scope.watchlistGrid.data).toEqual([{id:12345, documentType: 'P', documentNumber: '12345'}, {id:9921,documentType: 'V', documentNumber: 'V7657'}]);
+      expect(spinnerService.show).toHaveBeenCalledWith('html5spinner');
+      expect(spinnerService.hide).toHaveBeenCalledWith('html5spinner');
+      //expect(scope.gridApi.selection.clearSelectedRows).toHaveBeenCalled();
+    });
+
+  
   });
 
 });

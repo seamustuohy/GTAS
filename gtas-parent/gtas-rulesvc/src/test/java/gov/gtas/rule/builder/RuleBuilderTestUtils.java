@@ -40,6 +40,8 @@ public class RuleBuilderTestUtils {
 	public static final int ADDRESS_PHONE_EMAIL_DOCUMENT_RULE_INDX=6;
 	public static final int AGENCY_CC_FF_FLIGHT_DOC_RULE_INDX=7;
 	public static final int FLIGHT_ETA_ETD_RULE_INDX=8;
+	public static final int PASSENGER_SEAT_RULE_INDX=9;
+	public static final int PNR_SEAT_RULE_INDX=10;
 	
 	public static UdrRule createSimpleUdrRule(String userId, int indx) throws ParseException{
 		return createSimpleUdrRule(userId, indx, new Date(), null);
@@ -244,7 +246,30 @@ public class RuleBuilderTestUtils {
 				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
 				engineRule.setId(ENGINE_RULE_ID);
 				break;
-				
+			case PASSENGER_SEAT_RULE_INDX:
+				cond = createQueryTerm(EntityEnum.PASSENGER,
+						PassengerMapping.SEAT,
+						CriteriaOperatorEnum.IN, new String[]{"39G", "24A"}, TypeEnum.STRING);				
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.PASSENGER,
+						PassengerMapping.FIRST_NAME,
+						CriteriaOperatorEnum.NOT_IN, new String[]{"John", "Dotin"}, TypeEnum.STRING);				
+				ruleMinTerm.add(cond);
+				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule.setId(ENGINE_RULE_ID);
+				break;
+			case PNR_SEAT_RULE_INDX:
+				cond = createQueryTerm(EntityEnum.PNR,
+						PassengerMapping.SEAT,
+						CriteriaOperatorEnum.IN, new String[]{"39G", "24A"}, TypeEnum.STRING);				
+				ruleMinTerm.add(cond);
+				cond = createQueryTerm(EntityEnum.PASSENGER,
+						PassengerMapping.FIRST_NAME,
+						CriteriaOperatorEnum.NOT_IN, new String[]{"John", "Dotin"}, TypeEnum.STRING);				
+				ruleMinTerm.add(cond);
+				engineRule = EngineRuleUtils.createEngineRule(ruleMinTerm, parent, indx);
+				engineRule.setId(ENGINE_RULE_ID);
+				break;
 		}
 		return engineRule;
 	}

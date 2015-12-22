@@ -6,6 +6,9 @@ import java.util.Set;
 import gov.gtas.constant.RuleServiceConstants;
 
 public class RuleTemplateConstants {
+	public static final String SEAT_ENTITY_NAME = "Seat";
+	public static final String SEAT_ATTRIBUTE_NAME = "number";
+	
 	public static final String PASSENGER_VARIABLE_NAME = "$p";
 	public static final String DOCUMENT_VARIABLE_NAME = "$d";
 	public static final String FLIGHT_VARIABLE_NAME = "$f";
@@ -16,6 +19,7 @@ public class RuleTemplateConstants {
 	public static final String TRAVEL_AGENCY_VARIABLE_NAME = "$ta";
 	public static final String FREQUENT_FLYER_VARIABLE_NAME = "$ff";
 	public static final String PNR_VARIABLE_NAME = "$pnr";
+	public static final String SEAT_VARIABLE_NAME = "$seat";
 
 	public static final String LINK_VARIABLE_SUFFIX = "link";
 	public static final String LINK_PNR_ID = "pnrId";

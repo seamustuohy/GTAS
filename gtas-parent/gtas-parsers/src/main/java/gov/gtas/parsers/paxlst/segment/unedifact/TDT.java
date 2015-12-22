@@ -4,7 +4,8 @@ import java.util.List;
 
 import gov.gtas.parsers.edifact.Composite;
 import gov.gtas.parsers.edifact.Segment;
-import gov.gtas.parsers.util.ParseUtils;
+import gov.gtas.parsers.util.FlightNumber;
+import gov.gtas.parsers.util.FlightUtils;
 
 /**
  * <p>
@@ -67,9 +68,9 @@ public class TDT extends Segment {
         if (this.c_carrierIdentifier != null) {
             this.flightNumber = this.c_journeyIdentifier.replace(this.c_carrierIdentifier, "");
         } else {
-            String[] tmp = ParseUtils.separateCarrierAndFlightNumber(this.c_journeyIdentifier);
-            this.c_carrierIdentifier = tmp[0];
-            this.flightNumber = tmp[1];
+            FlightNumber tmp = FlightUtils.separateCarrierAndFlightNumber(this.c_journeyIdentifier);
+            this.c_carrierIdentifier = tmp.getCarrier();
+            this.flightNumber = tmp.getNumber();
         }
     }
 

@@ -22,6 +22,7 @@ import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
+import gov.gtas.model.Seat;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.watchlist.WatchlistItem;
@@ -51,7 +52,8 @@ public class DrlRuleFileBuilder {
 			Agency.class, PnrAddressLink.class, PnrCreditCardLink.class,
 			PnrEmailLink.class, PnrFrequentFlyerLink.class,
 			PnrPassengerLink.class, PnrPhoneLink.class,
-			PnrTravelAgencyLink.class};
+			PnrTravelAgencyLink.class,
+			Seat.class};
 
 	private StringBuilder stringBuilder;
 

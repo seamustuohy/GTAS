@@ -24,16 +24,6 @@ public class SegmentTokenizerTest {
     }
     
     @Test
-    public void testNullOrEmpty() throws ParseException {
-        Segment s = tokenizer.buildSegment(null);
-        assertNull(s);
-        s = tokenizer.buildSegment("");
-        assertNull(s);
-        s = tokenizer.buildSegment("   ");
-        assertNull(s);
-    }
-    
-    @Test
     public void testHappyPath() throws ParseException {
         String text = "NAD+FL+++PAGE:TIFFANY:ANNE";
         Segment s = tokenizer.buildSegment(text);

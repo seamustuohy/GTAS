@@ -1,25 +1,19 @@
 package gov.gtas.parsers.util;
 
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ParseUtils {
+public final class ParseUtils {
     private static final Logger logger = LoggerFactory.getLogger(ParseUtils.class);
 
+    private ParseUtils() { }
+    
     /**
      * Some telecommunications transmission protocols require various
      * communication type headers and trailers to facilitate addressing,
@@ -60,142 +54,13 @@ public class ParseUtils {
         return null;
     }
     
-    /**
-     * Split a string 's' using 'delimiter' but don't split on any delimiters
-     * escaped with 'escape' character.  For example, if we call this method
-     * with s = "mc?'foo'bar", delimiter = '\'', escape = '?'  the method
-     * should return ["mc'foo", "bar"].  Note as a side-effect, the escape
-     * characters are removed from the final output.
-     */
-    public static String[] splitWithEscapeChar(String s, char delimiter, char escape) {
-        if (s == null) {
-            return null;
-        }
-        
-        String escapedDelimiter = String.format("\\%c\\%c", escape, delimiter);
-        final String sentinel = "~XYZ~";
-        String tmp = s.replaceAll(escapedDelimiter, sentinel);
-        
-        String regex = String.format("\\%c", delimiter);
-        String[] tmpSplit = tmp.split(regex);
-        String[] rv = new String[tmpSplit.length];
-        for (int i=0; i<tmpSplit.length; i++) {
-            rv[i] = tmpSplit[i].replaceAll(sentinel, "\\" + delimiter).trim();
-        }
-        
-        return rv;
-    }
-    
-    /**
-     * @param str input string
-     * @return a concatenation of all the lines in 'str'.  Trim each line of
-     * leading and trailing whitespace.  Empty lines get clobbered.
-     */
-    public static String convertToSingleLine(String str) {
-        if (str == null) {
-            return null;
-        }
-        String[] lines = str.split("[\r\n]+");
-        StringBuilder sb = new StringBuilder();
-        for (String s : lines) {
-            sb.append(s.trim());
-        }
-        return sb.toString();
-    }
-    
-    /**
-     * @param txt input string
-     * @param encoding character encoding of the input string
-     * @return an md5 hash of the input string
-     */
-    public static String getMd5Hash(String txt, Charset encoding) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] array = md.digest(txt.getBytes(encoding));
-            StringBuilder sb = new StringBuilder();
-            for (byte b : array) {
-                sb.append(String.format("%02X", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Just like String.indexOf but allows use of a regex.
-     * 
-     * Returns the index within this string of the first occurrence of the
-     * specified character or -1 if the character does not occur.
-     */
-    public static int indexOfRegex(String regex, CharSequence input) {
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(input);
-        if (matcher.find()) {
-            return matcher.start();
-        }        
-        return -1;
-    }
-
-    /**
-     * assumptions:
-     *   - carrier must be at least 2 chars
-     *   - carrier can end in number
-     *   - flight number can be between 1 and 4 numbers
-     * TODO: flight numbers ending in letters?  or with letters?
-     * TODO: can we assume carrier is always 2 letter?
-     * @param s
-     * @return
-     */
-    public static String[] separateCarrierAndFlightNumber(String s) {
-        if (StringUtils.isBlank(s)) {
-            return null;
-        }
-        final int MAX_FLIGHT_NUM_LENG = 4;
-        final int MIN_CARRIER_LENG = 2;
-        
-        StringBuffer fn = new StringBuffer();
-        int j;
-        for (j = s.length() - 1; j >= 0; j--) {
-            char c = s.charAt(j);
-            if (Character.isDigit(c)) {
-                fn.append(c);
-                if (s.length() - fn.length() == MIN_CARRIER_LENG) {
-                    break;
-                } else if (fn.length() == MAX_FLIGHT_NUM_LENG) {
-                    break;
-                }
-            } else {
-                break;
-            }
-        }
-        
-        String carrier = s.substring(0, s.length() - fn.length());
-        return new String[] { carrier, fn.reverse().toString() };
-    }
-    
     public static String prepTelephoneNumber(String number) {
         if (StringUtils.isBlank(number)) {
             return null;
         }
         return number.replaceAll("[^0-9]", "");
     }
-    
-    public static Integer calculateAge(Date dob) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(dob);
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-         
-        LocalDate today = LocalDate.now();
-        LocalDate birthday = LocalDate.of(year, month + 1, day);  // cal is 0-based. yuck
-        Period p = Period.between(birthday, today);
-        return p.getYears();
-    }
-    
+       
     public static Integer returnNumberOrNull(String s) {
         if (StringUtils.isBlank(s)) {
             return null;
@@ -207,34 +72,5 @@ public class ParseUtils {
             e.printStackTrace();
             return null;
         }
-    }
-
-    /**
-     * rules for setting calculated field 'flightDate'
-     */
-    public static Date determineFlightDate(Date etd, Date eta, Date transmissionDate) {
-        Date d = null;
-        if (etd != null) {
-            d = etd;
-        } else if (eta != null) {
-            d = eta;
-        } else {
-            d = transmissionDate;
-        }
-
-        if (d != null) {
-            return DateCalendarUtils.stripTime(d);
-        }
-        
-        return null;
-    }
-    
-    public static String padFlightNumberWithZeroes(String fn) {
-        StringBuffer buff = new StringBuffer();
-        for (int j=0; j<4 - fn.length(); j++) {
-            buff.append("0");
-        }
-        buff.append(fn);
-        return buff.toString();
     }
 }

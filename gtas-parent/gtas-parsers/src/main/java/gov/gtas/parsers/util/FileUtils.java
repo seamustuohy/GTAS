@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class FileUtils {
+public final class FileUtils {
+    private FileUtils() { }
+    
     public static byte[] readSmallFile(String filePath) throws IOException {
         Path path = Paths.get(filePath);
         return Files.readAllBytes(path);

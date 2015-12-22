@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -24,9 +25,11 @@ public class Seat extends BaseEntity {
     private Boolean apis = Boolean.valueOf(false);
     
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Passenger passenger;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Flight flight;
     
     public String getNumber() {

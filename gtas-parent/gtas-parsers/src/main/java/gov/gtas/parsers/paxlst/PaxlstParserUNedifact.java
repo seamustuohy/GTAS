@@ -27,6 +27,8 @@ import gov.gtas.parsers.paxlst.segment.unedifact.NAT;
 import gov.gtas.parsers.paxlst.segment.unedifact.QTY;
 import gov.gtas.parsers.paxlst.segment.unedifact.RFF;
 import gov.gtas.parsers.paxlst.segment.unedifact.TDT;
+import gov.gtas.parsers.util.DateUtils;
+import gov.gtas.parsers.util.FlightUtils;
 import gov.gtas.parsers.util.ParseUtils;
 import gov.gtas.parsers.vo.ApisMessageVo;
 import gov.gtas.parsers.vo.DocumentVo;
@@ -187,13 +189,13 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
 
             if (origin != null && dest != null) {
                 FlightVo f = new FlightVo();
-                f.setFlightNumber(ParseUtils.padFlightNumberWithZeroes(tdt.getFlightNumber()));
+                f.setFlightNumber(FlightUtils.padFlightNumberWithZeroes(tdt.getFlightNumber()));
                 f.setCarrier(tdt.getC_carrierIdentifier());
                 f.setOrigin(origin);
                 f.setDestination(dest);
                 f.setEta(eta);
                 f.setEtd(etd);
-                f.setFlightDate(ParseUtils.determineFlightDate(etd, eta, parsedMessage.getTransmissionDate()));
+                f.setFlightDate(FlightUtils.determineFlightDate(etd, eta, parsedMessage.getTransmissionDate()));
 
                 if (f.isValid()) {
                     parsedMessage.addFlight(f);
@@ -266,7 +268,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
                 Date dob = dtm.getDtmValue();
                 if (dob != null) {
                     p.setDob(dob);
-                    p.setAge(ParseUtils.calculateAge(dob));
+                    p.setAge(DateUtils.calculateAge(dob));
                 }
             }
         }

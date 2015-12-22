@@ -32,14 +32,15 @@ public class RuleConditionBuilder {
 
 	private PnrRuleConditionBuilder pnrRuleConditionBuilder;
 
+	private SeatConditionBuilder pnrSeatConditionBuilder;
+	private SeatConditionBuilder apisSeatConditionBuilder;
+
 	private String passengerVariableName;
 	private String flightVariableName;
 
 	private StringBuilder conditionDescriptionBuilder;
 
 	private boolean flightCriteriaPresent;
-
-	// private List<String> causeList;
 
 	/**
 	 * Constructor for the Simple Rules:<br>
@@ -67,6 +68,11 @@ public class RuleConditionBuilder {
 		this.flightConditionBuilder = new FlightConditionBuilder(
 				flightVariableName, passengerVariableName);
 
+		this.pnrSeatConditionBuilder = new SeatConditionBuilder(
+				RuleTemplateConstants.SEAT_VARIABLE_NAME, false);
+		this.apisSeatConditionBuilder = new SeatConditionBuilder(
+				RuleTemplateConstants.SEAT_VARIABLE_NAME+"2", true);
+
 		this.pnrRuleConditionBuilder = new PnrRuleConditionBuilder(
 				entityVariableNameMap);
 	}
@@ -90,12 +96,15 @@ public class RuleConditionBuilder {
 	public void buildConditionsAndApppend(
 			final StringBuilder parentStringBuilder) {
 
-		generatePassengerLink();
+		generateLinkConditions();
+
+		parentStringBuilder.append(apisSeatConditionBuilder.build());
+		parentStringBuilder.append(pnrSeatConditionBuilder.build());
 
 		parentStringBuilder.append(documentConditionBuilder.build());
 		parentStringBuilder.append(passengerConditionBuilder.build());
 		parentStringBuilder.append(flightConditionBuilder.build());
-
+		
 		boolean isPassengerConditionCreated = !passengerConditionBuilder
 				.isEmpty() | !flightConditionBuilder.isEmpty();
 		pnrRuleConditionBuilder.buildConditionsAndApppend(parentStringBuilder,
@@ -104,15 +113,30 @@ public class RuleConditionBuilder {
 		passengerConditionBuilder.reset();
 		documentConditionBuilder.reset();
 		flightConditionBuilder.reset();
-		//this.flightCriteriaPresent = false;
+		pnrSeatConditionBuilder.reset();
+		apisSeatConditionBuilder.reset();
 
 	}
 
 	/**
-	 * Creates linking passenger criteria for documents and flights.
+	 * Creates linking passenger criteria for documents and flights,
+	 * and also seats, passengers and flights.
 	 * 
 	 */
-	private void generatePassengerLink() {
+	private void generateLinkConditions() {
+		if(!pnrSeatConditionBuilder.isEmpty()) {
+			pnrSeatConditionBuilder.addApisCondition();
+			passengerConditionBuilder.addConditionAsString("id == "+RuleTemplateConstants.SEAT_VARIABLE_NAME+".passenger.id");
+			flightConditionBuilder.addConditionAsString("id == "+RuleTemplateConstants.SEAT_VARIABLE_NAME+".flight.id");
+			this.flightCriteriaPresent = true;
+		}
+		if(!apisSeatConditionBuilder.isEmpty()) {
+			apisSeatConditionBuilder.addApisCondition();
+			passengerConditionBuilder.addConditionAsString("id == "+RuleTemplateConstants.SEAT_VARIABLE_NAME+"2.passenger.id");
+			flightConditionBuilder.addConditionAsString("id == "+RuleTemplateConstants.SEAT_VARIABLE_NAME+"2.flight.id");
+			this.flightCriteriaPresent = true;
+		}
+
 		if (!documentConditionBuilder.isEmpty()) {
 			// add a link condition to the passenger builder.
 			passengerConditionBuilder
@@ -125,7 +149,7 @@ public class RuleConditionBuilder {
 		if (!passengerConditionBuilder.isEmpty()) {
 			flightConditionBuilder
 					.addLinkedPassenger(this.passengerVariableName);
-		}
+		} 		
 	}
 
 	/**
@@ -151,10 +175,15 @@ public class RuleConditionBuilder {
 			TypeEnum attributeType = TypeEnum.getEnum(trm.getType());
 			CriteriaOperatorEnum opCode = CriteriaOperatorEnum.getEnum(trm
 					.getOperator());
+			String field = trm.getField();
 			switch (entity) {
 			case PASSENGER:
-				passengerConditionBuilder.addCondition(opCode, trm.getField(),
+				if(field.equalsIgnoreCase(RuleTemplateConstants.SEAT_ENTITY_NAME)){
+				   apisSeatConditionBuilder.addCondition(opCode, RuleTemplateConstants.SEAT_ATTRIBUTE_NAME, attributeType, trm.getValue());
+				} else {
+				   passengerConditionBuilder.addCondition(opCode, field,
 						attributeType, trm.getValue());
+				}
 				break;
 			case DOCUMENT:
 				documentConditionBuilder.addCondition(opCode, trm.getField(),
@@ -167,8 +196,12 @@ public class RuleConditionBuilder {
 				break;
 			default:
 				// try and add PNR related conditions if they exist.
-				pnrRuleConditionBuilder.addRuleCondition(entity, attributeType,
+				if(entity == EntityEnum.PNR && field.equalsIgnoreCase(RuleTemplateConstants.SEAT_ENTITY_NAME)) {
+					pnrSeatConditionBuilder.addCondition(opCode, RuleTemplateConstants.SEAT_ATTRIBUTE_NAME, attributeType, trm.getValue());
+				} else {
+				   pnrRuleConditionBuilder.addRuleCondition(entity, attributeType,
 						opCode, trm);
+				}
 				break;
 			}
 		} catch (ParseException pe) {

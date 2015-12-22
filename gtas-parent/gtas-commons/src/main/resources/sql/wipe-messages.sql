@@ -28,3 +28,4 @@ delete from address;
 delete from pnr;
 delete from apis_message;
 delete from message;
+delete from passenger;
