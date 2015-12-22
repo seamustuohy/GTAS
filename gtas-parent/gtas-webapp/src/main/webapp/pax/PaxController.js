@@ -5,10 +5,22 @@
     });
     app.controller('PaxController', function ($scope, $injector, $stateParams, $state, paxService, sharedPaxData, uiGridConstants, gridService,
                                               jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers,
-                                              $timeout, paxModel) {
-        $scope.model = paxModel.model;
+                                              $timeout, paxModel, $http) {
+        function createFilterFor(query) {
+            var lowercaseQuery = query.toLowerCase();
+            return function filterFn(contact) {
+                return (contact.lowerCasedName.indexOf(lowercaseQuery) >= 0);
+            };
+        }
+        /* Search for airports. */
+        function querySearch(query) {
+            var results = query && query.length ? self.allAirports.filter(createFilterFor(query)) : [];
+            return results;
+        }
 
-        var stateName = $state.$current.self.name,
+        $scope.model = paxModel.model;
+        var self = this, airports,
+            stateName = $state.$current.self.name,
             ruleGridColumns = [{
                 name: 'ruleTitle',
                 displayName: 'Title',
@@ -70,6 +82,17 @@
                 {label: 'Outbound', value: 'O'},
                 {label: 'Any', value: ''}
             ];
+
+        self.querySearch = querySearch;
+        $http.get('data/airports.json')
+            .then(function (allAirports) {
+                airports = allAirports.data;
+                self.allAirports = allAirports.data.map(function (contact) {
+                    contact.lowerCasedName = contact.name.toLowerCase();
+                    return contact;
+                });
+                self.filterSelected = true;
+            });
         $scope.flightDirections = flightDirections;
 
         $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});

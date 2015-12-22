@@ -1,9 +1,6 @@
 (function () {
     'use strict';
     app.controller('FlightsController', function ($scope, $http, $state, $interval, $stateParams, passengersBasedOnUserFilter, flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel) {
-        /* returns id of airport object function for a query string */
-        function returnObjectId(o) { return o.id; }
-        /* Create filter function for a query string */
         function createFilterFor(query) {
             var lowercaseQuery = query.toLowerCase();
             return function filterFn(contact) {
@@ -11,13 +8,10 @@
             };
         }
         /* Search for airports. */
-        function querySearch (query) {
+        function querySearch(query) {
             var results = query && query.length ? self.allAirports.filter(createFilterFor(query)) : [];
             return results;
         }
-        //function querySearch(query) {
-        //    return query && query.length ? self.allAirports.filter(createFilterFor(query)) : [];
-        //}
 
         $scope.model = flightsModel;
 
