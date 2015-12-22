@@ -1,5 +1,6 @@
 package gov.gtas.services;
 
+import java.util.Date;
 import java.util.List;
 
 import gov.gtas.model.Pnr;
@@ -14,4 +15,5 @@ public interface PnrService {
     public List<Pnr> findByPassengerId(Long passengerId);
     /*A duplicate method to avoid 'LazyInitializationException' in the Controller -- Can be removed after a fix */
     public List<Pnr> findPnrByPassengerIdAndFlightId(Long passengerId, Long flightId);
+	public List<Pnr> getPNRsByDates(Date startDate, Date endDate);
 }

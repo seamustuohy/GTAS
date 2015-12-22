@@ -85,8 +85,6 @@ var app;
         },
         router = function ($stateProvider, $urlRouterProvider, $httpProvider, USER_ROLES, $locationProvider) {
 
-            //$locationProvider.html5Mode(true);
-
             $stateProvider
                 .state('login', {
                     url: '/login',
@@ -97,6 +95,7 @@ var app;
                 })
                 .state('dashboard', {
                     url: '/dashboard',
+                    roles: [USER_ROLES.ADMIN, USER_ROLES.VIEW_FLIGHT_PASSENGERS, USER_ROLES.MANAGE_QUERIES, USER_ROLES.MANAGE_RULES, USER_ROLES.MANAGE_WATCHLIST],
                     authenticate: true,
                     views: {
                         '@': {
@@ -104,13 +103,6 @@ var app;
                             templateUrl: 'dashboard/dashboard.html'
                         }
                     }
-                })
-                .state('home', {
-                    url: '/home',
-                    controller: 'DashboardController',
-                    templateUrl: 'main.html',
-                    roles: [USER_ROLES.ADMIN, USER_ROLES.VIEW_FLIGHT_PASSENGERS, USER_ROLES.MANAGE_QUERIES, USER_ROLES.MANAGE_RULES, USER_ROLES.MANAGE_WATCHLIST],
-                    authenticate: true
                 })
                 .state('admin', {
                     url: '/admin',
@@ -280,14 +272,14 @@ var app;
                             templateUrl: 'watchlists/watchlists.html'
                         }
                     }
-                }).state('user-settings', {
-                    url: '/user-settings',
+                }).state('userSettings', {
+                    url: '/userSettings',
                     authenticate: true,
                     roles: [USER_ROLES.ADMIN, USER_ROLES.VIEW_FLIGHT_PASSENGERS, USER_ROLES.MANAGE_QUERIES, USER_ROLES.MANAGE_RULES, USER_ROLES.MANAGE_WATCHLIST],
                     views: {
                         '@': {
                             controller: 'UserSettingsController',
-                            templateUrl: 'user-settings/user-settings.html'
+                            templateUrl: 'userSettings/userSettings.html'
                         }
                     },
                     resolve: {
@@ -295,17 +287,18 @@ var app;
                             return userService.getUserData();
                         }
                     }
-                }).state('setFilter', {
-                    url: '/set/filter',
-                    views: {
-                        '@': {
-                            controller: 'FilterCtrl',
-                            templateUrl: 'user-settings/filter.html'
-                        }
-                    }
-                });
+                })
+                //.state('setFilter', {
+                //    url: '/set/filter',
+                //    views: {
+                //        '@': {
+                //            controller: 'FilterCtrl',
+                //            templateUrl: 'user-settings/filter.html'
+                //        }
+                //    }
+                //});
 
-            //$urlRouterProvider.otherwise("/login");
+            //$urlRouterProvider.otherwise('/');
             $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
         },
 
@@ -321,7 +314,7 @@ var app;
                 queries: {mode: ['query']},
                 risks: {mode: ['rule']},
                 watchlists: {name: ['watchlists']},
-                usersettings: {name: ['user-settings', 'setFilter']},
+                userSettings: {name: ['userSettings', 'setFilter']},
                 upload: {name: ['upload']}
             };
             $scope.onRoute = function (key) {
@@ -374,9 +367,8 @@ var app;
         })
         .constant('APP_CONSTANTS', {
             LOGIN_PAGE: '/gtas/login.html',
-            // HOME_PAGE: '/gtas/home.action',
             HOME_PAGE: '/gtas/main.html',
-            MAIN_PAGE: 'main.html',
+            MAIN_PAGE: 'main.html#/dashboard',
             CURRENT_USER: 'CurrentUser',
             LOGIN_ERROR_MSG: ' Invalid User Name or Password. Please Try Again '
         })

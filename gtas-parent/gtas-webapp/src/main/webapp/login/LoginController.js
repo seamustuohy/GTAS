@@ -3,7 +3,7 @@
     'use strict';
     app.controller('LoginController',
         function($state, $scope, $rootScope, $q, $stateParams, userService, $mdToast, AuthService,
-                 Session, sessionFactory, APP_CONSTANTS, $sessionStorage, $location) {
+                 Session, sessionFactory, APP_CONSTANTS, $sessionStorage, $location, $interval, $window) {
 
             $scope.currentUser = {};
             $scope.credentials = {
@@ -33,8 +33,26 @@
                         user.roles);
                     $sessionStorage.put(APP_CONSTANTS.CURRENT_USER, user);
                     //window.location.href = APP_CONSTANTS.HOME_PAGE;
-                    window.location.href = APP_CONSTANTS.MAIN_PAGE;
-                    // $state.go('home',{ reload: true, inherit: false, notify: true });
+                    $window.location.href = APP_CONSTANTS.MAIN_PAGE;
+
+                    //$window.location.href = '#/dashboard';
+                    //$state.go('dashboard', $stateParams, {
+                    //    reload: true,
+                    //    inherit: false,
+                    //    notify: true
+                    //});
+
+                    // $state.go('home');
+                    //
+                    //$interval(function () {
+                    //    $state.go('dashboard', $stateParams, {
+                    //        reload: true,
+                    //        inherit: false,
+                    //        notify: true
+                    //    });
+                    //}, 3000, true);
+
+
                 }
             });
 

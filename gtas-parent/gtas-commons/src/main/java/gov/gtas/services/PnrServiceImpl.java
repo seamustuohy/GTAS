@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
+import java.util.Date;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
@@ -72,7 +72,10 @@ public class PnrServiceImpl implements PnrService {
     public List<Pnr> findByPassengerId(Long passengerId) {
         return pnrRespository.getPnrsByPassengerId(passengerId);
     }
-    
+
+	@Override
+	public List<Pnr> getPNRsByDates(Date startDate, Date endDate){return pnrRespository.getPNRsByDates(startDate, endDate);}
+
     @Override
     @Transactional
     /*A duplicate method to avoid 'LazyInitializationException' in the Controller -- Can be removed after a fix */

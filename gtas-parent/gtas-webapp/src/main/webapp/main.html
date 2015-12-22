@@ -33,6 +33,10 @@
     </div>
         <span data-ng-if="showNav()">
 
+            <md-button data-has-role="[{{ ROLES.ADMIN }}, {{ ROLES.MANAGE_QUERIES }},{{ ROLES.MANAGE_RULES }},{{ ROLES.MANAGE_WATCHLIST }},{{ ROLES.VIEW_FLIGHT_PASSENGERS }}]"
+                       class="md-button" ng-class="{'md-raised md-primary': onRoute('dashboard')}"
+                       ng-disabled="onRoute('dashboard')" href="#/dashboard"><i class="glyphicon glyphicon-dashboard"></i>  Dashboard</md-button>
+
             <md-button data-has-role="[{{ ROLES.ADMIN }}, {{ ROLES.VIEW_FLIGHT_PASSENGERS }}]" class="md-button" ng-class="{'md-raised md-primary': onRoute('flights')}"
                        ng-disabled="onRoute('flights')" href="#/flights"><i class="glyphicon glyphicon-plane"></i>  Flights</md-button>
 
@@ -49,8 +53,8 @@
                        ng-disabled="onRoute('watchlists')" href="#/watchlists"><i class="glyphicon glyphicon-eye-open"></i>  Watchlist</md-button>
 
 
-            <md-button data-has-role="[{{ ROLES.ADMIN }}, {{ ROLES.MANAGE_QUERIES }},{{ ROLES.MANAGE_RULES }},{{ ROLES.MANAGE_WATCHLIST }},{{ ROLES.VIEW_FLIGHT_PASSENGERS }}]" class="md-button" ng-class="{'md-raised md-primary': onRoute('usersettings')}"
-                       ng-disabled="onRoute('usersettings')" href="#/user-settings"><i class="glyphicon glyphicon-cog"></i> Settings</md-button>
+            <md-button data-has-role="[{{ ROLES.ADMIN }}, {{ ROLES.MANAGE_QUERIES }},{{ ROLES.MANAGE_RULES }},{{ ROLES.MANAGE_WATCHLIST }},{{ ROLES.VIEW_FLIGHT_PASSENGERS }}]" class="md-button" ng-class="{'md-raised md-primary': onRoute('userSettings')}"
+                       ng-disabled="onRoute('userSettings')" href="#/userSettings"><i class="glyphicon glyphicon-cog"></i> Settings</md-button>
 
 
             <md-button data-has-role="[{{ ROLES.ADMIN }}]" class="md-button" ng-class="{'md-raised md-primary': onRoute('admin')}"
@@ -112,6 +116,7 @@
 <script src='factory/ModalGridFactory.js'></script>
 <script src='factory/JqueryQueryBuilderWidget.js'></script>
 <script src='dashboard/DashboardController.js'></script>
+<script src='dashboard/DashboardService.js'></script>
 <script src='flights/FlightsModel.js'></script>
 <script src='flights/FlightsController.js'></script>
 <script src='flights/FlightsService.js'></script>
@@ -126,8 +131,10 @@
 <script src='admin/UploadController.js'></script>
 <script src='login/AuthService.js'></script>
 <script src='login/LoginController.js'></script>
-<script src='user-settings/UserSettingsController.js'></script>
-<script src='user-settings/FilterCtrl.js'></script>
+<script src='userSettings/UserSettingsController.js'></script>
+<script src='userSettings/FilterCtrl.js'></script>
+
+
 
 </body>
 </html>

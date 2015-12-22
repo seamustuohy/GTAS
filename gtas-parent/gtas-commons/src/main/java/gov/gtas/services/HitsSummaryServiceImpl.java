@@ -28,4 +28,7 @@ public class HitsSummaryServiceImpl implements HitsSummaryService {
 	public Iterable<HitsSummary> findAll() {
 		return hitsSummaryRepository.findAll();
 	}
+
+	@Override
+	public List<HitsSummary> findHitsByFlightId(Long flightId){return hitsSummaryRepository.findHitsByFlightId(flightId);}
 }
