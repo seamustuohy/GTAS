@@ -69,4 +69,8 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
     @Transactional
     @Query("update Flight set listHitCount = (select count(distinct passenger) from HitsSummary where flight.id = :flightId and watchListHitCount > 0) where id = :flightId")
     public Integer updateListHitCountForFlight(@Param("flightId") Long flightId);
+
+	@Query("SELECT f FROM Flight f WHERE f.flightDate >= CURRENT_DATE AND f.flightDate <= CURRENT_DATE+3")
+	public List<Flight> getFlightsThreeDaysForward();
+
 }

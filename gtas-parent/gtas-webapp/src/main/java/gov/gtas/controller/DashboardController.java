@@ -41,7 +41,7 @@ public class DashboardController {
         List<HitsSummary> _tempHitsSummary = new ArrayList<HitsSummary>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        List<Flight> _tempFlightList = flightService.getFlightsByDates(sdf.parse(startDate), sdf.parse(endDate));
+        List<Flight> _tempFlightList = flightService.getFlightsThreeDaysForward();
         flights = Integer.valueOf(_tempFlightList.size());
 
         for(Flight _tempFlight : _tempFlightList) {

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ApisMessageRepository extends MessageRepository<ApisMessage> {
 
-    @Query("SELECT apis FROM ApisMessage apis WHERE apis.createDate between :startDate AND :endDate")
-    public List<Message> getAPIsByDates(@Param("startDate") Date startDate,
-                                        @Param("endDate") Date endDate);
+
+    @Query("SELECT apis FROM ApisMessage apis WHERE apis.createDate >= CURRENT_DATE-1 AND apis.createDate <= CURRENT_DATE")
+    public List<Message> getAPIsByDates();
 }
