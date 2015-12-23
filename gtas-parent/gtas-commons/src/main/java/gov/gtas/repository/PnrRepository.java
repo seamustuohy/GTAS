@@ -16,6 +16,6 @@ public interface PnrRepository extends MessageRepository<Pnr> {
     @Query("select pnr from Pnr pnr join pnr.passengers pax where pax.id = :passengerId")
     public List<Pnr> getPnrsByPassengerId(@Param("passengerId") Long passengerId);
 
-    @Query("SELECT pnr FROM Pnr pnr WHERE pnr.dateReceived >= CURRENT_DATE-1 AND pnr.dateReceived <= CURRENT_DATE")
+    @Query("SELECT pnr FROM Pnr pnr WHERE pnr.dateReceived >= current_date() - 1")
     public List<Pnr> getPNRsByDates();
 }
