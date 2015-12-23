@@ -156,4 +156,25 @@ public class TargetingServicePnrIT {
 				6L, res.getPassengerId());
 	}
 
+	@Test
+	@Transactional
+	public void testPnrRuleExecution4() throws ParseException {//seat rule with IN operator
+		// select all passengers in a flight
+	    Pnr msg = PnrDataGenerator.createTestPnr2(1L);
+		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, RuleBuilderTestUtils.PNR_SEAT_RULE_INDX);
+		String drlRules = drlBuilder.addRule(udrRule).build();
+		System.out.println(drlRules);
+		RuleServiceRequest request = TargetingServiceUtils
+				.createPnrRequestContext(msg).getRuleServiceRequest();
+		RuleServiceResult result = targetingService.applyRules(request,
+				drlRules);
+		assertNotNull(result);
+		assertEquals("Expected 1 hit", 1, result.getResultList().size());
+		RuleHitDetail res = (RuleHitDetail) (result.getResultList().get(0));
+		assertNotNull("passenger ID in result is null", res.getPassengerId());
+		assertEquals("Hit Passenger id mismatch",
+				5L, res.getPassengerId());
+	}
+
 }

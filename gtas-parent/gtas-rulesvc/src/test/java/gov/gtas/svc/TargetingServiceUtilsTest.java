@@ -30,7 +30,9 @@ public class TargetingServiceUtilsTest {
     }
 
 	/**
-	 * 2pnr+2flt+6pass+6doc+3addr+2email+2phone+2ff+2cc+2agency + (6+3+ 2*5)links = 48   
+	 * 1pnr+1flt+4pass+4doc+4seat+2addr+1email+1phone+1ff+1cc+1agency + (4pass+ 7)links = 32 (pnr1)
+	 * 	 * 1pnr+1flt+2pass+2doc+2seat+1addr+1email+1phone+1ff+1cc+1agency + (2pass+ 6)links = 22  (pnr2)
+ 
 	 */
     @Test
     public void testPnrRuleRequestCreation() {
@@ -38,13 +40,13 @@ public class TargetingServiceUtilsTest {
         RuleServiceRequest request = TargetingServiceUtils.createPnrRequestContext(msg).getRuleServiceRequest();
         Collection<?> reqObjects = request.getRequestObjects();
         assertNotNull(reqObjects);
-        assertEquals(28, reqObjects.size());
+        assertEquals(32, reqObjects.size());
 
         msg = PnrDataGenerator.createTestPnr2(1L);
         request = TargetingServiceUtils.createPnrRequestContext(msg).getRuleServiceRequest();
         reqObjects = request.getRequestObjects();
         assertNotNull(reqObjects);
-        assertEquals(20, reqObjects.size());
+        assertEquals(22, reqObjects.size());
     }
 
 	@Test
@@ -55,7 +57,7 @@ public class TargetingServiceUtilsTest {
 						.createApisRequest(message).getRuleServiceRequest();
 		Collection<?> reqObjects = request.getRequestObjects();
 		assertNotNull(reqObjects);		
-		assertEquals(14, reqObjects.size());//2 flights with 3 passengers each. Each passenger has 1 doc.		
+		assertEquals(15, reqObjects.size());//2 flights with 3 passengers each. Each passenger has 1 doc + 1 passenger has a seat		
 	}
 
 	@Test
@@ -66,7 +68,7 @@ public class TargetingServiceUtilsTest {
 						.createPnrApisRequestContext(Arrays.asList(apis), Arrays.asList(pnr)).getRuleServiceRequest();
 		Collection<?> reqObjects = request.getRequestObjects();
 		assertNotNull(reqObjects);		
-		assertEquals(42, reqObjects.size());//28 PNR + 14 APIS		
+		assertEquals(47, reqObjects.size());//32 PNR + 15 APIS		
 	}
 	
 	@Test
@@ -77,7 +79,7 @@ public class TargetingServiceUtilsTest {
 		ApisMessage apisMsg = ApisDataGenerator.createSimpleTestApisMesssage();
 		Pnr pnr = PnrDataGenerator.createTestPnr(1L);
 		
-		//BEGIN:create common flights aand passengers
+		//BEGIN:create common flights and passengers
 		Collection<Flight> apisFlights = apisMsg.getFlights();
 		Collection<Passenger> apisFlt1Passengers = apisFlights.iterator().next().getPassengers();
 		for(Flight fl:apisFlights){
@@ -87,12 +89,12 @@ public class TargetingServiceUtilsTest {
 		for(Passenger p:apisFlt1Passengers){
 			pnr.getPassengers().add(p);
 		}
-		//END:create common flights aand passengers
+		//END:create common flights and passengers
 		
 		RuleServiceRequest request = TargetingServiceUtils
 						.createPnrApisRequestContext(Arrays.asList(apisMsg), Arrays.asList(pnr)).getRuleServiceRequest();
 		Collection<?> reqObjects = request.getRequestObjects();
 		assertNotNull(reqObjects);		
-		assertEquals(45, reqObjects.size());//28 PNR + 14 APIS + 3 common passenger links	
+		assertEquals(50, reqObjects.size());//32 PNR + 15 APIS + 3 common passenger links	
 	}
 }

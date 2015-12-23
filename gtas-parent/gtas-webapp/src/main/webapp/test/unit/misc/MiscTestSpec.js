@@ -5,7 +5,7 @@
 
 describe('Miscellaneous Tests:', function() {
 
-  /* Test1: Invoke the controller on the default Tab (i.e., tab 0) */
+  /* Test1: Success and failure paths for HTTP GET */
   describe('HTTP functions:', function(){
     var scope, $httpBackend;
 
@@ -16,9 +16,19 @@ describe('Miscellaneous Tests:', function() {
   	  scope.test = function(code){
 	    		$http.get('/test'+code)
 	    		.then(
-	    				function(resp){//success handler
+	    				function(resp){
+	    					//success handler. 
+	    					//Note that with the spring-security-csrf-token-interceptor added to the app module
+	    					//the error handler is never invoked!
+	    					//Thus we need to check for error status in the success handler!
 	    					scope.status=resp.status;
-	    					scope.result='OK';
+	    					if(resp.status < 300){
+	    						//success
+		    					scope.result='OK';
+	    					} else {
+	    						//FAILED
+	    						scope.result = 'FAIL';
+	    					}
 	    					},
 	    				function(resp){//error handler
 	    					scope.status=resp.status;
