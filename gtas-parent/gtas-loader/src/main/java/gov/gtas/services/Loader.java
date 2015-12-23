@@ -37,7 +37,7 @@ public class Loader {
 	 */
 	public int[] processMessage(File f) {
 		String filePath = f.getAbsolutePath();
-		MessageService svc = null;
+		MessageLoaderService svc = null;
 		List<String> rawMessages = null;
 		try {
 			if (exceedsMaxSize(f)) {

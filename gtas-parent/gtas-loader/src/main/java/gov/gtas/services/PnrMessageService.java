@@ -24,7 +24,7 @@ import gov.gtas.repository.PnrRepository;
 import gov.gtas.util.LobUtils;
 
 @Service
-public class PnrMessageService extends MessageService {
+public class PnrMessageService extends MessageLoaderService {
     private static final Logger logger = LoggerFactory.getLogger(PnrMessageService.class);
    
     @Autowired
