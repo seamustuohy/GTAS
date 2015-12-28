@@ -17,7 +17,7 @@
 > git clone https://[username]@bitbucket.org/sanandreas/sanandreas.git
 1. Download front-end dependencies
 > cd gtas-webapp  
-npm install
+npm install  
 bower install
 2. Standard build with unit tests.  Note: if maven shows a java socket error (invalid argument 'connect'), you may need to add -Djava.net.preferIPv4Stack=true to the MAVEN_OPTS environment variable.
 > cd gtas-parent  
