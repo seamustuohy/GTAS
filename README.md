@@ -14,7 +14,7 @@
 
 1. Get the latest code from BitBucket
 > git clone https://[username]@bitbucket.org/sanandreas/sanandreas.git
-2. Standard build with unit tests.  
+2. Standard build with unit tests.  Note: if maven shows a java socket error (invalid argument 'connect'), you may need to add -Djava.net.preferIPv4Stack=true to the MAVEN_OPTS environment variable.
 > cd gtas-parent  
 mvn clean install
 3. Build without unit tests
