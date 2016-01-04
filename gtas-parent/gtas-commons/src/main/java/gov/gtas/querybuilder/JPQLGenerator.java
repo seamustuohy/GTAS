@@ -82,7 +82,7 @@ public class JPQLGenerator {
 				}
 				
 				if(seatCondition.isTrue()) {
-					join += " join p.seatAssignments s";
+					join += " left join p.seatAssignments s ";
 				}
 				
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
@@ -110,7 +110,7 @@ public class JPQLGenerator {
 				}
 					
 				if(seatCondition.isTrue()) {
-					join += " left join p.seatAssignments s";
+					join += " left join p.seatAssignments s ";
 				}
 				
 				query = queryPrefix + join + " " + Constants.WHERE + " " + where;
@@ -285,7 +285,7 @@ public class JPQLGenerator {
 						else if(entityEnum == EntityEnum.PNR) {
 							where.append("(s.apis = false");
 						}
-						where.append(" and s.number " + opEnum.getOperator() + " (?" + positionalParameter + "))");
+						where.append(" and f.id = s.flight.id and s.number " + opEnum.getOperator() + " (?" + positionalParameter + "))");
 					} else {
 						where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator() + " (?" + positionalParameter + ")");
 					}
@@ -300,7 +300,7 @@ public class JPQLGenerator {
 						else if(entityEnum == EntityEnum.PNR) {
 							where.append("(s.apis = false");
 						}
-						where.append(" and s.number " + opEnum.getOperator() + " ?" + positionalParameter + ")");
+						where.append(" and f.id = s.flight.id and s.number " + opEnum.getOperator() + " ?" + positionalParameter + ")");
 					} else {
 						where.append(entityEnum.getAlias() + "." + field + " " + opEnum.getOperator() + " ?" + positionalParameter);
 					}
