@@ -261,7 +261,7 @@ public class RuleBuilderTestUtils {
 			case PNR_SEAT_RULE_INDX:
 				cond = createQueryTerm(EntityEnum.PNR,
 						PassengerMapping.SEAT,
-						CriteriaOperatorEnum.IN, new String[]{"39G", "24A"}, TypeEnum.STRING);				
+						CriteriaOperatorEnum.IN, new String[]{"55E", "39G"}, TypeEnum.STRING);				
 				ruleMinTerm.add(cond);
 				cond = createQueryTerm(EntityEnum.PASSENGER,
 						PassengerMapping.FIRST_NAME,

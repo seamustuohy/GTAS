@@ -11,9 +11,7 @@ import org.junit.Test;
 import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 
-public class EdifactLexerTest {
-    EdifactLexer lexer = new EdifactLexer();
-    
+public class EdifactLexerTest {  
     /**
      * taken from https://en.wikipedia.org/wiki/EDIFACT
      */
@@ -36,7 +34,7 @@ public class EdifactLexerTest {
     
     @Test
     public void testParse() throws ParseException {
-        LinkedList<Segment> segments = lexer.tokenize(test);
+        LinkedList<Segment> segments = EdifactLexer.tokenize(test);
         assertEquals(15, segments.size());
         for (Segment s : segments) {
             // random checks

@@ -26,7 +26,7 @@ import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.util.LobUtils;
 
 @Service
-public class ApisMessageService extends MessageService {
+public class ApisMessageService extends MessageLoaderService {
     private static final Logger logger = LoggerFactory.getLogger(ApisMessageService.class);
 
     @Autowired

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import gov.gtas.parsers.vo.MessageVo;
 
 @Service
-public abstract class MessageService {
+public abstract class MessageLoaderService {
     @Autowired
     protected LoaderRepository loaderRepo;
 

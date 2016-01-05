@@ -11,7 +11,7 @@ import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.util.TextUtils;
 
 /**
- * Parses a segment text into composites and elements.
+ * Tokenize a segment text into composites and elements.
  */
 public final class SegmentTokenizer {
     private final UNA una;

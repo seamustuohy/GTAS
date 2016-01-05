@@ -74,7 +74,7 @@ public class PnrServiceImpl implements PnrService {
     }
 
 	@Override
-	public List<Pnr> getPNRsByDates(Date startDate, Date endDate){return pnrRespository.getPNRsByDates(startDate, endDate);}
+	public List<Pnr> getPNRsByDates(Date startDate, Date endDate){return pnrRespository.getPNRsByDates();}
 
     @Override
     @Transactional

@@ -16,7 +16,8 @@ public class MessageServiceImpl implements MessageService {
 
     public List<Message> getAPIsByDates (Date startDate, Date endDate){
 
-        return apisMessageRepo.getAPIsByDates(startDate, endDate);
+        //return apisMessageRepo.getAPIsByDates(startDate, endDate);
+        return apisMessageRepo.getAPIsByDates();
 
     }
 

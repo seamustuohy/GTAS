@@ -121,4 +121,10 @@ public class FlightServiceImpl implements FlightService {
 	public List<Flight> getFlightsByDates(Date startDate, Date endDate) {
 		return flightRespository.getFlightsByDates(startDate, endDate);
 	}
+
+	@Override
+	public List<Flight> getFlightsThreeDaysForward(){
+		return flightRespository.getFlightsThreeDaysForward();
+	}
+
 }

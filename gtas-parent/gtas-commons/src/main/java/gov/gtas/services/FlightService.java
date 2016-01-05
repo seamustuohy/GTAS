@@ -14,11 +14,10 @@ public interface FlightService {
 	public Flight create(Flight flight);
     public Flight update(Flight flight) ;
     public Flight findById(Long id);
-
     public FlightsPageDto findAll(FlightsRequestDto dto);
-    
     public Flight getUniqueFlightByCriteria(String carrier, String flightNumber, String origin, String destination, Date flightDate);
     public List<Flight> getFlightByPaxId(Long paxId);
     public List<Flight> getFlightsByDates(Date startDate, Date endDate);
     public HashMap<Document, List<Flight>> getFlightsByPassengerNameAndDocument(String firstName, String lastName, Set<Document> documents);
+    public List<Flight> getFlightsThreeDaysForward();
 }

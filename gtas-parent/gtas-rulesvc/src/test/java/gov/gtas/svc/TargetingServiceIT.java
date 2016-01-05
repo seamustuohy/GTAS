@@ -225,4 +225,27 @@ public class TargetingServiceIT {
 						|| new Long(55L).equals(res.getPassengerId())
 						|| new Long(66L).equals(res.getPassengerId()));
 	}
+	
+	@Test
+	@Transactional
+	public void testApisRuleExecution4() throws ParseException {// apis seat
+		// select all passengers in a flight
+		ApisMessage msg = ApisDataGenerator.createSimpleTestApisMesssage();
+		DrlRuleFileBuilder drlBuilder = new DrlRuleFileBuilder();
+		UdrRule udrRule = RuleBuilderTestUtils.createSimpleUdrRule(UDR_RULE_AUTHOR, RuleBuilderTestUtils.PASSENGER_SEAT_RULE_INDX);
+		String drlRules = drlBuilder.addRule(udrRule).build();
+		System.out.println(drlRules);
+		RuleServiceRequest request = TargetingServiceUtils
+				.createApisRequest(msg).getRuleServiceRequest();
+		RuleServiceResult result = targetingService.applyRules(request,
+				drlRules);
+		assertNotNull(result);
+		assertEquals("Expected 1 hit", 1, result.getResultList().size());
+		RuleHitDetail res = (RuleHitDetail) (result.getResultList().get(0));
+		assertNotNull("passenger ID in result is null", res.getPassengerId());
+		assertTrue(
+				"Hit Passenger id mismatch",
+				new Long(11L).equals(res.getPassengerId()));
+	}
+	
 }

@@ -20,252 +20,42 @@
     <link rel="stylesheet" href="resources/css/query-builder.default.css" />
     <link rel="stylesheet" href="resources/bower_components/angular-material/angular-material.min.css" />
     <link rel="stylesheet" href="resources/css/gtas.css" />
+    <link rel="stylesheet" href="resources/css/login.css" />
+
 </head>
 
-<body class="login">
+<body>
 <header class="header" title="GLOBAL TRAVEL ASSESSMENT SYSTEM"></header>
+<div style="padding: 30px;"  id='loginForm'></div>
+<div class="container">
+    <div class="card"></div>
+    <div class="card">
+        <h1 class="title">Login</h1>
+        <form  ng-controller="LoginController" ng-submit="login(credentials)">
+            <div class="input-container">
+                <input type="text" ng-model="credentials.j_username" autocomplete="off" required name="j_username" id="j_username"/>
+                <label for="j_username">Username</label>
+                <div class="bar"></div>
+            </div>
+            <div class="input-container">
+                <input type="password"
+                       ng-model="credentials.j_password"
+                       id="Password"
+                       name="password" required ng-minlength="6"
+                       pattern="(?=.*[a-z]).{6,}"
+                />
+                <label for="Password">Password</label>
+                <div class="bar"></div>
+            </div>
+            <div class="button-container active ripples buttonRipples">
+                <button type="submit" class="active"><span>Go</span></button>
+            </div>
 
-<!-- end of nav -->
-<div id='loginForm' style="padding: 3.5%"></div>
-<form ng-controller="LoginController" ng-submit="login(credentials)">
-    <div class="group">
-        <input type="text"
-               ng-model="credentials.j_username"
-               autocomplete="off" required name="j_username" id="j_username"
-        ><span class="highlight"></span><span class="bar"></span>
-        <label>User Name</label>
-
+        </form>
     </div>
-    <div class="group">
-        <input type="password"
-               ng-model="credentials.j_password"
-               name="password" required ng-minlength="6"
-               pattern="(?=.*[a-z]).{6,}"
-        ><span class="highlight"></span><span class="bar"></span>
-        <label>Password</label>
-    </div>
-    <button type="submit" class="button buttonBlue" style="font-family: 'Open Sans', sans-serif; font-size: 25px; font-weight: 200;">Login
-        <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
-    </button>
-</form>
 
+</div>
 
-<style>
-
-
-    * { box-sizing:border-box; }
-
-    body {
-        font-family: Open Sans;
-        background: #ffffff;
-        -webkit-font-smoothing: antialiased;
-    }
-
-    h1, h3 { font-weight: 200; }
-
-    h1 { color: #636363; }
-
-    h3 { color: #4a89dc; }
-
-    form {
-        width: 380px;
-        margin: 4em auto;
-        padding: 3em 2em 2em 2em;
-        background: #fafafa;
-        border: 1px solid #ebebeb;
-        box-shadow: rgba(0,0,0,0.14902) 0px 1px 1px 0px,rgba(0,0,0,0.09804) 0px 1px 2px 0px;
-    }
-
-    .group {
-        position: relative;
-        margin-bottom: 45px;
-    }
-
-    input {
-        font-size: 18px;
-        padding: 10px 10px 10px 5px;
-        -webkit-appearance: none;
-        display: block;
-        background: #fafafa;
-        color: #636363;
-        width: 100%;
-        border: none;
-        border-radius: 0;
-        border-bottom: 1px solid #757575;
-    }
-
-    input:focus { outline: none; }
-
-
-    /* Label */
-
-    label {
-        color: #999;
-        font-size: 18px;
-        font-weight: normal;
-        position: absolute;
-        pointer-events: none;
-        left: 5px;
-        top: 10px;
-        transition: all 0.2s ease;
-    }
-
-
-    /* active */
-
-   input:focus ~ label, input:valid ~ label  {
-        top: -20px;
-        /*transform: scale(.75); left: -2px;*/
-         font-size: 14px;
-        color: #4a89dc;
-    }
-
-
-    /* Underline */
-
-    .bar {
-        position: relative;
-        display: block;
-        width: 100%;
-    }
-
-    .bar:before, .bar:after {
-        content: '';
-        height: 2px;
-        width: 0;
-        bottom: 1px;
-        position: absolute;
-        background: #4a89dc;
-        transition: all 0.2s ease;
-    }
-
-    .bar:before { left: 50%; }
-
-    .bar:after { right: 50%; }
-
-
-    /* active */
-
-    input:focus ~ .bar:before, input:focus ~ .bar:after { width: 50%; }
-
-
-    /* Highlight */
-
-    .highlight {
-        position: absolute;
-        height: 60%;
-        width: 100px;
-        top: 25%;
-        left: 0;
-        pointer-events: none;
-        opacity: 0.5;
-    }
-
-
-    /* active */
-
-    input:focus ~ .highlight {
-        animation: inputHighlighter 0.3s ease;
-    }
-
-
-    /* Animations */
-
-    @keyframes inputHighlighter {
-        from { background: #4a89dc; }
-        to 	{ width: 0; background: transparent; }
-    }
-
-
-    /* Button */
-
-    .button {
-        position: relative;
-        display: inline-block;
-        padding: 12px 24px;
-        margin: .3em 0 1em 0;
-        width: 100%;
-        vertical-align: middle;
-        color: #fff;
-        font-size: 16px;
-        line-height: 20px;
-        -webkit-font-smoothing: antialiased;
-        text-align: center;
-        letter-spacing: 1px;
-        background: transparent;
-        border: 0;
-        border-bottom: 2px solid #3160B6;
-        cursor: pointer;
-        transition: all 0.15s ease;
-    }
-    .button:focus { outline: 0; }
-
-
-    /* Button modifiers */
-
-    .buttonBlue {
-        background: #4a89dc;
-        text-shadow: 1px 1px 0 rgba(39, 110, 204, .5);
-    }
-
-    .buttonBlue:hover { background: #357bd8; }
-
-
-    /* Ripples container */
-
-    .ripples {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: transparent;
-    }
-
-
-    /* Ripples circle */
-
-    .ripplesCircle {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        opacity: 0;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.25);
-    }
-
-    .ripples.is-active .ripplesCircle {
-        animation: ripples .4s ease-in;
-    }
-
-
-    /* Ripples animation */
-
-    @keyframes ripples {
-        0% { opacity: 0; }
-
-        25% { opacity: 1; }
-
-        100% {
-            width: 200%;
-            padding-bottom: 200%;
-            opacity: 0;
-        }
-    }
-
-
-    .md-toast.error {
-        background-color: white;
-    }
-
-    .md-toast.success {
-        background-color: green;
-    }
-</style>
 
 <script src="resources/bower_components/angular/angular.js"></script>
 <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -313,8 +103,8 @@
 <script src='admin/UploadController.js'></script>
 <script src='login/AuthService.js'></script>
 <script src='login/LoginController.js'></script>
-<script src='user-settings/UserSettingsController.js'></script>
-<script src='user-settings/FilterCtrl.js'></script>
+<script src='userSettings/UserSettingsController.js'></script>
+<script src='userSettings/FilterCtrl.js'></script>
 
 
 

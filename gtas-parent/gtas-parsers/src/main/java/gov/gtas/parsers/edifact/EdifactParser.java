@@ -39,8 +39,6 @@ public abstract class EdifactParser <T extends MessageVo> {
     /** the final parsed message we ultimately return */
     protected T parsedMessage;
 
-    private EdifactLexer lexer = new EdifactLexer();
-
     public EdifactParser() { }
 
     /**
@@ -63,7 +61,7 @@ public abstract class EdifactParser <T extends MessageVo> {
      */
     public T parse(String message) throws ParseException {
         this.segmentFactory = new SegmentFactory();
-        this.segments = lexer.tokenize(message);
+        this.segments = EdifactLexer.tokenize(message);
         this.message = message;
         this.iter = segments.listIterator();
 

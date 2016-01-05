@@ -9,12 +9,17 @@
 * Drools (6.2)
     * http://www.drools.org/download/download.html
     * http://download.jboss.org/drools/release/6.2.0.Final/org.drools.updatesite/
+* NodeJs 4 (for npm)
 
 ### Build and Deployment
 
-1. Get the latest code from BitBucket
+0. Get the latest code from BitBucket
 > git clone https://[username]@bitbucket.org/sanandreas/sanandreas.git
-2. Standard build with unit tests.  
+1. Download front-end dependencies
+> cd gtas-webapp  
+npm install  
+bower install
+2. Standard build with unit tests.  Note: if maven shows a java socket error (invalid argument 'connect'), you may need to add -Djava.net.preferIPv4Stack=true to the MAVEN_OPTS environment variable.
 > cd gtas-parent  
 mvn clean install
 3. Build without unit tests

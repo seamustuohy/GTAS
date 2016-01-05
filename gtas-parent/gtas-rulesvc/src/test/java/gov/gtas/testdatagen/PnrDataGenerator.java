@@ -12,6 +12,7 @@ import gov.gtas.model.FrequentFlyer;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
+import gov.gtas.model.Seat;
 import gov.gtas.util.DateCalendarUtils;
 
 public class PnrDataGenerator {
@@ -22,12 +23,12 @@ public class PnrDataGenerator {
 	public static final String PNR_ATTR_CARRIER2 = "AA";
 	public static final String PNR_ATTR_RECORD_LOCATOR2 = "MNP32556191";
 	
-	public static final String PNR_PASSENGER1 = "C,Actius,Ghoulish,Boozer,CAN,2012-05-01";//pnr1
-	public static final String PNR_PASSENGER2 = "P,Bilbo,,Baggins,CAN,2013-06-30";//pnr1
-	public static final String PNR_PASSENGER3 = "P,Kilmer,Gaunt,Baggins,CAN,2014-01-30";//pnr1
-	public static final String PNR_PASSENGER4 = "P,Crisco,Slick,Masterson,USA,2013-06-30";//pnr1
-	public static final String PNR_PASSENGER5 = "P,Donald,Hair,Trump,GBR,2014-06-30";//pnr2
-	public static final String PNR_PASSENGER6 = "C,Kadmil,K,Zamboni,GBR,2013-06-30";//pnr2
+	public static final String PNR_PASSENGER1 = "C,Actius,Ghoulish,Boozer,CAN,2012-05-01,11A";//pnr1
+	public static final String PNR_PASSENGER2 = "P,Bilbo,,Baggins,CAN,2013-06-30,22B";//pnr1
+	public static final String PNR_PASSENGER3 = "P,Kilmer,Gaunt,Baggins,CAN,2014-01-30,33C";//pnr1
+	public static final String PNR_PASSENGER4 = "P,Crisco,Slick,Masterson,USA,2013-06-30,44D";//pnr1
+	public static final String PNR_PASSENGER5 = "P,Donald,Hair,Trump,GBR,2014-06-30,55E";//pnr2
+	public static final String PNR_PASSENGER6 = "C,Kadmil,K,Zamboni,GBR,2013-06-30,66F";//pnr2
 	
 	public static final String PNR_FLIGHT1 = "IAD,CCU";
 	public static final String PNR_FLIGHT2 = "LHR,JFK";
@@ -265,6 +266,19 @@ public class PnrDataGenerator {
         pnr.getPassengers().add(p);
         flight.getPassengers().add(p);
    	
+        if(params.length > 6){
+        	//add seat
+        	addSeatToPassenger(p, params[6], flight);        	
+        }
+    }
+    private static void addSeatToPassenger(Passenger pass, String seatNo, Flight flight) throws ParseException {
+        Seat seat = new Seat();
+        seat.setId(pass.getId());
+        seat.setNumber(seatNo);
+        seat.setApis(false);
+        seat.setFlight(flight);
+        seat.setPassenger(pass);
+        pass.getSeatAssignments().add(seat);
     }
     private static void addDocumentToPassenger(Passenger pass, String country, String date) throws ParseException {
         Document doc = new Document();

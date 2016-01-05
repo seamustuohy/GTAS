@@ -48,18 +48,19 @@
         .service('auditService', function ($http, $q) {
             var GET_AUDIT_RECORDS_URL = "/gtas/auditlog";
 
-            function handleError(response) {
-                if (response.data.message === undefined) {
-                    return $q.reject("An unknown error occurred.");
-                }
-                return $q.reject(response.data.message);
-            }
+//            function handleError(response) {
+//                if (response.data.message === undefined) {
+//                    return $q.reject("An unknown error occurred.");
+//                }
+//                return $q.reject(response.data.message);
+//            }
 
             function handleSuccess(response) {
-            	//TODO 400 errors are going to success
-            	//for now manually calling handleError
-            	if(response.status == 400){
-            		return handleError(response);
+            	if(response.status > 299){
+                    if (response.data.message === undefined) {
+                        return $q.reject("An unknown error occurred.");
+                    }
+                    return $q.reject(response.data.message);
             	}
                 return response.data;
             }
@@ -93,7 +94,7 @@
                         url: urlString
                     });
 
-                    return (request.then(handleSuccess, handleError));
+                    return (request.then(handleSuccess));
                 },
                 auditActions: [
                     'ALL_ACTIONS',

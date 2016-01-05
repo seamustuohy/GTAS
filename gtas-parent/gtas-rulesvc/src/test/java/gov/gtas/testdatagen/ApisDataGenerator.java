@@ -5,14 +5,13 @@ import gov.gtas.model.Document;
 import gov.gtas.model.Flight;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.Seat;
 import gov.gtas.model.lookup.DocumentTypeCode;
 import gov.gtas.model.lookup.FlightDirectionCode;
 import gov.gtas.model.lookup.PassengerTypeCode;
 import gov.gtas.util.DateCalendarUtils;
 
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,7 +46,7 @@ public class ApisDataGenerator {
     		}
     	}
     }
-    private static Set<Passenger> createPassengerAndDocument(long[] ids, String[][]param){
+    private static Set<Passenger> createPassengerAndDocument(Flight flight, long[] ids, String[][]param){
     	Set<Passenger> passengers = new HashSet<Passenger>();
     	int passengerCount = 0;
     	for(String[] args:param){
@@ -61,19 +60,30 @@ public class ApisDataGenerator {
 	    	passenger.setLastName(args[3]);
 	    	passenger.setCitizenshipCountry(args[4]);
 	    	passenger.setEmbarkation(args[5]);
+	    	if(args.length > 7){
+	    		passenger.getSeatAssignments().add(createSeat(passenger, flight, args[7]));
+	    	}
 	    	passengers.add(passenger);
 	    	passengerCount++;
     	}
    	    return passengers;
+    }
+    private static Seat createSeat(Passenger p, Flight f, String seatNo){
+    	Seat seat = new Seat();
+    	seat.setApis(true);
+    	seat.setPassenger(p);
+    	seat.setFlight(f);
+    	seat.setNumber(seatNo);
+    	return seat;
     }
     private static Set<Flight> createFlights(){
     	Set<Flight> flights = new HashSet<Flight>();
     	
     	Flight flight = new Flight();
     	flight.setId(FLIGHT_ID1);
-    	Set<Passenger> passengers = createPassengerAndDocument(new long[]{29391L,29392L,29393L},
+    	Set<Passenger> passengers = createPassengerAndDocument(flight, new long[]{29391L,29392L,29393L},
     			new String[][]{
-    			{/*document*/"GB","2012-01-15", /*passenger(name, citzenship, embarkation*/"Ragner", "Yilmaz", "GB", "YHZ","11"},
+    			{/*document*/"GB","2012-01-15", /*passenger(name, citzenship, embarkation*/"Ragner", "Yilmaz", "GB", "YHZ","11","39G"},//added seat 39G to this passenger only
     			{"US", "2010-01-15", "Gitstash", "Garbled", "US", "BOB","22"},
     			{"CA", "2011-12-31", "Kalimar", "Rultan", "CA", "YHZ","33"}
     	       }
@@ -93,7 +103,7 @@ public class ApisDataGenerator {
     	
     	flight = new Flight();
     	flight.setId(FLIGHT_ID2);
-    	passengers = createPassengerAndDocument(new long[]{29394L,29395L,29396L},
+    	passengers = createPassengerAndDocument(flight, new long[]{29394L,29395L,29396L},
     			new String[][]{
     			{"YE","2012-01-15", "Iphsatz", "Zaglib", "PF", "YHZ","44"},
     			{"US", "2010-01-15", "Loopy", "Lair", "US", "BOB","55"},

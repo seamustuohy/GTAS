@@ -5,7 +5,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.services.ApisMessageService;
 import gov.gtas.services.LoaderMain;
-import gov.gtas.services.MessageService;
+import gov.gtas.services.MessageLoaderService;
 
 import java.nio.file.StandardCopyOption;
 import java.io.File;
@@ -54,7 +54,7 @@ public class ApisDirectoryReader implements Runnable{
     public void run() {
         try {
         	ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(CommonServicesConfig.class);
-        	MessageService svc = ctx.getBean(ApisMessageService.class);
+        	MessageLoaderService svc = ctx.getBean(ApisMessageService.class);
             // get the first event before looping
             WatchKey key = fileWatcher.take();
             while(key != null) {
@@ -95,7 +95,7 @@ public class ApisDirectoryReader implements Runnable{
         System.out.println("Stopping thread");
 
     }
-    private void processNewFile(Path p,MessageService svc){
+    private void processNewFile(Path p,MessageLoaderService svc){
 
 //    	MessageLoader.processSingleFile(svc, p.toFile());
     	System.out.println("*****************processing file"+p.toFile().getAbsolutePath());
