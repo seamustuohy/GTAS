@@ -9,28 +9,35 @@
     <link rel="stylesheet" href="resources/css/style-icomoon.css" />
     <link rel="stylesheet" href="resources/bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="resources/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css" />
-    <link rel="stylesheet"
-          href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
-    <link rel="stylesheet"
-          href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
+    <link rel="stylesheet" href="resources/bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+    <link rel="stylesheet" href="resources/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />
     <link rel="stylesheet" href="resources/bower_components/selectize/dist/css/selectize.bootstrap3.css" />
-    <link rel="stylesheet"
-          href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
+    <link rel="stylesheet" href="resources/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" />
     <link rel="stylesheet" href="resources/bower_components/angular-ui-grid/ui-grid.min.css" />
     <link rel="stylesheet" href="resources/css/query-builder.default.css" />
     <link rel="stylesheet" href="resources/bower_components/angular-material/angular-material.min.css" />
     <link rel="stylesheet" href="resources/css/gtas.css" />
     <link rel="stylesheet" href="resources/css/login.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="resources/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="resources/bower_components/font-awesome-animation/dist/font-awesome-animation.min.css">
 
 </head>
 
 <body>
 <header class="header" title="GLOBAL TRAVEL ASSESSMENT SYSTEM"></header>
+
 <div style="padding: 30px;"  id='loginForm'></div>
 <div class="container">
+    
     <div class="card"></div>
     <div class="card">
-        <h1 class="title">Login</h1>
+        
+        <h1 class="title">Login 
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class='faa-pulse animated fa fa-plane'></span>
+        </h1>
+        
         <form  ng-controller="LoginController" ng-submit="login(credentials)">
             <div class="input-container">
                 <input type="text" ng-model="credentials.j_username" autocomplete="off" required name="j_username" id="j_username"/>
@@ -48,7 +55,7 @@
                 <div class="bar"></div>
             </div>
             <div class="button-container active ripples buttonRipples">
-                <button type="submit" class="active"><span>Go</span></button>
+                <button type="submit" class="md-raised"><span>Go</span></button>
             </div>
 
         </form>
@@ -105,8 +112,6 @@
 <script src='login/LoginController.js'></script>
 <script src='userSettings/UserSettingsController.js'></script>
 <script src='userSettings/FilterCtrl.js'></script>
-
-
 
 </body>
 </html>
