@@ -50,8 +50,26 @@
                 }
             },
             resolvePage = function () {
+                populateAirports();
                 fetchMethods[stateName]();
             };
+
+        var populateAirports = function(){
+
+            var originAirports = new Array();
+            var destinationAirports = new Array();
+
+            angular.forEach($scope.model.origin,function(value,index){
+                originAirports.push(value.id);
+            })
+
+            angular.forEach($scope.model.dest,function(value,index){
+                destinationAirports.push(value.id);
+            })
+
+            $scope.model.originAirports = originAirports;
+            $scope.model.destinationAirports = destinationAirports;
+        };
 
         self.querySearch = querySearch;
         $http.get('data/airports.json')
