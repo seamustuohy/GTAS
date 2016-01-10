@@ -14,6 +14,7 @@
         }
 
         $scope.model = flightsModel;
+       
 
         var self = this, airports,
             stateName = $state ? $state.$current.self.name : 'flights',
@@ -70,6 +71,23 @@
             $scope.model.originAirports = originAirports;
             $scope.model.destinationAirports = destinationAirports;
         };
+        
+        var mapAirports = function(){
+            var originAirports = new Array();
+            var destinationAirports = new Array();
+            var airport = { id: "" };
+
+            angular.forEach(flightsModel.origins,function(value,index){
+                originAirports.push({ id: value });
+            });
+
+            angular.forEach(flightsModel.destinations,function(value,index){
+                destinationAirports.push({  id: value });
+            });
+            $scope.model.origin= originAirports;
+            $scope.model.dest = destinationAirports;
+        };
+        
 
         self.querySearch = querySearch;
         $http.get('data/airports.json')
@@ -198,5 +216,6 @@
             return gridService.calculateGridHeight($scope.flightsGrid.data.length);
         };
         resolvePage();
+        mapAirports();
     });
 }());

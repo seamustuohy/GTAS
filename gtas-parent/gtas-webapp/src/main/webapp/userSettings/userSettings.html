@@ -13,6 +13,30 @@ section {
     width: 264px !important;
 }
 
+    .md-contact-suggestion {
+        min-width: 25em;
+    }
+
+    .md-contact-suggestion span.md-contact-email {
+        overflow: visible !important;
+    }
+
+    .md-contact-suggestion .md-contact-name {
+        display: none !important;
+    }
+    
+    
+     .filter-form {
+        display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+        display: -moz-box; /* OLD - Firefox 19- (doesn't work very well) */
+        display: -ms-flexbox; /* TWEENER - IE 10 */
+        display: -webkit-flex; /* NEW - Chrome */
+        display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
 </style>
 
 
@@ -61,18 +85,23 @@ section {
         <md-tab label="Filter"> <!-- ng-click="setFilter()"-->
             <md-content class="md-padding">
 
-                <form name="filterForm" ng-submit="setFilter()">
-
+                <form name="filterForm"  ng-submit="setFilter()">
                     <section layout-padding layout-margin>
                         <div layout="column"  layout-align="space-around start">
-                            <md-input-container>
-                                <label>Origins</label>
-                                <input ng-model="filter.originAirports" id="originAirports">
-                            </md-input-container>
-                            <md-input-container >
-                                <label>Destinations</label>
-                                <input ng-model="filter.destinationAirports" id="destinationAirports" >
-                            </md-input-container>
+                        <md-content class="md-padding autocomplete origin" layout="column">
+                            <label>Origin</label>
+                            <md-contact-chips ng-model="origins" md-contacts="querySearch($query)" md-contact-name="id"
+                                              md-contact-email="name" md-require-match="true" md-highlight-flags="i"
+                                              filter-selected="filterSelected">
+                            </md-contact-chips>
+  				        </md-content>
+                         <md-content class="md-padding autocomplete destination" layout="column">
+                            <label>Destination</label>
+                            <md-contact-chips ng-model="destinations" md-contacts="querySearch($query)" md-contact-name="id"
+                                              md-contact-email="name" md-require-match="true" md-highlight-flags="i"
+                                              filter-selected="filterSelected">
+                            </md-contact-chips>
+                        </md-content>
                         </div>
                         <div layout="row" layout-align="space-around start">
                             <md-input-container >
