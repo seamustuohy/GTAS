@@ -27,7 +27,7 @@
             flightDirections = [
                 {label: 'Inbound', value: 'I'},
                 {label: 'Outbound', value: 'O'},
-                {label: 'Any', value: ''}
+                {label: 'Any', value: 'A'}
             ],
             getPage = function () {
                 setFlightsGrid($scope.flightsGrid, flights || {flights: [], totalFlights: 0 });
