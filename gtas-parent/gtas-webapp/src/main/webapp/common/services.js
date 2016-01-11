@@ -360,7 +360,6 @@
                             width: '55%'
                         }
                     ],
-
                     admin: [
                         {
                             name: 'active',
@@ -525,7 +524,7 @@
                             field: "modifiedOn",
                             cellTemplate: '<md-button aria-label="modified" ng-click="grid.api.selection.selectRow(row.entity)">{{row.entity.modifiedOn}} | {{row.entity.modifiedBy}}</md-button>',
                             enableCellEdit: false,
-                            enableColumnMenu: false,
+                            enableColumnMenu: false
                         }
                     ],
                     watchlist: {
@@ -546,6 +545,14 @@
                         ],
                         PASSENGER: [
                             {
+                                field: "dob",
+                                name: "dob",
+                                displayName: "DOB",
+                                width: 100,
+                                cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD | date:'yyyy-MM-dd'}}</md-button>",
+                                "type": "date"
+                            },
+                            {
                                 field: "firstName",
                                 name: "firstName",
                                 displayName: "First Name",
@@ -557,12 +564,6 @@
                                 displayName: "Last Name",
                                 cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                                 "type": "string"
-                            }, {
-                                field: "dob",
-                                name: "dob",
-                                displayName: "DOB",
-                                cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD | date:'yyyy-MM-dd'}}</md-button>",
-                                "type": "date"
                             }
                         ]
                     }
@@ -581,7 +582,7 @@
                 }
             };
         })
-        .service("gridService", function ($http, $q) {
+        .service("gridService", function () {
             /**
              * Take the number of rows in the grid and calculate the
              * correct 'height' style to show all of the data at once.
@@ -878,7 +879,7 @@
         })
         .service("filterService", function ($http, $q) {
             var filterURLS = {
-                    filter: '/gtas/filter/',
+                    filter: '/gtas/filter/'
                 },
                 getFilter = function (userId) {
                     var dfd = $q.defer();
@@ -954,7 +955,7 @@
             };
         // Return public API.
         return ({
-            load: load,
+            load: load
         });
     });
 }());
