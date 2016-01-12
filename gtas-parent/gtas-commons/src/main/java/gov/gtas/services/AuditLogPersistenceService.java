@@ -1,6 +1,8 @@
 package gov.gtas.services;
 
 import gov.gtas.enumtype.AuditActionType;
+import gov.gtas.json.AuditActionData;
+import gov.gtas.json.AuditActionTarget;
 import gov.gtas.model.AuditRecord;
 import gov.gtas.model.User;
 
@@ -11,6 +13,7 @@ public interface AuditLogPersistenceService {
 	public AuditRecord create(AuditRecord aRec);
 	public AuditRecord create(AuditActionType actionType, String target, Object actionData, String message, User user);
 	public AuditRecord create(AuditActionType actionType, String target, Object actionData, String message, String userId);
+	public AuditRecord create(AuditActionType actionType, AuditActionTarget target, AuditActionData actionData, String message, String userId);
     public AuditRecord findById(Long id);
 
     public List<AuditRecord> findByUserActionDateRange(String userId, AuditActionType action,  Date dateFrom, Date dateTo);

@@ -2,8 +2,8 @@ package gov.gtas.services.watchlist;
 
 import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_CREATE_MESSAGE;
 import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_DELETE_MESSAGE;
-import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_TARGET_PREFIX;
-import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_TARGET_SUFFIX;
+//import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_TARGET_PREFIX;
+//import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_TARGET_SUFFIX;
 import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_UPDATE_MESSAGE;
 import gov.gtas.constant.CommonErrorConstants;
 import gov.gtas.constant.WatchlistConstants;
@@ -12,6 +12,8 @@ import gov.gtas.enumtype.EntityEnum;
 import gov.gtas.enumtype.Status;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.json.AuditActionData;
+import gov.gtas.json.AuditActionTarget;
 import gov.gtas.model.AuditRecord;
 import gov.gtas.model.User;
 import gov.gtas.model.watchlist.Watchlist;
@@ -22,6 +24,7 @@ import gov.gtas.repository.watchlist.WatchlistRepository;
 import gov.gtas.services.security.UserData;
 import gov.gtas.services.security.UserService;
 import gov.gtas.services.security.UserServiceUtil;
+import gov.gtas.util.DateCalendarUtils;
 
 import java.util.Collection;
 import java.util.Date;
@@ -210,8 +213,8 @@ public class WatchlistPersistenceServiceImpl implements
 	 */
 	@Override
 	public List<AuditRecord> findLogEntriesForWatchlist(String watchlistName) {
-		return auditRecordRepository.findByTarget(WATCHLIST_LOG_TARGET_PREFIX
-				+ watchlistName + WATCHLIST_LOG_TARGET_SUFFIX);
+    	AuditActionTarget target = new AuditActionTarget(AuditActionType.CREATE_WL, watchlistName, null);
+		return auditRecordRepository.findByTarget(target.toString());
 	}
 
 	private void doDeleteWithLogging(Watchlist watchlist,
@@ -222,12 +225,9 @@ public class WatchlistPersistenceServiceImpl implements
 			for (WatchlistItem item : deleteItems) {
 				WatchlistItem itemToDelete = updateDeleteItemMap.get(item
 						.getId());
-				logRecords.add(new AuditRecord(AuditActionType.DELETE_WL,
-						WATCHLIST_LOG_TARGET_PREFIX
-								+ watchlist.getWatchlistName()
-								+ WATCHLIST_LOG_TARGET_SUFFIX, Status.SUCCESS,
-						WATCHLIST_LOG_DELETE_MESSAGE, itemToDelete
-								.getItemData(), editUser));
+				logRecords.add(createAuditLogRecord(AuditActionType.DELETE_WL,
+								watchlist, itemToDelete,
+						WATCHLIST_LOG_DELETE_MESSAGE, editUser));
 			}
 			watchlistItemRepository.delete(deleteItems);
 			auditRecordRepository.save(logRecords);
@@ -241,20 +241,14 @@ public class WatchlistPersistenceServiceImpl implements
 			List<WatchlistItem> updList = new LinkedList<WatchlistItem>();
 			for (WatchlistItem item : createUpdateItems) {
 				if (item.getId() != null) {
-					logRecords.add(new AuditRecord(AuditActionType.UPDATE_WL,
-							WATCHLIST_LOG_TARGET_PREFIX
-									+ watchlist.getWatchlistName()
-									+ WATCHLIST_LOG_TARGET_SUFFIX,
-							Status.SUCCESS, WATCHLIST_LOG_UPDATE_MESSAGE, item
-									.getItemData(), editUser));
+					logRecords.add(createAuditLogRecord(AuditActionType.UPDATE_WL,
+									watchlist, item,
+							WATCHLIST_LOG_UPDATE_MESSAGE, editUser));
 					updList.add(item);
 				} else {
-					logRecords.add(new AuditRecord(AuditActionType.CREATE_WL,
-							WATCHLIST_LOG_TARGET_PREFIX
-									+ watchlist.getWatchlistName()
-									+ WATCHLIST_LOG_TARGET_SUFFIX,
-							Status.SUCCESS, WATCHLIST_LOG_CREATE_MESSAGE, item
-									.getItemData(), editUser));
+					logRecords.add(createAuditLogRecord(AuditActionType.CREATE_WL,
+									watchlist, item,
+							        WATCHLIST_LOG_CREATE_MESSAGE, editUser));
 				}
 				item.setWatchlist(watchlist);
 			}
@@ -265,7 +259,15 @@ public class WatchlistPersistenceServiceImpl implements
 		} 
 		return ret;
 	}
-
+    private AuditRecord createAuditLogRecord(AuditActionType type, Watchlist watchlist, WatchlistItem item, String message, User editUser){
+    	AuditActionTarget target = new AuditActionTarget(type, watchlist.getWatchlistName(), null);
+    	AuditActionData actionData = new AuditActionData();
+    	actionData.addProperty("itemId", item.getId()!=null?String.valueOf(item.getId()):StringUtils.EMPTY);
+    	actionData.addProperty("user", editUser.getUserId());
+    	actionData.addProperty("editDate", watchlist.getEditTimestamp()!=null?DateCalendarUtils.formatJsonDate(watchlist.getEditTimestamp()):StringUtils.EMPTY);
+    	actionData.addProperty(StringUtils.EMPTY, StringUtils.EMPTY);
+    	return new AuditRecord(type, target.toString(), Status.SUCCESS, message, actionData.toString(), editUser);
+    }
 	private Map<Long, WatchlistItem> validateItemsPresentInDb(
 			Collection<WatchlistItem> targetItems) {
 		Map<Long, WatchlistItem> ret = new HashMap<Long, WatchlistItem>();

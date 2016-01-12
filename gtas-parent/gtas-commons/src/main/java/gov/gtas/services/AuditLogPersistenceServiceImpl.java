@@ -6,6 +6,8 @@ import gov.gtas.enumtype.AuditActionType;
 import gov.gtas.enumtype.Status;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.json.AuditActionData;
+import gov.gtas.json.AuditActionTarget;
 import gov.gtas.model.AuditRecord;
 import gov.gtas.model.User;
 import gov.gtas.repository.AuditRecordRepository;
@@ -128,7 +130,11 @@ public class AuditLogPersistenceServiceImpl implements
 		String actionDataString = null;
 		if (actionData != null) {
 			try {
-				actionDataString = mapper.writeValueAsString(actionData);
+				  if(actionData instanceof String){
+					  actionDataString = (String)actionData;
+				  } else {
+				      actionDataString = mapper.writeValueAsString(actionData);
+				  }
 			} catch (Exception ex) {
 				logger.warn(String.format(
 						AUDIT_LOG_WARNING_CANNOT_CONVERT_JSON_TO_STRING,
@@ -138,6 +144,23 @@ public class AuditLogPersistenceServiceImpl implements
 		AuditRecord ret = auditLogRepository.save(new AuditRecord(actionType,
 				target, Status.SUCCESS, message, actionDataString, user));
 		return ret;
+	}
+
+	/* (non-Javadoc)
+	 * @see gov.gtas.services.AuditLogPersistenceService#create(gov.gtas.enumtype.AuditActionType, gov.gtas.json.AuditActionTarget, gov.gtas.json.AuditActionData, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public AuditRecord create(AuditActionType actionType,
+			AuditActionTarget target, AuditActionData actionData,
+			String message, String userId) {
+		try{
+		    String targetStr = target != null ? target.toString():StringUtils.EMPTY;
+		    String actionDataStr = actionData != null ?actionData.toString():StringUtils.EMPTY;
+		    return create(actionType, targetStr, actionDataStr, message, userId);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return create(actionType, StringUtils.EMPTY, null, message, userId);
 	}
 
 	/* (non-Javadoc)

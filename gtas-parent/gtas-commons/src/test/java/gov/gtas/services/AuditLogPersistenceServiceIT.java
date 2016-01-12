@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.enumtype.AuditActionType;
 import gov.gtas.enumtype.Status;
+import gov.gtas.json.AuditActionData;
+import gov.gtas.json.AuditActionTarget;
 import gov.gtas.model.AuditRecord;
 import gov.gtas.model.User;
 import gov.gtas.services.security.UserService;
@@ -80,7 +82,7 @@ public class AuditLogPersistenceServiceIT {
 		assertNotNull(recList);
 		assertEquals(2, recList.size());
 		
-		recList = testTarget.findByActionType(AuditActionType.CREATE_UDR);
+		recList = testTarget.findByUserAndActionType(AuditActionType.CREATE_UDR, "jpjones");
 		assertEquals(1, recList.size());
 		AuditRecord rec = recList.get(0);
 		assertEquals(AuditActionType.CREATE_UDR, rec.getActionType());
@@ -89,7 +91,7 @@ public class AuditLogPersistenceServiceIT {
 		assertEquals("Creating UDR", rec.getMessage());
 		assertEquals("{jhhgjghgkjhgkjh}", rec.getActionData());
 		
-		recList = testTarget.findByActionType(AuditActionType.CREATE_WL);
+		recList = testTarget.findByUserAndActionType(AuditActionType.CREATE_WL, "jpjones");
 		assertEquals(1, recList.size());
 		rec = recList.get(0);
 		assertEquals(AuditActionType.CREATE_WL, rec.getActionType());
@@ -97,6 +99,33 @@ public class AuditLogPersistenceServiceIT {
 		assertEquals(Status.SUCCESS_WITH_WARNING, rec.getActionStatus());
 		assertEquals("WL_NAME", rec.getTarget());
 		assertNull(rec.getActionData());		
+	}
+
+	@Transactional
+	@Test()
+	public void testCreateFetchAuditLogWithDataObjects() throws Exception{
+		TestUtils.insertAdminUser(userService, "jpjones", "password", "firstName", "lastName");
+		User user = TestUtils.fetchUser(userService, userServiceUtil, "jpjones");
+		AuditActionTarget target = new AuditActionTarget(AuditActionType.CREATE_UDR, "UDR_TITLE", null);
+		AuditActionData data = new AuditActionData();
+		data.addProperty("foo", "bar");
+		data.addProperty("foo2", "bar2");
+		testTarget.create(AuditActionType.CREATE_UDR, target, data,  "Creating UDR", user.getUserId());
+		
+		List<AuditRecord> recList = testTarget.findByUser("jpjones");
+		assertNotNull(recList);
+		assertEquals(1, recList.size());
+		
+		recList = testTarget.findByUserAndActionType(AuditActionType.CREATE_UDR, "jpjones");
+		assertEquals(1, recList.size());
+		AuditRecord rec = recList.get(0);
+		assertEquals(AuditActionType.CREATE_UDR, rec.getActionType());
+		assertEquals(Status.SUCCESS, rec.getActionStatus());
+		assertEquals("{type:\"UDR\",name:\"UDR_TITLE\",id:\"\"}", rec.getTarget());
+		assertEquals("Creating UDR", rec.getMessage());
+		String actionData = rec.getActionData();
+		assertNotNull(actionData);
+		assertEquals("[{name:\"foo\",value:\"bar\"},{name:\"foo2\",value:\"bar2\"}]", actionData);		
 	}
 
 	@Transactional
@@ -113,7 +142,7 @@ public class AuditLogPersistenceServiceIT {
 		assertNotNull(recList);
 		assertEquals(4, recList.size());
 		
-		recList = testTarget.findByActionType(AuditActionType.CREATE_UDR);
+		recList = testTarget.findByUserAndActionType(AuditActionType.CREATE_UDR, "jpjones");
 		assertEquals(1, recList.size());
 		AuditRecord rec = recList.get(0);
 		assertEquals(AuditActionType.CREATE_UDR, rec.getActionType());
