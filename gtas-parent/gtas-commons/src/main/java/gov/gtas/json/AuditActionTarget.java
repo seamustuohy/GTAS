@@ -94,12 +94,12 @@ public class AuditActionTarget implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder bldr = new  StringBuilder();
-		bldr.append("{type:\"").append(this.targetType).append("\",")
-		.append("name:\"").append(this.targetName).append("\",");
+		bldr.append("{\"type\":\"").append(this.targetType).append("\",")
+		.append("\"name\":\"").append(this.targetName).append("\",");
 		if(this.targetId != null){
-			bldr.append("id:\"").append(this.targetId).append("\"}");			
+			bldr.append("\"id\":\"").append(this.targetId).append("\"}");			
 		}else{
-			bldr.append("id:\"\"}");
+			bldr.append("\"id\":\"\"}");
 		}
 		return bldr.toString();
 	}

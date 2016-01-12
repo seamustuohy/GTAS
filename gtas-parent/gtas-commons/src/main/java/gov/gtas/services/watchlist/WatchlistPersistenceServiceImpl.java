@@ -265,7 +265,6 @@ public class WatchlistPersistenceServiceImpl implements
     	actionData.addProperty("itemId", item.getId()!=null?String.valueOf(item.getId()):StringUtils.EMPTY);
     	actionData.addProperty("user", editUser.getUserId());
     	actionData.addProperty("editDate", watchlist.getEditTimestamp()!=null?DateCalendarUtils.formatJsonDate(watchlist.getEditTimestamp()):StringUtils.EMPTY);
-    	actionData.addProperty(StringUtils.EMPTY, StringUtils.EMPTY);
     	return new AuditRecord(type, target.toString(), Status.SUCCESS, message, actionData.toString(), editUser);
     }
 	private Map<Long, WatchlistItem> validateItemsPresentInDb(

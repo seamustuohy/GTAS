@@ -44,8 +44,8 @@ public class AuditActionData implements Serializable {
 	public String toString() {
 		StringBuilder bldr = new StringBuilder("[");
 		for(ActionProperty prop: this.actionProperties){
-			bldr.append("{name:\"").append(prop.getName()).append("\",")
-			.append("value:\"").append(prop.getValue()).append("\"},");
+			bldr.append("{\"name\":\"").append(prop.getName()).append("\",")
+			.append("\"value\":\"").append(prop.getValue()).append("\"},");
 		}
 		if(this.actionProperties.size() > 0){
 			//remove the last comma

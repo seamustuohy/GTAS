@@ -361,7 +361,6 @@ public class TargetingServiceImpl implements TargetingService {
 			actionData.addProperty("totalRuleHits", String.valueOf(ruleHits));
 			actionData.addProperty("watchlistHits", String.valueOf(wlHits));
 			actionData.addProperty("totalPassengerHits", String.valueOf(passengerHits.size()));
-			actionData.addProperty(" ", " ");//add a dummy fourth property
 			
 			String message = "Targeting run on " + new Date();
 			auditLogPersistenceService.create(AuditActionType.TARGETING_RUN,

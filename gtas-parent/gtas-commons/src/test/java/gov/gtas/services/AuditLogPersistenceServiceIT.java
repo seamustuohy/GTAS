@@ -121,11 +121,11 @@ public class AuditLogPersistenceServiceIT {
 		AuditRecord rec = recList.get(0);
 		assertEquals(AuditActionType.CREATE_UDR, rec.getActionType());
 		assertEquals(Status.SUCCESS, rec.getActionStatus());
-		assertEquals("{type:\"UDR\",name:\"UDR_TITLE\",id:\"\"}", rec.getTarget());
+		assertEquals("{\"type\":\"UDR\",\"name\":\"UDR_TITLE\",\"id\":\"\"}", rec.getTarget());
 		assertEquals("Creating UDR", rec.getMessage());
 		String actionData = rec.getActionData();
 		assertNotNull(actionData);
-		assertEquals("[{name:\"foo\",value:\"bar\"},{name:\"foo2\",value:\"bar2\"}]", actionData);		
+		assertEquals("[{\"name\":\"foo\",\"value\":\"bar\"},{\"name\":\"foo2\",\"value\":\"bar2\"}]", actionData);		
 	}
 
 	@Transactional
