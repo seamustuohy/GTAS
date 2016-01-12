@@ -533,9 +533,9 @@ var app;
                                         range.transition()
                                             .duration(duration)
                                             .attr("x", reverse ? x1 : 0)
-                                            .transition()
-                                            .duration(2000)
-                                            .ease("linear")
+                                            //.transition()
+                                            //.duration(2000)
+                                            //.ease("linear")
                                             .attr("width", w1)
 
                                             .attr("height", height);
@@ -560,9 +560,9 @@ var app;
                                         measure.transition()
                                             .duration(duration)
 
-                                            .transition()
-                                            .duration(2000)
-                                            .ease("linear")
+                                            //.transition()
+                                            //.duration(2000)
+                                            //.ease("linear")
 
                                             .attr("width", w1)
                                             .attr("height", height / 3)
@@ -576,9 +576,9 @@ var app;
                                         marker.enter().append("line")
                                             .attr("class", "marker")
 
-                                            .transition()
-                                            .duration(2000)
-                                            .ease("linear")
+                                            //.transition()
+                                            //.duration(2000)
+                                            //.ease("linear")
 
                                             .attr("x1", x0)
                                             .attr("x2", x0)
@@ -596,9 +596,9 @@ var app;
 
                                         marker.transition()
                                             .duration(duration)
-                                            .transition()
-                                            .duration(2000)
-                                            .ease("linear")
+                                            //.transition()
+                                            //.duration(2000)
+                                            //.ease("linear")
 
                                             .attr("x1", x1)
                                             .attr("x2", x1)
