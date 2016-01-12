@@ -18,7 +18,19 @@
             return results;
         }
 
+        $scope.searchSort = querySearch;
         $scope.model = paxModel.model;
+
+        //var obj1 = {
+        //    id: "JFK",
+        //    lowerCasedName: "john f kennedy intl (jfk)",
+        //    name: "John F Kennedy Intl (JFK)"
+        //};
+
+        var array1 = new Array();
+        array1.push(obj1);
+        $scope.model.origin = array1;
+
         var self = this, airports,
             stateName = $state.$current.self.name,
             ruleGridColumns = [{
@@ -75,6 +87,7 @@
                 }
             },
             resolvePage = function () {
+                populateAirports();
                 fetchMethods[stateName]();
             },
             flightDirections = [
@@ -92,6 +105,7 @@
                     return contact;
                 });
                 self.filterSelected = true;
+                $scope.filterSelected = true;
             });
         $scope.flightDirections = flightDirections;
 
@@ -304,7 +318,26 @@
             ];
         }
 
+        var populateAirports = function(){
+
+            var originAirports = new Array();
+            var destinationAirports = new Array();
+
+            angular.forEach($scope.model.origin,function(value,index){
+                originAirports.push(value.id);
+            })
+
+            angular.forEach($scope.model.dest,function(value,index){
+                destinationAirports.push(value.id);
+            })
+
+            $scope.model.originAirports = originAirports;
+            $scope.model.destinationAirports = destinationAirports;
+        };
+
+
         $scope.filter = function () {
+
             resolvePage();
         };
 

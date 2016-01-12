@@ -71,7 +71,7 @@
             spinnerService.show('html5spinner');
             watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
                 var obj, data = [], items = response.data.result.watchlistItems,
-                    setTerm = function (term) { obj[term.field] = term.type === 'date' ? term.value   : term.value; }; //moment(term.value).toDate()
+                    setTerm = function (term) { obj[term.field] = term.type === 'date' ? moment(term.value).toDate()   : term.value; }; //moment(term.value).toDate()
                 if (items === undefined) {
                     $scope.watchlistGrid.data = [];
                     return false;

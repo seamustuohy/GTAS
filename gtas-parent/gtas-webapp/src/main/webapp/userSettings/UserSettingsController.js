@@ -41,9 +41,9 @@ app.controller('UserSettingsController', function ($scope, $state, $interval,$ht
 
 
 //---------------------------------------- Filter JS -----------------------
-    
-   
-    
+
+
+    var toastPosition = angular.element(document.getElementById('filterForm'));
     var self = this, airports, 
     		userData = function (user) {
             $scope.user = user.data;      $scope.filter.userId=user.data.userId;
@@ -72,7 +72,7 @@ app.controller('UserSettingsController', function ($scope, $state, $interval,$ht
        
         alert = function (content) {
             $mdToast.show(
-                $mdToast.simple().content(content).position("top right").hideDelay(3000)
+                $mdToast.simple().content(content).position("top right").hideDelay(4000).parent(angular.element(document.getElementById('filterForm')))
             );
         },
         filterCreated  = function (filter) { alert('Filter has been saved');},
@@ -84,7 +84,7 @@ app.controller('UserSettingsController', function ($scope, $state, $interval,$ht
     $scope.flightDirections = [
         {label: 'Inbound', value: 'I'},
         {label: 'Outbound', value: 'O'},
-        {label: 'Any', value: 'A'}
+        {label: 'Any', value: ''}
     ];
 
     $scope.etaStartDays = [

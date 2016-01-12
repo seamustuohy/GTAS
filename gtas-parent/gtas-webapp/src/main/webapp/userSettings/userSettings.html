@@ -82,12 +82,15 @@ section {
             </md-content>
         </md-tab>
 
+
         <md-tab label="Filter"> <!-- ng-click="setFilter()"-->
+            <div id="filterForm"></div>
             <md-content class="md-padding">
 
-                <form name="filterForm"  ng-submit="setFilter()">
+                <form  name="filterForm"  ng-submit="setFilter()">
                     <section layout-padding layout-margin>
                         <div layout="column"  layout-align="space-around start">
+
                         <md-content class="md-padding autocomplete origin" layout="column">
                             <label>Origin</label>
                             <md-contact-chips ng-model="origins" md-contacts="querySearch($query)" md-contact-name="id"
