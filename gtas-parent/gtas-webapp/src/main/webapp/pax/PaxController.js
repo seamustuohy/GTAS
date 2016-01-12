@@ -28,7 +28,7 @@
         //};
 
         var array1 = new Array();
-        array1.push(obj1);
+        //array1.push(obj1);
         $scope.model.origin = array1;
 
         var self = this, airports,
