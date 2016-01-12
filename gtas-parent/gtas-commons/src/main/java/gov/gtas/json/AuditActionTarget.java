@@ -36,6 +36,7 @@ public class AuditActionTarget implements Serializable {
 		case CREATE_WL:
 		case DELETE_WL:
 		case UPDATE_WL:
+		case DELETE_ALL_WL:
 			return "WATCHLIST";
 		case LOADER_RUN:
 		case LOAD_APIS:

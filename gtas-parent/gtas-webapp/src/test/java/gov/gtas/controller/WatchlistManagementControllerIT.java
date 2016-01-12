@@ -4,8 +4,10 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -169,4 +171,33 @@ public class WatchlistManagementControllerIT {
 		// the watch list now has one item
 		assertEquals(1, wlSpec.getWatchlistItems().size());
 	}
+
+	@Test
+	@Transactional
+	@WithUserDetails(TEST_USER)
+	public void testDeleteAllWl() throws Exception {
+		watchlistService.createUpdateDeleteWatchlistItems(TEST_USER,
+				SampleDataGenerator.newWlWith2Items(WL_NAME));
+		WatchlistSpec wlSpec = watchlistService.fetchWatchlist(WL_NAME);
+		assertNotNull(wlSpec);
+		// the watch list has two items
+		assertEquals(2, wlSpec.getWatchlistItems().size());
+
+		mockMvc.perform(delete("/gtas/wl/passenger/"+WL_NAME))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(
+						jsonPath("$.status",
+								is(Status.SUCCESS.toString())))
+				.andExpect(
+						jsonPath("$.responseDetails[0].attributeName", is("id")))
+				.andExpect(
+						jsonPath("$.responseDetails[1].attributeName",
+								is("title")));
+
+		wlSpec = watchlistService.fetchWatchlist(WL_NAME);
+		// the watch list has been deleted
+		assertNull(wlSpec);
+	}
+
 }

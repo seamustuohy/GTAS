@@ -68,9 +68,11 @@ public interface WatchlistService {
 	JsonServiceResponse activateAllWatchlists();
 
 	/**
-	 * Deletes the named watch list.
+	 * Deletes all the items in the named watch list and then deletes the watch list.
+	 * @param userId
+	 *            the userId of the person requesting the delete.
 	 * @param wlName the name of the watch list to be deleted.
 	 * @return the delete result.
 	 */
-	JsonServiceResponse deleteWatchlist(String wlName);
+	JsonServiceResponse deleteWatchlist(String userId, String wlName);
 }

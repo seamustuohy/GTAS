@@ -25,8 +25,8 @@ public interface WatchlistPersistenceService {
 	 *            the list of watch list items to be added or updated.
 	 * @param deleteList
 	 *            the list of watch list items to be deleted.
-	 * @param user
-	 *            the user persisting the rule (usually also the WL author.)
+	 * @param userId
+	 *            the id of the user persisting the rule (usually also the WL author.)
 	 * @return the id's of the watch list and the updated items.
 	 */
 	public List<Long> createUpdateDelete(String wlName, EntityEnum entity,
@@ -78,9 +78,15 @@ public interface WatchlistPersistenceService {
 	 * (Note: this operation will throw an exception if the watch list contains items.)
 	 * @param name
 	 *            the name of the watch list to delete.
+	 * @param forceFlag
+	 *            If forceFlag is true then the watch list with its items will be deleted
+	 *            whether it is empty or not.
+	 *            Otherwise the watch list will only be deleted if it is empty.
+	 * @param userId
+	 *            the id of the user requesting the delete.
 	 * @return the deleted watch list or null, if the watchlist could not be found.
 	 */
-	public Watchlist deleteWatchlist(String name);
+	public Watchlist deleteWatchlist(String name, boolean forceFlag, String userId);
 
 	/**
 	 * Fetches all log entries for a Watch list by its name. 

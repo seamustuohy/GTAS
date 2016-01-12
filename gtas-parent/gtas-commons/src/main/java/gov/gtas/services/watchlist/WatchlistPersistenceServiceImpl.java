@@ -1,6 +1,7 @@
 package gov.gtas.services.watchlist;
 
 import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_CREATE_MESSAGE;
+import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_DELETE_ALL_MESSAGE;
 import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_DELETE_MESSAGE;
 //import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_TARGET_PREFIX;
 //import static gov.gtas.constant.AuditLogConstants.WATCHLIST_LOG_TARGET_SUFFIX;
@@ -183,24 +184,29 @@ public class WatchlistPersistenceServiceImpl implements
 	 */
 	@Override
 	@Transactional
-	public Watchlist deleteWatchlist(String name) {
-		Watchlist wl = null;
-		List<WatchlistItem> childItems = watchlistItemRepository
-				.getItemsByWatchlistName(name);
-		if (CollectionUtils.isEmpty(childItems)) {
-			wl = watchlistRepository.getWatchlistByName(name);
-			if (wl != null) {
-				watchlistRepository.delete(wl);
-			} else {
-				logger.warn("WatchlistPersistenceServiceImpl.deleteWatchlist - cannot delete watchlist since it does not exist:"
-						+ name);
-			}
+	public Watchlist deleteWatchlist(String name, boolean forceFlag, String userId) {
+		final User user = fetchUser(userId);
+		Watchlist wl = watchlistRepository.getWatchlistByName(name);
+		if(wl != null) {
+			List<WatchlistItem> childItems = watchlistItemRepository
+					.getItemsByWatchlistName(name);
+		    if (!CollectionUtils.isEmpty(childItems) && forceFlag) {
+		    	watchlistItemRepository.delete(childItems);
+		    	watchlistRepository.delete(wl);
+		    } else if(CollectionUtils.isEmpty(childItems)){
+			    watchlistRepository.delete(wl);
+		    } else {
+				throw ErrorHandlerFactory
+						.getErrorHandler()
+						.createException(
+								WatchlistConstants.CANNOT_DELETE_NONEMPTY_WATCHLIST_ERROR_CODE,
+								name);
+		    }
+		    //write the audit record
+		    auditRecordRepository.save(createAuditLogRecord(AuditActionType.DELETE_ALL_WL, wl, null, WATCHLIST_LOG_DELETE_ALL_MESSAGE, user));
 		} else {
-			throw ErrorHandlerFactory
-					.getErrorHandler()
-					.createException(
-							WatchlistConstants.CANNOT_DELETE_NONEMPTY_WATCHLIST_ERROR_CODE,
-							name);
+			logger.warn("WatchlistPersistenceServiceImpl.deleteWatchlist - cannot delete watchlist since it does not exist:"
+					+ name);						
 		}
 		return wl;
 	}
@@ -262,7 +268,9 @@ public class WatchlistPersistenceServiceImpl implements
     private AuditRecord createAuditLogRecord(AuditActionType type, Watchlist watchlist, WatchlistItem item, String message, User editUser){
     	AuditActionTarget target = new AuditActionTarget(type, watchlist.getWatchlistName(), null);
     	AuditActionData actionData = new AuditActionData();
-    	actionData.addProperty("itemId", item.getId()!=null?String.valueOf(item.getId()):StringUtils.EMPTY);
+    	if(item != null) {
+    	    actionData.addProperty("itemId", item.getId()!=null?String.valueOf(item.getId()):StringUtils.EMPTY);
+    	}
     	actionData.addProperty("user", editUser.getUserId());
     	actionData.addProperty("editDate", watchlist.getEditTimestamp()!=null?DateCalendarUtils.formatJsonDate(watchlist.getEditTimestamp()):StringUtils.EMPTY);
     	return new AuditRecord(type, target.toString(), Status.SUCCESS, message, actionData.toString(), editUser);

@@ -12,6 +12,7 @@ public class AuditLogConstants {
     public static final String WATCHLIST_LOG_CREATE_MESSAGE = "Watchlist Item created";
     public static final String WATCHLIST_LOG_UPDATE_MESSAGE = "Watchlist Item updated";
     public static final String WATCHLIST_LOG_DELETE_MESSAGE = "Watchlist Item deleted";
+    public static final String WATCHLIST_LOG_DELETE_ALL_MESSAGE = "All Watchlist Items deleted for specified Watchlist";
 
     // UDR logging constants
 //    public static final String UDR_LOG_TARGET_PREFIX = "{UDRtitle:";

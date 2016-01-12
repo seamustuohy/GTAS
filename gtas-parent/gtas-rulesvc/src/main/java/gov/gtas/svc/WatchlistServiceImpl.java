@@ -133,8 +133,8 @@ public class WatchlistServiceImpl implements WatchlistService {
 	 * @see gov.gtas.svc.WatchlistService#deleteWatchlist(java.lang.String)
 	 */
 	@Override
-	public JsonServiceResponse deleteWatchlist(String wlName) {
-		Watchlist wl = watchlistPersistenceService.deleteWatchlist(wlName);
+	public JsonServiceResponse deleteWatchlist(String userId, String wlName) {
+		Watchlist wl = watchlistPersistenceService.deleteWatchlist(wlName, true, userId);//force the delete even if the watch list is not empty.
 		if(wl != null){
 			return WatchlistServiceJsonResponseHelper.createResponse(true, WatchlistConstants.DELETE_OP_NAME,
 					wl.getId(), wl.getWatchlistName());
