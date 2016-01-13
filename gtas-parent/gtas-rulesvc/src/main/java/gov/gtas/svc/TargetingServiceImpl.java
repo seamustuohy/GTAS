@@ -364,7 +364,7 @@ public class TargetingServiceImpl implements TargetingService {
 			
 			String message = "Targeting run on " + new Date();
 			auditLogPersistenceService.create(AuditActionType.TARGETING_RUN,
-					target, actionData,
+					target.toString(), actionData.toString(),
 					message, GTAS_APPLICATION_USERID);
 		} catch (Exception ex) {
 			//audit log writing errors will not be propagated!
