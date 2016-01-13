@@ -24,7 +24,8 @@
     "selectize": "latest",
     "spring-security-csrf-token-interceptor": "latest",
     "font-awesome": "~4.5.0",
-    "font-awesome-animation": "~0.0.7"
+    "font-awesome-animation": "~0.0.7",
+    "d3": "~3.5.12"
   },
   "devDependencies": {
     "awesome-bootstrap-checkbox": "^0.3.0",
