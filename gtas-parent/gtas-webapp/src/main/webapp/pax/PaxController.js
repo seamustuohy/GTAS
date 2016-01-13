@@ -27,9 +27,9 @@
         //    name: "John F Kennedy Intl (JFK)"
         //};
 
-        var array1 = new Array();
+       // var array1 = new Array();
         //array1.push(obj1);
-        $scope.model.origin = array1;
+        //$scope.model.origin = array1;
 
         var self = this, airports,
             stateName = $state.$current.self.name,
@@ -93,7 +93,7 @@
             flightDirections = [
                 {label: 'Inbound', value: 'I'},
                 {label: 'Outbound', value: 'O'},
-                {label: 'Any', value: ''}
+                {label: 'Any', value: 'A'}
             ];
 
         self.querySearch = querySearch;
@@ -335,6 +335,93 @@
             $scope.model.destinationAirports = destinationAirports;
         };
 
+        var mapAirports = function(){
+
+            var originAirports = new Array();
+            var destinationAirports = new Array();
+            var airport = { id: "" };
+
+
+            if($scope.model.origin ) {
+                if ($scope.model.origin instanceof Array ) {
+                } else {
+                originAirports.push({id: $scope.model.origin});
+                $scope.model.origin = originAirports
+            }
+            };
+            if($scope.model.dest ) {
+                if ($scope.model.dest instanceof Array ) {
+                } else {
+                    destinationAirports.push({id: $scope.model.dest});
+                    $scope.model.dest = destinationAirports
+                }
+            };
+            
+        };
+
+        //var loadUserFilters = function(){
+        //
+        //    var userModel;
+        //    var userPrefs =  userService
+        //        .getUserData(  )                     // Request #1
+        //        .then( function( user ) {
+        //            if(user.data.filter!=null) {
+        //                if (user.data.filter.flightDirection)
+        //                    userModel.direction = user.data.filter.flightDirection;
+        //                if (user.data.filter.etaStart) {
+        //                    flightsModel.starteeDate = new Date();
+        //                    flightsModel.etaStart.setDate(today.getDate() + user.data.filter.etaStart);
+        //                }
+        //                if (user.data.filter.etaEnd) {
+        //                    flightsModel.endDate = new Date();
+        //                    flightsModel.etaEnd.setDate(today.getDate() + user.data.filter.etaEnd);
+        //                }// Response Handler #1
+        //                if (user.data.filter.originAirports != null)
+        //                    flightsModel.origins = user.data.filter.originAirports;
+        //                if (user.data.filter.destinationAirports != null)
+        //                    flightsModel.destinations = user.data.filter.destinationAirports;
+        //            }
+        //            return flightsModel;
+        //        });
+        //
+        //};
+        //var populateAirports = function(){
+        //
+        //    var originAirports = new Array();
+        //    var destinationAirports = new Array();
+        //    var airport = { id: "" };
+        //
+        //    angular.forEach($scope.model.origin,function(value,index){
+        //        //originAirports.push(value.id);
+        //        originAirports.push({ id: value });
+        //    })
+        //
+        //    angular.forEach($scope.model.dest,function(value,index){
+        //        //destinationAirports.push(value.id);
+        //        destinationAirports.push({  id: value });
+        //    })
+        //
+        //    $scope.model.originAirports = originAirports;
+        //    $scope.model.destinationAirports = destinationAirports;
+        //
+        //
+        //    //var originAirports = new Array();
+        //    //var destinationAirports = new Array();
+        //    //var airport = { id: "" };
+        //    //
+        //    //angular.forEach(flightsModel.origins,function(value,index){
+        //    //    originAirports.push({ id: value });
+        //    //});
+        //    //
+        //    //angular.forEach(flightsModel.destinations,function(value,index){
+        //    //    destinationAirports.push({  id: value });
+        //    //});
+        //    //$scope.model.origin= originAirports;
+        //    //$scope.model.dest = destinationAirports;
+        //
+        //
+        //};
+
 
         $scope.filter = function () {
 
@@ -351,5 +438,6 @@
         };
 
         getPage();
+        mapAirports();
     });
 }());

@@ -4,50 +4,50 @@
     app.controller('DashboardController',
         function($state, $scope, $rootScope, $q, $stateParams, dashboardService, $mdToast) {
 
-            $scope.numberOfFlights = 0;
-            $scope.numberOfRuleHits = 0;
-            $scope.numberOfWatchListHits = 0;
-            $scope.numberOfApisMessages = 0;
-            $scope.numberOfPNRMessages = 0;
-
-            $scope.credentials = {
-                beforeDate: '',
-                startDate: '',
-                endDate: ''
-            };
-
-            var d = new Date();
-            var n = d.toString();
-
-            var today = moment();
-            var tomorrow = moment(today).add(3, 'day');
-            var yesterday = moment(today).add(-1, 'day');
-
-            $scope.credentials.startDate = today.format('YYYY-MM-DD');
-            $scope.credentials.endDate = tomorrow.format('YYYY-MM-DD');
-            $scope.credentials.beforeDate = yesterday.format('YYYY-MM-DD');
-
-            $scope.getFlightAndHitsCount = function (credentials) {
-
-                dashboardService.getFlightAndHitsCount(credentials.startDate,credentials.endDate ).then(function (data){
-                    $scope.numberOfFlights = data.data.flightsCount;
-                    $scope.numberOfRuleHits = data.data.ruleHitsCount;
-                    $scope.numberOfWatchListHits = data.data.watchListCount;
-                });
-            };
-
-            $scope.getFlightAndHitsCount($scope.credentials);
-
-            $scope.getMessagesCount = function (credentials) {
-
-                dashboardService.getMessagesCount(credentials.beforeDate,credentials.startDate ).then(function (data){
-                    $scope.numberOfApisMessages = data.data.apisMessageCount;
-                    $scope.numberOfPNRMessages = data.data.pnrMessageCount;
-
-                });
-            };
-
-            $scope.getMessagesCount($scope.credentials);
+            //$scope.numberOfFlights = 0;
+            //$scope.numberOfRuleHits = 0;
+            //$scope.numberOfWatchListHits = 0;
+            //$scope.numberOfApisMessages = 0;
+            //$scope.numberOfPNRMessages = 0;
+            //
+            //$scope.credentials = {
+            //    beforeDate: '',
+            //    startDate: '',
+            //    endDate: ''
+            //};
+            //
+            //var d = new Date();
+            //var n = d.toString();
+            //
+            //var today = moment();
+            //var tomorrow = moment(today).add(3, 'day');
+            //var yesterday = moment(today).add(-1, 'day');
+            //
+            //$scope.credentials.startDate = today.format('YYYY-MM-DD');
+            //$scope.credentials.endDate = tomorrow.format('YYYY-MM-DD');
+            //$scope.credentials.beforeDate = yesterday.format('YYYY-MM-DD');
+            //
+            //$scope.getFlightAndHitsCount = function (credentials) {
+            //
+            //    dashboardService.getFlightAndHitsCount(credentials.startDate,credentials.endDate ).then(function (data){
+            //        $scope.numberOfFlights = data.data.flightsCount;
+            //        $scope.numberOfRuleHits = data.data.ruleHitsCount;
+            //        $scope.numberOfWatchListHits = data.data.watchListCount;
+            //    });
+            //};
+            //
+            //$scope.getFlightAndHitsCount($scope.credentials);
+            //
+            //$scope.getMessagesCount = function (credentials) {
+            //
+            //    dashboardService.getMessagesCount(credentials.beforeDate,credentials.startDate ).then(function (data){
+            //        $scope.numberOfApisMessages = data.data.apisMessageCount;
+            //        $scope.numberOfPNRMessages = data.data.pnrMessageCount;
+            //
+            //    });
+            //};
+            //
+            //$scope.getMessagesCount($scope.credentials);
 
           });
 
