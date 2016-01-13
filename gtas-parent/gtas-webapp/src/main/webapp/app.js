@@ -822,7 +822,7 @@ var app;
                     var yAxis = d3.svg.axis()
                         .scale(y)
                         .orient("left")
-                        .tickFormat(d3.format(".0f"));
+                        .tickFormat(d3.format("3d"));
 
 
                     var svg = d3.select("svg1").append("svg").attr("class", 'col-sm-offset-0')

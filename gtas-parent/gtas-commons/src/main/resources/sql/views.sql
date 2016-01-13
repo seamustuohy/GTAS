@@ -2,7 +2,7 @@
 DROP VIEW IF EXISTS `daily_apis_counts`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `daily_apis_counts`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `daily_apis_counts` AS SELECT
+CREATE VIEW `daily_apis_counts` AS SELECT
         id,
         DATE(create_date) AS 'day',
         COUNT(IF(HOUR(create_date)=0,1,NULL)) AS '1am',
@@ -39,7 +39,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `daily_apis_counts` A
 DROP VIEW IF EXISTS `daily_pnr_counts`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `daily_pnr_counts`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `daily_pnr_counts` AS SELECT
+CREATE VIEW `daily_pnr_counts` AS SELECT
         id,         
         DATE(create_date) AS 'day',
         COUNT(IF(HOUR(create_date)=0,1,NULL)) AS '1am',

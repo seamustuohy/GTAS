@@ -84,7 +84,7 @@ app.controller('UserSettingsController', function ($scope, $state, $interval,$ht
     $scope.flightDirections = [
         {label: 'Inbound', value: 'I'},
         {label: 'Outbound', value: 'O'},
-        {label: 'Any', value: ''}
+        {label: 'Any', value: 'A'}
     ];
 
     $scope.etaStartDays = [
