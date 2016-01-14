@@ -181,7 +181,7 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
          * hack: javascript sends the empty string represented by the 'all' dropdown
          * value as '0', so we check for that here to mean 'any direction' 
          */
-        if (StringUtils.isNotBlank(dto.getDirection()) && !"0".equals(dto.getDirection())) {
+        if (StringUtils.isNotBlank(dto.getDirection()) && !"A".equals(dto.getDirection())) {
             predicates.add(cb.equal(flight.<String>get("direction"), dto.getDirection()));
         }
         
