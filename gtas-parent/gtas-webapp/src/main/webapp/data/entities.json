@@ -17,10 +17,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"        
+        ]      
       },
       {
         "id": "Address.country",
@@ -41,7 +38,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "countries"       
       },
       {
@@ -59,10 +55,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                
+        ]              
       },
       {
         "id": "Address.line2",
@@ -79,10 +72,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                
+        ]               
       },
       {
         "id": "Address.line3",
@@ -99,10 +89,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                
+        ]              
       },
       {
         "id": "Address.postalCode",
@@ -119,10 +106,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                
+        ]               
       },
       {
         "id": "Address.state",
@@ -139,10 +123,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                
+        ]            
       }
     ]
   },
@@ -165,9 +146,7 @@
           "ENDS_WITH",
           "NOT_ENDS_WITH"
         ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                
+        "multiple": true               
       },
       {
         "id": "CreditCard.expiration",
@@ -202,10 +181,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                
+        ]                
       },
       {
         "id": "CreditCard.cardType",
@@ -222,10 +198,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                
+        ]              
       }
     ]
   },
@@ -251,7 +224,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "countries"
       },
       {
@@ -305,10 +277,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                     
       },
       {
         "id": "Document.documentType",
@@ -323,7 +292,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "doc_types"
       }
     ]
@@ -346,10 +314,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                      
       },
       {
         "id": "Email.domain",
@@ -366,10 +331,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                       
       }
     ]
   },
@@ -395,7 +357,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "airports"
       },
       {
@@ -417,7 +378,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "airports"
       },
       {
@@ -439,7 +399,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "carriers"
       },
       {
@@ -461,7 +420,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "countries"
       },
       {
@@ -483,7 +441,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "countries"
       },
       {
@@ -548,10 +505,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                      
       }
     ]
   },
@@ -573,10 +527,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                        
       },
       {
         "id": "FrequentFlyer.number",
@@ -593,10 +544,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                        
       }
     ]
   },
@@ -642,10 +590,7 @@
           "NOT_EQUAL",
           "IN",
           "NOT_IN"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                     
       }
     ]
   },
@@ -667,10 +612,7 @@
           "GREATER_OR_EQUAL",
           "BETWEEN",
           "NOT_BETWEEN"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                   
       },
       {
         "id": "Passenger.citizenshipCountry",
@@ -691,7 +633,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "countries"
       },
       {
@@ -713,7 +654,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "airports"
       },
       {
@@ -735,7 +675,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "countries"
       },
       {
@@ -775,7 +714,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "airports"
       },
       {
@@ -797,7 +735,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "countries"
       },
       {
@@ -836,10 +773,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                       
       },
       {
         "id": "Passenger.lastName",
@@ -856,10 +790,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                       
+        ]                      
       },
       {
         "id": "Passenger.middleName",
@@ -876,10 +807,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                        
       },
       {
         "id": "Passenger.residencyCountry",
@@ -900,7 +828,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "countries"
       },
       {
@@ -918,10 +845,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                
+        ]               
       },
       {
         "id": "Passenger.passengerType",
@@ -958,10 +882,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                       
       }
     ]
   },
@@ -983,10 +904,7 @@
           "GREATER_OR_EQUAL",
           "BETWEEN",
           "NOT_BETWEEN"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                       
       },
       {
         "id": "Pnr.dateBooked",
@@ -1021,10 +939,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                       
       },
       {
         "id": "Pnr.dateReceived",
@@ -1059,10 +974,7 @@
           "GREATER_OR_EQUAL",
           "BETWEEN",
           "NOT_BETWEEN"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                        
       },
       {
         "id": "Pnr.departureDate",
@@ -1113,7 +1025,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "airports"
       },
       {
@@ -1135,7 +1046,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "countries"
       },
       {
@@ -1153,10 +1063,7 @@
           "GREATER_OR_EQUAL",
           "BETWEEN",
           "NOT_BETWEEN"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                       
       },
       {
         "id": "Pnr.recordLocator",
@@ -1173,10 +1080,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                       
       },
       {
         "id": "Pnr.seat",
@@ -1193,10 +1097,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                
+        ]             
       }
     ]
   },
@@ -1222,7 +1123,6 @@
         "input": "select",
         "multiple": true,
         "plugin": "selectize",
-        "create": true,
         "dataSource": "countries"        
       },
       {
@@ -1240,10 +1140,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                       
       },
       {
         "id": "Agency.location",
@@ -1260,10 +1157,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                        
       },
       {
         "id": "Agency.name",
@@ -1280,10 +1174,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                       
       },
       {
         "id": "Agency.phone",
@@ -1300,10 +1191,7 @@
           "NOT_CONTAINS",
           "ENDS_WITH",
           "NOT_ENDS_WITH"
-        ],
-        "input": "select",
-        "multiple": true,
-        "plugin": "selectize"                        
+        ]                        
       }
     ]
   }
