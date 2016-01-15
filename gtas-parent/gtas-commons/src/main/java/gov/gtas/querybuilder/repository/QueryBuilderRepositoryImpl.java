@@ -11,6 +11,7 @@ import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.JPQLGenerator;
 import gov.gtas.querybuilder.constants.Constants;
 import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
+import gov.gtas.querybuilder.exceptions.InvalidUserRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistRepositoryException;
 import gov.gtas.querybuilder.model.QueryRequest;
@@ -45,6 +46,7 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	private static final SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd h:mm:ss a");
 	private static final String CREATED_BY = "createdBy";
 	private static final String TITLE = "title";
+	private static final String USER_ID = "userId";
 	private static final String PERCENT_SIGN = "%";
 	
 	@PersistenceContext 
@@ -53,33 +55,40 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	@Override
 	@Transactional
 	public UserQuery saveQuery(UserQuery query) throws QueryAlreadyExistsRepositoryException, 
-		InvalidQueryRepositoryException {
+		InvalidQueryRepositoryException, InvalidUserRepositoryException {
 		
-		if(query != null) {
-			try {
-				Errors errors = QueryValidationUtils.validateQueryRequest(query);
-				
-				if(errors != null && errors.hasErrors()) {
-					throw new InvalidQueryRepositoryException(QueryValidationUtils.getErrorString(errors), query);
-				}
-			} catch (IOException e) {
-				throw new InvalidQueryRepositoryException(e.getMessage(), query);
-			} 
-				
-			// check whether the title is unique before saving
-			// you can't have queries with duplicate titles for the same user
-			if(isUniqueTitle(query)) {
-				query.setId(null);
-				query.setTitle(query.getTitle() != null ? query.getTitle().trim() : query.getTitle());
-				query.setDescription(query.getDescription() != null ? query.getDescription().trim() : query.getDescription());
-				query.setCreatedDt(new Date());
-				
-				// save query to database
-				entityManager.persist(query);
+		if(query == null) {
+			throw new InvalidQueryRepositoryException(Constants.NULL_QUERY, query);
+		}
+		
+		String userId = query.getCreatedBy() != null ? query.getCreatedBy().getUserId() : "null";
+		if(!isValidUser(userId)) {
+			throw new InvalidUserRepositoryException(Constants.INVALID_USER + " userId: " + userId);
+		}
+		
+		try {
+			Errors errors = QueryValidationUtils.validateQueryRequest(query);
+			
+			if(errors != null && errors.hasErrors()) {
+				throw new InvalidQueryRepositoryException(QueryValidationUtils.getErrorString(errors), query);
 			}
-			else {
-				throw new QueryAlreadyExistsRepositoryException(Constants.QUERY_EXISTS_ERROR_MSG, query);
-			}
+		} catch (IOException e) {
+			throw new InvalidQueryRepositoryException(e.getMessage(), query);
+		} 
+			
+		// check whether the title is unique before saving
+		// you can't have queries with duplicate titles for the same user
+		if(isUniqueTitle(query)) {
+			query.setId(null);
+			query.setTitle(query.getTitle() != null ? query.getTitle().trim() : query.getTitle());
+			query.setDescription(query.getDescription() != null ? query.getDescription().trim() : query.getDescription());
+			query.setCreatedDt(new Date());
+			
+			// save query to database
+			entityManager.persist(query);
+		}
+		else {
+			throw new QueryAlreadyExistsRepositoryException(Constants.QUERY_EXISTS_ERROR_MSG, query);
 		}
 		
 		return query;
@@ -88,86 +97,100 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 	@Override
 	@Transactional
 	public UserQuery editQuery(UserQuery query) throws QueryAlreadyExistsRepositoryException, 
-		QueryDoesNotExistRepositoryException, InvalidQueryRepositoryException {
+		QueryDoesNotExistRepositoryException, InvalidQueryRepositoryException, InvalidUserRepositoryException {
 		UserQuery queryToSave = new UserQuery();
 		boolean isUniqueTitle = true;
 		
-		if(query != null && query.getId() != null) {
+		if(query == null || query.getId() == null) {
+			throw new InvalidQueryRepositoryException(Constants.NULL_QUERY, query);
+		}
+		
+		String userId = query.getCreatedBy() != null ? query.getCreatedBy().getUserId() : "null";
+		if(!isValidUser(userId)) {
+			throw new InvalidUserRepositoryException(Constants.INVALID_USER + " userId: " + userId);
+		}
+		
+		try {
+			Errors errors = QueryValidationUtils.validateQueryRequest(query);
 			
-			try {
-				Errors errors = QueryValidationUtils.validateQueryRequest(query);
-				
-				if(errors != null && errors.hasErrors()) {
-					throw new InvalidQueryRepositoryException(QueryValidationUtils.getErrorString(errors), query);
-				}
-			} catch (IOException e) {
-				throw new InvalidQueryRepositoryException(e.getMessage(), query);
-			} 
+			if(errors != null && errors.hasErrors()) {
+				throw new InvalidQueryRepositoryException(QueryValidationUtils.getErrorString(errors), query);
+			}
+		} catch (IOException e) {
+			throw new InvalidQueryRepositoryException(e.getMessage(), query);
+		} 
+		
+		queryToSave = entityManager.find(UserQuery.class, query.getId());
+		
+		// check whether the query exists or has not been deleted
+		// before updating
+		if(queryToSave == null || queryToSave.getDeletedDt() != null) {
+			throw new QueryDoesNotExistRepositoryException(Constants.QUERY_DOES_NOT_EXIST_ERROR_MSG, query);
+		}
+		
+		// check if the query's title is unique
+		if(!query.getTitle().trim().equalsIgnoreCase(queryToSave.getTitle().trim())) {
+			isUniqueTitle = isUniqueTitle(query);
+		}
+					
+		// update the query
+		if(isUniqueTitle) {
+			queryToSave.setTitle(query.getTitle() != null ? query.getTitle().trim() : query.getTitle());
+			queryToSave.setDescription(query.getDescription() != null ? query.getDescription().trim() : query.getDescription());
+			queryToSave.setQueryText(query.getQueryText());
 			
-			queryToSave = entityManager.find(UserQuery.class, query.getId());
-			
-			// check whether the query exists or has not been deleted
-			// before updating
-			if(queryToSave == null || queryToSave.getDeletedDt() != null) {
-				throw new QueryDoesNotExistRepositoryException(Constants.QUERY_DOES_NOT_EXIST_ERROR_MSG, query);
-			}
-			
-			// check if the query's title is unique
-			if(!query.getTitle().trim().equalsIgnoreCase(queryToSave.getTitle().trim())) {
-				isUniqueTitle = isUniqueTitle(query);
-			}
-						
-			// update the query
-			if(isUniqueTitle) {
-				queryToSave.setTitle(query.getTitle() != null ? query.getTitle().trim() : query.getTitle());
-				queryToSave.setDescription(query.getDescription() != null ? query.getDescription().trim() : query.getDescription());
-				queryToSave.setQueryText(query.getQueryText());
-				
-				entityManager.flush();
-			}
-			else {
-				throw new QueryAlreadyExistsRepositoryException(Constants.QUERY_EXISTS_ERROR_MSG, query);
-			}
+			entityManager.flush();
+		}
+		else {
+			throw new QueryAlreadyExistsRepositoryException(Constants.QUERY_EXISTS_ERROR_MSG, query);
 		}
 	
 		return queryToSave;
 	}
 
 	@Override
-	public List<UserQuery> listQueryByUser(String userId) {
+	public List<UserQuery> listQueryByUser(String userId) throws InvalidUserRepositoryException {
 		List<UserQuery> queryList = new ArrayList<>();
 		
-		if(userId != null) {
-			// get all the user's queries that have not been deleted
-			queryList = entityManager.createNamedQuery(Constants.LIST_QUERY, UserQuery.class)
-					.setParameter(CREATED_BY, userId).getResultList();
+		if(!isValidUser(userId)) {
+			throw new InvalidUserRepositoryException(Constants.INVALID_USER + " userId: " + userId);
 		}
+		
+		// get all the user's queries that have not been deleted
+		queryList = entityManager.createNamedQuery(Constants.LIST_QUERY, UserQuery.class)
+				.setParameter(CREATED_BY, userId).getResultList();
 		
 		return queryList;
 	}
 	
 	@Override
 	@Transactional
-	public void deleteQuery(String userId, int id) throws QueryDoesNotExistRepositoryException {
+	public void deleteQuery(String userId, int id) throws InvalidUserRepositoryException, QueryDoesNotExistRepositoryException {
 		
-		if(userId != null && !userId.isEmpty() && id > 0) {
-			UserQuery query = entityManager.find(UserQuery.class, id);
-			
-			// check whether the query exists or has not been deleted
-			// before deleting
-			if(query == null || query.getDeletedDt() != null) {
-				throw new QueryDoesNotExistRepositoryException(Constants.QUERY_DOES_NOT_EXIST_ERROR_MSG, null);
-			}
-			
-			// delete the query
-			User user = new User();
-			user.setUserId(userId);
-			
-			query.setDeletedDt(new Date());
-			query.setDeletedBy(user);
-			
-			entityManager.flush();
+		if(!isValidUser(userId)) {
+			throw new InvalidUserRepositoryException(Constants.INVALID_USER + " userId: " + userId);
 		}
+		
+		if(id <= 0) {
+			throw new QueryDoesNotExistRepositoryException(Constants.QUERY_DOES_NOT_EXIST_ERROR_MSG + " id: " + id, null);
+		}
+		
+		UserQuery query = entityManager.find(UserQuery.class, id);
+		
+		// check whether the query exists or has not been deleted
+		// before deleting
+		if(query == null || query.getDeletedDt() != null) {
+			throw new QueryDoesNotExistRepositoryException(Constants.QUERY_DOES_NOT_EXIST_ERROR_MSG, null);
+		}
+		
+		// delete the query
+		User user = new User();
+		user.setUserId(userId);
+		
+		query.setDeletedDt(new Date());
+		query.setDeletedBy(user);
+		
+		entityManager.flush();
 	}
 	
 	@Override
@@ -326,21 +349,6 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		}
 		
 		return totalPassengers;
-	}
-	
-	private boolean isUniqueTitle(UserQuery query) {
-		boolean unique = false;
-		
-		// check uniqueness of query title for this user
-		List<Integer> ids = entityManager.createNamedQuery(Constants.UNIQUE_TITLE_QUERY, Integer.class)
-				.setParameter(CREATED_BY, query.getCreatedBy())
-				.setParameter(TITLE, query.getTitle() != null ? query.getTitle().trim() : query.getTitle()).getResultList();
-		
-		if(ids == null || ids.size() == 0) {
-			unique = true;
-		}
-		
-		return unique;
 	}
 	
 	private void setJPQLParameters(Query query, QueryEntity queryEntity, MutableInt positionalParameter) throws ParseException {
@@ -514,4 +522,29 @@ public class QueryBuilderRepositoryImpl implements QueryBuilderRepository {
 		}
 	}
 
+	private boolean isUniqueTitle(UserQuery query) {
+		
+		// check uniqueness of query title for this user
+		List<Integer> ids = entityManager.createNamedQuery(Constants.UNIQUE_TITLE_QUERY, Integer.class)
+				.setParameter(CREATED_BY, query.getCreatedBy())
+				.setParameter(TITLE, query.getTitle() != null ? query.getTitle().trim() : query.getTitle()).getResultList();
+		
+		if(ids == null || ids.size() == 0) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean isValidUser(String userId) {
+
+		// check if valid user
+		Long count = entityManager.createNamedQuery(Constants.IS_VALID_USER, Long.class).setParameter(USER_ID, userId).getSingleResult();
+		
+		if(count > 0) {
+			return true;
+		}
+		
+		return false;
+	}
 }

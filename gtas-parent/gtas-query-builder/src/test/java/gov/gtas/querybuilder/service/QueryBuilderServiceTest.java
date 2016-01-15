@@ -14,6 +14,7 @@ import gov.gtas.model.udr.json.QueryTerm;
 import gov.gtas.querybuilder.constants.Constants;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
+import gov.gtas.querybuilder.exceptions.InvalidUserRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
@@ -72,7 +73,7 @@ public class QueryBuilderServiceTest {
 	
 	@Test
 	public void testSaveQuery() throws QueryAlreadyExistsException, InvalidQueryException, 
-		QueryAlreadyExistsRepositoryException, InvalidQueryRepositoryException {
+		QueryAlreadyExistsRepositoryException, InvalidQueryRepositoryException, InvalidUserRepositoryException {
 		UserQuery expected = new UserQuery();
 		expected.setId(1);
 		
@@ -84,7 +85,7 @@ public class QueryBuilderServiceTest {
 
 	@Test(expected = QueryAlreadyExistsException.class)
 	public void testSaveDuplicateQuery() throws QueryAlreadyExistsRepositoryException, InvalidQueryRepositoryException, 
-		QueryAlreadyExistsException, InvalidQueryException {
+		QueryAlreadyExistsException, InvalidQueryException, InvalidUserRepositoryException {
 		when(queryRepository.saveQuery(any(UserQuery.class))).thenThrow(queryExistsRepoException);
 		
 		queryService.saveQuery(userId,request);
@@ -92,7 +93,7 @@ public class QueryBuilderServiceTest {
 		
 	@Test(expected = InvalidQueryException.class)
 	public void testSaveInvalidQuery() throws QueryAlreadyExistsRepositoryException, InvalidQueryRepositoryException, 
-		QueryAlreadyExistsException, InvalidQueryException {
+		QueryAlreadyExistsException, InvalidQueryException, InvalidUserRepositoryException {
 		when(queryRepository.saveQuery(any(UserQuery.class))).thenThrow(invalidQueryRepoException);
 		
 		queryService.saveQuery(userId,request);
@@ -100,7 +101,7 @@ public class QueryBuilderServiceTest {
 	
 	@Test
 	public void testEditQuery() throws QueryAlreadyExistsRepositoryException, QueryDoesNotExistRepositoryException, 
-		InvalidQueryRepositoryException, QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
+		InvalidQueryRepositoryException, QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException, InvalidUserRepositoryException {
 		UserQuery expected = new UserQuery();
 		expected.setId(1);
 		
@@ -112,7 +113,7 @@ public class QueryBuilderServiceTest {
 	
 	@Test(expected = QueryAlreadyExistsException.class)
 	public void testEditQueryDuplicateTitle() throws QueryAlreadyExistsRepositoryException, QueryDoesNotExistRepositoryException, 
-		InvalidQueryRepositoryException, QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
+		InvalidQueryRepositoryException, QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException, InvalidUserRepositoryException {
 		when(queryRepository.editQuery(any(UserQuery.class))).thenThrow(queryExistsRepoException);
 		
 		queryService.editQuery(userId,request);
@@ -120,7 +121,7 @@ public class QueryBuilderServiceTest {
 	
 	@Test(expected = QueryDoesNotExistException.class)
 	public void testEditQueryDoesNotExist() throws QueryAlreadyExistsRepositoryException, QueryDoesNotExistRepositoryException, 
-		InvalidQueryRepositoryException, QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
+		InvalidQueryRepositoryException, QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException, InvalidUserRepositoryException {
 		when(queryRepository.editQuery(any(UserQuery.class))).thenThrow(queryNotExistRepoException);
 		
 		queryService.editQuery(userId,request);
@@ -128,14 +129,14 @@ public class QueryBuilderServiceTest {
 	
 	@Test(expected = InvalidQueryException.class)
 	public void testEditQueryInvalidQuery() throws QueryAlreadyExistsRepositoryException, QueryDoesNotExistRepositoryException, 
-		InvalidQueryRepositoryException, QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
+		InvalidQueryRepositoryException, QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException, InvalidUserRepositoryException {
 		when(queryRepository.editQuery(any(UserQuery.class))).thenThrow(invalidQueryRepoException);
 		
 		queryService.editQuery(userId,request);
 	}
 
 	@Test
-	public void testListQueryByUser() throws InvalidQueryException {
+	public void testListQueryByUser() throws InvalidQueryException, InvalidUserRepositoryException {
 		List<UserQuery> expected = new ArrayList<>();
 		UserQuery userQuery = new UserQuery();
 		userQuery.setId(1);
@@ -148,7 +149,7 @@ public class QueryBuilderServiceTest {
 	}
 	
 	@Test(expected = QueryDoesNotExistException.class)
-	public void testDeleteQueryDoesNotExist() throws QueryDoesNotExistRepositoryException, QueryDoesNotExistException {
+	public void testDeleteQueryDoesNotExist() throws QueryDoesNotExistRepositoryException, QueryDoesNotExistException, InvalidUserRepositoryException, InvalidQueryException {
 		doThrow(queryNotExistRepoException).when(queryRepository).deleteQuery(userId, queryId);
 
 		queryService.deleteQuery(userId, queryId);

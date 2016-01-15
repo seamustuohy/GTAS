@@ -32,6 +32,7 @@ public final class Constants {
 	
 	public static final String UNIQUE_TITLE_QUERY = "UserQuery.checkUniqueTitle";
 	public static final String LIST_QUERY = "UserQuery.listQueryByUser";
+	public static final String IS_VALID_USER = "UserQuery.isValidUser";
 	
 	public static final String IS_RULE_HIT = "isRuleHit";
 	public static final String HITS_ID = "id";
@@ -50,4 +51,6 @@ public final class Constants {
 	
 	public static final String QUERY_EXISTS_ERROR_MSG = "A query with the same title already exists. Please rename this query or edit the existing one.";
 	public static final String QUERY_DOES_NOT_EXIST_ERROR_MSG = "Query cannot be found.";
+	public static final String NULL_QUERY = "Query is null.";
+	public static final String INVALID_USER = "Invalid user.";
 }

@@ -6,6 +6,7 @@ import gov.gtas.model.User;
 import gov.gtas.model.udr.json.QueryObject;
 import gov.gtas.querybuilder.exceptions.InvalidQueryException;
 import gov.gtas.querybuilder.exceptions.InvalidQueryRepositoryException;
+import gov.gtas.querybuilder.exceptions.InvalidUserRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsException;
 import gov.gtas.querybuilder.exceptions.QueryAlreadyExistsRepositoryException;
 import gov.gtas.querybuilder.exceptions.QueryDoesNotExistException;
@@ -64,14 +65,15 @@ public class QueryBuilderService {
 			result = mapToQueryResult(queryRepository.saveQuery(createUserQuery(userId, queryRequest)));
 		} catch(QueryAlreadyExistsRepositoryException e) {
 			throw new QueryAlreadyExistsException(e.getMessage(), queryRequest);
-		} catch (InvalidQueryException | InvalidQueryRepositoryException | IOException | IllegalArgumentException e) {
+		} catch (InvalidUserRepositoryException | InvalidQueryException | InvalidQueryRepositoryException | IOException | IllegalArgumentException e) {
 			throw new InvalidQueryException(e.getMessage(), queryRequest);
 		}
 		
 		return result;
 	}
 
-	public IUserQueryResult editQuery(String userId, UserQueryRequest queryRequest) throws QueryAlreadyExistsException, QueryDoesNotExistException, InvalidQueryException {
+	public IUserQueryResult editQuery(String userId, UserQueryRequest queryRequest) throws QueryAlreadyExistsException, QueryDoesNotExistException, 
+		InvalidQueryException {
 		IUserQueryResult result = new UserQueryResult();
 		
 		try {
@@ -81,7 +83,7 @@ public class QueryBuilderService {
 			throw new QueryAlreadyExistsException(e.getMessage(), queryRequest);
 		} catch (QueryDoesNotExistRepositoryException e) {
 			throw new QueryDoesNotExistException(e.getMessage(), queryRequest);
-		} catch (InvalidQueryException | InvalidQueryRepositoryException | IOException | IllegalArgumentException e) {
+		} catch (InvalidUserRepositoryException | InvalidQueryException | InvalidQueryRepositoryException | IOException | IllegalArgumentException e) {
 			throw new InvalidQueryException(e.getMessage(), queryRequest);
 		} 
 		
@@ -94,21 +96,23 @@ public class QueryBuilderService {
 		try {
 			logger.debug("List query by " + userId);
 			result = mapToResultList(queryRepository.listQueryByUser(userId));
-		} catch (InvalidQueryException e) {
+		} catch (InvalidUserRepositoryException | InvalidQueryException e) {
 			throw new InvalidQueryException(e.getMessage(), null);
 		}
 		
 		return result;
 	}
 	
-	public void deleteQuery(String userId, int id) throws QueryDoesNotExistException {
+	public void deleteQuery(String userId, int id) throws QueryDoesNotExistException, InvalidQueryException {
 		
 		try {
 			logger.debug("Delete query id: " + id + " by " + userId);
 			queryRepository.deleteQuery(userId, id);
 		} catch (QueryDoesNotExistRepositoryException e) {
 			throw new QueryDoesNotExistException(e.getMessage(), null);
-		}
+		} catch (InvalidUserRepositoryException e) {
+			throw new InvalidQueryException(e.getMessage(), null);
+		} 
 	}
 		
 	public FlightsPageDto runFlightQuery(QueryRequest queryRequest) throws InvalidQueryException {
