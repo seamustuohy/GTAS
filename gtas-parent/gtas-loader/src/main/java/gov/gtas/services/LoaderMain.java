@@ -10,6 +10,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.enumtype.AuditActionType;
+import gov.gtas.json.AuditActionData;
+import gov.gtas.json.AuditActionTarget;
 
 public class LoaderMain {
 	private static Loader loader;
@@ -84,16 +86,16 @@ public class LoaderMain {
 	private static void writeAuditLog(ConfigurableApplicationContext ctx, LoaderStatistics stats) {
 		try{
 			AuditLogPersistenceService auditLogSvc = ctx.getBean(AuditLogPersistenceService.class);
-			StringBuilder bldr = new StringBuilder("{");
-			bldr.append("totalFilesProcessed:").append(stats.getNumFilesProcessed())
-			    .append(", totalFilesAborted:").append(stats.getNumFilesAborted())
-			    .append(", totalMessagesProcessed:").append(stats.getNumMessagesProcessed())
-			    .append(", totalMessagesInError:").append(stats.getNumMessagesFailed())
-			    .append("}");
+			AuditActionTarget target = new AuditActionTarget(AuditActionType.LOADER_RUN, "GTAS Message Loader", null);
+			AuditActionData actionData = new AuditActionData();
+			actionData.addProperty("totalFilesProcessed", String.valueOf(stats.getNumFilesProcessed()));
+			actionData.addProperty("totalFilesAborted", String.valueOf(stats.getNumFilesAborted()));
+			actionData.addProperty("totalMessagesProcessed", String.valueOf(stats.getNumMessagesProcessed()));
+			actionData.addProperty("totalMessagesInError", String.valueOf(stats.getNumMessagesFailed()));
 			
 			String message = "Message Loader run on " + new Date();
 			auditLogSvc.create(AuditActionType.LOADER_RUN,
-					"GTAS Message Loader Run", bldr.toString(),
+					target, actionData,
 					message, GTAS_APPLICATION_USERID);
 			
 		}catch(Exception ex){

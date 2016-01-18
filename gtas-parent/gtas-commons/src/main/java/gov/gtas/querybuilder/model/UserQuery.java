@@ -22,6 +22,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "user_query")
 @NamedQueries({
+	@NamedQuery(name = Constants.IS_VALID_USER, query = "select count(u.userId) from User u where u.userId = :userId"),
 	@NamedQuery(name = Constants.UNIQUE_TITLE_QUERY, query = "select q.id from UserQuery q where q.deletedDt is null and q.createdBy = :createdBy and q.title = :title"),
 	@NamedQuery(name = Constants.LIST_QUERY, query = "select q from UserQuery q where q.createdBy.userId = :createdBy and q.deletedDt is null order by q.id"),
 })

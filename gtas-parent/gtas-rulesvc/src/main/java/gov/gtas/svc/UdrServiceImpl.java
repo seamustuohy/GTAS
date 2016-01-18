@@ -2,8 +2,6 @@ package gov.gtas.svc;
 
 import static gov.gtas.constant.AuditLogConstants.UDR_LOG_CREATE_MESSAGE;
 import static gov.gtas.constant.AuditLogConstants.UDR_LOG_DELETE_MESSAGE;
-import static gov.gtas.constant.AuditLogConstants.UDR_LOG_TARGET_PREFIX;
-import static gov.gtas.constant.AuditLogConstants.UDR_LOG_TARGET_SUFFIX;
 import static gov.gtas.constant.AuditLogConstants.UDR_LOG_UPDATE_MESSAGE;
 import static gov.gtas.constant.AuditLogConstants.UDR_LOG_UPDATE_META_MESSAGE;
 import gov.gtas.constant.CommonErrorConstants;
@@ -13,6 +11,8 @@ import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.UdrServiceErrorHandler;
+import gov.gtas.json.AuditActionData;
+import gov.gtas.json.AuditActionTarget;
 import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.User;
 import gov.gtas.model.udr.Rule;
@@ -32,6 +32,7 @@ import gov.gtas.services.security.UserServiceUtil;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.svc.util.UdrServiceHelper;
 import gov.gtas.svc.util.UdrServiceJsonResponseHelper;
+import gov.gtas.util.DateCalendarUtils;
 
 import java.io.IOException;
 import java.util.Date;
@@ -471,29 +472,44 @@ public class UdrServiceImpl implements UdrService {
 			user = fetchUser(userId);
 		}
 		String message = null;
-		Object actionData = null;
+		AuditActionTarget target = new AuditActionTarget(actionType, udr.getTitle(), 
+				udr.getId()!=null?String.valueOf(udr.getId()):null);
+		AuditActionData actionData = new AuditActionData();
 		switch (actionType) {
 		case UPDATE_UDR:
 			message = UDR_LOG_UPDATE_MESSAGE;
-			actionData = udrspec;
+			actionData = createAuditDetailForUdr(udrspec, author);
 			break;
 		case UPDATE_UDR_META:
 			message = UDR_LOG_UPDATE_META_MESSAGE;
-			actionData = udrspec.getSummary();
+			actionData = createAuditDetailForUdr(udrspec, author);
 			break;
 		case CREATE_UDR:
 			message = UDR_LOG_CREATE_MESSAGE;
-			actionData = udrspec;
+			actionData = createAuditDetailForUdr(udrspec, author);
 			break;
 		case DELETE_UDR:
 			message = UDR_LOG_DELETE_MESSAGE;
+			actionData = null;
 			break;
 		default:
 			break;
 
 		}
-		auditLogPersistenceService.create(actionType, UDR_LOG_TARGET_PREFIX
-				+ udr.getTitle() + UDR_LOG_TARGET_SUFFIX, actionData, message,
-				user);
+		auditLogPersistenceService.create(actionType, target, actionData, message,
+				user.getUserId());
+	}
+	private AuditActionData createAuditDetailForUdr(UdrSpecification udrspec, User author){
+		AuditActionData actionData = new AuditActionData();
+		MetaData meta = udrspec.getSummary();
+		actionData.addProperty("author", meta.getAuthor()!=null?meta.getAuthor():author.getUserId());
+		actionData.addProperty("description", meta.getDescription()!=null?meta.getDescription():StringUtils.EMPTY);
+		actionData.addProperty("startDate", DateCalendarUtils.formatJsonDate(meta.getStartDate()));
+		if(meta.getEndDate() != null) {
+		   actionData.addProperty("endDate", DateCalendarUtils.formatJsonDate(meta.getEndDate()));
+		} else {
+			actionData.addProperty("endDate", StringUtils.EMPTY);
+		}
+		return actionData;
 	}
 }

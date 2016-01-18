@@ -113,10 +113,11 @@ public class WatchlistManagementController {
 	}
 
 	@RequestMapping(value = Constants.WL_DELETE, method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public JsonServiceResponse deleteUDR(@PathVariable String name) {
-		logger.info("******** Received Watchlist Delete requestfor watch list ="
-				+ name);
-		JsonServiceResponse resp = watchlistService.deleteWatchlist(name);
+	public JsonServiceResponse deleteAllWatchlistItems(@PathVariable String name) {
+		String userId = GtasSecurityUtils.fetchLoggedInUserId();
+		logger.info("******** Received Watchlist DeleteAll request for watch list ="
+				+ name + " by user " + userId);
+		JsonServiceResponse resp = watchlistService.deleteWatchlist(userId, name);
 		return resp;
 	}
 

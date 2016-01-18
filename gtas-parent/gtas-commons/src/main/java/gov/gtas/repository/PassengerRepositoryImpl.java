@@ -155,20 +155,24 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
             etaCondition = cb.and(startPredicate, endPredicate);
             predicates.add(etaCondition);
         }
-        // filters
-        
-        if (!CollectionUtils.isEmpty(dto.getOriginAirports())) {
-			Expression<String> originExp = flight.<String> get("origin");
-			Predicate originPredicate = originExp.in(dto.getDestinationAirports());
-			predicates.add(originPredicate);
-		}
 
-		if (!CollectionUtils.isEmpty(dto.getDestinationAirports())) {
-			Expression<String> destExp = flight.<String> get("origin");
-			Predicate destPredicate = destExp.in(dto.getDestinationAirports());
-			predicates.add(destPredicate);
-		}
-       
+
+        // filters
+        if (!CollectionUtils.isEmpty(dto.getOriginAirports())) {
+            Expression<String> originExp = flight.<String> get("origin");
+            Predicate originPredicate = originExp.in(dto.getOriginAirports());
+            Predicate originAirportsPredicate = cb.and(originPredicate);
+            predicates.add(originAirportsPredicate);
+        }
+
+        if (!CollectionUtils.isEmpty(dto.getDestinationAirports())) {
+            Expression<String> destExp = flight.<String> get("destination");
+            Predicate destPredicate = destExp.in(dto.getDestinationAirports());
+            Predicate destAirportsPredicate = cb.and(destPredicate);
+            predicates.add(destAirportsPredicate);
+        }
+
+
         if (StringUtils.isNotBlank(dto.getFlightNumber())) {
             String likeString = String.format("%%%s%%", dto.getFlightNumber().toUpperCase());
             predicates.add(cb.like(flight.<String>get("fullFlightNumber"), likeString));
@@ -177,7 +181,7 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
          * hack: javascript sends the empty string represented by the 'all' dropdown
          * value as '0', so we check for that here to mean 'any direction' 
          */
-        if (StringUtils.isNotBlank(dto.getDirection()) && !"0".equals(dto.getDirection())) {
+        if (StringUtils.isNotBlank(dto.getDirection()) && !"A".equals(dto.getDirection())) {
             predicates.add(cb.equal(flight.<String>get("direction"), dto.getDirection()));
         }
         

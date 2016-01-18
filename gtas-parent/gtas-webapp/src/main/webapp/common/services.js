@@ -925,7 +925,7 @@
                     .getUserData(  )                     // Request #1
                     .then( function( user ) {
                         if(user.data.filter!=null) {
-                            if (user.data.filter.flighDirection)
+                            if (user.data.filter.flightDirection)
                                 flightsModel.direction = user.data.filter.flightDirection;
                             if (user.data.filter.etaStart) {
                                 flightsModel.starteeDate = new Date();

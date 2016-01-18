@@ -1,4 +1,4 @@
-app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userService, auditService, errorService, $location, $mdToast, $document) {
+app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userService, auditService, errorService, $location, $mdToast, $document, $http) {
     'use strict';
     var that = this;
     this.successToast = function(msg){
@@ -43,17 +43,21 @@ app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userServ
     var selectRow = function(gridApi) {
         // set gridApi on scope
         $scope.gridApi = gridApi;
-        $scope.gridApi.selection.on.rowSelectionChanged($scope,
-                function(row) {
-        	      if($scope.selectedTabIndex == 2 || $scope.selectedTabIndex == 3){
-                    $scope.selectedItem = row.entity;
-                    if(row.isSelected){
-                      $scope.showAuditDetails = true;
-	        	    } else {
-	        	    	  $scope.showAuditDetails = false;
-	        	    }
-        	      }
-                });
+        if($scope.gridApi.selection)
+	        $scope.gridApi.selection.on.rowSelectionChanged($scope,
+	                function(row) {
+	        	      if($scope.selectedTabIndex == 1 || $scope.selectedTabIndex == 2){
+	                    $scope.selectedItem = row.entity;
+	                    if(row.isSelected){
+	                      //This converts a string into a JSON object, eliminates back-end change req
+	                      $scope.actionData = JSON.parse($scope.selectedItem.actionData);
+	                      $scope.actionTarget = JSON.parse($scope.selectedItem.target);
+	                      $scope.showAuditDetails = true;
+		        	    } else {
+		        	    	  $scope.showAuditDetails = false;
+		        	    }
+	        	      }
+	                });
 	    //$scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.OPTIONS);
     };
     var selectErrorRow = function(gridApi) {
@@ -61,7 +65,7 @@ app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userServ
         $scope.errorGridApi = gridApi;
         $scope.errorGridApi.selection.on.rowSelectionChanged($scope,
                 function(row) {
-        	      if($scope.selectedTabIndex == 3 && row.isSelected){                   
+        	      if($scope.selectedTabIndex == 2 && row.isSelected){                   
                     	$scope.selectedErrorItem = row.entity;
 	        	  } else {
 	        		  $scope.selectedErrorItem = null;
@@ -82,11 +86,11 @@ app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userServ
            case 0:        	    
         	    userService.getAllUsers().then(setUserData);       		
         	    break;
-           case 2:
+           case 1:
         	    $scope.toastParent = $document[0].getElementById('AuditFilterPanel');
         	    $scope.refreshAudit();
         	    break;
-           case 3:       	    
+           case 2:       	    
        	        $scope.toastParent = $document[0].getElementById('ErrorFilterPanel');
 	       	    $scope.refreshError();
 	       	    break;
@@ -121,5 +125,4 @@ app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userServ
     	  .hideDelay(0)
     	  .parent($scope.toastParent));
     };
-    
 });

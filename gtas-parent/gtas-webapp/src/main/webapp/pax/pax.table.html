@@ -281,23 +281,23 @@
 <script>alert('fresh');</script>
 <form ng-submit="filter()" data-ng-if="stateName === 'paxAll'" class="chipsdemoContactChips filter-form">
     <div class="last-name md-padding">
-        <label for="lastedName">Last Name</label>
+        <label for="lastName">Last Name</label>
         <md-input-container>
-            <input id="lastedName" ng-model="model.lastName">
+            <input id="lastName" ng-model="model.lastName">
         </md-input-container>
     </div>
     <md-content class="md-padding autocomplete origin" layout="column">
         <label>Origin</label>
-        <md-contact-chips ng-model="model.origin" md-contacts="flights.querySearch($query)" md-contact-name="id"
+        <md-contact-chips ng-model="model.origin" md-contacts="searchSort($query)" md-contact-name="id"
                           md-contact-email="name" md-require-match="true" md-highlight-flags="i"
-                          filter-selected="flights.filterSelected">
+                          filter-selected="filterSelected">
         </md-contact-chips>
     </md-content>
     <md-content class="md-padding autocomplete destination" layout="column">
         <label>Destination</label>
-        <md-contact-chips ng-model="model.dest" md-contacts="flights.querySearch($query)" md-contact-name="id"
+        <md-contact-chips ng-model="model.dest" md-contacts="searchSort($query)" md-contact-name="id"
                           md-contact-email="name" md-require-match="true" md-highlight-flags="i"
-                          filter-selected="flights.filterSelected">
+                          filter-selected="filterSelected">
         </md-contact-chips>
     </md-content>
     <div class="flight md-padding">
@@ -356,16 +356,16 @@
     </div>
     <md-content class="md-padding autocomplete origin" layout="column">
         <label>Origin</label>
-        <md-contact-chips ng-model="model.origin" md-contacts="flights.querySearch($query)" md-contact-name="id"
+        <md-contact-chips ng-model="model.origin" md-contacts="searchSort($query)" md-contact-name="id"
                           md-contact-email="name" md-require-match="true" md-highlight-flags="i"
-                          filter-selected="flights.filterSelected">
+                          filter-selected="filterSelected">
         </md-contact-chips>
     </md-content>
     <md-content class="md-padding autocomplete destination" layout="column">
         <label>Destination</label>
-        <md-contact-chips ng-model="model.dest" md-contacts="flights.querySearch($query)" md-contact-name="id"
+        <md-contact-chips ng-model="model.dest" md-contacts="searchSort($query)" md-contact-name="id"
                           md-contact-email="name" md-require-match="true" md-highlight-flags="i"
-                          filter-selected="flights.filterSelected">
+                          filter-selected="filterSelected">
         </md-contact-chips>
     </md-content>
     <div class="flight md-padding">

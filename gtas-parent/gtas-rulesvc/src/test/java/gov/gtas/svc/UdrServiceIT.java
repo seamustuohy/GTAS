@@ -1,7 +1,5 @@
 package gov.gtas.svc;
 
-import static gov.gtas.constant.AuditLogConstants.UDR_LOG_TARGET_PREFIX;
-import static gov.gtas.constant.AuditLogConstants.UDR_LOG_TARGET_SUFFIX;
 import static gov.gtas.constant.DomainModelConstants.UDR_UNIQUE_CONSTRAINT_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -485,7 +483,7 @@ public class UdrServiceIT {
 	}
 	
     private void verifyAuditLog(AuditActionType type, String title, UdrSpecification spec, boolean metaOnly){
-    	List<AuditRecord> logList = auditLogPersistenceService.findByTarget(UDR_LOG_TARGET_PREFIX + title + UDR_LOG_TARGET_SUFFIX);
+    	List<AuditRecord> logList = auditLogPersistenceService.findByTarget("{" + title + "}");
     	AuditRecord log = null;
     	assertTrue(logList.size() >= 1);
     	for(AuditRecord r:logList){

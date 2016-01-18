@@ -14,6 +14,8 @@ import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.enumtype.AuditActionType;
 import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.json.AuditActionData;
+import gov.gtas.json.AuditActionTarget;
 import gov.gtas.model.ApisMessage;
 import gov.gtas.model.Flight;
 import gov.gtas.model.HitDetail;
@@ -354,15 +356,15 @@ public class TargetingServiceImpl implements TargetingService {
 				wlHits += hit.getWatchlistHitCount();
 				passengerHits.add(hit.getPassengerId());
 			}
-			StringBuilder bldr = new StringBuilder("{");
-			bldr.append("totalRuleHits:").append(ruleHits)
-			    .append(", watchlistHits:").append(wlHits)
-			    .append(", totalPassengerHits:").append(passengerHits.size())
-			    .append("}");
+			AuditActionTarget target = new AuditActionTarget(AuditActionType.TARGETING_RUN, "GTAS Rule Engine", null);
+			AuditActionData actionData = new AuditActionData();
+			actionData.addProperty("totalRuleHits", String.valueOf(ruleHits));
+			actionData.addProperty("watchlistHits", String.valueOf(wlHits));
+			actionData.addProperty("totalPassengerHits", String.valueOf(passengerHits.size()));
 			
 			String message = "Targeting run on " + new Date();
 			auditLogPersistenceService.create(AuditActionType.TARGETING_RUN,
-					"Targeting Run", bldr.toString(),
+					target.toString(), actionData.toString(),
 					message, GTAS_APPLICATION_USERID);
 		} catch (Exception ex) {
 			//audit log writing errors will not be propagated!

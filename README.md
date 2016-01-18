@@ -50,7 +50,7 @@ source [sql filename]
 5. login to your aws appserver account and move the war to /tmp
 > mv gtas.war /tmp
 6. deploy to tomcat
-> cd /data/atsg/tomcat/
+> cd /data/atsg/tomcat/  
 sudo -u tomcat sh bin/catalina.sh stop  
 mv /tmp/gtas.war webapps  
 sudo -u tomcat sh bin/catalina.sh start  

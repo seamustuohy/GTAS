@@ -14,6 +14,7 @@
         }
 
         $scope.model = flightsModel;
+       
 
         var self = this, airports,
             stateName = $state ? $state.$current.self.name : 'flights',
@@ -26,7 +27,7 @@
             flightDirections = [
                 {label: 'Inbound', value: 'I'},
                 {label: 'Outbound', value: 'O'},
-                {label: 'Any', value: ''}
+                {label: 'Any', value: 'A'}
             ],
             getPage = function () {
                 setFlightsGrid($scope.flightsGrid, flights || {flights: [], totalFlights: 0 });
@@ -50,8 +51,43 @@
                 }
             },
             resolvePage = function () {
+                populateAirports();
                 fetchMethods[stateName]();
             };
+
+        var populateAirports = function(){
+
+            var originAirports = new Array();
+            var destinationAirports = new Array();
+
+            angular.forEach($scope.model.origin,function(value,index){
+                originAirports.push(value.id);
+            })
+
+            angular.forEach($scope.model.dest,function(value,index){
+                destinationAirports.push(value.id);
+            })
+
+            $scope.model.originAirports = originAirports;
+            $scope.model.destinationAirports = destinationAirports;
+        };
+        
+        var mapAirports = function(){
+            var originAirports = new Array();
+            var destinationAirports = new Array();
+            var airport = { id: "" };
+
+            angular.forEach(flightsModel.origins,function(value,index){
+                originAirports.push({ id: value });
+            });
+
+            angular.forEach(flightsModel.destinations,function(value,index){
+                destinationAirports.push({  id: value });
+            });
+            $scope.model.origin= originAirports;
+            $scope.model.dest = destinationAirports;
+        };
+        
 
         self.querySearch = querySearch;
         $http.get('data/airports.json')
@@ -180,5 +216,6 @@
             return gridService.calculateGridHeight($scope.flightsGrid.data.length);
         };
         resolvePage();
+        mapAirports();
     });
 }());

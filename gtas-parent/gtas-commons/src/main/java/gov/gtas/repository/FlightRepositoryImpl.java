@@ -73,14 +73,16 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
 		// filters
 		if (!CollectionUtils.isEmpty(dto.getOriginAirports())) {
 			Expression<String> originExp = root.<String> get("origin");
-			Predicate originPredicate = originExp.in(dto.getDestinationAirports());
-			predicates.add(originPredicate);
+			Predicate originPredicate = originExp.in(dto.getOriginAirports());
+			Predicate originAirportsPredicate = cb.and(originPredicate);
+			predicates.add(originAirportsPredicate);
 		}
 
 		if (!CollectionUtils.isEmpty(dto.getDestinationAirports())) {
-			Expression<String> destExp = root.<String> get("origin");
+			Expression<String> destExp = root.<String> get("destination");
 			Predicate destPredicate = destExp.in(dto.getDestinationAirports());
-			predicates.add(destPredicate);
+			Predicate destAirportsPredicate = cb.and(destPredicate);
+			predicates.add(destAirportsPredicate);
 		}
 
 		
@@ -90,13 +92,13 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
 		}
 		/*
 		 * hack: javascript sends the empty string represented by the 'all'
-		 * dropdown value as '0', so we check for that here to mean 'any
+		 * dropdown value as 'A', so we check for that here to mean 'any
 		 * direction'
 		 */
-		if (StringUtils.isNotBlank(dto.getDirection()) && !"0".equals(dto.getDirection())) {
+		if (StringUtils.isNotBlank(dto.getDirection()) && !"A".equals(dto.getDirection())) {
 			predicates.add(cb.equal(root.<String> get("direction"), dto.getDirection()));
 		}
-
+		
 		q.select(root).where(predicates.toArray(new Predicate[] {}));
 		TypedQuery<Flight> typedQuery = em.createQuery(q);
 
