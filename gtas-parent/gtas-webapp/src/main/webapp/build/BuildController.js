@@ -15,7 +15,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     this.title = obj ? obj.title : '';
                     this.description = obj ? obj.description : null;
                     this.startDate = obj ? obj.startDate : todayDate;
-                    this.endDate = obj ? obj.endDate : null;
+                    this.endDate = obj ? obj.endDate : undefined;
                     this.enabled = obj ? obj.enabled : true;
                 }
             }
@@ -61,7 +61,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 id: response.result,
                 title: response.responseDetails[1]['attributeValue'],
                 startDate: todayText,
-                endDate: null,
+                endDate: undefined,
                 modifiedOn: todayText,
                 modifiedBy: 'me'
             };
@@ -385,6 +385,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     //if mode query     $scope.buildAfterEntitiesLoaded();
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
     $scope.$scope = $scope;
+
 
     $scope.$watch("rule.endDate", function (newValue) {
         var datepicker;
