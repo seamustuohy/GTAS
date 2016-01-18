@@ -39,19 +39,20 @@
             </md-select>
         </md-input-container>
         <md-input-container ng-if="activeTab == 'Document'">
-            <label>Document Number:</label>
-            <input ng-model="Document.documentNumber" required>
+            <label for="documentNumber">Document Number:</label>
+            <input id="documentNumber" ng-model="Document.documentNumber" required/>
+        </md-input-container>
+        <label for="dobDO">Date of Birth:</label>
+        <md-datepicker ng-if="activeTab == 'Passenger'" ng-model="Passenger.dobDateObject"
+                       id="dobDO" required></md-datepicker>
+        <md-input-container ng-if="activeTab == 'Passenger'">
+            <label for="passengerFirstName">First Name:</label>
+            <input id="passengerFirstName" ng-model="Passenger.firstName" required>
         </md-input-container>
         <md-input-container ng-if="activeTab == 'Passenger'">
-            <label>First Name:</label>
-            <input ng-model="Passenger.firstName" required>
+            <label for="passengerLastName">Last Name:</label>
+            <input id="passengerLastName" ng-model="Passenger.lastName" required>
         </md-input-container>
-        <md-input-container ng-if="activeTab == 'Passenger'">
-            <label>Last Name:</label>
-            <input ng-model="Passenger.lastName" required>
-        </md-input-container>
-        <md-datepicker ng-if="activeTab == 'Passenger'" name="dob" ng-model="Passenger.dob"
-                       md-placeholder="Date of Birth" required></md-datepicker>
         <div class="actions">
             <md-button type="button"
                        ng-if="$scope[$scope.activeTab].id !== null"
