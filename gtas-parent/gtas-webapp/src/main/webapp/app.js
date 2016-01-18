@@ -66,14 +66,12 @@ var app;
             $rootScope.ROLES = USER_ROLES;
             $rootScope.$on('$stateChangeStart',
 
-                function (event, toState, toParams, fromState, fromParams) {
+                function (event, toState) {
 
                     var currentUser = $sessionStorage.get(APP_CONSTANTS.CURRENT_USER);
                     if (currentUser === undefined) {
                         $rootScope.$broadcast('unauthorizedEvent');
                     }
-                    ;
-
                     var roleCheck = checkUserRoleFactory.checkRoles(currentUser);
                     if (toState.authenticate && !roleCheck.hasRoles(toState.roles)) {
                         // User isn?t authenticated or authorized
@@ -83,7 +81,7 @@ var app;
                 });
 
         },
-        router = function ($stateProvider, $urlRouterProvider, $httpProvider, USER_ROLES, $locationProvider) {
+        router = function ($stateProvider, $urlRouterProvider, $httpProvider, USER_ROLES) {
 
             $stateProvider
                 .state('login', {
@@ -148,6 +146,8 @@ var app;
                         }
                     },
                     resolve: {
+                        //TODO research why this resolve doesn't stick...
+                        // I remember reading why on cbp machine
                         flights: function (passengersBasedOnUserFilter, flightsModel) {
                             return passengersBasedOnUserFilter.load();
                         }
@@ -258,6 +258,7 @@ var app;
                     views: {
                         '@': {
                             controller: 'BuildController',
+                            controllerAs: 'build',
                             templateUrl: 'build/build.html'
                         }
                     }
@@ -287,7 +288,7 @@ var app;
                             return userService.getUserData();
                         }
                     }
-                })
+            });
                 //.state('setFilter', {
                 //    url: '/set/filter',
                 //    views: {
@@ -473,13 +474,10 @@ var app;
         .config(function ($provide, $httpProvider) {
             $httpProvider.interceptors.push('httpSecurityInterceptor');
         })
-        .factory('httpSecurityInterceptor', function ($q, $rootScope, $sessionStorage, APP_CONSTANTS) {
+        .factory('httpSecurityInterceptor', function ($q, $rootScope) {
             return {
                 responseError: function (response) {
-                    if (response.status === 401) {
-                        $rootScope.$broadcast('operationNotAllowedEvent');
-                    }
-                    if (response.status === 403) {
+                    if ([401, 403].indexOf(response.status) >= 0) {
                         $rootScope.$broadcast('operationNotAllowedEvent');
                     }
 
