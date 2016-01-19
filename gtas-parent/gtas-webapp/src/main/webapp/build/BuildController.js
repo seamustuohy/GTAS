@@ -386,7 +386,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
     $scope.$scope = $scope;
 
-
     $scope.$watch("rule.endDate", function (newValue) {
         var datepicker;
         if (newValue === null || newValue === undefined) {

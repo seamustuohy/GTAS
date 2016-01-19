@@ -8,7 +8,7 @@ h2 {
 }
 
 /* BEGIN IE css patches */
-md-input-container .md-input { flex: none !important; }
+/*md-input-container .md-input { flex: none !important; }*/
 
 .md-select-label :first-child{
     flex-basis: auto;

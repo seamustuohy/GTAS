@@ -19,32 +19,30 @@
     <md-toolbar class="md-theme-light">
         <h2 class="md-toolbar-tools">{{getToolbarText()}}</h2>
     </md-toolbar>
-    <form name="queryForm" ng-submit="build.save.query.confirm()">
+    <form name="queryForm" ng-submit="save.query.confirm()">
         <md-content layout-padding>
             <div layout="row" layout-wrap>
                 <md-input-container flex>
-                    <label for="queryName">Name</label>
-                    <input id="queryName" md-maxlength="20" autofocus required name="title"
-                           ng-model="build.query.title">
+                    <label>Name</label>
+                    <input md-maxlength="20" autofocus required name="title" ng-model="query.title">
                 </md-input-container>
             </div>
             <div layout="row" layout-wrap>
                 <md-input-container flex>
-                    <label for="queryDescription">Description</label>
-                    <input id="queryDescription" md-maxlength="100" name="description"
-                           ng-model="build.query.description">
+                    <label>Description</label>
+                    <input md-maxlength="100" name="description" ng-model="query.description">
                 </md-input-container>
             </div>
         </md-content>
         <div class="actions">
             <md-button type="button"
-                       ng-click="build.prompt.cancel()"
-                       ng-disabled="build.saving === true"
+                       ng-click="prompt.cancel()"
+                       ng-disabled="saving === true"
                        class="md-raised pull-left">
                 <i class="glyphicon glyphicon-cancel"></i> Cancel
             </md-button>
             <md-button type="submit"
-                       ng-disabled="build.saving === true"
+                       ng-disabled="saving === true"
                        class="md-raised md-primary pull-right">
                 <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i> Confirm Save
             </md-button>
@@ -53,42 +51,41 @@
 </md-sidenav>
 <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="rule">
     <md-toolbar class="md-theme-light">
-        <h2 class="md-toolbar-tools">{{build.getToolbarText()}}</h2>
+        <h2 class="md-toolbar-tools">{{getToolbarText()}}</h2>
     </md-toolbar>
-    <form name="ruleForm" ng-submit="build.save.rule.confirm()">
+    <form name="ruleForm" ng-submit="save.rule.confirm()">
         <md-content layout-padding>
             <div layout="row" layout-wrap>
                 <md-input-container flex>
-                    <label for="ruleName">Name</label>
-                    <input id="ruleName" md-maxlength="20" required name="title" ng-model="build.rule.title">
+                    <label>Name</label>
+                    <input md-maxlength="20" required name="title" ng-model="rule.title">
                 </md-input-container>
             </div>
             <div layout="row" layout-wrap>
                 <md-input-container flex>
-                    <label for="ruleDescription">Description</label>
-                    <input id="ruleDescription" md-maxlength="100" name="description" ng-model="build.rule.description">
+                    <label>Description</label>
+                    <input md-maxlength="100" name="description" ng-model="rule.description">
                 </md-input-container>
             </div>
             <div layout="row" layout-wrap>
-                <md-checkbox class="md-primary" required ng-model="build.rule.enabled" aria-label="Enabled">Enabled
-                </md-checkbox>
+                <md-checkbox class="md-primary" required ng-model="rule.enabled" aria-label="Enabled">Enabled</md-checkbox>
             </div>
             <div layout="row" layout-wrap>
-                <md-datepicker ng-model="build.rule.startDate" md-placeholder="Start Date"></md-datepicker>
+                <md-datepicker ng-model="rule.startDate" md-placeholder="Start Date"></md-datepicker>
             </div>
             <div layout="row" layout-wrap>
-                <md-datepicker ng-model="build.rule.endDate" md-placeholder="End Date"></md-datepicker>
+                <md-datepicker ng-model="rule.endDate" md-placeholder="End Date"></md-datepicker>
             </div>
         </md-content>
         <div class="actions">
             <md-button type="button"
-                       ng-click="build.prompt.cancel()"
-                       ng-disabled="build.saving === true"
+                       ng-click="prompt.cancel()"
+                       ng-disabled="saving === true"
                        class="md-raised pull-left">
                 <i class="glyphicon glyphicon-cancel"></i> Cancel
             </md-button>
             <md-button type="submit"
-                       ng-disabled="build.saving === true"
+                       ng-disabled="saving === true"
                        class="md-raised md-primary pull-right">
                 <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Confirm Save
             </md-button>
@@ -96,61 +93,59 @@
     </form>
 </md-sidenav>
 <md-content flex="" layout-padding="" class="">
-    <div layout="column" layout-fill="" layout-align="top center">
-        <div ng-if="build.mode == 'rule'">
-            <md-switch class="md-primary" aria-label="Rules:" ng-model="build.selectedMode" ng-true-value="'all'"
-                       ng-false-value="'rule'">
-                {{build.selectedMode === "rule" ? "My Rules" : "All Rules"}}
+    <div layout="column" layout-fill="" layout-align="top">
+        <div ng-if="mode == 'rule'">
+            <md-switch class="md-primary" aria-label="Rules:" ng-model="$scope.selectedMode" ng-true-value="'all'" ng-false-value="'rule'">
+                {{selectedMode === "rule" ? "My Rules" : "All Rules"}}
             </md-switch>
         </div>
-        <div ui-grid="build.qbGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid"
-             external-scopes="$scope"></div>
+        <div ui-grid="qbGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
         <section>
             <h2>Conditions:</h2>
             <div id="builder"></div>
             <div class="actions">
-                <a href="#/query/flights"
-                   title="Launch Flight Query Results in new window"
-                   target="queryFlights"
-                   ng-click="build.executeQuery($event)"
-                   class="md-raised">
+                <md-button href="#/query/flights"
+                           title="Launch Flight Query Results in new window"
+                           target="queryFlights"
+                           ng-click="executeQuery($event)"
+                           class="md-raised">
                     <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-plane"></i> Query Flights
-                </a>
-                <a href="#/query/passengers"
-                   title="Launch Passengers Query Results in new window"
-                   target="queryPassengers"
-                   ng-click="build.executeQuery($event)"
-                   class="md-raised">
-                    <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-user"></i>  Query Passengers
-                </a>
-                <md-button ng-click="addNew()"
-                           ng-disabled="build.ruleId === null"
-                           class="md-raised pull-left">
-                    <i class="glyphicon glyphicon-plus"></i> Add New {{build.mode}}
                 </md-button>
-                <md-button ng-click="build.resetQueryBuilder()"
+                <md-button href="#/query/passengers"
+                           title="Launch Passengers Query Results in new window"
+                           target="queryPassengers"
+                           ng-click="executeQuery($event)"
+                           class="md-raised">
+                    <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-user"></i>  Query Passengers
+                </md-button>
+                <md-button ng-click="addNew()"
+                           ng-disabled="ruleId === null"
+                           class="md-raised pull-left">
+                    <i class="glyphicon glyphicon-plus"></i> Add New {{mode}}
+                </md-button>
+                <md-button ng-click="resetQueryBuilder()"
                            class="md-raised pull-left">
                     <i class="glyphicon glyphicon-minus"></i> Clear Conditions
                 </md-button>
-                <md-button ng-click="build.prompt.save('rule')"
-                           ng-disabled="build.saving === true"
-                           ng-class="{'md-primary': build.mode === 'rule'}"
+                <md-button ng-click="prompt.save('rule')"
+                           ng-disabled="saving === true"
+                           ng-class="{'md-primary': mode === 'rule'}"
                            class="md-raised pull-right">
                     <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Save As Rule
                 </md-button>
-                <md-button ng-click="build.copyRule()"
-                           ng-disabled="build.mode === 'query' || build.ruleId === null || build.saving === true"
+                <md-button ng-click="copyRule()"
+                           ng-disabled="mode === 'query' || ruleId === null || saving === true"
                            class="md-raised pull-right">
-                    <i class="glyphicon glyphicon-duplicate"></i> Copy {{build.mode}}
+                    <i class="glyphicon glyphicon-duplicate"></i> Copy {{mode}}
                 </md-button>
                 <md-button ng-click="delete()"
-                           ng-disabled="build.ruleId === null"
+                           ng-disabled="ruleId === null"
                            class="md-raised md-warn pull-right">
                     <i class="glyphicon glyphicon-erase"></i> Delete
                 </md-button>
-                <md-button ng-click="build.prompt.save('query')"
-                           ng-disabled="build.saving === true"
-                           ng-class="{'md-primary': build.mode === 'query'}"
+                <md-button ng-click="prompt.save('query')"
+                           ng-disabled="saving === true"
+                           ng-class="{'md-primary': mode === 'query'}"
                            class="md-raised pull-right" type="submit">
                     <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i>  Save As Query
                 </md-button>

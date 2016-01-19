@@ -278,12 +278,11 @@
 
 <h3 data-ng-if="stateName === 'queryPassengers'"><i class="glyphicon glyphicon-user"></i><i
         class="glyphicon glyphicon-filter"></i> Passengers Query</h3>
-<script>alert('fresh');</script>
 <form ng-submit="filter()" data-ng-if="stateName === 'paxAll'" class="chipsdemoContactChips filter-form">
     <div class="last-name md-padding">
         <label for="lastName">Last Name</label>
         <md-input-container>
-            <input id="lastName" ng-model="model.lastName">
+            <input style="padding-top:20px" id="lastName" ng-model="model.lastName">
         </md-input-container>
     </div>
     <md-content class="md-padding autocomplete origin" layout="column">
@@ -303,13 +302,13 @@
     <div class="flight md-padding">
         <label for="flightNumber">Flight</label>
         <md-input-container>
-            <input id="flightNumber" ng-model="model.flightNumber">
+            <input style="padding-top:20px" id="flightNumber" ng-model="model.flightNumber">
         </md-input-container>
     </div>
     <div class="direction md-padding">
         <label for="direction">Direction</label>
         <md-input-container>
-            <md-select id="direction" ng-model="model.direction">
+            <md-select style="padding-top:18px" id="direction" ng-model="model.direction">
                 <md-option ng-repeat="item in flightDirections" value="{{item.value}}">
                     {{item.label}}
                 </md-option>
