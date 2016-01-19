@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    app.controller('WatchListController', function ($scope, gridOptionsLookupService, $q, watchListService, $mdSidenav, $interval, spinnerService) {
+    app.controller('WatchListController', function ($scope, gridOptionsLookupService, $q, watchListService, $mdSidenav, $interval, spinnerService, $timeout) {
         var watchlist = {},
             tabs = [],
             model = {
@@ -14,7 +14,6 @@
                     this.firstName = entity ? entity.firstName : null;
                     this.lastName = entity ? entity.lastName : null;
                     this.dob = entity ? entity.dob : null;
-                    this.dobDateObject = entity ? moment(entity.dob).format('YYYY-MM-DD') : undefined;
                 }
             },
             resetModels = function (m) {
@@ -72,7 +71,7 @@
             spinnerService.show('html5spinner');
             watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
                 var obj, data = [], items = response.data.result.watchlistItems,
-                    setTerm = function (term) { obj[term.field] = term.type === 'date' ? moment(term.value).toDate() : term.value; }; //moment(term.value).toDate()
+                    setTerm = function (term) { obj[term.field] = term.type === 'date' ?  moment(term.value).toDate() : term.value; };
                 if (items === undefined) {
                     $scope.watchlistGrid.data = [];
                     return false;
@@ -89,8 +88,8 @@
         };
 
         $scope.getSaveStateText = function (activeTab) {
-            //TODO listen to broadcast, and return save or update
             return 'Save ';
+            // todo listen to broadcast, and return save or update
 //            return $scope[activeTab].id === null ? 'Save ' : 'Update ';
         };
 
@@ -137,15 +136,13 @@
                 if (['$$hashKey', 'id'].indexOf(key) === -1) {
                     columnType = columnTypeDict[key];
                     value = $scope[objectType][key];
-                    if (columnType === 'date') { //specific HACK to Passenger dob right now
-                        value = moment($scope.Passenger.dobDateObject).format('YYYY-MM-DD');
-                    }
-                    if (key.indexOf('DateObject') < 0) { //specific Hack for DateObject workaround
-                        terms.push({entity: entity, field: key, type: columnType, value: value});
-                    }
                     if (!value) {
                         ready = false;
                     }
+                    if (columnType === 'date') {
+                        value = moment(value).format('YYYY-MM-DD');
+                    }
+                    terms.push({entity: entity, field: key, type: columnType, value: value});
                 }
             });
             if (ready) {
