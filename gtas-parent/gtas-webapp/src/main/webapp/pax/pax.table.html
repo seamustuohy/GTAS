@@ -1,4 +1,8 @@
 <style>
+	.disabled-chips input,.disabled-chips .md-chip-remove-container {
+		display:none;
+	}
+	
     [ui-grid="passengerGrid"] .red {
         text-align: center;
         font-size: 1.5em;
@@ -345,22 +349,21 @@
     </div>
 </form>
 
-<form ng-submit="filter()" layout="row" data-ng-if="stateName === 'flightpax'" layout-padding layout-margin
-      layout-align="space-around center">
+<form ng-submit="filter()" layout="row" data-ng-if="stateName === 'flightpax'" class="chipsdemoContactChips filter-form">
     <div class="last-name md-padding">
+    <label for="lastName">Last Name</label>
         <md-input-container>
-            <label for="lastName">Last Name</label>
             <input id="lastName" ng-model="model.lastName">
         </md-input-container>
     </div>
-    <md-content class="md-padding autocomplete origin" layout="column">
+    <md-content class="disabled-chips md-padding autocomplete origin" layout="column" ng-disabled="true" >
         <label>Origin</label>
-        <md-contact-chips ng-model="model.origin" md-contacts="searchSort($query)" md-contact-name="id"
-                          md-contact-email="name" md-require-match="true" md-highlight-flags="i"
-                          filter-selected="filterSelected">
+        <md-contact-chips ng-disabled="true" ng-model="model.origin" md-contacts="searchSort($query)" 
+        				md-contact-name="id" md-contact-email="name"
+ 						md-require-match="true" md-highlight-flags="i" filter-selected="filterSelected">
         </md-contact-chips>
     </md-content>
-    <md-content class="md-padding autocomplete destination" layout="column">
+    <md-content class="disabled-chips md-padding autocomplete destination" layout="column">
         <label>Destination</label>
         <md-contact-chips ng-model="model.dest" md-contacts="searchSort($query)" md-contact-name="id"
                           md-contact-email="name" md-require-match="true" md-highlight-flags="i"
@@ -370,13 +373,13 @@
     <div class="flight md-padding">
         <label for="flightNumber">Flight</label>
         <md-input-container>
-            <input id="flightNumber" ng-model="model.flightNumber">
+            <input ng-disabled="true" id="flightNumber" ng-model="model.flightNumber">
         </md-input-container>
     </div>
     <div class="direction md-padding">
         <label for="direction">Direction</label>
         <md-input-container>
-            <md-select id="direction" ng-model="model.direction">
+            <md-select ng-disabled="true" id="direction" ng-model="model.direction" >
                 <md-option ng-repeat="item in flightDirections" value="{{item.value}}">
                     {{item.label}}
                 </md-option>
@@ -385,11 +388,11 @@
     </div>
     <div class="start-date md-padding">
         <label for="startDate">Start Date</label>
-        <md-datepicker id="startDate" ng-model="model.etaStart" md-placeholder="Start Date"></md-datepicker>
+        <md-datepicker ng-disabled="true" id="startDate" ng-model="model.etaStart" md-placeholder="Start Date"></md-datepicker>
     </div>
     <div class="end-date md-padding">
         <label for="endDate">End Date</label>
-        <md-datepicker id="endDate" ng-model="model.etaEnd" md-placeholder="End Date"></md-datepicker>
+        <md-datepicker ng-disabled="true" id="endDate" ng-model="model.etaEnd" md-placeholder="End Date"></md-datepicker>
     </div>
     <div class="actions">
         <md-button class="md-primary" aria-label="reset" ng-click="reset()" type="button">
@@ -411,8 +414,8 @@
             </svg>
         </md-button>
     </div>
+    </div>
 </form>
-
 <md-content layout-padding>
     <div class="modal" id="QBModal" tabindex="-1"
          role="dialog" aria-labelledby="myModalLabel"
