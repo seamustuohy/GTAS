@@ -21,46 +21,23 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="resources/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="resources/bower_components/font-awesome-animation/dist/font-awesome-animation.min.css">
-
 </head>
 
 <body>
 <header class="header" title="GLOBAL TRAVEL ASSESSMENT SYSTEM"></header>
-
-<div style="padding: 30px;"  id='loginForm'></div>
-<div class="container">
-    
-    <div class="card"></div>
-    <div class="card">
-        
-        <h1 class="title">Login 
-           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span class='faa-pulse animated fa fa-plane'></span>
-        </h1>
-        
-        <form  ng-controller="LoginController" ng-submit="login(credentials)">
-            <div class="input-container">
-                <input type="text" ng-model="credentials.j_username" autocomplete="off" required name="j_username" id="j_username"/>
-                <label for="j_username">Username</label>
-                <div class="bar"></div>
-            </div>
-            <div class="input-container">
-                <input type="password"
-                       ng-model="credentials.j_password"
-                       id="Password"
-                       name="password" required ng-minlength="6"
-                       pattern="(?=.*[a-z]).{6,}"
-                />
-                <label for="Password">Password</label>
-                <div class="bar"></div>
-            </div>
-            <div class="button-container active ripples buttonRipples">
-                <button type="submit" class="md-raised"><span>Go</span></button>
-            </div>
-
-        </form>
-    </div>
-
+<div id="main" class="container" style="padding-top:100px"> 
+	<form name="loginform" id="loginform" ng-controller="LoginController" ng-submit="login(credentials)" class="wpl-track-me">
+	<p class="login-username"> 
+		<label for="user_login">Username</label> <input type="text" class="input" id="user_login" placeholder="Username" ng-model="credentials.j_username" autocomplete="off" required name="j_username" id="j_username"/> 
+	</p>
+	<p class="login-password"> 
+		<label for="user_pass">Password</label> <input type="password" class="input" id="user_pass" placeholder="Password" ng-model="credentials.j_password" id="Password" name="password" required ng-minlength="6" pattern="(?=.*[a-z]).{6,}"/>
+	</p>
+	<p class="login-submit"> 
+		<input type="submit" name="wp-submit" id="wp-submit" class="button-primary" value="Go"/> 
+	</p>
+	</form> 
+ </div>
 </div>
 
 
