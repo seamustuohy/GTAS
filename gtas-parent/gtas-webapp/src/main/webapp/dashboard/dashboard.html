@@ -4,15 +4,13 @@
     .bullet .tick line { stroke: #666; stroke-width: .5px; }
     .bullet .range.s0 { fill: #eee; }
     .bullet .range.s1 { fill: #ddd; }
-    .bullet .range.s2 { fill: #ccc; }
+    .bullet .range.s2flight { fill: #ccc; }
     .bullet .measure.s0 { fill: lightsteelblue; }
     .bullet .measure.s1 { fill: steelblue; }
     .bullet .title { font-size: 14px; font-weight: bold; }
     .bullet .subtitle { fill: #999; }
     <!-- .bullet{font:10px sans-serif}.bullet .marker{stroke:#000;stroke-width:2px}.bullet .tick line{stroke:#666;stroke-width:.5px}.bullet .range.s0{fill:#eee}.bullet .range.s1{fill:#ddd}.bullet .range.s2{fill:#ccc}.bullet .measure.s0{fill:#b0c4de}.bullet .measure.s1{fill:#4682b4}.bullet .title{font-size:14px;font-weight:700}.bullet .subtitle{fill:#999} -->
     .axis path,.axis line{fill:none;stroke:#000;shape-rendering:crispEdges}.bar{fill:steelblue}.x.axis path{display:none}
-
-
 
 </style>
 
@@ -28,17 +26,167 @@
         <div bar-chart></div>
 
     </div>
-    <div class="column" style="padding-top: 75px; padding-bottom: 75px; padding-left: 450px;">
-        &nbsp;&nbsp;&nbsp; <div style="padding-bottom: 10px;"><span data-col="col-sm-offset-2"><label style="font-weight: bold;"> &nbsp;&nbsp;&nbsp;
-        Total # of Flights  (next 72 hrs) -- 150</label></span>
-        </div>
 
-        <div linear-chart></div>
-
-    </div>
 </div>
 </md-whiteframe>
 </div>
+
+<div class="column" style="padding-top: 90px;"></div>
+
+<div class="container-fluid">
+    <div class="column">
+
+<div class="panel panel-default col-lg-6 col-lg-offset-1" style="padding-left: 0;padding-right:0; margin-left: 3.3%;">
+    <div class="panel-heading">
+        <i class="fa fa-bar-chart-o fa-fw"></i><span data-col="col-sm-offset-2"><label style="font-weight: bold;"> Top Rule Hits </label></span>
+
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="row">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>Rule Name</th>
+                            <th>Hits</th>
+                            <th>Created On</th>
+                            <th>Created By</th>
+                            <th>Last Modified On</th>
+                            <th>Last Modified By</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>N-SSA-m8992</td>
+                            <td>556</td>
+                            <td>12/1/1990</td>
+                            <td>astark</td>
+                            <td>12/1/1990</td>
+                            <td>bjones</td>
+                        </tr>
+                        <tr>
+                            <td>N-SSA-c4592</td>
+                            <td>767</td>
+                            <td>12/1/1990</td>
+                            <td>astark</td>
+                            <td>12/1/1990</td>
+                            <td>bjones</td>
+                        </tr>
+                        <tr>
+                            <td>AT-FTF-h353d</td>
+                            <td>233</td>
+                            <td>12/1/1990</td>
+                            <td>astark</td>
+                            <td>12/1/1990</td>
+                            <td>shunter</td>
+                        </tr>
+                        <tr>
+                            <td>AT-FTF-lk3dj</td>
+                            <td>554</td>
+                            <td>12/1/1990</td>
+                            <td>astark</td>
+                            <td>12/1/1990</td>
+                            <td>shunter</td>
+                        </tr>
+                        <tr>
+                            <td>N-SSA-330012</td>
+                            <td>323</td>
+                            <td>12/1/1990</td>
+                            <td>astark</td>
+                            <td>12/1/1990</td>
+                            <td>dsmith</td>
+                        </tr>
+                        <tr>
+                            <td>N-SSA-pcfdgdf</td>
+                            <td>988</td>
+                            <td>12/1/1990</td>
+                            <td>astark</td>
+                            <td>12/1/1990</td>
+                            <td>dsmith</td>
+                        </tr>
+                        <tr>
+                            <td>N-SSA-34ssds2</td>
+                            <td>467</td>
+                            <td>12/1/1990</td>
+                            <td>astark</td>
+                            <td>12/1/1990</td>
+                            <td>astark</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+
+        <!-- /.row -->
+    </div>
+    <!-- /.panel-body -->
+</div>
+
+<div> <!-- YTD Stats-->
+    <!--<md-whiteframe class="md-whiteframe-12dp">-->
+
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i><span data-col="col-sm-offset-2"><label style="font-weight: bold;"> YTD Stats </label></span>
+
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div ytd-chart></div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+            </div>
+
+            <!--</md-whiteframe>-->
+        </div>
+
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="column" style="padding-top: 10px;">
+
+        <div class="row">
+<div class="panel panel-default col-lg-10" style="padding-left: 0;padding-right:0; margin-left: 3.9%;">
+    <div class="panel-heading">
+        <i class="fa fa-bar-chart-o fa-fw"></i> <span data-col="col-sm-offset-2"><label style="font-weight: bold;"> Flight Stats (Next 72 Hrs)</label></span>
+
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="row">
+
+                <div class="col-lg-6">
+                    <div class="column" style="padding-top: 15px; padding-bottom: 75px; padding-left: 20px;">
+                        &nbsp;&nbsp;&nbsp; <div style="padding-bottom: 10px;"><span data-col="col-sm-offset-2"><label style="font-weight: bold;"> &nbsp;&nbsp;&nbsp;
+                        Total # of Flights  (next 72 hrs) -- 150</label></span>
+                    </div>
+
+                        <div class="container">
+                            <div linear-chart></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+            </div>
+        </div>
+    </div>
+
+
 
 </body>
 
