@@ -221,12 +221,12 @@
     <div class="flight md-padding">
         <label for="flightNumber">Flight</label>
         <md-input-container>
-            <input  style="padding-top:20px" id="flightNumber" ng-model="model.flightNumber">
+            <input  style="height:30px" id="flightNumber" ng-model="model.flightNumber">
         </md-input-container>
     </div>
     <div class="direction md-padding">
         <label for="direction">Direction</label>
-        <md-input-container>
+        <md-input-container style="padding-top:0px">
             <md-select id="direction" ng-model="model.direction">
                 <md-option ng-repeat="item in flightDirections" value="{{item.value}}">
                     {{item.label}}
