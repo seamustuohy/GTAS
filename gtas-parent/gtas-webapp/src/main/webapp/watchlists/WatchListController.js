@@ -13,7 +13,7 @@
                     this.id = entity ? entity.id : null;
                     this.firstName = entity ? entity.firstName : null;
                     this.lastName = entity ? entity.lastName : null;
-                    this.dob = entity ? entity.dob : null;
+                    this.dob = entity ? entity.dob : undefined;
                 }
             },
             resetModels = function (m) {
@@ -27,6 +27,46 @@
 
         $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
         $scope.watchlistGrid.importerDataAddCallback = function ( grid, newObjects ) {
+            watchListService.deleteListItems(watchlist.types[listName].entity, listName).then(function (response) {
+                var objectType = $scope.activeTab,
+                    watchlistType = watchlist.types[objectType],
+                    columnTypeDict = {},
+                    entity = watchlistType.entity,
+                    method = !$scope[objectType].id ? 'addItem' : 'updateItem',
+                    terms = [],
+                    columnType,
+                    value,
+                    ready = true;
+
+                watchlistType.columns.forEach(function (column) {
+                    columnTypeDict[column.name] = column.type;
+                });
+
+                Object.keys($scope[objectType]).forEach(function (key) {
+                    if (['$$hashKey', 'id'].indexOf(key) === -1) {
+                        columnType = columnTypeDict[key];
+                        value = $scope[objectType][key];
+                        if (!value) {
+                            ready = false;
+                        }
+                        if (columnType === 'date') {
+                            value = moment(value).format('YYYY-MM-DD');
+                        }
+                        terms.push({entity: entity, field: key, type: columnType, value: value});
+                    }
+                });
+                if (ready) {
+                    watchListService[method](objectType, entity, $scope[objectType].id, terms).then(function (response) {
+                        if ($scope[$scope.activeTab].id === null) {
+                            $scope[$scope.activeTab].id = response.data.result[0];
+                            $scope.watchlistGrid.data.unshift($scope[$scope.activeTab]);
+                        }
+                        $scope.gridApi.selection.clearSelectedRows();
+                        $scope.rowSelected = null;
+                        $mdSidenav('save').close();
+                    });
+                }
+            });
             $scope.watchlistGrid.data = newObjects;
         };
         $scope.watchlistGrid.onRegisterApi = function (gridApi) {
@@ -73,7 +113,8 @@
             spinnerService.show('html5spinner');
             watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
                 var obj, data = [], items = response.data.result.watchlistItems,
-                    setTerm = function (term) { obj[term.field] = term.type === 'date' ?  moment(term.value).toDate() : term.value; };
+                    setTerm = function (term) { obj[term.field] = term.value; };
+//                    setTerm = function (term) { obj[term.field] = term.type === 'date' ?  moment(term.value).toDate() : term.value; };
                 if (items === undefined) {
                     $scope.watchlistGrid.data = [];
                     return false;
@@ -116,6 +157,9 @@
             var mode = $scope.activeTab;
             resetModels($scope);
             $scope[mode] = new model[mode]();
+            if (mode === "Passenger" && $scope[mode].dob !== undefined) {
+                $scope[mode].dob = moment($scope[mode].dob).toDate();
+            }
             $mdSidenav('save').open();
         };
 
@@ -155,6 +199,8 @@
                     }
                     $scope.gridApi.selection.clearSelectedRows();
                     $scope.rowSelected = null;
+                    $scope.getListItemsFor($scope.activeTab);
+//                    $scope.updateGrid($scope.activeTab);
                     $mdSidenav('save').close();
                 });
             }
@@ -163,7 +209,10 @@
         $scope.editRecord = function (row) {
             $scope.gridApi.selection.clearSelectedRows();
             $scope.gridApi.selection.selectRow(row);
-            $scope[$scope.activeTab] = row;
+            $scope[$scope.activeTab] = $.extend({}, row);
+            if ($scope.activeTab === "Passenger" && $scope[$scope.activeTab].dob !== undefined) {
+                $scope[$scope.activeTab].dob = moment($scope[$scope.activeTab].dob).toDate();
+            }
             //broadcast save or update
             $scope.rowSelected = row;
             $mdSidenav('save').open();
