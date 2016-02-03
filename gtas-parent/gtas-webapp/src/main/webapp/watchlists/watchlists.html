@@ -69,7 +69,7 @@
 <md-tabs>
     <md-tab ng-repeat="tab in tabs" label="{{tab.title}}" md-on-select="updateGrid(tab.title)"></md-tab>
 </md-tabs>
-<div ui-grid="watchlistGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
+<div ui-grid="watchlistGrid" ui-grid-pagination ui-grid-selection ui-grid-importer ui-grid-exporter class="grid" external-scopes="$scope"></div>
 <div class="actions">
     <md-button ng-click="removeRows()"
                ng-disabled="disableTrash"

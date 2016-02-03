@@ -26,7 +26,9 @@
             };
 
         $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
-
+        $scope.watchlistGrid.importerDataAddCallback = function ( grid, newObjects ) {
+            $scope.watchlistGrid.data = newObjects;
+        };
         $scope.watchlistGrid.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
             gridApi.selection.on.rowSelectionChanged($scope, isItTrashTime);

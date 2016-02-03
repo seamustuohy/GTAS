@@ -663,6 +663,17 @@
 
                     return (request.then(handleSuccess, handleError));
                 },
+                deleteListItems: function (entity, listTypeName) {
+                    if (!entity || !listTypeName) {
+                        return false;
+                    }
+                    var request = $http({
+                        method: "delete",
+                        url: baseUrl + entity + "/" + listTypeName
+                    });
+
+                    return (request.then(handleSuccess, handleError));
+                },
                 deleteItems: function (listTypeName, entity, watchlistItems) {
                     var request,
                         url = baseUrl + entity;

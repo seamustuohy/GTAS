@@ -16,6 +16,7 @@ var app;
             'ui.grid.rowEdit',
             'ui.grid.cellNav',
             'ui.grid.selection',
+            'ui.grid.importer',
             'ui.grid.exporter',
             'ui.grid.expandable',
             'ngMaterial',
