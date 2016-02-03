@@ -27,47 +27,45 @@
 
         $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
         $scope.watchlistGrid.importerDataAddCallback = function ( grid, newObjects ) {
+            spinnerService.show('html5spinner');
+            var listName = $scope.activeTab;
             watchListService.deleteListItems(watchlist.types[listName].entity, listName).then(function (response) {
                 var objectType = $scope.activeTab,
                     watchlistType = watchlist.types[objectType],
                     columnTypeDict = {},
                     entity = watchlistType.entity,
-                    method = !$scope[objectType].id ? 'addItem' : 'updateItem',
-                    terms = [],
+                    watchlistItems = [],
                     columnType,
                     value,
+                    terms,
                     ready = true;
 
                 watchlistType.columns.forEach(function (column) {
                     columnTypeDict[column.name] = column.type;
                 });
 
-                Object.keys($scope[objectType]).forEach(function (key) {
-                    if (['$$hashKey', 'id'].indexOf(key) === -1) {
-                        columnType = columnTypeDict[key];
-                        value = $scope[objectType][key];
-                        if (!value) {
-                            ready = false;
+                newObjects.forEach(function (obj){
+                    terms = [];
+                    Object.keys(obj).forEach(function (key) {
+                        if (['$$hashKey', 'id'].indexOf(key) === -1) {
+                            columnType = columnTypeDict[key];
+                            value = obj[key];
+                            if (!value) {
+                                ready = false;
+                            }
+                            terms.push({entity: entity, field: key, type: columnType, value: value});
                         }
-                        if (columnType === 'date') {
-                            value = moment(value).format('YYYY-MM-DD');
-                        }
-                        terms.push({entity: entity, field: key, type: columnType, value: value});
-                    }
+                    });
+                    watchlistItems.push({id: null, action: 'Create', terms: terms});
+
                 });
                 if (ready) {
-                    watchListService[method](objectType, entity, $scope[objectType].id, terms).then(function (response) {
-                        if ($scope[$scope.activeTab].id === null) {
-                            $scope[$scope.activeTab].id = response.data.result[0];
-                            $scope.watchlistGrid.data.unshift($scope[$scope.activeTab]);
-                        }
-                        $scope.gridApi.selection.clearSelectedRows();
-                        $scope.rowSelected = null;
-                        $mdSidenav('save').close();
+                    watchListService.addItems(objectType, entity, watchlistItems).then(function (response) {
+                        $scope.getListItemsFor(objectType);
+                        spinnerService.hide('html5spinner');
                     });
                 }
             });
-            $scope.watchlistGrid.data = newObjects;
         };
         $scope.watchlistGrid.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;

@@ -56,12 +56,12 @@
 //            }
 
             function handleSuccess(response) {
-            	if(response.status > 299){
+                if(response.status > 299){
                     if (response.data.message === undefined) {
                         return $q.reject("An unknown error occurred.");
                     }
                     return $q.reject(response.data.message);
-            	}
+                }
                 return response.data;
             }
 
@@ -695,6 +695,28 @@
 
                     return (request.then(handleSuccess, handleError));
                 },
+                addItems: function (listTypeName, entity, data) {
+                    var request,
+                        url = baseUrl + entity
+
+                    if (!listTypeName || !entity || !data) {
+                        return false;
+                    }
+
+                    request = $http({
+                        method: 'post',
+                        url: url,
+                        data: {
+                            "@class": "gov.gtas.model.watchlist.json.WatchlistSpec",
+                            "name": listTypeName,
+                            "entity": entity,
+                            "watchlistItems": data
+                        }
+                    });
+
+                    return (request.then(handleSuccess, handleError));
+                },
+
                 addItem: function (listTypeName, entity, id, terms) {
                     var request,
                         url = baseUrl + entity,
@@ -927,46 +949,46 @@
                 updateFilter: updateFilter
             });
         })
-    .service("passengersBasedOnUserFilter", function(userService, flightService, flightsModel, $q) {
+        .service("passengersBasedOnUserFilter", function(userService, flightService, flightsModel, $q) {
 
-        var today = new Date(),
-            loadUser = function()
-            {
-                return userService
-                    .getUserData(  )                     // Request #1
-                    .then( function( user ) {
-                        if(user.data.filter!=null) {
-                            if (user.data.filter.flightDirection)
-                                flightsModel.direction = user.data.filter.flightDirection;
-                            if (user.data.filter.etaStart) {
-                                flightsModel.starteeDate = new Date();
-                                flightsModel.etaStart.setDate(today.getDate() + user.data.filter.etaStart);
+            var today = new Date(),
+                loadUser = function()
+                {
+                    return userService
+                        .getUserData(  )                     // Request #1
+                        .then( function( user ) {
+                            if(user.data.filter!=null) {
+                                if (user.data.filter.flightDirection)
+                                    flightsModel.direction = user.data.filter.flightDirection;
+                                if (user.data.filter.etaStart) {
+                                    flightsModel.starteeDate = new Date();
+                                    flightsModel.etaStart.setDate(today.getDate() + user.data.filter.etaStart);
+                                }
+                                if (user.data.filter.etaEnd) {
+                                    flightsModel.endDate = new Date();
+                                    flightsModel.etaEnd.setDate(today.getDate() + user.data.filter.etaEnd);
+                                }// Response Handler #1
+                                if (user.data.filter.originAirports != null)
+                                    flightsModel.origins = user.data.filter.originAirports;
+                                if (user.data.filter.destinationAirports != null)
+                                    flightsModel.destinations = user.data.filter.destinationAirports;
                             }
-                            if (user.data.filter.etaEnd) {
-                                flightsModel.endDate = new Date();
-                                flightsModel.etaEnd.setDate(today.getDate() + user.data.filter.etaEnd);
-                            }// Response Handler #1
-                            if (user.data.filter.originAirports != null)
-                                flightsModel.origins = user.data.filter.originAirports;
-                            if (user.data.filter.destinationAirports != null)
-                                flightsModel.destinations = user.data.filter.destinationAirports;
-                        }
-                        return flightsModel;
-                    });
-            },
-            loadPassenger = function( flightsModel)
-            {
-                var dfd = $q.defer();
-                dfd.resolve(flightService.getFlights(flightsModel));
-                return dfd.promise;
-            },
-            load = function ()
-            {
-                return loadUser().then(loadPassenger );
-            };
-        // Return public API.
-        return ({
-            load: load
+                            return flightsModel;
+                        });
+                },
+                loadPassenger = function( flightsModel)
+                {
+                    var dfd = $q.defer();
+                    dfd.resolve(flightService.getFlights(flightsModel));
+                    return dfd.promise;
+                },
+                load = function ()
+                {
+                    return loadUser().then(loadPassenger );
+                };
+            // Return public API.
+            return ({
+                load: load
+            });
         });
-    });
 }());
