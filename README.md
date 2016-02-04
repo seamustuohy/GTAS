@@ -1,13 +1,13 @@
 # GTAS README
 
 ## About GTAS
-Global Travel Assessment System (GTAS) is a turn-key application that provides all the necessary decision support system features to receive and store air traveler data, both API and PNR, provide real-time risk assessment against this data based on your own specific risk criteria and/or watch lists, and view high risk travelers as well as their associated flight and reservation information.
+Global Travel Assessment System (GTAS) is a turn-key application that provides all the necessary decision support system features to receive and store air traveler data, both Advance Passenger Information (API) and PNR (Passenger Name Record), provide real-time risk assessment against this data based on your own specific risk criteria and/or watch lists, and view high risk travelers as well as their associated flight and reservation information.
 
 ## About the code
-GTAS is built on a stack of open source licensed software components and platforms. The open source GTAS code and resources is available for public access via a public repository. The GTAS software can be enhanced and expanded by the global open source community (private organizations and other government agencies). Any changes to the baseline software (trunk) will require CBP review and integration, however any consumer has access to the source code and may change/customize the code (new branch) for their own implementation.
+GTAS is developed in Java and uses open source licensed software components and platforms.
 
 ## About the data
-GTAS uses raw API and PNR data provided by airline departure control systems (API data), reservation systems (PNR data), and air traveler data consolidator providers such as ARINC, SITA, Amadeus and many others (both API and PNR data). The system will support data feeds that conform to WCO UN/EDIFACT Passenger (PAXLST V3.0) and PNRGOV (V13.1) message formats.
+GTAS uses raw API and PNR data provided by airline departure control systems (API data), reservation systems (PNR data). The system will support data feeds that conform to WCO UN/EDIFACT Passenger (PAXLST V3.0) and PNRGOV (V13.1) message formats.
 
 ## Features
 * API and PNR Data Processing
@@ -20,7 +20,6 @@ GTAS uses raw API and PNR data provided by airline departure control systems (AP
 
 ## Documentation
 * User Guide (this will be a link to the user guide)
-* Admin Guide (this will be a link to the admin guide)
 
 ## Multilingual
 
@@ -64,7 +63,7 @@ To deploy the application in a language of your choosing, …
 
 ### Add Support for your Language
 
-If you want to add support for a language that is not supported out-of-box by GTAS, …
+If you want to add support for a language that is not supported out-of-box by GTAS, please add a remark on the issues list and label it as "new feature"
 
 ## Issues
 
