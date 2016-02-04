@@ -224,6 +224,7 @@
                 rowIndexToDelete = $scope.watchlistGrid.data.indexOf($scope.rowSelected);
                 $scope.watchlistGrid.data.splice(rowIndexToDelete, 1);
                 $scope.rowSelected = null;
+                $scope.disableTrash = true;
                 spinnerService.hide('html5spinner');
                 $mdSidenav('save').close();
             });
