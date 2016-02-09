@@ -14,4 +14,6 @@ public interface FlightRepositoryCustom {
      * @return tuple consisting of total count and list of results.
      */
     public Pair<Long, List<Flight>> findByCriteria(FlightsRequestDto dto);
+    
+    public void deleteAllMessages() throws Exception ;
 }

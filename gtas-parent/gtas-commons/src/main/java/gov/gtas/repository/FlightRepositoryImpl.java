@@ -14,10 +14,13 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -119,4 +122,46 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
 
 		return new ImmutablePair<Long, List<Flight>>(count, results);
 	}
+	
+	@Transactional
+    public void deleteAllMessages() throws Exception {
+        String[] sqlScript = {  
+                "delete from document",
+                "delete from document", 
+                "delete from hit_detail", 
+                "delete from hits_summary", 
+                "delete from pnr_passenger", 
+                "delete from apis_message_passenger", 
+                "delete from flight_passenger", 
+                "delete from pnr_flight", 
+                "delete from apis_message_flight", 
+                "delete from flight_leg", 
+                "delete from seat", 
+                "delete from flight", 
+                "delete from pnr_agency", 
+                "delete from pnr_credit_card", 
+                "delete from pnr_frequent_flyer", 
+                "delete from pnr_phone", 
+                "delete from pnr_email", 
+                "delete from pnr_address", 
+                "delete from apis_message_reporting_party", 
+                "delete from reporting_party", 
+                "delete from agency", 
+                "delete from credit_card", 
+                "delete from frequent_flyer", 
+                "delete from phone", 
+                "delete from email", 
+                "delete from address", 
+                "delete from pnr", 
+                "delete from apis_message", 
+                "delete from message", 
+                "delete from passenger" 
+        };
+        
+        Session session = em.unwrap(Session.class);
+        for (String sql : sqlScript) {
+            SQLQuery q = session.createSQLQuery(sql); 
+            q.executeUpdate();
+        }
+    }
 }

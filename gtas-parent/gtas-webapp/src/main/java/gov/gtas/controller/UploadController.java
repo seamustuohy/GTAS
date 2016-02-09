@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import gov.gtas.repository.ApisMessageRepository;
-import gov.gtas.repository.PnrRepository;
+import gov.gtas.repository.FlightRepository;
 
 @Controller
 public class UploadController {
@@ -26,11 +25,8 @@ public class UploadController {
     private static String INDIR = "gtas_in/";
 
     @Autowired
-    private PnrRepository pnrMessageDao;
-
-    @Autowired
-    private ApisMessageRepository apisMessageDao;
-
+    private FlightRepository flightRespository;
+    
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/upload")
     public void upload(@RequestParam("file") MultipartFile file, @RequestParam("username") String username ) throws IOException {
@@ -54,9 +50,8 @@ public class UploadController {
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/deleteall")
-    public void wipeAllMessages() {
+    public void wipeAllMessages() throws Exception {
         logger.info("DELETE ALL MESSAGES");
-        pnrMessageDao.deleteAll();
-        apisMessageDao.deleteAll();
+        flightRespository.deleteAllMessages();
     }
 }
