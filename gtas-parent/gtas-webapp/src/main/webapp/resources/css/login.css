@@ -82,7 +82,7 @@ html, body, div, span, applet, object, iframe,
 	border-radius: 15px 15px 0 0;
 	color: #fff;
 	display: block;	
-	font: 600 18px FontAwesome;
+	font: 600 18px 'Open Sans', sans-serif;
 	line-height: 65px;
 	margin: -22px -22px 25px;
 	padding-left: 23px;
@@ -154,7 +154,7 @@ html, body, div, span, applet, object, iframe,
 	border-radius: 3px;
 	color: #fff;
    cursor: pointer;
-	font: 600 16px FontAwesome;
+	font: 600 16px 'Open Sans', sans-serif;
 	height: 40px;
 	margin-top: 14px;
 	text-shadow: 0 0 1px #000;
