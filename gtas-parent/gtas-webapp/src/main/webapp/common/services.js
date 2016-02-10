@@ -246,7 +246,7 @@
                 },
                 defaultOptions = $.extend({}, standardOptions, exporterOptions),
                 gridOptions = {
-                    admin: defaultOptions,
+                    admin: $.extend({},defaultOptions,{enableVerticalScrollbar:2}),
                     audit: {
                         enableRowSelection: true,
                         enableRowHeaderSelection: false,
@@ -520,7 +520,7 @@
                         },
                         {
                             name: "modifiedOn",
-                            displayName: "Modidified On | By",
+                            displayName: "Modified On | By",
                             field: "modifiedOn",
                             cellTemplate: '<md-button aria-label="modified" ng-click="grid.api.selection.selectRow(row.entity)">{{row.entity.modifiedOn}} | {{row.entity.modifiedBy}}</md-button>',
                             enableCellEdit: false,
@@ -960,11 +960,11 @@
                             if(user.data.filter!=null) {
                                 if (user.data.filter.flightDirection)
                                     flightsModel.direction = user.data.filter.flightDirection;
-                                if (user.data.filter.etaStart) {
+                                if (typeof user.data.filter.etaStart  != undefined && user.data.filter.etaStart != null) {
                                     flightsModel.starteeDate = new Date();
                                     flightsModel.etaStart.setDate(today.getDate() + user.data.filter.etaStart);
                                 }
-                                if (user.data.filter.etaEnd) {
+                                if (typeof user.data.filter.etaEnd  != undefined && user.data.filter.etaEnd != null) {
                                     flightsModel.endDate = new Date();
                                     flightsModel.etaEnd.setDate(today.getDate() + user.data.filter.etaEnd);
                                 }// Response Handler #1

@@ -196,14 +196,16 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.rowSelection = function (gridApi) {
         $scope.gridApi = gridApi;
-        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-            if (row.isSelected) {
-                loadOnSelection[$scope.mode](row);
-            } else {
-                $scope.addNew();
-                $scope.gridApi.selection.clearSelectedRows();
-            }
-        });
+        if($scope.gridApi.selection){
+	        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+	            if (row.isSelected) {
+	                loadOnSelection[$scope.mode](row);
+	            } else {
+	                $scope.addNew();
+	                $scope.gridApi.selection.clearSelectedRows();
+	            }
+	        });
+        }
     };
 
     $scope.delete = function () {
