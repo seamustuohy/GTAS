@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    app.controller('WatchListController', function ($scope, gridOptionsLookupService, $q, watchListService, $mdSidenav, $interval, spinnerService, $timeout) {
+    app.controller('WatchListController', function ($scope, gridOptionsLookupService, $q, watchListService, $mdSidenav, $interval, spinnerService, $timeout, $mdDialog) {
         var watchlist = {},
             tabs = [],
             model = {
@@ -27,6 +27,13 @@
 
         $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
         $scope.watchlistGrid.importerDataAddCallback = function ( grid, newObjects ) {
+        	if($scope.validateNewObjects(newObjects)){
+        		$scope.showConfirm(grid, newObjects);
+        	}else{
+        		$scope.openAlert(null)
+        	}
+        };
+        $scope.watchlistGrid.finishImport = function(grid, newObjects ){
             spinnerService.show('html5spinner');
             var listName = $scope.activeTab;
             watchListService.deleteListItems(watchlist.types[listName].entity, listName).then(function (response) {
@@ -262,5 +269,65 @@
         };
 
         $scope.$scope = $scope;
+        
+        $scope.showConfirm = function(grid, newObjects) {
+            var confirm = $mdDialog.confirm()
+                  .title('WARNING: This will erase all existing items!')
+                  .textContent('Are you certain you wish to replace existing data with the imported file\'s?')
+                  .ariaLabel('Deletion Warning')
+                  .ok('Confirm Replace')
+                  .cancel('Cancel');
+
+            $mdDialog.show(confirm).then(function() {
+            	$scope.watchlistGrid.finishImport(grid, newObjects);
+            }, function() {
+              return false;
+            });
+          };
+        
+        $scope.openAlert = function(msg) {
+            $mdDialog.show(
+              $mdDialog.alert()
+                .clickOutsideToClose(true)
+                .title('Invalid CSV Format')
+                .textContent('The format of the file you have uploaded is invalid.')
+                .ariaLabel('Invalid File Format')
+                .ok('OK')
+                .openFrom({
+                	left:1500
+                })
+                .closeTo(({
+                	right:1500
+                }))
+            );
+          };
+       //overriding CSV.error in order to halt throwing error to console, instead morph into mddialog message to the user.
+        CSV.error = function (err){
+        	var msg = CSV.dump(err);
+        	CSV.reset();
+        	$scope.openAlert(msg);
+        	};
+        	
+        //Sometimes CSV.js allows certain files despite being not CSV, this is an additional check that it matches our object requirements.
+        $scope.validateNewObjects = function (newObjects){
+        	var valid;
+            	if(newObjects){
+            		valid = true;
+    	        	if($scope.activeTab == 'Document'){
+    	        		$.each(newObjects, function(index,value){
+    	        			if(!newObjects[index] || !newObjects[index].documentNumber || !newObjects[index].documentType){
+    		        			valid = false;
+    		        		}
+    	        		});
+    	        	}else{
+    	        		$.each(newObjects, function(index,value){
+    	        			if(!newObjects[index] || !newObjects[index].dob || !newObjects[index].firstName || !newObjects[index].lastName){
+    		        			valid = false;
+    		        		}
+    	        		});
+    	        	}
+            	} 
+            	return valid;
+            };
     });
 }());
