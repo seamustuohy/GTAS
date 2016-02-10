@@ -125,4 +125,10 @@ public interface TargetingService {
 	 * update Pnr with message status
 	 */
 	public void updatePnr(Pnr message, MessageStatus messageStatus);
+
+	/**
+	 * Remove the hits on the hits_summary and hit_detail tables since 
+	 * the same messages might be processed by different criteria.
+	 */
+	public void preProcessing();
 }

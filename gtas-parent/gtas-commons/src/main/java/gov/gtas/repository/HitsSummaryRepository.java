@@ -5,37 +5,47 @@ import gov.gtas.model.HitsSummary;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface HitsSummaryRepository extends CrudRepository<HitsSummary, Long> {
+public interface HitsSummaryRepository extends
+		CrudRepository<HitsSummary, Long> {
 
-    /**
-     * @param id pax id
-     * @return all hit types
-     */
+	/**
+	 * @param id
+	 *            pax id
+	 * @return all hit types
+	 */
 	@Query("SELECT hits.hitdetails FROM HitsSummary hits WHERE hits.passenger.id = (:id)")
 	public List<HitDetail> findByPassengerId(@Param("id") Long id);
 
 	@Query("SELECT det.ruleId, count(*) FROM HitsSummary h join h.hitdetails det WHERE det.hitType = 'R'"
-	      +" group by det.ruleId")
+			+ " group by det.ruleId")
 	public List<Object[]> findDetailsByUdr();
-	
+
 	/**
-	 * @param id pax id
+	 * @param id
+	 *            pax id
 	 * @return RULE hits only
 	 */
-    @Query("SELECT d FROM HitsSummary h join h.hitdetails d WHERE h.passenger.id = (:id) and d.hitType = 'R'")
-    public List<HitDetail> findRuleHitsByPassengerId(@Param("id") Long id);
-	
+	@Query("SELECT d FROM HitsSummary h join h.hitdetails d WHERE h.passenger.id = (:id) and d.hitType = 'R'")
+	public List<HitDetail> findRuleHitsByPassengerId(@Param("id") Long id);
+
 	@Query("SELECT s FROM HitsSummary s")
 	public Iterable<HitsSummary> findAll();
 
 	@Query("SELECT hits FROM HitsSummary hits WHERE hits.passenger.id = :pid and hits.flight.id = :fid")
-	List<HitsSummary> findByFlightIdAndPassengerId(@Param("fid") Long flightId, @Param("pid") Long passengerId);
-
+	List<HitsSummary> findByFlightIdAndPassengerId(@Param("fid") Long flightId,
+			@Param("pid") Long passengerId);
 
 	@Query("SELECT hits FROM HitsSummary hits WHERE hits.flight.id = :fid")
 	List<HitsSummary> findHitsByFlightId(@Param("fid") Long flightId);
+
+	@Query("DELETE FROM HitsSummary hs WHERE hs.id = (:id)")
+	@Modifying
+	@Transactional
+	public void deleteDBData(@Param("id") Long id);
 }

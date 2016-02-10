@@ -34,6 +34,7 @@ public class RuleRunner {
 				.getBean("targetingServiceImpl");
 
 		try {
+			targetingService.preProcessing();
 			Set<Long> uniqueFlights = targetingService.runningRuleEngine();
 			if (logger.isInfoEnabled()) {
 				logger.info("updating hit counts for flight ids {} ",

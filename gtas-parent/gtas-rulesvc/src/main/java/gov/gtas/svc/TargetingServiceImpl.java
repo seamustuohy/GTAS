@@ -26,13 +26,13 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.Pnr;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.FlightRepository;
+import gov.gtas.repository.HitDetailRepository;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.repository.PnrRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.services.AuditLogPersistenceService;
-import gov.gtas.svc.request.builder.PassengerFlightTuple;
 import gov.gtas.svc.util.RuleExecutionContext;
 import gov.gtas.svc.util.TargetingResultUtils;
 import gov.gtas.svc.util.TargetingServiceUtils;
@@ -45,7 +45,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
@@ -79,7 +78,7 @@ public class TargetingServiceImpl implements TargetingService {
 	private ApisMessageRepository apisMsgRepository;
 
 	@Autowired
-	private PnrRepository PnrMsgRepository;
+	private PnrRepository pnrMsgRepository;
 
 	@Autowired
 	private HitsSummaryRepository hitsSummaryRepository;
@@ -91,13 +90,13 @@ public class TargetingServiceImpl implements TargetingService {
 	private PassengerRepository passengerRepository;
 
 	@Autowired
-	private EntityManager em;
-
-	@Autowired
 	private AuditLogPersistenceService auditLogPersistenceService;
 
 	@Value("${hibernate.jdbc.batch_size}")
 	private String batchSize;
+
+	@Autowired
+	private HitDetailRepository hitDetailRepository;
 
 	/**
 	 * Constructor obtained from the spring context by auto-wiring.
@@ -213,6 +212,46 @@ public class TargetingServiceImpl implements TargetingService {
 		}
 		return ret;
 	}
+	
+	/*
+	 * 
+	 * @see gov.gtas.svc.TargetingService#preProcessing()
+	 */
+	public void preProcessing() {
+		logger.info("Entering preProcessing()");
+		Iterator<Message> source = messageRepository.findByStatus(
+				MessageStatus.LOADED).iterator();
+		List<Message> loadedMessages = new ArrayList<Message>();
+		source.forEachRemaining(loadedMessages::add);
+		Set<Flight> flights = new HashSet<Flight>();
+		Set<Passenger> passengers = new HashSet<Passenger>();
+		if (loadedMessages != null) {
+			logger.info("Loaded messages size -->" + loadedMessages.size());
+			for (Message message : loadedMessages) {
+				if (message instanceof ApisMessage) {
+					ApisMessage apisMsg = (ApisMessage) message;
+					flights = apisMsg.getFlights();
+					passengers = apisMsg.getPassengers();
+				} else if (message instanceof Pnr) {
+					Pnr pnrMsg = (Pnr) message;
+					flights = pnrMsg.getFlights();
+					passengers = pnrMsg.getPassengers();
+				}
+				for (Flight f : flights) {
+					for (Passenger p : passengers) {
+						List<HitsSummary> hits = hitsSummaryRepository
+								.findByFlightIdAndPassengerId(f.getId(),
+										p.getId());
+						for (HitsSummary hs : hits) {
+							hitDetailRepository.deleteDBData(hs.getId());
+							hitsSummaryRepository.deleteDBData(hs.getId());
+						}
+					}
+				}
+			}
+		}
+		logger.info("Exiting preProcessing()");
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -295,7 +334,7 @@ public class TargetingServiceImpl implements TargetingService {
 	@Override
 	@Transactional
 	public List<Pnr> retrievePnr(MessageStatus messageStatus) {
-		return PnrMsgRepository.findByStatus(messageStatus);
+		return pnrMsgRepository.findByStatus(messageStatus);
 	}
 
 	@Override
@@ -311,7 +350,7 @@ public class TargetingServiceImpl implements TargetingService {
 	@Override
 	@Transactional
 	public void updatePnr(Pnr message, MessageStatus messageStatus) {
-		Pnr pnr = PnrMsgRepository.findOne(message.getId());
+		Pnr pnr = pnrMsgRepository.findOne(message.getId());
 		if (pnr != null) {
 			pnr.setStatus(messageStatus);
 		}
@@ -327,12 +366,6 @@ public class TargetingServiceImpl implements TargetingService {
 		if (logger.isInfoEnabled()) {
 			logger.info("TargetingServiceImpl.runningRuleEngine() - Total Rules fired. --> "
 					+ ruleExeStatus.getTotalRulesFired());
-		}
-
-		if (ruleRunningResult.getPaxFlightTuples().size() > 0) {
-			logger.info("Total number of Hits records removed. --> "
-					+ ruleRunningResult.getPaxFlightTuples().size());
-			deleteExistingHitRecords(ruleRunningResult.getPaxFlightTuples());
 		}
 
 		List<HitsSummary> hitsSummary = storeHitsInfo(ruleRunningResult);
@@ -351,23 +384,25 @@ public class TargetingServiceImpl implements TargetingService {
 			Set<Long> passengerHits = new HashSet<Long>();
 			int ruleHits = 0;
 			int wlHits = 0;
-			for(TargetSummaryVo hit: targetingResult.getTargetingResult()){
+			for (TargetSummaryVo hit : targetingResult.getTargetingResult()) {
 				ruleHits += hit.getRuleHitCount();
 				wlHits += hit.getWatchlistHitCount();
 				passengerHits.add(hit.getPassengerId());
 			}
-			AuditActionTarget target = new AuditActionTarget(AuditActionType.TARGETING_RUN, "GTAS Rule Engine", null);
+			AuditActionTarget target = new AuditActionTarget(
+					AuditActionType.TARGETING_RUN, "GTAS Rule Engine", null);
 			AuditActionData actionData = new AuditActionData();
 			actionData.addProperty("totalRuleHits", String.valueOf(ruleHits));
 			actionData.addProperty("watchlistHits", String.valueOf(wlHits));
-			actionData.addProperty("totalPassengerHits", String.valueOf(passengerHits.size()));
-			
+			actionData.addProperty("totalPassengerHits",
+					String.valueOf(passengerHits.size()));
+
 			String message = "Targeting run on " + new Date();
 			auditLogPersistenceService.create(AuditActionType.TARGETING_RUN,
-					target.toString(), actionData.toString(),
-					message, GTAS_APPLICATION_USERID);
+					target.toString(), actionData.toString(), message,
+					GTAS_APPLICATION_USERID);
 		} catch (Exception ex) {
-			//audit log writing errors will not be propagated!
+			// audit log writing errors will not be propagated!
 			ex.printStackTrace();
 		}
 	}
@@ -405,32 +440,6 @@ public class TargetingServiceImpl implements TargetingService {
 
 		logger.info("Exiting storeHitsInfo().");
 		return hitsSummaryList;
-	}
-
-	private void deleteExistingHitRecords(
-			Set<PassengerFlightTuple> passengerFlightTuples) {
-		logger.info("Entering deleteExistingHitRecords().");
-		List<PassengerFlightTuple> setList = new ArrayList<PassengerFlightTuple>(
-				passengerFlightTuples);
-		for (int i = 0; i < setList.size(); i++) {
-			PassengerFlightTuple passengerFlightTuple = setList.get(i);
-			List<HitsSummary> found = hitsSummaryRepository
-					.findByFlightIdAndPassengerId(passengerFlightTuple
-							.getFlight().getId(), passengerFlightTuple
-							.getPassenger().getId());
-
-			if (!CollectionUtils.isEmpty(found)) {
-				logger.info("Hits Summary record(s) found.");
-				found.forEach(obj -> {
-					em.remove(obj);
-				});
-			}
-			if (i % Integer.valueOf(batchSize) == 0) {
-				em.flush();
-				em.clear();
-			}
-		}
-		logger.info("Exiting deleteExistingHitRecords().");
 	}
 
 	/**
