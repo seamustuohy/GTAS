@@ -490,7 +490,7 @@ public class UdrServiceImpl implements UdrService {
 			break;
 		case DELETE_UDR:
 			message = UDR_LOG_DELETE_MESSAGE;
-			actionData = null;
+			actionData = createAuditDetailForUdr(udr, author);
 			break;
 		default:
 			break;
@@ -499,6 +499,20 @@ public class UdrServiceImpl implements UdrService {
 		auditLogPersistenceService.create(actionType, target, actionData, message,
 				user.getUserId());
 	}
+	
+	private AuditActionData createAuditDetailForUdr(UdrRule udr, User author) {
+		AuditActionData actionData = new AuditActionData();
+		actionData.addProperty("author", udr.getAuthor()!=null?udr.getAuthor().getUserId():author.getUserId());
+		actionData.addProperty("description", udr.getMetaData().getDescription()!=null?udr.getMetaData().getDescription():StringUtils.EMPTY);
+		actionData.addProperty("startDate", DateCalendarUtils.formatJsonDate(udr.getMetaData().getStartDt()));
+		if(udr.getMetaData().getEndDt() != null) {
+		   actionData.addProperty("endDate", DateCalendarUtils.formatJsonDate(udr.getMetaData().getEndDt()));
+		} else {
+			actionData.addProperty("endDate", StringUtils.EMPTY);
+		}
+		return actionData;
+	}
+
 	private AuditActionData createAuditDetailForUdr(UdrSpecification udrspec, User author){
 		AuditActionData actionData = new AuditActionData();
 		MetaData meta = udrspec.getSummary();
