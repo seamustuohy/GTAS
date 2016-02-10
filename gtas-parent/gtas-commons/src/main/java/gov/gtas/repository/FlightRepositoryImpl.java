@@ -126,7 +126,6 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
 	@Transactional
     public void deleteAllMessages() throws Exception {
         String[] sqlScript = {  
-                "delete from document",
                 "delete from document", 
                 "delete from hit_detail", 
                 "delete from hits_summary", 
