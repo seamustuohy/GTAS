@@ -36,7 +36,6 @@
     <module>gtas-rulesvc</module>
     <module>gtas-webapp</module>
     <module>gtas-query-builder</module>
-    <module>gtas-udr-builder</module>
   </modules>
 
   <build>
