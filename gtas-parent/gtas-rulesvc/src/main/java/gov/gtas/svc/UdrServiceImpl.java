@@ -15,6 +15,7 @@ import gov.gtas.json.AuditActionData;
 import gov.gtas.json.AuditActionTarget;
 import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.User;
+import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.RuleMeta;
 import gov.gtas.model.udr.UdrRule;
@@ -322,14 +323,22 @@ public class UdrServiceImpl implements UdrService {
 	 * @param kbName
 	 * @param userId
 	 */
-	private void recompileRules(final String kbName, String userId) {
+	public void recompileRules(final String kbName, String userId) {
 		List<UdrRule> ruleList = rulePersistenceService.findAll();
 		if (!CollectionUtils.isEmpty(ruleList)) {
 			ruleManagementService.createKnowledgeBaseFromUdrRules(kbName,
 					ruleList, userId);
 		} else {
-			ruleManagementService.deleteKnowledgeBase(kbName);
-			logger.warn("UdrService - no active rules -> deleting Knowledge Base!");
+			KnowledgeBase kb = rulePersistenceService
+					.findUdrKnowledgeBase(kbName);
+			if (kb != null) {
+				List<Rule> rules = rulePersistenceService
+						.findRulesByKnowledgeBaseId(kb.getId());
+				if (CollectionUtils.isEmpty(rules)) {
+					ruleManagementService.deleteKnowledgeBase(kbName);
+					logger.warn("UdrService - no active rules -> deleting Knowledge Base!");
+				}
+			}
 		}
 	}
 

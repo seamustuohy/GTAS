@@ -7,13 +7,16 @@ import gov.gtas.bo.RuleHitDetail;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceResult;
 import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.RuleConstants;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
 import gov.gtas.model.udr.KnowledgeBase;
+import gov.gtas.model.udr.UdrRule;
 import gov.gtas.rule.listener.RuleEventListenerUtils;
 import gov.gtas.services.udr.RulePersistenceService;
+import gov.gtas.svc.UdrService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of the Rule Engine Service.
@@ -47,6 +51,9 @@ public class RuleServiceImpl implements RuleService {
 
 	@Autowired
 	private RulePersistenceService rulePersistenceService;
+
+	@Autowired
+	private UdrService udrService;
 
 	@PostConstruct
 	public void initializeErrorHandling() {
@@ -143,19 +150,31 @@ public class RuleServiceImpl implements RuleService {
 			String kbName) {
 		logger.info("Entering invokeRuleEngine().");
 		KnowledgeBase kbRecord = null;
+		// check if there is any rule selected
+		List<UdrRule> ruleList = rulePersistenceService.findAll();
 		if (StringUtils.isEmpty(kbName)) {
 			logger.info("Default rule knowledge base is loaded.");
-			kbRecord = rulePersistenceService.findUdrKnowledgeBase();
+			udrService.recompileRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME,
+					null);
+			if (CollectionUtils.isEmpty(ruleList)) {
+				kbRecord = null;
+			} else {
+				kbRecord = rulePersistenceService.findUdrKnowledgeBase();
+			}
 		} else {
 			logger.info("Custom knowledge base is loaded.");
-			kbRecord = rulePersistenceService.findUdrKnowledgeBase(kbName);
+			if (CollectionUtils.isEmpty(ruleList)) {
+				kbRecord = null;
+			} else {
+				kbRecord = rulePersistenceService.findUdrKnowledgeBase(kbName);
+			}		
 		}
 		if (kbRecord == null) {
 			logger.debug("Knowledge based is null.");
 			return null;
 		}
 		try {
-			//create KieBase object from compressed binary data read from db
+			// create KieBase object from compressed binary data read from db
 			KieBase kb = RuleUtils
 					.convertKieBasefromBytes(kbRecord.getKbBlob());
 			return createSessionAndExecuteRules(kb, req);

@@ -1,5 +1,22 @@
 package gov.gtas.services.udr;
 
+import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.RuleConstants;
+import gov.gtas.enumtype.YesNoEnum;
+import gov.gtas.error.ErrorHandler;
+import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.model.BaseEntity;
+import gov.gtas.model.User;
+import gov.gtas.model.udr.KnowledgeBase;
+import gov.gtas.model.udr.Rule;
+import gov.gtas.model.udr.RuleMeta;
+import gov.gtas.model.udr.UdrRule;
+import gov.gtas.repository.udr.UdrRuleRepository;
+import gov.gtas.services.security.UserData;
+import gov.gtas.services.security.UserService;
+import gov.gtas.services.security.UserServiceUtil;
+import gov.gtas.util.DateCalendarUtils;
+
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
@@ -19,23 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import gov.gtas.constant.CommonErrorConstants;
-import gov.gtas.constant.RuleConstants;
-import gov.gtas.enumtype.YesNoEnum;
-import gov.gtas.error.ErrorHandler;
-import gov.gtas.error.ErrorHandlerFactory;
-import gov.gtas.model.BaseEntity;
-import gov.gtas.model.User;
-import gov.gtas.model.udr.KnowledgeBase;
-import gov.gtas.model.udr.Rule;
-import gov.gtas.model.udr.RuleMeta;
-import gov.gtas.model.udr.UdrRule;
-import gov.gtas.repository.udr.UdrRuleRepository;
-import gov.gtas.services.security.UserData;
-import gov.gtas.services.security.UserService;
-import gov.gtas.services.security.UserServiceUtil;
-import gov.gtas.util.DateCalendarUtils;
 
 /**
  * The back-end service for persisting rules.
@@ -135,7 +135,7 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 	@Override
 	@Transactional(value = TxType.SUPPORTS)
 	public List<UdrRule> findAll() {
-		return (List<UdrRule>) udrRuleRepository.findByDeleted(YesNoEnum.N);
+		return (List<UdrRule>) udrRuleRepository.findByDeletedAndEnabled(YesNoEnum.N, YesNoEnum.Y);
 	}
 
 	/* (non-Javadoc)

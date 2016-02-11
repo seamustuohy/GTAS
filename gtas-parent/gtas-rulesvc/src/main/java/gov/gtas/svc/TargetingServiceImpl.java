@@ -24,6 +24,7 @@ import gov.gtas.model.Message;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Pnr;
+import gov.gtas.model.udr.UdrRule;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.FlightRepository;
 import gov.gtas.repository.HitDetailRepository;
@@ -33,6 +34,7 @@ import gov.gtas.repository.PassengerRepository;
 import gov.gtas.repository.PnrRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.services.AuditLogPersistenceService;
+import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.svc.util.RuleExecutionContext;
 import gov.gtas.svc.util.TargetingResultUtils;
 import gov.gtas.svc.util.TargetingServiceUtils;
@@ -47,6 +49,7 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +100,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private HitDetailRepository hitDetailRepository;
+
+	@Autowired
+	private RulePersistenceService rulePersistenceService;
 
 	/**
 	 * Constructor obtained from the spring context by auto-wiring.
@@ -212,44 +218,50 @@ public class TargetingServiceImpl implements TargetingService {
 		}
 		return ret;
 	}
-	
+
 	/*
 	 * 
 	 * @see gov.gtas.svc.TargetingService#preProcessing()
 	 */
 	public void preProcessing() {
 		logger.info("Entering preProcessing()");
-		Iterator<Message> source = messageRepository.findByStatus(
-				MessageStatus.LOADED).iterator();
-		List<Message> loadedMessages = new ArrayList<Message>();
-		source.forEachRemaining(loadedMessages::add);
-		Set<Flight> flights = new HashSet<Flight>();
-		Set<Passenger> passengers = new HashSet<Passenger>();
-		if (loadedMessages != null) {
-			logger.info("Loaded messages size -->" + loadedMessages.size());
-			for (Message message : loadedMessages) {
-				if (message instanceof ApisMessage) {
-					ApisMessage apisMsg = (ApisMessage) message;
-					flights = apisMsg.getFlights();
-					passengers = apisMsg.getPassengers();
-				} else if (message instanceof Pnr) {
-					Pnr pnrMsg = (Pnr) message;
-					flights = pnrMsg.getFlights();
-					passengers = pnrMsg.getPassengers();
-				}
-				for (Flight f : flights) {
-					for (Passenger p : passengers) {
-						List<HitsSummary> hits = hitsSummaryRepository
-								.findByFlightIdAndPassengerId(f.getId(),
-										p.getId());
-						for (HitsSummary hs : hits) {
-							hitDetailRepository.deleteDBData(hs.getId());
-							hitsSummaryRepository.deleteDBData(hs.getId());
+
+		// check if there are active rules 
+		List<UdrRule> ruleList = rulePersistenceService.findAll();
+		if (!CollectionUtils.isEmpty(ruleList)) { 
+			Iterator<Message> source = messageRepository.findByStatus(
+					MessageStatus.LOADED).iterator();
+			List<Message> loadedMessages = new ArrayList<Message>();
+			source.forEachRemaining(loadedMessages::add);
+			Set<Flight> flights = new HashSet<Flight>();
+			Set<Passenger> passengers = new HashSet<Passenger>();
+			if (loadedMessages != null) {
+				logger.info("Loaded messages size -->" + loadedMessages.size());
+				for (Message message : loadedMessages) {
+					if (message instanceof ApisMessage) {
+						ApisMessage apisMsg = (ApisMessage) message;
+						flights = apisMsg.getFlights();
+						passengers = apisMsg.getPassengers();
+					} else if (message instanceof Pnr) {
+						Pnr pnrMsg = (Pnr) message;
+						flights = pnrMsg.getFlights();
+						passengers = pnrMsg.getPassengers();
+					}
+					for (Flight f : flights) {
+						for (Passenger p : passengers) {
+							List<HitsSummary> hits = hitsSummaryRepository
+									.findByFlightIdAndPassengerId(f.getId(),
+											p.getId());
+							for (HitsSummary hs : hits) {
+								hitDetailRepository.deleteDBData(hs.getId());
+								hitsSummaryRepository.deleteDBData(hs.getId());
+							}
 						}
 					}
 				}
 			}
 		}
+
 		logger.info("Exiting preProcessing()");
 	}
 
@@ -269,10 +281,6 @@ public class TargetingServiceImpl implements TargetingService {
 		List<Message> target = new ArrayList<Message>();
 		source.forEachRemaining(target::add);
 
-		if (logger.isInfoEnabled()) {
-			logger.info("TargetingServiceImpl.analyzeLoadedMessages() - retrieved  message list size-> "
-					+ target.size());
-		}
 		RuleExecutionContext ctx = executeRules(target);
 
 		logger.info("updating messages status from loaded to analyzed.");

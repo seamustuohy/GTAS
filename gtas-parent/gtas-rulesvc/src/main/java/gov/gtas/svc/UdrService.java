@@ -66,4 +66,6 @@ public interface UdrService {
    * @return the service response JSON format.
    */
   JsonServiceResponse deleteUdr(String userId, Long id);
+  
+  public void recompileRules(final String kbName, String userId);
 }

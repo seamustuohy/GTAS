@@ -112,7 +112,6 @@ public class TargetingServiceUtils {
 		RuleEngineRequestBuilder bldr = new RuleEngineRequestBuilder();
 
 		if (loadedMessages != null) {
-			logger.info("Loaded messages size -->" + loadedMessages.size());
 			for (Message message : loadedMessages) {
 				if (message instanceof ApisMessage) {
 					bldr.addApisMessage((ApisMessage) message);
