@@ -13,6 +13,7 @@ import gov.gtas.constant.RuleConstants;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.constant.WatchlistConstants;
 import gov.gtas.enumtype.AuditActionType;
+import gov.gtas.enumtype.YesNoEnum;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.json.AuditActionData;
 import gov.gtas.json.AuditActionTarget;
@@ -24,6 +25,7 @@ import gov.gtas.model.Message;
 import gov.gtas.model.MessageStatus;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.Pnr;
+import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.FlightRepository;
@@ -32,6 +34,7 @@ import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.repository.PnrRepository;
+import gov.gtas.repository.udr.UdrRuleRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.services.AuditLogPersistenceService;
 import gov.gtas.services.udr.RulePersistenceService;
@@ -49,7 +52,6 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +105,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private RulePersistenceService rulePersistenceService;
+
+	@Autowired
+	private UdrRuleRepository udrRuleRepository;
 
 	/**
 	 * Constructor obtained from the spring context by auto-wiring.
@@ -225,10 +230,10 @@ public class TargetingServiceImpl implements TargetingService {
 	 */
 	public void preProcessing() {
 		logger.info("Entering preProcessing()");
-
-		// check if there are active rules 
-		List<UdrRule> ruleList = rulePersistenceService.findAll();
-		if (!CollectionUtils.isEmpty(ruleList)) { 
+		// check if there are rules (undeleted)
+		List<UdrRule> ruleList = udrRuleRepository.findByDeleted(YesNoEnum.N);
+		if (!CollectionUtils.isEmpty(ruleList)) {
+			logger.info("Db operations...");
 			Iterator<Message> source = messageRepository.findByStatus(
 					MessageStatus.LOADED).iterator();
 			List<Message> loadedMessages = new ArrayList<Message>();
@@ -261,7 +266,6 @@ public class TargetingServiceImpl implements TargetingService {
 				}
 			}
 		}
-
 		logger.info("Exiting preProcessing()");
 	}
 
@@ -308,11 +312,33 @@ public class TargetingServiceImpl implements TargetingService {
 				ctx.getRuleServiceRequest(),
 				WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
 		if (udrResult == null && wlResult == null) {
-			throw ErrorHandlerFactory
+			boolean ruleExisting = false;
+			// currently only two knowledgebases: udr and Watchlist 
+			KnowledgeBase udrKb = rulePersistenceService
+					.findUdrKnowledgeBase(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);		
+			if (udrKb == null) {
+				KnowledgeBase wlKb = rulePersistenceService
+						.findUdrKnowledgeBase(WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
+				if(wlKb == null) {
+					throw ErrorHandlerFactory
 					.getErrorHandler()
 					.createException(
 							RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
 							(RuleConstants.UDR_KNOWLEDGE_BASE_NAME + "/" + WatchlistConstants.WL_KNOWLEDGE_BASE_NAME));
+				} else { // unselected wl rule exists
+					ruleExisting = true;
+				}	
+			} else { // unselected udr rule exists
+				ruleExisting = true;
+			}
+			if(ruleExisting) {
+				logger.error("No rule existing");
+				throw ErrorHandlerFactory
+				.getErrorHandler()
+				.createException(
+						RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
+						(RuleConstants.UDR_KNOWLEDGE_BASE_NAME + "/" + WatchlistConstants.WL_KNOWLEDGE_BASE_NAME));
+			}
 		}
 
 		// eliminate duplicates

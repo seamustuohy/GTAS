@@ -13,6 +13,7 @@ import gov.gtas.error.ErrorHandler;
 import gov.gtas.error.ErrorHandlerFactory;
 import gov.gtas.error.RuleServiceErrorHandler;
 import gov.gtas.model.udr.KnowledgeBase;
+import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
 import gov.gtas.rule.listener.RuleEventListenerUtils;
 import gov.gtas.services.udr.RulePersistenceService;
@@ -150,16 +151,24 @@ public class RuleServiceImpl implements RuleService {
 			String kbName) {
 		logger.info("Entering invokeRuleEngine().");
 		KnowledgeBase kbRecord = null;
-		// check if there is any rule selected
+		// check if there is any undeleted and enabled rule
 		List<UdrRule> ruleList = rulePersistenceService.findAll();
 		if (StringUtils.isEmpty(kbName)) {
 			logger.info("Default rule knowledge base is loaded.");
-			udrService.recompileRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME,
-					null);
 			if (CollectionUtils.isEmpty(ruleList)) {
 				kbRecord = null;
 			} else {
 				kbRecord = rulePersistenceService.findUdrKnowledgeBase();
+				if (kbRecord != null) {
+					List<Rule> rules = rulePersistenceService
+							.findRulesByKnowledgeBaseId(kbRecord.getId());
+					if (!CollectionUtils.isEmpty(rules)) {
+						udrService.recompileRules(
+								RuleConstants.UDR_KNOWLEDGE_BASE_NAME, null);
+						kbRecord = rulePersistenceService
+								.findUdrKnowledgeBase();
+					}
+				}
 			}
 		} else {
 			logger.info("Custom knowledge base is loaded.");
@@ -167,12 +176,23 @@ public class RuleServiceImpl implements RuleService {
 				kbRecord = null;
 			} else {
 				kbRecord = rulePersistenceService.findUdrKnowledgeBase(kbName);
-			}		
+				if (kbRecord != null) {
+					List<Rule> rules = rulePersistenceService
+							.findRulesByKnowledgeBaseId(kbRecord.getId());
+					if (!CollectionUtils.isEmpty(rules)) {
+						udrService.recompileRules(kbName, null);
+						kbRecord = rulePersistenceService
+								.findUdrKnowledgeBase(kbName);
+					}
+				}
+
+			}
 		}
 		if (kbRecord == null) {
 			logger.debug("Knowledge based is null.");
 			return null;
 		}
+
 		try {
 			// create KieBase object from compressed binary data read from db
 			KieBase kb = RuleUtils

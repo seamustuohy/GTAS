@@ -16,7 +16,11 @@ import static gov.gtas.constant.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR
 import static gov.gtas.constant.CommonErrorConstants.UPDATE_RECORD_MISSING_ERROR_MESSAGE;
 import static gov.gtas.constant.GtasSecurityConstants.UNAUTHORIZED_ERROR_CODE;
 import static gov.gtas.constant.GtasSecurityConstants.UNAUTHORIZED_ERROR_MESSAGE;
+import static gov.gtas.constant.RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE;
+import static gov.gtas.constant.RuleServiceConstants.KB_NOT_FOUND_ERROR_MESSAGE;
+
 import gov.gtas.constant.CommonErrorConstants;
+import gov.gtas.constant.RuleServiceConstants;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -70,6 +74,8 @@ public class BasicErrorHandler implements ErrorHandler {
 				JSON_INPUT_VALIDATION_ERROR_MESSAGE);		
 		errorMap.put(UNAUTHORIZED_ERROR_CODE,
 				UNAUTHORIZED_ERROR_MESSAGE);
+		errorMap.put(KB_NOT_FOUND_ERROR_CODE,
+				KB_NOT_FOUND_ERROR_MESSAGE);
 		exceptionProcessorMap = new HashMap<String, Function<Exception,ErrorDetailInfo>>();
 	}
 
