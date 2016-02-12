@@ -18,9 +18,9 @@ import static gov.gtas.constant.GtasSecurityConstants.UNAUTHORIZED_ERROR_CODE;
 import static gov.gtas.constant.GtasSecurityConstants.UNAUTHORIZED_ERROR_MESSAGE;
 import static gov.gtas.constant.RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE;
 import static gov.gtas.constant.RuleServiceConstants.KB_NOT_FOUND_ERROR_MESSAGE;
-
+import static gov.gtas.constant.RuleServiceConstants.NO_ENABLED_RULE_ERROR_CODE;
+import static gov.gtas.constant.RuleServiceConstants.NO_ENABLED_RULE_ERROR_MESSAGE;
 import gov.gtas.constant.CommonErrorConstants;
-import gov.gtas.constant.RuleServiceConstants;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class BasicErrorHandler implements ErrorHandler {
-	
+
 	/*
 	 * The logger for the Rule Engine Error Handler
 	 */
@@ -54,45 +54,53 @@ public class BasicErrorHandler implements ErrorHandler {
 	 * The map of all exception processors used by this handler.
 	 */
 	private final Map<String, Function<Exception, ErrorDetailInfo>> exceptionProcessorMap;
-	
+
 	/*
 	 * The first handler in the delegate chain for this error handler;
 	 */
-	private  ErrorHandler delegate;
-	
+	private ErrorHandler delegate;
+
 	public BasicErrorHandler() {
 		errorMap = new HashMap<String, String>();
 		errorMap.put(NULL_ARGUMENT_ERROR_CODE, NULL_ARGUMENT_ERROR_MESSAGE);
-		errorMap.put(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE);
+		errorMap.put(INVALID_ARGUMENT_ERROR_CODE,
+				INVALID_ARGUMENT_ERROR_MESSAGE);
 		errorMap.put(INVALID_USER_ID_ERROR_CODE, INVALID_USER_ID_ERROR_MESSAGE);
-		errorMap.put(INPUT_JSON_FORMAT_ERROR_CODE, INPUT_JSON_FORMAT_ERROR_MESSAGE);
+		errorMap.put(INPUT_JSON_FORMAT_ERROR_CODE,
+				INPUT_JSON_FORMAT_ERROR_MESSAGE);
 		errorMap.put(UPDATE_RECORD_MISSING_ERROR_CODE,
 				UPDATE_RECORD_MISSING_ERROR_MESSAGE);
 		errorMap.put(QUERY_RESULT_EMPTY_ERROR_CODE,
 				QUERY_RESULT_EMPTY_ERROR_MESSAGE);
 		errorMap.put(JSON_INPUT_VALIDATION_ERROR_CODE,
-				JSON_INPUT_VALIDATION_ERROR_MESSAGE);		
-		errorMap.put(UNAUTHORIZED_ERROR_CODE,
-				UNAUTHORIZED_ERROR_MESSAGE);
-		errorMap.put(KB_NOT_FOUND_ERROR_CODE,
-				KB_NOT_FOUND_ERROR_MESSAGE);
-		exceptionProcessorMap = new HashMap<String, Function<Exception,ErrorDetailInfo>>();
+				JSON_INPUT_VALIDATION_ERROR_MESSAGE);
+		errorMap.put(UNAUTHORIZED_ERROR_CODE, UNAUTHORIZED_ERROR_MESSAGE);
+		errorMap.put(KB_NOT_FOUND_ERROR_CODE, KB_NOT_FOUND_ERROR_MESSAGE);
+		errorMap.put(NO_ENABLED_RULE_ERROR_CODE, NO_ENABLED_RULE_ERROR_MESSAGE);
+		exceptionProcessorMap = new HashMap<String, Function<Exception, ErrorDetailInfo>>();
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.error.GtasErrorHandler#addErrorHandlerDelegate(gov.gtas.error.GtasErrorHandler)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * gov.gtas.error.GtasErrorHandler#addErrorHandlerDelegate(gov.gtas.error
+	 * .GtasErrorHandler)
 	 */
 	@Override
 	public void addErrorHandlerDelegate(ErrorHandler errorHandler) {
-		if(this.delegate == null){
+		if (this.delegate == null) {
 			this.delegate = errorHandler;
-		}else{
+		} else {
 			this.delegate.addErrorHandlerDelegate(errorHandler);
 		}
 	}
-	
-	/* (non-Javadoc)
-	 * @see gov.gtas.error.ErrorHandler#createException(java.lang.String, java.lang.Exception, java.lang.Object[])
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.gtas.error.ErrorHandler#createException(java.lang.String,
+	 * java.lang.Exception, java.lang.Object[])
 	 */
 	@Override
 	public CommonServiceException createException(String errorCode,
@@ -101,7 +109,7 @@ public class BasicErrorHandler implements ErrorHandler {
 		final String errorMessage = errorMap.get(errorCode);
 		if (errorMessage != null) {
 			ret = createExceptionAndLog(errorCode, cause, errorMessage, args);
-		} else if (this.delegate != null){
+		} else if (this.delegate != null) {
 			ret = this.delegate.createException(errorCode, cause, args);
 		}
 		if (ret == null) {
@@ -112,76 +120,94 @@ public class BasicErrorHandler implements ErrorHandler {
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see gov.gtas.error.GtasErrorHandler#createException(java.lang.String, java.lang.Object[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.gtas.error.GtasErrorHandler#createException(java.lang.String,
+	 * java.lang.Object[])
 	 */
 	@Override
 	public CommonServiceException createException(String errorCode,
 			Object... args) {
 		return createException(errorCode, null, args);
 	}
-	
-    /* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see gov.gtas.error.ErrorHandler#processError(java.lang.Exception)
 	 */
-    @Override
+	@Override
 	public ErrorDetailInfo processError(final Exception exception) {
-    	ErrorDetailInfo ret = null;
-		Function<Exception, ErrorDetailInfo> processor = exceptionProcessorMap.get(exception.getClass().getName());
-		if(processor != null){
+		ErrorDetailInfo ret = null;
+		Function<Exception, ErrorDetailInfo> processor = exceptionProcessorMap
+				.get(exception.getClass().getName());
+		if (processor != null) {
 			ret = processor.apply(exception);
-		} else if(this.delegate != null){
+		} else if (this.delegate != null) {
 			ret = delegate.processError(exception);
 		} else {
 			logger.error(exception.getMessage());
-			if(exception instanceof CommonServiceException){
-				ret = ErrorUtils.createErrorDetails((CommonServiceException)exception);
+			if (exception instanceof CommonServiceException) {
+				ret = ErrorUtils
+						.createErrorDetails((CommonServiceException) exception);
 			} else {
-			ret = ErrorUtils.createErrorDetails(exception);
+				ret = ErrorUtils.createErrorDetails(exception);
 			}
 		}
 		return ret;
 	}
 
-    
-    /* (non-Javadoc)
-	 * @see gov.gtas.error.ErrorHandler#processError(java.lang.String, java.lang.String, java.lang.String[])
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.gtas.error.ErrorHandler#processError(java.lang.String,
+	 * java.lang.String, java.lang.String[])
 	 */
 	@Override
 	public ErrorDetailInfo processError(String code, String description,
 			List<String> details) {
-    	ErrorDetailInfo ret = null;
+		ErrorDetailInfo ret = null;
 		CommonServiceException exception = null;
 		final String errorMessage = errorMap.get(code);
 		if (errorMessage != null) {
-			exception = createExceptionAndLog(code, null, errorMessage, details.toArray());
-		} else if (this.delegate != null){
-			exception = this.delegate.createException(code, null, details.toArray());
+			exception = createExceptionAndLog(code, null, errorMessage,
+					details.toArray());
+		} else if (this.delegate != null) {
+			exception = this.delegate.createException(code, null,
+					details.toArray());
 		}
 		if (exception != null) {
 			ret = processError(exception);
 		} else {
-			ret = new BasicErrorDetailInfo(null, code, new Date(), description, details);
+			ret = new BasicErrorDetailInfo(null, code, new Date(), description,
+					details);
 		}
 		return ret;
 	}
 
 	/**
-     * Adds a custom exception handler using a lambda.
-     * @param exceptionClass the exception class to handle.
-     * @param processor the lambda.
-     */
+	 * Adds a custom exception handler using a lambda.
+	 * 
+	 * @param exceptionClass
+	 *            the exception class to handle.
+	 * @param processor
+	 *            the lambda.
+	 */
 	protected void addCustomErrorProcesssor(
 			Class<? extends Exception> exceptionClass,
 			Function<Exception, ErrorDetailInfo> processor) {
-		this.exceptionProcessorMap.put(exceptionClass.getName(), processor);		
+		this.exceptionProcessorMap.put(exceptionClass.getName(), processor);
 	}
 
 	/**
-     * Adds the error code to the list of errors managed by this handler.
-     * @param errCode the error code to add.
-     * @param errMessage the corresponding error message.
-     */
+	 * Adds the error code to the list of errors managed by this handler.
+	 * 
+	 * @param errCode
+	 *            the error code to add.
+	 * @param errMessage
+	 *            the corresponding error message.
+	 */
 	protected void addErrorCodeToHandlerMap(String errCode, String errMessage) {
 		String msg = errorMap.get(errCode);
 		if (msg == null) {
@@ -205,12 +231,13 @@ public class BasicErrorHandler implements ErrorHandler {
 	 *            the arguments for the error message template.
 	 * @return the exception object.
 	 */
-	protected CommonServiceException createExceptionAndLog(String errorCode, Exception cause,
-			String errorMessageTemplate, Object... errorMessageArgs) {
+	protected CommonServiceException createExceptionAndLog(String errorCode,
+			Exception cause, String errorMessageTemplate,
+			Object... errorMessageArgs) {
 		String message = String.format(errorMessageTemplate, errorMessageArgs);
 		logger.error(message);
-		if(cause == null){
-		   return new CommonServiceException(errorCode, message);
+		if (cause == null) {
+			return new CommonServiceException(errorCode, message);
 		} else {
 			return new CommonServiceException(errorCode, message, cause);
 		}

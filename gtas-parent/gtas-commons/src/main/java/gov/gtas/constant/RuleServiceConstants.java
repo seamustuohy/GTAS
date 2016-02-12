@@ -68,6 +68,8 @@ public class RuleServiceConstants {
 
 	public static final String INCOMPLETE_TREE_ERROR_CODE = "INCOMPLETE_TREE_ERROR";
 	
+	public static final String NO_ENABLED_RULE_ERROR_CODE = "NO_ENABLED_RULE_ERROR";
+	
 	// //////////////////////////////////////////////////////////////////////////////////////
 	// ERROR Messages
 	// //////////////////////////////////////////////////////////////////////////////////////
@@ -107,8 +109,15 @@ public class RuleServiceConstants {
 	public static final String INCOMPLETE_TREE_ERROR_MESSAGE = "The query tree is incomplete at level %d.";
 	
 	/*
+	 * This error message indicates that the indicated knowledge base contains no enabled rule.
+	 * 
+	 */
+	public static final String NO_ENABLED_RULE_ERROR_MESSAGE = "The Knowledge Base contains no enabled rule.";
+
+	/*
 	 * This error message indicates that the Rule Engine Runner failed due to an unexpected exception.
 	 * 
 	 */
 	public static final String RULE_ENGINE_RUNNER_ERROR_MESSAGE = "The Rule Engine Runner failed to process APIS/PNR messages due to an unexpected exception.";
+
 }

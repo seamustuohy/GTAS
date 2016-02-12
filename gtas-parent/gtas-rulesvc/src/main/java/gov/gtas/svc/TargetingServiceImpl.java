@@ -325,19 +325,18 @@ public class TargetingServiceImpl implements TargetingService {
 					.createException(
 							RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
 							(RuleConstants.UDR_KNOWLEDGE_BASE_NAME + "/" + WatchlistConstants.WL_KNOWLEDGE_BASE_NAME));
-				} else { // unselected wl rule exists
+				} else { // No enabled but disabled wl rule exists
 					ruleExisting = true;
 				}	
-			} else { // unselected udr rule exists
+			} else { // No enabled but disabled udr rule exists
 				ruleExisting = true;
 			}
 			if(ruleExisting) {
-				logger.error("No rule existing");
 				throw ErrorHandlerFactory
 				.getErrorHandler()
 				.createException(
-						RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
-						(RuleConstants.UDR_KNOWLEDGE_BASE_NAME + "/" + WatchlistConstants.WL_KNOWLEDGE_BASE_NAME));
+						RuleServiceConstants.NO_ENABLED_RULE_ERROR_CODE,
+						RuleServiceConstants.NO_ENABLED_RULE_ERROR_MESSAGE);
 			}
 		}
 
