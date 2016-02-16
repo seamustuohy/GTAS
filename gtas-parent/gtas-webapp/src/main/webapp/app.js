@@ -796,7 +796,7 @@ var app;
                 link: function (scope, elem, attrs) {
 
                     var margin = {top: 10, right: 20, bottom: 20, left: 20},
-                        width = 1800 - margin.left - margin.right,
+                        width = 1600 - margin.left - margin.right,
                         height = 450 - margin.top - margin.bottom;
 
                     var x0 = d3.scale.ordinal()

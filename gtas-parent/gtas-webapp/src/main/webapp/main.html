@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="resources/css/query-builder.default.css" />
     <link rel="stylesheet" href="resources/bower_components/angular-material/angular-material.min.css" />
     <link rel="stylesheet" href="resources/css/gtas.css" />
+    <link href="resources/css/sb-admin-2.css" rel="stylesheet">
+    <link href="resources/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -51,7 +53,7 @@
                        ng-disabled="onRoute('risks')" href="#/build/rule"><i class="glyphicon glyphicon-flag"></i>  Risk Criteria</md-button>
 
             <md-button data-has-role="[{{ ROLES.ADMIN }}, {{ ROLES.MANAGE_WATCHLIST }}]" class="md-button" ng-class="{'md-raised md-primary': onRoute('watchlists')}"
-                       ng-disabled="onRoute('watchlists')" href="#/watchlists"><i class="glyphicon glyphicon-eye-open"></i>  Watchlist</md-button>
+                       ng-disabled="onRoute('watchlists')" href="#/watchlists"><i class="glyphicon glyphicon-eye-open"></i>  Watch List</md-button>
 
 
             <md-button data-has-role="[{{ ROLES.ADMIN }}, {{ ROLES.MANAGE_QUERIES }},{{ ROLES.MANAGE_RULES }},{{ ROLES.MANAGE_WATCHLIST }},{{ ROLES.VIEW_FLIGHT_PASSENGERS }}]" class="md-button" ng-class="{'md-raised md-primary': onRoute('userSettings')}"
