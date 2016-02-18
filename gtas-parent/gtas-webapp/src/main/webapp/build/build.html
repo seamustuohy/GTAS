@@ -15,7 +15,7 @@
         margin: 0 auto;
     }
 </style>
-<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="query">
+<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="query">
     <md-toolbar class="md-theme-light">
         <h2 class="md-toolbar-tools">{{getToolbarText()}}</h2>
     </md-toolbar>
@@ -71,7 +71,7 @@
                 <md-checkbox class="md-primary" required ng-model="rule.enabled" aria-label="Enabled">Enabled</md-checkbox>
             </div>
             <div layout="row" layout-wrap>
-                <md-datepicker ng-model="rule.startDate" md-placeholder="Start Date"></md-datepicker>
+                <md-datepicker ng-model="rule.startDate" md-placeholder="Start Date" ng-disabled="isUpdate() && !isCopy"></md-datepicker>
             </div>
             <div layout="row" layout-wrap>
                 <md-datepicker ng-model="rule.endDate" md-placeholder="End Date"></md-datepicker>

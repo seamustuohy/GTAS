@@ -1,4 +1,4 @@
-app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, spinnerService, $mdSidenav, $stateParams, $interval, $timeout) {
+app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, spinnerService, $mdSidenav, $stateParams, $interval, $timeout, $mdDialog) {
     'use strict';
     var todayDate = moment().toDate(),
         queryFlightsLink = document.querySelector('a[href="#/query/flights"]'),
@@ -26,7 +26,11 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             m.rule = new model.summary.rule();
         },
         setId = function () {
-            return $scope.buttonMode === $scope.mode ? $scope.ruleId : null;
+        	var returnValue = null;
+        	if($scope.buttonMode === $scope.mode && !$scope.isCopy){
+        		returnValue = $scope.ruleId;
+        	}
+            return returnValue;
         },
         mode = $stateParams.mode,
         loadOnSelection = {
@@ -50,7 +54,9 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     });
 
     $scope.copyRule = function () {
-        spinnerService.show('html5spinner');
+    	$scope.isCopy = true;
+    	$scope.prompt.save('rule');
+        /*spinnerService.show('html5spinner');
         var originalObj = $scope[$scope.mode], ruleId = $scope.ruleId;
         console.log(originalObj);
         $scope.addNew();
@@ -67,7 +73,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             };
             $scope.qbGrid.data.unshift($.extend({}, originalObj, partialCopyObj));
             spinnerService.hide('html5spinner');
-        });
+        });*/
     };
 
     $scope.mode = mode;
@@ -79,10 +85,26 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             conditions = $scope.$builder.queryBuilder('getDrools');
 
             if (conditions === false) { return; }
-            $scope.buttonMode = buttonMode;
+            $scope.buttonMode = buttonMode;  
+            if(buttonMode === 'rule'){$scope.ruleClone = $.extend({}, $scope.rule);}
+            if(buttonMode === 'query'){$scope.queryClone = $.extend({}, $scope.query);}
+            if ($scope.isCopy){
+            	$scope.rule.startDate = new Date();
+            }
             $mdSidenav(buttonMode).open();
         },
-        cancel: function () { $mdSidenav($scope.buttonMode).close(); }
+        cancel: function () { 
+        	if($scope.ruleClone){
+        		$scope.rule = $.extend({}, $scope.ruleClone);
+        		$scope.ruleClone = null;
+        	}
+        	if($scope.queryClone){
+        		$scope.query = $.extend({}, $scope.queryClone);
+        		$scope.queryClone = null;
+        	}
+        	$scope.isCopy = false;
+        	$mdSidenav($scope.buttonMode).close(); 
+    	}
     };
 
     $scope.setData = {
@@ -131,7 +153,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             case 'query':
                 return $scope.mode === 'query' && $scope.ruleId !== null ? 'Update Query' : 'Save Query';
             case 'rule':
-                return $scope.mode === 'rule' && $scope.ruleId !== null ? 'Update Rule' : 'Save Rule';
+                return $scope.mode === 'rule' && ($scope.ruleId !== null && !$scope.isCopy) ? 'Update Rule' : 'Save Rule';
         }
     };
 
@@ -141,7 +163,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             timestamp = m.day() + '|' + m.hours() + '|' + m.minutes() + '|' + m.seconds(),
             query = $scope.$builder.queryBuilder('getDrools');
         if (query === false) {
-            alert('Can not execute / invalid query');
+            $scope.openAlert('Incomplete Query', 'Can not execute / invalid query');
             e.preventDefault();
             return;
         }
@@ -166,11 +188,13 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.updateQueryBuilderOnSave = function (myData) {
         if (myData.status === 'FAILURE') {
+        	spinnerService.hide('html5spinner');
             alert(myData.message);
             $scope.saving = false;
             return;
         }
         if (typeof myData.errorCode !== "undefined") {
+        	spinnerService.hide('html5spinner');
             alert(myData.errorMessage);
             return;
         }
@@ -179,6 +203,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             $scope.setData[$scope.selectedMode](myData.result);
             $mdSidenav('rule').close();
             $mdSidenav('query').close();
+            $scope.isCopy = false;
             $interval(function () {
                 //var page;
                 //if (!$scope.selectedIndex) {
@@ -213,6 +238,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             rowIndexToDelete;
 
         if (!$scope.ruleId) {
+        	spinnerService.hide('html5spinner');
             alert('No rule loaded to delete');
             return;
         }
@@ -248,10 +274,23 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.loadSummary = function (obj, summary) {
         Object.keys(summary).forEach(function (key) {
-            $scope[obj][key] = summary[key];
+        	if(key === 'startDate' || key === 'endDate'){
+        		if(typeof summary[key] === 'string'){
+        			var date = new Date((summary[key].replace(/-/g,'/')));
+        			if (Object.prototype.toString.call(date) === '[object Date]'){
+        				$scope[obj][key] = date;
+        			}else{
+        				$scope[obj][key] = summary[key];
+        			}
+        		}else{
+        			$scope[obj][key] = summary[key];
+        		}
+        	}else{
+        		$scope[obj][key] = summary[key];
+        	}
         });
     };
-
+    
     $scope.formats = ["YYYY-MM-DD"];
 
     $scope.addNew = function () {
@@ -275,34 +314,37 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.save = {
         query: {
             confirm: function () {
-                var queryObject;
+                var queryObject = {
+                        id: setId(),
+                        title: $scope.query.title,
+                        description: $scope.query.description || null,
+                        query: conditions
+                    };
 
                 if ($scope.saving) { return; }
 //                    $scope.saving = true;
 
-                if ($scope.query.title && $scope.query.title.length) {
-                    $scope.query.title = $scope.query.title.trim();
+                if (queryObject.title && queryObject.title.length) {
+                	queryObject.title = queryObject.title.trim();
                 }
 
-                if (!$scope.query.title.length) {
+                if (!queryObject.title.length) {
                     alert('Title summary can not be blank!');
                     $scope.saving = false;
                     return;
                 }
 
-                queryObject = {
-                    id: setId(),
-                    title: $scope.query.title,
-                    description: $scope.query.description || null,
-                    query: conditions
-                };
                 spinnerService.show('html5spinner');
                 jqueryQueryBuilderService.save('query', queryObject).then($scope.updateQueryBuilderOnSave);
             }
         },
         rule: {
             confirm: function () {
-                var ruleObject;
+                var ruleObject = {
+                        id: setId(),
+                        details: conditions,
+                        summary: $scope.rule
+                    };
 
                 if ($scope.saving) {
                     return;
@@ -310,47 +352,42 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
 //                    $scope.saving = true;
 
-                if ($scope.rule.title && $scope.rule.title.length) {
-                    $scope.rule.title = $scope.rule.title.trim();
+                if (ruleObject.summary.title && ruleObject.summary.title.length) {
+                	ruleObject.summary.title = ruleObject.summary.title.trim();
                 }
 
-                if ($scope.rule.title.length === 0) {
+                if (ruleObject.summary.title.length === 0) {
                     alert('Title summary can not be blank!');
                     $scope.saving = false;
                     return;
                 }
 
-                if ($scope.ruleId === null) {
+                if ($scope.ruleId === null || $scope.isCopy) {
                     //if (!startDate.isValid()) {
                     //    alert('Dates must be in this format: ' + $scope.formats.toString());
                     //    $scope.saving = false;
                     //    return;
                     //}
-                    //if (startDate < $scope.today) {
-                    //    alert('Start date must be today or later when created new.');
-                    //    $scope.saving = false;
-                    //    return;
-                    //}
+                    if (ruleObject.summary.startDate.getDate() < new Date().getDate()) {
+                    	$scope.openAlert('Invalid Start Date', 'Start date must be today or later when created new');
+                        $scope.saving = false;
+                        return;
+                    }
                 }
 
-                if ($scope.rule.endDate) {
+                if (ruleObject.summary.endDate) {
                     //if (!endDate.isValid()) {
                     //    alert('End Date must be empty/open or in this format: ' + $scope.formats.toString());
                     //    $scope.saving = false;
                     //    return;
                     //}
-                    //if (endDate < startDate) {
-                    //    alert('End Date must be empty/open or be >= startDate: ' + $scope.formats.toString());
-                    //    $scope.saving = false;
-                    //    return;
-                    //}
+                    if (ruleObject.summary.endDate < ruleObject.summary.startDate) {
+                    	$scope.openAlert('Invalid End Date', 'End Date must be empty/open or be >= Start Date');
+                        $scope.saving = false;
+                        return;
+                    }
                 }
-
-                ruleObject = {
-                    id: setId(),
-                    details: conditions,
-                    summary: $scope.rule
-                };
+                
                 spinnerService.show('html5spinner');
                 jqueryQueryBuilderService.save('rule', ruleObject).then($scope.updateQueryBuilderOnSave);
             }
@@ -397,4 +434,44 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             }, 5);
         }
     });
+    
+    $scope.openAlert = function(title,msg) {
+        $mdDialog.show(
+          $mdDialog.alert()
+            .clickOutsideToClose(false)
+            .title(title)
+            .textContent(msg)
+            .ariaLabel('Invalid Format')
+            .ok('OK')
+            .openFrom({
+            	left:1500
+            })
+            .closeTo(({
+            	right:1500
+            }))
+        );
+      };
+      
+    $scope.isUpdate = function(){
+    	if($scope.ruleId === null){
+    		return false;
+    	}
+    	return true;
+    }
+    $scope.$watch(
+            function() { return $mdSidenav('rule').isOpen(); },
+            function(newValue, oldValue) {
+                if(newValue != oldValue && !newValue){
+                	$scope.prompt.cancel();
+                }
+            }
+        );
+    $scope.$watch(
+            function() { return $mdSidenav('query').isOpen(); },
+            function(newValue, oldValue) {
+                if(newValue != oldValue && !newValue){
+                	$scope.prompt.cancel();
+                }
+            }
+        );
 });
