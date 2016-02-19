@@ -230,8 +230,9 @@ public class TargetingServiceImpl implements TargetingService {
 	 */
 	public void preProcessing() {
 		logger.info("Entering preProcessing()");
-		// check if there are rules (undeleted)
-		List<UdrRule> ruleList = udrRuleRepository.findByDeleted(YesNoEnum.N);
+		// check if there are rules (undeleted & enabled)
+		List<UdrRule> ruleList = udrRuleRepository.findByDeletedAndEnabled(
+				YesNoEnum.N, YesNoEnum.Y);
 		if (!CollectionUtils.isEmpty(ruleList)) {
 			logger.info("Db operations...");
 			Iterator<Message> source = messageRepository.findByStatus(
@@ -257,9 +258,16 @@ public class TargetingServiceImpl implements TargetingService {
 							List<HitsSummary> hits = hitsSummaryRepository
 									.findByFlightIdAndPassengerId(f.getId(),
 											p.getId());
+							String enable = hitsSummaryRepository
+									.enableFlagByUndeletedAndEnabledRule(
+											f.getId(), p.getId());
 							for (HitsSummary hs : hits) {
-								hitDetailRepository.deleteDBData(hs.getId());
-								hitsSummaryRepository.deleteDBData(hs.getId());
+								if (enable.equalsIgnoreCase("Y")) {
+									hitDetailRepository
+											.deleteDBData(hs.getId());
+									hitsSummaryRepository.deleteDBData(hs
+											.getId());
+								}
 							}
 						}
 					}
@@ -313,28 +321,27 @@ public class TargetingServiceImpl implements TargetingService {
 				WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
 		if (udrResult == null && wlResult == null) {
 			boolean ruleExisting = false;
-			// currently only two knowledgebases: udr and Watchlist 
+			// currently only two knowledgebases: udr and Watchlist
 			KnowledgeBase udrKb = rulePersistenceService
-					.findUdrKnowledgeBase(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);		
+					.findUdrKnowledgeBase(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
 			if (udrKb == null) {
 				KnowledgeBase wlKb = rulePersistenceService
 						.findUdrKnowledgeBase(WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
-				if(wlKb == null) {
+				if (wlKb == null) {
 					throw ErrorHandlerFactory
-					.getErrorHandler()
-					.createException(
-							RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
-							(RuleConstants.UDR_KNOWLEDGE_BASE_NAME + "/" + WatchlistConstants.WL_KNOWLEDGE_BASE_NAME));
+							.getErrorHandler()
+							.createException(
+									RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE,
+									(RuleConstants.UDR_KNOWLEDGE_BASE_NAME
+											+ "/" + WatchlistConstants.WL_KNOWLEDGE_BASE_NAME));
 				} else { // No enabled but disabled wl rule exists
 					ruleExisting = true;
-				}	
+				}
 			} else { // No enabled but disabled udr rule exists
 				ruleExisting = true;
 			}
-			if(ruleExisting) {
-				throw ErrorHandlerFactory
-				.getErrorHandler()
-				.createException(
+			if (ruleExisting) {
+				throw ErrorHandlerFactory.getErrorHandler().createException(
 						RuleServiceConstants.NO_ENABLED_RULE_ERROR_CODE,
 						RuleServiceConstants.NO_ENABLED_RULE_ERROR_MESSAGE);
 			}
