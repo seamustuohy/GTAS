@@ -38,7 +38,7 @@ public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
     protected GROUP currentGroup;
     
     // TODO
-    protected String getPayloadText(String message) throws ParseException {
+    protected String getPayloadText() throws ParseException {
         return lexer.getMessagePayload("BGM", "UNT");
     }
     

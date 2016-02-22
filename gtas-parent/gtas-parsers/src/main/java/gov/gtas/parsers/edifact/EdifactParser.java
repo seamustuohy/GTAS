@@ -52,7 +52,7 @@ public abstract class EdifactParser <T extends MessageVo> {
      * <li>UNB Interchange Header Segment
      * <li>UNG Functional Group Header
      * <li>UNH Message Header
-     * <li>(BODY of MESSAGE)
+     * <li>(MESSAGE PAYLOAD/BODY)
      * <li>UNT Message Trailer
      * <li>UNE Functional Group Trailer
      * <li>UNZ Interchange Trailer
@@ -69,7 +69,7 @@ public abstract class EdifactParser <T extends MessageVo> {
         this.message = message;
         this.iter = segments.listIterator();
 
-        String payload = getPayloadText(message);
+        String payload = getPayloadText();
         if (payload == null) {
             throw new ParseException("Could not extract message payload");
         }
@@ -110,7 +110,10 @@ public abstract class EdifactParser <T extends MessageVo> {
      */
     protected abstract void parsePayload() throws ParseException;
     
-    protected abstract String getPayloadText(String message) throws ParseException;
+    /**
+     * Retrieve the message payload: text between header and footer.
+     */
+    protected abstract String getPayloadText() throws ParseException;
     
     protected <S extends Segment> S getMandatorySegment(Class<S> clazz, String segmentName) throws ParseException {
         return getNextSegment(clazz, segmentName, true);

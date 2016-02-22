@@ -68,7 +68,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         this.parsedMessage = new PnrVo();
     }
 
-    protected String getPayloadText(String message) throws ParseException {
+    protected String getPayloadText() throws ParseException {
         return lexer.getMessagePayload("SRC", "UNT");
     }
     
