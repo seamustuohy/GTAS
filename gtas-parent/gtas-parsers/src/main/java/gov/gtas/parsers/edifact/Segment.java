@@ -25,16 +25,16 @@ public class Segment {
     private final String name;
 
     /** original segment text, including any composites. Optional field. */
-    private String text;
+    private final String text;
 
     /**list of segment fields/composites */
     private final List<Composite> composites;
 
-    public Segment(final String name, final List<Composite> composites) {
+    public Segment(String name, List<Composite> composites) {
         this(name, "", composites);
     }
     
-    public Segment(final String name, final String text, final List<Composite> composites) {
+    public Segment(String name, String text, List<Composite> composites) {
         if (StringUtils.isBlank(name)) {
             throw new IllegalArgumentException("name cannot be null or empty");
         }
@@ -65,7 +65,7 @@ public class Segment {
      * @param index 0-based index of composite to retrieve
      * @return the composite given by the index; null if it does not exist.
      */
-    public Composite getComposite(final int index) {
+    public Composite getComposite(int index) {
         if (index < 0) {
             throw new IndexOutOfBoundsException();
         } else if (index >= numComposites()) {

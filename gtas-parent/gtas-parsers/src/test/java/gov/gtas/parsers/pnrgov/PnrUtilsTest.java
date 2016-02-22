@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
-import gov.gtas.parsers.edifact.segment.UNA;
 
 public class PnrUtilsTest {
 
@@ -27,14 +26,11 @@ public class PnrUtilsTest {
                 "UNT+135+1'\n" + 
                 "UNZ+1+020A07'";
 
-        UNA una = EdifactLexer.getUnaSegment(msg);
-        assertEquals(null, PnrUtils.getSinglePnr(null, una, -1));
-        assertEquals(null, PnrUtils.getSinglePnr("", una, -1));
-        assertEquals(null, PnrUtils.getSinglePnr("\n", una, -1));                
-        assertEquals(null, PnrUtils.getSinglePnr(msg, una, -1));
-        assertEquals("SRC'RCI+DL:MFN4TI1'", PnrUtils.getSinglePnr(msg, una, 0));
-        assertEquals("SRC'RCI+DL:MFN4TI2'", PnrUtils.getSinglePnr(msg, una, 1));
-        assertEquals("SRC'RCI+DL:MFN4TI3'", PnrUtils.getSinglePnr(msg, una, 2));
-        assertEquals(null, PnrUtils.getSinglePnr(msg, una, 3));
+        EdifactLexer lexer = new EdifactLexer(msg);
+        assertEquals(null, PnrUtils.getSinglePnr(lexer, -1));
+        assertEquals("SRC'RCI+DL:MFN4TI1'", PnrUtils.getSinglePnr(lexer, 0));
+        assertEquals("SRC'RCI+DL:MFN4TI2'", PnrUtils.getSinglePnr(lexer, 1));
+        assertEquals("SRC'RCI+DL:MFN4TI3'", PnrUtils.getSinglePnr(lexer, 2));
+        assertEquals(null, PnrUtils.getSinglePnr(lexer, 3));
     }
 }

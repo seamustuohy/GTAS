@@ -10,7 +10,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.gtas.parsers.edifact.EdifactLexer;
-import gov.gtas.parsers.edifact.segment.UNA;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.segment.ADD;
 import gov.gtas.parsers.pnrgov.segment.SSR;
@@ -187,14 +186,10 @@ public class PnrUtils {
      * @param index 0-based index of the PNR
      * @return text of the nth PNR; null if does not exist.
      */
-    public static String getSinglePnr(String msg, UNA una, int index) {
-        if (StringUtils.isBlank(msg) || index < 0) {
-            return null;
-        }
-        
-        String regex = String.format("SRC\\s*\\%c", una.getSegmentTerminator());
+    public static String getSinglePnr(EdifactLexer lexer, int index) {
+        String regex = String.format("SRC\\s*\\%c", lexer.getUna().getSegmentTerminator());
         Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(msg);
+        Matcher matcher = pattern.matcher(lexer.getMessage());
         boolean found = false;
         for (int i=0; i<=index; i++) {
             found = matcher.find();
@@ -209,13 +204,13 @@ public class PnrUtils {
         if (matcher.find()) {
             end = matcher.start();
         } else {
-            end = EdifactLexer.getStartOfSegment("UNT", msg, una);
+            end = lexer.getStartOfSegment("UNT");
         }
         
         if (end != -1) {
-            return msg.substring(start, end);
+            return lexer.getMessage().substring(start, end);
         } else {
-            return msg.substring(start);
+            return lexer.getMessage().substring(start);
         }
     }
     
@@ -223,23 +218,23 @@ public class PnrUtils {
         if (StringUtils.isBlank(msg)) {
             return null;
         }
+        EdifactLexer lexer = new EdifactLexer(msg);
         
-        UNA una = EdifactLexer.getUnaSegment(msg);
-        int start = EdifactLexer.getStartOfSegment("UNB", msg, una);
-        int end = EdifactLexer.getStartOfSegment("SRC", msg, una);
+        int start = lexer.getStartOfSegment("UNB");
+        int end = lexer.getStartOfSegment("SRC");
         String header = msg.substring(start, end);
         
-        start = EdifactLexer.getStartOfSegment("UNT", msg, una);
+        start = lexer.getStartOfSegment("UNT");
         String footer = msg.substring(start);
         
         List<String> rv = new ArrayList<>();
         int i = 0;
         for (;;) {
-            String pnr = getSinglePnr(msg, una, i++);
+            String pnr = getSinglePnr(lexer, i++);
             if (pnr == null) {
                 break;
             } else {
-                StringBuffer buff = new StringBuffer(una.getSegmentText());
+                StringBuffer buff = new StringBuffer(lexer.getUna().getSegmentText());
                 buff.append(header).append(pnr).append(footer);
                 rv.add(buff.toString());
             }

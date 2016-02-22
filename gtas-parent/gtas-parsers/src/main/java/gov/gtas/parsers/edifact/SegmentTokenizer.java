@@ -16,11 +16,11 @@ import gov.gtas.parsers.util.TextUtils;
 public final class SegmentTokenizer {
     private final UNA una;
     
-    public SegmentTokenizer(final UNA una) {
+    public SegmentTokenizer(UNA una) {
         this.una = una;
     }
     
-    public Segment buildSegment(final String segmentText) throws ParseException {
+    public Segment buildSegment(String segmentText) throws ParseException {
         List<String> tokens = TextUtils.splitWithEscapeChar(
                 segmentText, 
                 una.getDataElementSeparator(), 

@@ -5,7 +5,6 @@ import java.util.ListIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.edifact.Segment;
 import gov.gtas.parsers.exception.ParseException;
@@ -40,7 +39,7 @@ public final class PaxlstParserUSedifact extends EdifactParser<ApisMessageVo> {
     
     // TODO
     protected String getPayloadText(String message) throws ParseException {
-        return EdifactLexer.getMessagePayload(message, "BGM", "UNT");
+        return lexer.getMessagePayload("BGM", "UNT");
     }
     
     public PaxlstParserUSedifact() { 

@@ -11,6 +11,7 @@ import gov.gtas.parsers.edifact.segment.UNH;
 import gov.gtas.parsers.edifact.segment.UNT;
 import gov.gtas.parsers.edifact.segment.UNZ;
 import gov.gtas.parsers.exception.ParseException;
+import gov.gtas.parsers.util.EdifactUtils;
 import gov.gtas.parsers.util.TextUtils;
 import gov.gtas.parsers.vo.MessageVo;
 /**
@@ -26,6 +27,8 @@ import gov.gtas.parsers.vo.MessageVo;
 public abstract class EdifactParser <T extends MessageVo> {
     /** factory for creating segment classes */
     protected SegmentFactory segmentFactory;
+    
+    protected EdifactLexer lexer;
 
     /** output from the edifact lexer. The first segment will always be UNB */
     protected List<Segment> segments;
@@ -61,7 +64,8 @@ public abstract class EdifactParser <T extends MessageVo> {
      */
     public T parse(String message) throws ParseException {
         this.segmentFactory = new SegmentFactory();
-        this.segments = EdifactLexer.tokenize(message);
+        this.lexer = new EdifactLexer(message);
+        this.segments = lexer.tokenize();
         this.message = message;
         this.iter = segments.listIterator();
 
@@ -71,7 +75,7 @@ public abstract class EdifactParser <T extends MessageVo> {
         }
         String md5 = TextUtils.getMd5Hash(payload, StandardCharsets.US_ASCII);
         this.parsedMessage.setHashCode(md5);
-        this.parsedMessage.setRaw(EdifactLexer.prettyPrint(this.segments));
+        this.parsedMessage.setRaw(EdifactUtils.prettyPrint(this.segments));
         
         parseHeader();
         parsePayload();

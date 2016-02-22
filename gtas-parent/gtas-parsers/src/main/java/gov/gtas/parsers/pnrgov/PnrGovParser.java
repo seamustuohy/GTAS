@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.pnrgov.segment.ABI;
@@ -70,7 +69,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
     }
 
     protected String getPayloadText(String message) throws ParseException {
-        return EdifactLexer.getMessagePayload(message, "SRC", "UNT");
+        return lexer.getMessagePayload("SRC", "UNT");
     }
     
     @Override
