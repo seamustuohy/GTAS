@@ -112,15 +112,19 @@ public abstract class EdifactParser <T extends MessageVo> {
     
     protected abstract String getPayloadText(String message) throws ParseException;
     
-    protected <S extends Segment> S getMandatorySegment(Class<?> clazz, String segmentName) throws ParseException {
+    protected <S extends Segment> S getMandatorySegment(Class<S> clazz, String segmentName) throws ParseException {
         return getNextSegment(clazz, segmentName, true);
     }
     
-    protected <S extends Segment> S getMandatorySegment(Class<?> clazz) throws ParseException {
+    protected <S extends Segment> S getMandatorySegment(Class<S> clazz) throws ParseException {
         return getMandatorySegment(clazz, null);
     }
+
+    protected <S extends Segment> S getConditionalSegment(Class<S> clazz) throws ParseException {
+        return getConditionalSegment(clazz, null);
+    }
     
-    protected <S extends Segment> S getConditionalSegment(Class<?> clazz, String segmentName) throws ParseException {
+    protected <S extends Segment> S getConditionalSegment(Class<S> clazz, String segmentName) throws ParseException {
         S segment = getNextSegment(clazz, segmentName, false);
         if (segment != null) {
             return segment;
@@ -130,11 +134,7 @@ public abstract class EdifactParser <T extends MessageVo> {
         return null;
     }
 
-    protected <S extends Segment> S getConditionalSegment(Class<?> clazz) throws ParseException {
-        return getConditionalSegment(clazz, null);
-    }
-    
-    private <S extends Segment> S getNextSegment(Class<?> clazz, String segmentName, boolean mandatory) throws ParseException {
+    private <S extends Segment> S getNextSegment(Class<S> clazz, String segmentName, boolean mandatory) throws ParseException {
         String expectedName = (segmentName != null) ? segmentName : clazz.getSimpleName();
 
         if (iter.hasNext()) {

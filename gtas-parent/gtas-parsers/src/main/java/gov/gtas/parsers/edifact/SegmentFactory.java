@@ -12,11 +12,11 @@ import gov.gtas.parsers.util.ErrorUtils;
 public class SegmentFactory {
     private static final Logger logger = LoggerFactory.getLogger(SegmentFactory.class);
     
-    public <T extends Segment> T build(Segment s, Class<?> clazz) throws ParseException {
+    public <T extends Segment> T build(Segment s, Class<T> clazz) throws ParseException {
         try {
             logger.debug(s.getName() + " " + s.getComposites());
-            Object[] args = {s.getComposites()};
-            return (T)clazz.getDeclaredConstructor(List.class).newInstance(args);
+            Object[] args = { s.getComposites() };
+            return clazz.getDeclaredConstructor(List.class).newInstance(args);
         } catch (InvocationTargetException e) {
             Throwable t = e.getCause();
             if (t != null) {
