@@ -88,6 +88,12 @@
         <md-tooltip>Add {{activeTab}}</md-tooltip>
         <i class="glyphicon glyphicon-plus"></i><i class="glyphicon glyphicon-{{icon}}"></i>
     </md-button>
+    <md-button ng-click="export('csv')" class="md-raised pull-right" type="button">
+        <i class="glyphicon glyphicon-export"></i> CSV
+    </md-button>
+    <md-button ng-click="export('pdf')" class="md-raised pull-right" type="button">
+        <i class="glyphicon glyphicon-save-file"></i> PDF
+    </md-button>
 </div>
 <div>
     <spinner name="html5spinner" ng-cloak="">
