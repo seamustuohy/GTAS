@@ -1,15 +1,5 @@
 package gov.gtas.svc.request.builder;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
-
 import gov.gtas.bo.BasicRuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequest;
 import gov.gtas.bo.RuleServiceRequestType;
@@ -32,6 +22,16 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.Seat;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Rule Engine Request Builder constructs Rule Engine execution requests from
@@ -103,7 +103,7 @@ public class RuleEngineRequestBuilder {
 	public void addApisMessage(ApisMessage apisMessage) {
 		// add flights, passengers and documents.
 		// true for the second parameter means add passengers and documents
-		addFlights(apisMessage.getFlights(), true);
+		addFlights(apisMessage.getFlights(), apisMessage.getPassengers(), true);
 		if (this.requestType == null
 				|| this.requestType == RuleServiceRequestType.APIS_MESSAGE) {
 			this.requestType = RuleServiceRequestType.APIS_MESSAGE;
@@ -122,12 +122,16 @@ public class RuleEngineRequestBuilder {
 		// add PNR objects
 		if (pnr != null) {
 			if (logger.isDebugEnabled()) {
-				
+
 			}
 			// add all the PNR related objects
 			requestObjectList.add(pnr);
-			addFlights(pnr.getFlights(), false);// false means do not add
-												// passengers and documents.
+			addFlights(pnr.getFlights(), pnr.getPassengers(), false);// false
+																		// means
+																		// do
+																		// not
+																		// add
+			// passengers and documents.
 			addAddressObjects(pnr, pnr.getAddresses());
 			addPhoneObjects(pnr, pnr.getPhones());
 			addEmailObjects(pnr, pnr.getEmails());
@@ -164,7 +168,7 @@ public class RuleEngineRequestBuilder {
 	 * @param addAssociatedPassengers
 	 */
 	private void addFlights(Collection<Flight> flights,
-			boolean addAssociatedPassengers) {
+			Collection<Passenger> passengers, boolean addAssociatedPassengers) {
 		if (flights != null) {
 			for (Flight flight : flights) {
 				Long id = flight.getId();
@@ -173,10 +177,11 @@ public class RuleEngineRequestBuilder {
 					this.flightIdSet.add(id);
 				}
 				if (addAssociatedPassengers) {
-					addPassengerObjects(null, flight.getPassengers());
+					addPassengerObjects(null, passengers);
+					// addPassengerObjects(null, flight.getPassengers());
 					// add the passenger flight tuples
-					if (flight.getPassengers() != null) {
-						for (Passenger passenger : flight.getPassengers()) {
+					if (passengers != null) {
+						for (Passenger passenger : passengers) {
 							passengerFlightSet.add(new PassengerFlightTuple(
 									passenger, flight));
 						}
@@ -266,15 +271,17 @@ public class RuleEngineRequestBuilder {
 		}
 	}
 
-	private void addTravelAgencyObjects(final Pnr pnr, final Collection<Agency> agencies) {
+	private void addTravelAgencyObjects(final Pnr pnr,
+			final Collection<Agency> agencies) {
 		if (CollectionUtils.isEmpty(agencies)) {
-		    return;
+			return;
 		}
 		for (Agency a : agencies) {
-		    Long id = a.getId();
+			Long id = a.getId();
 			if (!this.travelAgencyIdSet.contains(id)) {
 				requestObjectList.add(a);
-                requestObjectList.add(new PnrTravelAgencyLink(pnr.getId(), a.getId()));
+				requestObjectList.add(new PnrTravelAgencyLink(pnr.getId(), a
+						.getId()));
 				this.travelAgencyIdSet.add(id);
 			}
 		}
@@ -306,19 +313,21 @@ public class RuleEngineRequestBuilder {
 			}
 		}
 	}
-    private void addPassengerAndDependdencies(Passenger passenger){
+
+	private void addPassengerAndDependdencies(Passenger passenger) {
 		requestObjectList.add(passenger);
 		if (passenger.getDocuments() != null) {
 			for (Document doc : passenger.getDocuments()) {
 				this.requestObjectList.add(doc);
 			}
-		}    	
+		}
 		if (passenger.getSeatAssignments() != null) {
 			for (Seat seat : passenger.getSeatAssignments()) {
 				this.requestObjectList.add(seat);
 			}
-		}    	
-    }
+		}
+	}
+
 	private void addPnrPassengerLink(final Pnr pnr, final Passenger passenger) {
 		PnrPassengerLink link = new PnrPassengerLink(pnr.getId(),
 				passenger.getId());
