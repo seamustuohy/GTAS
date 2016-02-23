@@ -7,6 +7,7 @@
                 return (contact.lowerCasedName.indexOf(lowercaseQuery) >= 0);
             };
         }
+
         /* Search for airports. */
         function querySearch(query) {
             var results = query && (query.length) && (query.length >= 3) ? self.allAirports.filter(createFilterFor(query)) : [];
@@ -14,7 +15,7 @@
         }
 
         $scope.model = flightsModel;
-       
+
 
         var self = this, airports,
             stateName = $state ? $state.$current.self.name : 'flights',
@@ -30,7 +31,7 @@
                 {label: 'Any', value: 'A'}
             ],
             getPage = function () {
-                setFlightsGrid($scope.flightsGrid, flights || {flights: [], totalFlights: 0 });
+                setFlightsGrid($scope.flightsGrid, flights || {flights: [], totalFlights: 0});
             },
             update = function (data) {
                 flights = data;
@@ -55,39 +56,39 @@
                 fetchMethods[stateName]();
             };
 
-        var populateAirports = function(){
+        var populateAirports = function () {
 
             var originAirports = new Array();
             var destinationAirports = new Array();
 
-            angular.forEach($scope.model.origin,function(value,index){
+            angular.forEach($scope.model.origin, function (value, index) {
                 originAirports.push(value.id);
             })
 
-            angular.forEach($scope.model.dest,function(value,index){
+            angular.forEach($scope.model.dest, function (value, index) {
                 destinationAirports.push(value.id);
             })
 
             $scope.model.originAirports = originAirports;
             $scope.model.destinationAirports = destinationAirports;
         };
-        
-        var mapAirports = function(){
+
+        var mapAirports = function () {
             var originAirports = new Array();
             var destinationAirports = new Array();
-            var airport = { id: "" };
+            var airport = {id: ""};
 
-            angular.forEach(flightsModel.origins,function(value,index){
-                originAirports.push({ id: value });
+            angular.forEach(flightsModel.origins, function (value, index) {
+                originAirports.push({id: value});
             });
 
-            angular.forEach(flightsModel.destinations,function(value,index){
-                destinationAirports.push({  id: value });
+            angular.forEach(flightsModel.destinations, function (value, index) {
+                destinationAirports.push({id: value});
             });
-            $scope.model.origin= originAirports;
+            $scope.model.origin = originAirports;
             $scope.model.dest = destinationAirports;
         };
-        
+
 
         self.querySearch = querySearch;
         $http.get('data/airports.json')
