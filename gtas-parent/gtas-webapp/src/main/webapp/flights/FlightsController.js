@@ -3,10 +3,10 @@
     app.controller('FlightsController', function ($scope, $http, $state, $interval, $stateParams, passengersBasedOnUserFilter, flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel) {
         var exporter = {
             'csv': function () {
-                $scope.gridApi.exporter.pdfExport('all', 'all');
+                $scope.gridApi.exporter.csvExport('all', 'all');
             },
             'pdf': function () {
-                $scope.gridApi.exporter.csvExport('all', 'all');
+                $scope.gridApi.exporter.pdfExport('all', 'all');
             }
         };
         function createFilterFor(query) {
