@@ -14,6 +14,7 @@ import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.util.EdifactUtils;
 import gov.gtas.parsers.util.TextUtils;
 import gov.gtas.parsers.vo.MessageVo;
+
 /**
  * The parser takes the output from the Edifact lexer and starts the process of
  * parsing the individual segments and extracting data. This class implements
@@ -26,19 +27,16 @@ import gov.gtas.parsers.vo.MessageVo;
  */
 public abstract class EdifactParser <T extends MessageVo> {
     /** factory for creating segment classes */
-    protected SegmentFactory segmentFactory;
-    
-    protected EdifactLexer lexer;
-
-    /** output from the edifact lexer. The first segment will always be UNB */
-    protected List<Segment> segments;
+    private SegmentFactory segmentFactory;
     
     /** iterator for segment list */
     private ListIterator<Segment> iter;
 
-    /** the original (preprocessed) message */
-    protected String message;
+    /** output from the edifact lexer. The first segment will always be UNB */
+    protected List<Segment> segments;
     
+    protected EdifactLexer lexer;
+
     /** the final parsed message we ultimately return */
     protected T parsedMessage;
 
@@ -66,7 +64,6 @@ public abstract class EdifactParser <T extends MessageVo> {
         this.segmentFactory = new SegmentFactory();
         this.lexer = new EdifactLexer(message);
         this.segments = lexer.tokenize();
-        this.message = message;
         this.iter = segments.listIterator();
 
         String payload = getPayloadText();
@@ -115,14 +112,28 @@ public abstract class EdifactParser <T extends MessageVo> {
      */
     protected abstract String getPayloadText() throws ParseException;
     
-    protected <S extends Segment> S getMandatorySegment(Class<S> clazz, String segmentName) throws ParseException {
-        return getNextSegment(clazz, segmentName, true);
-    }
+    /*
+     * get* methods below are used by subclasses to traverse the list of
+     * segments returned from the lexer.
+     */
     
     protected <S extends Segment> S getMandatorySegment(Class<S> clazz) throws ParseException {
         return getMandatorySegment(clazz, null);
     }
 
+    /**
+     * Same as {@link #getMandatorySegment(Class)} but takes the segment name as
+     * an argument. This is useful in cases where the segment name differs from
+     * the actual class it's associated with.
+     */
+    protected <S extends Segment> S getMandatorySegment(Class<S> clazz, String segmentName) throws ParseException {
+        return getNextSegment(clazz, segmentName, true);
+    }
+
+    /**
+     * A conditional segment is an optional segment that may or may not exist.
+     * If it exists, return it; otherwise move the pointer back and return null.
+     */
     protected <S extends Segment> S getConditionalSegment(Class<S> clazz) throws ParseException {
         return getConditionalSegment(clazz, null);
     }
@@ -137,6 +148,9 @@ public abstract class EdifactParser <T extends MessageVo> {
         return null;
     }
 
+    /**
+     * helper method for retrieving next segment from segment list.
+     */
     private <S extends Segment> S getNextSegment(Class<S> clazz, String segmentName, boolean mandatory) throws ParseException {
         String expectedName = (segmentName != null) ? segmentName : clazz.getSimpleName();
 

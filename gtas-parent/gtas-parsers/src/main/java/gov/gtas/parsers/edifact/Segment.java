@@ -27,7 +27,7 @@ public class Segment {
     /** original segment text, including any composites. Optional field. */
     private final String text;
 
-    /**list of segment fields/composites */
+    /** list of segment fields/composites */
     private final List<Composite> composites;
 
     public Segment(String name, List<Composite> composites) {

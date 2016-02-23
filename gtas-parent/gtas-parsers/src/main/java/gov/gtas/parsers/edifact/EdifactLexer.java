@@ -9,8 +9,7 @@ import gov.gtas.parsers.util.EdifactUtils;
 import gov.gtas.parsers.util.TextUtils;
 
 /**
- * Utilities for tokenizing Edifact files
- * (https://en.wikipedia.org/wiki/EDIFACT).
+ * Class for tokenizing Edifact files
  */
 public final class EdifactLexer {
     private final UNA una;
@@ -58,7 +57,6 @@ public final class EdifactLexer {
      * Tokenize the input message into a list of {@code Segments} 
      */
     public List<Segment> tokenize() throws ParseException {
-        String msg = TextUtils.convertToSingleLine(this.message).toUpperCase();
         SegmentTokenizer segmentTokenizer = new SegmentTokenizer(this.una);
 
         // start parsing with the UNB segment
@@ -67,8 +65,10 @@ public final class EdifactLexer {
             throw new ParseException("Required UNB segment not found");
         }
         
+        String tmp = this.message.substring(unbIndex);
+        String processedMessage = TextUtils.convertToSingleLine(tmp).toUpperCase();
         List<String> stringSegments = TextUtils.splitWithEscapeChar(
-                msg.substring(unbIndex), 
+                processedMessage, 
                 this.una.getSegmentTerminator(), 
                 this.una.getReleaseCharacter());
 
