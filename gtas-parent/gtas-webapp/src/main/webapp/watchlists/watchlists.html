@@ -88,6 +88,9 @@
         <md-tooltip>Add {{activeTab}}</md-tooltip>
         <i class="glyphicon glyphicon-plus"></i><i class="glyphicon glyphicon-{{icon}}"></i>
     </md-button>
+    <button onclick="angular.element(document.querySelector('.ui-grid-icon-menu'))[0].click();" class="md-raised pull-right md-button md-ink-ripple" type="button">
+        <i class="glyphicon glyphicon-import"></i> Import CSV
+    </button>
     <md-button ng-click="export('csv')" class="md-raised pull-right" type="button">
         <i class="glyphicon glyphicon-export"></i> CSV
     </md-button>
