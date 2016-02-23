@@ -1,6 +1,14 @@
 (function () {
     'use strict';
     app.controller('FlightsController', function ($scope, $http, $state, $interval, $stateParams, passengersBasedOnUserFilter, flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel) {
+        var exporter = {
+            'csv': function () {
+                $scope.gridApi.exporter.pdfExport('all', 'all');
+            },
+            'pdf': function () {
+                $scope.gridApi.exporter.csvExport('all', 'all');
+            }
+        };
         function createFilterFor(query) {
             var lowercaseQuery = query.toLowerCase();
             return function filterFn(contact) {
@@ -16,6 +24,9 @@
 
         $scope.model = flightsModel;
 
+        $scope.export = function (format) {
+            exporter[format]();
+        };
 
         var self = this, airports,
             stateName = $state ? $state.$current.self.name : 'flights',
