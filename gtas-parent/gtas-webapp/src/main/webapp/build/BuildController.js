@@ -3,7 +3,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     var todayDate = moment().toDate(),
         queryFlightsLink = document.querySelector('a[href="#/query/flights"]'),
         queryPassengersLink = document.querySelector('a[href="#/query/passengers"]'),
-        todayText = moment().format('YYYY-MM-DD').toString(),
         conditions,
         model = {
             summary: {
@@ -26,10 +25,10 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             m.rule = new model.summary.rule();
         },
         setId = function () {
-        	var returnValue = null;
-        	if($scope.buttonMode === $scope.mode && !$scope.isCopy){
-        		returnValue = $scope.ruleId;
-        	}
+            var returnValue = null;
+            if ($scope.buttonMode === $scope.mode && !$scope.isCopy) {
+                returnValue = $scope.ruleId;
+            }
             return returnValue;
         },
         mode = $stateParams.mode,
@@ -54,26 +53,8 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     });
 
     $scope.copyRule = function () {
-    	$scope.isCopy = true;
-    	$scope.prompt.save('rule');
-        /*spinnerService.show('html5spinner');
-        var originalObj = $scope[$scope.mode], ruleId = $scope.ruleId;
-        console.log(originalObj);
-        $scope.addNew();
-        $scope.gridApi.selection.clearSelectedRows();
-        jqueryQueryBuilderService.copyRule(ruleId).then(function (response) {
-            //this makes me cringe... hope result becomes object and this goes away.
-            var partialCopyObj = {
-                id: response.result,
-                title: response.responseDetails[1]['attributeValue'],
-                startDate: todayText,
-                endDate: undefined,
-                modifiedOn: todayText,
-                modifiedBy: 'me'
-            };
-            $scope.qbGrid.data.unshift($.extend({}, originalObj, partialCopyObj));
-            spinnerService.hide('html5spinner');
-        });*/
+        $scope.isCopy = true;
+        $scope.prompt.save('rule');
     };
 
     $scope.mode = mode;
@@ -84,27 +65,37 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             $scope.$builder.queryBuilder('setMode', buttonMode);
             conditions = $scope.$builder.queryBuilder('getDrools');
 
-            if (conditions === false) { return; }
-            $scope.buttonMode = buttonMode;  
-            if(buttonMode === 'rule'){$scope.ruleClone = $.extend({}, $scope.rule);}
-            if(buttonMode === 'query'){$scope.queryClone = $.extend({}, $scope.query);}
-            if ($scope.isCopy){
-            	$scope.rule.startDate = new Date();
+            if (conditions === false) {
+                return;
+            }
+            $scope.buttonMode = buttonMode;
+
+            switch (buttonMode) {
+            case 'rule':
+                $scope.ruleClone = $.extend({}, $scope.rule);
+                if ($scope.isCopy) {
+                    $scope.rule.startDate = new Date();
+                }
+                break;
+            case 'query':
+                $scope.queryClone = $.extend({}, $scope.query);
+                break;
             }
             $mdSidenav(buttonMode).open();
         },
-        cancel: function () { 
-        	if($scope.ruleClone){
-        		$scope.rule = $.extend({}, $scope.ruleClone);
-        		$scope.ruleClone = null;
-        	}
-        	if($scope.queryClone){
-        		$scope.query = $.extend({}, $scope.queryClone);
-        		$scope.queryClone = null;
-        	}
-        	$scope.isCopy = false;
-        	$mdSidenav($scope.buttonMode).close(); 
-    	}
+        cancel: function () {
+            // could we use $scope.buttonMode here?
+            if ($scope.ruleClone) {
+                $scope.rule = $.extend({}, $scope.ruleClone);
+                $scope.ruleClone = null;
+            }
+            if ($scope.queryClone) {
+                $scope.query = $.extend({}, $scope.queryClone);
+                $scope.queryClone = null;
+            }
+            $scope.isCopy = false;
+            $mdSidenav($scope.buttonMode).close();
+        }
     };
 
     $scope.setData = {
@@ -188,13 +179,13 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.updateQueryBuilderOnSave = function (myData) {
         if (myData.status === 'FAILURE') {
-        	spinnerService.hide('html5spinner');
+            spinnerService.hide('html5spinner');
             alert(myData.message);
             $scope.saving = false;
             return;
         }
         if (typeof myData.errorCode !== "undefined") {
-        	spinnerService.hide('html5spinner');
+            spinnerService.hide('html5spinner');
             alert(myData.errorMessage);
             return;
         }
@@ -221,15 +212,15 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.rowSelection = function (gridApi) {
         $scope.gridApi = gridApi;
-        if($scope.gridApi.selection){
-	        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-	            if (row.isSelected) {
-	                loadOnSelection[$scope.mode](row);
-	            } else {
-	                $scope.addNew();
-	                $scope.gridApi.selection.clearSelectedRows();
-	            }
-	        });
+        if ($scope.gridApi.selection) {
+            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                if (row.isSelected) {
+                    loadOnSelection[$scope.mode](row);
+                } else {
+                    $scope.addNew();
+                    $scope.gridApi.selection.clearSelectedRows();
+                }
+            });
         }
     };
 
@@ -238,7 +229,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             rowIndexToDelete;
 
         if (!$scope.ruleId) {
-        	spinnerService.hide('html5spinner');
+            spinnerService.hide('html5spinner');
             alert('No rule loaded to delete');
             return;
         }
@@ -274,23 +265,23 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.loadSummary = function (obj, summary) {
         Object.keys(summary).forEach(function (key) {
-        	if(key === 'startDate' || key === 'endDate'){
-        		if(typeof summary[key] === 'string'){
-        			var date = new Date((summary[key].replace(/-/g,'/')));
-        			if (Object.prototype.toString.call(date) === '[object Date]'){
-        				$scope[obj][key] = date;
-        			}else{
-        				$scope[obj][key] = summary[key];
-        			}
-        		}else{
-        			$scope[obj][key] = summary[key];
-        		}
-        	}else{
-        		$scope[obj][key] = summary[key];
-        	}
+            if (key === 'startDate' || key === 'endDate') {
+                if (typeof summary[key] === 'string') {
+                    var date = new Date((summary[key].replace(/-/g, '/')));
+                    if (Object.prototype.toString.call(date) === '[object Date]') {
+                        $scope[obj][key] = date;
+                    } else {
+                        $scope[obj][key] = summary[key];
+                    }
+                } else {
+                    $scope[obj][key] = summary[key];
+                }
+            } else {
+                $scope[obj][key] = summary[key];
+            }
         });
     };
-    
+
     $scope.formats = ["YYYY-MM-DD"];
 
     $scope.addNew = function () {
@@ -315,17 +306,19 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         query: {
             confirm: function () {
                 var queryObject = {
-                        id: setId(),
-                        title: $scope.query.title,
-                        description: $scope.query.description || null,
-                        query: conditions
-                    };
+                    id: setId(),
+                    title: $scope.query.title,
+                    description: $scope.query.description || null,
+                    query: conditions
+                };
 
-                if ($scope.saving) { return; }
+                if ($scope.saving) {
+                    return;
+                }
 //                    $scope.saving = true;
 
                 if (queryObject.title && queryObject.title.length) {
-                	queryObject.title = queryObject.title.trim();
+                    queryObject.title = queryObject.title.trim();
                 }
 
                 if (!queryObject.title.length) {
@@ -341,10 +334,10 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         rule: {
             confirm: function () {
                 var ruleObject = {
-                        id: setId(),
-                        details: conditions,
-                        summary: $scope.rule
-                    };
+                    id: setId(),
+                    details: conditions,
+                    summary: $scope.rule
+                };
 
                 if ($scope.saving) {
                     return;
@@ -353,7 +346,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 //                    $scope.saving = true;
 
                 if (ruleObject.summary.title && ruleObject.summary.title.length) {
-                	ruleObject.summary.title = ruleObject.summary.title.trim();
+                    ruleObject.summary.title = ruleObject.summary.title.trim();
                 }
 
                 if (ruleObject.summary.title.length === 0) {
@@ -369,7 +362,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     //    return;
                     //}
                     if (ruleObject.summary.startDate.getDate() < new Date().getDate()) {
-                    	$scope.openAlert('Invalid Start Date', 'Start date must be today or later when created new');
+                        $scope.openAlert('Invalid Start Date', 'Start date must be today or later when created new');
                         $scope.saving = false;
                         return;
                     }
@@ -382,19 +375,19 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     //    return;
                     //}
                     if (ruleObject.summary.endDate < ruleObject.summary.startDate) {
-                    	$scope.openAlert('Invalid End Date', 'End Date must be empty/open or be >= Start Date');
+                        $scope.openAlert('Invalid End Date', 'End Date must be empty/open or be >= Start Date');
                         $scope.saving = false;
                         return;
                     }
                 }
-                
+
                 spinnerService.show('html5spinner');
                 jqueryQueryBuilderService.save('rule', ruleObject).then($scope.updateQueryBuilderOnSave);
             }
         }
     };
 
-    $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope });
+    $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
 
     $scope.qbGrid = gridOptionsLookupService.getGridOptions(mode);
     $scope.qbGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs(mode);
@@ -434,44 +427,48 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             }, 5);
         }
     });
-    
-    $scope.openAlert = function(title,msg) {
+
+    $scope.openAlert = function (title, msg) {
         $mdDialog.show(
-          $mdDialog.alert()
-            .clickOutsideToClose(false)
-            .title(title)
-            .textContent(msg)
-            .ariaLabel('Invalid Format')
-            .ok('OK')
-            .openFrom({
-            	left:1500
-            })
-            .closeTo(({
-            	right:1500
-            }))
+            $mdDialog.alert()
+                .clickOutsideToClose(false)
+                .title(title)
+                .textContent(msg)
+                .ariaLabel('Invalid Format')
+                .ok('OK')
+                .openFrom({
+                    left: 1500
+                })
+                .closeTo(({
+                    right: 1500
+                }))
         );
-      };
-      
-    $scope.isUpdate = function(){
-    	if($scope.ruleId === null){
-    		return false;
-    	}
-    	return true;
+    };
+
+    $scope.isUpdate = function () {
+        if ($scope.ruleId === null) {
+            return false;
+        }
+        return true;
     }
     $scope.$watch(
-            function() { return $mdSidenav('rule').isOpen(); },
-            function(newValue, oldValue) {
-                if(newValue != oldValue && !newValue){
-                	$scope.prompt.cancel();
-                }
+        function () {
+            return $mdSidenav('rule').isOpen();
+        },
+        function (newValue, oldValue) {
+            if (newValue != oldValue && !newValue) {
+                $scope.prompt.cancel();
             }
-        );
+        }
+    );
     $scope.$watch(
-            function() { return $mdSidenav('query').isOpen(); },
-            function(newValue, oldValue) {
-                if(newValue != oldValue && !newValue){
-                	$scope.prompt.cancel();
-                }
+        function () {
+            return $mdSidenav('query').isOpen();
+        },
+        function (newValue, oldValue) {
+            if (newValue != oldValue && !newValue) {
+                $scope.prompt.cancel();
             }
-        );
+        }
+    );
 });
