@@ -26,8 +26,19 @@ var app;
             'angularSpinners',
             'ngFileUpload',
             'spring-security-csrf-token-interceptor',
-            'swxSessionStorage'
+            'swxSessionStorage',
+            'ngCookies',
+            'pascalprecht.translate'
         ],
+        language = function ($translateProvider) {
+      
+    		$translateProvider.useUrlLoader('/gtas/messageBundle/');
+    		$translateProvider.useCookieStorage();
+    		$translateProvider.preferredLanguage('es');
+    		$translateProvider.fallbackLanguage('es');
+    		
+        	
+		},
         localDateMomentFormat = function ($mdDateLocaleProvider) {
             // Example of a French localization.
             //$mdDateLocaleProvider.months = ['janvier', 'février', 'mars', ...];
@@ -349,6 +360,7 @@ var app;
         .module('myApp', appDependencies)
         .config(router)
         .config(localDateMomentFormat)
+        .config(language)
         .constant('USER_ROLES', {
             ADMIN: 'Admin',
             VIEW_FLIGHT_PASSENGERS: 'View Flight And Passenger',

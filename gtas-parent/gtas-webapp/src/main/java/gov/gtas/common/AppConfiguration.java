@@ -2,6 +2,7 @@ package gov.gtas.common;
 
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,6 +30,10 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
     
     @Bean
     public LocaleResolver localeResolver(){
+    	//String language=System.getProperty("site.language");
+    	//if(StringUtils.isBlank(language)){
+    		//language="en";
+    	//}
     	CookieLocaleResolver resolver = new CookieLocaleResolver();
     	resolver.setDefaultLocale(new Locale("en"));
     	resolver.setCookieName("myLocaleCookie");
