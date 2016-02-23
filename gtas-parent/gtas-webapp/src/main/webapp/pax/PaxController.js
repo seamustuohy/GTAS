@@ -238,12 +238,12 @@
                 {
                     field: 'flightOrigin',
                     name: 'flightOrigin',
-                    displayName: 'Origin'
+                    displayName: 'Origin Airport'
                 },
                 {
                     field: 'flightDestination',
                     name: 'flightDestination',
-                    displayName: 'Destination'
+                    displayName: 'Destination Airport'
                 },
                 {
                     field: 'etaLocalTZ',

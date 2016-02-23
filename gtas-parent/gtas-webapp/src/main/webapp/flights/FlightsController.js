@@ -187,10 +187,10 @@
                 }
             },
             {name: 'etdLocalTZ', displayName: 'ETD'},
-            {name: 'origin'},
-            {name: 'originCountry', displayName: 'Country'},
-            {name: 'destination'},
-            {name: 'destinationCountry', displayName: 'Country'}
+            {name: 'origin', displayName: 'Origin Airport'},
+            {name: 'originCountry', displayName: 'Origin Country'},
+            {name: 'destination', displayName: 'Destination Airport'},
+            {name: 'destinationCountry', displayName: 'Destination Country'}
         ];
 
         $scope.queryPassengersOnSelectedFlight = function (row_entity) {
