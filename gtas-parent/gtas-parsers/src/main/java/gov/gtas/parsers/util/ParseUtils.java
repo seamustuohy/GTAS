@@ -69,7 +69,6 @@ public final class ParseUtils {
         try {
             return Integer.valueOf(s);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
             return null;
         }
     }
