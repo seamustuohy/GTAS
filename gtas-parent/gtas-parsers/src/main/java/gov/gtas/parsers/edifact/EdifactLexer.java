@@ -74,7 +74,10 @@ public final class EdifactLexer {
 
         List<Segment> segments = new LinkedList<>();
         for (String s : stringSegments) {
-            segments.add(segmentTokenizer.buildSegment(s));
+            // add the segment terminator back (removed from split)
+            Segment segment = segmentTokenizer.buildSegment(s);
+            segment.setText(s + this.una.getSegmentTerminator());
+            segments.add(segment);
         }
         
         return segments;

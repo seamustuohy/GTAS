@@ -44,6 +44,6 @@ public final class SegmentTokenizer {
             composites.add(new Composite(elements));
         }
 
-        return new Segment(segmentName, segmentText + una.getSegmentTerminator(), composites);
+        return new Segment(segmentName, composites);
     }
 }
