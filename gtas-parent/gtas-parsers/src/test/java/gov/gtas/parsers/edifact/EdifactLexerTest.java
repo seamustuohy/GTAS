@@ -27,7 +27,8 @@ public class EdifactLexerTest {
             "PDI++C:4'\r\n" + 
             "APD+EM2:0:1630::6+++++++DA'\r\n";
 
-    String test = "UNA:+.? '\r\n" + 
+    String test = 
+            "UNA:+.? '\r\n" + 
             "UNB+IATB:1+6XPPC+LHPPC+940101:0950+1'\r\n" + 
             "UNH+1+PAORES:93:1:IA'\r\n" + 
             payload + 
@@ -56,10 +57,9 @@ public class EdifactLexerTest {
                 assertEquals("A7V", c.get(0).getElement(0));
                 break;
             }
-            System.out.println(s);
         }
     }
-    
+
     @Test
     public void testGetStartOfSegment() {
         EdifactLexer lexer = new EdifactLexer(test);

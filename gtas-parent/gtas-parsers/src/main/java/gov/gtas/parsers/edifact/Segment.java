@@ -24,10 +24,10 @@ public class Segment {
     /** the segment name (NAD, UNC, CNT, etc.) */
     private final String name;
 
-    /** original segment text, including any composites. Optional field. */
-    private final String text;
+    /** original segment text, including any composites. Optional */
+    private String text;
 
-    /**list of segment fields/composites */
+    /** list of segment fields/composites */
     private final List<Composite> composites;
 
     public Segment(String name, List<Composite> composites) {
@@ -54,6 +54,10 @@ public class Segment {
 
     public String getText() {
         return this.text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public List<Composite> getComposites() {

@@ -29,7 +29,8 @@ public final class SegmentTokenizer {
             throw new ParseException("Error tokenizing segment text " + segmentText);
         }
 
-        String segmentName = tokens.remove(0);  // remove just the segment name
+        // remove just the segment name
+        String segmentName = tokens.remove(0);  
         if (StringUtils.isBlank(segmentName)) {
             throw new ParseException("Illegal segment name " + segmentName);                
         }
@@ -43,6 +44,6 @@ public final class SegmentTokenizer {
             composites.add(new Composite(elements));
         }
 
-        return new Segment(segmentName, segmentText, composites);
+        return new Segment(segmentName, composites);
     }
 }
