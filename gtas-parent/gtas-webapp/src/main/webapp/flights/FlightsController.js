@@ -188,21 +188,21 @@
             },
             {
                 name: 'fullFlightNumber',
-                displayName: 'Flight',
+                displayName: 'flight.flight', headerCellFilter: 'translate',
                 width: 70
             },
             {
-                name: 'etaLocalTZ', displayName: 'ETA',
+                name: 'etaLocalTZ', displayName:'pass.eta', headerCellFilter: 'translate',
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 2
                 }
             },
-            {name: 'etdLocalTZ', displayName: 'ETD'},
-            {name: 'origin', displayName: 'Origin Airport'},
-            {name: 'originCountry', displayName: 'Origin Country'},
-            {name: 'destination', displayName: 'Destination Airport'},
-            {name: 'destinationCountry', displayName: 'Destination Country'}
+            {name: 'etdLocalTZ', displayName:'pass.etd', headerCellFilter: 'translate'},
+            {name: 'origin', displayName:'flight.origin', headerCellFilter: 'translate'},
+            {name: 'originCountry', displayName:'doc.country', headerCellFilter: 'translate'},
+            {name: 'destination', displayName:'flight.destination', headerCellFilter: 'translate'},
+            {name: 'destinationCountry', displayName:'add.Country', headerCellFilter: 'translate'}
         ];
 
         $scope.queryPassengersOnSelectedFlight = function (row_entity) {
