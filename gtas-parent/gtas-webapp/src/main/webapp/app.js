@@ -34,8 +34,8 @@ var app;
       
     		$translateProvider.useUrlLoader('/gtas/messageBundle/');
     		$translateProvider.useCookieStorage();
-    		$translateProvider.preferredLanguage('es');
-    		$translateProvider.fallbackLanguage('es');
+    		$translateProvider.preferredLanguage('en');
+    		$translateProvider.fallbackLanguage('en');
     		
         	
 		},
