@@ -464,13 +464,14 @@
                     query: [
                         {
                             name: "title",
-                            displayName: "Name",
+                            displayName: 'qry.name', headerCellFilter: 'translate',
                             field: "title",
                             cellTemplate: '<md-button aria-label="title" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }, {
                             name: "description",
+                            displayName: 'qry.desc', headerCellFilter: 'translate',
                             field: "description",
                             cellTemplate: '<md-button aria-label="description" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
@@ -532,13 +533,15 @@
                             {
                                 field: "documentType",
                                 name: "documentType",
-                                displayName: "Type",
+                                //displayName: "Type",
+                                displayName: 'doc.type', headerCellFilter: 'translate',
                                 cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                                 "type": "string"
                             }, {
                                 field: "documentNumber",
                                 name: "documentNumber",
-                                displayName: "Number",
+                                //displayName: "Number",
+                                displayName: 'doc.Number', headerCellFilter: 'translate',
                                 cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                                 "type": "string"
                             }
@@ -547,7 +550,8 @@
                             {
                                 field: "dob",
                                 name: "dob",
-                                displayName: "DOB",
+                                //displayName: "DOB",
+                                displayName: 'doc.dob', headerCellFilter: 'translate',
                                 width: 100,
                                 cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD | date:'yyyy-MM-dd'}}</md-button>",
                                 "type": "date"
@@ -555,13 +559,15 @@
                             {
                                 field: "firstName",
                                 name: "firstName",
-                                displayName: "First Name",
+                                //displayName: "First Name",
+                                displayName: 'pass.firstname', headerCellFilter: 'translate',
                                 cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                                 "type": "string"
                             }, {
                                 field: "lastName",
                                 name: "lastName",
-                                displayName: "Last Name",
+                                //displayName: "Last Name",
+                                displayName: 'pass.lastname', headerCellFilter: 'translate',
                                 cellTemplate: "<md-button class=\"md-primary\"  ng-click=\"grid.appScope.editRecord(row.entity)\" style=\"min-width: 0; margin: 0 auto; width: 100%;\" >{{COL_FIELD}}</md-button>",
                                 "type": "string"
                             }

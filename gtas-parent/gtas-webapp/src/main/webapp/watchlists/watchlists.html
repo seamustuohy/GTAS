@@ -31,7 +31,7 @@
     </md-toolbar>
     <form name="watchlist" ng-submit="saveRow()">
         <md-input-container ng-if="activeTab == 'Document'">
-            <label>Document Type:</label>
+            <label>{{'wl.doctype' | translate}}:</label>
             <md-select ng-model="Document.documentType" required>
                 <md-option ng-repeat="docType in documentTypes" value="{{docType.id}}">
                     {{docType.label}}
@@ -39,15 +39,15 @@
             </md-select>
         </md-input-container>
         <md-input-container ng-if="activeTab == 'Document'">
-            <label>Document Number:</label>
+            <label>{{'wl.docnum' | translate}}:</label>
             <input ng-model="Document.documentNumber" required>
         </md-input-container>
         <md-input-container ng-if="activeTab == 'Passenger'">
-            <label>First Name:</label>
+            <label>{{'pass.firstname' | translate}}:</label>
             <input ng-model="Passenger.firstName" required>
         </md-input-container>
         <md-input-container ng-if="activeTab == 'Passenger'">
-            <label>Last Name:</label>
+            <label>{{'pass.lastname' | translate}}:</label>
             <input ng-model="Passenger.lastName" required>
         </md-input-container>
         <md-datepicker ng-if="activeTab == 'Passenger'" name="dob" ng-model="Passenger.dob"
@@ -58,7 +58,7 @@
                        class="md-raised md-warn pull-left"
                        ng-click="removeRow()"
                        ng-disabled="rowSelected === null">
-                <span class="glyphicon glyphicon-remove"></span> Remove
+                <span class="glyphicon glyphicon-remove"></span> {{'wl.remove' | translate}}
             </md-button>
             <md-button class="md-raised md-primary pull-right" type="submit">
                 <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-eye-open"></i> {{getSaveStateText(activeTab)}}
@@ -74,18 +74,18 @@
     <md-button ng-click="removeRows()"
                ng-disabled="disableTrash"
                class="md-raised md-warn pull-left">
-        <md-tooltip>Selected {{activeTab}}(s)</md-tooltip>
+        <md-tooltip>{{'wl.select' | translate}} {{activeTab}}(s)</md-tooltip>
         <i class="glyphicon glyphicon-trash"></i><i class="glyphicon glyphicon-{{icon}}"></i>
     </md-button>
     <md-button ng-click="updateWatchlistService()"
                ng-disabled="updating === true"
                class="md-raised md-primary pull-right">
-        <md-tooltip>Watchlist Service</md-tooltip>
-        <i class="glyphicon glyphicon-cloud-upload"></i> <i class="glyphicon glyphicon-cloud-download"></i> Sync
+        <md-tooltip>{{'wl.title' | translate}}</md-tooltip>
+        <i class="glyphicon glyphicon-cloud-upload"></i> <i class="glyphicon glyphicon-cloud-download"></i> {{'wl.sync' | translate}}
     </md-button>
     <md-button ng-click="Add()"
                class="md-raised pull-right">
-        <md-tooltip>Add {{activeTab}}</md-tooltip>
+        <md-tooltip>{{'btn.add' | translate}} {{activeTab}}</md-tooltip>
         <i class="glyphicon glyphicon-plus"></i><i class="glyphicon glyphicon-{{icon}}"></i>
     </md-button>
     <button onclick="angular.element(document.querySelector('.ui-grid-icon-menu'))[0].click();" class="md-raised pull-right md-button md-ink-ripple" type="button">
@@ -105,6 +105,6 @@
             <div class="double-bounce1"></div>
             <div class="double-bounce2"></div>
         </div>
-        <div class="please-wait">Please Wait...</div>
+        <div class="please-wait">{{'wl.wait' | translate}}...</div>
     </spinner>
 </div>

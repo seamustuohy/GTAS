@@ -23,13 +23,13 @@
         <md-content layout-padding>
             <div layout="row" layout-wrap>
                 <md-input-container flex>
-                    <label>Name</label>
+                    <label>{{'qry.name' | translate}}</label>
                     <input md-maxlength="20" autofocus required name="title" ng-model="query.title">
                 </md-input-container>
             </div>
             <div layout="row" layout-wrap>
                 <md-input-container flex>
-                    <label>Description</label>
+                    <label>{{'qry.desc' | translate}}</label>
                     <input md-maxlength="100" name="description" ng-model="query.description">
                 </md-input-container>
             </div>
@@ -39,12 +39,12 @@
                        ng-click="prompt.cancel()"
                        ng-disabled="saving === true"
                        class="md-raised pull-left">
-                <i class="glyphicon glyphicon-cancel"></i> Cancel
+                <i class="glyphicon glyphicon-cancel"></i> {{'qry.cancel' | translate}}
             </md-button>
             <md-button type="submit"
                        ng-disabled="saving === true"
                        class="md-raised md-primary pull-right">
-                <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i> Confirm Save
+                <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i> {{'qry.confirm.save' | translate}}
             </md-button>
         </div>
     </form>
@@ -57,18 +57,18 @@
         <md-content layout-padding>
             <div layout="row" layout-wrap>
                 <md-input-container flex>
-                    <label>Name</label>
+                    <label>{{'qry.name' | translate}}</label>
                     <input md-maxlength="20" required name="title" ng-model="rule.title">
                 </md-input-container>
             </div>
             <div layout="row" layout-wrap>
                 <md-input-container flex>
-                    <label>Description</label>
+                    <label>{{'qry.desc' | translate}}</label>
                     <input md-maxlength="100" name="description" ng-model="rule.description">
                 </md-input-container>
             </div>
             <div layout="row" layout-wrap>
-                <md-checkbox class="md-primary" required ng-model="rule.enabled" aria-label="Enabled">Enabled</md-checkbox>
+                <md-checkbox class="md-primary" required ng-model="rule.enabled" aria-label="Enabled">{{'user.status.enabled' | translate}}</md-checkbox>
             </div>
             <div layout="row" layout-wrap>
                 <md-datepicker ng-model="rule.startDate" md-placeholder="Start Date" ng-disabled="isUpdate() && !isCopy"></md-datepicker>
@@ -82,12 +82,12 @@
                        ng-click="prompt.cancel()"
                        ng-disabled="saving === true"
                        class="md-raised pull-left">
-                <i class="glyphicon glyphicon-cancel"></i> Cancel
+                <i class="glyphicon glyphicon-cancel"></i> {{'qry.cancel' | translate}}
             </md-button>
             <md-button type="submit"
                        ng-disabled="saving === true"
                        class="md-raised md-primary pull-right">
-                <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Confirm Save
+                <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> {{'qry.confirm.save' | translate}}
             </md-button>
         </div>
     </form>
@@ -96,12 +96,12 @@
     <div layout="column" layout-fill="" layout-align="top">
         <div ng-if="mode == 'rule'">
             <md-switch class="md-primary" aria-label="Rules:" ng-model="$scope.selectedMode" ng-true-value="'all'" ng-false-value="'rule'">
-                {{selectedMode === "rule" ? "My Rules" : "All Rules"}}
+                <p translate> {{selectedMode === "rule" ? "My Rules" : "All Rules"}}</p>
             </md-switch>
         </div>
         <div ui-grid="qbGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
         <section>
-            <h2>Conditions:</h2>
+            <h2>{{'qry.Conditions' | translate}}:</h2>
             <div id="builder"></div>
             <div class="actions">
                 <md-button href="#/query/flights"
@@ -109,45 +109,45 @@
                            target="queryFlights"
                            ng-click="executeQuery($event)"
                            class="md-raised">
-                    <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-plane"></i> Query Flights
+                    <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-plane"></i> {{'qry.flights' | translate}}
                 </md-button>
                 <md-button href="#/query/passengers"
                            title="Launch Passengers Query Results in new window"
                            target="queryPassengers"
                            ng-click="executeQuery($event)"
                            class="md-raised">
-                    <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-user"></i>  Query Passengers
+                    <i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-user"></i>  {{'qry.passengers' | translate}}
                 </md-button>
                 <md-button ng-click="addNew()"
                            ng-disabled="ruleId === null"
                            class="md-raised pull-left">
-                    <i class="glyphicon glyphicon-plus"></i> Add New {{mode}}
+                    <i class="glyphicon glyphicon-plus"></i> {{'qry.add' | translate}} {{mode}}
                 </md-button>
                 <md-button ng-click="resetQueryBuilder()"
                            class="md-raised pull-left">
-                    <i class="glyphicon glyphicon-minus"></i> Clear Conditions
+                    <i class="glyphicon glyphicon-minus"></i> {{'qry.clear' | translate}}
                 </md-button>
                 <md-button ng-click="prompt.save('rule')"
                            ng-disabled="saving === true"
                            ng-class="{'md-primary': mode === 'rule'}"
                            class="md-raised pull-right">
-                    <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Save As Rule
+                    <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> {{'qry.saveas.rl' | translate}}
                 </md-button>
                 <md-button ng-click="copyRule()"
                            ng-disabled="mode === 'query' || ruleId === null || saving === true"
                            class="md-raised pull-right">
-                    <i class="glyphicon glyphicon-duplicate"></i> Copy {{mode}}
+                    <i class="glyphicon glyphicon-duplicate"></i> {{'qry.copy' | translate}} {{mode}}
                 </md-button>
                 <md-button ng-click="delete()"
                            ng-disabled="ruleId === null"
                            class="md-raised md-warn pull-right">
-                    <i class="glyphicon glyphicon-erase"></i> Delete
+                    <i class="glyphicon glyphicon-erase"></i> {{'qry.delete' | translate}}
                 </md-button>
                 <md-button ng-click="prompt.save('query')"
                            ng-disabled="saving === true"
                            ng-class="{'md-primary': mode === 'query'}"
                            class="md-raised pull-right" type="submit">
-                    <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i>  Save As Query
+                    <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-filter"></i>  {{'qry.save.qry' | translate}}
                 </md-button>
             </div>
         </section>
@@ -160,6 +160,6 @@
             <div class="double-bounce1"></div>
             <div class="double-bounce2"></div>
         </div>
-        <div class="please-wait">Please Wait...</div>
+        <div class="please-wait">{{'wl.wait' | translate}}...</div>
     </spinner>
 </div>
