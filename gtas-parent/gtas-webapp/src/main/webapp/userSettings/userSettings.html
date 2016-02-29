@@ -56,26 +56,26 @@ section {
                 <section layout="row" layout-padding layout-margin layout-align="space-around center" style="padding-bottom: 2px;">
 
                     <md-input-container style="padding-top: 0.5px; padding-bottom: 0.5px;">
-                        <label>First Name</label>
+                        <label>{{'user.firstname' | translate}}</label>
                         <input ng-model="userCredentials.firstName">
                     </md-input-container>
                     <md-input-container  style="padding-top: 0.5px; padding-bottom: 0.5px;">
-                        <label>Last Name</label>
+                        <label>{{'user.lastname' | translate}}</label>
                         <input ng-model="userCredentials.lastName">
                     </md-input-container>
                     <md-input-container style="padding-top: 0.5px; padding-bottom: 0.5px;">
-                        <label>New Password</label>
+                        <label>{{'user.newpassword' | translate}}</label>
                         <input ng-model="userCredentials.newPassword" type="password" name="newPassword" >
                     </md-input-container>
                     <md-input-container style="padding-top: 0.5px; padding-bottom: 0.5px;">
-                        <label>Confirm Password</label>
+                        <label>{{'user.confirmpassword' | translate}}</label>
                         <input ng-model="userCredentials.confirmPassword" type="password" name="confirmPassword" compare-to="userCredentials.newPassword" >
                         <div ng-messages="userSettings.confirmPassword.$error">
                             <div ng-messages-include="userSettings/messages.html"></div>
                         </div>
                     </md-input-container>
                     <div class="actions">
-                        <md-button class="md-raised md-primary" ng-click="updateCredentials()" ng-disabled="userSettings.$invalid || ! userCredentials.firstName || ! userCredentials.lastName">Update</md-button>
+                        <md-button class="md-raised md-primary" ng-click="updateCredentials()" ng-disabled="userSettings.$invalid || ! userCredentials.firstName || ! userCredentials.lastName">{{'btn.update' | translate}}</md-button>
                     </div>
                 </section>
                 </form>
