@@ -17,16 +17,17 @@
             }
 
             function getMessagesCount(startDate, endDate) {
-                var dfd = $q.defer();
-                dfd.resolve($http({
-                    method: 'get',
-                    url: '/gtas/getMessagesCount',
-                    params: {
-                        startDate: startDate,
-                        endDate: endDate
-                    }
-                }));
-                return dfd.promise;
+
+                    var request = $http({
+                        method: 'get',
+                        url: '/gtas/getMessagesCount',
+                        params: {
+                            startDate: startDate,
+                            endDate: endDate
+                        }
+                    });
+                    return (request.then(handleSuccess, handleError));
+
             }
 
             function handleSuccess(response) {
