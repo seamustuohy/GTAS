@@ -363,6 +363,7 @@
                     admin: [
                         {
                             name: 'active',
+                            displayName: 'admin.active', headerCellFilter: 'translate',
                             field: 'active',
                             cellFilter: 'userStatusFilter',
                             width: '10%',
@@ -372,19 +373,23 @@
                             }
                         }, {
                             name: 'userId',
+                            displayName: 'admin.userid', headerCellFilter: 'translate',
                             field: 'userId',
                             width: '15%',
                             cellTemplate: '<div><md-button class="md-primary md-button md-default-theme" ng-click="grid.appScope.lastSelectedUser(row.entity)" href="#/user/{{COL_FIELD}}">{{COL_FIELD}}</md-button></div>'
                         }, {
                             name: 'firstName',
+                            displayName: 'pass.firstname', headerCellFilter: 'translate',
                             field: 'firstName',
                             width: '15%'
                         }, {
                             name: 'lastName',
+                            displayName: 'pass.lastname', headerCellFilter: 'translate',
                             field: 'lastName',
                             width: '20%'
                         }, {
                             name: 'roles',
+                            displayName: 'user.roles', headerCellFilter: 'translate',
                             field: 'roles',
                             cellFilter: 'roleDescriptionFilter',
                             width: '40%',
@@ -481,7 +486,7 @@
                     rule: [
                         {
                             name: "hitCount",
-                            displayName: "Hits",
+                            displayName: 'Hits', headerCellFilter: 'translate',
                             field: "hitCount",
                             cellTemplate: '<md-button aria-label="title" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
@@ -489,31 +494,35 @@
                         },
                         {
                             name: "title",
-                            displayName: "Name",
+                            displayName: 'Name', headerCellFilter: 'translate',
                             field: "title",
                             cellTemplate: '<md-button aria-label="title" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }, {
                             name: "description",
+                            displayName: 'Description', headerCellFilter: 'translate',
                             field: "description",
                             cellTemplate: '<md-button aria-label="description" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }, {
                             name: "startDate",
+                            displayName: 'flight.startdate', headerCellFilter: 'translate',
                             field: "startDate",
                             cellTemplate: '<md-button aria-label="start date" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }, {
                             name: "endDate",
+                            displayName: 'flight.enddate', headerCellFilter: 'translate',
                             field: "endDate",
                             cellTemplate: '<md-button aria-label="end date" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
                             enableColumnMenu: false
                         }, {
                             name: "enabled",
+                            displayName: 'user.status.enabled', headerCellFilter: 'translate',
                             field: "enabled",
                             cellTemplate: '<md-button aria-label="enabled" ng-click="grid.api.selection.selectRow(row.entity)">{{COL_FIELD}}</md-button>',
                             enableCellEdit: false,
@@ -521,7 +530,7 @@
                         },
                         {
                             name: "modifiedOn",
-                            displayName: "Modified On | By",
+                            displayName: 'qry.modified', headerCellFilter: 'translate',
                             field: "modifiedOn",
                             cellTemplate: '<md-button aria-label="modified" ng-click="grid.api.selection.selectRow(row.entity)">{{row.entity.modifiedOn}} | {{row.entity.modifiedBy}}</md-button>',
                             enableCellEdit: false,

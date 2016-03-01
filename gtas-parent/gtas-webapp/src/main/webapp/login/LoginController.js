@@ -5,7 +5,7 @@
         function($state, $scope, $rootScope, $q, $stateParams, userService, $mdToast, AuthService,
                  Session, sessionFactory, APP_CONSTANTS, $sessionStorage, $location, $interval, $window,$translate) {
             //Set locale here to change language setting for web site
-			$scope.locale = "en";
+			$scope.locale = "ar";
             $scope.currentUser = {};
             $scope.credentials = {
                 j_username: '',

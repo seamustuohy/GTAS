@@ -96,7 +96,7 @@
     <div layout="column" layout-fill="" layout-align="top">
         <div ng-if="mode == 'rule'">
             <md-switch class="md-primary" aria-label="Rules:" ng-model="$scope.selectedMode" ng-true-value="'all'" ng-false-value="'rule'">
-                <p translate> {{selectedMode === "rule" ? "My Rules" : "All Rules"}}</p>
+                <p translate> {{selectedMode === "rule" ? "qry.myrules" : "qry.allrules"}}</p>
             </md-switch>
         </div>
         <div ui-grid="qbGrid" ui-grid-pagination ui-grid-selection ui-grid-exporter class="grid" external-scopes="$scope"></div>
