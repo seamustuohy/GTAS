@@ -313,6 +313,7 @@
                     audit: [
                         {
                             name: 'action',
+                            displayName: 'admin.action', headerCellFilter: 'translate',
                             field: 'actionType',
                             width: '10%',
                             sort: {
@@ -321,18 +322,22 @@
                             }
                         }, {
                             name: 'user',
+                            displayName: 'admin.user', headerCellFilter: 'translate',
                             field: 'user',
                             width: '15%'
                         }, {
                             name: 'status',
+                            displayName: 'admin.status', headerCellFilter: 'translate',
                             field: 'status',
                             width: '10%'
                         }, {
                             name: 'message',
+                            displayName: 'admin.message', headerCellFilter: 'translate',
                             field: 'message',
                             width: '20%'
                         }, {
                             name: 'timestamp',
+                            displayName: 'admin.timestamp', headerCellFilter: 'translate',
                             field: 'timestamp',
                             width: '45%'
                         }
@@ -341,6 +346,7 @@
                         {
                             name: 'Error ID',
                             field: 'errorId',
+                            displayName: 'admin.errorid', headerCellFilter: 'translate',
                             width: '15%',
                             sort: {
                                 direction: uiGridConstants.DESC,
@@ -348,14 +354,17 @@
                             }
                         }, {
                             name: 'Error Code',
+                            displayName: 'admin.errorcode', headerCellFilter: 'translate',
                             field: 'errorCode',
                             width: '15%'
                         }, {
                             name: 'DateTime',
+                            displayName: 'admin.DateTime', headerCellFilter: 'translate',
                             field: 'errorTimestamp',
                             width: '15%'
                         }, {
                             name: 'Error Description',
+                            displayName: 'admin.errordescription', headerCellFilter: 'translate',
                             field: 'errorDescription',
                             width: '55%'
                         }
