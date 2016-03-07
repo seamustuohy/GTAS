@@ -60,15 +60,10 @@ public interface TargetingService {
 	 * @param updateProcesssedMessageStatus
 	 *            it true, then the Targeting Service will update the status of
 	 *            each processed message.
-	 * @param statusToLoad
-	 *            status of the APIS/PNR messages to load.
-	 * @param statusAfterProcesssing
-	 *            status to update after processing.
 	 * @return the result of the invocation.
 	 */
-	RuleExecutionContext analyzeLoadedMessages(MessageStatus statusToLoad,
-			MessageStatus statusAfterProcesssing,
-			boolean updateProcesssedMessageStatus);
+	RuleExecutionContext analyzeLoadedMessages(
+			final boolean updateProcesssedMessageStatus);
 
 	/**
 	 * Invokes the Rule Engine on an arbitrary list of objects using the
@@ -127,8 +122,8 @@ public interface TargetingService {
 	public void updatePnr(Pnr message, MessageStatus messageStatus);
 
 	/**
-	 * Remove the hits on the hits_summary and hit_detail tables since 
-	 * the same messages might be processed by different criteria.
+	 * Remove the hits on the hits_summary and hit_detail tables since the same
+	 * messages might be processed by different criteria.
 	 */
 	public void preProcessing();
 }

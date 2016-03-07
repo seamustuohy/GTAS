@@ -1,7 +1,6 @@
 package gov.gtas.svc.perf.test;
 
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.model.MessageStatus;
 import gov.gtas.svc.TargetingService;
 import gov.gtas.svc.UdrService;
 import gov.gtas.svc.WatchlistService;
@@ -21,18 +20,18 @@ public class TargetingTestFactory implements PerformanceTestFactory,
 	private TargetingService targetingService;
 	private WatchlistService watchlistService;
 	private UdrService udrService;
-	
+
 	private int iterationCount = 10;
-	
-	private int udrCount =  100;
+
+	private int udrCount = 100;
 	private int passengerWlCount = 300;
 	private int documentWlCount = 40;
-	
-    private boolean genData;    
-    
+
+	private boolean genData;
+
 	@Override
 	public List<String> runTest() {
-		if(genData){
+		if (genData) {
 			genPerformanceData();
 			watchlistService.activateAllWatchlists();
 			System.out
@@ -48,9 +47,8 @@ public class TargetingTestFactory implements PerformanceTestFactory,
 		long totalStart = System.currentTimeMillis();
 		for (int i = 0; i < iterationCount; ++i) {
 			long start = System.currentTimeMillis();
-			targetingService.analyzeLoadedMessages(
-					MessageStatus.LOADED, MessageStatus.LOADED, false);
-			//Collection<TargetSummaryVo> res = ctx.getTargetingResult();
+			targetingService.analyzeLoadedMessages(false);
+			// Collection<TargetSummaryVo> res = ctx.getTargetingResult();
 			long elapsed = System.currentTimeMillis() - start;
 			if (elapsed > max)
 				max = elapsed;
@@ -58,10 +56,9 @@ public class TargetingTestFactory implements PerformanceTestFactory,
 				min = elapsed;
 		}
 		long totalElapsed = System.currentTimeMillis() - totalStart;
-		ret.add(String.format(
-				"Min Time = %d, Max Time = %d", min, max));
-		ret.add("Total Time = " + totalElapsed
-				+ ", Average Time = " + (totalElapsed / iterationCount));
+		ret.add(String.format("Min Time = %d, Max Time = %d", min, max));
+		ret.add("Total Time = " + totalElapsed + ", Average Time = "
+				+ (totalElapsed / iterationCount));
 		return ret;
 	}
 
@@ -71,8 +68,7 @@ public class TargetingTestFactory implements PerformanceTestFactory,
 				.getBean("targetingServiceImpl");
 		watchlistService = (WatchlistService) ctx
 				.getBean("watchlistServiceImpl");
-		udrService = (UdrService) ctx
-				.getBean("udrServiceImpl");
+		udrService = (UdrService) ctx.getBean("udrServiceImpl");
 		return this;
 	}
 
@@ -97,35 +93,40 @@ public class TargetingTestFactory implements PerformanceTestFactory,
 	}
 
 	/**
-	 * @param iterationCount the iterationCount to set
+	 * @param iterationCount
+	 *            the iterationCount to set
 	 */
 	public void setIterationCount(int iterationCount) {
 		this.iterationCount = iterationCount;
 	}
 
 	/**
-	 * @param genData the genData to set
+	 * @param genData
+	 *            the genData to set
 	 */
 	public void setGenData(boolean genData) {
 		this.genData = genData;
 	}
 
 	/**
-	 * @param udrCount the udrCount to set
+	 * @param udrCount
+	 *            the udrCount to set
 	 */
 	public void setUdrCount(int udrCount) {
 		this.udrCount = udrCount;
 	}
 
 	/**
-	 * @param passengerWlCount the passengerWlCount to set
+	 * @param passengerWlCount
+	 *            the passengerWlCount to set
 	 */
 	public void setPassengerWlCount(int passengerWlCount) {
 		this.passengerWlCount = passengerWlCount;
 	}
 
 	/**
-	 * @param documentWlCount the documentWlCount to set
+	 * @param documentWlCount
+	 *            the documentWlCount to set
 	 */
 	public void setDocumentWlCount(int documentWlCount) {
 		this.documentWlCount = documentWlCount;

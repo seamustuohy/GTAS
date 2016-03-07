@@ -285,11 +285,10 @@ public class TargetingServiceImpl implements TargetingService {
 	@Override
 	@Transactional
 	public RuleExecutionContext analyzeLoadedMessages(
-			MessageStatus statusToLoad, MessageStatus statusAfterProcesssing,
 			final boolean updateProcesssedMessageStat) {
 		logger.info("Entering analyzeLoadedMessages()");
-		Iterator<Message> source = messageRepository.findByStatus(statusToLoad)
-				.iterator();
+		Iterator<Message> source = messageRepository.findByStatus(
+				MessageStatus.LOADED).iterator();
 		List<Message> target = new ArrayList<Message>();
 		source.forEachRemaining(target::add);
 
@@ -298,7 +297,7 @@ public class TargetingServiceImpl implements TargetingService {
 		logger.info("updating messages status from loaded to analyzed.");
 		if (updateProcesssedMessageStat) {
 			for (Message message : target) {
-				message.setStatus(statusAfterProcesssing);
+				message.setStatus(MessageStatus.ANALYZED);
 			}
 		}
 		logger.info("Exiting analyzeLoadedMessages()");
@@ -398,9 +397,8 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Transactional
 	public Set<Long> runningRuleEngine() {
-		RuleExecutionContext ruleRunningResult = analyzeLoadedMessages(
-				MessageStatus.LOADED, MessageStatus.ANALYZED, true);
 		logger.info("Entering runningRuleEngine().");
+		RuleExecutionContext ruleRunningResult = analyzeLoadedMessages(true);
 		RuleExecutionStatistics ruleExeStatus = ruleRunningResult
 				.getRuleExecutionStatistics();
 		if (logger.isInfoEnabled()) {
