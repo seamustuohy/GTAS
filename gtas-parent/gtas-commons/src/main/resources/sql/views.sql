@@ -95,7 +95,7 @@ DROP TABLE IF EXISTS YTD_RULES;
         udr.edited_by as 'LastUpdatedBy',
         DATE_FORMAT(udr.edit_dt,'%d %b %Y')  as 'LastEditedOn'
 
-        FROM UDR_RULE as udr, rule_meta rm,
+        FROM udr_rule as udr, rule_meta rm,
         YTD_RULE_HIT_COUNTS as r
         WHERE udr.id = r.ruleref AND rm.ID = r.ruleid;
 
@@ -104,7 +104,7 @@ DROP TABLE IF EXISTS YTD_AIRPORT_STATS;
 
     CREATE VIEW YTD_AIRPORT_STATS AS
     SELECT a.id as 'ID', a.iata 'AIRPORT', COUNT(*) 'FLIGHTS', SUM(f.rule_hit_count) 'RULEHITS', SUM(f.list_hit_count) 'WATCHLISTHITS'
-        FROM Flight f, Airport a
+        FROM flight f, airport a
         WHERE a.country = 'USA'
         AND (TRIM(a.iata) = TRIM( f.origin )
         OR TRIM(a.iata) = TRIM(f.destination))
