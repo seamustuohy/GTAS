@@ -117,6 +117,12 @@ var app;
                         resolve: {
                             sampleData: function(){
                                 return true;
+                            },
+                            ytdRuleHits: function(dashboardService){
+                                return dashboardService.getYtdRulesCount();
+                            },
+                            ytdAirportStats: function (dashboardService) {
+                                return dashboardService.getYtdAirportStats();
                             }
                         }
 
@@ -135,6 +141,12 @@ var app;
                     resolve: {
                         sampleData: function(){
                             return false;
+                        },
+                        ytdRuleHits: function(dashboardService){
+                            return dashboardService.getYtdRulesCount();
+                        },
+                        ytdAirportStats: function (dashboardService) {
+                            return dashboardService.getYtdAirportStats();
                         }
                     }
                 })

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertNotNull;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.ApisStatistics;
 import gov.gtas.model.PnrStatistics;
+import gov.gtas.model.YTDAirportStatistics;
+import gov.gtas.model.YTDRules;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +13,9 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = CommonServicesConfig.class)
@@ -20,7 +25,22 @@ public class DashboardCountsIT {
 	@Autowired
 	MessageStatisticsService service;
 
+	@Autowired
+	YTDStatisticsService ytdService;
+
+
 	@Test
+	public void testYTDStatistics() {
+		List<YTDRules> ruleList = new ArrayList<YTDRules>();
+		List<YTDAirportStatistics> statsList = new ArrayList<YTDAirportStatistics>();
+
+		ruleList = ytdService.getYTDRules();
+		statsList = ytdService.getYTDAirportStats();
+
+		assertNotNull(statsList);
+	}
+
+		//@Test
 	public void testPnrStatistics() {
 		System.out.println("##################### begin testPnrStatistics#############################");
 		PnrStatistics pntCounts = service.getPnrStatistics();
@@ -31,7 +51,7 @@ public class DashboardCountsIT {
 		System.out.println("###################### end testPnrStatistics############################");
 	}
 	
-	@Test
+	//@Test
 	public void testApisStatistics() {
 		System.out.println("##################### begin testApisStatistics#############################");
 		ApisStatistics apisCounts = service.getApisStatistics();

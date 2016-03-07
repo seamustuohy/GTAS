@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     app.controller('DashboardController',
-        function($state, $scope, $rootScope, $q, $stateParams, dashboardService, $mdToast, sampleData) { //
+        function($state, $scope, $rootScope, $q, $stateParams, dashboardService, $mdToast, sampleData, ytdRuleHits, ytdAirportStats) {
 
             $scope.sampleData = sampleData;
             $scope.switchDashboard= function(input){
@@ -15,7 +15,8 @@
             $scope.numberOfPassengers = 0;
             $scope.numberOfApisMessages = 0;
             $scope.numberOfPNRMessages = 0;
-
+            $scope.rulesList = ytdRuleHits;
+            $scope.airportStats = ytdAirportStats;
             $scope.credentials = {
                 beforeDate: '',
                 startDate: '',

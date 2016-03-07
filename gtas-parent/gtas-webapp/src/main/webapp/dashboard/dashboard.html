@@ -215,46 +215,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>N-SSA-m8992</td>
-                                <td>556</td>
-                                <td>12/1/1990</td>
-                                <td>astark</td>
-                                <td>12/1/1990</td>
-                                <td>bjones</td>
-                            </tr>
-                            <tr>
-                                <td>N-SSA-c4592</td>
-                                <td>767</td>
-                                <td>12/1/1990</td>
-                                <td>astark</td>
-                                <td>12/1/1990</td>
-                                <td>bjones</td>
-                            </tr>
-
-                            <tr>
-                                <td>N-SSA-330012</td>
-                                <td>323</td>
-                                <td>12/1/1990</td>
-                                <td>astark</td>
-                                <td>12/1/1990</td>
-                                <td>dsmith</td>
-                            </tr>
-                            <tr>
-                                <td>N-SSA-pcfdgdf</td>
-                                <td>988</td>
-                                <td>12/1/1990</td>
-                                <td>astark</td>
-                                <td>12/1/1990</td>
-                                <td>dsmith</td>
-                            </tr>
-                            <tr>
-                                <td>N-SSA-34ssds2</td>
-                                <td>467</td>
-                                <td>12/1/1990</td>
-                                <td>astark</td>
-                                <td>12/1/1990</td>
-                                <td>astark</td>
+                            <tr ng-repeat="rec in rulesList">
+                                <td>{{rec.ruleName}}</td>
+                                <td>{{rec.ruleHits}}</td>
+                                <td>{{rec.createdOn}}</td>
+                                <td>{{rec.createdBy}}</td>
+                                <td>{{rec.lastEditedOn}}</td>
+                                <td>{{rec.lastUpdatedBy}}</td>
                             </tr>
 
                             </tbody>
@@ -292,41 +259,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>ORD</td>
-                                <td>440,210</td>
-                                <td>52256</td>
-                                <td>5560</td>
 
-                            </tr>
-                            <tr>
-                                <td>BOS</td>
-                                <td>323,210</td>
-                                <td>52256</td>
-                                <td>5560</td>
-
-                            </tr>
-                            <tr>
-                                <td>IAD</td>
-                                <td>140,210</td>
-                                <td>5256</td>
-                                <td>44560</td>
-
-                            </tr>
-                            <tr>
-                                <td>IAH</td>
-                                <td>240,210</td>
-                                <td>12256</td>
-                                <td>52560</td>
-
-                            </tr>
-
-                            <tr>
-                                <td>LAX</td>
-                                <td>440,210</td>
-                                <td>52256</td>
-                                <td>5560</td>
-
+                            <tr ng-repeat="rec in airportStats">
+                                <td>{{rec.airport}}</td>
+                                <td>{{rec.flights}}</td>
+                                <td>{{rec.watchListHits}}</td>
+                                <td>{{rec.ruleHits}}</td>
                             </tr>
 
                             </tbody>

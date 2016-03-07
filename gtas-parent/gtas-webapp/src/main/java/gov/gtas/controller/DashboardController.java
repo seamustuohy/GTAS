@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +32,10 @@ public class DashboardController {
 
     @Autowired
     private MessageStatisticsService messageStatsService;
+
+
+    @Autowired
+    private YTDStatisticsService ytdStatsService;
 
     @Autowired
     private PnrService pnrService;
@@ -143,6 +148,93 @@ public class DashboardController {
         }
 
         return _apisAndPnrCount;
+    }
+
+//    //Inner Class for YTD Rules
+//    class YTDRules implements Serializable {
+//        String ruleName;
+//        Integer hits;
+//        Date createdOn;
+//        String createdBy;
+//        Date lastModifiedOn;
+//        String lastModifiedBy;
+//
+//        public YTDRules(String ruleName, Integer hits, Date createdOn, String createdBy, Date lastModifiedOn, String lastModifiedBy) {
+//            this.ruleName = ruleName;
+//            this.hits = hits;
+//            this.createdOn = createdOn;
+//            this.createdBy = createdBy;
+//            this.lastModifiedOn = lastModifiedOn;
+//            this.lastModifiedBy = lastModifiedBy;
+//        }
+//
+//        public String getRuleName() {
+//            return ruleName;
+//        }
+//
+//        public void setRuleName(String ruleName) {
+//            this.ruleName = ruleName;
+//        }
+//
+//        public Integer getHits() {
+//            return hits;
+//        }
+//
+//        public void setHits(Integer hits) {
+//            this.hits = hits;
+//        }
+//
+//        public Date getCreatedOn() {
+//            return createdOn;
+//        }
+//
+//        public void setCreatedOn(Date createdOn) {
+//            this.createdOn = createdOn;
+//        }
+//
+//        public String getCreatedBy() {
+//            return createdBy;
+//        }
+//
+//        public void setCreatedBy(String createdBy) {
+//            this.createdBy = createdBy;
+//        }
+//
+//        public Date getLastModifiedOn() {
+//            return lastModifiedOn;
+//        }
+//
+//        public void setLastModifiedOn(Date lastModifiedOn) {
+//            this.lastModifiedOn = lastModifiedOn;
+//        }
+//
+//        public String getLastModifiedBy() {
+//            return lastModifiedBy;
+//        }
+//
+//        public void setLastModifiedBy(String lastModifiedBy) {
+//            this.lastModifiedBy = lastModifiedBy;
+//        }
+//    }
+//
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getYtdRulesCount")
+    public List<YTDRules> getYtdRulesCount(){
+      List<YTDRules> ruleList = new ArrayList<YTDRules>();
+
+        ruleList = ytdStatsService.getYTDRules();
+
+        return ruleList;
+    }
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getYtdAirportStats")
+    public List<YTDAirportStatistics> getYtdAirportStats(){
+        List<YTDAirportStatistics> ruleList = new ArrayList<YTDAirportStatistics>();
+
+        ruleList = ytdStatsService.getYTDAirportStats();
+
+        return ruleList;
     }
 
 

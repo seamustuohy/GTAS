@@ -30,6 +30,24 @@
 
             }
 
+            function getYtdRulesCount(){
+
+                var request = $http({
+                    method: 'get',
+                    url: '/gtas/getYtdRulesCount'
+                });
+                return (request.then(handleSuccess, handleError));
+            }
+
+            function getYtdAirportStats(){
+
+                var request = $http({
+                    method: 'get',
+                    url: '/gtas/getYtdAirportStats'
+                });
+                return (request.then(handleSuccess, handleError));
+            }
+
             function handleSuccess(response) {
                 return (response.data);
             }
@@ -44,7 +62,9 @@
             // Return public API.
             return ({
                 getFlightAndHitsCount: getFlightAndHitsCount,
-                getMessagesCount: getMessagesCount
+                getMessagesCount: getMessagesCount,
+                getYtdAirportStats: getYtdAirportStats,
+                getYtdRulesCount: getYtdRulesCount
 
             });
         });
