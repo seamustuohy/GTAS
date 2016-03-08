@@ -40,9 +40,10 @@ public class UploadController {
         
         writeFile(file);
 
-        String queueName = lookupRepo.getAppConfigOption(AppConfigurationRepository.QUEUE);
-        QueueService sqs = new QueueService(queueName);
-        sqs.sendMessage(new String(file.getBytes()));
+        // disable this for now
+//        String queueName = lookupRepo.getAppConfigOption(AppConfigurationRepository.QUEUE);
+//        QueueService sqs = new QueueService(queueName);
+//        sqs.sendMessage(new String(file.getBytes()));
         
         logger.info(String.format("received %s from %s", file.getOriginalFilename(), username));
     }

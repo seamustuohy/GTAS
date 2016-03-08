@@ -36,7 +36,8 @@ public class FileReader {
 	@Autowired
 	ErrorPersistenceService errorService;
 
-	@Scheduled(initialDelay=6000,fixedRate=180000) 
+	// disable for now
+//	@Scheduled(initialDelay=6000,fixedRate=180000) 
     public void CheckForNewFile() {
     	logger.info("*************************************************************************************");
     	logger.info("************************* FILE READING JOB BEGIN AT ************************"+new Date());
