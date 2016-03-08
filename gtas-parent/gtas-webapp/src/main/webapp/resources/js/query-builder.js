@@ -1097,7 +1097,7 @@
                     entity: model.entity,
                     'type': model.filter.type,
                     input: model.filter.input,
-                    operator: model.operator.type,
+                    operator: $('#'+model.id).find('.rule-operator-container').find('select').val(),
                     value: value
                 };
 
@@ -1650,10 +1650,21 @@
             return null;
         }
 
-        for (var i=0, l=this.filters.length; i<l; i++) {
-            if (this.filters[i].id == id) {
-                return this.filters[i];
-            }
+        //Custom fix to check against and load from the full filter list rather than the filters for "Last entity loaded"
+        var totalFilterList = this.entities[id.split('.')[0]].columns;
+        
+        if(totalFilterList.length > 0){
+    	    for (var i=0, l=totalFilterList.length; i<l; i++) {
+    	        if (totalFilterList[i].id == id) {
+    	            return totalFilterList[i];
+    	        }
+    	    }
+        } else{  
+    	    for (var i=0, l=this.filters.length; i<l; i++) {
+    	        if (this.filters[i].id == id) {
+    	            return this.filters[i];
+    	        }
+    	    }
         }
 
         error('Undefined filter "{0}"', id);

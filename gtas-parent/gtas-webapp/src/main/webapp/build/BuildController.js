@@ -55,7 +55,11 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     $scope.copyRule = function () {
     	$scope.isCopy = true;
-    	$scope.prompt.save('rule');
+    	if($scope.mode === 'rule'){
+    		$scope.prompt.save('rule');
+    	} else if($scope.mode === 'query'){
+    		$scope.prompt.save('query');
+    	}
         /*spinnerService.show('html5spinner');
         var originalObj = $scope[$scope.mode], ruleId = $scope.ruleId;
         console.log(originalObj);
@@ -214,6 +218,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 $scope.gridApi.selection.clearSelectedRows();
                 //$scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
                 $scope.saving = false;
+                $scope.addNew();
                 spinnerService.hide('html5spinner');
             }, 0, 1);
         });

@@ -305,8 +305,8 @@
                         useExternalFiltering: true,
                         expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>'
                     },
-                    query: defaultOptions,
-                    rule: defaultOptions,
+                    query: $.extend({},defaultOptions,{enableVerticalScrollbar:2}),
+                    rule: $.extend({},defaultOptions,{enableVerticalScrollbar:2}),
                     watchlist: defaultOptions
                 },
                 columns = {

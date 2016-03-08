@@ -1,16 +1,17 @@
-
 (function () {
     'use strict';
     app.controller('LoginController',
         function($state, $scope, $rootScope, $q, $stateParams, userService, $mdToast, AuthService,
                  Session, sessionFactory, APP_CONSTANTS, $sessionStorage, $location, $interval, $window) {
-
             $scope.currentUser = {};
             $scope.credentials = {
                 j_username: '',
                 j_password: ''
             };
-
+            
+            $('#user_login').prop('disabled',false);
+            $('#user_pass').prop('disabled',false);
+            
             $scope.login = function (credentials) {
                 
                 AuthService.login(credentials).then(function (user){
@@ -57,6 +58,4 @@
             });
 
         });
-
     }());
-

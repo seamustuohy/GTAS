@@ -134,7 +134,7 @@
                     <i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Save As Rule
                 </md-button>
                 <md-button ng-click="copyRule()"
-                           ng-disabled="mode === 'query' || ruleId === null || saving === true"
+                           ng-disabled="ruleId === null || saving === true"
                            class="md-raised pull-right">
                     <i class="glyphicon glyphicon-duplicate"></i> Copy {{mode}}
                 </md-button>

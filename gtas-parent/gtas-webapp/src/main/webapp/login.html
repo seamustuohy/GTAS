@@ -28,10 +28,10 @@
 <div id="main" class="container" style="padding-top:100px"> 
 	<form name="loginform" id="loginform" ng-controller="LoginController" ng-submit="login(credentials)">
 	<p class="login-username"> 
-		<label for="user_login">Username</label> <input type="text" class="input" id="user_login" placeholder="Username" ng-model="credentials.j_username" autocomplete="off" required name="j_username" id="j_username"/> 
+		<label for="user_login">Username</label> <input type="text" class="input" id="user_login" placeholder="Username" ng-model="credentials.j_username" autocomplete="off" required name="j_username" id="j_username" disabled/> 
 	</p>
 	<p class="login-password"> 
-		<label for="user_pass">Password</label> <input type="password" class="input" id="user_pass" placeholder="Password" ng-model="credentials.j_password" id="Password" name="password" required"/>
+		<label for="user_pass">Password</label> <input type="password" class="input" id="user_pass" placeholder="Password" ng-model="credentials.j_password" id="Password" name="password" required disabled/>
 	</p>
 	<p class="login-submit"> 
 		<input type="submit" name="wp-submit" id="wp-submit" class="button-primary" value="Go"/> 
@@ -39,7 +39,6 @@
 	</form> 
  </div>
 </div>
-
 
 <script src="resources/bower_components/angular/angular.js"></script>
 <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
