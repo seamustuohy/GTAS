@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.apache.commons.collections.CollectionUtils;
 
-import gov.gtas.parsers.edifact.EdifactLexer;
 import gov.gtas.parsers.edifact.EdifactParser;
 import gov.gtas.parsers.exception.ParseException;
 import gov.gtas.parsers.paxlst.segment.unedifact.ATT;
@@ -42,8 +41,8 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
         this.parsedMessage = new ApisMessageVo();
     }
     
-    protected String getPayloadText(String message) throws ParseException {
-        return EdifactLexer.getMessagePayload(message, "BGM", "UNT");
+    protected String getPayloadText() throws ParseException {
+        return lexer.getMessagePayload("BGM", "UNT");
     }
 
     @Override

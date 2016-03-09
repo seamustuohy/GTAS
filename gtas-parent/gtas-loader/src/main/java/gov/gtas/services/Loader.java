@@ -69,6 +69,7 @@ public class Loader {
 			msgDao.save(m);
 			return null;
 		}
+		
 		int successMsgCount = 0;
 		int failedMsgCount = 0;
 		svc.setFilePath(filePath);

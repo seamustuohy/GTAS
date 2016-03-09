@@ -17,16 +17,35 @@
             }
 
             function getMessagesCount(startDate, endDate) {
-                var dfd = $q.defer();
-                dfd.resolve($http({
+
+                    var request = $http({
+                        method: 'get',
+                        url: '/gtas/getMessagesCount',
+                        params: {
+                            startDate: startDate,
+                            endDate: endDate
+                        }
+                    });
+                    return (request.then(handleSuccess, handleError));
+
+            }
+
+            function getYtdRulesCount(){
+
+                var request = $http({
                     method: 'get',
-                    url: '/gtas/getMessagesCount',
-                    params: {
-                        startDate: startDate,
-                        endDate: endDate
-                    }
-                }));
-                return dfd.promise;
+                    url: '/gtas/getYtdRulesCount'
+                });
+                return (request.then(handleSuccess, handleError));
+            }
+
+            function getYtdAirportStats(){
+
+                var request = $http({
+                    method: 'get',
+                    url: '/gtas/getYtdAirportStats'
+                });
+                return (request.then(handleSuccess, handleError));
             }
 
             function handleSuccess(response) {
@@ -43,7 +62,9 @@
             // Return public API.
             return ({
                 getFlightAndHitsCount: getFlightAndHitsCount,
-                getMessagesCount: getMessagesCount
+                getMessagesCount: getMessagesCount,
+                getYtdAirportStats: getYtdAirportStats,
+                getYtdRulesCount: getYtdRulesCount
 
             });
         });

@@ -48,4 +48,9 @@ public interface HitsSummaryRepository extends
 	@Modifying
 	@Transactional
 	public void deleteDBData(@Param("id") Long id);
+
+	@Query("SELECT enabled FROM RuleMeta WHERE id=(SELECT hd.ruleId  FROM HitDetail hd WHERE hd.parent.flight.id=:flightId AND hd.parent.passenger.id=:passengerId)")
+	public String enableFlagByUndeletedAndEnabledRule(
+			@Param("flightId") Long flightId,
+			@Param("passengerId") Long passengerId);
 }

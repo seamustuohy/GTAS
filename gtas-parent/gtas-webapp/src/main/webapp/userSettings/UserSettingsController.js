@@ -128,7 +128,7 @@ app.controller('UserSettingsController', function ($scope, $state, $interval,$ht
     };
     
     $scope.querySearch = function(query){
-        var results = query && query.length ? self.allAirports.filter(createFilterFor(query)) : [];
+        var results = query && (query.length) && (query.length >= 3) ? self.allAirports.filter(createFilterFor(query)) : [];
         return results;
     };
     
@@ -166,7 +166,8 @@ app.controller('UserSettingsController', function ($scope, $state, $interval,$ht
         .then(function (allAirports) {
             airports = allAirports.data;
             self.allAirports = allAirports.data.map(function (contact) {
-                contact.lowerCasedName = contact.name.toLowerCase();
+                //contact.lowerCasedName = contact.name.toLowerCase();
+                contact.lowerCasedName = contact.id.toLowerCase();
                 return contact;
             });
             $scope.filterSelected = true;

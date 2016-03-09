@@ -56,7 +56,7 @@ public interface UdrRuleRepository extends CrudRepository<UdrRule, Long>,
 			@Param("titlePrefix") String title,
 			@Param("authorUserId") String authorUserId);
 
-	@Query("SELECT udr FROM UdrRule udr where udr.deleted = :deleted AND udr.metaData.enabled = :enabled")
+	@Query("SELECT udr FROM UdrRule udr where udr.deleted = :deleted AND udr.metaData.enabled = :enabled AND (udr.metaData.endDt is null OR udr.metaData.endDt >= CURRENT_DATE)")
 	public List<UdrRule> findByDeletedAndEnabled(
 			@Param("deleted") YesNoEnum deleted,
 			@Param("enabled") YesNoEnum enabled);

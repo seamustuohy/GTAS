@@ -28,13 +28,11 @@
       <artifactId>gtas-query-builder</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
-    
     <dependency>
-                <groupId>com.allanditzel</groupId>
-                <artifactId>spring-security-csrf-token-filter</artifactId>
-                <version>${spring-csrf-token-filter}</version>
-            </dependency>
-    
+      <groupId>com.allanditzel</groupId>
+      <artifactId>spring-security-csrf-token-filter</artifactId>
+      <version>${spring-csrf-token-filter}</version>
+    </dependency>
     <dependency>
       <groupId>gov.gtas</groupId>
       <artifactId>gtas-rulesvc</artifactId>
@@ -69,8 +67,8 @@
     </dependency>
     <dependency>
       <groupId>commons-fileupload</groupId>
-      <artifactId>commons-fileupload</artifactId>    
-    </dependency>    
+      <artifactId>commons-fileupload</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
@@ -159,7 +157,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-<!--       <version>${mockito.version}</version> -->
+      <!-- <version>${mockito.version}</version> -->
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -181,17 +179,21 @@
       <groupId>org.apache.tiles</groupId>
       <artifactId>tiles-jsp</artifactId>
     </dependency>
-	<dependency>
-	     <groupId>com.jayway.jsonpath</groupId>
-	    <artifactId>json-path</artifactId>
-	    <scope>test</scope>
-	 </dependency>
-	 <dependency>
-	    <groupId>org.springframework.security</groupId>
-	    <artifactId>spring-security-test</artifactId>
-	    <version>${spring-security-test.version}</version>
-	    <scope>test</scope>
-	 </dependency>
+    <dependency>
+      <groupId>com.jayway.jsonpath</groupId>
+      <artifactId>json-path</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <version>${spring-security-test.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-sqs</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <finalName>gtas</finalName>
@@ -209,7 +211,7 @@
           <downloadSources>true</downloadSources>
           <downloadJavadocs>true</downloadJavadocs>
         </configuration>
-      </plugin>      
+      </plugin>
     </plugins>
   </build>
 </project>

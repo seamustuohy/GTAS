@@ -14,7 +14,7 @@
         }
         /* Search for airports. */
         function querySearch(query) {
-            var results = query && query.length ? self.allAirports.filter(createFilterFor(query)) : [];
+            var results = query && (query.length) && (query.length >= 3) ? self.allAirports.filter(createFilterFor(query)) : [];
             return results;
         }
 
@@ -101,7 +101,8 @@
             .then(function (allAirports) {
                 airports = allAirports.data;
                 self.allAirports = allAirports.data.map(function (contact) {
-                    contact.lowerCasedName = contact.name.toLowerCase();
+                    //contact.lowerCasedName = contact.name.toLowerCase();
+                    contact.lowerCasedName = contact.id.toLowerCase();
                     return contact;
                 });
                 self.filterSelected = true;
@@ -211,38 +212,38 @@
                 {
                     field: 'passengerType',
                     name: 'passengerType',
-                    displayName: 'Type',
+                    displayName:'doc.type', headerCellFilter: 'translate',
                     width: 50},
                 {
                     field: 'lastName',
                     name: 'lastName',
-                    displayName: 'Last Name',
+                    displayName:'pass.lastname', headerCellFilter: 'translate',
                     cellTemplate: '<md-button aria-label="type" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail.{{row.entity.id}}.{{row.entity.flightId}}" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
                 },
                 {
                     field: 'firstName',
                     name: 'firstName',
-                    displayName: 'First Name'},
+                    displayName:'pass.firstname', headerCellFilter: 'translate'},
                 {
                     field: 'middleName',
                     name: 'middleName',
-                    displayName: 'Middle'
+                    displayName:'pass.middlename', headerCellFilter: 'translate'
                 },
                 {
                     field: 'flightNumber',
                     name: 'flightNumber',
-                    displayName: 'Flight',
+                    displayName:'pass.flight', headerCellFilter: 'translate',
                     cellTemplate: '<div>{{row.entity.carrier}}{{COL_FIELD}}</div>'
                 },
                 {
                     field: 'flightOrigin',
                     name: 'flightOrigin',
-                    displayName: 'Origin'
+                    displayName:'pass.origin', headerCellFilter: 'translate'
                 },
                 {
                     field: 'flightDestination',
                     name: 'flightDestination',
-                    displayName: 'Destination'
+                    displayName:'pass.destination', headerCellFilter: 'translate'
                 },
                 {
                     field: 'etaLocalTZ',
@@ -251,26 +252,26 @@
                         direction: uiGridConstants.DESC,
                         priority: 2
                     },
-                    displayName: 'ETA'
+                    displayName:'pass.eta', headerCellFilter: 'translate'
                 },
                 {
                     field: 'etdLocalTZ',
                     name: 'etdLocalTZ',
-                    displayName: 'ETD'
+                    displayName:'pass.etd', headerCellFilter: 'translate'
                 },
                 {
                     field: 'gender',
                     name: 'gender',
-                    displayName: 'G',
+                    displayName:'doc.gender', headerCellFilter: 'translate',
                     width: 50},
                 {
                     name: 'dob',
-                    displayName: 'DOB',
+                    displayName:'pass.dob', headerCellFilter: 'translate',
                     cellFilter: 'date'
                 },
                 {
                     name: 'citizenshipCountry',
-                    displayName: 'CTZ',
+                    displayName:'add.Country', headerCellFilter: 'translate',
                     width: 75
                 }
             ];
@@ -294,27 +295,27 @@
                     },
                     cellTemplate: '<div><i class="{{row.entity.onWatchList|watchListHit}}"></i> <i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
                 },
-                {name: 'passengerType', displayName: 'Type', width: 50},
+                {name: 'passengerType', displayName:'doc.type', headerCellFilter: 'translate', width: 50},
                 {
-                    name: 'lastName', displayName: 'Last Name',
+                    name: 'lastName', displayName:'pass.lastname', headerCellFilter: 'translate',
                     cellTemplate: '<md-button aria-label="type" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
                 },
-                {name: 'firstName', displayName: 'First Name'},
-                {name: 'middleName', displayName: 'Middle'},
-                {name: 'fullFlightNumber', displayName: 'Flight' },
+                {name: 'firstName', displayName:'pass.firstname', headerCellFilter: 'translate'},
+                {name: 'middleName', displayName:'pass.middlename', headerCellFilter: 'translate'},
+                {name: 'fullFlightNumber', displayName:'pass.flight', headerCellFilter: 'translate' },
                 {
                     name: 'eta',
                     sort: {
                         direction: uiGridConstants.DESC,
                         priority: 2
                     },
-                    displayName: 'ETA',
+                    displayName:'pass.eta', headerCellFilter: 'translate',
                     visible: (stateName === 'paxAll')
                 },
-                {name: 'etd', displayName: 'ETD', visible: (stateName === 'paxAll')},
-                {name: 'gender', displayName: 'G', width: 50},
-                {name: 'dob', displayName: 'DOB', cellFilter: 'date'},
-                {name: 'citizenshipCountry', displayName: 'CTZ', width: 75}
+                {name: 'etd', displayName:'pass.etd', headerCellFilter: 'translate', visible: (stateName === 'paxAll')},
+                {name: 'gender', displayName:'doc.gender', headerCellFilter: 'translate', width: 50},
+                {name: 'dob', displayName:'pass.dob', headerCellFilter: 'translate', cellFilter: 'date'},
+                {name: 'citizenshipCountry', displayName:'add.Country', headerCellFilter: 'translate', width: 75}
             ];
         }
 

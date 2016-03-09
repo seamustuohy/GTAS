@@ -1,20 +1,21 @@
 package gov.gtas.parsers.util;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.Date;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import gov.gtas.parsers.exception.ParseException;
-
-public class ParseUtilsTest {
+public class ParseUtilsTest {   
     @Test
-    public void testCalculateAge() throws ParseException {
-        Date d = ParseUtils.parseDateTime("03051980", "MMddyyyy");
-        int age = DateUtils.calculateAge(d);
-        System.out.println(d + " " + age);
+    public void testPrepTelephoneNumber() {
+        String num = ParseUtils.prepTelephoneNumber("+1-019-324- 1234");
+        assertEquals("10193241234", num);
+    }
+    
+    @Test
+    public void testReturnNumberOrNull() {
+        assertEquals(new Integer(33), ParseUtils.returnNumberOrNull("33"));
+        assertEquals(new Integer(3), ParseUtils.returnNumberOrNull("3"));
+        assertNull(ParseUtils.returnNumberOrNull("three"));
     }
 }

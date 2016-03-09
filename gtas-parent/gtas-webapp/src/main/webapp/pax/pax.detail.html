@@ -21,19 +21,19 @@
     <div class="span12 col-sm-offset-1" style="padding-left: 25px; padding-top: 25px; padding-bottom: 25px; padding-right: 25px;">
         <div class="container">
             <div class="row">
-                <div class="col-sm-4 capitalize">Last Name:&nbsp; <strong>{{ passenger.lastName }}</strong></div>
-                <div class="col-sm-4 capitalize">First Name:&nbsp; <strong>{{ passenger.firstName }}</strong></div>
-                <div class="col-sm-4 capitalize">Middle Name:&nbsp; <strong>{{ passenger.middleName }}</strong></div>
+                <div class="col-sm-4 capitalize">{{'pass.lastname' | translate}}:&nbsp; <strong>{{ passenger.lastName }}</strong></div>
+                <div class="col-sm-4 capitalize">{{'pass.firstname' | translate}}:&nbsp; <strong>{{ passenger.firstName }}</strong></div>
+                <div class="col-sm-4 capitalize">{{'pass.middlename' | translate}}:&nbsp; <strong>{{ passenger.middleName }}</strong></div>
             </div>
             <div class="row">
-                <div class="col-sm-4">Gender:&nbsp; <strong> {{ passenger.gender }}</strong></div>
-                <div class="col-sm-4">DOB:&nbsp; <strong> {{ passenger.dob | date:"MM/dd/yyyy" }}</strong></div>
-                <div class="col-sm-4">Pax Type:&nbsp; <strong> {{ passenger.passengerType }}</strong></div>
+                <div class="col-sm-4">{{'pass.gender' | translate}}:&nbsp; <strong> {{ passenger.gender }}</strong></div>
+                <div class="col-sm-4">{{'pass.dob' | translate}}:&nbsp; <strong> {{ passenger.dob | date:"MM/dd/yyyy" }}</strong></div>
+                <div class="col-sm-4">{{'pass.paxtype' | translate}}:&nbsp; <strong> {{ passenger.passengerType }}</strong></div>
             </div>
             <div class="row">
-                <div class="col-sm-4">Origin Country:&nbsp; <strong> {{ passenger.embarkCountry }}</strong></div>
-                <div class="col-sm-4">Destination Country:&nbsp; <strong> {{ passenger.debarkCountry }}</strong></div>
-                <div class="col-sm-4">Citizenship:&nbsp; <strong> {{ passenger.citizenshipCountry }}</strong></div>
+                <div class="col-sm-4">{{'pass.origin' | translate}}:&nbsp; <strong> {{ passenger.embarkCountry }}</strong></div>
+                <div class="col-sm-4">{{'pass.destination' | translate}}:&nbsp; <strong> {{ passenger.debarkCountry }}</strong></div>
+                <div class="col-sm-4">{{'pass.citizenship' | translate}}:&nbsp; <strong> {{ passenger.citizenshipCountry }}</strong></div>
             </div>
         </div>
     </div>
@@ -56,18 +56,18 @@
         </div>
         <div class="panel panel-default" style="min-height: 1200px; max-height: 1600px;">
             <md-tabs id="detailSection" md-stretch-tabs="always" md-dynamic-height>
-                <md-tab label="Details" style="max-width: 150px;">
+                <md-tab label="{{ 'pass.details' | translate}}" style="max-width: 150px;">
                     <div class="span12" style="background-color: rgb(255, 255, 255, 0.15);">
                         <div class="container" style="height:100%;">
                             <div style="padding: 10px;"></div>
                             <div class="row col-md-offset-1">
-                                <div class="col-sm-2 capitalize">&nbsp;&nbsp;&nbsp;<span style="text-decoration: underline;">Flight:&nbsp; <strong>{{
+                                <div class="col-sm-2 capitalize">&nbsp;&nbsp;&nbsp;<span style="text-decoration: underline;">{{'flight.flight' | translate}}:&nbsp; <strong>{{
                                     passenger.flightNumber }}</strong></span></div>
-                                <div class="col-sm-2">Origin Airport:&nbsp; <strong>{{ passenger.flightOrigin }}</strong></div>
-                                <div class="col-sm-2">Destination Airport:&nbsp; <strong>{{ passenger.flightDestination }}</strong></div>
-                                <div class="col-sm-2">ETD:&nbsp; <strong>{{ passenger.flightETD | date:"MM/dd/yyyy HH:mm" }}</strong></div>
-                                <div class="col-sm-2">ETA:&nbsp; <strong>{{ passenger.flightETA | date:'MM/dd/yyyy HH:mm' }}</strong></div>
-                                <div class="col-sm-1">Seat:&nbsp; <strong>{{ passenger.seat }}</strong></div>
+                                <div class="col-sm-2">{{'pass.originairport' | translate}}:&nbsp; <strong>{{ passenger.flightOrigin }}</strong></div>
+                                <div class="col-sm-2">{{'pass.destinationairport' | translate}}:&nbsp; <strong>{{ passenger.flightDestination }}</strong></div>
+                                <div class="col-sm-2">{{'pass.etd' | translate}}:&nbsp; <strong>{{ passenger.flightETD | date:"MM/dd/yyyy HH:mm" }}</strong></div>
+                                <div class="col-sm-2">{{'pass.eta' | translate}}:&nbsp; <strong>{{ passenger.flightETA | date:'MM/dd/yyyy HH:mm' }}</strong></div>
+                                <div class="col-sm-1">{{'pass.seat' | translate}}:&nbsp; <strong>{{ passenger.seat }}</strong></div>
                             </div>
                         </div>
                     </div>
@@ -77,11 +77,11 @@
                                style="border-collapse: separate; padding-left: 20px; width: 1200px; text-align: center;">
                             <thead>
                             <tr class="text-center">
-                                <th style="text-align: center">Doc #</th>
-                                <th style="text-align: center">Type</th>
-                                <th style="text-align: center">Iss. Country</th>
-                                <th style="text-align: center">Iss. Date</th>
-                                <th style="text-align: center">Exp. Date</th>
+                                <th style="text-align: center">{{'doc.doc' | translate}} #</th>
+                                <th style="text-align: center">{{'doc.type' | translate}}</th>
+                                <th style="text-align: center">{{'doc.iss.country' | translate}}</th>
+                                <th style="text-align: center">{{'doc.iss.date' | translate}}</th>
+                                <th style="text-align: center">{{'doc.exp.date' | translate}}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -105,17 +105,17 @@
                             <div class="container" style="height:100%;">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        &nbsp;&nbsp;&nbsp;&nbsp; Record Locator:&nbsp; <span
+                                        &nbsp;&nbsp;&nbsp;&nbsp; {{'pnr.recordlocator' | translate}}:&nbsp; <span
                                                 style="text-decoration: underline;"><strong>{{
                                             passenger.pnrVo.recordLocator }}</strong></span>
                                     </div>
                                     <div class="col-sm-4">
-                                        Booking Date:&nbsp; <strong>{{ passenger.pnrVo.dateBooked | date
+                                        {{'pnr.bookingdate' | translate}}:&nbsp; <strong>{{ passenger.pnrVo.dateBooked | date
                                             }}</strong>
                                         
                                     </div>
                                     <div class="col-sm-4">
-                                         Received:&nbsp; <strong>{{ passenger.pnrVo.dateReceived | date }}</strong>
+                                         {{'pnr.received' | translate}}:&nbsp; <strong>{{ passenger.pnrVo.dateReceived | date }}</strong>
                                         
                                     </div>
                                 </div>
@@ -132,7 +132,7 @@
                                             <tbody>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Itinerary ({{ passenger.pnrVo.flightLegs.length }})</strong></td>
+                                                <td><strong>{{'pnr.itenerary' | translate}} ({{ passenger.pnrVo.flightLegs.length }})</strong></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -143,12 +143,12 @@
                                                                style="border-collapse: separate; text-align: center;">
                                                             <thead>
                                                             <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center">Leg</th>
-                                                                <th style="text-align: center">Flight#</th>
-                                                                <th style="text-align: center">Origin</th>
-                                                                <th style="text-align: center">Destination</th>
-                                                                <th style="text-align: center">Flight Date</th>
-                                                                <th style="text-align: center">ETD</th>
+                                                                <th style="text-align: center">{{'pnr.leg' | translate}}</th>
+                                                                <th style="text-align: center">{{'flight.flight' | translate}}#</th>
+                                                                <th style="text-align: center">{{'pass.origin' | translate}}</th>
+                                                                <th style="text-align: center">{{'pass.destination' | translate}}</th>
+                                                                <th style="text-align: center">{{'pnr.flightdate' | translate}}</th>
+                                                                <th style="text-align: center">{{'pass.etd' | translate}}</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -167,7 +167,7 @@
                                             </tr>
                                             <tr id="package2" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails2">
-                                                <td><strong>PNR Names ({{ passenger.pnrVo.passengers.length }})</strong></td>
+                                                <td><strong>{{'pnr.names' | translate}}  ({{ passenger.pnrVo.passengers.length }})</strong></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -177,9 +177,9 @@
                                                         <table class="table table-condensed">
                                                             <thead>
                                                             <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center">First</th>
-                                                                <th style="text-align: center">Middle</th>
-                                                                <th style="text-align: center">Last</th>
+                                                                <th style="text-align: center">{{'pnr.first' | translate}}</th>
+                                                                <th style="text-align: center">{{'pnr.middle' | translate}}</th>
+                                                                <th style="text-align: center">{{'pnr.last' | translate}}</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -195,7 +195,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Documents ({{ passenger.documents.length }})</strong></td>
+                                                <td><strong>{{'pnr.documents' | translate}} ({{ passenger.documents.length }})</strong></td>
                                                 <td></td>
                                                 <td>
                                                 </td>
@@ -207,12 +207,12 @@
                                                                style="border-collapse: separate; text-align: center;">
                                                             <thead>
                                                             <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center">Type</th>
-                                                                <th style="text-align: center">Name</th>
-                                                                <th style="text-align: center">Country</th>
-                                                                <th style="text-align: center">Number</th>
-                                                                <th style="text-align: center">Gender</th>
-                                                                <th style="text-align: center">DOB</th>
+                                                                <th style="text-align: center">{{'doc.type' | translate}}</th>
+                                                                <th style="text-align: center">{{'doc.name' | translate}}</th>
+                                                                <th style="text-align: center">{{'doc.name' | translate}}</th>
+                                                                <th style="text-align: center">{{'doc.Number' | translate}}</th>
+                                                                <th style="text-align: center">{{'doc.gender' | translate}}</th>
+                                                                <th style="text-align: center">{{'doc.dob' | translate}}</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -233,7 +233,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Addresses ({{ passenger.pnrVo.addresses.length }})</strong>
+                                                <td><strong>{{'add.addresses' | translate}} ({{ passenger.pnrVo.addresses.length }})</strong>
                                                 </td>
                                                 <td></td>
                                                 <td>
@@ -245,9 +245,9 @@
                                                         <table class="table table-condensed">
                                                             <thead>
                                                             <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center">City</th>
-                                                                <th style="text-align: center">State</th>
-                                                                <th style="text-align: center">Country</th>
+                                                                <th style="text-align: center">{{'add.city' | translate}}</th>
+                                                                <th style="text-align: center">{{'add.state' | translate}}</th>
+                                                                <th style="text-align: center">{{'add.Country' | translate}}</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody ng-repeat="addr in passenger.pnrVo.addresses track by $index">
@@ -263,7 +263,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Phone Numbers ({{ passenger.pnrVo.phoneNumbers.length }})</strong>
+                                                <td><strong>{{'phone.phonenumbers' | translate}} ({{ passenger.pnrVo.phoneNumbers.length }})</strong>
                                                 </td>
                                                 <td></td>
                                                 <td>
@@ -275,7 +275,7 @@
                                                         <table class="table table-condensed">
                                                        	 	<thead>
 		                                                            <tr class="text-center" style="text-align: center">
-		                                                                <th style="text-align: center">Phone Number</th>
+		                                                                <th style="text-align: center">{{'phone.phonenumber' | translate}}</th>
 		                                                                
 		                                                            </tr>
                                                             	</thead>
@@ -291,7 +291,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Email Addresses ({{ passenger.pnrVo.emails.length
+                                                <td><strong>{{'email.emailaddresses' | translate}} ({{ passenger.pnrVo.emails.length
                                                     }})</strong>
                                                 </td>
                                                 <td></td>
@@ -312,7 +312,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle"
                                                 data-parent="#OrderPackages" data-target=".packageDetails1">
-                                                <td><strong>Credit Cards ({{ passenger.pnrVo.creditCards.length
+                                                <td><strong>{{'cc.creditcards' | translate}} ({{ passenger.pnrVo.creditCards.length
                                                     }})</strong>
                                                 </td>
                                                 <td></td>
@@ -325,10 +325,10 @@
                                                         <table class="table table-condensed">
                                                             <thead>
                                                             <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center">Holder</th>
-                                                                <th style="text-align: center">Type</th>
-                                                                <th style="text-align: center">Number</th>
-                                                                <th style="text-align: center">Exp. Date</th>
+                                                                <th style="text-align: center">{{'cc.holder' | translate}}</th>
+                                                                <th style="text-align: center">{{'cc.Type' | translate}}</th>
+                                                                <th style="text-align: center">{{'cc.Number' | translate}}</th>
+                                                                <th style="text-align: center">{{'cc.expdate' | translate}}</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -347,7 +347,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Frequent Flyer Numbers ({{
+                                                <td><strong>{{'ff.FrequentFlyers' | translate}} ({{
                                                     passenger.pnrVo.frequentFlyerDetails.length
                                                     }})</strong></td>
                                                 <td></td>
@@ -360,8 +360,8 @@
                                                         <table class="table table-condensed">
                                                             <thead>
                                                             <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center">Airline</th>
-                                                                <th style="text-align: center">Number</th>
+                                                                <th style="text-align: center">{{'ff.airline' | translate}}</th>
+                                                                <th style="text-align: center">{{'ff.number' | translate}}</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -376,7 +376,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Travel Agencies ({{ passenger.pnrVo.agencies.length
+                                                <td><strong>{{'tt.travelagencies' | translate}} ({{ passenger.pnrVo.agencies.length
                                                     }})</strong>
                                                 </td>
                                                 <td></td>
@@ -389,11 +389,11 @@
                                                         <table class="table table-condensed">
                                                          <thead>
                                                             <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center">Country</th>
-                                                                <th style="text-align: center">ID</th>
-                                                                <th style="text-align: center">Location</th>
-                                                                <th style="text-align: center">Name</th>
-                                                                <th style="text-align: center">Phone</th>
+                                                                <th style="text-align: center">{{'tt.country' | translate}}</th>
+                                                                <th style="text-align: center">{{'tt.id' | translate}}</th>
+                                                                <th style="text-align: center">{{'tt.location' | translate}}</th>
+                                                                <th style="text-align: center">{{'tt.Name' | translate}}</th>
+                                                                <th style="text-align: center">{{'tt.Phone' | translate}}</th>
                                                               </tr>
                                                             </thead>
                                                         <tbody>
@@ -411,7 +411,7 @@
                                             </tr>
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Baggage ({{ passenger.pnrVo.bagCount }})</strong></td>
+                                                <td><strong>{{'pnr.baggage' | translate}} ({{ passenger.pnrVo.bagCount }})</strong></td>
                                                 <td></td>
                                                 <td>
                                                 </td>
@@ -430,7 +430,7 @@
 
                                             <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
                                                 data-target=".packageDetails1">
-                                                <td><strong>Seat Information</strong></td>
+                                                <td><strong>{{'pnr.seatinformation' | translate}}</strong></td>
                                                 <td></td>
                                                 <td>
                                                 </td>
@@ -442,9 +442,9 @@
                                                                style="border-collapse: separate; text-align: center;">
                                                             <thead>
                                                             <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center">Name</th>
-                                                                <th style="text-align: center">Flight#</th>
-                                                                <th style="text-align: center">Seat#</th>
+                                                                <th style="text-align: center">{{'doc.name' | translate}}</th>
+                                                                <th style="text-align: center">{{'flight.flight' | translate}}#</th>
+                                                                <th style="text-align: center">{{'pnr.seat' | translate}}#</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -480,7 +480,7 @@
                     </md-tab-body>
                 </md-tab>
                 <!-- Flight History Tab -->
-                <md-tab label="Flight History">
+                <md-tab label="{{ 'pass.flt.history' | translate}}">
 
                     <div class="span6" style="background-color: rgb(255, 255, 255, 0.15);">
                         <div class="container">
@@ -491,19 +491,19 @@
                                      ng-repeat-start="(key, value) in passenger.flightHistoryVo.flightHistoryMap">
                                     <div style="padding: 10px;"></div>
                                     <span class="col-sm-offset-1"
-                                          style="margin-left:3.5%; font-weight: bold;">&nbsp;Document# : {{ key }}</span>
+                                          style="margin-left:3.5%; font-weight: bold;">&nbsp;{{ 'doc.doc' | translate}}# : {{ key }}</span>
 
                                     <div style="padding: 15px;"></div>
                                     <table class="table table-striped">
                                         <thead>
                                         <tr class="text-center" style="text-align: center">
-                                            <th style="text-align: center">Carrier/Flight</th>
-                                            <th style="text-align: center">ETA</th>
-                                            <th style="text-align: center">ETD</th>
-                                            <th style="text-align: center">Origin Country</th>
-                                            <th style="text-align: center">Origin Airport</th>
-                                            <th style="text-align: center">Destination Country</th>
-                                            <th style="text-align: center">Destination Airport</th>
+                                            <th style="text-align: center">{{ 'flight.carrieflight' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.eta' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.etd' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.origin' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.originairport' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.destination' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.originairport' | translate}}</th>
                                         </tr>
                                         </thead>
                                         <tbody>

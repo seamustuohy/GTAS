@@ -26,8 +26,19 @@ var app;
             'angularSpinners',
             'ngFileUpload',
             'spring-security-csrf-token-interceptor',
-            'swxSessionStorage'
+            'swxSessionStorage',
+            'ngCookies',
+            'pascalprecht.translate'
         ],
+        language = function ($translateProvider) {
+      
+    		$translateProvider.useUrlLoader('/gtas/messageBundle/');
+    		$translateProvider.useCookieStorage();
+    		$translateProvider.preferredLanguage('en');
+    		$translateProvider.fallbackLanguage('en');
+    		
+        	
+		},
         localDateMomentFormat = function ($mdDateLocaleProvider) {
             // Example of a French localization.
             //$mdDateLocaleProvider.months = ['janvier', 'février', 'mars', ...];
@@ -92,6 +103,30 @@ var app;
                     authenticate: false
 
                 })
+                .state('dash', { // temporary mapping to show sample dashboard data
+                    url: '/dash',
+                    roles: [USER_ROLES.ADMIN, USER_ROLES.VIEW_FLIGHT_PASSENGERS, USER_ROLES.MANAGE_QUERIES, USER_ROLES.MANAGE_RULES, USER_ROLES.MANAGE_WATCHLIST],
+                    authenticate: true,
+                    views: {
+                        '@': {
+                            controller: 'DashboardController',
+                            templateUrl: 'dashboard/dash.html'
+                        }
+                    }
+                        ,
+                        resolve: {
+                            sampleData: function(){
+                                return true;
+                            },
+                            ytdRuleHits: function(dashboardService){
+                                return dashboardService.getYtdRulesCount();
+                            },
+                            ytdAirportStats: function (dashboardService) {
+                                return dashboardService.getYtdAirportStats();
+                            }
+                        }
+
+                })
                 .state('dashboard', {
                     url: '/dashboard',
                     roles: [USER_ROLES.ADMIN, USER_ROLES.VIEW_FLIGHT_PASSENGERS, USER_ROLES.MANAGE_QUERIES, USER_ROLES.MANAGE_RULES, USER_ROLES.MANAGE_WATCHLIST],
@@ -100,6 +135,18 @@ var app;
                         '@': {
                             controller: 'DashboardController',
                             templateUrl: 'dashboard/dashboard.html'
+                        }
+                    }
+                    ,
+                    resolve: {
+                        sampleData: function(){
+                            return false;
+                        },
+                        ytdRuleHits: function(dashboardService){
+                            return dashboardService.getYtdRulesCount();
+                        },
+                        ytdAirportStats: function (dashboardService) {
+                            return dashboardService.getYtdAirportStats();
                         }
                     }
                 })
@@ -349,6 +396,7 @@ var app;
         .module('myApp', appDependencies)
         .config(router)
         .config(localDateMomentFormat)
+        .config(language)
         .constant('USER_ROLES', {
             ADMIN: 'Admin',
             VIEW_FLIGHT_PASSENGERS: 'View Flight And Passenger',
@@ -789,7 +837,218 @@ var app;
                 };
             }
         ) // End of Linear Chart
-        .directive('barChart', function ($window) {
+        .directive('barChart', function ($window, dashboardService, $http) {
+            return {
+                restrict: 'EA',
+                template: "<svg1></svg1>",
+                link: function (scope, elem, attrs) {
+
+                    var margin = {top: 10, right: 20, bottom: 20, left: 20},
+                        width = 1600 - margin.left - margin.right,
+                        height = 450 - margin.top - margin.bottom;
+
+                    var x0 = d3.scale.ordinal()
+                        .rangeRoundBands([0, width], .6);
+
+                    var x1 = d3.scale.ordinal();
+
+                    var yaxistext = '# of Messages Loaded';
+
+                    var y = d3.scale
+                        .linear()
+                        //        .transition()
+                        //        .duration(2000)
+                        //        .ease("circle")
+                        .range([height, 0]);
+
+                    var color = d3.scale.ordinal()
+                        .range(["#3A9DC6", "#376180"]);
+
+                    var xAxis = d3.svg.axis()
+                        .scale(x0)
+                        .orient("bottom");
+
+                    var yAxis = d3.svg.axis()
+                        .scale(y)
+                        .orient("left")
+                        .tickFormat(d3.format("3d"));
+
+
+                    var svg = d3.select("svg1").append("svg").attr("class", 'col-sm-offset-0')
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                        .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                    //var fvg = d3.select("svg1").append("svg");
+
+                    var today = moment();
+                    var credentials = {
+                        beforeDate: '',
+                        startDate: '',
+                        endDate: ''
+                    };
+                    credentials.startDate = today.format('YYYY-MM-DD');
+                    credentials.endDate = today.format('YYYY-MM-DD');
+                    credentials.beforeDate = today.format('YYYY-MM-DD');
+
+                    var csvData = '';
+
+                    var request = $http({
+                        method: 'get',
+                        url: '/gtas/getMessagesCount',
+                        params: {
+                            startDate: credentials.startDate,
+                            endDate: credentials.endDate
+                        }
+                    });
+
+                    request.then(JSON2CSV, handleError);
+
+                    function handleError(response) {
+
+                    }
+
+                    function JSON2CSV(objArray) {
+                        var array = typeof objArray != 'object' ? JSON.parse(JSON.stringify(objArray.data)) : objArray.data;
+                        var str = '';
+                        var line = '';
+                        var dataString = "";
+                        var csvContent = "";
+
+                        displayData (objArray.data);
+                        return str;
+                    }
+
+                    d3.csv("data/data.csv", function (error, data) {
+                        // displayData(data);
+                    });
+
+                    function displayData (data) {
+                        //if (error) throw error;
+
+                        var ageNames = d3.keys(data[0]).filter(function (key) {
+                            return key.toUpperCase() !== "STATE";
+                        });
+
+                        data.forEach(function (d) {
+                            d.ages = ageNames.map(function (name) {
+                                return {name: name, value: +d[name]};
+                            });
+                        });
+
+                        x0.domain(data.map(function (d) {
+                            return d.state;
+                        }));
+                        x1.domain(ageNames).rangeRoundBands([0, x0.rangeBand()]);
+                        y.domain([0, d3.max(data, function (d) {
+                            return d3.max(d.ages, function (d) {
+                                return d.value;
+                            });
+                        })]);
+
+                        svg.append("g")
+                            .attr("class", "x axis")
+                            .attr("transform", "translate(0," + height + ")")
+                            .call(xAxis);
+
+                        svg.append("g")
+
+                            .attr("class", "y axis")
+                            .call(yAxis)
+                            .append("text")
+
+                            .attr("transform", "rotate(-90)")
+
+                            .attr("y", 6)
+
+                            .attr("dy", ".71em")
+                            .style("text-anchor", "end")
+                            .text(yaxistext);
+
+
+                        var state = svg.selectAll(".state")
+                            .data(data)
+                            .enter().append("g")
+
+                            .attr("class", "state")
+
+                            .attr("transform", function (d) {
+                                return "translate(" + x0(d.state) + ",0)";
+                            })
+
+                            ;
+
+                        state.transition()
+                            .duration(2000)
+                            .ease("circle")
+                        ;
+
+                        state.selectAll("rect")
+
+                            .data(function (d) {
+                                return d.ages;
+                            })
+                            .enter()
+
+                            .append("rect")
+                            .attr("width", x1.rangeBand())
+                            .attr("x", function (d) {
+                                return x1(d.name);
+                            })
+                            .attr("y", height)
+                            .attr("height", 0)
+                            .transition()
+                            .duration(2000)
+                            .ease("linear")
+                            .attr("y", function (d) {
+                                return y(d.value);
+                            })
+                            //        .transition()
+                            //        .duration(2000)
+                            //        .ease("linear")
+                            .attr("height", function (d) {
+                                return height - y(d.value);
+                            })
+                            //        .transition()
+                            //        .duration(2000)
+                            //        .ease("circle")
+                            .style("fill", function (d) {
+                                return color(d.name);
+                            })
+                        ;
+
+                        var legend = svg.selectAll(".legend")
+                            .data(ageNames.slice().reverse())
+                            .enter().append("g")
+                            .attr("class", "legend")
+                            .attr("transform", function (d, i) {
+                                return "translate(0," + i * 20 + ")";
+                            });
+
+                        legend.append("rect")
+                            .attr("x", width - 18)
+                            .attr("width", 18)
+                            .attr("height", 18)
+                            .style("fill", color);
+
+                        legend.append("text")
+                            .attr("x", width - 29)
+                            .attr("y", 9)
+                            .attr("dy", ".35em")
+                            .style("text-anchor", "end")
+                            .text(function (d) {
+                                return d;
+                            });
+
+                    } // End of Display Data
+
+                }
+            }
+        })// END of Bar Chart Directive
+
+        // Begin Sample Data Bar Chart
+        .directive('sampleBarChart', function ($window) {
             return {
                 restrict: 'EA',
                 template: "<svg1></svg1>",
@@ -955,468 +1214,7 @@ var app;
 
                 }
             }
-        })// END of Bar Chart Directive
-
-        .directive('ytdChart', function ($window) {
-                return {
-                    restrict: 'EA',
-                    template: "<html> <head> <link rel=\"shortcut icon\" href=\"data:image/x-icon;,\" type=\"image/x-icon\"> <style> path.line { fill: none; stroke: #000; stroke-width: 3px;}.axis { shape-rendering: crispEdges;}.x.axis line, .x.axis path,.y.axis line, .y.axis path { fill: none; stroke: #000;}th, td { font-family: \"Open Sans\"; font-size:1em; padding-left:7px; padding-right:7px; padding-top:4px; padding-bottom:4px; vertical-align:middle; text-align:center;}th { color:white; background-color:#4682B4;}td { border:1px solid steelblue;}td.rowkey { text-align:left;}tr:hover { color:#000000; background-color:#E0E0E0;}tr[chosen=true] { background-color:lightgray;} </style> </head> <body> <div class=\"container\"><div class=\"row\"> <div style='padding-left: 40px;' id=\"table\"></div> <div id=\"plot\"></div></div></div> </body></html>",
-                    link: function (scope, elem, attrs) {
-
-                        (function () {
-
-                            var xAxisGroup = null;
-                            var yAxisGroup = null;
-
-
-                                // This function builds a line plot on the g.#lineplot built by setupPlot.js
-                                // It creates a line for each row selected in the associated MultiTable.
-
-                                var drawLinePlot = function (stats, height, width, margin,
-                                                             transDur, reportStats) {
-
-                                    // Make a list of the selected statistics
-                                    var statsToPlot = [];
-
-                                    d3.selectAll("tr[chosen='true']")
-                                        .each(function (d) {
-                                            statsToPlot.push(d.key);
-                                        });
-
-                                    // If the function is run without any stats chosen, remove any
-                                    // existing lines and their g elements
-                                    if (statsToPlot.length < 1) {
-                                        d3.selectAll("path.line")
-                                            .transition().duration(transDur)
-                                            .style("opacity", 1e-6)
-                                            .remove();
-
-                                        d3.selectAll("g.line").transition().duration(transDur).remove();
-
-                                        return;
-                                    }
-                                    ;
-
-                                    // Subset to the chosen data
-                                    var plotdata = stats.filter(function (d) {
-                                        return (statsToPlot.indexOf(d.stat_name) > -1)
-                                    });
-
-
-                                    // Nest each statistic's data in its own object
-                                    var nested = d3.nest()
-                                        .key(function (d) {
-                                            return d.stat_name;
-                                        })
-                                        .entries(plotdata);
-
-
-                                    // Set up the x-scale
-                                    var xScale = d3.scale.linear()
-                                        .domain([0,
-                                            d3.nest()
-                                                .key(function (d) {
-                                                    return d.datestring;
-                                                })
-                                                .entries(plotdata)
-                                                .length])
-                                        .range([0, width - margin.left - margin.right])
-
-
-                                    // Set up the y-scale
-                                    var yScale = d3.scale.linear()
-                                        .domain([0, d3.max(plotdata, function (d) {
-                                            return d.qtr_result;
-                                        })])
-                                        .range([height - margin.top - margin.bottom, 0])
-
-
-                                    // Set up the x-axis
-                                    var xAxis = d3.svg.axis()
-                                        .scale(xScale)
-                                        .orient("bottom")
-                                        .tickPadding(8);
-
-                                    // Set up the y-axis
-                                    var yAxis = d3.svg.axis()
-                                        .scale(yScale)
-                                        .orient("right")
-                                        .tickPadding(8);
-
-
-                                    // Set up a scale function for coloring the paths
-                                    var colorScale = d3.scale.category10();
-
-                                    var colorStat = {};
-                                    var i=0;
-                                    for (i = 0; i < reportStats.length; i++) {
-                                        colorStat[reportStats[i]] = colorScale(i);
-                                    }
-
-
-                                    // Create a line generator
-                                    var generateLine = d3.svg.line()
-                                        .interpolate("step-after")
-                                        .x(function (d, i) {
-                                            return xScale(i);
-                                        })
-                                        .y(function (d) {
-                                            return yScale(d.qtr_result);
-                                        })
-
-                                    // Create a second line generator for transitioning lines -
-                                    // this gives them a starting and ending place on the axis
-                                    var generateNullLine = d3.svg.line()
-                                        .interpolate("step-after")
-                                        .x(function (d, i) {
-                                            return xScale(i);
-                                        })
-                                        .y(function () {
-                                            return yScale(0);
-                                        })
-
-
-                                    // Find the g.#lineplot element - build the plot on this
-                                    var lineplot = d3.select("#lineplot");
-
-                                    // Set up a transition function to keep things DRY
-                                    var transit = lineplot.transition().duration(transDur);
-
-                                    // Each statistic should have a group for its plot elements
-                                    // function(d)... lets d3 key the groups based on which statistic
-                                    // they contain, so that the correct statistics and entered and exited
-                                    // (as opposed to unkeyed joins, which only use the data's array index
-                                    var lineGroups = lineplot.selectAll("g.line")
-                                        .data(nested, function (d) {
-                                            return d.key;
-                                        });
-
-
-                                    // Add the paths
-                                    lineGroups.enter()
-                                        .append("g")
-                                        .attr("class", "line")
-                                        .append("svg:path")
-                                        .style("opacity", 1e-6)
-                                        .attr("class", "line")
-                                        .attr("d", function (d) {
-                                            return generateNullLine(d.values);
-                                        })
-                                        .style("stroke", function (d) {
-                                            return colorStat[d.key];
-                                        })
-                                        .transition().duration(transDur)
-                                        .style("opacity", 1)
-                                        .attr("d", function (d) {
-                                            return generateLine(d.values);
-                                        })
-
-                                    //              .style("stroke", function(d) { return colorStat[d.key]; })
-
-
-                                    // Transition deselected paths out
-                                    lineGroups.exit().selectAll("path")
-                                        .transition().duration(transDur)
-                                        .attr("d", function (d) {
-                                            return generateNullLine(d.values);
-                                        })
-                                        .remove();
-
-                                    // Remove deselected g elements, too
-                                    lineGroups.exit().transition().duration(transDur).remove();
-
-
-                                    // Transition the remaining paths
-                                    transit.selectAll("path.line")
-                                        .attr("d", function (d) {
-                                            return generateLine(d.values);
-                                        });
-
-
-
-                                    // Add or transition the x-axis
-                                    if (!xAxisGroup) {
-                                        xAxisGroup = lineplot.append("g")
-                                            .attr("class", "x axis")
-                                            .attr("transform", "translate(0, " + yScale.range()[0] + ")")
-                                            .call(xAxis)
-                                    }
-                                    else {
-                                        transit.select("g.x.axis").call(xAxis)
-                                    }
-
-
-                                    // Add or transition the y-axis
-                                    if (!yAxisGroup) {
-                                        yAxisGroup = lineplot.append("g")
-                                            .attr("class", "y axis")
-                                            .attr("transform", "translate(" + xScale.range()[1] + ", 0)")
-                                            .call(yAxis)
-                                    }
-                                    else {
-                                        transit.select("g.y.axis").call(yAxis)
-                                    }
-
-
-                                };
-
-                            var toggleStat = function (stat_name) {
-
-                                // Toggle the statistic's row
-                                // Get the current value
-                                var current = d3.select("tr[rowstat='" + stat_name + "']")
-                                    .attr("chosen")
-
-                                // Invert it. When the current toggle status is "true", the comparison
-                                // below returns "false"; when the current status is "false", it returns
-                                // "true". A bit opaque, but I can't store proper booleans in HTML attr.
-                                d3.select("tr[rowstat='" + stat_name + "']")
-                                    .attr("chosen", current == "false")
-
-
-                                // Toggle the statistic in the plot
-                                drawLinePlot(stats, height, width, margin, transDur, reportStats);
-
-
-                            };
-                            window.toggleStat = toggleStat;
-
-                                // Define dimensions of the plot
-                                var margin = {top: 120, right: 60, bottom: 60, left: 80};
-                                var height = 500;
-                                var width = 900;
-
-                                 // Define the transition duration
-                                var transDur = 700;
-
-                                // Set up a global variable for the names of the stats reported here
-                                // (in hopes of making it easier to keep line colors consistent
-                                var reportStats = [];
-
-                                var stats;
-
-
-                                // Load in the CRD quarterly stats table
-                                d3.csv("data/qtr_stats.csv", function (crd) {
-
-                                    // Format the variables as neeeded
-                                    crd.forEach(function (d) {
-                                //        d.stat_year = +d.stat_year;
-                                        d.stat_qtr = +d.stat_qtr;
-                                        d.datestring = d.stat_qtr
-                                //            + " Q" + d.stat_qtr
-                                        ;
-
-                                        d.qtr_result = +d.qtr_result;
-                                    });
-
-                                    // Subset to two sets of stats:
-                                    // 1. Active Cases Reported for all metro residents and, separately,
-                                    // just Denver residents.
-                                    // 2. Active and latent tx starts and visits, for everyone
-                                    var other_stats = ["ORD", "ATL", "DFW", "LAX", "DEN", "ATL"];
-
-                                    var qtrly = crd.filter(function (d) {
-                                        return (d.stat_name == "ORD" &&
-                                            d.pt_group == "All Patients") ||
-
-                                            ((other_stats.indexOf(d.stat_name) > -1) &&
-                                            d.pt_group == "All Patients")
-
-                                            ;
-                                    });
-
-
-                                    // Assign the data outside of the function for later use
-                                    stats = qtrly;
-
-
-                                    // Load the initial stats table
-                                    makeMultiTable(stats);
-
-                                    // Make a vector for all of the stats, so that plot attributes can be
-                                    // kept consistent - probably a better way to do this.
-                                    d3.selectAll("tbody tr")
-                                        .each(function (d) {
-                                            reportStats.push(d.key);
-                                        });
-
-
-                                    // Setup the line plot
-                                    setupPlot(height, width, margin);
-
-
-                                });
-
-                                // This function creates a table with a row for each statistic in a flat data
-                                // object and a column for each time period in the data object.
-
-
-                                var makeMultiTable = function (stats) {
-
-                                    // Set up the column names
-                                    // One set for the year supercolumns
-                                    var yrCols = d3.nest()
-                                        .key(function (d) {
-                                            return d.stat_year;
-                                        })
-                                        .rollup(function (d) {
-                                            return d.length;
-                                        })
-                                        .entries(stats.filter(function (d) {
-                                            return d.stat_name == "ATL";
-                                        }));
-
-
-                                    // And one for the quarter columns
-                                //    var qtrCols = d3.keys(
-                                //        d3.nest()
-                                //            .key(function(d) { return d.datestring; })
-                                //            .map(stats)
-                                //    );
-
-                                    // Add an empty column for the statistic name
-                                    yrCols.unshift("");
-                                //    qtrCols.unshift("");
-
-
-                                    // Nest data within each statistic
-                                    var aggstats = d3.nest()
-                                        .key(function (d) {
-                                            return d.stat_name;
-                                        })
-
-                                        .entries(stats);
-
-                                    // Create the table
-                                    var table = d3.select("#table").append("table");
-                                    var thead = table.append("thead");
-                                    var tbody = table.append("tbody");
-
-                                    var yearCols = {"year": "2015"};
-                                    var quarterCols = ["Airport", "Total Flights",
-                                        "Rule Hits", "Watchlist Hits"];
-
-                                    // Append the year headers
-                                    thead.append("tr")
-                                        .selectAll("th")
-                                        .data(yrCols)
-                                        //.data(yearCols)
-                                        .enter()
-                                        .append("th")
-                                        .text(function (d) {
-                                            return d.key;
-                                        })
-                                        .attr("colspan", function (d) {
-                                            return d.values;
-                                        })
-
-                                    // Append the quarter headers
-                                    thead.append("tr")
-                                        .selectAll("th")
-                                        //.data(qtrCols)
-                                        .data(quarterCols)
-                                        .enter()
-                                        .append("th")
-                                        .text(function (column) {
-                                            return column.substr(0, 15);
-                                        })
-
-
-
-
-                                    // Bind each statistic to a line of the table
-                                    var rows = tbody.selectAll("tr")
-                                        .data(aggstats)
-                                        .enter()
-                                        .append("tr")
-                                        .attr("rowstat", function (d) {
-                                            return d.key;
-                                        })
-                                        .attr("chosen", false)
-                                        .attr("onclick", function (d) {
-                                            return "toggleStat('" + d.key + "')";
-                                        })
-
-
-                                    // Add statistic names to each row
-                                    var stat_cells = rows.append("td")
-                                        .text(function (d) {
-                                            return d.key;
-                                        })
-                                        .attr("class", "rowkey")
-
-
-                                    // Fill in the cells.  The data -> d.values pulls the value arrays from
-                                    // the data assigned above to each row.
-                                    // The unshift crap bumps the data cells over one - otherwise, the first
-                                    // result value falls under the statistic labels.
-                                    var res_cells = rows.selectAll("td")
-                                        .data(function (d) {
-                                            var x = d.values;
-                                            x.unshift({qtr_result: ""});
-                                            return x;
-                                        })
-                                        .enter()
-                                        .append("td")
-                                        .text(function (d) {
-                                            return d3.format(",d")(d.qtr_result);
-                                        })
-
-
-                                };
-
-
-                        var toggleStat = function (stat_name) {
-
-                            // Toggle the statistic's row
-                            // Get the current value
-                            var current = d3.select("tr[rowstat='" + stat_name + "']")
-                                .attr("chosen")
-
-                            // Invert it. When the current toggle status is "true", the comparison
-                            // below returns "false"; when the current status is "false", it returns
-                            // "true". A bit opaque, but I can't store proper booleans in HTML attr.
-                            d3.select("tr[rowstat='" + stat_name + "']")
-                                .attr("chosen", current == "false")
-
-
-                            // Toggle the statistic in the plot
-                            drawLinePlot(stats, height, width, margin, transDur, reportStats);
-
-
-                        };
-
-                                // This function does the one-time setup for the plot - which is basically
-                                // just setting up this g.#lineplot
-
-                                var setupPlot = function (height, width, margin) {
-
-                                    // Create an svg element for the plot
-                                    d3.select("#plot").append("svg:svg")
-                                        .attr("width", width)
-                                        .attr("height", height)
-                                        .append("g")
-                                        .attr("transform",
-                                            "translate(" + margin.left + "," + margin.top + ")")
-                                        .attr("id", "lineplot");
-
-                                    // Create global variables for the axes - no need to populate them just yet
-                                     xAxisGroup = null;
-                                     yAxisGroup = null;
-
-                                };
-
-
-
-
-
-                    })();
-
-                    }
-                };
-            }
-        ) // End of YTD Chart
+        })// END of Sample Data Bar Chart Directive
 
         .controller('NavCtrl', NavCtrl)
 

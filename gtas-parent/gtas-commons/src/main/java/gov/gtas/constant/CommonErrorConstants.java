@@ -36,14 +36,15 @@ public class CommonErrorConstants {
 	public static final String INVALID_USER_ID_ERROR_CODE = "INVALID_USER_ID";
 
 	/*
-	 * This error code indicates that an input JSON field has an incorrect format.
+	 * This error code indicates that an input JSON field has an incorrect
+	 * format.
 	 */
 	public static final String INPUT_JSON_FORMAT_ERROR_CODE = "INPUT_FORMAT_ERROR";
 	/*
 	 * This error code indicates that an input JSON failed validation.
 	 */
 	public static final String JSON_INPUT_VALIDATION_ERROR_CODE = "JSON_VALIDATION_ERROR";
-	
+
 	/*
 	 * This is the error code indicating that the a query returned no result.
 	 */
@@ -79,17 +80,18 @@ public class CommonErrorConstants {
 	 * supplied userId cannot be found.
 	 */
 	public static final String INVALID_USER_ID_ERROR_MESSAGE = "The user id '%s' does not represent a valid user.";
-	
+
 	/*
-	 * This error message indicates that an input JSON field has an incorrect format.
+	 * This error message indicates that an input JSON field has an incorrect
+	 * format.
 	 */
 	public static final String INPUT_JSON_FORMAT_ERROR_MESSAGE = "Parse error for values %s with type %s for '%s'.";
-	
+
 	/*
 	 * This error message indicates that an input JSON failed validation.
 	 */
 	public static final String JSON_INPUT_VALIDATION_ERROR_MESSAGE = "The JSON input is invalid.";
-	
+
 	/*
 	 * This is the error message indicating that the record to be updated does
 	 * not exist in the database.

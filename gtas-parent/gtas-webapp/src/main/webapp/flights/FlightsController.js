@@ -1,12 +1,21 @@
 (function () {
     'use strict';
     app.controller('FlightsController', function ($scope, $http, $state, $interval, $stateParams, passengersBasedOnUserFilter, flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel) {
+        var exporter = {
+            'csv': function () {
+                $scope.gridApi.exporter.csvExport('all', 'all');
+            },
+            'pdf': function () {
+                $scope.gridApi.exporter.pdfExport('all', 'all');
+            }
+        };
         function createFilterFor(query) {
             var lowercaseQuery = query.toLowerCase();
             return function filterFn(contact) {
                 return (contact.lowerCasedName.indexOf(lowercaseQuery) >= 0);
             };
         }
+
         /* Search for airports. */
         function querySearch(query) {
             var results = query && (query.length) && (query.length >= 3) ? self.allAirports.filter(createFilterFor(query)) : [];
@@ -14,7 +23,10 @@
         }
 
         $scope.model = flightsModel;
-       
+
+        $scope.export = function (format) {
+            exporter[format]();
+        };
 
         var self = this, airports,
             stateName = $state ? $state.$current.self.name : 'flights',
@@ -30,7 +42,7 @@
                 {label: 'Any', value: 'A'}
             ],
             getPage = function () {
-                setFlightsGrid($scope.flightsGrid, flights || {flights: [], totalFlights: 0 });
+                setFlightsGrid($scope.flightsGrid, flights || {flights: [], totalFlights: 0});
             },
             update = function (data) {
                 flights = data;
@@ -55,39 +67,39 @@
                 fetchMethods[stateName]();
             };
 
-        var populateAirports = function(){
+        var populateAirports = function () {
 
             var originAirports = new Array();
             var destinationAirports = new Array();
 
-            angular.forEach($scope.model.origin,function(value,index){
+            angular.forEach($scope.model.origin, function (value, index) {
                 originAirports.push(value.id);
             })
 
-            angular.forEach($scope.model.dest,function(value,index){
+            angular.forEach($scope.model.dest, function (value, index) {
                 destinationAirports.push(value.id);
             })
 
             $scope.model.originAirports = originAirports;
             $scope.model.destinationAirports = destinationAirports;
         };
-        
-        var mapAirports = function(){
+
+        var mapAirports = function () {
             var originAirports = new Array();
             var destinationAirports = new Array();
-            var airport = { id: "" };
+            var airport = {id: ""};
 
-            angular.forEach(flightsModel.origins,function(value,index){
-                originAirports.push({ id: value });
+            angular.forEach(flightsModel.origins, function (value, index) {
+                originAirports.push({id: value});
             });
 
-            angular.forEach(flightsModel.destinations,function(value,index){
-                destinationAirports.push({  id: value });
+            angular.forEach(flightsModel.destinations, function (value, index) {
+                destinationAirports.push({id: value});
             });
-            $scope.model.origin= originAirports;
+            $scope.model.origin = originAirports;
             $scope.model.dest = destinationAirports;
         };
-        
+
 
         self.querySearch = querySearch;
         $http.get('data/airports.json')
@@ -176,21 +188,21 @@
             },
             {
                 name: 'fullFlightNumber',
-                displayName: 'Flight',
+                displayName: 'flight.flight', headerCellFilter: 'translate',
                 width: 70
             },
             {
-                name: 'etaLocalTZ', displayName: 'ETA',
+                name: 'etaLocalTZ', displayName:'pass.eta', headerCellFilter: 'translate',
                 sort: {
                     direction: uiGridConstants.DESC,
                     priority: 2
                 }
             },
-            {name: 'etdLocalTZ', displayName: 'ETD'},
-            {name: 'origin'},
-            {name: 'originCountry', displayName: 'Country'},
-            {name: 'destination'},
-            {name: 'destinationCountry', displayName: 'Country'}
+            {name: 'etdLocalTZ', displayName:'pass.etd', headerCellFilter: 'translate'},
+            {name: 'origin', displayName:'flight.origin', headerCellFilter: 'translate'},
+            {name: 'originCountry', displayName:'doc.country', headerCellFilter: 'translate'},
+            {name: 'destination', displayName:'flight.destination', headerCellFilter: 'translate'},
+            {name: 'destinationCountry', displayName:'add.Country', headerCellFilter: 'translate'}
         ];
 
         $scope.queryPassengersOnSelectedFlight = function (row_entity) {

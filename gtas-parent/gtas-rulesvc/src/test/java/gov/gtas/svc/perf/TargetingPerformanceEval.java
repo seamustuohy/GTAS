@@ -2,7 +2,6 @@ package gov.gtas.svc.perf;
 
 import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.enumtype.EntityEnum;
-import gov.gtas.model.MessageStatus;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.services.watchlist.WatchlistPersistenceService;
 import gov.gtas.svc.TargetingService;
@@ -34,7 +33,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 public class TargetingPerformanceEval {
 	public static final String PASSENGER_WL_NAME = "PerfTest Passenger WL";
 	public static final String DOCUMENT_WL_NAME = "PerfTest Document WL";
-	
+
 	@Autowired
 	TargetingService targetingService;
 
@@ -58,29 +57,42 @@ public class TargetingPerformanceEval {
 	public void tearDown() throws Exception {
 	}
 
-	//@Test
+	// @Test
 	@Transactional
 	public void genPerformanceData() {
-	    WatchlistRuleGenerator.generateWlRules(watchlistService, PASSENGER_WL_NAME, EntityEnum.PASSENGER, 100);
-		WatchlistRuleGenerator.generateWlRules(watchlistService, DOCUMENT_WL_NAME, EntityEnum.DOCUMENT, 20);
-		//UdrRuleGenerator.generateUdr(udrService, "PerfTestUdr", 200);
-		System.out.println("*****************************************************************");
-		System.out.println("********************   GENERATION COMPLETE  *********************");
-		System.out.println("*****************************************************************");
+		WatchlistRuleGenerator.generateWlRules(watchlistService,
+				PASSENGER_WL_NAME, EntityEnum.PASSENGER, 100);
+		WatchlistRuleGenerator.generateWlRules(watchlistService,
+				DOCUMENT_WL_NAME, EntityEnum.DOCUMENT, 20);
+		// UdrRuleGenerator.generateUdr(udrService, "PerfTestUdr", 200);
+		System.out
+				.println("*****************************************************************");
+		System.out
+				.println("********************   GENERATION COMPLETE  *********************");
+		System.out
+				.println("*****************************************************************");
 	}
-   // @Test
+
+	// @Test
 	public void activatePerformanceData() {
 		watchlistService.activateAllWatchlists();
-		System.out.println("*****************************************************************");
-		System.out.println("********************   ACTIVATION COMPLETE  *********************");
-		System.out.println("*****************************************************************");
+		System.out
+				.println("*****************************************************************");
+		System.out
+				.println("********************   ACTIVATION COMPLETE  *********************");
+		System.out
+				.println("*****************************************************************");
 	}
+
 	@Test
 	@Transactional
 	public void runPerformance() {
 		long start = System.currentTimeMillis();
-		RuleExecutionContext ctx = targetingService.analyzeLoadedMessages(MessageStatus.LOADED, MessageStatus.LOADED, false);
+		RuleExecutionContext ctx = targetingService
+				.analyzeLoadedMessages(false);
 		long elapsed = System.currentTimeMillis() - start;
-		System.out.println(String.format("******* result count = %d, elapsed millis = %d", ctx.getTargetingResult().size(), elapsed));
+		System.out.println(String.format(
+				"******* result count = %d, elapsed millis = %d", ctx
+						.getTargetingResult().size(), elapsed));
 	}
 }

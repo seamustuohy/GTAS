@@ -1,12 +1,12 @@
 <md-content>
     <md-tabs md-dynamic-height md-border-bottom md-selected="selectedTabIndex">
-        <md-tab label="Manage Users" layout="column">
+        <md-tab label="{{'admin.manage' | translate}}" layout="column">
        		<div layout="column">
 	       		<div>
 		        	<md-button ng-click="createUser()" class="md-raised pull-left md-primary md-raised]">
-		        		<md-tooltip>Add User</md-tooltip>
+		        		<md-tooltip>{{'btn.add' | translate}}</md-tooltip>
 		        		<i class="glyphicon glyphicon-plus"></i><i class="glyphicon glyphicon-user"></i>
-		        		Add User
+		        		{{'btn.add' | translate}}
 		   			</md-button>
 		   		</div>
 		            <md-content class="md-padding">
@@ -14,10 +14,10 @@
 		            </md-content>
 	        </div>
    		</md-tab>
-        <md-tab label = "Audit Log View">
+        <md-tab label = "{{'admin.auditlog' | translate}}">
             <ng-include src="'admin/auditlog.html'"/>
         </md-tab>
-        <md-tab label = "Error Log View">
+        <md-tab label = "{{'admin.errorlog' | translate}}">
             <ng-include src="'admin/errorlog.html'"/>
         </md-tab>
     </md-tabs>

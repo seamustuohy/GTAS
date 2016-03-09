@@ -31,7 +31,7 @@ CREATE VIEW `daily_apis_counts` AS SELECT
         COUNT(IF(HOUR(create_date)=23,1,NULL)) AS '12am'
     FROM message
     where create_date >= DATE_FORMAT(CURRENT_DATE(),'%Y-%m-%d') AND CURRENT_DATE()
-    AND raw LIKE '%PAXLST%' 
+    AND raw LIKE '%PAXLST%'
     GROUP BY day ;
 
 
@@ -40,7 +40,7 @@ DROP VIEW IF EXISTS `daily_pnr_counts`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `daily_pnr_counts`;
 CREATE VIEW `daily_pnr_counts` AS SELECT
-        id,         
+        id,
         DATE(create_date) AS 'day',
         COUNT(IF(HOUR(create_date)=0,1,NULL)) AS '1am',
         COUNT(IF(HOUR(create_date)=1,1,NULL)) AS '2am',
@@ -68,5 +68,46 @@ CREATE VIEW `daily_pnr_counts` AS SELECT
         COUNT(IF(HOUR(create_date)=23,1,NULL)) AS '12am'
     FROM message
     where create_date >= DATE_FORMAT(CURRENT_DATE(),'%Y-%m-%d') AND CURRENT_DATE()
-    AND raw LIKE '%PNRGOV%' 
+    AND raw LIKE '%PNRGOV%'
     GROUP BY day ;
+
+
+DROP VIEW IF EXISTS YTD_RULE_HIT_COUNTS;
+DROP TABLE IF EXISTS YTD_RULE_HIT_COUNTS;
+DROP VIEW IF EXISTS YTD_RULES;
+DROP TABLE IF EXISTS YTD_RULES;
+
+    CREATE VIEW YTD_RULE_HIT_COUNTS AS
+    Select
+      r.id as 'ruleid',
+      r.UDR_RULE_REF as 'ruleref',
+      COUNT(hd.id) as 'hits'
+      FROM rule as r JOIN hit_detail as hd ON hd.rule_id = r.id GROUP BY r.id;
+
+
+    CREATE VIEW YTD_RULES AS
+    SELECT
+    	  udr.id as 'id',
+        rm.TITLE as 'RuleName',
+        r.hits as 'RuleHits',
+        udr.author as 'CreatedBy',
+        DATE_FORMAT(rm.START_DT,'%d %b %Y') as 'CreatedOn',
+        udr.edited_by as 'LastUpdatedBy',
+        DATE_FORMAT(udr.edit_dt,'%d %b %Y')  as 'LastEditedOn'
+
+        FROM udr_rule as udr, rule_meta rm,
+        YTD_RULE_HIT_COUNTS as r
+        WHERE udr.id = r.ruleref AND rm.ID = r.ruleid;
+
+DROP VIEW IF EXISTS YTD_AIRPORT_STATS;
+DROP TABLE IF EXISTS YTD_AIRPORT_STATS;
+
+    CREATE VIEW YTD_AIRPORT_STATS AS
+    SELECT a.id as 'ID', a.iata 'AIRPORT', COUNT(*) 'FLIGHTS', SUM(f.rule_hit_count) 'RULEHITS', SUM(f.list_hit_count) 'WATCHLISTHITS'
+        FROM flight f, airport a
+        WHERE a.country = 'USA'
+        AND (TRIM(a.iata) = TRIM( f.origin )
+        OR TRIM(a.iata) = TRIM(f.destination))
+        GROUP BY a.iata
+        ORDER BY COUNT(*) DESC
+        LIMIT 5;

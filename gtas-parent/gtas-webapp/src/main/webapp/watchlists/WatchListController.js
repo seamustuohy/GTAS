@@ -23,17 +23,29 @@
             },
             isItTrashTime = function (rows) {
                 $scope.disableTrash = $scope.gridApi.selection.getSelectedRows(rows).length === 0;
+            },
+            exporter = {
+                'csv': function () {
+                    $scope.gridApi.exporter.csvExport('all', 'all');
+                },
+                'pdf': function () {
+                    $scope.gridApi.exporter.pdfExport('all', 'all');
+                }
             };
 
-        $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
-        $scope.watchlistGrid.importerDataAddCallback = function ( grid, newObjects ) {
-        	if($scope.validateNewObjects(newObjects)){
-        		$scope.showConfirm(grid, newObjects);
-        	}else{
-        		$scope.openAlert(null)
-        	}
+        $scope.export = function (format) {
+            exporter[format]();
         };
-        $scope.watchlistGrid.finishImport = function(grid, newObjects ){
+
+        $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
+        $scope.watchlistGrid.importerDataAddCallback = function (grid, newObjects) {
+            if ($scope.validateNewObjects(newObjects)) {
+                $scope.showConfirm(grid, newObjects);
+            } else {
+                $scope.openAlert(null);
+            }
+        };
+        $scope.watchlistGrid.finishImport = function (grid, newObjects) {
             spinnerService.show('html5spinner');
             var listName = $scope.activeTab;
             watchListService.deleteListItems(watchlist.types[listName].entity, listName).then(function (response) {
@@ -51,7 +63,7 @@
                     columnTypeDict[column.name] = column.type;
                 });
 
-                newObjects.forEach(function (obj){
+                newObjects.forEach(function (obj) {
                     terms = [];
                     Object.keys(obj).forEach(function (key) {
                         if (['$$hashKey', 'id'].indexOf(key) === -1) {
@@ -118,7 +130,9 @@
             spinnerService.show('html5spinner');
             watchListService.getListItems(watchlist.types[listName].entity, listName).then(function (response) {
                 var obj, data = [], items = response.data.result.watchlistItems,
-                    setTerm = function (term) { obj[term.field] = term.value; };
+                    setTerm = function (term) {
+                        obj[term.field] = term.value;
+                    };
 //                    setTerm = function (term) { obj[term.field] = term.type === 'date' ?  moment(term.value).toDate() : term.value; };
                 if (items === undefined) {
                     $scope.watchlistGrid.data = [];
@@ -269,65 +283,65 @@
         };
 
         $scope.$scope = $scope;
-        
-        $scope.showConfirm = function(grid, newObjects) {
-            var confirm = $mdDialog.confirm()
-                  .title('WARNING: This will erase all existing items!')
-                  .textContent('Are you certain you wish to replace existing data with the imported file\'s?')
-                  .ariaLabel('Deletion Warning')
-                  .ok('Confirm Replace')
-                  .cancel('Cancel');
 
-            $mdDialog.show(confirm).then(function() {
-            	$scope.watchlistGrid.finishImport(grid, newObjects);
-            }, function() {
-              return false;
+        $scope.showConfirm = function (grid, newObjects) {
+            var confirm = $mdDialog.confirm()
+                .title('WARNING: This will erase all existing items!')
+                .textContent('Are you certain you wish to replace existing data with the imported file\'s?')
+                .ariaLabel('Deletion Warning')
+                .ok('Confirm Replace')
+                .cancel('Cancel');
+
+            $mdDialog.show(confirm).then(function () {
+                $scope.watchlistGrid.finishImport(grid, newObjects);
+            }, function () {
+                return false;
             });
-          };
-        
-        $scope.openAlert = function(msg) {
+        };
+
+        $scope.openAlert = function (msg) {
             $mdDialog.show(
-              $mdDialog.alert()
-                .clickOutsideToClose(true)
-                .title('Invalid CSV Format')
-                .textContent('The format of the file you have uploaded is invalid.')
-                .ariaLabel('Invalid File Format')
-                .ok('OK')
-                .openFrom({
-                	left:1500
-                })
-                .closeTo(({
-                	right:1500
-                }))
+                $mdDialog.alert()
+                    .clickOutsideToClose(true)
+                    .title('Invalid CSV Format')
+                    .textContent('The format of the file you have uploaded is invalid.')
+                    .ariaLabel('Invalid File Format')
+                    .ok('OK')
+                    .openFrom({
+                        left: 1500
+                    })
+                    .closeTo(({
+                        right: 1500
+                    }))
             );
-          };
-       //overriding CSV.error in order to halt throwing error to console, instead morph into mddialog message to the user.
-        CSV.error = function (err){
-        	var msg = CSV.dump(err);
-        	CSV.reset();
-        	$scope.openAlert(msg);
-        	};
-        	
+        };
+        //overriding CSV.error in order to halt throwing error to console, instead morph into mddialog message to the user.
+        CSV.error = function (err) {
+            var msg = CSV.dump(err);
+            CSV.reset();
+            $scope.openAlert(msg);
+        };
+
         //Sometimes CSV.js allows certain files despite being not CSV, this is an additional check that it matches our object requirements.
-        $scope.validateNewObjects = function (newObjects){
-        	var valid;
-            	if(newObjects){
-            		valid = true;
-    	        	if($scope.activeTab == 'Document'){
-    	        		$.each(newObjects, function(index,value){
-    	        			if(!newObjects[index] || !newObjects[index].documentNumber || !newObjects[index].documentType){
-    		        			valid = false;
-    		        		}
-    	        		});
-    	        	}else{
-    	        		$.each(newObjects, function(index,value){
-    	        			if(!newObjects[index] || !newObjects[index].dob || !newObjects[index].firstName || !newObjects[index].lastName){
-    		        			valid = false;
-    		        		}
-    	        		});
-    	        	}
-            	} 
-            	return valid;
-            };
+        $scope.validateNewObjects = function (newObjects) {
+            var valid;
+            if (newObjects) {
+                valid = true;
+                if ($scope.activeTab === 'Document') {
+                    $.each(newObjects, function (index, value) {
+                        if (!newObjects[index] || !newObjects[index].documentNumber || !newObjects[index].documentType) {
+                            valid = false;
+                        }
+                    });
+                } else {
+                    $.each(newObjects, function (index, value) {
+                        if (!newObjects[index] || !newObjects[index].dob || !newObjects[index].firstName || !newObjects[index].lastName) {
+                            valid = false;
+                        }
+                    });
+                }
+            }
+            return valid;
+        };
     });
 }());

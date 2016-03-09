@@ -15,36 +15,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import gov.gtas.aws.QueueService;
+import gov.gtas.repository.AppConfigurationRepository;
 import gov.gtas.repository.FlightRepository;
+import gov.gtas.repository.LookUpRepository;
 
 @Controller
 public class UploadController {
     private static final Logger logger = LoggerFactory.getLogger(UploadController.class);
 
-    /** root dir by default is catalina_home */
-    private static String INDIR = "gtas_in/";
-
     @Autowired
     private FlightRepository flightRespository;
-    
+
+    @Autowired
+    private LookUpRepository lookupRepo;
+
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/upload")
-    public void upload(@RequestParam("file") MultipartFile file, @RequestParam("username") String username ) throws IOException {
-        byte[] bytes;
-        FileOutputStream output = null;
-        try {
-            if (!file.isEmpty()) {
-                 bytes = file.getBytes();
-                 String filename = INDIR + file.getOriginalFilename();
-                 output = new FileOutputStream(new File(filename));
-                 IOUtils.write(bytes, output);
-            }
-        } finally {
-            if (output != null) {
-                output.close();
-            }
+    public void upload(@RequestParam("file") MultipartFile file, @RequestParam("username") String username) throws IOException {
+        if (file.isEmpty()) {
+            logger.info("empty file!");
+            return;
         }
+        
+        writeFile(file);
 
+        // disable this for now
+//        String queueName = lookupRepo.getAppConfigOption(AppConfigurationRepository.QUEUE);
+//        QueueService sqs = new QueueService(queueName);
+//        sqs.sendMessage(new String(file.getBytes()));
+        
         logger.info(String.format("received %s from %s", file.getOriginalFilename(), username));
     }
 
@@ -53,5 +53,29 @@ public class UploadController {
     public void wipeAllMessages() throws Exception {
         logger.info("DELETE ALL MESSAGES");
         flightRespository.deleteAllMessages();
+    }
+    
+    private static String INDIR = "gtas_in/";
+
+    /**
+     * for writing uploaded files to disk.
+     * @param file
+     * @throws IOException
+     */
+    private void writeFile(MultipartFile file) throws IOException {
+        FileOutputStream output = null;
+
+        try {
+            if (!file.isEmpty()) {
+                byte[] bytes = file.getBytes();
+                String filename = INDIR + file.getOriginalFilename();
+                output = new FileOutputStream(new File(filename));
+                IOUtils.write(bytes, output);
+           }
+       } finally {
+           if (output != null) {
+               output.close();
+           }
+       }
     }
 }

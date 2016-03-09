@@ -54,7 +54,8 @@
 
     .watchlist-hit {
         font-size: 1.25em;
-        color: rgba(255, 0, 0, 1);
+        /*color: rgba(255, 0, 0, 1);*/
+        color: rgb(255, 176, 22);
         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
         box-sizing: border-box;
         width: 100%;
@@ -284,52 +285,52 @@
         class="glyphicon glyphicon-filter"></i> Passengers Query</h3>
 <form ng-submit="filter()" data-ng-if="stateName === 'paxAll'" class="chipsdemoContactChips filter-form">
     <div class="last-name md-padding">
-        <label for="lastName">Last Name</label>
+        <label for="lastName">{{'pass.lastname' | translate}}</label>
         <md-input-container>
             <input style="height:30px" id="lastName" ng-model="model.lastName">
         </md-input-container>
     </div>
     <md-content class="md-padding autocomplete origin" layout="column">
-        <label>Origin</label>
+        <label>{{'flight.origin' | translate}}</label>
         <md-contact-chips ng-model="model.origin" md-contacts="searchSort($query)" md-contact-name="id"
                           md-contact-email="name" md-require-match="true" md-highlight-flags="i"
                           filter-selected="filterSelected">
         </md-contact-chips>
     </md-content>
     <md-content class="md-padding autocomplete destination" layout="column">
-        <label>Destination</label>
+        <label>{{'flight.destination' | translate}}</label>
         <md-contact-chips ng-model="model.dest" md-contacts="searchSort($query)" md-contact-name="id"
                           md-contact-email="name" md-require-match="true" md-highlight-flags="i"
                           filter-selected="filterSelected">
         </md-contact-chips>
     </md-content>
     <div class="flight md-padding">
-        <label for="flightNumber">Flight</label>
+        <label for="flightNumber">{{'flight.flight' | translate}}</label>
         <md-input-container>
             <input style="height:30px" id="flightNumber" ng-model="model.flightNumber">
         </md-input-container>
     </div>
     <div class="direction md-padding">
-        <label for="direction">Direction</label>
+        <label for="direction">{{'flight.direction' | translate}}</label>
         <md-input-container>
             <md-select id="direction" ng-model="model.direction">
                 <md-option ng-repeat="item in flightDirections" value="{{item.value}}">
-                    {{item.label}}
+                    <p translate> {{item.label}}</p>
                 </md-option>
             </md-select>
         </md-input-container>
     </div>
     <div class="start-date md-padding">
-        <label for="startDate">Start Date</label>
+        <label for="startDate">{{'flight.startdate' | translate}}</label>
         <md-datepicker id="startDate" ng-model="model.etaStart" md-placeholder="Start Date"></md-datepicker>
     </div>
     <div class="end-date md-padding">
-        <label for="endDate">End Date</label>
+        <label for="endDate">{{'flight.enddate' | translate}}</label>
         <md-datepicker id="endDate" ng-model="model.etaEnd" md-placeholder="End Date"></md-datepicker>
     </div>
     <div class="actions">
         <md-button class="md-primary" aria-label="reset" ng-click="reset()" type="button">
-            <md-tooltip>Reset</md-tooltip>
+            <md-tooltip>{{'flight.reset' | translate}}</md-tooltip>
             <!--<i class="glyphicon glyphicon-remove-sign"></i>-->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
                 <path d="M14 12c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2z"></path>
@@ -338,7 +339,7 @@
             <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path></svg>-->
         </md-button>
         <md-button class="md-primary" type="submit">
-            <md-tooltip>Filter</md-tooltip>
+            <md-tooltip>{{'flight.filter' | translate}}</md-tooltip>
             <!--<i class="glyphicon glyphicon-filter"></i>-->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
                 <path d="M10 18h4v-2h-4v2z"></path>
@@ -351,33 +352,33 @@
 
 <form ng-submit="filter()" layout="row" data-ng-if="stateName === 'flightpax'" class="chipsdemoContactChips filter-form">
     <div class="last-name md-padding">
-    <label for="lastName">Last Name</label>
+    <label for="lastName">{{'pass.lastname' | translate}}</label>
         <md-input-container>
             <input id="lastName" ng-model="model.lastName">
         </md-input-container>
     </div>
     <md-content class="disabled-chips md-padding autocomplete origin" layout="column" ng-disabled="true" >
-        <label>Origin</label>
+        <label>{{'flight.origin' | translate}}</label>
         <md-contact-chips ng-disabled="true" ng-model="model.origin" md-contacts="searchSort($query)" 
         				md-contact-name="id" md-contact-email="name"
  						md-require-match="true" md-highlight-flags="i" filter-selected="filterSelected">
         </md-contact-chips>
     </md-content>
     <md-content class="disabled-chips md-padding autocomplete destination" layout="column">
-        <label>Destination</label>
+        <label>{{'flight.destination' | translate}}</label>
         <md-contact-chips ng-model="model.dest" md-contacts="searchSort($query)" md-contact-name="id"
                           md-contact-email="name" md-require-match="true" md-highlight-flags="i"
                           filter-selected="filterSelected">
         </md-contact-chips>
     </md-content>
     <div class="flight md-padding">
-        <label for="flightNumber">Flight</label>
+        <label for="flightNumber">{{'flight.flight' | translate}}</label>
         <md-input-container>
             <input ng-disabled="true" id="flightNumber" ng-model="model.flightNumber">
         </md-input-container>
     </div>
     <div class="direction md-padding">
-        <label for="direction">Direction</label>
+        <label for="direction">{{'flight.direction' | translate}}</label>
         <md-input-container>
             <md-select ng-disabled="true" id="direction" ng-model="model.direction" >
                 <md-option ng-repeat="item in flightDirections" value="{{item.value}}">
@@ -387,16 +388,16 @@
         </md-input-container>
     </div>
     <div class="start-date md-padding">
-        <label for="startDate">Start Date</label>
+        <label for="startDate">{{'flight.startdate' | translate}}</label>
         <md-datepicker ng-disabled="true" id="startDate" ng-model="model.etaStart" md-placeholder="Start Date"></md-datepicker>
     </div>
     <div class="end-date md-padding">
-        <label for="endDate">End Date</label>
+        <label for="endDate">{{'flight.enddate' | translate}}</label>
         <md-datepicker ng-disabled="true" id="endDate" ng-model="model.etaEnd" md-placeholder="End Date"></md-datepicker>
     </div>
     <div class="actions">
         <md-button class="md-primary" aria-label="reset" ng-click="reset()" type="button">
-            <md-tooltip>Reset</md-tooltip>
+            <md-tooltip>{{'flight.reset' | translate}}</md-tooltip>
             <!--<i class="glyphicon glyphicon-remove-sign"></i>-->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
                 <path d="M14 12c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2z"></path>
@@ -405,7 +406,7 @@
             <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path></svg>-->
         </md-button>
         <md-button class="md-primary" type="submit">
-            <md-tooltip>Filter</md-tooltip>
+            <md-tooltip>{{'flight.filter' | translate}}</md-tooltip>
             <!--<i class="glyphicon glyphicon-filter"></i>-->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
                 <path d="M10 18h4v-2h-4v2z"></path>
