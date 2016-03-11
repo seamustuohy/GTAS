@@ -20,7 +20,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import gov.gtas.model.lookup.Airport;
 
 @Entity
-@Table(name = "Filter")
+@Table(name = "filter")
 public class Filter extends BaseEntity {
 	/**
 	 * 
@@ -83,6 +83,8 @@ public class Filter extends BaseEntity {
 	  @Column(name = "etas_end", nullable = true)
 	  private Integer etaEnd = Integer.valueOf(0);
 
+	  @Column(name = "hourly_adj", nullable = false, columnDefinition="INT(10) NOT NULL DEFAULT '-5'")
+	  private Integer hourlyAdj = Integer.valueOf(-5);
 
 
 	public Integer getEtaStart() {
