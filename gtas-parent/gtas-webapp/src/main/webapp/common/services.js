@@ -903,18 +903,13 @@
                     flights: '/gtas/query/queryFlights/',
                     passengers: '/gtas/query/queryPassengers/'
                 },
-                queryFlights = function () {
-                    var query = JSON.parse(localStorage['query']),
-                        dfd = $q.defer();
+                queryFlights = function (qbData) {
+                    var dfd = $q.defer();
 
                     dfd.resolve($http({
                         method: 'post',
                         url: serviceURLs.flights,
-                        data: {
-                            pageNumber: 1,
-                            pageSize: -1,
-                            query: query
-                        }
+                        data: qbData
                     }));
 
                     return dfd.promise;

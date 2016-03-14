@@ -26,6 +26,7 @@
 </head>
 
 <body>
+
 <header class="header" title="{{'gtas.title' | translate}}"></header>
 <nav data-ng-controller="NavCtrl">
     <div class="nav navbar-nav navbar-right" ng-if="showNav()" style="margin: 0;">
@@ -88,6 +89,7 @@
 </style>
 
 <script src="resources/bower_components/angular/angular.js"></script>
+<script src="resources/bower_components/ng-idle/angular-idle.min.js"></script>
 <script src="resources/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="resources/bower_components/moment/min/moment.min.js"></script>
 <script src="resources/bower_components/jquery/dist/jquery.js"></script>
@@ -145,6 +147,15 @@
 <script src='userSettings/FilterCtrl.js'></script>
 <script src='common/languagecontroller.js'></script>
 
-
+<div>
+    <spinner name="html5spinner" ng-cloak="">
+        <div class="overlay"></div>
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+        <div class="please-wait">{{'wl.wait' | translate}}...</div>
+    </spinner>
+</div>
 </body>
 </html>

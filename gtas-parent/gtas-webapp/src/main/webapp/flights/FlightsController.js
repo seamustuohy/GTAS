@@ -1,7 +1,16 @@
 (function () {
     'use strict';
-    app.controller('FlightsController', function ($scope, $http, $state, $interval, $stateParams, passengersBasedOnUserFilter, flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel) {
-        var exporter = {
+    app.controller('FlightsController', function ($scope, $http, $state, $interval, $stateParams, $mdToast, passengersBasedOnUserFilter, 
+    		flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel, spinnerService) {
+    	$scope.errorToast = function(error){
+        	$mdToast.show($mdToast.simple()
+        	 .content(error)
+        	 .position('top right')
+        	 .hideDelay(4000)
+        	 .parent($scope.toastParent));
+        };
+        
+    	var exporter = {
             'csv': function () {
                 $scope.gridApi.exporter.csvExport('all', 'all');
             },
@@ -35,6 +44,9 @@
                 var data = stateName === 'queryFlights' ? response.data.result : response.data;
                 grid.totalItems = data.totalFlights === -1 ? 0 : data.totalFlights;
                 grid.data = data.flights;
+                if(!data.flights || data.flights.length == 0){
+                	$scope.errorToast("No results found for selected filter criteria");
+                }
             },
             flightDirections = [
                 {label: 'Inbound', value: 'I'},
@@ -47,6 +59,7 @@
             update = function (data) {
                 flights = data;
                 getPage();
+                spinnerService.hide('html5spinner');
             },
             fetchMethods = {
                 queryFlights: function () {
@@ -56,9 +69,11 @@
                         pageSize: $scope.model.pageSize,
                         query: query
                     };
+                    spinnerService.show('html5spinner');
                     executeQueryService.queryFlights(postData).then(update);
                 },
                 flights: function () {
+                	spinnerService.show('html5spinner');
                     flightService.getFlights($scope.model).then(update);
                 }
             },

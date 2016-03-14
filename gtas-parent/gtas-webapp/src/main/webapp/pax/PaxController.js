@@ -3,9 +3,18 @@
     app.controller('PassengerDetailCtrl', function ($scope, passenger) {
         $scope.passenger = passenger.data;
     });
-    app.controller('PaxController', function ($scope, $injector, $stateParams, $state, paxService, sharedPaxData, uiGridConstants, gridService,
+    app.controller('PaxController', function ($scope, $injector, $stateParams, $state, $mdToast, paxService, sharedPaxData, uiGridConstants, gridService,
                                               jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers,
-                                              $timeout, paxModel, $http) {
+                                              $timeout, paxModel, $http, spinnerService) {
+    	
+       	$scope.errorToast = function(error){
+        	$mdToast.show($mdToast.simple()
+        	 .content(error)
+        	 .position('top right')
+        	 .hideDelay(4000)
+        	 .parent($scope.toastParent));
+        };
+        
         function createFilterFor(query) {
             var lowercaseQuery = query.toLowerCase();
             return function filterFn(contact) {
@@ -61,6 +70,9 @@
                 setSubGridOptions(data, $scope);
                 grid.totalItems = data.totalPassengers === -1 ? 0 : data.totalPassengers;
                 grid.data = data.passengers;
+                if(!grid.data || grid.data.length == 0){
+                	$scope.errorToast('No results found for selected filter criteria');
+                }
             },
             getPage = function () {
                 setPassengersGrid($scope.passengerGrid, passengers);
@@ -68,6 +80,7 @@
             update = function (data) {
                 passengers = data;
                 getPage();
+                spinnerService.hide('html5spinner');
             },
             fetchMethods = {
                 'queryPassengers': function () {
@@ -77,12 +90,15 @@
                         pageSize: $scope.model.pageSize,
                         query: query
                     };
+                    spinnerService.show('html5spinner');
                     executeQueryService.queryPassengers(postData).then(update);
                 },
                 'flightpax': function () {
+                	spinnerService.show('html5spinner');
                     paxService.getPax($stateParams.id, $scope.model).then(update);
                 },
                 'paxAll': function () {
+                	spinnerService.show('html5spinner');
                     paxService.getAllPax($scope.model).then(update);
                 }
             },
