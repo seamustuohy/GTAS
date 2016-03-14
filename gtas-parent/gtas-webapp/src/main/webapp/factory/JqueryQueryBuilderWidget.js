@@ -72,13 +72,22 @@ app.factory('jqueryQueryBuilderWidget', function () {
                 $builder = $('#builder'),
                 supplement = {
                     selectize: function (obj) {
+                    	var maxItems = 1;
+                    	var isCreate = true;
+                    	if(obj.operatorVal === "IN" || obj.operatorVal === "NOT_IN"){
+                    		maxItems = 10;
+                    	}
+                    	if(obj.dataSource){
+                    		isCreate = false;
+                    	}
                         obj.plugin_config = {
                             "valueField": "id",
                             "labelField": "name",
                             "searchField": "name",
                             "sortField": "name",
-                            "create":true,
+                            "create":isCreate,
                             "persist": false,
+                            "maxItems":maxItems,
                             "plugins": ["restore_on_backspace", "remove_button"],
                             "onInitialize": function () {
                                 getOptionsFromJSONArray(this, obj.dataSource);
@@ -134,7 +143,7 @@ app.factory('jqueryQueryBuilderWidget', function () {
 	            			rule.filter = $.extend({},originalSettings);
 	            			rule.filter.operatorVal = tmpOp;
 	            		}
-	            		if(rule.filter && rule.filter.plugin !== 'selectize' && rule.filter.plugin !== 'datepicker' &&
+	            		if(rule.filter && rule.filter.plugin !== 'datepicker' &&
 	            				(rule.filter.operatorVal === "IN" || rule.filter.operatorVal === "NOT_IN")){
 	            			rule.filter.plugin = 'selectize';
 	            			supplement[rule.filter.plugin](rule.filter);

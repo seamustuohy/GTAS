@@ -594,8 +594,6 @@
         "operators": [
           "EQUAL",
           "NOT_EQUAL",
-          "IN",
-          "NOT_IN",
           "LESS",
           "LESS_OR_EQUAL",
           "GREATER",
@@ -884,8 +882,6 @@
         "operators": [
           "EQUAL",
           "NOT_EQUAL",
-          "IN",
-          "NOT_IN",
           "LESS",
           "LESS_OR_EQUAL",
           "GREATER",
@@ -950,8 +946,6 @@
         "operators": [
           "EQUAL",
           "NOT_EQUAL",
-          "IN",
-          "NOT_IN",
           "LESS",
           "LESS_OR_EQUAL",
           "GREATER",
@@ -1037,8 +1031,6 @@
         "operators": [
           "EQUAL",
           "NOT_EQUAL",
-          "IN",
-          "NOT_IN",
           "LESS",
           "LESS_OR_EQUAL",
           "GREATER",
