@@ -5,12 +5,12 @@ import java.util.concurrent.Executors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 @Configuration
-@EnableScheduling
+@PropertySource("classpath:ruleRunnerScheduler.properties")
 public class RuleRunnerConfig implements SchedulingConfigurer {
 
 	@Override
@@ -20,7 +20,6 @@ public class RuleRunnerConfig implements SchedulingConfigurer {
 
 	@Bean(destroyMethod = "shutdown")
 	public Executor taskExecutor() {
-		// return Executors.newSingleThreadExecutor();
 		return Executors.newScheduledThreadPool(10);
 	}
 

@@ -131,11 +131,11 @@ public class FileReader {
 		InputStream input = null;
 		try {
 			ClassLoader classLoader = getClass().getClassLoader();
-	        File file = new File(classLoader.getResource("scheduler.properties").getFile());
+	        File file = new File(classLoader.getResource("loaderScheduler.properties").getFile());
 	    	input = new FileInputStream(file);
 			prop.load(input);
 		} catch (IOException e1) {
-			logger.info("Exception loading scheduler.properties"+e1.getMessage());
+			logger.info("Exception loading loaderScheduler.properties"+e1.getMessage());
 		}
 		return prop;
 	}
