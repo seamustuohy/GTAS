@@ -1,10 +1,12 @@
 (function () {
     'use strict';
-    app.factory('AuthService', function ($http, Session, $rootScope, $mdToast, APP_CONSTANTS) {
+    app.factory('AuthService', function ($http, Session, $rootScope, $mdToast, APP_CONSTANTS, $location, $cookies) {
         var authService = {};
 
         $http.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
         $http.defaults.xsrfCookieName = 'CSRF-TOKEN';
+        var csrfToken = $cookies.get('CSRF-TOKEN');
+        var sessionId = '';
 
         authService.getCurrentUser = function() {
             return $http.get("user").then(function (response) {
@@ -20,34 +22,55 @@
 
         authService.login = function (credentials) {
             var postData = preparePostData(credentials);
+            sessionId = $cookies.get("JSESSIONID");
 
-            return    $http({
+            $http({
+                method: 'GET',
+                url: ''
+                ,
+                headers: {
+                    "JSESSIONID":""+sessionId,
+                    "X-CSRF-TOKEN" : ""+csrfToken,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-Login-Ajax-call": 'true'
+                }
+            });
+
+            return $http({
                 method: 'POST',
                 url: 'authenticate',
-                data: postData,
+                data: postData
+                ,
                 headers: {
+                    "JSESSIONID":""+sessionId,
+                    "X-CSRF-TOKEN" : ""+csrfToken,
                     "Content-Type": "application/x-www-form-urlencoded",
                     "X-Login-Ajax-call": 'true'
                 }
             })
                 .success(function (data, status) {
 
-                    if(data == 'ok' && status != 401){
-                        $rootScope.authenticated = true;
-                    }
-                    else{
-                        var toastPosition = angular.element(document.getElementById('loginForm'));
-                        $mdToast.show(
-                            $mdToast.simple()
-                                .content(APP_CONSTANTS.LOGIN_ERROR_MSG)
-                                .position('top right')
-                                .hideDelay(4000)
-                                .parent(toastPosition)
-                        );
+                        if (data == 'ok' && status != 401) {
+                            $rootScope.authenticated = true;
+                        }
+                        else {
+                            if (status != 405){
+                            var toastPosition = angular.element(document.getElementById('loginForm'));
+                            $mdToast.show(
+                                $mdToast.simple()
+                                    .content(APP_CONSTANTS.LOGIN_ERROR_MSG)
+                                    .position('top right')
+                                    .hideDelay(4000)
+                                    .parent(toastPosition)
+                            );
+                            $location.path('/error');
+                        }
+                        }
 
-                    }
                 }).error(function (data, status) {
                     $rootScope.authenticated = false;
+                    $location.path('/error');
+
                 });
         }
 

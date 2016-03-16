@@ -30,7 +30,8 @@
     "pdfmake": "~0.1.18",
     "seiyria-bootstrap-slider": "latest",
     "selectize": "latest",
-    "spring-security-csrf-token-interceptor": "latest"
+    "spring-security-csrf-token-interceptor": "latest",
+    "ng-idle": "~1.2.0"
   },
   "devDependencies": {
     "awesome-bootstrap-checkbox": "^0.3.0",

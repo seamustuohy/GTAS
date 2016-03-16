@@ -339,9 +339,11 @@ var app;
                     }
                 });
             $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+            $httpProvider.defaults.withCredentials = false;
+           // $httpProvider.defaults.headers.common['X-CSRF-TOKEN'] = $cookies.get('X-CSRF-TOKEN');
         },
 
-        NavCtrl = function ($scope, $http, APP_CONSTANTS, $sessionStorage, $rootScope) {
+        NavCtrl = function ($scope, $http, APP_CONSTANTS, $sessionStorage, $rootScope, $cookies) {
             $http.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
             $http.defaults.xsrfCookieName = 'CSRF-TOKEN';
 
@@ -383,7 +385,11 @@ var app;
                     method: 'POST',
                     url: 'logout'
                 }).then(function (response) {
-                    if (response.status === 200 || response.status === 403) {
+                    if (response.status === 200 || response.status === 403 || response.status === 405) {
+                        var cookies = $cookies.getAll();
+                        angular.forEach(cookies, function (v, k) {
+                            $cookies.remove(k);
+                        });
                         $sessionStorage.remove(APP_CONSTANTS.CURRENT_USER);
                         $rootScope.authenticated = false;
                         window.location = APP_CONSTANTS.LOGIN_PAGE;
@@ -1221,8 +1227,9 @@ var app;
         .config(function ($provide, $httpProvider) {
             $httpProvider.interceptors.push('httpSecurityInterceptor');
         })
-        .factory('httpSecurityInterceptor', function ($q, $rootScope) {
+        .factory('httpSecurityInterceptor', function ($q, $rootScope ) {
             return {
+                
                 responseError: function (response) {
                     if ([401, 403].indexOf(response.status) >= 0) {
                         $rootScope.$broadcast('operationNotAllowedEvent');
@@ -1231,5 +1238,7 @@ var app;
                     return $q.reject(response);
                 }
             };
-        });
+        }
+
+    );
 }());

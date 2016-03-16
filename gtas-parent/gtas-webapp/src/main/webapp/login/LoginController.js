@@ -2,31 +2,86 @@
     'use strict';
     app.controller('LoginController',
         function($state, $scope, $rootScope, $q, $stateParams, userService, $mdToast, AuthService,
-                 Session, sessionFactory, APP_CONSTANTS, $sessionStorage, $location, $interval, $window,$translate) {
+                 Session, sessionFactory, APP_CONSTANTS, $sessionStorage, $location, $interval, $window, $translate, $cookies) {
             //Set locale here to change language setting for web site
-			$scope.locale = "en";
+            $scope.locale = "en";
             $scope.currentUser = {};
             $scope.credentials = {
                 j_username: '',
                 j_password: ''
             };
-            
-            $('#user_login').prop('disabled',false);
-            $('#user_pass').prop('disabled',false);
-            
-            $scope.login = function (credentials) {
-                
-                AuthService.login(credentials).then(function (user){
-                    if($rootScope.authenticated){
-                        AuthService.getCurrentUser().then(function (user){
-                            $scope.currentUser.data = user;
-                        });
-                    }else {
-                        if(user.status == 401){
-                        }
-                    }
+
+            $('#user_login').prop('disabled', false);
+            $('#user_pass').prop('disabled', false);
+
+
+            $scope.clearSessionCookie = function(){
+                var cookies = $cookies.getAll();
+                angular.forEach(cookies, function (v, k) {
+                    $cookies.remove(k);
                 });
             };
+
+            $scope.login = function (credentials) {
+
+
+                AuthService.login(credentials).then(function (user) {
+                        if (user.status == 405) {
+                            $scope.clearSessionCookie();
+                            AuthService.login(credentials).then(
+                                function(user){
+                                    if (user.status == 405) {
+                                        $scope.clearSessionCookie();
+                                        AuthService.login(credentials).then(function (user) {
+                                            //$scope.currentUser.data = user;
+                                            if (user.status == 405) {
+                                                AuthService.login(credentials).then(
+                                                    function(user){
+                                                        if ($rootScope.authenticated) {
+
+                                                            AuthService.getCurrentUser().then(function (user) {
+                                                                $scope.currentUser.data = user;
+                                                            });
+                                                        } else {
+
+                                                            if (user.status == 401) {
+                                                            }
+                                                        }
+                                                    }
+                                                );
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        if ($rootScope.authenticated) {
+
+                                            AuthService.getCurrentUser().then(function (user) {
+                                                $scope.currentUser.data = user;
+                                            });
+                                        } else {
+
+                                            if (user.status == 401) {
+                                            }
+                                        }
+                                    }
+                                }
+                            );
+                        }
+                        else{
+                        if ($rootScope.authenticated) {
+
+                            AuthService.getCurrentUser().then(function (user) {
+                                $scope.currentUser.data = user;
+                            });
+                        } else {
+
+                            if (user.status == 401) {
+                            }
+                        }
+                    }
+                    }); // END of AuthService Call
+
+            }; // END of LOGIN Function
 
             $scope.$watch('currentUser.data', function (user) {
                 
@@ -37,24 +92,6 @@
                     $sessionStorage.put(APP_CONSTANTS.CURRENT_USER, user);
                     //window.location.href = APP_CONSTANTS.HOME_PAGE;
                     $window.location.href = APP_CONSTANTS.MAIN_PAGE;
-
-                    //$window.location.href = '#/dashboard';
-                    //$state.go('dashboard', $stateParams, {
-                    //    reload: true,
-                    //    inherit: false,
-                    //    notify: true
-                    //});
-
-                    // $state.go('home');
-                    //
-                    //$interval(function () {
-                    //    $state.go('dashboard', $stateParams, {
-                    //        reload: true,
-                    //        inherit: false,
-                    //        notify: true
-                    //    });
-                    //}, 3000, true);
-
 
                 }
             });
