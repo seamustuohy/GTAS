@@ -19,6 +19,6 @@ public class ParserConfig implements SchedulingConfigurer {
 
 	@Bean(destroyMethod = "shutdown")
 	public Executor taskExecutor() {
-		return Executors.newScheduledThreadPool(10);
+		return Executors.newScheduledThreadPool(20);
 	}
 }
