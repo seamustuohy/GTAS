@@ -1,17 +1,29 @@
-package gov.gtas.config;
+package gov.gtas.scheduler.config;
+
+import gov.gtas.job.LoaderScheduler;
+import gov.gtas.rule.RuleRunnerScheduler;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 @Configuration
-@PropertySource("classpath:ruleRunnerScheduler.properties")
-public class RuleRunnerConfig implements SchedulingConfigurer {
+@EnableScheduling
+public class JobSchedulerConfig implements SchedulingConfigurer {
+	@Bean
+	public RuleRunnerScheduler ruleRunnerSchedulerbean() {
+		return new RuleRunnerScheduler();
+	}
+
+	@Bean
+	public LoaderScheduler loaderReaderbean() {
+		return new LoaderScheduler();
+	}
 
 	@Override
 	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {

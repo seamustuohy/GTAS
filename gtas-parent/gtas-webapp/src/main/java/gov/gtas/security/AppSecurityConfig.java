@@ -60,10 +60,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	    SavedRequestAwareAuthenticationSuccessHandler savedReqHandler = new SavedRequestAwareAuthenticationSuccessHandler();
 	    
-	    //savedReqHandler.setDefaultTargetUrl(Constants.HOME_PAGE);
-	   // savedReqHandler.setTargetUrlParameter(Constants.HOME_PAGE);
 
-    	
         CsrfTokenResponseHeaderBindingFilter csrfTokenFilter = new CsrfTokenResponseHeaderBindingFilter();
         http.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
         .csrf().csrfTokenRepository(csrfTokenRepository())
@@ -71,14 +68,13 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
             .authorizeRequests()
-            .antMatchers("/*/**","/resources/*/**","/resources/**","/common/**","/login/**").permitAll()
+            .antMatchers("/*/**","/resources/*/**","/resources/**","/common/**","/login/**","/authenticate").permitAll()
             .antMatchers("/resources/login/assets/**").permitAll()
             .antMatchers("/resources/**/*").permitAll()
             .antMatchers(HttpMethod.POST, "/user").permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin()
-            //.defaultSuccessUrl("/current")
             .loginProcessingUrl("/authenticate")
             .usernameParameter("username")
             .passwordParameter("password")
@@ -86,8 +82,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
             .failureHandler(new SimpleUrlAuthenticationFailureHandler())
             .loginPage("/login.html")
             .and()
-            //            .httpBasic()
-            //            .and()
             .logout()
             .logoutUrl("/logout")
             .logoutSuccessUrl("/login.html")

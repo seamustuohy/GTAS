@@ -26,30 +26,24 @@ public class CsrfHeaderFilter extends OncePerRequestFilter {
 	  protected void doFilterInternal(HttpServletRequest request,
 	      HttpServletResponse response, FilterChain filterChain)
 	      throws ServletException, IOException {
-//	    CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class
-//	        .getName());
-//	    
 	    CsrfToken csrf = (CsrfToken) request.getAttribute(REQUEST_ATTRIBUTE_NAME);
 	    
 	    if (csrf != null) {
 	      Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
 	      String token = csrf.getToken();
-//	     // response.addCookie(new Cookie("X-XSRF-TOKEN", token));
-//	      if (cookie==null || token!=null && !token.equals(cookie.getValue())) {
-//	        cookie = new Cookie("XSRF-TOKEN", token);
-	        //cookie.s
 	      cookie = new Cookie("CSRF-TOKEN", token);
-//	      if(cookie == null){cookie = WebUtils.getCookie(request, "X-CSRF-TOKEN");}
-//	      if(cookie != null){
 	        cookie.setPath("/gtas");
 	        response.addCookie(cookie);
-	      //}
+
 	    	response.setHeader(RESPONSE_HEADER_NAME, csrf.getHeaderName());
             response.setHeader(RESPONSE_PARAM_NAME, csrf.getParameterName());
             response.setHeader(RESPONSE_TOKEN_NAME , csrf.getToken());
-	    	
-	      }
-	    
+			  }
+
+			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+			response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+
 	    filterChain.doFilter(request, response);
 	  }
 }
