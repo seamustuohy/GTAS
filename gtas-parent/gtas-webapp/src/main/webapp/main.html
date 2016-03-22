@@ -147,6 +147,27 @@
 <script src='userSettings/FilterCtrl.js'></script>
 <script src='common/languagecontroller.js'></script>
 
+<script type="text/ng-template" id="dialog1.tmpl.html">  
+<md-dialog ng-cloak>
+  <form>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <h2 class="md-title">Idle Timeout Warning</h2>
+		<div class="_md-dialog-content-body ng-scope"><p class="ng-binding">
+			You have been idle for too long. If you wish to maintain your session please click the button below</p>
+		</div>
+		<span idle-countdown="countdown"> You will be logged out automatically in <strong style="font-size:xx-large;">{{countdown}}</strong> seconds. </span>
+	  </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-dialog-actions layout="row" class="layout-row">
+  	  
+      <md-button ng-click="dialog.hide()">Continue Session</md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
+</script>
+
 <div>
     <spinner name="html5spinner" ng-cloak="">
         <div class="overlay"></div>

@@ -10,7 +10,34 @@
 
             return ({getPaxDetail: getPaxDetail});
         })
-        .service("paxService", function ($rootScope, $http, $q) {
+        .service("paxService", function (userService, $rootScope, $http, $q) {
+        	
+        	function getPassengersBasedOnUser(paxModel){
+        		var today = new Date();
+        		//first request
+        		 return userService.getUserData().then( function( user ) {
+                    if(user.data.filter!=null) {
+                        if (user.data.filter.flightDirection)
+                            paxModel.model.direction = user.data.filter.flightDirection;
+                        if (typeof user.data.filter.etaStart  != undefined && user.data.filter.etaStart != null) {
+                            paxModel.model.starteeDate = new Date();
+                            paxModel.model.etaStart.setDate(today.getDate() + user.data.filter.etaStart);
+                        }
+                        if (typeof user.data.filter.etaEnd  != undefined && user.data.filter.etaEnd != null) {
+                            paxModel.model.endDate = new Date();
+                            paxModel.model.etaEnd.setDate(today.getDate() + user.data.filter.etaEnd);
+                        }
+                        if (user.data.filter.originAirports != null)
+                            paxModel.model.origin = paxModel.model.origins = user.data.filter.originAirports;
+                        if (user.data.filter.destinationAirports != null)
+                            paxModel.model.dest = paxModel.model.destinations = user.data.filter.destinationAirports;
+                    }
+                    //second request
+                    return getAllPax(paxModel.model);
+        		});
+        	}
+        	
+        	
             function getPax(flightId, pageRequest) {
                 var dfd = $q.defer();
                 dfd.resolve($http({
@@ -75,7 +102,8 @@
                 broadcast: broadcast,
                 getRuleHits: getRuleHits,
                 getPaxDetail: getPaxDetail,
-                broadcastRuleID: broadcastRuleID
+                broadcastRuleID: broadcastRuleID,
+                getPassengersBasedOnUser: getPassengersBasedOnUser
             });
         });
 }());

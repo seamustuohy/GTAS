@@ -2,7 +2,28 @@
     'use strict';
     app.controller('LoginController',
         function($state, $scope, $rootScope, $q, $stateParams, userService, $mdToast, AuthService,
-                 Session, sessionFactory, APP_CONSTANTS, $sessionStorage, $location, $interval, $window,$translate) {
+                 Session, sessionFactory, APP_CONSTANTS, $sessionStorage, $location, $interval, $window, $translate, $mdDialog, Idle) {
+    		//Insure Idle is not watching pre-login
+    		if(Idle.running()){
+    			Idle.unwatch();
+    		}
+    		//Inform user if they timed out
+    		if(window.location.search.replace("?", "") === "userTimeout"){
+	    		$mdDialog.show(
+	                    $mdDialog.alert()
+	                        .clickOutsideToClose(false)
+	                        .textContent("Your session has timed out. For security reasons you have been logged out automatically.")
+	                        .ariaLabel('User Time Out')
+	                        .ok('OK')
+	                        .openFrom({
+	                            left: 1500
+	                        })
+	                        .closeTo(({
+	                            right: 1500
+	                        }))
+	                );
+    		}
+    		
             //Set locale here to change language setting for web site
 			$scope.locale = "en";
             $scope.currentUser = {};
@@ -20,6 +41,8 @@
                     if($rootScope.authenticated){
                         AuthService.getCurrentUser().then(function (user){
                             $scope.currentUser.data = user;
+                            $rootScope.userTimedout = false;
+                            //Idle.watch();
                         });
                     }else {
                         if(user.status == 401){

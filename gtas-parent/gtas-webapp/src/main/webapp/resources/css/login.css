@@ -62,7 +62,7 @@ html, body, div, span, applet, object, iframe,
 	border-radius: 15px;
 	margin: auto; 	
 	display: block;
-	height: 290px;
+	height: auto;
 	margin: 50px auto;
 	width: 356px; 
 	padding: 22px;

@@ -18,8 +18,8 @@ app.service("paxModel", [function () {
             origin: params && params.origin ? params.origin : [],
             dest: params && params.destination ? params.destination : [],
             direction: params && params.direction ? params.direction : 'I',
-            etaStart: params && params.etaStart ? new Date(params.etaStart) : startDate,
-            etaEnd: params && params.etaEnd ? new Date(params.etaEnd) : endDate,
+            etaStart: params && params.etaStart ? new Date(params.etaStart.split('-').join(',')) : startDate,
+            etaEnd: params && params.etaEnd ? new Date(params.etaEnd.split('-').join(',')) : endDate,
             sort: defaultSort
         };
     };

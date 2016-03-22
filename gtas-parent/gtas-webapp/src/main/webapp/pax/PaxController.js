@@ -357,22 +357,36 @@
             var originAirports = new Array();
             var destinationAirports = new Array();
             var airport = { id: "" };
-
-
+            
             if($scope.model.origin ) {
-                if ($scope.model.origin instanceof Array ) {
-                } else {
-                originAirports.push({id: $scope.model.origin});
-                $scope.model.origin = originAirports
+            	if ($scope.model.origin instanceof Array ){
+	            	angular.forEach($scope.model.origin, function (value, index) {
+	            		if(value instanceof Object) {
+	                		originAirports.push({id:value.id});
+	                	}else{
+	                		originAirports.push({id: value});
+	                	}
+	                });
+            	}else{
+            		originAirports.push({id: $scope.model.origin});
+            	}
+            	$scope.model.origin = originAirports;
             }
-            };
+            
             if($scope.model.dest ) {
-                if ($scope.model.dest instanceof Array ) {
-                } else {
-                    destinationAirports.push({id: $scope.model.dest});
-                    $scope.model.dest = destinationAirports
-                }
-            };
+            	if ($scope.model.dest instanceof Array ) {
+            	  angular.forEach($scope.model.dest, function (value, index) {
+            		if(value instanceof Object) {
+                  		destinationAirports.push({id:value.id});
+                  	}else{
+                      destinationAirports.push({id: value});
+                  	}
+                  });
+            	}else{
+            		destinationAirports.push({id: $scope.model.dest});
+            	}
+            	$scope.model.dest = destinationAirports;   
+            }
             
         };
 

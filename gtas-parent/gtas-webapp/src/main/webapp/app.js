@@ -28,7 +28,8 @@ var app;
             'spring-security-csrf-token-interceptor',
             'swxSessionStorage',
             'ngCookies',
-            'pascalprecht.translate'
+            'pascalprecht.translate',
+            'ngIdle'
         ],
         language = function ($translateProvider) {
       
@@ -38,6 +39,13 @@ var app;
     		$translateProvider.fallbackLanguage('en');
     		
         	
+		},
+		idleWatchConfig = function(IdleProvider, KeepaliveProvider, TitleProvider){
+			/*TitleProvider.enabled(false);
+			IdleProvider.interrupt('notDefault');
+			IdleProvider.idle(10);
+			IdleProvider.timeout(15);
+			IdleProvider.keepalive(false);*/
 		},
         localDateMomentFormat = function ($mdDateLocaleProvider) {
             // Example of a French localization.
@@ -74,12 +82,12 @@ var app;
             //$mdDateLocaleProvider.msgCalendar = 'Calendrier';
             //$mdDateLocaleProvider.msgOpenCalendar = 'Ouvrir le calendrier';
         },
-        initialize = function ($rootScope, AuthService, USER_ROLES, $state, APP_CONSTANTS, $sessionStorage, checkUserRoleFactory) {
+        initialize = function ($rootScope, AuthService, USER_ROLES, $state, APP_CONSTANTS, $sessionStorage, checkUserRoleFactory, Idle, $mdDialog) {
             $rootScope.ROLES = USER_ROLES;
             $rootScope.$on('$stateChangeStart',
 
                 function (event, toState) {
-
+            		//Idle.watch();
                     var currentUser = $sessionStorage.get(APP_CONSTANTS.CURRENT_USER);
                     if (currentUser === undefined) {
                         $rootScope.$broadcast('unauthorizedEvent');
@@ -91,6 +99,48 @@ var app;
                         event.preventDefault();
                     }
                 });
+            
+           $rootScope.$on('IdleStart', function(){
+        	   $rootScope.showConfirm();
+           });
+           
+           $rootScope.$on('IdleEnd', function(){
+        	   console.log('No longer Idle');
+           });
+           
+           $rootScope.$on('IdleTimeout', function(){
+        	  $mdDialog.hide();
+        	  $rootScope.userTimedout = true;
+        	  $rootScope.$broadcast('unauthorizedEvent');
+        	  window.location.href = APP_CONSTANTS.LOGIN_PAGE +"?userTimeout";
+           });
+           
+           $rootScope.showConfirm = function() {
+        	   var confirm = $mdDialog.confirm({
+	        	   parent: angular.element(document.body),
+	               templateUrl:'dialog1.tmpl.html'
+	           })
+	           $mdDialog.show(confirm).then(function() {
+	            	      Idle.watch();
+	            	    }, function() {
+	            	      return false;
+	            	    
+	           });
+       	  };
+       	  
+       	  $rootScope.hide = function(){
+       		  $mdDialog.hide();
+       	  };
+       	    /*var confirm = $mdDialog.confirm()
+       	          .title('Idle warning')
+       	          .textContent('You are idle, for security purposes your session will be terminated in 60 seconds. '+ 
+       	        		  'To continue your session please select the button below')
+       	          .ok('Continue Session');
+       	    $mdDialog.show(confirm).then(function() {
+       	      Idle.watch();
+       	    }, function() {
+       	      return false;
+       	    });*/
 
         },
         router = function ($stateProvider, $urlRouterProvider, $httpProvider, USER_ROLES) {
@@ -229,7 +279,7 @@ var app;
                     },
                     resolve: {
                         passengers: function (paxService, paxModel) {
-                            return paxService.getAllPax(paxModel.model);
+                            return paxService.getPassengersBasedOnUser(paxModel);
                         }
                     }
                 })
@@ -245,7 +295,10 @@ var app;
                     },
                     resolve: {
                         paxModel: function ($stateParams, paxModel) {
-                            return {
+                        	$stateParams.dest = $stateParams.destination;
+                            $stateParams.etaStart = $stateParams.eta;
+                            $stateParams.etaEnd = $stateParams.etd;
+                        	return {
                                 model: paxModel.initial($stateParams),
                                 reset: function () {
                                     this.model.lastName = '';
@@ -397,6 +450,7 @@ var app;
         .config(router)
         .config(localDateMomentFormat)
         .config(language)
+        .config(idleWatchConfig)
         .constant('USER_ROLES', {
             ADMIN: 'Admin',
             VIEW_FLIGHT_PASSENGERS: 'View Flight And Passenger',
