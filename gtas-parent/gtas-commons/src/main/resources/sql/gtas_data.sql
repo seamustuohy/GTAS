@@ -50,4 +50,4 @@ INSERT INTO `flight_direction` VALUES (3,'A', 'Any');
 -- ----------------------------
 insert into app_configuration (opt, val, description) values('HOME_COUNTRY', 'USA', 'home country for the loader to determine incoming/outgoing flights');
 insert into app_configuration (opt, val, description) values('QUEUE', 'gtasQ', 'queue name for storing incoming messages');
-insert into app_configuration (opt, val, description) values('Dashboard Time Adjustment', 'HOURLY_ADJ', '-5');
+insert into app_configuration (opt, val, description) values('HOURLY_ADJ','-5','Dashboard Time Adjustment');

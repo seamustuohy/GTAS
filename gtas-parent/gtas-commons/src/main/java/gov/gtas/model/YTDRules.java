@@ -13,7 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "YTD_RULES")
+@Table(name = "ytd_rules")
 public class YTDRules {
 
     private static final long serialVersionUID = 1L;

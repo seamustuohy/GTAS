@@ -13,7 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "YTD_AIRPORT_STATS")
+@Table(name = "ytd_airport_stats")
 public class YTDAirportStatistics {
 
     private static final long serialVersionUID = 1L;
