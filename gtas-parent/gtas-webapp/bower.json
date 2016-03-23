@@ -31,11 +31,7 @@
     "seiyria-bootstrap-slider": "latest",
     "selectize": "latest",
     "spring-security-csrf-token-interceptor": "latest",
-<<<<<<< HEAD
     "ng-idle": "^1.2.0"
-=======
-    "ng-idle": "~1.2.0"
->>>>>>> branch 'master' of https://taylorjwdev@bitbucket.org/sanandreas/sanandreas.git
   },
   "devDependencies": {
     "awesome-bootstrap-checkbox": "^0.3.0",
