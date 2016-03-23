@@ -25,7 +25,22 @@
 
 <body>
 <header class="header" title="{{'gtas.title' | translate}}"></header>
+<div style="padding-top: 15px;text-align:right">
+<ul ng-controller="LanguageController">
 
+<b> Select Country and Language to view in your locale:</b><select ng-model="country"                
+                ng-options="obj.id as obj.name for obj in countries"
+                ng-change="updateCountry()"
+                ng-required="true"
+                id="country">
+          <option value="">-- Choose Country --</option>
+        </select> 
+        <select ng-model="locale" ng-options="locale.id as locale.name for locale in availableLocales" ng-change="changeLanguage('en')">
+  			<option value="">Select locale</option>
+		</select> 
+</ul>
+</div>
+   
 <div id="main" class="container" style="padding-top:100px"> 
 	<form name="loginform" id="loginform" ng-controller="LoginController" ng-submit="login(credentials)">
 	<p class="login-username"> 

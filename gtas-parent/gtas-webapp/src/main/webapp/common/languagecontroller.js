@@ -7,6 +7,7 @@ app.controller('LanguageController', ['$scope','$translate','$location', functio
         $location.search('lang', locale);
     };
     $scope.countries = [
+    	{"name": "United States","id": 33  },
 		{"name":"Algeria","id": 1  },
 		{"name": "Bahrain","id": 2  },
 		{"name": "Egypt","id": 3  },
@@ -39,7 +40,6 @@ app.controller('LanguageController', ['$scope','$translate','$location', functio
 		{"name": "Philippines","id": 30  },
 		{"name": "Singapore","id": 31  },
 		{"name": "South Africa","id": 32  },
-		{"name": "United States","id": 33  },
 		{"name": "France","id": 34 },
 		{"name": "Luxembourg","id": 35  },
 		{"name": "Switzerland","id": 36 },
