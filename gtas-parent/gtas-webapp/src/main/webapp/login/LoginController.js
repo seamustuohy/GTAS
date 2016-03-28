@@ -2,7 +2,8 @@
     'use strict';
     app.controller('LoginController',
         function($state, $scope, $rootScope, $q, $stateParams, userService, $mdToast, AuthService,
-                 Session, sessionFactory, APP_CONSTANTS, $sessionStorage, $location, $interval, $window, $translate, $cookies, $mdDialog, Idle) {
+                 Session, sessionFactory, APP_CONSTANTS, $sessionStorage, $location, $interval,
+                 $window, $translate, $cookies, $mdDialog, Idle) {
     		//Insure Idle is not watching pre-login
     		if(Idle.running()){
     			Idle.unwatch();
@@ -25,7 +26,7 @@
     		}
     		
             //Set locale here to change language setting for web site
-			$scope.locale = "en";
+            $translate.refresh($cookies.get(APP_CONSTANTS.LOCALE_COOKIE_KEY));
             $scope.currentUser = {};
             $scope.credentials = {
                 j_username: '',

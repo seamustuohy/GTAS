@@ -28,16 +28,24 @@
 <div style="padding-top: 15px;text-align:right">
 <ul ng-controller="LanguageController">
 
-<b> Select Country and Language to view in your locale:</b><select ng-model="country"                
-                ng-options="obj.id as obj.name for obj in countries"
-                ng-change="updateCountry()"
-                ng-required="true"
-                id="country">
-          <option value="">-- Choose Country --</option>
-        </select> 
-        <select ng-model="locale" ng-options="locale.id as locale.name for locale in availableLocales" ng-change="changeLanguage('en')">
-  			<option value="">Select locale</option>
-		</select> 
+    <md-input-container>
+        <label>Category</label>
+        <md-select ng-model="country" ng-change="locale = null">
+            <md-option ng-repeat="s in list" ng-value="s">
+                {{s.name}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+
+    <md-input-container>
+        <label>Locale</label>
+        <md-select ng-model="locale" ng-disabled="!country.version" ng-change="changeLanguage('en')">
+            <md-option ng-repeat="s in country.version" ng-value="s.id">
+                {{s.name}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+
 </ul>
 </div>
    
@@ -110,6 +118,6 @@
 <script src='login/LoginController.js'></script>
 <script src='userSettings/UserSettingsController.js'></script>
 <script src='userSettings/FilterCtrl.js'></script>
-<script src='common/languagecontroller.js'></script>
+<script src='common/languageController.js'></script>
 </body>
 </html>

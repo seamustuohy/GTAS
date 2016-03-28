@@ -441,7 +441,9 @@ var app;
                     if (response.status === 200 || response.status === 403 || response.status === 405) {
                         var cookies = $cookies.getAll();
                         angular.forEach(cookies, function (v, k) {
-                            $cookies.remove(k);
+                            if(APP_CONSTANTS.LOCALE_COOKIE_KEY != k) {
+                                $cookies.remove(k);
+                            }
                         });
                         $sessionStorage.remove(APP_CONSTANTS.CURRENT_USER);
                         $rootScope.authenticated = false;
@@ -469,6 +471,7 @@ var app;
             HOME_PAGE: '/gtas/main.html',
             MAIN_PAGE: 'main.html#/dashboard',
             CURRENT_USER: 'CurrentUser',
+            LOCALE_COOKIE_KEY: 'myLocaleCookie',
             LOGIN_ERROR_MSG: ' Invalid User Name or Password. Please Try Again '
         })
         .run(initialize)
