@@ -1,4 +1,4 @@
-package gov.gtas.job;
+package gov.gtas.job.scheduler;
 
 import static gov.gtas.constant.GtasSecurityConstants.GTAS_APPLICATION_USERID;
 import gov.gtas.enumtype.AuditActionType;
@@ -25,7 +25,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LoaderScheduler {
 
 	private static final Logger logger = LoggerFactory
@@ -55,7 +57,7 @@ public class LoaderScheduler {
 	@Value("${inputType}")
 	private String inputType;
 
-	@Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelayString = "${initialDelay.in.milliseconds}")
+	@Scheduled(fixedDelayString = "${loader.fixedDelay.in.milliseconds}", initialDelayString = "${loader.initialDelay.in.milliseconds}")
 	public void jobScheduling() {
 		logger.info("entering jobScheduling()");
 
@@ -84,7 +86,7 @@ public class LoaderScheduler {
 		if (exitStatus) {
 			Thread.currentThread().interrupt();
 		}
-		
+
 		LoaderStatistics stats = new LoaderStatistics();
 		switch (inputType) {
 		case InputType.FILE_LIST:
