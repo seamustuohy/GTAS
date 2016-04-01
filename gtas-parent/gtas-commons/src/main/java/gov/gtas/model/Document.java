@@ -9,9 +9,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "document")
+@Table(name = "document",
+    uniqueConstraints={@UniqueConstraint(columnNames={"document_type", "document_number", "issuance_date", "issuance_country"})}
+)
 public class Document extends BaseEntity {
     private static final long serialVersionUID = 1L;  
     public Document() { }
