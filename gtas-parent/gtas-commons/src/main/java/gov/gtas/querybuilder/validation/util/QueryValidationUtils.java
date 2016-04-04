@@ -44,10 +44,13 @@ public class QueryValidationUtils {
 		BeanPropertyBindingResult errors = new BeanPropertyBindingResult(QueryObject.class, objectName);
 		
 		logger.info("Validating " + objectName);
-		if(queryObject != null) {
-			// validate user query
-			validate(queryObject, errors);
+		if(queryObject == null) {
+			errors.reject("", "query is null");
+			return errors;
 		}
+		
+		// validate user query
+		validate(queryObject, errors);
 		
 		return errors;
 	}
