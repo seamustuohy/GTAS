@@ -1,8 +1,15 @@
 package gov.gtas.job.scheduler;
 
+import static gov.gtas.constant.GtasSecurityConstants.GTAS_APPLICATION_USERID;
+import gov.gtas.enumtype.AuditActionType;
 import gov.gtas.error.ErrorDetailInfo;
 import gov.gtas.error.ErrorHandlerFactory;
+import gov.gtas.json.AuditActionData;
+import gov.gtas.json.AuditActionTarget;
+import gov.gtas.services.AuditLogPersistenceService;
 import gov.gtas.services.ErrorPersistenceService;
+
+import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,10 +37,16 @@ public class DashboardUpdateScheduler {
 	@Value("${dashboard.pnr.message.update}")
 	private String pnrDashboardUpdateSql;
 
-	@Autowired
 	private ErrorPersistenceService errorPersistenceService;
 
-	public DashboardUpdateScheduler() {
+	private AuditLogPersistenceService auditLogPersistenceService;
+
+	@Autowired
+	public DashboardUpdateScheduler(
+			ErrorPersistenceService errorPersistenceService,
+			AuditLogPersistenceService auditLogPersistenceService) {
+		this.errorPersistenceService = errorPersistenceService;
+		this.auditLogPersistenceService = auditLogPersistenceService;
 	}
 
 	@Scheduled(fixedDelayString = "${dashboard.fixedDelay.in.milliseconds}")
@@ -45,9 +58,10 @@ public class DashboardUpdateScheduler {
 			entityManager.createNativeQuery(apiDashboardUpdateSql)
 					.executeUpdate();
 			logger.info("Updated dashboard api.");
-			entityManager.createNativeQuery(pnrDashboardUpdateSql)
-					.executeUpdate();
+			int updatedRecords = entityManager.createNativeQuery(
+					pnrDashboardUpdateSql).executeUpdate();
 			logger.info("Updated dashboard pnr.");
+			writeAuditLogForTargetingRun(updatedRecords);
 		} catch (Exception ex) {
 			logger.error("SQLException:" + ex.getMessage(), ex);
 			ErrorDetailInfo errInfo = ErrorHandlerFactory
@@ -57,6 +71,25 @@ public class DashboardUpdateScheduler {
 
 		logger.info("exiting jobScheduling()");
 
+	}
+
+	private void writeAuditLogForTargetingRun(Integer updatedRecords) {
+		try {
+			AuditActionTarget target = new AuditActionTarget(
+					AuditActionType.UPDATE_DASHBOARD,
+					"GTAS Updating Dashboard", null);
+			AuditActionData actionData = new AuditActionData();
+			actionData.addProperty("updatedDashboardRecord", String.valueOf(updatedRecords));
+			String message = "Updating Dashboard run on " + new Date();
+			auditLogPersistenceService.create(AuditActionType.UPDATE_DASHBOARD,
+					target.toString(), actionData.toString(), message,
+					GTAS_APPLICATION_USERID);
+		} catch (Exception ex) {
+			logger.error("SQLException:" + ex.getMessage(), ex);
+			ErrorDetailInfo errInfo = ErrorHandlerFactory
+					.createErrorDetails(ex);
+			errorPersistenceService.create(errInfo);
+		}
 	}
 
 }
