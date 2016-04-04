@@ -129,17 +129,13 @@ public class DashboardController {
         List<Message> _tempApisList = apisMessageService.getAPIsByDates(sdf.parse(startDate), sdf.parse(endDate));
         List<Pnr> _tempPnrList = pnrService.getPNRsByDates(sdf.parse(startDate), sdf.parse(endDate));
 
-        ApisStatistics apisStatistics = messageStatsService.getApisStatistics();
-        PnrStatistics pnrStatistics = messageStatsService.getPnrStatistics();
+        DashboardMessageStats apisStatistics = messageStatsService.getDashboardAPIMessageStats();
+        DashboardMessageStats pnrStatistics = messageStatsService.getDashboardPNRMessageStats();
 
         apisMessageCount = _tempApisList.size();
         pnrMessageCount = _tempPnrList.size();
 
-        //        _apisAndPnrCount.put("apisMessageCount", apisMessageCount);
-        //        _apisAndPnrCount.put("pnrMessageCount", pnrMessageCount);
-
         MessageCount mc = new MessageCount(stateLabel,EMPTY_STRING,EMPTY_STRING);
-         //_apisAndPnrCount.add(mc);
         for(int i=0; i<clockTicks; i++){
 
             mc = new MessageCount(displayTokens[i]+EMPTY_STRING, Arrays.asList(getApiPnrCountPerRow(apisStatistics, pnrStatistics, i).split(",")).get(0),
@@ -149,74 +145,6 @@ public class DashboardController {
 
         return _apisAndPnrCount;
     }
-
-//    //Inner Class for YTD Rules
-//    class YTDRules implements Serializable {
-//        String ruleName;
-//        Integer hits;
-//        Date createdOn;
-//        String createdBy;
-//        Date lastModifiedOn;
-//        String lastModifiedBy;
-//
-//        public YTDRules(String ruleName, Integer hits, Date createdOn, String createdBy, Date lastModifiedOn, String lastModifiedBy) {
-//            this.ruleName = ruleName;
-//            this.hits = hits;
-//            this.createdOn = createdOn;
-//            this.createdBy = createdBy;
-//            this.lastModifiedOn = lastModifiedOn;
-//            this.lastModifiedBy = lastModifiedBy;
-//        }
-//
-//        public String getRuleName() {
-//            return ruleName;
-//        }
-//
-//        public void setRuleName(String ruleName) {
-//            this.ruleName = ruleName;
-//        }
-//
-//        public Integer getHits() {
-//            return hits;
-//        }
-//
-//        public void setHits(Integer hits) {
-//            this.hits = hits;
-//        }
-//
-//        public Date getCreatedOn() {
-//            return createdOn;
-//        }
-//
-//        public void setCreatedOn(Date createdOn) {
-//            this.createdOn = createdOn;
-//        }
-//
-//        public String getCreatedBy() {
-//            return createdBy;
-//        }
-//
-//        public void setCreatedBy(String createdBy) {
-//            this.createdBy = createdBy;
-//        }
-//
-//        public Date getLastModifiedOn() {
-//            return lastModifiedOn;
-//        }
-//
-//        public void setLastModifiedOn(Date lastModifiedOn) {
-//            this.lastModifiedOn = lastModifiedOn;
-//        }
-//
-//        public String getLastModifiedBy() {
-//            return lastModifiedBy;
-//        }
-//
-//        public void setLastModifiedBy(String lastModifiedBy) {
-//            this.lastModifiedBy = lastModifiedBy;
-//        }
-//    }
-//
 
     @RequestMapping(method = RequestMethod.GET, value = "/getYtdRulesCount")
     public List<YTDRules> getYtdRulesCount(){
@@ -238,7 +166,7 @@ public class DashboardController {
     }
 
 
-    private String getApiPnrCountPerRow(ApisStatistics apisStatistics,PnrStatistics pnrStatistics, int position ){
+    private String getApiPnrCountPerRow(DashboardMessageStats apisStatistics,DashboardMessageStats pnrStatistics, int position ){
 
         String returnString = "";
 
