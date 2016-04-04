@@ -14,7 +14,8 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 @Configuration
 @EnableScheduling
 @ComponentScan("gov.gtas.job.scheduler")
-@PropertySource("classpath:jobScheduler.properties")
+@PropertySource({ "classpath:jobScheduler.properties",
+		"classpath:dashboardJobScheduler.properties" })
 public class JobSchedulerConfig implements SchedulingConfigurer {
 
 	@Override
@@ -24,7 +25,7 @@ public class JobSchedulerConfig implements SchedulingConfigurer {
 
 	@Bean(destroyMethod = "shutdown")
 	public Executor taskExecutor() {
-		return Executors.newScheduledThreadPool(20);
+		return Executors.newScheduledThreadPool(30);
 	}
 
 }

@@ -20,13 +20,14 @@ public class RuleRunnerScheduler {
 	private static final Logger logger = LoggerFactory
 			.getLogger(RuleRunnerScheduler.class);
 
-	@Autowired
 	private TargetingService targetingService;
 
-	@Autowired
 	private ErrorPersistenceService errorPersistenceService;
 
-	public RuleRunnerScheduler() {
+	@Autowired
+	public RuleRunnerScheduler(TargetingService targetingService, ErrorPersistenceService errorPersistenceService) {
+		this.targetingService = targetingService;
+		this.errorPersistenceService = errorPersistenceService;
 	}
 
 	@Scheduled(fixedDelayString = "${ruleRunner.fixedDelay.in.milliseconds}", initialDelayString = "${ruleRunner.initialDelay.in.milliseconds}")
