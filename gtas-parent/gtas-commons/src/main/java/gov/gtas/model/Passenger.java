@@ -13,9 +13,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "passenger")
+@Table(name = "passenger",
+    uniqueConstraints={@UniqueConstraint(columnNames={
+            "passenger_type", 
+            "first_name", 
+            "last_name", 
+            "middle_name", 
+            "gender", 
+            "dob"})}
+)
 public class Passenger extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;  
     public Passenger() { }

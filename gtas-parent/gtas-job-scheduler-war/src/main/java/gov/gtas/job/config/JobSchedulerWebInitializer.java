@@ -1,8 +1,6 @@
-package gov.gtas.scheduler.config;
+package gov.gtas.job.config;
 
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.config.RuleRunnerConfig;
-import gov.gtas.job.config.ParserConfig;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -12,8 +10,7 @@ public class JobSchedulerWebInitializer extends
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 		return new Class<?>[] { CommonServicesConfig.class,
-				JobSchedulerConfig.class, RuleRunnerConfig.class,
-				ParserConfig.class };
+				JobSchedulerConfig.class };
 	}
 
 	@Override

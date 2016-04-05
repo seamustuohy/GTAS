@@ -9,10 +9,10 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>gtas-job-scheduler-webapp</artifactId>
+	<artifactId>gtas-job-scheduler-war</artifactId>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>gtas-job-scheduler Maven Webapp</name>
+	<name>gtas-job-scheduler Maven War file</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,4 +1,4 @@
-package gov.gtas.rule;
+package gov.gtas.job.scheduler;
 
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.ErrorDetailInfo;
@@ -12,22 +12,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RuleRunnerScheduler {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(RuleRunnerScheduler.class);
 
-	@Autowired
 	private TargetingService targetingService;
 
-	@Autowired
 	private ErrorPersistenceService errorPersistenceService;
 
-	public RuleRunnerScheduler() {
+	@Autowired
+	public RuleRunnerScheduler(TargetingService targetingService, ErrorPersistenceService errorPersistenceService) {
+		this.targetingService = targetingService;
+		this.errorPersistenceService = errorPersistenceService;
 	}
 
-	@Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelayString = "${initialDelay.in.milliseconds}")
+	@Scheduled(fixedDelayString = "${ruleRunner.fixedDelay.in.milliseconds}", initialDelayString = "${ruleRunner.initialDelay.in.milliseconds}")
 	public void jobScheduling() {
 		logger.info("entering jobScheduling()");
 		try {

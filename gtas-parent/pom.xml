@@ -43,7 +43,7 @@
     <module>gtas-rulesvc</module>
     <module>gtas-webapp</module>
     <module>gtas-query-builder</module>
-    <module>gtas-job-scheduler-webapp</module>
+    <module>gtas-job-scheduler-war</module>
   </modules>
 
   <build>

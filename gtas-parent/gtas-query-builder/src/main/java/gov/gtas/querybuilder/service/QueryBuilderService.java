@@ -17,6 +17,9 @@ import gov.gtas.querybuilder.model.UserQuery;
 import gov.gtas.querybuilder.model.UserQueryRequest;
 import gov.gtas.querybuilder.model.UserQueryResult;
 import gov.gtas.querybuilder.repository.QueryBuilderRepository;
+import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
+import gov.gtas.querybuilder.vo.FlightQueryVo;
+import gov.gtas.querybuilder.vo.PassengerQueryVo;
 import gov.gtas.services.PassengerService;
 import gov.gtas.services.dto.FlightsPageDto;
 import gov.gtas.services.dto.PassengersPageDto;
@@ -32,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -119,20 +123,28 @@ public class QueryBuilderService {
 		List<FlightVo> flightList = new ArrayList<>();
 		long totalCount = 0;
 		
+		// validate queryRequest
+		if(queryRequest == null) {
+			throw new InvalidQueryException("Error: query is null", queryRequest);
+		}
+		
+		Errors errors = QueryValidationUtils.validateQueryObject(queryRequest.getQuery());
+		if(errors != null && errors.hasErrors()) {
+			String errorMsg = QueryValidationUtils.getErrorString(errors);
+			logger.info(errorMsg, new InvalidQueryException(errorMsg, queryRequest.getQuery()));
+			throw new InvalidQueryException(errorMsg, queryRequest.getQuery());
+		}
+				
 		try {
-			List<Flight> flights = queryRepository.getFlightsByDynamicQuery(queryRequest);
+			FlightQueryVo flights = queryRepository.getFlightsByDynamicQuery(queryRequest);
 			
-			if(flights == null || flights.size() == 0) {
+			if(flights == null) {
 				return new FlightsPageDto(flightList, totalCount);
 			}
 			
-			if(queryRequest.getPageSize() < 0) {
-				totalCount = flights.size();
-			} else {
-				totalCount = queryRepository.totalFlightsByDynamicQuery(queryRequest);
-			}
-			
-			for(Flight flight : flights) {
+			totalCount = flights.getTotalFlights();
+						
+			for(Flight flight : flights.getFlights()) {
 				if(flight != null && flight.getId() > 0) {
 					FlightVo flightVo = new FlightVo();
 					
@@ -151,20 +163,28 @@ public class QueryBuilderService {
 		List<PassengerVo> passengerList = new ArrayList<>();
 		long totalCount = 0;
 		
-		try {
-			List<Object[]> resultList = queryRepository.getPassengersByDynamicQuery(queryRequest);
+		// validate queryRequest
+		if(queryRequest == null) {
+			throw new InvalidQueryException("Error: query is null", queryRequest);
+		}
+		
+		Errors errors = QueryValidationUtils.validateQueryObject(queryRequest.getQuery());
+		if(errors != null && errors.hasErrors()) {
+			String errorMsg = QueryValidationUtils.getErrorString(errors);
+			logger.info(errorMsg, new InvalidQueryException(errorMsg, queryRequest.getQuery()));
+			throw new InvalidQueryException(errorMsg, queryRequest.getQuery());
+		}
 			
-			if(resultList == null || resultList.size() == 0) {
+		try {
+			PassengerQueryVo resultList = queryRepository.getPassengersByDynamicQuery(queryRequest);
+			
+			if(resultList == null) {
 				return new PassengersPageDto(passengerList, totalCount);
 			}
 			
-			if(queryRequest.getPageSize() < 0) {
-				totalCount = resultList.size();
-			} else {
-				totalCount = queryRepository.totalPassengersByDynamicQuery(queryRequest);
-			}
+			totalCount = resultList.getTotalPassengers();
 			
-	        for (Object[] result : resultList) {
+	        for (Object[] result : resultList.getResult()) {
 	        	Passenger passenger = (Passenger) result[1];
 				Flight flight = (Flight) result[2];
 	            PassengerVo vo = new PassengerVo();

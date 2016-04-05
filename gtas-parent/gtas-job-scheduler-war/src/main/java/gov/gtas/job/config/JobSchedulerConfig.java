@@ -1,29 +1,22 @@
-package gov.gtas.scheduler.config;
-
-import gov.gtas.job.LoaderScheduler;
-import gov.gtas.rule.RuleRunnerScheduler;
+package gov.gtas.job.config;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 @Configuration
 @EnableScheduling
+@ComponentScan("gov.gtas.job.scheduler")
+@PropertySource({ "classpath:jobScheduler.properties",
+		"classpath:dashboardJobScheduler.properties" })
 public class JobSchedulerConfig implements SchedulingConfigurer {
-	@Bean
-	public RuleRunnerScheduler ruleRunnerSchedulerbean() {
-		return new RuleRunnerScheduler();
-	}
-
-	@Bean
-	public LoaderScheduler loaderReaderbean() {
-		return new LoaderScheduler();
-	}
 
 	@Override
 	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
@@ -32,7 +25,7 @@ public class JobSchedulerConfig implements SchedulingConfigurer {
 
 	@Bean(destroyMethod = "shutdown")
 	public Executor taskExecutor() {
-		return Executors.newScheduledThreadPool(20);
+		return Executors.newScheduledThreadPool(30);
 	}
 
 }
