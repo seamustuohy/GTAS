@@ -1,7 +1,13 @@
 (function () {
     'use strict';
-    app.controller('PassengerDetailCtrl', function ($scope, passenger) {
+    app.controller('PassengerDetailCtrl', function ($scope, passenger, paxDetailService) {
         $scope.passenger = passenger.data;
+        $scope.isLoadingFlightHistory = true;
+        paxDetailService.getPaxFlightHistory($scope.passenger.paxId)
+        .then(function(response){
+        	$scope.isLoadingFlightHistory = false;
+        	$scope.passenger.flightHistoryVo = response.data;
+        });
     });
     app.controller('PaxController', function ($scope, $injector, $stateParams, $state, $mdToast, paxService, sharedPaxData, uiGridConstants, gridService,
                                               jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers,

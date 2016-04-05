@@ -41,11 +41,11 @@ var app;
         	
 		},
 		idleWatchConfig = function(IdleProvider, KeepaliveProvider, TitleProvider){
-			/*TitleProvider.enabled(false);
+			TitleProvider.enabled(false);
 			IdleProvider.interrupt('notDefault');
-			IdleProvider.idle(10);
-			IdleProvider.timeout(15);
-			IdleProvider.keepalive(false);*/
+			IdleProvider.idle(540);
+			IdleProvider.timeout(60);
+			IdleProvider.keepalive(false);
 		},
         localDateMomentFormat = function ($mdDateLocaleProvider) {
             // Example of a French localization.
@@ -87,7 +87,7 @@ var app;
             $rootScope.$on('$stateChangeStart',
 
                 function (event, toState) {
-            		//Idle.watch();
+            		Idle.watch();
                     var currentUser = $sessionStorage.get(APP_CONSTANTS.CURRENT_USER);
                     if (currentUser === undefined) {
                         $rootScope.$broadcast('unauthorizedEvent');
@@ -99,7 +99,13 @@ var app;
                         event.preventDefault();
                     }
                 });
-            
+           $rootScope.triggerIdle = function(){
+        	   	//Prevent triggers pre-login
+        	   	if(Idle.running()){
+        	   		Idle.watch();
+           		}
+           };
+           
            $rootScope.$on('IdleStart', function(){
         	   $rootScope.showConfirm();
            });
@@ -118,8 +124,23 @@ var app;
            $rootScope.showConfirm = function() {
         	   var confirm = $mdDialog.confirm({
 	        	   parent: angular.element(document.body),
-	               templateUrl:'dialog1.tmpl.html'
-	           })
+	               template:'<md-dialog ng-cloak>'+
+	            	   '<form>'+
+	            	   		'<md-dialog-content>'+
+	            	   			'<div class="md-dialog-content" style="padding-top:0px;padding-bottom:0px;">'+
+	            	   				'<h5 class="md-title"><strong>Idle Session Timeout Warning</strong></h5>'+
+	            	   					'<div class="_md-dialog-content-body ng-scope"><p class="ng-binding">'+
+	            	   						'Your session has been idle for too long. If you wish to maintain your session please click the button below.</p></div>'+
+	            	   					'<span idle-countdown="countdown"> You will be logged out automatically in <strong style="font-size:xx-large;">{{countdown}}</strong> seconds. </span>'+
+	            	   			'</div>'+
+	            	   		'</md-dialog-content>'+
+	            	   	'<md-dialog-actions layout="row">'+
+        	      '<md-dialog-actions layout="row" class="layout-row">'+      	  	  
+        	      '<md-button ng-click="dialog.hide()">Continue Session</md-button>'+
+        	    '</md-dialog-actions>'+
+        	  '</form>'+
+        	  '</md-dialog>'})
+        	  
 	           $mdDialog.show(confirm).then(function() {
 	            	      Idle.watch();
 	            	    }, function() {
@@ -131,16 +152,6 @@ var app;
        	  $rootScope.hide = function(){
        		  $mdDialog.hide();
        	  };
-       	    /*var confirm = $mdDialog.confirm()
-       	          .title('Idle warning')
-       	          .textContent('You are idle, for security purposes your session will be terminated in 60 seconds. '+ 
-       	        		  'To continue your session please select the button below')
-       	          .ok('Continue Session');
-       	    $mdDialog.show(confirm).then(function() {
-       	      Idle.watch();
-       	    }, function() {
-       	      return false;
-       	    });*/
 
         },
         router = function ($stateProvider, $urlRouterProvider, $httpProvider, USER_ROLES) {
@@ -441,7 +452,9 @@ var app;
                     if (response.status === 200 || response.status === 403 || response.status === 405) {
                         var cookies = $cookies.getAll();
                         angular.forEach(cookies, function (v, k) {
-                            $cookies.remove(k);
+                            if(APP_CONSTANTS.LOCALE_COOKIE_KEY != k) {
+                                $cookies.remove(k);
+                            }
                         });
                         $sessionStorage.remove(APP_CONSTANTS.CURRENT_USER);
                         $rootScope.authenticated = false;
@@ -469,6 +482,7 @@ var app;
             HOME_PAGE: '/gtas/main.html',
             MAIN_PAGE: 'main.html#/dashboard',
             CURRENT_USER: 'CurrentUser',
+            LOCALE_COOKIE_KEY: 'myLocaleCookie',
             LOGIN_ERROR_MSG: ' Invalid User Name or Password. Please Try Again '
         })
         .run(initialize)
@@ -1283,7 +1297,10 @@ var app;
         })
         .factory('httpSecurityInterceptor', function ($q, $rootScope ) {
             return {
-                
+                request: function(config){
+                	$rootScope.triggerIdle();
+                	return config;
+                },
                 responseError: function (response) {
                     if ([401, 403].indexOf(response.status) >= 0) {
                         $rootScope.$broadcast('operationNotAllowedEvent');
@@ -1293,6 +1310,5 @@ var app;
                 }
             };
         }
-
     );
 }());

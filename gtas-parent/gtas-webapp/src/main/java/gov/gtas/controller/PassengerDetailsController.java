@@ -85,22 +85,21 @@ public class PassengerDetailsController {
 
 		Long id = Long.valueOf(paxId);
 		Passenger t = pService.findById(id);
-		List<Flight> flightList = fService.getFlightByPaxId(t.getId());
+		Flight _tempFlight = fService.findById(Long.parseLong(flightId));
 		Flight theFlight = null;
-		for (Flight _tempFlight : flightList) {
-			if (flightId != null && _tempFlight.getId().toString().equals(flightId)) {
-				vo.setFlightNumber(_tempFlight.getFlightNumber());
-				vo.setCarrier(_tempFlight.getCarrier());
-				vo.setFlightOrigin(_tempFlight.getOrigin());
-				vo.setFlightDestination(_tempFlight.getDestination());
-				vo.setFlightETA((_tempFlight.getEta() != null) ? _tempFlight
-						.getEta().toString() : EMPTY_STRING);
-				vo.setFlightETD((_tempFlight.getEtd() != null) ? _tempFlight
-						.getEtd().toString() : EMPTY_STRING);
-				vo.setFlightId(_tempFlight.getId().toString());
-				theFlight = _tempFlight;
-			}
+		if (flightId != null && _tempFlight.getId().toString().equals(flightId)) {
+			vo.setFlightNumber(_tempFlight.getFlightNumber());
+			vo.setCarrier(_tempFlight.getCarrier());
+			vo.setFlightOrigin(_tempFlight.getOrigin());
+			vo.setFlightDestination(_tempFlight.getDestination());
+			vo.setFlightETA((_tempFlight.getEta() != null) ? _tempFlight
+					.getEta().toString() : EMPTY_STRING);
+			vo.setFlightETD((_tempFlight.getEtd() != null) ? _tempFlight
+					.getEtd().toString() : EMPTY_STRING);
+			vo.setFlightId(_tempFlight.getId().toString());
+			theFlight = _tempFlight;
 		}
+		
 
 		vo.setPaxId(String.valueOf(t.getId()));
 		vo.setPassengerType(t.getPassengerType());
@@ -146,7 +145,7 @@ public class PassengerDetailsController {
 		if (_tempPnrList.size() >= 1)
 			vo.setPnrVo(mapPnrToPnrVo((Pnr) _tempPnrList.get(0)));
 
-		// Gather Flight History Details
+		/*// Gather Flight History Details
 		_tempFlightHistoryMap = fService.getFlightsByPassengerNameAndDocument(
 				t.getFirstName(), t.getLastName(), t.getDocuments());
 
@@ -169,10 +168,51 @@ public class PassengerDetailsController {
 			}
 		}
 
-		vo.setFlightHistoryVo(flightHistoryVo);
+		vo.setFlightHistoryVo(flightHistoryVo);*/
 		return vo;
 	} // END of GetPassengerDetails Method
 
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/passengers/passenger/flighthistory", method = RequestMethod.GET)
+		public FlightHistoryVo getFlightHistoryByPassengerAndDocuments(
+		@RequestParam(value = "paxId") String paxId){
+		
+		HashMap<Document, List<Flight>> _tempFlightHistoryMap = new HashMap<Document, List<Flight>>();
+		FlightHistoryVo flightHistoryVo = new FlightHistoryVo();
+		List<FlightVo> _tempFlightVoList = new ArrayList<FlightVo>();
+
+		PassengerVo vo = new PassengerVo();
+		
+		Long id = Long.valueOf(paxId);
+		Passenger t = pService.findById(id);
+		
+		// Gather Flight History Details
+				_tempFlightHistoryMap = fService.getFlightsByPassengerNameAndDocument(
+						t.getFirstName(), t.getLastName(), t.getDocuments());
+
+				for (Document document : _tempFlightHistoryMap.keySet()) {
+					for (Document doc : t.getDocuments()) {
+						if ((document.getDocumentNumber() != null)
+								&& (document.getDocumentNumber().equals(
+										doc.getDocumentNumber()) && (document
+										.getDocumentType().equalsIgnoreCase(doc
+										.getDocumentType())))) {
+							_tempFlightVoList.clear();
+							for (Flight flight : _tempFlightHistoryMap.get(document)) {
+								FlightVo _tempFlightVo = new FlightVo();
+								copyModelToVo(flight, _tempFlightVo);
+								_tempFlightVoList.add(_tempFlightVo);
+							}
+							flightHistoryVo.getFlightHistoryMap().put(
+									doc.getDocumentNumber(), _tempFlightVoList);
+						}
+					}
+				}
+		
+		return flightHistoryVo;
+	}
+	
 	/**
 	 * Util method to map PNR model object to VO
 	 * 

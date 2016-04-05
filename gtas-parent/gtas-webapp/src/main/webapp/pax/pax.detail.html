@@ -479,9 +479,9 @@
                         </div>
                     </md-tab-body>
                 </md-tab>
-                <!-- Flight History Tab -->
-                <md-tab label="{{ 'pass.flt.history' | translate}}">
-
+                <md-tab label="Loading Flight History..." ng-disabled="isLoadingFlightHistory" ng-if="isLoadingFlightHistory">
+                </md-tab>
+                <md-tab label="{{ 'pass.flt.history' | translate}}" ng-if="!isLoadingFlightHistory">
                     <div class="span6" style="background-color: rgb(255, 255, 255, 0.15);">
                         <div class="container">
                             <div style="padding: 10px;"></div>

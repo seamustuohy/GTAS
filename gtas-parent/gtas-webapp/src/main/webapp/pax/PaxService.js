@@ -7,8 +7,15 @@
                 dfd.resolve($http.get("/gtas/passengers/passenger/" + paxId + "/details?flightId=" + flightId));
                 return dfd.promise;
             }
+            
+            function getPaxFlightHistory(paxId){
+            	var dfd = $q.defer();
+            	dfd.resolve($http.get("/gtas/passengers/passenger/flighthistory?paxId=" + paxId));
+            	return dfd.promise;
+            }
 
-            return ({getPaxDetail: getPaxDetail});
+            return ({getPaxDetail: getPaxDetail,
+            		getPaxFlightHistory: getPaxFlightHistory});
         })
         .service("paxService", function (userService, $rootScope, $http, $q) {
         	
