@@ -1,5 +1,9 @@
 package gov.gtas.services;
 
+import gov.gtas.config.CachingConfig;
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.parsers.exception.ParseException;
+
 import java.io.File;
 
 import org.junit.After;
@@ -12,30 +16,30 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.parsers.exception.ParseException;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CommonServicesConfig.class)
+@ContextConfiguration(classes = { CommonServicesConfig.class,
+		CachingConfig.class })
 @Transactional
-public class ApisMessageServiceIT extends AbstractTransactionalJUnit4SpringContextTests {
-    @Autowired
-    private Loader svc;
+public class ApisMessageServiceIT extends
+		AbstractTransactionalJUnit4SpringContextTests {
+	@Autowired
+	private Loader svc;
 
-    private File message;
-    
-    @Before
-    public void setUp() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        this.message = new File(classLoader.getResource("apis-messages/airline2.edi").getFile());
-    }
+	private File message;
 
-    @After
-    public void tearDown() throws Exception {
-    }
+	@Before
+	public void setUp() throws Exception {
+		ClassLoader classLoader = getClass().getClassLoader();
+		this.message = new File(classLoader.getResource(
+				"apis-messages/airline2.edi").getFile());
+	}
 
-    @Test()
-    public void testRunService() throws ParseException {
-        svc.processMessage(this.message);
-    }
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test()
+	public void testRunService() throws ParseException {
+		svc.processMessage(this.message);
+	}
 }

@@ -1,6 +1,11 @@
 package gov.gtas.services;
 
 import static org.junit.Assert.assertEquals;
+import gov.gtas.config.CachingConfig;
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.services.Filter.FilterData;
+import gov.gtas.services.Filter.FilterService;
+import gov.gtas.services.Filter.FilterServiceUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,13 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.services.Filter.FilterData;
-import gov.gtas.services.Filter.FilterService;
-import gov.gtas.services.Filter.FilterServiceUtil;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CommonServicesConfig.class)
+@ContextConfiguration(classes = { CommonServicesConfig.class,
+		CachingConfig.class })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FilterServiceIT {
 
@@ -48,8 +49,8 @@ public class FilterServiceIT {
 
 		FilterData acutalFilter = null;
 
-		FilterData expectedFilter = new FilterData("bStygar", "I", originAirports, destinationAirports, etaStart,
-				etaEnd);
+		FilterData expectedFilter = new FilterData("bStygar", "I",
+				originAirports, destinationAirports, etaStart, etaEnd);
 
 		// Act
 		try {
@@ -92,9 +93,10 @@ public class FilterServiceIT {
 		destinationAirports.add("AEY");
 		destinationAirports.add("EGS");
 
-		FilterData expectedFilter = new FilterData(existingFilter.getUserId(), "O", originAirports, destinationAirports,
-				existingFilter.getEtaStart()-2,
-				existingFilter.getEtaEnd()+2);
+		FilterData expectedFilter = new FilterData(existingFilter.getUserId(),
+				"O", originAirports, destinationAirports,
+				existingFilter.getEtaStart() - 2,
+				existingFilter.getEtaEnd() + 2);
 
 		// Act
 		FilterData actualFilter = filterService.update(expectedFilter);

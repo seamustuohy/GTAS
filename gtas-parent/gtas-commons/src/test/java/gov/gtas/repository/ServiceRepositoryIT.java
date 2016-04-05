@@ -2,6 +2,19 @@ package gov.gtas.repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import gov.gtas.config.CachingConfig;
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.model.ApisMessage;
+import gov.gtas.model.Document;
+import gov.gtas.model.Flight;
+import gov.gtas.model.MessageStatus;
+import gov.gtas.model.Passenger;
+import gov.gtas.model.lookup.Airport;
+import gov.gtas.model.lookup.Carrier;
+import gov.gtas.model.lookup.Country;
+import gov.gtas.model.lookup.DocumentTypeCode;
+import gov.gtas.model.lookup.PassengerTypeCode;
+import gov.gtas.services.FlightService;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -22,21 +35,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.model.ApisMessage;
-import gov.gtas.model.Document;
-import gov.gtas.model.Flight;
-import gov.gtas.model.MessageStatus;
-import gov.gtas.model.Passenger;
-import gov.gtas.model.lookup.Airport;
-import gov.gtas.model.lookup.Carrier;
-import gov.gtas.model.lookup.Country;
-import gov.gtas.model.lookup.DocumentTypeCode;
-import gov.gtas.model.lookup.PassengerTypeCode;
-import gov.gtas.services.FlightService;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CommonServicesConfig.class)
+@ContextConfiguration(classes = { CommonServicesConfig.class,
+		CachingConfig.class })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ServiceRepositoryIT {
 
@@ -277,25 +278,25 @@ public class ServiceRepositoryIT {
 							}
 						}
 					}
-					//System.out.println("happy faces!\n");
+					// System.out.println("happy faces!\n");
 				}
 			}
 		}
-		//System.out.println("happy faces again!\n");
+		// System.out.println("happy faces again!\n");
 	}
-	
+
 	@Test
 	@Transactional
 	public void testGetApisMessageByHashcode() {
-	    final String hash = "1122233";
-	    ApisMessage m = new ApisMessage();
-	    m.setHashCode(hash);
-	    m.setCreateDate(new Date());
-	    m.setFilePath("/tmp/nothing.txt");
-	    m.setStatus(MessageStatus.ANALYZED);
-	    apisMessageRepository.save(m);
-	    
-	    ApisMessage m2 = apisMessageRepository.findByHashCode(hash);
-	    assertEquals(m, m2);
+		final String hash = "1122233";
+		ApisMessage m = new ApisMessage();
+		m.setHashCode(hash);
+		m.setCreateDate(new Date());
+		m.setFilePath("/tmp/nothing.txt");
+		m.setStatus(MessageStatus.ANALYZED);
+		apisMessageRepository.save(m);
+
+		ApisMessage m2 = apisMessageRepository.findByHashCode(hash);
+		assertEquals(m, m2);
 	}
 }

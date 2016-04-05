@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +18,6 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.spring.cache.HazelcastCacheManager;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
@@ -38,7 +35,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 		"classpath:hibernate.properties" })
 @EnableJpaRepositories("gov.gtas")
 @EnableTransactionManagement
-@EnableCaching
 public class CommonServicesConfig {
 
 	private static final String PROPERTY_NAME_DATABASE_DRIVER = "hibernate.connection.driver_class";
@@ -167,11 +163,6 @@ public class CommonServicesConfig {
 		transactionManager.setEntityManagerFactory(entityManagerFactory()
 				.getObject());
 		return transactionManager;
-	}
-
-	@Bean(name = "cacheManager")
-	HazelcastCacheManager hazelcastcacheManager() throws Exception {
-		return new HazelcastCacheManager(Hazelcast.newHazelcastInstance());
 	}
 
 }

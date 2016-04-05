@@ -1,19 +1,7 @@
 package gov.gtas.services;
 
 import static org.junit.Assert.assertNotNull;
-
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import gov.gtas.config.CachingConfig;
 import gov.gtas.config.CommonServicesConfig;
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
@@ -28,8 +16,23 @@ import gov.gtas.model.lookup.PassengerTypeCode;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.LookUpRepository;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CommonServicesConfig.class)
+@ContextConfiguration(classes = { CommonServicesConfig.class,
+		CachingConfig.class })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PnrServiceIT {
 	@Autowired
@@ -52,7 +55,7 @@ public class PnrServiceIT {
 
 	@Autowired
 	private ApisMessageRepository apisMessageRepository;
-	
+
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -60,11 +63,13 @@ public class PnrServiceIT {
 	@After
 	public void tearDown() throws Exception {
 	}
+
 	@Test
 	public void testPnrSave() {
-		System.out.println("##################################################");
+		System.out
+				.println("##################################################");
 		Flight f = new Flight();
-		prepareFlightData( f);
+		prepareFlightData(f);
 		Passenger passengerToUpdate = new Passenger();
 		preparePassengerData(passengerToUpdate);
 		Pnr pnr = new Pnr();
@@ -73,15 +78,17 @@ public class PnrServiceIT {
 		passengerToUpdate.getFlights().add(f);
 		pnr.getPassengers().add(passengerToUpdate);
 		f.getPassengers().add(passengerToUpdate);
-		//testTarget.create(f);
+		// testTarget.create(f);
 		pnr.getFlights().add(f);
 		pnrService.create(pnr);
-		System.out.println("#####################pnr.getId()#############################"+pnr.getId());
+		System.out
+				.println("#####################pnr.getId()#############################"
+						+ pnr.getId());
 		assertNotNull(pnr.getId());
 
 	}
 
-	private void preparePnr(Pnr pnr){
+	private void preparePnr(Pnr pnr) {
 		pnr.setBagCount(2);
 		pnr.setDateBooked(new Date("7/7/2015"));
 		pnr.setDateReceived(new Date("7/7/2015"));
@@ -100,7 +107,7 @@ public class PnrServiceIT {
 		cc.setAccountHolder("Srinivasarao Vempati");
 		cc.setNumber("6666-3333-9999-5555");
 		cc.setCardType("VISA");
-		//cc.setPnr(pnr);
+		// cc.setPnr(pnr);
 		pnr.addCreditCard(cc);
 		Address add = new Address();
 		add.setCity("ALDIE");
@@ -135,9 +142,9 @@ public class PnrServiceIT {
 		ff.setCreatedBy("JUNIT");
 		pnr.addFrequentFlyer(ff);
 	}
-	
-	private void prepareFlightData(Flight f){
-	    f.setDirection("I");
+
+	private void prepareFlightData(Flight f) {
+		f.setDirection("I");
 		f.setCreatedAt(new Date());
 		f.setCreatedBy("JUNIT");
 		String a = "IAD";
@@ -157,9 +164,9 @@ public class PnrServiceIT {
 		f.setUpdatedAt(new Date());
 		f.setUpdatedBy("TEST");
 	}
-	
-	private void preparePassengerData(Passenger passengerToUpdate){
-	    passengerToUpdate.setPassengerType(PassengerTypeCode.P.name());
+
+	private void preparePassengerData(Passenger passengerToUpdate) {
+		passengerToUpdate.setPassengerType(PassengerTypeCode.P.name());
 		passengerToUpdate.setAge(30);
 		String c = "US";
 		String b = "JFK";
