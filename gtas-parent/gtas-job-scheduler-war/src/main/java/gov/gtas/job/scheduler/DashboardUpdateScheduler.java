@@ -61,7 +61,7 @@ public class DashboardUpdateScheduler {
 			int updatedRecords = entityManager.createNativeQuery(
 					pnrDashboardUpdateSql).executeUpdate();
 			logger.info("Updated dashboard pnr.");
-			writeAuditLogForTargetingRun(updatedRecords);
+			writeAuditLogForUpdatingDashboardRun(updatedRecords);
 		} catch (Exception ex) {
 			logger.error("SQLException:" + ex.getMessage(), ex);
 			ErrorDetailInfo errInfo = ErrorHandlerFactory
@@ -73,19 +73,19 @@ public class DashboardUpdateScheduler {
 
 	}
 
-	private void writeAuditLogForTargetingRun(Integer updatedRecords) {
+	private void writeAuditLogForUpdatingDashboardRun(Integer updatedRecords) {
 		try {
 			AuditActionTarget target = new AuditActionTarget(
-					AuditActionType.UPDATE_DASHBOARD,
+					AuditActionType.UPDATE_DASHBOARD_RUN,
 					"GTAS Updating Dashboard", null);
 			AuditActionData actionData = new AuditActionData();
 			actionData.addProperty("updatedDashboardRecord", String.valueOf(updatedRecords));
 			String message = "Updating Dashboard run on " + new Date();
-			auditLogPersistenceService.create(AuditActionType.UPDATE_DASHBOARD,
+			auditLogPersistenceService.create(AuditActionType.UPDATE_DASHBOARD_RUN,
 					target.toString(), actionData.toString(), message,
 					GTAS_APPLICATION_USERID);
 		} catch (Exception ex) {
-			logger.error("SQLException:" + ex.getMessage(), ex);
+			logger.error("Exception:" + ex.getMessage(), ex);
 			ErrorDetailInfo errInfo = ErrorHandlerFactory
 					.createErrorDetails(ex);
 			errorPersistenceService.create(errInfo);
