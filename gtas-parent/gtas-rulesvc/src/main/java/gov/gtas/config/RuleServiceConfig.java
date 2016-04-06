@@ -2,10 +2,8 @@ package gov.gtas.config;
 
 import javax.annotation.Resource;
 
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -18,20 +16,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author GTAS3 (AB)
  *
  */
-// @ImportResource("another-application-context.xml")
-// @Import(OtherConfiguration.class)
+
 @Configuration
 @ComponentScan("gov.gtas")
-@PropertySource("classpath:rulesvc.properties")
 @EnableTransactionManagement
-@EnableCaching
 public class RuleServiceConfig {
 	@Resource
 	private Environment env;
 
-//	@Bean(name = "cacheManager")
-//	HazelcastCacheManager hazelcastcacheManager() throws Exception {
-//		return new HazelcastCacheManager(hazelcastInstance());
-//	}
-//
 }

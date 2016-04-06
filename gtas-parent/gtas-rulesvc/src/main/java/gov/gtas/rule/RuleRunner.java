@@ -1,8 +1,6 @@
 package gov.gtas.rule;
 
-import gov.gtas.config.CachingConfig;
 import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.config.RuleServiceConfig;
 import gov.gtas.constant.RuleServiceConstants;
 import gov.gtas.error.ErrorDetailInfo;
 import gov.gtas.error.ErrorHandlerFactory;
@@ -28,8 +26,7 @@ public class RuleRunner {
 	public static void main(String[] args) {
 		logger.info("Entering main().");
 		ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(
-				CommonServicesConfig.class, CachingConfig.class,
-				RuleServiceConfig.class);
+				CommonServicesConfig.class);
 		TargetingService targetingService = (TargetingService) ctx
 				.getBean("targetingServiceImpl");
 
