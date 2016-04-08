@@ -41,6 +41,14 @@ public interface HitsSummaryRepository extends
 	List<HitsSummary> findByFlightIdAndPassengerId(@Param("fid") Long flightId,
 			@Param("pid") Long passengerId);
 
+	@Query("SELECT hits FROM HitsSummary hits WHERE hits.passenger.id = :pid and hits.flight.id = :fid and hits.hitType<>'R'")
+	List<HitsSummary> findByFlightIdAndPassengerIdAndNotRule(@Param("fid") Long flightId,
+			@Param("pid") Long passengerId);
+	
+	@Query("SELECT hits FROM HitsSummary hits WHERE hits.passenger.id = :pid and hits.flight.id = :fid and hits.hitType='R'")
+	List<HitsSummary> findByFlightIdAndPassengerIdAndRule(@Param("fid") Long flightId,
+			@Param("pid") Long passengerId);
+	
 	@Query("SELECT hits FROM HitsSummary hits WHERE hits.flight.id = :fid")
 	List<HitsSummary> findHitsByFlightId(@Param("fid") Long flightId);
 

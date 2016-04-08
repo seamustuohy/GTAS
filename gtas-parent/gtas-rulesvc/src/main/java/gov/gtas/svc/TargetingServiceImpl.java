@@ -27,6 +27,7 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.UdrRule;
+import gov.gtas.model.watchlist.WatchlistItem;
 import gov.gtas.repository.ApisMessageRepository;
 import gov.gtas.repository.FlightRepository;
 import gov.gtas.repository.HitDetailRepository;
@@ -35,6 +36,7 @@ import gov.gtas.repository.MessageRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.repository.PnrRepository;
 import gov.gtas.repository.udr.UdrRuleRepository;
+import gov.gtas.repository.watchlist.WatchlistItemRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.services.AuditLogPersistenceService;
 import gov.gtas.services.udr.RulePersistenceService;
@@ -105,6 +107,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private RulePersistenceService rulePersistenceService;
+
+	@Autowired
+	private WatchlistItemRepository watchlistItemRepository;
 
 	@Autowired
 	private UdrRuleRepository udrRuleRepository;
@@ -233,7 +238,13 @@ public class TargetingServiceImpl implements TargetingService {
 		// check if there are rules (undeleted & enabled)
 		List<UdrRule> ruleList = udrRuleRepository.findByDeletedAndEnabled(
 				YesNoEnum.N, YesNoEnum.Y);
-		if (!CollectionUtils.isEmpty(ruleList)) {
+
+		Iterable<WatchlistItem> all = watchlistItemRepository.findAll();
+		List<WatchlistItem> target = new ArrayList<>();
+		all.forEach(target::add);
+
+		if (!CollectionUtils.isEmpty(ruleList)
+				|| !CollectionUtils.isEmpty(target)) {
 			logger.info("Db operations...");
 			Iterator<Message> source = messageRepository.findByStatus(
 					MessageStatus.LOADED).iterator();
@@ -255,26 +266,65 @@ public class TargetingServiceImpl implements TargetingService {
 					}
 					for (Flight f : flights) {
 						for (Passenger p : passengers) {
-							List<HitsSummary> hits = hitsSummaryRepository
-									.findByFlightIdAndPassengerId(f.getId(),
-											p.getId());
-							String enable = hitsSummaryRepository
-									.enableFlagByUndeletedAndEnabledRule(
-											f.getId(), p.getId());
-							for (HitsSummary hs : hits) {
-								if (enable.equalsIgnoreCase("Y")) {
-									hitDetailRepository
-											.deleteDBData(hs.getId());
-									hitsSummaryRepository.deleteDBData(hs
-											.getId());
-								}
-							}
+							// /
+							deleteRelatedRecords(ruleList, target, f, p);
 						}
 					}
 				}
 			}
 		}
 		logger.info("Exiting preProcessing()");
+	}
+
+	private void deleteRelatedRecords(List<UdrRule> ruleList,
+			List<WatchlistItem> target, Flight f, Passenger p) {
+		if (CollectionUtils.isEmpty(ruleList)
+				&& !CollectionUtils.isEmpty(target)) {
+			List<HitsSummary> hitsD = hitsSummaryRepository
+					.findByFlightIdAndPassengerIdAndNotRule(f.getId(),
+							p.getId());
+			for (HitsSummary hs : hitsD) {
+
+				hitDetailRepository.deleteDBData(hs.getId());
+				hitsSummaryRepository.deleteDBData(hs.getId());
+			}
+		} else if (!CollectionUtils.isEmpty(ruleList)
+				&& CollectionUtils.isEmpty(target)) {
+
+			List<HitsSummary> hitsR = hitsSummaryRepository
+					.findByFlightIdAndPassengerIdAndRule(f.getId(), p.getId());
+			String enable = hitsSummaryRepository
+					.enableFlagByUndeletedAndEnabledRule(f.getId(), p.getId());
+			for (HitsSummary hs : hitsR) {
+				if (enable.equalsIgnoreCase("Y")) {
+					hitDetailRepository.deleteDBData(hs.getId());
+					hitsSummaryRepository.deleteDBData(hs.getId());
+				}
+			}
+		} else if (!CollectionUtils.isEmpty(ruleList)
+				&& !CollectionUtils.isEmpty(target)) {
+			//
+			List<HitsSummary> hitsD = hitsSummaryRepository
+					.findByFlightIdAndPassengerIdAndNotRule(f.getId(),
+							p.getId());
+			for (HitsSummary hs : hitsD) {
+
+				hitDetailRepository.deleteDBData(hs.getId());
+				hitsSummaryRepository.deleteDBData(hs.getId());
+			}
+			//
+			List<HitsSummary> hitsR = hitsSummaryRepository
+					.findByFlightIdAndPassengerIdAndRule(f.getId(), p.getId());
+			String enable = hitsSummaryRepository
+					.enableFlagByUndeletedAndEnabledRule(f.getId(), p.getId());
+
+			for (HitsSummary hs : hitsR) {
+				if (enable.equalsIgnoreCase("Y")) {
+					hitDetailRepository.deleteDBData(hs.getId());
+					hitsSummaryRepository.deleteDBData(hs.getId());
+				}
+			}
+		}
 	}
 
 	/*
@@ -318,6 +368,7 @@ public class TargetingServiceImpl implements TargetingService {
 		RuleServiceResult wlResult = ruleService.invokeRuleEngine(
 				ctx.getRuleServiceRequest(),
 				WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
+
 		if (udrResult == null && wlResult == null) {
 			boolean ruleExisting = false;
 			// currently only two knowledgebases: udr and Watchlist

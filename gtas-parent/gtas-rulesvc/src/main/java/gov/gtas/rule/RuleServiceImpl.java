@@ -15,6 +15,8 @@ import gov.gtas.error.RuleServiceErrorHandler;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
+import gov.gtas.model.watchlist.WatchlistItem;
+import gov.gtas.repository.watchlist.WatchlistItemRepository;
 import gov.gtas.rule.listener.RuleEventListenerUtils;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.svc.UdrService;
@@ -55,6 +57,9 @@ public class RuleServiceImpl implements RuleService {
 
 	@Autowired
 	private UdrService udrService;
+
+	@Autowired
+	private WatchlistItemRepository watchlistItemRepository;
 
 	@PostConstruct
 	public void initializeErrorHandling() {
@@ -172,20 +177,13 @@ public class RuleServiceImpl implements RuleService {
 			}
 		} else {
 			logger.info("Custom knowledge base is loaded.");
-			if (CollectionUtils.isEmpty(ruleList)) {
+			Iterable<WatchlistItem> all = watchlistItemRepository.findAll();
+			List<WatchlistItem> target = new ArrayList<>();
+			all.forEach(target::add);
+			if (CollectionUtils.isEmpty(target)) {
 				kbRecord = null;
 			} else {
 				kbRecord = rulePersistenceService.findUdrKnowledgeBase(kbName);
-				if (kbRecord != null) {
-					List<Rule> rules = rulePersistenceService
-							.findRulesByKnowledgeBaseId(kbRecord.getId());
-					if (!CollectionUtils.isEmpty(rules)) {
-						udrService.recompileRules(kbName, null);
-						kbRecord = rulePersistenceService
-								.findUdrKnowledgeBase(kbName);
-					}
-				}
-
 			}
 		}
 		if (kbRecord == null) {
