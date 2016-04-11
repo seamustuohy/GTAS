@@ -42,7 +42,7 @@ public class MessageGeneratorIT {
     public void tearDown() throws Exception {
     }
 
-   // @Test()
+    @Test()
     public void testRunService() throws ParseException {
     	int j=0;
 		for(int i=1;i <=99;i++){
