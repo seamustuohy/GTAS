@@ -39,6 +39,7 @@ import gov.gtas.repository.udr.UdrRuleRepository;
 import gov.gtas.repository.watchlist.WatchlistItemRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.services.AuditLogPersistenceService;
+import gov.gtas.services.HitsSummaryService;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.svc.util.RuleExecutionContext;
 import gov.gtas.svc.util.TargetingResultUtils;
@@ -89,6 +90,9 @@ public class TargetingServiceImpl implements TargetingService {
 
 	@Autowired
 	private HitsSummaryRepository hitsSummaryRepository;
+
+	@Autowired
+	private HitsSummaryService hitsSummaryService;
 
 	@Autowired
 	private FlightRepository flightRepository;
@@ -264,12 +268,7 @@ public class TargetingServiceImpl implements TargetingService {
 						flights = pnrMsg.getFlights();
 						passengers = pnrMsg.getPassengers();
 					}
-					for (Flight f : flights) {
-						for (Passenger p : passengers) {
-							// /
-							deleteRelatedRecords(ruleList, target, f, p);
-						}
-					}
+					deleteRelatedRecords(ruleList, target, flights, passengers);
 				}
 			}
 		}
@@ -277,51 +276,67 @@ public class TargetingServiceImpl implements TargetingService {
 	}
 
 	private void deleteRelatedRecords(List<UdrRule> ruleList,
-			List<WatchlistItem> target, Flight f, Passenger p) {
-		if (CollectionUtils.isEmpty(ruleList)
-				&& !CollectionUtils.isEmpty(target)) {
-			List<HitsSummary> hitsD = hitsSummaryRepository
-					.findByFlightIdAndPassengerIdAndNotRule(f.getId(),
-							p.getId());
-			for (HitsSummary hs : hitsD) {
+			List<WatchlistItem> target, Set<Flight> flights,
+			Set<Passenger> passengers) {
+		for (Flight f : flights) {
+			for (Passenger p : passengers) {
+				// /
+				if (CollectionUtils.isEmpty(ruleList)
+						&& !CollectionUtils.isEmpty(target)) {
+					// deleted anything with Watchlist
+					List<HitsSummary> hitsD = hitsSummaryService
+							.findByFlightIdAndPassengerIdAndWL(f.getId(),
+									p.getId());
+					for (HitsSummary hs : hitsD) {
+						hitDetailRepository.deleteDBData(hs.getId());
+						hitsSummaryRepository.deleteDBData(hs.getId());
+					}
+					// deleted anything with combined rules
+					List<HitsSummary> hitsWithCombined = hitsSummaryService
+							.findByFlightIdAndPassengerIdAndCombinedWithUdrRule(
+									f.getId(), p.getId());
+					for (HitsSummary hs : hitsWithCombined) {
+						hitDetailRepository.deleteDBData(hs.getId());
+						hitsSummaryRepository.deleteDBData(hs.getId());
+					}
 
-				hitDetailRepository.deleteDBData(hs.getId());
-				hitsSummaryRepository.deleteDBData(hs.getId());
-			}
-		} else if (!CollectionUtils.isEmpty(ruleList)
-				&& CollectionUtils.isEmpty(target)) {
-
-			List<HitsSummary> hitsR = hitsSummaryRepository
-					.findByFlightIdAndPassengerIdAndRule(f.getId(), p.getId());
-			String enable = hitsSummaryRepository
-					.enableFlagByUndeletedAndEnabledRule(f.getId(), p.getId());
-			for (HitsSummary hs : hitsR) {
-				if (enable.equalsIgnoreCase("Y")) {
-					hitDetailRepository.deleteDBData(hs.getId());
-					hitsSummaryRepository.deleteDBData(hs.getId());
-				}
-			}
-		} else if (!CollectionUtils.isEmpty(ruleList)
-				&& !CollectionUtils.isEmpty(target)) {
-			//
-			List<HitsSummary> hitsD = hitsSummaryRepository
-					.findByFlightIdAndPassengerIdAndNotRule(f.getId(),
-							p.getId());
-			for (HitsSummary hs : hitsD) {
-
-				hitDetailRepository.deleteDBData(hs.getId());
-				hitsSummaryRepository.deleteDBData(hs.getId());
-			}
-			//
-			List<HitsSummary> hitsR = hitsSummaryRepository
-					.findByFlightIdAndPassengerIdAndRule(f.getId(), p.getId());
-			String enable = hitsSummaryRepository
-					.enableFlagByUndeletedAndEnabledRule(f.getId(), p.getId());
-
-			for (HitsSummary hs : hitsR) {
-				if (enable.equalsIgnoreCase("Y")) {
-					hitDetailRepository.deleteDBData(hs.getId());
-					hitsSummaryRepository.deleteDBData(hs.getId());
+				} else if (!CollectionUtils.isEmpty(ruleList)
+						&& CollectionUtils.isEmpty(target)) {
+					List<HitsSummary> hitsR = hitsSummaryService
+							.findByFlightIdAndPassengerIdAndUdrRule(f.getId(),
+									p.getId());
+					List<String> enable = hitsSummaryRepository
+							.enableFlagByUndeletedAndEnabledRule(f.getId(),
+									p.getId());
+					for (HitsSummary hs : hitsR) {
+						if (enable.contains(YesNoEnum.Y)) {
+							hitDetailRepository.deleteDBData(hs.getId());
+							hitsSummaryRepository.deleteDBData(hs.getId());
+						}
+					}
+				} else if (!CollectionUtils.isEmpty(ruleList)
+						&& !CollectionUtils.isEmpty(target)) {
+					//
+					List<HitsSummary> hitsD = hitsSummaryService
+							.findByFlightIdAndPassengerIdAndWL(f.getId(),
+									p.getId());
+					for (HitsSummary hs : hitsD) {
+						hitDetailRepository.deleteDBData(hs.getId());
+						hitsSummaryRepository.deleteDBData(hs.getId());
+					}
+					//
+					List<HitsSummary> hitsR = hitsSummaryService
+							.findByFlightIdAndPassengerIdAndUdrRule(f.getId(),
+									p.getId());
+					List<String> enable = hitsSummaryRepository
+							.enableFlagByUndeletedAndEnabledRule(f.getId(),
+									p.getId());
+					for (HitsSummary hs : hitsR) {
+						if (enable.contains(YesNoEnum.Y)) {
+							hitDetailRepository.deleteDBData(hs.getId());
+							hitsSummaryRepository.deleteDBData(hs.getId());
+						}
+					}
 				}
 			}
 		}

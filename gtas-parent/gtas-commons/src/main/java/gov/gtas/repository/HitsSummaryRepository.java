@@ -41,14 +41,11 @@ public interface HitsSummaryRepository extends
 	List<HitsSummary> findByFlightIdAndPassengerId(@Param("fid") Long flightId,
 			@Param("pid") Long passengerId);
 
-	@Query("SELECT hits FROM HitsSummary hits WHERE hits.passenger.id = :pid and hits.flight.id = :fid and hits.hitType<>'R'")
-	List<HitsSummary> findByFlightIdAndPassengerIdAndNotRule(@Param("fid") Long flightId,
-			@Param("pid") Long passengerId);
-	
-	@Query("SELECT hits FROM HitsSummary hits WHERE hits.passenger.id = :pid and hits.flight.id = :fid and hits.hitType='R'")
-	List<HitsSummary> findByFlightIdAndPassengerIdAndRule(@Param("fid") Long flightId,
-			@Param("pid") Long passengerId);
-	
+	@Query("SELECT hits FROM HitsSummary hits WHERE hits.passenger.id = :pid and hits.flight.id = :fid and hits.hitType IN :hitTypes")
+	List<HitsSummary> findByFlightIdAndPassengerIdWithHitTypes(
+			@Param("fid") Long flightId, @Param("pid") Long passengerId,
+			@Param("hitTypes") List<String> listHitTypes);
+
 	@Query("SELECT hits FROM HitsSummary hits WHERE hits.flight.id = :fid")
 	List<HitsSummary> findHitsByFlightId(@Param("fid") Long flightId);
 
@@ -57,8 +54,8 @@ public interface HitsSummaryRepository extends
 	@Transactional
 	public void deleteDBData(@Param("id") Long id);
 
-	@Query("SELECT enabled FROM RuleMeta WHERE id=(SELECT hd.ruleId  FROM HitDetail hd WHERE hd.parent.flight.id=:flightId AND hd.parent.passenger.id=:passengerId)")
-	public String enableFlagByUndeletedAndEnabledRule(
+	@Query("SELECT enabled FROM RuleMeta WHERE id IN (SELECT hd.ruleId  FROM HitDetail hd WHERE hd.parent.flight.id=:flightId AND hd.parent.passenger.id=:passengerId)")
+	public List<String> enableFlagByUndeletedAndEnabledRule(
 			@Param("flightId") Long flightId,
 			@Param("passengerId") Long passengerId);
 }
