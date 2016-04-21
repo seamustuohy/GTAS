@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,7 +24,12 @@ import javax.persistence.UniqueConstraint;
             "last_name", 
             "middle_name", 
             "gender", 
-            "dob"})}
+            "dob"})},
+            indexes = {@Index(name = "first_name_index",  columnList="first_name"),
+                    @Index(name = "last_name_index", columnList="last_name"),
+                    @Index(name="middle_name_index", columnList="middle_name"),
+                    @Index(name="gender_index", columnList="gender"),
+                    @Index(name="dob_index", columnList="dob")}
 )
 public class Passenger extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;  

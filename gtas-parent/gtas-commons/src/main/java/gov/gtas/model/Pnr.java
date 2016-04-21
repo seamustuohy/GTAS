@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -21,7 +22,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "pnr")
+@Table(name = "pnr",
+		indexes = {@Index(name = "record_locator_index",  columnList="record_locator")}
+)
 public class Pnr extends Message {
 	private static final long serialVersionUID = 1L;
 
