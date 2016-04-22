@@ -82,4 +82,42 @@ public class MessageGeneratorIT {
 		}
 		PnrGen.buildApisMessages(flights,j);
     }
+    
+    @Test()
+    public void testEbolaFileService() throws ParseException {
+    	int j=0;
+		for(int i=100;i <=200;i++){
+			j=i;
+			FlightDto dto = new FlightDto();
+			StringBuilder sb = new StringBuilder();
+			String carrier=GenUtil.getCarrier();
+			String origin=GenUtil.getEbolaAirport();
+			String dest=GenUtil.getUsAirport();
+					
+
+			String fNumber=GenUtil.getFlightNumber();
+			String dString=GenUtil.getPnrDate();
+			String originCountry=GenUtil.getEbolaCountry(origin);
+			String destCountry="USA";
+			int numPax=GenUtil.getRandomNumber(3)+2;
+			dto.setCarrier(carrier);
+			dto.setDebark(dest);
+			dto.setEmbark(origin);
+			dto.setFlightNum(fNumber);
+			dto.setEmbarkCountry(originCountry);
+			dto.setDebarkCountry(destCountry);
+			
+			PnrGen.buildHeader(carrier,sb);
+			PnrGen.buildMessage("22",sb);
+			PnrGen.buildOrigDestinations(carrier, origin,dest,fNumber,dString,sb);
+			PnrGen.buildEqn(numPax,sb);
+			PnrGen.buildSrc(carrier, origin,dest,fNumber,dString,numPax,dto,sb);
+			PnrGen.buildFooter(sb);
+			flights.add(dto);
+			System.out.println(sb.toString());	
+			PnrGen.writeToFile(i,sb);
+			sb=null;
+		}
+		PnrGen.buildApisMessages(flights,j);
+    }
 }

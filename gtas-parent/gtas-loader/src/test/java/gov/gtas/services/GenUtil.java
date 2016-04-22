@@ -26,12 +26,37 @@ public class GenUtil {
 	private static String[] airports ={"GKA","MAG","HGU","LAE","POM","WWK","UAK","GOH","SFJ","THU","AEY","EGS","HFN","HZK","IFJ","KEF","PFJ","RKV","SIJ","VEY","YAM","YAV","YAW","YAY","YAZ","YBB","YBC","YBG","YBK","YBL","YBR","YCB","YCD","YCG","YCH","YCL","YCO","YCT","YCW","YCY","YZS","YDA","YDB","YDC","YDF","YDL","YDN","YDQ","YEG","YEK","YEN","YET","YEU","YEV","YFB","YFC","YFO","YFR","YFS","YGK","YGL","YGP","YGQ","YGR","YHB","YHD","YHI","YHK","YHM","YHU","YHY","YHZ","YIB","YIO","YJN","YJT","YKA","YKF","YKL","YKY","YKZ","YLD","YLJ","YLL","YLT","YLW","YMA","YMJ","YMM","YMO","YMW","YMX","YNA","YND","YNM","YOC","YOD","YOJ","YOW","YPA","YPE","YPG","YPL","YPN","YPQ","YPR","YPY","YQA","YQB","YQF","YQG","YQH","YQK","YQL","YQM","YQQ","YQR","YQT","YQU","YQV","YQW","YQX","YQY","YQZ","YRB","YRI","YRJ","YRM","YRT","YSB","YSC","YSJ","YSM","YSR","YSU","YSY","YTE","YTH","YTR","YTS","YTZ","YUB","YUL","YUT","YUX","YUY","YVC","YVG","YVM","YVO","YVP","YVQ","YVR","YVT","YVV","YWA","YWG","YWK","YWL","YWY","YXC","YXD","YXE","YXH","YXJ","YXL","YXP","YXR","YXS","YXT","YXU","YXX","YXY","YYB","YYC","YYD","YYE","YYF","YYG","YYH","YYJ","YYL","YYN","YYQ","YYR","YYT","YYU","YYW","YYY","YYZ","YZD","YZE","YZF","YZH","YZP","YZR","YZT","YZU","YZV","YZW","YZX","ZFA","ZFM","BJA","ALG","DJG","QFD","VVZ","TMR","GJL","AAE","CZL","TEE","HRM","TID","TIN","QAS","TAF","TLM","ORN","MUW","AZR","BSK","ELG","GHA","HME","INZ","TGR","LOO","TMX","OGX","IAM","COO","OUA","BOY","ACC","TML","NYI","TKD","ABJ","BYK","DJO","HGO","MJC","SPY","ASK","ABV","AKR","BNI","CBQ","ENU","QUS","IBA","ILR","JOS","KAD","KAN","MIU","MDI","LOS","MXJ","PHC","SKO","YOL","ZAR","MFQ","NIM","THZ","AJY","ZND","MIR","TUN","GAF","GAE","DJE","EBM","SFA","TOE","LRL","LFW","ANR","BRU","CRL","QKT","LGG","OST","BBJ","AOC","4I7","BBH","SXF","DRS","ERF","FRA","FMO","HAM","THF","CGN","DUS","MUC","NUE","LEJ","SCN","STR","TXL","HAJ","BRE","HHN","MHG","XFW","KEL","LBC","ZCA","ESS","MGL","PAD","DTM","AGB","OBF","FDH","SZW","ZSN","BYU","HOQ","ZNV","ZQF","ZQC","ZQL","BWE","KSF","BRV","EME","WVN","BMK","NRD","FLF","GWT","KDL","URE","EPU","TLL","TAY","ENF","KEV","HEM","HEL","HYV","IVL","JOE","JYV","KAU","KEM","KAJ","KOK","KAO","KTT","KUO","LPP","MHQ","MIK","OUL","POR","RVN","SVL","SOT","TMP","TKU","QVY","VAA","VRK","BFS","ENK","BHD","LDY","BHX","CVT","GLO","MAN","NQY","LYE","YEO","CWL","SWS","BRS","LPL","LTN","PLH","BOH","SOU","QLA","ACI","GCI","JER","ESH","BQH","LGW","LCY","FAB","BBS","LHR","SEN","LYX","MSE","CAX","BLK","HUY","BWF","LBA","CEG","IOM","NCL","MME","EMA","KOI","LSI","WIC","ABZ","INV","GLA","EDI","ILY","PIK","BEB","SDZ","DND","SYY","TRE","ADX","LMO","CBG","NWI","STN","EXT","FZO","OXF","MHZ","FFD","BZZ","ODH","NHT","QCY","BEQ","WTN","KNF","MPN","AMS","MST","EIN","GRQ","DHR","LWR","RTM","UTC","ENS","LID","WOE","ORK","GWY","DUB","NOC","KIR","SNN","SXL","WAT","AAR","BLL","CPH","EBJ","KRP","ODE","RKE","RNN","SGD","SKS","TED","FAE","STA","AAL","LUX","AES","ANX","ALF","BNN","BOO","BGO","BJF","KRS","BDU","EVE","VDB","FRO","OSL","HAU","HAA","KSU","KKN","FAN","MOL","MJF","LKL","NTB","OLA","RRS","RYG","LYR","SKE","SRP","SSJ","TOS","TRF","TRD","SVG","GDN","KRK","KTW","POZ","RZE","SZZ","OSP","WAW","WRO","IEG","RNB","GOT","JKG","LDK","GSE","KVB","THN","KSK","MXX","NYO","KID","JLD","OSK","KLR","MMX","HAD","VXO","EVG","GEV","HUV","KRF","LYC","SDL","OER","KRN","SFT","UME","VHM","AJR","ORB","VST","LLA","ARN","BMA","BLE","HLF","GVX","LPI","NRK","VBY","SPM","RMS","GHF","ZCN","ZNF","GKE","RLG","FEL","GUT","ALJ","AGZ","BIY","BFN","CPT","DUR","ELS","GCJ","GRJ","HDS","JNB","KIM","KLZ","HLA","LAY","MGH","MEZ","NCS","DUH","PLZ","PHW","PTG","PZB","NTY","UTW","RCB","SBU","SIS","SZK","LTA","ULD","UTN","UTT","VRU","VIR"};
 	private static String[] alphas ={"A","B","C","D","E","F","G","H","I","J","K","L","M","N"};
 	private static String[] usairports={"BHM","HSV","IFP","GCN","AZA","PHX","TUS","YUM","XNA","FSM","ACV","FAT","LGB","LAX","OAK","ONT","PSP","SMF","SAN","SFO","DEN","BDL","DAB","MCO","SFB","TPA","PBI","ATL","SAV","ITO","HNL","BOI","SUN","BLV","ORD","PIA","RFD","FWA","IND","DSM","ICT","SDF","AEX","MSY","BGR","BWI","BOS","FNT","AZO","MBS","DLH","GPT","MCI","BIL","GRI","LAS","MHT","ACY","EWR","ABQ","ALB","JFK","PBG","CLT","GFK","CLE","MFR","PHL","PIT","CHS","MEM","AMA","DFW","HOU","SLC","BTV","IAD","RIC","CLM","CRW","ATW"};
+	private static String[] ebolaAirports={"FNA","BTE","ROB","MLW"};
+	//LBR,GIN,SLE "CKY","BKJ",
 	
+	public static String getEbolaAirport(){
+		Random random = new Random();
+		int select=random.nextInt(ebolaAirports.length);
+		return ebolaAirports[select];
+	}
+	
+	public static String getEbolaCountry(String airport){
+		String country="";
+		switch(airport){
+			case "FNA":country="SLE";
+				break;
+			case "BTE":country="SLE";
+				break;
+			case "MLW":country="LBR";
+				break;
+			case "ROB":country="LBR";
+				break;
+			//default: country = "GIN";
+            	//break;				
+		}
+		return country;
+	}
 	public static String getUsAirport(){
 		Random random = new Random();
 		int select=random.nextInt(usairports.length);
 		return usairports[select];
 	}
+	
 	public static String getLastName(){
 		Random random = new Random();
 		int select=random.nextInt(lastNames.length);
