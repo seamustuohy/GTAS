@@ -447,9 +447,18 @@
 </md-content>
 
 <div id="builder"></div>
-<div id="grid1" ui-grid="passengerGrid"
+<div ng-if="stateName != 'queryPassengers'"
+	 id="grid1" ui-grid="passengerGrid"
      ui-grid-pagination
      ui-grid-expandable
      ui-grid-auto-resize
      ng-style="getTableHeight()"
      class="grid"></div>
+<div ng-if="stateName === 'queryPassengers'"
+	 id="grid1" ui-grid="passengerQueryGrid"
+     ui-grid-pagination
+     ui-grid-expandable
+     ui-grid-auto-resize
+     ng-style="getTableHeight()"
+     class="grid"></div>
+     

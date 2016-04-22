@@ -47,6 +47,7 @@
                 if(!data.flights || data.flights.length == 0){
                 	$scope.errorToast("No results found for selected filter criteria");
                 }
+                spinnerService.hide('html5spinner');
             },
             flightDirections = [
                 {label: 'Inbound', value: 'I'},
@@ -54,7 +55,13 @@
                 {label: 'Any', value: 'A'}
             ],
             getPage = function () {
-                setFlightsGrid($scope.flightsGrid, flights || {flights: [], totalFlights: 0});
+            	if(stateName === 'queryFlights'){
+            		setFlightsGrid($scope.flightsQueryGrid, flights || {flights: [], totalFlights: 0});
+            	}
+            	else{
+            		setFlightsGrid($scope.flightsGrid, flights || {flights: [], totalFlights: 0});
+            	}
+            	
             },
             update = function (data) {
                 flights = data;
@@ -169,6 +176,28 @@
                 });
             }
         };
+        //Front-end pagination configuration object for gridUi
+        //Should only be active on stateName === 'queryFlights'
+        $scope.flightsQueryGrid = {
+                paginationPageSizes: [10, 15, 25],
+                paginationPageSize: $scope.model.pageSize,
+                paginationCurrentPage: 1,
+                useExternalPagination: false,
+                useExternalSorting: false,
+                useExternalFiltering: false,
+                enableHorizontalScrollbar: 0,
+                enableVerticalScrollbar: 1,
+                enableColumnMenus: false,
+                exporterCsvFilename: 'Flights.csv'
+                	
+               onRegisterApi: function (gridApi) {
+            	   $scope.gridApi = gridApi;
+                   
+            	   gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
+            		   $scope.model.pageSize = pageSize;
+            	   });
+               }
+        }
 
         $scope.flightsGrid.columnDefs = [
             {
@@ -219,6 +248,8 @@
             {name: 'destination', displayName:'flight.destination', headerCellFilter: 'translate'},
             {name: 'destinationCountry', displayName:'add.Country', headerCellFilter: 'translate'}
         ];
+        
+        $scope.flightsQueryGrid.columnDefs = $scope.flightsGrid.columnDefs;
 
         $scope.queryPassengersOnSelectedFlight = function (row_entity) {
             $state.go('passengers', {
@@ -241,7 +272,10 @@
         };
 
         $scope.getTableHeight = function () {
-            return gridService.calculateGridHeight($scope.flightsGrid.data.length);
+        	if(stateName != 'queryFlights'){
+        		return gridService.calculateGridHeight($scope.flightsGrid.data.length);
+        	} // Sets minimal height for front-end pagination controlled variant of grid
+        	return gridService.calculateGridHeight($scope.model.pageSize);
         };
         resolvePage();
         mapAirports();

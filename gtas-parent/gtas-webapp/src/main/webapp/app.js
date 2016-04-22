@@ -274,7 +274,8 @@ var app;
                     },
                     resolve: {
                         flights: function (executeQueryService) {
-                            return executeQueryService.queryFlights();
+                           //removed return due to it being an empty call to the service, returning an erroneous 400 Bad Request. 
+                           //Kept resolve rather than restructuring flights.html to not use flights entity as it was.
                         }
                     }
                 })

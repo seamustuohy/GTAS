@@ -9,8 +9,15 @@
     }
 </style>
 <h3><i class="glyphicon glyphicon-filter"></i><i class="glyphicon glyphicon-plane"></i> {{'qry.flights' | translate}}</h3>
-<div
+<div ng-if="stateName != 'queryFlights'"
         ui-grid="flightsGrid"
+        ui-grid-pagination
+        ui-grid-auto-resize
+        ng-style="getTableHeight()"
+        class="grid"></div>
+        
+<div ng-if="stateName === 'queryFlights'"
+        ui-grid="flightsQueryGrid"
         ui-grid-pagination
         ui-grid-auto-resize
         ng-style="getTableHeight()"

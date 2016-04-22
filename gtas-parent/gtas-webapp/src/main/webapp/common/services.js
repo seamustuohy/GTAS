@@ -898,12 +898,13 @@
                 save: services.save
             });
         })
-        .service("executeQueryService", function ($http, $q) {
+        .service("executeQueryService", function ($http, $q, spinnerService) {
             var serviceURLs = {
                     flights: '/gtas/query/queryFlights/',
                     passengers: '/gtas/query/queryPassengers/'
                 },
                 queryFlights = function (qbData) {
+            	spinnerService.show('html5spinner');
                     var dfd = $q.defer();
 
                     dfd.resolve($http({
@@ -915,6 +916,7 @@
                     return dfd.promise;
                 },
                 queryPassengers = function (qbData) {
+                	spinnerService.show('html5spinner');
                     var dfd = $q.defer();
                     dfd.resolve($http({
                         method: 'post',

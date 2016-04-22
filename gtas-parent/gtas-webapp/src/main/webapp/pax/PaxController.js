@@ -79,9 +79,14 @@
                 if(!grid.data || grid.data.length == 0){
                 	$scope.errorToast('No results found for selected filter criteria');
                 }
+                spinnerService.hide('html5spinner');
             },
             getPage = function () {
-                setPassengersGrid($scope.passengerGrid, passengers);
+            	if(stateName === "queryPassengers"){
+            		setPassengersGrid($scope.passengerQueryGrid, passengers);
+            	}else{
+            		setPassengersGrid($scope.passengerGrid, passengers);
+            	}
             },
             update = function (data) {
                 passengers = data;
@@ -162,54 +167,87 @@
         };
 
         $scope.buildAfterEntitiesLoaded();
-
+        
         $scope.passengerGrid = {
+                paginationPageSizes: [10, 15, 25],
+                paginationPageSize: $scope.model.pageSize,
+                paginationCurrentPage: $scope.model.pageNumber,
+                useExternalPagination: true,
+                useExternalSorting: true,
+                useExternalFiltering: true,
+                enableHorizontalScrollbar: 0,
+                enableVerticalScrollbar: 0,
+                enableColumnMenus: false,
+                multiSelect: false,
+                enableExpandableRowHeader: false,
+                expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>',
+
+                onRegisterApi: function (gridApi) {
+                    $scope.gridApi = gridApi;
+
+                    gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
+                        $scope.model.pageNumber = newPage;
+                        $scope.model.pageSize = pageSize;
+                        resolvePage();
+                    });
+
+                    gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
+                        if (sortColumns.length === 0) {
+                            $scope.model.sort = null;
+                        } else {
+                            $scope.model.sort = [];
+                            for (var i = 0; i < sortColumns.length; i++) {
+                                $scope.model.sort.push({column: sortColumns[i].name, dir: sortColumns[i].sort.direction});
+                            }
+                        }
+                        resolvePage();
+                    });
+
+                    gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
+                        if (row.isExpanded) {
+                            paxService.getRuleHits(row.entity.id).then(function (data) {
+                                row.entity.subGridOptions.data = data;
+                            });
+                        }
+                    });
+                }
+            };
+        //Front-end pagination configuration object for gridUi
+        //Should only be active on stateName === 'queryPassengers'
+        $scope.passengerQueryGrid = {
             paginationPageSizes: [10, 15, 25],
             paginationPageSize: $scope.model.pageSize,
-            paginationCurrentPage: $scope.model.pageNumber,
-            useExternalPagination: true,
-            useExternalSorting: true,
-            useExternalFiltering: true,
+            paginationCurrentPage: 1,
+            useExternalPagination: false,
+            useExternalSorting: false,
+            useExternalFiltering: false,
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 0,
             enableColumnMenus: false,
             multiSelect: false,
             enableExpandableRowHeader: false,
+            minRowsToShow: 10,
             expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>',
 
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
-
+                
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-                    $scope.model.pageNumber = newPage;
                     $scope.model.pageSize = pageSize;
-                    resolvePage();
                 });
-
-                gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-                    if (sortColumns.length === 0) {
-                        $scope.model.sort = null;
-                    } else {
-                        $scope.model.sort = [];
-                        for (var i = 0; i < sortColumns.length; i++) {
-                            $scope.model.sort.push({column: sortColumns[i].name, dir: sortColumns[i].sort.direction});
-                        }
-                    }
-                    resolvePage();
-                });
-
-                gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
-                    if (row.isExpanded) {
-                        paxService.getRuleHits(row.entity.id).then(function (data) {
-                            row.entity.subGridOptions.data = data;
-                        });
-                    }
-                });
-            }
+                
+	            gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
+		            if (row.isExpanded) {
+		                paxService.getRuleHits(row.entity.id).then(function (data) {
+		                    row.entity.subGridOptions.data = data;
+		                });
+		            }
+		        });
+            }    
         };
 
         if (stateName === 'queryPassengers') {
-            $scope.passengerGrid.columnDefs = [
+            $scope.passengerQueryGrid.columnDefs = [
                 {
                     field: 'onRuleHitList',
                     name: 'onRuleHitList',
@@ -471,7 +509,10 @@
         };
 
         $scope.getTableHeight = function () {
-            return gridService.calculateGridHeight($scope.passengerGrid.data.length);
+        	if( stateName != "queryPassengers"){
+        		return gridService.calculateGridHeight($scope.passengerGrid.data.length);
+        	} // Sets minimal height for front-end pagination controlled variant of grid
+        	return gridService.calculateGridHeight($scope.model.pageSize);
         };
 
         getPage();
