@@ -188,7 +188,7 @@
                 enableHorizontalScrollbar: 0,
                 enableVerticalScrollbar: 1,
                 enableColumnMenus: false,
-                exporterCsvFilename: 'Flights.csv'
+                exporterCsvFilename: 'Flights.csv',
                 	
                onRegisterApi: function (gridApi) {
             	   $scope.gridApi = gridApi;
