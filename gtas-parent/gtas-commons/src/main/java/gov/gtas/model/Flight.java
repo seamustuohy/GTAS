@@ -22,6 +22,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "flight",
+	uniqueConstraints={@UniqueConstraint(columnNames={"carrier", "flight_number", "flight_date", "origin", "destination"})},
     indexes = {@Index(name = "carrier_index",  columnList="carrier"),
         @Index(name = "flight_number_index", columnList="flight_number"),
         @Index(name="flight_date_index", columnList="flight_date"),
