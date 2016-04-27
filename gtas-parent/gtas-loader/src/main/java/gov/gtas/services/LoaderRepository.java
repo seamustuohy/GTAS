@@ -196,7 +196,6 @@ public class LoaderRepository {
         }
                
         // create any new passengers
-        int newPax = 0;
         for (PassengerVo pvo : passengers) {
             if (existingPassengers.contains(pvo)) {
                 continue;
@@ -212,23 +211,15 @@ public class LoaderRepository {
             for (Flight f : messageFlights) {
                 createSeatAssignment(pvo.getSeatAssignments(), newPassenger, f);
             }
-            
-            newPax++;
         }
         
-        // assoc all passengers w/ flights
+        // assoc all passengers w/ flights, update pax counts
         for (Flight f : messageFlights) {
             for (Passenger p : messagePassengers) {
                 f.addPassenger(p);
             }
             
-            /*
-             * update pax count to backend; for now it calculates the number of
-             * pax added and updates the count in the db; however, pax could be
-             * deleted in the future (canceled pnr), so have to update this
-             * logic eventually.
-             */
-            f.setPassengerCount(f.getPassengerCount() + newPax);
+            f.setPassengerCount(f.getPassengers().size());
         }
     }
     
