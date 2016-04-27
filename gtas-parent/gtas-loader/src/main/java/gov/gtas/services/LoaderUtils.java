@@ -67,22 +67,31 @@ public class LoaderUtils {
         BeanUtils.copyProperties(vo, p, getNullPropertyNames(vo));
         p.setUpdatedBy(LOADER_USER);
         
-        String airportCode = vo.getDebarkation();
-        p.setDebarkation(airportCode);
-        Airport debark = getAirport(airportCode);
-        if (debark != null) {
-            p.setDebarkCountry(debark.getCountry());
-        }
-
-        airportCode = vo.getEmbarkation();
-        p.setEmbarkation(airportCode);
-        Airport embark = getAirport(airportCode);
-        if (embark != null) {
-            p.setEmbarkCountry(embark.getCountry());
+        if (vo.getDebarkation() != null) {
+	        String airportCode = vo.getDebarkation();
+	        p.setDebarkation(airportCode);
+	        Airport debark = getAirport(airportCode);
+	        if (debark != null) {
+	            p.setDebarkCountry(debark.getCountry());
+	        }
         }
         
-        p.setCitizenshipCountry(normalizeCountryCode(vo.getCitizenshipCountry()));
-        p.setResidencyCountry(normalizeCountryCode(vo.getResidencyCountry()));
+        if (vo.getEmbarkation() != null) {
+	        String airportCode = vo.getEmbarkation();
+	        p.setEmbarkation(airportCode);
+	        Airport embark = getAirport(airportCode);
+	        if (embark != null) {
+	            p.setEmbarkCountry(embark.getCountry());
+	        }
+        }
+        
+        if (vo.getCitizenshipCountry() != null) {
+        	p.setCitizenshipCountry(normalizeCountryCode(vo.getCitizenshipCountry()));
+        }
+        
+        if (vo.getResidencyCountry() != null) {
+        	p.setResidencyCountry(normalizeCountryCode(vo.getResidencyCountry()));
+        }
     }
 
     public Document createNewDocument(DocumentVo vo) throws ParseException {
