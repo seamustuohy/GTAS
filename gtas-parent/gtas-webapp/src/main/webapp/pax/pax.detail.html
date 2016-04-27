@@ -97,7 +97,7 @@
                     </div>
                 </md-tab>
                 <!-- PNR Tab -->
-               
+
                 <md-tab label="PNR" ng-if="passenger.pnrVo.pnrRecordExists">
                     <md-tab-body>
                         <div style="padding: 10px;"></div>
@@ -112,11 +112,11 @@
                                     <div class="col-sm-4">
                                         {{'pnr.bookingdate' | translate}}:&nbsp; <strong>{{ passenger.pnrVo.dateBooked | date
                                             }}</strong>
-                                        
+
                                     </div>
                                     <div class="col-sm-4">
                                          {{'pnr.received' | translate}}:&nbsp; <strong>{{ passenger.pnrVo.dateReceived | date }}</strong>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -142,14 +142,14 @@
                                                         <table class="table table-condensed"
                                                                style="border-collapse: separate; text-align: center;">
                                                             <thead>
-                                                            <tr class="text-center" style="text-align: center">
-                                                                <th style="text-align: center">{{'pnr.leg' | translate}}</th>
-                                                                <th style="text-align: center">{{'flight.flight' | translate}}#</th>
-                                                                <th style="text-align: center">{{'pass.origin' | translate}}</th>
-                                                                <th style="text-align: center">{{'pass.destination' | translate}}</th>
-                                                                <th style="text-align: center">{{'pnr.flightdate' | translate}}</th>
-                                                                <th style="text-align: center">{{'pass.etd' | translate}}</th>
-                                                            </tr>
+                                                              <tr class="text-center" style="text-align: center">
+                                                                   <th style="text-align: center">{{'pnr.leg' | translate}}</th>
+                                                                   <th style="text-align: center">{{'flight.flight' | translate}}#</th>
+                                                                   <th style="text-align: center">{{'pass.originairport' | translate}}</th>
+                                                                   <th style="text-align: center">{{'pass.destinationairport' | translate}}</th>
+                                                                   <th style="text-align: center">{{'pnr.flightdate' | translate}}</th>
+                                                                   <th style="text-align: center">{{'pass.etd' | translate}}</th>
+                                                               </tr>
                                                             </thead>
                                                             <tbody>
                                                             <tr ng-repeat="doc in passenger.pnrVo.flightLegs">
@@ -276,7 +276,7 @@
                                                        	 	<thead>
 		                                                            <tr class="text-center" style="text-align: center">
 		                                                                <th style="text-align: center">{{'phone.phonenumber' | translate}}</th>
-		                                                                
+
 		                                                            </tr>
                                                             	</thead>
                                                             <tbody ng-repeat="phn in passenger.pnrVo.phoneNumbers track by $index">
