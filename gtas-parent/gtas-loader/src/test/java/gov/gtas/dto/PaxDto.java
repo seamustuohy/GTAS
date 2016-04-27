@@ -3,9 +3,39 @@ package gov.gtas.dto;
 public class PaxDto {
 	private String firstName;
 	private String lastName;
+	private String middleName;
 	private String embark;
 	private String debark;
+	private String dob;
 	private int docNumber;
+	private FlightDto flight;
+	private int id;
+	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public FlightDto getFlight() {
+		return flight;
+	}
+	public void setFlight(FlightDto flight) {
+		this.flight = flight;
+	}
+	public String getMiddleName() {
+		return middleName;
+	}
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+	public String getDob() {
+		return dob;
+	}
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
 	public String getFirstName() {
 		return firstName;
 	}

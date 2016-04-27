@@ -1,9 +1,14 @@
 package gov.gtas.services;
 
+import gov.gtas.dto.PaxDto;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -251,5 +256,116 @@ public class GenUtil {
 		date=cal.getTime();
 		SimpleDateFormat df = new SimpleDateFormat("yyMMdd");
 		return df.format(date);
+	}
+	public static String getApisPaxBirthday(String dob){
+		//06MAR72
+		//String day=dob.substring(0, 1);
+		//int year = Integer.parseInt(dateString.substring(0, 4));
+		//int month = Integer.parseInt(dateString.substring(4, 6));
+		//int day = Integer.parseInt(dateString.substring(6));
+		int day=Integer.parseInt(dob.substring(0,2));
+		String month=dob.substring(2,5);
+		int mon=1;
+		
+		switch(month){
+			case "JAN":mon=1;
+				break;
+			case "FEB":mon=2;
+				break;
+			case "MAR":mon=3;
+				break;
+			case "APR":mon=4;
+				break;
+			case "MAY":mon=5;
+				break;
+			case "JUN":mon=6;
+				break;
+			case "JUL":mon=7;
+				break;
+			case "AUG":mon=8;
+				break;
+			case "SEP":mon=9;
+				break;
+			case "OCT":mon=10;
+				break;
+			case "NOV":mon=11;
+				break;
+			case "DEC":mon=12;
+				break;
+		}
+		int year=Integer.parseInt(dob.substring(5));
+		
+		Calendar cal = new GregorianCalendar(year,mon,day);
+		Date date=cal.getTime();
+		SimpleDateFormat df = new SimpleDateFormat("yyMMdd");
+		//System.out.println("DOB<<<<<<<<<<----"+df.format(date));
+		return df.format(date);
+	}
+	public static List<PaxDto> getWatchList(){
+		List<PaxDto> watchList=new ArrayList<>();
+		PaxDto one =new PaxDto();
+		one.setFirstName("Madelyne");
+		one.setMiddleName("Jennifer");
+		one.setLastName("Pryor");
+		one.setDob("06MAR72");
+		watchList.add(one);
+		
+		PaxDto two =new PaxDto();
+		two.setFirstName("John");
+		two.setLastName("Wraith");
+		two.setDob("28SEP58");
+		watchList.add(two);
+		
+		PaxDto three =new PaxDto();
+		three.setFirstName("Lex");
+		three.setLastName("Luthor");
+		three.setDob("15JUL45");
+		watchList.add(three);
+		
+		PaxDto four =new PaxDto();
+		four.setFirstName("Slade");
+		one.setMiddleName("Joseph");
+		four.setLastName("Wilson");
+		four.setDob("11JUN70");
+		watchList.add(four);
+		
+		PaxDto five =new PaxDto();
+		five.setFirstName("John");
+		five.setLastName("Constantine");
+		five.setDob("30APR69");
+		watchList.add(five);
+
+		PaxDto six =new PaxDto();
+		six.setFirstName("Valerie");
+		six.setLastName("Hart");
+		six.setDob("05AUG75");
+		watchList.add(six);
+		
+		PaxDto seven =new PaxDto();
+		seven.setFirstName("Diana");
+		seven.setLastName("Prince");
+		seven.setDob("01JAN60");
+		watchList.add(seven);
+		
+		PaxDto eight =new PaxDto();
+		eight.setFirstName("Henry");
+		eight.setMiddleName("Jonathan");
+		eight.setLastName("Pym");
+		eight.setDob("20AUG78");
+		watchList.add(eight);
+		
+		PaxDto nine =new PaxDto();
+		nine.setFirstName("Wanda");
+		nine.setLastName("Maximoff");
+		nine.setDob("24MAR80");
+		watchList.add(nine);
+		
+		return watchList;
+	}
+	public static PaxDto getPaxDto(){
+		List<PaxDto> watchList=getWatchList();
+		Integer select = getRandomNumber(watchList.size());
+		PaxDto dto=watchList.get(select);
+		return dto;
 	}
 }

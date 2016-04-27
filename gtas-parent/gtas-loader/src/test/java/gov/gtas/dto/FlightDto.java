@@ -12,9 +12,16 @@ public class FlightDto {
 	private String endDate;
 	private String embarkCountry;
 	private String debarkCountry;
+	private String toDay;
 	private List<PaxDto> paxList=new ArrayList<PaxDto>();
 	
 	
+	public String getToDay() {
+		return toDay;
+	}
+	public void setToDay(String toDay) {
+		this.toDay = toDay;
+	}
 	public String getEmbarkCountry() {
 		return embarkCountry;
 	}
@@ -64,10 +71,10 @@ public class FlightDto {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	public List getPaxList() {
+	public List<PaxDto> getPaxList() {
 		return paxList;
 	}
-	public void setPaxList(List paxList) {
+	public void setPaxList(List<PaxDto> paxList) {
 		this.paxList = paxList;
 	}
 	

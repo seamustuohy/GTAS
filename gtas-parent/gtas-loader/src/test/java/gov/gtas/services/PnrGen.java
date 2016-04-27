@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 
 public class PnrGen {
 
@@ -58,9 +60,21 @@ public class PnrGen {
 		String ph=GenUtil.getPhoneNumber();
 		String lName=GenUtil.getLastName();
 		List<String> ssrs=new ArrayList<>();
+		PaxDto pDto= new PaxDto();
+		String bDate=GenUtil.getBirthDate();
+		String fName=GenUtil.getFirstName();
 		for(int i =1;i<=numPax;i++){
-			PaxDto pDto= new PaxDto();
-			String fName=GenUtil.getFirstName();
+			if(numPax == 1){
+				pDto=(PaxDto)GenUtil.getPaxDto();
+				pDto.setEmbark(orig);
+				pDto.setDebark(dest);
+				bDate=pDto.getDob();
+				lName=pDto.getLastName();
+				fName=pDto.getFirstName();
+				//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>------"+lName);
+				//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>------"+fName);
+			}
+			
 			String id=""+GenUtil.getRandomNumber(9999);
 			pDto.setFirstName(fName);
 			pDto.setLastName(lName);
@@ -74,7 +88,7 @@ public class PnrGen {
 			sb.append("FAR+N+++++MIL24'"+newline);
 			String country=GenUtil.getCountryCode();
 			pDto.setDocNumber(GenUtil.getRandomNumber(9999999));
-			sb.append("SSR+DOCS:HK::"+carrier+":::::/P/"+country+"/"+pDto.getDocNumber()+"/"+country+"/"+GenUtil.getBirthDate()+"/"+GenUtil.getGender()+"/"+GenUtil.getExpiryDate()+"/"+lName+"/"+fName+"'"+newline);
+			sb.append("SSR+DOCS:HK::"+carrier+":::::/P/"+country+"/"+pDto.getDocNumber()+"/"+country+"/"+bDate+"/"+GenUtil.getGender()+"/"+GenUtil.getExpiryDate()+"/"+lName+"/"+fName+"'"+newline);
 			String s="SSR+SEAT:HK:"+i+":"+carrier+":::"+orig+":"+dest+"+"+GenUtil.getRandomNumber(99)+"A"+"::"+id+":N'"+newline;
 			ssrs.add(s);
 			sb.append("SSR+AVML:HK:"+i+":"+carrier+"'"+newline);
@@ -99,6 +113,57 @@ public class PnrGen {
 		
 	}
 	
+	public static void buildPaxRecord(FlightDto dto,PaxDto pax,StringBuilder sb){
+
+		String add=GenUtil.getSponsorAddress();
+		String ph=GenUtil.getPhoneNumber();
+		List<String> ssrs=new ArrayList<>();
+		pax.setEmbark(dto.getEmbark());
+		pax.setDebark(dto.getDebark());	
+		pax.setDocNumber(GenUtil.getRandomNumber(9999999));
+		String id=""+GenUtil.getRandomNumber(9999);
+		sb.append("TIF+"+pax.getLastName()+"+"+pax.getFirstName()+":A:"+id+":"+pax.getId()+"'"+newline);
+		sb.append("FTI+"+dto.getCarrier()+":8"+GenUtil.getRandomNumber(999999)+":::ELITE'"+newline);
+		sb.append("IFT+4:15:9+"+dto.getEmbark()+" "+dto.getCarrier()+" X/"+dto.getDebark()+" "+dto.getCarrier()+" GBP/IT END ROE0."+GenUtil.getRandomNumber(999)+"'"+newline);
+		sb.append("REF+:"+GenUtil.getRandomNumber(999999999)+"P'"+newline);
+		sb.append("FAR+N+++++MIL24'"+newline);
+		String country=GenUtil.getCountryCode();
+		
+		sb.append("SSR+DOCS:HK::"+dto.getCarrier()+":::::/P/"+country+"/"+pax.getDocNumber()+"/"+country+"/"+pax.getDob()+"/"+GenUtil.getGender()+"/"+GenUtil.getExpiryDate()+"/"+pax.getLastName()+"/"+pax.getFirstName()+"'"+newline);
+		String s="SSR+SEAT:HK:"+pax.getId()+":"+dto.getCarrier()+":::"+dto.getEmbark()+":"+dto.getDebark()+"+"+GenUtil.getRandomNumber(300)+"A"+"::"+id+":N'"+newline;
+		ssrs.add(s);
+		sb.append("SSR+AVML:HK:"+pax.getId()+":"+dto.getCarrier()+"'"+newline);
+		sb.append("TKT+30"+GenUtil.getRandomNumber(999999999)+":T:1'"+newline);
+		sb.append("MON+B:"+GenUtil.getRandomNumber(9999)+".00:USD+T:"+GenUtil.getRandomNumber(9999)+".94:USD'"+newline);
+		sb.append("PTK+NR++"+dto.getToDay()+"+"+dto.getCarrier()+"+006+"+dto.getEmbark()+"'"+newline);
+		sb.append("TXD++6.10::USD'"+newline);
+		sb.append("DAT+710:"+dto.getToDay()+"'"+newline);
+		sb.append("FOP+CC:::"+GenUtil.getCcNum()+newline);
+		sb.append("IFT+4:43+"+pax.getLastName()+" "+pax.getFirstName()+"+"+add+"+"+ph+"'"+newline);	
+		dto.setStartDate(GenUtil.getDepArlTime(1));
+		dto.setEndDate(GenUtil.getDepArlTime(6));
+		sb.append("TVL+"+dto.getStartDate()+":"+dto.getEndDate()+"+"+dto.getEmbark()+"+"+dto.getDebark()+"+"+dto.getCarrier()+"+"+dto.getFlightNum()+":B'"+newline);
+		sb.append("RPI+"+1+"HK'"+newline);
+		sb.append("APD+7"+GenUtil.getRandomNumber(9)+"7'"+newline);
+		
+		for(String ss:ssrs){
+			sb.append(ss);
+		}
+	}
+	public static void buildPnrSrcData(FlightDto dto,PaxDto pax,StringBuilder sb){
+		String add=GenUtil.getAddress();
+		String ph=GenUtil.getPhoneNumber();
+		sb.append("SRC'"+newline);
+		sb.append("RCI+"+dto.getCarrier()+":"+GenUtil.getRecordLocator()+"'"+newline);
+		sb.append("SSR+AVML:HK:2:"+dto.getCarrier()+"'"+newline);
+		sb.append("DAT+700:"+GenUtil.getDate()+"+710:"+GenUtil.getTicketDate()+"'"+newline);
+		sb.append("IFT+4:28::"+dto.getCarrier()+"+THIS PASSENGER IS A VIP'"+newline);
+		sb.append("IFT+4:28::"+dto.getCarrier()+"+CTCR "+ph+"'"+newline);
+		sb.append("ORG+"+dto.getCarrier()+":"+dto.getEmbark()+"+52519950:LON+++A+GB:GBP+D050517'"+newline);
+		sb.append("ADD++"+add+"'"+newline);
+		sb.append("EBD+USD:40.00+1::N'"+newline);
+		buildPaxRecord(dto,pax,sb);
+	}
 	public static void buildSrc(String carrier, String orig,String dest, String flightNumber,String date,int numPax,FlightDto dto,StringBuilder sb){
 		String add=GenUtil.getAddress();
 		String ph=GenUtil.getPhoneNumber();
@@ -173,7 +238,7 @@ public class PnrGen {
 		sb.append("DTM+189:"+GenUtil.getYYMMDD(-1)+":201'"+newline);
 		//DTM+189:1401312330:201'
 		//DTM+232:1401310642:201'
-		sb.append("LOC+125+"+fd.getDebark()+"'"+newline);
+		sb.append("LOC+87+"+fd.getDebark()+"'"+newline);
 		sb.append("DTM+232:"+GenUtil.getYYMMDD(5)+":201'"+newline);
 		return sb;
 	}
@@ -181,19 +246,28 @@ public class PnrGen {
 	public static StringBuilder buildPaxList(StringBuilder sb,PaxDto pd,FlightDto fd){
 		//NAD NAD+FL+++DOE:JOHN:WAYNE+20 MAIN STREET+ANYCITY+VA+10053+USA’
 		//NAD*FL***{0}:{1}:$
-		sb.append("NAD+FL+++"+pd.getLastName()+":"+pd.getFirstName()+":"+pd.getLastName()+"+"+GenUtil.getPaxAddress()+"'"+newline);
+		String mName="";
+		if(StringUtils.isNotEmpty(pd.getMiddleName())){
+			mName=pd.getMiddleName();
+		}
+		sb.append("NAD+FL+++"+pd.getLastName()+":"+pd.getFirstName()+":"+mName+"+"+GenUtil.getPaxAddress()+"'"+newline);
 		//ATT
 		//ATT*2**M$  ATT+2++M’
+		
 		sb.append("ATT+2++"+GenUtil.getGender()+"'"+newline);
 		//DTM  DTM*329:541016$
-		sb.append("DTM+329:"+GenUtil.getPaxBirthday()+"'"+newline);
+		
+		sb.append("DTM+329:"+GenUtil.getApisPaxBirthday(pd.getDob())+"'"+newline);
 		//LOC LOC*178*{2}$
 		//LOC*179*{3}$
-		sb.append("LOC+178+"+fd.getEmbarkCountry()+"'"+newline);
-		sb.append("LOC+179+"+fd.getDebarkCountry()+"'"+newline);
+		sb.append("LOC+178+"+fd.getEmbark()+"'"+newline);
+		sb.append("LOC+179+"+fd.getDebark()+"'"+newline);
+		sb.append("LOC+174+"+fd.getEmbarkCountry()+"'"+newline);
 		//NAT NAT*2*USA$
+		
 		sb.append("NAT+2+USA'"+newline);
 		//RFF*AVF:QXGYLO$
+		
 		sb.append("RFF+AVF:"+"QXGYLO"+GenUtil.getRandomNumber(999)+"'"+newline);
 		//DOC DOC+P:110:111+MB140241’  DOC*P:110:111*{4}$
 		sb.append("DOC+P:110:111+"+pd.getDocNumber()+"'"+newline);
@@ -212,26 +286,24 @@ public class PnrGen {
 		sb.append("UNZ+1+1402111800'"+newline);
 	}
 	public static void buildApisMessages(List<FlightDto> flights,int counter){
-		
+		counter=1;
+		int j=0;
 		for(FlightDto fd : flights){
-			counter++;
-			
-			StringBuilder sb= new StringBuilder();
-			buildApisHeader(sb,fd);
-			buildApisReportingParty(sb);
-			buildApisFlight(sb,fd);
-		
-			Iterator it = fd.getPaxList().iterator();
-			if(it.hasNext()){
-				PaxDto pd=(PaxDto)it.next();
-				buildPaxList(sb,pd,fd);
+			j++;
+			for(int i=0;i< fd.getPaxList().size();i++){
+				PaxDto pd=(PaxDto)fd.getPaxList().get(i);
+				counter=counter*j+i;
+				StringBuilder sb= new StringBuilder();
+				buildApisHeader(sb,fd);
+				buildApisReportingParty(sb);
+				buildApisFlight(sb,fd);
 				
+				buildPaxList(sb,pd,fd);
+				buildApisFooter(sb);
+				writeToApisFile(counter,sb);
+				sb=null;
 			}
-			
-			buildApisFooter(sb);
-			writeToApisFile(counter,sb);
-			
-			sb=null;
+
 		}
 	}
 	
@@ -252,6 +324,8 @@ public class PnrGen {
              System.out.println(e);
          }
 	}
+	
+
 	//run it from MessageGeneratorIT classs
 //	public static void main(String[] args) {
 //		for(int i=56;i <=57;i++){
