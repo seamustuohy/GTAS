@@ -433,9 +433,12 @@ public class UdrServiceImpl implements UdrService {
 			for (Rule r : newEngineRules) {
 				ruleToUpdate.addEngineRule(r);
 			}
-
-			updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
-
+			if(ruleToUpdate.getAuthor().getUserId().equals(userId)){
+				updatedRule = rulePersistenceService.update(ruleToUpdate, ruleToUpdate.getAuthor());
+			}else{
+				updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
+			}
+			
 			recompileRules(RuleConstants.UDR_KNOWLEDGE_BASE_NAME, userId);
 
 			writeAuditLog(AuditActionType.UPDATE_UDR, updatedRule, udrToUpdate,
@@ -443,7 +446,11 @@ public class UdrServiceImpl implements UdrService {
 		} else {
 			// simple update - meta data only
 			// no need to re-generate the Knowledge Base.
-			updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
+			if(ruleToUpdate.getAuthor().getUserId().equals(userId)){
+				updatedRule = rulePersistenceService.update(ruleToUpdate, ruleToUpdate.getAuthor());
+			}else{
+				updatedRule = rulePersistenceService.update(ruleToUpdate, userId);
+			}
 			writeAuditLog(AuditActionType.UPDATE_UDR_META, ruleToUpdate,
 					udrToUpdate, userId, author);
 		}

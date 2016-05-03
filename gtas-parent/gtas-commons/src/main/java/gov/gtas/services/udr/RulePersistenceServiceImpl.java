@@ -194,6 +194,23 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
 		UdrRule updatedRule = udrRuleRepository.save(rule);
 		return updatedRule;
 	}
+	
+	@Override
+	@Transactional
+	public UdrRule update(UdrRule rule, User user) {
+
+		if (rule.getId() == null) {
+			ErrorHandler errorHandler = ErrorHandlerFactory.getErrorHandler();
+			throw errorHandler.createException(
+					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "id",
+					"Update UDR");
+		}
+
+		rule.setEditDt(new Date());
+		rule.setEditedBy(user);
+		UdrRule updatedRule = udrRuleRepository.save(rule);
+		return updatedRule;
+	}
 
 	@Override
 	@Transactional(TxType.SUPPORTS)

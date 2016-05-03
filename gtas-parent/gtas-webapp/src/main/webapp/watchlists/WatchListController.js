@@ -40,9 +40,20 @@
         $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
         $scope.watchlistGrid.importerDataAddCallback = function (grid, newObjects) {
             if ($scope.validateNewObjects(newObjects)) {
-                $scope.showConfirm(grid, newObjects);
+            	var valid = true;
+            	if($scope.activeTab === "Passenger"){
+	            	$.each(newObjects, function(index,value){
+	                	if(!$scope.validateDateFormat(value.dob, index)){
+	                		valid = false;
+	                		return false;
+	                	};
+	            	});
+            	}
+            	if(valid){
+            		$scope.showConfirm(grid, newObjects);
+            	}
             } else {
-                $scope.openAlert(null);
+            	$scope.openAlert('The format of the file you have uploaded is invalid.');
             }
         };
         $scope.watchlistGrid.finishImport = function (grid, newObjects) {
@@ -304,7 +315,7 @@
                 $mdDialog.alert()
                     .clickOutsideToClose(true)
                     .title('Invalid CSV Format')
-                    .textContent('The format of the file you have uploaded is invalid.')
+                    .textContent(msg)
                     .ariaLabel('Invalid File Format')
                     .ok('OK')
                     .openFrom({
@@ -331,17 +342,44 @@
                     $.each(newObjects, function (index, value) {
                         if (!newObjects[index] || !newObjects[index].documentNumber || !newObjects[index].documentType) {
                             valid = false;
+                            return false;
                         }
                     });
                 } else {
                     $.each(newObjects, function (index, value) {
                         if (!newObjects[index] || !newObjects[index].dob || !newObjects[index].firstName || !newObjects[index].lastName) {
                             valid = false;
+                            return false;
                         }
                     });
                 }
             }
             return valid;
         };
+        
+        $scope.validateDateFormat = function(date, index){
+        	var valid = true;
+        	if(date.search('-') < 2){
+        		//BAD FORMAT, INCORRECT DELINEATOR
+        		 $scope.openAlert('Accepted Date Format Is yyyy-mm-dd. Invalid dilineator found at index: '+index);
+        		 valid = false;
+        	}else {
+        		var dateArry = date.split('-');
+        		if(dateArry[0].length != 4){
+        			//BAD FORMAT, YEAR NOT FIRST
+        			$scope.openAlert('\n Accepted Date Format Is yyyy-mm-dd. Invalid YEAR location found at index: '+index);
+        			valid = false;
+        		}else if(dateArry[1] < 1 || dateArry[1] > 12){
+        			//BAD FORMAT, MONTH OUT OF RANGE
+        			$scope.openAlert('Accepted Date Format Is yyyy-mm-dd. Invalid MONTH value found at index: '+index);
+        			valid = false;
+        		}else if(dateArry[2] < 1 || dateArry[2] > 31){
+        			//BAD FORMAT, DAY OUT OF RANGE
+        			$scope.openAlert('Accepted Date Format Is yyyy-mm-dd. Invalid DAY value found at index: '+index);
+        			valid = false;
+        		}
+        	}
+        	return valid;
+        }
     });
 }());

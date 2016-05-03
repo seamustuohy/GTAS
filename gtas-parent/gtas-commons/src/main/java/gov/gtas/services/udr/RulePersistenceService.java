@@ -1,6 +1,7 @@
 package gov.gtas.services.udr;
 
 import gov.gtas.model.BaseEntity;
+import gov.gtas.model.User;
 import gov.gtas.model.udr.KnowledgeBase;
 import gov.gtas.model.udr.Rule;
 import gov.gtas.model.udr.UdrRule;
@@ -167,4 +168,14 @@ public interface RulePersistenceService {
 	 * @return
 	 */
 	public EntityManager getEntityManager();
+	/**
+	 * Updates a UDR rule or its children engine rules. This overloaded method helps bypasses an EntityExistsException in certain scenarios.
+	 * 
+	 * @param rule
+	 *            the UDR rule to update.
+	 * @param User
+	 *            the user who represents the author of the update.
+	 * @return the updated rule.
+	 */
+	UdrRule update(UdrRule rule, User user);
 }
