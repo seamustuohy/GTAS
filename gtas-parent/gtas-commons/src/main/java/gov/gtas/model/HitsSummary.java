@@ -31,11 +31,11 @@ public class HitsSummary extends BaseEntity {
 	private List<HitDetail> hitdetails = new ArrayList<HitDetail>();
 
 	@ManyToOne
-	@JoinColumn(name = " flight_id", nullable = false)
+	@JoinColumn(name = "flight_id", nullable = false)
 	private Flight flight;
 
 	@ManyToOne
-	@JoinColumn(name = " passenger_id", nullable = false)
+	@JoinColumn(name = "passenger_id", nullable = false)
 	private Passenger passenger;
 
 	@Column(name = "rule_hit_count")
