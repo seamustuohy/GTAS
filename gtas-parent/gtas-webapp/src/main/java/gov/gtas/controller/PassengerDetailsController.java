@@ -74,11 +74,8 @@ public class PassengerDetailsController {
 	public PassengerVo getPassengerByPaxIdAndFlightId(
 			@PathVariable(value = "id") String paxId,
 			@RequestParam(value = "flightId", required = false) String flightId) {
-		List<PassengerVo> rv = new ArrayList<>();
 		PassengerVo vo = new PassengerVo();
-		FlightHistoryVo flightHistoryVo = new FlightHistoryVo();
 		Iterator _tempIter;
-		Pnr _tempPnr = new Pnr();
 		List _tempPnrList = new ArrayList();
 		List<FlightVo> _tempFlightVoList = new ArrayList<FlightVo>();
 		HashMap<Document, List<Flight>> _tempFlightHistoryMap = new HashMap<Document, List<Flight>>();
@@ -145,32 +142,8 @@ public class PassengerDetailsController {
 		if (_tempPnrList.size() >= 1)
 			vo.setPnrVo(mapPnrToPnrVo((Pnr) _tempPnrList.get(0)));
 
-		/*// Gather Flight History Details
-		_tempFlightHistoryMap = fService.getFlightsByPassengerNameAndDocument(
-				t.getFirstName(), t.getLastName(), t.getDocuments());
-
-		for (Document document : _tempFlightHistoryMap.keySet()) {
-			for (DocumentVo docVo : vo.getDocuments()) {
-				if ((document.getDocumentNumber() != null)
-						&& (document.getDocumentNumber().equals(
-								docVo.getDocumentNumber()) && (document
-								.getDocumentType().equalsIgnoreCase(docVo
-								.getDocumentType())))) {
-					_tempFlightVoList.clear();
-					for (Flight flight : _tempFlightHistoryMap.get(document)) {
-						FlightVo _tempFlightVo = new FlightVo();
-						copyModelToVo(flight, _tempFlightVo);
-						_tempFlightVoList.add(_tempFlightVo);
-					}
-					flightHistoryVo.getFlightHistoryMap().put(
-							docVo.getDocumentNumber(), _tempFlightVoList);
-				}
-			}
-		}
-
-		vo.setFlightHistoryVo(flightHistoryVo);*/
 		return vo;
-	} // END of GetPassengerDetails Method
+	}
 
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)

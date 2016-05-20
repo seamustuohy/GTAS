@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import gov.gtas.model.Disposition;
 import gov.gtas.vo.BaseVo;
 
 public class PassengerVo extends BaseVo {
@@ -61,6 +62,8 @@ public class PassengerVo extends BaseVo {
 	private List<DocumentVo> documents = new ArrayList<>();
 	private FlightHistoryVo flightHistoryVo;
     private PnrVo pnrVo;
+    
+    private List<Disposition> dispositionHistory;
     
 	public String getPaxId() {
 		return paxId;
