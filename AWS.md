@@ -2,16 +2,19 @@
 
 ## Overview
 
+Note: *this information is intended for GTAS developers only.*
+
 Access our AWS deployment on govcloud: [https://taspd01govcloud.signin.amazonaws-us-gov.com]()
 
-We have two environments -- dev and staging -- deployed on separate tomcat instances on the same ec2 server.  There are separate RDS instances for dev and staging.
+We have two environments -- dev and staging -- deployed on separate Tomcat instances on the same ec2 server.  There are separate RDS instances for dev and staging.
 
 ## Deployment
 
-1. Build gtas.war locally.  Make sure your hibernate.properties is set for the correct RDS instance.
-2. Copy gtas.war, gtas-loader.jar, and gtas-rulesvc-jar-with-dependencies.jar to the app server ec2 instance.
-3. Login to the ec2 instance.  Copy the files to a folder under /tmp.
-4. Deploy the files in the appropriate tomcat folder: /data/atsg/tomcat for dev and /data/atsg_staging/tomcat for staging.
+1. Build GTAS locally.  Make sure hibernate.properties is set for the correct RDS instance.  Also update jobScheduler.properties with the correct directories.
+2. Transfer gtas.war and gtas-job-scheduler.war to the app server ec2 instance.
+3. Login to the ec2 instance.  Copy the files to a folder under /tmp. 
+4. Deploy the files in the appropriate Tomcat folder: /data/atsg/tomcat for dev and /data/atsg_staging/tomcat for staging:
+```$ sudo -u tomcat cp /tmp/* /data/atsg/tomcat/webapps```
 
 If you need to shutdown/startup tomcat use the following command:
 ```
@@ -20,7 +23,9 @@ $ sudo -u tomcat sh ./bin/catalina.sh stop
 
 ## Cron jobs
 
-To start/stop the cron jobs, edit the crontab as the 'tomcat' user:
+The scheduler war will execute both the loader and the rule runner.  If you wish to configure traditional cron jobs, you can use the following instructions:
+
+Edit the crontab as the 'tomcat' user:
 
 ```
 $ sudo -u tomcat crontab -e

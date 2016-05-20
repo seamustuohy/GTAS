@@ -2,21 +2,20 @@
 
 ## Environment
 
-* Java 8 update 45
-* Apache Tomcat 7.0.62
-* MariaDB 10.0.19 Stable
+* Java 8
+* Apache Tomcat 8
+* MariaDB 10.0 Stable
 * Maven 3.3
-* NodeJs 4 (for npm)
 
 ## Download
 
-Grab the latest code from BitBucket
+GTAS must be build from the source code.  Grab the latest code from BitBucket:
 
 ```
 git clone https://[username]@bitbucket.org/sanandreas/sanandreas.git
 ```
 
-## Build
+## Configure
 
 First update the following values in gtas-parent/gtas-commons/src/main/resourceshibernate.properties to work with your installation of MariaDB:
 
@@ -26,13 +25,14 @@ hibernate.connection.username=root
 hibernate.connection.password=admin
 ```
 
-GTAS uses bower to manage front-end dependencies.  Use npm to download bower first and then use bower to download javascript libraries:
+Configure the job scheduler war by editing gtas-parent/gtas-job-scheduler-war/src/main/resources/jobScheduler.properties.  Modify the message origin and processed folders.  For example,
 
 ```
-cd gtas-webapp
-npm install  
-bower install
+message.dir.origin=/data/gtas_in
+message.dir.processed=/data/gtas_out
 ```
+
+## Build
 
 Standard build with unit tests. Note: if maven shows a java socket error (invalid argument 'connect'), you may need to add -Djava.net.preferIPv4Stack=true to the MAVEN_OPTS environment variable.
 
@@ -83,18 +83,21 @@ Deploy to tomcat and start the server.
 
 ```
 cp gtas-webapp/gtas.war [tomcat home]/webapps
+cp gtas-job-scheduler-war/target/gtas-job-scheduler.war [tomcat home]/webapps
 ```
 
 Access site at http://localhost:8080/gtas
 
 ## Backend Processes
 
+These instructions are only for admins who wish to configure the backend processes as cron jobs on a Unix system.  If you plan on using the job scheduler war instead, there is no need to follow these instructions.
+
 GTAS currently relies on the following batch processes:
 
 * GTAS Loader: Parses and loads APIS and PNR messages.
 * GTAS Rule Runner: Applies user-defined rules against messages.
 
-On production environments, both processes should be set up as cron jobs.
+Both of these processes can be executed on the command-line.
 
 ### GTAS Loader
 
