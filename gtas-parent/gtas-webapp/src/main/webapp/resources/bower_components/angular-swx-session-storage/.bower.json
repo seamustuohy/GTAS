@@ -51,7 +51,7 @@
     "tag": "v1.0.2",
     "commit": "b1afc33f880fd71cd6b06920bf5bef52d7bf2a7e"
   },
-  "_source": "git://github.com/scriptwerx/angular-swx-session-storage.git",
-  "_target": "*",
+  "_source": "https://github.com/scriptwerx/angular-swx-session-storage.git",
+  "_target": "1.0.2",
   "_originalSource": "angular-swx-session-storage"
 }
