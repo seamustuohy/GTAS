@@ -2,6 +2,7 @@ package gov.gtas.services;
 
 import java.util.List;
 
+import gov.gtas.model.Disposition;
 import gov.gtas.model.Passenger;
 import gov.gtas.services.dto.PassengersPageDto;
 import gov.gtas.services.dto.PassengersRequestDto;
@@ -13,6 +14,7 @@ public interface PassengerService {
     
     public Passenger findById(Long id);
     public List<Passenger> getPassengersByLastName(String lastName);
+    public List<Disposition> getPassengerDispositionHistory(Long passengerId, Long flightId);
     
     /**
      * 

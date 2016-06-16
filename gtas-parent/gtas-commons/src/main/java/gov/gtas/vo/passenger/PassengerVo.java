@@ -292,8 +292,14 @@ public class PassengerVo extends BaseVo {
 	public String getEtaLocalTZ() {
 		return etaLocalTZ;
 	}
-    
-    @Override
+    public List<Disposition> getDispositionHistory() {
+		return dispositionHistory;
+	}
+	public void setDispositionHistory(List<Disposition> dispositionHistory) {
+		this.dispositionHistory = dispositionHistory;
+	}
+
+	@Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }

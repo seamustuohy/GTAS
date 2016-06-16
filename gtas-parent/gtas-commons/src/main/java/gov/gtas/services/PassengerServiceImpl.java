@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import gov.gtas.enumtype.HitTypeEnum;
+import gov.gtas.model.Disposition;
 import gov.gtas.model.Flight;
 import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Passenger;
@@ -106,11 +107,16 @@ public class PassengerServiceImpl implements PassengerService {
 			passengerToUpdate.setDocuments(passenger.getDocuments());
 			passengerToUpdate.setSuffix(passenger.getSuffix());
 			passengerToUpdate.setTitle(passenger.getTitle());
-//			passengerToUpdate.setType(passenger.getType());
 		}
 		return passengerToUpdate;
 	}
 
+	@Override
+	@Transactional	
+    public List<Disposition> getPassengerDispositionHistory(Long passengerId, Long flightId) {
+		return passengerRespository.getPassengerDispositionHistory(passengerId, flightId);
+	}
+	
 	@Override
 	@Transactional
 	public Passenger findById(Long id) {
@@ -129,9 +135,6 @@ public class PassengerServiceImpl implements PassengerService {
         List<HitsSummary> hitsSummary = hitsSummaryRepository.findByFlightIdAndPassengerId(flightId, passengerId);
         if (!CollectionUtils.isEmpty(hitsSummary)) {
             for (HitsSummary hs : hitsSummary) {
-//                if (vo.getOnRuleHitList() && vo.getOnWatchList()) {
-//                    break;
-//                }
                 String hitType = hs.getHitType();
                 if (hitType.contains(HitTypeEnum.R.toString())) {
                     vo.setOnRuleHitList(true);

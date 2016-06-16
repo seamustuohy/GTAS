@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
+import gov.gtas.model.Disposition;
 import gov.gtas.model.Document;
 import gov.gtas.model.Email;
 import gov.gtas.model.Flight;
@@ -134,13 +135,17 @@ public class PassengerDetailsController {
 			docVo.setIssuanceDate(d.getIssuanceDate());
 			vo.addDocument(docVo);
 		}
-
+		
+		List<Disposition> cases = pService.getPassengerDispositionHistory(id, Long.parseLong(flightId));
+		vo.setDispositionHistory(cases);
+		
 		// Gather PNR Details
 		_tempPnrList = pnrService.findPnrByPassengerIdAndFlightId(t.getId(),
 				new Long(flightId));
 
-		if (_tempPnrList.size() >= 1)
+		if (_tempPnrList.size() >= 1) {
 			vo.setPnrVo(mapPnrToPnrVo((Pnr) _tempPnrList.get(0)));
+		}
 
 		return vo;
 	}
