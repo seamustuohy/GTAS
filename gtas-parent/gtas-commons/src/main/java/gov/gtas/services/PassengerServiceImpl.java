@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ import gov.gtas.model.Disposition;
 import gov.gtas.model.Flight;
 import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Passenger;
+import gov.gtas.model.lookup.DispositionStatus;
+import gov.gtas.repository.DispositionStatusRepository;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.services.dto.PassengersPageDto;
@@ -31,6 +34,9 @@ public class PassengerServiceImpl implements PassengerService {
     @Resource
     private HitsSummaryRepository hitsSummaryRepository;
 
+    @Resource
+    private DispositionStatusRepository dispositionStatusRepo;
+    
 	@Override
 	@Transactional
 	public Passenger create(Passenger passenger) {
@@ -115,6 +121,15 @@ public class PassengerServiceImpl implements PassengerService {
 	@Transactional	
     public List<Disposition> getPassengerDispositionHistory(Long passengerId, Long flightId) {
 		return passengerRespository.getPassengerDispositionHistory(passengerId, flightId);
+	}
+	
+	@Override
+    public List<DispositionStatus> getDispositionStatuses() {
+		Iterable<DispositionStatus> i = dispositionStatusRepo.findAll();
+		if (i != null) {
+			return IteratorUtils.toList(i.iterator());
+		}
+		return new ArrayList<>();
 	}
 	
 	@Override

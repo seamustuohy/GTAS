@@ -35,6 +35,7 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.Seat;
+import gov.gtas.model.lookup.DispositionStatus;
 import gov.gtas.services.FlightService;
 import gov.gtas.services.PassengerService;
 import gov.gtas.services.PnrService;
@@ -190,6 +191,13 @@ public class PassengerDetailsController {
 		
 		return flightHistoryVo;
 	}
+	
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/dispositionstatuses", method = RequestMethod.GET)
+	public List<DispositionStatus> getDispositionStatuses() {
+		return pService.getDispositionStatuses();
+	}	
 	
 	/**
 	 * Util method to map PNR model object to VO

@@ -61,3 +61,10 @@ INSERT INTO `dashboard_message_stats` (`id`, `dt_modified`,`message_type`, `hour
 
 INSERT INTO `dashboard_message_stats` (`id`, `dt_modified`,`message_type`, `hour_1`, `hour_2`, `hour_3`, `hour_4`, `hour_5`, `hour_6`, `hour_7`, `hour_8`, `hour_9`, `hour_10`, `hour_11`, `hour_12`, `hour_13`, `hour_14`, `hour_15`, `hour_16`, `hour_17`, `hour_18`, `hour_19`, `hour_20`, `hour_21`, `hour_22`, `hour_23`, `hour_24`) VALUES
 (2, CURRENT_TIMESTAMP, 'PNR', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- ----------------------------
+-- Case mgmt: disposition statuses
+-- ----------------------------
+
+INSERT INTO `disposition_status` (`id`, `name`, `description`) VALUES (1, 'NEW', 'New case');
+INSERT INTO `disposition_status` (`id`, `name`, `description`) VALUES (2, 'CLOSED', 'No action required');
