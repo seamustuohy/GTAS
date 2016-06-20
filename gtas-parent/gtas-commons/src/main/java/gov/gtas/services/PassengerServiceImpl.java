@@ -1,6 +1,7 @@
 package gov.gtas.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -18,6 +19,7 @@ import gov.gtas.model.Flight;
 import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.DispositionStatus;
+import gov.gtas.repository.DispositionRepository;
 import gov.gtas.repository.DispositionStatusRepository;
 import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PassengerRepository;
@@ -37,7 +39,10 @@ public class PassengerServiceImpl implements PassengerService {
     @Resource
     private DispositionStatusRepository dispositionStatusRepo;
     
-	@Override
+    @Resource
+    private DispositionRepository dispositionRepo;
+
+    @Override
 	@Transactional
 	public Passenger create(Passenger passenger) {
 		return passengerRespository.save(passenger);
@@ -134,8 +139,21 @@ public class PassengerServiceImpl implements PassengerService {
 	
 	@Override	
     public void createDisposition(DispositionData disposition) {
-		System.out.println("MAC: " + disposition);
+		Disposition d = new Disposition();
+		d.setCreatedAt(new Date());
+		d.setCreatedBy(disposition.getUser());
+		Flight f = new Flight();
+		f.setId(disposition.getFlightId());
+		d.setFlight(f);
+		Passenger p = new Passenger();
+		p.setId(disposition.getPassengerId());
+		d.setPassenger(p);
+		d.setComments(disposition.getComments());
+		DispositionStatus status = new DispositionStatus();
+		status.setId(disposition.getStatusId());
+		d.setStatus(status);
 		
+		dispositionRepo.save(d);
 	}
 	
 	@Override

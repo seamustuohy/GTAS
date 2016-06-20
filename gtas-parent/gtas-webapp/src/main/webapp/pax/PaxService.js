@@ -14,15 +14,19 @@
             	return dfd.promise;
             }
 
+            return ({getPaxDetail: getPaxDetail,
+            		getPaxFlightHistory: getPaxFlightHistory});
+        })
+        .service('caseService', function ($http, $q) {
             function createDisposition(disposition){
             	var dfd = $q.defer();
             	dfd.resolve($http.post("/gtas/disposition", disposition));
             	return dfd.promise;
             }
 
-            return ({getPaxDetail: getPaxDetail,
-            		getPaxFlightHistory: getPaxFlightHistory,
-                    createDisposition: createDisposition});
+            return ({
+                createDisposition: createDisposition
+            });
         })
         .service("paxService", function (userService, $rootScope, $http, $q) {
         	

@@ -8,16 +8,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DispositionData {
-	private final Integer passengerId;
-	private final Integer flightId;
-	private final Integer statusId;
+	private final Long passengerId;
+	private final Long flightId;
+	private final Long statusId;
 	private final String comments;
 	private final String user;
 
 	public DispositionData(
-			@JsonProperty("passengerId") Integer passengerId, 
-			@JsonProperty("flightId") Integer flightId,
-			@JsonProperty("statusId") Integer statusId,
+			@JsonProperty("passengerId") Long passengerId, 
+			@JsonProperty("flightId") Long flightId,
+			@JsonProperty("statusId") Long statusId,
 			@JsonProperty("comments") String comments,
 			@JsonProperty("user") String user) {
 		this.passengerId = passengerId;
@@ -28,17 +28,17 @@ public class DispositionData {
 	}
 
 	@JsonProperty("passengerId")
-	public Integer getPassengerId() {
+	public Long getPassengerId() {
 		return passengerId;
 	}
 
 	@JsonProperty("flightId")
-	public Integer getFlightId() {
+	public Long getFlightId() {
 		return flightId;
 	}
 
 	@JsonProperty("statusId")
-	public Integer getStatusId() {
+	public Long getStatusId() {
 		return statusId;
 	}
 

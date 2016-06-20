@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import gov.gtas.enumtype.Status;
+import gov.gtas.json.JsonServiceResponse;
 import gov.gtas.model.Address;
 import gov.gtas.model.Agency;
 import gov.gtas.model.CreditCard;
@@ -212,11 +214,10 @@ public class PassengerDetailsController {
 		return pService.getDispositionStatuses();
 	}	
 	
-	@RequestMapping(value = "/disposition", method = RequestMethod.POST
-			,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody String createUserFilter(@RequestBody DispositionData disposition) {
+	@RequestMapping(value = "/disposition", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JsonServiceResponse createUserFilter(@RequestBody DispositionData disposition) {
 		pService.createDisposition(disposition);
-		return "created new disposition";
+		return new JsonServiceResponse(Status.SUCCESS, "Create disposition successful");
 	}
 
 	/**
