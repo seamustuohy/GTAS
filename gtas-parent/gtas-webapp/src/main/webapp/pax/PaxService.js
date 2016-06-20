@@ -18,13 +18,20 @@
             		getPaxFlightHistory: getPaxFlightHistory});
         })
         .service('caseService', function ($http, $q) {
-            function createDisposition(disposition){
+            function createDisposition(disposition) {
             	var dfd = $q.defer();
             	dfd.resolve($http.post("/gtas/disposition", disposition));
             	return dfd.promise;
             }
 
+            function getDispositionStatuses() {
+            	var dfd = $q.defer();
+            	dfd.resolve($http.get("/gtas/dispositionstatuses"));
+            	return dfd.promise;
+            }
+
             return ({
+                getDispositionStatuses: getDispositionStatuses,
                 createDisposition: createDisposition
             });
         })
