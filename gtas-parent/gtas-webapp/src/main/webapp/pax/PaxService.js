@@ -14,8 +14,15 @@
             	return dfd.promise;
             }
 
+            function createDisposition(disposition){
+            	var dfd = $q.defer();
+            	dfd.resolve($http.post("/gtas/disposition", disposition));
+            	return dfd.promise;
+            }
+
             return ({getPaxDetail: getPaxDetail,
-            		getPaxFlightHistory: getPaxFlightHistory});
+            		getPaxFlightHistory: getPaxFlightHistory,
+                    createDisposition: createDisposition});
         })
         .service("paxService", function (userService, $rootScope, $http, $q) {
         	

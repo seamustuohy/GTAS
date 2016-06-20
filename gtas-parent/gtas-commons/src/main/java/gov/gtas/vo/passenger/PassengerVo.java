@@ -10,7 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import gov.gtas.model.Disposition;
 import gov.gtas.vo.BaseVo;
 
 public class PassengerVo extends BaseVo {
@@ -63,7 +62,7 @@ public class PassengerVo extends BaseVo {
 	private FlightHistoryVo flightHistoryVo;
     private PnrVo pnrVo;
     
-    private List<Disposition> dispositionHistory;
+    private List<DispositionVo> dispositionHistory;
     
 	public String getPaxId() {
 		return paxId;
@@ -292,10 +291,10 @@ public class PassengerVo extends BaseVo {
 	public String getEtaLocalTZ() {
 		return etaLocalTZ;
 	}
-    public List<Disposition> getDispositionHistory() {
+    public List<DispositionVo> getDispositionHistory() {
 		return dispositionHistory;
 	}
-	public void setDispositionHistory(List<Disposition> dispositionHistory) {
+	public void setDispositionHistory(List<DispositionVo> dispositionHistory) {
 		this.dispositionHistory = dispositionHistory;
 	}
 

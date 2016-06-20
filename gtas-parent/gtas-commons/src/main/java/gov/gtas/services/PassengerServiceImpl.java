@@ -132,6 +132,12 @@ public class PassengerServiceImpl implements PassengerService {
 		return new ArrayList<>();
 	}
 	
+	@Override	
+    public void createDisposition(DispositionData disposition) {
+		System.out.println("MAC: " + disposition);
+		
+	}
+	
 	@Override
 	@Transactional
 	public Passenger findById(Long id) {

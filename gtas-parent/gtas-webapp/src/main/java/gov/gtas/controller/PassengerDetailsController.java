@@ -14,8 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +38,7 @@ import gov.gtas.model.Phone;
 import gov.gtas.model.Pnr;
 import gov.gtas.model.Seat;
 import gov.gtas.model.lookup.DispositionStatus;
+import gov.gtas.services.DispositionData;
 import gov.gtas.services.FlightService;
 import gov.gtas.services.PassengerService;
 import gov.gtas.services.PnrService;
@@ -43,6 +46,7 @@ import gov.gtas.util.LobUtils;
 import gov.gtas.vo.passenger.AddressVo;
 import gov.gtas.vo.passenger.AgencyVo;
 import gov.gtas.vo.passenger.CreditCardVo;
+import gov.gtas.vo.passenger.DispositionVo;
 import gov.gtas.vo.passenger.DocumentVo;
 import gov.gtas.vo.passenger.EmailVo;
 import gov.gtas.vo.passenger.FlightHistoryVo;
@@ -138,7 +142,18 @@ public class PassengerDetailsController {
 		}
 		
 		List<Disposition> cases = pService.getPassengerDispositionHistory(id, Long.parseLong(flightId));
-		vo.setDispositionHistory(cases);
+		if (CollectionUtils.isNotEmpty(cases)) {
+			List<DispositionVo> history = new ArrayList<>();
+			for (Disposition d : cases) {
+				DispositionVo dvo = new DispositionVo();
+				dvo.setComments(d.getComments());
+				dvo.setCreatedAt(d.getCreatedAt());
+				dvo.setStatus(d.getStatus().getName());
+				dvo.setCreatedBy(d.getCreatedBy());
+				history.add(dvo);
+			}
+			vo.setDispositionHistory(history);			
+		}
 		
 		// Gather PNR Details
 		_tempPnrList = pnrService.findPnrByPassengerIdAndFlightId(t.getId(),
@@ -192,13 +207,18 @@ public class PassengerDetailsController {
 		return flightHistoryVo;
 	}
 	
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "/dispositionstatuses", method = RequestMethod.GET)
-	public List<DispositionStatus> getDispositionStatuses() {
+	public @ResponseBody List<DispositionStatus> getDispositionStatuses() {
 		return pService.getDispositionStatuses();
 	}	
 	
+	@RequestMapping(value = "/disposition", method = RequestMethod.POST
+			,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody String createUserFilter(@RequestBody DispositionData disposition) {
+		pService.createDisposition(disposition);
+		return "created new disposition";
+	}
+
 	/**
 	 * Util method to map PNR model object to VO
 	 * 

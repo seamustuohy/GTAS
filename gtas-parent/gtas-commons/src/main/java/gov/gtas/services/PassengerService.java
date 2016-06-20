@@ -16,6 +16,7 @@ public interface PassengerService {
     public Passenger findById(Long id);
     public List<Passenger> getPassengersByLastName(String lastName);
     public List<Disposition> getPassengerDispositionHistory(Long passengerId, Long flightId);
+    public void createDisposition(DispositionData disposition);
     public List<DispositionStatus> getDispositionStatuses();
     
     /**
