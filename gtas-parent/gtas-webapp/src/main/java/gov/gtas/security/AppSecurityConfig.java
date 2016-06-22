@@ -69,7 +69,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
             .antMatchers("/*/**","/resources/*/**","/resources/**","/common/**","/login/**","/authenticate").permitAll()
-            .antMatchers("/resources/login/assets/**").permitAll()
             .antMatchers("/resources/**/*").permitAll()
             .antMatchers(HttpMethod.POST, "/user").permitAll()
             .anyRequest().authenticated()
