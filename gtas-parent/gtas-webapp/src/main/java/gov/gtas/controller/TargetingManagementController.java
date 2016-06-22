@@ -1,13 +1,5 @@
 package gov.gtas.controller;
 
-import gov.gtas.bo.RuleHitDetail;
-import gov.gtas.bo.RuleServiceResult;
-import gov.gtas.constants.Constants;
-import gov.gtas.model.MessageStatus;
-import gov.gtas.svc.RuleManagementService;
-import gov.gtas.svc.TargetingService;
-import gov.gtas.svc.util.RuleExecutionContext;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -19,11 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import gov.gtas.bo.RuleHitDetail;
+import gov.gtas.bo.RuleServiceResult;
+import gov.gtas.constants.Constants;
+import gov.gtas.svc.RuleManagementService;
+import gov.gtas.svc.TargetingService;
+import gov.gtas.svc.util.RuleExecutionContext;
+
 /**
  * The REST service end-point controller Targeting Services.
- * 
- * @author GTAS3 (AB)
- *
  */
 @RestController
 public class TargetingManagementController {

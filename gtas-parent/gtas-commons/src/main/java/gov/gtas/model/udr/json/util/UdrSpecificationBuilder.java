@@ -19,9 +19,6 @@ import java.util.Stack;
 
 /**
  * A builder pattern object for creating UDR objects programmatically.
- * 
- * @author GTAS3
- *
  */
 public class UdrSpecificationBuilder {
     private Stack<QueryObject> queryObjectStack;

@@ -26,8 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**
  * The Watch list service implementation.
- * @author GTAS3 (AB)
- *
  */
 @Service
 public class WatchlistServiceImpl implements WatchlistService {

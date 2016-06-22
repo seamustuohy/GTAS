@@ -27,9 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Back-end REST service interface to support audit/error log viewing and
  * configuration management.
- * 
- * @author GTAS3
- *
  */
 @RestController
 public class AdminController {

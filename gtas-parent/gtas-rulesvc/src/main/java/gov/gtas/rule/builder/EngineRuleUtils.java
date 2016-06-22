@@ -26,8 +26,6 @@ import java.util.Map;
 
 /**
  * Utility functions to construct Drools rules
- * @author GTAS3
- *
  */
 public class EngineRuleUtils {
     /**

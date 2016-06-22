@@ -39,9 +39,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 /**
  * Unit tests for the TargetingService using spring support.
  * (Also contains tests for date-effective and date-expires properties of rules.)
- * 
- * @author GTAS3 (AB)
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = RuleServiceConfig.class)

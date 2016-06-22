@@ -5,9 +5,6 @@ import gov.gtas.bo.RuleServiceResult;
 
 /**
  * The interface for the Rule Engine.
- * 
- * @author GTAS3 (AB)
- *
  */
 public interface RuleService {
     /**

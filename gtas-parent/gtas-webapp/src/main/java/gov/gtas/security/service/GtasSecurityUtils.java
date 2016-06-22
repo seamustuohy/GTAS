@@ -5,8 +5,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Some utility functions related to spring security.
- * @author GTAS3 (AB)
- *
  */
 public class GtasSecurityUtils {
     public static String fetchLoggedInUserId(){

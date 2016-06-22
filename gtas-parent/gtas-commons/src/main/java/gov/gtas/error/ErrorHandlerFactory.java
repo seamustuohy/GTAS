@@ -5,9 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Factory class for creating error handlers.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class ErrorHandlerFactory {
     /*

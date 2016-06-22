@@ -10,8 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 /**
  * Watch list Repository with custom queries.
- * @author GTAS3 (AB)
- *
  */
 public interface WatchlistItemRepository extends CrudRepository<WatchlistItem, Long>, JpaSpecificationExecutor<WatchlistItem> {
     

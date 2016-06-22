@@ -3,8 +3,6 @@ package gov.gtas.bo;
 import java.util.List;
 /**
  * Interface definition for rule engine execution result objects.
- * @author GTAS3 (AB)
- *
  */
 public interface RuleServiceResult {
     /**

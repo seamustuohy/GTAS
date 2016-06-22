@@ -17,7 +17,7 @@ import gov.gtas.model.lookup.Country;
 
 /**
  * 
- * @author Srinivas class LookupRepositoryImpl serves as delivering lookup table
+ * class LookupRepositoryImpl serves as delivering lookup table
  *         data to the calling applications. The purpose of this class is to
  *         enable the CACHING for methods passing QUERYHINT in the query.
  *

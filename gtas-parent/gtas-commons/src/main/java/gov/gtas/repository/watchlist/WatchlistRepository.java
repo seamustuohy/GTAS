@@ -11,8 +11,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 /**
  * Watch list Repository with custom queries.
- * @author GTAS3 (AB)
- *
  */
 public interface WatchlistRepository extends CrudRepository<Watchlist, Long>, JpaSpecificationExecutor<Watchlist> {
     public List<Watchlist> findByWatchlistEntity(EntityEnum entity);

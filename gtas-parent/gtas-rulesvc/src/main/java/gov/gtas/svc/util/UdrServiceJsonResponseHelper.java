@@ -9,9 +9,6 @@ import gov.gtas.model.udr.UdrRule;
 
 /** 
  * Helper class for the UDR service response generation.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class UdrServiceJsonResponseHelper {
     public static JsonServiceResponse createResponse(boolean success,

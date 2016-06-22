@@ -28,9 +28,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 /**
  * Unit tests for the TargetingService using Mockito.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class TargetingServiceTest {
     private TargetingService targetingService;

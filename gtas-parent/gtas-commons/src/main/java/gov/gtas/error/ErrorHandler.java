@@ -2,12 +2,6 @@ package gov.gtas.error;
 
 import java.util.List;
 
-/**
- * The error Handler
- * 
- * @author GTAS3 (AB)
- *
- */
 public interface ErrorHandler {
     /**
      * Creates the exception message for the indicated error.

@@ -42,9 +42,6 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of the Rule Engine Service.
- * 
- * @author GTAS3 (AB)
- *
  */
 @Service
 public class RuleServiceImpl implements RuleService {

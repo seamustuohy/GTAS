@@ -33,15 +33,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * The REST service end-point controller for creating and managing user Defined
  * Rules (UDR) for targeting.
- * 
- * @author GTAS3 (AB)
- *
  */
 @RestController
 public class UdrManagementController {
-    /*
-     * The logger for the UdrManagementController
-     */
     private static final Logger logger = LoggerFactory
             .getLogger(UdrManagementController.class);
 

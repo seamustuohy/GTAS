@@ -7,8 +7,6 @@ import gov.gtas.model.udr.UdrRule;
 import gov.gtas.model.watchlist.WatchlistItem;
 /**
  * Interface specification for the rule management service.
- * @author GTAS3 (AB)
- *
  */
 public interface RuleManagementService {
     /**

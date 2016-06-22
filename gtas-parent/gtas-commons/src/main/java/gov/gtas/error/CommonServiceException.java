@@ -1,8 +1,6 @@
 package gov.gtas.error;
 /**
  * Exception class for errors generated during Rule Engine execution.
- * @author GTAS3 (AB)
- *
  */
 public class CommonServiceException extends RuntimeException {
     private static final long serialVersionUID = -4115507029260625072L;

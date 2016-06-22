@@ -8,8 +8,6 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * Rule meta-data JSON object class.
- * @author GTAS3 (AB)
- *
  */
 public class MetaData implements Serializable {
     private static final long serialVersionUID = -1376823917772400633L;

@@ -28,15 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * The REST service end-point controller for creating and managing watch lists.
- * 
- * @author GTAS3 (AB)
- *
  */
 @RestController
 public class WatchlistManagementController {
-    /*
-     * The logger for the WatchlistManagementController
-     */
     private static final Logger logger = LoggerFactory
             .getLogger(WatchlistManagementController.class);
 

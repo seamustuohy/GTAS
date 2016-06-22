@@ -1,24 +1,21 @@
 package gov.gtas.services;
-import gov.gtas.config.CommonServicesConfig;
-import gov.gtas.dto.FlightDto;
-import gov.gtas.dto.PaxDto;
-import gov.gtas.parsers.exception.ParseException;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import gov.gtas.config.CommonServicesConfig;
+import gov.gtas.dto.FlightDto;
+import gov.gtas.dto.PaxDto;
+import gov.gtas.parsers.exception.ParseException;
+
 /**
- * 
- * @author GTAS4
  * Class MessageGeneratorIT generates the combined PNR and APIS messages for 
  * specific carrier and flight. Uncomment the @Test annotation and run by 
  * changing the for loop values.Also create a folder in your local to store the

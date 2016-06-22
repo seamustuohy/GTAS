@@ -12,9 +12,6 @@ import gov.gtas.services.security.UserService;
 
 /**
  * Generates test data for rules domain objects.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class WatchlistDataGenUtils {
     public static final String TEST_WATCHLIST_PREFIX = "TestWL";

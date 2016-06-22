@@ -64,9 +64,6 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of the Targeting Service API.
- * 
- * @author GTAS3 (AB)
- *
  */
 @Service
 public class TargetingServiceImpl implements TargetingService {

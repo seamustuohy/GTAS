@@ -10,8 +10,6 @@ import java.util.Set;
 /**
  * This class is for objects that carry state information during 
  * Targeting operations.
- * @author GTAS3
- *
  */
 public class RuleExecutionContext {
     private Set<PassengerFlightTuple> paxFlightTuples;

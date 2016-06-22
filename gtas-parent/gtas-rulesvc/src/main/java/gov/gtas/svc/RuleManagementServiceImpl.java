@@ -36,9 +36,6 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of the Knowledge Base and Rule management service interface.
- * 
- * @author GTAS3
- *
  */
 @Service
 public class RuleManagementServiceImpl implements RuleManagementService {

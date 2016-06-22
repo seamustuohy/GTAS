@@ -2,8 +2,6 @@ package gov.gtas.constant;
 
 /**
  * UDR and JSON related constants.
- * @author GTAS3 (AB)
- *
  */
 public class RuleConstants {
     public static final String UDR_KNOWLEDGE_BASE_NAME = "UDR Knowledge Base";

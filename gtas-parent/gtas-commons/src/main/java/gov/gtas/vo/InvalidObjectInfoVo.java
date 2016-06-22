@@ -7,8 +7,6 @@ import java.util.Date;
  * This class is used in MessageValidators and while validating the object graph the invalid object 
  * will be set to null to avoid loading issues and the same will be copied into this object which will 
  * be stored in database as InvalidObjectInfo
- * @author GTAS4
- *
  */
 public class InvalidObjectInfoVo {
     

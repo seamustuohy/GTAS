@@ -24,11 +24,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * The configuration class can be imported into an XML configuration by:<br>
  * <context:annotation-config/> <bean
  * class="gov.gtas.config.CommonServicesConfig"/>
- * 
- * @author GTAS4
- *
  */
-
 @Configuration
 @ComponentScan("gov.gtas")
 @PropertySource({ "classpath:commonservices.properties",

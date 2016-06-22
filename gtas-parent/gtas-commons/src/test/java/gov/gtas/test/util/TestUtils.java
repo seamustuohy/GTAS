@@ -14,9 +14,6 @@ import java.util.Set;
 
 /**
  * Miscellaneous utility methods for testing.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class TestUtils {
 

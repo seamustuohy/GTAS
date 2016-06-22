@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 /**
  * JSON object class to convey generic requests.
- * @author GTAS3 (AB)
- *
  */
 public class JsonGenericRequest implements Serializable {
     private static final long serialVersionUID = -4390502518498037033L;

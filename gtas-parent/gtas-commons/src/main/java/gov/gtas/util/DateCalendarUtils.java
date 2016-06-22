@@ -11,9 +11,6 @@ import org.apache.commons.lang3.time.DateUtils;
 
 /**
  * Basic adaptation of commons DateUtils.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class DateCalendarUtils {
     private static final long MILLIS_IN_ONE_DAY = 86400000L;

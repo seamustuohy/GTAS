@@ -14,9 +14,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Rule Engine Event Listener utility functions.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class RuleEventListenerUtils {
 

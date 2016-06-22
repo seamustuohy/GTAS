@@ -6,8 +6,6 @@ import gov.gtas.model.User;
 import java.io.Serializable;
 /**
  * JSON object class to convey audit action target information.
- * @author GTAS3 (AB)
- *
  */
 public class AuditActionTarget implements Serializable {
     private static final long serialVersionUID = -4390502518498037033L;

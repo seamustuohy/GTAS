@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 /**
  * JSON object class to convey audit log details.
- * @author GTAS3 (AB)
- *
  */
 public class AuditActionData implements Serializable {
     private static final long serialVersionUID = -4390502518498037033L;

@@ -7,8 +7,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * The base query condition term.
- * @author GTAS3 (AB)
- *
  */
 public class WatchlistItemSpec implements Serializable{
     private static final long serialVersionUID = -10797308502449251L;

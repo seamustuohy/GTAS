@@ -1,8 +1,6 @@
 package gov.gtas.services;
 /**
  * A Data structure to capture GTAS Loader Run statistics.
- * @author GTAS3
- *
  */
 public class LoaderStatistics {
     private int numFilesProcessed = 0;

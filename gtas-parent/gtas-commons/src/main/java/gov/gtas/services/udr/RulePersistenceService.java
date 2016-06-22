@@ -16,9 +16,6 @@ import javax.persistence.EntityManager;
  * The Persistence Layer service for UDR (User Defined Rule). Since an UDR can
  * have complex AND-OR logic in it, it can give rise to multiple rules for the
  * Rule Engine. The latter are called engine rules.
- * 
- * @author GTAS3 (AB)
- *
  */
 public interface RulePersistenceService {
     /**

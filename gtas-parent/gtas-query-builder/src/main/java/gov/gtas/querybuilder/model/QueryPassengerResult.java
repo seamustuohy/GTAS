@@ -1,10 +1,5 @@
 package gov.gtas.querybuilder.model;
 
-/**
- * 
- * @author GTAS5
- *
- */
 public class QueryPassengerResult extends BaseQueryResult {
 
     private String firstName;

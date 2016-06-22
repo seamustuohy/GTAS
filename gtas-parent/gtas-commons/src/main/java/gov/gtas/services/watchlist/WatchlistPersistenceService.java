@@ -9,9 +9,6 @@ import java.util.List;
 
 /**
  * The Persistence Layer service for Watch lists.
- * 
- * @author GTAS3 (AB)
- *
  */
 public interface WatchlistPersistenceService {
     /**

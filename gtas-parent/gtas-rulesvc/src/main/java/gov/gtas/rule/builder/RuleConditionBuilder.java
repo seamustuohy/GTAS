@@ -21,8 +21,6 @@ import java.util.Map;
  * Generates the "when" part of a DRL rule.
  * procedure:
  * new RuleConditionBuilder( 
- * 
- * @author GTAS3 (AB)
  */
 public class RuleConditionBuilder {
 

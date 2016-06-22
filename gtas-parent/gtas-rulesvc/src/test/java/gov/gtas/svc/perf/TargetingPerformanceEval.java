@@ -23,9 +23,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 /**
  * Load tests for the Rule Engine using Watch list rules.
- * 
- * @author GTAS3 (AB)
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = RuleServiceConfig.class)

@@ -13,9 +13,6 @@ import java.util.Set;
 /**
  * Common functionality for building Rule criteria for entities such as
  * Passenger, Flight and Document.
- * 
- * @author GTAS3 (AB)
- *
  */
 public abstract class EntityConditionBuilder {
     /*

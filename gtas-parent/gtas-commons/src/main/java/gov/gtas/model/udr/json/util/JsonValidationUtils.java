@@ -12,8 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Validation utilities for the UDR JSON.
- * @author GTAS3 (AB)
- *
  */
 public class JsonValidationUtils {
     

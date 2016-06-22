@@ -2,9 +2,6 @@ package gov.gtas.constant;
 
 /**
  * Constants used in the Rule Service module.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class RuleServiceConstants {
     public static final String DEFAULT_RULESET_NAME = "gov/gtas/rule/gts.drl";

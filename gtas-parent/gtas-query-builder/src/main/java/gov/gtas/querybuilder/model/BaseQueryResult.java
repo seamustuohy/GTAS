@@ -1,12 +1,5 @@
 package gov.gtas.querybuilder.model;
 
-import java.util.Date;
-
-/**
- * 
- * @author GTAS5
- *
- */
 public abstract class BaseQueryResult implements IQueryResult {
     
     private Long id;

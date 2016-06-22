@@ -2,9 +2,6 @@ package gov.gtas.constant;
 
 /**
  * Constants used in the Rule Service module.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class RuleErrorConstants {
     // //////////////////////////////////////////////////////////////////////////////////////

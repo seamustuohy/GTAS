@@ -4,9 +4,6 @@ import gov.gtas.constant.RuleServiceConstants;
 
 /**
  * Error Handler for the UDR Service.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class UdrServiceErrorHandler extends BasicErrorHandler {
     public UdrServiceErrorHandler() {

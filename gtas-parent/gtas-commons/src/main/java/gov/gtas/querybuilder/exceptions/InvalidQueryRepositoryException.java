@@ -2,9 +2,6 @@ package gov.gtas.querybuilder.exceptions;
 
 public class InvalidQueryRepositoryException extends Exception {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private Object object;
     

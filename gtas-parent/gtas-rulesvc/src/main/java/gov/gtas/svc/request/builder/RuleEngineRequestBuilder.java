@@ -38,9 +38,6 @@ import org.springframework.util.CollectionUtils;
  * APIS and PNR messages. The constructed request contains all entities (e.g.,
  * passenger, flight) associated with the APIS and PNR messages supplied.
  * Duplicate entities are removed in the construction process.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class RuleEngineRequestBuilder {
 

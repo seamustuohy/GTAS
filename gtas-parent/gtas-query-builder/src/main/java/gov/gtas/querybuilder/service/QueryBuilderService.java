@@ -1,5 +1,19 @@
 package gov.gtas.querybuilder.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.gtas.model.Flight;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.User;
@@ -26,25 +40,6 @@ import gov.gtas.services.dto.PassengersPageDto;
 import gov.gtas.vo.passenger.FlightVo;
 import gov.gtas.vo.passenger.PassengerVo;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-/**
- * 
- * Service class for Query Builder
- *
- */
 @Service
 public class QueryBuilderService {
     private static final Logger logger = LoggerFactory.getLogger(QueryBuilderService.class);

@@ -9,9 +9,6 @@ import java.util.List;
  * The service interface for managing User Defined Rules (UDR).<br>
  * 1. CRUD on UDR.<br>
  * 2. Generation of Drools Rules and creation of versioned Knowledge Base.
- * 
- * @author GTAS3 (AB)
- *
  */
 public interface WatchlistService {
     /**

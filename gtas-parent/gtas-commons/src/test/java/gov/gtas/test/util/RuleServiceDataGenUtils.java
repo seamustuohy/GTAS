@@ -19,9 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Generates test data for rules domain objects.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class RuleServiceDataGenUtils {
     public static final String TEST_RULE_TITLE_PREFIX = "TestRule";

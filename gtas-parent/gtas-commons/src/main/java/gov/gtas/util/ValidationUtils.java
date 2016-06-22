@@ -6,8 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utility methods for validation.
- * @author GTAS3 (AB)
- *
  */
 public class ValidationUtils {
     public static boolean isStringInList(final String target, String... args){

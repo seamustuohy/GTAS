@@ -13,9 +13,6 @@ import java.util.List;
 /**
  * Utility functions to split UDRs into objects suitable for conversion to
  * Drools Rules.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class UdrSplitterUtils {
     public static List<List<QueryTerm>> createFlattenedList(QueryEntity entity) {

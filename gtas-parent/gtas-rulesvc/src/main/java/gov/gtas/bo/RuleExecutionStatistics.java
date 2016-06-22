@@ -8,9 +8,6 @@ import java.util.List;
 /**
  * A Java bean class that keeps useful statistics of a rule engine run (i.e.
  * session).
- * 
- * @author GTAS3 (AB)
- *
  */
 public class RuleExecutionStatistics implements Serializable {
     /**

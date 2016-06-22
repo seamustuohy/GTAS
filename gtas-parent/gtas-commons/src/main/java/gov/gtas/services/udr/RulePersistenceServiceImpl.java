@@ -39,9 +39,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * The back-end service for persisting rules.
- * 
- * @author GTAS3 (AB)
- *
  */
 @Service
 public class RulePersistenceServiceImpl implements RulePersistenceService {

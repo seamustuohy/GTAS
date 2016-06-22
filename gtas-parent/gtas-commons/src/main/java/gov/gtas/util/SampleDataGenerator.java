@@ -9,9 +9,6 @@ import gov.gtas.querybuilder.mappings.PassengerMapping;
 
 /**
  * A builder pattern object for creating watch list objects programmatically.
- * 
- * @author GTAS3
- *
  */
 public class SampleDataGenerator {
     /**

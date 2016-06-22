@@ -20,9 +20,6 @@ import org.springframework.validation.Errors;
 
 /**
  * Helper class for the UDR service.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class UdrServiceHelper {
 

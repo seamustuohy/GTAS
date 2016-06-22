@@ -10,9 +10,6 @@ import gov.gtas.svc.WatchlistService;
 
 /**
  * Generates and persists test Watch list rules.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class WatchlistRuleGenerator {
     public static final String WL_AUTHOR = "bstygar";

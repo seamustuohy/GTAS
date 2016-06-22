@@ -50,20 +50,12 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * The back-end service for persisting watch lists.
- * 
- * @author GTAS3 (AB)
- *
  */
 @Service
 public class WatchlistPersistenceServiceImpl implements
         WatchlistPersistenceService {
-    /*
-     * The logger for the WatchlistPersistenceServiceImpl.
-     */
     private static final Logger logger = LoggerFactory
             .getLogger(WatchlistPersistenceServiceImpl.class);
-
-    // private static final int UPDATE_BATCH_SIZE = 100;
 
     @PersistenceContext
     private EntityManager entityManager;

@@ -31,29 +31,26 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Common Error Handler for the Rule Engine related functionality.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class BasicErrorHandler implements ErrorHandler {
 
-    /*
+    /**
      * The logger for the Rule Engine Error Handler
      */
     private static final Logger logger = LoggerFactory
             .getLogger(BasicErrorHandler.class);
 
-    /*
+    /**
      * The map of all error codes handled by this handler.
      */
     private final Map<String, String> errorMap;
 
-    /*
+    /**
      * The map of all exception processors used by this handler.
      */
     private final Map<String, Function<Exception, ErrorDetailInfo>> exceptionProcessorMap;
 
-    /*
+    /**
      * The first handler in the delegate chain for this error handler;
      */
     private ErrorHandler delegate;
@@ -77,13 +74,6 @@ public class BasicErrorHandler implements ErrorHandler {
         exceptionProcessorMap = new HashMap<String, Function<Exception, ErrorDetailInfo>>();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.error.GtasErrorHandler#addErrorHandlerDelegate(gov.gtas.error
-     * .GtasErrorHandler)
-     */
     @Override
     public void addErrorHandlerDelegate(ErrorHandler errorHandler) {
         if (this.delegate == null) {
@@ -93,12 +83,6 @@ public class BasicErrorHandler implements ErrorHandler {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.error.ErrorHandler#createException(java.lang.String,
-     * java.lang.Exception, java.lang.Object[])
-     */
     @Override
     public CommonServiceException createException(String errorCode,
             Exception cause, Object... args) {
@@ -117,23 +101,12 @@ public class BasicErrorHandler implements ErrorHandler {
         return ret;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.error.GtasErrorHandler#createException(java.lang.String,
-     * java.lang.Object[])
-     */
     @Override
     public CommonServiceException createException(String errorCode,
             Object... args) {
         return createException(errorCode, null, args);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.error.ErrorHandler#processError(java.lang.Exception)
-     */
     @Override
     public ErrorDetailInfo processError(final Exception exception) {
         ErrorDetailInfo ret = null;
@@ -155,12 +128,6 @@ public class BasicErrorHandler implements ErrorHandler {
         return ret;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.error.ErrorHandler#processError(java.lang.String,
-     * java.lang.String, java.lang.String[])
-     */
     @Override
     public ErrorDetailInfo processError(String code, String description,
             List<String> details) {

@@ -27,9 +27,6 @@ import gov.gtas.querybuilder.validation.util.QueryValidationUtils;
 /**
  * An Adapter class that uses QueryValidationUtils to validate watch list JSON
  * objects.
- * 
- * @author GTAS3
- *
  */
 public class WatchlistValidationAdapter {
     public static void validateWatchlistSpec(WatchlistSpec wljson) {

@@ -38,8 +38,6 @@ import org.slf4j.LoggerFactory;
  * <li> Knowledge management</li>
  * <li> Rule management</li>
  * </ul>
- * @author GTAS3 (AB)
- *
  */
 public class RuleUtils {
     private static final Logger logger = LoggerFactory.getLogger(RuleUtils.class);

@@ -4,9 +4,6 @@ import java.util.Collection;
 
 /**
  * An interface for input requests to the Rule Engine.
- * 
- * @author GTAS3 (AB)
- *
  */
 public interface RuleServiceRequest {
     /**

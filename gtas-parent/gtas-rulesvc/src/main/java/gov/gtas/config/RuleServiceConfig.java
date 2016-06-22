@@ -12,11 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * It can be imported into an XML configuration by:<br>
  * &lt;context:annotation-config/&gt;<br>
  * &lt;bean class="gov.gtas.config.RuleServiceConfig"/&gt;
- * 
- * @author GTAS3 (AB)
- *
  */
-
 @Configuration
 @ComponentScan("gov.gtas")
 @EnableTransactionManagement

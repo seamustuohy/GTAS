@@ -2,9 +2,6 @@ package gov.gtas.constant;
 
 /**
  * Common Error Constants for GTAS.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class CommonErrorConstants {
     public static final String CONSTRAINT_VIOLATION_EXCEPTION_NAME = "ConstraintViolationException";

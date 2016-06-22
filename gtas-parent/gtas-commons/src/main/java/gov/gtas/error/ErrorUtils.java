@@ -11,9 +11,6 @@ import org.hibernate.exception.ConstraintViolationException;
 
 /**
  * Error processing utility functions.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class ErrorUtils {
     /**

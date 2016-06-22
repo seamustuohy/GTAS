@@ -12,9 +12,6 @@ import java.util.Date;
 
 /**
  * Generates and persists test Watch list rules.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class UdrRuleGenerator {
     public static final String UDR_AUTHOR = "bstygar";

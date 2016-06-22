@@ -50,9 +50,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 /**
  * Integration tests for the UDR management service.
- * 
- * @author GTAS3 (AB)
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = RuleServiceConfig.class)

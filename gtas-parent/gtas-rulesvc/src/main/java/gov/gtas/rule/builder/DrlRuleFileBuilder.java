@@ -35,14 +35,8 @@ import org.slf4j.LoggerFactory;
  * A builder pattern class for constructing a Drools rule "file" (actually a
  * text string) from one or more UDR objects. This DRL string is then compiled
  * into a Knowledge Base (KieBase object).
- * 
- * @author GTAS3 (AB)
- *
  */
 public class DrlRuleFileBuilder {
-    /*
-     * The logger for the DrlRuleBuilder.
-     */
     private static final Logger logger = LoggerFactory
             .getLogger(DrlRuleFileBuilder.class);
 

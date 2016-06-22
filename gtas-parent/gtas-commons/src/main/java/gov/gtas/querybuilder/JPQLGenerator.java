@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class parses the QueryEntity and generates a JPQL Statement
- *
  */
 public class JPQLGenerator {
     private static final Logger logger = LoggerFactory.getLogger(JPQLGenerator.class);

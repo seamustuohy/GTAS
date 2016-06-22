@@ -13,9 +13,6 @@ import org.springframework.util.CollectionUtils;
 
 /** 
  * Helper class for the UDR service response generation.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class WatchlistServiceJsonResponseHelper {
     public static JsonServiceResponse createResponse(boolean success,

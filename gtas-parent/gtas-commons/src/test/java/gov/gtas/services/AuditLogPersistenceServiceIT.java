@@ -31,9 +31,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 /**
  * Persistence layer tests for Audit Logging.
- * 
- * @author GTAS3 (AB)
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { CommonServicesConfig.class,

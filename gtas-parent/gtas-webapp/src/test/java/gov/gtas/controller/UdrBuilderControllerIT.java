@@ -36,8 +36,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 /**
  * End to end Integration tests for UDR.
- * @author GTAS3 (AB)
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestMvcRestServiceWebConfig.class,

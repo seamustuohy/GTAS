@@ -7,8 +7,6 @@ import java.util.Objects;
 
 /**
  * Data structure class for passenger id flight id pairs.
- * @author GTAS3 (AB)
- *
  */
 public class PassengerFlightTuple {
    private Passenger passenger;

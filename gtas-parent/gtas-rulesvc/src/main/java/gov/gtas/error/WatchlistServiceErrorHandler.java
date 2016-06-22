@@ -4,9 +4,6 @@ import gov.gtas.constant.WatchlistConstants;
 
 /**
  * Error Handler for the UDR Service.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class WatchlistServiceErrorHandler extends BasicErrorHandler {
     public WatchlistServiceErrorHandler() {

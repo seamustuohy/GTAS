@@ -10,8 +10,6 @@ import gov.gtas.model.udr.json.UdrSpecification;
  * The service interface for managing User Defined Rules (UDR).<br>
  * 1. CRUD on UDR.<br>
  * 2. Generation of Drools Rules and creation of versioned Knowledge Base.
- * @author GTAS3 (AB)
- *
  */
 public interface UdrService {
     /**

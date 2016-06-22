@@ -13,9 +13,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
  * Recursive query condition object.
- * 
- * @author GTAS3 (AB)
- *
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class QueryObject implements QueryEntity {

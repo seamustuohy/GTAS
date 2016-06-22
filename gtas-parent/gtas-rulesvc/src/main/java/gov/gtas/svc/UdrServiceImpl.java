@@ -57,9 +57,6 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of the UDR Service API.
- * 
- * @author GTAS3 (AB)
- *
  */
 @Service
 public class UdrServiceImpl implements UdrService {

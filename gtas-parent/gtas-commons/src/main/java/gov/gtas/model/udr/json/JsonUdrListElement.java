@@ -6,8 +6,6 @@ import java.io.Serializable;
 import java.util.Date;
 /**
  * Class representing summary listing element for UDR.
- * @author GTAS3
- *
  */
 public class JsonUdrListElement implements Serializable {
 

@@ -32,9 +32,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 /**
  * Persistence layer tests for Watch list.
- * 
- * @author GTAS3 (AB)
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { CommonServicesConfig.class,

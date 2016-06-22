@@ -37,9 +37,6 @@ import gov.gtas.testdatagen.PnrDataGenerator;
 
 /**
  * Unit tests for the TargetingService using spring support and Mockito.
- * 
- * @author GTAS3 (AB)
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = RuleServiceConfig.class)

@@ -11,8 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 /**
  * Rule meta-data JSON object class.
- * @author GTAS3 (AB)
- *
  */
 public class JsonServiceResponse implements Serializable {
     private static final long serialVersionUID = -1376823917772400644L;

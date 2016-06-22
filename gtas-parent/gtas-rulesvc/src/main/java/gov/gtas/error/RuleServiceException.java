@@ -7,8 +7,6 @@ import org.kie.api.builder.Message;
 
 /**
  * Exception class for errors generated during Rule Engine execution.
- * @author GTAS3 (AB)
- *
  */
 public class RuleServiceException extends CommonServiceException {
     

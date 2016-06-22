@@ -16,11 +16,7 @@ import java.util.Set;
 
 /**
  * The API for the Targeting Service.
- * 
- * @author GTAS3 (AB)
- *
  */
-
 public interface TargetingService {
     /**
      * Invokes the Targeting service for an API message.

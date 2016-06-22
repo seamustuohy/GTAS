@@ -55,9 +55,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Integration tests for the UDR management service.
- * 
- * @author GTAS3 (AB)
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = RuleServiceConfig.class)

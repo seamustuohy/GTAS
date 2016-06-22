@@ -20,8 +20,6 @@ import gov.gtas.model.Pnr;
  * APIS and PNR messages. The constructed request contains all watch list related objects (e.g.,
  * passenger, document) associated with the APIS and PNR messages supplied.
  * Duplicates are also removed in the construction process.
- * 
- * @author GTAS3 (AB)
  * @deprecated
  *
  */

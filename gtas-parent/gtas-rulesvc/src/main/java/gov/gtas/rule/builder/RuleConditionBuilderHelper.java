@@ -28,12 +28,6 @@ import gov.gtas.util.DateCalendarUtils;
 import java.text.ParseException;
 import java.util.Date;
 
-/**
- * Utility class to construct
- * 
- * @author GTAS3 (AB)
- *
- */
 public class RuleConditionBuilderHelper {
 
     private static String convertJsonStringVal(final TypeEnum type,

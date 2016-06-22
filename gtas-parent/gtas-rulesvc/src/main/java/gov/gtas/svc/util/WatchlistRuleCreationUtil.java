@@ -13,9 +13,6 @@ import java.util.List;
 
 /**
  * Helper class for the UDR service.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class WatchlistRuleCreationUtil {
     public static List<String> createWatchlistRule(EntityEnum entity, WatchlistTerm[] wlData,

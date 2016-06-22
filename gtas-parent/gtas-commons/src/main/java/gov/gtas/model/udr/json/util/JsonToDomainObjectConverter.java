@@ -21,9 +21,6 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * Utility functions to convert JSON objects to JPA domain objects.
- * 
- * @author GTAS3 (AB)
- *
  */
 public class JsonToDomainObjectConverter {
     /**
