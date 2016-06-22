@@ -70,7 +70,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/*/**","/resources/*/**","/resources/**","/common/**","/login/**","/authenticate").permitAll()
             .antMatchers("/resources/**/*").permitAll()
-            .antMatchers(HttpMethod.POST, "/user").permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin()
