@@ -9,25 +9,25 @@
             }
             
             function getPaxFlightHistory(paxId){
-            	var dfd = $q.defer();
-            	dfd.resolve($http.get("/gtas/passengers/passenger/flighthistory?paxId=" + paxId));
-            	return dfd.promise;
+                var dfd = $q.defer();
+                dfd.resolve($http.get("/gtas/passengers/passenger/flighthistory?paxId=" + paxId));
+                return dfd.promise;
             }
 
             return ({getPaxDetail: getPaxDetail,
-            		getPaxFlightHistory: getPaxFlightHistory});
+                    getPaxFlightHistory: getPaxFlightHistory});
         })
         .service('caseService', function ($http, $q) {
             function createDisposition(disposition) {
-            	var dfd = $q.defer();
-            	dfd.resolve($http.post("/gtas/disposition", disposition));
-            	return dfd.promise;
+                var dfd = $q.defer();
+                dfd.resolve($http.post("/gtas/disposition", disposition));
+                return dfd.promise;
             }
 
             function getDispositionStatuses() {
-            	var dfd = $q.defer();
-            	dfd.resolve($http.get("/gtas/dispositionstatuses"));
-            	return dfd.promise;
+                var dfd = $q.defer();
+                dfd.resolve($http.get("/gtas/dispositionstatuses"));
+                return dfd.promise;
             }
 
             return ({
@@ -36,11 +36,11 @@
             });
         })
         .service("paxService", function (userService, $rootScope, $http, $q) {
-        	
-        	function getPassengersBasedOnUser(paxModel){
-        		var today = new Date();
-        		//first request
-        		 return userService.getUserData().then( function( user ) {
+            
+            function getPassengersBasedOnUser(paxModel){
+                var today = new Date();
+                //first request
+                 return userService.getUserData().then( function( user ) {
                     if(user.data.filter!=null) {
                         if (user.data.filter.flightDirection)
                             paxModel.model.direction = user.data.filter.flightDirection;
@@ -59,10 +59,10 @@
                     }
                     //second request
                     return getAllPax(paxModel.model);
-        		});
-        	}
-        	
-        	
+                });
+            }
+            
+            
             function getPax(flightId, pageRequest) {
                 var dfd = $q.defer();
                 dfd.resolve($http({

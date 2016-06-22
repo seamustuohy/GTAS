@@ -5,20 +5,20 @@
         $scope.isLoadingFlightHistory = true;
         paxDetailService.getPaxFlightHistory($scope.passenger.paxId)
         .then(function(response){
-        	$scope.isLoadingFlightHistory = false;
-        	$scope.passenger.flightHistoryVo = response.data;
+            $scope.isLoadingFlightHistory = false;
+            $scope.passenger.flightHistoryVo = response.data;
         });
     });
     app.controller('PaxController', function ($scope, $injector, $stateParams, $state, $mdToast, paxService, sharedPaxData, uiGridConstants, gridService,
                                               jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers,
                                               $timeout, paxModel, $http, spinnerService) {
-    	
-       	$scope.errorToast = function(error){
-        	$mdToast.show($mdToast.simple()
-        	 .content(error)
-        	 .position('top right')
-        	 .hideDelay(4000)
-        	 .parent($scope.toastParent));
+        
+        $scope.errorToast = function(error){
+            $mdToast.show($mdToast.simple()
+             .content(error)
+             .position('top right')
+             .hideDelay(4000)
+             .parent($scope.toastParent));
         };
         
         function createFilterFor(query) {
@@ -77,16 +77,16 @@
                 grid.totalItems = data.totalPassengers === -1 ? 0 : data.totalPassengers;
                 grid.data = data.passengers;
                 if(!grid.data || grid.data.length == 0){
-                	$scope.errorToast('No results found for selected filter criteria');
+                    $scope.errorToast('No results found for selected filter criteria');
                 }
                 spinnerService.hide('html5spinner');
             },
             getPage = function () {
-            	if(stateName === "queryPassengers"){
-            		setPassengersGrid($scope.passengerQueryGrid, passengers);
-            	}else{
-            		setPassengersGrid($scope.passengerGrid, passengers);
-            	}
+                if(stateName === "queryPassengers"){
+                    setPassengersGrid($scope.passengerQueryGrid, passengers);
+                }else{
+                    setPassengersGrid($scope.passengerGrid, passengers);
+                }
             },
             update = function (data) {
                 passengers = data;
@@ -105,11 +105,11 @@
                     executeQueryService.queryPassengers(postData).then(update);
                 },
                 'flightpax': function () {
-                	spinnerService.show('html5spinner');
+                    spinnerService.show('html5spinner');
                     paxService.getPax($stateParams.id, $scope.model).then(update);
                 },
                 'paxAll': function () {
-                	spinnerService.show('html5spinner');
+                    spinnerService.show('html5spinner');
                     paxService.getAllPax($scope.model).then(update);
                 }
             },
@@ -236,13 +236,13 @@
                     $scope.model.pageSize = pageSize;
                 });
                 
-	            gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
-		            if (row.isExpanded) {
-		                paxService.getRuleHits(row.entity.id).then(function (data) {
-		                    row.entity.subGridOptions.data = data;
-		                });
-		            }
-		        });
+                gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
+                    if (row.isExpanded) {
+                        paxService.getRuleHits(row.entity.id).then(function (data) {
+                            row.entity.subGridOptions.data = data;
+                        });
+                    }
+                });
             }    
         };
 
@@ -403,33 +403,33 @@
             var airport = { id: "" };
             
             if($scope.model.origin ) {
-            	if ($scope.model.origin instanceof Array ){
-	            	angular.forEach($scope.model.origin, function (value, index) {
-	            		if(value instanceof Object) {
-	                		originAirports.push({id:value.id});
-	                	}else{
-	                		originAirports.push({id: value});
-	                	}
-	                });
-            	}else{
-            		originAirports.push({id: $scope.model.origin});
-            	}
-            	$scope.model.origin = originAirports;
+                if ($scope.model.origin instanceof Array ){
+                    angular.forEach($scope.model.origin, function (value, index) {
+                        if(value instanceof Object) {
+                            originAirports.push({id:value.id});
+                        }else{
+                            originAirports.push({id: value});
+                        }
+                    });
+                }else{
+                    originAirports.push({id: $scope.model.origin});
+                }
+                $scope.model.origin = originAirports;
             }
             
             if($scope.model.dest ) {
-            	if ($scope.model.dest instanceof Array ) {
-            	  angular.forEach($scope.model.dest, function (value, index) {
-            		if(value instanceof Object) {
-                  		destinationAirports.push({id:value.id});
-                  	}else{
+                if ($scope.model.dest instanceof Array ) {
+                  angular.forEach($scope.model.dest, function (value, index) {
+                    if(value instanceof Object) {
+                        destinationAirports.push({id:value.id});
+                    }else{
                       destinationAirports.push({id: value});
-                  	}
+                    }
                   });
-            	}else{
-            		destinationAirports.push({id: $scope.model.dest});
-            	}
-            	$scope.model.dest = destinationAirports;   
+                }else{
+                    destinationAirports.push({id: $scope.model.dest});
+                }
+                $scope.model.dest = destinationAirports;   
             }
             
         };
@@ -509,10 +509,10 @@
         };
 
         $scope.getTableHeight = function () {
-        	if( stateName != "queryPassengers"){
-        		return gridService.calculateGridHeight($scope.passengerGrid.data.length);
-        	} // Sets minimal height for front-end pagination controlled variant of grid
-        	return gridService.calculateGridHeight($scope.model.pageSize);
+            if( stateName != "queryPassengers"){
+                return gridService.calculateGridHeight($scope.passengerGrid.data.length);
+            } // Sets minimal height for front-end pagination controlled variant of grid
+            return gridService.calculateGridHeight($scope.model.pageSize);
         };
 
         getPage();
@@ -522,15 +522,15 @@
         //Datepicker automatically sets it to 0:00:00 if passed a date with no time, 
         //however our initial dates for the model carry with it a time and must be overridden
         $scope.$watch("model.etaStart", function (newValue) {
-        	newValue.setHours(0);
-        	newValue.setMinutes(0);
-        	newValue.setSeconds(0); 	
+            newValue.setHours(0);
+            newValue.setMinutes(0);
+            newValue.setSeconds(0);     
         });
         //End date is set to the maximum clock time
         $scope.$watch("model.etaEnd", function (newValue) {
-        	newValue.setHours(23);
-        	newValue.setMinutes(59);
-        	newValue.setSeconds(59);
+            newValue.setHours(23);
+            newValue.setMinutes(59);
+            newValue.setSeconds(59);
         });
     });
 }());

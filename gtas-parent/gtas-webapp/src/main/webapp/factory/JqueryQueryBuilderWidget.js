@@ -4,15 +4,15 @@ app.factory('jqueryQueryBuilderWidget', function () {
     /* this only handles pulling jQueryBuilder into angular */
     return function ($scope, $timeout) {
         var setSelectizeValue = function ($selectize, value) {
-        		if($scope.isLoadedSelectize && !$scope.hasDataSource){
-	                $scope.isLoadedSelectize = false;
-	                value = value[0].split(',');
-	                $.each(value, function(index,val){
-	                	$selectize[0].selectize.addOption({'id':val,'name':val});
-	                });
-        		}
-        		
-        		$selectize[0].selectize.setValue(value);
+                if($scope.isLoadedSelectize && !$scope.hasDataSource){
+                    $scope.isLoadedSelectize = false;
+                    value = value[0].split(',');
+                    $.each(value, function(index,val){
+                        $selectize[0].selectize.addOption({'id':val,'name':val});
+                    });
+                }
+                
+                $selectize[0].selectize.setValue(value);
                 $timeout(function () {
                     if ($selectize[0].selectize.getValue().length === 0) {setSelectizeValue($selectize, value);}else{$scope.isLoadedSelectize = false;}
          
@@ -26,23 +26,23 @@ app.factory('jqueryQueryBuilderWidget', function () {
             },
             getOptionsFromJSONArray = function (that, property) {
                 //if (localStorage[property] === undefined) {
-            	if(typeof property !== 'undefined' && property !== ''){
-            		$scope.hasDataSource = true;
-	                $.getJSON('./data/' + property + '.json', function (data) {
-	                    //localStorage[property] = JSON.stringify(data);
-	                    try {
-	                        data.forEach(function (item) {
-	                            that.addOption(item);
-	                        });
-	                    } catch (exception) {
-	                        throw exception;
-	                    }
-	                    $scope.isLoadedSelectize = true;
-	                });
-            	}else{
-            		$scope.hasDataSource = false;
-            		$scope.isLoadedSelectize = true;
-            	}
+                if(typeof property !== 'undefined' && property !== ''){
+                    $scope.hasDataSource = true;
+                    $.getJSON('./data/' + property + '.json', function (data) {
+                        //localStorage[property] = JSON.stringify(data);
+                        try {
+                            data.forEach(function (item) {
+                                that.addOption(item);
+                            });
+                        } catch (exception) {
+                            throw exception;
+                        }
+                        $scope.isLoadedSelectize = true;
+                    });
+                }else{
+                    $scope.hasDataSource = false;
+                    $scope.isLoadedSelectize = true;
+                }
                 //} else {
                 //    try {
                 //    JSON.parse(localStorage[property]).forEach(function (item) {
@@ -72,14 +72,14 @@ app.factory('jqueryQueryBuilderWidget', function () {
                 $builder = $('#builder'),
                 supplement = {
                     selectize: function (obj) {
-                    	var maxItems = 1;
-                    	var isCreate = true;
-                    	if(obj.operatorVal === "IN" || obj.operatorVal === "NOT_IN"){
-                    		maxItems = 10;
-                    	}
-                    	if(obj.dataSource){
-                    		isCreate = false;
-                    	}
+                        var maxItems = 1;
+                        var isCreate = true;
+                        if(obj.operatorVal === "IN" || obj.operatorVal === "NOT_IN"){
+                            maxItems = 10;
+                        }
+                        if(obj.dataSource){
+                            isCreate = false;
+                        }
                         obj.plugin_config = {
                             "valueField": "id",
                             "labelField": "name",
@@ -116,41 +116,41 @@ app.factory('jqueryQueryBuilderWidget', function () {
                 });
             
             $builder
-            	.on('afterUpdateRuleOperator.queryBuilder', function(e, rule){
-            	if(!$scope.ruleOpIsTriggered){
-	            	var op = rule.$el.find('.rule-operator-container').find('select').val();
-		           	rule.filter.operatorVal = op;
-		           	$scope.tempRuleFilter = rule.filter;
-		           	rule.$el.find('.rule-filter-container').find('select').trigger('change'); //allows rebuild of input field plugin
-		           	$scope.resetOperatorValue(op, rule);
-		           	$('.bs-container').remove();
-		           	$scope.tempRuleFilter = false;
-		           	$scope.ruleOpIsTriggered = false;
-            	}
+                .on('afterUpdateRuleOperator.queryBuilder', function(e, rule){
+                if(!$scope.ruleOpIsTriggered){
+                    var op = rule.$el.find('.rule-operator-container').find('select').val();
+                    rule.filter.operatorVal = op;
+                    $scope.tempRuleFilter = rule.filter;
+                    rule.$el.find('.rule-filter-container').find('select').trigger('change'); //allows rebuild of input field plugin
+                    $scope.resetOperatorValue(op, rule);
+                    $('.bs-container').remove();
+                    $scope.tempRuleFilter = false;
+                    $scope.ruleOpIsTriggered = false;
+                }
             });
             
             $builder
-            	.on('afterCreateRuleOperators.queryBuilder', function(e, rule, op){	
-            		//prevent multiple triggers and insure is only active after our custom operator event listener above
-            		if($scope.tempRuleFilter && !$scope.ruleOpIsTriggered){
-            			$scope.ruleOpIsTriggered = true;
-	            		if($scope.tempRuleFilter){
-	            			rule.filter = $.extend({}, $scope.tempRuleFilter);
-	            		}
-	            		if(rule.filter.needRevert){
-	            			var originalSettings = $scope.options.filters.filter(function(obj){ return obj.id === rule.filter.id})[0];
-	            			var tmpOp = rule.filter.operatorVal;
-	            			rule.filter = $.extend({},originalSettings);
-	            			rule.filter.operatorVal = tmpOp;
-	            		}
-	            		if(rule.filter && rule.filter.plugin !== 'datepicker' &&
-	            				(rule.filter.operatorVal === "IN" || rule.filter.operatorVal === "NOT_IN")){
-	            			rule.filter.plugin = 'selectize';
-	            			supplement[rule.filter.plugin](rule.filter);
-	            			rule.filter.needRevert = true;
-	            		}
-            		}
-            	});
+                .on('afterCreateRuleOperators.queryBuilder', function(e, rule, op){ 
+                    //prevent multiple triggers and insure is only active after our custom operator event listener above
+                    if($scope.tempRuleFilter && !$scope.ruleOpIsTriggered){
+                        $scope.ruleOpIsTriggered = true;
+                        if($scope.tempRuleFilter){
+                            rule.filter = $.extend({}, $scope.tempRuleFilter);
+                        }
+                        if(rule.filter.needRevert){
+                            var originalSettings = $scope.options.filters.filter(function(obj){ return obj.id === rule.filter.id})[0];
+                            var tmpOp = rule.filter.operatorVal;
+                            rule.filter = $.extend({},originalSettings);
+                            rule.filter.operatorVal = tmpOp;
+                        }
+                        if(rule.filter && rule.filter.plugin !== 'datepicker' &&
+                                (rule.filter.operatorVal === "IN" || rule.filter.operatorVal === "NOT_IN")){
+                            rule.filter.plugin = 'selectize';
+                            supplement[rule.filter.plugin](rule.filter);
+                            rule.filter.needRevert = true;
+                        }
+                    }
+                });
 
             try {
                 //if (localStorage[property] === undefined) {
@@ -193,14 +193,14 @@ app.factory('jqueryQueryBuilderWidget', function () {
         };
         
         $scope.resetOperatorValue = function(op, rule){
-        	var operatorVal = '';
-        	$.each($scope.$builder.queryBuilder.defaults().operators, function(index,value){
-        		if(value.type === op){
-        			operatorVal = value;
-        			return false;
-        		}
-        	});
-        	rule.operator = operatorVal;
+            var operatorVal = '';
+            $.each($scope.$builder.queryBuilder.defaults().operators, function(index,value){
+                if(value.type === op){
+                    operatorVal = value;
+                    return false;
+                }
+            });
+            rule.operator = operatorVal;
         };
     };
 });

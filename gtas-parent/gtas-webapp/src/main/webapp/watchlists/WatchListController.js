@@ -40,20 +40,20 @@
         $scope.watchlistGrid = gridOptionsLookupService.getGridOptions('watchlist');
         $scope.watchlistGrid.importerDataAddCallback = function (grid, newObjects) {
             if ($scope.validateNewObjects(newObjects)) {
-            	var valid = true;
-            	if($scope.activeTab === "Passenger"){
-	            	$.each(newObjects, function(index,value){
-	                	if(!$scope.validateDateFormat(value.dob, index)){
-	                		valid = false;
-	                		return false;
-	                	};
-	            	});
-            	}
-            	if(valid){
-            		$scope.showConfirm(grid, newObjects);
-            	}
+                var valid = true;
+                if($scope.activeTab === "Passenger"){
+                    $.each(newObjects, function(index,value){
+                        if(!$scope.validateDateFormat(value.dob, index)){
+                            valid = false;
+                            return false;
+                        };
+                    });
+                }
+                if(valid){
+                    $scope.showConfirm(grid, newObjects);
+                }
             } else {
-            	$scope.openAlert('The format of the file you have uploaded is invalid.');
+                $scope.openAlert('The format of the file you have uploaded is invalid.');
             }
         };
         $scope.watchlistGrid.finishImport = function (grid, newObjects) {
@@ -358,28 +358,28 @@
         };
         
         $scope.validateDateFormat = function(date, index){
-        	var valid = true;
-        	if(date.search('-') < 2){
-        		//BAD FORMAT, INCORRECT DELINEATOR
-        		 $scope.openAlert('Accepted Date Format Is yyyy-mm-dd. Invalid dilineator found at index: '+index);
-        		 valid = false;
-        	}else {
-        		var dateArry = date.split('-');
-        		if(dateArry[0].length != 4){
-        			//BAD FORMAT, YEAR NOT FIRST
-        			$scope.openAlert('\n Accepted Date Format Is yyyy-mm-dd. Invalid YEAR location found at index: '+index);
-        			valid = false;
-        		}else if(dateArry[1] < 1 || dateArry[1] > 12){
-        			//BAD FORMAT, MONTH OUT OF RANGE
-        			$scope.openAlert('Accepted Date Format Is yyyy-mm-dd. Invalid MONTH value found at index: '+index);
-        			valid = false;
-        		}else if(dateArry[2] < 1 || dateArry[2] > 31){
-        			//BAD FORMAT, DAY OUT OF RANGE
-        			$scope.openAlert('Accepted Date Format Is yyyy-mm-dd. Invalid DAY value found at index: '+index);
-        			valid = false;
-        		}
-        	}
-        	return valid;
+            var valid = true;
+            if(date.search('-') < 2){
+                //BAD FORMAT, INCORRECT DELINEATOR
+                 $scope.openAlert('Accepted Date Format Is yyyy-mm-dd. Invalid dilineator found at index: '+index);
+                 valid = false;
+            }else {
+                var dateArry = date.split('-');
+                if(dateArry[0].length != 4){
+                    //BAD FORMAT, YEAR NOT FIRST
+                    $scope.openAlert('\n Accepted Date Format Is yyyy-mm-dd. Invalid YEAR location found at index: '+index);
+                    valid = false;
+                }else if(dateArry[1] < 1 || dateArry[1] > 12){
+                    //BAD FORMAT, MONTH OUT OF RANGE
+                    $scope.openAlert('Accepted Date Format Is yyyy-mm-dd. Invalid MONTH value found at index: '+index);
+                    valid = false;
+                }else if(dateArry[2] < 1 || dateArry[2] > 31){
+                    //BAD FORMAT, DAY OUT OF RANGE
+                    $scope.openAlert('Accepted Date Format Is yyyy-mm-dd. Invalid DAY value found at index: '+index);
+                    valid = false;
+                }
+            }
+            return valid;
         }
     });
 }());

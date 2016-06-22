@@ -37,28 +37,28 @@ describe('Watchlist controller:', function() {
     it('should fetch two documents from xhr', function() {
       $httpBackend.expectGET('/gtas/wl/DOCUMENT/Document').
           respond({
-        	  status:'SUCCESS',
-        	  message:'Operation was successful',
-        	  result:{
-        		  name:'Document',
-        		  entity:'DOCUMENT',
-        		  watchlistItems:
-        	       [
+              status:'SUCCESS',
+              message:'Operation was successful',
+              result:{
+                  name:'Document',
+                  entity:'DOCUMENT',
+                  watchlistItems:
+                   [
                      {
-                    	 id:12345,
-                    	 action:'',
-                    	 terms:[
-                    	        {field:'documentType', type:'string', value:'P'},
-                    	        {field:'documentNumber', type:'string', value:'12345'},                    	        
-                    	        ]
+                         id:12345,
+                         action:'',
+                         terms:[
+                                {field:'documentType', type:'string', value:'P'},
+                                {field:'documentNumber', type:'string', value:'12345'},                             
+                                ]
                      },
                      {
-                    	 id:9921,
-                    	 action:'',
-                    	 terms:[
-                    	        {field:'documentType', type:'string', value:'V'},
-                    	        {field:'documentNumber', type:'string', value:'V7657'},                    	        
-                    	        ]
+                         id:9921,
+                         action:'',
+                         terms:[
+                                {field:'documentType', type:'string', value:'V'},
+                                {field:'documentNumber', type:'string', value:'V7657'},                             
+                                ]
                      }
                    ]
           }});

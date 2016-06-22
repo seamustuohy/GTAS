@@ -904,7 +904,7 @@
                     passengers: '/gtas/query/queryPassengers/'
                 },
                 queryFlights = function (qbData) {
-            	spinnerService.show('html5spinner');
+                spinnerService.show('html5spinner');
                     var dfd = $q.defer();
 
                     dfd.resolve($http({
@@ -916,7 +916,7 @@
                     return dfd.promise;
                 },
                 queryPassengers = function (qbData) {
-                	spinnerService.show('html5spinner');
+                    spinnerService.show('html5spinner');
                     var dfd = $q.defer();
                     dfd.resolve($http({
                         method: 'post',

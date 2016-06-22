@@ -101,14 +101,14 @@ app.controller('FilterCtrl', function ($scope, $state, $interval, $stateParams,u
     });
 
     $("#originAirports").change(function(){
-    	$scope.filter.originAirports=$(this).val().split(','); 
+        $scope.filter.originAirports=$(this).val().split(','); 
 
     });
     
     $("#destinationAirports").change(function(){
 
-    	$scope.filter.destinationAirports=$(this).val().split(',');  	  
- 	});
+        $scope.filter.destinationAirports=$(this).val().split(',');       
+    });
 
     init();
 

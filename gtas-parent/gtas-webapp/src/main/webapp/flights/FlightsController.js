@@ -1,16 +1,16 @@
 (function () {
     'use strict';
     app.controller('FlightsController', function ($scope, $http, $state, $interval, $stateParams, $mdToast, passengersBasedOnUserFilter, 
-    		flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel, spinnerService) {
-    	$scope.errorToast = function(error){
-        	$mdToast.show($mdToast.simple()
-        	 .content(error)
-        	 .position('top right')
-        	 .hideDelay(4000)
-        	 .parent($scope.toastParent));
+            flightService, gridService, uiGridConstants, executeQueryService, flights, flightsModel, spinnerService) {
+        $scope.errorToast = function(error){
+            $mdToast.show($mdToast.simple()
+             .content(error)
+             .position('top right')
+             .hideDelay(4000)
+             .parent($scope.toastParent));
         };
         
-    	var exporter = {
+        var exporter = {
             'csv': function () {
                 $scope.gridApi.exporter.csvExport('all', 'all');
             },
@@ -45,7 +45,7 @@
                 grid.totalItems = data.totalFlights === -1 ? 0 : data.totalFlights;
                 grid.data = data.flights;
                 if(!data.flights || data.flights.length == 0){
-                	$scope.errorToast("No results found for selected filter criteria");
+                    $scope.errorToast("No results found for selected filter criteria");
                 }
                 spinnerService.hide('html5spinner');
             },
@@ -55,13 +55,13 @@
                 {label: 'Any', value: 'A'}
             ],
             getPage = function () {
-            	if(stateName === 'queryFlights'){
-            		setFlightsGrid($scope.flightsQueryGrid, flights || {flights: [], totalFlights: 0});
-            	}
-            	else{
-            		setFlightsGrid($scope.flightsGrid, flights || {flights: [], totalFlights: 0});
-            	}
-            	
+                if(stateName === 'queryFlights'){
+                    setFlightsGrid($scope.flightsQueryGrid, flights || {flights: [], totalFlights: 0});
+                }
+                else{
+                    setFlightsGrid($scope.flightsGrid, flights || {flights: [], totalFlights: 0});
+                }
+                
             },
             update = function (data) {
                 flights = data;
@@ -80,7 +80,7 @@
                     executeQueryService.queryFlights(postData).then(update);
                 },
                 flights: function () {
-                	spinnerService.show('html5spinner');
+                    spinnerService.show('html5spinner');
                     flightService.getFlights($scope.model).then(update);
                 }
             },
@@ -189,13 +189,13 @@
                 enableVerticalScrollbar: 1,
                 enableColumnMenus: false,
                 exporterCsvFilename: 'Flights.csv',
-                	
+                    
                onRegisterApi: function (gridApi) {
-            	   $scope.gridApi = gridApi;
+                   $scope.gridApi = gridApi;
                    
-            	   gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-            		   $scope.model.pageSize = pageSize;
-            	   });
+                   gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
+                       $scope.model.pageSize = pageSize;
+                   });
                }
         }
 
@@ -272,10 +272,10 @@
         };
 
         $scope.getTableHeight = function () {
-        	if(stateName != 'queryFlights'){
-        		return gridService.calculateGridHeight($scope.flightsGrid.data.length);
-        	} // Sets minimal height for front-end pagination controlled variant of grid
-        	return gridService.calculateGridHeight($scope.model.pageSize);
+            if(stateName != 'queryFlights'){
+                return gridService.calculateGridHeight($scope.flightsGrid.data.length);
+            } // Sets minimal height for front-end pagination controlled variant of grid
+            return gridService.calculateGridHeight($scope.model.pageSize);
         };
         resolvePage();
         mapAirports();
@@ -284,15 +284,15 @@
         //Datepicker automatically sets it to 0:00:00 if passed a date with no time, 
         //however our initial dates for the model carry with it a time and must be overridden
         $scope.$watch("model.etaStart", function (newValue) {
-        	newValue.setHours(0);
-        	newValue.setMinutes(0);
-        	newValue.setSeconds(0);
+            newValue.setHours(0);
+            newValue.setMinutes(0);
+            newValue.setSeconds(0);
         });
         //End date is set to the maximum clock time
         $scope.$watch("model.etaEnd", function (newValue) {
-        	newValue.setHours(23);
-        	newValue.setMinutes(59);
-        	newValue.setSeconds(59);
+            newValue.setHours(23);
+            newValue.setMinutes(59);
+            newValue.setSeconds(59);
         });
     });
 }());

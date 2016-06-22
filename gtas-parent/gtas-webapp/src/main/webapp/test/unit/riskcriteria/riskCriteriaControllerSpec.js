@@ -45,7 +45,7 @@ describe('RiskCriteriaController:', function() {
     beforeEach(module('myApp'));
 
     beforeEach(inject(function(_$httpBackend_, $controller, $rootScope, _$location_, _$stateParams_) {
-    	$httpBackend = _$httpBackend_;
+        $httpBackend = _$httpBackend_;
         scope = $rootScope.$new();
         $location = _$location_;
         //restService = _restService_;
@@ -56,25 +56,25 @@ describe('RiskCriteriaController:', function() {
         //scope.$digest();
     }));
 
-	it('should be initialized with Risk Criteria defaults', function() {
-	  expect(scope.query.title).toBe('');
-	  expect(scope.query.description).toBe(null);
-	  expect(scope.rule).toBeDefined();
-	  
-	  expect(scope.calendarOptions).toEqual({format: 'yyyy-mm-dd', autoClose: true});
-	  expect(scope.formats).toEqual(["YYYY-MM-DD"]);
-	  expect(scope.ruleId).toBe(null);
-	  expect(scope.saving).toBe(false);
+    it('should be initialized with Risk Criteria defaults', function() {
+      expect(scope.query.title).toBe('');
+      expect(scope.query.description).toBe(null);
+      expect(scope.rule).toBeDefined();
+      
+      expect(scope.calendarOptions).toEqual({format: 'yyyy-mm-dd', autoClose: true});
+      expect(scope.formats).toEqual(["YYYY-MM-DD"]);
+      expect(scope.ruleId).toBe(null);
+      expect(scope.saving).toBe(false);
 
-	  expect(scope.qbGrid).toBeDefined();
-	  expect(scope.qbGrid.columnDefs).toBeDefined();
-	  expect(scope.qbGrid.onRegisterApi).toBeDefined();
-	  
-	  expect(scope.qbGrid.enableRowHeaderSelection).toBe(true);
-	  expect(scope.qbGrid.enableSelectAll).toBe(false);
-	  expect(scope.qbGrid.multiSelect).toBe(false);
-	  expect(scope.qbGrid.exporterCsvFilename).toBe('rule.csv');
-	  expect(scope.qbGrid.exporterPdfHeader).toEqual({text: 'rule', style: 'headerStyle'});
-	});
+      expect(scope.qbGrid).toBeDefined();
+      expect(scope.qbGrid.columnDefs).toBeDefined();
+      expect(scope.qbGrid.onRegisterApi).toBeDefined();
+      
+      expect(scope.qbGrid.enableRowHeaderSelection).toBe(true);
+      expect(scope.qbGrid.enableSelectAll).toBe(false);
+      expect(scope.qbGrid.multiSelect).toBe(false);
+      expect(scope.qbGrid.exporterCsvFilename).toBe('rule.csv');
+      expect(scope.qbGrid.exporterPdfHeader).toEqual({text: 'rule', style: 'headerStyle'});
+    });
 
 });

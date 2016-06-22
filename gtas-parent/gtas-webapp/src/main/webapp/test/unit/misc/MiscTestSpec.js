@@ -13,29 +13,29 @@ describe('Miscellaneous Tests:', function() {
     beforeEach(inject(function(_$httpBackend_, $rootScope, $http) {
       $httpBackend = _$httpBackend_;
       scope = $rootScope.$new();
-  	  scope.test = function(code){
-	    		$http.get('/test'+code)
-	    		.then(
-	    				function(resp){
-	    					//success handler. 
-	    					//Note that with the spring-security-csrf-token-interceptor added to the app module
-	    					//the error handler is never invoked!
-	    					//Thus we need to check for error status in the success handler!
-	    					scope.status=resp.status;
-	    					if(resp.status < 300){
-	    						//success
-		    					scope.result='OK';
-	    					} else {
-	    						//FAILED
-	    						scope.result = 'FAIL';
-	    					}
-	    					},
-	    				function(resp){//error handler
-	    					scope.status=resp.status;
-	    					scope.result = 'FAIL';
-	    					}
-	    		);
-	  }
+      scope.test = function(code){
+                $http.get('/test'+code)
+                .then(
+                        function(resp){
+                            //success handler. 
+                            //Note that with the spring-security-csrf-token-interceptor added to the app module
+                            //the error handler is never invoked!
+                            //Thus we need to check for error status in the success handler!
+                            scope.status=resp.status;
+                            if(resp.status < 300){
+                                //success
+                                scope.result='OK';
+                            } else {
+                                //FAILED
+                                scope.result = 'FAIL';
+                            }
+                            },
+                        function(resp){//error handler
+                            scope.status=resp.status;
+                            scope.result = 'FAIL';
+                            }
+                );
+      }
 
     }));
 

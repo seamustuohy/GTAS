@@ -9,7 +9,7 @@
         .filter('roleDescriptionFilter', function () {
             return function (roles) {
                 return roles != null ?
-                		roles.map(function (role) {
+                        roles.map(function (role) {
                             return role.roleDescription;
                         }).join(', ')
                         :'';

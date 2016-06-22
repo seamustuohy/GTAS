@@ -53,12 +53,12 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     });
 
     $scope.copyRule = function () {
-    	$scope.isCopy = true;
-    	if($scope.mode === 'rule'){
-    		$scope.prompt.save('rule');
-    	} else if($scope.mode === 'query'){
-    		$scope.prompt.save('query');
-    	}
+        $scope.isCopy = true;
+        if($scope.mode === 'rule'){
+            $scope.prompt.save('rule');
+        } else if($scope.mode === 'query'){
+            $scope.prompt.save('query');
+        }
     };
 
     $scope.mode = mode;

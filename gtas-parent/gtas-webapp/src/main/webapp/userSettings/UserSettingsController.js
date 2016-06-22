@@ -33,7 +33,7 @@ app.controller('UserSettingsController', function ($scope, $state, $interval,$ht
 
     //$scope.setFilter = function () {
     //
-    //    /*	$scope.partialView="setFilter";
+    //    /*    $scope.partialView="setFilter";
     //     $state.go('user-settings.setFilter');*/
     //    $location.path('/set/filter');
     //};
@@ -45,16 +45,16 @@ app.controller('UserSettingsController', function ($scope, $state, $interval,$ht
 
     var toastPosition = angular.element(document.getElementById('filterForm'));
     var self = this, airports, 
-    		userData = function (user) {
+            userData = function (user) {
             $scope.user = user.data;      $scope.filter.userId=user.data.userId;
             
             if(user.data.filter!=null) {
-                if(user.data.filter.originAirports)	{
-                	$scope.filter.originAirports=user.data.filter.originAirports;
-                	}
-                if(user.data.filter.destinationAirports)	{
+                if(user.data.filter.originAirports) {
+                    $scope.filter.originAirports=user.data.filter.originAirports;
+                    }
+                if(user.data.filter.destinationAirports)    {
                    $scope.filter.destinationAirports=user.data.filter.destinationAirports;
-                	}
+                    }
                 if(typeof user.data.filter.etaStart  != undefined && user.data.filter.etaStart != null)
                     $scope.filter.etaStart=user.data.filter.etaStart;
                 if(typeof user.data.filter.etaEnd  != undefined && user.data.filter.etaEnd != null)
