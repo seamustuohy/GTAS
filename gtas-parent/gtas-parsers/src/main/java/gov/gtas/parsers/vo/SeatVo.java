@@ -20,7 +20,7 @@ public class SeatVo implements Validatable {
     private String origin;
     private String destination;
     
-	public String getNumber() {
+    public String getNumber() {
         return number;
     }
     public Boolean getApis() {
@@ -52,11 +52,11 @@ public class SeatVo implements Validatable {
     }
 
     @Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.number)
-		       && StringUtils.isNotBlank(this.origin)
-		       && StringUtils.isNotBlank(this.destination);
-	}
+    public boolean isValid() {
+        return StringUtils.isNotBlank(this.number)
+               && StringUtils.isNotBlank(this.origin)
+               && StringUtils.isNotBlank(this.destination);
+    }
 
     @Override
     public String toString() {

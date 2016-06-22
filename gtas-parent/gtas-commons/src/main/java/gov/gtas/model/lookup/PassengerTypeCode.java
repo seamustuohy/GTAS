@@ -7,13 +7,13 @@ public enum PassengerTypeCode {
     
     private String passengerTypeName;
     private PassengerTypeCode(final String name){
-    	this.passengerTypeName = name;
+        this.passengerTypeName = name;
     }
-	/**
-	 * @return the passengerTypeName
-	 */
-	public String getPassengerTypeName() {
-		return passengerTypeName;
-	}
+    /**
+     * @return the passengerTypeName
+     */
+    public String getPassengerTypeName() {
+        return passengerTypeName;
+    }
     
 }

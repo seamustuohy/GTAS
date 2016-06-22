@@ -45,27 +45,27 @@ public class ApisMessageVo extends MessageVo implements Validatable {
     }
 
     public void setReportingParties(List<ReportingPartyVo> reportingParties) {
-		this.reportingParties = reportingParties;
-	}
+        this.reportingParties = reportingParties;
+    }
 
-	public void setFlights(List<FlightVo> flights) {
-		this.flights = flights;
-	}
+    public void setFlights(List<FlightVo> flights) {
+        this.flights = flights;
+    }
 
-	public void setPassengers(List<PassengerVo> passengers) {
-		this.passengers = passengers;
-	}
+    public void setPassengers(List<PassengerVo> passengers) {
+        this.passengers = passengers;
+    }
 
-	@Override
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }
 
-	@Override
-	public boolean isValid() {
-		if(StringUtils.isBlank(this.getHashCode()) ){
-			return false;
-		}
-		return true;
-	}
+    @Override
+    public boolean isValid() {
+        if(StringUtils.isBlank(this.getHashCode()) ){
+            return false;
+        }
+        return true;
+    }
 }

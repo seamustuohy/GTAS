@@ -10,22 +10,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DirectoryWatcherService {
-	private static final Logger logger = LoggerFactory.getLogger(DirectoryWatcherService.class);
-	/** change this as appropriate for your file system structure. */
+    private static final Logger logger = LoggerFactory.getLogger(DirectoryWatcherService.class);
+    /** change this as appropriate for your file system structure. */
     private static String DIRECTORY_TO_WATCH = null;//C:\\TEST\\APIS
  
     public static void main(String[] args) throws Exception {
-    	if(args != null && args.length >=1){
-    		DIRECTORY_TO_WATCH=args[0];
-    	}
-    	else{
-    		System.out.println("Enter Directory Name to Watch : ");
-    		Scanner scanIn = new Scanner(System.in);
-    		DIRECTORY_TO_WATCH = scanIn.nextLine();
-   	        scanIn.close();            
-   	        logger.info(DIRECTORY_TO_WATCH);
-    	}
-    	
+        if(args != null && args.length >=1){
+            DIRECTORY_TO_WATCH=args[0];
+        }
+        else{
+            System.out.println("Enter Directory Name to Watch : ");
+            Scanner scanIn = new Scanner(System.in);
+            DIRECTORY_TO_WATCH = scanIn.nextLine();
+            scanIn.close();            
+            logger.info(DIRECTORY_TO_WATCH);
+        }
+        
         // get the directory we want to watch, using the Paths singleton class
         Path toWatch = Paths.get(DIRECTORY_TO_WATCH);
         if(toWatch == null ) {

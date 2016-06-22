@@ -25,39 +25,39 @@ import gov.gtas.validator.UserDataValidator;
 @RestController
 public class UserController {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private UserDataValidator userDataValidator;
-	
-	@InitBinder("userData")
+    @Autowired
+    private UserService userService;
+    
+    @Autowired
+    private UserDataValidator userDataValidator;
+    
+    @InitBinder("userData")
     protected void intializeUserDataValidator(WebDataBinder binder) {
         binder.addValidators(userDataValidator);
     }
 
-	@RequestMapping( method = RequestMethod.GET,value = "/users/")
-	public List<UserData> getAllUsers() {
-		return userService.findAll();
-	}
+    @RequestMapping( method = RequestMethod.GET,value = "/users/")
+    public List<UserData> getAllUsers() {
+        return userService.findAll();
+    }
 
-	@RequestMapping(method = RequestMethod.POST, value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public UserData createUser(@RequestBody @Valid UserData userData) {
-		return userService.create(userData);
-	}
-	
-	@RequestMapping(method = RequestMethod.PUT, value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public UserData updateUser(@RequestBody @Valid UserData userData) {
-		return userService.update(userData);
-	}
-	
-	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping("/user")
-	public UserData user(Principal principal) {
-				
-		return userService.findById(principal.getName());
-	}	
+    @RequestMapping(method = RequestMethod.POST, value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public UserData createUser(@RequestBody @Valid UserData userData) {
+        return userService.create(userData);
+    }
+    
+    @RequestMapping(method = RequestMethod.PUT, value = "/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public UserData updateUser(@RequestBody @Valid UserData userData) {
+        return userService.update(userData);
+    }
+    
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping("/user")
+    public UserData user(Principal principal) {
+                
+        return userService.findById(principal.getName());
+    }   
 
 }

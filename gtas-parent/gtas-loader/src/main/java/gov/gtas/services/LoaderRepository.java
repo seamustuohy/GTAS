@@ -51,9 +51,9 @@ import gov.gtas.repository.ReportingPartyRepository;
 
 @Repository
 public class LoaderRepository {
-	@PersistenceContext 
- 	private EntityManager entityManager;
-	
+    @PersistenceContext 
+    private EntityManager entityManager;
+    
     @Autowired
     private ReportingPartyRepository rpDao;
     

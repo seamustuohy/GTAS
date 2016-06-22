@@ -21,7 +21,7 @@ public class PhoneVo implements Validatable {
         this.city = city;
     }
     @Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.number);
-	}
+    public boolean isValid() {
+        return StringUtils.isNotBlank(this.number);
+    }
 }

@@ -36,8 +36,8 @@ public class CreditCardVo implements Validatable {
     public void setAccountHolder(String accountHolder) {
         this.accountHolder = accountHolder;
     }
-	@Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.number);
-	}
+    @Override
+    public boolean isValid() {
+        return StringUtils.isNotBlank(this.number);
+    }
 }

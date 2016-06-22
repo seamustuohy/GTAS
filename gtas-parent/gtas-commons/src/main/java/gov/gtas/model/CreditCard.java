@@ -21,16 +21,16 @@ public class CreditCard extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;  
     public CreditCard() { }
     
-	@Column(name = "card_type")
+    @Column(name = "card_type")
     private String cardType;
-	
-	@Column(nullable = false)
+    
+    @Column(nullable = false)
     private String number;
-	
+    
     @Temporal(TemporalType.DATE)
     private Date expiration;
-	
-	@Column(name = "account_holder")
+    
+    @Column(name = "account_holder")
     private String accountHolder;
 
     @ManyToMany(
@@ -39,13 +39,13 @@ public class CreditCard extends BaseEntityAudit {
     )
     private Set<Pnr> pnrs = new HashSet<>();
 
-	public String getCardType() {
-		return cardType;
-	}
+    public String getCardType() {
+        return cardType;
+    }
 
-	public void setCardType(String cardType) {
-		this.cardType = cardType;
-	}
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
+    }
 
     public String getNumber() {
         return number;
@@ -96,5 +96,5 @@ public class CreditCard extends BaseEntityAudit {
         return Objects.equals(this.cardType, other.cardType)
                 && Objects.equals(this.number, other.number) 
                 && Objects.equals(this.expiration, other.expiration);
-    }    		
+    }           
 }

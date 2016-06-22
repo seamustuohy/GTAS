@@ -13,10 +13,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 @JsonSubTypes({@JsonSubTypes.Type(QueryTerm.class), @JsonSubTypes.Type(QueryObject.class)})
 public interface QueryEntity extends Serializable{
-	/**
-	 * Creates a canonical form of the query expression as sum of "minterms".
-	 * Each "minterm" is a list of QueryTerm which can be converted to a Drools rule.
-	 * @return
-	 */
-	List<List<QueryTerm>> createFlattenedList();
+    /**
+     * Creates a canonical form of the query expression as sum of "minterms".
+     * Each "minterm" is a list of QueryTerm which can be converted to a Drools rule.
+     * @return
+     */
+    List<List<QueryTerm>> createFlattenedList();
 }

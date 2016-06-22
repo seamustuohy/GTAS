@@ -33,72 +33,72 @@ import org.springframework.test.util.ReflectionTestUtils;
  *
  */
 public class TargetingServiceTest {
-	private TargetingService targetingService;
+    private TargetingService targetingService;
 
-	@Mock
-	private RuleService mockRuleService;
+    @Mock
+    private RuleService mockRuleService;
 
-	@Mock
-	private ApisMessageRepository mockApisMsgRepository;
+    @Mock
+    private ApisMessageRepository mockApisMsgRepository;
 
-	@Before
-	public void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
-		targetingService = new TargetingServiceImpl(mockRuleService);
-		ReflectionTestUtils.setField(targetingService, "apisMsgRepository",
-				mockApisMsgRepository);
-	}
+    @Before
+    public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+        targetingService = new TargetingServiceImpl(mockRuleService);
+        ReflectionTestUtils.setField(targetingService, "apisMsgRepository",
+                mockApisMsgRepository);
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	@Test
-	public void testInitialization() {
-		assertNotNull("Autowire of targeting service failed", targetingService);
-		assertNotNull("Autowire of rule service failed",
-				ReflectionTestUtils.getField(targetingService, "ruleService"));
-	}
+    @Test
+    public void testInitialization() {
+        assertNotNull("Autowire of targeting service failed", targetingService);
+        assertNotNull("Autowire of rule service failed",
+                ReflectionTestUtils.getField(targetingService, "ruleService"));
+    }
 
-	@Test
-	public void testAnalyzeApisMessage() {
-		ReflectionTestUtils.setField(targetingService, "ruleService",
-				mockRuleService);
-		ApisMessage message = new ApisMessage();
-		RuleServiceResult result = new BasicRuleServiceResult(
-				new LinkedList<RuleHitDetail>(), new RuleExecutionStatistics());
-		when(mockRuleService.invokeRuleEngine(any(RuleServiceRequest.class)))
-				.thenReturn(result);
-		targetingService.analyzeApisMessage(message);
-		verify(mockRuleService).invokeRuleEngine(any(RuleServiceRequest.class));
-	}
+    @Test
+    public void testAnalyzeApisMessage() {
+        ReflectionTestUtils.setField(targetingService, "ruleService",
+                mockRuleService);
+        ApisMessage message = new ApisMessage();
+        RuleServiceResult result = new BasicRuleServiceResult(
+                new LinkedList<RuleHitDetail>(), new RuleExecutionStatistics());
+        when(mockRuleService.invokeRuleEngine(any(RuleServiceRequest.class)))
+                .thenReturn(result);
+        targetingService.analyzeApisMessage(message);
+        verify(mockRuleService).invokeRuleEngine(any(RuleServiceRequest.class));
+    }
 
-	@Test
-	public void testRetrieveApisMessage() {
-		ReflectionTestUtils.setField(targetingService, "apisMsgRepository",
-				mockApisMsgRepository);
-		List<ApisMessage> messages = new ArrayList<ApisMessage>();
-		ApisMessage nApisMessage = new ApisMessage();
-		nApisMessage.setStatus(MessageStatus.LOADED);
-		messages.add(nApisMessage);
-		MessageStatus messageStatus = MessageStatus.LOADED;
-		when(mockApisMsgRepository.findByStatus(messageStatus)).thenReturn(
-				messages);
-		targetingService.retrieveApisMessage(messageStatus);
-		verify(mockApisMsgRepository).findByStatus(messageStatus);
-	}
+    @Test
+    public void testRetrieveApisMessage() {
+        ReflectionTestUtils.setField(targetingService, "apisMsgRepository",
+                mockApisMsgRepository);
+        List<ApisMessage> messages = new ArrayList<ApisMessage>();
+        ApisMessage nApisMessage = new ApisMessage();
+        nApisMessage.setStatus(MessageStatus.LOADED);
+        messages.add(nApisMessage);
+        MessageStatus messageStatus = MessageStatus.LOADED;
+        when(mockApisMsgRepository.findByStatus(messageStatus)).thenReturn(
+                messages);
+        targetingService.retrieveApisMessage(messageStatus);
+        verify(mockApisMsgRepository).findByStatus(messageStatus);
+    }
 
-	@Test
-	public void testNullReturnRetrieveApisMessage() {
-		ReflectionTestUtils.setField(targetingService, "apisMsgRepository",
-				mockApisMsgRepository);
-		List<ApisMessage> messages = new ArrayList<ApisMessage>();
-		MessageStatus messageStatus = MessageStatus.LOADED;
-		when(mockApisMsgRepository.findByStatus(messageStatus)).thenReturn(
-				messages);
-		List<ApisMessage> result = targetingService
-				.retrieveApisMessage(messageStatus);
-		verify(mockApisMsgRepository).findByStatus(messageStatus);
-		assertEquals(new ArrayList<>(0), result);
-	}
+    @Test
+    public void testNullReturnRetrieveApisMessage() {
+        ReflectionTestUtils.setField(targetingService, "apisMsgRepository",
+                mockApisMsgRepository);
+        List<ApisMessage> messages = new ArrayList<ApisMessage>();
+        MessageStatus messageStatus = MessageStatus.LOADED;
+        when(mockApisMsgRepository.findByStatus(messageStatus)).thenReturn(
+                messages);
+        List<ApisMessage> result = targetingService
+                .retrieveApisMessage(messageStatus);
+        verify(mockApisMsgRepository).findByStatus(messageStatus);
+        assertEquals(new ArrayList<>(0), result);
+    }
 }

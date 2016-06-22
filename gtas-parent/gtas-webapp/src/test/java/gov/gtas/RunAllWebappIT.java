@@ -9,6 +9,6 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ UdrBuilderControllerIT.class, WatchlistManagementControllerIT.class
-		 })
+         })
 public class RunAllWebappIT {
 }

@@ -20,36 +20,36 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  */
 public class RuleRunner {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(RuleRunner.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(RuleRunner.class);
 
-	public static void main(String[] args) {
-		logger.info("Entering main().");
-		ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(
-				CommonServicesConfig.class);
-		TargetingService targetingService = (TargetingService) ctx
-				.getBean("targetingServiceImpl");
+    public static void main(String[] args) {
+        logger.info("Entering main().");
+        ConfigurableApplicationContext ctx = new AnnotationConfigApplicationContext(
+                CommonServicesConfig.class);
+        TargetingService targetingService = (TargetingService) ctx
+                .getBean("targetingServiceImpl");
 
-		try {
-			targetingService.preProcessing();
-			Set<Long> uniqueFlights = targetingService.runningRuleEngine();
-			if (logger.isInfoEnabled()) {
-				logger.info("updating hit counts for flight ids {} ",
-						uniqueFlights);
-			}
-			targetingService.updateFlightHitCounts(uniqueFlights);
-			logger.info("Exiting main().");
-		} catch (Exception exception) {
-			exception.printStackTrace();
-			ErrorDetailInfo errInfo = ErrorHandlerFactory.createErrorDetails(
-					RuleServiceConstants.RULE_ENGINE_RUNNER_ERROR_CODE,
-					exception);
-			ErrorPersistenceService errorService = (ErrorPersistenceService) ctx
-					.getBean("errorPersistenceServiceImpl");
-			errorService.create(errInfo);
-		} finally {
-			ctx.close();
-		}
-		System.exit(0);
-	}
+        try {
+            targetingService.preProcessing();
+            Set<Long> uniqueFlights = targetingService.runningRuleEngine();
+            if (logger.isInfoEnabled()) {
+                logger.info("updating hit counts for flight ids {} ",
+                        uniqueFlights);
+            }
+            targetingService.updateFlightHitCounts(uniqueFlights);
+            logger.info("Exiting main().");
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            ErrorDetailInfo errInfo = ErrorHandlerFactory.createErrorDetails(
+                    RuleServiceConstants.RULE_ENGINE_RUNNER_ERROR_CODE,
+                    exception);
+            ErrorPersistenceService errorService = (ErrorPersistenceService) ctx
+                    .getBean("errorPersistenceServiceImpl");
+            errorService.create(errInfo);
+        } finally {
+            ctx.close();
+        }
+        System.exit(0);
+    }
 }

@@ -10,8 +10,8 @@ import com.hazelcast.spring.cache.HazelcastCacheManager;
 @Configuration
 @EnableCaching
 public class CachingConfig {
-	@Bean(name = "cacheManager")
-	HazelcastCacheManager hazelcastcacheManager() throws Exception {
-		return new HazelcastCacheManager(Hazelcast.newHazelcastInstance());
-	}
+    @Bean(name = "cacheManager")
+    HazelcastCacheManager hazelcastcacheManager() throws Exception {
+        return new HazelcastCacheManager(Hazelcast.newHazelcastInstance());
+    }
 }

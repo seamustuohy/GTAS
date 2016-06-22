@@ -3,14 +3,14 @@ package gov.gtas.services.Filter;
 import java.util.List;
 
 public interface FilterService {
-	public FilterData create(FilterData filterData);
+    public FilterData create(FilterData filterData);
 
-	public void delete(String userId);
+    public void delete(String userId);
 
-	public List<FilterData> findAll();
+    public List<FilterData> findAll();
 
-	public FilterData update(FilterData filterData);
+    public FilterData update(FilterData filterData);
 
-	public FilterData findById(String userId);
+    public FilterData findById(String userId);
 
 }

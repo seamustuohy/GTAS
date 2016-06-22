@@ -19,10 +19,10 @@ public class Email extends BaseEntityAudit {
     public Email() { }
     
     @Column(nullable = false)
-	private String address;
+    private String address;
     
-	private String domain;
-	
+    private String domain;
+    
     @ManyToMany(
         mappedBy = "emails",
         targetEntity = Pnr.class

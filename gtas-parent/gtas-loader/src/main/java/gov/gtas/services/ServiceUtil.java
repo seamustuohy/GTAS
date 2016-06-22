@@ -8,26 +8,26 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ServiceUtil {
-	
+    
     @Autowired
     private  AirportService airportService;
     
     public String getCountry(String airport){
-    	
-    	Airport a = airportService.getAirportByThreeLetterCode(airport);
-    	if(a == null ){
-    		return "USA";
-    	}
-    	return a.getCountry();
-    	
+        
+        Airport a = airportService.getAirportByThreeLetterCode(airport);
+        if(a == null ){
+            return "USA";
+        }
+        return a.getCountry();
+        
     }
 
-	public AirportService getAirportService() {
-		return airportService;
-	}
+    public AirportService getAirportService() {
+        return airportService;
+    }
 
-	public void setAirportService(AirportService airportService) {
-		this.airportService = airportService;
-	}
+    public void setAirportService(AirportService airportService) {
+        this.airportService = airportService;
+    }
 
 }

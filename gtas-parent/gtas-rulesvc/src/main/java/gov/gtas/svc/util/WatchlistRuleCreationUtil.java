@@ -18,24 +18,24 @@ import java.util.List;
  *
  */
 public class WatchlistRuleCreationUtil {
-	public static List<String> createWatchlistRule(EntityEnum entity, WatchlistTerm[] wlData,
-			String title, StringBuilder ruleOutput) {
-		RuleConditionBuilder ruleConditionBuilder = new RuleConditionBuilder(
-				EngineRuleUtils.createEngineRuleVariableMap());
+    public static List<String> createWatchlistRule(EntityEnum entity, WatchlistTerm[] wlData,
+            String title, StringBuilder ruleOutput) {
+        RuleConditionBuilder ruleConditionBuilder = new RuleConditionBuilder(
+                EngineRuleUtils.createEngineRuleVariableMap());
 
-		ruleOutput.append("rule \"").append(title).append(":%d\"")
-				.append(NEW_LINE).append("when\n");
-		for (WatchlistTerm wlterm : wlData) {
-			QueryTerm trm = new QueryTerm(entity.getEntityName(),
-					wlterm.getField(), wlterm.getType(),
-					CriteriaOperatorEnum.EQUAL.toString(), new String[]{wlterm.getValue()});
-			ruleConditionBuilder.addRuleCondition(trm);
-		}
-		ruleConditionBuilder.buildConditionsAndApppend(ruleOutput);
-		List<String> causes = ruleConditionBuilder.addWatchlistRuleAction(ruleOutput, entity, 
-				title, RuleTemplateConstants.PASSENGER_VARIABLE_NAME);
+        ruleOutput.append("rule \"").append(title).append(":%d\"")
+                .append(NEW_LINE).append("when\n");
+        for (WatchlistTerm wlterm : wlData) {
+            QueryTerm trm = new QueryTerm(entity.getEntityName(),
+                    wlterm.getField(), wlterm.getType(),
+                    CriteriaOperatorEnum.EQUAL.toString(), new String[]{wlterm.getValue()});
+            ruleConditionBuilder.addRuleCondition(trm);
+        }
+        ruleConditionBuilder.buildConditionsAndApppend(ruleOutput);
+        List<String> causes = ruleConditionBuilder.addWatchlistRuleAction(ruleOutput, entity, 
+                title, RuleTemplateConstants.PASSENGER_VARIABLE_NAME);
 
-		return causes;
-	}
+        return causes;
+    }
 
 }

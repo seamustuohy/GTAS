@@ -26,70 +26,70 @@ import org.springframework.validation.Errors;
  */
 public class UdrServiceHelper {
 
-	public static void addEngineRulesToUdrRule(UdrRule parent,
-			UdrSpecification inputJson) {
-		// validate and create minterms
-		List<List<QueryTerm>> mintermList = createRuleMinterms(inputJson);
-		int indx = 0;
-		for (List<QueryTerm> minterm : mintermList) {
-			Rule rule = EngineRuleUtils.createEngineRule(minterm, parent, indx++);
-			parent.addEngineRule(rule);
-		}
-	}
+    public static void addEngineRulesToUdrRule(UdrRule parent,
+            UdrSpecification inputJson) {
+        // validate and create minterms
+        List<List<QueryTerm>> mintermList = createRuleMinterms(inputJson);
+        int indx = 0;
+        for (List<QueryTerm> minterm : mintermList) {
+            Rule rule = EngineRuleUtils.createEngineRule(minterm, parent, indx++);
+            parent.addEngineRule(rule);
+        }
+    }
 
-	/**
-	 * Creates engine rules from "minterms" (i.e., sets of AND conditions). This
-	 * method is called from the UDR service when a new UDR is being created.
-	 * 
-	 * @param parent
-	 *            the parent UDR
-	 * @param inputJson
-	 * 
-	 *            the JSON UDR object
-	 * @throws ParseException
-	 *             on error
-	 */
-	public static List<List<QueryTerm>> createRuleMinterms(
-			UdrSpecification inputJson) {
-		QueryObject qobj = inputJson.getDetails();
-		if (qobj == null) {
-			throw ErrorHandlerFactory.getErrorHandler().createException(
-					CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "details",
-					"Create UDR");
-		}
-		// validate the input JSON object
-		Errors errors = QueryValidationUtils.validateQueryObject(qobj);
-		if (errors.hasErrors()) {
-			throw new CommonValidationException(
-					"JsonToDomainObjectConverter.createEngineRules() - validation errors:",
-					errors);
-		}
-		List<List<QueryTerm>> ruleDataList = UdrSplitterUtils
-				.createFlattenedList(qobj);
-		return ruleDataList;
-	}
+    /**
+     * Creates engine rules from "minterms" (i.e., sets of AND conditions). This
+     * method is called from the UDR service when a new UDR is being created.
+     * 
+     * @param parent
+     *            the parent UDR
+     * @param inputJson
+     * 
+     *            the JSON UDR object
+     * @throws ParseException
+     *             on error
+     */
+    public static List<List<QueryTerm>> createRuleMinterms(
+            UdrSpecification inputJson) {
+        QueryObject qobj = inputJson.getDetails();
+        if (qobj == null) {
+            throw ErrorHandlerFactory.getErrorHandler().createException(
+                    CommonErrorConstants.NULL_ARGUMENT_ERROR_CODE, "details",
+                    "Create UDR");
+        }
+        // validate the input JSON object
+        Errors errors = QueryValidationUtils.validateQueryObject(qobj);
+        if (errors.hasErrors()) {
+            throw new CommonValidationException(
+                    "JsonToDomainObjectConverter.createEngineRules() - validation errors:",
+                    errors);
+        }
+        List<List<QueryTerm>> ruleDataList = UdrSplitterUtils
+                .createFlattenedList(qobj);
+        return ruleDataList;
+    }
 
-	/**
-	 * Creates a new list of engine rules when a UDR is being updated.
-	 * 
-	 * @param parent
-	 *            the UDR.
-	 * @param inputJson
-	 *            the update JSON object.
-	 * @return list of engine rules to replace the existing rules.
-	 */
-	public static List<Rule> listEngineRules(UdrRule parent,
-			UdrSpecification inputJson) {
-		List<Rule> ret = new LinkedList<Rule>();
-		List<List<QueryTerm>> ruleDataList = createRuleMinterms(inputJson);
-		int indx = 0;
-		for (List<QueryTerm> ruleData : ruleDataList) {
-			Rule r = EngineRuleUtils.createEngineRule(ruleData, parent, indx);
-			r.setParent(parent);
-			ret.add(r);
-			++indx;
-		}
-		return ret;
-	}
+    /**
+     * Creates a new list of engine rules when a UDR is being updated.
+     * 
+     * @param parent
+     *            the UDR.
+     * @param inputJson
+     *            the update JSON object.
+     * @return list of engine rules to replace the existing rules.
+     */
+    public static List<Rule> listEngineRules(UdrRule parent,
+            UdrSpecification inputJson) {
+        List<Rule> ret = new LinkedList<Rule>();
+        List<List<QueryTerm>> ruleDataList = createRuleMinterms(inputJson);
+        int indx = 0;
+        for (List<QueryTerm> ruleData : ruleDataList) {
+            Rule r = EngineRuleUtils.createEngineRule(ruleData, parent, indx);
+            r.setParent(parent);
+            ret.add(r);
+            ++indx;
+        }
+        return ret;
+    }
 
 }

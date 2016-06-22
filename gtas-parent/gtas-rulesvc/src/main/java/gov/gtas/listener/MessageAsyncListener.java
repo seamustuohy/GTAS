@@ -13,17 +13,17 @@ import org.springframework.stereotype.Component;
 @AsyncListener
 @Component
 public class MessageAsyncListener implements ApplicationListener<MessageEvent> {
-	private static final Logger logger = LoggerFactory
-			.getLogger(MessageAsyncListener.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(MessageAsyncListener.class);
 
-	@Override
-	public void onApplicationEvent(MessageEvent event) {
+    @Override
+    public void onApplicationEvent(MessageEvent event) {
 
-		List<Long> msgIds = event.getMessageIds();
-		for (Long msgId : msgIds) {
-			logger.info("MessageId:" + msgId + "\n");
+        List<Long> msgIds = event.getMessageIds();
+        for (Long msgId : msgIds) {
+            logger.info("MessageId:" + msgId + "\n");
 
-		}
+        }
 
-	}
+    }
 }

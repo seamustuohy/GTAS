@@ -5,33 +5,33 @@ package gov.gtas.services;
  *
  */
 public class LoaderStatistics {
-	private int numFilesProcessed = 0;
-	private int numFilesAborted = 0;
-	private int numMessagesProcessed = 0;
-	private int numMessagesFailed = 0;
-	public int getNumFilesProcessed() {
-		return numFilesProcessed;
-	}
-	public void incrementNumFilesProcessed() {
-		this.numFilesProcessed++;
-	}
-	public int getNumFilesAborted() {
-		return numFilesAborted;
-	}
-	public void incrementNumFilesAborted() {
-		this.numFilesAborted++;
-	}
-	public int getNumMessagesProcessed() {
-		return numMessagesProcessed;
-	}
-	public void incrementNumMessagesProcessed(int incr) {
-		this.numMessagesProcessed += incr;
-	}
-	public int getNumMessagesFailed() {
-		return numMessagesFailed;
-	}
-	public void incrementNumMessagesFailed(int incr) {
-		this.numMessagesFailed += incr;
-	}
+    private int numFilesProcessed = 0;
+    private int numFilesAborted = 0;
+    private int numMessagesProcessed = 0;
+    private int numMessagesFailed = 0;
+    public int getNumFilesProcessed() {
+        return numFilesProcessed;
+    }
+    public void incrementNumFilesProcessed() {
+        this.numFilesProcessed++;
+    }
+    public int getNumFilesAborted() {
+        return numFilesAborted;
+    }
+    public void incrementNumFilesAborted() {
+        this.numFilesAborted++;
+    }
+    public int getNumMessagesProcessed() {
+        return numMessagesProcessed;
+    }
+    public void incrementNumMessagesProcessed(int incr) {
+        this.numMessagesProcessed += incr;
+    }
+    public int getNumMessagesFailed() {
+        return numMessagesFailed;
+    }
+    public void incrementNumMessagesFailed(int incr) {
+        this.numMessagesFailed += incr;
+    }
 
 }

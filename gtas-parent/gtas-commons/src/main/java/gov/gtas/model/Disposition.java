@@ -13,48 +13,48 @@ public class Disposition extends BaseEntityAudit {
     private static final long serialVersionUID = 1L;  
 
     @ManyToOne
-	@JoinColumn(name = "flight_id", nullable = false)
+    @JoinColumn(name = "flight_id", nullable = false)
     private Flight flight;
 
     @ManyToOne
-	@JoinColumn(name = "passenger_id", nullable = false)
+    @JoinColumn(name = "passenger_id", nullable = false)
     private Passenger passenger;
 
     @ManyToOne
-	@JoinColumn(name = "status_id", nullable = false)
+    @JoinColumn(name = "status_id", nullable = false)
     private DispositionStatus status;
 
     private String comments;  
 
-	public Flight getFlight() {
-		return flight;
-	}
+    public Flight getFlight() {
+        return flight;
+    }
 
-	public void setFlight(Flight flight) {
-		this.flight = flight;
-	}
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
 
-	public Passenger getPassenger() {
-		return passenger;
-	}
+    public Passenger getPassenger() {
+        return passenger;
+    }
 
-	public void setPassenger(Passenger passenger) {
-		this.passenger = passenger;
-	}
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
+    }
 
-	public DispositionStatus getStatus() {
-		return status;
-	}
+    public DispositionStatus getStatus() {
+        return status;
+    }
 
-	public void setStatus(DispositionStatus status) {
-		this.status = status;
-	}
+    public void setStatus(DispositionStatus status) {
+        this.status = status;
+    }
 
-	public String getComments() {
-		return comments;
-	}
+    public String getComments() {
+        return comments;
+    }
 
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 }

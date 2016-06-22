@@ -29,20 +29,20 @@ public class SSR extends Segment {
     public static final String DOCO = "DOCO";
     public static final String SEAT = "SEAT";
     
-	private String typeOfRequest;
-	private String action;
-	private String quantity;
-	private String carrier;
-	private String boardCity;
-	private String offCity;
-	private String freeText;
+    private String typeOfRequest;
+    private String action;
+    private String quantity;
+    private String carrier;
+    private String boardCity;
+    private String offCity;
+    private String freeText;
 
-	public class SpecialRequirementDetails {
-    	private String specialRequirementData;
-    	private String unit;
-    	private String travelerReferenceNumber;
-    	private String seatCharacteristic;
-    	
+    public class SpecialRequirementDetails {
+        private String specialRequirementData;
+        private String unit;
+        private String travelerReferenceNumber;
+        private String seatCharacteristic;
+        
         public String getSpecialRequirementData() {
             return specialRequirementData;
         }
@@ -71,44 +71,44 @@ public class SSR extends Segment {
         public String toString() {
             return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
         }
-	}
-	
-	private List<SpecialRequirementDetails> details = new ArrayList<>();
-	
-	public SSR(List<Composite> composites) {
-		super(SSR.class.getSimpleName(), composites);
-		
-		Composite c = getComposite(0);
-		if (c != null) {
-    		this.typeOfRequest = c.getElement(0);
-    		this.action = c.getElement(1);
-    		this.quantity = c.getElement(2);
-    		this.carrier = c.getElement(3);
-    		// indices 4, 5 processing indicators
-    		this.boardCity = c.getElement(6);
-    		this.offCity = c.getElement(7);
+    }
     
-    		StringBuffer b = new StringBuffer();
-    		for (int i=8; i<c.numElements(); i++) {
-    		    b.append(c.getElement(i));
-    		}
-    		if (b.length() != 0) {
-    		    this.freeText = b.toString();
-    		}
-		}
-		
-		for (int i=1; i<getComposites().size(); i++) {
-		    c = getComposite(i);
-    		if (c != null) {
-    		    SpecialRequirementDetails d = new SpecialRequirementDetails();
-        		d.setSpecialRequirementData(c.getElement(0));
-        		d.setUnit(c.getElement(1));
-        		d.setTravelerReferenceNumber(c.getElement(2));
-        		d.setSeatCharacteristic(c.getElement(3));
-        		this.details.add(d);
-    		}
-		}
-	}
+    private List<SpecialRequirementDetails> details = new ArrayList<>();
+    
+    public SSR(List<Composite> composites) {
+        super(SSR.class.getSimpleName(), composites);
+        
+        Composite c = getComposite(0);
+        if (c != null) {
+            this.typeOfRequest = c.getElement(0);
+            this.action = c.getElement(1);
+            this.quantity = c.getElement(2);
+            this.carrier = c.getElement(3);
+            // indices 4, 5 processing indicators
+            this.boardCity = c.getElement(6);
+            this.offCity = c.getElement(7);
+    
+            StringBuffer b = new StringBuffer();
+            for (int i=8; i<c.numElements(); i++) {
+                b.append(c.getElement(i));
+            }
+            if (b.length() != 0) {
+                this.freeText = b.toString();
+            }
+        }
+        
+        for (int i=1; i<getComposites().size(); i++) {
+            c = getComposite(i);
+            if (c != null) {
+                SpecialRequirementDetails d = new SpecialRequirementDetails();
+                d.setSpecialRequirementData(c.getElement(0));
+                d.setUnit(c.getElement(1));
+                d.setTravelerReferenceNumber(c.getElement(2));
+                d.setSeatCharacteristic(c.getElement(3));
+                this.details.add(d);
+            }
+        }
+    }
 
     public String getTypeOfRequest() {
         return typeOfRequest;

@@ -20,42 +20,42 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { CommonServicesConfig.class,
-		CachingConfig.class })
+        CachingConfig.class })
 @WebAppConfiguration
 @Transactional
 public class SecurityUserDetailsServiceIT {
-	@Autowired
-	UserRepository userDao;
+    @Autowired
+    UserRepository userDao;
 
-	@Autowired
-	SecurityUserDetailsService userDetailsService;
+    @Autowired
+    SecurityUserDetailsService userDetailsService;
 
-	@Before
-	public void setUp() {
-		User u = new User();
-		u.setFirstName("mike");
-		u.setLastName("cope");
-		u.setUserId("copenham");
-		BCryptPasswordEncoder e = new BCryptPasswordEncoder();
-		String pw = e.encode("password");
-		u.setPassword(pw);
-		userDao.save(u);
-	}
+    @Before
+    public void setUp() {
+        User u = new User();
+        u.setFirstName("mike");
+        u.setLastName("cope");
+        u.setUserId("copenham");
+        BCryptPasswordEncoder e = new BCryptPasswordEncoder();
+        String pw = e.encode("password");
+        u.setPassword(pw);
+        userDao.save(u);
+    }
 
-	@Test
-	public void testDoesNotExist() {
-		boolean pass = false;
-		try {
-			userDetailsService.loadUserByUsername("none");
-		} catch (UsernameNotFoundException e) {
-			pass = true;
-		}
-		assertTrue(pass);
-	}
+    @Test
+    public void testDoesNotExist() {
+        boolean pass = false;
+        try {
+            userDetailsService.loadUserByUsername("none");
+        } catch (UsernameNotFoundException e) {
+            pass = true;
+        }
+        assertTrue(pass);
+    }
 
-	@Test
-	public void testMyUser() {
-		UserDetails u = userDetailsService.loadUserByUsername("copenham");
-		System.out.println(u);
-	}
+    @Test
+    public void testMyUser() {
+        UserDetails u = userDetailsService.loadUserByUsername("copenham");
+        System.out.println(u);
+    }
 }

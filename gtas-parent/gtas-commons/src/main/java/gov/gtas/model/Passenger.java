@@ -56,7 +56,7 @@ public class Passenger extends BaseEntityAudit {
     )
     private Set<Pnr> pnrs = new HashSet<>();
     
-	private String title;
+    private String title;
     
     @Column(name = "first_name")
     private String firstName;

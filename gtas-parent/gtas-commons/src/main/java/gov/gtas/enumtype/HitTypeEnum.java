@@ -10,54 +10,54 @@ public enum HitTypeEnum {
     RD; // UDR rule, Watchlist Document Hit
     
     public HitTypeEnum addHitType(HitTypeEnum hitTypeToAdd){
-    	HitTypeEnum ret = this;
-    	switch(hitTypeToAdd){
-	    	case R:
-	    		if(this == P){
-	    			ret = RP;
-	    		} else if( this == D){
-	    			ret = RD;
-	    		} else if (this == PD){
-	    			ret = RPD;
-	    		}
-	    		break;
-	    	case P:
-	    		if(this == R){
-	    			ret = RP;
-	    		} else if( this == D){
-	    			ret = PD;
-	    		} else if (this == RD){
-	    			ret = RPD;
-	    		}
-	    		break;
-	    	case D:
-	    		if(this == P){
-	    			ret = PD;
-	    		} else if( this == R){
-	    			ret = RD;
-	    		} else if (this == RP){
-	    			ret = RPD;
-	    		}
-	    		break;
-	    	case PD:
-	    		if(this == R){
-	    			ret = RPD;
-	    		}
-	    		break;
-	    	case RP:
-	    		if(this == D){
-	    			ret = RPD;
-	    		}
-	    		break;
-	    	case RD:
-	    		if(this == P){
-	    			ret = RPD;
-	    		}
-	    		break;
-    		default:
-    			break;
-    		
-    	}
-    	return ret;
+        HitTypeEnum ret = this;
+        switch(hitTypeToAdd){
+            case R:
+                if(this == P){
+                    ret = RP;
+                } else if( this == D){
+                    ret = RD;
+                } else if (this == PD){
+                    ret = RPD;
+                }
+                break;
+            case P:
+                if(this == R){
+                    ret = RP;
+                } else if( this == D){
+                    ret = PD;
+                } else if (this == RD){
+                    ret = RPD;
+                }
+                break;
+            case D:
+                if(this == P){
+                    ret = PD;
+                } else if( this == R){
+                    ret = RD;
+                } else if (this == RP){
+                    ret = RPD;
+                }
+                break;
+            case PD:
+                if(this == R){
+                    ret = RPD;
+                }
+                break;
+            case RP:
+                if(this == D){
+                    ret = RPD;
+                }
+                break;
+            case RD:
+                if(this == P){
+                    ret = RPD;
+                }
+                break;
+            default:
+                break;
+            
+        }
+        return ret;
     }
 }

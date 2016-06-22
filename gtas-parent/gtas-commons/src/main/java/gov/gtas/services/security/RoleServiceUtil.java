@@ -12,17 +12,17 @@ import gov.gtas.model.Role;
 @Component
 public class RoleServiceUtil {
 
-	public Set<RoleData> getRoleDataSetFromEntityCollection(Iterable<Role> roleEntities) {
+    public Set<RoleData> getRoleDataSetFromEntityCollection(Iterable<Role> roleEntities) {
 
-		Set<RoleData> roles = StreamSupport.stream(roleEntities.spliterator(), false)
-				.map(new Function<Role, RoleData>() {
-					@Override
-					public RoleData apply(Role role) {
-						return new RoleData(role.getRoleId(), role.getRoleDescription());
-					}
-				}).collect(Collectors.toSet());
+        Set<RoleData> roles = StreamSupport.stream(roleEntities.spliterator(), false)
+                .map(new Function<Role, RoleData>() {
+                    @Override
+                    public RoleData apply(Role role) {
+                        return new RoleData(role.getRoleId(), role.getRoleDescription());
+                    }
+                }).collect(Collectors.toSet());
 
-		return roles;
-	}
+        return roles;
+    }
 
 }

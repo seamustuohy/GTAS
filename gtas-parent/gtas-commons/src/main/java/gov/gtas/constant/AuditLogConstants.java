@@ -27,5 +27,5 @@ public class AuditLogConstants {
     // WARNING/ERROR MESSAGES
     ////////////////////////////////////////////////////////////////////////////////////
     public static final String AUDIT_LOG_WARNING_CANNOT_CONVERT_JSON_TO_STRING =
-    		"Action Data Object supplied for logging cannot be serialized (actionType=%s, Target=%s, message=%s)";
+            "Action Data Object supplied for logging cannot be serialized (actionType=%s, Target=%s, message=%s)";
 }

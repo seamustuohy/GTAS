@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class WatchlistMappingTest {
     private static final String TEST_JSON =
-    	"{\"@class\": \"gov.gtas.model.watchlist.json.WatchlistSpec\","
+        "{\"@class\": \"gov.gtas.model.watchlist.json.WatchlistSpec\","
        +" \"name\": \"PASSENGER_WL\","
        +" \"entity\": \"PASSENGER\","
        +"\"watchlistItems\": ["
@@ -55,64 +55,64 @@ public class WatchlistMappingTest {
          +"               \"value\": \"1957-04-01\" } ] } ] } ";       
 
 
-	@Before
-	public void setUp() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	@Test
-	public void testUdrSpecToJson() {
-		try{
-		ObjectMapper mapper = new ObjectMapper();
-		WatchlistSpec testObj = SampleDataGenerator.createSampleWatchlist("Passenger Watch List 1");
-		
-		//serialize
-		String json=mapper.writeValueAsString(testObj);
-	    //de-serialize
-		mapper.readValue(json, WatchlistSpec.class);
-		
-		} catch(Exception ex){
-			ex.printStackTrace();
-			fail("Got exception");
-		}
-	}
-	@Test
-	public void testJsonToUdrSpec() {
-		try{
-			ObjectMapper mapper = new ObjectMapper();
-		    //de-serialize
-			WatchlistSpec testObj = mapper.readValue(TEST_JSON, WatchlistSpec.class);	
-			assertNotNull(testObj);
-			assertEquals("PASSENGER_WL", testObj.getName());
-			assertEquals("PASSENGER", testObj.getEntity());
-			List<WatchlistItemSpec> items = testObj.getWatchlistItems();
-			assertNotNull(items);
-			assertEquals(3, items.size());
-			for(WatchlistItemSpec item:items){
-				if(item.getAction().equalsIgnoreCase(WatchlistEditEnum.C.getOperationName())){
-					assertNull(item.getId());
-					WatchlistTerm[] terms = item.getTerms();
-					assertNotNull(terms);
-					assertEquals(3, terms.length);
-				} else if(item.getAction().equalsIgnoreCase(WatchlistEditEnum.U.getOperationName())){
-					assertNotNull(item.getId());
-					WatchlistTerm[] terms = item.getTerms();
-					assertNotNull(terms);
-					assertEquals(3, terms.length);
-				} else if(item.getAction().equalsIgnoreCase(WatchlistEditEnum.D.getOperationName())){
-					assertNotNull(item.getId());
-					WatchlistTerm[] terms = item.getTerms();
-					assertNull(terms);
-				} else {
-						fail("Unexpected operation");
-				}
-			}
-		} catch(Exception ex){
-			ex.printStackTrace();
-			fail("Got exception");
-		}
-	}
+    @Test
+    public void testUdrSpecToJson() {
+        try{
+        ObjectMapper mapper = new ObjectMapper();
+        WatchlistSpec testObj = SampleDataGenerator.createSampleWatchlist("Passenger Watch List 1");
+        
+        //serialize
+        String json=mapper.writeValueAsString(testObj);
+        //de-serialize
+        mapper.readValue(json, WatchlistSpec.class);
+        
+        } catch(Exception ex){
+            ex.printStackTrace();
+            fail("Got exception");
+        }
+    }
+    @Test
+    public void testJsonToUdrSpec() {
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            //de-serialize
+            WatchlistSpec testObj = mapper.readValue(TEST_JSON, WatchlistSpec.class);   
+            assertNotNull(testObj);
+            assertEquals("PASSENGER_WL", testObj.getName());
+            assertEquals("PASSENGER", testObj.getEntity());
+            List<WatchlistItemSpec> items = testObj.getWatchlistItems();
+            assertNotNull(items);
+            assertEquals(3, items.size());
+            for(WatchlistItemSpec item:items){
+                if(item.getAction().equalsIgnoreCase(WatchlistEditEnum.C.getOperationName())){
+                    assertNull(item.getId());
+                    WatchlistTerm[] terms = item.getTerms();
+                    assertNotNull(terms);
+                    assertEquals(3, terms.length);
+                } else if(item.getAction().equalsIgnoreCase(WatchlistEditEnum.U.getOperationName())){
+                    assertNotNull(item.getId());
+                    WatchlistTerm[] terms = item.getTerms();
+                    assertNotNull(terms);
+                    assertEquals(3, terms.length);
+                } else if(item.getAction().equalsIgnoreCase(WatchlistEditEnum.D.getOperationName())){
+                    assertNotNull(item.getId());
+                    WatchlistTerm[] terms = item.getTerms();
+                    assertNull(terms);
+                } else {
+                        fail("Unexpected operation");
+                }
+            }
+        } catch(Exception ex){
+            ex.printStackTrace();
+            fail("Got exception");
+        }
+    }
 }

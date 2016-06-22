@@ -25,20 +25,20 @@ import gov.gtas.model.lookup.Country;
 @Repository
 public class LookupRepositoryImpl implements LookUpRepository {
 
-	@Autowired
-	private CountryRepository countryRepository;
+    @Autowired
+    private CountryRepository countryRepository;
 
-	@Autowired
-	private AirportRepository airportRepository;
+    @Autowired
+    private AirportRepository airportRepository;
 
-	@Autowired
-	private CarrierRepository carrierRepository;
+    @Autowired
+    private CarrierRepository carrierRepository;
 
-	@Autowired
-	private FlightDirectionRepository flightDirectionRepository;
-	
-	@Autowired
-	private AppConfigurationRepository appConfigRepository;
+    @Autowired
+    private FlightDirectionRepository flightDirectionRepository;
+    
+    @Autowired
+    private AppConfigurationRepository appConfigRepository;
 
     @Override
     @Cacheable("app_configuration")
@@ -46,62 +46,62 @@ public class LookupRepositoryImpl implements LookUpRepository {
         return (List<AppConfiguration>) appConfigRepository.findAll();
     }
 
-	@Override
-	@Cacheable("flightDirection")
-	public List<FlightDirection> getFlightDirections() {
-		return (List<FlightDirection>) flightDirectionRepository.findAll();
-	}
+    @Override
+    @Cacheable("flightDirection")
+    public List<FlightDirection> getFlightDirections() {
+        return (List<FlightDirection>) flightDirectionRepository.findAll();
+    }
 
-	@Override
-	@Cacheable("country")
-	public List<Country> getAllCountries() {
-		return (List<Country>) countryRepository.findAll();
-	}
+    @Override
+    @Cacheable("country")
+    public List<Country> getAllCountries() {
+        return (List<Country>) countryRepository.findAll();
+    }
 
-	@Override
-	@Cacheable("carrier")
-	public List<Carrier> getAllCarriers() {
-		return (List<Carrier>) carrierRepository.findAll();
-	}
+    @Override
+    @Cacheable("carrier")
+    public List<Carrier> getAllCarriers() {
+        return (List<Carrier>) carrierRepository.findAll();
+    }
 
-	@Override
-	@Cacheable("airport")
-	public List<Airport> getAllAirports() {
-		return (List<Airport>) airportRepository.findAll();
-	}
+    @Override
+    @Cacheable("airport")
+    public List<Airport> getAllAirports() {
+        return (List<Airport>) airportRepository.findAll();
+    }
 
-	@Override
-	@Transactional
-	@CacheEvict(value = "carrier", allEntries = true)
-	public void clearAllEntitiesCache() {
-		// remove all entities from cache
-	}
+    @Override
+    @Transactional
+    @CacheEvict(value = "carrier", allEntries = true)
+    public void clearAllEntitiesCache() {
+        // remove all entities from cache
+    }
 
-	@Override
-	@Transactional
-	public void clearEntityFromCache(Long id) {
-		// NOTE: later
+    @Override
+    @Transactional
+    public void clearEntityFromCache(Long id) {
+        // NOTE: later
 
-	}
+    }
 
-	@Override
-	@Transactional
-	public Country saveCountry(Country country) {
-		return countryRepository.save(country);
-	}
+    @Override
+    @Transactional
+    public Country saveCountry(Country country) {
+        return countryRepository.save(country);
+    }
 
-	@Override
-	@Transactional
-	@Cacheable(value = "country", key = "#countryName")
-	public Country getCountry(String countryName) {
-		return countryRepository.findByName(countryName);
-	}
+    @Override
+    @Transactional
+    @Cacheable(value = "country", key = "#countryName")
+    public Country getCountry(String countryName) {
+        return countryRepository.findByName(countryName);
+    }
 
-	@Transactional
-	@CacheEvict(value = "country", key = "#countryName")
-	public void removeCountryCache(String countryName) {
-		// remove entity from cache only
-	}
+    @Transactional
+    @CacheEvict(value = "country", key = "#countryName")
+    public void removeCountryCache(String countryName) {
+        // remove entity from cache only
+    }
 
     @Override
     @Transactional
@@ -110,9 +110,9 @@ public class LookupRepositoryImpl implements LookUpRepository {
         return appConfigRepository.findByOption(option).getValue();
     }
 
-	@Transactional
-	public void deleteCountryDb(Country country) {
-		countryRepository.delete(country);
-	}
+    @Transactional
+    public void deleteCountryDb(Country country) {
+        countryRepository.delete(country);
+    }
 
 }

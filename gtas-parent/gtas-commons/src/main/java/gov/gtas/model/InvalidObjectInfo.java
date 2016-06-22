@@ -10,56 +10,56 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "loader_audit_logs")
 public class InvalidObjectInfo extends BaseEntityAudit{
-	
-	private static final long serialVersionUID = 1L;  
-	
-	@Column(name = "object_key")
-	private String messageKey;
-	
-	@Size(max = 4000)
-	@Column(name = "object_value")
-	private String invalidObjectValue;
-	
-	@Column(name = "object_type")
-	private String invalidObjectType;
-	
-	@Column(name = "description")
-	private String failureDescription;
-	
-	
+    
+    private static final long serialVersionUID = 1L;  
+    
+    @Column(name = "object_key")
+    private String messageKey;
+    
+    @Size(max = 4000)
+    @Column(name = "object_value")
+    private String invalidObjectValue;
+    
+    @Column(name = "object_type")
+    private String invalidObjectType;
+    
+    @Column(name = "description")
+    private String failureDescription;
+    
+    
     public String getMessageKey() {
-		return messageKey;
-	}
+        return messageKey;
+    }
 
-	public void setMessageKey(String messageKey) {
-		this.messageKey = messageKey;
-	}
+    public void setMessageKey(String messageKey) {
+        this.messageKey = messageKey;
+    }
 
-	public String getInvalidObjectValue() {
-		return invalidObjectValue;
-	}
+    public String getInvalidObjectValue() {
+        return invalidObjectValue;
+    }
 
-	public void setInvalidObjectValue(String invalidObjectValue) {
-		this.invalidObjectValue = invalidObjectValue;
-	}
+    public void setInvalidObjectValue(String invalidObjectValue) {
+        this.invalidObjectValue = invalidObjectValue;
+    }
 
-	public String getInvalidObjectType() {
-		return invalidObjectType;
-	}
+    public String getInvalidObjectType() {
+        return invalidObjectType;
+    }
 
-	public void setInvalidObjectType(String invalidObjectType) {
-		this.invalidObjectType = invalidObjectType;
-	}
+    public void setInvalidObjectType(String invalidObjectType) {
+        this.invalidObjectType = invalidObjectType;
+    }
 
-	public String getFailureDescription() {
-		return failureDescription;
-	}
+    public String getFailureDescription() {
+        return failureDescription;
+    }
 
-	public void setFailureDescription(String failureDescription) {
-		this.failureDescription = failureDescription;
-	}
+    public void setFailureDescription(String failureDescription) {
+        this.failureDescription = failureDescription;
+    }
 
-	@Override
+    @Override
     public int hashCode() {
         return Objects.hash(this.messageKey, this.invalidObjectValue,this.invalidObjectType);
     }
@@ -76,5 +76,5 @@ public class InvalidObjectInfo extends BaseEntityAudit{
         return Objects.equals(this.messageKey, other.messageKey) 
                 && Objects.equals(this.invalidObjectType,other.invalidObjectType)
                 && Objects.equals(this.invalidObjectValue,other.invalidObjectValue);
-    }    		
+    }           
 }

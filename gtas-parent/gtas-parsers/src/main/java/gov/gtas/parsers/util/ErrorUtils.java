@@ -11,24 +11,24 @@ public final class ErrorUtils {
     private ErrorUtils() { }
     
     public static void constructExceptionDetails(Throwable exception, List<String> details){
-    	details.add("Exception class:"+exception.getClass().getSimpleName());
-    	details.add("Exception messsage:"+exception.getMessage());
-    	for(StackTraceElement el:exception.getStackTrace()){
-    		details.add(el.toString());
-    	}
-    	if(exception.getCause() != null){
-    		details.add(">>>>>>>> Caused by:");
-    		constructExceptionDetails(exception.getCause(), details);
-    	}
+        details.add("Exception class:"+exception.getClass().getSimpleName());
+        details.add("Exception messsage:"+exception.getMessage());
+        for(StackTraceElement el:exception.getStackTrace()){
+            details.add(el.toString());
+        }
+        if(exception.getCause() != null){
+            details.add(">>>>>>>> Caused by:");
+            constructExceptionDetails(exception.getCause(), details);
+        }
     }
 
-	private static final int MAX_ERROR_LENG = 4000;
+    private static final int MAX_ERROR_LENG = 4000;
 
-	public static String getStacktrace(Throwable e) {
-		String stacktrace = ExceptionUtils.getStackTrace(e);
-		if (stacktrace.length() > MAX_ERROR_LENG) {
-			stacktrace = stacktrace.substring(0, MAX_ERROR_LENG);
-		}
-		return stacktrace;
-	}
+    public static String getStacktrace(Throwable e) {
+        String stacktrace = ExceptionUtils.getStackTrace(e);
+        if (stacktrace.length() > MAX_ERROR_LENG) {
+            stacktrace = stacktrace.substring(0, MAX_ERROR_LENG);
+        }
+        return stacktrace;
+    }
 }

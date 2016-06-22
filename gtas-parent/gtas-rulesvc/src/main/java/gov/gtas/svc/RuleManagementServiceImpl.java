@@ -42,222 +42,222 @@ import org.springframework.util.CollectionUtils;
  */
 @Service
 public class RuleManagementServiceImpl implements RuleManagementService {
-	private static final Logger logger = LoggerFactory
-			.getLogger(RuleManagementServiceImpl.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(RuleManagementServiceImpl.class);
 
-	@Autowired
-	private RulePersistenceService rulePersistenceService;
+    @Autowired
+    private RulePersistenceService rulePersistenceService;
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    UserService userService;
 
-	@PostConstruct
-	private void initializeErrorHandler() {
-		ErrorHandler errorHandler = new RuleServiceErrorHandler();
-		ErrorHandlerFactory.registerErrorHandler(errorHandler);
-	}
+    @PostConstruct
+    private void initializeErrorHandler() {
+        ErrorHandler errorHandler = new RuleServiceErrorHandler();
+        ErrorHandlerFactory.registerErrorHandler(errorHandler);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromDRLString(java
-	 * .lang.String, java.lang.String)
-	 */
-	@Override
-	public KnowledgeBase createKnowledgeBaseFromDRLString(String kbName,
-			String drlString) {
-		try {
-			KieBase kieBase = RuleUtils.createKieBaseFromDrlString(drlString);
-			byte[] kbBlob = RuleUtils.convertKieBaseToBytes(kieBase);
-			logger.info("Size of the compiled Knowledge Base = "
-					+ kbBlob.length);
-			KnowledgeBase kb = rulePersistenceService
-					.findUdrKnowledgeBase(kbName);
-			if (kb == null) {
-				kb = new KnowledgeBase(kbName);
-			}
-			kb.setRulesBlob(drlString
-					.getBytes(RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
-			kb.setKbBlob(kbBlob);
-			if (StringUtils.isEmpty(kbName)) {
-				kb.setKbName(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
-			}
-			kb = rulePersistenceService.saveKnowledgeBase(kb);
-			return kb;
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			throw ErrorHandlerFactory.getErrorHandler().createException(
-					CommonErrorConstants.SYSTEM_ERROR_CODE,
-					System.currentTimeMillis(), ioe);
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromDRLString(java
+     * .lang.String, java.lang.String)
+     */
+    @Override
+    public KnowledgeBase createKnowledgeBaseFromDRLString(String kbName,
+            String drlString) {
+        try {
+            KieBase kieBase = RuleUtils.createKieBaseFromDrlString(drlString);
+            byte[] kbBlob = RuleUtils.convertKieBaseToBytes(kieBase);
+            logger.info("Size of the compiled Knowledge Base = "
+                    + kbBlob.length);
+            KnowledgeBase kb = rulePersistenceService
+                    .findUdrKnowledgeBase(kbName);
+            if (kb == null) {
+                kb = new KnowledgeBase(kbName);
+            }
+            kb.setRulesBlob(drlString
+                    .getBytes(RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING));
+            kb.setKbBlob(kbBlob);
+            if (StringUtils.isEmpty(kbName)) {
+                kb.setKbName(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
+            }
+            kb = rulePersistenceService.saveKnowledgeBase(kb);
+            return kb;
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            throw ErrorHandlerFactory.getErrorHandler().createException(
+                    CommonErrorConstants.SYSTEM_ERROR_CODE,
+                    System.currentTimeMillis(), ioe);
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.gtas.svc.RuleManagementService#fetchDrlRulesFromKnowledgeBase(java
-	 * .lang.String)
-	 */
-	@Override
-	public String fetchDrlRulesFromKnowledgeBase(String kbName) {
-		KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
-		if (kb == null) {
-			throw ErrorHandlerFactory.getErrorHandler().createException(
-					RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE, kbName);
-		}
-		String drlRules = null;
-		try {
-			drlRules = new String(kb.getRulesBlob(),
-					RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
-		} catch (UnsupportedEncodingException uee) {
-			throw ErrorHandlerFactory.getErrorHandler().createException(
-					RuleServiceConstants.KB_INVALID_ERROR_CODE,
-					RuleConstants.UDR_KNOWLEDGE_BASE_NAME, uee);
-		}
-		return drlRules;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * gov.gtas.svc.RuleManagementService#fetchDrlRulesFromKnowledgeBase(java
+     * .lang.String)
+     */
+    @Override
+    public String fetchDrlRulesFromKnowledgeBase(String kbName) {
+        KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
+        if (kb == null) {
+            throw ErrorHandlerFactory.getErrorHandler().createException(
+                    RuleServiceConstants.KB_NOT_FOUND_ERROR_CODE, kbName);
+        }
+        String drlRules = null;
+        try {
+            drlRules = new String(kb.getRulesBlob(),
+                    RuleConstants.UDR_EXTERNAL_CHARACTER_ENCODING);
+        } catch (UnsupportedEncodingException uee) {
+            throw ErrorHandlerFactory.getErrorHandler().createException(
+                    RuleServiceConstants.KB_INVALID_ERROR_CODE,
+                    RuleConstants.UDR_KNOWLEDGE_BASE_NAME, uee);
+        }
+        return drlRules;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.gtas.svc.RuleManagementService#fetchDefaultDrlRulesFromKnowledgeBase
-	 * ()
-	 */
-	@Override
-	public String fetchDefaultDrlRulesFromKnowledgeBase() {
-		String drlRules = this
-				.fetchDrlRulesFromKnowledgeBase(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
-		return drlRules;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * gov.gtas.svc.RuleManagementService#fetchDefaultDrlRulesFromKnowledgeBase
+     * ()
+     */
+    @Override
+    public String fetchDefaultDrlRulesFromKnowledgeBase() {
+        String drlRules = this
+                .fetchDrlRulesFromKnowledgeBase(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
+        return drlRules;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromUdrRules(java
-	 * .lang.String, java.util.Collection)
-	 */
-	@Override
-	@Transactional(value = TxType.MANDATORY)
-	public KnowledgeBase createKnowledgeBaseFromUdrRules(String kbName,
-			Collection<UdrRule> rules, String userId) {
-		if (!CollectionUtils.isEmpty(rules)) {
-			DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
-			for (UdrRule rule : rules) {
-				ruleFileBuilder.addRule(rule);
-			}
-			String drlRules = ruleFileBuilder.build();
-			KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName,
-					drlRules);
-			linkRulesToKnowledgeBase(kb, rules);
-			return kb;
-		} else {
-			return null;
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromUdrRules(java
+     * .lang.String, java.util.Collection)
+     */
+    @Override
+    @Transactional(value = TxType.MANDATORY)
+    public KnowledgeBase createKnowledgeBaseFromUdrRules(String kbName,
+            Collection<UdrRule> rules, String userId) {
+        if (!CollectionUtils.isEmpty(rules)) {
+            DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
+            for (UdrRule rule : rules) {
+                ruleFileBuilder.addRule(rule);
+            }
+            String drlRules = ruleFileBuilder.build();
+            KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName,
+                    drlRules);
+            linkRulesToKnowledgeBase(kb, rules);
+            return kb;
+        } else {
+            return null;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromWatchlistItems
-	 * (java.lang.String, java.lang.Iterable)
-	 */
-	@Override
-	@Transactional(value = TxType.MANDATORY)
-	public KnowledgeBase createKnowledgeBaseFromWatchlistItems(String kbName,
-			Iterable<WatchlistItem> rules) {
-		if (rules != null) {
-			DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
-			for (WatchlistItem rule : rules) {
-				ruleFileBuilder.addWatchlistItemRule(rule);
-			}
-			String drlRules = ruleFileBuilder.build();
-			KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName,
-					drlRules);
-			return kb;
-		} else {
-			return null;
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromWatchlistItems
+     * (java.lang.String, java.lang.Iterable)
+     */
+    @Override
+    @Transactional(value = TxType.MANDATORY)
+    public KnowledgeBase createKnowledgeBaseFromWatchlistItems(String kbName,
+            Iterable<WatchlistItem> rules) {
+        if (rules != null) {
+            DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
+            for (WatchlistItem rule : rules) {
+                ruleFileBuilder.addWatchlistItemRule(rule);
+            }
+            String drlRules = ruleFileBuilder.build();
+            KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName,
+                    drlRules);
+            return kb;
+        } else {
+            return null;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromUdrAndWatchlist
-	 * (java.lang.String, java.util.Collection, java.lang.Iterable)
-	 */
-	// @Override
-	// public KnowledgeBase createKnowledgeBaseFromUdrAndWatchlist(String
-	// kbName,
-	// Collection<UdrRule> rules, Iterable<WatchlistItem> wlItems) {
-	// DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
-	// boolean udrNotEmpty = false;
-	// if (!CollectionUtils.isEmpty(rules)) {
-	// udrNotEmpty = true;
-	// for (UdrRule rule : rules) {
-	// ruleFileBuilder.addRule(rule);
-	// }
-	// }
-	// boolean wlNotEmpty = false;
-	// if (wlItems != null) {
-	// for (WatchlistItem item : wlItems) {
-	// wlNotEmpty = true;
-	// ruleFileBuilder.addWatchlistItemRule(item);
-	// }
-	// }
-	// if(udrNotEmpty || wlNotEmpty){
-	// String drlRules = ruleFileBuilder.build();
-	// KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName, drlRules);
-	// if(udrNotEmpty){
-	// linkRulesToKnowledgeBase(kb, rules);
-	// }
-	// return kb;
-	// } else {
-	// return null;
-	// }
-	// }
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromUdrAndWatchlist
+     * (java.lang.String, java.util.Collection, java.lang.Iterable)
+     */
+    // @Override
+    // public KnowledgeBase createKnowledgeBaseFromUdrAndWatchlist(String
+    // kbName,
+    // Collection<UdrRule> rules, Iterable<WatchlistItem> wlItems) {
+    // DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
+    // boolean udrNotEmpty = false;
+    // if (!CollectionUtils.isEmpty(rules)) {
+    // udrNotEmpty = true;
+    // for (UdrRule rule : rules) {
+    // ruleFileBuilder.addRule(rule);
+    // }
+    // }
+    // boolean wlNotEmpty = false;
+    // if (wlItems != null) {
+    // for (WatchlistItem item : wlItems) {
+    // wlNotEmpty = true;
+    // ruleFileBuilder.addWatchlistItemRule(item);
+    // }
+    // }
+    // if(udrNotEmpty || wlNotEmpty){
+    // String drlRules = ruleFileBuilder.build();
+    // KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName, drlRules);
+    // if(udrNotEmpty){
+    // linkRulesToKnowledgeBase(kb, rules);
+    // }
+    // return kb;
+    // } else {
+    // return null;
+    // }
+    // }
 
-	private void linkRulesToKnowledgeBase(KnowledgeBase kb,
-			Collection<UdrRule> rules) {
-		if (kb != null && kb.getId() != null) {
-			List<Rule> ruleList = new LinkedList<Rule>();
-			for (UdrRule rule : rules) {
-				for (Rule engineRule : rule.getEngineRules()) {
-					engineRule.setKnowledgeBase(kb);
-				}
-				ruleList.addAll(rule.getEngineRules());
-			}
-			rulePersistenceService.batchUpdate(ruleList);
-		}
-	}
+    private void linkRulesToKnowledgeBase(KnowledgeBase kb,
+            Collection<UdrRule> rules) {
+        if (kb != null && kb.getId() != null) {
+            List<Rule> ruleList = new LinkedList<Rule>();
+            for (UdrRule rule : rules) {
+                for (Rule engineRule : rule.getEngineRules()) {
+                    engineRule.setKnowledgeBase(kb);
+                }
+                ruleList.addAll(rule.getEngineRules());
+            }
+            rulePersistenceService.batchUpdate(ruleList);
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * gov.gtas.svc.RuleManagementService#deleteKnowledgeBase(java.lang.String)
-	 */
-	@Override
-	@Transactional(value = TxType.MANDATORY)
-	public KnowledgeBase deleteKnowledgeBase(String kbName) {
-		KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
-		if (kb != null) {
-			List<Rule> ruleList = rulePersistenceService
-					.findRulesByKnowledgeBaseId(kb.getId());
-			List<Rule> saveRuleList = new ArrayList<Rule>();
-			for (Rule rule : ruleList) {
-				rule.setKnowledgeBase(null);
-				saveRuleList.add(rule);
-			}
-			rulePersistenceService.batchUpdate(saveRuleList);
-			kb = rulePersistenceService.deleteKnowledgeBase(kbName);
-		}
-		return kb;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * gov.gtas.svc.RuleManagementService#deleteKnowledgeBase(java.lang.String)
+     */
+    @Override
+    @Transactional(value = TxType.MANDATORY)
+    public KnowledgeBase deleteKnowledgeBase(String kbName) {
+        KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
+        if (kb != null) {
+            List<Rule> ruleList = rulePersistenceService
+                    .findRulesByKnowledgeBaseId(kb.getId());
+            List<Rule> saveRuleList = new ArrayList<Rule>();
+            for (Rule rule : ruleList) {
+                rule.setKnowledgeBase(null);
+                saveRuleList.add(rule);
+            }
+            rulePersistenceService.batchUpdate(saveRuleList);
+            kb = rulePersistenceService.deleteKnowledgeBase(kbName);
+        }
+        return kb;
+    }
 
 }

@@ -6,5 +6,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan(basePackages = "gov.gtas.querybuilder.service")
 public class QueryBuilderAppConfig {
-	
+    
 }

@@ -19,22 +19,22 @@ public class Phone extends BaseEntityAudit {
     public Phone() { }
     
     @Column(nullable = false)
-	private String number;
-	
+    private String number;
+    
     @ManyToMany(
         mappedBy = "phones",
         targetEntity = Pnr.class
     )
     private Set<Pnr> pnrs = new HashSet<>();
 
-	public String getNumber() {
-		return number;
-	}
+    public String getNumber() {
+        return number;
+    }
 
-	public void setNumber(String number) {
-		this.number = number;
-	}
-	
+    public void setNumber(String number) {
+        this.number = number;
+    }
+    
     public Set<Pnr> getPnrs() {
         return pnrs;
     }

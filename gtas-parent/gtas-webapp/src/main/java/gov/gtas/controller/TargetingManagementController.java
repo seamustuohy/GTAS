@@ -27,42 +27,42 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class TargetingManagementController {
-	/*
-	 * The logger for the TargetingManagementController
-	 */
-	private static final Logger logger = LoggerFactory
-			.getLogger(TargetingManagementController.class);
+    /*
+     * The logger for the TargetingManagementController
+     */
+    private static final Logger logger = LoggerFactory
+            .getLogger(TargetingManagementController.class);
 
-	@Autowired
-	private TargetingService targetingService;
+    @Autowired
+    private TargetingService targetingService;
 
-	@Autowired
-	private RuleManagementService ruleManagementService;
+    @Autowired
+    private RuleManagementService ruleManagementService;
 
-	@RequestMapping(value = Constants.TARGET_ONE_APIS_MSG, method = RequestMethod.GET)
-	public List<?> getTargetingResult(@PathVariable Long id) {
-		RuleServiceResult resp = targetingService.analyzeApisMessage(id);
-		return resp.getResultList();
-	}
+    @RequestMapping(value = Constants.TARGET_ONE_APIS_MSG, method = RequestMethod.GET)
+    public List<?> getTargetingResult(@PathVariable Long id) {
+        RuleServiceResult resp = targetingService.analyzeApisMessage(id);
+        return resp.getResultList();
+    }
 
-	@RequestMapping(value = Constants.TARGET_ALL_APIS, method = RequestMethod.GET)
-	public List<?> getTargetingApisResult() {
-		List<RuleHitDetail> ret = targetingService.analyzeLoadedApisMessage();
-		return ret;
-	}
+    @RequestMapping(value = Constants.TARGET_ALL_APIS, method = RequestMethod.GET)
+    public List<?> getTargetingApisResult() {
+        List<RuleHitDetail> ret = targetingService.analyzeLoadedApisMessage();
+        return ret;
+    }
 
-	@RequestMapping(value = Constants.TARGET_ALL_PNR, method = RequestMethod.GET)
-	public List<?> getTargetingPnrResult() {
-		List<RuleHitDetail> ret = targetingService.analyzeLoadedPnr();
-		return ret;
-	}
+    @RequestMapping(value = Constants.TARGET_ALL_PNR, method = RequestMethod.GET)
+    public List<?> getTargetingPnrResult() {
+        List<RuleHitDetail> ret = targetingService.analyzeLoadedPnr();
+        return ret;
+    }
 
-	@RequestMapping(value = Constants.TARGET_ALL_MSG, method = RequestMethod.GET)
-	public Collection<?> getTargetingResult() {
-		RuleExecutionContext result = targetingService.analyzeLoadedMessages(true);
-		logger.info("TargetingManagementController.getTargetingResult() - rules fired ="
-				+ result.getRuleExecutionStatistics().getTotalRulesFired());
-		Collection<?> ret = result.getTargetingResult();
-		return ret;
-	}
+    @RequestMapping(value = Constants.TARGET_ALL_MSG, method = RequestMethod.GET)
+    public Collection<?> getTargetingResult() {
+        RuleExecutionContext result = targetingService.analyzeLoadedMessages(true);
+        logger.info("TargetingManagementController.getTargetingResult() - rules fired ="
+                + result.getRuleExecutionStatistics().getTotalRulesFired());
+        Collection<?> ret = result.getTargetingResult();
+        return ret;
+    }
 }

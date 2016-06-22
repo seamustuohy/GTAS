@@ -45,41 +45,41 @@ public class FlightVo extends BaseVo {
     private int docListHit;
     
     public int getRuleHits() {
-		return ruleHits;
-	}
-	public void setRuleHits(int ruleHits) {
-		this.ruleHits = ruleHits;
-	}
-	public int getListHits() {
-		return listHits;
-	}
-	public void setListHits(int listHits) {
-		this.listHits = listHits;
-	}
-	public int getPaxListHit() {
-		return paxListHit;
-	}
-	public void setPaxListHit(int paxListHit) {
-		this.paxListHit = paxListHit;
-	}
-	public int getDocListHit() {
-		return docListHit;
-	}
-	public void setDocListHit(int docListHit) {
-		this.docListHit = docListHit;
-	}
-	public String getFlightId() {
-		return flightId;
-	}
-	public void setFlightId(String flightId) {
-		this.flightId = flightId;
-	}
-	public String getDirection() {
-		return direction;
-	}
-	public void setDirection(String direction) {
-		this.direction = direction;
-	}
+        return ruleHits;
+    }
+    public void setRuleHits(int ruleHits) {
+        this.ruleHits = ruleHits;
+    }
+    public int getListHits() {
+        return listHits;
+    }
+    public void setListHits(int listHits) {
+        this.listHits = listHits;
+    }
+    public int getPaxListHit() {
+        return paxListHit;
+    }
+    public void setPaxListHit(int paxListHit) {
+        this.paxListHit = paxListHit;
+    }
+    public int getDocListHit() {
+        return docListHit;
+    }
+    public void setDocListHit(int docListHit) {
+        this.docListHit = docListHit;
+    }
+    public String getFlightId() {
+        return flightId;
+    }
+    public void setFlightId(String flightId) {
+        this.flightId = flightId;
+    }
+    public String getDirection() {
+        return direction;
+    }
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
     public String getCarrier() {
         return carrier;
     }
@@ -135,7 +135,7 @@ public class FlightVo extends BaseVo {
         this.etd = etd;
         
         if(etd != null) {
-        	this.etdLocalTZ = dtFormat.format(etd);
+            this.etdLocalTZ = dtFormat.format(etd);
         }
     }
     public Date getEta() {
@@ -145,7 +145,7 @@ public class FlightVo extends BaseVo {
         this.eta = eta;
         
         if(eta != null) {
-        	this.etaLocalTZ = dtFormat.format(eta);
+            this.etaLocalTZ = dtFormat.format(eta);
         }
     }
     public boolean isOverFlight() {
@@ -174,39 +174,39 @@ public class FlightVo extends BaseVo {
     }
     
     /**
-	 * @return the etdDate
-	 */
-	public Date getEtdDate() {
-		return etdDate;
-	}
-	/**
-	 * @param etdDate the etdDate to set
-	 */
-	public void setEtdDate(Date etdDate) {
-		this.etdDate = etdDate;
-	}
-	/**
-	 * @return the etaDate
-	 */
-	public Date getEtaDate() {
-		return etaDate;
-	}
-	/**
-	 * @param etaDate the etaDate to set
-	 */
-	public void setEtaDate(Date etaDate) {
-		this.etaDate = etaDate;
-	}
-	
-	public String getEtdLocalTZ() {
-		return etdLocalTZ;
-	}
-	
-	public String getEtaLocalTZ() {
-		return etaLocalTZ;
-	}
-	
-	@Override
+     * @return the etdDate
+     */
+    public Date getEtdDate() {
+        return etdDate;
+    }
+    /**
+     * @param etdDate the etdDate to set
+     */
+    public void setEtdDate(Date etdDate) {
+        this.etdDate = etdDate;
+    }
+    /**
+     * @return the etaDate
+     */
+    public Date getEtaDate() {
+        return etaDate;
+    }
+    /**
+     * @param etaDate the etaDate to set
+     */
+    public void setEtaDate(Date etaDate) {
+        this.etaDate = etaDate;
+    }
+    
+    public String getEtdLocalTZ() {
+        return etdLocalTZ;
+    }
+    
+    public String getEtaLocalTZ() {
+        return etaLocalTZ;
+    }
+    
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }

@@ -20,58 +20,58 @@ import org.springframework.stereotype.Component;
 @Component("authenticationProvider")
 public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
-	private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	UserDaoImpl userDetailsDao;
+    private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
+    
+    @Autowired
+    UserDaoImpl userDetailsDao;
  
-	@Autowired
-	@Qualifier("userDetailsService")
-	@Override
-	public void setUserDetailsService(UserDetailsService userDetailsService) {
-		super.setUserDetailsService(userDetailsService);
-	}
-	
-	
-	@Override
-	public Authentication authenticate(Authentication authentication) 
+    @Autowired
+    @Qualifier("userDetailsService")
+    @Override
+    public void setUserDetailsService(UserDetailsService userDetailsService) {
+        super.setUserDetailsService(userDetailsService);
+    }
+    
+    
+    @Override
+    public Authentication authenticate(Authentication authentication) 
           throws AuthenticationException {
  
-	  try {
-		  
-		Authentication auth = super.authenticate(authentication);
-		
-		//reached here, means login success, else an exception will be thrown
-		//reset the user_attempts
-//		userDetailsDao.resetFailAttempts(authentication.getName());
+      try {
+          
+        Authentication auth = super.authenticate(authentication);
+        
+        //reached here, means login success, else an exception will be thrown
+        //reset the user_attempts
+//      userDetailsDao.resetFailAttempts(authentication.getName());
  
-		return auth;
+        return auth;
  
-	  } catch (BadCredentialsException e) {	
+      } catch (BadCredentialsException e) { 
  
-		//invalid login, update to user_attempts
-	//	userDetailsDao.updateFailAttempts(authentication.getName());
-		throw e;
+        //invalid login, update to user_attempts
+    //  userDetailsDao.updateFailAttempts(authentication.getName());
+        throw e;
  
-	  } catch (LockedException e){
+      } catch (LockedException e){
  
-	/*	//this user is locked!
-		String error = "";
-		UserAttempts userAttempts = 
+    /*  //this user is locked!
+        String error = "";
+        UserAttempts userAttempts = 
                     userDetailsDao.getUserAttempts(authentication.getName());
  
                if(userAttempts!=null){
-			Date lastAttempts = userAttempts.getLastModified();
-			error = "User account is locked! <br><br>Username : " 
+            Date lastAttempts = userAttempts.getLastModified();
+            error = "User account is locked! <br><br>Username : " 
                            + authentication.getName() + "<br>Last Attempts : " + lastAttempts;
-		}else{
-			error = e.getMessage();
-		}
+        }else{
+            error = e.getMessage();
+        }
  */
-	  throw new LockedException("");
-	}
+      throw new LockedException("");
+    }
  
-	}
+    }
  
-	
+    
 }

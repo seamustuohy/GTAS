@@ -29,126 +29,126 @@ import gov.gtas.security.AuthUser;
 public class AuthUserDetailsService extends JdbcDaoImpl {
 
 
-	@Autowired
-	private DataSource dataSource;
+    @Autowired
+    private DataSource dataSource;
  
-	@PostConstruct
-	private void initialize() {
-		setDataSource(dataSource);
-	}
+    @PostConstruct
+    private void initialize() {
+        setDataSource(dataSource);
+    }
  
-	@Override
-	@Value("select * from gtas_users where user_id = ?")
-	public void setUsersByUsernameQuery(String usersByUsernameQueryString) {
-		super.setUsersByUsernameQuery(usersByUsernameQueryString);
-	}
+    @Override
+    @Value("select * from gtas_users where user_id = ?")
+    public void setUsersByUsernameQuery(String usersByUsernameQueryString) {
+        super.setUsersByUsernameQuery(usersByUsernameQueryString);
+    }
  
-	@Override
-	@Value("select role_id, role_description from gtas_roles where role_id =?")
-	public void setAuthoritiesByUsernameQuery(String queryString) {
-		super.setAuthoritiesByUsernameQuery(queryString);
-	}
-	
-	
-	
+    @Override
+    @Value("select role_id, role_description from gtas_roles where role_id =?")
+    public void setAuthoritiesByUsernameQuery(String queryString) {
+        super.setAuthoritiesByUsernameQuery(queryString);
+    }
+    
+    
+    
  
-	@Override
-	public UserDetails loadUserByUsername(String username)
-			throws UsernameNotFoundException {
-		  
-	//	return getJdbcTemplate().queryForObject(super.getUsersByUsernameQuery(), new String[] { username }, gov.gtas.model.Role.class)
-		
-		
-		return getJdbcTemplate().queryForObject(super.getUsersByUsernameQuery(), new String[] { username }, new RowMapper<AuthUser>() {
-			  public AuthUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-				String username = rs.getString("user_id");
-				String password = rs.getString("password");
-				/*	boolean enabled = rs.getBoolean("enabled");
-				boolean accountNonExpired = rs.getBoolean("accountNonExpired");
-				boolean credentialsNonExpired = rs.getBoolean("credentialsNonExpired");
-				boolean accountNonLocked = rs.getBoolean("accountNonLocked");
-	 */
-				ArrayList<GrantedAuthority> tempList = new ArrayList<GrantedAuthority>();
-				
-				tempList.add(AuthUser.MANAGE_QUERIES_AUTHORITY);
-				
-				return new AuthUser(username, password, true, true, true, true, tempList);
-			  }
-	 
-		  })
-		  ;
-				  
-				  
-				
-	}
+    @Override
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
+          
+    //  return getJdbcTemplate().queryForObject(super.getUsersByUsernameQuery(), new String[] { username }, gov.gtas.model.Role.class)
+        
+        
+        return getJdbcTemplate().queryForObject(super.getUsersByUsernameQuery(), new String[] { username }, new RowMapper<AuthUser>() {
+              public AuthUser mapRow(ResultSet rs, int rowNum) throws SQLException {
+                String username = rs.getString("user_id");
+                String password = rs.getString("password");
+                /*  boolean enabled = rs.getBoolean("enabled");
+                boolean accountNonExpired = rs.getBoolean("accountNonExpired");
+                boolean credentialsNonExpired = rs.getBoolean("credentialsNonExpired");
+                boolean accountNonLocked = rs.getBoolean("accountNonLocked");
+     */
+                ArrayList<GrantedAuthority> tempList = new ArrayList<GrantedAuthority>();
+                
+                tempList.add(AuthUser.MANAGE_QUERIES_AUTHORITY);
+                
+                return new AuthUser(username, password, true, true, true, true, tempList);
+              }
+     
+          })
+          ;
+                  
+                  
+                
+    }
 
-	@Override
-	protected List<UserDetails> loadUsersByUsername(String username) {
+    @Override
+    protected List<UserDetails> loadUsersByUsername(String username) {
 
-	ArrayList<UserDetails> tempList = new ArrayList<UserDetails>();
-			
-	tempList.add(	getJdbcTemplate().queryForObject(super.getUsersByUsernameQuery(), new String[] { username }, new RowMapper<AuthUser>() {
-			  public AuthUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-				String username = rs.getString("user_id");
-				String password = rs.getString("password");
-				/*	boolean enabled = rs.getBoolean("enabled");
-				boolean accountNonExpired = rs.getBoolean("accountNonExpired");
-				boolean credentialsNonExpired = rs.getBoolean("credentialsNonExpired");
-				boolean accountNonLocked = rs.getBoolean("accountNonLocked");
-	 */
-				ArrayList<GrantedAuthority> tempList = new ArrayList<GrantedAuthority>();
-								
-				tempList.add(AuthUser.MANAGE_RULES_AUTHORITY);
-				
-				return new AuthUser(username, password, true, true, true, true, tempList);
-			  }
-	 
-		  })  
-		  )
-		  ;
-		 
-		 return tempList;
-	}
+    ArrayList<UserDetails> tempList = new ArrayList<UserDetails>();
+            
+    tempList.add(   getJdbcTemplate().queryForObject(super.getUsersByUsernameQuery(), new String[] { username }, new RowMapper<AuthUser>() {
+              public AuthUser mapRow(ResultSet rs, int rowNum) throws SQLException {
+                String username = rs.getString("user_id");
+                String password = rs.getString("password");
+                /*  boolean enabled = rs.getBoolean("enabled");
+                boolean accountNonExpired = rs.getBoolean("accountNonExpired");
+                boolean credentialsNonExpired = rs.getBoolean("credentialsNonExpired");
+                boolean accountNonLocked = rs.getBoolean("accountNonLocked");
+     */
+                ArrayList<GrantedAuthority> tempList = new ArrayList<GrantedAuthority>();
+                                
+                tempList.add(AuthUser.MANAGE_RULES_AUTHORITY);
+                
+                return new AuthUser(username, password, true, true, true, true, tempList);
+              }
+     
+          })  
+          )
+          ;
+         
+         return tempList;
+    }
 
-	
-	
-	
-	//override to get accountNonLocked  
-/*	@Override
-	public List<UserDetails> loadUsersByUsername(String username) {
-	  return getJdbcTemplate().query(super.getUsersByUsernameQuery(), new String[] { username },
-		new RowMapper<AuthUser>() {
-		  public AuthUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-			String username = rs.getString("user_id");
-			String password = rs.getString("password");
-			boolean enabled = rs.getBoolean("enabled");
-			boolean accountNonExpired = rs.getBoolean("accountNonExpired");
-			boolean credentialsNonExpired = rs.getBoolean("credentialsNonExpired");
-			boolean accountNonLocked = rs.getBoolean("accountNonLocked");
+    
+    
+    
+    //override to get accountNonLocked  
+/*  @Override
+    public List<UserDetails> loadUsersByUsername(String username) {
+      return getJdbcTemplate().query(super.getUsersByUsernameQuery(), new String[] { username },
+        new RowMapper<AuthUser>() {
+          public AuthUser mapRow(ResultSet rs, int rowNum) throws SQLException {
+            String username = rs.getString("user_id");
+            String password = rs.getString("password");
+            boolean enabled = rs.getBoolean("enabled");
+            boolean accountNonExpired = rs.getBoolean("accountNonExpired");
+            boolean credentialsNonExpired = rs.getBoolean("credentialsNonExpired");
+            boolean accountNonLocked = rs.getBoolean("accountNonLocked");
  
-			return new AuthUser(username, password, true, true, true, true, AuthorityUtils.NO_AUTHORITIES);
-		  }
+            return new AuthUser(username, password, true, true, true, true, AuthorityUtils.NO_AUTHORITIES);
+          }
  
-	  });
-	}*/
+      });
+    }*/
  
-	/*//override to pass accountNonLocked
-	@Override
-	public UserDetails createUserDetails(String username, UserDetails userFromUserQuery,
-			List<GrantedAuthority> combinedAuthorities) {
-		String returnUsername = userFromUserQuery.getUsername();
+    /*//override to pass accountNonLocked
+    @Override
+    public UserDetails createUserDetails(String username, UserDetails userFromUserQuery,
+            List<GrantedAuthority> combinedAuthorities) {
+        String returnUsername = userFromUserQuery.getUsername();
  
-		if (super.isUsernameBasedPrimaryKey()) {
-		  returnUsername = username;
-		}
+        if (super.isUsernameBasedPrimaryKey()) {
+          returnUsername = username;
+        }
  
-		return new User(returnUsername, userFromUserQuery.getPassword(), 
+        return new User(returnUsername, userFromUserQuery.getPassword(), 
                        userFromUserQuery.isEnabled(),
-		       userFromUserQuery.isAccountNonExpired(), 
+               userFromUserQuery.isAccountNonExpired(), 
                        userFromUserQuery.isCredentialsNonExpired(),
-			userFromUserQuery.isAccountNonLocked(), combinedAuthorities);
-	}*/
+            userFromUserQuery.isAccountNonLocked(), combinedAuthorities);
+    }*/
  
-	
-	
+    
+    
 }

@@ -17,35 +17,35 @@ import org.springframework.transaction.annotation.Transactional;
 //@TransactionConfiguration(defaultRollback = true)
 public class QueryBuilderControllerIT {
 
-	public void testInitQueryBuilder() {
-		
-	}
-	
-	public void testRunFlightQuery() {
-	
-	}
-	
-	public void testRunPassengerQuery() {
+    public void testInitQueryBuilder() {
+        
+    }
+    
+    public void testRunFlightQuery() {
+    
+    }
+    
+    public void testRunPassengerQuery() {
 
-	}
-	
-	@Rollback
-	@Transactional
-	public void saveQuery() {
+    }
+    
+    @Rollback
+    @Transactional
+    public void saveQuery() {
 
-	}
+    }
 
-	
-	public void editQuery() {
+    
+    public void editQuery() {
 
-	}
-	
-	public void listQueryByUser() {
+    }
+    
+    public void listQueryByUser() {
 
-	}
-	
-	public void deleteQuery() {
+    }
+    
+    public void deleteQuery() {
 
-	}
+    }
 
 }

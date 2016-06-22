@@ -13,93 +13,93 @@ import gov.gtas.services.Filter.FilterData;
 
 public class UserData implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2939774474055002106L;
-	private final String userId;
-	private final String password;
-	private final String firstName;
-	private final String lastName;
-	private final int active;
-	private Set<RoleData> roles = new HashSet<RoleData>();
-	private FilterData filter;
-	
-	public UserData(@JsonProperty("userId") String userId, @JsonProperty("password") String password,
-			@JsonProperty("firstName") String firstName, @JsonProperty("lasatName") String lastName,
-			@JsonProperty("active") int active, @JsonProperty("roles") Set<RoleData> roles,
-			@JsonProperty("filter") FilterData filterData) {
-		this.userId = userId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.active = active;
-		this.password = password;
-		this.roles = roles;
-		this.filter=filterData;
-	}
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2939774474055002106L;
+    private final String userId;
+    private final String password;
+    private final String firstName;
+    private final String lastName;
+    private final int active;
+    private Set<RoleData> roles = new HashSet<RoleData>();
+    private FilterData filter;
+    
+    public UserData(@JsonProperty("userId") String userId, @JsonProperty("password") String password,
+            @JsonProperty("firstName") String firstName, @JsonProperty("lasatName") String lastName,
+            @JsonProperty("active") int active, @JsonProperty("roles") Set<RoleData> roles,
+            @JsonProperty("filter") FilterData filterData) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.active = active;
+        this.password = password;
+        this.roles = roles;
+        this.filter=filterData;
+    }
 
-	@JsonProperty("userId")
-	public final String getUserId() {
-		return userId;
-	}
+    @JsonProperty("userId")
+    public final String getUserId() {
+        return userId;
+    }
 
-	@JsonProperty("password")
-	public final String getPassword() {
-		return password;
-	}
+    @JsonProperty("password")
+    public final String getPassword() {
+        return password;
+    }
 
-	@JsonProperty("firstName")
-	public final String getFirstName() {
-		return firstName;
-	}
+    @JsonProperty("firstName")
+    public final String getFirstName() {
+        return firstName;
+    }
 
-	@JsonProperty("lastName")
-	public final String getLastName() {
-		return lastName;
-	}
+    @JsonProperty("lastName")
+    public final String getLastName() {
+        return lastName;
+    }
 
-	@JsonProperty("active")
-	public final int getActive() {
-		return active;
-	}
+    @JsonProperty("active")
+    public final int getActive() {
+        return active;
+    }
 
-	public final Set<RoleData> getRoles() {
-		return roles;
-	}
-	
-	public final FilterData getFilter() {
-		return this.filter;
-	}
+    public final Set<RoleData> getRoles() {
+        return roles;
+    }
+    
+    public final FilterData getFilter() {
+        return this.filter;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(this.userId, this.password, this.firstName, this.lastName, this.active);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.userId, this.password, this.firstName, this.lastName, this.active);
+    }
 
-	@Override
-	public boolean equals(Object target) {
+    @Override
+    public boolean equals(Object target) {
 
-		if (this == target) {
-			return true;
-		}
+        if (this == target) {
+            return true;
+        }
 
-		if (!(target instanceof UserData)) {
-			return false;
-		}
+        if (!(target instanceof UserData)) {
+            return false;
+        }
 
-		UserData dataTarget = ((UserData) target);
+        UserData dataTarget = ((UserData) target);
 
-		return new EqualsBuilder().append(this.userId, dataTarget.getUserId())
-				.append(this.firstName, dataTarget.getFirstName()).append(this.lastName, dataTarget.getLastName())
-				.append(this.password, dataTarget.getPassword()).append(this.active, dataTarget.getActive())
-				.append(this.roles, dataTarget.getRoles())
-				.append(this.filter, dataTarget.getFilter()).isEquals();
-	}
+        return new EqualsBuilder().append(this.userId, dataTarget.getUserId())
+                .append(this.firstName, dataTarget.getFirstName()).append(this.lastName, dataTarget.getLastName())
+                .append(this.password, dataTarget.getPassword()).append(this.active, dataTarget.getActive())
+                .append(this.roles, dataTarget.getRoles())
+                .append(this.filter, dataTarget.getFilter()).isEquals();
+    }
 
-	@Override
-	public String toString() {
-		return "UserData [userId=" + userId + ", password=" + password + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", active=" + active + ", roles=" + roles +", Filter=" + filter +"]";
-	}
+    @Override
+    public String toString() {
+        return "UserData [userId=" + userId + ", password=" + password + ", firstName=" + firstName + ", lastName="
+                + lastName + ", active=" + active + ", roles=" + roles +", Filter=" + filter +"]";
+    }
 
 }

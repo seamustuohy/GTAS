@@ -6,12 +6,12 @@ public enum WatchlistTypeEnum {
    
    private String watchlistEntityName;
    private WatchlistTypeEnum(String entityName){
-	   this.watchlistEntityName = entityName;
+       this.watchlistEntityName = entityName;
    }
-	/**
-	 * @return the watchlistEntityName
-	 */
-	public String getWatchlistEntityName() {
-		return watchlistEntityName;
-	}
+    /**
+     * @return the watchlistEntityName
+     */
+    public String getWatchlistEntityName() {
+        return watchlistEntityName;
+    }
 }

@@ -17,9 +17,9 @@ import org.springframework.data.repository.query.Param;
 public interface WatchlistRepository extends CrudRepository<Watchlist, Long>, JpaSpecificationExecutor<Watchlist> {
     public List<Watchlist> findByWatchlistEntity(EntityEnum entity);
     
-	@Query("SELECT wl FROM Watchlist wl WHERE wl.watchlistName = :name")
-	public Watchlist getWatchlistByName(@Param("name") String name);
-	
-	@Query("SELECT watchlistName, watchlistEntity FROM Watchlist")
-	public List<Object[]> fetchWatchlistSummary();
+    @Query("SELECT wl FROM Watchlist wl WHERE wl.watchlistName = :name")
+    public Watchlist getWatchlistByName(@Param("name") String name);
+    
+    @Query("SELECT watchlistName, watchlistEntity FROM Watchlist")
+    public List<Object[]> fetchWatchlistSummary();
 }

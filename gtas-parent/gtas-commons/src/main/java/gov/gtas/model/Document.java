@@ -14,7 +14,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "document",
-	uniqueConstraints={@UniqueConstraint(columnNames={"document_type", "document_number", "issuance_date", "issuance_country"})},
+    uniqueConstraints={@UniqueConstraint(columnNames={"document_type", "document_number", "issuance_date", "issuance_country"})},
     indexes = {@Index(name = "document_type_index",  columnList="document_type"),
         @Index(name = "document_number_index", columnList="document_number"),
         @Index(name="issuance_date_index", columnList="issuance_date"),

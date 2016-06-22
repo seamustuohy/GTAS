@@ -20,10 +20,10 @@ public class FrequentFlyer extends BaseEntityAudit {
     
     @Column(nullable = false)
     private String carrier;
-	
-	@Column(nullable = false)
+    
+    @Column(nullable = false)
     private String number;
-	
+    
     @ManyToMany(
         mappedBy = "frequentFlyers",
         targetEntity = Pnr.class
@@ -69,6 +69,6 @@ public class FrequentFlyer extends BaseEntityAudit {
             return false;
         final FrequentFlyer other = (FrequentFlyer) obj;
         return Objects.equals(this.number, other.number) && 
-        		Objects.equals(this.carrier, other.carrier);
-    }    	
+                Objects.equals(this.carrier, other.carrier);
+    }       
 }

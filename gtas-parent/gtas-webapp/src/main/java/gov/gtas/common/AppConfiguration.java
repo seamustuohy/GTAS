@@ -22,7 +22,7 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean(name="gtasMessageSource")
     public MessageSource messageSource() {
-    	GtasResourceBundleMessageSource messageSource = new GtasResourceBundleMessageSource();
+        GtasResourceBundleMessageSource messageSource = new GtasResourceBundleMessageSource();
         messageSource.setBasename("/WEB-INF/messages/messages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
@@ -30,22 +30,22 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
     
     @Bean
     public LocaleResolver localeResolver(){
-    	//String language=System.getProperty("site.language");
-    	//if(StringUtils.isBlank(language)){
-    		//language="en";
-    	//}
-    	CookieLocaleResolver resolver = new CookieLocaleResolver();
-    	resolver.setDefaultLocale(new Locale("en"));
-    	resolver.setCookieName("myLocaleCookie");
-    	resolver.setCookieMaxAge(4800);
-	return resolver;
+        //String language=System.getProperty("site.language");
+        //if(StringUtils.isBlank(language)){
+            //language="en";
+        //}
+        CookieLocaleResolver resolver = new CookieLocaleResolver();
+        resolver.setDefaultLocale(new Locale("en"));
+        resolver.setCookieName("myLocaleCookie");
+        resolver.setCookieMaxAge(4800);
+    return resolver;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-    	LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-    	interceptor.setParamName("lang");
-    	registry.addInterceptor(interceptor);
+        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+        interceptor.setParamName("lang");
+        registry.addInterceptor(interceptor);
     }
     
 } 

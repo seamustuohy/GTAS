@@ -34,33 +34,33 @@ public class PnrVo extends MessageVo implements Validatable {
     private List<FrequentFlyerVo> frequentFlyerDetails = new ArrayList<>();
     private List<EmailVo> emails = new ArrayList<>();
     private List<AgencyVo> agencies = new ArrayList<>();
-	
+    
     public PnrVo() {
         this.bagCount = 0;
         this.passengerCount = 0;
     }
      
     public List<EmailVo> getEmails() {
-		return emails;
-	}
+        return emails;
+    }
 
-	public void setEmails(List<EmailVo> emails) {
-		this.emails = emails;
-	}
+    public void setEmails(List<EmailVo> emails) {
+        this.emails = emails;
+    }
 
-	public Integer getDaysBookedBeforeTravel() {
-		return daysBookedBeforeTravel;
-	}
+    public Integer getDaysBookedBeforeTravel() {
+        return daysBookedBeforeTravel;
+    }
 
-	public void setDaysBookedBeforeTravel(Integer daysBookedBeforeTravel) {
-		this.daysBookedBeforeTravel = daysBookedBeforeTravel;
-	}
-	
-	public String getMessageCode() {
+    public void setDaysBookedBeforeTravel(Integer daysBookedBeforeTravel) {
+        this.daysBookedBeforeTravel = daysBookedBeforeTravel;
+    }
+    
+    public String getMessageCode() {
         return messageCode;
     }
     
-	public void setMessageCode(String messageCode) {
+    public void setMessageCode(String messageCode) {
         this.messageCode = messageCode;
     }
     
@@ -205,11 +205,11 @@ public class PnrVo extends MessageVo implements Validatable {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
-	@Override
-	public boolean isValid() {
-		if(StringUtils.isBlank(this.recordLocator) || StringUtils.isBlank(this.carrier)){
-			return false;
-		}
-		return true;
-	}
+    @Override
+    public boolean isValid() {
+        if(StringUtils.isBlank(this.recordLocator) || StringUtils.isBlank(this.carrier)){
+            return false;
+        }
+        return true;
+    }
 }

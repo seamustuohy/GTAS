@@ -30,8 +30,8 @@ import gov.gtas.vo.passenger.PassengerVo;
 @Service
 public class PassengerServiceImpl implements PassengerService {
 
-	@Resource
-	private PassengerRepository passengerRespository;
+    @Resource
+    private PassengerRepository passengerRespository;
 
     @Resource
     private HitsSummaryRepository hitsSummaryRepository;
@@ -43,10 +43,10 @@ public class PassengerServiceImpl implements PassengerService {
     private DispositionRepository dispositionRepo;
 
     @Override
-	@Transactional
-	public Passenger create(Passenger passenger) {
-		return passengerRespository.save(passenger);
-	}
+    @Transactional
+    public Passenger create(Passenger passenger) {
+        return passengerRespository.save(passenger);
+    }
 
     @Override
     @Transactional
@@ -97,79 +97,79 @@ public class PassengerServiceImpl implements PassengerService {
         return new PassengersPageDto(rv, tuple.getLeft());
     }    
     
-	@Override
-	@Transactional
-	public Passenger update(Passenger passenger) {
-		Passenger passengerToUpdate = this.findById(passenger.getId());
-		if(passengerToUpdate != null){
-			passengerToUpdate.setAge(passenger.getAge());
-			passengerToUpdate.setCitizenshipCountry(passenger.getCitizenshipCountry());
-			passengerToUpdate.setDebarkation(passenger.getDebarkation());
-			passengerToUpdate.setDebarkCountry(passenger.getDebarkCountry());
-			passengerToUpdate.setDob(passenger.getDob());
-			passengerToUpdate.setEmbarkation(passenger.getEmbarkation());
-			passengerToUpdate.setEmbarkCountry(passenger.getEmbarkCountry());
-			passengerToUpdate.setFirstName(passenger.getFirstName());
-			passengerToUpdate.setFlights(passenger.getFlights());
-			passengerToUpdate.setGender(passenger.getGender());
-			passengerToUpdate.setLastName(passenger.getLastName());
-			passengerToUpdate.setMiddleName(passenger.getMiddleName());
-			passengerToUpdate.setResidencyCountry(passenger.getResidencyCountry());
-			passengerToUpdate.setDocuments(passenger.getDocuments());
-			passengerToUpdate.setSuffix(passenger.getSuffix());
-			passengerToUpdate.setTitle(passenger.getTitle());
-		}
-		return passengerToUpdate;
-	}
+    @Override
+    @Transactional
+    public Passenger update(Passenger passenger) {
+        Passenger passengerToUpdate = this.findById(passenger.getId());
+        if(passengerToUpdate != null){
+            passengerToUpdate.setAge(passenger.getAge());
+            passengerToUpdate.setCitizenshipCountry(passenger.getCitizenshipCountry());
+            passengerToUpdate.setDebarkation(passenger.getDebarkation());
+            passengerToUpdate.setDebarkCountry(passenger.getDebarkCountry());
+            passengerToUpdate.setDob(passenger.getDob());
+            passengerToUpdate.setEmbarkation(passenger.getEmbarkation());
+            passengerToUpdate.setEmbarkCountry(passenger.getEmbarkCountry());
+            passengerToUpdate.setFirstName(passenger.getFirstName());
+            passengerToUpdate.setFlights(passenger.getFlights());
+            passengerToUpdate.setGender(passenger.getGender());
+            passengerToUpdate.setLastName(passenger.getLastName());
+            passengerToUpdate.setMiddleName(passenger.getMiddleName());
+            passengerToUpdate.setResidencyCountry(passenger.getResidencyCountry());
+            passengerToUpdate.setDocuments(passenger.getDocuments());
+            passengerToUpdate.setSuffix(passenger.getSuffix());
+            passengerToUpdate.setTitle(passenger.getTitle());
+        }
+        return passengerToUpdate;
+    }
 
-	@Override
-	@Transactional	
+    @Override
+    @Transactional  
     public List<Disposition> getPassengerDispositionHistory(Long passengerId, Long flightId) {
-		return passengerRespository.getPassengerDispositionHistory(passengerId, flightId);
-	}
-	
-	@Override
+        return passengerRespository.getPassengerDispositionHistory(passengerId, flightId);
+    }
+    
+    @Override
     public List<DispositionStatus> getDispositionStatuses() {
-		Iterable<DispositionStatus> i = dispositionStatusRepo.findAll();
-		if (i != null) {
-			return IteratorUtils.toList(i.iterator());
-		}
-		return new ArrayList<>();
-	}
-	
-	@Override	
+        Iterable<DispositionStatus> i = dispositionStatusRepo.findAll();
+        if (i != null) {
+            return IteratorUtils.toList(i.iterator());
+        }
+        return new ArrayList<>();
+    }
+    
+    @Override   
     public void createDisposition(DispositionData disposition) {
-		Disposition d = new Disposition();
-		d.setCreatedAt(new Date());
-		d.setCreatedBy(disposition.getUser());
-		Flight f = new Flight();
-		f.setId(disposition.getFlightId());
-		d.setFlight(f);
-		Passenger p = new Passenger();
-		p.setId(disposition.getPassengerId());
-		d.setPassenger(p);
-		d.setComments(disposition.getComments());
-		DispositionStatus status = new DispositionStatus();
-		status.setId(disposition.getStatusId());
-		d.setStatus(status);
-		
-		dispositionRepo.save(d);
-	}
-	
-	@Override
-	@Transactional
-	public Passenger findById(Long id) {
-		return passengerRespository.findOne(id);
-	}
+        Disposition d = new Disposition();
+        d.setCreatedAt(new Date());
+        d.setCreatedBy(disposition.getUser());
+        Flight f = new Flight();
+        f.setId(disposition.getFlightId());
+        d.setFlight(f);
+        Passenger p = new Passenger();
+        p.setId(disposition.getPassengerId());
+        d.setPassenger(p);
+        d.setComments(disposition.getComments());
+        DispositionStatus status = new DispositionStatus();
+        status.setId(disposition.getStatusId());
+        d.setStatus(status);
+        
+        dispositionRepo.save(d);
+    }
+    
+    @Override
+    @Transactional
+    public Passenger findById(Long id) {
+        return passengerRespository.findOne(id);
+    }
 
-	@Override
-	@Transactional
-	public List<Passenger> getPassengersByLastName(String lastName) {
-		List<Passenger> passengerList = passengerRespository.getPassengersByLastName(lastName);
-		return passengerList;
-	}
+    @Override
+    @Transactional
+    public List<Passenger> getPassengersByLastName(String lastName) {
+        List<Passenger> passengerList = passengerRespository.getPassengersByLastName(lastName);
+        return passengerList;
+    }
 
-	@Override
+    @Override
     public void fillWithHitsInfo(PassengerVo vo, Long flightId, Long passengerId) {
         List<HitsSummary> hitsSummary = hitsSummaryRepository.findByFlightIdAndPassengerId(flightId, passengerId);
         if (!CollectionUtils.isEmpty(hitsSummary)) {

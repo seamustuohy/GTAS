@@ -80,23 +80,23 @@ public class FlightsRequestDto implements Serializable {
         this.sort = sort;
     }
 
-	public Set<String> getOriginAirports() {
-		return originAirports;
-	}
+    public Set<String> getOriginAirports() {
+        return originAirports;
+    }
 
-	public void setOriginAirports(Set<String> originAirports) {
-		this.originAirports = originAirports;
-	}
+    public void setOriginAirports(Set<String> originAirports) {
+        this.originAirports = originAirports;
+    }
 
-	public Set<String> getDestinationAirports() {
-		return destinationAirports;
-	}
+    public Set<String> getDestinationAirports() {
+        return destinationAirports;
+    }
 
-	public void setDestinationAirports(Set<String> destinationAirports) {
-		this.destinationAirports = destinationAirports;
-	}
-	
-	@Override
+    public void setDestinationAirports(Set<String> destinationAirports) {
+        this.destinationAirports = destinationAirports;
+    }
+    
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }

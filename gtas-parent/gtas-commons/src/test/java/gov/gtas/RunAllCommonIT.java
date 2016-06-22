@@ -12,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ ServiceRepositoryIT.class, RulePersistenceServiceIT.class,
-		UserServiceIT.class, PnrServiceIT.class,
-		WatchlistPersistenceServiceIT.class })
+        UserServiceIT.class, PnrServiceIT.class,
+        WatchlistPersistenceServiceIT.class })
 public class RunAllCommonIT {
 }

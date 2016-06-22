@@ -6,10 +6,10 @@ package gov.gtas.constant;
  */
 public class JsonResponseConstants {
 
-	public static final String ATTR_ERROR_DETAIL = "errorDetail";
-	public static final String ATTR_ERROR_CODE = "errorCode";
-	public static final String ATTR_ERROR_ID = "errorId";
+    public static final String ATTR_ERROR_DETAIL = "errorDetail";
+    public static final String ATTR_ERROR_CODE = "errorCode";
+    public static final String ATTR_ERROR_ID = "errorId";
 
-	public static final String ATTR_RESULT = "result";
+    public static final String ATTR_RESULT = "result";
 
 }

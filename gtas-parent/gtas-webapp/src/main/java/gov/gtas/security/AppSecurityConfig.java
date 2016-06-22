@@ -46,8 +46,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     DataSource dataSource;
     
     public void configure(WebSecurity web) throws Exception {
-	  web.ignoring().antMatchers("/resources/**/*","/common/**","/login/**","/admin/**","/app.js","WEB-INF/**","/data/**");
-	}
+      web.ignoring().antMatchers("/resources/**/*","/common/**","/login/**","/admin/**","/app.js","WEB-INF/**","/data/**");
+    }
 
 
     @Override
@@ -58,8 +58,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-	    SavedRequestAwareAuthenticationSuccessHandler savedReqHandler = new SavedRequestAwareAuthenticationSuccessHandler();
-	    
+        SavedRequestAwareAuthenticationSuccessHandler savedReqHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+        
 
         CsrfTokenResponseHeaderBindingFilter csrfTokenFilter = new CsrfTokenResponseHeaderBindingFilter();
         http.addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
@@ -88,7 +88,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
             .invalidateHttpSession(true)
             .permitAll();
 
-        	http.sessionManagement().maximumSessions(1).and().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+            http.sessionManagement().maximumSessions(1).and().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
         
         if ("true".equals(System.getProperty("httpsOnly"))) {
             LOGGER.info("launching the application in HTTPS-only mode");
@@ -97,13 +97,13 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     }
     
     
-	  /**
-	  * Util Method to add XSRF Token into the HTTP Header
-	  */
-	 private CsrfTokenRepository csrfTokenRepository() {
-			  HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-			  repository.setHeaderName("X-CSRF-TOKEN");
-			  return repository;
-		}
+      /**
+      * Util Method to add XSRF Token into the HTTP Header
+      */
+     private CsrfTokenRepository csrfTokenRepository() {
+              HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+              repository.setHeaderName("X-CSRF-TOKEN");
+              return repository;
+        }
     
 }

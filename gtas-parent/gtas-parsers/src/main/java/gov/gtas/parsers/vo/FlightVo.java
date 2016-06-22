@@ -59,18 +59,18 @@ public class FlightVo implements Validatable {
     public void setEta(Date eta) {
         this.eta = eta;
     }
-	
-	@Override
+    
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }
 
-	@Override
-	public boolean isValid() {
-		 return StringUtils.isNotBlank(this.destination) 
-		        && StringUtils.isNotBlank(this.origin) 
-				&& StringUtils.isNotBlank(this.flightNumber)
-				&& this.flightDate != null 
-				&& StringUtils.isNotBlank(this.carrier);
-	}  
+    @Override
+    public boolean isValid() {
+         return StringUtils.isNotBlank(this.destination) 
+                && StringUtils.isNotBlank(this.origin) 
+                && StringUtils.isNotBlank(this.flightNumber)
+                && this.flightDate != null 
+                && StringUtils.isNotBlank(this.carrier);
+    }  
 }

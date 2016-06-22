@@ -41,7 +41,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestMvcRestServiceWebConfig.class,
-		WebAppConfig.class })
+        WebAppConfig.class })
 @WebAppConfiguration
 @TransactionConfiguration(defaultRollback = true)
 public class UdrBuilderControllerIT {
@@ -50,83 +50,83 @@ public class UdrBuilderControllerIT {
     private static final String TEST_UDR_TITLE2 = "TEST_TITLE2231";
     private static final String TEST_DESCRIPTION = "TREST_DESCRIPTION";
     
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	@Autowired
-	private UdrService udrService;
-	
-	@Autowired
-	private RuleManagementService ruleManagementService;
+    @Autowired
+    private UdrService udrService;
+    
+    @Autowired
+    private RuleManagementService ruleManagementService;
 
-	private UdrManagementController udrController;
-	
-	@Before
-	public void setUp() {
-		udrController = new UdrManagementController();
-		ReflectionTestUtils.setField(udrController,
-				"udrService", udrService);
-		ReflectionTestUtils.setField(udrController, "ruleManagementService",
-				ruleManagementService);
+    private UdrManagementController udrController;
+    
+    @Before
+    public void setUp() {
+        udrController = new UdrManagementController();
+        ReflectionTestUtils.setField(udrController,
+                "udrService", udrService);
+        ReflectionTestUtils.setField(udrController, "ruleManagementService",
+                ruleManagementService);
 
-		mockMvc = MockMvcBuilders
-				.standaloneSetup(udrController)
-				.defaultRequest(
-						get("/").contextPath("/gtas").accept(
-								MediaType.APPLICATION_JSON)).build();
-	}
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(udrController)
+                .defaultRequest(
+                        get("/").contextPath("/gtas").accept(
+                                MediaType.APPLICATION_JSON)).build();
+    }
 
-	@Test
-	@Transactional
-	public void testGetUdr() throws Exception {
-		UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
-		udrService.createUdr(TEST_USER, udrSpec);
+    @Test
+    @Transactional
+    public void testGetUdr() throws Exception {
+        UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
+        udrService.createUdr(TEST_USER, udrSpec);
 
-		mockMvc.perform(get("/gtas/udr/" + TEST_USER+"/"+TEST_UDR_TITLE))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON+";charset=UTF-8"))
-				.andExpect(jsonPath("$.result.summary.title", is(TEST_UDR_TITLE)))
-				.andExpect(jsonPath("$.result.summary.description", is(TEST_DESCRIPTION)));
+        mockMvc.perform(get("/gtas/udr/" + TEST_USER+"/"+TEST_UDR_TITLE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON+";charset=UTF-8"))
+                .andExpect(jsonPath("$.result.summary.title", is(TEST_UDR_TITLE)))
+                .andExpect(jsonPath("$.result.summary.description", is(TEST_DESCRIPTION)));
 
-	}
+    }
 
-	@Test
-	@Transactional
-	@WithUserDetails(TEST_USER)
-	public void testGetUdrList() throws Exception {
-		UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
-		udrService.createUdr(TEST_USER, udrSpec);
+    @Test
+    @Transactional
+    @WithUserDetails(TEST_USER)
+    public void testGetUdrList() throws Exception {
+        UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
+        udrService.createUdr(TEST_USER, udrSpec);
         udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE2, TEST_DESCRIPTION, TEST_USER);
-		udrService.createUdr(TEST_USER, udrSpec);
-		mockMvc.perform(get("/gtas/udr"))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON+";charset=UTF-8"))
-				.andExpect(jsonPath("$.result", hasSize(greaterThanOrEqualTo(2))))
-				.andExpect(jsonPath("$.result[*].summary.title", hasItem(TEST_UDR_TITLE)))
-				.andExpect(jsonPath("$.result[*].summary.title", hasItem(TEST_UDR_TITLE2)));
+        udrService.createUdr(TEST_USER, udrSpec);
+        mockMvc.perform(get("/gtas/udr"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON+";charset=UTF-8"))
+                .andExpect(jsonPath("$.result", hasSize(greaterThanOrEqualTo(2))))
+                .andExpect(jsonPath("$.result[*].summary.title", hasItem(TEST_UDR_TITLE)))
+                .andExpect(jsonPath("$.result[*].summary.title", hasItem(TEST_UDR_TITLE2)));
 
-	}
-	@Test
-	@Transactional
-	@WithUserDetails(TEST_USER)
-	public void testDeleteUdr() throws Exception {
-		UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
-		udrService.createUdr(TEST_USER, udrSpec);
-		udrSpec = udrService.fetchUdr(TEST_USER, TEST_UDR_TITLE);
-		assertTrue(udrSpec.getSummary().isEnabled());
-		Long id = udrSpec.getId();
-		mockMvc.perform(delete("/gtas/udr/"+id))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(
-						jsonPath("$.status",
-								is(Status.SUCCESS.toString())))
-				.andExpect(jsonPath("$.responseDetails", hasSize(2)))
-				.andExpect(
-						jsonPath("$.responseDetails[0].attributeName", is("id")))
-						.andExpect(
-								jsonPath("$.responseDetails[0].attributeValue", is(id.toString())));
+    }
+    @Test
+    @Transactional
+    @WithUserDetails(TEST_USER)
+    public void testDeleteUdr() throws Exception {
+        UdrSpecification udrSpec = new UdrBuilderDataUtils().createSimpleSpec(TEST_UDR_TITLE, TEST_DESCRIPTION, TEST_USER);
+        udrService.createUdr(TEST_USER, udrSpec);
+        udrSpec = udrService.fetchUdr(TEST_USER, TEST_UDR_TITLE);
+        assertTrue(udrSpec.getSummary().isEnabled());
+        Long id = udrSpec.getId();
+        mockMvc.perform(delete("/gtas/udr/"+id))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(
+                        jsonPath("$.status",
+                                is(Status.SUCCESS.toString())))
+                .andExpect(jsonPath("$.responseDetails", hasSize(2)))
+                .andExpect(
+                        jsonPath("$.responseDetails[0].attributeName", is("id")))
+                        .andExpect(
+                                jsonPath("$.responseDetails[0].attributeValue", is(id.toString())));
 
-		udrSpec = udrService.fetchUdr(id);
-		assertFalse(udrSpec.getSummary().isEnabled());
-	}
+        udrSpec = udrService.fetchUdr(id);
+        assertFalse(udrSpec.getSummary().isEnabled());
+    }
 }

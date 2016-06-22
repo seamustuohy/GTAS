@@ -10,10 +10,10 @@ import java.util.Date;
 import java.util.List;
 
 public interface AuditLogPersistenceService {
-	public AuditRecord create(AuditRecord aRec);
-	public AuditRecord create(AuditActionType actionType, String target, Object actionData, String message, User user);
-	public AuditRecord create(AuditActionType actionType, String target, Object actionData, String message, String userId);
-	public AuditRecord create(AuditActionType actionType, AuditActionTarget target, AuditActionData actionData, String message, String userId);
+    public AuditRecord create(AuditRecord aRec);
+    public AuditRecord create(AuditActionType actionType, String target, Object actionData, String message, User user);
+    public AuditRecord create(AuditActionType actionType, String target, Object actionData, String message, String userId);
+    public AuditRecord create(AuditActionType actionType, AuditActionTarget target, AuditActionData actionData, String message, String userId);
     public AuditRecord findById(Long id);
 
     public List<AuditRecord> findByUserActionDateRange(String userId, AuditActionType action,  Date dateFrom, Date dateTo);

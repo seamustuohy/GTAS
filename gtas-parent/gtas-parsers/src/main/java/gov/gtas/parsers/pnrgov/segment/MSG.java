@@ -42,27 +42,27 @@ public class MSG extends Segment {
         }        
     }
     
-	private MsgCode messageTypeCode;
-	
-	public MSG(List<Composite> composites) {
-		super(MSG.class.getSimpleName(), composites);
-		
-		String code = null;
+    private MsgCode messageTypeCode;
+    
+    public MSG(List<Composite> composites) {
+        super(MSG.class.getSimpleName(), composites);
+        
+        String code = null;
         Composite c = getComposite(0);
         if (c != null) {
-    		if (c.getElement(0) != null) {
-    		    code = c.getElement(0);
-    		} else {
+            if (c.getElement(0) != null) {
+                code = c.getElement(0);
+            } else {
                 if (c.getElement(1) != null) {
                     code = c.getElement(1);
                 }
-    		}
+            }
             this.messageTypeCode = MsgCode.forCode(code);
         }
-	}
+    }
 
 
-	public MsgCode getMessageTypeCode() {
-		return messageTypeCode;
-	}
+    public MsgCode getMessageTypeCode() {
+        return messageTypeCode;
+    }
 }

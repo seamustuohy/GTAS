@@ -32,15 +32,15 @@ public class CorsFilter
     
     if(request.getMethod() !="OPTIONS") {
 
-    	try{
-				chain.doFilter(req, res);
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}
+        try{
+                chain.doFilter(req, res);
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
     
     } 
     else {
-    	
+        
     }
     
   }

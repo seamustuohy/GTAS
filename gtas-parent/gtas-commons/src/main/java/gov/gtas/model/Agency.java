@@ -23,25 +23,25 @@ public class Agency extends BaseEntityAudit {
      * the name of the agency.
      */
     @Column(nullable = false)    
-	private String name;
-	
-	/** IATA airport/city code of the delivering system */
-	private String location;
-	
-	/** IATA travel agency ID number */
+    private String name;
+    
+    /** IATA airport/city code of the delivering system */
+    private String location;
+    
+    /** IATA travel agency ID number */
     private String identifier;
-	
-	private String country;
+    
+    private String country;
 
-	private String phone;
-	
+    private String phone;
+    
     @ManyToMany(
         mappedBy = "agencies",
         targetEntity = Pnr.class
     )
     private Set<Pnr> pnrs = new HashSet<>();
     
-	public String getName() {
+    public String getName() {
         return name;
     }
 
@@ -82,13 +82,13 @@ public class Agency extends BaseEntityAudit {
     }
 
     public Set<Pnr> getPnrs() {
-		return pnrs;
-	}
+        return pnrs;
+    }
 
-	public void setPnrs(Set<Pnr> pnrs) {
-		this.pnrs = pnrs;
-	}
-	
+    public void setPnrs(Set<Pnr> pnrs) {
+        this.pnrs = pnrs;
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(this.name, this.location);
@@ -104,6 +104,6 @@ public class Agency extends BaseEntityAudit {
             return false;
         final Agency other = (Agency) obj;
         return Objects.equals(this.name, other.name)
-        		&& Objects.equals(this.location, other.location);
-    }    	
+                && Objects.equals(this.location, other.location);
+    }       
 }

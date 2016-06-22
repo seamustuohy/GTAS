@@ -10,8 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public class GtasSecurityUtils {
     public static String fetchLoggedInUserId(){
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    String userId = auth.getName(); //get logged in username
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userId = auth.getName(); //get logged in username
         return userId;
     }
 }

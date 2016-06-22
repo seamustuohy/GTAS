@@ -16,22 +16,22 @@ import gov.gtas.repository.RoleRepository;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-	@PersistenceContext
-	private EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	@Resource
-	private RoleRepository roleRepository;
-	
-	@Autowired
-	private RoleServiceUtil roleServiceUtil;
+    @Resource
+    private RoleRepository roleRepository;
+    
+    @Autowired
+    private RoleServiceUtil roleServiceUtil;
 
-	@Override
-	@Transactional
-	public Set<RoleData> findAll() {
+    @Override
+    @Transactional
+    public Set<RoleData> findAll() {
 
-		Iterable<Role> roleEntityCollection = roleRepository.findAll();
-		Set<RoleData> roles = roleServiceUtil.getRoleDataSetFromEntityCollection(roleEntityCollection);
+        Iterable<Role> roleEntityCollection = roleRepository.findAll();
+        Set<RoleData> roles = roleServiceUtil.getRoleDataSetFromEntityCollection(roleEntityCollection);
 
-		return roles;
-	}
+        return roles;
+    }
 }

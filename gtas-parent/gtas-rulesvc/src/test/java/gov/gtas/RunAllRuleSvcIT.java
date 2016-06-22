@@ -12,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ RuleRepositoryIT.class, RuleUtilsIT.class,
-		TargetingServiceIT.class, TargetingServicePnrIT.class,
-		WatchlistServiceIT.class })
+        TargetingServiceIT.class, TargetingServicePnrIT.class,
+        WatchlistServiceIT.class })
 public class RunAllRuleSvcIT {
 }

@@ -14,48 +14,48 @@ import gov.gtas.model.udr.UdrRule;
  *
  */
 public class UdrServiceJsonResponseHelper {
-	public static JsonServiceResponse createResponse(boolean success,
-			String op, UdrRule rule) {
-		return createResponse(success, op, rule, null);
-	}
-	public static JsonServiceResponse createResponse(boolean success,
-			String op, UdrRule rule, String failureReason) {
-		JsonServiceResponse resp = null;
-		if (success) {
-			resp = new JsonServiceResponse(
-					Status.SUCCESS,
-					String.format(
-							op
-									+ " on UDR Rule with title='%s' and ID='%s' was successful.",
-							rule.getTitle(), rule.getId()));
-			resp.setResult(rule.getId());
-			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					RuleConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(rule
-							.getId())));
-			resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
-					RuleConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(rule
-							.getTitle())));
-		} else {
-			if (rule != null) {
-				resp = new JsonServiceResponse(
-						Status.FAILURE,
-						String.format(
-								op
-										+ " on UDR Rule with title='%s' and ID='%s' failed.",
-								rule.getTitle(), rule.getId()));
-				resp.setResult(rule.getId());
-			} else {
-				String msg =null;
-				if(StringUtils.isEmpty(failureReason)){
-					msg = op + " failed.";
-				} else {
-					msg = op + " failed " + failureReason + ".";
-				}
-				resp = new JsonServiceResponse(
-						Status.FAILURE,  msg);
-			}
+    public static JsonServiceResponse createResponse(boolean success,
+            String op, UdrRule rule) {
+        return createResponse(success, op, rule, null);
+    }
+    public static JsonServiceResponse createResponse(boolean success,
+            String op, UdrRule rule, String failureReason) {
+        JsonServiceResponse resp = null;
+        if (success) {
+            resp = new JsonServiceResponse(
+                    Status.SUCCESS,
+                    String.format(
+                            op
+                                    + " on UDR Rule with title='%s' and ID='%s' was successful.",
+                            rule.getTitle(), rule.getId()));
+            resp.setResult(rule.getId());
+            resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
+                    RuleConstants.UDR_ID_ATTRIBUTE_NAME, String.valueOf(rule
+                            .getId())));
+            resp.addResponseDetails(new JsonServiceResponse.ServiceResponseDetailAttribute(
+                    RuleConstants.UDR_TITLE_ATTRIBUTE_NAME, String.valueOf(rule
+                            .getTitle())));
+        } else {
+            if (rule != null) {
+                resp = new JsonServiceResponse(
+                        Status.FAILURE,
+                        String.format(
+                                op
+                                        + " on UDR Rule with title='%s' and ID='%s' failed.",
+                                rule.getTitle(), rule.getId()));
+                resp.setResult(rule.getId());
+            } else {
+                String msg =null;
+                if(StringUtils.isEmpty(failureReason)){
+                    msg = op + " failed.";
+                } else {
+                    msg = op + " failed " + failureReason + ".";
+                }
+                resp = new JsonServiceResponse(
+                        Status.FAILURE,  msg);
+            }
 
-		}
-		return resp;
-	}
+        }
+        return resp;
+    }
 }

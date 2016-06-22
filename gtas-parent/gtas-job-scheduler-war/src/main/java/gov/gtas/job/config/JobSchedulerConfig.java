@@ -15,17 +15,17 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 @EnableScheduling
 @ComponentScan("gov.gtas.job.scheduler")
 @PropertySource({ "classpath:jobScheduler.properties",
-		"classpath:dashboardJobScheduler.properties" })
+        "classpath:dashboardJobScheduler.properties" })
 public class JobSchedulerConfig implements SchedulingConfigurer {
 
-	@Override
-	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-		taskRegistrar.setScheduler(taskExecutor());
-	}
+    @Override
+    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+        taskRegistrar.setScheduler(taskExecutor());
+    }
 
-	@Bean(destroyMethod = "shutdown")
-	public Executor taskExecutor() {
-		return Executors.newScheduledThreadPool(30);
-	}
+    @Bean(destroyMethod = "shutdown")
+    public Executor taskExecutor() {
+        return Executors.newScheduledThreadPool(30);
+    }
 
 }

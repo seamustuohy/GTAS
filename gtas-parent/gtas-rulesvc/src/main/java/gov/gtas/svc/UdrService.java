@@ -14,29 +14,29 @@ import gov.gtas.model.udr.json.UdrSpecification;
  *
  */
 public interface UdrService {
-	/**
-	 * Retrieves the UDR domain object from the DB and converts it to the corresponding JSON object.
-	 * @param userId the userId of the author.
-	 * @param title the title of the UDR.
-	 * @return the JSON UDR object.
-	 */
+    /**
+     * Retrieves the UDR domain object from the DB and converts it to the corresponding JSON object.
+     * @param userId the userId of the author.
+     * @param title the title of the UDR.
+     * @return the JSON UDR object.
+     */
    UdrSpecification fetchUdr(String userId, String title);
-	/**
-	 * Retrieves the UDR domain object from the DB and converts it to the corresponding JSON object.
-	 * @param id the id of the UDR record in the DB.
-	 * @return the JSON UDR object.
-	 */
+    /**
+     * Retrieves the UDR domain object from the DB and converts it to the corresponding JSON object.
+     * @param id the id of the UDR record in the DB.
+     * @return the JSON UDR object.
+     */
   UdrSpecification fetchUdr(Long id);
-	/**
-	 * Retrieves a list of UDR summary JSON objects authored by the specified user.
-	 * @param userId the userId of the author.
-	 * @return the list of JSON UDR summary objects.
-	 */
+    /**
+     * Retrieves a list of UDR summary JSON objects authored by the specified user.
+     * @param userId the userId of the author.
+     * @return the list of JSON UDR summary objects.
+     */
   List<JsonUdrListElement> fetchUdrSummaryList(String userId);
-	/**
-	 * Retrieves a list of UDR summary JSON objects.
-	 * @return the list of JSON UDR summary objects.
-	 */
+    /**
+     * Retrieves a list of UDR summary JSON objects.
+     * @return the list of JSON UDR summary objects.
+     */
   List<JsonUdrListElement> fetchUdrSummaryList();
   /**
    * Creates a new UDR object in the database and returns it in JSON object format.

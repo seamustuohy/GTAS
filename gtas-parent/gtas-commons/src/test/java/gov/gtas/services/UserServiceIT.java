@@ -31,191 +31,191 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { CommonServicesConfig.class,
-		CachingConfig.class })
+        CachingConfig.class })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserServiceIT {
 
-	private static final String USER_ID = "iTest";
-	private static final String FIRST_NAME = "Integration";
-	private static final String LAST_NAME = "test";
-	private static final String PASSWORD = "$2a$10$VZaP2o9djsabv2x3DCjK.e8TRSNyjb972M9k4rtXlUAc4J0AEm7.C";
-	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-	private static final DateFormat dateFormat = new SimpleDateFormat(
-			DATE_FORMAT);
+    private static final String USER_ID = "iTest";
+    private static final String FIRST_NAME = "Integration";
+    private static final String LAST_NAME = "test";
+    private static final String PASSWORD = "$2a$10$VZaP2o9djsabv2x3DCjK.e8TRSNyjb972M9k4rtXlUAc4J0AEm7.C";
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    private static final DateFormat dateFormat = new SimpleDateFormat(
+            DATE_FORMAT);
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    UserService userService;
 
-	@Autowired
-	UserServiceUtil userServiceUtil;
+    @Autowired
+    UserServiceUtil userServiceUtil;
 
-	@Autowired
-	RoleService roleService;
+    @Autowired
+    RoleService roleService;
 
-	@Autowired
-	RoleServiceUtil roleServiceUtil;
+    @Autowired
+    RoleServiceUtil roleServiceUtil;
 
-	Set<RoleData> roles;
+    Set<RoleData> roles;
 
-	@Before
-	public void setUp() throws Exception {
-		roles = roleService.findAll();
+    @Before
+    public void setUp() throws Exception {
+        roles = roleService.findAll();
 
-	}
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		// userService.delete(USER_ID);
-	}
+    @After
+    public void tearDown() throws Exception {
+        // userService.delete(USER_ID);
+    }
 
-	@Test
-	public void testGetAllUser() {
-		// TBD
-		List<UserData> users = userService.findAll();
-		users.forEach(r -> r.getRoles().forEach(
-				role -> System.out.println(role.getRoleDescription())));
+    @Test
+    public void testGetAllUser() {
+        // TBD
+        List<UserData> users = userService.findAll();
+        users.forEach(r -> r.getRoles().forEach(
+                role -> System.out.println(role.getRoleDescription())));
 
-	}
+    }
 
-	@Test
-	public void testGetSpecifUser() {
+    @Test
+    public void testGetSpecifUser() {
 
-		UserData user = userService.findById("bstygar");
-		user.getRoles()
-				.forEach(r -> System.out.println(r.getRoleDescription()));
-	}
+        UserData user = userService.findById("bstygar");
+        user.getRoles()
+                .forEach(r -> System.out.println(r.getRoleDescription()));
+    }
 
-	@Test
-	public void testCreateUserWithRoles() {
-		// Arrange
+    @Test
+    public void testCreateUserWithRoles() {
+        // Arrange
 
-		Stream<RoleData> streamRoles = roles.stream().filter(
-				r -> r.getRoleId() == 2);
-		Set<RoleData> authRoles = streamRoles.collect(Collectors.toSet());
+        Stream<RoleData> streamRoles = roles.stream().filter(
+                r -> r.getRoleId() == 2);
+        Set<RoleData> authRoles = streamRoles.collect(Collectors.toSet());
 
-		System.out.println(authRoles);
-		UserData expectedUser = new UserData("iTest99", PASSWORD, "test", "99",
-				1, authRoles, null);
+        System.out.println(authRoles);
+        UserData expectedUser = new UserData("iTest99", PASSWORD, "test", "99",
+                1, authRoles, null);
 
-		UserData actualUser = null;
-		// Act
-		try {
-			actualUser = userService.create(expectedUser);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        UserData actualUser = null;
+        // Act
+        try {
+            actualUser = userService.create(expectedUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		// Assert
-		assertEquals(expectedUser, actualUser);
-	}
+        // Assert
+        assertEquals(expectedUser, actualUser);
+    }
 
-	@Test
-	public void testCreateUserWithRolesAndFilter() {
-		// Arrange
+    @Test
+    public void testCreateUserWithRolesAndFilter() {
+        // Arrange
 
-		Stream<RoleData> streamRoles = roles.stream().filter(
-				r -> r.getRoleId() == 2 || r.getRoleId() == 7);
-		Set<RoleData> authRoles = streamRoles.collect(Collectors.toSet());
+        Stream<RoleData> streamRoles = roles.stream().filter(
+                r -> r.getRoleId() == 2 || r.getRoleId() == 7);
+        Set<RoleData> authRoles = streamRoles.collect(Collectors.toSet());
 
-		Set<String> originAirports = new HashSet<String>();
+        Set<String> originAirports = new HashSet<String>();
 
-		originAirports.add("HFN");
-		originAirports.add("HZK");
-		originAirports.add("IFJ");
+        originAirports.add("HFN");
+        originAirports.add("HZK");
+        originAirports.add("IFJ");
 
-		Set<String> destinationAirports = new HashSet<String>();
-		destinationAirports.add("KEF");
-		destinationAirports.add("PFJ");
-		destinationAirports.add("RKV");
-		int etaStart = -2;
-		int etaEnd = 2;
+        Set<String> destinationAirports = new HashSet<String>();
+        destinationAirports.add("KEF");
+        destinationAirports.add("PFJ");
+        destinationAirports.add("RKV");
+        int etaStart = -2;
+        int etaEnd = 2;
 
-		FilterData filter = new FilterData("iTest99", "I", originAirports,
-				destinationAirports, etaStart, etaEnd);
+        FilterData filter = new FilterData("iTest99", "I", originAirports,
+                destinationAirports, etaStart, etaEnd);
 
-		UserData expectedUser = new UserData("iTest99", PASSWORD, "test", "99",
-				1, authRoles, filter);
+        UserData expectedUser = new UserData("iTest99", PASSWORD, "test", "99",
+                1, authRoles, filter);
 
-		UserData actualUser = null;
-		// Act
-		try {
-			actualUser = userService.create(expectedUser);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        UserData actualUser = null;
+        // Act
+        try {
+            actualUser = userService.create(expectedUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		// Assert
-		assertEquals(expectedUser, actualUser);
-	}
+        // Assert
+        assertEquals(expectedUser, actualUser);
+    }
 
-	@Test
-	public void testUpdateUserWithOutFilters() {
-		// Arrange
+    @Test
+    public void testUpdateUserWithOutFilters() {
+        // Arrange
 
-		Stream<RoleData> streamRoles = roles.stream().filter(
-				r -> r.getRoleId() == 3 || r.getRoleId() == 2);
-		Set<RoleData> authRoles = streamRoles.collect(Collectors.toSet());
+        Stream<RoleData> streamRoles = roles.stream().filter(
+                r -> r.getRoleId() == 3 || r.getRoleId() == 2);
+        Set<RoleData> authRoles = streamRoles.collect(Collectors.toSet());
 
-		System.out.println(authRoles);
-		UserData expectedUser = new UserData("iTest99", PASSWORD, "test", "99",
-				1, authRoles, null);
+        System.out.println(authRoles);
+        UserData expectedUser = new UserData("iTest99", PASSWORD, "test", "99",
+                1, authRoles, null);
 
-		UserData actualUser = null;
-		// Act
-		try {
-			actualUser = userService.update(expectedUser);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        UserData actualUser = null;
+        // Act
+        try {
+            actualUser = userService.update(expectedUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		// Assert
-		assertEquals(expectedUser, actualUser);
-	}
+        // Assert
+        assertEquals(expectedUser, actualUser);
+    }
 
-	@Test
-	public void testFinduser() {
-		// Arrange
-		String userId = "iTest2";
+    @Test
+    public void testFinduser() {
+        // Arrange
+        String userId = "iTest2";
 
-		// Act
-		UserData actualUser = userService.findById(userId);
+        // Act
+        UserData actualUser = userService.findById(userId);
 
-		// Assert
-	}
+        // Assert
+    }
 
-	@Test
-	public void testUpdateUserWithFilters() {
-		// Arrange
+    @Test
+    public void testUpdateUserWithFilters() {
+        // Arrange
 
-		Stream<RoleData> streamRoles = roles.stream().filter(
-				r -> r.getRoleId() == 1 || r.getRoleId() == 2);
-		Set<RoleData> authRoles = streamRoles.collect(Collectors.toSet());
-		Set<String> originAirports = new HashSet<String>();
+        Stream<RoleData> streamRoles = roles.stream().filter(
+                r -> r.getRoleId() == 1 || r.getRoleId() == 2);
+        Set<RoleData> authRoles = streamRoles.collect(Collectors.toSet());
+        Set<String> originAirports = new HashSet<String>();
 
-		originAirports.add("GKA");
+        originAirports.add("GKA");
 
-		Set<String> destinationAirports = new HashSet<String>();
-		destinationAirports.add("LAE");
-		int etaStart = -3;
-		int etaEnd = 3;
+        Set<String> destinationAirports = new HashSet<String>();
+        destinationAirports.add("LAE");
+        int etaStart = -3;
+        int etaEnd = 3;
 
-		FilterData filterData = new FilterData("iTest99", "O", originAirports,
-				destinationAirports, etaStart, etaEnd);
+        FilterData filterData = new FilterData("iTest99", "O", originAirports,
+                destinationAirports, etaStart, etaEnd);
 
-		System.out.println(authRoles);
-		UserData expectedUser = new UserData(USER_ID, PASSWORD, "test", "99",
-				1, authRoles, filterData);
+        System.out.println(authRoles);
+        UserData expectedUser = new UserData(USER_ID, PASSWORD, "test", "99",
+                1, authRoles, filterData);
 
-		UserData actualUser = null;
-		// Act
-		try {
-			actualUser = userService.update(expectedUser);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        UserData actualUser = null;
+        // Act
+        try {
+            actualUser = userService.update(expectedUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		// Assert
-		assertEquals(expectedUser, actualUser);
-	}
+        // Assert
+        assertEquals(expectedUser, actualUser);
+    }
 
 }

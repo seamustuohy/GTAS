@@ -20,35 +20,35 @@ import gov.gtas.validator.FilterDataValidator;
 @RestController
 public class FilterController {
 
-	private static final Logger logger = LoggerFactory.getLogger(FilterController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FilterController.class);
 
-	@Autowired
-	private FilterService filterService;
+    @Autowired
+    private FilterService filterService;
 
-	@Autowired
-	private FilterDataValidator filterDataValidator;
+    @Autowired
+    private FilterDataValidator filterDataValidator;
 
-	@InitBinder("filterData")
+    @InitBinder("filterData")
     protected void intializeUserDataValidator(WebDataBinder binder) {
         binder.addValidators(filterDataValidator);
     }
 
-	@RequestMapping( method = RequestMethod.GET,value = "/filter/{userId}"
-			,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody  FilterData getUserFilter(@PathVariable(value = "id") String userId) {
-		return filterService.findById(userId);
-	}
-	
-	@RequestMapping( method = RequestMethod.POST,value = "/filter/{userId}"
-			,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody  FilterData createUserFilter(@RequestBody FilterData filterData) {
-		return filterService.create(filterData);
-	}
-	
-	@RequestMapping( method = RequestMethod.PUT,value = "/filter/{userId}"
-			,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody  FilterData updateUserFilter(@RequestBody FilterData filterData) {
-		return filterService.update(filterData);
-	}
+    @RequestMapping( method = RequestMethod.GET,value = "/filter/{userId}"
+            ,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody  FilterData getUserFilter(@PathVariable(value = "id") String userId) {
+        return filterService.findById(userId);
+    }
+    
+    @RequestMapping( method = RequestMethod.POST,value = "/filter/{userId}"
+            ,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody  FilterData createUserFilter(@RequestBody FilterData filterData) {
+        return filterService.create(filterData);
+    }
+    
+    @RequestMapping( method = RequestMethod.PUT,value = "/filter/{userId}"
+            ,produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody  FilterData updateUserFilter(@RequestBody FilterData filterData) {
+        return filterService.update(filterData);
+    }
 
 }

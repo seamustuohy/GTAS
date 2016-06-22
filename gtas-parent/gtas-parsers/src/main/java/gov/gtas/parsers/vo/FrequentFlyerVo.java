@@ -20,9 +20,9 @@ public class FrequentFlyerVo implements Validatable {
     public void setNumber(String number) {
         this.number = number;
     }
-	@Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.carrier) 
-		       && StringUtils.isNotBlank(this.number);
-	}
+    @Override
+    public boolean isValid() {
+        return StringUtils.isNotBlank(this.carrier) 
+               && StringUtils.isNotBlank(this.number);
+    }
 }

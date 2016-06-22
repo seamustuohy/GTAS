@@ -28,68 +28,68 @@ public class Watchlist extends BaseEntity {
     
     public Watchlist() { }
     public Watchlist(String name, EntityEnum entity) { 
-    	this.watchlistName = name;
-    	this.watchlistEntity = entity;
+        this.watchlistName = name;
+        this.watchlistEntity = entity;
     }
 
     @ManyToOne
     @JoinColumn(name="WL_EDITOR", referencedColumnName="user_id", nullable = false)     
     private User watchListEditor;
-    	
-	@Column(name = "WL_NAME", nullable=false, length = DomainModelConstants.WL_NAME_COLUMN_SIZE)
-	private String watchlistName;
-	
-	@Enumerated(EnumType.STRING)
+        
+    @Column(name = "WL_NAME", nullable=false, length = DomainModelConstants.WL_NAME_COLUMN_SIZE)
+    private String watchlistName;
+    
+    @Enumerated(EnumType.STRING)
     @Column(name = "WL_ENTITY", nullable=false, length = DomainModelConstants.ENTITY_NAME_SIZE)
     private EntityEnum watchlistEntity;
     
-	@Column(name = "WL_EDIT_DTTM", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date editTimestamp;
+    @Column(name = "WL_EDIT_DTTM", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date editTimestamp;
     
     /**
-	 * @return the watchListEditor
-	 */
-	public User getWatchListEditor() {
-		return watchListEditor;
-	}
+     * @return the watchListEditor
+     */
+    public User getWatchListEditor() {
+        return watchListEditor;
+    }
 
-	/**
-	 * @param watchListEditor the watchListEditor to set
-	 */
-	public void setWatchListEditor(User watchListEditor) {
-		this.watchListEditor = watchListEditor;
-	}
+    /**
+     * @param watchListEditor the watchListEditor to set
+     */
+    public void setWatchListEditor(User watchListEditor) {
+        this.watchListEditor = watchListEditor;
+    }
 
-	/**
-	 * @return the editTimestamp
-	 */
-	public Date getEditTimestamp() {
-		return editTimestamp;
-	}
+    /**
+     * @return the editTimestamp
+     */
+    public Date getEditTimestamp() {
+        return editTimestamp;
+    }
 
-	/**
-	 * @param editTimestamp the editTimestamp to set
-	 */
-	public void setEditTimestamp(Date editTimestamp) {
-		this.editTimestamp = editTimestamp;
-	}
+    /**
+     * @param editTimestamp the editTimestamp to set
+     */
+    public void setEditTimestamp(Date editTimestamp) {
+        this.editTimestamp = editTimestamp;
+    }
 
-	/**
-	 * @return the watchlistName
-	 */
-	public String getWatchlistName() {
-		return watchlistName;
-	}
+    /**
+     * @return the watchlistName
+     */
+    public String getWatchlistName() {
+        return watchlistName;
+    }
 
-	/**
-	 * @return the watchlistEntity
-	 */
-	public EntityEnum getWatchlistEntity() {
-		return watchlistEntity;
-	}
+    /**
+     * @return the watchlistEntity
+     */
+    public EntityEnum getWatchlistEntity() {
+        return watchlistEntity;
+    }
 
-	@Override
+    @Override
     public int hashCode() {
        return super.hashCode();
     }

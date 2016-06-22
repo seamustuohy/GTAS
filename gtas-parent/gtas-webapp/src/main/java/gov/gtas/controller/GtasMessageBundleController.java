@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GtasMessageBundleController {
 
-	@Autowired
-	ApplicationContext ctx;
-	
+    @Autowired
+    ApplicationContext ctx;
+    
     GtasResourceBundleMessageSource messageBundle = new GtasResourceBundleMessageSource();
 
-	/**
+    /**
      * ReadAll
      */
     @RequestMapping( method = RequestMethod.GET,value = "/messageBundle/")
     public Properties list(@RequestParam String lang) {
-    	messageBundle=(GtasResourceBundleMessageSource)ctx.getBean("gtasMessageSource");
+        messageBundle=(GtasResourceBundleMessageSource)ctx.getBean("gtasMessageSource");
         
-		return messageBundle.getAllProperties(new Locale(lang));
+        return messageBundle.getAllProperties(new Locale(lang));
     }
     
  

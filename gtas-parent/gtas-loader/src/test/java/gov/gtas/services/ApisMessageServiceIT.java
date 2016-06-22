@@ -18,28 +18,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { CommonServicesConfig.class,
-		CachingConfig.class })
+        CachingConfig.class })
 @Transactional
 public class ApisMessageServiceIT extends
-		AbstractTransactionalJUnit4SpringContextTests {
-	@Autowired
-	private Loader svc;
+        AbstractTransactionalJUnit4SpringContextTests {
+    @Autowired
+    private Loader svc;
 
-	private File message;
+    private File message;
 
-	@Before
-	public void setUp() throws Exception {
-		ClassLoader classLoader = getClass().getClassLoader();
-		this.message = new File(classLoader.getResource(
-				"apis-messages/airline2.edi").getFile());
-	}
+    @Before
+    public void setUp() throws Exception {
+        ClassLoader classLoader = getClass().getClassLoader();
+        this.message = new File(classLoader.getResource(
+                "apis-messages/airline2.edi").getFile());
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	@Test()
-	public void testRunService() throws ParseException {
-		svc.processMessage(this.message);
-	}
+    @Test()
+    public void testRunService() throws ParseException {
+        svc.processMessage(this.message);
+    }
 }

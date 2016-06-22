@@ -7,7 +7,7 @@ public class SeatVo {
     private String firstName;
     private String lastName;
     
-	public String getNumber() {
+    public String getNumber() {
         return number;
     }
     public Boolean getApis() {

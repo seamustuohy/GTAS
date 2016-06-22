@@ -11,13 +11,13 @@ import gov.gtas.model.watchlist.WatchlistItem;
  *
  */
 public interface RuleManagementService {
-	/**
-	 * Creates a named Knowledge Base from the given DRL rules string and saves it in the DB.
-	 * Note: the KB name must not be the default KB name.
-	 * @param kbName the Knowledge Base name.
-	 * @param drlString the rules.
-	 * @return the KnowledgeBase object.
-	 */
+    /**
+     * Creates a named Knowledge Base from the given DRL rules string and saves it in the DB.
+     * Note: the KB name must not be the default KB name.
+     * @param kbName the Knowledge Base name.
+     * @param drlString the rules.
+     * @return the KnowledgeBase object.
+     */
     KnowledgeBase createKnowledgeBaseFromDRLString(String kbName, String drlString);
     /**
      * Fetches DRL rules from a Knowledge Base.

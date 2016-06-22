@@ -20,9 +20,9 @@ public final class DateUtils {
     
     private DateUtils() { }
     
-	/**
-	 * set the time portion of a Date to all 0's
-	 */
+    /**
+     * set the time portion of a Date to all 0's
+     */
     public static Date stripTime(Date d) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(d);

@@ -14,21 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
 import gov.gtas.model.Flight;
 
 public interface FlightRepository extends PagingAndSortingRepository<Flight, Long>, FlightRepositoryCustom {
-	@Query("SELECT f FROM Flight f WHERE f.carrier = :carrier "
-	        + "AND f.flightNumber = :flightNumber "
-	        + "AND f.origin = :origin "
-	        + "AND f.destination=:destination "
-	        + "AND f.flightDate = :flightDate")
-	public Flight getFlightByCriteria(@Param("carrier") String carrier,
-			@Param("flightNumber") String flightNumber,@Param("origin") String origin,
-			@Param("destination") String destination,@Param("flightDate") Date flightDate);
+    @Query("SELECT f FROM Flight f WHERE f.carrier = :carrier "
+            + "AND f.flightNumber = :flightNumber "
+            + "AND f.origin = :origin "
+            + "AND f.destination=:destination "
+            + "AND f.flightDate = :flightDate")
+    public Flight getFlightByCriteria(@Param("carrier") String carrier,
+            @Param("flightNumber") String flightNumber,@Param("origin") String origin,
+            @Param("destination") String destination,@Param("flightDate") Date flightDate);
 
-	/**
-	 * I thought I was having problems comparing dates with hibernate,
-	 * but it appears that zero'ing out the time portion of the date was
-	 * sufficient.  Use this method as a last resort to compare 
-	 * flight dates. 
-	 */
+    /**
+     * I thought I was having problems comparing dates with hibernate,
+     * but it appears that zero'ing out the time portion of the date was
+     * sufficient.  Use this method as a last resort to compare 
+     * flight dates. 
+     */
     @Query("SELECT f FROM Flight f WHERE f.carrier = :carrier "
             + "AND f.flightNumber = :flightNumber "
             + "AND f.origin = :origin "
@@ -49,15 +49,15 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
 
     @Query("SELECT f FROM Flight f WHERE f.flightDate between :startDate AND :endDate")
     public List<Flight> getFlightsByDates(@Param("startDate") Date startDate, 
-            							  @Param("endDate") Date endDate);
+                                          @Param("endDate") Date endDate);
 
     @Query("SELECT f FROM Flight f join f.passengers p join p.documents d where UPPER(p.firstName) = UPPER(:firstName) "
-    														  + "AND UPPER(p.lastName) = UPPER(:lastName)"
-    														 + " AND d.documentNumber = :documentNumber"
-    														 + " GROUP BY d.documentNumber, f.flightNumber")
+                                                              + "AND UPPER(p.lastName) = UPPER(:lastName)"
+                                                             + " AND d.documentNumber = :documentNumber"
+                                                             + " GROUP BY d.documentNumber, f.flightNumber")
     public List<Flight> getFlightsByPassengerNameAndDocument(@Param("firstName") String firstName,
-    														 @Param("lastName") String lastName,
-    														 @Param("documentNumber") String documentNumber);
+                                                             @Param("lastName") String lastName,
+                                                             @Param("documentNumber") String documentNumber);
     
     @Modifying
     @Transactional
@@ -69,7 +69,7 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
     @Query("update Flight set listHitCount = (select count(distinct passenger) from HitsSummary where flight.id = :flightId and watchListHitCount > 0) where id = :flightId")
     public Integer updateListHitCountForFlight(@Param("flightId") Long flightId);
 
-	@Query("SELECT f FROM Flight f WHERE f.flightDate >= CURRENT_DATE AND f.flightDate <= CURRENT_DATE+3")
-	public List<Flight> getFlightsThreeDaysForward();
+    @Query("SELECT f FROM Flight f WHERE f.flightDate >= CURRENT_DATE AND f.flightDate <= CURRENT_DATE+3")
+    public List<Flight> getFlightsThreeDaysForward();
 
 }

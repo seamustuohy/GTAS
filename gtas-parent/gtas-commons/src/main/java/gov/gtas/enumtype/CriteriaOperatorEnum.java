@@ -33,35 +33,35 @@ public enum CriteriaOperatorEnum {
  * @return the operatorString
  */
 public String getOperatorString() {
-	return operatorString;
+    return operatorString;
 }
 
 /**
  * @return the displayName
  */
 public String getDisplayName() {
-	return displayName;
+    return displayName;
 }
 
 /**
  * @return the takesMultipleArguements
  */
 public boolean isTakesMultipleArguements() {
-	return takesMultipleArguements;
+    return takesMultipleArguements;
 }
 
 private CriteriaOperatorEnum(final String opString, final String displayName, final boolean isMultivalued){
-	  this.operatorString = opString;
-	  this.displayName = displayName;
-	  this.takesMultipleArguements = isMultivalued;
+      this.operatorString = opString;
+      this.displayName = displayName;
+      this.takesMultipleArguements = isMultivalued;
   }
 
-public static CriteriaOperatorEnum getEnum(String value) {	
-	for (CriteriaOperatorEnum opEnum : CriteriaOperatorEnum.values()) {
-	     if(opEnum.name().equalsIgnoreCase(value)) {
-	    	 return opEnum;
-	     }
-	 }	
+public static CriteriaOperatorEnum getEnum(String value) {  
+    for (CriteriaOperatorEnum opEnum : CriteriaOperatorEnum.values()) {
+         if(opEnum.name().equalsIgnoreCase(value)) {
+             return opEnum;
+         }
+     }  
     throw new IllegalArgumentException();
 }
 

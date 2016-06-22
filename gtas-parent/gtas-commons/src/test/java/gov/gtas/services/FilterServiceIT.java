@@ -20,89 +20,89 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { CommonServicesConfig.class,
-		CachingConfig.class })
+        CachingConfig.class })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FilterServiceIT {
 
-	@Autowired
-	FilterService filterService;
+    @Autowired
+    FilterService filterService;
 
-	@Autowired
-	FilterServiceUtil filterServiceUtil;
+    @Autowired
+    FilterServiceUtil filterServiceUtil;
 
-	@Test
-	public void testCreateUserFilter() {
-		// Arrange
+    @Test
+    public void testCreateUserFilter() {
+        // Arrange
 
-		Set<String> originAirports = new HashSet<String>();
+        Set<String> originAirports = new HashSet<String>();
 
-		originAirports.add("GKA");
-		originAirports.add("MAG");
-		originAirports.add("HGU");
+        originAirports.add("GKA");
+        originAirports.add("MAG");
+        originAirports.add("HGU");
 
-		Set<String> destinationAirports = new HashSet<String>();
-		destinationAirports.add("LAE");
-		destinationAirports.add("POM");
-		destinationAirports.add("WWK");
-		int etaStart = -1;
-		int etaEnd = 1;
+        Set<String> destinationAirports = new HashSet<String>();
+        destinationAirports.add("LAE");
+        destinationAirports.add("POM");
+        destinationAirports.add("WWK");
+        int etaStart = -1;
+        int etaEnd = 1;
 
-		FilterData acutalFilter = null;
+        FilterData acutalFilter = null;
 
-		FilterData expectedFilter = new FilterData("bStygar", "I",
-				originAirports, destinationAirports, etaStart, etaEnd);
+        FilterData expectedFilter = new FilterData("bStygar", "I",
+                originAirports, destinationAirports, etaStart, etaEnd);
 
-		// Act
-		try {
-			// acutalFilter = filterService.create(expectedFilter);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        // Act
+        try {
+            // acutalFilter = filterService.create(expectedFilter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		// Assert
-		assertEquals(expectedFilter, acutalFilter);
-	}
+        // Assert
+        assertEquals(expectedFilter, acutalFilter);
+    }
 
-	@Test
-	public void testgFilterByUserId() {
+    @Test
+    public void testgFilterByUserId() {
 
-		// Arrange
-		String userId = "bStygar";
+        // Arrange
+        String userId = "bStygar";
 
-		// Act
-		FilterData filterData = filterService.findById(userId);
+        // Act
+        FilterData filterData = filterService.findById(userId);
 
-		System.out.println(filterData);
-	}
+        System.out.println(filterData);
+    }
 
-	@Test
-	public void testUpdateFilter() {
-		// Arrange
-		String userId = "bStygar";
+    @Test
+    public void testUpdateFilter() {
+        // Arrange
+        String userId = "bStygar";
 
-		FilterData existingFilter = filterService.findById(userId);
+        FilterData existingFilter = filterService.findById(userId);
 
-		Set<String> originAirports = new HashSet<String>();
+        Set<String> originAirports = new HashSet<String>();
 
-		originAirports.add("UAK");
-		originAirports.add("GOH");
-		originAirports.add("SFJ");
+        originAirports.add("UAK");
+        originAirports.add("GOH");
+        originAirports.add("SFJ");
 
-		Set<String> destinationAirports = new HashSet<String>();
-		destinationAirports.add("THU");
-		destinationAirports.add("AEY");
-		destinationAirports.add("EGS");
+        Set<String> destinationAirports = new HashSet<String>();
+        destinationAirports.add("THU");
+        destinationAirports.add("AEY");
+        destinationAirports.add("EGS");
 
-		FilterData expectedFilter = new FilterData(existingFilter.getUserId(),
-				"O", originAirports, destinationAirports,
-				existingFilter.getEtaStart() - 2,
-				existingFilter.getEtaEnd() + 2);
+        FilterData expectedFilter = new FilterData(existingFilter.getUserId(),
+                "O", originAirports, destinationAirports,
+                existingFilter.getEtaStart() - 2,
+                existingFilter.getEtaEnd() + 2);
 
-		// Act
-		FilterData actualFilter = filterService.update(expectedFilter);
+        // Act
+        FilterData actualFilter = filterService.update(expectedFilter);
 
-		System.out.println(actualFilter);
+        System.out.println(actualFilter);
 
-	}
+    }
 
 }

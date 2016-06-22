@@ -13,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import gov.gtas.vo.BaseVo;
 
 public class PassengerVo extends BaseVo {
-	private static final SimpleDateFormat dtFormat = new SimpleDateFormat(FlightVo.DATE_FORMAT);
-	
+    private static final SimpleDateFormat dtFormat = new SimpleDateFormat(FlightVo.DATE_FORMAT);
+    
     private String title;    
     private String firstName;
     private String middleName;
@@ -58,55 +58,55 @@ public class PassengerVo extends BaseVo {
     
     // co-pax?
     private List<PassengerVo> passengers;
-	private List<DocumentVo> documents = new ArrayList<>();
-	private FlightHistoryVo flightHistoryVo;
+    private List<DocumentVo> documents = new ArrayList<>();
+    private FlightHistoryVo flightHistoryVo;
     private PnrVo pnrVo;
     
     private List<DispositionVo> dispositionHistory;
     
-	public String getPaxId() {
-		return paxId;
-	}
-	public void setPaxId(String paxId) {
-		this.paxId = paxId;
-	}
-	public String getFlightOrigin() {
-		return flightOrigin;
-	}
-	public void setFlightOrigin(String flightOrigin) {
-		this.flightOrigin = flightOrigin;
-	}
-	public String getFlightDestination() {
-		return flightDestination;
-	}
-	public void setFlightDestination(String flightDestination) {
-		this.flightDestination = flightDestination;
-	}
-	public String getFlightETD() {
-		return flightETD;
-	}
-	public void setFlightETD(String flightETD) {
-		this.flightETD = flightETD;
-	}
-	public String getFlightETA() {
-		return flightETA;
-	}
-	public void setFlightETA(String flightETA) {
-		this.flightETA = flightETA;
-	}
-	public List<PassengerVo> getPassengers() {
-		return passengers;
-	}
-	public void setPassengers(List<PassengerVo> passengers) {
-		this.passengers = passengers;
-	}
-	public PnrVo getPnrVo() {
-		return pnrVo;
-	}
-	public void setPnrVo(PnrVo pnrVo) {
-		this.pnrVo = pnrVo;
-	}
-	public String getFlightId() {
+    public String getPaxId() {
+        return paxId;
+    }
+    public void setPaxId(String paxId) {
+        this.paxId = paxId;
+    }
+    public String getFlightOrigin() {
+        return flightOrigin;
+    }
+    public void setFlightOrigin(String flightOrigin) {
+        this.flightOrigin = flightOrigin;
+    }
+    public String getFlightDestination() {
+        return flightDestination;
+    }
+    public void setFlightDestination(String flightDestination) {
+        this.flightDestination = flightDestination;
+    }
+    public String getFlightETD() {
+        return flightETD;
+    }
+    public void setFlightETD(String flightETD) {
+        this.flightETD = flightETD;
+    }
+    public String getFlightETA() {
+        return flightETA;
+    }
+    public void setFlightETA(String flightETA) {
+        this.flightETA = flightETA;
+    }
+    public List<PassengerVo> getPassengers() {
+        return passengers;
+    }
+    public void setPassengers(List<PassengerVo> passengers) {
+        this.passengers = passengers;
+    }
+    public PnrVo getPnrVo() {
+        return pnrVo;
+    }
+    public void setPnrVo(PnrVo pnrVo) {
+        this.pnrVo = pnrVo;
+    }
+    public String getFlightId() {
         return flightId;
     }
     public void setFlightId(String flightId) {
@@ -125,12 +125,12 @@ public class PassengerVo extends BaseVo {
         this.fullFlightNumber = fullFlightNumber;
     }
     public FlightHistoryVo getFlightHistoryVo() {
-		return flightHistoryVo;
-	}
-	public void setFlightHistoryVo(FlightHistoryVo flightHistoryVo) {
-		this.flightHistoryVo = flightHistoryVo;
-	}
-	public String getCarrier() {
+        return flightHistoryVo;
+    }
+    public void setFlightHistoryVo(FlightHistoryVo flightHistoryVo) {
+        this.flightHistoryVo = flightHistoryVo;
+    }
+    public String getCarrier() {
         return carrier;
     }
     public void setCarrier(String carrier) {
@@ -143,7 +143,7 @@ public class PassengerVo extends BaseVo {
         this.etd = etd;
         
         if(etd != null) {
-        	this.etdLocalTZ = dtFormat.format(etd);
+            this.etdLocalTZ = dtFormat.format(etd);
         }
     }
     public Date getEta() {
@@ -153,7 +153,7 @@ public class PassengerVo extends BaseVo {
         this.eta = eta;
         
         if(eta != null) {
-        	this.etaLocalTZ = dtFormat.format(eta);
+            this.etaLocalTZ = dtFormat.format(eta);
         }
     }
     public void addDocument(DocumentVo d) {
@@ -286,19 +286,19 @@ public class PassengerVo extends BaseVo {
         this.onWatchListDoc = onWatchListDoc;
     }
     public String getEtdLocalTZ() {
-		return etdLocalTZ;
-	}
-	public String getEtaLocalTZ() {
-		return etaLocalTZ;
-	}
+        return etdLocalTZ;
+    }
+    public String getEtaLocalTZ() {
+        return etaLocalTZ;
+    }
     public List<DispositionVo> getDispositionHistory() {
-		return dispositionHistory;
-	}
-	public void setDispositionHistory(List<DispositionVo> dispositionHistory) {
-		this.dispositionHistory = dispositionHistory;
-	}
+        return dispositionHistory;
+    }
+    public void setDispositionHistory(List<DispositionVo> dispositionHistory) {
+        this.dispositionHistory = dispositionHistory;
+    }
 
-	@Override
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }

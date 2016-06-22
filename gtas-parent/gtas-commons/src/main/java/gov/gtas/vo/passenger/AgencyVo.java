@@ -1,13 +1,13 @@
 package gov.gtas.vo.passenger;
 
 public class AgencyVo {
-	private String name;
+    private String name;
     private String location;
-	private String identifier;
-	private String country;
+    private String identifier;
+    private String country;
     private String phone;
-	
-	public String getName() {
+    
+    public String getName() {
         return name;
     }
     public void setName(String name) {

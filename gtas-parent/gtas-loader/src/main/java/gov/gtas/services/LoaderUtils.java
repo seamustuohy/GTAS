@@ -68,29 +68,29 @@ public class LoaderUtils {
         p.setUpdatedBy(LOADER_USER);
         
         if (vo.getDebarkation() != null) {
-	        String airportCode = vo.getDebarkation();
-	        p.setDebarkation(airportCode);
-	        Airport debark = getAirport(airportCode);
-	        if (debark != null) {
-	            p.setDebarkCountry(debark.getCountry());
-	        }
+            String airportCode = vo.getDebarkation();
+            p.setDebarkation(airportCode);
+            Airport debark = getAirport(airportCode);
+            if (debark != null) {
+                p.setDebarkCountry(debark.getCountry());
+            }
         }
         
         if (vo.getEmbarkation() != null) {
-	        String airportCode = vo.getEmbarkation();
-	        p.setEmbarkation(airportCode);
-	        Airport embark = getAirport(airportCode);
-	        if (embark != null) {
-	            p.setEmbarkCountry(embark.getCountry());
-	        }
+            String airportCode = vo.getEmbarkation();
+            p.setEmbarkation(airportCode);
+            Airport embark = getAirport(airportCode);
+            if (embark != null) {
+                p.setEmbarkCountry(embark.getCountry());
+            }
         }
         
         if (vo.getCitizenshipCountry() != null) {
-        	p.setCitizenshipCountry(normalizeCountryCode(vo.getCitizenshipCountry()));
+            p.setCitizenshipCountry(normalizeCountryCode(vo.getCitizenshipCountry()));
         }
         
         if (vo.getResidencyCountry() != null) {
-        	p.setResidencyCountry(normalizeCountryCode(vo.getResidencyCountry()));
+            p.setResidencyCountry(normalizeCountryCode(vo.getResidencyCountry()));
         }
     }
 

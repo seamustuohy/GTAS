@@ -32,88 +32,88 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { CommonServicesConfig.class,
-		CachingConfig.class })
+        CachingConfig.class })
 public class PnrMessageServiceIT extends
-		AbstractTransactionalJUnit4SpringContextTests {
-	@Autowired
-	private Loader svc;
+        AbstractTransactionalJUnit4SpringContextTests {
+    @Autowired
+    private Loader svc;
 
-	private File message;
+    private File message;
 
-	@Autowired
-	private FlightRepository flightDao;
+    @Autowired
+    private FlightRepository flightDao;
 
-	@Autowired
-	private LoaderRepository loaderRepo;
+    @Autowired
+    private LoaderRepository loaderRepo;
 
-	@Autowired
-	private PassengerRepository paxDao;
+    @Autowired
+    private PassengerRepository paxDao;
 
-	@Before
-	public void setUp() throws Exception {
-		ClassLoader classLoader = getClass().getClassLoader();
-		this.message = new File(classLoader.getResource(
-				"pnr-messages/2_pnrs_basic.edi").getFile());
-	}
+    @Before
+    public void setUp() throws Exception {
+        ClassLoader classLoader = getClass().getClassLoader();
+        this.message = new File(classLoader.getResource(
+                "pnr-messages/2_pnrs_basic.edi").getFile());
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	@Test
-	public void testme() throws ParseException {
-		Flight f = new Flight();
-		f.setCarrier("DL");
-		f.setDirection("O");
-		f.setFlightDate(new Date());
-		f.setFlightNumber("0012");
-		f.setOrigin("LAX");
-		f.setDestination("IAD");
-		Passenger p = new Passenger();
-		p.setPassengerType("P");
-		p.setFirstName("john");
-		p.setLastName("doe");
-		f.getPassengers().add(p);
-		flightDao.save(f);
-		assertNotNull(f.getId());
-	}
+    @Test
+    public void testme() throws ParseException {
+        Flight f = new Flight();
+        f.setCarrier("DL");
+        f.setDirection("O");
+        f.setFlightDate(new Date());
+        f.setFlightNumber("0012");
+        f.setOrigin("LAX");
+        f.setDestination("IAD");
+        Passenger p = new Passenger();
+        p.setPassengerType("P");
+        p.setFirstName("john");
+        p.setLastName("doe");
+        f.getPassengers().add(p);
+        flightDao.save(f);
+        assertNotNull(f.getId());
+    }
 
-	// @Test
-	public void testFlightAndPax() throws ParseException {
-		Flight f = new Flight();
-		f.setCarrier("DL");
-		f.setDirection("O");
-		f.setFlightDate(new Date());
-		f.setFlightNumber("0012");
-		f.setOrigin("LAX");
-		f.setDestination("IAD");
+    // @Test
+    public void testFlightAndPax() throws ParseException {
+        Flight f = new Flight();
+        f.setCarrier("DL");
+        f.setDirection("O");
+        f.setFlightDate(new Date());
+        f.setFlightNumber("0012");
+        f.setOrigin("LAX");
+        f.setDestination("IAD");
 
-		FlightVo fvo = new FlightVo();
-		BeanUtils.copyProperties(f, fvo);
-		List<FlightVo> flights = new ArrayList<>();
-		flights.add(fvo);
-		PassengerVo pvo = new PassengerVo();
-		pvo.setPassengerType("P");
-		pvo.setFirstName("sam");
-		pvo.setLastName("doe");
-		List<PassengerVo> passengers = new ArrayList<>();
-		passengers.add(pvo);
-		PassengerVo pvo2 = new PassengerVo();
-		pvo2.setPassengerType("P");
-		pvo2.setFirstName("sam2");
-		pvo2.setLastName("doe2");
-		passengers.add(pvo2);
+        FlightVo fvo = new FlightVo();
+        BeanUtils.copyProperties(f, fvo);
+        List<FlightVo> flights = new ArrayList<>();
+        flights.add(fvo);
+        PassengerVo pvo = new PassengerVo();
+        pvo.setPassengerType("P");
+        pvo.setFirstName("sam");
+        pvo.setLastName("doe");
+        List<PassengerVo> passengers = new ArrayList<>();
+        passengers.add(pvo);
+        PassengerVo pvo2 = new PassengerVo();
+        pvo2.setPassengerType("P");
+        pvo2.setFirstName("sam2");
+        pvo2.setLastName("doe2");
+        passengers.add(pvo2);
 
-		Set<Flight> dummy = new HashSet<>();
-		Set<Passenger> paxDummy = new HashSet<>();
-		loaderRepo.processFlightsAndPassengers(flights, passengers, dummy,
-				paxDummy, new ArrayList<FlightLeg>());
-		List<Passenger> pax = paxDao.getPassengersByLastName("doe");
-		assertEquals(2, pax.size());
-	}
+        Set<Flight> dummy = new HashSet<>();
+        Set<Passenger> paxDummy = new HashSet<>();
+        loaderRepo.processFlightsAndPassengers(flights, passengers, dummy,
+                paxDummy, new ArrayList<FlightLeg>());
+        List<Passenger> pax = paxDao.getPassengersByLastName("doe");
+        assertEquals(2, pax.size());
+    }
 
-	@Test()
-	public void testRunService() throws ParseException {
-		svc.processMessage(this.message);
-	}
+    @Test()
+    public void testRunService() throws ParseException {
+        svc.processMessage(this.message);
+    }
 }

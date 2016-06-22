@@ -14,65 +14,65 @@ import java.util.List;
  *
  */
 public interface WatchlistService {
-	/**
-	 * Retrieves the UDR domain object from the DB and converts it to the
-	 * corresponding JSON object.
-	 * 
-	 * @param wlName
-	 *            the name of the watch list.
-	 * @return the Watch list object.
-	 */
-	WatchlistSpec fetchWatchlist(String wlName);
+    /**
+     * Retrieves the UDR domain object from the DB and converts it to the
+     * corresponding JSON object.
+     * 
+     * @param wlName
+     *            the name of the watch list.
+     * @return the Watch list object.
+     */
+    WatchlistSpec fetchWatchlist(String wlName);
 
-	/**
-	 * Creates/Updates/Deletes watchlist items from the specified watchlist.
-	 * 
-	 * @param userId
-	 *            the userId of the author.
-	 * @param wlToCreateUpdateDelete
-	 *            the JSON Watchlist object with items to be inserted/updated/deleted.
-	 * @return the service response JSON format.
-	 */
-	JsonServiceResponse createUpdateDeleteWatchlistItems(String userId,
-			WatchlistSpec wlToCreateUpdateDelete);
+    /**
+     * Creates/Updates/Deletes watchlist items from the specified watchlist.
+     * 
+     * @param userId
+     *            the userId of the author.
+     * @param wlToCreateUpdateDelete
+     *            the JSON Watchlist object with items to be inserted/updated/deleted.
+     * @return the service response JSON format.
+     */
+    JsonServiceResponse createUpdateDeleteWatchlistItems(String userId,
+            WatchlistSpec wlToCreateUpdateDelete);
 
-	/**
-	 * Creates/Updates watch list items from the specified watch list.
-	 * 
-	 * @param userId
-	 *            the userId of the author.
-	 * @param wlToCreateUpdate
-	 *            the JSON Watch list object with items to be inserted/updated/deleted.
-	 * @return the service response JSON format.
-	 */
-	JsonServiceResponse createUpdateWatchlistItems(String userId,
-			WatchlistSpec wlToCreateUpdate);
-	
-	/**
-	 * Fetches all watch lists
-	 * 
-	 * @return the list of all available watch list objects.
-	 */
-	List<WatchlistSpec> fetchAllWatchlists();
+    /**
+     * Creates/Updates watch list items from the specified watch list.
+     * 
+     * @param userId
+     *            the userId of the author.
+     * @param wlToCreateUpdate
+     *            the JSON Watch list object with items to be inserted/updated/deleted.
+     * @return the service response JSON format.
+     */
+    JsonServiceResponse createUpdateWatchlistItems(String userId,
+            WatchlistSpec wlToCreateUpdate);
+    
+    /**
+     * Fetches all watch lists
+     * 
+     * @return the list of all available watch list objects.
+     */
+    List<WatchlistSpec> fetchAllWatchlists();
 
-	/**
-	 * Compiles all watch lists into a named knowledge base
-	 * @param knowledgeBaseName name of the knowledge base to compile the watch list rules into.
-	 * @return the list of all available watch list objects.
-	 */
-	JsonServiceResponse activateAllWatchlists(String knowledgeBaseName);
-	/**
-	 * Compiles all watch lists into the default knowledge base for watch lists.
-	 * @return the list of all available watch list objects.
-	 */
-	JsonServiceResponse activateAllWatchlists();
+    /**
+     * Compiles all watch lists into a named knowledge base
+     * @param knowledgeBaseName name of the knowledge base to compile the watch list rules into.
+     * @return the list of all available watch list objects.
+     */
+    JsonServiceResponse activateAllWatchlists(String knowledgeBaseName);
+    /**
+     * Compiles all watch lists into the default knowledge base for watch lists.
+     * @return the list of all available watch list objects.
+     */
+    JsonServiceResponse activateAllWatchlists();
 
-	/**
-	 * Deletes all the items in the named watch list and then deletes the watch list.
-	 * @param userId
-	 *            the userId of the person requesting the delete.
-	 * @param wlName the name of the watch list to be deleted.
-	 * @return the delete result.
-	 */
-	JsonServiceResponse deleteWatchlist(String userId, String wlName);
+    /**
+     * Deletes all the items in the named watch list and then deletes the watch list.
+     * @param userId
+     *            the userId of the person requesting the delete.
+     * @param wlName the name of the watch list to be deleted.
+     * @return the delete result.
+     */
+    JsonServiceResponse deleteWatchlist(String userId, String wlName);
 }

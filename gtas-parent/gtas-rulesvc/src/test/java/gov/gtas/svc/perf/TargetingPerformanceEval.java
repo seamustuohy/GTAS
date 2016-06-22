@@ -31,68 +31,68 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 @ContextConfiguration(classes = RuleServiceConfig.class)
 @TransactionConfiguration(defaultRollback = false)
 public class TargetingPerformanceEval {
-	public static final String PASSENGER_WL_NAME = "PerfTest Passenger WL";
-	public static final String DOCUMENT_WL_NAME = "PerfTest Document WL";
+    public static final String PASSENGER_WL_NAME = "PerfTest Passenger WL";
+    public static final String DOCUMENT_WL_NAME = "PerfTest Document WL";
 
-	@Autowired
-	TargetingService targetingService;
+    @Autowired
+    TargetingService targetingService;
 
-	@Autowired
-	WatchlistService watchlistService;
+    @Autowired
+    WatchlistService watchlistService;
 
-	@Autowired
-	UdrService udrService;
+    @Autowired
+    UdrService udrService;
 
-	@Autowired
-	WatchlistPersistenceService watchlistPersistenceService;
+    @Autowired
+    WatchlistPersistenceService watchlistPersistenceService;
 
-	@Resource
-	private ApisMessageRepository apisMessageRepository;
+    @Resource
+    private ApisMessageRepository apisMessageRepository;
 
-	@Before
-	public void setUp() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	// @Test
-	@Transactional
-	public void genPerformanceData() {
-		WatchlistRuleGenerator.generateWlRules(watchlistService,
-				PASSENGER_WL_NAME, EntityEnum.PASSENGER, 100);
-		WatchlistRuleGenerator.generateWlRules(watchlistService,
-				DOCUMENT_WL_NAME, EntityEnum.DOCUMENT, 20);
-		// UdrRuleGenerator.generateUdr(udrService, "PerfTestUdr", 200);
-		System.out
-				.println("*****************************************************************");
-		System.out
-				.println("********************   GENERATION COMPLETE  *********************");
-		System.out
-				.println("*****************************************************************");
-	}
+    // @Test
+    @Transactional
+    public void genPerformanceData() {
+        WatchlistRuleGenerator.generateWlRules(watchlistService,
+                PASSENGER_WL_NAME, EntityEnum.PASSENGER, 100);
+        WatchlistRuleGenerator.generateWlRules(watchlistService,
+                DOCUMENT_WL_NAME, EntityEnum.DOCUMENT, 20);
+        // UdrRuleGenerator.generateUdr(udrService, "PerfTestUdr", 200);
+        System.out
+                .println("*****************************************************************");
+        System.out
+                .println("********************   GENERATION COMPLETE  *********************");
+        System.out
+                .println("*****************************************************************");
+    }
 
-	// @Test
-	public void activatePerformanceData() {
-		watchlistService.activateAllWatchlists();
-		System.out
-				.println("*****************************************************************");
-		System.out
-				.println("********************   ACTIVATION COMPLETE  *********************");
-		System.out
-				.println("*****************************************************************");
-	}
+    // @Test
+    public void activatePerformanceData() {
+        watchlistService.activateAllWatchlists();
+        System.out
+                .println("*****************************************************************");
+        System.out
+                .println("********************   ACTIVATION COMPLETE  *********************");
+        System.out
+                .println("*****************************************************************");
+    }
 
-	@Test
-	@Transactional
-	public void runPerformance() {
-		long start = System.currentTimeMillis();
-		RuleExecutionContext ctx = targetingService
-				.analyzeLoadedMessages(false);
-		long elapsed = System.currentTimeMillis() - start;
-		System.out.println(String.format(
-				"******* result count = %d, elapsed millis = %d", ctx
-						.getTargetingResult().size(), elapsed));
-	}
+    @Test
+    @Transactional
+    public void runPerformance() {
+        long start = System.currentTimeMillis();
+        RuleExecutionContext ctx = targetingService
+                .analyzeLoadedMessages(false);
+        long elapsed = System.currentTimeMillis() - start;
+        System.out.println(String.format(
+                "******* result count = %d, elapsed millis = %d", ctx
+                        .getTargetingResult().size(), elapsed));
+    }
 }

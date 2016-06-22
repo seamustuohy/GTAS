@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "flight",
-	uniqueConstraints={@UniqueConstraint(columnNames={"carrier", "flight_number", "flight_date", "origin", "destination"})},
+    uniqueConstraints={@UniqueConstraint(columnNames={"carrier", "flight_number", "flight_date", "origin", "destination"})},
     indexes = {@Index(name = "carrier_index",  columnList="carrier"),
         @Index(name = "flight_number_index", columnList="flight_number"),
         @Index(name="flight_date_index", columnList="flight_date"),
@@ -187,11 +187,11 @@ public class Flight extends BaseEntityAudit {
         this.destinationCountry = destinationCountry;
     }
     public Set<Pnr> getPnrs() {
-		return pnrs;
-	}
-	public void setPnrs(Set<Pnr> pnrs) {
-		this.pnrs = pnrs;
-	}
+        return pnrs;
+    }
+    public void setPnrs(Set<Pnr> pnrs) {
+        this.pnrs = pnrs;
+    }
     public Integer getPassengerCount() {
         return passengerCount;
     }
@@ -212,34 +212,34 @@ public class Flight extends BaseEntityAudit {
     }
 
     /**
-	 * @return the etdDate
-	 */
-	public Date getEtdDate() {
-		return etdDate;
-	}
+     * @return the etdDate
+     */
+    public Date getEtdDate() {
+        return etdDate;
+    }
 
-	/**
-	 * @param etdDate the etdDate to set
-	 */
-	public void setEtdDate(Date etdDate) {
-		this.etdDate = etdDate;
-	}
+    /**
+     * @param etdDate the etdDate to set
+     */
+    public void setEtdDate(Date etdDate) {
+        this.etdDate = etdDate;
+    }
 
-	/**
-	 * @return the etaDate
-	 */
-	public Date getEtaDate() {
-		return etaDate;
-	}
+    /**
+     * @return the etaDate
+     */
+    public Date getEtaDate() {
+        return etaDate;
+    }
 
-	/**
-	 * @param etaDate the etaDate to set
-	 */
-	public void setEtaDate(Date etaDate) {
-		this.etaDate = etaDate;
-	}
+    /**
+     * @param etaDate the etaDate to set
+     */
+    public void setEtaDate(Date etaDate) {
+        this.etaDate = etaDate;
+    }
 
-	@Override
+    @Override
     public int hashCode() {
        return Objects.hash(this.carrier, this.flightNumber, this.flightDate, this.origin, this.destination);
     }

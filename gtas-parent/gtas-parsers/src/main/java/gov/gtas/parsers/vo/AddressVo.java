@@ -5,16 +5,16 @@ import org.apache.commons.lang3.StringUtils;
 import gov.gtas.validators.Validatable;
 
 public class AddressVo implements Validatable {
-	private String type;
-	private String line1;
-	private String line2;
-	private String line3;
-	private String city;
-	private String state;
-	private String country;
-	private String postalCode;
-	private String phoneNumber;
-	
+    private String type;
+    private String line1;
+    private String line2;
+    private String line3;
+    private String city;
+    private String state;
+    private String country;
+    private String postalCode;
+    private String phoneNumber;
+    
     public String getType() {
         return type;
     }
@@ -69,8 +69,8 @@ public class AddressVo implements Validatable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-	@Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.line1);
-	}
+    @Override
+    public boolean isValid() {
+        return StringUtils.isNotBlank(this.line1);
+    }
 }

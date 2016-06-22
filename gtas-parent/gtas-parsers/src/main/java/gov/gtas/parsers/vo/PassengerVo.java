@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import gov.gtas.validators.Validatable;
 
 public class PassengerVo implements Validatable {
-	
+    
     /**
      * a unique passenger reference identifier (from PNR) used to cross
      * reference passenger information in a PNR
@@ -135,7 +135,7 @@ public class PassengerVo implements Validatable {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
-	public List<SeatVo> getSeatAssignments() {
+    public List<SeatVo> getSeatAssignments() {
         return seatAssignments;
     }
     public void setSeatAssignments(List<SeatVo> seatAssignments) {
@@ -147,11 +147,11 @@ public class PassengerVo implements Validatable {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE); 
     }
 
-	@Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.firstName)
-		       && StringUtils.isNotBlank(this.lastName);
-	}
+    @Override
+    public boolean isValid() {
+        return StringUtils.isNotBlank(this.firstName)
+               && StringUtils.isNotBlank(this.lastName);
+    }
 
     @Override
     public int hashCode() {

@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UdrSpecificationMappingTest {
     private static final String TEST_JSON =
-        	"{ \"details\": {"
+            "{ \"details\": {"
               +"  \"@class\": \"gov.gtas.model.udr.json.QueryObject\","
                +" \"condition\": \"OR\","
                +" \"rules\": ["
@@ -47,41 +47,41 @@ public class UdrSpecificationMappingTest {
         
 
 
-	@Before
-	public void setUp() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {
+    }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+    @After
+    public void tearDown() throws Exception {
+    }
 
-	@Test
-	public void testUdrSpecToJson() {
-		try{
-		ObjectMapper mapper = new ObjectMapper();
-		UdrSpecification testObj = UdrSpecificationBuilder.createSampleSpec();
-		
-		//serialize
-		String json=mapper.writeValueAsString(testObj);
-	    //de-serialize
-		mapper.readValue(json, UdrSpecification.class);
-		
-		} catch(Exception ex){
-			ex.printStackTrace();
-			fail("Got exception");
-		}
-	}
-	@Test
-	public void testJsonToUdrSpec() {
-		try{
-			ObjectMapper mapper = new ObjectMapper();
-		    //de-serialize
-			UdrSpecification testObj = mapper.readValue(TEST_JSON, UdrSpecification.class);	
-			assertNotNull(testObj);
-			assertEquals("Hello Rule 1", testObj.getSummary().getTitle());
-		} catch(Exception ex){
-			ex.printStackTrace();
-			fail("Got exception");
-		}
-	}
+    @Test
+    public void testUdrSpecToJson() {
+        try{
+        ObjectMapper mapper = new ObjectMapper();
+        UdrSpecification testObj = UdrSpecificationBuilder.createSampleSpec();
+        
+        //serialize
+        String json=mapper.writeValueAsString(testObj);
+        //de-serialize
+        mapper.readValue(json, UdrSpecification.class);
+        
+        } catch(Exception ex){
+            ex.printStackTrace();
+            fail("Got exception");
+        }
+    }
+    @Test
+    public void testJsonToUdrSpec() {
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            //de-serialize
+            UdrSpecification testObj = mapper.readValue(TEST_JSON, UdrSpecification.class); 
+            assertNotNull(testObj);
+            assertEquals("Hello Rule 1", testObj.getSummary().getTitle());
+        } catch(Exception ex){
+            ex.printStackTrace();
+            fail("Got exception");
+        }
+    }
 }

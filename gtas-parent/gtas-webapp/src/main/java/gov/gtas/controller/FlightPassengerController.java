@@ -18,8 +18,8 @@ import gov.gtas.services.dto.PassengersRequestDto;
 
 @RestController
 public class FlightPassengerController {
-	@Autowired
-	private FlightService flightService;
+    @Autowired
+    private FlightService flightService;
 
     @Autowired
     private PassengerService paxService;

@@ -15,9 +15,9 @@ import org.springframework.data.repository.query.Param;
  */
 public interface WatchlistItemRepository extends CrudRepository<WatchlistItem, Long>, JpaSpecificationExecutor<WatchlistItem> {
     
-	@Query("SELECT wli FROM WatchlistItem wli WHERE wli.watchlist.watchlistName = :watchlistName")
+    @Query("SELECT wli FROM WatchlistItem wli WHERE wli.watchlist.watchlistName = :watchlistName")
     public List<WatchlistItem> getItemsByWatchlistName(@Param("watchlistName") String watchlistName);   
 
-	@Query("DELETE FROM WatchlistItem wli WHERE wli.watchlist.watchlistName = :watchlistName")
+    @Query("DELETE FROM WatchlistItem wli WHERE wli.watchlist.watchlistName = :watchlistName")
     public void deleteItemsByWatchlistName(@Param("watchlistName") String watchlistName);   
 }

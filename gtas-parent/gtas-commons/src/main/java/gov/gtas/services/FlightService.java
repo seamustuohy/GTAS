@@ -10,8 +10,8 @@ import gov.gtas.model.Flight;
 import gov.gtas.services.dto.FlightsPageDto;
 import gov.gtas.services.dto.FlightsRequestDto;
 
-public interface FlightService {	
-	public Flight create(Flight flight);
+public interface FlightService {    
+    public Flight create(Flight flight);
     public Flight update(Flight flight) ;
     public Flight findById(Long id);
     public FlightsPageDto findAll(FlightsRequestDto dto);

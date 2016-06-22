@@ -2,7 +2,7 @@ package gov.gtas.error;
 
 public class WebappErrorConstants {
    private WebappErrorConstants(){
-	   //to prevent instantiation
+       //to prevent instantiation
    }
    
    public static final String MALFORMED_JSON_ERROR_CODE="MALFORMED_JSON";

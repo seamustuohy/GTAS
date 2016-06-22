@@ -80,7 +80,7 @@ public class ApisMessageService extends MessageLoaderService {
 
     @Override
     public boolean load(MessageVo messageVo) {
-    	boolean success = true;
+        boolean success = true;
         try {
             ApisMessageVo m = (ApisMessageVo)messageVo;
             loaderRepo.processReportingParties(apisMessage, m.getReportingParties());
@@ -89,7 +89,7 @@ public class ApisMessageService extends MessageLoaderService {
             apisMessage.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
-        	success = false;
+            success = false;
             handleException(e, MessageStatus.FAILED_LOADING);
         } finally {
             success &= createMessage(apisMessage);            
@@ -107,11 +107,11 @@ public class ApisMessageService extends MessageLoaderService {
 
     @Transactional
     private boolean createMessage(ApisMessage m) {
-    	boolean ret = true;
+        boolean ret = true;
         try {
             msgDao.save(m);
         } catch (Exception e) {
-        	ret = false;
+            ret = false;
             handleException(e, MessageStatus.FAILED_LOADING);
             msgDao.save(m);
         }

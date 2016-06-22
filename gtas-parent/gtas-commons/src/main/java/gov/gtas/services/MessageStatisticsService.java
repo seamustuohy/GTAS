@@ -5,10 +5,10 @@ import gov.gtas.model.DashboardMessageStats;
 import gov.gtas.model.PnrStatistics;
 
 public interface MessageStatisticsService {
-	
-	public PnrStatistics getPnrStatistics();
-	public ApisStatistics getApisStatistics();
-	public DashboardMessageStats getDashboardAPIMessageStats();
-	public DashboardMessageStats getDashboardPNRMessageStats();
+    
+    public PnrStatistics getPnrStatistics();
+    public ApisStatistics getApisStatistics();
+    public DashboardMessageStats getDashboardAPIMessageStats();
+    public DashboardMessageStats getDashboardPNRMessageStats();
 
 }

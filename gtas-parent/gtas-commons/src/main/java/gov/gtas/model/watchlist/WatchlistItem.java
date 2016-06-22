@@ -22,57 +22,57 @@ public class WatchlistItem extends BaseEntity {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="ITM_WL_REF", referencedColumnName="ID", nullable = false)     
     private Watchlist watchlist;
-	
-	@Column(name = "ITM_DATA", nullable=false, length = DomainModelConstants.WL_ITEM_DATA_COLUMN_SIZE)
-	private String itemData;
-	
+    
+    @Column(name = "ITM_DATA", nullable=false, length = DomainModelConstants.WL_ITEM_DATA_COLUMN_SIZE)
+    private String itemData;
+    
     @Column(name = "ITM_RL_DATA", nullable=true, length = DomainModelConstants.WL_RULE_DATA_COLUMN_SIZE)
     private String itemRuleData;
     
     
     /**
-	 * @return the watch list
-	 */
-	public Watchlist getWatchlist() {
-		return watchlist;
-	}
+     * @return the watch list
+     */
+    public Watchlist getWatchlist() {
+        return watchlist;
+    }
 
-	/**
-	 * @param watchlist the watchlist to set
-	 */
-	public void setWatchlist(Watchlist watchlist) {
-		this.watchlist = watchlist;
-	}
+    /**
+     * @param watchlist the watchlist to set
+     */
+    public void setWatchlist(Watchlist watchlist) {
+        this.watchlist = watchlist;
+    }
 
-	/**
-	 * @return the itemData
-	 */
-	public String getItemData() {
-		return itemData;
-	}
+    /**
+     * @return the itemData
+     */
+    public String getItemData() {
+        return itemData;
+    }
 
-	/**
-	 * @param itemData the itemData to set
-	 */
-	public void setItemData(String itemData) {
-		this.itemData = itemData;
-	}
+    /**
+     * @param itemData the itemData to set
+     */
+    public void setItemData(String itemData) {
+        this.itemData = itemData;
+    }
 
-	/**
-	 * @return the itemRuleData
-	 */
-	public String getItemRuleData() {
-		return itemRuleData;
-	}
+    /**
+     * @return the itemRuleData
+     */
+    public String getItemRuleData() {
+        return itemRuleData;
+    }
 
-	/**
-	 * @param itemRuleData the itemRuleData to set
-	 */
-	public void setItemRuleData(String itemRuleData) {
-		this.itemRuleData = itemRuleData;
-	}
+    /**
+     * @param itemRuleData the itemRuleData to set
+     */
+    public void setItemRuleData(String itemRuleData) {
+        this.itemRuleData = itemRuleData;
+    }
 
-	@Override
+    @Override
     public int hashCode() {
        return Objects.hash(this.itemData);
     }

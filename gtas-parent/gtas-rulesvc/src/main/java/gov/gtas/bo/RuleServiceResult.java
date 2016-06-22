@@ -7,10 +7,10 @@ import java.util.List;
  *
  */
 public interface RuleServiceResult {
-	/**
-	 * Gets the list of Passenger IDs "hit" by the rules.
-	 * @return the list of hits.
-	 */
+    /**
+     * Gets the list of Passenger IDs "hit" by the rules.
+     * @return the list of hits.
+     */
   List<RuleHitDetail> getResultList();
   /**
    * Gets the statistics of the rule engine execution.

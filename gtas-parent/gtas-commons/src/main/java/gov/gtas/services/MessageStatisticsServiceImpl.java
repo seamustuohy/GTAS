@@ -14,61 +14,61 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageStatisticsServiceImpl implements MessageStatisticsService {
 
-	@Resource
-	private PnrStatisticsRepository pnrStatisticsRepository;
-	
-	@Resource
-	private ApisStatisticsRepository apisStatisticsRepository;
+    @Resource
+    private PnrStatisticsRepository pnrStatisticsRepository;
+    
+    @Resource
+    private ApisStatisticsRepository apisStatisticsRepository;
 
-	@Resource
-	private DashboardMessageStatsRepository dashboardMessageStatsRepository;
+    @Resource
+    private DashboardMessageStatsRepository dashboardMessageStatsRepository;
 
-	private String api_message_string = "API";
-	private String pnr_message_string = "PNR";
+    private String api_message_string = "API";
+    private String pnr_message_string = "PNR";
 
 
-	@Override
-	@Transactional
-	public DashboardMessageStats getDashboardAPIMessageStats() {
-		DashboardMessageStats stat=new DashboardMessageStats();
-		List<DashboardMessageStats> statsList= (List<DashboardMessageStats>)dashboardMessageStatsRepository.getMessages(api_message_string);
-		if(statsList != null && statsList.size() >0){
-			stat=statsList.get(0);
-		}
-		return stat;
-	}
+    @Override
+    @Transactional
+    public DashboardMessageStats getDashboardAPIMessageStats() {
+        DashboardMessageStats stat=new DashboardMessageStats();
+        List<DashboardMessageStats> statsList= (List<DashboardMessageStats>)dashboardMessageStatsRepository.getMessages(api_message_string);
+        if(statsList != null && statsList.size() >0){
+            stat=statsList.get(0);
+        }
+        return stat;
+    }
 
-	@Override
-	@Transactional
-	public DashboardMessageStats getDashboardPNRMessageStats() {
-		DashboardMessageStats stat=new DashboardMessageStats();
-		List<DashboardMessageStats> statsList= (List<DashboardMessageStats>)dashboardMessageStatsRepository.getMessages(pnr_message_string);
-		if(statsList != null && statsList.size() >0){
-			stat=statsList.get(0);
-		}
-		return stat;
-	}
+    @Override
+    @Transactional
+    public DashboardMessageStats getDashboardPNRMessageStats() {
+        DashboardMessageStats stat=new DashboardMessageStats();
+        List<DashboardMessageStats> statsList= (List<DashboardMessageStats>)dashboardMessageStatsRepository.getMessages(pnr_message_string);
+        if(statsList != null && statsList.size() >0){
+            stat=statsList.get(0);
+        }
+        return stat;
+    }
 
-	@Override
-	@Transactional
-	public PnrStatistics getPnrStatistics() {
-		PnrStatistics stat=new PnrStatistics();
-		List<PnrStatistics> statsList=(List<PnrStatistics>)pnrStatisticsRepository.findAll();
-		if(statsList != null && statsList.size() >0){
-			stat=statsList.get(0);
-		}
-		return stat ;
-	}
+    @Override
+    @Transactional
+    public PnrStatistics getPnrStatistics() {
+        PnrStatistics stat=new PnrStatistics();
+        List<PnrStatistics> statsList=(List<PnrStatistics>)pnrStatisticsRepository.findAll();
+        if(statsList != null && statsList.size() >0){
+            stat=statsList.get(0);
+        }
+        return stat ;
+    }
 
-	@Override
-	@Transactional
-	public ApisStatistics getApisStatistics() {
-		ApisStatistics stat = new ApisStatistics();
-		List<ApisStatistics> statsList = (List<ApisStatistics>)apisStatisticsRepository.findAll();
-		if(statsList != null && statsList.size() >0){
-			stat=statsList.get(0);
-		}
-		return stat;
-	}
+    @Override
+    @Transactional
+    public ApisStatistics getApisStatistics() {
+        ApisStatistics stat = new ApisStatistics();
+        List<ApisStatistics> statsList = (List<ApisStatistics>)apisStatisticsRepository.findAll();
+        if(statsList != null && statsList.size() >0){
+            stat=statsList.get(0);
+        }
+        return stat;
+    }
 
 }

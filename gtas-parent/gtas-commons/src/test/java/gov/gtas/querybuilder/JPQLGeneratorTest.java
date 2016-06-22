@@ -6,9 +6,9 @@ import org.junit.Test;
 
 public class JPQLGeneratorTest {
 
-	@Test
-	public void testGenerateQuery() {
-		
-	}
+    @Test
+    public void testGenerateQuery() {
+        
+    }
 
 }

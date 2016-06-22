@@ -25,71 +25,71 @@ import org.springframework.stereotype.Component;
 @Component
 public class DashboardUpdateScheduler {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(DashboardUpdateScheduler.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(DashboardUpdateScheduler.class);
 
-	@PersistenceContext
-	private EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	@Value("${dashboard.api.message.update}")
-	private String apiDashboardUpdateSql;
+    @Value("${dashboard.api.message.update}")
+    private String apiDashboardUpdateSql;
 
-	@Value("${dashboard.pnr.message.update}")
-	private String pnrDashboardUpdateSql;
+    @Value("${dashboard.pnr.message.update}")
+    private String pnrDashboardUpdateSql;
 
-	private ErrorPersistenceService errorPersistenceService;
+    private ErrorPersistenceService errorPersistenceService;
 
-	private AuditLogPersistenceService auditLogPersistenceService;
+    private AuditLogPersistenceService auditLogPersistenceService;
 
-	@Autowired
-	public DashboardUpdateScheduler(
-			ErrorPersistenceService errorPersistenceService,
-			AuditLogPersistenceService auditLogPersistenceService) {
-		this.errorPersistenceService = errorPersistenceService;
-		this.auditLogPersistenceService = auditLogPersistenceService;
-	}
+    @Autowired
+    public DashboardUpdateScheduler(
+            ErrorPersistenceService errorPersistenceService,
+            AuditLogPersistenceService auditLogPersistenceService) {
+        this.errorPersistenceService = errorPersistenceService;
+        this.auditLogPersistenceService = auditLogPersistenceService;
+    }
 
-	@Scheduled(fixedDelayString = "${dashboard.fixedDelay.in.milliseconds}")
-	@Transactional
-	public void jobScheduling() {
-		logger.info("entering jobScheduling()");
+    @Scheduled(fixedDelayString = "${dashboard.fixedDelay.in.milliseconds}")
+    @Transactional
+    public void jobScheduling() {
+        logger.info("entering jobScheduling()");
 
-		try {
-			entityManager.createNativeQuery(apiDashboardUpdateSql)
-					.executeUpdate();
-			logger.info("Updated dashboard api.");
-			int updatedRecords = entityManager.createNativeQuery(
-					pnrDashboardUpdateSql).executeUpdate();
-			logger.info("Updated dashboard pnr.");
-			writeAuditLogForUpdatingDashboardRun(updatedRecords);
-		} catch (Exception ex) {
-			logger.error("SQLException:" + ex.getMessage(), ex);
-			ErrorDetailInfo errInfo = ErrorHandlerFactory
-					.createErrorDetails(ex);
-			errorPersistenceService.create(errInfo);
-		}
+        try {
+            entityManager.createNativeQuery(apiDashboardUpdateSql)
+                    .executeUpdate();
+            logger.info("Updated dashboard api.");
+            int updatedRecords = entityManager.createNativeQuery(
+                    pnrDashboardUpdateSql).executeUpdate();
+            logger.info("Updated dashboard pnr.");
+            writeAuditLogForUpdatingDashboardRun(updatedRecords);
+        } catch (Exception ex) {
+            logger.error("SQLException:" + ex.getMessage(), ex);
+            ErrorDetailInfo errInfo = ErrorHandlerFactory
+                    .createErrorDetails(ex);
+            errorPersistenceService.create(errInfo);
+        }
 
-		logger.info("exiting jobScheduling()");
+        logger.info("exiting jobScheduling()");
 
-	}
+    }
 
-	private void writeAuditLogForUpdatingDashboardRun(Integer updatedRecords) {
-		try {
-			AuditActionTarget target = new AuditActionTarget(
-					AuditActionType.UPDATE_DASHBOARD_RUN,
-					"GTAS Updating Dashboard", null);
-			AuditActionData actionData = new AuditActionData();
-			actionData.addProperty("updatedDashboardRecord", String.valueOf(updatedRecords));
-			String message = "Updating Dashboard run on " + new Date();
-			auditLogPersistenceService.create(AuditActionType.UPDATE_DASHBOARD_RUN,
-					target.toString(), actionData.toString(), message,
-					GTAS_APPLICATION_USERID);
-		} catch (Exception ex) {
-			logger.error("Exception:" + ex.getMessage(), ex);
-			ErrorDetailInfo errInfo = ErrorHandlerFactory
-					.createErrorDetails(ex);
-			errorPersistenceService.create(errInfo);
-		}
-	}
+    private void writeAuditLogForUpdatingDashboardRun(Integer updatedRecords) {
+        try {
+            AuditActionTarget target = new AuditActionTarget(
+                    AuditActionType.UPDATE_DASHBOARD_RUN,
+                    "GTAS Updating Dashboard", null);
+            AuditActionData actionData = new AuditActionData();
+            actionData.addProperty("updatedDashboardRecord", String.valueOf(updatedRecords));
+            String message = "Updating Dashboard run on " + new Date();
+            auditLogPersistenceService.create(AuditActionType.UPDATE_DASHBOARD_RUN,
+                    target.toString(), actionData.toString(), message,
+                    GTAS_APPLICATION_USERID);
+        } catch (Exception ex) {
+            logger.error("Exception:" + ex.getMessage(), ex);
+            ErrorDetailInfo errInfo = ErrorHandlerFactory
+                    .createErrorDetails(ex);
+            errorPersistenceService.create(errInfo);
+        }
+    }
 
 }

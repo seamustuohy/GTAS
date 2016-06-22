@@ -20,44 +20,44 @@ import org.springframework.data.repository.query.Param;
  *
  */
 public interface UdrRuleRepository extends CrudRepository<UdrRule, Long>,
-		JpaSpecificationExecutor<UdrRule> {
-	public List<UdrRule> findByDeleted(YesNoEnum deleted);
+        JpaSpecificationExecutor<UdrRule> {
+    public List<UdrRule> findByDeleted(YesNoEnum deleted);
 
-	@Query("SELECT udr FROM UdrRule udr WHERE udr.deleted = 'N' and udr.author.userId = :authorUserId")
-	public List<UdrRule> findUdrRuleByAuthor(
-			@Param("authorUserId") String authorUserId);
+    @Query("SELECT udr FROM UdrRule udr WHERE udr.deleted = 'N' and udr.author.userId = :authorUserId")
+    public List<UdrRule> findUdrRuleByAuthor(
+            @Param("authorUserId") String authorUserId);
 
-	@Query("SELECT udr.id, udr.editedBy.userId, udr.editDt, udr.metaData.title, udr.metaData.description, "
-			+ "udr.metaData.startDt, udr.metaData.enabled, udr.metaData.endDt, udr.author.userId FROM UdrRule udr "
-			+ "WHERE udr.deleted = 'N' and udr.author.userId = :authorUserId")
-	public List<Object[]> findAllUdrRuleSummaryByAuthor(
-			@Param("authorUserId") String authorUserId);
+    @Query("SELECT udr.id, udr.editedBy.userId, udr.editDt, udr.metaData.title, udr.metaData.description, "
+            + "udr.metaData.startDt, udr.metaData.enabled, udr.metaData.endDt, udr.author.userId FROM UdrRule udr "
+            + "WHERE udr.deleted = 'N' and udr.author.userId = :authorUserId")
+    public List<Object[]> findAllUdrRuleSummaryByAuthor(
+            @Param("authorUserId") String authorUserId);
 
-	@Query("SELECT udr.id, udr.editedBy.userId, udr.editDt, udr.metaData.title, udr.metaData.description, "
-			+ "udr.metaData.startDt, udr.metaData.enabled, udr.metaData.endDt, udr.author.userId FROM UdrRule udr WHERE udr.deleted = 'N'")
-	public List<Object[]> findAllUdrRuleSummary();
+    @Query("SELECT udr.id, udr.editedBy.userId, udr.editDt, udr.metaData.title, udr.metaData.description, "
+            + "udr.metaData.startDt, udr.metaData.enabled, udr.metaData.endDt, udr.author.userId FROM UdrRule udr WHERE udr.deleted = 'N'")
+    public List<Object[]> findAllUdrRuleSummary();
 
-	@Query("SELECT udr FROM UdrRule udr WHERE udr.deleted = 'N' and udr.metaData.title = :title and udr.author.userId = :authorUserId")
-	public UdrRule getUdrRuleByTitleAndAuthor(@Param("title") String title,
-			@Param("authorUserId") String authorUserId);
+    @Query("SELECT udr FROM UdrRule udr WHERE udr.deleted = 'N' and udr.metaData.title = :title and udr.author.userId = :authorUserId")
+    public UdrRule getUdrRuleByTitleAndAuthor(@Param("title") String title,
+            @Param("authorUserId") String authorUserId);
 
-	@Query("SELECT kb FROM KnowledgeBase kb WHERE kb.kbName = :name")
-	public KnowledgeBase getKnowledgeBaseByName(@Param("name") String name);
+    @Query("SELECT kb FROM KnowledgeBase kb WHERE kb.kbName = :name")
+    public KnowledgeBase getKnowledgeBaseByName(@Param("name") String name);
 
-	@Query("SELECT rl FROM Rule rl WHERE rl.knowledgeBase.id = :kbId")
-	public List<Rule> getRuleByKbId(@Param("kbId") Long kbId);
+    @Query("SELECT rl FROM Rule rl WHERE rl.knowledgeBase.id = :kbId")
+    public List<Rule> getRuleByKbId(@Param("kbId") Long kbId);
 
-	@Query("SELECT udr FROM UdrRule udr WHERE  udr.deleted = 'N' and (udr.metaData.endDt is null or udr.metaData.endDt >= :targetDate)")
-	public List<UdrRule> findValidUdrRuleByDate(
-			@Param("targetDate") Date targetDate);
+    @Query("SELECT udr FROM UdrRule udr WHERE  udr.deleted = 'N' and (udr.metaData.endDt is null or udr.metaData.endDt >= :targetDate)")
+    public List<UdrRule> findValidUdrRuleByDate(
+            @Param("targetDate") Date targetDate);
 
-	@Query("SELECT udr.title FROM UdrRule udr WHERE udr.deleted = 'N' and udr.title like :titlePrefix and udr.author.userId = :authorUserId")
-	public List<String> getUdrTitleByTitlePrefixAndAuthor(
-			@Param("titlePrefix") String title,
-			@Param("authorUserId") String authorUserId);
+    @Query("SELECT udr.title FROM UdrRule udr WHERE udr.deleted = 'N' and udr.title like :titlePrefix and udr.author.userId = :authorUserId")
+    public List<String> getUdrTitleByTitlePrefixAndAuthor(
+            @Param("titlePrefix") String title,
+            @Param("authorUserId") String authorUserId);
 
-	@Query("SELECT udr FROM UdrRule udr where udr.deleted = :deleted AND udr.metaData.enabled = :enabled AND (udr.metaData.endDt is null OR udr.metaData.endDt >= CURRENT_DATE)")
-	public List<UdrRule> findByDeletedAndEnabled(
-			@Param("deleted") YesNoEnum deleted,
-			@Param("enabled") YesNoEnum enabled);
+    @Query("SELECT udr FROM UdrRule udr where udr.deleted = :deleted AND udr.metaData.enabled = :enabled AND (udr.metaData.endDt is null OR udr.metaData.endDt >= CURRENT_DATE)")
+    public List<UdrRule> findByDeletedAndEnabled(
+            @Param("deleted") YesNoEnum deleted,
+            @Param("enabled") YesNoEnum enabled);
 }

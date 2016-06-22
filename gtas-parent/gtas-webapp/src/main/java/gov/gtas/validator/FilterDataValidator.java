@@ -8,22 +8,22 @@ import org.springframework.validation.Validator;
 import gov.gtas.services.Filter.FilterData;
 @Component
 public class FilterDataValidator implements Validator {
-	
+    
 
-	private static final String USERID_REQUIRED = "UserId required .";
+    private static final String USERID_REQUIRED = "UserId required .";
 
-	@Override
-	public boolean supports(Class<?> clazz) {
-		// TODO Auto-generated method stub
-		return FilterData.class.isAssignableFrom(clazz);
-	}
+    @Override
+    public boolean supports(Class<?> clazz) {
+        // TODO Auto-generated method stub
+        return FilterData.class.isAssignableFrom(clazz);
+    }
 
-	@Override
-	public void validate(Object target, Errors errors) {
-		FilterData filterDataRequest = (FilterData) target;
+    @Override
+    public void validate(Object target, Errors errors) {
+        FilterData filterDataRequest = (FilterData) target;
 
-		ValidationUtils.rejectIfEmpty(errors, "userId", USERID_REQUIRED);
-		
-	}
+        ValidationUtils.rejectIfEmpty(errors, "userId", USERID_REQUIRED);
+        
+    }
 
 }

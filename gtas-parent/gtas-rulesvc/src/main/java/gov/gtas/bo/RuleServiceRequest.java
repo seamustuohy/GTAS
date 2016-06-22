@@ -9,19 +9,19 @@ import java.util.Collection;
  *
  */
 public interface RuleServiceRequest {
-	/**
-	 * Gets objects to be inserted into the working memory before the rule
-	 * engine is executed.
-	 * 
-	 * @return list of objects to be inserted into the working memory.
-	 */
-	Collection<?> getRequestObjects();
+    /**
+     * Gets objects to be inserted into the working memory before the rule
+     * engine is executed.
+     * 
+     * @return list of objects to be inserted into the working memory.
+     */
+    Collection<?> getRequestObjects();
 
-	/**
-	 * Gets the type of the request.<br>
-	 * (e.g., APIS_MESSAGE)
-	 * 
-	 * @return request type.
-	 */
-	RuleServiceRequestType getRequestType();
+    /**
+     * Gets the type of the request.<br>
+     * (e.g., APIS_MESSAGE)
+     * 
+     * @return request type.
+     */
+    RuleServiceRequestType getRequestType();
 }

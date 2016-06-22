@@ -5,13 +5,13 @@ import org.apache.commons.lang3.StringUtils;
 import gov.gtas.validators.Validatable;
 
 public class AgencyVo implements Validatable {
-	private String name;
+    private String name;
     private String location;
-	private String identifier;
-	private String country;
+    private String identifier;
+    private String country;
     private String phone;
-	
-	public String getName() {
+    
+    public String getName() {
         return name;
     }
     public void setName(String name) {
@@ -41,8 +41,8 @@ public class AgencyVo implements Validatable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-	@Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.name);
-	}
+    @Override
+    public boolean isValid() {
+        return StringUtils.isNotBlank(this.name);
+    }
 }

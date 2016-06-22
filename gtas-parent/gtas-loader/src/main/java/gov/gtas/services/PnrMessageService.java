@@ -72,7 +72,7 @@ public class PnrMessageService extends MessageLoaderService {
     
     @Override
     public boolean load(MessageVo messageVo) {
-    	boolean success = true;
+        boolean success = true;
         try {
             PnrVo vo = (PnrVo)messageVo;
             // TODO: fix this, combine methods
@@ -86,7 +86,7 @@ public class PnrMessageService extends MessageLoaderService {
             pnr.setStatus(MessageStatus.LOADED);
 
         } catch (Exception e) {
-        	success = false;
+            success = false;
             handleException(e, MessageStatus.FAILED_LOADING);
         } finally {
             success &= createMessage(pnr);            
@@ -114,11 +114,11 @@ public class PnrMessageService extends MessageLoaderService {
 
     @Transactional
     private boolean createMessage(Pnr m) {
-    	boolean ret = true;
+        boolean ret = true;
         try {
             msgDao.save(m);
         } catch (Exception e) {
-        	ret = false;
+            ret = false;
             handleException(e, MessageStatus.FAILED_LOADING);
             msgDao.save(m);
         }

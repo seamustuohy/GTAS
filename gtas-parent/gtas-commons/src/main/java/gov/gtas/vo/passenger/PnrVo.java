@@ -26,7 +26,7 @@ public class PnrVo extends MessageVo {
     private String raw;
     private List<String> rawList = new ArrayList<String>();
     private Integer daysBookedBeforeTravel;
-	private boolean pnrRecordExists = false; 
+    private boolean pnrRecordExists = false; 
     private List<FlightVo> flights = new ArrayList<>();
     private List<PassengerVo> passengers = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class PnrVo extends MessageVo {
     private List<EmailVo> emails = new ArrayList<>();
     private List<AgencyVo> agencies = new ArrayList<>();
     private List<FlightLegVo> flightLegs = new ArrayList<>();
-	
+    
     /** seat assignments in this pnr.  for display purposes only */
     private List<SeatVo> seatAssignments = new ArrayList<>();
     
@@ -47,50 +47,50 @@ public class PnrVo extends MessageVo {
     }
      
     public List<EmailVo> getEmails() {
-		return emails;
-	}
+        return emails;
+    }
 
-	public void setEmails(List<EmailVo> emails) {
-		this.emails = emails;
-	}
+    public void setEmails(List<EmailVo> emails) {
+        this.emails = emails;
+    }
 
-	public String getRaw() {
-		return raw;
-	}
+    public String getRaw() {
+        return raw;
+    }
 
-	public void setRaw(String raw) {
-		this.raw = raw;
-	}
+    public void setRaw(String raw) {
+        this.raw = raw;
+    }
 
-	public List<String> getRawList() {
-		return rawList;
-	}
+    public List<String> getRawList() {
+        return rawList;
+    }
 
-	public void setRawList(List<String> rawList) {
-		this.rawList = rawList;
-	}
+    public void setRawList(List<String> rawList) {
+        this.rawList = rawList;
+    }
 
-	public boolean isPnrRecordExists() {
-		return pnrRecordExists;
-	}
+    public boolean isPnrRecordExists() {
+        return pnrRecordExists;
+    }
 
-	public void setPnrRecordExists(boolean pnrRecordExists) {
-		this.pnrRecordExists = pnrRecordExists;
-	}
+    public void setPnrRecordExists(boolean pnrRecordExists) {
+        this.pnrRecordExists = pnrRecordExists;
+    }
 
-	public Integer getDaysBookedBeforeTravel() {
-		return daysBookedBeforeTravel;
-	}
+    public Integer getDaysBookedBeforeTravel() {
+        return daysBookedBeforeTravel;
+    }
 
-	public void setDaysBookedBeforeTravel(Integer daysBookedBeforeTravel) {
-		this.daysBookedBeforeTravel = daysBookedBeforeTravel;
-	}
-	
-	public String getMessageCode() {
+    public void setDaysBookedBeforeTravel(Integer daysBookedBeforeTravel) {
+        this.daysBookedBeforeTravel = daysBookedBeforeTravel;
+    }
+    
+    public String getMessageCode() {
         return messageCode;
     }
     
-	public void setMessageCode(String messageCode) {
+    public void setMessageCode(String messageCode) {
         this.messageCode = messageCode;
     }
     
@@ -135,12 +135,12 @@ public class PnrVo extends MessageVo {
     }
 
     public List<FlightLegVo> getFlightLegs() {
-		return flightLegs;
-	}
+        return flightLegs;
+    }
 
-	public void setFlightLegs(List<FlightLegVo> flightLegs) {
-		this.flightLegs = flightLegs;
-	}
+    public void setFlightLegs(List<FlightLegVo> flightLegs) {
+        this.flightLegs = flightLegs;
+    }
 
     public Date getDateReceived() {
         return dateReceived;

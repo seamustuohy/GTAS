@@ -4,6 +4,6 @@ import java.util.Set;
 
 public interface RoleService {
 
-	public Set<RoleData> findAll();
+    public Set<RoleData> findAll();
 
 }

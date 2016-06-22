@@ -49,26 +49,26 @@ public class DAT extends Segment {
     }
     
     private List<DatDetails> dateTimes;
-	
-	public DAT(List<Composite> composites) throws ParseException {
-		super(DAT.class.getSimpleName(), composites);
-		
-		this.dateTimes = new ArrayList<>();
-		for (Composite c : getComposites()) {
-	        DatDetails d = new DatDetails();
-	        
-	        String type = c.getElement(0);
+    
+    public DAT(List<Composite> composites) throws ParseException {
+        super(DAT.class.getSimpleName(), composites);
+        
+        this.dateTimes = new ArrayList<>();
+        for (Composite c : getComposites()) {
+            DatDetails d = new DatDetails();
+            
+            String type = c.getElement(0);
             d.setType(type);
-	        if (CHECKIN_FREE_TEXT_CODE.equals(type)) {
-	            d.setDateTime(processFreeTextDt(c));
-	        } else {
-	            d.setDateTime(processDt(c));
-	        }
-	        
-	        dateTimes.add(d);
-		}
-	}
-	
+            if (CHECKIN_FREE_TEXT_CODE.equals(type)) {
+                d.setDateTime(processFreeTextDt(c));
+            } else {
+                d.setDateTime(processDt(c));
+            }
+            
+            dateTimes.add(d);
+        }
+    }
+    
     public static Date processDt(Composite c) throws ParseException {
         String dt = null;
         dt = c.getElement(1);

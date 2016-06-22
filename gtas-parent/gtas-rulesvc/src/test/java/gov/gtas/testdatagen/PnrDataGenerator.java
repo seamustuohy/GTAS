@@ -16,41 +16,41 @@ import gov.gtas.model.Seat;
 import gov.gtas.util.DateCalendarUtils;
 
 public class PnrDataGenerator {
-	public static final long PNR_ID1 = 221L;
-	public static final String PNR_ATTR_CARRIER1 = "NZ";
-	public static final String PNR_ATTR_RECORD_LOCATOR1 = "VYZ32901123";
-	public static final long PNR_ID2 = 251L;
-	public static final String PNR_ATTR_CARRIER2 = "AA";
-	public static final String PNR_ATTR_RECORD_LOCATOR2 = "MNP32556191";
-	
-	public static final String PNR_PASSENGER1 = "C,Actius,Ghoulish,Boozer,CAN,2012-05-01,11A";//pnr1
-	public static final String PNR_PASSENGER2 = "P,Bilbo,,Baggins,CAN,2013-06-30,22B";//pnr1
-	public static final String PNR_PASSENGER3 = "P,Kilmer,Gaunt,Baggins,CAN,2014-01-30,33C";//pnr1
-	public static final String PNR_PASSENGER4 = "P,Crisco,Slick,Masterson,USA,2013-06-30,44D";//pnr1
-	public static final String PNR_PASSENGER5 = "P,Donald,Hair,Trump,GBR,2014-06-30,55E";//pnr2
-	public static final String PNR_PASSENGER6 = "C,Kadmil,K,Zamboni,GBR,2013-06-30,66F";//pnr2
-	
-	public static final String PNR_FLIGHT1 = "IAD,CCU";
-	public static final String PNR_FLIGHT2 = "LHR,JFK";
-	
-	public static final String PNR_PHONE1 = "+1 555-765-9087";
-	public static final String PNR_PHONE2 = "+1 456-231-8944";
+    public static final long PNR_ID1 = 221L;
+    public static final String PNR_ATTR_CARRIER1 = "NZ";
+    public static final String PNR_ATTR_RECORD_LOCATOR1 = "VYZ32901123";
+    public static final long PNR_ID2 = 251L;
+    public static final String PNR_ATTR_CARRIER2 = "AA";
+    public static final String PNR_ATTR_RECORD_LOCATOR2 = "MNP32556191";
+    
+    public static final String PNR_PASSENGER1 = "C,Actius,Ghoulish,Boozer,CAN,2012-05-01,11A";//pnr1
+    public static final String PNR_PASSENGER2 = "P,Bilbo,,Baggins,CAN,2013-06-30,22B";//pnr1
+    public static final String PNR_PASSENGER3 = "P,Kilmer,Gaunt,Baggins,CAN,2014-01-30,33C";//pnr1
+    public static final String PNR_PASSENGER4 = "P,Crisco,Slick,Masterson,USA,2013-06-30,44D";//pnr1
+    public static final String PNR_PASSENGER5 = "P,Donald,Hair,Trump,GBR,2014-06-30,55E";//pnr2
+    public static final String PNR_PASSENGER6 = "C,Kadmil,K,Zamboni,GBR,2013-06-30,66F";//pnr2
+    
+    public static final String PNR_FLIGHT1 = "IAD,CCU";
+    public static final String PNR_FLIGHT2 = "LHR,JFK";
+    
+    public static final String PNR_PHONE1 = "+1 555-765-9087";
+    public static final String PNR_PHONE2 = "+1 456-231-8944";
 
-	public static final String PNR_ADDRESS1 = "CAN,Toronto,12345,1 Nowhere Street";
-	public static final String PNR_ADDRESS2 = "CAN,Montreal,98765,21 Rue Blanc";
-	public static final String PNR_ADDRESS3 = "GBR,London,NKZ215,33 Ilkeston Blvd";
+    public static final String PNR_ADDRESS1 = "CAN,Toronto,12345,1 Nowhere Street";
+    public static final String PNR_ADDRESS2 = "CAN,Montreal,98765,21 Rue Blanc";
+    public static final String PNR_ADDRESS3 = "GBR,London,NKZ215,33 Ilkeston Blvd";
 
-	public static final String PNR_EMAIL1 = "bilbo.baggins@fall.home";
-	public static final String PNR_EMAIL2 = "the.donald@allmine.com";
+    public static final String PNR_EMAIL1 = "bilbo.baggins@fall.home";
+    public static final String PNR_EMAIL2 = "the.donald@allmine.com";
 
-	public static final String PNR_FREQUENT_FLYER1 = "CO,16675981";
-	public static final String PNR_FREQUENT_FLYER2 = "AA,99834512";
-	
-	public static final String PNR_CREDIT_CARD1= "1234567890123456";
-	public static final String PNR_CREDIT_CARD2 = "1231456823941111";
+    public static final String PNR_FREQUENT_FLYER1 = "CO,16675981";
+    public static final String PNR_FREQUENT_FLYER2 = "AA,99834512";
+    
+    public static final String PNR_CREDIT_CARD1= "1234567890123456";
+    public static final String PNR_CREDIT_CARD2 = "1231456823941111";
 
-	public static final String PNR_AGENCY1 = "USA,Alexandria,Amnesia Travels,1234567890123456";
-	public static final String PNR_AGENCY2 = "GBR,Leeds,Island Tours,1231456823941111";
+    public static final String PNR_AGENCY1 = "USA,Alexandria,Amnesia Travels,1234567890123456";
+    public static final String PNR_AGENCY2 = "GBR,Leeds,Island Tours,1231456823941111";
 
     public static Pnr createTestPnr(long id) {
         Pnr pnr = null;
@@ -93,8 +93,8 @@ public class PnrDataGenerator {
             ex.printStackTrace();
         }
         return pnr;
-    }	
-	
+    }   
+    
     private static Pnr createPnr(long id, String carrier, String recLocator) {
         Pnr pnr = new Pnr();
         pnr.setCarrier(carrier);
@@ -231,27 +231,27 @@ public class PnrDataGenerator {
     private static void addPassenger(Pnr pnr, int indx, Flight flight) throws ParseException {
         switch (indx) {
         case 1:
-        	configurePassenger(1L, pnr, flight, PNR_PASSENGER1);
+            configurePassenger(1L, pnr, flight, PNR_PASSENGER1);
             break;
         case 2:
-        	configurePassenger(2L, pnr, flight, PNR_PASSENGER2);
+            configurePassenger(2L, pnr, flight, PNR_PASSENGER2);
             break;
         case 3:
-        	configurePassenger(3L, pnr, flight, PNR_PASSENGER3);
+            configurePassenger(3L, pnr, flight, PNR_PASSENGER3);
             break;
         case 4:
-        	configurePassenger(4L, pnr, flight, PNR_PASSENGER4);
+            configurePassenger(4L, pnr, flight, PNR_PASSENGER4);
             break;
         case 5:
-        	configurePassenger(5L, pnr, flight, PNR_PASSENGER5);
+            configurePassenger(5L, pnr, flight, PNR_PASSENGER5);
             break;
         case 6:
-        	configurePassenger(6L, pnr, flight, PNR_PASSENGER6);
+            configurePassenger(6L, pnr, flight, PNR_PASSENGER6);
             break;
         }
     }
     private static void configurePassenger(Long id,Pnr pnr, Flight flight, String passengerData) throws ParseException{
-    	Passenger p = new Passenger();
+        Passenger p = new Passenger();
         String[] params = passengerData.split(",");
         
         // setup passenger
@@ -265,10 +265,10 @@ public class PnrDataGenerator {
         addDocumentToPassenger(p, params[4], params[5]);
         pnr.getPassengers().add(p);
         flight.getPassengers().add(p);
-   	
+    
         if(params.length > 6){
-        	//add seat
-        	addSeatToPassenger(p, params[6], flight);        	
+            //add seat
+            addSeatToPassenger(p, params[6], flight);           
         }
     }
     private static void addSeatToPassenger(Passenger pass, String seatNo, Flight flight) throws ParseException {

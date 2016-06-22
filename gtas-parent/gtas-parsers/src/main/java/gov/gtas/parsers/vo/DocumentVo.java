@@ -43,9 +43,9 @@ public class DocumentVo implements Validatable {
     public void setIssuanceCountry(String issuanceCountry) {
         this.issuanceCountry = issuanceCountry;
     }
-	@Override
-	public boolean isValid() {
-		return StringUtils.isNotBlank(this.documentNumber) 
-		       && StringUtils.isNotBlank(this.documentType);
-	}    
+    @Override
+    public boolean isValid() {
+        return StringUtils.isNotBlank(this.documentNumber) 
+               && StringUtils.isNotBlank(this.documentType);
+    }    
 }

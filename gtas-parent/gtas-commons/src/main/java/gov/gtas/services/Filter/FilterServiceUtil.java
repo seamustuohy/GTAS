@@ -15,58 +15,58 @@ import gov.gtas.repository.LookUpRepository;
 @Component
 public class FilterServiceUtil {
 
-	@Autowired
-	private LookUpRepository lookupRepository;
+    @Autowired
+    private LookUpRepository lookupRepository;
 
-	public FilterData mapFilterDataFromEntity(Filter entity) {
+    public FilterData mapFilterDataFromEntity(Filter entity) {
 
-		FilterData filterData = null;
+        FilterData filterData = null;
 
-		if (entity != null) {
-			Set<String> originAirports = entity.getOriginAirports().stream().map(airport -> airport.getIata())
-					.collect(Collectors.toSet());
-			Set<String> destinationAirports = entity.getDestinationAirports().stream().map(airport -> airport.getIata())
-					.collect(Collectors.toSet());
+        if (entity != null) {
+            Set<String> originAirports = entity.getOriginAirports().stream().map(airport -> airport.getIata())
+                    .collect(Collectors.toSet());
+            Set<String> destinationAirports = entity.getDestinationAirports().stream().map(airport -> airport.getIata())
+                    .collect(Collectors.toSet());
 
-			filterData = new FilterData(entity.getUser().getUserId(), entity.getFlightDirection().getcode(),
-					originAirports, destinationAirports, entity.getEtaStart(), entity.getEtaEnd());
-		}
+            filterData = new FilterData(entity.getUser().getUserId(), entity.getFlightDirection().getcode(),
+                    originAirports, destinationAirports, entity.getEtaStart(), entity.getEtaEnd());
+        }
 
-		return filterData;
-	}
+        return filterData;
+    }
 
-	public Filter mapFilterEntityFromFilterData(FilterData filterData) {
+    public Filter mapFilterEntityFromFilterData(FilterData filterData) {
 
-		Filter filter = null;
-		if (filterData != null) {
-			filter = new Filter();
-			User user = new User();
-			user.setUserId(filterData.getUserId());
-			filter.setUser(user);
+        Filter filter = null;
+        if (filterData != null) {
+            filter = new Filter();
+            User user = new User();
+            user.setUserId(filterData.getUserId());
+            filter.setUser(user);
 
-			// DetachedObject
-			FlightDirection flightDirection = lookupRepository.getFlightDirections().stream()
-					.filter(fd -> (fd.getcode()).equals(filterData.getFlightDirection())).findFirst().get();
+            // DetachedObject
+            FlightDirection flightDirection = lookupRepository.getFlightDirections().stream()
+                    .filter(fd -> (fd.getcode()).equals(filterData.getFlightDirection())).findFirst().get();
 
-			filter.setFlightDirection(flightDirection);
+            filter.setFlightDirection(flightDirection);
 
-			Set<Airport> originAirports = lookupRepository.getAllAirports().stream()
-					.filter(airport -> filterData.getOriginAirports().contains(airport.getIata()))
-					.collect(Collectors.toSet());
+            Set<Airport> originAirports = lookupRepository.getAllAirports().stream()
+                    .filter(airport -> filterData.getOriginAirports().contains(airport.getIata()))
+                    .collect(Collectors.toSet());
 
-			Set<Airport> destinationAirports = lookupRepository.getAllAirports().stream()
-					.filter(airport -> filterData.getDestinationAirports().contains(airport.getIata()))
-					.collect(Collectors.toSet());
+            Set<Airport> destinationAirports = lookupRepository.getAllAirports().stream()
+                    .filter(airport -> filterData.getDestinationAirports().contains(airport.getIata()))
+                    .collect(Collectors.toSet());
 
-			filter.setOriginAirports(originAirports);
-			filter.setDestinationAirports(destinationAirports);
+            filter.setOriginAirports(originAirports);
+            filter.setDestinationAirports(destinationAirports);
 
-			filter.setEtaStart(filterData.getEtaStart());
-			filter.setEtaEnd(filterData.getEtaEnd());
+            filter.setEtaStart(filterData.getEtaStart());
+            filter.setEtaEnd(filterData.getEtaEnd());
 
-		}
+        }
 
-		return filter;
-	}
+        return filter;
+    }
 
 }

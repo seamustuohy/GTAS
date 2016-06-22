@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface ErrorPersistenceService {
-	public ErrorDetailInfo create(ErrorDetailInfo error);
+    public ErrorDetailInfo create(ErrorDetailInfo error);
     public ErrorDetailInfo findById(Long id);
 
     public List<ErrorDetailInfo> findByDateRange(Date dateFrom, Date dateTo);

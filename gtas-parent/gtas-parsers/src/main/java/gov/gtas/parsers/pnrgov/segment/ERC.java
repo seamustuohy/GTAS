@@ -12,7 +12,7 @@ import gov.gtas.parsers.edifact.Segment;
  * Ex:Invalid flight number(ERC+114')
  */
 public class ERC extends Segment{
-	public ERC(String name, List<Composite> composites) {
-		super(name, composites);
-	}
+    public ERC(String name, List<Composite> composites) {
+        super(name, composites);
+    }
 }

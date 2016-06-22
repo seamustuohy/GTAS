@@ -12,13 +12,13 @@ import gov.gtas.parsers.edifact.Segment;
 public class TRI extends Segment {
     private String travelerReferenceNumber;
     
-	public TRI(List<Composite> composites) {
-		super(TRI.class.getSimpleName(), composites);
-		Composite c = getComposite(1);
-		if (c != null) {
-		    this.travelerReferenceNumber = c.getElement(3);
-		}
-	}
+    public TRI(List<Composite> composites) {
+        super(TRI.class.getSimpleName(), composites);
+        Composite c = getComposite(1);
+        if (c != null) {
+            this.travelerReferenceNumber = c.getElement(3);
+        }
+    }
 
     public String getTravelerReferenceNumber() {
         return travelerReferenceNumber;

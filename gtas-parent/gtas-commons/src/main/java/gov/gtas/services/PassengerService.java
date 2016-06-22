@@ -10,7 +10,7 @@ import gov.gtas.services.dto.PassengersRequestDto;
 import gov.gtas.vo.passenger.PassengerVo;
 
 public interface PassengerService {
-	public Passenger create(Passenger passenger);
+    public Passenger create(Passenger passenger);
     public Passenger update(Passenger passenger) ;
     
     public Passenger findById(Long id);

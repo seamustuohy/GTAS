@@ -8,5 +8,5 @@ public interface AppConfigurationRepository extends CrudRepository<AppConfigurat
     public static String HOME_COUNTRY = "HOME_COUNTRY";
     public static String QUEUE = "QUEUE";
     
-	public AppConfiguration findByOption(String option);
+    public AppConfiguration findByOption(String option);
 }
