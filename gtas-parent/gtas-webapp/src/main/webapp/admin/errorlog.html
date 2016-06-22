@@ -48,12 +48,12 @@
 <md-content class="error-detail fixed-panel" ng-show = "selectedErrorItem" layout-padding layout-margin layout-align="space-around center">
    <table border="1px" width="100%" margin-top="2px">
        <tr ng-repeat="line in selectedErrorItem.errorDetails track by $index">
-	       <td>{{line}}</td>
+           <td>{{line}}</td>
        </tr>
    </table>
 </md-content>
 
 <md-content class="md-padding">
-	<div ui-grid="errorGrid" ui-grid-pagination ui-grid-selection ui-grid-auto-resize class="grid" />
+    <div ui-grid="errorGrid" ui-grid-pagination ui-grid-selection ui-grid-auto-resize class="grid" />
 </md-content>
 

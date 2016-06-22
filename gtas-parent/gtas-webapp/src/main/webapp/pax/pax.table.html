@@ -1,8 +1,8 @@
 <style>
-	.disabled-chips input,.disabled-chips .md-chip-remove-container {
-		display:none;
-	}
-	
+    .disabled-chips input,.disabled-chips .md-chip-remove-container {
+        display:none;
+    }
+    
     [ui-grid="passengerGrid"] .red {
         text-align: center;
         font-size: 1.5em;
@@ -360,8 +360,8 @@
     <md-content class="disabled-chips md-padding autocomplete origin" layout="column" ng-disabled="true" >
         <label>{{'flight.origin' | translate}}</label>
         <md-contact-chips ng-disabled="true" ng-model="model.origin" md-contacts="searchSort($query)" 
-        				md-contact-name="id" md-contact-email="name"
- 						md-require-match="true" md-highlight-flags="i" filter-selected="filterSelected">
+                        md-contact-name="id" md-contact-email="name"
+                        md-require-match="true" md-highlight-flags="i" filter-selected="filterSelected">
         </md-contact-chips>
     </md-content>
     <md-content class="disabled-chips md-padding autocomplete destination" layout="column">
@@ -448,14 +448,14 @@
 
 <div id="builder"></div>
 <div ng-if="stateName != 'queryPassengers'"
-	 id="grid1" ui-grid="passengerGrid"
+     id="grid1" ui-grid="passengerGrid"
      ui-grid-pagination
      ui-grid-expandable
      ui-grid-auto-resize
      ng-style="getTableHeight()"
      class="grid"></div>
 <div ng-if="stateName === 'queryPassengers'"
-	 id="grid1" ui-grid="passengerQueryGrid"
+     id="grid1" ui-grid="passengerQueryGrid"
      ui-grid-pagination
      ui-grid-expandable
      ui-grid-auto-resize
