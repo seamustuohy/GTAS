@@ -127,31 +127,6 @@ public class RuleHitDetail implements Serializable, Cloneable {
     }
 
     /**
-     * This constructor is used when the knowledge base is built from UDR.
-     * 
-     * @param ruleId
-     *            the id of the GTAS RULE DB object. An UDR can generate
-     *            multiple RULE objects.
-     * @param passenger
-     *            the Passenger object that matched.
-     * @param flight
-     *            the flight object that matched.
-     * 
-     */
-    // public RuleHitDetail(final Long ruleId, final Passenger passenger,
-    // final Flight flight) {
-    // this.ruleId = ruleId;
-    // this.passengerId = passenger.getId();
-    // this.passengerType = decodePassengerTypeName(passenger
-    // .getPassengerType());
-    // this.passengerName = passenger.getFirstName() + " "
-    // + passenger.getLastName();
-    // if (flight != null) {
-    // this.flightId = flight.getId();
-    // }
-    // }
-
-    /**
      * @return the hitRule
      */
     public String getHitRule() {
