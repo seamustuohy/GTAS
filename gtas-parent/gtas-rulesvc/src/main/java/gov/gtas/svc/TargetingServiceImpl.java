@@ -1,6 +1,24 @@
 package gov.gtas.svc;
 
 import static gov.gtas.constant.GtasSecurityConstants.GTAS_APPLICATION_USERID;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
 import gov.gtas.bo.CompositeRuleServiceResult;
 import gov.gtas.bo.RuleExecutionStatistics;
 import gov.gtas.bo.RuleHitDetail;
@@ -40,27 +58,11 @@ import gov.gtas.repository.watchlist.WatchlistItemRepository;
 import gov.gtas.rule.RuleService;
 import gov.gtas.services.AuditLogPersistenceService;
 import gov.gtas.services.HitsSummaryService;
+import gov.gtas.services.PassengerService;
 import gov.gtas.services.udr.RulePersistenceService;
 import gov.gtas.svc.util.RuleExecutionContext;
 import gov.gtas.svc.util.TargetingResultUtils;
 import gov.gtas.svc.util.TargetingServiceUtils;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.transaction.Transactional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 /**
  * Implementation of the Targeting Service API.
@@ -114,6 +116,9 @@ public class TargetingServiceImpl implements TargetingService {
 
     @Autowired
     private UdrRuleRepository udrRuleRepository;
+    
+    @Autowired
+    private PassengerService passengerService;
 
     /**
      * Constructor obtained from the spring context by auto-wiring.
@@ -472,13 +477,14 @@ public class TargetingServiceImpl implements TargetingService {
         List<HitsSummary> hitsSummary = storeHitsInfo(ruleRunningResult);
         Set<Long> uniqueFlights = new HashSet<>();
         for (HitsSummary s : hitsSummary) {
+            passengerService.createDisposition(s);
             uniqueFlights.add(s.getFlight().getId());
         }
         writeAuditLogForTargetingRun(ruleRunningResult);
         logger.info("Exiting runningRuleEngine().");
         return uniqueFlights;
     }
-
+    
     private void writeAuditLogForTargetingRun(
             RuleExecutionContext targetingResult) {
         try {

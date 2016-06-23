@@ -156,6 +156,24 @@ public class PassengerServiceImpl implements PassengerService {
         dispositionRepo.save(d);
     }
     
+    /**
+     * TODO: figure out how we can obtain the id of 'NEW' status
+     */
+    @Override    
+    public void createDisposition(HitsSummary hit) {
+        Disposition d = new Disposition();
+        d.setCreatedAt(new Date());
+        d.setCreatedBy("SYSTEM");
+        d.setComments("New case");
+        d.setPassenger(hit.getPassenger());
+        d.setFlight(hit.getFlight());
+        DispositionStatus status = new DispositionStatus();
+        status.setId(1L);
+        d.setStatus(status);
+        
+        dispositionRepo.save(d);
+    }
+    
     @Override
     @Transactional
     public Passenger findById(Long id) {

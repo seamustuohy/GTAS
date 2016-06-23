@@ -3,6 +3,7 @@ package gov.gtas.services;
 import java.util.List;
 
 import gov.gtas.model.Disposition;
+import gov.gtas.model.HitsSummary;
 import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.DispositionStatus;
 import gov.gtas.services.dto.PassengersPageDto;
@@ -15,8 +16,10 @@ public interface PassengerService {
     
     public Passenger findById(Long id);
     public List<Passenger> getPassengersByLastName(String lastName);
+    
     public List<Disposition> getPassengerDispositionHistory(Long passengerId, Long flightId);
     public void createDisposition(DispositionData disposition);
+    public void createDisposition(HitsSummary hit);
     public List<DispositionStatus> getDispositionStatuses();
     
     /**
