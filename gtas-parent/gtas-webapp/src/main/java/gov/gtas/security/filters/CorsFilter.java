@@ -13,14 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.Ordered;
-//
-//@Component
-//@Order(Ordered.HIGHEST_PRECEDENCE)
-public class CorsFilter 
 
-//implements Filter 
-
-{
+public class CorsFilter {
 
   public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) {
     HttpServletResponse response = (HttpServletResponse) res;
@@ -45,7 +39,6 @@ public class CorsFilter
     
   }
 
-  
   public void init(FilterConfig filterConfig) {}
 
   public void destroy() {}

@@ -16,24 +16,14 @@ public final class AuthUser extends User{
 
     
     private static final long serialVersionUID = 1L;
-
     private final String lastName;
-
     private final String firstName;
-
     private final String emailAddress;
-    
     private final String userLevelAccess;
-    
-    
     public static final GrantedAuthority MANAGE_RULES_AUTHORITY = new SimpleGrantedAuthority("MANAGE_RULES");
-    
     public static final GrantedAuthority MANAGE_QUERIES_AUTHORITY = new SimpleGrantedAuthority("MANAGE_QUERIES");
-    
     public static final GrantedAuthority MANAGE_USERS_AUTHORITY = new SimpleGrantedAuthority("MANAGE_USERS");
-    
     public static final GrantedAuthority MANAGE_WATCHLIST_AUTHORITY = new SimpleGrantedAuthority("MANAGE_WATCHLIST");
-    
     public static final GrantedAuthority VIEW_FLIGHTS_PASSENGERS_AUTHORITY = new SimpleGrantedAuthority("VIEW_FLIGHTS_PASSENGERS");
 
             
@@ -55,21 +45,21 @@ public final class AuthUser extends User{
     
     public AuthUser(String username, String password, boolean b, boolean c,
             boolean d, boolean e, List<GrantedAuthority> noAuthorities) {
-        
+
         super(username, password, b, c, d,
                 e, noAuthorities);
-        
+
         this.firstName = "";
         this.lastName = "";
         this.emailAddress = "";
         this.userLevelAccess = "";
-        
+
     }
 
     public static AuthUser getUser() {
         return (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
-    
+
     @Override
     public boolean equals(final Object other) {
         if (!(other instanceof AuthUser))
@@ -106,8 +96,8 @@ public final class AuthUser extends User{
     public String getUserLevelAccess() {
         return userLevelAccess;
     }
-    
-    
+
+
     public boolean isQueryBuilderPageEnabled() {
         return (getAuthorities().contains(MANAGE_QUERIES_AUTHORITY));
     }
@@ -119,5 +109,5 @@ public final class AuthUser extends User{
                 getAuthorities().contains(MANAGE_WATCHLIST_AUTHORITY)&&
                 getAuthorities().contains(VIEW_FLIGHTS_PASSENGERS_AUTHORITY));
     }
-    
+
 }

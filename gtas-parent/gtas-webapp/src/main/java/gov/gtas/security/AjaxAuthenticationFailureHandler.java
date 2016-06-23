@@ -17,7 +17,7 @@ public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHa
     public void onAuthenticationFailure(HttpServletRequest arg0,
             HttpServletResponse arg1, AuthenticationException arg2)
             throws IOException, ServletException {
-        logger.info("MAC: failed auth");
+            logger.info("MAC: failed auth");
         
     }
 }

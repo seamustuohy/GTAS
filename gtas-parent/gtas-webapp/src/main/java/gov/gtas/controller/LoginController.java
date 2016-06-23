@@ -31,7 +31,6 @@ public class LoginController extends AbstractController {
     //@RequestMapping( method = RequestMethod.GET,value ="/add")
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        logger.info("Testing logging from slf4j from LoginController starting");
         String viewString = "login";// redirect to login page
         String message = "";
         ModelAndView mav = new ModelAndView();
@@ -56,13 +55,11 @@ public class LoginController extends AbstractController {
             return mav;
         } else if (user != null && (!user.getPassword().equals(passWord))) {
             logger.info("Invalid Password");
-
             message = "Invalid Password.";
             mav.getModel().put("message", message);
             mav.setViewName(viewString);
             return mav;
         }
-        logger.info("SUCCESS--Navigate to main page");
         mav.addObject("userName", user.getFirstName() + " " + user.getLastName());
         viewString = "main";
         mav.setViewName(viewString);

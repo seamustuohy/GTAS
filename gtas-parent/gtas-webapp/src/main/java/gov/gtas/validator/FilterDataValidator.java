@@ -14,7 +14,6 @@ public class FilterDataValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        // TODO Auto-generated method stub
         return FilterData.class.isAssignableFrom(clazz);
     }
 

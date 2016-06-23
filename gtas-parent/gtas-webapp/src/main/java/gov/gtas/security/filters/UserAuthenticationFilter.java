@@ -13,9 +13,4 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
-
-public class UserAuthenticationFilter
-        {
-    
-}
+public class UserAuthenticationFilter {}

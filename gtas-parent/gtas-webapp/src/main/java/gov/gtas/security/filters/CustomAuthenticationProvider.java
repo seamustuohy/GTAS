@@ -40,34 +40,12 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
       try {
           
         Authentication auth = super.authenticate(authentication);
-        
-        //reached here, means login success, else an exception will be thrown
-        //reset the user_attempts
-//      userDetailsDao.resetFailAttempts(authentication.getName());
- 
         return auth;
  
       } catch (BadCredentialsException e) { 
- 
-        //invalid login, update to user_attempts
-    //  userDetailsDao.updateFailAttempts(authentication.getName());
         throw e;
- 
       } catch (LockedException e){
  
-    /*  //this user is locked!
-        String error = "";
-        UserAttempts userAttempts = 
-                    userDetailsDao.getUserAttempts(authentication.getName());
- 
-               if(userAttempts!=null){
-            Date lastAttempts = userAttempts.getLastModified();
-            error = "User account is locked! <br><br>Username : " 
-                           + authentication.getName() + "<br>Last Attempts : " + lastAttempts;
-        }else{
-            error = e.getMessage();
-        }
- */
       throw new LockedException("");
     }
  
