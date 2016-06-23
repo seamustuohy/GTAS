@@ -33,20 +33,21 @@ var app;
         ],
         language = function ($translateProvider) {
       
-            $translateProvider.useUrlLoader('/gtas/messageBundle/');
-            $translateProvider.useCookieStorage();
-            $translateProvider.preferredLanguage('en');
-            $translateProvider.fallbackLanguage('en');
-            
-            
-        },
-        idleWatchConfig = function(IdleProvider, KeepaliveProvider, TitleProvider){
-            TitleProvider.enabled(false);
-            IdleProvider.interrupt('notDefault');
-            IdleProvider.idle(540);
-            IdleProvider.timeout(60);
-            IdleProvider.keepalive(false);
-        },
+    		$translateProvider.useUrlLoader('/gtas/messageBundle/');
+    		$translateProvider.useCookieStorage();
+    		$translateProvider.preferredLanguage('en');
+    		$translateProvider.fallbackLanguage('en');
+    		$translateProvider.useSanitizeValueStrategy('escape');
+    		
+        	
+		},
+		idleWatchConfig = function(IdleProvider, KeepaliveProvider, TitleProvider){
+			TitleProvider.enabled(false);
+			IdleProvider.interrupt('notDefault');
+			IdleProvider.idle(540);
+			IdleProvider.timeout(60);
+			IdleProvider.keepalive(false);
+		},
         localDateMomentFormat = function ($mdDateLocaleProvider) {
             // Example of a French localization.
             //$mdDateLocaleProvider.months = ['janvier', 'février', 'mars', ...];
@@ -82,12 +83,12 @@ var app;
             //$mdDateLocaleProvider.msgCalendar = 'Calendrier';
             //$mdDateLocaleProvider.msgOpenCalendar = 'Ouvrir le calendrier';
         },
-        initialize = function ($rootScope, AuthService, USER_ROLES, $state, APP_CONSTANTS, $sessionStorage, checkUserRoleFactory, Idle, $mdDialog) {
+        initialize = function ($rootScope, AuthService, userService, USER_ROLES, $state, APP_CONSTANTS, $sessionStorage, checkUserRoleFactory, Idle, $mdDialog) {
             $rootScope.ROLES = USER_ROLES;
             $rootScope.$on('$stateChangeStart',
 
                 function (event, toState) {
-                    Idle.watch();
+            		Idle.watch();
                     var currentUser = $sessionStorage.get(APP_CONSTANTS.CURRENT_USER);
                     if (currentUser === undefined) {
                         $rootScope.$broadcast('unauthorizedEvent');
@@ -100,58 +101,59 @@ var app;
                     }
                 });
            $rootScope.triggerIdle = function(){
-                //Prevent triggers pre-login
-                if(Idle.running()){
-                    Idle.watch();
-                }
+        	   	//Prevent triggers pre-login
+        	   	if(Idle.running()){
+        	   		Idle.watch();
+           		}
            };
            
            $rootScope.$on('IdleStart', function(){
-               $rootScope.showConfirm();
+        	   $rootScope.showConfirm();
            });
            
            $rootScope.$on('IdleEnd', function(){
-               console.log('No longer Idle');
+        	   //Keep session alive via small request
+        	  userService.getUserData().then(console.log('No longer Idle'));
            });
            
            $rootScope.$on('IdleTimeout', function(){
-              $mdDialog.hide();
-              $rootScope.userTimedout = true;
-              $rootScope.$broadcast('unauthorizedEvent');
-              window.location.href = APP_CONSTANTS.LOGIN_PAGE +"?userTimeout";
+        	  $mdDialog.hide();
+        	  $rootScope.userTimedout = true;
+        	  $rootScope.$broadcast('unauthorizedEvent');
+        	  window.location.href = APP_CONSTANTS.LOGIN_PAGE +"?userTimeout";
            });
            
            $rootScope.showConfirm = function() {
-               var confirm = $mdDialog.confirm({
-                   parent: angular.element(document.body),
-                   template:'<md-dialog ng-cloak>'+
-                       '<form>'+
-                            '<md-dialog-content>'+
-                                '<div class="md-dialog-content" style="padding-top:0px;padding-bottom:0px;">'+
-                                    '<h5 class="md-title"><strong>Idle Session Timeout Warning</strong></h5>'+
-                                        '<div class="_md-dialog-content-body ng-scope"><p class="ng-binding">'+
-                                            'Your session has been idle for too long. If you wish to maintain your session please click the button below.</p></div>'+
-                                        '<span idle-countdown="countdown"> You will be logged out automatically in <strong style="font-size:xx-large;">{{countdown}}</strong> seconds. </span>'+
-                                '</div>'+
-                            '</md-dialog-content>'+
-                        '<md-dialog-actions layout="row">'+
-                  '<md-dialog-actions layout="row" class="layout-row">'+              
-                  '<md-button ng-click="dialog.hide()">Continue Session</md-button>'+
-                '</md-dialog-actions>'+
-              '</form>'+
-              '</md-dialog>'})
-              
-               $mdDialog.show(confirm).then(function() {
-                          Idle.watch();
-                        }, function() {
-                          return false;
-                        
-               });
-          };
-          
-          $rootScope.hide = function(){
-              $mdDialog.hide();
-          };
+        	   var confirm = $mdDialog.confirm({
+	        	   parent: angular.element(document.body),
+	               template:'<md-dialog ng-cloak>'+
+	            	   '<form>'+
+	            	   		'<md-dialog-content>'+
+	            	   			'<div class="md-dialog-content" style="padding-top:0px;padding-bottom:0px;">'+
+	            	   				'<h5 class="md-title"><strong>Idle Session Timeout Warning</strong></h5>'+
+	            	   					'<div class="_md-dialog-content-body ng-scope"><p class="ng-binding">'+
+	            	   						'Your session has been idle for too long. If you wish to maintain your session please click the button below.</p></div>'+
+	            	   					'<span idle-countdown="countdown"> You will be logged out automatically in <strong style="font-size:xx-large;">{{countdown}}</strong> seconds. </span>'+
+	            	   			'</div>'+
+	            	   		'</md-dialog-content>'+
+	            	   	'<md-dialog-actions layout="row">'+
+        	      '<md-dialog-actions layout="row" class="layout-row">'+      	  	  
+        	      '<md-button ng-click="dialog.hide()">Continue Session</md-button>'+
+        	    '</md-dialog-actions>'+
+        	  '</form>'+
+        	  '</md-dialog>'})
+        	  
+	           $mdDialog.show(confirm).then(function() {
+	            	      Idle.watch();
+	            	    }, function() {
+	            	      return false;
+	            	    
+	           });
+       	  };
+       	  
+       	  $rootScope.hide = function(){
+       		  $mdDialog.hide();
+       	  };
 
         },
         router = function ($stateProvider, $urlRouterProvider, $httpProvider, USER_ROLES) {
@@ -307,10 +309,10 @@ var app;
                     },
                     resolve: {
                         paxModel: function ($stateParams, paxModel) {
-                            $stateParams.dest = $stateParams.destination;
+                        	$stateParams.dest = $stateParams.destination;
                             $stateParams.etaStart = $stateParams.eta;
                             $stateParams.etaEnd = $stateParams.etd;
-                            return {
+                        	return {
                                 model: paxModel.initial($stateParams),
                                 reset: function () {
                                     this.model.lastName = '';
@@ -1299,8 +1301,8 @@ var app;
         .factory('httpSecurityInterceptor', function ($q, $rootScope ) {
             return {
                 request: function(config){
-                    $rootScope.triggerIdle();
-                    return config;
+                	$rootScope.triggerIdle();
+                	return config;
                 },
                 responseError: function (response) {
                     if ([401, 403].indexOf(response.status) >= 0) {

@@ -1,536 +1,579 @@
-(function () {
-    'use strict';
-    app.controller('PassengerDetailCtrl', function ($scope, passenger, paxDetailService) {
-        $scope.passenger = passenger.data;
-        $scope.isLoadingFlightHistory = true;
-        paxDetailService.getPaxFlightHistory($scope.passenger.paxId)
-        .then(function(response){
-            $scope.isLoadingFlightHistory = false;
-            $scope.passenger.flightHistoryVo = response.data;
-        });
-    });
-    app.controller('PaxController', function ($scope, $injector, $stateParams, $state, $mdToast, paxService, sharedPaxData, uiGridConstants, gridService,
-                                              jqueryQueryBuilderService, jqueryQueryBuilderWidget, executeQueryService, passengers,
-                                              $timeout, paxModel, $http, spinnerService) {
-        
-        $scope.errorToast = function(error){
-            $mdToast.show($mdToast.simple()
-             .content(error)
-             .position('top right')
-             .hideDelay(4000)
-             .parent($scope.toastParent));
-        };
-        
-        function createFilterFor(query) {
-            var lowercaseQuery = query.toLowerCase();
-            return function filterFn(contact) {
-                return (contact.lowerCasedName.indexOf(lowercaseQuery) >= 0);
-            };
-        }
-        /* Search for airports. */
-        function querySearch(query) {
-            var results = query && (query.length) && (query.length >= 3) ? self.allAirports.filter(createFilterFor(query)) : [];
-            return results;
-        }
+<style>
+    #detailSection md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item {
+        width: 1050px;
+    }
 
-        $scope.searchSort = querySearch;
-        $scope.model = paxModel.model;
+    md-tab-item {
+        max-width: none !important;
+    }
 
-        //var obj1 = {
-        //    id: "JFK",
-        //    lowerCasedName: "john f kennedy intl (jfk)",
-        //    name: "John F Kennedy Intl (JFK)"
-        //};
+    .capitalize {
+        text-transform: capitalize;
+    }
 
-       // var array1 = new Array();
-        //array1.push(obj1);
-        //$scope.model.origin = array1;
+    h3 {
+        margin-top: -3em;
+    }
+</style>
+<div style="padding-left: 25px; padding-top: 25px; padding-bottom: 25px; padding-right: 25px; min-width: 1680px; min-height: 1500px;">
+    <!--<h3><span class="glyphicon glyphicon-user glyphiconFlightPax img-circle"></span>Passenger Detail</h3>-->
 
-        var self = this, airports,
-            stateName = $state.$current.self.name,
-            ruleGridColumns = [{
-                name: 'ruleTitle',
-                displayName: 'Title',
-                cellTemplate: '<md-button aria-label="title" class="md-primary md-button md-default-theme" ng-click="grid.appScope.ruleIdClick(row)">{{COL_FIELD}}</md-button>'
-            }, {
-                name: 'ruleConditions',
-                displayName: 'Conditions',
-                field: 'hitsDetailsList[0]',
-                cellFilter: 'hitsConditionDisplayFilter'
-            }],
-            setSubGridOptions = function (data, appScopeProvider) {
-                data.passengers.forEach(function (entity_row) {
-                    if (!entity_row.flightId) {
-                        entity_row.flightId = $stateParams.id;
-                    }
-                    entity_row.subGridOptions = {
-                        appScopeProvider: appScopeProvider,
-                        columnDefs: ruleGridColumns,
-                        data: []
-                    };
-                });
-            },
-            setPassengersGrid = function (grid, response) {
-                //NEEDED because java services responses not standardize should have Lola change and Amit revert to what he had;
-                var data = stateName === 'queryPassengers' ? response.data.result : response.data;
-                setSubGridOptions(data, $scope);
-                grid.totalItems = data.totalPassengers === -1 ? 0 : data.totalPassengers;
-                grid.data = data.passengers;
-                if(!grid.data || grid.data.length == 0){
-                    $scope.errorToast('No results found for selected filter criteria');
-                }
-                spinnerService.hide('html5spinner');
-            },
-            getPage = function () {
-                if(stateName === "queryPassengers"){
-                    setPassengersGrid($scope.passengerQueryGrid, passengers);
-                }else{
-                    setPassengersGrid($scope.passengerGrid, passengers);
-                }
-            },
-            update = function (data) {
-                passengers = data;
-                getPage();
-                spinnerService.hide('html5spinner');
-            },
-            fetchMethods = {
-                'queryPassengers': function () {
-                    var postData, query = JSON.parse(localStorage['query']);
-                    postData = {
-                        pageNumber: $scope.model.pageNumber,
-                        pageSize: $scope.model.pageSize,
-                        query: query
-                    };
-                    spinnerService.show('html5spinner');
-                    executeQueryService.queryPassengers(postData).then(update);
-                },
-                'flightpax': function () {
-                    spinnerService.show('html5spinner');
-                    paxService.getPax($stateParams.id, $scope.model).then(update);
-                },
-                'paxAll': function () {
-                    spinnerService.show('html5spinner');
-                    paxService.getAllPax($scope.model).then(update);
-                }
-            },
-            resolvePage = function () {
-                populateAirports();
-                fetchMethods[stateName]();
-            },
-            flightDirections = [
-                {label: 'Inbound', value: 'I'},
-                {label: 'Outbound', value: 'O'},
-                {label: 'Any', value: 'A'}
-            ];
+    <div class="span12 col-sm-offset-1" style="padding-left: 25px; padding-top: 25px; padding-bottom: 25px; padding-right: 25px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 capitalize">{{'pass.lastname' | translate}}:&nbsp; <strong>{{ passenger.lastName }}</strong></div>
+                <div class="col-sm-4 capitalize">{{'pass.firstname' | translate}}:&nbsp; <strong>{{ passenger.firstName }}</strong></div>
+                <div class="col-sm-4 capitalize">{{'pass.middlename' | translate}}:&nbsp; <strong>{{ passenger.middleName }}</strong></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">{{'pass.gender' | translate}}:&nbsp; <strong> {{ passenger.gender }}</strong></div>
+                <div class="col-sm-4">{{'pass.dob' | translate}}:&nbsp; <strong> {{ passenger.dob | date:"MM/dd/yyyy" }}</strong></div>
+                <div class="col-sm-4">{{'pass.paxtype' | translate}}:&nbsp; <strong> {{ passenger.passengerType }}</strong></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">{{'pass.origin' | translate}}:&nbsp; <strong> {{ passenger.embarkCountry }}</strong></div>
+                <div class="col-sm-4">{{'pass.destination' | translate}}:&nbsp; <strong> {{ passenger.debarkCountry }}</strong></div>
+                <div class="col-sm-4">{{'pass.citizenship' | translate}}:&nbsp; <strong> {{ passenger.citizenshipCountry }}</strong></div>
+            </div>
+        </div>
+    </div>
+    <!-- END OF SPAN 12 -->
 
-        self.querySearch = querySearch;
-        $http.get('data/airports.json')
-            .then(function (allAirports) {
-                airports = allAirports.data;
-                self.allAirports = allAirports.data.map(function (contact) {
-                    //contact.lowerCasedName = contact.name.toLowerCase();
-                    contact.lowerCasedName = contact.id.toLowerCase();
-                    return contact;
-                });
-                self.filterSelected = true;
-                $scope.filterSelected = true;
-            });
-        $scope.flightDirections = flightDirections;
+    <div class="container" style="padding: 10px;">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+    <section>
+        <div class="container" style="height:100%;">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4"></div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+        <div class="panel panel-default" style="min-height: 1200px; max-height: 1600px;">
+            <md-tabs id="detailSection" md-stretch-tabs="always" md-dynamic-height>
+                <md-tab label="{{ 'pass.details' | translate}}" style="max-width: 150px;">
+                    <div class="span12" style="background-color: rgb(255, 255, 255, 0.15);">
+                        <div class="container" style="height:100%;">
+                            <div style="padding: 10px;"></div>
+                            <div class="row col-md-offset-1">
+                                <div class="col-sm-2 capitalize">&nbsp;&nbsp;&nbsp;<span style="text-decoration: underline;">{{'flight.flight' | translate}}:&nbsp; <strong>{{
+                                    passenger.flightNumber }}</strong></span></div>
+                                <div class="col-sm-2">{{'pass.originairport' | translate}}:&nbsp; <strong>{{ passenger.flightOrigin }}</strong></div>
+                                <div class="col-sm-2">{{'pass.destinationairport' | translate}}:&nbsp; <strong>{{ passenger.flightDestination }}</strong></div>
+                                <div class="col-sm-2">{{'pass.etd' | translate}}:&nbsp; <strong>{{ passenger.flightETD | date:"MM/dd/yyyy HH:mm" }}</strong></div>
+                                <div class="col-sm-2">{{'pass.eta' | translate}}:&nbsp; <strong>{{ passenger.flightETA | date:'MM/dd/yyyy HH:mm' }}</strong></div>
+                                <div class="col-sm-1">{{'pass.seat' | translate}}:&nbsp; <strong>{{ passenger.seat }}</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 30px;"></div>
+                    <div class="span10">
+                        <table class="table table-hover table-condensed table-striped col-lg-offset-1"
+                               style="border-collapse: separate; padding-left: 20px; width: 1200px; text-align: center;">
+                            <thead>
+                            <tr class="text-center">
+                                <th style="text-align: center">{{'doc.doc' | translate}} #</th>
+                                <th style="text-align: center">{{'doc.type' | translate}}</th>
+                                <th style="text-align: center">{{'doc.iss.country' | translate}}</th>
+                                <th style="text-align: center">{{'doc.iss.date' | translate}}</th>
+                                <th style="text-align: center">{{'doc.exp.date' | translate}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="doc in passenger.documents">
+                                <td style="text-align: center">{{doc.documentNumber}}</td>
+                                <td style="text-align: center">{{doc.documentType}}</td>
+                                <td style="text-align: center">{{doc.issuanceCountry}}</td>
+                                <td style="text-align: center">{{doc.issuanceDate}}</td>
+                                <td style="text-align: center">{{doc.expirationDate}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-tab>
+                <!-- PNR Tab -->
 
-        $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
-//        $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
-        $scope.stateName = $state.$current.self.name;
-        $scope.ruleIdClick = function (row) {
-            $scope.getRuleObject(row.entity.ruleId);
-        };
+                <md-tab label="PNR" ng-if="passenger.pnrVo.pnrRecordExists">
+                    <md-tab-body>
+                        <div style="padding: 10px;"></div>
+                        <div class="span12">
+                            <div class="container" style="height:100%;">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        &nbsp;&nbsp;&nbsp;&nbsp; {{'pnr.recordlocator' | translate}}:&nbsp; <span
+                                                style="text-decoration: underline;"><strong>{{
+                                            passenger.pnrVo.recordLocator }}</strong></span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        {{'pnr.bookingdate' | translate}}:&nbsp; <strong>{{ passenger.pnrVo.dateBooked | date
+                                            }}</strong>
 
-        $scope.getRuleObject = function (ruleID) {
-            jqueryQueryBuilderService.loadRuleById('rule', ruleID).then(function (myData) {
-                $scope.$builder.queryBuilder('readOnlyRules', myData.result.details);
-                $scope.hitDetailDisplay = myData.result.summary.title;
-                document.getElementById("QBModal").style.display = "block";
+                                    </div>
+                                    <div class="col-sm-4">
+                                         {{'pnr.received' | translate}}:&nbsp; <strong>{{ passenger.pnrVo.dateReceived | date }}</strong>
 
-                $scope.closeDialog = function () {
-                    document.getElementById("QBModal").style.display = "none";
-                };
-            });
-        };
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 30px;"></div>
+                        <!-- LEFT DIV -->
+                        <div class="col-lg-6" style="min-height: 200px; min-width: 40px; height: 100%; ">
+                            <div class="span6">
+                                <div class="container">
+                                    <div id="OrderPackages">
+                                        <table id="tableSearchResults"
+                                               class="table table-hover table-striped table-condensed">
+                                            <tbody>
+                                            <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
+                                                data-target=".packageDetails1">
+                                                <td><strong>{{'pnr.itenerary' | translate}} ({{ passenger.pnrVo.flightLegs.length }})</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails1" id="accordion1">
+                                                        <table class="table table-condensed"
+                                                               style="border-collapse: separate; text-align: center;">
+                                                            <thead>
+                                                              <tr class="text-center" style="text-align: center">
+                                                                   <th style="text-align: center">{{'pnr.leg' | translate}}</th>
+                                                                   <th style="text-align: center">{{'flight.flight' | translate}}#</th>
+                                                                   <th style="text-align: center">{{'pass.originairport' | translate}}</th>
+                                                                   <th style="text-align: center">{{'pass.destinationairport' | translate}}</th>
+                                                                   <th style="text-align: center">{{'pnr.flightdate' | translate}}</th>
+                                                                   <th style="text-align: center">{{'pass.etd' | translate}}</th>
+                                                               </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr ng-repeat="doc in passenger.pnrVo.flightLegs">
+                                                                <td style="text-align: center">{{ doc.legNumber }}</td>
+                                                                <td style="text-align: center">{{ doc.flightNumber }}</td>
+                                                                <td style="text-align: center">{{ doc.originAirport }}</td>
+                                                                <td style="text-align: center">{{ doc.destinationAirport }}</td>
+                                                                <td style="text-align: center">{{ doc.flightDate }}</td>
+                                                                <td style="text-align: center">{{ doc.etd }}</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="package2" class="accordion-toggle" data-parent="#OrderPackages"
+                                                data-target=".packageDetails2">
+                                                <td><strong>{{'pnr.names' | translate}}  ({{ passenger.pnrVo.passengers.length }})</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails2" id="accordion2">
+                                                        <table class="table table-condensed">
+                                                            <thead>
+                                                            <tr class="text-center" style="text-align: center">
+                                                                <th style="text-align: center">{{'pnr.first' | translate}}</th>
+                                                                <th style="text-align: center">{{'pnr.middle' | translate}}</th>
+                                                                <th style="text-align: center">{{'pnr.last' | translate}}</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr ng-repeat="pass in passenger.pnrVo.passengers">
+                                                                <td style="text-align: center">{{ pass.firstName }}</td>
+                                                                <td style="text-align: center">{{ pass.middleName }}</td>
+                                                                <td style="text-align: center">{{ pass.lastName }}</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
+                                                data-target=".packageDetails1">
+                                                <td><strong>{{'pnr.documents' | translate}} ({{ passenger.documents.length }})</strong></td>
+                                                <td></td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails1" id="accordion1">
+                                                        <table class="table table-condensed"
+                                                               style="border-collapse: separate; text-align: center;">
+                                                            <thead>
+                                                            <tr class="text-center" style="text-align: center">
+                                                                <th style="text-align: center">{{'doc.type' | translate}}</th>
+                                                                <th style="text-align: center">{{'doc.name' | translate}}</th>
+                                                                <th style="text-align: center">{{'doc.country' | translate}}</th>
+                                                                <th style="text-align: center">{{'doc.Number' | translate}}</th>
+                                                                <th style="text-align: center">{{'doc.gender' | translate}}</th>
+                                                                <th style="text-align: center">{{'doc.dob' | translate}}</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr ng-repeat="doc in passenger.documents">
+                                                                <td style="text-align: center">{{doc.documentType}}</td>
+                                                                <td style="text-align: center"></td>
+                                                                <td style="text-align: center">{{doc.issuanceCountry}}
+                                                                </td>
+                                                                <td style="text-align: center">{{doc.documentNumber}}
+                                                                </td>
+                                                                <td style="text-align: center"></td>
+                                                                <td style="text-align: center"></td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
+                                                data-target=".packageDetails1">
+                                                <td><strong>{{'add.addresses' | translate}} ({{ passenger.pnrVo.addresses.length }})</strong>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails1" id="accordion1">
+                                                        <table class="table table-condensed">
+                                                            <thead>
+                                                            <tr class="text-center" style="text-align: center">
+                                                                <th style="text-align: center">{{'add.city' | translate}}</th>
+                                                                <th style="text-align: center">{{'add.state' | translate}}</th>
+                                                                <th style="text-align: center">{{'add.Country' | translate}}</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody ng-repeat="addr in passenger.pnrVo.addresses track by $index">
+                                                            <tr>
+                                                                <td style="text-align: center">{{ addr.city }}</td>
+                                                                <td style="text-align: center">{{ addr.state }}</td>
+                                                                <td style="text-align: center">{{ addr.country }}</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
+                                                data-target=".packageDetails1">
+                                                <td><strong>{{'phone.phonenumbers' | translate}} ({{ passenger.pnrVo.phoneNumbers.length }})</strong>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails1" id="accordion1">
+                                                        <table class="table table-condensed">
+                                                            <thead>
+                                                                    <tr class="text-center" style="text-align: center">
+                                                                        <th style="text-align: center">{{'phone.phonenumber' | translate}}</th>
 
-        $scope.isExpanded = true;
-        $scope.paxHitList = [];
-        $scope.list = sharedPaxData.list;
-        $scope.add = sharedPaxData.add;
-        $scope.getAll = sharedPaxData.getAll;
+                                                                    </tr>
+                                                                </thead>
+                                                            <tbody ng-repeat="phn in passenger.pnrVo.phoneNumbers track by $index">
+                                                                <tr>
+                                                                    <td style="text-align: center">{{ phn.number }}</td>
+                                                                </tr>
+                                                            </tbody>
 
-        $scope.getPaxSpecificList = function (index) {
-            return $scope.list(index);
-        };
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
+                                                data-target=".packageDetails1">
+                                                <td><strong>{{'email.emailaddresses' | translate}} ({{ passenger.pnrVo.emails.length
+                                                    }})</strong>
+                                                </td>
+                                                <td></td>
+                                                <td>
 
-        $scope.buildAfterEntitiesLoaded();
-        
-        $scope.passengerGrid = {
-                paginationPageSizes: [10, 15, 25],
-                paginationPageSize: $scope.model.pageSize,
-                paginationCurrentPage: $scope.model.pageNumber,
-                useExternalPagination: true,
-                useExternalSorting: true,
-                useExternalFiltering: true,
-                enableHorizontalScrollbar: 0,
-                enableVerticalScrollbar: 0,
-                enableColumnMenus: false,
-                multiSelect: false,
-                enableExpandableRowHeader: false,
-                expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>',
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails1" id="accordion1">
+                                                        <table class="table table-condensed">
+                                                            <tr ng-repeat="email in passenger.pnrVo.emails track by $index">
+                                                                <td>{{ email.address }}</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="package1" class="accordion-toggle"
+                                                data-parent="#OrderPackages" data-target=".packageDetails1">
+                                                <td><strong>{{'cc.creditcards' | translate}} ({{ passenger.pnrVo.creditCards.length
+                                                    }})</strong>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails1" id="accordion1">
+                                                        <table class="table table-condensed">
+                                                            <thead>
+                                                            <tr class="text-center" style="text-align: center">
+                                                                <th style="text-align: center">{{'cc.holder' | translate}}</th>
+                                                                <th style="text-align: center">{{'cc.Type' | translate}}</th>
+                                                                <th style="text-align: center">{{'cc.Number' | translate}}</th>
+                                                                <th style="text-align: center">{{'cc.expdate' | translate}}</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr ng-repeat="cc in passenger.pnrVo.creditCards track by $index">
+                                                                <td style="text-align: center">{{cc.accountHolder}}</td>
+                                                                <td style="text-align: center">{{cc.cardType}}</td>
+                                                                <td style="text-align: center">{{cc.number}}</td>
+                                                                <td style="text-align: center">{{cc.expiration |
+                                                                    date:'MM-dd-yyyy' }}
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
+                                                data-target=".packageDetails1">
+                                                <td><strong>{{'ff.FrequentFlyers' | translate}} ({{
+                                                    passenger.pnrVo.frequentFlyerDetails.length
+                                                    }})</strong></td>
+                                                <td></td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails1" id="accordion1">
+                                                        <table class="table table-condensed">
+                                                            <thead>
+                                                            <tr class="text-center" style="text-align: center">
+                                                                <th style="text-align: center">{{'ff.airline' | translate}}</th>
+                                                                <th style="text-align: center">{{'ff.number' | translate}}</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr ng-repeat="ff in passenger.pnrVo.frequentFlyerDetails track by $index">
+                                                                <td style="text-align: center">{{ff.carrier}}</td>
+                                                                <td style="text-align: center">{{ff.number}}</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
+                                                data-target=".packageDetails1">
+                                                <td><strong>{{'tt.travelagencies' | translate}} ({{ passenger.pnrVo.agencies.length
+                                                    }})</strong>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails1" id="accordion1">
+                                                        <table class="table table-condensed">
+                                                         <thead>
+                                                            <tr class="text-center" style="text-align: center">
+                                                                <th style="text-align: center">{{'tt.country' | translate}}</th>
+                                                                <th style="text-align: center">{{'tt.id' | translate}}</th>
+                                                                <th style="text-align: center">{{'tt.location' | translate}}</th>
+                                                                <th style="text-align: center">{{'tt.Name' | translate}}</th>
+                                                                <th style="text-align: center">{{'tt.Phone' | translate}}</th>
+                                                              </tr>
+                                                            </thead>
+                                                        <tbody>
+                                                                <tr ng-repeat="agency in passenger.pnrVo.agencies">
+                                                                        <td style="text-align: center">{{agency.country}}</td>
+                                                                        <td style="text-align: center">{{agency.identifier}}</td>
+                                                                        <td style="text-align: center">{{agency.location}}</td>
+                                                                        <td style="text-align: center">{{agency.name}}</td>
+                                                                        <td style="text-align: center">{{agency.phone}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
+                                                data-target=".packageDetails1">
+                                                <td><strong>{{'pnr.baggage' | translate}} ({{ passenger.pnrVo.bagCount }})</strong></td>
+                                                <td></td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails1" id="accordion1">
+                                                        <table class="table table-condensed">
+                                                            <tr>
 
-                onRegisterApi: function (gridApi) {
-                    $scope.gridApi = gridApi;
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
 
-                    gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-                        $scope.model.pageNumber = newPage;
-                        $scope.model.pageSize = pageSize;
-                        resolvePage();
-                    });
+                                            <tr id="package1" class="accordion-toggle" data-parent="#OrderPackages"
+                                                data-target=".packageDetails1">
+                                                <td><strong>{{'pnr.seatinformation' | translate}}</strong></td>
+                                                <td></td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="accordion-body packageDetails1" id="accordion1">
+                                                       <table class="table table-condensed"
+                                                               style="border-collapse: separate; text-align: center;">
+                                                            <thead>
+                                                            <tr class="text-center" style="text-align: center">
+                                                                <th style="text-align: center">{{'doc.name' | translate}}</th>
+                                                                <th style="text-align: center">{{'flight.flight' | translate}}#</th>
+                                                                <th style="text-align: center">{{'pnr.seat' | translate}}#</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr ng-repeat="sa in passenger.pnrVo.seatAssignments">
+                                                                <td style="text-align: center">{{ sa.firstName }} {{ sa.lastName }}</td>
+                                                                <td style="text-align: center">{{ sa.flightNumber }}</td>
+                                                                <td style="text-align: center">{{ sa.number }}</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- END of ORDERED PACKS -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- RIGHT DIV -->
+                        <div class="col-md-offset-2 col-lg-6 col-lg-offset-0"
+                             style="min-height: 200px; min-width: 40px;  max-height: 1300px; overflow: scroll;">
+                            <table class="table table-striped">
+                                <tbody>
+                                <tr ng-repeat="i in passenger.pnrVo.rawList track by $index">
+                                    <td><span>{{ $index+1 }} .&nbsp;&nbsp;&nbsp; {{ i }}</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </md-tab-body>
+                </md-tab>
+                <md-tab label="Disposition History">
+	                <div class="span6" style="background-color: rgb(255, 255, 255, 0.15);">
+	                	<div class="container">
+	                	<div style="padding: 10px;"></div>
+	                		<div class="col-sm-offset-2" style="padding-left:15px">
+	                			<div style="display:inline-block">Disposition Status:</div>
+	                			<md-input-container style="padding-left:5px">
+                                <md-select ng-model="currentDispStatus">
+                                	<md-option value=-1 selected="selected">N/A</md-option>
+                                    <md-option ng-repeat="item in dispositionStatus" value="{{item.id}}">
+                                        {{item.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+	                		</div>
+	                		<div class="col-sm-7 col-sm-offset-2">
+	                			<textarea ng-model ="currentDispComments" rows="7" style="min-width:100%;resize:none"></textarea>
+	                			<div style="float:right">
+	  								<md-button type="submit"
+					                      ng-disabled="currentDispComments === empty || currentDispComments === '' || currentDispStatus === '-1'"
+					                      class="md-raised md-primary col-sm-offset-6" ng-click="saveDisposition()">
+					               	<i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Save
+					           		</md-button>
+				            	</div>
+	                		</div>
+	                	</div>
+	                	<div style="padding:10px;"></div>
+	                	<div>
+	                		<h2 class="col-sm-offset-1"><strong>Disposition History:</strong></h2>
+	                	</div>
+	                	<div class="container" ng-repeat ="disp in passenger.dispositionHistory | orderBy:'createdAt':true">
+	                	<div style="padding: 10px;"></div>
+	                		<div>
+	                			<md-input-container class="col-sm-offset-2" style="padding-left:15px">
+	                                <md-select ng-model="passengerTempHistory" disabled>
+	                                    <md-option selected=selected>
+                                        	{{disp.status}}
+	                                    </md-option>
+	                                </md-select>
+                            	</md-input-container>
+	                		</div>
+	                		<div class="col-sm-7 col-sm-offset-2">
+	                			<textarea rows="7" style="min-width:100%;resize:none" disabled>{{disp.comments}}</textarea>
+				            </div>
+	                	</div>
+	                </div>
+                	</div>
+                </md-tab>
+                <md-tab label="Loading Flight History..." ng-disabled="isLoadingFlightHistory" ng-if="isLoadingFlightHistory">
+                </md-tab>
+                <md-tab label="{{ 'pass.flt.history' | translate}}" ng-if="!isLoadingFlightHistory">
+                    <div class="span6" style="background-color: rgb(255, 255, 255, 0.15);">
+                        <div class="container">
+                            <div style="padding: 10px;"></div>
+                            <div class="row">
 
-                    gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-                        if (sortColumns.length === 0) {
-                            $scope.model.sort = null;
-                        } else {
-                            $scope.model.sort = [];
-                            for (var i = 0; i < sortColumns.length; i++) {
-                                $scope.model.sort.push({column: sortColumns[i].name, dir: sortColumns[i].sort.direction});
-                            }
-                        }
-                        resolvePage();
-                    });
+                                <div class="row"
+                                     ng-repeat-start="(key, value) in passenger.flightHistoryVo.flightHistoryMap">
+                                    <div style="padding: 10px;"></div>
+                                    <span class="col-sm-offset-1"
+                                          style="margin-left:3.5%; font-weight: bold;">&nbsp;{{ 'doc.doc' | translate}}# : {{ key }}</span>
 
-                    gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
-                        if (row.isExpanded) {
-                            paxService.getRuleHits(row.entity.id).then(function (data) {
-                                row.entity.subGridOptions.data = data;
-                            });
-                        }
-                    });
-                }
-            };
-        //Front-end pagination configuration object for gridUi
-        //Should only be active on stateName === 'queryPassengers'
-        $scope.passengerQueryGrid = {
-            paginationPageSizes: [10, 15, 25],
-            paginationPageSize: $scope.model.pageSize,
-            paginationCurrentPage: 1,
-            useExternalPagination: false,
-            useExternalSorting: false,
-            useExternalFiltering: false,
-            enableHorizontalScrollbar: 0,
-            enableVerticalScrollbar: 0,
-            enableColumnMenus: false,
-            multiSelect: false,
-            enableExpandableRowHeader: false,
-            minRowsToShow: 10,
-            expandableRowTemplate: '<div ui-grid="row.entity.subGridOptions"></div>',
-
-            onRegisterApi: function (gridApi) {
-                $scope.gridApi = gridApi;
-                
-                gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-                    $scope.model.pageSize = pageSize;
-                });
-                
-                gridApi.expandable.on.rowExpandedStateChanged($scope, function (row) {
-                    if (row.isExpanded) {
-                        paxService.getRuleHits(row.entity.id).then(function (data) {
-                            row.entity.subGridOptions.data = data;
-                        });
-                    }
-                });
-            }    
-        };
-
-        if (stateName === 'queryPassengers') {
-            $scope.passengerQueryGrid.columnDefs = [
-                {
-                    field: 'onRuleHitList',
-                    name: 'onRuleHitList',
-                    displayName: 'H',
-                    width: 50,
-                    cellClass: "rule-hit",
-                    sort: {
-                        direction: uiGridConstants.DESC,
-                        priority: 0
-                    },
-                    cellTemplate: '<md-button aria-label="hits" ng-click="grid.api.expandable.toggleRowExpansion(row.entity)" disabled="{{row.entity.onRuleHitList|ruleHitButton}}"><i class="{{row.entity.onRuleHitList|ruleHitIcon}}"></i></md-button>'
-                },
-                {
-                    name: 'onWatchList', displayName: 'L', width: 70,
-                    cellClass: gridService.anyWatchlistHit,
-                    sort: {
-                        direction: uiGridConstants.DESC,
-                        priority: 1
-                    },
-                    cellTemplate: '<div><i class="{{row.entity.onWatchList|watchListHit}}"></i> <i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
-                },
-                {
-                    field: 'passengerType',
-                    name: 'passengerType',
-                    displayName:'doc.type', headerCellFilter: 'translate',
-                    width: 50},
-                {
-                    field: 'lastName',
-                    name: 'lastName',
-                    displayName:'pass.lastname', headerCellFilter: 'translate',
-                    cellTemplate: '<md-button aria-label="type" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail.{{row.entity.id}}.{{row.entity.flightId}}" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
-                },
-                {
-                    field: 'firstName',
-                    name: 'firstName',
-                    displayName:'pass.firstname', headerCellFilter: 'translate'},
-                {
-                    field: 'middleName',
-                    name: 'middleName',
-                    displayName:'pass.middlename', headerCellFilter: 'translate'
-                },
-                {
-                    field: 'flightNumber',
-                    name: 'flightNumber',
-                    displayName:'pass.flight', headerCellFilter: 'translate',
-                    cellTemplate: '<div>{{row.entity.carrier}}{{COL_FIELD}}</div>'
-                },
-                {
-                    field: 'flightOrigin',
-                    name: 'flightOrigin',
-                    displayName:'pass.origin', headerCellFilter: 'translate'
-                },
-                {
-                    field: 'flightDestination',
-                    name: 'flightDestination',
-                    displayName:'pass.destination', headerCellFilter: 'translate'
-                },
-                {
-                    field: 'etaLocalTZ',
-                    name: 'etaLocalTZ',
-                    sort: {
-                        direction: uiGridConstants.DESC,
-                        priority: 2
-                    },
-                    displayName:'pass.eta', headerCellFilter: 'translate'
-                },
-                {
-                    field: 'etdLocalTZ',
-                    name: 'etdLocalTZ',
-                    displayName:'pass.etd', headerCellFilter: 'translate'
-                },
-                {
-                    field: 'gender',
-                    name: 'gender',
-                    displayName:'doc.gender', headerCellFilter: 'translate',
-                    width: 50},
-                {
-                    name: 'dob',
-                    displayName:'pass.dob', headerCellFilter: 'translate',
-                    cellFilter: 'date'
-                },
-                {
-                    name: 'citizenshipCountry',
-                    displayName:'add.Country', headerCellFilter: 'translate',
-                    width: 75
-                }
-            ];
-        } else {
-            $scope.passengerGrid.columnDefs = [
-                {
-                    name: 'onRuleHitList', displayName: 'H', width: 50,
-                    cellClass: "rule-hit",
-                    sort: {
-                        direction: uiGridConstants.DESC,
-                        priority: 0
-                    },
-                    cellTemplate: '<md-button aria-label="hits" ng-click="grid.api.expandable.toggleRowExpansion(row.entity)" disabled="{{row.entity.onRuleHitList|ruleHitButton}}"><i class="{{row.entity.onRuleHitList|ruleHitIcon}}"></i></md-button>'
-                },
-                {
-                    name: 'onWatchList', displayName: 'L', width: 70,
-                    cellClass: gridService.anyWatchlistHit,
-                    sort: {
-                        direction: uiGridConstants.DESC,
-                        priority: 1
-                    },
-                    cellTemplate: '<div><i class="{{row.entity.onWatchList|watchListHit}}"></i> <i class="{{row.entity.onWatchListDoc|watchListDocHit}}"></i></div>'
-                },
-                {name: 'passengerType', displayName:'doc.type', headerCellFilter: 'translate', width: 50},
-                {
-                    name: 'lastName', displayName:'pass.lastname', headerCellFilter: 'translate',
-                    cellTemplate: '<md-button aria-label="type" href="#/paxdetail/{{row.entity.id}}/{{row.entity.flightId}}" title="Launch Flight Passengers in new window" target="pax.detail" class="md-primary md-button md-default-theme" >{{COL_FIELD}}</md-button>'
-                },
-                {name: 'firstName', displayName:'pass.firstname', headerCellFilter: 'translate'},
-                {name: 'middleName', displayName:'pass.middlename', headerCellFilter: 'translate'},
-                {name: 'fullFlightNumber', displayName:'pass.flight', headerCellFilter: 'translate' },
-                {
-                    name: 'eta',
-                    sort: {
-                        direction: uiGridConstants.DESC,
-                        priority: 2
-                    },
-                    displayName:'pass.eta', headerCellFilter: 'translate',
-                    visible: (stateName === 'paxAll')
-                },
-                {name: 'etd', displayName:'pass.etd', headerCellFilter: 'translate', visible: (stateName === 'paxAll')},
-                {name: 'gender', displayName:'doc.gender', headerCellFilter: 'translate', width: 50},
-                {name: 'dob', displayName:'pass.dob', headerCellFilter: 'translate', cellFilter: 'date'},
-                {name: 'citizenshipCountry', displayName:'add.Country', headerCellFilter: 'translate', width: 75}
-            ];
-        }
-
-        var populateAirports = function(){
-
-            var originAirports = new Array();
-            var destinationAirports = new Array();
-
-            angular.forEach($scope.model.origin,function(value,index){
-                originAirports.push(value.id);
-            })
-
-            angular.forEach($scope.model.dest,function(value,index){
-                destinationAirports.push(value.id);
-            })
-
-            $scope.model.originAirports = originAirports;
-            $scope.model.destinationAirports = destinationAirports;
-        };
-
-        var mapAirports = function(){
-
-            var originAirports = new Array();
-            var destinationAirports = new Array();
-            var airport = { id: "" };
-            
-            if($scope.model.origin ) {
-                if ($scope.model.origin instanceof Array ){
-                    angular.forEach($scope.model.origin, function (value, index) {
-                        if(value instanceof Object) {
-                            originAirports.push({id:value.id});
-                        }else{
-                            originAirports.push({id: value});
-                        }
-                    });
-                }else{
-                    originAirports.push({id: $scope.model.origin});
-                }
-                $scope.model.origin = originAirports;
-            }
-            
-            if($scope.model.dest ) {
-                if ($scope.model.dest instanceof Array ) {
-                  angular.forEach($scope.model.dest, function (value, index) {
-                    if(value instanceof Object) {
-                        destinationAirports.push({id:value.id});
-                    }else{
-                      destinationAirports.push({id: value});
-                    }
-                  });
-                }else{
-                    destinationAirports.push({id: $scope.model.dest});
-                }
-                $scope.model.dest = destinationAirports;   
-            }
-            
-        };
-
-        //var loadUserFilters = function(){
-        //
-        //    var userModel;
-        //    var userPrefs =  userService
-        //        .getUserData(  )                     // Request #1
-        //        .then( function( user ) {
-        //            if(user.data.filter!=null) {
-        //                if (user.data.filter.flightDirection)
-        //                    userModel.direction = user.data.filter.flightDirection;
-        //                if (user.data.filter.etaStart) {
-        //                    flightsModel.starteeDate = new Date();
-        //                    flightsModel.etaStart.setDate(today.getDate() + user.data.filter.etaStart);
-        //                }
-        //                if (user.data.filter.etaEnd) {
-        //                    flightsModel.endDate = new Date();
-        //                    flightsModel.etaEnd.setDate(today.getDate() + user.data.filter.etaEnd);
-        //                }// Response Handler #1
-        //                if (user.data.filter.originAirports != null)
-        //                    flightsModel.origins = user.data.filter.originAirports;
-        //                if (user.data.filter.destinationAirports != null)
-        //                    flightsModel.destinations = user.data.filter.destinationAirports;
-        //            }
-        //            return flightsModel;
-        //        });
-        //
-        //};
-        //var populateAirports = function(){
-        //
-        //    var originAirports = new Array();
-        //    var destinationAirports = new Array();
-        //    var airport = { id: "" };
-        //
-        //    angular.forEach($scope.model.origin,function(value,index){
-        //        //originAirports.push(value.id);
-        //        originAirports.push({ id: value });
-        //    })
-        //
-        //    angular.forEach($scope.model.dest,function(value,index){
-        //        //destinationAirports.push(value.id);
-        //        destinationAirports.push({  id: value });
-        //    })
-        //
-        //    $scope.model.originAirports = originAirports;
-        //    $scope.model.destinationAirports = destinationAirports;
-        //
-        //
-        //    //var originAirports = new Array();
-        //    //var destinationAirports = new Array();
-        //    //var airport = { id: "" };
-        //    //
-        //    //angular.forEach(flightsModel.origins,function(value,index){
-        //    //    originAirports.push({ id: value });
-        //    //});
-        //    //
-        //    //angular.forEach(flightsModel.destinations,function(value,index){
-        //    //    destinationAirports.push({  id: value });
-        //    //});
-        //    //$scope.model.origin= originAirports;
-        //    //$scope.model.dest = destinationAirports;
-        //
-        //
-        //};
-
-
-        $scope.filter = function () {
-
-            resolvePage();
-        };
-
-        $scope.reset = function () {
-            paxModel.reset();
-            resolvePage();
-        };
-
-        $scope.getTableHeight = function () {
-            if( stateName != "queryPassengers"){
-                return gridService.calculateGridHeight($scope.passengerGrid.data.length);
-            } // Sets minimal height for front-end pagination controlled variant of grid
-            return gridService.calculateGridHeight($scope.model.pageSize);
-        };
-
-        getPage();
-        mapAirports();
-        
-        //These two watches establish the range of clock times the start/end dates are set to.
-        //Datepicker automatically sets it to 0:00:00 if passed a date with no time, 
-        //however our initial dates for the model carry with it a time and must be overridden
-        $scope.$watch("model.etaStart", function (newValue) {
-            newValue.setHours(0);
-            newValue.setMinutes(0);
-            newValue.setSeconds(0);     
-        });
-        //End date is set to the maximum clock time
-        $scope.$watch("model.etaEnd", function (newValue) {
-            newValue.setHours(23);
-            newValue.setMinutes(59);
-            newValue.setSeconds(59);
-        });
-    });
-}());
+                                    <div style="padding: 15px;"></div>
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr class="text-center" style="text-align: center">
+                                            <th style="text-align: center">{{ 'flight.carrieflight' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.eta' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.etd' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.origin' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.originairport' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.destination' | translate}}</th>
+                                            <th style="text-align: center">{{ 'pass.originairport' | translate}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="j in value track by $index">
+                                            <td style="text-align: center">{{j.fullFlightNumber}}</td>
+                                            <td style="text-align: center">{{j.eta | date:'MM/dd/yyyy HH:mm'}}</td>
+                                            <td style="text-align: center">{{j.etd | date:'MM/dd/yyyy HH:mm'}}</td>
+                                            <td style="text-align: center">{{j.originCountry}}</td>
+                                            <td style="text-align: center">{{j.origin}}</td>
+                                            <td style="text-align: center">{{j.destinationCountry}}</td>
+                                            <td style="text-align: center">{{j.destination}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <span ng-repeat-end></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 30px;"></div>
+                </md-tab>
+            </md-tabs>
+        </div>
+    </section>
+</div>
