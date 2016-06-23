@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    app.controller('PassengerDetailCtrl', function ($scope, passenger, $mdToast, spinnerService, paxDetailService, caseService) {
+    app.controller('PassengerDetailCtrl', function ($scope, passenger, $mdToast, spinnerService, user, paxDetailService, caseService) {
         $scope.passenger = passenger.data;
         $scope.isLoadingFlightHistory = true;        
         
@@ -10,7 +10,7 @@
                     'flightId':$scope.passenger.flightId,
                     'statusId':$scope.currentDispStatus,
                     'comments':$scope.currentDispComments,
-                    'user':JSON.parse(localStorage.lastSelectedUser).userId
+                    'user':user.userId
                 };
         	spinnerService.show('html5spinner');
         	caseService.createDisposition(disposition)

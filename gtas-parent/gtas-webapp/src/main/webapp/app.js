@@ -363,6 +363,9 @@ var app;
                     resolve: {
                         passenger: function (paxDetailService, $stateParams) {
                             return paxDetailService.getPaxDetail($stateParams.paxId, $stateParams.flightId);
+                        },
+                        user: function (userService) {
+                            return userService.getUserData();
                         }
                     }
                 })
