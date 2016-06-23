@@ -129,6 +129,7 @@ public class FlightRepositoryImpl implements FlightRepositoryCustom {
                 "delete from document", 
                 "delete from hit_detail", 
                 "delete from hits_summary", 
+                "delete from disposition", 
                 "delete from pnr_passenger", 
                 "delete from apis_message_passenger", 
                 "delete from flight_passenger", 

@@ -16,8 +16,7 @@
 <h2>{{'upload.title' | translate}}</h2>
 <div ngf-drop ngf-select ng-model="files" class="drop-box" 
     ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
-    accept="text/plain" 
-    ngf-pattern="'.edi,.txt,.pnr,.apis'">{{'upload.file.msg' | translate}}</div>
+    accept="text/plain">{{'upload.file.msg' | translate}}</div>
 <div ngf-no-file-drop>{{'upload.no.msg' | translate}}</div>
 
 <md-button class="md-raised md-warn" ng-click="deleteall()" type="button">{{'upload.delete' | translate}}</md-button>
