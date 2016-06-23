@@ -225,7 +225,7 @@ var app;
                 .state('modifyUser', {
                     url: '/user/:userId',
                     authenticate: true,
-                    roles: ['Admin'],
+                    roles: [USER_ROLES.ADMIN],
                     views: {
                         '@': {
                             controller: 'UserCtrl',
