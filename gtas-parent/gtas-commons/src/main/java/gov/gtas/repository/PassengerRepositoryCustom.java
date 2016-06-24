@@ -14,4 +14,6 @@ public interface PassengerRepositoryCustom {
      * @param request query criteria.
      */
     public Pair<Long, List<Object[]>> findByCriteria(Long flightId, PassengersRequestDto request);
+    
+    public List<Object[]> findAllDispositions();
 }

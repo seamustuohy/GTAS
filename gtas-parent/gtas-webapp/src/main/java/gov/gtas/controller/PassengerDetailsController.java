@@ -47,6 +47,7 @@ import gov.gtas.services.PnrService;
 import gov.gtas.util.LobUtils;
 import gov.gtas.vo.passenger.AddressVo;
 import gov.gtas.vo.passenger.AgencyVo;
+import gov.gtas.vo.passenger.CaseVo;
 import gov.gtas.vo.passenger.CreditCardVo;
 import gov.gtas.vo.passenger.DispositionVo;
 import gov.gtas.vo.passenger.DocumentVo;
@@ -215,11 +216,16 @@ public class PassengerDetailsController {
     }   
     
     @RequestMapping(value = "/disposition", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody JsonServiceResponse createUserFilter(@RequestBody DispositionData disposition) {
+    public @ResponseBody JsonServiceResponse createDisposition(@RequestBody DispositionData disposition) {
         pService.createDisposition(disposition);
         return new JsonServiceResponse(Status.SUCCESS, "Create disposition successful");
     }
 
+    @RequestMapping(value = "/allcases", method = RequestMethod.GET)
+    public @ResponseBody List<CaseVo> getAllDispositions() {
+        return pService.getAllDispositions();
+    }   
+    
     /**
      * Util method to map PNR model object to VO
      * 

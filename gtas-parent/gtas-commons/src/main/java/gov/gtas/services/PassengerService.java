@@ -8,6 +8,7 @@ import gov.gtas.model.Passenger;
 import gov.gtas.model.lookup.DispositionStatus;
 import gov.gtas.services.dto.PassengersPageDto;
 import gov.gtas.services.dto.PassengersRequestDto;
+import gov.gtas.vo.passenger.CaseVo;
 import gov.gtas.vo.passenger.PassengerVo;
 
 public interface PassengerService {
@@ -21,6 +22,7 @@ public interface PassengerService {
     public void createDisposition(DispositionData disposition);
     public void createDisposition(HitsSummary hit);
     public List<DispositionStatus> getDispositionStatuses();
+    public List<CaseVo> getAllDispositions();
     
     /**
      * 

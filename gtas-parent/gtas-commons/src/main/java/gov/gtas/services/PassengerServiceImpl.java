@@ -25,6 +25,7 @@ import gov.gtas.repository.HitsSummaryRepository;
 import gov.gtas.repository.PassengerRepository;
 import gov.gtas.services.dto.PassengersPageDto;
 import gov.gtas.services.dto.PassengersRequestDto;
+import gov.gtas.vo.passenger.CaseVo;
 import gov.gtas.vo.passenger.PassengerVo;
 
 @Service
@@ -96,6 +97,28 @@ public class PassengerServiceImpl implements PassengerService {
 
         return new PassengersPageDto(rv, tuple.getLeft());
     }    
+    
+    @Override
+    @Transactional
+    public List<CaseVo> getAllDispositions() {
+        List<CaseVo> rv = new ArrayList<>();
+        List<Object[]> cases = passengerRespository.findAllDispositions();
+        for (Object[] objs : cases) {
+            Disposition d = (Disposition)objs[0];
+            Passenger p = (Passenger)objs[1];
+            Flight f = (Flight)objs[2];
+            CaseVo vo = new CaseVo();
+            rv.add(vo);
+            vo.setFirstName(p.getFirstName());
+            vo.setLastName(p.getLastName());
+            vo.setMiddleName(p.getMiddleName());
+            vo.setFlightNumber(f.getFullFlightNumber());
+            vo.setCreateDate(d.getCreatedAt().toString());
+            vo.setStatus(d.getStatus().getName());
+        }
+        
+        return rv;
+    }
     
     @Override
     @Transactional

@@ -46,9 +46,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     DataSource dataSource;
     
     public void configure(WebSecurity web) throws Exception {
-      web.ignoring().antMatchers("/factory/**/*","/admin/**/*","/flights/**/*","/pax/**/*","/query-builder/**/*","/watchlists/**/*",
-                                 "/build/**/*","/dashboard/**/*","/dist/**/*","/jqb/**/*","/userSettings/**/*","/cases/**/*",
-                                 "/resources/**","/common/**/*","/login/**","/admin/**","/app.js","WEB-INF/**/*","/data/**");
+      web.ignoring().antMatchers("/resources/**/*","/common/**","/login/**","/admin/**","/app.js","WEB-INF/**","/data/**");
     }
 
 
@@ -70,7 +68,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
             .authorizeRequests()
-            .antMatchers("/resources/*/**","/resources/**/*","/resources/**","/common/**","/login/**","/authenticate").permitAll()
+            .antMatchers("/*/**","/resources/*/**","/resources/**","/common/**","/login/**","/authenticate").permitAll()
+            .antMatchers("/resources/**/*").permitAll()
+            .antMatchers(HttpMethod.POST, "/user").permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin()

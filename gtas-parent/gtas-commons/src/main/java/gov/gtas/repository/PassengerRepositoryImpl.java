@@ -39,6 +39,7 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
     
+    @Deprecated
     public List<Object[]> getPassengersByCriteria_(Long flightId, PassengersRequestDto dto) {
         String q = "select p, f, h"
                 + " from Passenger p"
@@ -70,6 +71,7 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
      * "org.hibernate.hql.internal.ast.QuerySyntaxException: with-clause
      * referenced two different from-clause elements."
      */
+    @Override    
     public Pair<Long, List<Object[]>> findByCriteria(Long flightId, PassengersRequestDto dto) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Object[]> q = cb.createQuery(Object[].class);
@@ -141,6 +143,33 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         List<Object[]> results = typedQuery.getResultList();
         
         return new ImmutablePair<Long, List<Object[]>>(count, results);
+    }
+    
+    @Override
+    public List<Object[]> findAllDispositions() {
+        String q = "select d, p, f"
+                + " from Disposition d"
+                + " join d.passenger p"
+                + " join d.flight f"
+                + " group by p.id"
+                + " order by d.createdAt";
+        
+//        String nativeQuery = 
+//                "select d1.passenger_id, d1.flight_id, d1.comments, d1.created_at"
+//                + " from disposition d1"
+//                + " join ("
+//                + "   select passenger_id, flight_id, max(created_at) maxdate"
+//                + "   from disposition"
+//                + "   group by passenger_id, flight_id"
+//                + " ) d2"
+//                + " on d1.created_at = d2.maxdate"
+//                + " and d1.passenger_id = d2.passenger_id"
+//                + " and d1.flight_id = d2.flight_id";
+
+        TypedQuery<Object[]> typedQuery = em.createQuery(q, Object[].class);
+        List<Object[]> results = typedQuery.getResultList();
+        
+        return results;
     }
     
     private List<Predicate> createPredicates(CriteriaBuilder cb, PassengersRequestDto dto, Root<Passenger> pax, Join<Passenger, Flight> flight) {
