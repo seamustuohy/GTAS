@@ -1,6 +1,8 @@
 package gov.gtas.vo.passenger;
 
 public class CaseVo {
+    private Long passengerId;
+    private Long flightId;
     private String lastName;
     private String firstName;
     private String middleName;
@@ -8,6 +10,18 @@ public class CaseVo {
     private String createDate; 
     private String status;
     
+    public Long getPassengerId() {
+        return passengerId;
+    }
+    public void setPassengerId(Long passengerId) {
+        this.passengerId = passengerId;
+    }
+    public Long getFlightId() {
+        return flightId;
+    }
+    public void setFlightId(Long flightId) {
+        this.flightId = flightId;
+    }
     public String getLastName() {
         return lastName;
     }

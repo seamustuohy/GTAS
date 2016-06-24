@@ -109,6 +109,8 @@ public class PassengerServiceImpl implements PassengerService {
             Flight f = (Flight)objs[2];
             CaseVo vo = new CaseVo();
             rv.add(vo);
+            vo.setPassengerId(p.getId());
+            vo.setFlightId(f.getId());
             vo.setFirstName(p.getFirstName());
             vo.setLastName(p.getLastName());
             vo.setMiddleName(p.getMiddleName());
