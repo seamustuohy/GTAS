@@ -144,6 +144,8 @@
 	                                    </md-option>
 	                                </md-select>
                             	</md-input-container>
+                                {{disp.createdBy}}
+                                ({{disp.createdAt | date:'yyyy-MM-dd HH:mm:ss Z'}})                                
 	                		</div>
 	                		<div class="col-sm-7 col-sm-offset-2">
 	                			<textarea rows="7" style="min-width:100%;resize:none" disabled>{{disp.comments}}</textarea>
