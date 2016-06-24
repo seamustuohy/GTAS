@@ -162,9 +162,10 @@ public class PassengerServiceImpl implements PassengerService {
     @Override    
     public void createDisposition(HitsSummary hit) {
         Disposition d = new Disposition();
-        d.setCreatedAt(new Date());
+        Date date = new Date();
+        d.setCreatedAt(date);
         d.setCreatedBy("SYSTEM");
-        d.setComments("New case");
+        d.setComments("A new disposition has been created on " + date);
         d.setPassenger(hit.getPassenger());
         d.setFlight(hit.getFlight());
         DispositionStatus status = new DispositionStatus();

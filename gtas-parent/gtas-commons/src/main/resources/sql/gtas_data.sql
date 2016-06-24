@@ -61,5 +61,8 @@ INSERT INTO `dashboard_message_stats` (`id`, `dt_modified`,`message_type`, `hour
 -- Case mgmt: disposition statuses
 -- ----------------------------
 
-INSERT INTO `disposition_status` (`id`, `name`, `description`) VALUES (1, 'NEW', 'New case');
-INSERT INTO `disposition_status` (`id`, `name`, `description`) VALUES (2, 'CLOSED', 'No action required');
+INSERT INTO `disposition_status` (`id`, `name`, `description`) VALUES (1, 'NEW', 'NEW');
+INSERT INTO `disposition_status` (`id`, `name`, `description`) VALUES (2, 'Arrest on Site', 'Arrest on Site');
+INSERT INTO `disposition_status` (`id`, `name`, `description`) VALUES (3, 'Investigate In-person', 'Investigate In-person');
+INSERT INTO `disposition_status` (`id`, `name`, `description`) VALUES (4, 'Requires Review', 'Requires Review');
+INSERT INTO `disposition_status` (`id`, `name`, `description`) VALUES (5, 'Under Review', 'Under Review');
