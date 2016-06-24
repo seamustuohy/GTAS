@@ -151,7 +151,7 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
                 + " from Disposition d"
                 + " join d.passenger p"
                 + " join d.flight f"
-                + " group by p.id"
+                + " group by p.id, f.id"
                 + " order by d.createdAt";
         
 //        String nativeQuery = 
