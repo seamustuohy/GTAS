@@ -56,6 +56,8 @@
         </div>
         <div class="panel panel-default" style="min-height: 1200px; max-height: 1600px;">
             <md-tabs id="detailSection" md-stretch-tabs="always" md-dynamic-height>
+
+                <!-- Details Tab -->
                 <md-tab label="{{ 'pass.details' | translate}}" style="max-width: 150px;">
                     <div class="span12" style="background-color: rgb(255, 255, 255, 0.15);">
                         <div class="container" style="height:100%;">
@@ -72,6 +74,9 @@
                         </div>
                     </div>
                     <div style="padding: 30px;"></div>
+                    <div>
+                        <h2 class="col-sm-offset-1"><strong>Documents</strong></h2>
+                    </div>
                     <div class="span10">
                         <table class="table table-hover table-condensed table-striped col-lg-offset-1"
                                style="border-collapse: separate; padding-left: 20px; width: 1200px; text-align: center;">
@@ -95,9 +100,59 @@
                             </tbody>
                         </table>
                     </div>
-                </md-tab>
-                <!-- PNR Tab -->
+                    <div style="padding: 30px;"></div>
 
+                    <div>
+                        <h2 class="col-sm-offset-1"><strong>Disposition</strong></h2>
+                    </div>
+	                <div class="span6" style="background-color: rgb(255, 255, 255, 0.15);">
+	                	<div class="container">
+	                	<div style="padding: 10px;"></div>
+	                		<div class="col-sm-offset-2" style="padding-left:15px">
+	                			<div style="display:inline-block">Disposition Status:</div>
+	                			<md-input-container style="padding-left:5px">
+                                <md-select ng-model="currentDispStatus">
+                                	<md-option value=-1 selected="selected">N/A</md-option>
+                                    <md-option ng-repeat="item in dispositionStatus" value="{{item.id}}">
+                                        {{item.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+	                		</div>
+	                		<div class="col-sm-7 col-sm-offset-2">
+	                			<textarea ng-model ="currentDispComments" rows="7" style="min-width:100%;resize:none"></textarea>
+	                			<div style="float:right">
+	  								<md-button type="submit"
+					                      ng-disabled="currentDispComments === empty || currentDispComments === '' || currentDispStatus === '-1'"
+					                      class="md-raised md-primary col-sm-offset-6" ng-click="saveDisposition()">
+					               	<i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Save
+					           		</md-button>
+				            	</div>
+	                		</div>
+	                	</div>
+	                	<div style="padding:10px;"></div>
+	                	<div>
+	                		<h2 class="col-sm-offset-1"><strong>Disposition History</strong></h2>
+	                	</div>
+	                	<div class="container" ng-repeat ="disp in passenger.dispositionHistory | orderBy:'createdAt':true">
+	                	<div style="padding: 10px;"></div>
+	                		<div>
+	                			<md-input-container class="col-sm-offset-2" style="padding-left:15px">
+	                                <md-select ng-model="passengerTempHistory" disabled>
+	                                    <md-option selected=selected>
+                                        	{{disp.status}}
+	                                    </md-option>
+	                                </md-select>
+                            	</md-input-container>
+	                		</div>
+	                		<div class="col-sm-7 col-sm-offset-2">
+	                			<textarea rows="7" style="min-width:100%;resize:none" disabled>{{disp.comments}}</textarea>
+				            </div>
+	                	</div>
+	                </div>
+                </md-tab>
+
+                <!-- PNR Tab -->
                 <md-tab label="PNR" ng-if="passenger.pnrVo.pnrRecordExists">
                     <md-tab-body>
                         <div style="padding: 10px;"></div>
@@ -479,54 +534,8 @@
                         </div>
                     </md-tab-body>
                 </md-tab>
-                <md-tab label="Disposition History">
-	                <div class="span6" style="background-color: rgb(255, 255, 255, 0.15);">
-	                	<div class="container">
-	                	<div style="padding: 10px;"></div>
-	                		<div class="col-sm-offset-2" style="padding-left:15px">
-	                			<div style="display:inline-block">Disposition Status:</div>
-	                			<md-input-container style="padding-left:5px">
-                                <md-select ng-model="currentDispStatus">
-                                	<md-option value=-1 selected="selected">N/A</md-option>
-                                    <md-option ng-repeat="item in dispositionStatus" value="{{item.id}}">
-                                        {{item.name}}
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>
-	                		</div>
-	                		<div class="col-sm-7 col-sm-offset-2">
-	                			<textarea ng-model ="currentDispComments" rows="7" style="min-width:100%;resize:none"></textarea>
-	                			<div style="float:right">
-	  								<md-button type="submit"
-					                      ng-disabled="currentDispComments === empty || currentDispComments === '' || currentDispStatus === '-1'"
-					                      class="md-raised md-primary col-sm-offset-6" ng-click="saveDisposition()">
-					               	<i class="glyphicon glyphicon-save"></i><i class="glyphicon glyphicon-flag"></i> Save
-					           		</md-button>
-				            	</div>
-	                		</div>
-	                	</div>
-	                	<div style="padding:10px;"></div>
-	                	<div>
-	                		<h2 class="col-sm-offset-1"><strong>Disposition History:</strong></h2>
-	                	</div>
-	                	<div class="container" ng-repeat ="disp in passenger.dispositionHistory | orderBy:'createdAt':true">
-	                	<div style="padding: 10px;"></div>
-	                		<div>
-	                			<md-input-container class="col-sm-offset-2" style="padding-left:15px">
-	                                <md-select ng-model="passengerTempHistory" disabled>
-	                                    <md-option selected=selected>
-                                        	{{disp.status}}
-	                                    </md-option>
-	                                </md-select>
-                            	</md-input-container>
-	                		</div>
-	                		<div class="col-sm-7 col-sm-offset-2">
-	                			<textarea rows="7" style="min-width:100%;resize:none" disabled>{{disp.comments}}</textarea>
-				            </div>
-	                	</div>
-	                </div>
-                	</div>
-                </md-tab>
+
+                <!-- Flight History Tab -->                
                 <md-tab label="Loading Flight History..." ng-disabled="isLoadingFlightHistory" ng-if="isLoadingFlightHistory">
                 </md-tab>
                 <md-tab label="{{ 'pass.flt.history' | translate}}" ng-if="!isLoadingFlightHistory">
