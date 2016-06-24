@@ -10,8 +10,9 @@
                     'flightId':$scope.passenger.flightId,
                     'statusId':$scope.currentDispStatus,
                     'comments':$scope.currentDispComments,
-                    'user':user.userId
+                    'user':user.data.userId
                 };
+            console.log(disposition);
         	spinnerService.show('html5spinner');
         	caseService.createDisposition(disposition)
         	.then(function(response){
