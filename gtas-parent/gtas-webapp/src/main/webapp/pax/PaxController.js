@@ -75,16 +75,6 @@
         $scope.searchSort = querySearch;
         $scope.model = paxModel.model;
 
-        //var obj1 = {
-        //    id: "JFK",
-        //    lowerCasedName: "john f kennedy intl (jfk)",
-        //    name: "John F Kennedy Intl (JFK)"
-        //};
-
-       // var array1 = new Array();
-        //array1.push(obj1);
-        //$scope.model.origin = array1;
-
         var self = this, airports,
             stateName = $state.$current.self.name,
             ruleGridColumns = [{
@@ -177,7 +167,6 @@
         $scope.flightDirections = flightDirections;
 
         $injector.invoke(jqueryQueryBuilderWidget, this, {$scope: $scope});
-//        $injector.invoke(queryBuilderFactory, this, {$scope: $scope});
         $scope.stateName = $state.$current.self.name;
         $scope.ruleIdClick = function (row) {
             $scope.getRuleObject(row.entity.ruleId);
@@ -473,72 +462,7 @@
             
         };
 
-        //var loadUserFilters = function(){
-        //
-        //    var userModel;
-        //    var userPrefs =  userService
-        //        .getUserData(  )                     // Request #1
-        //        .then( function( user ) {
-        //            if(user.data.filter!=null) {
-        //                if (user.data.filter.flightDirection)
-        //                    userModel.direction = user.data.filter.flightDirection;
-        //                if (user.data.filter.etaStart) {
-        //                    flightsModel.starteeDate = new Date();
-        //                    flightsModel.etaStart.setDate(today.getDate() + user.data.filter.etaStart);
-        //                }
-        //                if (user.data.filter.etaEnd) {
-        //                    flightsModel.endDate = new Date();
-        //                    flightsModel.etaEnd.setDate(today.getDate() + user.data.filter.etaEnd);
-        //                }// Response Handler #1
-        //                if (user.data.filter.originAirports != null)
-        //                    flightsModel.origins = user.data.filter.originAirports;
-        //                if (user.data.filter.destinationAirports != null)
-        //                    flightsModel.destinations = user.data.filter.destinationAirports;
-        //            }
-        //            return flightsModel;
-        //        });
-        //
-        //};
-        //var populateAirports = function(){
-        //
-        //    var originAirports = new Array();
-        //    var destinationAirports = new Array();
-        //    var airport = { id: "" };
-        //
-        //    angular.forEach($scope.model.origin,function(value,index){
-        //        //originAirports.push(value.id);
-        //        originAirports.push({ id: value });
-        //    })
-        //
-        //    angular.forEach($scope.model.dest,function(value,index){
-        //        //destinationAirports.push(value.id);
-        //        destinationAirports.push({  id: value });
-        //    })
-        //
-        //    $scope.model.originAirports = originAirports;
-        //    $scope.model.destinationAirports = destinationAirports;
-        //
-        //
-        //    //var originAirports = new Array();
-        //    //var destinationAirports = new Array();
-        //    //var airport = { id: "" };
-        //    //
-        //    //angular.forEach(flightsModel.origins,function(value,index){
-        //    //    originAirports.push({ id: value });
-        //    //});
-        //    //
-        //    //angular.forEach(flightsModel.destinations,function(value,index){
-        //    //    destinationAirports.push({  id: value });
-        //    //});
-        //    //$scope.model.origin= originAirports;
-        //    //$scope.model.dest = destinationAirports;
-        //
-        //
-        //};
-
-
         $scope.filter = function () {
-
             resolvePage();
         };
 
