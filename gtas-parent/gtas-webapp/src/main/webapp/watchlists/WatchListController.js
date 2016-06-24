@@ -144,7 +144,6 @@
                     setTerm = function (term) {
                         obj[term.field] = term.value;
                     };
-//                    setTerm = function (term) { obj[term.field] = term.type === 'date' ?  moment(term.value).toDate() : term.value; };
                 if (items === undefined) {
                     $scope.watchlistGrid.data = [];
                     return false;
@@ -163,7 +162,6 @@
         $scope.getSaveStateText = function (activeTab) {
             return 'Save ';
             // todo listen to broadcast, and return save or update
-//            return $scope[activeTab].id === null ? 'Save ' : 'Update ';
         };
 
         $scope.updateGrid = function (listName) {
@@ -230,7 +228,6 @@
                     $scope.gridApi.selection.clearSelectedRows();
                     $scope.rowSelected = null;
                     $scope.getListItemsFor($scope.activeTab);
-//                    $scope.updateGrid($scope.activeTab);
                     $mdSidenav('save').close();
                 });
             }

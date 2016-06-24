@@ -200,14 +200,7 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
             $mdSidenav('query').close();
             $scope.isCopy = false;
             $interval(function () {
-                //var page;
-                //if (!$scope.selectedIndex) {
-                //    page = $scope.gridApi.pagination.getTotalPages();
-                //    $scope.selectedIndex = $scope.qbGrid.data.length - 1;
-                //    $scope.gridApi.pagination.seek(page);
-                //}
                 $scope.gridApi.selection.clearSelectedRows();
-                //$scope.gridApi.selection.selectRow($scope.qbGrid.data[$scope.selectedIndex]);
                 $scope.saving = false;
                 $scope.addNew();
                 spinnerService.hide('html5spinner');
@@ -293,17 +286,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
         $scope.ruleId = null;
         $scope.$builder.queryBuilder('reset');
         resetModels($scope);
-        ////TODO temp had trouble setting md-datepicker default value to null, default value today
-        //if (document.querySelector('[ng-model="endDate"] input')) {
-        //    document.querySelector('[ng-model="endDate"] input').value = null;
-        //}
-        //
-        ////TODO find angular way to set focus
-        //document.querySelector('[autofocus]').focus();
-        //if ($scope.gridApi !== undefined) {
-        //    $scope.gridApi.selection.clearSelectedRows();
-        //    $scope.selectedIndex = null;
-        //}
     };
     $scope.ruleId = null;
     $scope.saving = false;
@@ -320,7 +302,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 if ($scope.saving) {
                     return;
                 }
-//                    $scope.saving = true;
 
                 if (queryObject.title && queryObject.title.length) {
                     queryObject.title = queryObject.title.trim();
@@ -348,8 +329,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                     return;
                 }
 
-//                    $scope.saving = true;
-
                 if (ruleObject.summary.title && ruleObject.summary.title.length) {
                     ruleObject.summary.title = ruleObject.summary.title.trim();
                 }
@@ -361,11 +340,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 }
 
                 if ($scope.ruleId === null || $scope.isCopy) {
-                    //if (!startDate.isValid()) {
-                    //    alert('Dates must be in this format: ' + $scope.formats.toString());
-                    //    $scope.saving = false;
-                    //    return;
-                    //}
                     if (ruleObject.summary.startDate.getDate() < new Date().getDate()) {
                         $scope.openAlert('Invalid Start Date', 'Start date must be today or later when created new');
                         $scope.saving = false;
@@ -374,11 +348,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
                 }
 
                 if (ruleObject.summary.endDate) {
-                    //if (!endDate.isValid()) {
-                    //    alert('End Date must be empty/open or in this format: ' + $scope.formats.toString());
-                    //    $scope.saving = false;
-                    //    return;
-                    //}
                     if (ruleObject.summary.endDate < ruleObject.summary.startDate) {
                         $scope.openAlert('Invalid End Date', 'End Date must be empty/open or be >= Start Date');
                         $scope.saving = false;
@@ -403,10 +372,8 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
     $scope.qbGrid.exporterPdfHeader = {text: mode, style: 'headerStyle'};
     $scope.qbGrid.onRegisterApi = $scope.rowSelection;
 
-    //spinnerService.show('html5spinner');
     jqueryQueryBuilderService.getList($scope.selectedMode).then(function (myData) {
         $scope.setData[$scope.mode](myData.result);
-        //spinnerService.hide('html5spinner');
     });
 
     //query specific
@@ -419,7 +386,6 @@ app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilde
 
     resetModels($scope);
 
-    //if mode query     $scope.buildAfterEntitiesLoaded();
     $scope.buildAfterEntitiesLoaded({deleteEntity: 'HITS'});
     $scope.$scope = $scope;
 

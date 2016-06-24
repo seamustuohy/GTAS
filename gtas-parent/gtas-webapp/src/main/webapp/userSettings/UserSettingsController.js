@@ -31,17 +31,7 @@ app.controller('UserSettingsController', function ($scope, $state, $interval,$ht
     init();
 
 
-    //$scope.setFilter = function () {
-    //
-    //    /*    $scope.partialView="setFilter";
-    //     $state.go('user-settings.setFilter');*/
-    //    $location.path('/set/filter');
-    //};
-
-
-
-//---------------------------------------- Filter JS -----------------------
-
+    //---------------------------------------- Filter JS -----------------------
 
     var toastPosition = angular.element(document.getElementById('filterForm'));
     var self = this, airports, 
@@ -166,7 +156,6 @@ app.controller('UserSettingsController', function ($scope, $state, $interval,$ht
         .then(function (allAirports) {
             airports = allAirports.data;
             self.allAirports = allAirports.data.map(function (contact) {
-                //contact.lowerCasedName = contact.name.toLowerCase();
                 contact.lowerCasedName = contact.id.toLowerCase();
                 return contact;
             });

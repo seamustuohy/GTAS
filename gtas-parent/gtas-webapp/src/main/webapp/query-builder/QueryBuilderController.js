@@ -23,8 +23,6 @@ app.controller('QueryBuilderController', function ($scope, $rootScope, $injector
 
     jqueryQueryBuilderService.init('querybuilder');
 
-//    $scope.resultsGrid.enableColumnResizing = true;
-
     $scope.qbGrid = gridOptionsLookupService.getGridOptions('queries');
     $scope.qbGrid.columnDefs = gridOptionsLookupService.getLookupColumnDefs('queries');
     $scope.qbGrid.exporterCsvFilename = 'MySavedQueries.csv';

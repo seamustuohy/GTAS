@@ -72,16 +72,6 @@ var app;
             $mdDateLocaleProvider.formatDate = function (date) {
                 return moment(date).format('YYYY-MM-DD');
             };
-            //$mdDateLocaleProvider.monthHeaderFormatter = function(date) {
-            //    return myShortMonths[date.getMonth()] + ' ' + date.getFullYear();
-            //};
-            // In addition to date display, date components also need localized messages
-            // for aria-labels for screen-reader users.
-            //$mdDateLocaleProvider.weekNumberFormatter = function(weekNumber) {
-            //    return 'Semaine ' + weekNumber;
-            //};
-            //$mdDateLocaleProvider.msgCalendar = 'Calendrier';
-            //$mdDateLocaleProvider.msgOpenCalendar = 'Ouvrir le calendrier';
         },
         initialize = function ($rootScope, AuthService, userService, USER_ROLES, $state, APP_CONSTANTS, $sessionStorage, checkUserRoleFactory, Idle, $mdDialog) {
             $rootScope.ROLES = USER_ROLES;
@@ -258,7 +248,6 @@ var app;
                     },
                     resolve: {
                         //TODO research why this resolve doesn't stick...
-                        // I remember reading why on cbp machine
                         flights: function (passengersBasedOnUserFilter, flightsModel) {
                             return passengersBasedOnUserFilter.load();
                         }
@@ -421,7 +410,6 @@ var app;
                 });
             $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
             $httpProvider.defaults.withCredentials = false;
-           // $httpProvider.defaults.headers.common['X-CSRF-TOKEN'] = $cookies.get('X-CSRF-TOKEN');
         },
 
         NavCtrl = function ($scope, $http, APP_CONSTANTS, $sessionStorage, $rootScope, $cookies) {
@@ -674,9 +662,6 @@ var app;
                                         range.transition()
                                             .duration(duration)
                                             .attr("x", reverse ? x1 : 0)
-                                            //.transition()
-                                            //.duration(2000)
-                                            //.ease("linear")
                                             .attr("width", w1)
 
                                             .attr("height", height);
@@ -700,11 +685,6 @@ var app;
 
                                         measure.transition()
                                             .duration(duration)
-
-                                            //.transition()
-                                            //.duration(2000)
-                                            //.ease("linear")
-
                                             .attr("width", w1)
                                             .attr("height", height / 3)
                                             .attr("x", reverse ? x1 : 0)
@@ -716,11 +696,6 @@ var app;
 
                                         marker.enter().append("line")
                                             .attr("class", "marker")
-
-                                            //.transition()
-                                            //.duration(2000)
-                                            //.ease("linear")
-
                                             .attr("x1", x0)
                                             .attr("x2", x0)
                                             .attr("y1", height / 6)
@@ -737,10 +712,6 @@ var app;
 
                                         marker.transition()
                                             .duration(duration)
-                                            //.transition()
-                                            //.duration(2000)
-                                            //.ease("linear")
-
                                             .attr("x1", x1)
                                             .attr("x2", x1)
                                             .attr("y1", height / 6)
@@ -948,9 +919,6 @@ var app;
 
                     var y = d3.scale
                         .linear()
-                        //        .transition()
-                        //        .duration(2000)
-                        //        .ease("circle")
                         .range([height, 0]);
 
                     var color = d3.scale.ordinal()
@@ -1096,15 +1064,9 @@ var app;
                             .attr("y", function (d) {
                                 return y(d.value);
                             })
-                            //        .transition()
-                            //        .duration(2000)
-                            //        .ease("linear")
                             .attr("height", function (d) {
                                 return height - y(d.value);
                             })
-                            //        .transition()
-                            //        .duration(2000)
-                            //        .ease("circle")
                             .style("fill", function (d) {
                                 return color(d.name);
                             })
@@ -1159,9 +1121,6 @@ var app;
 
                     var y = d3.scale
                         .linear()
-                        //        .transition()
-                        //        .duration(2000)
-                        //        .ease("circle")
                         .range([height, 0]);
 
                     var color = d3.scale.ordinal()
@@ -1182,8 +1141,6 @@ var app;
                         .attr("height", height + margin.top + margin.bottom)
                         .append("g")
                         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-                    //var fvg = d3.select("svg1").append("svg");
 
                     d3.csv("data/data.csv", function (error, data) {
                         if (error) throw error;
@@ -1265,15 +1222,9 @@ var app;
                             .attr("y", function (d) {
                                 return y(d.value);
                             })
-                            //        .transition()
-                            //        .duration(2000)
-                            //        .ease("linear")
                             .attr("height", function (d) {
                                 return height - y(d.value);
                             })
-                            //        .transition()
-                            //        .duration(2000)
-                            //        .ease("circle")
                             .style("fill", function (d) {
                                 return color(d.name);
                             })
