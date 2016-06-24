@@ -45,6 +45,9 @@
             <md-button data-has-role="[{{ ROLES.ADMIN }}, {{ ROLES.VIEW_FLIGHT_PASSENGERS }}]" class="md-button" ng-class="{'md-raised md-primary': onRoute('passengers')}"
                        ng-disabled="onRoute('passengers')" href="#/passengers"><i class="glyphicon glyphicon-user"></i>  {{'menu.passengers' | translate}}</md-button>
 
+            <md-button data-has-role="[{{ ROLES.ADMIN }}, {{ ROLES.VIEW_FLIGHT_PASSENGERS }}]" class="md-button" ng-class="{'md-raised md-primary': onRoute('cases')}"
+                       ng-disabled="onRoute('cases')" href="#/cases"><i class="glyphicon glyphicon-folder-close"></i>  Cases</md-button>
+
             <md-button data-has-role="[{{ ROLES.ADMIN }}, {{ ROLES.MANAGE_QUERIES }}]" class="md-button" ng-class="{'md-raised md-primary': onRoute('queries')}"
                        ng-disabled="onRoute('queries')" href="#/build/query"><i class="glyphicon glyphicon-filter"></i> {{'menu.queries' | translate}}</md-button>
 
@@ -147,6 +150,7 @@
 <script src='userSettings/UserSettingsController.js'></script>
 <script src='userSettings/FilterCtrl.js'></script>
 <script src='common/languagecontroller.js'></script>
+<script src='cases/CasesController.js'></script>
 
 <script type="text/ng-template" id="dialog1.tmpl.html">  
 <md-dialog ng-cloak>

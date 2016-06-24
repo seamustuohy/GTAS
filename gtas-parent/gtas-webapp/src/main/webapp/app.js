@@ -264,6 +264,17 @@ var app;
                         }
                     }
                 })
+                .state('cases', {
+                    url: '/cases',
+                    roles: [USER_ROLES.ADMIN, USER_ROLES.VIEW_FLIGHT_PASSENGERS],
+                    authenticate: true,
+                    views: {
+                        '@': {
+                            controller: 'CasesCtrl',
+                            templateUrl: 'cases/cases.html'
+                        }
+                    }
+                })
                 .state('queryFlights', {
                     url: '/query/flights',
                     authenticate: true,
@@ -426,7 +437,8 @@ var app;
                 risks: {mode: ['rule']},
                 watchlists: {name: ['watchlists']},
                 userSettings: {name: ['userSettings', 'setFilter']},
-                upload: {name: ['upload']}
+                upload: {name: ['upload']},
+                cases: {name: ['cases']}                
             };
             $scope.onRoute = function (key) {
                 return (lookup[key].name && lookup[key].name.indexOf($scope.stateName) >= 0) || (lookup[key].mode && lookup[key].mode.indexOf($scope.mode) >= 0);
