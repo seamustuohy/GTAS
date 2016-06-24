@@ -46,7 +46,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     DataSource dataSource;
     
     public void configure(WebSecurity web) throws Exception {
-      web.ignoring().antMatchers("/resources/**/*","/common/**","/login/**","/admin/**","/app.js","WEB-INF/**","/data/**");
+      web.ignoring().antMatchers("/factory/**/*","/admin/**/*","/flights/**/*","/pax/**/*","/query-builder/**/*","/watchlists/**/*",
+                                 "/build/**/*","/dashboard/**/*","/dist/**/*","/jqb/**/*","/userSettings/**/*",
+                                 "/resources/**","/common/**/*","/login/**","/admin/**","/app.js","WEB-INF/**/*","/data/**");
     }
 
 
