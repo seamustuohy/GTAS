@@ -255,14 +255,19 @@ var app;
                 })
                 .state('cases', {
                     url: '/cases',
-                    roles: [USER_ROLES.ADMIN, USER_ROLES.VIEW_FLIGHT_PASSENGERS],
                     authenticate: true,
+                    roles: [USER_ROLES.ADMIN, USER_ROLES.VIEW_FLIGHT_PASSENGERS],
                     views: {
                         '@': {
                             controller: 'CasesCtrl',
                             templateUrl: 'cases/cases.html'
-                        }
-                    }
+                        },
+                    },
+                    resolve: {
+                        	newCases: function(caseService){
+                        		return caseService.getAllCases();
+                        	}
+                    	}
                 })
                 .state('queryFlights', {
                     url: '/query/flights',

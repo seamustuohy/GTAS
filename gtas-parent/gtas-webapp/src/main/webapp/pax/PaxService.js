@@ -29,10 +29,17 @@
                 dfd.resolve($http.get("/gtas/dispositionstatuses"));
                 return dfd.promise;
             }
+            
+            function getAllCases(){
+            	var dfd = $q.defer();
+            	dfd.resolve($http.get("/gtas/allcases"));
+            	return dfd.promise;
+            }
 
             return ({
                 getDispositionStatuses: getDispositionStatuses,
-                createDisposition: createDisposition
+                createDisposition: createDisposition,
+                getAllCases:getAllCases
             });
         })
         .service("paxService", function (userService, $rootScope, $http, $q) {
