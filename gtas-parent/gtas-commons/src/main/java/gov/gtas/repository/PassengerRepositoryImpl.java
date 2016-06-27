@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -147,31 +148,28 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
     
     @Override
     public List<Object[]> findAllDispositions() {
-        String q = "select d, p, f"
-                + " from Disposition d"
-                + " join d.passenger p"
-                + " join d.flight f"
-                + " group by p.id, f.id"
-                + " order by d.createdAt";
-        
-//        String nativeQuery = 
-//                "select d1.passenger_id, d1.flight_id, d1.comments, d1.created_at"
-//                + " from disposition d1"
-//                + " join ("
-//                + "   select passenger_id, flight_id, max(created_at) maxdate"
-//                + "   from disposition"
-//                + "   group by passenger_id, flight_id"
-//                + " ) d2"
-//                + " on d1.created_at = d2.maxdate"
-//                + " and d1.passenger_id = d2.passenger_id"
-//                + " and d1.flight_id = d2.flight_id";
+        String nativeQuery = 
+                "select d1.passenger_id, d1.flight_id, p.first_name, p.last_name, p.middle_name, f.full_flight_number, d1.created_at, s.name"
+                + " from disposition d1"
+                + " join ("
+                + "   select passenger_id, flight_id, max(created_at) maxdate"
+                + "   from disposition"
+                + "   group by passenger_id, flight_id"
+                + " ) d2"
+                + " on d1.created_at = d2.maxdate"
+                + "   and d1.passenger_id = d2.passenger_id"
+                + "   and d1.flight_id = d2.flight_id"
+                + " join passenger p on p.id = d1.passenger_id"
+                + " join flight f on f.id = d1.flight_id"
+                + " join disposition_status s on s.id = d1.status_id"
+                + " order by d1.created_at desc";
 
-        TypedQuery<Object[]> typedQuery = em.createQuery(q, Object[].class);
-        List<Object[]> results = typedQuery.getResultList();
+        Query q = em.createNativeQuery(nativeQuery);
+        List<Object[]> results = q.getResultList();
         
         return results;
     }
-    
+        
     private List<Predicate> createPredicates(CriteriaBuilder cb, PassengersRequestDto dto, Root<Passenger> pax, Join<Passenger, Flight> flight) {
         List<Predicate> predicates = new ArrayList<Predicate>();
 

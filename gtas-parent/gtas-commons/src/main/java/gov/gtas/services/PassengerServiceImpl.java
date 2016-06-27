@@ -1,5 +1,8 @@
 package gov.gtas.services;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -101,22 +104,23 @@ public class PassengerServiceImpl implements PassengerService {
     @Override
     @Transactional
     public List<CaseVo> getAllDispositions() {
-        List<CaseVo> rv = new ArrayList<>();
+        List<CaseVo> rv = new ArrayList<>();        
         List<Object[]> cases = passengerRespository.findAllDispositions();
         for (Object[] objs : cases) {
-            Disposition d = (Disposition)objs[0];
-            Passenger p = (Passenger)objs[1];
-            Flight f = (Flight)objs[2];
             CaseVo vo = new CaseVo();
             rv.add(vo);
-            vo.setPassengerId(p.getId());
-            vo.setFlightId(f.getId());
-            vo.setFirstName(p.getFirstName());
-            vo.setLastName(p.getLastName());
-            vo.setMiddleName(p.getMiddleName());
-            vo.setFlightNumber(f.getFullFlightNumber());
-            vo.setCreateDate(d.getCreatedAt().toString());
-            vo.setStatus(d.getStatus().getName());
+            vo.setPassengerId(((BigInteger)objs[0]).longValue());
+            vo.setFlightId(((BigInteger)objs[1]).longValue());
+            vo.setFirstName((String)objs[2]);
+            vo.setLastName((String)objs[3]);
+            vo.setMiddleName((String)objs[4]);
+            vo.setFlightNumber((String)objs[5]);
+            
+            Timestamp ts = (Timestamp)objs[6];
+            String datetime = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(ts);
+            vo.setCreateDate(datetime);
+            
+            vo.setStatus((String)objs[7]);
         }
         
         return rv;
