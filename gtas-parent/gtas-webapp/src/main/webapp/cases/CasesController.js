@@ -47,7 +47,7 @@ app.controller('CasesCtrl', function ($scope, newCases) {
                                    {
                                        field: 'createDate',
                                        name: 'createDate',
-                                       displayName:'Last Hit Date',
+                                       displayName:'Last Updated',
                                        cellFilter:'date'
                                    },
                                    {
