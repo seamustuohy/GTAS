@@ -22,9 +22,9 @@ import gov.gtas.parsers.edifact.Segment;
  * </ul>
  */
 public class IFT extends Segment {
-    public static String CONTACT_EMAIL = "CTCE";
-    public static String CONTACT_ADDR = "CTCA";
-    public static String CONTACT = "CTC";
+    public static final String CONTACT_EMAIL = "CTCE";
+    public static final String CONTACT_ADDR = "CTCA";
+    public static final String CONTACT = "CTC";
     
     private String iftCode;
     
