@@ -232,6 +232,7 @@ public final class PaxlstParserUNedifact extends EdifactParser<ApisMessageVo> {
                 break;
             case INTRANSIT_PASSENGER:
                 paxType = "I";
+                break;
             default:
                 paxType = "P";
                 break;
