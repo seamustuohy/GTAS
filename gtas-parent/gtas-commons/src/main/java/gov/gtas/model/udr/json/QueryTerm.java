@@ -33,9 +33,6 @@ public class QueryTerm implements QueryEntity {
          this.value = val;
      }
      
-    /* (non-Javadoc)
-     * @see gov.gtas.model.udr.json.QueryEntity#getFlattenedList()
-     */
     @Override
     public List<List<QueryTerm>> createFlattenedList() {
         final List<QueryTerm> mintermList = new LinkedList<QueryTerm>();

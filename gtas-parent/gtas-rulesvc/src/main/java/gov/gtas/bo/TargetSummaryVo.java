@@ -134,11 +134,6 @@ public class TargetSummaryVo implements Serializable, Cloneable {
         this.hitType = this.hitType.addHitType(detail.getHitType());
         hitDetails.add(detail);
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#clone()
-     */
     @Override
     public TargetSummaryVo clone() throws CloneNotSupportedException {
         return (TargetSummaryVo) super.clone();

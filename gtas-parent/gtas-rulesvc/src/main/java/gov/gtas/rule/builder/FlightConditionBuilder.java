@@ -26,10 +26,6 @@ public class FlightConditionBuilder extends EntityConditionBuilder {
         this.linkedPassengerList.add(passengerVariable);
     }
     
-    
-    /* (non-Javadoc)
-     * @see gov.gtas.rule.builder.EntityConditionBuilder#init()
-     */
     @Override
     public void reset() {
         super.reset();

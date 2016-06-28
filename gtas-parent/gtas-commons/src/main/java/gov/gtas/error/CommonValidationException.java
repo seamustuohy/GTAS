@@ -18,9 +18,6 @@ public class CommonValidationException extends CommonServiceException {
          this.validationErrors = errors;
      }
 
-    /* (non-Javadoc)
-     * @see java.lang.Throwable#getMessage()
-     */
     @Override
     public String getMessage() {
         StringBuilder msg = new StringBuilder(super.getMessage());

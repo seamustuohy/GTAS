@@ -42,17 +42,11 @@ public class BasicRuleServiceRequest implements RuleServiceRequest,
     public void addRequestObjects(final Collection<Object> reqObjects){
         this.requestObjects.add(reqObjects);
     }
-    /* (non-Javadoc)
-     * @see gov.gtas.bo.RuleServiceRequest#getRequestObjects()
-     */
     @Override
     public Collection<?> getRequestObjects() {
         return requestObjects;
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.bo.RuleServiceRequest#getRequestType()
-     */
     @Override
     public RuleServiceRequestType getRequestType() {
         return requestType;

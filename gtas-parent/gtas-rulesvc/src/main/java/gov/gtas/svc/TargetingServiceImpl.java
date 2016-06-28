@@ -131,13 +131,6 @@ public class TargetingServiceImpl implements TargetingService {
         ruleService = rulesvc;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.svc.TargetingService#analyzeApisMessage(gov.gtas.model.ApisMessage
-     * )
-     */
     @Override
     @Transactional
     public RuleServiceResult analyzeApisMessage(ApisMessage message) {
@@ -158,13 +151,6 @@ public class TargetingServiceImpl implements TargetingService {
         return res;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.svc.TargetingService#applyRules(gov.gtas.bo.RuleServiceRequest,
-     * java.lang.String)
-     */
     @Override
     public RuleServiceResult applyRules(RuleServiceRequest request,
             String drlRules) {
@@ -174,11 +160,6 @@ public class TargetingServiceImpl implements TargetingService {
         return res;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.TargetingService#analyzeApisMessage(long)
-     */
     @Override
     @Transactional
     public RuleServiceResult analyzeApisMessage(long messageId) {
@@ -193,11 +174,6 @@ public class TargetingServiceImpl implements TargetingService {
         return res;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.TargetingService#analyzeLoadedApisMessage()
-     */
     @Override
     @Transactional
     public List<RuleHitDetail> analyzeLoadedApisMessage() {
@@ -214,11 +190,6 @@ public class TargetingServiceImpl implements TargetingService {
         return ret;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.TargetingService#analyzeLoadedPnr()
-     */
     @Override
     @Transactional
     public List<RuleHitDetail> analyzeLoadedPnr() {
@@ -235,10 +206,6 @@ public class TargetingServiceImpl implements TargetingService {
         return ret;
     }
 
-    /*
-     * 
-     * @see gov.gtas.svc.TargetingService#preProcessing()
-     */
     public void preProcessing() {
         logger.info("Entering preProcessing()");
         // check if there are rules (undeleted & enabled)
@@ -344,11 +311,6 @@ public class TargetingServiceImpl implements TargetingService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.TargetingService#analyzeLoadedMessages()
-     */
     @Override
     @Transactional
     public RuleExecutionContext analyzeLoadedMessages(

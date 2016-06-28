@@ -22,9 +22,7 @@ public class BasicErrorDetailInfo implements ErrorDetailInfo {
         this.errorDescription = description != null?description:StringUtils.EMPTY;
         this.errorId = id;
     }
-    /* (non-Javadoc)
-     * @see gov.gtas.error.ErrorDetails#getErrorId()
-     */
+
     @Override
     public Long getErrorId() {
         return errorId;
@@ -65,9 +63,6 @@ public class BasicErrorDetailInfo implements ErrorDetailInfo {
     public void setErrorDescription(String errorDescription) {
         this.errorDescription = errorDescription;
     }
-    /* (non-Javadoc)
-     * @see gov.gtas.error.ErrorDetailInfo#getErrorTimestamp()
-     */
     @Override
     public String getErrorTimestamp() {
         return this.timestamp;

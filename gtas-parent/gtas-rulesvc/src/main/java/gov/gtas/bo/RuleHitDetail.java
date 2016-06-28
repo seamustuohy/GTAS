@@ -264,11 +264,6 @@ public class RuleHitDetail implements Serializable, Cloneable {
         this.passenger = passenger;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#clone()
-     */
     @Override
     public RuleHitDetail clone() throws CloneNotSupportedException {
         return (RuleHitDetail) super.clone();

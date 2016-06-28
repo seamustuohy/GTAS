@@ -35,9 +35,6 @@ public class AuditActionData implements Serializable {
         this.actionProperties = actionProperties;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         StringBuilder bldr = new StringBuilder("[");

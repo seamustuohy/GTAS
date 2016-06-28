@@ -138,11 +138,6 @@ public class TargetDetailVo implements Serializable, Cloneable {
         return hitType;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#clone()
-     */
     @Override
     public TargetDetailVo clone() throws CloneNotSupportedException {
         return (TargetDetailVo) super.clone();

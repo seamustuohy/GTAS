@@ -90,11 +90,6 @@ public class UdrServiceImpl implements UdrService {
         ErrorHandlerFactory.registerErrorHandler(errorHandler);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.UdrService#fetchUdr(java.lang.String, java.lang.String)
-     */
     @Override
     public UdrSpecification fetchUdr(String userId, String title) {
         UdrRule fetchedRule = rulePersistenceService.findByTitleAndAuthor(
@@ -115,11 +110,6 @@ public class UdrServiceImpl implements UdrService {
         return jsonObject;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.UdrService#fetchUdr(java.lang.Long)
-     */
     @Override
     public UdrSpecification fetchUdr(Long id) {
         UdrRule fetchedRule = rulePersistenceService.findById(id);
@@ -139,11 +129,6 @@ public class UdrServiceImpl implements UdrService {
         return jsonObject;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.UdrService#fetchUdrSummaryList(java.lang.String)
-     */
     @Override
     public List<JsonUdrListElement> fetchUdrSummaryList(String userId) {
         return convertSummaryList(rulePersistenceService
@@ -199,20 +184,12 @@ public class UdrServiceImpl implements UdrService {
         return hitCountMap;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.UdrService#fetchUdrSummaryList()
-     */
     @Override
     public List<JsonUdrListElement> fetchUdrSummaryList() {
         return convertSummaryList(rulePersistenceService
                 .findAllUdrSummary(null));
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.svc.UdrService#copyUdr(java.lang.String, java.lang.Long)
-     */
     @Override
     @Transactional
     public JsonServiceResponse copyUdr(String userId, Long udrId) {
@@ -270,12 +247,6 @@ public class UdrServiceImpl implements UdrService {
         
         return ret;
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.UdrService#createUdr(gov.gtas.model.udr.json.
-     * UdrSpecification )
-     */
     @Override
     @Transactional
     public JsonServiceResponse createUdr(String userId,
@@ -356,12 +327,6 @@ public class UdrServiceImpl implements UdrService {
         return userServiceUtil.mapUserEntityFromUserData(user);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.UdrService#updateUdr(gov.gtas.model.udr.json.
-     * UdrSpecification )
-     */
     @Override
     @Transactional
     public JsonServiceResponse updateUdr(String userId,
@@ -456,11 +421,6 @@ public class UdrServiceImpl implements UdrService {
                 RuleConstants.UDR_UPDATE_OP_NAME, updatedRule);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.svc.UdrService#deleteUdr(java.lang.Long)
-     */
     @Override
     @Transactional
     public JsonServiceResponse deleteUdr(String userId, Long id) {

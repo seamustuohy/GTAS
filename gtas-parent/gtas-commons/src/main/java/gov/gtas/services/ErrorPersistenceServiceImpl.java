@@ -19,44 +19,29 @@ public class ErrorPersistenceServiceImpl implements ErrorPersistenceService{
     @Resource
     private ErrorRecordRepository errorRecordRepository;
     
-    /* (non-Javadoc)
-     * @see gov.gtas.services.ErrorPersistenceService#create(gov.gtas.error.ErrorDetails)
-     */
     @Override
     public ErrorDetailInfo create(ErrorDetailInfo error) {
         ErrorRecord err =  errorRecordRepository.save(new ErrorRecord(error));
         return new BasicErrorDetailInfo(err.getId(), err.getCode(), err.getTimestamp(), err.getDescription(), err.fetchErrorDetails());
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.services.ErrorPersistenceService#findById(java.lang.Long)
-     */
     @Override
     public ErrorDetailInfo findById(Long id) {
         ErrorRecord err =  errorRecordRepository.findOne(id);
         return new BasicErrorDetailInfo(err.getId(), err.getCode(), err.getTimestamp(), err.getDescription(), err.fetchErrorDetails());
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.services.ErrorPersistenceService#findByDateRange(java.lang.String, java.lang.String)
-     */
     @Override
     public List<ErrorDetailInfo> findByDateRange(Date fromDate,
             Date toDate) {
         return convert(errorRecordRepository.findByTimestampRange(fromDate, toDate));
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.services.ErrorPersistenceService#findByDateFrom(java.lang.String)
-     */
     @Override
     public List<ErrorDetailInfo> findByDateFrom(Date fromDate) {
         return convert(errorRecordRepository.findByTimestampFrom(fromDate));
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.services.ErrorPersistenceService#findByCode(java.lang.String)
-     */
     @Override
     public List<ErrorDetailInfo> findByCode(String code) {
         return convert(errorRecordRepository.findByCode(code));

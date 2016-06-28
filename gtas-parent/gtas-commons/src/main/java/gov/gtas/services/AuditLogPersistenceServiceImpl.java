@@ -82,26 +82,12 @@ public class AuditLogPersistenceServiceImpl implements
         return auditLogRepository.findByUserAndActionType(user, actionType);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.AuditLogPersistenceService#findByUserAndTarget(java
-     * .lang.String, java.lang.String)
-     */
     @Override
     public List<AuditRecord> findByUserAndTarget(String userId, String target) {
         User user = fetchUser(userId);
         return auditLogRepository.findByUserAndTarget(user, target);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.AuditLogPersistenceService#findByTarget(java.lang.String
-     * )
-     */
     @Override
     public List<AuditRecord> findByTarget(String target) {
         return auditLogRepository.findByTarget(target);
@@ -115,14 +101,6 @@ public class AuditLogPersistenceServiceImpl implements
         return ret;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.AuditLogPersistenceService#create(gov.gtas.enumtype
-     * .AuditActionType, java.lang.String, java.lang.Object, java.lang.String,
-     * gov.gtas.model.User)
-     */
     @Override
     public AuditRecord create(AuditActionType actionType, String target,
             Object actionData, String message, User user) {
@@ -146,9 +124,6 @@ public class AuditLogPersistenceServiceImpl implements
         return ret;
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.services.AuditLogPersistenceService#create(gov.gtas.enumtype.AuditActionType, gov.gtas.json.AuditActionTarget, gov.gtas.json.AuditActionData, java.lang.String, java.lang.String)
-     */
     @Override
     public AuditRecord create(AuditActionType actionType,
             AuditActionTarget target, AuditActionData actionData,
@@ -163,9 +138,6 @@ public class AuditLogPersistenceServiceImpl implements
         return create(actionType, StringUtils.EMPTY, null, message, userId);
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.services.AuditLogPersistenceService#create(gov.gtas.enumtype.AuditActionType, java.lang.String, java.lang.Object, java.lang.String, java.lang.String)
-     */
     @Override
     public AuditRecord create(AuditActionType actionType, String target,
             Object actionData, String message, String userId) {
@@ -173,9 +145,6 @@ public class AuditLogPersistenceServiceImpl implements
         return create(actionType, target, actionData, message, user);
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.services.AuditLogPersistenceService#findByUserActionDateRange(java.lang.String, gov.gtas.enumtype.AuditActionType, java.util.Date, java.util.Date)
-     */
     @Override
     public List<AuditRecord> findByUserActionDateRange(String userId,
             AuditActionType action, Date dateFrom, Date dateTo) {
@@ -226,5 +195,4 @@ public class AuditLogPersistenceServiceImpl implements
         }
         return user;
     }
-
 }

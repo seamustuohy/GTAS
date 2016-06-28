@@ -135,9 +135,6 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
         return (List<UdrRule>) udrRuleRepository.findByDeletedAndEnabled(YesNoEnum.N, YesNoEnum.Y);
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.services.udr.RulePersistenceService#findAllSummary()
-     */
     @Override
     public List<Object[]> findAllUdrSummary(String userId) {
         if(StringUtils.isEmpty(userId)){
@@ -147,12 +144,6 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.udr.RulePersistenceService#batchUpdate(java.util.List)
-     */
     @Override
     public Collection<? extends BaseEntity> batchUpdate(
             Collection<? extends BaseEntity> entities) {
@@ -215,13 +206,6 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
         return udrRuleRepository.findOne(id);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.udr.RulePersistenceService#findByTitleAndAuthor(java
-     * .lang.String, java.lang.String)
-     */
     @Override
     @Transactional(TxType.SUPPORTS)
     public UdrRule findByTitleAndAuthor(String title, String authorUserId) {
@@ -229,24 +213,11 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
                 .getUdrRuleByTitleAndAuthor(title, authorUserId);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.services.udr.RulePersistenceService#findByAuthor(java.lang.
-     * String )
-     */
     @Override
     public List<UdrRule> findByAuthor(String authorUserId) {
         return udrRuleRepository.findUdrRuleByAuthor(authorUserId);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.udr.RulePersistenceService#findValidUdrOnDate(java.
-     * util.Date)
-     */
     @Override
     public List<UdrRule> findValidUdrOnDate(Date targetDate) {
         List<UdrRule> ret = null;
@@ -264,38 +235,18 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
         return ret;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.udr.RulePersistenceService#findDefaultKnowledgeBase()
-     */
     @Override
     @Cacheable(value = "knowledgebase")
     public KnowledgeBase findUdrKnowledgeBase() {
         return this.findUdrKnowledgeBase(RuleConstants.UDR_KNOWLEDGE_BASE_NAME);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.udr.RulePersistenceService#findUdrKnowledgeBase(java
-     * .lang.String)
-     */
     @Override
     @Cacheable(value = "knowledgebase")
     public KnowledgeBase findUdrKnowledgeBase(String kbName) {
         return udrRuleRepository.getKnowledgeBaseByName(kbName);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.udr.RulePersistenceService#saveKnowledgeBase(gov.gtas
-     * .model.udr.KnowledgeBase)
-     */
     @Override
     @CacheEvict(value = "knowledgebase", allEntries = true)
     public KnowledgeBase saveKnowledgeBase(KnowledgeBase kb) {
@@ -308,13 +259,6 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
         return kb;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.udr.RulePersistenceService#deleteKnowledgeBase(java
-     * .lang.String)
-     */
     @Override
     @CacheEvict(value = "knowledgebase", allEntries = true)
     public KnowledgeBase deleteKnowledgeBase(String kbName) {
@@ -325,13 +269,6 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
         return kb;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.udr.RulePersistenceService#findRulesByKnowledgeBaseId(
-     * java.lang.Long)
-     */
     @Override
     public List<Rule> findRulesByKnowledgeBaseId(Long id) {
         return udrRuleRepository.getRuleByKbId(id);
@@ -362,5 +299,4 @@ public class RulePersistenceServiceImpl implements RulePersistenceService {
     public EntityManager getEntityManager() {
         return entityManager;
     }
-
 }

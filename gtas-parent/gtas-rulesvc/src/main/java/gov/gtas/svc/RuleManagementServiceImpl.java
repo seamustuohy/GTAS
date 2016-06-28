@@ -54,13 +54,6 @@ public class RuleManagementServiceImpl implements RuleManagementService {
         ErrorHandlerFactory.registerErrorHandler(errorHandler);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromDRLString(java
-     * .lang.String, java.lang.String)
-     */
     @Override
     public KnowledgeBase createKnowledgeBaseFromDRLString(String kbName,
             String drlString) {
@@ -90,13 +83,6 @@ public class RuleManagementServiceImpl implements RuleManagementService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.svc.RuleManagementService#fetchDrlRulesFromKnowledgeBase(java
-     * .lang.String)
-     */
     @Override
     public String fetchDrlRulesFromKnowledgeBase(String kbName) {
         KnowledgeBase kb = rulePersistenceService.findUdrKnowledgeBase(kbName);
@@ -116,13 +102,6 @@ public class RuleManagementServiceImpl implements RuleManagementService {
         return drlRules;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.svc.RuleManagementService#fetchDefaultDrlRulesFromKnowledgeBase
-     * ()
-     */
     @Override
     public String fetchDefaultDrlRulesFromKnowledgeBase() {
         String drlRules = this
@@ -130,13 +109,6 @@ public class RuleManagementServiceImpl implements RuleManagementService {
         return drlRules;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromUdrRules(java
-     * .lang.String, java.util.Collection)
-     */
     @Override
     @Transactional(value = TxType.MANDATORY)
     public KnowledgeBase createKnowledgeBaseFromUdrRules(String kbName,
@@ -156,13 +128,6 @@ public class RuleManagementServiceImpl implements RuleManagementService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromWatchlistItems
-     * (java.lang.String, java.lang.Iterable)
-     */
     @Override
     @Transactional(value = TxType.MANDATORY)
     public KnowledgeBase createKnowledgeBaseFromWatchlistItems(String kbName,
@@ -181,44 +146,6 @@ public class RuleManagementServiceImpl implements RuleManagementService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.svc.RuleManagementService#createKnowledgeBaseFromUdrAndWatchlist
-     * (java.lang.String, java.util.Collection, java.lang.Iterable)
-     */
-    // @Override
-    // public KnowledgeBase createKnowledgeBaseFromUdrAndWatchlist(String
-    // kbName,
-    // Collection<UdrRule> rules, Iterable<WatchlistItem> wlItems) {
-    // DrlRuleFileBuilder ruleFileBuilder = new DrlRuleFileBuilder();
-    // boolean udrNotEmpty = false;
-    // if (!CollectionUtils.isEmpty(rules)) {
-    // udrNotEmpty = true;
-    // for (UdrRule rule : rules) {
-    // ruleFileBuilder.addRule(rule);
-    // }
-    // }
-    // boolean wlNotEmpty = false;
-    // if (wlItems != null) {
-    // for (WatchlistItem item : wlItems) {
-    // wlNotEmpty = true;
-    // ruleFileBuilder.addWatchlistItemRule(item);
-    // }
-    // }
-    // if(udrNotEmpty || wlNotEmpty){
-    // String drlRules = ruleFileBuilder.build();
-    // KnowledgeBase kb = createKnowledgeBaseFromDRLString(kbName, drlRules);
-    // if(udrNotEmpty){
-    // linkRulesToKnowledgeBase(kb, rules);
-    // }
-    // return kb;
-    // } else {
-    // return null;
-    // }
-    // }
-
     private void linkRulesToKnowledgeBase(KnowledgeBase kb,
             Collection<UdrRule> rules) {
         if (kb != null && kb.getId() != null) {
@@ -233,12 +160,6 @@ public class RuleManagementServiceImpl implements RuleManagementService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.svc.RuleManagementService#deleteKnowledgeBase(java.lang.String)
-     */
     @Override
     @Transactional(value = TxType.MANDATORY)
     public KnowledgeBase deleteKnowledgeBase(String kbName) {

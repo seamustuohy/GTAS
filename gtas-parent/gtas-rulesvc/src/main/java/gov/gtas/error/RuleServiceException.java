@@ -43,9 +43,6 @@ public class RuleServiceException extends CommonServiceException {
     public void addRuleCompilationError(Message msg){
         this.errorMessages.add(msg.getText());
     }
-    /* (non-Javadoc)
-     * @see java.lang.Throwable#getMessage()
-     */
     @Override
     public String getMessage() {
         StringBuilder msgBuilder  = new StringBuilder(super.getMessage());

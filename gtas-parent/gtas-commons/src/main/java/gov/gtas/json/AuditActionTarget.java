@@ -87,9 +87,6 @@ public class AuditActionTarget implements Serializable {
     public void setTargetId(String targetId) {
         this.targetId = targetId;
     }
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         StringBuilder bldr = new  StringBuilder();

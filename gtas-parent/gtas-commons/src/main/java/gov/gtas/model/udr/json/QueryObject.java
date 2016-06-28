@@ -51,11 +51,6 @@ public class QueryObject implements QueryEntity {
         this.rules = rules;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.model.udr.json.QueryEntity#getFlattenedList()
-     */
     @Override
     public List<List<QueryTerm>> createFlattenedList() {
         List<List<QueryTerm>> flatList = new LinkedList<List<QueryTerm>>();

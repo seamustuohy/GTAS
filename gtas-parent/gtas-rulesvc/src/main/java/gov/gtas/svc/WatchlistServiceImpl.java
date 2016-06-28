@@ -41,9 +41,6 @@ public class WatchlistServiceImpl implements WatchlistService {
         ErrorHandlerFactory.registerErrorHandler(errorHandler);
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.svc.WatchlistService#fetchWatchlist(java.lang.String)
-     */
     @Override
     public WatchlistSpec fetchWatchlist(String wlName) {
         WatchlistSpec ret = null;
@@ -56,9 +53,6 @@ public class WatchlistServiceImpl implements WatchlistService {
         return ret;
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.svc.WatchlistService#createOrUpdateWatchlist(java.lang.String, gov.gtas.model.watchlist.json.Watchlist)
-     */
     @Override
     public JsonServiceResponse createUpdateDeleteWatchlistItems(String userId,
             WatchlistSpec wlToCreateUpdate) {
@@ -81,9 +75,6 @@ public class WatchlistServiceImpl implements WatchlistService {
         return WatchlistServiceJsonResponseHelper.createResponse(true, "Create/Update", wlId, wlName, itemIdList, StringUtils.EMPTY);
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.svc.WatchlistService#createUpdateWatchlistItems(java.lang.String, gov.gtas.model.watchlist.json.WatchlistSpec)
-     */
     @Override
     public JsonServiceResponse createUpdateWatchlistItems(String userId,
             WatchlistSpec wlToCreateUpdate) {
@@ -91,9 +82,6 @@ public class WatchlistServiceImpl implements WatchlistService {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.svc.WatchlistService#fetchAllWatchlists()
-     */
     @Override
     public List<WatchlistSpec> fetchAllWatchlists() {
         List<Watchlist> summary = watchlistPersistenceService.findAllSummary();
@@ -104,9 +92,6 @@ public class WatchlistServiceImpl implements WatchlistService {
         return ret;
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.svc.WatchlistService#activateAllWatchlists(java.lang.String)
-     */
     @Override
     @Transactional
     public JsonServiceResponse activateAllWatchlists(String knowledgeBaseName) {
@@ -118,18 +103,12 @@ public class WatchlistServiceImpl implements WatchlistService {
         return WatchlistServiceJsonResponseHelper.createKnowledBaseResponse(kb, null);
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.svc.WatchlistService#activateAllWatchlists()
-     */
     @Override
     @Transactional
     public JsonServiceResponse activateAllWatchlists() {
         return activateAllWatchlists(WatchlistConstants.WL_KNOWLEDGE_BASE_NAME);
     }
 
-    /* (non-Javadoc)
-     * @see gov.gtas.svc.WatchlistService#deleteWatchlist(java.lang.String)
-     */
     @Override
     public JsonServiceResponse deleteWatchlist(String userId, String wlName) {
         Watchlist wl = watchlistPersistenceService.deleteWatchlist(wlName, true, userId);//force the delete even if the watch list is not empty.

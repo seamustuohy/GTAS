@@ -64,12 +64,6 @@ public class RuleServiceImpl implements RuleService {
         ErrorHandlerFactory.registerErrorHandler(errorHandler);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.rule.RuleService#invokeRuleset(java.lang.String,
-     * gov.gtas.bo.RuleServiceRequest)
-     */
     @Override
     public RuleServiceResult invokeAdhocRules(String rulesFilePath,
             RuleServiceRequest req) {
@@ -141,13 +135,6 @@ public class RuleServiceImpl implements RuleService {
         return res;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.rule.RuleService#invokeRuleEngine(gov.gtas.bo.RuleServiceRequest
-     * , java.lang.String)
-     */
     @Override
     public RuleServiceResult invokeRuleEngine(RuleServiceRequest req,
             String kbName) {
@@ -200,24 +187,11 @@ public class RuleServiceImpl implements RuleService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.rule.RuleService#invokeRuleset(gov.gtas.bo.RuleServiceRequest)
-     */
     @Override
     public RuleServiceResult invokeRuleEngine(RuleServiceRequest req) {
         return invokeRuleEngine(req, null);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.rule.RuleService#invokeAdhocRulesFRomString(java.lang.String,
-     * gov.gtas.bo.RuleServiceRequest)
-     */
     @Override
     public RuleServiceResult invokeAdhocRulesFromString(String rules,
             RuleServiceRequest req) {

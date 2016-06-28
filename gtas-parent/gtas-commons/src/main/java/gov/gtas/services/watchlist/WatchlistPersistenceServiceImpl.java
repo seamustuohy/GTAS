@@ -75,14 +75,6 @@ public class WatchlistPersistenceServiceImpl implements
     @Autowired
     private UserServiceUtil userServiceUtil;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.watchlist.WatchlistPersistenceService#createOrUpdate
-     * (java.lang.String, java.lang.String, java.util.List, java.util.List,
-     * java.util.List, java.lang.String)
-     */
     @Override
     @Transactional
     public List<Long> createUpdateDelete(String wlName, EntityEnum entity,
@@ -116,33 +108,16 @@ public class WatchlistPersistenceServiceImpl implements
         return ret;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.services.watchlist.WatchlistPersistenceService#
-     * findWatchlistItems (java.lang.String)
-     */
     @Override
     public List<WatchlistItem> findWatchlistItems(String watchlistName) {
         return watchlistItemRepository.getItemsByWatchlistName(watchlistName);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.services.watchlist.WatchlistPersistenceService#
-     * findAllWatchlistItems ()
-     */
     @Override
     public Iterable<WatchlistItem> findAllWatchlistItems() {
         return watchlistItemRepository.findAll();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.services.watchlist.WatchlistPersistenceService#findAll()
-     */
     @Override
     public List<Watchlist> findAllSummary() {
         List<Object[]> summaryList = watchlistRepository
@@ -154,26 +129,12 @@ public class WatchlistPersistenceServiceImpl implements
         return ret;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.watchlist.WatchlistPersistenceService#findByName(java
-     * .lang.String)
-     */
     @Override
     public Watchlist findByName(String name) {
         Watchlist wl = watchlistRepository.getWatchlistByName(name);
         return wl;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.services.watchlist.WatchlistPersistenceService#deleteWatchlist
-     * (java.lang.String)
-     */
     @Override
     @Transactional
     public Watchlist deleteWatchlist(String name, boolean forceFlag, String userId) {
@@ -203,12 +164,6 @@ public class WatchlistPersistenceServiceImpl implements
         return wl;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see gov.gtas.services.watchlist.WatchlistPersistenceService#
-     * findLogEntriesForWatchlist(java.lang.String)
-     */
     @Override
     public List<AuditRecord> findLogEntriesForWatchlist(String watchlistName) {
         AuditActionTarget target = new AuditActionTarget(AuditActionType.CREATE_WL, watchlistName, null);

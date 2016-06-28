@@ -1,15 +1,7 @@
 package gov.gtas.rule.builder;
 
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
 public class SeatConditionBuilder extends EntityConditionBuilder {
-    /*
-     * The logger for the SeatConditionBuilder.
-     */
-//  private static final Logger logger = LoggerFactory
-//          .getLogger(SeatConditionBuilder.class);
     
     private boolean apis;
     public SeatConditionBuilder(final String drlVariableName, final boolean apis){
@@ -23,9 +15,6 @@ public class SeatConditionBuilder extends EntityConditionBuilder {
             super.addConditionAsString("apis == false");            
         }
     }
-    /* (non-Javadoc)
-     * @see gov.gtas.rule.builder.EntityConditionBuilder#addSpecialConditions(java.lang.StringBuilder)
-     */
     @Override
     protected void addSpecialConditions(StringBuilder bldr) {
     }

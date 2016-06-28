@@ -20,13 +20,6 @@ public class FetchUdrTest implements PerformanceTestFactory {
         this.parallelRequestCount =  parallelRequestCount;
         this.poolTimeoutSeconds = poolTimeout;
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * gov.gtas.svc.perf.PerformanceTestFactory#createTest(org.springframework
-     * .context.ConfigurableApplicationContext)
-     */
     @Override
     public PerformanceTest createTest(ConfigurableApplicationContext ctx) {
         this.udrService = (UdrService) ctx.getBean("udrServiceImpl");
@@ -62,9 +55,6 @@ public class FetchUdrTest implements PerformanceTestFactory {
         final String userId = "bstygar";
         return new Runnable(){
 
-            /* (non-Javadoc)
-             * @see java.lang.Runnable#run()
-             */
             @Override
             public void run() {
                 UdrSpecification spec = udrService.fetchUdr(userId, title);
