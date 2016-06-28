@@ -40,28 +40,6 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
     
-    @Deprecated
-    public List<Object[]> getPassengersByCriteria_(Long flightId, PassengersRequestDto dto) {
-        String q = "select p, f, h"
-                + " from Passenger p"
-                + " join p.flights f"
-                + " left join p.hits h"
-                + " with h.flight.id = :flightId"
-                + " where 1=1";
-        
-        if (flightId != null) {
-            q += " and f.id = :flightId";            
-        }
-        
-        TypedQuery<Object[]> typedQuery = em.createQuery(q, Object[].class);
-        typedQuery.setParameter("flightId", flightId);
-        int offset = (dto.getPageNumber() - 1) * dto.getPageSize();
-        typedQuery.setFirstResult(offset);
-        typedQuery.setMaxResults(dto.getPageSize());
-        List<Object[]> results = typedQuery.getResultList();
-        return results;
-    }
-    
     /**
      * This was an especially difficult query to construct mainly because of a
      * bug in hibernate. See https://hibernate.atlassian.net/browse/HHH-7321.
@@ -146,6 +124,12 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
         return new ImmutablePair<Long, List<Object[]>>(count, results);
     }
     
+    /**
+     * Ended up using a native query here. The inner query finds the most recent
+     * disposition in the history and uses this as the basis for finding all the
+     * other information. Not particularly efficient. May consider having a
+     * separate 'case' table that stores most recent disposition status.
+     */
     @Override
     public List<Object[]> findAllDispositions() {
         String nativeQuery = 
@@ -165,6 +149,7 @@ public class PassengerRepositoryImpl implements PassengerRepositoryCustom {
                 + " order by d1.created_at desc";
 
         Query q = em.createNativeQuery(nativeQuery);
+        @SuppressWarnings("unchecked")
         List<Object[]> results = q.getResultList();
         
         return results;
