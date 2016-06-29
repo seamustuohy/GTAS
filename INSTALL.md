@@ -9,15 +9,15 @@
 
 ## Download
 
-GTAS must be build from the source code.  Grab the latest code from BitBucket:
+GTAS must be build from the source code.  Grab the latest code from GitHub:
 
 ```
-git clone https://[username]@bitbucket.org/sanandreas/sanandreas.git
+git clone https://github.com/US-CBP/GTAS.git
 ```
 
 ## Configure
 
-First update the following values in gtas-parent/gtas-commons/src/main/resourceshibernate.properties to work with your installation of MariaDB:
+First update the following values in gtas-parent/gtas-commons/src/main/resources/hibernate.properties to work with your installation of MariaDB:
 
 ```
 hibernate.connection.url=jdbc:mariadb://localhost:3306/gtas
