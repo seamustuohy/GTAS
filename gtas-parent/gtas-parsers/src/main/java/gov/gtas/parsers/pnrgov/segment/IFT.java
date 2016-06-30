@@ -88,10 +88,10 @@ public class IFT extends Segment {
     }
     
     public boolean isSponsorInfo() {
-        return ("4".equals(this.iftCode) && "43".equals(this.freetextType));
+        return "4".equals(this.iftCode) && "43".equals(this.freetextType);
     }
     
     public boolean isOtherServiceInfo() {
-        return ("4".equals(this.iftCode) && "28".equals(this.freetextType));
+        return "4".equals(this.iftCode) && "28".equals(this.freetextType);
     }
 }

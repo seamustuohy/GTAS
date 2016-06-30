@@ -68,6 +68,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         this.parsedMessage = new PnrVo();
     }
 
+    @Override
     protected String getPayloadText() throws ParseException {
         return lexer.getMessagePayload("SRC", "UNT");
     }
@@ -309,9 +310,9 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
         
         IFT ift = getConditionalSegment(IFT.class);
         if (ift != null) {
-            if (newCreditCards.size() > 0 && ift.isSponsorInfo()) {
+            if (CollectionUtils.isNotEmpty(newCreditCards) && ift.isSponsorInfo()) {
                 List<String> msgs = ift.getMessages();
-                if (msgs.size() >= 1) {
+                if (CollectionUtils.isNotEmpty(msgs)) {
                     for (CreditCardVo cc : newCreditCards) {
                         cc.setAccountHolder(msgs.get(0));
                     }
@@ -494,7 +495,7 @@ public final class PnrGovParser extends EdifactParser<PnrVo> {
             // try finding pax based on tif info
             String surname = tif.getTravelerSurname();
             List<TravelerDetails> td = tif.getTravelerDetails();
-            if (td != null && td.size() > 0) {
+            if (CollectionUtils.isNotEmpty(td)) {
                 String firstName = td.get(0).getTravelerGivenName();
                 for (PassengerVo pax : parsedMessage.getPassengers()) {
                     if (surname.equals(pax.getLastName()) && firstName.equals(pax.getFirstName())) {

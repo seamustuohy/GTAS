@@ -15,17 +15,17 @@ import gov.gtas.parsers.edifact.Segment;
  * DL1314U 19FEB MCOATL NN/SS1 1130A 105P AS SEAT RS 29F TRAN/TRINH')
  */
 public class LTS extends Segment {
-    private String text;
+    private String theText;
 
     public LTS(List<Composite> composites) {
         super(LTS.class.getSimpleName(), composites);
         Composite c = getComposite(0);
         if (c != null) {
-            this.text = c.getElement(0);
+            this.theText = c.getElement(0);
         }
     }
 
-    public String getText() {
-        return text;
+    public String getTheText() {
+        return theText;
     }
 }

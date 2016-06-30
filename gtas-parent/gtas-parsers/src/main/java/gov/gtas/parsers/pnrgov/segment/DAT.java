@@ -70,8 +70,7 @@ public class DAT extends Segment {
     }
     
     public static Date processDt(Composite c) throws ParseException {
-        String dt = null;
-        dt = c.getElement(1);
+        String dt = c.getElement(1);
         if (dt != null) {
             String time = c.getElement(2);
             if (time != null) {
