@@ -34,6 +34,7 @@ public class LoaderScheduler {
             .getLogger(LoaderScheduler.class);
 
     private interface InputType {
+    	
         String FILE_LIST = "file_list";
         String TWO_DIRS = "two_dirs";
         String QUEUE = "queue";
