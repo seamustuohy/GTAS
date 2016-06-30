@@ -12,11 +12,13 @@ public class CommonServiceException extends RuntimeException {
     private boolean logable;
     
     public String getErrorCode() {
+    	
         return errorCode;
     }
     
     /**
-     * @return the writeErrorLog
+     * @return boolean the writeErrorLog
+     * 
      */
     public boolean isLogable() {
         return logable;
