@@ -5,6 +5,9 @@ sudo: false
 jdk:
   - oraclejdk8
 
+notifications:
+  slack: gtas:G1lDbK5rR8cNBEhlszZNGDnL
+
 before_script:
   - cd gtas-parent
 
