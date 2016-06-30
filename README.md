@@ -62,17 +62,6 @@ If you want to add support for a language that is not supported out-of-box by GT
 
 Find a bug or want to request a new feature? Please let us know by submitting an issue. The GTAS team manages all GTAS updates, bugs, and feature additions via GitHub's public issue tracker in this repository. In the spirit of open source software, everyone is encouraged to help improve this project. 
 
-Here are some ways you can contribute:
-
-* by reporting bugs
-* by suggesting new features 
-* by translating content to a new language
-* by writing or editing documentation
-* by writing specifications
-* by writing code and documentation (no pull request is too small: fix typos, add code comments, clean up inconsistent whitespace)
-* by reviewing pull requests.
-* by closing issues
-
 ### Submit Issues
 
 * Before submitting a new issue, check to make sure a similar issue isn't already open. If one is, contribute to that issue thread with your feedback.
