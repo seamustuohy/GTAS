@@ -1,0 +1,5 @@
+language: java
+sudo: false
+before_script:
+  - cd gtas_parent
+script: mvn clean verify
