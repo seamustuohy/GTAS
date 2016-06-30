@@ -1,5 +1,5 @@
 # GTAS README
-
+  
 ## About GTAS
 The Global Travel Assessment System (GTAS) is a turn-key web application that provides all the necessary decision support system features to (1) receive and store air traveler data, both Advance Passenger Information (API) and PNR (Passenger Name Record); (2) provide real-time risk assessment against this data based on your own specific risk criteria and/or watch lists; and (3) view high risk travelers as well as their associated flight and reservation information.
 
