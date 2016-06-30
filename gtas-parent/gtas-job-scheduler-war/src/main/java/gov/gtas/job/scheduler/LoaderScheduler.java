@@ -27,148 +27,151 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/**
+ * Loader Scheduler class
+ *
+ */
 @Component
 public class LoaderScheduler {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(LoaderScheduler.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(LoaderScheduler.class);
 
-    private interface InputType {
-    	
-        String FILE_LIST = "file_list";
-        String TWO_DIRS = "two_dirs";
-        String QUEUE = "queue";
-    }
+	public enum InputType {
+		TWO_DIRS("two_dirs");
+		private final String stringValue;
 
-    @Autowired
-    private Loader loader;
+		private InputType(final String s) {
+			stringValue = s;
+		}
 
-    @Autowired
-    private ErrorPersistenceService errorPersistenceService;
+		@Override
+		public String toString() {
+			return stringValue;
+		}
+	}
 
-    @Autowired
-    private AuditLogPersistenceService auditLogPersistenceService;
+	@Autowired
+	private Loader loader;
 
-    @Value("${message.dir.origin}")
-    private String messageOriginDir;
+	@Autowired
+	private ErrorPersistenceService errorPersistenceService;
 
-    @Value("${message.dir.processed}")
-    private String messageProcessedDir;
+	@Autowired
+	private AuditLogPersistenceService auditLogPersistenceService;
 
-    @Value("${inputType}")
-    private String inputType;
+	@Value("${message.dir.origin}")
+	private String messageOriginDir;
 
-    @Scheduled(fixedDelayString = "${loader.fixedDelay.in.milliseconds}", initialDelayString = "${loader.initialDelay.in.milliseconds}")
-    public void jobScheduling() {
-        logger.info("entering jobScheduling()");
+	@Value("${message.dir.processed}")
+	private String messageProcessedDir;
 
-        boolean exitStatus = false;
-        Path dInputDir = Paths.get(messageOriginDir).normalize();
-        File inputDirFile = dInputDir.toFile();
-        Path dOutputDir = Paths.get(messageProcessedDir).normalize();
-        File outputDirFile = dOutputDir.toFile();
+	@Value("${inputType}")
+	private String inputType;
 
-        if (!inputDirFile.exists() || !outputDirFile.exists()) {
-            logger.error("directory does not exist.");
-            Exception fileNotExist = new RuntimeException(
-                    "directory does not exist.");
-            ErrorDetailInfo errInfo = ErrorHandlerFactory
-                    .createErrorDetails(fileNotExist);
-            errorPersistenceService.create(errInfo);
-            exitStatus = true;
-        } else if (!inputDirFile.isDirectory() || !outputDirFile.isDirectory()) {
-            logger.error("Not a directory: '" + inputDirFile + "'");
-            Exception notADirectory = new RuntimeException("Not a directory.");
-            ErrorDetailInfo errInfo = ErrorHandlerFactory
-                    .createErrorDetails(notADirectory);
-            errorPersistenceService.create(errInfo);
-            exitStatus = true;
-        }
-        if (exitStatus) {
-            Thread.currentThread().interrupt();
-        }
+	/**
+	 * Loader Scheduler running on configured schedule
+	 */
+	@Scheduled(fixedDelayString = "${loader.fixedDelay.in.milliseconds}", initialDelayString = "${loader.initialDelay.in.milliseconds}")
+	public void jobScheduling() {
+		logger.info("entering jobScheduling()");
 
-        LoaderStatistics stats = new LoaderStatistics();
-        switch (inputType) {
-        case InputType.FILE_LIST:
-            // processListOfFiles(args, stats);
-            break;
-        case InputType.TWO_DIRS:
-            processInputAndOutputDirectories(dInputDir, dOutputDir, stats);
-            break;
-        case InputType.QUEUE:
-            // processQueue(args, stats);
-            break;
-        }
-        writeAuditLog(stats);
-        logger.info("exiting jobScheduling()");
-    }
+		boolean exitStatus = false;
+		Path dInputDir = Paths.get(messageOriginDir).normalize();
+		File inputDirFile = dInputDir.toFile();
+		Path dOutputDir = Paths.get(messageProcessedDir).normalize();
+		File outputDirFile = dOutputDir.toFile();
 
-    private void processInputAndOutputDirectories(Path incomingDir,
-            Path outgoingDir, LoaderStatistics stats) {
-        // No hidden files.
-        DirectoryStream.Filter<Path> filter = (entry) -> {
-            File f = entry.toFile();
-            return !f.isHidden() && f.isFile();
-        };
+		if (!inputDirFile.exists() || !outputDirFile.exists()) {
+			logger.error("directory does not exist.");
+			Exception fileNotExist = new RuntimeException(
+					"directory does not exist.");
+			ErrorDetailInfo errInfo = ErrorHandlerFactory
+					.createErrorDetails(fileNotExist);
+			errorPersistenceService.create(errInfo);
+			exitStatus = true;
+		} else if (!inputDirFile.isDirectory() || !outputDirFile.isDirectory()) {
+			logger.error("Not a directory: '" + inputDirFile + "'");
+			Exception notADirectory = new RuntimeException("Not a directory.");
+			ErrorDetailInfo errInfo = ErrorHandlerFactory
+					.createErrorDetails(notADirectory);
+			errorPersistenceService.create(errInfo);
+			exitStatus = true;
+		}
+		if (exitStatus) {
+			Thread.currentThread().interrupt();
+		}
 
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(
-                incomingDir, filter)) {
-            for (final Iterator<Path> it = stream.iterator(); it.hasNext();) {
-                Path p = it.next();
-                File f = p.toFile();
-                processSingleFile(f, stats);
-                f.renameTo(new File(outgoingDir.toFile() + File.separator
-                        + f.getName()));
-            }
-            stream.close();
-        } catch (IOException ex) {
-            logger.error("IOException:" + ex.getMessage(), ex);
-            ErrorDetailInfo errInfo = ErrorHandlerFactory
-                    .createErrorDetails(ex);
-            errorPersistenceService.create(errInfo);
-        }
-    }
+		LoaderStatistics stats = new LoaderStatistics();
+		if (inputType.equalsIgnoreCase(InputType.TWO_DIRS.name())) {
+			processInputAndOutputDirectories(dInputDir, dOutputDir, stats);
+		} else {
+			logger.warn("No inputType selection.");
+		}
+		writeAuditLog(stats);
+		logger.info("exiting jobScheduling()");
+	}
 
-    private void processSingleFile(File f, LoaderStatistics stats) {
-        System.out.println(String.format("Processing %s", f.getAbsolutePath()));
-        int[] result = loader.processMessage(f);
-        // update loader statistics.
-        if (result != null) {
-            stats.incrementNumFilesProcessed();
-            stats.incrementNumMessagesProcessed(result[0]);
-            stats.incrementNumMessagesFailed(result[1]);
-        } else {
-            stats.incrementNumFilesAborted();
-        }
-    }
+	private void processInputAndOutputDirectories(Path incomingDir,
+			Path outgoingDir, LoaderStatistics stats) {
+		// No hidden files.
+		DirectoryStream.Filter<Path> filter = entry -> {
+			File f = entry.toFile();
+			return !f.isHidden() && f.isFile();
+		};
 
-    /**
-     * Writes the audit log with run statistics.
-     * 
-     * @param stats
-     *            the statistics bean.
-     */
-    private void writeAuditLog(LoaderStatistics stats) {
-        try {
-            AuditActionTarget target = new AuditActionTarget(
-                    AuditActionType.LOADER_RUN, "GTAS Message Loader", null);
-            AuditActionData actionData = new AuditActionData();
-            actionData.addProperty("totalFilesProcessed",
-                    String.valueOf(stats.getNumFilesProcessed()));
-            actionData.addProperty("totalFilesAborted",
-                    String.valueOf(stats.getNumFilesAborted()));
-            actionData.addProperty("totalMessagesProcessed",
-                    String.valueOf(stats.getNumMessagesProcessed()));
-            actionData.addProperty("totalMessagesInError",
-                    String.valueOf(stats.getNumMessagesFailed()));
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(
+				incomingDir, filter)) {
+			for (final Iterator<Path> it = stream.iterator(); it.hasNext();) {
+				Path p = it.next();
+				File f = p.toFile();
+				processSingleFile(f, stats);
+				f.renameTo(new File(outgoingDir.toFile() + File.separator
+						+ f.getName()));
+			}
+			stream.close();
+		} catch (IOException ex) {
+			logger.error("IOException:" + ex.getMessage(), ex);
+			ErrorDetailInfo errInfo = ErrorHandlerFactory
+					.createErrorDetails(ex);
+			errorPersistenceService.create(errInfo);
+		}
+	}
 
-            String message = "Message Loader run on " + new Date();
-            auditLogPersistenceService.create(AuditActionType.LOADER_RUN,
-                    target, actionData, message, GTAS_APPLICATION_USERID);
+	private void processSingleFile(File f, LoaderStatistics stats) {
+		logger.info(String.format("Processing %s", f.getAbsolutePath()));
+		int[] result = loader.processMessage(f);
+		// update loader statistics.
+		if (result != null) {
+			stats.incrementNumFilesProcessed();
+			stats.incrementNumMessagesProcessed(result[0]);
+			stats.incrementNumMessagesFailed(result[1]);
+		} else {
+			stats.incrementNumFilesAborted();
+		}
+	}
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+	/**
+	 * Writes the audit log with run statistics.
+	 * 
+	 * @param stats
+	 *            the statistics bean.
+	 */
+	private void writeAuditLog(LoaderStatistics stats) {
+		AuditActionTarget target = new AuditActionTarget(
+				AuditActionType.LOADER_RUN, "GTAS Message Loader", null);
+		AuditActionData actionData = new AuditActionData();
+		actionData.addProperty("totalFilesProcessed",
+				String.valueOf(stats.getNumFilesProcessed()));
+		actionData.addProperty("totalFilesAborted",
+				String.valueOf(stats.getNumFilesAborted()));
+		actionData.addProperty("totalMessagesProcessed",
+				String.valueOf(stats.getNumMessagesProcessed()));
+		actionData.addProperty("totalMessagesInError",
+				String.valueOf(stats.getNumMessagesFailed()));
+
+		String message = "Message Loader run on " + new Date();
+		auditLogPersistenceService.create(AuditActionType.LOADER_RUN, target,
+				actionData, message, GTAS_APPLICATION_USERID);
+	}
 }
