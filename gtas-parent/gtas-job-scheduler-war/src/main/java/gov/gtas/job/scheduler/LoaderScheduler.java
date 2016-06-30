@@ -28,7 +28,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
- * Loader Scheduler class
+ * Message Loader Scheduler class. Using Spring's Scheduled annotation for
+ * scheduling tasks. The class reads configuration values from an external file.
  *
  */
 @Component
@@ -37,6 +38,9 @@ public class LoaderScheduler {
 	private static final Logger logger = LoggerFactory
 			.getLogger(LoaderScheduler.class);
 
+	/**
+	 * The Enum InputType.
+	 */
 	public enum InputType {
 		TWO_DIRS("two_dirs");
 		private final String stringValue;

@@ -14,16 +14,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/**
+ * Rule Runner Scheduler class. Using Spring's Scheduled annotation for
+ * scheduling tasks. The class reads configuration values from an external file.
+ *
+ */
 @Component
 public class RuleRunnerScheduler {
 
+	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory
 			.getLogger(RuleRunnerScheduler.class);
 
+	/** The targeting service. */
 	private TargetingService targetingService;
 
+	/** The error persistence service. */
 	private ErrorPersistenceService errorPersistenceService;
 
+	/**
+	 * Instantiates a new rule runner scheduler.
+	 *
+	 * @param targetingService
+	 *            the targeting service
+	 * @param errorPersistenceService
+	 *            the error persistence service
+	 */
 	@Autowired
 	public RuleRunnerScheduler(TargetingService targetingService,
 			ErrorPersistenceService errorPersistenceService) {
@@ -31,6 +47,9 @@ public class RuleRunnerScheduler {
 		this.errorPersistenceService = errorPersistenceService;
 	}
 
+	/**
+	 * Job scheduling.
+	 */
 	@Scheduled(fixedDelayString = "${ruleRunner.fixedDelay.in.milliseconds}", initialDelayString = "${ruleRunner.initialDelay.in.milliseconds}")
 	public void jobScheduling() {
 		logger.info("entering jobScheduling()");

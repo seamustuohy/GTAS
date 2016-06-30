@@ -110,7 +110,7 @@ public class AuditLogPersistenceServiceImpl implements
 	@Override
 	public List<AuditRecord> findAll() {
 		Iterable<AuditRecord> res = auditLogRepository.findAll();
-		List<AuditRecord> ret = new LinkedList<AuditRecord>();
+		List<AuditRecord> ret = new LinkedList<>();
 		res.forEach(ret::add);
 		return ret;
 	}
@@ -141,9 +141,8 @@ public class AuditLogPersistenceServiceImpl implements
 						actionType, target, message));
 			}
 		}
-		AuditRecord ret = auditLogRepository.save(new AuditRecord(actionType,
-				target, Status.SUCCESS, message, actionDataString, user));
-		return ret;
+		return auditLogRepository.save(new AuditRecord(actionType, target,
+				Status.SUCCESS, message, actionDataString, user));
 	}
 
 	/*
@@ -197,7 +196,7 @@ public class AuditLogPersistenceServiceImpl implements
 	public List<AuditRecord> findByUserActionDateRange(String userId,
 			AuditActionType action, Date dateFrom, Date dateTo) {
 
-		List<AuditRecord> ret = new LinkedList<AuditRecord>();
+		List<AuditRecord> ret = new LinkedList<>();
 		boolean byUser = !StringUtils.isEmpty(userId);
 		Date today = new Date();
 		if (dateFrom != null && byUser && action != null) {

@@ -22,25 +22,43 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/**
+ * Dashboard Scheduler class. Using Spring's Scheduled annotation for 
+ * scheduling tasks. The class reads configuration values from 
+ * an external file.
+ *
+ */
 @Component
 public class DashboardUpdateScheduler {
 
+    /** The Constant logger. */
     private static final Logger logger = LoggerFactory
             .getLogger(DashboardUpdateScheduler.class);
 
+    /** The entity manager. */
     @PersistenceContext
     private EntityManager entityManager;
 
+    /** The api dashboard update sql. */
     @Value("${dashboard.api.message.update}")
     private String apiDashboardUpdateSql;
 
+    /** The pnr dashboard update sql. */
     @Value("${dashboard.pnr.message.update}")
     private String pnrDashboardUpdateSql;
 
+    /** The error persistence service. */
     private ErrorPersistenceService errorPersistenceService;
 
+    /** The audit log persistence service. */
     private AuditLogPersistenceService auditLogPersistenceService;
 
+    /**
+     * Instantiates a new dashboard update scheduler.
+     *
+     * @param errorPersistenceService the error persistence service
+     * @param auditLogPersistenceService the audit log persistence service
+     */
     @Autowired
     public DashboardUpdateScheduler(
             ErrorPersistenceService errorPersistenceService,
@@ -49,6 +67,9 @@ public class DashboardUpdateScheduler {
         this.auditLogPersistenceService = auditLogPersistenceService;
     }
 
+    /**
+     * Job scheduling.
+     */
     @Scheduled(fixedDelayString = "${dashboard.fixedDelay.in.milliseconds}")
     @Transactional
     public void jobScheduling() {
@@ -73,6 +94,11 @@ public class DashboardUpdateScheduler {
 
     }
 
+    /**
+     * Write audit log for updating dashboard run.
+     *
+     * @param updatedRecords the updated records
+     */
     private void writeAuditLogForUpdatingDashboardRun(Integer updatedRecords) {
         try {
             AuditActionTarget target = new AuditActionTarget(
