@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 (function () {
     'use strict';
     app.factory('AuthService', function ($http, Session, $rootScope, $mdToast, APP_CONSTANTS, $location, $cookies) {

@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 app.controller('BuildController', function ($scope, $injector, jqueryQueryBuilderWidget, gridOptionsLookupService, jqueryQueryBuilderService, spinnerService, $mdSidenav, $stateParams, $interval, $timeout, $mdDialog) {
     'use strict';
     var todayDate = moment().toDate(),

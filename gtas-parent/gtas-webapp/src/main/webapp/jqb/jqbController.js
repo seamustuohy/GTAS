@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 app.controller('jqbController', function ($scope, $timeout) {
     'use strict';
     /* Note any controller pulling in must have a view template with one element with an id of builder */

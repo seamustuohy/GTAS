@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 app.controller('UploadCtrl', ['$scope', '$timeout', '$http', 'Upload', function ($scope, $timeout, $http, Upload) {
     $scope.$watch('files', function () {
         $scope.upload($scope.files);

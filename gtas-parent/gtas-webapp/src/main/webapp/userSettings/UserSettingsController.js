@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 app.controller('UserSettingsController', function ($scope, $state, $interval,$http, $stateParams,user,userService, $location, flightsModel,filterService,$mdToast) {
 
     $scope.userCredentials = {

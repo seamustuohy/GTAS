@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 app.controller('UserCtrl', function ($scope, $stateParams, userService, $mdToast, $location, $timeout) {
     'use strict';
     var backToAdmin = function () { $location.path('/admin'); },

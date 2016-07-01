@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 // Karma configuration
 // Generated on Sat Nov 21 2015 15:28:58 GMT-0500 (Eastern Standard Time)
 

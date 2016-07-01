@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 app.factory('queryBuilderFactory', function () {
     'use strict';
     return function ($scope, $timeout, jqueryQueryBuilderService, $interval, $mdSidenav) {

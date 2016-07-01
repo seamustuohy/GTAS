@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 app.controller('LanguageController', ['$scope', '$translate', '$location', '$cookies', 'APP_CONSTANTS',
                 function ($scope, $translate, $location, $cookies, APP_CONSTANTS) {
     $scope.changeLanguage = function (locale) {

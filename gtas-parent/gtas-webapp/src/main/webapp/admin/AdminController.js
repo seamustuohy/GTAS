@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 app.controller('AdminCtrl', function ($scope, gridOptionsLookupService, userService, auditService, errorService, $location, $mdToast, $document, $http) {
     'use strict';
     var that = this;
