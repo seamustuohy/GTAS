@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 package gov.gtas.svc;
 
 import static gov.gtas.constant.GtasSecurityConstants.GTAS_APPLICATION_USERID;

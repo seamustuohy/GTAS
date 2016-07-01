@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 package gov.gtas.services;
 
 import static gov.gtas.constant.AuditLogConstants.AUDIT_LOG_WARNING_CANNOT_CONVERT_JSON_TO_STRING;

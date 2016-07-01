@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 package gov.gtas.rule;
 
 import static gov.gtas.rule.listener.RuleEventListenerUtils.createEventListeners;

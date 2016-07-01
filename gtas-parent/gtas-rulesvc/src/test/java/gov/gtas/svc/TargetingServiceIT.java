@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 package gov.gtas.svc;
 
 import static gov.gtas.rule.builder.RuleBuilderTestUtils.DOC_FLIGHT_CRITERIA_RULE_INDX;

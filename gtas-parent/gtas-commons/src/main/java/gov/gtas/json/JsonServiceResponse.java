@@ -1,3 +1,8 @@
+/*
+ * All GTAS code is Copyright 2016, Unisys Corporation.
+ * 
+ * Please see LICENSE.txt for details.
+ */
 package gov.gtas.json;
 
 import static gov.gtas.constant.JsonResponseConstants.ATTR_ERROR_CODE;
