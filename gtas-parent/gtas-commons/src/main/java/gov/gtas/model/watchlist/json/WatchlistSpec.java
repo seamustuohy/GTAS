@@ -19,67 +19,104 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class WatchlistSpec implements Serializable {
-    private static final long serialVersionUID = -182544361080662L;
 
-    private String name;
-    private String entity;
-    private List<WatchlistItemSpec> watchlistItems;
+	/**
+	 * default constructor
+	 */
+	public WatchlistSpec() {
+	}
 
-    public WatchlistSpec() {
-    }
+	/** The Constant serialVersionUID. */
+	private static final long serialVersionUID = -182544361080662L;
 
-    public WatchlistSpec(String name, String entity) {
-        this.name = name;
-        this.entity = entity;
-        watchlistItems = new LinkedList<WatchlistItemSpec>();
-    }
+	/** The name. */
+	private String name;
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
+	/** The entity. */
+	private String entity;
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+	/** The watchlist items. */
+	private List<WatchlistItemSpec> watchlistItems;
 
-    /**
-     * @return the entity
-     */
-    public String getEntity() {
-        return entity;
-    }
+	/**
+	 * Instantiates a new watchlist spec.
+	 *
+	 * @param name
+	 *            the name
+	 * @param entity
+	 *            the entity
+	 */
+	public WatchlistSpec(String name, String entity) {
+		this.name = name;
+		this.entity = entity;
+		watchlistItems = new LinkedList<>();
+	}
 
-    /**
-     * @param entity the entity to set
-     */
-    public void setEntity(String entity) {
-        this.entity = entity;
-    }
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * @return the watchlistItems
-     */
-    public List<WatchlistItemSpec> getWatchlistItems() {
-        return watchlistItems;
-    }
+	/**
+	 * Sets the name.
+	 *
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * @param watchlistItems
-     *            the watchlistItems to set
-     */
-    public void addWatchlistItem(WatchlistItemSpec watchlistItem) {
-        this.watchlistItems.add(watchlistItem);
-    }
+	/**
+	 * Gets the entity.
+	 *
+	 * @return the entity
+	 */
+	public String getEntity() {
+		return entity;
+	}
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this,
-                ToStringStyle.MULTI_LINE_STYLE);
-    }
+	/**
+	 * Sets the entity.
+	 *
+	 * @param entity
+	 *            the entity to set
+	 */
+	public void setEntity(String entity) {
+		this.entity = entity;
+	}
+
+	/**
+	 * Gets the watchlist items.
+	 *
+	 * @return the watchlistItems
+	 */
+	public List<WatchlistItemSpec> getWatchlistItems() {
+		return watchlistItems;
+	}
+
+	/**
+	 * Adds the watchlist item.
+	 *
+	 * @param watchlistItem
+	 *            the watchlist item
+	 */
+	public void addWatchlistItem(WatchlistItemSpec watchlistItem) {
+		this.watchlistItems.add(watchlistItem);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this,
+				ToStringStyle.MULTI_LINE_STYLE);
+	}
 }
