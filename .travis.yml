@@ -6,7 +6,9 @@ jdk:
   - oraclejdk8
 
 notifications:
-  slack: gtas:G1lDbK5rR8cNBEhlszZNGDnL
+  slack: 
+    rooms:
+      - gtas:G1lDbK5rR8cNBEhlszZNGDnL#general
     on_success: change
     on_failure: always
 
@@ -14,7 +16,7 @@ notifications:
     recipients:
       - david.j.ertel@cbp.dhs.gov
       - maneesh.lekkala@gmail.com
-      -	taylorjwdev@gmail.com
+      - taylorjwdev@gmail.com
       - jtangfed@gmail.com
       - vempatisvr@gmail.com
       - mikecope@gmail.com
@@ -25,3 +27,4 @@ before_script:
   - cd gtas-parent
 
 script: mvn clean verify
+
