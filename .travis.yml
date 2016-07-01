@@ -20,7 +20,7 @@ notifications:
       - jtangfed@gmail.com
       - vempatisvr@gmail.com
       - mikecope@gmail.com
-    on_success: always
+    on_success: change
     on_failure: always
 
 before_script:
