@@ -18,8 +18,10 @@ notifications:
       - jtangfed@gmail.com
       - vempatisvr@gmail.com
       - mikecope@gmail.com
+    on_success: always
+    on_failure: always
 
 before_script:
-  - cd gtas_parent
+  - cd gtas-parent
 
 script: mvn clean verify
