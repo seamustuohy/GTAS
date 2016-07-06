@@ -17,6 +17,9 @@ public class RuleServiceErrorHandler extends BasicErrorHandler {
     private static final Logger logger = LoggerFactory
             .getLogger(RuleServiceErrorHandler.class);
 
+    /**
+     * Instantiates a new rule service error handler.
+     */
     public RuleServiceErrorHandler() {
         super();
         logger.info("RuleServiceErrorHandler - initializing handler map");
