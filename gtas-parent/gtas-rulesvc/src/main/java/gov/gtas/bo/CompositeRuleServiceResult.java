@@ -9,45 +9,58 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CompositeRuleServiceResult implements RuleServiceResult, Serializable {
-    private static final long serialVersionUID = 6373119898883595702L;
-    
-    private List<RuleHitDetail> resultList;
-    private RuleExecutionStatistics executionStatistics;
-    private RuleExecutionStatistics wlExecutionStatistics;
+/**
+ * The Class CompositeRuleServiceResult that combines Udr and watchlist results.
+ */
+public class CompositeRuleServiceResult implements RuleServiceResult,
+		Serializable {
+	private static final long serialVersionUID = 6373119898883595702L;
 
-    public CompositeRuleServiceResult(RuleServiceResult udrResults,
-            RuleServiceResult watchlistResults) {
-        if(udrResults != null){
-            this.resultList = udrResults.getResultList();
-            this.executionStatistics = udrResults.getExecutionStatistics();
-        }else{
-            this.resultList = new LinkedList<RuleHitDetail>();
-        }
-        if(watchlistResults != null){
-            this.resultList.addAll(watchlistResults.getResultList());
-            this.wlExecutionStatistics = watchlistResults.getExecutionStatistics();
-            if(this.executionStatistics ==null){
-                this.executionStatistics = this.wlExecutionStatistics;
-            }
-        }
-    }
+	private List<RuleHitDetail> resultList;
+	private RuleExecutionStatistics executionStatistics;
+	private RuleExecutionStatistics wlExecutionStatistics;
 
-    @Override
-    public List<RuleHitDetail> getResultList() {
-        return this.resultList;
-    }
+	/**
+	 * Instantiates a new composite rule service result.
+	 *
+	 * @param udrResults
+	 *            the udr results
+	 * @param watchlistResults
+	 *            the watchlist results
+	 */
+	public CompositeRuleServiceResult(RuleServiceResult udrResults,
+			RuleServiceResult watchlistResults) {
+		if (udrResults != null) {
+			this.resultList = udrResults.getResultList();
+			this.executionStatistics = udrResults.getExecutionStatistics();
+		} else {
+			this.resultList = new LinkedList<>();
+		}
+		if (watchlistResults != null) {
+			this.resultList.addAll(watchlistResults.getResultList());
+			this.wlExecutionStatistics = watchlistResults
+					.getExecutionStatistics();
+			if (this.executionStatistics == null) {
+				this.executionStatistics = this.wlExecutionStatistics;
+			}
+		}
+	}
 
-    @Override
-    public RuleExecutionStatistics getExecutionStatistics() {
-        return this.executionStatistics;
-    }
+	@Override
+	public List<RuleHitDetail> getResultList() {
+		return this.resultList;
+	}
 
-    /**
-     * @return the wlExecutionStatistics
-     */
-    public RuleExecutionStatistics getWlExecutionStatistics() {
-        return wlExecutionStatistics;
-    }
+	@Override
+	public RuleExecutionStatistics getExecutionStatistics() {
+		return this.executionStatistics;
+	}
+
+	/**
+	 * @return the wlExecutionStatistics
+	 */
+	public RuleExecutionStatistics getWlExecutionStatistics() {
+		return wlExecutionStatistics;
+	}
 
 }

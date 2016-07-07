@@ -16,20 +16,28 @@ import java.util.Objects;
 public class TargetSummaryVo implements Serializable, Cloneable {
     private static final long serialVersionUID = 2946626283174855377L;
 
+    /** The flight id. */
     private Long flightId;
 
+    /** The passenger id. */
     private Long passengerId;
 
+    /** The passenger type. */
     private String passengerType;
 
+    /** The passenger name. */
     private String passengerName;
 
+    /** The hit type. */
     private HitTypeEnum hitType;
 
+    /** The watchlist hit count. */
     private int watchlistHitCount;
 
+    /** The rule hit count. */
     private int ruleHitCount;
 
+    /** The hit details. */
     private Collection<TargetDetailVo> hitDetails;
 
     /**
