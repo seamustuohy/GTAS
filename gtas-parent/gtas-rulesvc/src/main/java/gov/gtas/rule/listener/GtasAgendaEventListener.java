@@ -26,71 +26,94 @@ import org.slf4j.LoggerFactory;
  */
 public class GtasAgendaEventListener extends DefaultAgendaEventListener {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(GtasAgendaEventListener.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(GtasAgendaEventListener.class);
 
-    private List<String> ruleNameList = new ArrayList<String>();
+	private List<String> ruleNameList = new ArrayList<>();
 
-    private RuleExecutionStatistics ruleExecutionStatistics;
+	private RuleExecutionStatistics ruleExecutionStatistics;
 
-    /**
-     * constructor.
-     * 
-     * @param stats
-     *            the data structure to collect statistics.
-     */
-    public GtasAgendaEventListener(final RuleExecutionStatistics stats) {
-        this.ruleExecutionStatistics = stats;
-    }
+	/**
+	 * constructor.
+	 * 
+	 * @param stats
+	 *            the data structure to collect statistics.
+	 */
+	public GtasAgendaEventListener(final RuleExecutionStatistics stats) {
+		this.ruleExecutionStatistics = stats;
+	}
 
-    public void afterMatchFired(AfterMatchFiredEvent event) {
-        this.ruleExecutionStatistics.incrementTotalRulesFired();
-        this.ruleExecutionStatistics.addRuleFired(event.getMatch().getRule()
-                .getName());
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.kie.api.event.rule.DefaultAgendaEventListener#afterMatchFired(org
+	 * .kie.api.event.rule.AfterMatchFiredEvent)
+	 */
+	@Override
+	public void afterMatchFired(AfterMatchFiredEvent event) {
+		this.ruleExecutionStatistics.incrementTotalRulesFired();
+		this.ruleExecutionStatistics.addRuleFired(event.getMatch().getRule()
+				.getName());
 
-        Rule rule = event.getMatch().getRule();
-        String ruleName = rule.getName();
-        Map<String, Object> ruleMetaDataMap = rule.getMetaData();
+		Rule rule = event.getMatch().getRule();
+		String ruleName = rule.getName();
+		Map<String, Object> ruleMetaDataMap = rule.getMetaData();
 
-        ruleNameList.add(ruleName);
-        StringBuilder sb = new StringBuilder("Rule fired: " + ruleName);
+		ruleNameList.add(ruleName);
+		StringBuilder sb = new StringBuilder("Rule fired: " + ruleName);
 
-        if (ruleMetaDataMap.size() > 0) {
-            sb.append("\n  With [" + ruleMetaDataMap.size() + "] meta-data:");
-            for (String key : ruleMetaDataMap.keySet()) {
-                sb.append("\n    key=" + key + ", value="
-                        + ruleMetaDataMap.get(key));
-            }
-        }
+		if (ruleMetaDataMap.size() > 0) {
+			sb.append("\n  With [" + ruleMetaDataMap.size() + "] meta-data:");
+			for (Map.Entry<String, Object> e : ruleMetaDataMap.entrySet()) {
+				sb.append("\n    key=" + e.getKey() + ", value="
+						+ ruleMetaDataMap.get(e.getKey()));
+			}
+		}
+		logger.debug(sb.toString());
+	}
 
-        logger.debug(sb.toString());
-    }
-    public boolean isRuleFired(String ruleName) {
-        for (String a : ruleNameList) {
-            if (a.equals(ruleName)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	/**
+	 * Checks if is rule fired.
+	 *
+	 * @param ruleName
+	 *            the rule name
+	 * @return true, if is rule fired
+	 */
+	public boolean isRuleFired(String ruleName) {
+		for (String a : ruleNameList) {
+			if (a.equals(ruleName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public void reset() {
-        ruleNameList.clear();
-    }
+	/**
+	 * Reset.
+	 */
+	public void reset() {
+		ruleNameList.clear();
+	}
 
-    public final List<String> getRuleNameList() {
-        return ruleNameList;
-    }
+	public final List<String> getRuleNameList() {
+		return ruleNameList;
+	}
 
-    public String ruleMatchesToString() {
-        if (ruleNameList.size() == 0) {
-            return "No matches occurred.";
-        } else {
-            StringBuilder sb = new StringBuilder("Rules Matched: ");
-            for (String match : ruleNameList) {
-                sb.append("\n  rule: ").append(match);
-            }
-            return sb.toString();
-        }
-    }
+	/**
+	 * Rule matches to string.
+	 *
+	 * @return the string
+	 */
+	public String ruleMatchesToString() {
+		if (ruleNameList.isEmpty()) {
+			return "No matches occurred.";
+		} else {
+			StringBuilder sb = new StringBuilder("Rules Matched: ");
+			for (String match : ruleNameList) {
+				sb.append("\n  rule: ").append(match);
+			}
+			return sb.toString();
+		}
+	}
 }

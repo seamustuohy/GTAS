@@ -34,9 +34,8 @@ public interface TargetingService {
 
     /**
      * Invokes the Targeting service for an API message.
-     * 
-     * @param message
-     *            the API message.
+     *
+     * @param messageId the message id
      * @return the result of the invocation.
      */
     RuleServiceResult analyzeApisMessage(long messageId);
@@ -102,23 +101,35 @@ public interface TargetingService {
     public void updateFlightHitCounts(Set<Long> flights);
 
     /**
-     * retrieve ApisMessage from db
+     * retrieve ApisMessage from db.
+     *
+     * @param messageStatus the message status
+     * @return the list
      */
     public List<ApisMessage> retrieveApisMessage(MessageStatus messageStatus);
 
     /**
-     * update ApisMessage with message status
+     * update ApisMessage with message status.
+     *
+     * @param message the message
+     * @param messageStatus the message status
      */
     public void updateApisMessage(ApisMessage message,
             MessageStatus messageStatus);
 
     /**
-     * retrieve ApisMessage from db
+     * retrieve ApisMessage from db.
+     *
+     * @param messageStatus the message status
+     * @return the list
      */
     public List<Pnr> retrievePnr(MessageStatus messageStatus);
 
     /**
-     * update Pnr with message status
+     * update Pnr with message status.
+     *
+     * @param message the message
+     * @param messageStatus the message status
      */
     public void updatePnr(Pnr message, MessageStatus messageStatus);
 
